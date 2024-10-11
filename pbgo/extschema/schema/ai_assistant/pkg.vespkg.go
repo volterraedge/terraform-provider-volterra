@@ -10,8 +10,10 @@ import (
 )
 
 func initializeValidatorRegistry(vr map[string]db.Validator) {
+	vr["ves.io.schema.ai_assistant.AIAssistantQueryFeedbackRequest"] = AIAssistantQueryFeedbackRequestValidator()
 	vr["ves.io.schema.ai_assistant.AIAssistantQueryRequest"] = AIAssistantQueryRequestValidator()
 	vr["ves.io.schema.ai_assistant.AIAssistantQueryResponse"] = AIAssistantQueryResponseValidator()
+	vr["ves.io.schema.ai_assistant.NegativeFeedbackDetails"] = NegativeFeedbackDetailsValidator()
 
 }
 

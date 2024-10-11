@@ -89,6 +89,15 @@ func (v *ValidateFieldData) Validate(ctx context.Context, pm interface{}, opts .
 
 	}
 
+	if fv, exists := v.FldValidators["status"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("status"))
+		if err := fv(ctx, m.GetStatus(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["value"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("value"))

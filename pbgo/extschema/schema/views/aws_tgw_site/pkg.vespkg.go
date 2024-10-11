@@ -74,8 +74,38 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 
+	mdr.RPCSubscriptionFieldsRegistry["ves.io.schema.views.aws_tgw_site.API.Create"] = []svcfw.SubscriptionField{
+		{
+			FieldPath:     "ves.io.schema.views.aws_tgw_site.CreateRequest.spec.aws_parameters.az_nodes.choice.inside_subnet.choice.subnet_param.ipv6",
+			AddonServices: []string{"f5xc-ipv6-standard"},
+		},
+		{
+			FieldPath:     "ves.io.schema.views.aws_tgw_site.CreateRequest.spec.aws_parameters.az_nodes.outside_subnet.choice.subnet_param.ipv6",
+			AddonServices: []string{"f5xc-ipv6-standard"},
+		},
+		{
+			FieldPath:     "ves.io.schema.views.aws_tgw_site.CreateRequest.spec.aws_parameters.az_nodes.workload_subnet.choice.subnet_param.ipv6",
+			AddonServices: []string{"f5xc-ipv6-standard"},
+		},
+		{
+			FieldPath:     "ves.io.schema.views.aws_tgw_site.CreateRequest.spec.aws_parameters.tgw_cidr_choice.tgw_cidr.ipv6",
+			AddonServices: []string{"f5xc-ipv6-standard"},
+		},
+		{
+			FieldPath:     "ves.io.schema.views.aws_tgw_site.CreateRequest.spec.custom_dns.inside_nameserver_v6",
+			AddonServices: []string{"f5xc-ipv6-standard"},
+		},
+		{
+			FieldPath:     "ves.io.schema.views.aws_tgw_site.CreateRequest.spec.custom_dns.outside_nameserver_v6",
+			AddonServices: []string{"f5xc-ipv6-standard"},
+		},
+	}
+
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.views.aws_tgw_site.API.Create"] = []string{
-		"spec.aws_parameters.admin_password",
+		"spec.aws_parameters.admin_password.blindfold_secret_info_internal",
+		"spec.aws_parameters.admin_password.secret_encoding_type",
+		"spec.aws_parameters.admin_password.vault_secret_info",
+		"spec.aws_parameters.admin_password.wingman_secret_info",
 		"spec.aws_parameters.assisted",
 		"spec.aws_parameters.az_nodes.#.disk_size",
 		"spec.vn_config.global_network_list.global_network_connections.#.enable_forward_proxy.tls_intercept.custom_certificate.private_key.blindfold_secret_info_internal",
@@ -98,12 +128,16 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
+			FieldPath:           "spec.aws_parameters.tgw_cidr.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
+		},
+		{
 			FieldPath:           "spec.custom_dns.inside_nameserver_v6",
-			AllowedEnvironments: []string{"crt", "softbank_mec", "staging", "test"},
+			AllowedEnvironments: []string{"crt", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
 			FieldPath:           "spec.custom_dns.outside_nameserver_v6",
-			AllowedEnvironments: []string{"crt", "softbank_mec", "staging", "test"},
+			AllowedEnvironments: []string{"crt", "prod", "softbank_mec", "staging", "test"},
 		},
 	}
 
@@ -121,12 +155,16 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
+			FieldPath:           "spec.aws_parameters.tgw_cidr.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
+		},
+		{
 			FieldPath:           "spec.custom_dns.inside_nameserver_v6",
-			AllowedEnvironments: []string{"crt", "softbank_mec", "staging", "test"},
+			AllowedEnvironments: []string{"crt", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
 			FieldPath:           "spec.custom_dns.outside_nameserver_v6",
-			AllowedEnvironments: []string{"crt", "softbank_mec", "staging", "test"},
+			AllowedEnvironments: []string{"crt", "prod", "softbank_mec", "staging", "test"},
 		},
 	}
 
@@ -146,12 +184,16 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
+			FieldPath:           "create_form.spec.aws_parameters.tgw_cidr.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
+		},
+		{
 			FieldPath:           "create_form.spec.custom_dns.inside_nameserver_v6",
-			AllowedEnvironments: []string{"crt", "softbank_mec", "staging", "test"},
+			AllowedEnvironments: []string{"crt", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
 			FieldPath:           "create_form.spec.custom_dns.outside_nameserver_v6",
-			AllowedEnvironments: []string{"crt", "softbank_mec", "staging", "test"},
+			AllowedEnvironments: []string{"crt", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
 			FieldPath:           "replace_form.spec.aws_parameters.az_nodes.#.inside_subnet.subnet_param.ipv6",
@@ -167,11 +209,11 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		},
 		{
 			FieldPath:           "replace_form.spec.custom_dns.inside_nameserver_v6",
-			AllowedEnvironments: []string{"crt", "softbank_mec", "staging", "test"},
+			AllowedEnvironments: []string{"crt", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
 			FieldPath:           "replace_form.spec.custom_dns.outside_nameserver_v6",
-			AllowedEnvironments: []string{"crt", "softbank_mec", "staging", "test"},
+			AllowedEnvironments: []string{"crt", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
 			FieldPath:           "spec.aws_parameters.az_nodes.#.inside_subnet.subnet_param.ipv6",
@@ -186,12 +228,16 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
+			FieldPath:           "spec.aws_parameters.tgw_cidr.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
+		},
+		{
 			FieldPath:           "spec.custom_dns.inside_nameserver_v6",
-			AllowedEnvironments: []string{"crt", "softbank_mec", "staging", "test"},
+			AllowedEnvironments: []string{"crt", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
 			FieldPath:           "spec.custom_dns.outside_nameserver_v6",
-			AllowedEnvironments: []string{"crt", "softbank_mec", "staging", "test"},
+			AllowedEnvironments: []string{"crt", "prod", "softbank_mec", "staging", "test"},
 		},
 	}
 
@@ -209,12 +255,39 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
+			FieldPath:           "items.#.get_spec.aws_parameters.tgw_cidr.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
+		},
+		{
 			FieldPath:           "items.#.get_spec.custom_dns.inside_nameserver_v6",
-			AllowedEnvironments: []string{"crt", "softbank_mec", "staging", "test"},
+			AllowedEnvironments: []string{"crt", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
 			FieldPath:           "items.#.get_spec.custom_dns.outside_nameserver_v6",
-			AllowedEnvironments: []string{"crt", "softbank_mec", "staging", "test"},
+			AllowedEnvironments: []string{"crt", "prod", "softbank_mec", "staging", "test"},
+		},
+	}
+
+	mdr.RPCSubscriptionFieldsRegistry["ves.io.schema.views.aws_tgw_site.API.Replace"] = []svcfw.SubscriptionField{
+		{
+			FieldPath:     "ves.io.schema.views.aws_tgw_site.ReplaceRequest.spec.aws_parameters.az_nodes.choice.inside_subnet.choice.subnet_param.ipv6",
+			AddonServices: []string{"f5xc-ipv6-standard"},
+		},
+		{
+			FieldPath:     "ves.io.schema.views.aws_tgw_site.ReplaceRequest.spec.aws_parameters.az_nodes.outside_subnet.choice.subnet_param.ipv6",
+			AddonServices: []string{"f5xc-ipv6-standard"},
+		},
+		{
+			FieldPath:     "ves.io.schema.views.aws_tgw_site.ReplaceRequest.spec.aws_parameters.az_nodes.workload_subnet.choice.subnet_param.ipv6",
+			AddonServices: []string{"f5xc-ipv6-standard"},
+		},
+		{
+			FieldPath:     "ves.io.schema.views.aws_tgw_site.ReplaceRequest.spec.custom_dns.inside_nameserver_v6",
+			AddonServices: []string{"f5xc-ipv6-standard"},
+		},
+		{
+			FieldPath:     "ves.io.schema.views.aws_tgw_site.ReplaceRequest.spec.custom_dns.outside_nameserver_v6",
+			AddonServices: []string{"f5xc-ipv6-standard"},
 		},
 	}
 
@@ -242,11 +315,11 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		},
 		{
 			FieldPath:           "spec.custom_dns.inside_nameserver_v6",
-			AllowedEnvironments: []string{"crt", "softbank_mec", "staging", "test"},
+			AllowedEnvironments: []string{"crt", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
 			FieldPath:           "spec.custom_dns.outside_nameserver_v6",
-			AllowedEnvironments: []string{"crt", "softbank_mec", "staging", "test"},
+			AllowedEnvironments: []string{"crt", "prod", "softbank_mec", "staging", "test"},
 		},
 	}
 

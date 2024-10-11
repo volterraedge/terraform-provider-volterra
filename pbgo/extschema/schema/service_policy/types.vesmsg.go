@@ -3835,18 +3835,18 @@ func (v *ValidateSimpleRule) Validate(ctx context.Context, pm interface{}, opts 
 
 	}
 
-	if fv, exists := v.FldValidators["jwt_claims"]; exists {
-		vOpts := append(opts, db.WithValidateField("jwt_claims"))
-		if err := fv(ctx, m.GetJwtClaims(), vOpts...); err != nil {
+	if fv, exists := v.FldValidators["ja4_tls_fingerprint"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("ja4_tls_fingerprint"))
+		if err := fv(ctx, m.GetJa4TlsFingerprint(), vOpts...); err != nil {
 			return err
 		}
 
 	}
 
-	if fv, exists := v.FldValidators["l4_dest_matcher"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("l4_dest_matcher"))
-		if err := fv(ctx, m.GetL4DestMatcher(), vOpts...); err != nil {
+	if fv, exists := v.FldValidators["jwt_claims"]; exists {
+		vOpts := append(opts, db.WithValidateField("jwt_claims"))
+		if err := fv(ctx, m.GetJwtClaims(), vOpts...); err != nil {
 			return err
 		}
 
@@ -4192,8 +4192,6 @@ var DefaultSimpleRuleValidator = func() *ValidateSimpleRule {
 
 	v.FldValidators["url_matcher"] = ves_io_schema_policy.URLMatcherTypeValidator().Validate
 
-	v.FldValidators["l4_dest_matcher"] = ves_io_schema_policy.L4DestMatcherTypeValidator().Validate
-
 	v.FldValidators["ip_prefix_list"] = ves_io_schema_policy.PrefixMatchListValidator().Validate
 
 	v.FldValidators["dst_ip_prefix_list"] = ves_io_schema_policy.PrefixMatchListValidator().Validate
@@ -4255,6 +4253,8 @@ var DefaultSimpleRuleValidator = func() *ValidateSimpleRule {
 	v.FldValidators["threat_mesh_action"] = ves_io_schema_policy.ModifyActionValidator().Validate
 
 	v.FldValidators["response_masking_config"] = ves_io_schema_policy.MaskingConfigValidator().Validate
+
+	v.FldValidators["ja4_tls_fingerprint"] = ves_io_schema_policy.JA4TlsFingerprintMatcherTypeValidator().Validate
 
 	return v
 }()

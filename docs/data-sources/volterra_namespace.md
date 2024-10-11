@@ -11,7 +11,7 @@ Namespace creates logical independent workspace within a tenant. Data Source rea
 ## Example Usage
 
 ```hcl
-data volterra_namespace" "example" {
+data "volterra_namespace" "example" {
   name = "example"
 }
 ```

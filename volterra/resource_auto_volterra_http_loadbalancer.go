@@ -1625,6 +1625,75 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 
+						"api_discovery_from_code_scan": {
+
+							Type:     schema.TypeSet,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"code_base_integrations": {
+
+										Type:     schema.TypeList,
+										Required: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"all_repos": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
+												"selected_repos": {
+
+													Type:     schema.TypeSet,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"api_code_repo": {
+
+																Type: schema.TypeList,
+
+																Required: true,
+																Elem: &schema.Schema{
+																	Type: schema.TypeString,
+																},
+															},
+														},
+													},
+												},
+
+												"code_base_integration": {
+
+													Type:     schema.TypeSet,
+													Required: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"name": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+															"namespace": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+															"tenant": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+														},
+													},
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+
 						"discovered_api_settings": {
 
 							Type:     schema.TypeSet,
@@ -8956,6 +9025,28 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 																},
 															},
 
+															"ja4_tls_fingerprint": {
+
+																Type:       schema.TypeSet,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"exact_values": {
+
+																			Type: schema.TypeList,
+
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																			Elem: &schema.Schema{
+																				Type: schema.TypeString,
+																			},
+																		},
+																	},
+																},
+															},
+
 															"tls_fingerprint_matcher": {
 
 																Type:     schema.TypeSet,
@@ -11718,6 +11809,84 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 							Deprecated: "This field is deprecated and will be removed in future release.",
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
+
+									"api_discovery_from_code_scan": {
+
+										Type:       schema.TypeSet,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"code_base_integrations": {
+
+													Type:       schema.TypeList,
+													Required:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"all_repos": {
+
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
+															"selected_repos": {
+
+																Type:       schema.TypeSet,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"api_code_repo": {
+
+																			Type: schema.TypeList,
+
+																			Required:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																			Elem: &schema.Schema{
+																				Type: schema.TypeString,
+																			},
+																		},
+																	},
+																},
+															},
+
+															"code_base_integration": {
+
+																Type:       schema.TypeSet,
+																Required:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"name": {
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+																		"namespace": {
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+																		"tenant": {
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+																	},
+																},
+															},
+														},
+													},
+												},
+											},
+										},
+									},
 
 									"discovered_api_settings": {
 
@@ -18422,18 +18591,6 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
-															"idle_timeout": {
-																Type:       schema.TypeInt,
-																Optional:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
-															},
-
-															"max_connect_attempts": {
-																Type:       schema.TypeInt,
-																Optional:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
-															},
-
 															"use_websocket": {
 																Type:     schema.TypeBool,
 																Optional: true,
@@ -18699,35 +18856,6 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 										Type:       schema.TypeBool,
 										Optional:   true,
 										Deprecated: "This field is deprecated and will be removed in future release.",
-									},
-
-									"metadata": {
-
-										Type:       schema.TypeSet,
-										Required:   true,
-										Deprecated: "This field is deprecated and will be removed in future release.",
-										Elem: &schema.Resource{
-											Schema: map[string]*schema.Schema{
-
-												"description": {
-													Type:       schema.TypeString,
-													Optional:   true,
-													Deprecated: "This field is deprecated and will be removed in future release.",
-												},
-
-												"disable": {
-													Type:       schema.TypeBool,
-													Optional:   true,
-													Deprecated: "This field is deprecated and will be removed in future release.",
-												},
-
-												"name": {
-													Type:       schema.TypeString,
-													Required:   true,
-													Deprecated: "This field is deprecated and will be removed in future release.",
-												},
-											},
-										},
 									},
 
 									"api_endpoint": {
@@ -21281,7 +21409,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 
 	apiDiscoveryChoiceTypeFound := false
 
-	if v, ok := d.GetOk("disable_api_discovery"); ok && !apiDiscoveryChoiceTypeFound {
+	if v, ok := d.GetOk("disable_api_discovery"); ok && !isIntfNil(v) && !apiDiscoveryChoiceTypeFound {
 
 		apiDiscoveryChoiceTypeFound = true
 
@@ -21293,7 +21421,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 
 	}
 
-	if v, ok := d.GetOk("enable_api_discovery"); ok && !apiDiscoveryChoiceTypeFound {
+	if v, ok := d.GetOk("enable_api_discovery"); ok && !isIntfNil(v) && !apiDiscoveryChoiceTypeFound {
 
 		apiDiscoveryChoiceTypeFound = true
 		apiDiscoveryChoiceInt := &ves_io_schema_views_http_loadbalancer.CreateSpecType_EnableApiDiscovery{}
@@ -21303,6 +21431,92 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 		sl := v.(*schema.Set).List()
 		for _, set := range sl {
 			cs := set.(map[string]interface{})
+
+			if v, ok := cs["api_discovery_from_code_scan"]; ok && !isIntfNil(v) {
+
+				sl := v.(*schema.Set).List()
+				apiDiscoveryFromCodeScan := &ves_io_schema_views_common_waf.ApiDiscoveryFromCodeScan{}
+				apiDiscoveryChoiceInt.EnableApiDiscovery.ApiDiscoveryFromCodeScan = apiDiscoveryFromCodeScan
+				for _, set := range sl {
+					apiDiscoveryFromCodeScanMapStrToI := set.(map[string]interface{})
+
+					if v, ok := apiDiscoveryFromCodeScanMapStrToI["code_base_integrations"]; ok && !isIntfNil(v) {
+
+						sl := v.([]interface{})
+						codeBaseIntegrations := make([]*ves_io_schema_views_common_waf.CodeBaseIntegrationSelection, len(sl))
+						apiDiscoveryFromCodeScan.CodeBaseIntegrations = codeBaseIntegrations
+						for i, set := range sl {
+							codeBaseIntegrations[i] = &ves_io_schema_views_common_waf.CodeBaseIntegrationSelection{}
+							codeBaseIntegrationsMapStrToI := set.(map[string]interface{})
+
+							apiReposChoiceTypeFound := false
+
+							if v, ok := codeBaseIntegrationsMapStrToI["all_repos"]; ok && !isIntfNil(v) && !apiReposChoiceTypeFound {
+
+								apiReposChoiceTypeFound = true
+
+								if v.(bool) {
+									apiReposChoiceInt := &ves_io_schema_views_common_waf.CodeBaseIntegrationSelection_AllRepos{}
+									apiReposChoiceInt.AllRepos = &ves_io_schema.Empty{}
+									codeBaseIntegrations[i].ApiReposChoice = apiReposChoiceInt
+								}
+
+							}
+
+							if v, ok := codeBaseIntegrationsMapStrToI["selected_repos"]; ok && !isIntfNil(v) && !apiReposChoiceTypeFound {
+
+								apiReposChoiceTypeFound = true
+								apiReposChoiceInt := &ves_io_schema_views_common_waf.CodeBaseIntegrationSelection_SelectedRepos{}
+								apiReposChoiceInt.SelectedRepos = &ves_io_schema_views_common_waf.ApiCodeRepos{}
+								codeBaseIntegrations[i].ApiReposChoice = apiReposChoiceInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									if v, ok := cs["api_code_repo"]; ok && !isIntfNil(v) {
+
+										ls := make([]string, len(v.([]interface{})))
+										for i, v := range v.([]interface{}) {
+											ls[i] = v.(string)
+										}
+										apiReposChoiceInt.SelectedRepos.ApiCodeRepo = ls
+
+									}
+
+								}
+
+							}
+
+							if v, ok := codeBaseIntegrationsMapStrToI["code_base_integration"]; ok && !isIntfNil(v) {
+
+								sl := v.(*schema.Set).List()
+								codeBaseIntegrationInt := &ves_io_schema_views.ObjectRefType{}
+								codeBaseIntegrations[i].CodeBaseIntegration = codeBaseIntegrationInt
+
+								for _, set := range sl {
+									cbiMapToStrVal := set.(map[string]interface{})
+									if val, ok := cbiMapToStrVal["name"]; ok && !isIntfNil(v) {
+										codeBaseIntegrationInt.Name = val.(string)
+									}
+									if val, ok := cbiMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+										codeBaseIntegrationInt.Namespace = val.(string)
+									}
+
+									if val, ok := cbiMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+										codeBaseIntegrationInt.Tenant = val.(string)
+									}
+								}
+
+							}
+
+						}
+
+					}
+
+				}
+
+			}
 
 			if v, ok := cs["discovered_api_settings"]; ok && !isIntfNil(v) {
 
@@ -22087,6 +22301,16 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 											ls[i] = v.(string)
 										}
 										ipAsnChoiceInt.IpPrefixList.IpPrefixes = ls
+
+									}
+
+									if v, ok := cs["ipv6_prefixes"]; ok && !isIntfNil(v) {
+
+										ls := make([]string, len(v.([]interface{})))
+										for i, v := range v.([]interface{}) {
+											ls[i] = v.(string)
+										}
+										ipAsnChoiceInt.IpPrefixList.Ipv6Prefixes = ls
 
 									}
 
@@ -22895,6 +23119,16 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 
 									}
 
+									if v, ok := cs["ipv6_prefixes"]; ok && !isIntfNil(v) {
+
+										ls := make([]string, len(v.([]interface{})))
+										for i, v := range v.([]interface{}) {
+											ls[i] = v.(string)
+										}
+										ipAsnChoiceInt.IpPrefixList.Ipv6Prefixes = ls
+
+									}
+
 								}
 
 							}
@@ -23698,6 +23932,16 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 											ls[i] = v.(string)
 										}
 										ipAsnChoiceInt.IpPrefixList.IpPrefixes = ls
+
+									}
+
+									if v, ok := cs["ipv6_prefixes"]; ok && !isIntfNil(v) {
+
+										ls := make([]string, len(v.([]interface{})))
+										for i, v := range v.([]interface{}) {
+											ls[i] = v.(string)
+										}
+										ipAsnChoiceInt.IpPrefixList.Ipv6Prefixes = ls
 
 									}
 
@@ -24555,6 +24799,16 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 													ls[i] = v.(string)
 												}
 												ipAsnChoiceInt.IpPrefixList.IpPrefixes = ls
+
+											}
+
+											if v, ok := cs["ipv6_prefixes"]; ok && !isIntfNil(v) {
+
+												ls := make([]string, len(v.([]interface{})))
+												for i, v := range v.([]interface{}) {
+													ls[i] = v.(string)
+												}
+												ipAsnChoiceInt.IpPrefixList.Ipv6Prefixes = ls
 
 											}
 
@@ -25471,6 +25725,16 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 											ls[i] = v.(string)
 										}
 										ipAsnChoiceInt.IpPrefixList.IpPrefixes = ls
+
+									}
+
+									if v, ok := cs["ipv6_prefixes"]; ok && !isIntfNil(v) {
+
+										ls := make([]string, len(v.([]interface{})))
+										for i, v := range v.([]interface{}) {
+											ls[i] = v.(string)
+										}
+										ipAsnChoiceInt.IpPrefixList.Ipv6Prefixes = ls
 
 									}
 
@@ -30431,6 +30695,16 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 
 											}
 
+											if v, ok := cs["ipv6_prefixes"]; ok && !isIntfNil(v) {
+
+												ls := make([]string, len(v.([]interface{})))
+												for i, v := range v.([]interface{}) {
+													ls[i] = v.(string)
+												}
+												ipChoiceInt.IpPrefixList.Ipv6Prefixes = ls
+
+											}
+
 										}
 
 									}
@@ -30596,38 +30870,72 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 
 									}
 
-									if v, ok := specMapStrToI["tls_fingerprint_matcher"]; ok && !isIntfNil(v) {
+									tlsFingerprintChoiceTypeFound := false
+
+									if v, ok := specMapStrToI["ja4_tls_fingerprint"]; ok && !isIntfNil(v) && !tlsFingerprintChoiceTypeFound {
+
+										tlsFingerprintChoiceTypeFound = true
+										tlsFingerprintChoiceInt := &ves_io_schema_service_policy_rule.ChallengeRuleSpec_Ja4TlsFingerprint{}
+										tlsFingerprintChoiceInt.Ja4TlsFingerprint = &ves_io_schema_policy.JA4TlsFingerprintMatcherType{}
+										spec.TlsFingerprintChoice = tlsFingerprintChoiceInt
 
 										sl := v.(*schema.Set).List()
-										tlsFingerprintMatcher := &ves_io_schema_policy.TlsFingerprintMatcherType{}
-										spec.TlsFingerprintMatcher = tlsFingerprintMatcher
 										for _, set := range sl {
-											tlsFingerprintMatcherMapStrToI := set.(map[string]interface{})
+											cs := set.(map[string]interface{})
 
-											if v, ok := tlsFingerprintMatcherMapStrToI["classes"]; ok && !isIntfNil(v) {
+											if v, ok := cs["exact_values"]; ok && !isIntfNil(v) {
+
+												ls := make([]string, len(v.([]interface{})))
+												for i, v := range v.([]interface{}) {
+													ls[i] = v.(string)
+												}
+												tlsFingerprintChoiceInt.Ja4TlsFingerprint.ExactValues = ls
+
+											}
+
+										}
+
+									}
+
+									if v, ok := specMapStrToI["tls_fingerprint_matcher"]; ok && !isIntfNil(v) && !tlsFingerprintChoiceTypeFound {
+
+										tlsFingerprintChoiceTypeFound = true
+										tlsFingerprintChoiceInt := &ves_io_schema_service_policy_rule.ChallengeRuleSpec_TlsFingerprintMatcher{}
+										tlsFingerprintChoiceInt.TlsFingerprintMatcher = &ves_io_schema_policy.TlsFingerprintMatcherType{}
+										spec.TlsFingerprintChoice = tlsFingerprintChoiceInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											if v, ok := cs["classes"]; ok && !isIntfNil(v) {
 
 												classesList := []ves_io_schema_policy.KnownTlsFingerprintClass{}
 												for _, j := range v.([]interface{}) {
 													classesList = append(classesList, ves_io_schema_policy.KnownTlsFingerprintClass(ves_io_schema_policy.KnownTlsFingerprintClass_value[j.(string)]))
 												}
-												tlsFingerprintMatcher.Classes = classesList
+												tlsFingerprintChoiceInt.TlsFingerprintMatcher.Classes = classesList
 
 											}
 
-											if w, ok := tlsFingerprintMatcherMapStrToI["exact_values"]; ok && !isIntfNil(w) {
-												ls := make([]string, len(w.([]interface{})))
-												for i, v := range w.([]interface{}) {
+											if v, ok := cs["exact_values"]; ok && !isIntfNil(v) {
+
+												ls := make([]string, len(v.([]interface{})))
+												for i, v := range v.([]interface{}) {
 													ls[i] = v.(string)
 												}
-												tlsFingerprintMatcher.ExactValues = ls
+												tlsFingerprintChoiceInt.TlsFingerprintMatcher.ExactValues = ls
+
 											}
 
-											if w, ok := tlsFingerprintMatcherMapStrToI["excluded_values"]; ok && !isIntfNil(w) {
-												ls := make([]string, len(w.([]interface{})))
-												for i, v := range w.([]interface{}) {
+											if v, ok := cs["excluded_values"]; ok && !isIntfNil(v) {
+
+												ls := make([]string, len(v.([]interface{})))
+												for i, v := range v.([]interface{}) {
 													ls[i] = v.(string)
 												}
-												tlsFingerprintMatcher.ExcludedValues = ls
+												tlsFingerprintChoiceInt.TlsFingerprintMatcher.ExcludedValues = ls
+
 											}
 
 										}
@@ -31661,6 +31969,16 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 							ls[i] = v.(string)
 						}
 						mitigationChoiceInt.IpPrefixList.IpPrefixes = ls
+
+					}
+
+					if v, ok := cs["ipv6_prefixes"]; ok && !isIntfNil(v) {
+
+						ls := make([]string, len(v.([]interface{})))
+						for i, v := range v.([]interface{}) {
+							ls[i] = v.(string)
+						}
+						mitigationChoiceInt.IpPrefixList.Ipv6Prefixes = ls
 
 					}
 
@@ -34663,6 +34981,92 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 				sl := v.(*schema.Set).List()
 				for _, set := range sl {
 					cs := set.(map[string]interface{})
+
+					if v, ok := cs["api_discovery_from_code_scan"]; ok && !isIntfNil(v) {
+
+						sl := v.(*schema.Set).List()
+						apiDiscoveryFromCodeScan := &ves_io_schema_views_common_waf.ApiDiscoveryFromCodeScan{}
+						apiDiscoveryChoiceInt.EnableDiscovery.ApiDiscoveryFromCodeScan = apiDiscoveryFromCodeScan
+						for _, set := range sl {
+							apiDiscoveryFromCodeScanMapStrToI := set.(map[string]interface{})
+
+							if v, ok := apiDiscoveryFromCodeScanMapStrToI["code_base_integrations"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								codeBaseIntegrations := make([]*ves_io_schema_views_common_waf.CodeBaseIntegrationSelection, len(sl))
+								apiDiscoveryFromCodeScan.CodeBaseIntegrations = codeBaseIntegrations
+								for i, set := range sl {
+									codeBaseIntegrations[i] = &ves_io_schema_views_common_waf.CodeBaseIntegrationSelection{}
+									codeBaseIntegrationsMapStrToI := set.(map[string]interface{})
+
+									apiReposChoiceTypeFound := false
+
+									if v, ok := codeBaseIntegrationsMapStrToI["all_repos"]; ok && !isIntfNil(v) && !apiReposChoiceTypeFound {
+
+										apiReposChoiceTypeFound = true
+
+										if v.(bool) {
+											apiReposChoiceInt := &ves_io_schema_views_common_waf.CodeBaseIntegrationSelection_AllRepos{}
+											apiReposChoiceInt.AllRepos = &ves_io_schema.Empty{}
+											codeBaseIntegrations[i].ApiReposChoice = apiReposChoiceInt
+										}
+
+									}
+
+									if v, ok := codeBaseIntegrationsMapStrToI["selected_repos"]; ok && !isIntfNil(v) && !apiReposChoiceTypeFound {
+
+										apiReposChoiceTypeFound = true
+										apiReposChoiceInt := &ves_io_schema_views_common_waf.CodeBaseIntegrationSelection_SelectedRepos{}
+										apiReposChoiceInt.SelectedRepos = &ves_io_schema_views_common_waf.ApiCodeRepos{}
+										codeBaseIntegrations[i].ApiReposChoice = apiReposChoiceInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											if v, ok := cs["api_code_repo"]; ok && !isIntfNil(v) {
+
+												ls := make([]string, len(v.([]interface{})))
+												for i, v := range v.([]interface{}) {
+													ls[i] = v.(string)
+												}
+												apiReposChoiceInt.SelectedRepos.ApiCodeRepo = ls
+
+											}
+
+										}
+
+									}
+
+									if v, ok := codeBaseIntegrationsMapStrToI["code_base_integration"]; ok && !isIntfNil(v) {
+
+										sl := v.(*schema.Set).List()
+										codeBaseIntegrationInt := &ves_io_schema_views.ObjectRefType{}
+										codeBaseIntegrations[i].CodeBaseIntegration = codeBaseIntegrationInt
+
+										for _, set := range sl {
+											cbiMapToStrVal := set.(map[string]interface{})
+											if val, ok := cbiMapToStrVal["name"]; ok && !isIntfNil(v) {
+												codeBaseIntegrationInt.Name = val.(string)
+											}
+											if val, ok := cbiMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+												codeBaseIntegrationInt.Namespace = val.(string)
+											}
+
+											if val, ok := cbiMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+												codeBaseIntegrationInt.Tenant = val.(string)
+											}
+										}
+
+									}
+
+								}
+
+							}
+
+						}
+
+					}
 
 					if v, ok := cs["discovered_api_settings"]; ok && !isIntfNil(v) {
 
@@ -38422,6 +38826,16 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 
 							}
 
+							if v, ok := cs["ipv6_prefixes"]; ok && !isIntfNil(v) {
+
+								ls := make([]string, len(v.([]interface{})))
+								for i, v := range v.([]interface{}) {
+									ls[i] = v.(string)
+								}
+								ipChoiceInt.IpPrefixList.Ipv6Prefixes = ls
+
+							}
+
 						}
 
 					}
@@ -38977,6 +39391,16 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 											ls[i] = v.(string)
 										}
 										ipAsnChoiceInt.IpPrefixList.IpPrefixes = ls
+
+									}
+
+									if v, ok := cs["ipv6_prefixes"]; ok && !isIntfNil(v) {
+
+										ls := make([]string, len(v.([]interface{})))
+										for i, v := range v.([]interface{}) {
+											ls[i] = v.(string)
+										}
+										ipAsnChoiceInt.IpPrefixList.Ipv6Prefixes = ls
 
 									}
 
@@ -39834,6 +40258,16 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 													ls[i] = v.(string)
 												}
 												ipAsnChoiceInt.IpPrefixList.IpPrefixes = ls
+
+											}
+
+											if v, ok := cs["ipv6_prefixes"]; ok && !isIntfNil(v) {
+
+												ls := make([]string, len(v.([]interface{})))
+												for i, v := range v.([]interface{}) {
+													ls[i] = v.(string)
+												}
+												ipAsnChoiceInt.IpPrefixList.Ipv6Prefixes = ls
 
 											}
 
@@ -40750,6 +41184,16 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 											ls[i] = v.(string)
 										}
 										ipAsnChoiceInt.IpPrefixList.IpPrefixes = ls
+
+									}
+
+									if v, ok := cs["ipv6_prefixes"]; ok && !isIntfNil(v) {
+
+										ls := make([]string, len(v.([]interface{})))
+										for i, v := range v.([]interface{}) {
+											ls[i] = v.(string)
+										}
+										ipAsnChoiceInt.IpPrefixList.Ipv6Prefixes = ls
 
 									}
 
@@ -43367,18 +43811,6 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 								for _, set := range sl {
 									cs := set.(map[string]interface{})
 
-									if v, ok := cs["idle_timeout"]; ok && !isIntfNil(v) {
-
-										websocketChoiceInt.WebSocketConfig.IdleTimeout = uint32(v.(int))
-
-									}
-
-									if v, ok := cs["max_connect_attempts"]; ok && !isIntfNil(v) {
-
-										websocketChoiceInt.WebSocketConfig.MaxConnectAttempts = uint32(v.(int))
-
-									}
-
 									if v, ok := cs["use_websocket"]; ok && !isIntfNil(v) {
 
 										websocketChoiceInt.WebSocketConfig.UseWebsocket = v.(bool)
@@ -43752,30 +44184,6 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 							maskingModeChoiceInt := &ves_io_schema_views_http_loadbalancer.SensitiveDataTypes_Report{}
 							maskingModeChoiceInt.Report = &ves_io_schema.Empty{}
 							sensitiveDataTypesInResponse[i].MaskingModeChoice = maskingModeChoiceInt
-						}
-
-					}
-
-					if v, ok := sensitiveDataTypesInResponseMapStrToI["metadata"]; ok && !isIntfNil(v) {
-
-						sl := v.(*schema.Set).List()
-						metadata := &ves_io_schema.MessageMetaType{}
-						sensitiveDataTypesInResponse[i].Metadata = metadata
-						for _, set := range sl {
-							metadataMapStrToI := set.(map[string]interface{})
-
-							if w, ok := metadataMapStrToI["description"]; ok && !isIntfNil(w) {
-								metadata.Description = w.(string)
-							}
-
-							if w, ok := metadataMapStrToI["disable"]; ok && !isIntfNil(w) {
-								metadata.Disable = w.(bool)
-							}
-
-							if w, ok := metadataMapStrToI["name"]; ok && !isIntfNil(w) {
-								metadata.Name = w.(string)
-							}
-
 						}
 
 					}
@@ -46644,7 +47052,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 
 	apiDiscoveryChoiceTypeFound := false
 
-	if v, ok := d.GetOk("disable_api_discovery"); ok && !apiDiscoveryChoiceTypeFound {
+	if v, ok := d.GetOk("disable_api_discovery"); ok && !isIntfNil(v) && !apiDiscoveryChoiceTypeFound {
 
 		apiDiscoveryChoiceTypeFound = true
 
@@ -46656,7 +47064,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 
 	}
 
-	if v, ok := d.GetOk("enable_api_discovery"); ok && !apiDiscoveryChoiceTypeFound {
+	if v, ok := d.GetOk("enable_api_discovery"); ok && !isIntfNil(v) && !apiDiscoveryChoiceTypeFound {
 
 		apiDiscoveryChoiceTypeFound = true
 		apiDiscoveryChoiceInt := &ves_io_schema_views_http_loadbalancer.ReplaceSpecType_EnableApiDiscovery{}
@@ -46666,6 +47074,92 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 		sl := v.(*schema.Set).List()
 		for _, set := range sl {
 			cs := set.(map[string]interface{})
+
+			if v, ok := cs["api_discovery_from_code_scan"]; ok && !isIntfNil(v) {
+
+				sl := v.(*schema.Set).List()
+				apiDiscoveryFromCodeScan := &ves_io_schema_views_common_waf.ApiDiscoveryFromCodeScan{}
+				apiDiscoveryChoiceInt.EnableApiDiscovery.ApiDiscoveryFromCodeScan = apiDiscoveryFromCodeScan
+				for _, set := range sl {
+					apiDiscoveryFromCodeScanMapStrToI := set.(map[string]interface{})
+
+					if v, ok := apiDiscoveryFromCodeScanMapStrToI["code_base_integrations"]; ok && !isIntfNil(v) {
+
+						sl := v.([]interface{})
+						codeBaseIntegrations := make([]*ves_io_schema_views_common_waf.CodeBaseIntegrationSelection, len(sl))
+						apiDiscoveryFromCodeScan.CodeBaseIntegrations = codeBaseIntegrations
+						for i, set := range sl {
+							codeBaseIntegrations[i] = &ves_io_schema_views_common_waf.CodeBaseIntegrationSelection{}
+							codeBaseIntegrationsMapStrToI := set.(map[string]interface{})
+
+							apiReposChoiceTypeFound := false
+
+							if v, ok := codeBaseIntegrationsMapStrToI["all_repos"]; ok && !isIntfNil(v) && !apiReposChoiceTypeFound {
+
+								apiReposChoiceTypeFound = true
+
+								if v.(bool) {
+									apiReposChoiceInt := &ves_io_schema_views_common_waf.CodeBaseIntegrationSelection_AllRepos{}
+									apiReposChoiceInt.AllRepos = &ves_io_schema.Empty{}
+									codeBaseIntegrations[i].ApiReposChoice = apiReposChoiceInt
+								}
+
+							}
+
+							if v, ok := codeBaseIntegrationsMapStrToI["selected_repos"]; ok && !isIntfNil(v) && !apiReposChoiceTypeFound {
+
+								apiReposChoiceTypeFound = true
+								apiReposChoiceInt := &ves_io_schema_views_common_waf.CodeBaseIntegrationSelection_SelectedRepos{}
+								apiReposChoiceInt.SelectedRepos = &ves_io_schema_views_common_waf.ApiCodeRepos{}
+								codeBaseIntegrations[i].ApiReposChoice = apiReposChoiceInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									if v, ok := cs["api_code_repo"]; ok && !isIntfNil(v) {
+
+										ls := make([]string, len(v.([]interface{})))
+										for i, v := range v.([]interface{}) {
+											ls[i] = v.(string)
+										}
+										apiReposChoiceInt.SelectedRepos.ApiCodeRepo = ls
+
+									}
+
+								}
+
+							}
+
+							if v, ok := codeBaseIntegrationsMapStrToI["code_base_integration"]; ok && !isIntfNil(v) {
+
+								sl := v.(*schema.Set).List()
+								codeBaseIntegrationInt := &ves_io_schema_views.ObjectRefType{}
+								codeBaseIntegrations[i].CodeBaseIntegration = codeBaseIntegrationInt
+
+								for _, set := range sl {
+									cbiMapToStrVal := set.(map[string]interface{})
+									if val, ok := cbiMapToStrVal["name"]; ok && !isIntfNil(v) {
+										codeBaseIntegrationInt.Name = val.(string)
+									}
+									if val, ok := cbiMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+										codeBaseIntegrationInt.Namespace = val.(string)
+									}
+
+									if val, ok := cbiMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+										codeBaseIntegrationInt.Tenant = val.(string)
+									}
+								}
+
+							}
+
+						}
+
+					}
+
+				}
+
+			}
 
 			if v, ok := cs["discovered_api_settings"]; ok && !isIntfNil(v) {
 
@@ -47449,6 +47943,16 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 											ls[i] = v.(string)
 										}
 										ipAsnChoiceInt.IpPrefixList.IpPrefixes = ls
+
+									}
+
+									if v, ok := cs["ipv6_prefixes"]; ok && !isIntfNil(v) {
+
+										ls := make([]string, len(v.([]interface{})))
+										for i, v := range v.([]interface{}) {
+											ls[i] = v.(string)
+										}
+										ipAsnChoiceInt.IpPrefixList.Ipv6Prefixes = ls
 
 									}
 
@@ -48257,6 +48761,16 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 
 									}
 
+									if v, ok := cs["ipv6_prefixes"]; ok && !isIntfNil(v) {
+
+										ls := make([]string, len(v.([]interface{})))
+										for i, v := range v.([]interface{}) {
+											ls[i] = v.(string)
+										}
+										ipAsnChoiceInt.IpPrefixList.Ipv6Prefixes = ls
+
+									}
+
 								}
 
 							}
@@ -49059,6 +49573,16 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 											ls[i] = v.(string)
 										}
 										ipAsnChoiceInt.IpPrefixList.IpPrefixes = ls
+
+									}
+
+									if v, ok := cs["ipv6_prefixes"]; ok && !isIntfNil(v) {
+
+										ls := make([]string, len(v.([]interface{})))
+										for i, v := range v.([]interface{}) {
+											ls[i] = v.(string)
+										}
+										ipAsnChoiceInt.IpPrefixList.Ipv6Prefixes = ls
 
 									}
 
@@ -49916,6 +50440,16 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 													ls[i] = v.(string)
 												}
 												ipAsnChoiceInt.IpPrefixList.IpPrefixes = ls
+
+											}
+
+											if v, ok := cs["ipv6_prefixes"]; ok && !isIntfNil(v) {
+
+												ls := make([]string, len(v.([]interface{})))
+												for i, v := range v.([]interface{}) {
+													ls[i] = v.(string)
+												}
+												ipAsnChoiceInt.IpPrefixList.Ipv6Prefixes = ls
 
 											}
 
@@ -50832,6 +51366,16 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 											ls[i] = v.(string)
 										}
 										ipAsnChoiceInt.IpPrefixList.IpPrefixes = ls
+
+									}
+
+									if v, ok := cs["ipv6_prefixes"]; ok && !isIntfNil(v) {
+
+										ls := make([]string, len(v.([]interface{})))
+										for i, v := range v.([]interface{}) {
+											ls[i] = v.(string)
+										}
+										ipAsnChoiceInt.IpPrefixList.Ipv6Prefixes = ls
 
 									}
 
@@ -55787,6 +56331,16 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 
 											}
 
+											if v, ok := cs["ipv6_prefixes"]; ok && !isIntfNil(v) {
+
+												ls := make([]string, len(v.([]interface{})))
+												for i, v := range v.([]interface{}) {
+													ls[i] = v.(string)
+												}
+												ipChoiceInt.IpPrefixList.Ipv6Prefixes = ls
+
+											}
+
 										}
 
 									}
@@ -55952,38 +56506,72 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 
 									}
 
-									if v, ok := specMapStrToI["tls_fingerprint_matcher"]; ok && !isIntfNil(v) {
+									tlsFingerprintChoiceTypeFound := false
+
+									if v, ok := specMapStrToI["ja4_tls_fingerprint"]; ok && !isIntfNil(v) && !tlsFingerprintChoiceTypeFound {
+
+										tlsFingerprintChoiceTypeFound = true
+										tlsFingerprintChoiceInt := &ves_io_schema_service_policy_rule.ChallengeRuleSpec_Ja4TlsFingerprint{}
+										tlsFingerprintChoiceInt.Ja4TlsFingerprint = &ves_io_schema_policy.JA4TlsFingerprintMatcherType{}
+										spec.TlsFingerprintChoice = tlsFingerprintChoiceInt
 
 										sl := v.(*schema.Set).List()
-										tlsFingerprintMatcher := &ves_io_schema_policy.TlsFingerprintMatcherType{}
-										spec.TlsFingerprintMatcher = tlsFingerprintMatcher
 										for _, set := range sl {
-											tlsFingerprintMatcherMapStrToI := set.(map[string]interface{})
+											cs := set.(map[string]interface{})
 
-											if v, ok := tlsFingerprintMatcherMapStrToI["classes"]; ok && !isIntfNil(v) {
+											if v, ok := cs["exact_values"]; ok && !isIntfNil(v) {
+
+												ls := make([]string, len(v.([]interface{})))
+												for i, v := range v.([]interface{}) {
+													ls[i] = v.(string)
+												}
+												tlsFingerprintChoiceInt.Ja4TlsFingerprint.ExactValues = ls
+
+											}
+
+										}
+
+									}
+
+									if v, ok := specMapStrToI["tls_fingerprint_matcher"]; ok && !isIntfNil(v) && !tlsFingerprintChoiceTypeFound {
+
+										tlsFingerprintChoiceTypeFound = true
+										tlsFingerprintChoiceInt := &ves_io_schema_service_policy_rule.ChallengeRuleSpec_TlsFingerprintMatcher{}
+										tlsFingerprintChoiceInt.TlsFingerprintMatcher = &ves_io_schema_policy.TlsFingerprintMatcherType{}
+										spec.TlsFingerprintChoice = tlsFingerprintChoiceInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											if v, ok := cs["classes"]; ok && !isIntfNil(v) {
 
 												classesList := []ves_io_schema_policy.KnownTlsFingerprintClass{}
 												for _, j := range v.([]interface{}) {
 													classesList = append(classesList, ves_io_schema_policy.KnownTlsFingerprintClass(ves_io_schema_policy.KnownTlsFingerprintClass_value[j.(string)]))
 												}
-												tlsFingerprintMatcher.Classes = classesList
+												tlsFingerprintChoiceInt.TlsFingerprintMatcher.Classes = classesList
 
 											}
 
-											if w, ok := tlsFingerprintMatcherMapStrToI["exact_values"]; ok && !isIntfNil(w) {
-												ls := make([]string, len(w.([]interface{})))
-												for i, v := range w.([]interface{}) {
+											if v, ok := cs["exact_values"]; ok && !isIntfNil(v) {
+
+												ls := make([]string, len(v.([]interface{})))
+												for i, v := range v.([]interface{}) {
 													ls[i] = v.(string)
 												}
-												tlsFingerprintMatcher.ExactValues = ls
+												tlsFingerprintChoiceInt.TlsFingerprintMatcher.ExactValues = ls
+
 											}
 
-											if w, ok := tlsFingerprintMatcherMapStrToI["excluded_values"]; ok && !isIntfNil(w) {
-												ls := make([]string, len(w.([]interface{})))
-												for i, v := range w.([]interface{}) {
+											if v, ok := cs["excluded_values"]; ok && !isIntfNil(v) {
+
+												ls := make([]string, len(v.([]interface{})))
+												for i, v := range v.([]interface{}) {
 													ls[i] = v.(string)
 												}
-												tlsFingerprintMatcher.ExcludedValues = ls
+												tlsFingerprintChoiceInt.TlsFingerprintMatcher.ExcludedValues = ls
+
 											}
 
 										}
@@ -57011,6 +57599,16 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 							ls[i] = v.(string)
 						}
 						mitigationChoiceInt.IpPrefixList.IpPrefixes = ls
+
+					}
+
+					if v, ok := cs["ipv6_prefixes"]; ok && !isIntfNil(v) {
+
+						ls := make([]string, len(v.([]interface{})))
+						for i, v := range v.([]interface{}) {
+							ls[i] = v.(string)
+						}
+						mitigationChoiceInt.IpPrefixList.Ipv6Prefixes = ls
 
 					}
 
@@ -59996,6 +60594,92 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 				sl := v.(*schema.Set).List()
 				for _, set := range sl {
 					cs := set.(map[string]interface{})
+
+					if v, ok := cs["api_discovery_from_code_scan"]; ok && !isIntfNil(v) {
+
+						sl := v.(*schema.Set).List()
+						apiDiscoveryFromCodeScan := &ves_io_schema_views_common_waf.ApiDiscoveryFromCodeScan{}
+						apiDiscoveryChoiceInt.EnableDiscovery.ApiDiscoveryFromCodeScan = apiDiscoveryFromCodeScan
+						for _, set := range sl {
+							apiDiscoveryFromCodeScanMapStrToI := set.(map[string]interface{})
+
+							if v, ok := apiDiscoveryFromCodeScanMapStrToI["code_base_integrations"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								codeBaseIntegrations := make([]*ves_io_schema_views_common_waf.CodeBaseIntegrationSelection, len(sl))
+								apiDiscoveryFromCodeScan.CodeBaseIntegrations = codeBaseIntegrations
+								for i, set := range sl {
+									codeBaseIntegrations[i] = &ves_io_schema_views_common_waf.CodeBaseIntegrationSelection{}
+									codeBaseIntegrationsMapStrToI := set.(map[string]interface{})
+
+									apiReposChoiceTypeFound := false
+
+									if v, ok := codeBaseIntegrationsMapStrToI["all_repos"]; ok && !isIntfNil(v) && !apiReposChoiceTypeFound {
+
+										apiReposChoiceTypeFound = true
+
+										if v.(bool) {
+											apiReposChoiceInt := &ves_io_schema_views_common_waf.CodeBaseIntegrationSelection_AllRepos{}
+											apiReposChoiceInt.AllRepos = &ves_io_schema.Empty{}
+											codeBaseIntegrations[i].ApiReposChoice = apiReposChoiceInt
+										}
+
+									}
+
+									if v, ok := codeBaseIntegrationsMapStrToI["selected_repos"]; ok && !isIntfNil(v) && !apiReposChoiceTypeFound {
+
+										apiReposChoiceTypeFound = true
+										apiReposChoiceInt := &ves_io_schema_views_common_waf.CodeBaseIntegrationSelection_SelectedRepos{}
+										apiReposChoiceInt.SelectedRepos = &ves_io_schema_views_common_waf.ApiCodeRepos{}
+										codeBaseIntegrations[i].ApiReposChoice = apiReposChoiceInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											if v, ok := cs["api_code_repo"]; ok && !isIntfNil(v) {
+
+												ls := make([]string, len(v.([]interface{})))
+												for i, v := range v.([]interface{}) {
+													ls[i] = v.(string)
+												}
+												apiReposChoiceInt.SelectedRepos.ApiCodeRepo = ls
+
+											}
+
+										}
+
+									}
+
+									if v, ok := codeBaseIntegrationsMapStrToI["code_base_integration"]; ok && !isIntfNil(v) {
+
+										sl := v.(*schema.Set).List()
+										codeBaseIntegrationInt := &ves_io_schema_views.ObjectRefType{}
+										codeBaseIntegrations[i].CodeBaseIntegration = codeBaseIntegrationInt
+
+										for _, set := range sl {
+											cbiMapToStrVal := set.(map[string]interface{})
+											if val, ok := cbiMapToStrVal["name"]; ok && !isIntfNil(v) {
+												codeBaseIntegrationInt.Name = val.(string)
+											}
+											if val, ok := cbiMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+												codeBaseIntegrationInt.Namespace = val.(string)
+											}
+
+											if val, ok := cbiMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+												codeBaseIntegrationInt.Tenant = val.(string)
+											}
+										}
+
+									}
+
+								}
+
+							}
+
+						}
+
+					}
 
 					if v, ok := cs["discovered_api_settings"]; ok && !isIntfNil(v) {
 
@@ -63751,6 +64435,16 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 
 							}
 
+							if v, ok := cs["ipv6_prefixes"]; ok && !isIntfNil(v) {
+
+								ls := make([]string, len(v.([]interface{})))
+								for i, v := range v.([]interface{}) {
+									ls[i] = v.(string)
+								}
+								ipChoiceInt.IpPrefixList.Ipv6Prefixes = ls
+
+							}
+
 						}
 
 					}
@@ -64303,6 +64997,16 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 											ls[i] = v.(string)
 										}
 										ipAsnChoiceInt.IpPrefixList.IpPrefixes = ls
+
+									}
+
+									if v, ok := cs["ipv6_prefixes"]; ok && !isIntfNil(v) {
+
+										ls := make([]string, len(v.([]interface{})))
+										for i, v := range v.([]interface{}) {
+											ls[i] = v.(string)
+										}
+										ipAsnChoiceInt.IpPrefixList.Ipv6Prefixes = ls
 
 									}
 
@@ -65160,6 +65864,16 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 													ls[i] = v.(string)
 												}
 												ipAsnChoiceInt.IpPrefixList.IpPrefixes = ls
+
+											}
+
+											if v, ok := cs["ipv6_prefixes"]; ok && !isIntfNil(v) {
+
+												ls := make([]string, len(v.([]interface{})))
+												for i, v := range v.([]interface{}) {
+													ls[i] = v.(string)
+												}
+												ipAsnChoiceInt.IpPrefixList.Ipv6Prefixes = ls
 
 											}
 
@@ -66076,6 +66790,16 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 											ls[i] = v.(string)
 										}
 										ipAsnChoiceInt.IpPrefixList.IpPrefixes = ls
+
+									}
+
+									if v, ok := cs["ipv6_prefixes"]; ok && !isIntfNil(v) {
+
+										ls := make([]string, len(v.([]interface{})))
+										for i, v := range v.([]interface{}) {
+											ls[i] = v.(string)
+										}
+										ipAsnChoiceInt.IpPrefixList.Ipv6Prefixes = ls
 
 									}
 
@@ -68692,18 +69416,6 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 								for _, set := range sl {
 									cs := set.(map[string]interface{})
 
-									if v, ok := cs["idle_timeout"]; ok && !isIntfNil(v) {
-
-										websocketChoiceInt.WebSocketConfig.IdleTimeout = uint32(v.(int))
-
-									}
-
-									if v, ok := cs["max_connect_attempts"]; ok && !isIntfNil(v) {
-
-										websocketChoiceInt.WebSocketConfig.MaxConnectAttempts = uint32(v.(int))
-
-									}
-
 									if v, ok := cs["use_websocket"]; ok && !isIntfNil(v) {
 
 										websocketChoiceInt.WebSocketConfig.UseWebsocket = v.(bool)
@@ -69076,30 +69788,6 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 							maskingModeChoiceInt := &ves_io_schema_views_http_loadbalancer.SensitiveDataTypes_Report{}
 							maskingModeChoiceInt.Report = &ves_io_schema.Empty{}
 							sensitiveDataTypesInResponse[i].MaskingModeChoice = maskingModeChoiceInt
-						}
-
-					}
-
-					if v, ok := sensitiveDataTypesInResponseMapStrToI["metadata"]; ok && !isIntfNil(v) {
-
-						sl := v.(*schema.Set).List()
-						metadata := &ves_io_schema.MessageMetaType{}
-						sensitiveDataTypesInResponse[i].Metadata = metadata
-						for _, set := range sl {
-							metadataMapStrToI := set.(map[string]interface{})
-
-							if w, ok := metadataMapStrToI["description"]; ok && !isIntfNil(w) {
-								metadata.Description = w.(string)
-							}
-
-							if w, ok := metadataMapStrToI["disable"]; ok && !isIntfNil(w) {
-								metadata.Disable = w.(bool)
-							}
-
-							if w, ok := metadataMapStrToI["name"]; ok && !isIntfNil(w) {
-								metadata.Name = w.(string)
-							}
-
 						}
 
 					}

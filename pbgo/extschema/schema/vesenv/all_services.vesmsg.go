@@ -1013,6 +1013,28 @@ func (v *ValidateServiceChoice) Validate(ctx context.Context, pm interface{}, op
 				return err
 			}
 		}
+	case *ServiceChoice_Discovery:
+		if fv, exists := v.FldValidators["choice.discovery"]; exists {
+			val := m.GetChoice().(*ServiceChoice_Discovery).Discovery
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("discovery"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ServiceChoice_Wibadapter:
+		if fv, exists := v.FldValidators["choice.wibadapter"]; exists {
+			val := m.GetChoice().(*ServiceChoice_Wibadapter).Wibadapter
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("wibadapter"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 

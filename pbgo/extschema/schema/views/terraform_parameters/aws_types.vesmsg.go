@@ -740,6 +740,15 @@ func (v *ValidateAWSTGWType) Validate(ctx context.Context, pm interface{}, opts 
 
 	}
 
+	if fv, exists := v.FldValidators["gre_tunnel"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("gre_tunnel"))
+		if err := fv(ctx, m.GetGreTunnel(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["inside_security_group_id"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("inside_security_group_id"))
@@ -871,6 +880,18 @@ func (v *ValidateAWSTGWType) Validate(ctx context.Context, pm interface{}, opts 
 		vOpts := append(opts, db.WithValidateField("tgw"))
 		if err := fv(ctx, m.GetTgw(), vOpts...); err != nil {
 			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["transit_gateway_cidr_block"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("transit_gateway_cidr_block"))
+		for idx, item := range m.GetTransitGatewayCidrBlock() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
 		}
 
 	}

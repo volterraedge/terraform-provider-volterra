@@ -60,138 +60,128 @@ func resourceVolterraUztnaLeasepool() *schema.Resource {
 				ForceNew: true,
 			},
 
-			"lease_pool": {
+			"ip_version": {
 
-				Type:     schema.TypeList,
+				Type:     schema.TypeSet,
 				Required: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 
-						"end_address": {
-
-							Type:     schema.TypeSet,
-							Required: true,
-							Elem: &schema.Resource{
-								Schema: map[string]*schema.Schema{
-
-									"ipv4": {
-
-										Type:     schema.TypeSet,
-										Optional: true,
-										Elem: &schema.Resource{
-											Schema: map[string]*schema.Schema{
-
-												"addr": {
-													Type:     schema.TypeString,
-													Optional: true,
-												},
-											},
-										},
-									},
-
-									"ipv6": {
-
-										Type:     schema.TypeSet,
-										Optional: true,
-										Elem: &schema.Resource{
-											Schema: map[string]*schema.Schema{
-
-												"addr": {
-													Type:     schema.TypeString,
-													Optional: true,
-												},
-											},
-										},
-									},
-								},
-							},
-						},
-
-						"start_address": {
-
-							Type:     schema.TypeSet,
-							Required: true,
-							Elem: &schema.Resource{
-								Schema: map[string]*schema.Schema{
-
-									"ipv4": {
-
-										Type:     schema.TypeSet,
-										Optional: true,
-										Elem: &schema.Resource{
-											Schema: map[string]*schema.Schema{
-
-												"addr": {
-													Type:     schema.TypeString,
-													Optional: true,
-												},
-											},
-										},
-									},
-
-									"ipv6": {
-
-										Type:     schema.TypeSet,
-										Optional: true,
-										Elem: &schema.Resource{
-											Schema: map[string]*schema.Schema{
-
-												"addr": {
-													Type:     schema.TypeString,
-													Optional: true,
-												},
-											},
-										},
-									},
-								},
-							},
-						},
-					},
-				},
-			},
-
-			"network": {
-
-				Type:     schema.TypeList,
-				Required: true,
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-
-						"ipv4": {
+						"ipv4_vip": {
 
 							Type:     schema.TypeSet,
 							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
-									"plen": {
-										Type:     schema.TypeInt,
+									"prefix": {
+
+										Type: schema.TypeList,
+
 										Optional: true,
+										Elem: &schema.Schema{
+											Type: schema.TypeString,
+										},
 									},
 
-									"prefix": {
-										Type:     schema.TypeString,
-										Optional: true,
+									"vip4_range": {
+
+										Type:     schema.TypeList,
+										Required: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"end_address": {
+
+													Type:     schema.TypeSet,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"addr": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+														},
+													},
+												},
+
+												"start_address": {
+
+													Type:     schema.TypeSet,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"addr": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+														},
+													},
+												},
+											},
+										},
 									},
 								},
 							},
 						},
 
-						"ipv6": {
+						"ipv6_vip": {
 
 							Type:     schema.TypeSet,
 							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
-									"plen": {
-										Type:     schema.TypeInt,
+									"ipv6_prefix": {
+
+										Type: schema.TypeList,
+
 										Optional: true,
+										Elem: &schema.Schema{
+											Type: schema.TypeString,
+										},
 									},
 
-									"prefix": {
-										Type:     schema.TypeString,
-										Optional: true,
+									"vip6_range": {
+
+										Type:     schema.TypeList,
+										Required: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"end_address": {
+
+													Type:     schema.TypeSet,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"addr": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+														},
+													},
+												},
+
+												"start_address": {
+
+													Type:     schema.TypeSet,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"addr": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+														},
+													},
+												},
+											},
+										},
 									},
 								},
 							},
@@ -256,164 +246,80 @@ func resourceVolterraUztnaLeasepoolCreate(d *schema.ResourceData, meta interface
 			v.(string)
 	}
 
-	//lease_pool
-	if v, ok := d.GetOk("lease_pool"); ok && !isIntfNil(v) {
+	//ip_version
+	if v, ok := d.GetOk("ip_version"); ok && !isIntfNil(v) {
 
-		sl := v.([]interface{})
-		leasePool := make([]*ves_io_schema_uztna_uztna_leasepool.LeasePool, len(sl))
-		createSpec.LeasePool = leasePool
-		for i, set := range sl {
-			leasePool[i] = &ves_io_schema_uztna_uztna_leasepool.LeasePool{}
-			leasePoolMapStrToI := set.(map[string]interface{})
+		sl := v.(*schema.Set).List()
+		ipVersion := &ves_io_schema_uztna_uztna_leasepool.IPVersion{}
+		createSpec.IpVersion = ipVersion
+		for _, set := range sl {
+			ipVersionMapStrToI := set.(map[string]interface{})
 
-			if v, ok := leasePoolMapStrToI["end_address"]; ok && !isIntfNil(v) {
+			ipVipTypeFound := false
 
-				sl := v.(*schema.Set).List()
-				endAddress := &ves_io_schema.IpAddressType{}
-				leasePool[i].EndAddress = endAddress
-				for _, set := range sl {
-					endAddressMapStrToI := set.(map[string]interface{})
+			if v, ok := ipVersionMapStrToI["ipv4_vip"]; ok && !isIntfNil(v) && !ipVipTypeFound {
 
-					verTypeFound := false
-
-					if v, ok := endAddressMapStrToI["ipv4"]; ok && !isIntfNil(v) && !verTypeFound {
-
-						verTypeFound = true
-						verInt := &ves_io_schema.IpAddressType_Ipv4{}
-						verInt.Ipv4 = &ves_io_schema.Ipv4AddressType{}
-						endAddress.Ver = verInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["addr"]; ok && !isIntfNil(v) {
-
-								verInt.Ipv4.Addr = v.(string)
-
-							}
-
-						}
-
-					}
-
-					if v, ok := endAddressMapStrToI["ipv6"]; ok && !isIntfNil(v) && !verTypeFound {
-
-						verTypeFound = true
-						verInt := &ves_io_schema.IpAddressType_Ipv6{}
-						verInt.Ipv6 = &ves_io_schema.Ipv6AddressType{}
-						endAddress.Ver = verInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["addr"]; ok && !isIntfNil(v) {
-
-								verInt.Ipv6.Addr = v.(string)
-
-							}
-
-						}
-
-					}
-
-				}
-
-			}
-
-			if v, ok := leasePoolMapStrToI["start_address"]; ok && !isIntfNil(v) {
-
-				sl := v.(*schema.Set).List()
-				startAddress := &ves_io_schema.IpAddressType{}
-				leasePool[i].StartAddress = startAddress
-				for _, set := range sl {
-					startAddressMapStrToI := set.(map[string]interface{})
-
-					verTypeFound := false
-
-					if v, ok := startAddressMapStrToI["ipv4"]; ok && !isIntfNil(v) && !verTypeFound {
-
-						verTypeFound = true
-						verInt := &ves_io_schema.IpAddressType_Ipv4{}
-						verInt.Ipv4 = &ves_io_schema.Ipv4AddressType{}
-						startAddress.Ver = verInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["addr"]; ok && !isIntfNil(v) {
-
-								verInt.Ipv4.Addr = v.(string)
-
-							}
-
-						}
-
-					}
-
-					if v, ok := startAddressMapStrToI["ipv6"]; ok && !isIntfNil(v) && !verTypeFound {
-
-						verTypeFound = true
-						verInt := &ves_io_schema.IpAddressType_Ipv6{}
-						verInt.Ipv6 = &ves_io_schema.Ipv6AddressType{}
-						startAddress.Ver = verInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["addr"]; ok && !isIntfNil(v) {
-
-								verInt.Ipv6.Addr = v.(string)
-
-							}
-
-						}
-
-					}
-
-				}
-
-			}
-
-		}
-
-	}
-
-	//network
-	if v, ok := d.GetOk("network"); ok && !isIntfNil(v) {
-
-		sl := v.([]interface{})
-		network := make([]*ves_io_schema.IpSubnetType, len(sl))
-		createSpec.Network = network
-		for i, set := range sl {
-			network[i] = &ves_io_schema.IpSubnetType{}
-			networkMapStrToI := set.(map[string]interface{})
-
-			verTypeFound := false
-
-			if v, ok := networkMapStrToI["ipv4"]; ok && !isIntfNil(v) && !verTypeFound {
-
-				verTypeFound = true
-				verInt := &ves_io_schema.IpSubnetType_Ipv4{}
-				verInt.Ipv4 = &ves_io_schema.Ipv4SubnetType{}
-				network[i].Ver = verInt
+				ipVipTypeFound = true
+				ipVipInt := &ves_io_schema_uztna_uztna_leasepool.IPVersion_Ipv4Vip{}
+				ipVipInt.Ipv4Vip = &ves_io_schema_uztna_uztna_leasepool.IPV4LeasePoolConfig{}
+				ipVersion.IpVip = ipVipInt
 
 				sl := v.(*schema.Set).List()
 				for _, set := range sl {
 					cs := set.(map[string]interface{})
 
-					if v, ok := cs["plen"]; ok && !isIntfNil(v) {
+					if v, ok := cs["prefix"]; ok && !isIntfNil(v) {
 
-						verInt.Ipv4.Plen = uint32(v.(int))
+						ls := make([]string, len(v.([]interface{})))
+						for i, v := range v.([]interface{}) {
+							ls[i] = v.(string)
+						}
+						ipVipInt.Ipv4Vip.Prefix = ls
 
 					}
 
-					if v, ok := cs["prefix"]; ok && !isIntfNil(v) {
+					if v, ok := cs["vip4_range"]; ok && !isIntfNil(v) {
 
-						verInt.Ipv4.Prefix = v.(string)
+						sl := v.([]interface{})
+						vip4Range := make([]*ves_io_schema_uztna_uztna_leasepool.IPV4LeasePoolRange, len(sl))
+						ipVipInt.Ipv4Vip.Vip4Range = vip4Range
+						for i, set := range sl {
+							vip4Range[i] = &ves_io_schema_uztna_uztna_leasepool.IPV4LeasePoolRange{}
+							vip4RangeMapStrToI := set.(map[string]interface{})
+
+							if v, ok := vip4RangeMapStrToI["end_address"]; ok && !isIntfNil(v) {
+
+								sl := v.(*schema.Set).List()
+								endAddress := &ves_io_schema.Ipv4AddressType{}
+								vip4Range[i].EndAddress = endAddress
+								for _, set := range sl {
+									endAddressMapStrToI := set.(map[string]interface{})
+
+									if w, ok := endAddressMapStrToI["addr"]; ok && !isIntfNil(w) {
+										endAddress.Addr = w.(string)
+									}
+
+								}
+
+							}
+
+							if v, ok := vip4RangeMapStrToI["start_address"]; ok && !isIntfNil(v) {
+
+								sl := v.(*schema.Set).List()
+								startAddress := &ves_io_schema.Ipv4AddressType{}
+								vip4Range[i].StartAddress = startAddress
+								for _, set := range sl {
+									startAddressMapStrToI := set.(map[string]interface{})
+
+									if w, ok := startAddressMapStrToI["addr"]; ok && !isIntfNil(w) {
+										startAddress.Addr = w.(string)
+									}
+
+								}
+
+							}
+
+						}
 
 					}
 
@@ -421,26 +327,69 @@ func resourceVolterraUztnaLeasepoolCreate(d *schema.ResourceData, meta interface
 
 			}
 
-			if v, ok := networkMapStrToI["ipv6"]; ok && !isIntfNil(v) && !verTypeFound {
+			if v, ok := ipVersionMapStrToI["ipv6_vip"]; ok && !isIntfNil(v) && !ipVipTypeFound {
 
-				verTypeFound = true
-				verInt := &ves_io_schema.IpSubnetType_Ipv6{}
-				verInt.Ipv6 = &ves_io_schema.Ipv6SubnetType{}
-				network[i].Ver = verInt
+				ipVipTypeFound = true
+				ipVipInt := &ves_io_schema_uztna_uztna_leasepool.IPVersion_Ipv6Vip{}
+				ipVipInt.Ipv6Vip = &ves_io_schema_uztna_uztna_leasepool.IPV6LeasePoolConfig{}
+				ipVersion.IpVip = ipVipInt
 
 				sl := v.(*schema.Set).List()
 				for _, set := range sl {
 					cs := set.(map[string]interface{})
 
-					if v, ok := cs["plen"]; ok && !isIntfNil(v) {
+					if v, ok := cs["ipv6_prefix"]; ok && !isIntfNil(v) {
 
-						verInt.Ipv6.Plen = uint32(v.(int))
+						ls := make([]string, len(v.([]interface{})))
+						for i, v := range v.([]interface{}) {
+							ls[i] = v.(string)
+						}
+						ipVipInt.Ipv6Vip.Ipv6Prefix = ls
 
 					}
 
-					if v, ok := cs["prefix"]; ok && !isIntfNil(v) {
+					if v, ok := cs["vip6_range"]; ok && !isIntfNil(v) {
 
-						verInt.Ipv6.Prefix = v.(string)
+						sl := v.([]interface{})
+						vip6Range := make([]*ves_io_schema_uztna_uztna_leasepool.IPV6LeasePoolRange, len(sl))
+						ipVipInt.Ipv6Vip.Vip6Range = vip6Range
+						for i, set := range sl {
+							vip6Range[i] = &ves_io_schema_uztna_uztna_leasepool.IPV6LeasePoolRange{}
+							vip6RangeMapStrToI := set.(map[string]interface{})
+
+							if v, ok := vip6RangeMapStrToI["end_address"]; ok && !isIntfNil(v) {
+
+								sl := v.(*schema.Set).List()
+								endAddress := &ves_io_schema.Ipv6AddressType{}
+								vip6Range[i].EndAddress = endAddress
+								for _, set := range sl {
+									endAddressMapStrToI := set.(map[string]interface{})
+
+									if w, ok := endAddressMapStrToI["addr"]; ok && !isIntfNil(w) {
+										endAddress.Addr = w.(string)
+									}
+
+								}
+
+							}
+
+							if v, ok := vip6RangeMapStrToI["start_address"]; ok && !isIntfNil(v) {
+
+								sl := v.(*schema.Set).List()
+								startAddress := &ves_io_schema.Ipv6AddressType{}
+								vip6Range[i].StartAddress = startAddress
+								for _, set := range sl {
+									startAddressMapStrToI := set.(map[string]interface{})
+
+									if w, ok := startAddressMapStrToI["addr"]; ok && !isIntfNil(w) {
+										startAddress.Addr = w.(string)
+									}
+
+								}
+
+							}
+
+						}
 
 					}
 
@@ -551,162 +500,79 @@ func resourceVolterraUztnaLeasepoolUpdate(d *schema.ResourceData, meta interface
 			v.(string)
 	}
 
-	if v, ok := d.GetOk("lease_pool"); ok && !isIntfNil(v) {
+	if v, ok := d.GetOk("ip_version"); ok && !isIntfNil(v) {
 
-		sl := v.([]interface{})
-		leasePool := make([]*ves_io_schema_uztna_uztna_leasepool.LeasePool, len(sl))
-		updateSpec.LeasePool = leasePool
-		for i, set := range sl {
-			leasePool[i] = &ves_io_schema_uztna_uztna_leasepool.LeasePool{}
-			leasePoolMapStrToI := set.(map[string]interface{})
+		sl := v.(*schema.Set).List()
+		ipVersion := &ves_io_schema_uztna_uztna_leasepool.IPVersion{}
+		updateSpec.IpVersion = ipVersion
+		for _, set := range sl {
+			ipVersionMapStrToI := set.(map[string]interface{})
 
-			if v, ok := leasePoolMapStrToI["end_address"]; ok && !isIntfNil(v) {
+			ipVipTypeFound := false
 
-				sl := v.(*schema.Set).List()
-				endAddress := &ves_io_schema.IpAddressType{}
-				leasePool[i].EndAddress = endAddress
-				for _, set := range sl {
-					endAddressMapStrToI := set.(map[string]interface{})
+			if v, ok := ipVersionMapStrToI["ipv4_vip"]; ok && !isIntfNil(v) && !ipVipTypeFound {
 
-					verTypeFound := false
-
-					if v, ok := endAddressMapStrToI["ipv4"]; ok && !isIntfNil(v) && !verTypeFound {
-
-						verTypeFound = true
-						verInt := &ves_io_schema.IpAddressType_Ipv4{}
-						verInt.Ipv4 = &ves_io_schema.Ipv4AddressType{}
-						endAddress.Ver = verInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["addr"]; ok && !isIntfNil(v) {
-
-								verInt.Ipv4.Addr = v.(string)
-
-							}
-
-						}
-
-					}
-
-					if v, ok := endAddressMapStrToI["ipv6"]; ok && !isIntfNil(v) && !verTypeFound {
-
-						verTypeFound = true
-						verInt := &ves_io_schema.IpAddressType_Ipv6{}
-						verInt.Ipv6 = &ves_io_schema.Ipv6AddressType{}
-						endAddress.Ver = verInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["addr"]; ok && !isIntfNil(v) {
-
-								verInt.Ipv6.Addr = v.(string)
-
-							}
-
-						}
-
-					}
-
-				}
-
-			}
-
-			if v, ok := leasePoolMapStrToI["start_address"]; ok && !isIntfNil(v) {
-
-				sl := v.(*schema.Set).List()
-				startAddress := &ves_io_schema.IpAddressType{}
-				leasePool[i].StartAddress = startAddress
-				for _, set := range sl {
-					startAddressMapStrToI := set.(map[string]interface{})
-
-					verTypeFound := false
-
-					if v, ok := startAddressMapStrToI["ipv4"]; ok && !isIntfNil(v) && !verTypeFound {
-
-						verTypeFound = true
-						verInt := &ves_io_schema.IpAddressType_Ipv4{}
-						verInt.Ipv4 = &ves_io_schema.Ipv4AddressType{}
-						startAddress.Ver = verInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["addr"]; ok && !isIntfNil(v) {
-
-								verInt.Ipv4.Addr = v.(string)
-
-							}
-
-						}
-
-					}
-
-					if v, ok := startAddressMapStrToI["ipv6"]; ok && !isIntfNil(v) && !verTypeFound {
-
-						verTypeFound = true
-						verInt := &ves_io_schema.IpAddressType_Ipv6{}
-						verInt.Ipv6 = &ves_io_schema.Ipv6AddressType{}
-						startAddress.Ver = verInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["addr"]; ok && !isIntfNil(v) {
-
-								verInt.Ipv6.Addr = v.(string)
-
-							}
-
-						}
-
-					}
-
-				}
-
-			}
-
-		}
-
-	}
-
-	if v, ok := d.GetOk("network"); ok && !isIntfNil(v) {
-
-		sl := v.([]interface{})
-		network := make([]*ves_io_schema.IpSubnetType, len(sl))
-		updateSpec.Network = network
-		for i, set := range sl {
-			network[i] = &ves_io_schema.IpSubnetType{}
-			networkMapStrToI := set.(map[string]interface{})
-
-			verTypeFound := false
-
-			if v, ok := networkMapStrToI["ipv4"]; ok && !isIntfNil(v) && !verTypeFound {
-
-				verTypeFound = true
-				verInt := &ves_io_schema.IpSubnetType_Ipv4{}
-				verInt.Ipv4 = &ves_io_schema.Ipv4SubnetType{}
-				network[i].Ver = verInt
+				ipVipTypeFound = true
+				ipVipInt := &ves_io_schema_uztna_uztna_leasepool.IPVersion_Ipv4Vip{}
+				ipVipInt.Ipv4Vip = &ves_io_schema_uztna_uztna_leasepool.IPV4LeasePoolConfig{}
+				ipVersion.IpVip = ipVipInt
 
 				sl := v.(*schema.Set).List()
 				for _, set := range sl {
 					cs := set.(map[string]interface{})
 
-					if v, ok := cs["plen"]; ok && !isIntfNil(v) {
+					if v, ok := cs["prefix"]; ok && !isIntfNil(v) {
 
-						verInt.Ipv4.Plen = uint32(v.(int))
+						ls := make([]string, len(v.([]interface{})))
+						for i, v := range v.([]interface{}) {
+							ls[i] = v.(string)
+						}
+						ipVipInt.Ipv4Vip.Prefix = ls
 
 					}
 
-					if v, ok := cs["prefix"]; ok && !isIntfNil(v) {
+					if v, ok := cs["vip4_range"]; ok && !isIntfNil(v) {
 
-						verInt.Ipv4.Prefix = v.(string)
+						sl := v.([]interface{})
+						vip4Range := make([]*ves_io_schema_uztna_uztna_leasepool.IPV4LeasePoolRange, len(sl))
+						ipVipInt.Ipv4Vip.Vip4Range = vip4Range
+						for i, set := range sl {
+							vip4Range[i] = &ves_io_schema_uztna_uztna_leasepool.IPV4LeasePoolRange{}
+							vip4RangeMapStrToI := set.(map[string]interface{})
+
+							if v, ok := vip4RangeMapStrToI["end_address"]; ok && !isIntfNil(v) {
+
+								sl := v.(*schema.Set).List()
+								endAddress := &ves_io_schema.Ipv4AddressType{}
+								vip4Range[i].EndAddress = endAddress
+								for _, set := range sl {
+									endAddressMapStrToI := set.(map[string]interface{})
+
+									if w, ok := endAddressMapStrToI["addr"]; ok && !isIntfNil(w) {
+										endAddress.Addr = w.(string)
+									}
+
+								}
+
+							}
+
+							if v, ok := vip4RangeMapStrToI["start_address"]; ok && !isIntfNil(v) {
+
+								sl := v.(*schema.Set).List()
+								startAddress := &ves_io_schema.Ipv4AddressType{}
+								vip4Range[i].StartAddress = startAddress
+								for _, set := range sl {
+									startAddressMapStrToI := set.(map[string]interface{})
+
+									if w, ok := startAddressMapStrToI["addr"]; ok && !isIntfNil(w) {
+										startAddress.Addr = w.(string)
+									}
+
+								}
+
+							}
+
+						}
 
 					}
 
@@ -714,26 +580,69 @@ func resourceVolterraUztnaLeasepoolUpdate(d *schema.ResourceData, meta interface
 
 			}
 
-			if v, ok := networkMapStrToI["ipv6"]; ok && !isIntfNil(v) && !verTypeFound {
+			if v, ok := ipVersionMapStrToI["ipv6_vip"]; ok && !isIntfNil(v) && !ipVipTypeFound {
 
-				verTypeFound = true
-				verInt := &ves_io_schema.IpSubnetType_Ipv6{}
-				verInt.Ipv6 = &ves_io_schema.Ipv6SubnetType{}
-				network[i].Ver = verInt
+				ipVipTypeFound = true
+				ipVipInt := &ves_io_schema_uztna_uztna_leasepool.IPVersion_Ipv6Vip{}
+				ipVipInt.Ipv6Vip = &ves_io_schema_uztna_uztna_leasepool.IPV6LeasePoolConfig{}
+				ipVersion.IpVip = ipVipInt
 
 				sl := v.(*schema.Set).List()
 				for _, set := range sl {
 					cs := set.(map[string]interface{})
 
-					if v, ok := cs["plen"]; ok && !isIntfNil(v) {
+					if v, ok := cs["ipv6_prefix"]; ok && !isIntfNil(v) {
 
-						verInt.Ipv6.Plen = uint32(v.(int))
+						ls := make([]string, len(v.([]interface{})))
+						for i, v := range v.([]interface{}) {
+							ls[i] = v.(string)
+						}
+						ipVipInt.Ipv6Vip.Ipv6Prefix = ls
 
 					}
 
-					if v, ok := cs["prefix"]; ok && !isIntfNil(v) {
+					if v, ok := cs["vip6_range"]; ok && !isIntfNil(v) {
 
-						verInt.Ipv6.Prefix = v.(string)
+						sl := v.([]interface{})
+						vip6Range := make([]*ves_io_schema_uztna_uztna_leasepool.IPV6LeasePoolRange, len(sl))
+						ipVipInt.Ipv6Vip.Vip6Range = vip6Range
+						for i, set := range sl {
+							vip6Range[i] = &ves_io_schema_uztna_uztna_leasepool.IPV6LeasePoolRange{}
+							vip6RangeMapStrToI := set.(map[string]interface{})
+
+							if v, ok := vip6RangeMapStrToI["end_address"]; ok && !isIntfNil(v) {
+
+								sl := v.(*schema.Set).List()
+								endAddress := &ves_io_schema.Ipv6AddressType{}
+								vip6Range[i].EndAddress = endAddress
+								for _, set := range sl {
+									endAddressMapStrToI := set.(map[string]interface{})
+
+									if w, ok := endAddressMapStrToI["addr"]; ok && !isIntfNil(w) {
+										endAddress.Addr = w.(string)
+									}
+
+								}
+
+							}
+
+							if v, ok := vip6RangeMapStrToI["start_address"]; ok && !isIntfNil(v) {
+
+								sl := v.(*schema.Set).List()
+								startAddress := &ves_io_schema.Ipv6AddressType{}
+								vip6Range[i].StartAddress = startAddress
+								for _, set := range sl {
+									startAddressMapStrToI := set.(map[string]interface{})
+
+									if w, ok := startAddressMapStrToI["addr"]; ok && !isIntfNil(w) {
+										startAddress.Addr = w.(string)
+									}
+
+								}
+
+							}
+
+						}
 
 					}
 

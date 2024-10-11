@@ -1,9 +1,9 @@
 ---
 
 page_title: "Volterra: managed_tenant"
-
 description: "The managed_tenant allows CRUD of Managed Tenant resource on Volterra SaaS"
------------------------------------------------------------------------------------------
+
+---
 
 Resource volterra_managed_tenant
 ================================

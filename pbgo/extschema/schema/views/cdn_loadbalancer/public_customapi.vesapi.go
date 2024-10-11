@@ -2854,7 +2854,7 @@ var CustomAPISwaggerJSON string = `{
         },
         "cdn_loadbalancerLilacCDNMetricsFieldSelector": {
             "type": "string",
-            "description": "CDN Metric fields. Naming convention is \u003cfield\u003e_\u003caggregation\u003e\n\nREQUEST_SUCCESS computed from REQUEST_TOTAL - REQUEST_FAILED\nBandwidth computed from DATA_OUT",
+            "description": "CDN Metric fields. Naming convention is \u003cfield\u003e_\u003caggregation\u003e\n\nREQUEST_SUCCESS computed from REQUEST_TOTAL - REQUEST_FAILED\nBandwidth computed from DATA_OUT\nBandwidth computed from DATA_IN",
             "title": "Metrics Field Selector options",
             "enum": [
                 "REQUEST_TOTAL_SUM",
@@ -2865,7 +2865,8 @@ var CustomAPISwaggerJSON string = `{
                 "REQUEST_4XX_SUM",
                 "REQUEST_5XX_SUM",
                 "DATA_OUT_SUM",
-                "LATENCY_MEAN"
+                "LATENCY_MEAN",
+                "DATA_IN_SUM"
             ],
             "default": "REQUEST_TOTAL_SUM",
             "x-displayname": "Metrics Field Selector",

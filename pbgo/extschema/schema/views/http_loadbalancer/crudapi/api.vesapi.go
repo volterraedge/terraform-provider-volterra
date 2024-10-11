@@ -4418,6 +4418,30 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "common_wafApiCodeRepos": {
+            "type": "object",
+            "description": "Select which API repositories represent the LB applications",
+            "title": "API Code Repositories",
+            "x-displayname": "API Code Repositories",
+            "x-ves-proto-message": "ves.io.schema.views.common_waf.ApiCodeRepos",
+            "properties": {
+                "api_code_repo": {
+                    "type": "array",
+                    "description": " Code repository which contain API endpoints\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 256\n",
+                    "title": "API Code Repository",
+                    "items": {
+                        "type": "string",
+                        "maxLength": 256
+                    },
+                    "x-displayname": "API Code Repository",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_len": "256"
+                    }
+                }
+            }
+        },
         "common_wafApiDefinitionList": {
             "type": "object",
             "description": "x-displayName: \"API Definition List\"\nList of api definitions.",
@@ -4433,6 +4457,31 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "common_wafApiDiscoveryFromCodeScan": {
+            "type": "object",
+            "description": "x-required",
+            "title": "API Discovery Code Scan",
+            "x-displayname": "Select Code Base and Repositories",
+            "x-ves-proto-message": "ves.io.schema.views.common_waf.ApiDiscoveryFromCodeScan",
+            "properties": {
+                "code_base_integrations": {
+                    "type": "array",
+                    "description": "\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 5\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "Code Base Integrations",
+                    "maxItems": 5,
+                    "items": {
+                        "$ref": "#/definitions/common_wafCodeBaseIntegrationSelection"
+                    },
+                    "x-displayname": "Select Code Base Integrations",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.max_items": "5",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                }
+            }
+        },
         "common_wafApiDiscoverySetting": {
             "type": "object",
             "description": "Specifies the settings used for API discovery",
@@ -4442,6 +4491,12 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-learn_from_redirect_traffic": "[\"disable_learn_from_redirect_traffic\",\"enable_learn_from_redirect_traffic\"]",
             "x-ves-proto-message": "ves.io.schema.views.common_waf.ApiDiscoverySetting",
             "properties": {
+                "api_discovery_from_code_scan": {
+                    "description": " Select API code repositories to the load balancer to use them as a source for API endpoint discovery.",
+                    "title": "Code Base Integration",
+                    "$ref": "#/definitions/common_wafApiDiscoveryFromCodeScan",
+                    "x-displayname": "API repositories"
+                },
                 "disable_learn_from_redirect_traffic": {
                     "description": "Exclusive with [enable_learn_from_redirect_traffic]\n Disable learning API patterns from traffic with redirect response codes 3xx",
                     "title": "Disable learning from redirected request traffic",
@@ -4792,6 +4847,37 @@ var APISwaggerJSON string = `{
             "default": "SKIP_PROCESSING_WAF",
             "x-displayname": "Action",
             "x-ves-proto-enum": "ves.io.schema.views.common_waf.ClientSrcRuleAction"
+        },
+        "common_wafCodeBaseIntegrationSelection": {
+            "type": "object",
+            "title": "Code Base Integration",
+            "x-displayname": "Code Base Integration",
+            "x-ves-oneof-field-api_repos_choice": "[\"all_repos\",\"selected_repos\"]",
+            "x-ves-proto-message": "ves.io.schema.views.common_waf.CodeBaseIntegrationSelection",
+            "properties": {
+                "all_repos": {
+                    "description": "Exclusive with [selected_repos]\n",
+                    "title": "All API Repositories",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "All API Repositories"
+                },
+                "code_base_integration": {
+                    "description": " Select the code base integration for use in code-based API discovery\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Code Base Integration Selection",
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "Select Code Base",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "selected_repos": {
+                    "description": "Exclusive with [all_repos]\n",
+                    "title": "Selected API Repositories",
+                    "$ref": "#/definitions/common_wafApiCodeRepos",
+                    "x-displayname": "Selected API Repositories"
+                }
+            }
         },
         "common_wafCustomFallThroughMode": {
             "type": "object",
@@ -6180,7 +6266,7 @@ var APISwaggerJSON string = `{
             "properties": {
                 "fields": {
                     "type": "array",
-                    "description": "x-displayName: \"Values\"\nx-required\nx-example: \"['user.email', 'credit_card']\"\nList of JSONPath field values",
+                    "description": "x-displayName: \"Values\"\nx-required\nx-example: \"['user.email', 'credit_card']\"\nList of JSON Path field values. Use square brackets with an underscore [_] to indicate array elements, e.g., person.emails[_].",
                     "title": "Field Values",
                     "items": {
                         "type": "string"
@@ -7055,13 +7141,13 @@ var APISwaggerJSON string = `{
         },
         "http_loadbalancerSensitiveDataDisclosureRules": {
             "type": "object",
-            "description": "x-displayName: \"Sensitive Data Disclosure Rules\"\nSensitive Data Disclosure Rules are setting to mask sensitive data in the request/response to prevent data exposure in XC portal",
-            "title": "Sensitive Data Disclosure Rules",
+            "description": "x-displayName: \"Sensitive Data Exposure Rules\"\nSensitive Data Exposure Rules allows specifying rules to mask sensitive data fields in API responses",
+            "title": "Sensitive Data Exposure Rules",
             "properties": {
                 "sensitive_data_types_in_response": {
                     "type": "array",
-                    "description": "x-displayName: \"Sensitive Data Types in Responses\"\nSettings to mask sensitive data in response body",
-                    "title": "Sensitive Data Types in Responses",
+                    "description": "x-displayName: \"Sensitive Data Exposure Rules\"\nSensitive Data Exposure Rules allows specifying rules to mask sensitive data fields in API responses",
+                    "title": "Sensitive Data Exposure Rules",
                     "items": {
                         "$ref": "#/definitions/http_loadbalancerSensitiveDataTypes"
                     }
@@ -7089,7 +7175,7 @@ var APISwaggerJSON string = `{
                     "title": "base path"
                 },
                 "body": {
-                    "description": "x-displayName: \"Json fields\"",
+                    "description": "x-displayName: \"JSON Path\"",
                     "title": "Body Section Masking Options",
                     "$ref": "#/definitions/http_loadbalancerBodySectionMaskingOptions"
                 },
@@ -7097,11 +7183,6 @@ var APISwaggerJSON string = `{
                     "description": "x-displayName: \"Mask Sensitive Data\"",
                     "title": "Masking",
                     "$ref": "#/definitions/schemaEmpty"
-                },
-                "metadata": {
-                    "description": "x-displayName: \"Metadata\"\nx-required\nCommon attributes for the rule including name and description.",
-                    "title": "metadata",
-                    "$ref": "#/definitions/schemaMessageMetaType"
                 },
                 "report": {
                     "description": "x-displayName: \"Report Sensitive Data\"",
@@ -8235,13 +8316,13 @@ var APISwaggerJSON string = `{
                 },
                 "context_name": {
                     "type": "string",
-                    "description": " Relevant only for contexts: Header, Cookie and Parameter. Name of the Context that the WAF Exclusion Rules will check.\n\nExample: - \"exampleuser-agent for Header\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 64\n",
+                    "description": " Relevant only for contexts: Header, Cookie and Parameter.\n Name of the Context that the WAF Exclusion Rules will check.\n Wildcard matching can be used by prefixing or suffixing the context name\n with an wildcard asterisk (*).\n\nExample: - \"exampleuser-agent for Header\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 128\n",
                     "title": "Context Name",
-                    "maxLength": 64,
+                    "maxLength": 128,
                     "x-displayname": "Context Name",
                     "x-ves-example": "example: user-agent for Header",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.max_len": "64"
+                        "ves.io.schema.rules.string.max_len": "128"
                     }
                 },
                 "exclude_attack_type": {
@@ -8341,13 +8422,13 @@ var APISwaggerJSON string = `{
                 },
                 "context_name": {
                     "type": "string",
-                    "description": " Relevant only for contexts: Header, Cookie and Parameter. Name of the Context that the WAF Exclusion Rules will check.\n\nExample: - \"exampleuser-agent for Header\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 64\n",
+                    "description": " Relevant only for contexts: Header, Cookie and Parameter.\n Name of the Context that the WAF Exclusion Rules will check.\n Wildcard matching can be used by prefixing or suffixing the context name\n with an wildcard asterisk (*).\n\nExample: - \"exampleuser-agent for Header\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 128\n",
                     "title": "Context Name",
-                    "maxLength": 64,
+                    "maxLength": 128,
                     "x-displayname": "Context Name",
                     "x-ves-example": "example: user-agent for Header",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.max_len": "64"
+                        "ves.io.schema.rules.string.max_len": "128"
                     }
                 },
                 "signature_id": {
@@ -8385,13 +8466,13 @@ var APISwaggerJSON string = `{
                 },
                 "context_name": {
                     "type": "string",
-                    "description": " Relevant only for contexts: Header, Cookie and Parameter. Name of the Context that the WAF Exclusion Rules will check.\n\nExample: - \"exampleuser-agent for Header\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 64\n",
+                    "description": " Relevant only for contexts: Header, Cookie and Parameter.\n Name of the Context that the WAF Exclusion Rules will check.\n Wildcard matching can be used by prefixing or suffixing the context name\n with an wildcard asterisk (*).\n\nExample: - \"exampleuser-agent for Header\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 128\n",
                     "title": "Context Name",
-                    "maxLength": 64,
+                    "maxLength": 128,
                     "x-displayname": "Context Name",
                     "x-ves-example": "example: user-agent for Header",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.max_len": "64"
+                        "ves.io.schema.rules.string.max_len": "128"
                     }
                 },
                 "exclude_violation": {
@@ -9187,6 +9268,21 @@ var APISwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.repeated.max_items": "4"
+                    }
+                }
+            }
+        },
+        "policyJA4TlsFingerprintMatcherType": {
+            "type": "object",
+            "description": "x-displayName: \"JA4 TLS Fingerprint Matcher\"\nJA4 TLS fingerprints to be matched",
+            "title": "JA4TlsFingerprintMatcherType",
+            "properties": {
+                "exact_values": {
+                    "type": "array",
+                    "description": "x-displayName: \"Exact Values\"\nA list of exact JA4 TLS fingerprint to match the input JA4 TLS fingerprint against",
+                    "title": "exact values",
+                    "items": {
+                        "type": "string"
                     }
                 }
             }
@@ -12771,6 +12867,7 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-challenge_action": "[\"disable_challenge\",\"enable_captcha_challenge\",\"enable_javascript_challenge\"]",
             "x-ves-oneof-field-client_choice": "[\"any_client\",\"client_selector\"]",
             "x-ves-oneof-field-ip_choice": "[\"any_ip\",\"ip_matcher\",\"ip_prefix_list\"]",
+            "x-ves-oneof-field-tls_fingerprint_choice": "[\"tls_fingerprint_matcher\"]",
             "x-ves-proto-message": "ves.io.schema.service_policy_rule.ChallengeRuleSpec",
             "properties": {
                 "any_asn": {
@@ -12889,7 +12986,7 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "tls_fingerprint_matcher": {
-                    "description": " TLS JA3 fingerprints to be matched.\n The predicate evaluates to true if the TLS fingerprint matches any of the exact values or classes of known TLS fingerprints.",
+                    "description": "Exclusive with []\n JA3 TLS fingerprints to be matched",
                     "$ref": "#/definitions/policyTlsFingerprintMatcherType"
                 }
             }

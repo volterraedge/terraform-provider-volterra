@@ -7,15 +7,21 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 	ves_io_schema_netw_intf "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/network_interface"
+	ves_io_schema_tenant "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/tenant"
 )
 
 func TestNetworkInterface(t *testing.T) {
 	name := generateResourceName()
 	resourceName := "volterra_network_interface." + name
-	testURL, stopFunc, _ := createTestCustomAPIServer(t, []string{ves_io_schema_netw_intf.ObjectType})
+	testURL, stopFunc, f := createTestCustomAPIServer(t, []string{ves_io_schema_netw_intf.ObjectType, ves_io_schema_tenant.ObjectType})
 	defer stopFunc()
+	tenantName := "ves-io"
+	tenantObj := mkDBObjTenant(tenantName, uuid.New().String(), withAddonServices("f5xc-flow-collection", "f5xc-ipv6-standard", "f5xc-waap-standard"))
+	f.MustCreateEntry(tenantObj)
+
 	os.Setenv("VOLT_API_TEST", "true")
 	os.Setenv("VOLT_API_URL", testURL)
 	os.Setenv("TF_ACC", "true")

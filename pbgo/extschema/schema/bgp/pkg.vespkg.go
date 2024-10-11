@@ -65,6 +65,33 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 
+	mdr.RPCSubscriptionFieldsRegistry["ves.io.schema.bgp.API.Create"] = []svcfw.SubscriptionField{
+		{
+			FieldPath:     "ves.io.schema.bgp.CreateRequest.spec.peers.type_choice.external.address_choice_v6.address_ipv6",
+			AddonServices: []string{"f5xc-ipv6-standard"},
+		},
+		{
+			FieldPath:     "ves.io.schema.bgp.CreateRequest.spec.peers.type_choice.external.address_choice_v6.default_gateway_v6",
+			AddonServices: []string{"f5xc-ipv6-standard"},
+		},
+		{
+			FieldPath:     "ves.io.schema.bgp.CreateRequest.spec.peers.type_choice.external.address_choice_v6.from_site_v6",
+			AddonServices: []string{"f5xc-ipv6-standard"},
+		},
+		{
+			FieldPath:     "ves.io.schema.bgp.CreateRequest.spec.peers.type_choice.external.address_choice_v6.subnet_begin_offset_v6",
+			AddonServices: []string{"f5xc-ipv6-standard"},
+		},
+		{
+			FieldPath:     "ves.io.schema.bgp.CreateRequest.spec.peers.type_choice.external.address_choice_v6.subnet_end_offset_v6",
+			AddonServices: []string{"f5xc-ipv6-standard"},
+		},
+		{
+			FieldPath:     "ves.io.schema.bgp.CreateRequest.spec.peers.type_choice.external.family_inet_v6",
+			AddonServices: []string{"f5xc-ipv6-standard"},
+		},
+	}
+
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.bgp.API.Create"] = []string{
 		"spec.bgp_parameters.bgp_router_id",
 		"spec.bgp_parameters.bgp_router_id_key",
@@ -80,23 +107,23 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 
 	mdr.RPCAvailableInReqFieldRegistry["ves.io.schema.bgp.API.Create"] = []svcfw.EnvironmentField{
 		{
-			FieldPath:           "spec.peers.#.external.address_ipv6",
+			FieldPath:           "spec.peers.#.external.address_choice_v6",
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
 			FieldPath:           "spec.peers.#.external.family_inet_v6",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 	}
 
 	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.bgp.API.Create"] = []svcfw.EnvironmentField{
 		{
-			FieldPath:           "spec.peers.#.external.address_ipv6",
+			FieldPath:           "spec.peers.#.external.address_choice_v6",
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
 			FieldPath:           "spec.peers.#.external.family_inet_v6",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 	}
 
@@ -104,39 +131,66 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 
 	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.bgp.API.Get"] = []svcfw.EnvironmentField{
 		{
-			FieldPath:           "create_form.spec.peers.#.external.address_ipv6",
+			FieldPath:           "create_form.spec.peers.#.external.address_choice_v6",
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
 			FieldPath:           "create_form.spec.peers.#.external.family_inet_v6",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
-			FieldPath:           "replace_form.spec.peers.#.external.address_ipv6",
+			FieldPath:           "replace_form.spec.peers.#.external.address_choice_v6",
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
 			FieldPath:           "replace_form.spec.peers.#.external.family_inet_v6",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
-			FieldPath:           "spec.peers.#.external.address_ipv6",
+			FieldPath:           "spec.peers.#.external.address_choice_v6",
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
 			FieldPath:           "spec.peers.#.external.family_inet_v6",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 	}
 
 	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.bgp.API.List"] = []svcfw.EnvironmentField{
 		{
-			FieldPath:           "items.#.get_spec.peers.#.external.address_ipv6",
+			FieldPath:           "items.#.get_spec.peers.#.external.address_choice_v6",
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
 			FieldPath:           "items.#.get_spec.peers.#.external.family_inet_v6",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
+		},
+	}
+
+	mdr.RPCSubscriptionFieldsRegistry["ves.io.schema.bgp.API.Replace"] = []svcfw.SubscriptionField{
+		{
+			FieldPath:     "ves.io.schema.bgp.ReplaceRequest.spec.peers.type_choice.external.address_choice_v6.address_ipv6",
+			AddonServices: []string{"f5xc-ipv6-standard"},
+		},
+		{
+			FieldPath:     "ves.io.schema.bgp.ReplaceRequest.spec.peers.type_choice.external.address_choice_v6.default_gateway_v6",
+			AddonServices: []string{"f5xc-ipv6-standard"},
+		},
+		{
+			FieldPath:     "ves.io.schema.bgp.ReplaceRequest.spec.peers.type_choice.external.address_choice_v6.from_site_v6",
+			AddonServices: []string{"f5xc-ipv6-standard"},
+		},
+		{
+			FieldPath:     "ves.io.schema.bgp.ReplaceRequest.spec.peers.type_choice.external.address_choice_v6.subnet_begin_offset_v6",
+			AddonServices: []string{"f5xc-ipv6-standard"},
+		},
+		{
+			FieldPath:     "ves.io.schema.bgp.ReplaceRequest.spec.peers.type_choice.external.address_choice_v6.subnet_end_offset_v6",
+			AddonServices: []string{"f5xc-ipv6-standard"},
+		},
+		{
+			FieldPath:     "ves.io.schema.bgp.ReplaceRequest.spec.peers.type_choice.external.family_inet_v6",
+			AddonServices: []string{"f5xc-ipv6-standard"},
 		},
 	}
 
@@ -155,12 +209,12 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 
 	mdr.RPCAvailableInReqFieldRegistry["ves.io.schema.bgp.API.Replace"] = []svcfw.EnvironmentField{
 		{
-			FieldPath:           "spec.peers.#.external.address_ipv6",
+			FieldPath:           "spec.peers.#.external.address_choice_v6",
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
 			FieldPath:           "spec.peers.#.external.family_inet_v6",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 	}
 

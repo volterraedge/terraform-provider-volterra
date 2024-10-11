@@ -374,6 +374,7 @@ var CustomAPISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-central_manager-customapi-list"
                 },
+                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.central_manager.CustomAPI.List"
             },
             "x-displayname": "Central Manager Custom API",

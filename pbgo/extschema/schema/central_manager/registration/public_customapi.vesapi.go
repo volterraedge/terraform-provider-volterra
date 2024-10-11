@@ -841,6 +841,7 @@ var CustomAPISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-central_manager-registration-customapi-list"
                 },
+                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.central_manager.registration.CustomAPI.List"
             },
             "x-displayname": "Central Manager Registration Custom API",
@@ -925,6 +926,7 @@ var CustomAPISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-central_manager-registration-customapi-get"
                 },
+                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.central_manager.registration.CustomAPI.Get"
             },
             "delete": {
@@ -1002,6 +1004,7 @@ var CustomAPISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-central_manager-registration-customapi-delete"
                 },
+                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.central_manager.registration.CustomAPI.Delete"
             },
             "put": {
@@ -1087,6 +1090,7 @@ var CustomAPISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-central_manager-registration-customapi-updatestatus"
                 },
+                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.central_manager.registration.CustomAPI.UpdateStatus"
             },
             "x-displayname": "Central Manager Registration Custom API",

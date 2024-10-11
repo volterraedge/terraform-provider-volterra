@@ -3430,11 +3430,14 @@ var APISwaggerJSON string = `{
                 },
                 "weight": {
                     "type": "integer",
-                    "description": " When requests have to distributed among multiple upstream clusters,\n multiple destinations are configured, each having its own cluster and weight.\n Traffic is distributed among clusters based on the weight configured.\n\n Example:\n    destinations:\n    - cluster:\n      - kind: ves.io.vega.cfg.adc.cluster.Object\n        uid: cluster-1\n     weight: 20\n   - cluster:\n     - kind: ves.io.vega.cfg.adc.cluster.Object\n       uid: cluster-2\n     weight: 30\n   - cluster:\n     - kind: ves.io.vega.cfg.adc.cluster.Object\n       uid: cluster-3\n     weight: 10\n\n This indicates that out of every 60 requests, 10 goes to cluster-3, 30 to\n cluster-2 and 20 to cluster-1\n\n When single destination is configured, weight is ignored. All the requests are\n sent to the cluster specified in the destination\n\nExample: - \"10\"-",
+                    "description": " When requests have to distributed among multiple upstream clusters,\n multiple destinations are configured, each having its own cluster and weight.\n Traffic is distributed among clusters based on the weight configured.\n\n Example:\n    destinations:\n    - cluster:\n      - kind: ves.io.vega.cfg.adc.cluster.Object\n        uid: cluster-1\n     weight: 20\n   - cluster:\n     - kind: ves.io.vega.cfg.adc.cluster.Object\n       uid: cluster-2\n     weight: 30\n   - cluster:\n     - kind: ves.io.vega.cfg.adc.cluster.Object\n       uid: cluster-3\n     weight: 10\n\n This indicates that out of every 60 requests, 10 goes to cluster-3, 30 to\n cluster-2 and 20 to cluster-1\n\n When single destination is configured, weight is ignored. All the requests are\n sent to the cluster specified in the destination\n\nExample: - \"10\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 65535\n",
                     "title": "weight",
                     "format": "int64",
                     "x-displayname": "Weight",
-                    "x-ves-example": "10"
+                    "x-ves-example": "10",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.lte": "65535"
+                    }
                 }
             }
         },
@@ -3520,10 +3523,16 @@ var APISwaggerJSON string = `{
                 },
                 "host_rewrite": {
                     "type": "string",
-                    "description": "Exclusive with [auto_host_rewrite]\n Indicates that during forwarding, the host header will be swapped with this value\n\nExample: - \"one.volterra.com\"-",
+                    "description": "Exclusive with [auto_host_rewrite]\n Indicates that during forwarding, the host header will be swapped with this value\n\nExample: - \"one.volterra.com\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n  ves.io.schema.rules.string.min_len: 1\n",
                     "title": "HostRewrite",
+                    "minLength": 1,
+                    "maxLength": 256,
                     "x-displayname": "Host Rewrite",
-                    "x-ves-example": "one.volterra.com"
+                    "x-ves-example": "one.volterra.com",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "256",
+                        "ves.io.schema.rules.string.min_len": "1"
+                    }
                 },
                 "mirror_policy": {
                     "description": " MirrorPolicy is used for shadowing traffic from one cluster to another. The current\n implementation is \"fire and forget,\" meaning it will not wait for the shadow cluster to\n respond before returning the response from the primary cluster. All normal statistics are\n collected for the shadow cluster making this feature useful for testing.\n\n During shadowing, the host/authority header is altered such that *-shadow* is appended. This is\n useful for logging. For example, *cluster1* becomes *cluster1-shadow*.",
@@ -3576,11 +3585,14 @@ var APISwaggerJSON string = `{
                 },
                 "timeout": {
                     "type": "integer",
-                    "description": " Specifies the timeout for the route in milliseconds.\n This timeout includes all retries.\n For server side streaming, configure this field with higher value or leave it un-configured\n for infinite timeout\n\nExample: - \"2000\"-",
+                    "description": " Specifies the timeout for the route in milliseconds.\n This timeout includes all retries.\n For server side streaming, configure this field with higher value or leave it un-configured\n for infinite timeout\n\nExample: - \"2000\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 1800000\n",
                     "title": "timeout",
                     "format": "int64",
                     "x-displayname": "Timeout",
-                    "x-ves-example": "2000"
+                    "x-ves-example": "2000",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.lte": "1800000"
+                    }
                 },
                 "web_socket_config": {
                     "description": " Websocket configuration for each route",

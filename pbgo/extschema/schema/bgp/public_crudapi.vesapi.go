@@ -2761,10 +2761,10 @@ var APISwaggerJSON string = `{
             "properties": {
                 "interfaces": {
                     "type": "array",
-                    "description": " List of network interfaces.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 8\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " List of network interfaces.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 16\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "interface_list",
                     "minItems": 1,
-                    "maxItems": 8,
+                    "maxItems": 16,
                     "items": {
                         "$ref": "#/definitions/schemaviewsObjectRefType"
                     },
@@ -2772,7 +2772,7 @@ var APISwaggerJSON string = `{
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.repeated.max_items": "8",
+                        "ves.io.schema.rules.repeated.max_items": "16",
                         "ves.io.schema.rules.repeated.min_items": "1",
                         "ves.io.schema.rules.repeated.unique": "true"
                     }
@@ -2948,7 +2948,7 @@ var APISwaggerJSON string = `{
             "x-displayname": "External BGP Peer",
             "x-ves-displayorder": "1,2,29,10,11,12,20,25",
             "x-ves-oneof-field-address_choice": "[\"address\",\"default_gateway\",\"disable\",\"from_site\",\"subnet_begin_offset\",\"subnet_end_offset\"]",
-            "x-ves-oneof-field-address_choice_v6": "[\"default_gateway_v6\",\"disable_v6\",\"from_site_v6\",\"subnet_begin_offset_v6\",\"subnet_end_offset_v6\"]",
+            "x-ves-oneof-field-address_choice_v6": "[\"address_ipv6\",\"default_gateway_v6\",\"disable_v6\",\"from_site_v6\",\"subnet_begin_offset_v6\",\"subnet_end_offset_v6\"]",
             "x-ves-oneof-field-auth_choice": "[\"md5_auth_key\",\"no_authentication\"]",
             "x-ves-oneof-field-interface_choice": "[\"interface\",\"interface_list\"]",
             "x-ves-proto-message": "ves.io.schema.bgp.PeerExternal",
@@ -2964,7 +2964,7 @@ var APISwaggerJSON string = `{
                 },
                 "address_ipv6": {
                     "type": "string",
-                    "description": " Specify peer IPv6 address.\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6: true\n",
+                    "description": "Exclusive with [default_gateway_v6 disable_v6 from_site_v6 subnet_begin_offset_v6 subnet_end_offset_v6]\n Specify peer IPv6 address.\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6: true\n",
                     "title": "address_ipv6",
                     "x-displayname": "Peer IPv6 Address",
                     "x-ves-validation-rules": {
@@ -2991,7 +2991,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Default Gateway"
                 },
                 "default_gateway_v6": {
-                    "description": "Exclusive with [disable_v6 from_site_v6 subnet_begin_offset_v6 subnet_end_offset_v6]\n Use the default gateway address.",
+                    "description": "Exclusive with [address_ipv6 disable_v6 from_site_v6 subnet_begin_offset_v6 subnet_end_offset_v6]\n Use the default gateway address.",
                     "title": "default_gateway_v6",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Default Gateway"
@@ -3003,7 +3003,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Disable"
                 },
                 "disable_v6": {
-                    "description": "Exclusive with [default_gateway_v6 from_site_v6 subnet_begin_offset_v6 subnet_end_offset_v6]\n No Peer IPv6 Address.",
+                    "description": "Exclusive with [address_ipv6 default_gateway_v6 from_site_v6 subnet_begin_offset_v6 subnet_end_offset_v6]\n No Peer IPv6 Address.",
                     "title": "disable_v6",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Disable"
@@ -3027,7 +3027,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Address From Site Object"
                 },
                 "from_site_v6": {
-                    "description": "Exclusive with [default_gateway_v6 disable_v6 subnet_begin_offset_v6 subnet_end_offset_v6]\n Use the address specified in the site object.",
+                    "description": "Exclusive with [address_ipv6 default_gateway_v6 disable_v6 subnet_begin_offset_v6 subnet_end_offset_v6]\n Use the address specified in the site object.",
                     "title": "from_site_v6",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Address From Site Object"
@@ -3081,7 +3081,7 @@ var APISwaggerJSON string = `{
                 },
                 "subnet_begin_offset_v6": {
                     "type": "integer",
-                    "description": "Exclusive with [default_gateway_v6 disable_v6 from_site_v6 subnet_end_offset_v6]\n Calculate peer address using offset from the beginning of the subnet.\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 0\n  ves.io.schema.rules.uint32.lte: 32\n",
+                    "description": "Exclusive with [address_ipv6 default_gateway_v6 disable_v6 from_site_v6 subnet_end_offset_v6]\n Calculate peer address using offset from the beginning of the subnet.\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 0\n  ves.io.schema.rules.uint32.lte: 32\n",
                     "title": "subnet_begin_offset_v6",
                     "format": "int64",
                     "x-displayname": "Offset From Beginning Of Subnet",
@@ -3103,7 +3103,7 @@ var APISwaggerJSON string = `{
                 },
                 "subnet_end_offset_v6": {
                     "type": "integer",
-                    "description": "Exclusive with [default_gateway_v6 disable_v6 from_site_v6 subnet_begin_offset_v6]\n Calculate peer address using offset from the end of the subnet.\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 0\n  ves.io.schema.rules.uint32.lte: 32\n",
+                    "description": "Exclusive with [address_ipv6 default_gateway_v6 disable_v6 from_site_v6 subnet_begin_offset_v6]\n Calculate peer address using offset from the end of the subnet.\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 0\n  ves.io.schema.rules.uint32.lte: 32\n",
                     "title": "subnet_end_offset_v6",
                     "format": "int64",
                     "x-displayname": "Offset From End Of Subnet",

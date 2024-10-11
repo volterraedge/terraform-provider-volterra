@@ -2773,33 +2773,21 @@ var APISwaggerJSON string = `{
         },
         "cdn_loadbalancerCDNDownstreamTlsParamsType": {
             "type": "object",
-            "description": "TLS parameters for CDN distribution",
+            "description": "x-displayName: \"TLS Parameters\"\nTLS parameters for CDN distribution",
             "title": "CDNDownstreamTlsParamsType",
-            "x-displayname": "TLS Parameters",
-            "x-ves-proto-message": "ves.io.schema.views.cdn_loadbalancer.CDNDownstreamTlsParamsType",
             "properties": {
                 "tls_certificates": {
                     "type": "array",
-                    "description": " Users can add one or more certificates that share the same set of domains.\n for example, domain.com and *.domain.com - but use different signature algorithms\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 16\n  ves.io.schema.rules.repeated.min_items: 1\n",
+                    "description": "x-displayName: \"TLS Certificates\"\nx-required\nUsers can add one or more certificates that share the same set of domains.\nfor example, domain.com and *.domain.com - but use different signature algorithms",
                     "title": "tls_certificates",
-                    "minItems": 1,
-                    "maxItems": 16,
                     "items": {
                         "$ref": "#/definitions/schemaTlsCertificateType"
-                    },
-                    "x-displayname": "TLS Certificates",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.repeated.max_items": "16",
-                        "ves.io.schema.rules.repeated.min_items": "1"
                     }
                 },
                 "tls_config": {
-                    "description": " TLS Configuration Parameters",
+                    "description": "x-displayName: \"TLS\"\nTLS Configuration Parameters",
                     "title": "TLS Config",
-                    "$ref": "#/definitions/cdn_loadbalancerCDNTLSConfig",
-                    "x-displayname": "TLS"
+                    "$ref": "#/definitions/cdn_loadbalancerCDNTLSConfig"
                 }
             }
         },
@@ -2838,7 +2826,7 @@ var APISwaggerJSON string = `{
             "description": "Choice for selecting CDN Distribution with bring your own certificates",
             "title": "BYOC for the CDN distribution",
             "x-displayname": "BYOC HTTPS Choice",
-            "x-ves-displayorder": "1,2,3",
+            "x-ves-displayorder": "1,2,3,4",
             "x-ves-proto-message": "ves.io.schema.views.cdn_loadbalancer.CDNHTTPSCustomCertsType",
             "properties": {
                 "add_hsts": {
@@ -2855,10 +2843,11 @@ var APISwaggerJSON string = `{
                     "format": "boolean",
                     "x-displayname": "HTTP Redirect to HTTPS"
                 },
-                "tls_parameters": {
-                    "description": " TLS parameters for the downstream connections.",
-                    "$ref": "#/definitions/cdn_loadbalancerCDNDownstreamTlsParamsType",
-                    "x-displayname": "TLS Parameters"
+                "tls_cert_options": {
+                    "description": " TLS Certificate Options",
+                    "title": "TLS Certificate Options",
+                    "$ref": "#/definitions/cdn_loadbalancerTlsCertOptions",
+                    "x-displayname": "TLS Certificate Options"
                 }
             }
         },
@@ -4138,6 +4127,28 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "cdn_loadbalancerTlsCertOptions": {
+            "type": "object",
+            "description": "TLS Certificate Options",
+            "title": "TLS Configuration Options",
+            "x-displayname": "TLS Options",
+            "x-ves-oneof-field-tls_certificates_choice": "[\"tls_cert_params\",\"tls_inline_params\"]",
+            "x-ves-proto-message": "ves.io.schema.views.cdn_loadbalancer.TlsCertOptions",
+            "properties": {
+                "tls_cert_params": {
+                    "description": "Exclusive with [tls_inline_params]\n Select/Add one or more TLS Certificate objects to associate with this Load Balancer",
+                    "title": "TLS Certificates",
+                    "$ref": "#/definitions/viewsDownstreamTLSCertsParams",
+                    "x-displayname": "TLS Certificates"
+                },
+                "tls_inline_params": {
+                    "description": "Exclusive with [tls_cert_params]\n Upload a TLS certificate covering all domain names for this Load Balancer",
+                    "title": "Inline TLS Parameters (legacy)",
+                    "$ref": "#/definitions/schemaviewsDownstreamTlsParamsType",
+                    "x-displayname": "Inline Certificate (legacy)"
+                }
+            }
+        },
         "cdn_loadbalancerWebApplicationFirewall": {
             "type": "object",
             "description": "x-displayName: \"Web Application Firewall\"\nWeb Application Firewall",
@@ -5188,166 +5199,95 @@ var APISwaggerJSON string = `{
         },
         "common_wafAPIEndpointProtectionRule": {
             "type": "object",
-            "description": "API Protection Rule for a specific endpoint",
+            "description": "x-displayName: \"API Endpoint Protection Rule\"\nAPI Protection Rule for a specific endpoint",
             "title": "API Endpoint Protection Rule",
-            "x-displayname": "API Endpoint Protection Rule",
-            "x-ves-oneof-field-domain_choice": "[\"any_domain\",\"specific_domain\"]",
-            "x-ves-proto-message": "ves.io.schema.views.common_waf.APIEndpointProtectionRule",
             "properties": {
                 "action": {
-                    "description": " The action to take if the input request matches the rule.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": "x-required\nx-displayName: \"Rule Action\"\nThe action to take if the input request matches the rule.",
                     "title": "action",
-                    "$ref": "#/definitions/common_wafAPIProtectionRuleAction",
-                    "x-displayname": "Rule Action",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
+                    "$ref": "#/definitions/common_wafAPIProtectionRuleAction"
                 },
                 "any_domain": {
-                    "description": "Exclusive with [specific_domain]\n The rule will apply for all domains.",
+                    "description": "x-displayName: \"Any Domain\"\nThe rule will apply for all domains.",
                     "title": "any domain",
-                    "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Any Domain"
+                    "$ref": "#/definitions/ioschemaEmpty"
                 },
                 "api_endpoint_method": {
-                    "description": " The list of expected values for the HTTP method in the request API. The actual value of the HTTP method is extracted from the HTTP request.\n The predicate evaluates to true if the actual HTTP method belongs is present in the list of expected values.",
+                    "description": "x-displayName: \"HTTP Methods\"\nThe list of expected values for the HTTP method in the request API. The actual value of the HTTP method is extracted from the HTTP request.\nThe predicate evaluates to true if the actual HTTP method belongs is present in the list of expected values.",
                     "title": "method",
-                    "$ref": "#/definitions/policyHttpMethodMatcherType",
-                    "x-displayname": "HTTP Methods"
+                    "$ref": "#/definitions/policyHttpMethodMatcherType"
                 },
                 "api_endpoint_path": {
                     "type": "string",
-                    "description": " The endpoint (path) of the request.\n\nExample: - \"/endpoint1\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 1024\n  ves.io.schema.rules.string.templated_http_path: true\n",
-                    "title": "api endpoint path",
-                    "maxLength": 1024,
-                    "x-displayname": "API Endpoint",
-                    "x-ves-example": "/endpoint1",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.string.max_len": "1024",
-                        "ves.io.schema.rules.string.templated_http_path": "true"
-                    }
+                    "description": "x-required\nx-example: \"/endpoint1\"\nx-displayName: \"API Endpoint\"\nThe endpoint (path) of the request.",
+                    "title": "api endpoint path"
                 },
                 "client_matcher": {
-                    "description": " Conditions related to the origin of the request, such as client IP, TLS fingerprint, etc.",
+                    "description": "x-displayName: \"Clients\"\nConditions related to the origin of the request, such as client IP, TLS fingerprint, etc.",
                     "title": "client_matcher",
-                    "$ref": "#/definitions/policyClientMatcher",
-                    "x-displayname": "Clients"
+                    "$ref": "#/definitions/policyClientMatcher"
                 },
                 "metadata": {
-                    "description": " Common attributes for the rule including name and description.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": "x-displayName: \"Metadata\"\nx-required\nCommon attributes for the rule including name and description.",
                     "title": "metadata",
-                    "$ref": "#/definitions/schemaMessageMetaType",
-                    "x-displayname": "Metadata",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
+                    "$ref": "#/definitions/schemaMessageMetaType"
                 },
                 "request_matcher": {
-                    "description": " Conditions related to the request, such as query parameters, headers, etc.",
+                    "description": "x-displayName: \"Request\"\nConditions related to the request, such as query parameters, headers, etc.",
                     "title": "request_matcher",
-                    "$ref": "#/definitions/policyRequestMatcher",
-                    "x-displayname": "Request"
+                    "$ref": "#/definitions/policyRequestMatcher"
                 },
                 "specific_domain": {
                     "type": "string",
-                    "description": "Exclusive with [any_domain]\n The rule will apply for a specific domain.\n For example: api.example.com\n\nExample: - \"api.example.com\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 128\n  ves.io.schema.rules.string.vh_domain: true\n",
-                    "title": "domain",
-                    "maxLength": 128,
-                    "x-displayname": "Specific Domain",
-                    "x-ves-example": "api.example.com",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.max_len": "128",
-                        "ves.io.schema.rules.string.vh_domain": "true"
-                    }
+                    "description": "x-displayName: \"Specific Domain\"\nx-example: \"api.example.com\"\nThe rule will apply for a specific domain.\nFor example: api.example.com",
+                    "title": "domain"
                 }
             }
         },
         "common_wafAPIGroupProtectionRule": {
             "type": "object",
-            "description": "API Protection Rule for a group or a base url",
+            "description": "x-displayName: \"API Group Protection Rule\"\nAPI Protection Rule for a group or a base url",
             "title": "API Group Protection  Rule",
-            "x-displayname": "API Group Protection Rule",
-            "x-ves-oneof-field-domain_choice": "[\"any_domain\",\"specific_domain\"]",
-            "x-ves-proto-message": "ves.io.schema.views.common_waf.APIGroupProtectionRule",
             "properties": {
                 "action": {
-                    "description": " The action to take if the input request matches the rule.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": "x-required\nx-displayName: \"Rule Action\"\nThe action to take if the input request matches the rule.",
                     "title": "action",
-                    "$ref": "#/definitions/common_wafAPIProtectionRuleAction",
-                    "x-displayname": "Rule Action",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
+                    "$ref": "#/definitions/common_wafAPIProtectionRuleAction"
                 },
                 "any_domain": {
-                    "description": "Exclusive with [specific_domain]\n The rule will apply for all domains.",
+                    "description": "x-displayName: \"Any Domain\"\nThe rule will apply for all domains.",
                     "title": "any domain",
-                    "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Any Domain"
+                    "$ref": "#/definitions/ioschemaEmpty"
                 },
                 "api_group": {
                     "type": "string",
-                    "description": " API groups derived from API Definition swaggers.\n For example oas-all-operations including all paths and methods from the swaggers, oas-base-urls covering all requests under base-paths from the swaggers.\n Custom groups can be created if user tags paths or operations with \"x-volterra-api-group\" extensions inside swaggers.\n\nExample: - \"oas-all-operations\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 128\n",
-                    "title": "api_group",
-                    "maxLength": 128,
-                    "x-displayname": "API Group",
-                    "x-ves-example": "oas-all-operations",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.max_len": "128"
-                    }
+                    "description": "x-displayName: \"API Group\"\nx-example: \"oas-all-operations\"\nAPI groups derived from API Definition swaggers.\nFor example oas-all-operations including all paths and methods from the swaggers, oas-base-urls covering all requests under base-paths from the swaggers.\nCustom groups can be created if user tags paths or operations with \"x-volterra-api-group\" extensions inside swaggers.",
+                    "title": "api_group"
                 },
                 "base_path": {
                     "type": "string",
-                    "description": " Prefix of the request path.\n For example: /v1\n\nExample: - \"/v1\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.http_path: true\n  ves.io.schema.rules.string.max_len: 128\n",
-                    "title": "base path",
-                    "maxLength": 128,
-                    "x-displayname": "Base Path",
-                    "x-ves-example": "/v1",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.string.http_path": "true",
-                        "ves.io.schema.rules.string.max_len": "128"
-                    }
+                    "description": "x-required\nx-example: \"/v1\"\nx-displayName: \"Base Path\"\nPrefix of the request path.\nFor example: /v1",
+                    "title": "base path"
                 },
                 "client_matcher": {
-                    "description": " Conditions related to the origin of the request, such as client IP, TLS fingerprint, etc.",
+                    "description": "x-displayName: \"Clients\"\nConditions related to the origin of the request, such as client IP, TLS fingerprint, etc.",
                     "title": "client_matcher",
-                    "$ref": "#/definitions/policyClientMatcher",
-                    "x-displayname": "Clients"
+                    "$ref": "#/definitions/policyClientMatcher"
                 },
                 "metadata": {
-                    "description": " Common attributes for the rule including name and description.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": "x-displayName: \"Metadata\"\nx-required\nCommon attributes for the rule including name and description.",
                     "title": "metadata",
-                    "$ref": "#/definitions/schemaMessageMetaType",
-                    "x-displayname": "Metadata",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
+                    "$ref": "#/definitions/schemaMessageMetaType"
                 },
                 "request_matcher": {
-                    "description": " Conditions related to the request, such as query parameters, headers, etc.",
+                    "description": "x-displayName: \"Request\"\nConditions related to the request, such as query parameters, headers, etc.",
                     "title": "request_matcher",
-                    "$ref": "#/definitions/policyRequestMatcher",
-                    "x-displayname": "Request"
+                    "$ref": "#/definitions/policyRequestMatcher"
                 },
                 "specific_domain": {
                     "type": "string",
-                    "description": "Exclusive with [any_domain]\n The rule will apply for a specific domain.\n For example: api.example.com\n\nExample: - \"api.example.com\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 128\n  ves.io.schema.rules.string.vh_domain: true\n",
-                    "title": "domain",
-                    "maxLength": 128,
-                    "x-displayname": "Specific Domain",
-                    "x-ves-example": "api.example.com",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.max_len": "128",
-                        "ves.io.schema.rules.string.vh_domain": "true"
-                    }
+                    "description": "x-displayName: \"Specific Domain\"\nx-example: \"api.example.com\"\nThe rule will apply for a specific domain.\nFor example: api.example.com",
+                    "title": "domain"
                 }
             }
         },
@@ -5378,57 +5318,40 @@ var APISwaggerJSON string = `{
         },
         "common_wafAPIProtectionRuleAction": {
             "type": "object",
-            "description": "The action to take if the input request matches the rule.",
+            "description": "x-displayName: \"API Protection Rule Action\"\nThe action to take if the input request matches the rule.",
             "title": "API Protection Rule Action",
-            "x-displayname": "API Protection Rule Action",
-            "x-ves-oneof-field-action": "[\"allow\",\"deny\"]",
-            "x-ves-proto-message": "ves.io.schema.views.common_waf.APIProtectionRuleAction",
             "properties": {
                 "allow": {
-                    "description": "Exclusive with [deny]\n Allow the request to proceed.",
+                    "description": "x-displayName: \"Allow\"\nAllow the request to proceed.",
                     "title": "Allow",
-                    "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Allow"
+                    "$ref": "#/definitions/ioschemaEmpty"
                 },
                 "deny": {
-                    "description": "Exclusive with [allow]\n Deny the request.",
+                    "description": "x-displayName: \"Deny\"\nDeny the request.",
                     "title": "Deny",
-                    "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Deny"
+                    "$ref": "#/definitions/ioschemaEmpty"
                 }
             }
         },
         "common_wafAPIProtectionRules": {
             "type": "object",
-            "description": "API Protection Rules",
+            "description": "x-displayName: \"API Protection Rules\"\nAPI Protection Rules",
             "title": "API Protection Rules",
-            "x-displayname": "API Protection Rules",
-            "x-ves-proto-message": "ves.io.schema.views.common_waf.APIProtectionRules",
             "properties": {
                 "api_endpoint_rules": {
                     "type": "array",
-                    "description": " This category defines specific rules per API endpoints.\n If request matches any of these rules, skipping second category rules.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 20\n",
+                    "description": "x-displayName: \"API Endpoints\"\nThis category defines specific rules per API endpoints.\nIf request matches any of these rules, skipping second category rules.",
                     "title": "api_endpoint_rules",
-                    "maxItems": 20,
                     "items": {
                         "$ref": "#/definitions/common_wafAPIEndpointProtectionRule"
-                    },
-                    "x-displayname": "API Endpoints",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.max_items": "20"
                     }
                 },
                 "api_groups_rules": {
                     "type": "array",
-                    "description": " This category includes rules per API group or Server URL.\n For API groups, refer to API Definition which includes API groups derived from uploaded swaggers.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 20\n",
+                    "description": "x-displayName: \"Server URLs and API Groups\"\nThis category includes rules per API group or Server URL.\nFor API groups, refer to API Definition which includes API groups derived from uploaded swaggers.",
                     "title": "api_groups_rules",
-                    "maxItems": 20,
                     "items": {
                         "$ref": "#/definitions/common_wafAPIGroupProtectionRule"
-                    },
-                    "x-displayname": "Server URLs and API Groups",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.max_items": "20"
                     }
                 }
             }
@@ -5530,6 +5453,55 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "common_wafApiCodeRepos": {
+            "type": "object",
+            "description": "Select which API repositories represent the LB applications",
+            "title": "API Code Repositories",
+            "x-displayname": "API Code Repositories",
+            "x-ves-proto-message": "ves.io.schema.views.common_waf.ApiCodeRepos",
+            "properties": {
+                "api_code_repo": {
+                    "type": "array",
+                    "description": " Code repository which contain API endpoints\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 256\n",
+                    "title": "API Code Repository",
+                    "items": {
+                        "type": "string",
+                        "maxLength": 256
+                    },
+                    "x-displayname": "API Code Repository",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_len": "256"
+                    }
+                }
+            }
+        },
+        "common_wafApiDiscoveryFromCodeScan": {
+            "type": "object",
+            "description": "x-required",
+            "title": "API Discovery Code Scan",
+            "x-displayname": "Select Code Base and Repositories",
+            "x-ves-proto-message": "ves.io.schema.views.common_waf.ApiDiscoveryFromCodeScan",
+            "properties": {
+                "code_base_integrations": {
+                    "type": "array",
+                    "description": "\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 5\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "Code Base Integrations",
+                    "maxItems": 5,
+                    "items": {
+                        "$ref": "#/definitions/common_wafCodeBaseIntegrationSelection"
+                    },
+                    "x-displayname": "Select Code Base Integrations",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.max_items": "5",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                }
+            }
+        },
         "common_wafApiDiscoverySetting": {
             "type": "object",
             "description": "Specifies the settings used for API discovery",
@@ -5539,6 +5511,12 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-learn_from_redirect_traffic": "[\"disable_learn_from_redirect_traffic\",\"enable_learn_from_redirect_traffic\"]",
             "x-ves-proto-message": "ves.io.schema.views.common_waf.ApiDiscoverySetting",
             "properties": {
+                "api_discovery_from_code_scan": {
+                    "description": " Select API code repositories to the load balancer to use them as a source for API endpoint discovery.",
+                    "title": "Code Base Integration",
+                    "$ref": "#/definitions/common_wafApiDiscoveryFromCodeScan",
+                    "x-displayname": "API repositories"
+                },
                 "disable_learn_from_redirect_traffic": {
                     "description": "Exclusive with [enable_learn_from_redirect_traffic]\n Disable learning API patterns from traffic with redirect response codes 3xx",
                     "title": "Disable learning from redirected request traffic",
@@ -5889,6 +5867,37 @@ var APISwaggerJSON string = `{
             "default": "SKIP_PROCESSING_WAF",
             "x-displayname": "Action",
             "x-ves-proto-enum": "ves.io.schema.views.common_waf.ClientSrcRuleAction"
+        },
+        "common_wafCodeBaseIntegrationSelection": {
+            "type": "object",
+            "title": "Code Base Integration",
+            "x-displayname": "Code Base Integration",
+            "x-ves-oneof-field-api_repos_choice": "[\"all_repos\",\"selected_repos\"]",
+            "x-ves-proto-message": "ves.io.schema.views.common_waf.CodeBaseIntegrationSelection",
+            "properties": {
+                "all_repos": {
+                    "description": "Exclusive with [selected_repos]\n",
+                    "title": "All API Repositories",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "All API Repositories"
+                },
+                "code_base_integration": {
+                    "description": " Select the code base integration for use in code-based API discovery\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Code Base Integration Selection",
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "Select Code Base",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "selected_repos": {
+                    "description": "Exclusive with [all_repos]\n",
+                    "title": "Selected API Repositories",
+                    "$ref": "#/definitions/common_wafApiCodeRepos",
+                    "x-displayname": "Selected API Repositories"
+                }
+            }
         },
         "common_wafCustomFallThroughMode": {
             "type": "object",
@@ -7404,13 +7413,13 @@ var APISwaggerJSON string = `{
                 },
                 "context_name": {
                     "type": "string",
-                    "description": " Relevant only for contexts: Header, Cookie and Parameter. Name of the Context that the WAF Exclusion Rules will check.\n\nExample: - \"exampleuser-agent for Header\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 64\n",
+                    "description": " Relevant only for contexts: Header, Cookie and Parameter.\n Name of the Context that the WAF Exclusion Rules will check.\n Wildcard matching can be used by prefixing or suffixing the context name\n with an wildcard asterisk (*).\n\nExample: - \"exampleuser-agent for Header\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 128\n",
                     "title": "Context Name",
-                    "maxLength": 64,
+                    "maxLength": 128,
                     "x-displayname": "Context Name",
                     "x-ves-example": "example: user-agent for Header",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.max_len": "64"
+                        "ves.io.schema.rules.string.max_len": "128"
                     }
                 },
                 "exclude_attack_type": {
@@ -7510,13 +7519,13 @@ var APISwaggerJSON string = `{
                 },
                 "context_name": {
                     "type": "string",
-                    "description": " Relevant only for contexts: Header, Cookie and Parameter. Name of the Context that the WAF Exclusion Rules will check.\n\nExample: - \"exampleuser-agent for Header\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 64\n",
+                    "description": " Relevant only for contexts: Header, Cookie and Parameter.\n Name of the Context that the WAF Exclusion Rules will check.\n Wildcard matching can be used by prefixing or suffixing the context name\n with an wildcard asterisk (*).\n\nExample: - \"exampleuser-agent for Header\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 128\n",
                     "title": "Context Name",
-                    "maxLength": 64,
+                    "maxLength": 128,
                     "x-displayname": "Context Name",
                     "x-ves-example": "example: user-agent for Header",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.max_len": "64"
+                        "ves.io.schema.rules.string.max_len": "128"
                     }
                 },
                 "signature_id": {
@@ -7554,13 +7563,13 @@ var APISwaggerJSON string = `{
                 },
                 "context_name": {
                     "type": "string",
-                    "description": " Relevant only for contexts: Header, Cookie and Parameter. Name of the Context that the WAF Exclusion Rules will check.\n\nExample: - \"exampleuser-agent for Header\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 64\n",
+                    "description": " Relevant only for contexts: Header, Cookie and Parameter.\n Name of the Context that the WAF Exclusion Rules will check.\n Wildcard matching can be used by prefixing or suffixing the context name\n with an wildcard asterisk (*).\n\nExample: - \"exampleuser-agent for Header\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 128\n",
                     "title": "Context Name",
-                    "maxLength": 64,
+                    "maxLength": 128,
                     "x-displayname": "Context Name",
                     "x-ves-example": "example: user-agent for Header",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.max_len": "64"
+                        "ves.io.schema.rules.string.max_len": "128"
                     }
                 },
                 "exclude_violation": {
@@ -8429,6 +8438,21 @@ var APISwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.repeated.max_items": "4"
+                    }
+                }
+            }
+        },
+        "policyJA4TlsFingerprintMatcherType": {
+            "type": "object",
+            "description": "x-displayName: \"JA4 TLS Fingerprint Matcher\"\nJA4 TLS fingerprints to be matched",
+            "title": "JA4TlsFingerprintMatcherType",
+            "properties": {
+                "exact_values": {
+                    "type": "array",
+                    "description": "x-displayName: \"Exact Values\"\nA list of exact JA4 TLS fingerprint to match the input JA4 TLS fingerprint against",
+                    "title": "exact values",
+                    "items": {
+                        "type": "string"
                     }
                 }
             }
@@ -11113,6 +11137,22 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "schemaXfccElement": {
+            "type": "string",
+            "description": "X-Forwarded-Client-Cert custom cookie elements\n\nThe entire client certificate in URL encoded PEM format.\nThe entire client certificate chain (including the leaf certificate) in URL encoded PEM format.\nThe Subject field of the current client certificate. The value is always double-quoted.\nThe URI type Subject Alternative Name field of the current client certificate.\nA client certificate may contain multiple URI type Subject Alternative Names,\neach will be a separate key-value pair.\nThe DNS type Subject Alternative Name field of the current client certificate.\nA client certificate may contain multiple DNS type Subject Alternative Names,\neach will be a separate key-value pair.",
+            "title": "XfccElement",
+            "enum": [
+                "XFCC_NONE",
+                "XFCC_CERT",
+                "XFCC_CHAIN",
+                "XFCC_SUBJECT",
+                "XFCC_URI",
+                "XFCC_DNS"
+            ],
+            "default": "XFCC_NONE",
+            "x-displayname": "XFCC Elements",
+            "x-ves-proto-enum": "ves.io.schema.XfccElement"
+        },
         "schemapolicyHeaderMatcherType": {
             "type": "object",
             "description": "A header matcher specifies the name of a single HTTP header and the criteria for the input request to match it. The input has a list of actual values for each\nheader name in the original HTTP request.\nA header matcher can check for one of the following:\n* Presence or absence of the header in the input\n* At least one of the values for the header in the input satisfies the MatcherType item",
@@ -11342,6 +11382,51 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "schemaviewsDownstreamTlsParamsType": {
+            "type": "object",
+            "description": "Inline TLS parameters",
+            "title": "DownstreamTlsParamsType",
+            "x-displayname": "Inline TLS Parameters",
+            "x-ves-oneof-field-mtls_choice": "[\"no_mtls\",\"use_mtls\"]",
+            "x-ves-proto-message": "ves.io.schema.views.DownstreamTlsParamsType",
+            "properties": {
+                "no_mtls": {
+                    "description": "Exclusive with [use_mtls]\n",
+                    "title": "No mTLS",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable"
+                },
+                "tls_certificates": {
+                    "type": "array",
+                    "description": " Users can add one or more certificates that share the same set of domains.\n for example, domain.com and *.domain.com - but use different signature algorithms\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 16\n  ves.io.schema.rules.repeated.min_items: 1\n",
+                    "title": "tls_certificates",
+                    "minItems": 1,
+                    "maxItems": 16,
+                    "items": {
+                        "$ref": "#/definitions/schemaTlsCertificateType"
+                    },
+                    "x-displayname": "TLS Certificates",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.max_items": "16",
+                        "ves.io.schema.rules.repeated.min_items": "1"
+                    }
+                },
+                "tls_config": {
+                    "description": " Configuration of TLS settings such as min/max TLS version and ciphersuites",
+                    "title": "TLS Config",
+                    "$ref": "#/definitions/viewsTlsConfig",
+                    "x-displayname": "TLS"
+                },
+                "use_mtls": {
+                    "description": "Exclusive with [no_mtls]\n",
+                    "title": "Use mTLS",
+                    "$ref": "#/definitions/viewsDownstreamTlsValidationContext",
+                    "x-displayname": "Enable"
+                }
+            }
+        },
         "schemaviewsObjectRefType": {
             "type": "object",
             "description": "This type establishes a direct reference from one object(the referrer) to another(the referred).\nSuch a reference is in form of tenant/namespace/name",
@@ -11397,6 +11482,7 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-challenge_action": "[\"disable_challenge\",\"enable_captcha_challenge\",\"enable_javascript_challenge\"]",
             "x-ves-oneof-field-client_choice": "[\"any_client\",\"client_selector\"]",
             "x-ves-oneof-field-ip_choice": "[\"any_ip\",\"ip_matcher\",\"ip_prefix_list\"]",
+            "x-ves-oneof-field-tls_fingerprint_choice": "[\"tls_fingerprint_matcher\"]",
             "x-ves-proto-message": "ves.io.schema.service_policy_rule.ChallengeRuleSpec",
             "properties": {
                 "any_asn": {
@@ -11515,7 +11601,7 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "tls_fingerprint_matcher": {
-                    "description": " TLS JA3 fingerprints to be matched.\n The predicate evaluates to true if the TLS fingerprint matches any of the exact values or classes of known TLS fingerprints.",
+                    "description": "Exclusive with []\n JA3 TLS fingerprints to be matched",
                     "$ref": "#/definitions/policyTlsFingerprintMatcherType"
                 }
             }
@@ -11555,6 +11641,112 @@ var APISwaggerJSON string = `{
                     "title": "minimum_protocol_version",
                     "$ref": "#/definitions/schemaTlsProtocol",
                     "x-displayname": "Minimum TLS version"
+                }
+            }
+        },
+        "viewsDownstreamTLSCertsParams": {
+            "type": "object",
+            "description": "Select TLS Parameters and Certificates",
+            "title": "DownstreamTLSCertsParams",
+            "x-displayname": "TLS Parameters",
+            "x-ves-oneof-field-mtls_choice": "[\"no_mtls\",\"use_mtls\"]",
+            "x-ves-proto-message": "ves.io.schema.views.DownstreamTLSCertsParams",
+            "properties": {
+                "certificates": {
+                    "type": "array",
+                    "description": " Select one or more certificates with any domain names.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 32\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "certificates",
+                    "maxItems": 32,
+                    "items": {
+                        "$ref": "#/definitions/schemaviewsObjectRefType"
+                    },
+                    "x-displayname": "Certificates",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.max_items": "32",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                },
+                "no_mtls": {
+                    "description": "Exclusive with [use_mtls]\n",
+                    "title": "No mTLS",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable"
+                },
+                "tls_config": {
+                    "description": " Configuration of TLS settings such as min/max TLS version and ciphersuites",
+                    "title": "TLS Config",
+                    "$ref": "#/definitions/viewsTlsConfig",
+                    "x-displayname": "TLS"
+                },
+                "use_mtls": {
+                    "description": "Exclusive with [no_mtls]\n",
+                    "title": "Use mTLS",
+                    "$ref": "#/definitions/viewsDownstreamTlsValidationContext",
+                    "x-displayname": "Enable"
+                }
+            }
+        },
+        "viewsDownstreamTlsValidationContext": {
+            "type": "object",
+            "description": "Validation context for downstream client TLS connections",
+            "title": "DownstreamTlsValidationContext",
+            "x-displayname": "Clients TLS validation context",
+            "x-ves-oneof-field-crl_choice": "[\"crl\",\"no_crl\"]",
+            "x-ves-oneof-field-trusted_ca_choice": "[\"trusted_ca\",\"trusted_ca_url\"]",
+            "x-ves-oneof-field-xfcc_header": "[\"xfcc_disabled\",\"xfcc_options\"]",
+            "x-ves-proto-message": "ves.io.schema.views.DownstreamTlsValidationContext",
+            "properties": {
+                "client_certificate_optional": {
+                    "type": "boolean",
+                    "description": " Client certificate is optional. If the client has provided a certificate,\n the load balancer will verify it. If certification verification fails,\n the connection will be terminated. If the client does not provide a certificate,\n the connection will be accepted.",
+                    "title": "client_certificate_optional",
+                    "format": "boolean",
+                    "x-displayname": "Client Certificate Optional"
+                },
+                "crl": {
+                    "description": "Exclusive with [no_crl]\n\n Client certificate is verified against CRL.\n Specify the CRL server information to download the certificate revocation list",
+                    "title": "Verify client certificate with CRL",
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "CRL"
+                },
+                "no_crl": {
+                    "description": "Exclusive with [crl]\n Client certificate revocation status is not verified",
+                    "title": "No client certificate verification with CRL",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "No CRL"
+                },
+                "trusted_ca": {
+                    "description": "Exclusive with [trusted_ca_url]\n Select/Add a Root CA Certificate object to associate with this Load Balancer",
+                    "title": "trusted_ca",
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "Root CA Certificate"
+                },
+                "trusted_ca_url": {
+                    "type": "string",
+                    "description": "Exclusive with [trusted_ca]\n Upload a Root CA Certificate specifically for this Load Balancer\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 131072\n  ves.io.schema.rules.string.min_bytes: 1\n  ves.io.schema.rules.string.truststore_url: true\n",
+                    "title": "trusted_ca_url",
+                    "minLength": 1,
+                    "maxLength": 131072,
+                    "x-displayname": "Inline Root CA Certificate (legacy)",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_bytes": "131072",
+                        "ves.io.schema.rules.string.min_bytes": "1",
+                        "ves.io.schema.rules.string.truststore_url": "true"
+                    }
+                },
+                "xfcc_disabled": {
+                    "description": "Exclusive with [xfcc_options]\n No X-Forwarded-Client-Cert header will be added",
+                    "title": "No XFCC header",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disabled"
+                },
+                "xfcc_options": {
+                    "description": "Exclusive with [xfcc_disabled]\n X-Forwarded-Client-Cert header will be added with the configured fields",
+                    "title": "Add XFCC header",
+                    "$ref": "#/definitions/viewsXfccHeaderKeys",
+                    "x-displayname": "Enabled"
                 }
             }
         },
@@ -11634,6 +11826,30 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "viewsXfccHeaderKeys": {
+            "type": "object",
+            "description": "X-Forwarded-Client-Cert header elements to be added to requests",
+            "title": "XfccHeaderKeys",
+            "x-displayname": "XFCC Header Elements",
+            "x-ves-proto-message": "ves.io.schema.views.XfccHeaderKeys",
+            "properties": {
+                "xfcc_header_elements": {
+                    "type": "array",
+                    "description": " X-Forwarded-Client-Cert header elements to be added to requests\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.items.enum.defined_only: true\n  ves.io.schema.rules.repeated.items.enum.not_in: [0]\n",
+                    "title": "XFCC Header",
+                    "items": {
+                        "$ref": "#/definitions/schemaXfccElement"
+                    },
+                    "x-displayname": "XFCC Header Elements",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.items.enum.defined_only": "true",
+                        "ves.io.schema.rules.repeated.items.enum.not_in": "[0]"
+                    }
+                }
+            }
+        },
         "viewscdn_loadbalancerAdvancedOptionsType": {
             "type": "object",
             "description": "x-displayName: \"Advanced Options\"\nThis defines various options to define a route",
@@ -11693,11 +11909,6 @@ var APISwaggerJSON string = `{
                     "description": "Exclusive with [no_service_policies service_policies_from_namespace]\n Apply the specified list of service policies and bypass the namespace service policy set",
                     "$ref": "#/definitions/common_wafServicePolicyList",
                     "x-displayname": "Apply Specified Service Policies"
-                },
-                "api_protection_rules": {
-                    "description": " API Protection Rules can be defined in two categories.\n The first category includes fine-grained rules, per API path and methods.\n The second category includes rules per API groups or Server URLs.\n If request matches any rule in the first category, second category rules are not evaluated.\n Rules can also include additional conditions, for example specific clients can access certain API endpoint or API group.",
-                    "$ref": "#/definitions/common_wafAPIProtectionRules",
-                    "x-displayname": "API Protection Rules"
                 },
                 "api_rate_limit": {
                     "description": "Exclusive with [disable_rate_limit rate_limit]\n Define rate limiting for one or more API endpoints",
@@ -12075,11 +12286,6 @@ var APISwaggerJSON string = `{
                     "description": "Exclusive with [no_service_policies service_policies_from_namespace]\n Apply the specified list of service policies and bypass the namespace service policy set",
                     "$ref": "#/definitions/common_wafServicePolicyList",
                     "x-displayname": "Apply Specified Service Policies"
-                },
-                "api_protection_rules": {
-                    "description": " API Protection Rules can be defined in two categories.\n The first category includes fine-grained rules, per API path and methods.\n The second category includes rules per API groups or Server URLs.\n If request matches any rule in the first category, second category rules are not evaluated.\n Rules can also include additional conditions, for example specific clients can access certain API endpoint or API group.",
-                    "$ref": "#/definitions/common_wafAPIProtectionRules",
-                    "x-displayname": "API Protection Rules"
                 },
                 "api_rate_limit": {
                     "description": "Exclusive with [disable_rate_limit rate_limit]\n Define rate limiting for one or more API endpoints",
@@ -12493,11 +12699,6 @@ var APISwaggerJSON string = `{
                     "description": "Exclusive with [no_service_policies service_policies_from_namespace]\n Apply the specified list of service policies and bypass the namespace service policy set",
                     "$ref": "#/definitions/common_wafServicePolicyList",
                     "x-displayname": "Apply Specified Service Policies"
-                },
-                "api_protection_rules": {
-                    "description": " API Protection Rules can be defined in two categories.\n The first category includes fine-grained rules, per API path and methods.\n The second category includes rules per API groups or Server URLs.\n If request matches any rule in the first category, second category rules are not evaluated.\n Rules can also include additional conditions, for example specific clients can access certain API endpoint or API group.",
-                    "$ref": "#/definitions/common_wafAPIProtectionRules",
-                    "x-displayname": "API Protection Rules"
                 },
                 "api_rate_limit": {
                     "description": "Exclusive with [disable_rate_limit rate_limit]\n Define rate limiting for one or more API endpoints",

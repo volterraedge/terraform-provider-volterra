@@ -3606,40 +3606,68 @@ var APISwaggerJSON string = `{
         },
         "schemaBlindfoldSecretInfoType": {
             "type": "object",
-            "description": "x-displayName: \"Blindfold Secret\"\nBlindfoldSecretInfoType specifies information about the Secret managed by F5XC Secret Management",
+            "description": "BlindfoldSecretInfoType specifies information about the Secret managed by F5XC Secret Management",
             "title": "BlindfoldSecretInfoType",
+            "x-displayname": "Blindfold Secret",
+            "x-ves-displayorder": "3,1,2",
+            "x-ves-proto-message": "ves.io.schema.BlindfoldSecretInfoType",
             "properties": {
                 "decryption_provider": {
                     "type": "string",
-                    "description": "x-displayName: \"Decryption Provider\"\nx-example: \"value\"\nName of the Secret Management Access object that contains information about the backend Secret Management service.",
-                    "title": "Decryption Provider"
+                    "description": " Name of the Secret Management Access object that contains information about the backend Secret Management service.\n\nExample: - \"value\"-",
+                    "title": "Decryption Provider",
+                    "x-displayname": "Decryption Provider",
+                    "x-ves-example": "value"
                 },
                 "location": {
                     "type": "string",
-                    "description": "x-displayName: \"Location\"\nx-required\nx-example: \"string:///U2VjcmV0SW5mb3JtYXRpb24=\"\nLocation is the uri_ref. It could be in url format for string:///\nOr it could be a path if the store provider is an http/https location",
-                    "title": "Location"
+                    "description": " Location is the uri_ref. It could be in url format for string:///\n Or it could be a path if the store provider is an http/https location\n\nExample: - \"string:///U2VjcmV0SW5mb3JtYXRpb24=\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.uri_ref: true\n",
+                    "title": "Location",
+                    "x-displayname": "Location",
+                    "x-ves-example": "string:///U2VjcmV0SW5mb3JtYXRpb24=",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.uri_ref": "true"
+                    }
                 },
                 "store_provider": {
                     "type": "string",
-                    "description": "x-displayName: \"Store Provider\"\nx-example: \"value\"\nName of the Secret Management Access object that contains information about the store to get encrypted bytes\nThis field needs to be provided only if the url scheme is not string:///",
-                    "title": "Store Provider"
+                    "description": " Name of the Secret Management Access object that contains information about the store to get encrypted bytes\n This field needs to be provided only if the url scheme is not string:///\n\nExample: - \"value\"-",
+                    "title": "Store Provider",
+                    "x-displayname": "Store Provider",
+                    "x-ves-example": "value"
                 }
             }
         },
         "schemaClearSecretInfoType": {
             "type": "object",
-            "description": "x-displayName: \"In-Clear Secret\"\nClearSecretInfoType specifies information about the Secret that is not encrypted.",
+            "description": "ClearSecretInfoType specifies information about the Secret that is not encrypted.",
             "title": "ClearSecretInfoType",
+            "x-displayname": "In-Clear Secret",
+            "x-ves-displayorder": "2,1",
+            "x-ves-proto-message": "ves.io.schema.ClearSecretInfoType",
             "properties": {
                 "provider": {
                     "type": "string",
-                    "description": "x-displayName: \"Provider\"\nx-example: \"box-provider\"\nName of the Secret Management Access object that contains information about the store to get encrypted bytes\nThis field needs to be provided only if the url scheme is not string:///",
-                    "title": "Provider"
+                    "description": " Name of the Secret Management Access object that contains information about the store to get encrypted bytes\n This field needs to be provided only if the url scheme is not string:///\n\nExample: - \"box-provider\"-",
+                    "title": "Provider",
+                    "x-displayname": "Provider",
+                    "x-ves-example": "box-provider"
                 },
                 "url": {
                     "type": "string",
-                    "description": "x-displayName: \"URL\"\nx-required\nx-example: \"string:///U2VjcmV0SW5mb3JtYXRpb24=\"\nURL of the secret. Currently supported URL schemes is string:///.\nFor string:/// scheme, Secret needs to be encoded Base64 format.\nWhen asked for this secret, caller will get Secret bytes after Base64 decoding.",
-                    "title": "URL"
+                    "description": " URL of the secret. Currently supported URL schemes is string:///.\n For string:/// scheme, Secret needs to be encoded Base64 format.\n When asked for this secret, caller will get Secret bytes after Base64 decoding.\n\nExample: - \"string:///U2VjcmV0SW5mb3JtYXRpb24=\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_bytes: 131072\n  ves.io.schema.rules.string.uri_ref: true\n",
+                    "title": "URL",
+                    "maxLength": 131072,
+                    "x-displayname": "URL",
+                    "x-ves-example": "string:///U2VjcmV0SW5mb3JtYXRpb24=",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_bytes": "131072",
+                        "ves.io.schema.rules.string.uri_ref": "true"
+                    }
                 }
             }
         },
@@ -4136,38 +4164,23 @@ var APISwaggerJSON string = `{
         },
         "schemaSecretType": {
             "type": "object",
-            "description": "x-displayName: \"Secret\"\nSecretType is used in an object to indicate a sensitive/confidential field",
+            "description": "SecretType is used in an object to indicate a sensitive/confidential field",
             "title": "SecretType",
+            "x-displayname": "Secret",
+            "x-ves-oneof-field-secret_info_oneof": "[\"blindfold_secret_info\",\"clear_secret_info\"]",
+            "x-ves-proto-message": "ves.io.schema.SecretType",
             "properties": {
                 "blindfold_secret_info": {
-                    "description": "x-displayName: \"Blindfold Secret\"\nBlindfold Secret is used for the secrets managed by F5XC Secret Management Service",
+                    "description": "Exclusive with [clear_secret_info]\n Blindfold Secret is used for the secrets managed by F5XC Secret Management Service",
                     "title": "Blindfold Secret",
-                    "$ref": "#/definitions/schemaBlindfoldSecretInfoType"
-                },
-                "blindfold_secret_info_internal": {
-                    "description": "x-displayName: \"Blindfold Secret Internal\"\nBlindfold Secret Internal is used for the putting re-encrypted blindfold secret",
-                    "title": "Blindfold Secret Internal",
-                    "$ref": "#/definitions/schemaBlindfoldSecretInfoType"
+                    "$ref": "#/definitions/schemaBlindfoldSecretInfoType",
+                    "x-displayname": "Blindfold Secret"
                 },
                 "clear_secret_info": {
-                    "description": "x-displayName: \"Clear Secret\"\nClear Secret is used for the secrets that are not encrypted",
+                    "description": "Exclusive with [blindfold_secret_info]\n Clear Secret is used for the secrets that are not encrypted",
                     "title": "Clear Secret",
-                    "$ref": "#/definitions/schemaClearSecretInfoType"
-                },
-                "secret_encoding_type": {
-                    "description": "x-displayName: \"Secret Encoding\"\nThis field defines the encoding type of the secret BEFORE the secret is given to any Secret Management System.\nthis will be set if the secret is encoded and not plaintext BEFORE it is encrypted and put it in SecretType.\nNote - Do NOT set this field for Clear Secret with string:/// scheme.\ne.g. if a secret is base64 encoded and then put into vault.",
-                    "title": "secret_encoding_type",
-                    "$ref": "#/definitions/schemaSecretEncodingType"
-                },
-                "vault_secret_info": {
-                    "description": "x-displayName: \"Vault Secret\"\nVault Secret is used for the secrets managed by Hashicorp Vault",
-                    "title": "Vault Secret",
-                    "$ref": "#/definitions/schemaVaultSecretInfoType"
-                },
-                "wingman_secret_info": {
-                    "description": "x-displayName: \"Bootstrap Secret\"\nSecret is given as bootstrap secret in F5XC Security Sidecar",
-                    "title": "Wingman Secret",
-                    "$ref": "#/definitions/schemaWingmanSecretInfoType"
+                    "$ref": "#/definitions/schemaClearSecretInfoType",
+                    "x-displayname": "Clear Secret"
                 }
             }
         },
@@ -5281,7 +5294,7 @@ var APISwaggerJSON string = `{
             "type": "object",
             "description": "Specify how worker nodes within a site will be upgraded.",
             "title": "Node by Node Upgrade",
-            "x-displayname": "Node by Node Upgrade [BETA]",
+            "x-displayname": "Node by Node Upgrade",
             "x-ves-displayorder": "1",
             "x-ves-oneof-field-kubernetes_upgrade_drain_enable_choice": "[\"disable_upgrade_drain\",\"enable_upgrade_drain\"]",
             "x-ves-proto-message": "ves.io.schema.views.KubernetesUpgradeDrain",
@@ -5652,6 +5665,12 @@ var APISwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.string.max_len": "256"
                     }
+                },
+                "admin_password": {
+                    "description": " Admin password user for accessing site through serial console .",
+                    "title": "Admin Password",
+                    "$ref": "#/definitions/schemaSecretType",
+                    "x-displayname": "Admin Password"
                 },
                 "block_all_services": {
                     "description": "Exclusive with [blocked_services default_blocked_services]\n Block DNS, SSH \u0026 WebUI services on Site",

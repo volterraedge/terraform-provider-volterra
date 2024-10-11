@@ -29,6 +29,7 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.api_credential.DeleteRequest"] = DeleteRequestValidator()
 	vr["ves.io.schema.api_credential.GetRequest"] = GetRequestValidator()
 	vr["ves.io.schema.api_credential.GetResponse"] = GetResponseValidator()
+	vr["ves.io.schema.api_credential.GetServiceCredentialsResponse"] = GetServiceCredentialsResponseValidator()
 	vr["ves.io.schema.api_credential.ListRequest"] = ListRequestValidator()
 	vr["ves.io.schema.api_credential.ListResponse"] = ListResponseValidator()
 	vr["ves.io.schema.api_credential.ListResponseItem"] = ListResponseItemValidator()

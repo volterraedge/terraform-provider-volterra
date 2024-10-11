@@ -64,6 +64,17 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 
+	mdr.RPCSubscriptionFieldsRegistry["ves.io.schema.fast_acl.API.Create"] = []svcfw.SubscriptionField{
+		{
+			FieldPath:     "ves.io.schema.fast_acl.CreateRequest.spec.site_choice.re_acl.fast_acl_rules.source.prefix.ipv6_prefix",
+			AddonServices: []string{"f5xc-ipv6-standard"},
+		},
+		{
+			FieldPath:     "ves.io.schema.fast_acl.CreateRequest.spec.site_choice.site_acl.fast_acl_rules.source.prefix.ipv6_prefix",
+			AddonServices: []string{"f5xc-ipv6-standard"},
+		},
+	}
+
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.fast_acl.API.Create"] = []string{
 		"spec.legacy_acl",
 		"spec.re_acl.fast_acl_rules.#.metadata.disable",
@@ -129,6 +140,17 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		{
 			FieldPath:           "items.#.get_spec.site_acl.fast_acl_rules.#.prefix.ipv6_prefix.#",
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
+		},
+	}
+
+	mdr.RPCSubscriptionFieldsRegistry["ves.io.schema.fast_acl.API.Replace"] = []svcfw.SubscriptionField{
+		{
+			FieldPath:     "ves.io.schema.fast_acl.ReplaceRequest.spec.site_choice.re_acl.fast_acl_rules.source.prefix.ipv6_prefix",
+			AddonServices: []string{"f5xc-ipv6-standard"},
+		},
+		{
+			FieldPath:     "ves.io.schema.fast_acl.ReplaceRequest.spec.site_choice.site_acl.fast_acl_rules.source.prefix.ipv6_prefix",
+			AddonServices: []string{"f5xc-ipv6-standard"},
 		},
 	}
 

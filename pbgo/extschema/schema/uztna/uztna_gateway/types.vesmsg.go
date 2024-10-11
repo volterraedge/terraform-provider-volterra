@@ -66,28 +66,28 @@ func (m *BigIpAccessSiteList) GetDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 	}
 
-	return m.GetSecureMeshSiteDRefInfo()
+	return m.GetBigipSiteDRefInfo()
 
 }
 
-func (m *BigIpAccessSiteList) GetSecureMeshSiteDRefInfo() ([]db.DRefInfo, error) {
-	refs := m.GetSecureMeshSite()
+func (m *BigIpAccessSiteList) GetBigipSiteDRefInfo() ([]db.DRefInfo, error) {
+	refs := m.GetBigipSite()
 	if len(refs) == 0 {
 		return nil, nil
 	}
 	drInfos := make([]db.DRefInfo, 0, len(refs))
 	for i, ref := range refs {
 		if ref == nil {
-			return nil, fmt.Errorf("BigIpAccessSiteList.secure_mesh_site[%d] has a nil value", i)
+			return nil, fmt.Errorf("BigIpAccessSiteList.bigip_site[%d] has a nil value", i)
 		}
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
 		drInfos = append(drInfos, db.DRefInfo{
-			RefdType:   "securemesh_site.Object",
+			RefdType:   "bigip_instance_site.Object",
 			RefdUID:    ref.Uid,
 			RefdTenant: ref.Tenant,
 			RefdNS:     ref.Namespace,
 			RefdName:   ref.Name,
-			DRField:    "secure_mesh_site",
+			DRField:    "bigip_site",
 			Ref:        ref,
 		})
 	}
@@ -95,14 +95,14 @@ func (m *BigIpAccessSiteList) GetSecureMeshSiteDRefInfo() ([]db.DRefInfo, error)
 
 }
 
-// GetSecureMeshSiteDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
-func (m *BigIpAccessSiteList) GetSecureMeshSiteDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+// GetBigipSiteDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *BigIpAccessSiteList) GetBigipSiteDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
 	var entries []db.Entry
-	refdType, err := d.TypeForEntryKind("", "", "securemesh_site.Object")
+	refdType, err := d.TypeForEntryKind("", "", "bigip_instance_site.Object")
 	if err != nil {
-		return nil, errors.Wrap(err, "Cannot find type for kind: securemesh_site")
+		return nil, errors.Wrap(err, "Cannot find type for kind: bigip_instance_site")
 	}
-	for _, ref := range m.GetSecureMeshSite() {
+	for _, ref := range m.GetBigipSite() {
 		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
 		if err != nil {
 			return nil, errors.Wrap(err, "Getting referred entry")
@@ -119,12 +119,12 @@ type ValidateBigIpAccessSiteList struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
-func (v *ValidateBigIpAccessSiteList) SecureMeshSiteValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+func (v *ValidateBigIpAccessSiteList) BigipSiteValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
-		return nil, errors.Wrap(err, "Message ValidationRuleHandler for secure_mesh_site")
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for bigip_site")
 	}
 	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.ObjectRefType, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
@@ -139,7 +139,7 @@ func (v *ValidateBigIpAccessSiteList) SecureMeshSiteValidationRuleHandler(rules 
 	}
 	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
 	if err != nil {
-		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for secure_mesh_site")
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for bigip_site")
 	}
 
 	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
@@ -156,10 +156,10 @@ func (v *ValidateBigIpAccessSiteList) SecureMeshSiteValidationRuleHandler(rules 
 			l = append(l, strVal)
 		}
 		if err := repValFn(ctx, l, opts...); err != nil {
-			return errors.Wrap(err, "repeated secure_mesh_site")
+			return errors.Wrap(err, "repeated bigip_site")
 		}
 		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
-			return errors.Wrap(err, "items secure_mesh_site")
+			return errors.Wrap(err, "items bigip_site")
 		}
 		return nil
 	}
@@ -181,9 +181,9 @@ func (v *ValidateBigIpAccessSiteList) Validate(ctx context.Context, pm interface
 		return nil
 	}
 
-	if fv, exists := v.FldValidators["secure_mesh_site"]; exists {
-		vOpts := append(opts, db.WithValidateField("secure_mesh_site"))
-		if err := fv(ctx, m.GetSecureMeshSite(), vOpts...); err != nil {
+	if fv, exists := v.FldValidators["bigip_site"]; exists {
+		vOpts := append(opts, db.WithValidateField("bigip_site"))
+		if err := fv(ctx, m.GetBigipSite(), vOpts...); err != nil {
 			return err
 		}
 
@@ -204,17 +204,17 @@ var DefaultBigIpAccessSiteListValidator = func() *ValidateBigIpAccessSiteList {
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
 
-	vrhSecureMeshSite := v.SecureMeshSiteValidationRuleHandler
-	rulesSecureMeshSite := map[string]string{
+	vrhBigipSite := v.BigipSiteValidationRuleHandler
+	rulesBigipSite := map[string]string{
 		"ves.io.schema.rules.message.required":   "true",
 		"ves.io.schema.rules.repeated.max_items": "1",
 	}
-	vFn, err = vrhSecureMeshSite(rulesSecureMeshSite)
+	vFn, err = vrhBigipSite(rulesBigipSite)
 	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for BigIpAccessSiteList.secure_mesh_site: %s", err)
+		errMsg := fmt.Sprintf("ValidationRuleHandler for BigIpAccessSiteList.bigip_site: %s", err)
 		panic(errMsg)
 	}
-	v.FldValidators["secure_mesh_site"] = vFn
+	v.FldValidators["bigip_site"] = vFn
 
 	return v
 }()
@@ -265,23 +265,23 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 	}
 
-	return m.GetBigIpCeSiteDRefInfo()
+	return m.GetBigIpInstanceDRefInfo()
 
 }
 
 // GetDRefInfo for the field's type
-func (m *CreateSpecType) GetBigIpCeSiteDRefInfo() ([]db.DRefInfo, error) {
-	if m.GetBigIpCeSite() == nil {
+func (m *CreateSpecType) GetBigIpInstanceDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetBigIpInstance() == nil {
 		return nil, nil
 	}
 
-	drInfos, err := m.GetBigIpCeSite().GetDRefInfo()
+	drInfos, err := m.GetBigIpInstance().GetDRefInfo()
 	if err != nil {
-		return nil, errors.Wrap(err, "GetBigIpCeSite().GetDRefInfo() FAILED")
+		return nil, errors.Wrap(err, "GetBigIpInstance().GetDRefInfo() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
-		dri.DRField = "big_ip_ce_site." + dri.DRField
+		dri.DRField = "big_ip_instance." + dri.DRField
 	}
 	return drInfos, err
 
@@ -291,11 +291,11 @@ type ValidateCreateSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
-func (v *ValidateCreateSpecType) BigIpCeSiteValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+func (v *ValidateCreateSpecType) BigIpInstanceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
-		return nil, errors.Wrap(err, "MessageValidationRuleHandler for big_ip_ce_site")
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for big_ip_instance")
 	}
 	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
@@ -312,17 +312,48 @@ func (v *ValidateCreateSpecType) BigIpCeSiteValidationRuleHandler(rules map[stri
 	return validatorFn, nil
 }
 
-func (v *ValidateCreateSpecType) PrivateIpValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+func (v *ValidateCreateSpecType) ListenersValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
-	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
-		return nil, errors.Wrap(err, "MessageValidationRuleHandler for private_ip")
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for listeners")
 	}
-	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
-		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
-			return err
+	itemsValidatorFn := func(ctx context.Context, elems []*Listeners, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ListenersValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for listeners")
+	}
 
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*Listeners)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*Listeners, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated listeners")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items listeners")
+		}
 		return nil
 	}
 
@@ -343,19 +374,18 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 		return nil
 	}
 
-	if fv, exists := v.FldValidators["big_ip_ce_site"]; exists {
+	if fv, exists := v.FldValidators["big_ip_instance"]; exists {
 
-		vOpts := append(opts, db.WithValidateField("big_ip_ce_site"))
-		if err := fv(ctx, m.GetBigIpCeSite(), vOpts...); err != nil {
+		vOpts := append(opts, db.WithValidateField("big_ip_instance"))
+		if err := fv(ctx, m.GetBigIpInstance(), vOpts...); err != nil {
 			return err
 		}
 
 	}
 
-	if fv, exists := v.FldValidators["private_ip"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("private_ip"))
-		if err := fv(ctx, m.GetPrivateIp(), vOpts...); err != nil {
+	if fv, exists := v.FldValidators["listeners"]; exists {
+		vOpts := append(opts, db.WithValidateField("listeners"))
+		if err := fv(ctx, m.GetListeners(), vOpts...); err != nil {
 			return err
 		}
 
@@ -376,27 +406,27 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
 
-	vrhBigIpCeSite := v.BigIpCeSiteValidationRuleHandler
-	rulesBigIpCeSite := map[string]string{
+	vrhBigIpInstance := v.BigIpInstanceValidationRuleHandler
+	rulesBigIpInstance := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
 	}
-	vFn, err = vrhBigIpCeSite(rulesBigIpCeSite)
+	vFn, err = vrhBigIpInstance(rulesBigIpInstance)
 	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.big_ip_ce_site: %s", err)
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.big_ip_instance: %s", err)
 		panic(errMsg)
 	}
-	v.FldValidators["big_ip_ce_site"] = vFn
+	v.FldValidators["big_ip_instance"] = vFn
 
-	vrhPrivateIp := v.PrivateIpValidationRuleHandler
-	rulesPrivateIp := map[string]string{
+	vrhListeners := v.ListenersValidationRuleHandler
+	rulesListeners := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
 	}
-	vFn, err = vrhPrivateIp(rulesPrivateIp)
+	vFn, err = vrhListeners(rulesListeners)
 	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.private_ip: %s", err)
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.listeners: %s", err)
 		panic(errMsg)
 	}
-	v.FldValidators["private_ip"] = vFn
+	v.FldValidators["listeners"] = vFn
 
 	return v
 }()
@@ -447,23 +477,23 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 	}
 
-	return m.GetBigIpCeSiteDRefInfo()
+	return m.GetBigIpInstanceDRefInfo()
 
 }
 
 // GetDRefInfo for the field's type
-func (m *GetSpecType) GetBigIpCeSiteDRefInfo() ([]db.DRefInfo, error) {
-	if m.GetBigIpCeSite() == nil {
+func (m *GetSpecType) GetBigIpInstanceDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetBigIpInstance() == nil {
 		return nil, nil
 	}
 
-	drInfos, err := m.GetBigIpCeSite().GetDRefInfo()
+	drInfos, err := m.GetBigIpInstance().GetDRefInfo()
 	if err != nil {
-		return nil, errors.Wrap(err, "GetBigIpCeSite().GetDRefInfo() FAILED")
+		return nil, errors.Wrap(err, "GetBigIpInstance().GetDRefInfo() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
-		dri.DRField = "big_ip_ce_site." + dri.DRField
+		dri.DRField = "big_ip_instance." + dri.DRField
 	}
 	return drInfos, err
 
@@ -473,11 +503,11 @@ type ValidateGetSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
-func (v *ValidateGetSpecType) BigIpCeSiteValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+func (v *ValidateGetSpecType) BigIpInstanceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
-		return nil, errors.Wrap(err, "MessageValidationRuleHandler for big_ip_ce_site")
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for big_ip_instance")
 	}
 	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
@@ -494,17 +524,48 @@ func (v *ValidateGetSpecType) BigIpCeSiteValidationRuleHandler(rules map[string]
 	return validatorFn, nil
 }
 
-func (v *ValidateGetSpecType) PrivateIpValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+func (v *ValidateGetSpecType) ListenersValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
-	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
-		return nil, errors.Wrap(err, "MessageValidationRuleHandler for private_ip")
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for listeners")
 	}
-	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
-		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
-			return err
+	itemsValidatorFn := func(ctx context.Context, elems []*Listeners, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ListenersValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for listeners")
+	}
 
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*Listeners)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*Listeners, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated listeners")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items listeners")
+		}
 		return nil
 	}
 
@@ -525,19 +586,18 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 		return nil
 	}
 
-	if fv, exists := v.FldValidators["big_ip_ce_site"]; exists {
+	if fv, exists := v.FldValidators["big_ip_instance"]; exists {
 
-		vOpts := append(opts, db.WithValidateField("big_ip_ce_site"))
-		if err := fv(ctx, m.GetBigIpCeSite(), vOpts...); err != nil {
+		vOpts := append(opts, db.WithValidateField("big_ip_instance"))
+		if err := fv(ctx, m.GetBigIpInstance(), vOpts...); err != nil {
 			return err
 		}
 
 	}
 
-	if fv, exists := v.FldValidators["private_ip"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("private_ip"))
-		if err := fv(ctx, m.GetPrivateIp(), vOpts...); err != nil {
+	if fv, exists := v.FldValidators["listeners"]; exists {
+		vOpts := append(opts, db.WithValidateField("listeners"))
+		if err := fv(ctx, m.GetListeners(), vOpts...); err != nil {
 			return err
 		}
 
@@ -558,27 +618,27 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
 
-	vrhBigIpCeSite := v.BigIpCeSiteValidationRuleHandler
-	rulesBigIpCeSite := map[string]string{
+	vrhBigIpInstance := v.BigIpInstanceValidationRuleHandler
+	rulesBigIpInstance := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
 	}
-	vFn, err = vrhBigIpCeSite(rulesBigIpCeSite)
+	vFn, err = vrhBigIpInstance(rulesBigIpInstance)
 	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.big_ip_ce_site: %s", err)
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.big_ip_instance: %s", err)
 		panic(errMsg)
 	}
-	v.FldValidators["big_ip_ce_site"] = vFn
+	v.FldValidators["big_ip_instance"] = vFn
 
-	vrhPrivateIp := v.PrivateIpValidationRuleHandler
-	rulesPrivateIp := map[string]string{
+	vrhListeners := v.ListenersValidationRuleHandler
+	rulesListeners := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
 	}
-	vFn, err = vrhPrivateIp(rulesPrivateIp)
+	vFn, err = vrhListeners(rulesListeners)
 	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.private_ip: %s", err)
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.listeners: %s", err)
 		panic(errMsg)
 	}
-	v.FldValidators["private_ip"] = vFn
+	v.FldValidators["listeners"] = vFn
 
 	return v
 }()
@@ -629,23 +689,23 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 	}
 
-	return m.GetBigIpCeSiteDRefInfo()
+	return m.GetBigIpInstanceDRefInfo()
 
 }
 
 // GetDRefInfo for the field's type
-func (m *GlobalSpecType) GetBigIpCeSiteDRefInfo() ([]db.DRefInfo, error) {
-	if m.GetBigIpCeSite() == nil {
+func (m *GlobalSpecType) GetBigIpInstanceDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetBigIpInstance() == nil {
 		return nil, nil
 	}
 
-	drInfos, err := m.GetBigIpCeSite().GetDRefInfo()
+	drInfos, err := m.GetBigIpInstance().GetDRefInfo()
 	if err != nil {
-		return nil, errors.Wrap(err, "GetBigIpCeSite().GetDRefInfo() FAILED")
+		return nil, errors.Wrap(err, "GetBigIpInstance().GetDRefInfo() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
-		dri.DRField = "big_ip_ce_site." + dri.DRField
+		dri.DRField = "big_ip_instance." + dri.DRField
 	}
 	return drInfos, err
 
@@ -655,11 +715,11 @@ type ValidateGlobalSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
-func (v *ValidateGlobalSpecType) BigIpCeSiteValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+func (v *ValidateGlobalSpecType) BigIpInstanceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
-		return nil, errors.Wrap(err, "MessageValidationRuleHandler for big_ip_ce_site")
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for big_ip_instance")
 	}
 	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
@@ -676,17 +736,48 @@ func (v *ValidateGlobalSpecType) BigIpCeSiteValidationRuleHandler(rules map[stri
 	return validatorFn, nil
 }
 
-func (v *ValidateGlobalSpecType) PrivateIpValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+func (v *ValidateGlobalSpecType) ListenersValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
-	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
-		return nil, errors.Wrap(err, "MessageValidationRuleHandler for private_ip")
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for listeners")
 	}
-	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
-		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
-			return err
+	itemsValidatorFn := func(ctx context.Context, elems []*Listeners, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ListenersValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for listeners")
+	}
 
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*Listeners)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*Listeners, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated listeners")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items listeners")
+		}
 		return nil
 	}
 
@@ -707,19 +798,18 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 		return nil
 	}
 
-	if fv, exists := v.FldValidators["big_ip_ce_site"]; exists {
+	if fv, exists := v.FldValidators["big_ip_instance"]; exists {
 
-		vOpts := append(opts, db.WithValidateField("big_ip_ce_site"))
-		if err := fv(ctx, m.GetBigIpCeSite(), vOpts...); err != nil {
+		vOpts := append(opts, db.WithValidateField("big_ip_instance"))
+		if err := fv(ctx, m.GetBigIpInstance(), vOpts...); err != nil {
 			return err
 		}
 
 	}
 
-	if fv, exists := v.FldValidators["private_ip"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("private_ip"))
-		if err := fv(ctx, m.GetPrivateIp(), vOpts...); err != nil {
+	if fv, exists := v.FldValidators["listeners"]; exists {
+		vOpts := append(opts, db.WithValidateField("listeners"))
+		if err := fv(ctx, m.GetListeners(), vOpts...); err != nil {
 			return err
 		}
 
@@ -740,33 +830,173 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
 
-	vrhBigIpCeSite := v.BigIpCeSiteValidationRuleHandler
-	rulesBigIpCeSite := map[string]string{
+	vrhBigIpInstance := v.BigIpInstanceValidationRuleHandler
+	rulesBigIpInstance := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
 	}
-	vFn, err = vrhBigIpCeSite(rulesBigIpCeSite)
+	vFn, err = vrhBigIpInstance(rulesBigIpInstance)
 	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.big_ip_ce_site: %s", err)
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.big_ip_instance: %s", err)
 		panic(errMsg)
 	}
-	v.FldValidators["big_ip_ce_site"] = vFn
+	v.FldValidators["big_ip_instance"] = vFn
 
-	vrhPrivateIp := v.PrivateIpValidationRuleHandler
-	rulesPrivateIp := map[string]string{
+	vrhListeners := v.ListenersValidationRuleHandler
+	rulesListeners := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
 	}
-	vFn, err = vrhPrivateIp(rulesPrivateIp)
+	vFn, err = vrhListeners(rulesListeners)
 	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.private_ip: %s", err)
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.listeners: %s", err)
 		panic(errMsg)
 	}
-	v.FldValidators["private_ip"] = vFn
+	v.FldValidators["listeners"] = vFn
 
 	return v
 }()
 
 func GlobalSpecTypeValidator() db.Validator {
 	return DefaultGlobalSpecTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *Listeners) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *Listeners) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *Listeners) DeepCopy() *Listeners {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &Listeners{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *Listeners) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *Listeners) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return ListenersValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateListeners struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateListeners) FlowTypeIpv4ValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_Ipv4, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for ipv4")
+	}
+	return oValidatorFn_Ipv4, nil
+}
+func (v *ValidateListeners) FlowTypeIpv6ValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_Ipv6, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for ipv6")
+	}
+	return oValidatorFn_Ipv6, nil
+}
+
+func (v *ValidateListeners) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*Listeners)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *Listeners got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	switch m.GetFlowType().(type) {
+	case *Listeners_Ipv4:
+		if fv, exists := v.FldValidators["flow_type.ipv4"]; exists {
+			val := m.GetFlowType().(*Listeners_Ipv4).Ipv4
+			vOpts := append(opts,
+				db.WithValidateField("flow_type"),
+				db.WithValidateField("ipv4"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *Listeners_Ipv6:
+		if fv, exists := v.FldValidators["flow_type.ipv6"]; exists {
+			val := m.GetFlowType().(*Listeners_Ipv6).Ipv6
+			vOpts := append(opts,
+				db.WithValidateField("flow_type"),
+				db.WithValidateField("ipv6"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultListenersValidator = func() *ValidateListeners {
+	v := &ValidateListeners{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhFlowTypeIpv4 := v.FlowTypeIpv4ValidationRuleHandler
+	rulesFlowTypeIpv4 := map[string]string{
+		"ves.io.schema.rules.string.ipv4": "true",
+	}
+	vFnMap["flow_type.ipv4"], err = vrhFlowTypeIpv4(rulesFlowTypeIpv4)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field Listeners.flow_type_ipv4: %s", err)
+		panic(errMsg)
+	}
+	vrhFlowTypeIpv6 := v.FlowTypeIpv6ValidationRuleHandler
+	rulesFlowTypeIpv6 := map[string]string{
+		"ves.io.schema.rules.string.ipv6": "true",
+	}
+	vFnMap["flow_type.ipv6"], err = vrhFlowTypeIpv6(rulesFlowTypeIpv6)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field Listeners.flow_type_ipv6: %s", err)
+		panic(errMsg)
+	}
+
+	v.FldValidators["flow_type.ipv4"] = vFnMap["flow_type.ipv4"]
+	v.FldValidators["flow_type.ipv6"] = vFnMap["flow_type.ipv6"]
+
+	return v
+}()
+
+func ListenersValidator() db.Validator {
+	return DefaultListenersValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -811,23 +1041,23 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 	}
 
-	return m.GetBigIpCeSiteDRefInfo()
+	return m.GetBigIpInstanceDRefInfo()
 
 }
 
 // GetDRefInfo for the field's type
-func (m *ReplaceSpecType) GetBigIpCeSiteDRefInfo() ([]db.DRefInfo, error) {
-	if m.GetBigIpCeSite() == nil {
+func (m *ReplaceSpecType) GetBigIpInstanceDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetBigIpInstance() == nil {
 		return nil, nil
 	}
 
-	drInfos, err := m.GetBigIpCeSite().GetDRefInfo()
+	drInfos, err := m.GetBigIpInstance().GetDRefInfo()
 	if err != nil {
-		return nil, errors.Wrap(err, "GetBigIpCeSite().GetDRefInfo() FAILED")
+		return nil, errors.Wrap(err, "GetBigIpInstance().GetDRefInfo() FAILED")
 	}
 	for i := range drInfos {
 		dri := &drInfos[i]
-		dri.DRField = "big_ip_ce_site." + dri.DRField
+		dri.DRField = "big_ip_instance." + dri.DRField
 	}
 	return drInfos, err
 
@@ -837,11 +1067,11 @@ type ValidateReplaceSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
-func (v *ValidateReplaceSpecType) BigIpCeSiteValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+func (v *ValidateReplaceSpecType) BigIpInstanceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
-		return nil, errors.Wrap(err, "MessageValidationRuleHandler for big_ip_ce_site")
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for big_ip_instance")
 	}
 	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
@@ -858,17 +1088,48 @@ func (v *ValidateReplaceSpecType) BigIpCeSiteValidationRuleHandler(rules map[str
 	return validatorFn, nil
 }
 
-func (v *ValidateReplaceSpecType) PrivateIpValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+func (v *ValidateReplaceSpecType) ListenersValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
-	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
-		return nil, errors.Wrap(err, "MessageValidationRuleHandler for private_ip")
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for listeners")
 	}
-	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
-		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
-			return err
+	itemsValidatorFn := func(ctx context.Context, elems []*Listeners, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ListenersValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for listeners")
+	}
 
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*Listeners)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*Listeners, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated listeners")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items listeners")
+		}
 		return nil
 	}
 
@@ -889,19 +1150,18 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 		return nil
 	}
 
-	if fv, exists := v.FldValidators["big_ip_ce_site"]; exists {
+	if fv, exists := v.FldValidators["big_ip_instance"]; exists {
 
-		vOpts := append(opts, db.WithValidateField("big_ip_ce_site"))
-		if err := fv(ctx, m.GetBigIpCeSite(), vOpts...); err != nil {
+		vOpts := append(opts, db.WithValidateField("big_ip_instance"))
+		if err := fv(ctx, m.GetBigIpInstance(), vOpts...); err != nil {
 			return err
 		}
 
 	}
 
-	if fv, exists := v.FldValidators["private_ip"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("private_ip"))
-		if err := fv(ctx, m.GetPrivateIp(), vOpts...); err != nil {
+	if fv, exists := v.FldValidators["listeners"]; exists {
+		vOpts := append(opts, db.WithValidateField("listeners"))
+		if err := fv(ctx, m.GetListeners(), vOpts...); err != nil {
 			return err
 		}
 
@@ -922,27 +1182,27 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
 
-	vrhBigIpCeSite := v.BigIpCeSiteValidationRuleHandler
-	rulesBigIpCeSite := map[string]string{
+	vrhBigIpInstance := v.BigIpInstanceValidationRuleHandler
+	rulesBigIpInstance := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
 	}
-	vFn, err = vrhBigIpCeSite(rulesBigIpCeSite)
+	vFn, err = vrhBigIpInstance(rulesBigIpInstance)
 	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.big_ip_ce_site: %s", err)
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.big_ip_instance: %s", err)
 		panic(errMsg)
 	}
-	v.FldValidators["big_ip_ce_site"] = vFn
+	v.FldValidators["big_ip_instance"] = vFn
 
-	vrhPrivateIp := v.PrivateIpValidationRuleHandler
-	rulesPrivateIp := map[string]string{
+	vrhListeners := v.ListenersValidationRuleHandler
+	rulesListeners := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
 	}
-	vFn, err = vrhPrivateIp(rulesPrivateIp)
+	vFn, err = vrhListeners(rulesListeners)
 	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.private_ip: %s", err)
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.listeners: %s", err)
 		panic(errMsg)
 	}
-	v.FldValidators["private_ip"] = vFn
+	v.FldValidators["listeners"] = vFn
 
 	return v
 }()
@@ -955,8 +1215,8 @@ func (m *CreateSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool
 	if f == nil {
 		return
 	}
-	m.BigIpCeSite = f.GetBigIpCeSite()
-	m.PrivateIp = f.GetPrivateIp()
+	m.BigIpInstance = f.GetBigIpInstance()
+	m.Listeners = f.GetListeners()
 }
 
 func (m *CreateSpecType) FromGlobalSpecType(f *GlobalSpecType) {
@@ -974,8 +1234,8 @@ func (m *CreateSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) 
 	}
 	_ = m1
 
-	f.BigIpCeSite = m1.BigIpCeSite
-	f.PrivateIp = m1.PrivateIp
+	f.BigIpInstance = m1.BigIpInstance
+	f.Listeners = m1.Listeners
 }
 
 func (m *CreateSpecType) ToGlobalSpecType(f *GlobalSpecType) {
@@ -990,8 +1250,8 @@ func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	if f == nil {
 		return
 	}
-	m.BigIpCeSite = f.GetBigIpCeSite()
-	m.PrivateIp = f.GetPrivateIp()
+	m.BigIpInstance = f.GetBigIpInstance()
+	m.Listeners = f.GetListeners()
 }
 
 func (m *GetSpecType) FromGlobalSpecType(f *GlobalSpecType) {
@@ -1009,8 +1269,8 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	}
 	_ = m1
 
-	f.BigIpCeSite = m1.BigIpCeSite
-	f.PrivateIp = m1.PrivateIp
+	f.BigIpInstance = m1.BigIpInstance
+	f.Listeners = m1.Listeners
 }
 
 func (m *GetSpecType) ToGlobalSpecType(f *GlobalSpecType) {
@@ -1025,8 +1285,8 @@ func (m *ReplaceSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy boo
 	if f == nil {
 		return
 	}
-	m.BigIpCeSite = f.GetBigIpCeSite()
-	m.PrivateIp = f.GetPrivateIp()
+	m.BigIpInstance = f.GetBigIpInstance()
+	m.Listeners = f.GetListeners()
 }
 
 func (m *ReplaceSpecType) FromGlobalSpecType(f *GlobalSpecType) {
@@ -1044,8 +1304,8 @@ func (m *ReplaceSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool)
 	}
 	_ = m1
 
-	f.BigIpCeSite = m1.BigIpCeSite
-	f.PrivateIp = m1.PrivateIp
+	f.BigIpInstance = m1.BigIpInstance
+	f.Listeners = m1.Listeners
 }
 
 func (m *ReplaceSpecType) ToGlobalSpecType(f *GlobalSpecType) {

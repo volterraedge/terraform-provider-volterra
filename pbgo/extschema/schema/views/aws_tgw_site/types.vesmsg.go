@@ -6036,6 +6036,14 @@ func (v *ValidateServicesVPCType) TgwChoiceValidationRuleHandler(rules map[strin
 	return validatorFn, nil
 }
 
+func (v *ValidateServicesVPCType) TgwCidrChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for tgw_cidr_choice")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidateServicesVPCType) WorkerNodesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -6403,6 +6411,42 @@ func (v *ValidateServicesVPCType) Validate(ctx context.Context, pm interface{}, 
 
 	}
 
+	if fv, exists := v.FldValidators["tgw_cidr_choice"]; exists {
+		val := m.GetTgwCidrChoice()
+		vOpts := append(opts,
+			db.WithValidateField("tgw_cidr_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetTgwCidrChoice().(type) {
+	case *ServicesVPCType_ReservedTgwCidr:
+		if fv, exists := v.FldValidators["tgw_cidr_choice.reserved_tgw_cidr"]; exists {
+			val := m.GetTgwCidrChoice().(*ServicesVPCType_ReservedTgwCidr).ReservedTgwCidr
+			vOpts := append(opts,
+				db.WithValidateField("tgw_cidr_choice"),
+				db.WithValidateField("reserved_tgw_cidr"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ServicesVPCType_TgwCidr:
+		if fv, exists := v.FldValidators["tgw_cidr_choice.tgw_cidr"]; exists {
+			val := m.GetTgwCidrChoice().(*ServicesVPCType_TgwCidr).TgwCidr
+			vOpts := append(opts,
+				db.WithValidateField("tgw_cidr_choice"),
+				db.WithValidateField("tgw_cidr"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["worker_nodes"]; exists {
 		val := m.GetWorkerNodes()
 		vOpts := append(opts,
@@ -6533,6 +6577,17 @@ var DefaultServicesVPCTypeValidator = func() *ValidateServicesVPCType {
 	}
 	v.FldValidators["tgw_choice"] = vFn
 
+	vrhTgwCidrChoice := v.TgwCidrChoiceValidationRuleHandler
+	rulesTgwCidrChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhTgwCidrChoice(rulesTgwCidrChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ServicesVPCType.tgw_cidr_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["tgw_cidr_choice"] = vFn
+
 	vrhWorkerNodes := v.WorkerNodesValidationRuleHandler
 	rulesWorkerNodes := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -6635,6 +6690,8 @@ var DefaultServicesVPCTypeValidator = func() *ValidateServicesVPCType {
 
 	v.FldValidators["tgw_choice.new_tgw"] = TGWParamsTypeValidator().Validate
 	v.FldValidators["tgw_choice.existing_tgw"] = ExistingTGWTypeValidator().Validate
+
+	v.FldValidators["tgw_cidr_choice.tgw_cidr"] = ves_io_schema_views.CloudSubnetParamTypeValidator().Validate
 
 	v.FldValidators["admin_password"] = ves_io_schema.SecretTypeValidator().Validate
 

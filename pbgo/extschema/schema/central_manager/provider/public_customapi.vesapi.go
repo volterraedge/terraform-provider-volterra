@@ -688,6 +688,7 @@ var CustomAPISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-central_manager-provider-customapi-list"
                 },
+                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.central_manager.provider.CustomAPI.List"
             },
             "x-displayname": "Central Manager Cloud Provider Custom API",
@@ -780,6 +781,7 @@ var CustomAPISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-central_manager-provider-customapi-get"
                 },
+                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.central_manager.provider.CustomAPI.Get"
             },
             "x-displayname": "Central Manager Cloud Provider Custom API",
@@ -890,6 +892,7 @@ var CustomAPISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-central_manager-provider-customapi-getdeployment"
                 },
+                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.central_manager.provider.CustomAPI.GetDeployment"
             },
             "x-displayname": "Central Manager Cloud Provider Custom API",

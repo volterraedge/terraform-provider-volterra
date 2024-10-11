@@ -2668,6 +2668,15 @@ func (v *ValidateHTTPLoadbalancerResultType) Validate(ctx context.Context, pm in
 
 	}
 
+	if fv, exists := v.FldValidators["waf_enforcement_mode"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("waf_enforcement_mode"))
+		if err := fv(ctx, m.GetWafEnforcementMode(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["waf_exclusion_enabled"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("waf_exclusion_enabled"))

@@ -50,6 +50,13 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 
+	mdr.RPCSubscriptionFieldsRegistry["ves.io.schema.fast_acl_rule.API.Create"] = []svcfw.SubscriptionField{
+		{
+			FieldPath:     "ves.io.schema.fast_acl_rule.CreateRequest.spec.source.prefix.ipv6_prefix",
+			AddonServices: []string{"f5xc-ipv6-standard"},
+		},
+	}
+
 	mdr.RPCAvailableInReqFieldRegistry["ves.io.schema.fast_acl_rule.API.Create"] = []svcfw.EnvironmentField{
 		{
 			FieldPath:           "spec.prefix.ipv6_prefix.#",
@@ -83,6 +90,13 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		{
 			FieldPath:           "items.#.get_spec.prefix.ipv6_prefix.#",
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
+		},
+	}
+
+	mdr.RPCSubscriptionFieldsRegistry["ves.io.schema.fast_acl_rule.API.Replace"] = []svcfw.SubscriptionField{
+		{
+			FieldPath:     "ves.io.schema.fast_acl_rule.ReplaceRequest.spec.source.prefix.ipv6_prefix",
+			AddonServices: []string{"f5xc-ipv6-standard"},
 		},
 	}
 

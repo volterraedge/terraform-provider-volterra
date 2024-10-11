@@ -621,11 +621,28 @@ func (v *ValidateChallengeRuleSpec) Validate(ctx context.Context, pm interface{}
 
 	}
 
-	if fv, exists := v.FldValidators["tls_fingerprint_matcher"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("tls_fingerprint_matcher"))
-		if err := fv(ctx, m.GetTlsFingerprintMatcher(), vOpts...); err != nil {
-			return err
+	switch m.GetTlsFingerprintChoice().(type) {
+	case *ChallengeRuleSpec_TlsFingerprintMatcher:
+		if fv, exists := v.FldValidators["tls_fingerprint_choice.tls_fingerprint_matcher"]; exists {
+			val := m.GetTlsFingerprintChoice().(*ChallengeRuleSpec_TlsFingerprintMatcher).TlsFingerprintMatcher
+			vOpts := append(opts,
+				db.WithValidateField("tls_fingerprint_choice"),
+				db.WithValidateField("tls_fingerprint_matcher"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ChallengeRuleSpec_Ja4TlsFingerprint:
+		if fv, exists := v.FldValidators["tls_fingerprint_choice.ja4_tls_fingerprint"]; exists {
+			val := m.GetTlsFingerprintChoice().(*ChallengeRuleSpec_Ja4TlsFingerprint).Ja4TlsFingerprint
+			vOpts := append(opts,
+				db.WithValidateField("tls_fingerprint_choice"),
+				db.WithValidateField("ja4_tls_fingerprint"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
 		}
 
 	}
@@ -721,13 +738,14 @@ var DefaultChallengeRuleSpecValidator = func() *ValidateChallengeRuleSpec {
 	v.FldValidators["ip_choice.ip_prefix_list"] = ves_io_schema_policy.PrefixMatchListValidator().Validate
 	v.FldValidators["ip_choice.ip_matcher"] = ves_io_schema_policy.IpMatcherTypeValidator().Validate
 
+	v.FldValidators["tls_fingerprint_choice.tls_fingerprint_matcher"] = ves_io_schema_policy.TlsFingerprintMatcherTypeValidator().Validate
+	v.FldValidators["tls_fingerprint_choice.ja4_tls_fingerprint"] = ves_io_schema_policy.JA4TlsFingerprintMatcherTypeValidator().Validate
+
 	v.FldValidators["domain_matcher"] = ves_io_schema_policy.MatcherTypeBasicValidator().Validate
 
 	v.FldValidators["path"] = ves_io_schema_policy.PathMatcherTypeValidator().Validate
 
 	v.FldValidators["http_method"] = ves_io_schema_policy.HttpMethodMatcherTypeValidator().Validate
-
-	v.FldValidators["tls_fingerprint_matcher"] = ves_io_schema_policy.TlsFingerprintMatcherTypeValidator().Validate
 
 	v.FldValidators["body_matcher"] = ves_io_schema_policy.MatcherTypeValidator().Validate
 
@@ -1920,15 +1938,6 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
-	if fv, exists := v.FldValidators["l4_dest_matcher"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("l4_dest_matcher"))
-		if err := fv(ctx, m.GetL4DestMatcher(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
 	if fv, exists := v.FldValidators["label_matcher"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("label_matcher"))
@@ -2037,11 +2046,28 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
-	if fv, exists := v.FldValidators["tls_fingerprint_matcher"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("tls_fingerprint_matcher"))
-		if err := fv(ctx, m.GetTlsFingerprintMatcher(), vOpts...); err != nil {
-			return err
+	switch m.GetTlsFingerprintChoice().(type) {
+	case *CreateSpecType_TlsFingerprintMatcher:
+		if fv, exists := v.FldValidators["tls_fingerprint_choice.tls_fingerprint_matcher"]; exists {
+			val := m.GetTlsFingerprintChoice().(*CreateSpecType_TlsFingerprintMatcher).TlsFingerprintMatcher
+			vOpts := append(opts,
+				db.WithValidateField("tls_fingerprint_choice"),
+				db.WithValidateField("tls_fingerprint_matcher"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CreateSpecType_Ja4TlsFingerprint:
+		if fv, exists := v.FldValidators["tls_fingerprint_choice.ja4_tls_fingerprint"]; exists {
+			val := m.GetTlsFingerprintChoice().(*CreateSpecType_Ja4TlsFingerprint).Ja4TlsFingerprint
+			vOpts := append(opts,
+				db.WithValidateField("tls_fingerprint_choice"),
+				db.WithValidateField("ja4_tls_fingerprint"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
 		}
 
 	}
@@ -2272,6 +2298,9 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v.FldValidators["ip_choice.ip_matcher"] = ves_io_schema_policy.IpMatcherTypeValidator().Validate
 	v.FldValidators["ip_choice.ip_prefix_list"] = ves_io_schema_policy.PrefixMatchListValidator().Validate
 
+	v.FldValidators["tls_fingerprint_choice.tls_fingerprint_matcher"] = ves_io_schema_policy.TlsFingerprintMatcherTypeValidator().Validate
+	v.FldValidators["tls_fingerprint_choice.ja4_tls_fingerprint"] = ves_io_schema_policy.JA4TlsFingerprintMatcherTypeValidator().Validate
+
 	v.FldValidators["label_matcher"] = ves_io_schema.LabelMatcherTypeValidator().Validate
 
 	v.FldValidators["path"] = ves_io_schema_policy.PathMatcherTypeValidator().Validate
@@ -2290,11 +2319,7 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 
 	v.FldValidators["virtual_host_matcher"] = ves_io_schema_policy.MatcherTypeBasicValidator().Validate
 
-	v.FldValidators["tls_fingerprint_matcher"] = ves_io_schema_policy.TlsFingerprintMatcherTypeValidator().Validate
-
 	v.FldValidators["url_matcher"] = ves_io_schema_policy.URLMatcherTypeValidator().Validate
-
-	v.FldValidators["l4_dest_matcher"] = ves_io_schema_policy.L4DestMatcherTypeValidator().Validate
 
 	v.FldValidators["server_selector"] = ves_io_schema.LabelSelectorTypeValidator().Validate
 
@@ -3501,15 +3526,6 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
-	if fv, exists := v.FldValidators["l4_dest_matcher"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("l4_dest_matcher"))
-		if err := fv(ctx, m.GetL4DestMatcher(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
 	if fv, exists := v.FldValidators["label_matcher"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("label_matcher"))
@@ -3618,11 +3634,28 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
-	if fv, exists := v.FldValidators["tls_fingerprint_matcher"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("tls_fingerprint_matcher"))
-		if err := fv(ctx, m.GetTlsFingerprintMatcher(), vOpts...); err != nil {
-			return err
+	switch m.GetTlsFingerprintChoice().(type) {
+	case *GetSpecType_TlsFingerprintMatcher:
+		if fv, exists := v.FldValidators["tls_fingerprint_choice.tls_fingerprint_matcher"]; exists {
+			val := m.GetTlsFingerprintChoice().(*GetSpecType_TlsFingerprintMatcher).TlsFingerprintMatcher
+			vOpts := append(opts,
+				db.WithValidateField("tls_fingerprint_choice"),
+				db.WithValidateField("tls_fingerprint_matcher"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GetSpecType_Ja4TlsFingerprint:
+		if fv, exists := v.FldValidators["tls_fingerprint_choice.ja4_tls_fingerprint"]; exists {
+			val := m.GetTlsFingerprintChoice().(*GetSpecType_Ja4TlsFingerprint).Ja4TlsFingerprint
+			vOpts := append(opts,
+				db.WithValidateField("tls_fingerprint_choice"),
+				db.WithValidateField("ja4_tls_fingerprint"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
 		}
 
 	}
@@ -3853,6 +3886,9 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v.FldValidators["ip_choice.ip_matcher"] = ves_io_schema_policy.IpMatcherTypeValidator().Validate
 	v.FldValidators["ip_choice.ip_prefix_list"] = ves_io_schema_policy.PrefixMatchListValidator().Validate
 
+	v.FldValidators["tls_fingerprint_choice.tls_fingerprint_matcher"] = ves_io_schema_policy.TlsFingerprintMatcherTypeValidator().Validate
+	v.FldValidators["tls_fingerprint_choice.ja4_tls_fingerprint"] = ves_io_schema_policy.JA4TlsFingerprintMatcherTypeValidator().Validate
+
 	v.FldValidators["label_matcher"] = ves_io_schema.LabelMatcherTypeValidator().Validate
 
 	v.FldValidators["path"] = ves_io_schema_policy.PathMatcherTypeValidator().Validate
@@ -3871,11 +3907,7 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 
 	v.FldValidators["virtual_host_matcher"] = ves_io_schema_policy.MatcherTypeBasicValidator().Validate
 
-	v.FldValidators["tls_fingerprint_matcher"] = ves_io_schema_policy.TlsFingerprintMatcherTypeValidator().Validate
-
 	v.FldValidators["url_matcher"] = ves_io_schema_policy.URLMatcherTypeValidator().Validate
-
-	v.FldValidators["l4_dest_matcher"] = ves_io_schema_policy.L4DestMatcherTypeValidator().Validate
 
 	v.FldValidators["server_selector"] = ves_io_schema.LabelSelectorTypeValidator().Validate
 
@@ -5254,15 +5286,6 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
-	if fv, exists := v.FldValidators["l4_dest_matcher"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("l4_dest_matcher"))
-		if err := fv(ctx, m.GetL4DestMatcher(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
 	if fv, exists := v.FldValidators["label_matcher"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("label_matcher"))
@@ -5398,11 +5421,28 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
-	if fv, exists := v.FldValidators["tls_fingerprint_matcher"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("tls_fingerprint_matcher"))
-		if err := fv(ctx, m.GetTlsFingerprintMatcher(), vOpts...); err != nil {
-			return err
+	switch m.GetTlsFingerprintChoice().(type) {
+	case *GlobalSpecType_TlsFingerprintMatcher:
+		if fv, exists := v.FldValidators["tls_fingerprint_choice.tls_fingerprint_matcher"]; exists {
+			val := m.GetTlsFingerprintChoice().(*GlobalSpecType_TlsFingerprintMatcher).TlsFingerprintMatcher
+			vOpts := append(opts,
+				db.WithValidateField("tls_fingerprint_choice"),
+				db.WithValidateField("tls_fingerprint_matcher"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_Ja4TlsFingerprint:
+		if fv, exists := v.FldValidators["tls_fingerprint_choice.ja4_tls_fingerprint"]; exists {
+			val := m.GetTlsFingerprintChoice().(*GlobalSpecType_Ja4TlsFingerprint).Ja4TlsFingerprint
+			vOpts := append(opts,
+				db.WithValidateField("tls_fingerprint_choice"),
+				db.WithValidateField("ja4_tls_fingerprint"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
 		}
 
 	}
@@ -5664,6 +5704,9 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v.FldValidators["ip_choice.ip_matcher"] = ves_io_schema_policy.IpMatcherTypeValidator().Validate
 	v.FldValidators["ip_choice.ip_prefix_list"] = ves_io_schema_policy.PrefixMatchListValidator().Validate
 
+	v.FldValidators["tls_fingerprint_choice.tls_fingerprint_matcher"] = ves_io_schema_policy.TlsFingerprintMatcherTypeValidator().Validate
+	v.FldValidators["tls_fingerprint_choice.ja4_tls_fingerprint"] = ves_io_schema_policy.JA4TlsFingerprintMatcherTypeValidator().Validate
+
 	v.FldValidators["label_matcher"] = ves_io_schema.LabelMatcherTypeValidator().Validate
 
 	v.FldValidators["path"] = ves_io_schema_policy.PathMatcherTypeValidator().Validate
@@ -5682,11 +5725,7 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 	v.FldValidators["virtual_host_matcher"] = ves_io_schema_policy.MatcherTypeValidator().Validate
 
-	v.FldValidators["tls_fingerprint_matcher"] = ves_io_schema_policy.TlsFingerprintMatcherTypeValidator().Validate
-
 	v.FldValidators["url_matcher"] = ves_io_schema_policy.URLMatcherTypeValidator().Validate
-
-	v.FldValidators["l4_dest_matcher"] = ves_io_schema_policy.L4DestMatcherTypeValidator().Validate
 
 	v.FldValidators["server_selector"] = ves_io_schema.LabelSelectorTypeValidator().Validate
 
@@ -7595,15 +7634,6 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 
 	}
 
-	if fv, exists := v.FldValidators["l4_dest_matcher"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("l4_dest_matcher"))
-		if err := fv(ctx, m.GetL4DestMatcher(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
 	if fv, exists := v.FldValidators["label_matcher"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("label_matcher"))
@@ -7712,11 +7742,28 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 
 	}
 
-	if fv, exists := v.FldValidators["tls_fingerprint_matcher"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("tls_fingerprint_matcher"))
-		if err := fv(ctx, m.GetTlsFingerprintMatcher(), vOpts...); err != nil {
-			return err
+	switch m.GetTlsFingerprintChoice().(type) {
+	case *ReplaceSpecType_TlsFingerprintMatcher:
+		if fv, exists := v.FldValidators["tls_fingerprint_choice.tls_fingerprint_matcher"]; exists {
+			val := m.GetTlsFingerprintChoice().(*ReplaceSpecType_TlsFingerprintMatcher).TlsFingerprintMatcher
+			vOpts := append(opts,
+				db.WithValidateField("tls_fingerprint_choice"),
+				db.WithValidateField("tls_fingerprint_matcher"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ReplaceSpecType_Ja4TlsFingerprint:
+		if fv, exists := v.FldValidators["tls_fingerprint_choice.ja4_tls_fingerprint"]; exists {
+			val := m.GetTlsFingerprintChoice().(*ReplaceSpecType_Ja4TlsFingerprint).Ja4TlsFingerprint
+			vOpts := append(opts,
+				db.WithValidateField("tls_fingerprint_choice"),
+				db.WithValidateField("ja4_tls_fingerprint"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
 		}
 
 	}
@@ -7947,6 +7994,9 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v.FldValidators["ip_choice.ip_matcher"] = ves_io_schema_policy.IpMatcherTypeValidator().Validate
 	v.FldValidators["ip_choice.ip_prefix_list"] = ves_io_schema_policy.PrefixMatchListValidator().Validate
 
+	v.FldValidators["tls_fingerprint_choice.tls_fingerprint_matcher"] = ves_io_schema_policy.TlsFingerprintMatcherTypeValidator().Validate
+	v.FldValidators["tls_fingerprint_choice.ja4_tls_fingerprint"] = ves_io_schema_policy.JA4TlsFingerprintMatcherTypeValidator().Validate
+
 	v.FldValidators["label_matcher"] = ves_io_schema.LabelMatcherTypeValidator().Validate
 
 	v.FldValidators["path"] = ves_io_schema_policy.PathMatcherTypeValidator().Validate
@@ -7965,11 +8015,7 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 
 	v.FldValidators["virtual_host_matcher"] = ves_io_schema_policy.MatcherTypeBasicValidator().Validate
 
-	v.FldValidators["tls_fingerprint_matcher"] = ves_io_schema_policy.TlsFingerprintMatcherTypeValidator().Validate
-
 	v.FldValidators["url_matcher"] = ves_io_schema_policy.URLMatcherTypeValidator().Validate
-
-	v.FldValidators["l4_dest_matcher"] = ves_io_schema_policy.L4DestMatcherTypeValidator().Validate
 
 	v.FldValidators["server_selector"] = ves_io_schema.LabelSelectorTypeValidator().Validate
 
@@ -8123,6 +8169,41 @@ func (r *ChallengeRuleSpec) GetIpChoiceFromGlobalSpecType(o *GlobalSpecType) err
 	return nil
 }
 
+// create setters in ChallengeRuleSpec from GlobalSpecType for oneof fields
+func (r *ChallengeRuleSpec) SetTlsFingerprintChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.TlsFingerprintChoice.(type) {
+	case nil:
+		o.TlsFingerprintChoice = nil
+
+	case *ChallengeRuleSpec_Ja4TlsFingerprint:
+		o.TlsFingerprintChoice = &GlobalSpecType_Ja4TlsFingerprint{Ja4TlsFingerprint: of.Ja4TlsFingerprint}
+
+	case *ChallengeRuleSpec_TlsFingerprintMatcher:
+		o.TlsFingerprintChoice = &GlobalSpecType_TlsFingerprintMatcher{TlsFingerprintMatcher: of.TlsFingerprintMatcher}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *ChallengeRuleSpec) GetTlsFingerprintChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.TlsFingerprintChoice.(type) {
+	case nil:
+		r.TlsFingerprintChoice = nil
+
+	case *GlobalSpecType_Ja4TlsFingerprint:
+		r.TlsFingerprintChoice = &ChallengeRuleSpec_Ja4TlsFingerprint{Ja4TlsFingerprint: of.Ja4TlsFingerprint}
+
+	case *GlobalSpecType_TlsFingerprintMatcher:
+		r.TlsFingerprintChoice = &ChallengeRuleSpec_TlsFingerprintMatcher{TlsFingerprintMatcher: of.TlsFingerprintMatcher}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
 func (m *ChallengeRuleSpec) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	if f == nil {
 		return
@@ -8149,7 +8230,7 @@ func (m *ChallengeRuleSpec) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy b
 	m.GetIpChoiceFromGlobalSpecType(f)
 	m.Path = f.GetPath()
 	m.QueryParams = f.GetQueryParams()
-	m.TlsFingerprintMatcher = f.GetTlsFingerprintMatcher()
+	m.GetTlsFingerprintChoiceFromGlobalSpecType(f)
 }
 
 func (m *ChallengeRuleSpec) FromGlobalSpecType(f *GlobalSpecType) {
@@ -8192,7 +8273,7 @@ func (m *ChallengeRuleSpec) toGlobalSpecType(f *GlobalSpecType, withDeepCopy boo
 	m1.SetIpChoiceToGlobalSpecType(f)
 	f.Path = m1.Path
 	f.QueryParams = m1.QueryParams
-	f.TlsFingerprintMatcher = m1.TlsFingerprintMatcher
+	m1.SetTlsFingerprintChoiceToGlobalSpecType(f)
 }
 
 func (m *ChallengeRuleSpec) ToGlobalSpecType(f *GlobalSpecType) {
@@ -8429,6 +8510,41 @@ func (r *CreateSpecType) GetIpChoiceFromGlobalSpecType(o *GlobalSpecType) error 
 	return nil
 }
 
+// create setters in CreateSpecType from GlobalSpecType for oneof fields
+func (r *CreateSpecType) SetTlsFingerprintChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.TlsFingerprintChoice.(type) {
+	case nil:
+		o.TlsFingerprintChoice = nil
+
+	case *CreateSpecType_Ja4TlsFingerprint:
+		o.TlsFingerprintChoice = &GlobalSpecType_Ja4TlsFingerprint{Ja4TlsFingerprint: of.Ja4TlsFingerprint}
+
+	case *CreateSpecType_TlsFingerprintMatcher:
+		o.TlsFingerprintChoice = &GlobalSpecType_TlsFingerprintMatcher{TlsFingerprintMatcher: of.TlsFingerprintMatcher}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *CreateSpecType) GetTlsFingerprintChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.TlsFingerprintChoice.(type) {
+	case nil:
+		r.TlsFingerprintChoice = nil
+
+	case *GlobalSpecType_Ja4TlsFingerprint:
+		r.TlsFingerprintChoice = &CreateSpecType_Ja4TlsFingerprint{Ja4TlsFingerprint: of.Ja4TlsFingerprint}
+
+	case *GlobalSpecType_TlsFingerprintMatcher:
+		r.TlsFingerprintChoice = &CreateSpecType_TlsFingerprintMatcher{TlsFingerprintMatcher: of.TlsFingerprintMatcher}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
 func (m *CreateSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	if f == nil {
 		return
@@ -8463,7 +8579,6 @@ func (m *CreateSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool
 	m.GetIpChoiceFromGlobalSpecType(f)
 	m.IpReputationAction = f.GetIpReputationAction()
 	m.JwtClaims = f.GetJwtClaims()
-	m.L4DestMatcher = f.GetL4DestMatcher()
 	m.LabelMatcher = f.GetLabelMatcher()
 	m.MumAction = f.GetMumAction()
 	m.OriginServerSubsetsAction = f.GetOriginServerSubsetsAction()
@@ -8476,7 +8591,7 @@ func (m *CreateSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool
 	m.SegmentPolicy = f.GetSegmentPolicy()
 	m.ServerSelector = f.GetServerSelector()
 	m.ShapeProtectedEndpointAction = f.GetShapeProtectedEndpointAction()
-	m.TlsFingerprintMatcher = f.GetTlsFingerprintMatcher()
+	m.GetTlsFingerprintChoiceFromGlobalSpecType(f)
 	m.UrlMatcher = f.GetUrlMatcher()
 
 	if f.GetVirtualHostMatcher() != nil {
@@ -8539,7 +8654,6 @@ func (m *CreateSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) 
 	m1.SetIpChoiceToGlobalSpecType(f)
 	f.IpReputationAction = m1.IpReputationAction
 	f.JwtClaims = m1.JwtClaims
-	f.L4DestMatcher = m1.L4DestMatcher
 	f.LabelMatcher = m1.LabelMatcher
 	f.MumAction = m1.MumAction
 	f.OriginServerSubsetsAction = m1.OriginServerSubsetsAction
@@ -8552,7 +8666,7 @@ func (m *CreateSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) 
 	f.SegmentPolicy = m1.SegmentPolicy
 	f.ServerSelector = m1.ServerSelector
 	f.ShapeProtectedEndpointAction = m1.ShapeProtectedEndpointAction
-	f.TlsFingerprintMatcher = m1.TlsFingerprintMatcher
+	m1.SetTlsFingerprintChoiceToGlobalSpecType(f)
 	f.UrlMatcher = m1.UrlMatcher
 
 	if m1.VirtualHostMatcher != nil {
@@ -8804,6 +8918,41 @@ func (r *GetSpecType) GetIpChoiceFromGlobalSpecType(o *GlobalSpecType) error {
 	return nil
 }
 
+// create setters in GetSpecType from GlobalSpecType for oneof fields
+func (r *GetSpecType) SetTlsFingerprintChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.TlsFingerprintChoice.(type) {
+	case nil:
+		o.TlsFingerprintChoice = nil
+
+	case *GetSpecType_Ja4TlsFingerprint:
+		o.TlsFingerprintChoice = &GlobalSpecType_Ja4TlsFingerprint{Ja4TlsFingerprint: of.Ja4TlsFingerprint}
+
+	case *GetSpecType_TlsFingerprintMatcher:
+		o.TlsFingerprintChoice = &GlobalSpecType_TlsFingerprintMatcher{TlsFingerprintMatcher: of.TlsFingerprintMatcher}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *GetSpecType) GetTlsFingerprintChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.TlsFingerprintChoice.(type) {
+	case nil:
+		r.TlsFingerprintChoice = nil
+
+	case *GlobalSpecType_Ja4TlsFingerprint:
+		r.TlsFingerprintChoice = &GetSpecType_Ja4TlsFingerprint{Ja4TlsFingerprint: of.Ja4TlsFingerprint}
+
+	case *GlobalSpecType_TlsFingerprintMatcher:
+		r.TlsFingerprintChoice = &GetSpecType_TlsFingerprintMatcher{TlsFingerprintMatcher: of.TlsFingerprintMatcher}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
 func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	if f == nil {
 		return
@@ -8838,7 +8987,6 @@ func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	m.GetIpChoiceFromGlobalSpecType(f)
 	m.IpReputationAction = f.GetIpReputationAction()
 	m.JwtClaims = f.GetJwtClaims()
-	m.L4DestMatcher = f.GetL4DestMatcher()
 	m.LabelMatcher = f.GetLabelMatcher()
 	m.MumAction = f.GetMumAction()
 	m.OriginServerSubsetsAction = f.GetOriginServerSubsetsAction()
@@ -8851,7 +8999,7 @@ func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	m.SegmentPolicy = f.GetSegmentPolicy()
 	m.ServerSelector = f.GetServerSelector()
 	m.ShapeProtectedEndpointAction = f.GetShapeProtectedEndpointAction()
-	m.TlsFingerprintMatcher = f.GetTlsFingerprintMatcher()
+	m.GetTlsFingerprintChoiceFromGlobalSpecType(f)
 	m.UrlMatcher = f.GetUrlMatcher()
 
 	if f.GetVirtualHostMatcher() != nil {
@@ -8914,7 +9062,6 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	m1.SetIpChoiceToGlobalSpecType(f)
 	f.IpReputationAction = m1.IpReputationAction
 	f.JwtClaims = m1.JwtClaims
-	f.L4DestMatcher = m1.L4DestMatcher
 	f.LabelMatcher = m1.LabelMatcher
 	f.MumAction = m1.MumAction
 	f.OriginServerSubsetsAction = m1.OriginServerSubsetsAction
@@ -8927,7 +9074,7 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	f.SegmentPolicy = m1.SegmentPolicy
 	f.ServerSelector = m1.ServerSelector
 	f.ShapeProtectedEndpointAction = m1.ShapeProtectedEndpointAction
-	f.TlsFingerprintMatcher = m1.TlsFingerprintMatcher
+	m1.SetTlsFingerprintChoiceToGlobalSpecType(f)
 	f.UrlMatcher = m1.UrlMatcher
 
 	if m1.VirtualHostMatcher != nil {
@@ -9326,6 +9473,41 @@ func (r *ReplaceSpecType) GetIpChoiceFromGlobalSpecType(o *GlobalSpecType) error
 	return nil
 }
 
+// create setters in ReplaceSpecType from GlobalSpecType for oneof fields
+func (r *ReplaceSpecType) SetTlsFingerprintChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.TlsFingerprintChoice.(type) {
+	case nil:
+		o.TlsFingerprintChoice = nil
+
+	case *ReplaceSpecType_Ja4TlsFingerprint:
+		o.TlsFingerprintChoice = &GlobalSpecType_Ja4TlsFingerprint{Ja4TlsFingerprint: of.Ja4TlsFingerprint}
+
+	case *ReplaceSpecType_TlsFingerprintMatcher:
+		o.TlsFingerprintChoice = &GlobalSpecType_TlsFingerprintMatcher{TlsFingerprintMatcher: of.TlsFingerprintMatcher}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *ReplaceSpecType) GetTlsFingerprintChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.TlsFingerprintChoice.(type) {
+	case nil:
+		r.TlsFingerprintChoice = nil
+
+	case *GlobalSpecType_Ja4TlsFingerprint:
+		r.TlsFingerprintChoice = &ReplaceSpecType_Ja4TlsFingerprint{Ja4TlsFingerprint: of.Ja4TlsFingerprint}
+
+	case *GlobalSpecType_TlsFingerprintMatcher:
+		r.TlsFingerprintChoice = &ReplaceSpecType_TlsFingerprintMatcher{TlsFingerprintMatcher: of.TlsFingerprintMatcher}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
 func (m *ReplaceSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	if f == nil {
 		return
@@ -9360,7 +9542,6 @@ func (m *ReplaceSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy boo
 	m.GetIpChoiceFromGlobalSpecType(f)
 	m.IpReputationAction = f.GetIpReputationAction()
 	m.JwtClaims = f.GetJwtClaims()
-	m.L4DestMatcher = f.GetL4DestMatcher()
 	m.LabelMatcher = f.GetLabelMatcher()
 	m.MumAction = f.GetMumAction()
 	m.OriginServerSubsetsAction = f.GetOriginServerSubsetsAction()
@@ -9373,7 +9554,7 @@ func (m *ReplaceSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy boo
 	m.SegmentPolicy = f.GetSegmentPolicy()
 	m.ServerSelector = f.GetServerSelector()
 	m.ShapeProtectedEndpointAction = f.GetShapeProtectedEndpointAction()
-	m.TlsFingerprintMatcher = f.GetTlsFingerprintMatcher()
+	m.GetTlsFingerprintChoiceFromGlobalSpecType(f)
 	m.UrlMatcher = f.GetUrlMatcher()
 
 	if f.GetVirtualHostMatcher() != nil {
@@ -9436,7 +9617,6 @@ func (m *ReplaceSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool)
 	m1.SetIpChoiceToGlobalSpecType(f)
 	f.IpReputationAction = m1.IpReputationAction
 	f.JwtClaims = m1.JwtClaims
-	f.L4DestMatcher = m1.L4DestMatcher
 	f.LabelMatcher = m1.LabelMatcher
 	f.MumAction = m1.MumAction
 	f.OriginServerSubsetsAction = m1.OriginServerSubsetsAction
@@ -9449,7 +9629,7 @@ func (m *ReplaceSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool)
 	f.SegmentPolicy = m1.SegmentPolicy
 	f.ServerSelector = m1.ServerSelector
 	f.ShapeProtectedEndpointAction = m1.ShapeProtectedEndpointAction
-	f.TlsFingerprintMatcher = m1.TlsFingerprintMatcher
+	m1.SetTlsFingerprintChoiceToGlobalSpecType(f)
 	f.UrlMatcher = m1.UrlMatcher
 
 	if m1.VirtualHostMatcher != nil {

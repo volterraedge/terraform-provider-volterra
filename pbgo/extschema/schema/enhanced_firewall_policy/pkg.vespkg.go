@@ -60,6 +60,33 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 
+	mdr.RPCSubscriptionFieldsRegistry["ves.io.schema.enhanced_firewall_policy.API.Create"] = []svcfw.SubscriptionField{
+		{
+			FieldPath:     "ves.io.schema.enhanced_firewall_policy.CreateRequest.spec.rule_choice.allowed_destinations.ipv6_prefix",
+			AddonServices: []string{"f5xc-ipv6-standard"},
+		},
+		{
+			FieldPath:     "ves.io.schema.enhanced_firewall_policy.CreateRequest.spec.rule_choice.allowed_sources.ipv6_prefix",
+			AddonServices: []string{"f5xc-ipv6-standard"},
+		},
+		{
+			FieldPath:     "ves.io.schema.enhanced_firewall_policy.CreateRequest.spec.rule_choice.denied_destinations.ipv6_prefix",
+			AddonServices: []string{"f5xc-ipv6-standard"},
+		},
+		{
+			FieldPath:     "ves.io.schema.enhanced_firewall_policy.CreateRequest.spec.rule_choice.denied_sources.ipv6_prefix",
+			AddonServices: []string{"f5xc-ipv6-standard"},
+		},
+		{
+			FieldPath:     "ves.io.schema.enhanced_firewall_policy.CreateRequest.spec.rule_choice.rule_list.rules.destination_choice.destination_prefix_list.ipv6_prefixes",
+			AddonServices: []string{"f5xc-ipv6-standard"},
+		},
+		{
+			FieldPath:     "ves.io.schema.enhanced_firewall_policy.CreateRequest.spec.rule_choice.rule_list.rules.source_choice.source_prefix_list.ipv6_prefixes",
+			AddonServices: []string{"f5xc-ipv6-standard"},
+		},
+	}
+
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.enhanced_firewall_policy.API.Create"] = []string{
 		"spec.rule_list.rules.#.destination_namespace",
 		"spec.rule_list.rules.#.metadata.disable",
@@ -267,6 +294,33 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		{
 			FieldPath:           "items.#.get_spec.rule_list.rules.#.source_prefix_list.ipv6_prefixes.#",
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
+		},
+	}
+
+	mdr.RPCSubscriptionFieldsRegistry["ves.io.schema.enhanced_firewall_policy.API.Replace"] = []svcfw.SubscriptionField{
+		{
+			FieldPath:     "ves.io.schema.enhanced_firewall_policy.ReplaceRequest.spec.rule_choice.allowed_destinations.ipv6_prefix",
+			AddonServices: []string{"f5xc-ipv6-standard"},
+		},
+		{
+			FieldPath:     "ves.io.schema.enhanced_firewall_policy.ReplaceRequest.spec.rule_choice.allowed_sources.ipv6_prefix",
+			AddonServices: []string{"f5xc-ipv6-standard"},
+		},
+		{
+			FieldPath:     "ves.io.schema.enhanced_firewall_policy.ReplaceRequest.spec.rule_choice.denied_destinations.ipv6_prefix",
+			AddonServices: []string{"f5xc-ipv6-standard"},
+		},
+		{
+			FieldPath:     "ves.io.schema.enhanced_firewall_policy.ReplaceRequest.spec.rule_choice.denied_sources.ipv6_prefix",
+			AddonServices: []string{"f5xc-ipv6-standard"},
+		},
+		{
+			FieldPath:     "ves.io.schema.enhanced_firewall_policy.ReplaceRequest.spec.rule_choice.rule_list.rules.destination_choice.destination_prefix_list.ipv6_prefixes",
+			AddonServices: []string{"f5xc-ipv6-standard"},
+		},
+		{
+			FieldPath:     "ves.io.schema.enhanced_firewall_policy.ReplaceRequest.spec.rule_choice.rule_list.rules.source_choice.source_prefix_list.ipv6_prefixes",
+			AddonServices: []string{"f5xc-ipv6-standard"},
 		},
 	}
 

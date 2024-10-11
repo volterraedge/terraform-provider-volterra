@@ -743,7 +743,7 @@ var DefaultBgpPeerValidator = func() *ValidateBgpPeer {
 
 	vrhInterfaceRefs := v.InterfaceRefsValidationRuleHandler
 	rulesInterfaceRefs := map[string]string{
-		"ves.io.schema.rules.repeated.max_items": "8",
+		"ves.io.schema.rules.repeated.max_items": "16",
 	}
 	vFn, err = vrhInterfaceRefs(rulesInterfaceRefs)
 	if err != nil {
@@ -3239,7 +3239,7 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 	vrhNetworkInterface := v.NetworkInterfaceValidationRuleHandler
 	rulesNetworkInterface := map[string]string{
-		"ves.io.schema.rules.repeated.max_items": "8",
+		"ves.io.schema.rules.repeated.max_items": "16",
 		"ves.io.schema.rules.repeated.unique":    "true",
 	}
 	vFn, err = vrhNetworkInterface(rulesNetworkInterface)
@@ -3476,7 +3476,7 @@ var DefaultInterfaceListValidator = func() *ValidateInterfaceList {
 	vrhInterfaces := v.InterfacesValidationRuleHandler
 	rulesInterfaces := map[string]string{
 		"ves.io.schema.rules.message.required":   "true",
-		"ves.io.schema.rules.repeated.max_items": "8",
+		"ves.io.schema.rules.repeated.max_items": "16",
 		"ves.io.schema.rules.repeated.min_items": "1",
 		"ves.io.schema.rules.repeated.unique":    "true",
 	}

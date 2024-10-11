@@ -2658,7 +2658,7 @@ var APISwaggerJSON string = `{
     "definitions": {
         "alert_policyAlertName": {
             "type": "string",
-            "description": "List of Alert Names\n\nCustomer tunnel interface down\nPhysical Interface down\nTunnel Interfaces to Customer Site Down\nVirutal Host server error\nVirtual Host client error\nService Health Low\nService Unavailable\nVirtual Host server error\nVirtual Host client error\nEndpoint Healthcheck failure\nSynthetic monitor health critical\nMalicious user detected\nVirtual Host WAF security events detected\nVirtual Host API security events detected\nVirtual Host Service Policy security events detected\nVirtual Host Many Malicious Bots based WAF security events detected\nVirtual Host Many Malicious Bots based Bot Defense security events detected\nVirtual Host Many Threat campaign based WAF security events detected\nSuspicious domain identified by Client-Side Defense service\nClient-Side Defense has identified a suspicious script that is reading sensitive form field\nError rate anomaly detected\nRequest rate anomaly detected\nRequest throughput anomaly detected\nResponse latency anomaly detected\nResponse throughput anomaly detected\nTLS Automatic Certificate renewal is failing\nTLS Automatic Certificate renewal is still failing after multiple retries\nTLS Automatic Certificate has expired\nTLS Custom Certificate will expire in less than 28 days\nTLS Custom Certificate will expire in less than 15 days\nTLS Custom Certificate has expired\nDDoS security event detected\nDNS Zone Ignored a Duplicate Record Create Request\nUnused APIs Detected\nShadow APIs Detected\nEndpoints With Sensitive Data In Response Detected\nHigh Risk Score Endpoints Detected",
+            "description": "List of Alert Names\n\nCustomer tunnel interface down\nPhysical Interface down\nTunnel Interfaces to Customer Site Down\nVirutal Host server error\nVirtual Host client error\nService Health Low\nService Unavailable\nVirtual Host server error\nVirtual Host client error\nEndpoint Healthcheck failure\nSynthetic monitor health critical\nMalicious user detected\nVirtual Host WAF security events detected\nVirtual Host API security events detected\nVirtual Host Service Policy security events detected\nVirtual Host Many Malicious Bots based WAF security events detected\nVirtual Host Many Malicious Bots based Bot Defense security events detected\nVirtual Host Many Threat campaign based WAF security events detected\nSuspicious domain identified by Client-Side Defense service\nClient-Side Defense has identified a suspicious script that is reading sensitive form field\nError rate anomaly detected\nRequest rate anomaly detected\nRequest throughput anomaly detected\nResponse latency anomaly detected\nResponse throughput anomaly detected\nTLS Automatic Certificate renewal is failing\nTLS Automatic Certificate renewal is still failing after multiple retries\nTLS Automatic Certificate has expired\nTLS Custom Certificate will expire in less than 28 days\nTLS Custom Certificate will expire in less than 15 days\nTLS Custom Certificate has expired\nDDoS security event detected\nDNS Zone Ignored a Duplicate Record Create Request\nUnused APIs Detected\nShadow APIs Detected\nEndpoints With Sensitive Data In Response Detected\nHigh Risk Score Endpoints Detected\nA routed DDoS traffic anomaly has been detected\nA routed DDoS mitigation has been implemented to block malicious traffic",
             "title": "AlertName",
             "enum": [
                 "SITE_CUSTOMER_TUNNEL_INTERFACE_DOWN",
@@ -2697,7 +2697,9 @@ var APISwaggerJSON string = `{
                 "API_SECURITY_UNUSED_API_DETECTED",
                 "API_SECURITY_SHADOW_API_DETECTED",
                 "API_SECURITY_SENSITIVE_DATA_IN_RESPONSE_DETECTED",
-                "API_SECURITY_RISK_SCORE_HIGH_DETECTED"
+                "API_SECURITY_RISK_SCORE_HIGH_DETECTED",
+                "ROUTED_DDOS_ALERT_NOTIFICATION",
+                "ROUTED_DDOS_MITIGATION_NOTIFICATION"
             ],
             "default": "SITE_CUSTOMER_TUNNEL_INTERFACE_DOWN",
             "x-displayname": "AlertName",
@@ -2815,7 +2817,7 @@ var APISwaggerJSON string = `{
         },
         "alert_policyGroup": {
             "type": "string",
-            "description": "List of Groups\n\nInfrastructure alerts\nAlerts related to Infrastructure as a Service/Communication as a Service\nAlerts related to Virtual Host\nAlerts related to the VoltShare feature\nAlerts related to User Access Management\nAlerts related to Application Security\nAlerts related to Timeseries Anomaly\nAlerts related to Shape Security\nAlerts related to CSD Security\nAlerts related to CDN\nAlerts related to Synthetic Monitors\nAlerts related to TLS Certificates\nAlerts related to Bot Defense\nAlerts related Cloud Link\nAlerts related DNS",
+            "description": "List of Groups\n\nInfrastructure alerts\nAlerts related to Infrastructure as a Service/Communication as a Service\nAlerts related to Virtual Host\nAlerts related to the VoltShare feature\nAlerts related to User Access Management\nAlerts related to Application Security\nAlerts related to Timeseries Anomaly\nAlerts related to Shape Security\nAlerts related to CSD Security\nAlerts related to CDN\nAlerts related to Synthetic Monitors\nAlerts related to TLS Certificates\nAlerts related to Bot Defense\nAlerts related Cloud Link\nAlerts related DNS\nAlerts related to Routed DDoS",
             "title": "Group",
             "enum": [
                 "INFRASTRUCTURE",
@@ -2832,7 +2834,8 @@ var APISwaggerJSON string = `{
                 "TLS",
                 "SECURITY_BOT_DEFENSE",
                 "CLOUD_LINK",
-                "DNS"
+                "DNS",
+                "ROUTED_DDOS"
             ],
             "default": "INFRASTRUCTURE",
             "x-displayname": "Group",

@@ -10,6 +10,7 @@ import (
 	github_com_gogo_protobuf_sortkeys "github.com/gogo/protobuf/sortkeys"
 	golang_proto "github.com/golang/protobuf/proto"
 	schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+	views "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
 	io "io"
 	math "math"
 	math_bits "math/bits"
@@ -121,7 +122,7 @@ func (K8SDNSMode) EnumDescriptor() ([]byte, []int) {
 	return fileDescriptor_1beabb40327c3d92, []int{2}
 }
 
-// VER status for Discovery
+// VER status for k8s and consul Discovery
 //
 // x-displayName: "VER Status"
 // This VER status is per site on which discovery is happening and it lists all services that site has discovered.
@@ -1486,6 +1487,673 @@ func (m *ConsulDiscoveryType) GetPublishInfo() *ConsulVipDiscoveryInfoType {
 	return nil
 }
 
+// Classic BIG-IP Discovery Type
+//
+// x-displayName: "Classic BIG-IP Discovery Configuration"
+// Discovery configuration for Classic BIG-IP
+type CbipDiscoveryType struct {
+	// Classic BIG-IP Clusters
+	//
+	// x-displayName: "Classic BIG-IP Clusters"
+	// x-required
+	// List of Classic BIG-IP clusters. A BIG-IP cluster is a set of BIG-IP devices which
+	// are in an Active-Active or Active-Standby setup or even a standalone BIG-IP device.
+	CbipClusters []*CbipCluster `protobuf:"bytes,1,rep,name=cbip_clusters,json=cbipClusters,proto3" json:"cbip_clusters,omitempty"`
+	// Internal LB
+	//
+	// x-displayName: "Internal LB domain"
+	// Domain name of the internal LB
+	InternalLbDomain string `protobuf:"bytes,2,opt,name=internal_lb_domain,json=internalLbDomain,proto3" json:"internal_lb_domain,omitempty"`
+}
+
+func (m *CbipDiscoveryType) Reset()      { *m = CbipDiscoveryType{} }
+func (*CbipDiscoveryType) ProtoMessage() {}
+func (*CbipDiscoveryType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_1beabb40327c3d92, []int{16}
+}
+func (m *CbipDiscoveryType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *CbipDiscoveryType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *CbipDiscoveryType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CbipDiscoveryType.Merge(m, src)
+}
+func (m *CbipDiscoveryType) XXX_Size() int {
+	return m.Size()
+}
+func (m *CbipDiscoveryType) XXX_DiscardUnknown() {
+	xxx_messageInfo_CbipDiscoveryType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_CbipDiscoveryType proto.InternalMessageInfo
+
+func (m *CbipDiscoveryType) GetCbipClusters() []*CbipCluster {
+	if m != nil {
+		return m.CbipClusters
+	}
+	return nil
+}
+
+func (m *CbipDiscoveryType) GetInternalLbDomain() string {
+	if m != nil {
+		return m.InternalLbDomain
+	}
+	return ""
+}
+
+// Classic BIG-IP Cluster
+//
+// x-displayName: "Classic BIG-IP Cluster"
+// A BIG-IP cluster is a set of BIG-IP devices which are in an
+// Active-Active or Active-Standby setup or even a standalone BIG-IP device.
+type CbipCluster struct {
+	// metadata
+	//
+	// x-required
+	// x-displayName: "Metadata"
+	// Common attributes for the device configuration including name and description.
+	Metadata *schema.MessageMetaType `protobuf:"bytes,1,opt,name=metadata,proto3" json:"metadata,omitempty"`
+	// Classic BIG-IP Devices
+	//
+	// x-displayName: "Classic BIG-IP Devices"
+	// x-required
+	// List of Classic BIG-IP devices. Note Namespace Mapping is only available
+	// in Shared Configuration. Otherwise all devices are imported to current namespace.
+	CbipDevices []*CbipDeviceConfig `protobuf:"bytes,2,rep,name=cbip_devices,json=cbipDevices,proto3" json:"cbip_devices,omitempty"`
+}
+
+func (m *CbipCluster) Reset()      { *m = CbipCluster{} }
+func (*CbipCluster) ProtoMessage() {}
+func (*CbipCluster) Descriptor() ([]byte, []int) {
+	return fileDescriptor_1beabb40327c3d92, []int{17}
+}
+func (m *CbipCluster) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *CbipCluster) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *CbipCluster) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CbipCluster.Merge(m, src)
+}
+func (m *CbipCluster) XXX_Size() int {
+	return m.Size()
+}
+func (m *CbipCluster) XXX_DiscardUnknown() {
+	xxx_messageInfo_CbipCluster.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_CbipCluster proto.InternalMessageInfo
+
+func (m *CbipCluster) GetMetadata() *schema.MessageMetaType {
+	if m != nil {
+		return m.Metadata
+	}
+	return nil
+}
+
+func (m *CbipCluster) GetCbipDevices() []*CbipDeviceConfig {
+	if m != nil {
+		return m.CbipDevices
+	}
+	return nil
+}
+
+// Classic BIG-IP Configuration
+//
+// x-displayName: "Classic BIG-IP Configuration"
+type CbipDeviceConfig struct {
+	// Management IP
+	//
+	// x-displayName: "Management IP"
+	// x-required
+	// x-example: "10.1.1.1"
+	// IP Address of the Classic BIG-IP device
+	CbipMgmtIp string `protobuf:"bytes,1,opt,name=cbip_mgmt_ip,json=cbipMgmtIp,proto3" json:"cbip_mgmt_ip,omitempty"`
+	// Classic BIG-IP Admin Credentials
+	//
+	// x-displayName: "Classic BIG-IP Admin Credentials"
+	// x-required
+	AdminCredentials *CbipAdminCredentials `protobuf:"bytes,2,opt,name=admin_credentials,json=adminCredentials,proto3" json:"admin_credentials,omitempty"`
+	// Classic BIG-IP Root CA Certificate
+	//
+	// x-displayName: "Classic BIG-IP Root CA Certificate"
+	// x-required
+	CbipCertificateAuthority *CbipCertificateAuthority `protobuf:"bytes,3,opt,name=cbip_certificate_authority,json=cbipCertificateAuthority,proto3" json:"cbip_certificate_authority,omitempty"`
+	// Virtual Server Filter
+	//
+	// x-displayName: "Virtual Server Filter"
+	// Filters to only discover certain BIG-IP Virtual Servers
+	VirtualServerFilter *VirtualServerFilter `protobuf:"bytes,4,opt,name=virtual_server_filter,json=virtualServerFilter,proto3" json:"virtual_server_filter,omitempty"`
+	// Namespace Mapping Choice
+	//
+	// x-displayName: "Namespace Mapping Choice"
+	// Select Default for adding all partitions to the Shared Namespace. Or, select
+	// Custom Mapping to add specific partitions to specific namespaces.
+	//
+	// Types that are valid to be assigned to NamespaceMappingChoice:
+	//	*CbipDeviceConfig_DefaultAll
+	//	*CbipDeviceConfig_NamespaceMapping
+	NamespaceMappingChoice isCbipDeviceConfig_NamespaceMappingChoice `protobuf_oneof:"namespace_mapping_choice"`
+}
+
+func (m *CbipDeviceConfig) Reset()      { *m = CbipDeviceConfig{} }
+func (*CbipDeviceConfig) ProtoMessage() {}
+func (*CbipDeviceConfig) Descriptor() ([]byte, []int) {
+	return fileDescriptor_1beabb40327c3d92, []int{18}
+}
+func (m *CbipDeviceConfig) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *CbipDeviceConfig) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *CbipDeviceConfig) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CbipDeviceConfig.Merge(m, src)
+}
+func (m *CbipDeviceConfig) XXX_Size() int {
+	return m.Size()
+}
+func (m *CbipDeviceConfig) XXX_DiscardUnknown() {
+	xxx_messageInfo_CbipDeviceConfig.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_CbipDeviceConfig proto.InternalMessageInfo
+
+type isCbipDeviceConfig_NamespaceMappingChoice interface {
+	isCbipDeviceConfig_NamespaceMappingChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+
+type CbipDeviceConfig_DefaultAll struct {
+	DefaultAll *schema.Empty `protobuf:"bytes,6,opt,name=default_all,json=defaultAll,proto3,oneof" json:"default_all,omitempty"`
+}
+type CbipDeviceConfig_NamespaceMapping struct {
+	NamespaceMapping *NamespaceMapping `protobuf:"bytes,7,opt,name=namespace_mapping,json=namespaceMapping,proto3,oneof" json:"namespace_mapping,omitempty"`
+}
+
+func (*CbipDeviceConfig_DefaultAll) isCbipDeviceConfig_NamespaceMappingChoice()       {}
+func (*CbipDeviceConfig_NamespaceMapping) isCbipDeviceConfig_NamespaceMappingChoice() {}
+
+func (m *CbipDeviceConfig) GetNamespaceMappingChoice() isCbipDeviceConfig_NamespaceMappingChoice {
+	if m != nil {
+		return m.NamespaceMappingChoice
+	}
+	return nil
+}
+
+func (m *CbipDeviceConfig) GetCbipMgmtIp() string {
+	if m != nil {
+		return m.CbipMgmtIp
+	}
+	return ""
+}
+
+func (m *CbipDeviceConfig) GetAdminCredentials() *CbipAdminCredentials {
+	if m != nil {
+		return m.AdminCredentials
+	}
+	return nil
+}
+
+func (m *CbipDeviceConfig) GetCbipCertificateAuthority() *CbipCertificateAuthority {
+	if m != nil {
+		return m.CbipCertificateAuthority
+	}
+	return nil
+}
+
+func (m *CbipDeviceConfig) GetVirtualServerFilter() *VirtualServerFilter {
+	if m != nil {
+		return m.VirtualServerFilter
+	}
+	return nil
+}
+
+func (m *CbipDeviceConfig) GetDefaultAll() *schema.Empty {
+	if x, ok := m.GetNamespaceMappingChoice().(*CbipDeviceConfig_DefaultAll); ok {
+		return x.DefaultAll
+	}
+	return nil
+}
+
+func (m *CbipDeviceConfig) GetNamespaceMapping() *NamespaceMapping {
+	if x, ok := m.GetNamespaceMappingChoice().(*CbipDeviceConfig_NamespaceMapping); ok {
+		return x.NamespaceMapping
+	}
+	return nil
+}
+
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*CbipDeviceConfig) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
+		(*CbipDeviceConfig_DefaultAll)(nil),
+		(*CbipDeviceConfig_NamespaceMapping)(nil),
+	}
+}
+
+// Classic BIG-IP Admin Credentials
+//
+// x-displayName: "Classic BIG-IP Admin Credentials"
+type CbipAdminCredentials struct {
+	// Classic BIG-IP Admin Username
+	//
+	// x-example: "admin"
+	// x-displayName: "Classic BIG-IP Admin Username"
+	// x-required
+	// Username used to log into an admin account on the BIG-IP device
+	Username string `protobuf:"bytes,1,opt,name=username,proto3" json:"username,omitempty"`
+	// Classic BIG-IP Admin Password
+	//
+	// x-displayName: "Classic BIG-IP Admin Password"
+	// x-required
+	// Password used to log into an admin account on the BIG-IP device
+	Password *schema.SecretType `protobuf:"bytes,2,opt,name=password,proto3" json:"password,omitempty"`
+}
+
+func (m *CbipAdminCredentials) Reset()      { *m = CbipAdminCredentials{} }
+func (*CbipAdminCredentials) ProtoMessage() {}
+func (*CbipAdminCredentials) Descriptor() ([]byte, []int) {
+	return fileDescriptor_1beabb40327c3d92, []int{19}
+}
+func (m *CbipAdminCredentials) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *CbipAdminCredentials) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *CbipAdminCredentials) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CbipAdminCredentials.Merge(m, src)
+}
+func (m *CbipAdminCredentials) XXX_Size() int {
+	return m.Size()
+}
+func (m *CbipAdminCredentials) XXX_DiscardUnknown() {
+	xxx_messageInfo_CbipAdminCredentials.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_CbipAdminCredentials proto.InternalMessageInfo
+
+func (m *CbipAdminCredentials) GetUsername() string {
+	if m != nil {
+		return m.Username
+	}
+	return ""
+}
+
+func (m *CbipAdminCredentials) GetPassword() *schema.SecretType {
+	if m != nil {
+		return m.Password
+	}
+	return nil
+}
+
+// BIG-IP Root CA Certificate
+//
+// x-displayName: "BIG-IP Root CA Certificate"
+// BIG-IP Root CA Certificate
+type CbipCertificateAuthority struct {
+	// BIG-IP Root CA Certificate
+	//
+	// x-displayName: "BIG-IP Root CA Certificate"
+	// x-required
+	// BIG-IP Root CA Certificate choice
+	//
+	// Types that are valid to be assigned to ServerValidationChoice:
+	//	*CbipCertificateAuthority_TrustedCa
+	//	*CbipCertificateAuthority_SkipServerVerification
+	ServerValidationChoice isCbipCertificateAuthority_ServerValidationChoice `protobuf_oneof:"server_validation_choice"`
+}
+
+func (m *CbipCertificateAuthority) Reset()      { *m = CbipCertificateAuthority{} }
+func (*CbipCertificateAuthority) ProtoMessage() {}
+func (*CbipCertificateAuthority) Descriptor() ([]byte, []int) {
+	return fileDescriptor_1beabb40327c3d92, []int{20}
+}
+func (m *CbipCertificateAuthority) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *CbipCertificateAuthority) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *CbipCertificateAuthority) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CbipCertificateAuthority.Merge(m, src)
+}
+func (m *CbipCertificateAuthority) XXX_Size() int {
+	return m.Size()
+}
+func (m *CbipCertificateAuthority) XXX_DiscardUnknown() {
+	xxx_messageInfo_CbipCertificateAuthority.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_CbipCertificateAuthority proto.InternalMessageInfo
+
+type isCbipCertificateAuthority_ServerValidationChoice interface {
+	isCbipCertificateAuthority_ServerValidationChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+
+type CbipCertificateAuthority_TrustedCa struct {
+	TrustedCa *views.ObjectRefType `protobuf:"bytes,2,opt,name=trusted_ca,json=trustedCa,proto3,oneof" json:"trusted_ca,omitempty"`
+}
+type CbipCertificateAuthority_SkipServerVerification struct {
+	SkipServerVerification *schema.Empty `protobuf:"bytes,3,opt,name=skip_server_verification,json=skipServerVerification,proto3,oneof" json:"skip_server_verification,omitempty"`
+}
+
+func (*CbipCertificateAuthority_TrustedCa) isCbipCertificateAuthority_ServerValidationChoice() {}
+func (*CbipCertificateAuthority_SkipServerVerification) isCbipCertificateAuthority_ServerValidationChoice() {
+}
+
+func (m *CbipCertificateAuthority) GetServerValidationChoice() isCbipCertificateAuthority_ServerValidationChoice {
+	if m != nil {
+		return m.ServerValidationChoice
+	}
+	return nil
+}
+
+func (m *CbipCertificateAuthority) GetTrustedCa() *views.ObjectRefType {
+	if x, ok := m.GetServerValidationChoice().(*CbipCertificateAuthority_TrustedCa); ok {
+		return x.TrustedCa
+	}
+	return nil
+}
+
+func (m *CbipCertificateAuthority) GetSkipServerVerification() *schema.Empty {
+	if x, ok := m.GetServerValidationChoice().(*CbipCertificateAuthority_SkipServerVerification); ok {
+		return x.SkipServerVerification
+	}
+	return nil
+}
+
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*CbipCertificateAuthority) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
+		(*CbipCertificateAuthority_TrustedCa)(nil),
+		(*CbipCertificateAuthority_SkipServerVerification)(nil),
+	}
+}
+
+// Virtual Server Filter
+//
+// x-displayName: "Virtual Server Filter"
+// Filter to only discover certain BIG-IP Virtual Servers
+type VirtualServerFilter struct {
+	// Discover Disabled Choice
+	//
+	// x-displayName: "Discover Disabled Choice"
+	// x-required
+	// When Discover Disabled is enabled, disabled virtual servers will be included
+	//
+	// Types that are valid to be assigned to DiscoverDisabledChoice:
+	//	*VirtualServerFilter_EnabledOnly
+	//	*VirtualServerFilter_IncludeDisabled
+	DiscoverDisabledChoice isVirtualServerFilter_DiscoverDisabledChoice `protobuf_oneof:"discover_disabled_choice"`
+	// Regex To Match Virtual Server Name
+	//
+	// x-displayName: "Regex To Match Virtual Server Name"
+	// Regex to match Virtual Server name
+	NameRegex string `protobuf:"bytes,4,opt,name=name_regex,json=nameRegex,proto3" json:"name_regex,omitempty"`
+	// Regex To Match Virtual Server Description
+	//
+	// x-displayName: "Regex To Match Virtual Server Description"
+	// Regex to match Virtual Server description
+	DescriptionRegex string `protobuf:"bytes,5,opt,name=description_regex,json=descriptionRegex,proto3" json:"description_regex,omitempty"`
+	// protocols
+	//
+	// x-displayName: "Protocol(s)"
+	// x-example: "TCP"
+	// Filter by protocol(s)
+	Protocols []string `protobuf:"bytes,6,rep,name=protocols,proto3" json:"protocols,omitempty"`
+	// Port_ranges
+	//
+	// x-displayName: "Port Ranges"
+	// x-example: "80,443,8080-8191,9080"
+	// A string containing a comma separated list of port ranges.
+	// Each port range consists of a single port or two ports separated by "-".
+	PortRanges string `protobuf:"bytes,7,opt,name=port_ranges,json=portRanges,proto3" json:"port_ranges,omitempty"`
+}
+
+func (m *VirtualServerFilter) Reset()      { *m = VirtualServerFilter{} }
+func (*VirtualServerFilter) ProtoMessage() {}
+func (*VirtualServerFilter) Descriptor() ([]byte, []int) {
+	return fileDescriptor_1beabb40327c3d92, []int{21}
+}
+func (m *VirtualServerFilter) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *VirtualServerFilter) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *VirtualServerFilter) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_VirtualServerFilter.Merge(m, src)
+}
+func (m *VirtualServerFilter) XXX_Size() int {
+	return m.Size()
+}
+func (m *VirtualServerFilter) XXX_DiscardUnknown() {
+	xxx_messageInfo_VirtualServerFilter.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_VirtualServerFilter proto.InternalMessageInfo
+
+type isVirtualServerFilter_DiscoverDisabledChoice interface {
+	isVirtualServerFilter_DiscoverDisabledChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+
+type VirtualServerFilter_EnabledOnly struct {
+	EnabledOnly *schema.Empty `protobuf:"bytes,2,opt,name=enabled_only,json=enabledOnly,proto3,oneof" json:"enabled_only,omitempty"`
+}
+type VirtualServerFilter_IncludeDisabled struct {
+	IncludeDisabled *schema.Empty `protobuf:"bytes,3,opt,name=include_disabled,json=includeDisabled,proto3,oneof" json:"include_disabled,omitempty"`
+}
+
+func (*VirtualServerFilter_EnabledOnly) isVirtualServerFilter_DiscoverDisabledChoice()     {}
+func (*VirtualServerFilter_IncludeDisabled) isVirtualServerFilter_DiscoverDisabledChoice() {}
+
+func (m *VirtualServerFilter) GetDiscoverDisabledChoice() isVirtualServerFilter_DiscoverDisabledChoice {
+	if m != nil {
+		return m.DiscoverDisabledChoice
+	}
+	return nil
+}
+
+func (m *VirtualServerFilter) GetEnabledOnly() *schema.Empty {
+	if x, ok := m.GetDiscoverDisabledChoice().(*VirtualServerFilter_EnabledOnly); ok {
+		return x.EnabledOnly
+	}
+	return nil
+}
+
+func (m *VirtualServerFilter) GetIncludeDisabled() *schema.Empty {
+	if x, ok := m.GetDiscoverDisabledChoice().(*VirtualServerFilter_IncludeDisabled); ok {
+		return x.IncludeDisabled
+	}
+	return nil
+}
+
+func (m *VirtualServerFilter) GetNameRegex() string {
+	if m != nil {
+		return m.NameRegex
+	}
+	return ""
+}
+
+func (m *VirtualServerFilter) GetDescriptionRegex() string {
+	if m != nil {
+		return m.DescriptionRegex
+	}
+	return ""
+}
+
+func (m *VirtualServerFilter) GetProtocols() []string {
+	if m != nil {
+		return m.Protocols
+	}
+	return nil
+}
+
+func (m *VirtualServerFilter) GetPortRanges() string {
+	if m != nil {
+		return m.PortRanges
+	}
+	return ""
+}
+
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*VirtualServerFilter) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
+		(*VirtualServerFilter_EnabledOnly)(nil),
+		(*VirtualServerFilter_IncludeDisabled)(nil),
+	}
+}
+
+// Namespace Mapping
+//
+// x-displayName: "Namespace Mapping"
+// Map BIG-IP partition(s) to an XC namespace. If not specified, all virtual
+// servers will be discovered under shared namespace.
+type NamespaceMapping struct {
+	// Partition to Namespace Mapping
+	//
+	// x-displayName: "Partition to Namespace Mapping"
+	// Map BIG-IP partition(s) to XC Namespaces
+	Items []*NamespaceMappingItem `protobuf:"bytes,1,rep,name=items,proto3" json:"items,omitempty"`
+}
+
+func (m *NamespaceMapping) Reset()      { *m = NamespaceMapping{} }
+func (*NamespaceMapping) ProtoMessage() {}
+func (*NamespaceMapping) Descriptor() ([]byte, []int) {
+	return fileDescriptor_1beabb40327c3d92, []int{22}
+}
+func (m *NamespaceMapping) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *NamespaceMapping) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *NamespaceMapping) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_NamespaceMapping.Merge(m, src)
+}
+func (m *NamespaceMapping) XXX_Size() int {
+	return m.Size()
+}
+func (m *NamespaceMapping) XXX_DiscardUnknown() {
+	xxx_messageInfo_NamespaceMapping.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_NamespaceMapping proto.InternalMessageInfo
+
+func (m *NamespaceMapping) GetItems() []*NamespaceMappingItem {
+	if m != nil {
+		return m.Items
+	}
+	return nil
+}
+
+// Namespace Mapping Item
+//
+// x-displayName: "Namespace Mapping Item"
+// Map BIG-IP partition(s) to an XC namespace. If not specified, all virtual
+// servers will be discovered under shared namespace.
+type NamespaceMappingItem struct {
+	// Classic BIG-IP Partition Regex
+	//
+	// x-displayName: "Regex To Match BIG-IP device partition(s)"
+	// The regex here will be used to match BIG-IP partition(s).
+	PartitionRegex string `protobuf:"bytes,1,opt,name=partition_regex,json=partitionRegex,proto3" json:"partition_regex,omitempty"`
+	// XC Namespace
+	//
+	// x-displayName: "XC Namespace"
+	// Select a namespace
+	Namespace string `protobuf:"bytes,2,opt,name=namespace,proto3" json:"namespace,omitempty"`
+}
+
+func (m *NamespaceMappingItem) Reset()      { *m = NamespaceMappingItem{} }
+func (*NamespaceMappingItem) ProtoMessage() {}
+func (*NamespaceMappingItem) Descriptor() ([]byte, []int) {
+	return fileDescriptor_1beabb40327c3d92, []int{23}
+}
+func (m *NamespaceMappingItem) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *NamespaceMappingItem) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *NamespaceMappingItem) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_NamespaceMappingItem.Merge(m, src)
+}
+func (m *NamespaceMappingItem) XXX_Size() int {
+	return m.Size()
+}
+func (m *NamespaceMappingItem) XXX_DiscardUnknown() {
+	xxx_messageInfo_NamespaceMappingItem.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_NamespaceMappingItem proto.InternalMessageInfo
+
+func (m *NamespaceMappingItem) GetPartitionRegex() string {
+	if m != nil {
+		return m.PartitionRegex
+	}
+	return ""
+}
+
+func (m *NamespaceMappingItem) GetNamespace() string {
+	if m != nil {
+		return m.Namespace
+	}
+	return ""
+}
+
 // Specification for discovery
 //
 // x-displayName: "Specification"
@@ -1501,11 +2169,12 @@ type GlobalSpecType struct {
 	//
 	// x-displayName: "Select Discovery Method"
 	// x-required
-	// Select discovery method as K8S or Hashicorp Consul
+	// Select discovery method
 	//
 	// Types that are valid to be assigned to DiscoveryChoice:
 	//	*GlobalSpecType_DiscoveryK8S
 	//	*GlobalSpecType_DiscoveryConsul
+	//	*GlobalSpecType_DiscoveryCbip
 	DiscoveryChoice isGlobalSpecType_DiscoveryChoice `protobuf_oneof:"discovery_choice"`
 	// Discovery type
 	//
@@ -1551,12 +2220,17 @@ type GlobalSpecType struct {
 	//	*GlobalSpecType_NoClusterId
 	//	*GlobalSpecType_ClusterId
 	ClusterIdentifierChoice isGlobalSpecType_ClusterIdentifierChoice `protobuf_oneof:"cluster_identifier_choice"`
+	// view_internal
+	//
+	// x-displayName: "View Internal"
+	// Reference to view internal object
+	ViewInternal *views.ObjectRefType `protobuf:"bytes,1000,opt,name=view_internal,json=viewInternal,proto3" json:"view_internal,omitempty"`
 }
 
 func (m *GlobalSpecType) Reset()      { *m = GlobalSpecType{} }
 func (*GlobalSpecType) ProtoMessage() {}
 func (*GlobalSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_1beabb40327c3d92, []int{16}
+	return fileDescriptor_1beabb40327c3d92, []int{24}
 }
 func (m *GlobalSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1606,6 +2280,9 @@ type GlobalSpecType_DiscoveryK8S struct {
 type GlobalSpecType_DiscoveryConsul struct {
 	DiscoveryConsul *ConsulDiscoveryType `protobuf:"bytes,9,opt,name=discovery_consul,json=discoveryConsul,proto3,oneof" json:"discovery_consul,omitempty"`
 }
+type GlobalSpecType_DiscoveryCbip struct {
+	DiscoveryCbip *CbipDiscoveryType `protobuf:"bytes,14,opt,name=discovery_cbip,json=discoveryCbip,proto3,oneof" json:"discovery_cbip,omitempty"`
+}
 type GlobalSpecType_K8S struct {
 	K8S *K8SAccessInfo `protobuf:"bytes,4,opt,name=k8s,proto3,oneof" json:"k8s,omitempty"`
 }
@@ -1621,6 +2298,7 @@ type GlobalSpecType_ClusterId struct {
 
 func (*GlobalSpecType_DiscoveryK8S) isGlobalSpecType_DiscoveryChoice()        {}
 func (*GlobalSpecType_DiscoveryConsul) isGlobalSpecType_DiscoveryChoice()     {}
+func (*GlobalSpecType_DiscoveryCbip) isGlobalSpecType_DiscoveryChoice()       {}
 func (*GlobalSpecType_K8S) isGlobalSpecType_AccessInfo()                      {}
 func (*GlobalSpecType_Consul) isGlobalSpecType_AccessInfo()                   {}
 func (*GlobalSpecType_NoClusterId) isGlobalSpecType_ClusterIdentifierChoice() {}
@@ -1662,6 +2340,13 @@ func (m *GlobalSpecType) GetDiscoveryK8S() *K8SDiscoveryType {
 func (m *GlobalSpecType) GetDiscoveryConsul() *ConsulDiscoveryType {
 	if x, ok := m.GetDiscoveryChoice().(*GlobalSpecType_DiscoveryConsul); ok {
 		return x.DiscoveryConsul
+	}
+	return nil
+}
+
+func (m *GlobalSpecType) GetDiscoveryCbip() *CbipDiscoveryType {
+	if x, ok := m.GetDiscoveryChoice().(*GlobalSpecType_DiscoveryCbip); ok {
+		return x.DiscoveryCbip
 	}
 	return nil
 }
@@ -1716,11 +2401,19 @@ func (m *GlobalSpecType) GetClusterId() string {
 	return ""
 }
 
+func (m *GlobalSpecType) GetViewInternal() *views.ObjectRefType {
+	if m != nil {
+		return m.ViewInternal
+	}
+	return nil
+}
+
 // XXX_OneofWrappers is for the internal use of the proto package.
 func (*GlobalSpecType) XXX_OneofWrappers() []interface{} {
 	return []interface{}{
 		(*GlobalSpecType_DiscoveryK8S)(nil),
 		(*GlobalSpecType_DiscoveryConsul)(nil),
+		(*GlobalSpecType_DiscoveryCbip)(nil),
 		(*GlobalSpecType_K8S)(nil),
 		(*GlobalSpecType_Consul)(nil),
 		(*GlobalSpecType_NoClusterId)(nil),
@@ -1737,6 +2430,7 @@ type CreateSpecType struct {
 	// Types that are valid to be assigned to DiscoveryChoice:
 	//	*CreateSpecType_DiscoveryK8S
 	//	*CreateSpecType_DiscoveryConsul
+	//	*CreateSpecType_DiscoveryCbip
 	DiscoveryChoice isCreateSpecType_DiscoveryChoice `protobuf_oneof:"discovery_choice"`
 	// Types that are valid to be assigned to ClusterIdentifierChoice:
 	//	*CreateSpecType_NoClusterId
@@ -1747,7 +2441,7 @@ type CreateSpecType struct {
 func (m *CreateSpecType) Reset()      { *m = CreateSpecType{} }
 func (*CreateSpecType) ProtoMessage() {}
 func (*CreateSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_1beabb40327c3d92, []int{17}
+	return fileDescriptor_1beabb40327c3d92, []int{25}
 }
 func (m *CreateSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1791,6 +2485,9 @@ type CreateSpecType_DiscoveryK8S struct {
 type CreateSpecType_DiscoveryConsul struct {
 	DiscoveryConsul *ConsulDiscoveryType `protobuf:"bytes,9,opt,name=discovery_consul,json=discoveryConsul,proto3,oneof" json:"discovery_consul,omitempty"`
 }
+type CreateSpecType_DiscoveryCbip struct {
+	DiscoveryCbip *CbipDiscoveryType `protobuf:"bytes,14,opt,name=discovery_cbip,json=discoveryCbip,proto3,oneof" json:"discovery_cbip,omitempty"`
+}
 type CreateSpecType_NoClusterId struct {
 	NoClusterId *schema.Empty `protobuf:"bytes,12,opt,name=no_cluster_id,json=noClusterId,proto3,oneof" json:"no_cluster_id,omitempty"`
 }
@@ -1800,6 +2497,7 @@ type CreateSpecType_ClusterId struct {
 
 func (*CreateSpecType_DiscoveryK8S) isCreateSpecType_DiscoveryChoice()        {}
 func (*CreateSpecType_DiscoveryConsul) isCreateSpecType_DiscoveryChoice()     {}
+func (*CreateSpecType_DiscoveryCbip) isCreateSpecType_DiscoveryChoice()       {}
 func (*CreateSpecType_NoClusterId) isCreateSpecType_ClusterIdentifierChoice() {}
 func (*CreateSpecType_ClusterId) isCreateSpecType_ClusterIdentifierChoice()   {}
 
@@ -1837,6 +2535,13 @@ func (m *CreateSpecType) GetDiscoveryConsul() *ConsulDiscoveryType {
 	return nil
 }
 
+func (m *CreateSpecType) GetDiscoveryCbip() *CbipDiscoveryType {
+	if x, ok := m.GetDiscoveryChoice().(*CreateSpecType_DiscoveryCbip); ok {
+		return x.DiscoveryCbip
+	}
+	return nil
+}
+
 func (m *CreateSpecType) GetNoClusterId() *schema.Empty {
 	if x, ok := m.GetClusterIdentifierChoice().(*CreateSpecType_NoClusterId); ok {
 		return x.NoClusterId
@@ -1856,6 +2561,7 @@ func (*CreateSpecType) XXX_OneofWrappers() []interface{} {
 	return []interface{}{
 		(*CreateSpecType_DiscoveryK8S)(nil),
 		(*CreateSpecType_DiscoveryConsul)(nil),
+		(*CreateSpecType_DiscoveryCbip)(nil),
 		(*CreateSpecType_NoClusterId)(nil),
 		(*CreateSpecType_ClusterId)(nil),
 	}
@@ -1870,6 +2576,7 @@ type ReplaceSpecType struct {
 	// Types that are valid to be assigned to DiscoveryChoice:
 	//	*ReplaceSpecType_DiscoveryK8S
 	//	*ReplaceSpecType_DiscoveryConsul
+	//	*ReplaceSpecType_DiscoveryCbip
 	DiscoveryChoice isReplaceSpecType_DiscoveryChoice `protobuf_oneof:"discovery_choice"`
 	// Types that are valid to be assigned to ClusterIdentifierChoice:
 	//	*ReplaceSpecType_NoClusterId
@@ -1880,7 +2587,7 @@ type ReplaceSpecType struct {
 func (m *ReplaceSpecType) Reset()      { *m = ReplaceSpecType{} }
 func (*ReplaceSpecType) ProtoMessage() {}
 func (*ReplaceSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_1beabb40327c3d92, []int{18}
+	return fileDescriptor_1beabb40327c3d92, []int{26}
 }
 func (m *ReplaceSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1924,6 +2631,9 @@ type ReplaceSpecType_DiscoveryK8S struct {
 type ReplaceSpecType_DiscoveryConsul struct {
 	DiscoveryConsul *ConsulDiscoveryType `protobuf:"bytes,9,opt,name=discovery_consul,json=discoveryConsul,proto3,oneof" json:"discovery_consul,omitempty"`
 }
+type ReplaceSpecType_DiscoveryCbip struct {
+	DiscoveryCbip *CbipDiscoveryType `protobuf:"bytes,14,opt,name=discovery_cbip,json=discoveryCbip,proto3,oneof" json:"discovery_cbip,omitempty"`
+}
 type ReplaceSpecType_NoClusterId struct {
 	NoClusterId *schema.Empty `protobuf:"bytes,12,opt,name=no_cluster_id,json=noClusterId,proto3,oneof" json:"no_cluster_id,omitempty"`
 }
@@ -1933,6 +2643,7 @@ type ReplaceSpecType_ClusterId struct {
 
 func (*ReplaceSpecType_DiscoveryK8S) isReplaceSpecType_DiscoveryChoice()        {}
 func (*ReplaceSpecType_DiscoveryConsul) isReplaceSpecType_DiscoveryChoice()     {}
+func (*ReplaceSpecType_DiscoveryCbip) isReplaceSpecType_DiscoveryChoice()       {}
 func (*ReplaceSpecType_NoClusterId) isReplaceSpecType_ClusterIdentifierChoice() {}
 func (*ReplaceSpecType_ClusterId) isReplaceSpecType_ClusterIdentifierChoice()   {}
 
@@ -1970,6 +2681,13 @@ func (m *ReplaceSpecType) GetDiscoveryConsul() *ConsulDiscoveryType {
 	return nil
 }
 
+func (m *ReplaceSpecType) GetDiscoveryCbip() *CbipDiscoveryType {
+	if x, ok := m.GetDiscoveryChoice().(*ReplaceSpecType_DiscoveryCbip); ok {
+		return x.DiscoveryCbip
+	}
+	return nil
+}
+
 func (m *ReplaceSpecType) GetNoClusterId() *schema.Empty {
 	if x, ok := m.GetClusterIdentifierChoice().(*ReplaceSpecType_NoClusterId); ok {
 		return x.NoClusterId
@@ -1989,6 +2707,7 @@ func (*ReplaceSpecType) XXX_OneofWrappers() []interface{} {
 	return []interface{}{
 		(*ReplaceSpecType_DiscoveryK8S)(nil),
 		(*ReplaceSpecType_DiscoveryConsul)(nil),
+		(*ReplaceSpecType_DiscoveryCbip)(nil),
 		(*ReplaceSpecType_NoClusterId)(nil),
 		(*ReplaceSpecType_ClusterId)(nil),
 	}
@@ -2005,6 +2724,7 @@ type GetSpecType struct {
 	// Types that are valid to be assigned to DiscoveryChoice:
 	//	*GetSpecType_DiscoveryK8S
 	//	*GetSpecType_DiscoveryConsul
+	//	*GetSpecType_DiscoveryCbip
 	DiscoveryChoice isGetSpecType_DiscoveryChoice `protobuf_oneof:"discovery_choice"`
 	// Types that are valid to be assigned to ClusterIdentifierChoice:
 	//	*GetSpecType_NoClusterId
@@ -2015,7 +2735,7 @@ type GetSpecType struct {
 func (m *GetSpecType) Reset()      { *m = GetSpecType{} }
 func (*GetSpecType) ProtoMessage() {}
 func (*GetSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_1beabb40327c3d92, []int{19}
+	return fileDescriptor_1beabb40327c3d92, []int{27}
 }
 func (m *GetSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -2059,6 +2779,9 @@ type GetSpecType_DiscoveryK8S struct {
 type GetSpecType_DiscoveryConsul struct {
 	DiscoveryConsul *ConsulDiscoveryType `protobuf:"bytes,9,opt,name=discovery_consul,json=discoveryConsul,proto3,oneof" json:"discovery_consul,omitempty"`
 }
+type GetSpecType_DiscoveryCbip struct {
+	DiscoveryCbip *CbipDiscoveryType `protobuf:"bytes,14,opt,name=discovery_cbip,json=discoveryCbip,proto3,oneof" json:"discovery_cbip,omitempty"`
+}
 type GetSpecType_NoClusterId struct {
 	NoClusterId *schema.Empty `protobuf:"bytes,12,opt,name=no_cluster_id,json=noClusterId,proto3,oneof" json:"no_cluster_id,omitempty"`
 }
@@ -2068,6 +2791,7 @@ type GetSpecType_ClusterId struct {
 
 func (*GetSpecType_DiscoveryK8S) isGetSpecType_DiscoveryChoice()        {}
 func (*GetSpecType_DiscoveryConsul) isGetSpecType_DiscoveryChoice()     {}
+func (*GetSpecType_DiscoveryCbip) isGetSpecType_DiscoveryChoice()       {}
 func (*GetSpecType_NoClusterId) isGetSpecType_ClusterIdentifierChoice() {}
 func (*GetSpecType_ClusterId) isGetSpecType_ClusterIdentifierChoice()   {}
 
@@ -2119,6 +2843,13 @@ func (m *GetSpecType) GetDiscoveryConsul() *ConsulDiscoveryType {
 	return nil
 }
 
+func (m *GetSpecType) GetDiscoveryCbip() *CbipDiscoveryType {
+	if x, ok := m.GetDiscoveryChoice().(*GetSpecType_DiscoveryCbip); ok {
+		return x.DiscoveryCbip
+	}
+	return nil
+}
+
 func (m *GetSpecType) GetNoClusterId() *schema.Empty {
 	if x, ok := m.GetClusterIdentifierChoice().(*GetSpecType_NoClusterId); ok {
 		return x.NoClusterId
@@ -2138,6 +2869,7 @@ func (*GetSpecType) XXX_OneofWrappers() []interface{} {
 	return []interface{}{
 		(*GetSpecType_DiscoveryK8S)(nil),
 		(*GetSpecType_DiscoveryConsul)(nil),
+		(*GetSpecType_DiscoveryCbip)(nil),
 		(*GetSpecType_NoClusterId)(nil),
 		(*GetSpecType_ClusterId)(nil),
 	}
@@ -2186,6 +2918,22 @@ func init() {
 	golang_proto.RegisterType((*K8SDiscoveryType)(nil), "ves.io.schema.discovery.K8SDiscoveryType")
 	proto.RegisterType((*ConsulDiscoveryType)(nil), "ves.io.schema.discovery.ConsulDiscoveryType")
 	golang_proto.RegisterType((*ConsulDiscoveryType)(nil), "ves.io.schema.discovery.ConsulDiscoveryType")
+	proto.RegisterType((*CbipDiscoveryType)(nil), "ves.io.schema.discovery.CbipDiscoveryType")
+	golang_proto.RegisterType((*CbipDiscoveryType)(nil), "ves.io.schema.discovery.CbipDiscoveryType")
+	proto.RegisterType((*CbipCluster)(nil), "ves.io.schema.discovery.CbipCluster")
+	golang_proto.RegisterType((*CbipCluster)(nil), "ves.io.schema.discovery.CbipCluster")
+	proto.RegisterType((*CbipDeviceConfig)(nil), "ves.io.schema.discovery.CbipDeviceConfig")
+	golang_proto.RegisterType((*CbipDeviceConfig)(nil), "ves.io.schema.discovery.CbipDeviceConfig")
+	proto.RegisterType((*CbipAdminCredentials)(nil), "ves.io.schema.discovery.CbipAdminCredentials")
+	golang_proto.RegisterType((*CbipAdminCredentials)(nil), "ves.io.schema.discovery.CbipAdminCredentials")
+	proto.RegisterType((*CbipCertificateAuthority)(nil), "ves.io.schema.discovery.CbipCertificateAuthority")
+	golang_proto.RegisterType((*CbipCertificateAuthority)(nil), "ves.io.schema.discovery.CbipCertificateAuthority")
+	proto.RegisterType((*VirtualServerFilter)(nil), "ves.io.schema.discovery.VirtualServerFilter")
+	golang_proto.RegisterType((*VirtualServerFilter)(nil), "ves.io.schema.discovery.VirtualServerFilter")
+	proto.RegisterType((*NamespaceMapping)(nil), "ves.io.schema.discovery.NamespaceMapping")
+	golang_proto.RegisterType((*NamespaceMapping)(nil), "ves.io.schema.discovery.NamespaceMapping")
+	proto.RegisterType((*NamespaceMappingItem)(nil), "ves.io.schema.discovery.NamespaceMappingItem")
+	golang_proto.RegisterType((*NamespaceMappingItem)(nil), "ves.io.schema.discovery.NamespaceMappingItem")
 	proto.RegisterType((*GlobalSpecType)(nil), "ves.io.schema.discovery.GlobalSpecType")
 	golang_proto.RegisterType((*GlobalSpecType)(nil), "ves.io.schema.discovery.GlobalSpecType")
 	proto.RegisterType((*CreateSpecType)(nil), "ves.io.schema.discovery.CreateSpecType")
@@ -2204,164 +2952,225 @@ func init() {
 }
 
 var fileDescriptor_1beabb40327c3d92 = []byte{
-	// 2506 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x59, 0x4d, 0x6c, 0x1b, 0xc7,
-	0x15, 0xe6, 0xf0, 0x9f, 0x8f, 0x22, 0x45, 0x8f, 0x95, 0x78, 0xcd, 0xb8, 0xcc, 0x9a, 0x49, 0x1a,
-	0x45, 0xa1, 0xa9, 0x1f, 0x3b, 0x09, 0x23, 0xb7, 0x41, 0x4c, 0x4a, 0xb1, 0x64, 0x59, 0x8a, 0xba,
-	0xb4, 0x15, 0xb4, 0x17, 0x62, 0xb9, 0x3b, 0x12, 0x17, 0x5a, 0xee, 0x6e, 0x77, 0x97, 0x72, 0x74,
-	0x08, 0x60, 0x04, 0x68, 0x8b, 0xba, 0x97, 0x00, 0xbd, 0x14, 0x39, 0xf6, 0xd4, 0x02, 0xed, 0xa5,
-	0x87, 0x1e, 0x42, 0x1f, 0x0c, 0x03, 0x05, 0x82, 0x5c, 0xa2, 0xde, 0x7c, 0xe8, 0x21, 0x91, 0x2f,
-	0x69, 0x4e, 0x41, 0x4e, 0x41, 0x7a, 0x48, 0x31, 0xb3, 0xc3, 0xe5, 0x92, 0xa2, 0xe8, 0xa8, 0x31,
-	0x5a, 0xa0, 0xc8, 0x6d, 0x76, 0xe6, 0xfd, 0x7f, 0xef, 0xbd, 0x79, 0x43, 0xc2, 0x33, 0x7b, 0xc4,
-	0x29, 0x6b, 0xe6, 0xac, 0xa3, 0xb4, 0x48, 0x5b, 0x9e, 0x55, 0x35, 0x47, 0x31, 0xf7, 0x88, 0xbd,
-	0x3f, 0xeb, 0xee, 0x5b, 0xc4, 0x29, 0x5b, 0xb6, 0xe9, 0x9a, 0xf8, 0x8c, 0x47, 0x54, 0xf6, 0x88,
-	0xca, 0x3e, 0x51, 0xfe, 0xc2, 0x8e, 0xe6, 0xb6, 0x3a, 0xcd, 0xb2, 0x62, 0xb6, 0x67, 0x77, 0xcc,
-	0x1d, 0x73, 0x96, 0xd1, 0x37, 0x3b, 0xdb, 0xec, 0x8b, 0x7d, 0xb0, 0x95, 0x27, 0x27, 0xff, 0xd4,
-	0xa0, 0x32, 0xd3, 0x72, 0x35, 0xd3, 0xe0, 0x4a, 0xf2, 0x67, 0x07, 0x0f, 0x03, 0xfa, 0xf3, 0xe7,
-	0x06, 0x8f, 0xf6, 0x64, 0x5d, 0x53, 0x65, 0x97, 0xf0, 0x53, 0x71, 0xe8, 0x54, 0x23, 0xb7, 0x1a,
-	0x03, 0xa2, 0x8b, 0xff, 0x40, 0x90, 0xd9, 0x22, 0x76, 0xdd, 0x95, 0xdd, 0x8e, 0x73, 0x63, 0xdf,
-	0x22, 0xf8, 0x1c, 0xa4, 0x14, 0xd3, 0x30, 0x88, 0xe2, 0x12, 0x55, 0x40, 0x22, 0x9a, 0x4e, 0x4a,
-	0xfd, 0x0d, 0x8c, 0x21, 0xea, 0x68, 0x2e, 0x11, 0xc2, 0x22, 0x9a, 0x4e, 0x49, 0x6c, 0x8d, 0xe7,
-	0x20, 0x4a, 0x4d, 0x12, 0x22, 0x22, 0x9a, 0xce, 0x2e, 0x9c, 0x2b, 0x0f, 0x86, 0x64, 0xa9, 0x17,
-	0x12, 0x2a, 0x5d, 0x62, 0x94, 0xf8, 0x1a, 0x24, 0x1d, 0x62, 0xef, 0x69, 0x0a, 0x71, 0x84, 0xa8,
-	0x18, 0x99, 0x4e, 0x2f, 0x94, 0xcb, 0xc7, 0x04, 0xd2, 0xe7, 0x27, 0x6a, 0xdd, 0x63, 0x61, 0x72,
-	0x7c, 0xfe, 0xc5, 0xa7, 0xee, 0x77, 0xd1, 0x19, 0x78, 0x02, 0x60, 0x6b, 0x59, 0x12, 0x3d, 0x3f,
-	0x70, 0x62, 0xbe, 0xb4, 0x50, 0xba, 0x58, 0xba, 0x54, 0x5c, 0x82, 0xf4, 0xa6, 0xa9, 0xae, 0x1a,
-	0xdb, 0x26, 0xf3, 0xed, 0x69, 0x48, 0x5a, 0xa6, 0xda, 0x30, 0xe4, 0x36, 0x61, 0xae, 0xa5, 0xaa,
-	0xd1, 0xaf, 0xba, 0x28, 0x24, 0x25, 0x2c, 0x53, 0xdd, 0x90, 0xdb, 0x04, 0x4f, 0x41, 0x58, 0xb3,
-	0x3c, 0xe7, 0xf8, 0x51, 0x58, 0xb3, 0x8a, 0xef, 0xc0, 0xc4, 0xa6, 0x69, 0xbb, 0xbe, 0x98, 0xf3,
-	0x10, 0xb5, 0x4c, 0xdb, 0x65, 0x22, 0x32, 0xd5, 0xcc, 0x07, 0xff, 0xbc, 0x17, 0x49, 0xce, 0xc4,
-	0x85, 0x6f, 0xbe, 0x89, 0x4c, 0x23, 0x89, 0x1d, 0xe1, 0x3c, 0x24, 0x59, 0x80, 0x15, 0x53, 0xe7,
-	0xb1, 0xf2, 0xbf, 0x71, 0x19, 0xd2, 0xae, 0x6c, 0xef, 0x10, 0xb7, 0xc1, 0xa4, 0x44, 0x46, 0x49,
-	0x01, 0x8f, 0x82, 0xaa, 0x2d, 0xfe, 0x39, 0x09, 0x4f, 0x8c, 0x8c, 0x02, 0x9e, 0x83, 0x09, 0x1e,
-	0x87, 0xa0, 0x4f, 0x19, 0x6a, 0x38, 0x15, 0x17, 0xb5, 0xc3, 0xc2, 0xeb, 0x52, 0x9a, 0x93, 0x30,
-	0x07, 0x5f, 0x84, 0x14, 0xa5, 0x74, 0x2c, 0x59, 0xe1, 0x20, 0x0e, 0x93, 0xf7, 0xcf, 0x83, 0xe2,
-	0x7d, 0x80, 0x8f, 0x15, 0xcf, 0x0c, 0x2a, 0x01, 0x28, 0x7a, 0xc7, 0x71, 0x89, 0xdd, 0xd0, 0x2c,
-	0x21, 0x7a, 0x84, 0xde, 0x42, 0x52, 0x8a, 0x13, 0xac, 0x5a, 0xf8, 0x6d, 0x88, 0xeb, 0x72, 0x93,
-	0xe8, 0x8e, 0x10, 0x63, 0x49, 0xb0, 0x78, 0xb2, 0x24, 0x28, 0x5f, 0x67, 0xcc, 0xcb, 0x86, 0x6b,
-	0xef, 0x57, 0x9f, 0xa5, 0x1a, 0x62, 0xef, 0xa3, 0x70, 0x2e, 0x47, 0x57, 0xf0, 0x3e, 0x4a, 0xcc,
-	0xc4, 0xec, 0xc8, 0x01, 0x42, 0x87, 0x9f, 0xfc, 0x2d, 0x12, 0xbf, 0x73, 0x17, 0x85, 0x93, 0x21,
-	0x89, 0xeb, 0xc3, 0x15, 0x8a, 0xa0, 0xea, 0x08, 0x71, 0xa6, 0xf7, 0xd9, 0x63, 0xf5, 0x06, 0x92,
-	0x47, 0x62, 0x1c, 0xf8, 0x17, 0x11, 0x9a, 0x43, 0xb6, 0xdb, 0x68, 0xcb, 0x96, 0x90, 0x60, 0xec,
-	0x97, 0x4f, 0x68, 0x36, 0x05, 0x75, 0x5d, 0xb6, 0x3c, 0xbb, 0xff, 0x14, 0x7e, 0xf0, 0x0e, 0xfa,
-	0xac, 0x8b, 0x10, 0xb5, 0x3a, 0xf3, 0x3e, 0x82, 0xa2, 0x9f, 0x04, 0xbd, 0x9d, 0x19, 0x7f, 0x87,
-	0xba, 0x32, 0x7b, 0xe7, 0x2e, 0x7a, 0x11, 0xbf, 0xf0, 0x79, 0x17, 0x3d, 0xb7, 0x6a, 0x28, 0x66,
-	0x5b, 0x33, 0x76, 0x44, 0x6a, 0x90, 0x68, 0x74, 0xda, 0x4d, 0x62, 0x8b, 0x6e, 0x4b, 0x76, 0x45,
-	0x83, 0x10, 0xd5, 0x11, 0x6d, 0xd2, 0x96, 0x2d, 0xca, 0x53, 0xb8, 0x73, 0x17, 0xe5, 0xb1, 0x70,
-	0xd8, 0x45, 0x53, 0x3e, 0x0f, 0xb5, 0x42, 0xdc, 0x60, 0x3c, 0x94, 0x04, 0xee, 0xdc, 0x45, 0x71,
-	0x1c, 0xfd, 0xb0, 0x8b, 0x42, 0xfd, 0x80, 0x31, 0x85, 0x6f, 0xdd, 0xb9, 0x8b, 0xea, 0xf9, 0x9f,
-	0x7c, 0xde, 0x45, 0xeb, 0x6f, 0x76, 0xdc, 0x1d, 0x73, 0xa4, 0xc2, 0x5b, 0x9a, 0xae, 0x8b, 0x3b,
-	0xa6, 0xe8, 0x9a, 0x62, 0x0f, 0xdf, 0x4d, 0xb1, 0x57, 0xa3, 0xa2, 0x69, 0x8b, 0x86, 0xa9, 0x92,
-	0x0b, 0x8c, 0xad, 0xb7, 0xeb, 0x1b, 0x96, 0x67, 0x86, 0xf9, 0xb2, 0x47, 0x19, 0x96, 0x67, 0x86,
-	0x09, 0x88, 0x56, 0x2a, 0x0b, 0x1e, 0xbe, 0x0c, 0x31, 0xba, 0x74, 0x84, 0x24, 0xc3, 0xe0, 0xb9,
-	0x31, 0x10, 0xf6, 0x2b, 0x57, 0xf2, 0x78, 0xf2, 0xaf, 0x42, 0x3a, 0x90, 0x3b, 0x38, 0x07, 0x91,
-	0x5d, 0xb2, 0xef, 0x55, 0x8f, 0x44, 0x97, 0x78, 0x0a, 0x62, 0x7b, 0xb2, 0xde, 0xe9, 0xf5, 0x39,
-	0xef, 0x63, 0x31, 0x5c, 0x41, 0xf9, 0x45, 0xaf, 0x17, 0xf4, 0xf0, 0x0b, 0xf2, 0x66, 0x46, 0xf0,
-	0x66, 0x02, 0xbc, 0x8b, 0xe4, 0xa3, 0x2e, 0x92, 0xe1, 0x2c, 0x24, 0x78, 0x36, 0xe4, 0xb3, 0x83,
-	0xf5, 0x0b, 0x02, 0xa4, 0x36, 0x7a, 0xd5, 0x97, 0x4f, 0x07, 0x4a, 0x15, 0x9e, 0x84, 0x28, 0x75,
-	0x20, 0xc8, 0x41, 0x4b, 0x12, 0x30, 0x84, 0x57, 0x37, 0xf3, 0x13, 0xc1, 0xb2, 0x2b, 0xbe, 0x1b,
-	0x85, 0xd3, 0x37, 0xae, 0xd7, 0x6b, 0xba, 0x46, 0x0c, 0xb7, 0x66, 0x1a, 0xdb, 0xda, 0x0e, 0x2b,
-	0xce, 0x0a, 0xb0, 0x5a, 0x25, 0x76, 0xb0, 0x59, 0x9c, 0xe9, 0x55, 0x67, 0xcc, 0x8e, 0x08, 0xb7,
-	0xc3, 0xbc, 0x4e, 0x5b, 0x48, 0x02, 0x8f, 0x96, 0x75, 0x8d, 0x75, 0x98, 0x54, 0x88, 0xed, 0x6a,
-	0xdb, 0x9a, 0x22, 0xbb, 0xa4, 0xd1, 0xb1, 0xbd, 0xa6, 0x96, 0x5e, 0x38, 0x3b, 0x14, 0xf6, 0x3a,
-	0x51, 0x6c, 0xe2, 0x52, 0x6d, 0xd5, 0x14, 0xcf, 0x6b, 0x01, 0x49, 0xd9, 0x00, 0xf3, 0x4d, 0x5b,
-	0xc7, 0xd7, 0x20, 0x1d, 0xd8, 0x11, 0x62, 0xcc, 0x90, 0xe9, 0xaf, 0xba, 0x28, 0xfa, 0xfb, 0xbb,
-	0x28, 0x6d, 0x91, 0x76, 0x49, 0x6c, 0xca, 0x0e, 0x79, 0xf9, 0x12, 0xb5, 0x26, 0x6e, 0x47, 0xa7,
-	0x6f, 0xdf, 0x4e, 0x72, 0x13, 0xdf, 0x43, 0x48, 0x0a, 0x32, 0xe3, 0x0a, 0x24, 0x76, 0xc9, 0x3e,
-	0x33, 0x29, 0xf2, 0x28, 0x93, 0xa2, 0x07, 0x5d, 0x84, 0xa4, 0xf8, 0x2e, 0xd9, 0xa7, 0x56, 0x48,
-	0x80, 0x15, 0xb9, 0x31, 0xec, 0x57, 0xf4, 0x04, 0x7e, 0xe5, 0x14, 0xb9, 0x36, 0xe8, 0xd9, 0x06,
-	0x64, 0x5d, 0x9b, 0x02, 0xa1, 0x36, 0x14, 0x99, 0xc9, 0x8b, 0x9f, 0xd0, 0xb9, 0x09, 0xce, 0x5f,
-	0x93, 0x6f, 0xda, 0xfa, 0x62, 0xe5, 0x7e, 0x17, 0x5d, 0x02, 0x01, 0x4e, 0xd5, 0x19, 0x18, 0xe2,
-	0xa6, 0x6c, 0xcb, 0x6d, 0xe2, 0x12, 0xdb, 0xc1, 0x91, 0xf9, 0xd2, 0xcb, 0xf4, 0xc4, 0x83, 0x79,
-	0xe0, 0xe4, 0xa5, 0xd2, 0xc5, 0xe2, 0xef, 0x10, 0x64, 0x25, 0xe2, 0x04, 0xf1, 0x7f, 0x05, 0x40,
-	0xb6, 0xb4, 0x86, 0x87, 0x2b, 0x87, 0x5f, 0x08, 0xc2, 0xff, 0xcb, 0x30, 0x5f, 0x7d, 0x82, 0x90,
-	0x94, 0x92, 0x2d, 0xcd, 0xd3, 0x8a, 0xd7, 0x21, 0xe9, 0xea, 0x4e, 0x43, 0x33, 0xb6, 0x4d, 0x8e,
-	0x7b, 0xe9, 0xd8, 0x72, 0x1b, 0x91, 0x78, 0x3c, 0xee, 0x09, 0x57, 0x77, 0x68, 0x21, 0x16, 0xff,
-	0x12, 0x81, 0xcc, 0x5a, 0xa5, 0x7e, 0x45, 0x51, 0x88, 0xc3, 0x76, 0xf0, 0x0a, 0x64, 0x77, 0x3b,
-	0x4d, 0xa2, 0x30, 0x16, 0x16, 0x36, 0xf4, 0xad, 0xb0, 0x5c, 0x09, 0x49, 0x99, 0x3e, 0xa3, 0x07,
-	0xea, 0x24, 0x1f, 0x56, 0x34, 0xd3, 0x08, 0x5a, 0xfc, 0xfc, 0xb1, 0x16, 0x0f, 0x46, 0x69, 0x25,
-	0x24, 0x65, 0xfb, 0x12, 0x98, 0x75, 0xd3, 0x00, 0x9a, 0xd1, 0xe0, 0x05, 0xc6, 0xb2, 0x2c, 0x59,
-	0x4d, 0xf0, 0x2c, 0x58, 0x09, 0x49, 0x29, 0xcd, 0xa8, 0x79, 0x67, 0xb8, 0x02, 0x49, 0xcd, 0x31,
-	0x75, 0x99, 0x8e, 0x4e, 0x5e, 0x22, 0x4d, 0x0d, 0xa9, 0x5d, 0x6e, 0x5b, 0xee, 0x7e, 0x35, 0x7a,
-	0x8f, 0xb2, 0x22, 0xc9, 0xa7, 0xc6, 0x8b, 0x90, 0xb2, 0x89, 0xac, 0xb4, 0xe4, 0xa6, 0xee, 0x15,
-	0xc4, 0xa3, 0x58, 0xfb, 0xe4, 0x8b, 0xc9, 0x2f, 0x5f, 0x8b, 0xcd, 0xcf, 0x95, 0xe6, 0xe7, 0xab,
-	0x05, 0x48, 0xf3, 0x18, 0xb2, 0x31, 0x6b, 0x92, 0xd2, 0x1e, 0x74, 0x11, 0x1c, 0x76, 0x51, 0x64,
-	0xbe, 0xb4, 0x50, 0xbd, 0x00, 0x4f, 0xee, 0x56, 0x9c, 0x06, 0x9b, 0x81, 0x88, 0x7b, 0xcb, 0xb4,
-	0x77, 0x1b, 0x4a, 0xcb, 0xd4, 0x14, 0x82, 0x4f, 0xdf, 0xeb, 0x22, 0xda, 0x63, 0x29, 0x79, 0x9a,
-	0x92, 0x5f, 0x2a, 0xbd, 0x74, 0x2d, 0x9a, 0x84, 0x5c, 0xfa, 0x5a, 0x34, 0x99, 0xce, 0x4d, 0x14,
-	0x7f, 0x8d, 0xe0, 0xa9, 0x9a, 0x69, 0x38, 0x1d, 0x7d, 0xc5, 0x75, 0xad, 0xaa, 0xec, 0x68, 0xca,
-	0x95, 0x8e, 0xdb, 0xf2, 0x67, 0xa2, 0x19, 0x48, 0x75, 0x9c, 0xc1, 0xd6, 0x32, 0x34, 0x28, 0x24,
-	0xe9, 0x39, 0x6b, 0x27, 0xaf, 0x01, 0x58, 0xb2, 0xe3, 0xdc, 0x52, 0xbf, 0x5d, 0x27, 0xf1, 0xd2,
-	0x27, 0xe5, 0xb1, 0xdc, 0xb4, 0xf5, 0xe2, 0x6f, 0xc3, 0x90, 0xf3, 0x6c, 0x09, 0xe4, 0xd0, 0xe6,
-	0x51, 0xe4, 0xd1, 0x89, 0x90, 0x3f, 0x82, 0xfb, 0x1b, 0x10, 0x67, 0x2c, 0x5e, 0x27, 0xcf, 0x2e,
-	0x3c, 0x73, 0xac, 0xa0, 0x3a, 0x23, 0x1b, 0x6e, 0x0f, 0x9c, 0x1b, 0x13, 0x98, 0x6a, 0xb9, 0xae,
-	0xd5, 0x68, 0xd2, 0xa0, 0x35, 0xe4, 0x8e, 0xdb, 0xf2, 0xcc, 0xf3, 0xfa, 0xd5, 0xa5, 0x63, 0xa5,
-	0x8e, 0x09, 0xb7, 0x74, 0xaa, 0x35, 0xbc, 0x5d, 0xfc, 0x6b, 0x18, 0xa6, 0xb6, 0x34, 0xcb, 0x9f,
-	0xb7, 0x7d, 0x68, 0x16, 0x00, 0x5b, 0x9d, 0xa6, 0xae, 0x39, 0xad, 0xc6, 0x9e, 0x66, 0xbb, 0x1d,
-	0x59, 0xa7, 0xc3, 0x19, 0x1b, 0xed, 0xf9, 0x90, 0x9b, 0xe3, 0xe7, 0x5b, 0xde, 0xf1, 0xaa, 0x85,
-	0x57, 0xf9, 0x4c, 0xef, 0x79, 0x3e, 0x7b, 0xac, 0x8d, 0x3d, 0x8e, 0xcd, 0x81, 0x31, 0x9f, 0x8b,
-	0xf5, 0x86, 0xfd, 0x12, 0xa4, 0x9c, 0x4e, 0x53, 0x35, 0xdb, 0xb2, 0x66, 0xf0, 0x11, 0x32, 0x3b,
-	0x78, 0xe9, 0x48, 0x7d, 0x02, 0xbc, 0x04, 0x49, 0xd5, 0x70, 0x1a, 0x6d, 0x53, 0x25, 0xac, 0x84,
-	0xc6, 0x85, 0x7d, 0xad, 0x52, 0x5f, 0xda, 0xa8, 0xaf, 0x9b, 0x6a, 0x4f, 0x61, 0x42, 0x35, 0x1c,
-	0xfa, 0x39, 0x38, 0xe6, 0xc6, 0xc6, 0x8f, 0xb9, 0xc5, 0x1f, 0x43, 0x76, 0xad, 0x52, 0xdf, 0xf4,
-	0x42, 0xc0, 0x22, 0x36, 0xc0, 0x8e, 0x1e, 0xc1, 0xfe, 0x2b, 0x04, 0xa7, 0xa8, 0x25, 0x44, 0x27,
-	0x3b, 0x32, 0x4d, 0x9e, 0x1b, 0x47, 0xbc, 0x46, 0x27, 0xf1, 0x3a, 0xfc, 0x9f, 0x7a, 0x5d, 0xfc,
-	0x38, 0x0c, 0x67, 0xd6, 0x2a, 0xf5, 0x91, 0x49, 0x30, 0x07, 0x09, 0x55, 0x73, 0x58, 0x7b, 0x09,
-	0x1f, 0xdf, 0x5e, 0x56, 0xa8, 0x34, 0x8f, 0x0c, 0xd7, 0x20, 0xc1, 0xd3, 0x82, 0x67, 0xea, 0xf3,
-	0xe3, 0x4c, 0x0a, 0x84, 0x8f, 0x0a, 0xe1, 0x9c, 0xf8, 0x32, 0x64, 0x7a, 0xb9, 0xb7, 0xfd, 0x73,
-	0xd5, 0x70, 0xc6, 0xb5, 0xc5, 0x95, 0x90, 0x34, 0xc1, 0x89, 0xdf, 0xa0, 0xb4, 0xb8, 0x0e, 0x59,
-	0x1a, 0x15, 0xd5, 0x8f, 0x2c, 0xef, 0x8c, 0x33, 0x63, 0x63, 0x33, 0x80, 0x03, 0xbd, 0x21, 0x54,
-	0xc3, 0xe9, 0x6f, 0x56, 0x9f, 0x83, 0x6c, 0xcf, 0xa2, 0x40, 0xef, 0x0b, 0xd3, 0x1e, 0x73, 0xd8,
-	0x45, 0x09, 0xf6, 0x6e, 0x64, 0xbd, 0x0f, 0xe5, 0xc2, 0xc5, 0x3f, 0x22, 0xc8, 0x7b, 0x65, 0xf8,
-	0x98, 0x82, 0x3a, 0x37, 0x1c, 0xd4, 0x63, 0x39, 0x38, 0x59, 0xf5, 0xfc, 0x11, 0x7b, 0x27, 0x03,
-	0xf6, 0x46, 0x16, 0x4a, 0x17, 0xb9, 0xad, 0x5f, 0x22, 0xc8, 0x51, 0xff, 0x83, 0x85, 0x88, 0xaf,
-	0x42, 0x5a, 0x66, 0x3d, 0x32, 0xd8, 0x11, 0x7f, 0x38, 0x2e, 0x7e, 0xfd, 0x96, 0x2a, 0x81, 0xdc,
-	0x6f, 0xaf, 0x75, 0xe8, 0x61, 0x13, 0xbc, 0x55, 0xe7, 0xc6, 0x49, 0x1a, 0x15, 0x32, 0x29, 0xcd,
-	0xa5, 0xd0, 0x8d, 0xc5, 0xd7, 0xef, 0x77, 0xd1, 0x8f, 0xe0, 0x0c, 0x60, 0x4f, 0xa9, 0x58, 0xb3,
-	0x89, 0x4a, 0x0c, 0x57, 0x93, 0x75, 0x07, 0xa3, 0x79, 0x38, 0x0f, 0xe7, 0xb6, 0x56, 0x37, 0x45,
-	0x9e, 0x5a, 0xf4, 0x6d, 0xe0, 0x75, 0xeb, 0x8e, 0xcd, 0xa0, 0xc4, 0x68, 0xa1, 0xf8, 0x2f, 0x04,
-	0xa7, 0x3d, 0x80, 0x06, 0xfd, 0xbe, 0x36, 0xca, 0xef, 0x17, 0x1e, 0xd1, 0x6a, 0x8f, 0x71, 0x7d,
-	0x6b, 0xa4, 0xeb, 0x17, 0x1f, 0x21, 0xec, 0xbf, 0xe1, 0xfd, 0x07, 0x09, 0xc8, 0x5e, 0xd5, 0xcd,
-	0xa6, 0xac, 0xd7, 0x2d, 0xa2, 0x30, 0xc7, 0x2f, 0x43, 0xec, 0x56, 0x8b, 0xd8, 0x84, 0xbb, 0x3c,
-	0xfc, 0x2e, 0xda, 0xf0, 0xae, 0xfd, 0xba, 0xe6, 0x12, 0x89, 0x6c, 0xd7, 0x89, 0x4e, 0x14, 0xd7,
-	0xb4, 0x25, 0x8f, 0x07, 0x6f, 0x41, 0xc6, 0x77, 0xa3, 0xb1, 0x5b, 0xa1, 0x8f, 0xab, 0xf1, 0x71,
-	0x1b, 0xce, 0x37, 0x7f, 0x2c, 0x9b, 0xf0, 0x69, 0xd6, 0x2a, 0x0e, 0x6e, 0x40, 0xae, 0x2f, 0x57,
-	0x61, 0xe1, 0x11, 0x52, 0x8f, 0x18, 0x24, 0x47, 0xa0, 0xea, 0x4b, 0x9f, 0xf4, 0xc9, 0x3c, 0x2a,
-	0xfc, 0xea, 0xc0, 0x75, 0x35, 0xf6, 0x27, 0x28, 0x7f, 0x74, 0xe3, 0xd7, 0xd3, 0x5b, 0x90, 0xee,
-	0xdf, 0x8e, 0x16, 0xaf, 0xca, 0x0b, 0x63, 0x2e, 0xbc, 0xa3, 0xb0, 0xf6, 0x45, 0x82, 0x7f, 0x91,
-	0x5a, 0xb8, 0x06, 0x11, 0x1a, 0xc2, 0xe8, 0x49, 0x4a, 0xae, 0x3f, 0x57, 0x22, 0x89, 0x72, 0xe3,
-	0xeb, 0x10, 0xe7, 0xf1, 0x8a, 0x9d, 0x30, 0x85, 0x83, 0xa2, 0xb8, 0x0c, 0xfc, 0x06, 0x60, 0xff,
-	0x9d, 0xc8, 0x52, 0x6d, 0x5b, 0x23, 0xb6, 0x00, 0xde, 0x43, 0x90, 0x93, 0x0f, 0x5e, 0x52, 0x02,
-	0x92, 0x4e, 0xf5, 0x1e, 0xf4, 0x3e, 0x07, 0x5e, 0x84, 0x8c, 0x61, 0x36, 0xfa, 0xa2, 0x84, 0x89,
-	0x31, 0xbd, 0x2c, 0x2c, 0xa5, 0x0d, 0xb3, 0xd6, 0x93, 0x81, 0x67, 0x03, 0x6f, 0x55, 0x55, 0xc8,
-	0x8c, 0xba, 0x19, 0x57, 0xc2, 0xfd, 0x5f, 0x89, 0xd4, 0xc5, 0xb5, 0xfb, 0x5d, 0x74, 0x15, 0x00,
-	0x62, 0x6f, 0xb1, 0x1c, 0x45, 0xf3, 0xf0, 0x04, 0xe4, 0x7c, 0x0c, 0xc4, 0x75, 0xe2, 0xb6, 0x4c,
-	0x15, 0xa3, 0x57, 0xa0, 0x08, 0xe7, 0xfa, 0xdb, 0x5c, 0xa1, 0x18, 0xb0, 0x3a, 0x3c, 0x3f, 0x5f,
-	0x7d, 0x66, 0x20, 0x13, 0xfb, 0xfd, 0x34, 0x79, 0xd0, 0x45, 0x09, 0xda, 0x4f, 0x2b, 0xa5, 0x57,
-	0xab, 0xc5, 0x81, 0xe6, 0xe1, 0xcd, 0xc6, 0x07, 0x5d, 0x14, 0xe7, 0x73, 0xf1, 0x17, 0x5d, 0x84,
-	0xaa, 0x65, 0x38, 0x7b, 0x34, 0x94, 0x3d, 0x89, 0xa7, 0xee, 0x75, 0xd1, 0x04, 0x9f, 0xa4, 0x63,
-	0xf3, 0x0b, 0xa5, 0x79, 0xda, 0xa3, 0x13, 0xb9, 0xe4, 0xb5, 0x68, 0x32, 0x9e, 0x4b, 0xf0, 0x89,
-	0xfa, 0x20, 0x02, 0xd9, 0x9a, 0x4d, 0x64, 0x97, 0x3c, 0x9e, 0xe2, 0xdd, 0xfc, 0xae, 0xc5, 0x7b,
-	0xa4, 0x6c, 0x7f, 0xfa, 0x78, 0xca, 0x76, 0x54, 0xc1, 0x9e, 0x28, 0x83, 0xd0, 0x60, 0x06, 0x3d,
-	0x7d, 0x34, 0x83, 0x56, 0x50, 0x30, 0x63, 0x4e, 0x7d, 0xf4, 0xda, 0x50, 0x5b, 0xac, 0x4e, 0x8f,
-	0xc0, 0x7d, 0xea, 0xdd, 0xaf, 0xd1, 0x91, 0xdd, 0xea, 0xe2, 0x38, 0x60, 0x7f, 0xf0, 0xee, 0xd7,
-	0xe8, 0xf8, 0xe3, 0xe2, 0xdf, 0x23, 0x30, 0x29, 0x11, 0x4b, 0x97, 0x95, 0xef, 0x31, 0xfd, 0x7f,
-	0xc1, 0xf4, 0xe3, 0x28, 0xa4, 0xaf, 0x12, 0xf7, 0xf1, 0xe0, 0x39, 0xf7, 0xed, 0xef, 0x29, 0x7e,
-	0x3d, 0x6d, 0x7c, 0xf7, 0xeb, 0x69, 0xe0, 0x56, 0xfa, 0x3e, 0xa3, 0xfe, 0xd7, 0x19, 0x35, 0x73,
-	0x1e, 0xa0, 0xff, 0x83, 0x01, 0x4e, 0x42, 0x74, 0xe5, 0xc6, 0x8d, 0xcd, 0x5c, 0x08, 0xa7, 0x20,
-	0x46, 0x57, 0xf5, 0x1c, 0x9a, 0xb9, 0x02, 0x4f, 0x8e, 0x7e, 0x59, 0x63, 0x0c, 0xd9, 0xa5, 0x8d,
-	0x7a, 0x63, 0x69, 0xf9, 0xfa, 0xf2, 0xd5, 0x2b, 0x37, 0x56, 0xdf, 0xdc, 0xc8, 0x85, 0xf0, 0x69,
-	0x98, 0xdc, 0xbc, 0x59, 0xbd, 0xbe, 0x5a, 0x5f, 0x69, 0xd4, 0x97, 0xa5, 0xad, 0xd5, 0xda, 0x72,
-	0x0e, 0xcd, 0x4c, 0x03, 0xf4, 0x5f, 0x8a, 0x78, 0x02, 0x92, 0xb5, 0x37, 0xa5, 0xe5, 0xc6, 0xd2,
-	0x46, 0x3d, 0x17, 0xa2, 0x5f, 0x6b, 0x37, 0xab, 0xde, 0x17, 0xaa, 0xfe, 0x06, 0x1d, 0x7c, 0x5a,
-	0x08, 0x3d, 0xf8, 0xb4, 0x10, 0xfa, 0xe2, 0xd3, 0x02, 0xba, 0x7d, 0x58, 0x40, 0x7f, 0x38, 0x2c,
-	0xa0, 0x0f, 0x0f, 0x0b, 0xe8, 0xe0, 0xb0, 0x80, 0x1e, 0x1c, 0x16, 0xd0, 0x27, 0x87, 0x05, 0xf4,
-	0xd9, 0x61, 0x21, 0xf4, 0xc5, 0x61, 0x01, 0xbd, 0xf7, 0xb0, 0x10, 0xba, 0xf7, 0xb0, 0x80, 0x0e,
-	0x1e, 0x16, 0x42, 0x0f, 0x1e, 0x16, 0x42, 0x3f, 0x5b, 0xdf, 0x31, 0xad, 0xdd, 0x9d, 0xf2, 0x9e,
-	0xa9, 0xbb, 0xc4, 0xb6, 0xe5, 0x72, 0xc7, 0x99, 0x65, 0x8b, 0x6d, 0xd3, 0x6e, 0x5f, 0xb0, 0x6c,
-	0x73, 0x4f, 0x53, 0x89, 0x7d, 0xa1, 0x77, 0x3c, 0x6b, 0x35, 0x77, 0xcc, 0x59, 0xf2, 0xb6, 0xcb,
-	0xff, 0x93, 0x1c, 0xfe, 0x77, 0xb5, 0x19, 0x67, 0xff, 0x93, 0x5d, 0xfc, 0x77, 0x00, 0x00, 0x00,
-	0xff, 0xff, 0xa6, 0x31, 0x54, 0x0c, 0x7f, 0x1d, 0x00, 0x00,
+	// 3475 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x7a, 0x4d, 0x6c, 0x1c, 0x47,
+	0x76, 0xff, 0xd4, 0x7c, 0xcf, 0x1b, 0x72, 0x38, 0x2c, 0xd1, 0x52, 0x6b, 0xac, 0xff, 0x68, 0x3c,
+	0xbb, 0xb6, 0x69, 0x7a, 0x38, 0xfc, 0x90, 0x6c, 0xd3, 0xa3, 0xff, 0x1a, 0xe6, 0x90, 0xb2, 0x48,
+	0x49, 0xa4, 0x26, 0x3d, 0x12, 0x8d, 0xf5, 0x21, 0x93, 0x9e, 0xee, 0xe2, 0xb0, 0xc3, 0x9e, 0xee,
+	0x4e, 0x77, 0x0f, 0x65, 0x1e, 0x04, 0x28, 0x06, 0x92, 0x6c, 0x14, 0x2c, 0xb0, 0x48, 0x2e, 0x81,
+	0x8f, 0x41, 0x12, 0x24, 0x8b, 0xe4, 0x92, 0x43, 0x0e, 0x3b, 0x3a, 0x08, 0x06, 0x12, 0x2c, 0x74,
+	0x09, 0x8f, 0xc2, 0x22, 0x07, 0x9b, 0xba, 0x38, 0x3e, 0x19, 0x8b, 0x1c, 0x8c, 0xcd, 0x61, 0x83,
+	0xaa, 0xae, 0xee, 0xe9, 0xf9, 0xe0, 0x50, 0x8c, 0x8d, 0x1c, 0x02, 0x9f, 0xd8, 0x53, 0xf5, 0x7b,
+	0xaf, 0xde, 0x57, 0xbd, 0x7a, 0xf5, 0x8a, 0xf0, 0x83, 0x03, 0x62, 0x97, 0x55, 0x63, 0xc1, 0x96,
+	0xf7, 0x48, 0x5b, 0x5a, 0x50, 0x54, 0x5b, 0x36, 0x0e, 0x88, 0x75, 0xb8, 0xe0, 0x1c, 0x9a, 0xc4,
+	0x2e, 0x9b, 0x96, 0xe1, 0x18, 0xf8, 0x82, 0x0b, 0x2a, 0xbb, 0xa0, 0xb2, 0x0f, 0xca, 0xcd, 0xb7,
+	0x54, 0x67, 0xaf, 0xd3, 0x2c, 0xcb, 0x46, 0x7b, 0xa1, 0x65, 0xb4, 0x8c, 0x05, 0x86, 0x6f, 0x76,
+	0x76, 0xd9, 0x2f, 0xf6, 0x83, 0x7d, 0xb9, 0x7c, 0x72, 0x2f, 0xf7, 0x2f, 0x66, 0x98, 0x8e, 0x6a,
+	0xe8, 0x7c, 0x91, 0xdc, 0xc5, 0xfe, 0xc9, 0xc0, 0xfa, 0xb9, 0x4b, 0xfd, 0x53, 0x07, 0x92, 0xa6,
+	0x2a, 0x92, 0x43, 0xf8, 0x6c, 0x61, 0x60, 0x56, 0x25, 0xf7, 0x1b, 0xfd, 0xac, 0x2f, 0x0f, 0x23,
+	0xec, 0xe0, 0x02, 0xc5, 0x7f, 0x47, 0x30, 0xb9, 0x43, 0xac, 0xba, 0x23, 0x39, 0x1d, 0xfb, 0xee,
+	0xa1, 0x49, 0xf0, 0x25, 0x48, 0xc9, 0x86, 0xae, 0x13, 0xd9, 0x21, 0x8a, 0x80, 0x0a, 0x68, 0x36,
+	0x29, 0xf6, 0x06, 0x30, 0x86, 0xa8, 0xad, 0x3a, 0x44, 0x08, 0x17, 0xd0, 0x6c, 0x4a, 0x64, 0xdf,
+	0x78, 0x11, 0xa2, 0x94, 0xa5, 0x10, 0x29, 0xa0, 0xd9, 0xcc, 0xf2, 0xa5, 0x72, 0xbf, 0xcd, 0xd6,
+	0x3d, 0x9b, 0x51, 0xee, 0x22, 0x43, 0xe2, 0x9b, 0x90, 0xb4, 0x89, 0x75, 0xa0, 0xca, 0xc4, 0x16,
+	0xa2, 0x85, 0xc8, 0x6c, 0x7a, 0xb9, 0x5c, 0x3e, 0xc1, 0xd2, 0x3e, 0x3d, 0x51, 0xea, 0x2e, 0x09,
+	0xe3, 0xe3, 0xd3, 0x57, 0x5e, 0xfe, 0xac, 0x8b, 0x2e, 0xc0, 0x4b, 0x00, 0x3b, 0xd7, 0xc5, 0x82,
+	0xab, 0x07, 0x4e, 0x2c, 0x95, 0x96, 0x4b, 0x57, 0x4a, 0x57, 0x8b, 0xeb, 0x90, 0xae, 0x19, 0xca,
+	0xa6, 0xbe, 0x6b, 0x30, 0xdd, 0x2e, 0x43, 0xd2, 0x34, 0x94, 0x86, 0x2e, 0xb5, 0x09, 0x53, 0x2d,
+	0x55, 0x8d, 0x7e, 0xd3, 0x45, 0x21, 0x31, 0x61, 0x1a, 0xca, 0xb6, 0xd4, 0x26, 0x78, 0x06, 0xc2,
+	0xaa, 0xe9, 0x2a, 0xc7, 0xa7, 0xc2, 0xaa, 0x59, 0x7c, 0x00, 0x13, 0x35, 0xc3, 0x72, 0x7c, 0x36,
+	0xaf, 0x40, 0xd4, 0x34, 0x2c, 0x87, 0xb1, 0x98, 0xac, 0x4e, 0xfe, 0xe2, 0x3f, 0x9e, 0x44, 0x92,
+	0x73, 0x71, 0xe1, 0xb7, 0xbf, 0x8d, 0xcc, 0x22, 0x91, 0x4d, 0xe1, 0x1c, 0x24, 0x99, 0x81, 0x65,
+	0x43, 0xe3, 0xb6, 0xf2, 0x7f, 0xe3, 0x32, 0xa4, 0x1d, 0xc9, 0x6a, 0x11, 0xa7, 0xc1, 0xb8, 0x44,
+	0x46, 0x71, 0x01, 0x17, 0x41, 0x97, 0x2d, 0xfe, 0x63, 0x12, 0x5e, 0x1a, 0x69, 0x05, 0xbc, 0x08,
+	0x13, 0xdc, 0x0e, 0x41, 0x9d, 0x26, 0xa9, 0xe0, 0x94, 0x5d, 0xd4, 0x0a, 0x0b, 0xef, 0x8b, 0x69,
+	0x0e, 0x61, 0x0a, 0xbe, 0x09, 0x29, 0x8a, 0xb4, 0x4d, 0x49, 0xe6, 0x4e, 0x1c, 0x84, 0xf7, 0xe6,
+	0x83, 0xec, 0x7d, 0x07, 0x9f, 0xc8, 0x9e, 0x09, 0x54, 0x02, 0x90, 0xb5, 0x8e, 0xed, 0x10, 0xab,
+	0xa1, 0x9a, 0x42, 0x74, 0x08, 0x6f, 0x22, 0x31, 0xc5, 0x01, 0x9b, 0x26, 0xfe, 0x18, 0xe2, 0x9a,
+	0xd4, 0x24, 0x9a, 0x2d, 0xc4, 0x58, 0x10, 0x54, 0xce, 0x16, 0x04, 0xe5, 0xdb, 0x8c, 0xf8, 0xba,
+	0xee, 0x58, 0x87, 0xd5, 0x1f, 0xd2, 0x15, 0x62, 0x9f, 0xa2, 0x70, 0x36, 0x4b, 0xbf, 0xe0, 0x53,
+	0x94, 0x98, 0x8b, 0x59, 0x91, 0x23, 0x84, 0x8e, 0x3f, 0xff, 0x97, 0x48, 0xfc, 0xd1, 0x63, 0x14,
+	0x4e, 0x86, 0x44, 0xbe, 0x1e, 0x5e, 0xa1, 0x1e, 0x54, 0x6c, 0x21, 0xce, 0xd6, 0xfd, 0xe1, 0x89,
+	0xeb, 0x06, 0x82, 0x47, 0x64, 0x14, 0xf8, 0x8f, 0x22, 0x34, 0x86, 0x2c, 0xa7, 0xd1, 0x96, 0x4c,
+	0x21, 0xc1, 0xc8, 0xaf, 0x9d, 0x51, 0x6c, 0xea, 0xd4, 0x2d, 0xc9, 0x74, 0xe5, 0xfe, 0x87, 0xf0,
+	0xb3, 0x07, 0xe8, 0xcb, 0x2e, 0x42, 0x54, 0xea, 0xc9, 0x4f, 0x11, 0x14, 0xfd, 0x20, 0xf0, 0x46,
+	0xe6, 0xfc, 0x11, 0xaa, 0xca, 0xc2, 0xa3, 0xc7, 0xe8, 0x4d, 0xfc, 0xc6, 0x57, 0x5d, 0xf4, 0xea,
+	0xa6, 0x2e, 0x1b, 0x6d, 0x55, 0x6f, 0x15, 0xa8, 0x40, 0x05, 0xbd, 0xd3, 0x6e, 0x12, 0xab, 0xe0,
+	0xec, 0x49, 0x4e, 0x41, 0x27, 0x44, 0xb1, 0x0b, 0x16, 0x69, 0x4b, 0x26, 0xa5, 0xc9, 0x3f, 0x7a,
+	0x8c, 0x72, 0x58, 0x38, 0xee, 0xa2, 0x19, 0x9f, 0x86, 0x4a, 0x51, 0xd8, 0x66, 0x34, 0x14, 0x02,
+	0x8f, 0x1e, 0xa3, 0x38, 0x8e, 0xfe, 0xb2, 0x8b, 0x42, 0x3d, 0x83, 0xb1, 0x05, 0x3f, 0x7c, 0xf4,
+	0x18, 0xd5, 0x73, 0xbf, 0xf3, 0x55, 0x17, 0x6d, 0xdd, 0xe9, 0x38, 0x2d, 0x63, 0xe4, 0x82, 0xf7,
+	0x55, 0x4d, 0x2b, 0xb4, 0x8c, 0x82, 0x63, 0x14, 0x3c, 0xff, 0xd6, 0x0a, 0xde, 0x1e, 0x2d, 0x18,
+	0x56, 0x41, 0x37, 0x14, 0x32, 0xcf, 0xc8, 0xbc, 0x51, 0x5f, 0xb0, 0x1c, 0x13, 0xcc, 0xe7, 0x3d,
+	0x4a, 0xb0, 0x1c, 0x13, 0x4c, 0x40, 0x74, 0xa7, 0x32, 0xe3, 0xe1, 0x6b, 0x10, 0xa3, 0x9f, 0xb6,
+	0x90, 0x64, 0x3e, 0x78, 0x75, 0x8c, 0x0b, 0x7b, 0x3b, 0x57, 0x74, 0x69, 0x72, 0xef, 0x42, 0x3a,
+	0x10, 0x3b, 0x38, 0x0b, 0x91, 0x7d, 0x72, 0xe8, 0xee, 0x1e, 0x91, 0x7e, 0xe2, 0x19, 0x88, 0x1d,
+	0x48, 0x5a, 0xc7, 0xcb, 0x73, 0xee, 0x8f, 0x4a, 0x78, 0x05, 0xe5, 0x2a, 0x6e, 0x2e, 0xf0, 0xfc,
+	0x17, 0xa4, 0x9d, 0x1c, 0x41, 0x3b, 0x19, 0xa0, 0xad, 0x90, 0xa7, 0x5d, 0x24, 0xc1, 0x45, 0x48,
+	0xf0, 0x68, 0xc8, 0x65, 0xfa, 0xf7, 0x2f, 0x08, 0x90, 0xda, 0xf6, 0x76, 0x5f, 0x2e, 0x1d, 0xd8,
+	0xaa, 0x70, 0x1e, 0xa2, 0x54, 0x81, 0x20, 0x05, 0xdd, 0x92, 0x80, 0x21, 0xbc, 0x59, 0xcb, 0x4d,
+	0x04, 0xb7, 0x5d, 0xf1, 0x93, 0x28, 0x9c, 0xbb, 0x7b, 0xbb, 0xbe, 0xa6, 0xa9, 0x44, 0x77, 0xd6,
+	0x0c, 0x7d, 0x57, 0x6d, 0xb1, 0xcd, 0xb9, 0x02, 0x6c, 0xaf, 0x12, 0x2b, 0x98, 0x2c, 0x2e, 0x78,
+	0xbb, 0x33, 0x66, 0x45, 0x84, 0x87, 0x61, 0xbe, 0x4f, 0xf7, 0x90, 0x08, 0x2e, 0x96, 0x65, 0x8d,
+	0x2d, 0x98, 0x92, 0x89, 0xe5, 0xa8, 0xbb, 0xaa, 0x2c, 0x39, 0xa4, 0xd1, 0xb1, 0xdc, 0xa4, 0x96,
+	0x5e, 0xbe, 0x38, 0x60, 0xf6, 0x3a, 0x91, 0x2d, 0xe2, 0xd0, 0xd5, 0xaa, 0x29, 0x1e, 0xd7, 0x02,
+	0x12, 0x33, 0x01, 0xe2, 0x7b, 0x96, 0x86, 0x6f, 0x42, 0x3a, 0x30, 0x22, 0xc4, 0x98, 0x20, 0xb3,
+	0xdf, 0x74, 0x51, 0xf4, 0xaf, 0x1e, 0xa3, 0xb4, 0x49, 0xda, 0xa5, 0x42, 0x53, 0xb2, 0xc9, 0xdb,
+	0x57, 0xa9, 0x34, 0x71, 0x2b, 0x3a, 0xfb, 0xf0, 0x61, 0x92, 0x8b, 0xf8, 0x33, 0x84, 0xc4, 0x20,
+	0x31, 0x5e, 0x81, 0xc4, 0x3e, 0x39, 0x64, 0x22, 0x45, 0x4e, 0x13, 0x29, 0x7a, 0xd4, 0x45, 0x48,
+	0x8c, 0xef, 0x93, 0x43, 0x2a, 0x85, 0x08, 0x58, 0x96, 0x1a, 0x83, 0x7a, 0x45, 0xcf, 0xa0, 0x57,
+	0x56, 0x96, 0xd6, 0xfa, 0x35, 0xdb, 0x86, 0x8c, 0x63, 0x51, 0x47, 0x28, 0x0d, 0x59, 0x62, 0xfc,
+	0xe2, 0x67, 0x54, 0x6e, 0x82, 0xd3, 0xaf, 0x49, 0xf7, 0x2c, 0xad, 0xb2, 0xf2, 0x59, 0x17, 0x5d,
+	0x05, 0x01, 0xa6, 0xeb, 0xcc, 0x19, 0x85, 0x9a, 0x64, 0x49, 0x6d, 0xe2, 0x10, 0xcb, 0xc6, 0x91,
+	0xa5, 0xd2, 0xdb, 0x74, 0xc6, 0x75, 0x73, 0xdf, 0xcc, 0x5b, 0xa5, 0x2b, 0xc5, 0xbf, 0x44, 0x90,
+	0x11, 0x89, 0x1d, 0xf4, 0xff, 0x3b, 0x00, 0x92, 0xa9, 0x36, 0x5c, 0xbf, 0x72, 0xf7, 0x0b, 0x41,
+	0xf7, 0xff, 0x71, 0x98, 0x7f, 0x7d, 0x8e, 0x90, 0x98, 0x92, 0x4c, 0xd5, 0x5d, 0x15, 0x6f, 0x41,
+	0xd2, 0xd1, 0xec, 0x86, 0xaa, 0xef, 0x1a, 0xdc, 0xef, 0xa5, 0x13, 0xb7, 0xdb, 0x88, 0xc0, 0xe3,
+	0x76, 0x4f, 0x38, 0x9a, 0x4d, 0x37, 0x62, 0xf1, 0x9f, 0x22, 0x30, 0x79, 0x6b, 0xa5, 0xbe, 0x2a,
+	0xcb, 0xc4, 0x66, 0x23, 0x78, 0x03, 0x32, 0xfb, 0x9d, 0x26, 0x91, 0x19, 0x09, 0x33, 0x1b, 0x7a,
+	0x21, 0x5f, 0x6e, 0x84, 0xc4, 0xc9, 0x1e, 0xa1, 0xeb, 0xd4, 0x29, 0x5e, 0xac, 0xa8, 0x86, 0x1e,
+	0x94, 0xf8, 0xf5, 0x13, 0x25, 0xee, 0xb7, 0xd2, 0x46, 0x48, 0xcc, 0xf4, 0x38, 0x30, 0xe9, 0x66,
+	0x01, 0x54, 0xbd, 0xc1, 0x37, 0x18, 0x8b, 0xb2, 0x64, 0x35, 0xc1, 0xa3, 0x60, 0x23, 0x24, 0xa6,
+	0x54, 0x7d, 0xcd, 0x9d, 0xc3, 0x2b, 0x90, 0x54, 0x6d, 0x43, 0x93, 0x68, 0xe9, 0xe4, 0x06, 0xd2,
+	0xcc, 0xc0, 0xb2, 0xd7, 0xdb, 0xa6, 0x73, 0x58, 0x8d, 0x3e, 0xa1, 0xa4, 0x48, 0xf4, 0xd1, 0xb8,
+	0x02, 0x29, 0x8b, 0x48, 0xf2, 0x9e, 0xd4, 0xd4, 0xdc, 0x0d, 0x71, 0x1a, 0x69, 0x0f, 0x5e, 0x49,
+	0xfe, 0xfa, 0xbd, 0xd8, 0xd2, 0x62, 0x69, 0x69, 0xa9, 0x9a, 0x87, 0x34, 0xb7, 0x21, 0x2b, 0xb3,
+	0xa6, 0x28, 0xf6, 0xa8, 0x8b, 0xe0, 0xb8, 0x8b, 0x22, 0x4b, 0xa5, 0xe5, 0xea, 0x3c, 0x9c, 0xdf,
+	0x5f, 0xb1, 0x1b, 0xac, 0x06, 0x22, 0xce, 0x7d, 0xc3, 0xda, 0x6f, 0xc8, 0x7b, 0x86, 0x2a, 0x13,
+	0x7c, 0xee, 0x49, 0x17, 0xd1, 0x1c, 0x4b, 0xe1, 0x69, 0x0a, 0xbf, 0x5a, 0x7a, 0xeb, 0x66, 0x34,
+	0x09, 0xd9, 0xf4, 0xcd, 0x68, 0x32, 0x9d, 0x9d, 0x28, 0xfe, 0x29, 0x82, 0x97, 0xd7, 0x0c, 0xdd,
+	0xee, 0x68, 0x1b, 0x8e, 0x63, 0x56, 0x25, 0x5b, 0x95, 0x57, 0x3b, 0xce, 0x9e, 0x5f, 0x13, 0xcd,
+	0x41, 0xaa, 0x63, 0xf7, 0xa7, 0x96, 0x81, 0x42, 0x21, 0x49, 0xe7, 0x59, 0x3a, 0x79, 0x0f, 0xc0,
+	0x94, 0x6c, 0xfb, 0xbe, 0xf2, 0x62, 0x99, 0xc4, 0x0d, 0x9f, 0x94, 0x4b, 0x72, 0xcf, 0xd2, 0x8a,
+	0x7f, 0x11, 0x86, 0xac, 0x2b, 0x4b, 0x20, 0x86, 0x6a, 0xc3, 0x9e, 0x47, 0x67, 0xf2, 0xfc, 0x90,
+	0xdf, 0x3f, 0x80, 0x38, 0x23, 0x71, 0x33, 0x79, 0x66, 0xf9, 0x07, 0x27, 0x32, 0xaa, 0x33, 0xd8,
+	0x60, 0x7a, 0xe0, 0xd4, 0x98, 0xc0, 0xcc, 0x9e, 0xe3, 0x98, 0x8d, 0x26, 0x35, 0x5a, 0x43, 0xea,
+	0x38, 0x7b, 0xae, 0x78, 0x6e, 0xbe, 0xba, 0x7a, 0x22, 0xd7, 0x31, 0xe6, 0x16, 0xa7, 0xf7, 0x06,
+	0x87, 0x8b, 0xff, 0x1c, 0x86, 0x99, 0x1d, 0xd5, 0xf4, 0xeb, 0x6d, 0xdf, 0x35, 0xcb, 0x80, 0xcd,
+	0x4e, 0x53, 0x53, 0xed, 0xbd, 0xc6, 0x81, 0x6a, 0x39, 0x1d, 0x49, 0xa3, 0xc5, 0x19, 0x2b, 0xed,
+	0x79, 0x91, 0x9b, 0xe5, 0xf3, 0x3b, 0xee, 0xf4, 0xa6, 0x89, 0x37, 0x79, 0x4d, 0xef, 0x6a, 0xbe,
+	0x70, 0xa2, 0x8c, 0x1e, 0x45, 0xad, 0xaf, 0xcc, 0xe7, 0x6c, 0xdd, 0x62, 0xbf, 0x04, 0x29, 0xbb,
+	0xd3, 0x54, 0x8c, 0xb6, 0xa4, 0xea, 0xbc, 0x84, 0xcc, 0xf4, 0x1f, 0x3a, 0x62, 0x0f, 0x80, 0xd7,
+	0x21, 0xa9, 0xe8, 0x76, 0xa3, 0x6d, 0x28, 0x84, 0x6d, 0xa1, 0x71, 0x66, 0xbf, 0xb5, 0x52, 0x5f,
+	0xdf, 0xae, 0x6f, 0x19, 0x8a, 0xb7, 0x60, 0x42, 0xd1, 0x6d, 0xfa, 0xb3, 0xbf, 0xcc, 0x8d, 0x8d,
+	0x2f, 0x73, 0x8b, 0x3f, 0x82, 0xcc, 0xad, 0x95, 0x7a, 0xcd, 0x35, 0x01, 0xb3, 0x58, 0x1f, 0x39,
+	0x3a, 0x85, 0xfc, 0x4f, 0x10, 0x4c, 0x53, 0x49, 0x88, 0x46, 0x5a, 0x12, 0x0d, 0x9e, 0xbb, 0x43,
+	0x5a, 0xa3, 0xb3, 0x68, 0x1d, 0xfe, 0x9f, 0x6a, 0x5d, 0xfc, 0xb7, 0x30, 0x5c, 0xb8, 0xb5, 0x52,
+	0x1f, 0x19, 0x04, 0x8b, 0x90, 0x50, 0x54, 0x9b, 0xa5, 0x97, 0xf0, 0xc9, 0xe9, 0x65, 0x83, 0x72,
+	0x73, 0x61, 0x78, 0x0d, 0x12, 0x3c, 0x2c, 0x78, 0xa4, 0xbe, 0x3e, 0x4e, 0xa4, 0x80, 0xf9, 0x28,
+	0x13, 0x4e, 0x89, 0xaf, 0xc1, 0xa4, 0x17, 0x7b, 0xbb, 0x7f, 0xa0, 0xe8, 0xf6, 0xb8, 0xb4, 0xb8,
+	0x11, 0x12, 0x27, 0x38, 0xf8, 0x03, 0x8a, 0xc5, 0x75, 0xc8, 0x50, 0xab, 0x28, 0xbe, 0x65, 0x79,
+	0x66, 0x9c, 0x1b, 0x6b, 0x9b, 0x3e, 0x3f, 0xd0, 0x13, 0x42, 0xd1, 0xed, 0xde, 0x60, 0xf5, 0x55,
+	0xc8, 0x78, 0x12, 0x05, 0x72, 0x5f, 0x98, 0xe6, 0x98, 0xe3, 0x2e, 0x4a, 0xb0, 0x7b, 0x23, 0xcb,
+	0x7d, 0x28, 0x1b, 0x2e, 0xfe, 0x3d, 0x82, 0x9c, 0xbb, 0x0d, 0xbf, 0x23, 0xa3, 0x2e, 0x0e, 0x1a,
+	0xf5, 0x44, 0x0a, 0x0e, 0xab, 0xbe, 0x32, 0x24, 0xef, 0x54, 0x40, 0xde, 0xc8, 0x72, 0xe9, 0x0a,
+	0x97, 0xf5, 0xd7, 0x08, 0xb2, 0x54, 0xff, 0xe0, 0x46, 0xc4, 0x37, 0x20, 0x2d, 0xb1, 0x1c, 0x19,
+	0xcc, 0x88, 0xaf, 0x8d, 0xb3, 0x5f, 0x2f, 0xa5, 0x8a, 0x20, 0xf5, 0xd2, 0x6b, 0x1d, 0x3c, 0xdf,
+	0x04, 0x4f, 0xd5, 0xc5, 0x71, 0x9c, 0x46, 0x99, 0x4c, 0x4c, 0x73, 0x2e, 0x74, 0xa0, 0xf2, 0xfe,
+	0x67, 0x5d, 0xf4, 0xff, 0xe1, 0x02, 0x60, 0x77, 0xd1, 0xc2, 0x9a, 0x45, 0x14, 0xa2, 0x3b, 0xaa,
+	0xa4, 0xd9, 0x18, 0x2d, 0xc1, 0x2b, 0x70, 0x69, 0x67, 0xb3, 0x56, 0xe0, 0xa1, 0x45, 0xef, 0x06,
+	0x6e, 0xb6, 0xee, 0x58, 0xcc, 0x95, 0x18, 0x2d, 0x17, 0xff, 0x0b, 0xc1, 0x39, 0xd7, 0x41, 0xfd,
+	0x7a, 0xdf, 0x1c, 0xa5, 0xf7, 0x1b, 0xa7, 0xa4, 0xda, 0x13, 0x54, 0xdf, 0x19, 0xa9, 0xfa, 0x95,
+	0x53, 0x98, 0xfd, 0x6f, 0x68, 0xff, 0x0d, 0x82, 0xe9, 0xb5, 0x66, 0x60, 0x21, 0xa6, 0xbb, 0x0a,
+	0x93, 0x72, 0x53, 0x35, 0xbd, 0x8a, 0xc5, 0x16, 0xd0, 0x29, 0xb7, 0x5c, 0xca, 0x82, 0x97, 0x30,
+	0xd5, 0x3c, 0x4b, 0x50, 0x7f, 0x8e, 0xc2, 0xd9, 0x82, 0xf7, 0x95, 0x44, 0xde, 0x97, 0x80, 0xc4,
+	0x09, 0xb9, 0x07, 0xb6, 0xf1, 0x5b, 0x80, 0x55, 0xdd, 0x21, 0x96, 0x2e, 0x69, 0x0d, 0xad, 0xd9,
+	0xe0, 0xe9, 0xce, 0xed, 0x2b, 0x78, 0x25, 0x92, 0x98, 0xf5, 0x20, 0xb7, 0x9b, 0xeb, 0x0c, 0x50,
+	0x59, 0x7d, 0xda, 0x45, 0x3f, 0x82, 0x6b, 0x70, 0x61, 0x4d, 0x93, 0x6c, 0x5b, 0x95, 0x0b, 0xd5,
+	0xcd, 0x1b, 0xf3, 0x9b, 0xb5, 0x82, 0xc7, 0xb7, 0x5a, 0x18, 0x50, 0x21, 0x1b, 0x2d, 0x4e, 0xb6,
+	0x89, 0x23, 0x29, 0x92, 0x23, 0x95, 0x69, 0xea, 0x2d, 0xfe, 0x34, 0x0c, 0xe9, 0x80, 0xdc, 0xb8,
+	0x02, 0x49, 0x0f, 0xc0, 0xbd, 0x9d, 0x1f, 0xd0, 0x77, 0x8b, 0xd8, 0xb6, 0xd4, 0x22, 0x5b, 0xc4,
+	0x91, 0xdc, 0x16, 0x92, 0x87, 0xc7, 0x4d, 0x60, 0x5a, 0x35, 0x14, 0xe2, 0xb6, 0xa4, 0xc2, 0xcc,
+	0x5e, 0x6f, 0x8c, 0xb5, 0xd7, 0x3a, 0xc3, 0xba, 0x1e, 0xa9, 0xce, 0xf8, 0x46, 0x4b, 0x06, 0x4c,
+	0x95, 0x96, 0x7d, 0x9c, 0x5d, 0xf9, 0xdd, 0xa7, 0x5d, 0xf4, 0x11, 0x94, 0xe1, 0xe5, 0xd1, 0x2a,
+	0x17, 0x68, 0x61, 0x94, 0x9b, 0x82, 0x7e, 0x2d, 0x61, 0x16, 0xce, 0x0f, 0xe0, 0x3d, 0x7e, 0x99,
+	0x7e, 0x99, 0x8b, 0xcf, 0x63, 0x90, 0x1d, 0x94, 0x0b, 0x2f, 0x70, 0x50, 0xbb, 0xd5, 0x76, 0xbc,
+	0x33, 0xbf, 0xff, 0x28, 0xfb, 0x18, 0x89, 0x40, 0x21, 0x5b, 0xad, 0xb6, 0xb3, 0x69, 0xe2, 0x8f,
+	0x60, 0x5a, 0x52, 0xda, 0xb4, 0xda, 0xed, 0xc5, 0x22, 0x8f, 0xf7, 0xf9, 0xb1, 0xe6, 0x58, 0xa5,
+	0x54, 0x81, 0x00, 0x16, 0xb3, 0xd2, 0xc0, 0x08, 0x36, 0x20, 0xe7, 0xfa, 0x34, 0x70, 0xe3, 0xa2,
+	0xc5, 0x90, 0x61, 0xa9, 0xce, 0x21, 0xcf, 0x86, 0x4b, 0xe3, 0x63, 0xb4, 0x47, 0xb9, 0xea, 0x11,
+	0x8a, 0x82, 0x7c, 0xc2, 0x0c, 0xfe, 0x3d, 0x78, 0xc9, 0xab, 0x77, 0xf8, 0xbd, 0x77, 0x57, 0xd5,
+	0x68, 0x09, 0x1f, 0x3d, 0xe5, 0x0e, 0xc3, 0x8b, 0x1a, 0xf7, 0xf6, 0xf3, 0x01, 0xa3, 0x11, 0xcf,
+	0x1d, 0x0c, 0x0f, 0xe2, 0x77, 0x20, 0xad, 0x90, 0x5d, 0xa9, 0xa3, 0x39, 0x0d, 0x49, 0x73, 0xef,
+	0x7a, 0x27, 0x67, 0x74, 0xe0, 0xd0, 0x55, 0x4d, 0xc3, 0x2a, 0x4c, 0xfb, 0x05, 0x44, 0xa3, 0x2d,
+	0x99, 0xa6, 0xaa, 0xb7, 0x84, 0xc4, 0x29, 0x49, 0xca, 0x6f, 0x0d, 0x6c, 0xb9, 0x04, 0xd5, 0x29,
+	0xd6, 0x1f, 0xf9, 0xf4, 0x31, 0x8a, 0xdb, 0x7b, 0x92, 0x45, 0x94, 0x8d, 0x90, 0x98, 0xd5, 0x07,
+	0x40, 0x95, 0x9f, 0xa2, 0xa7, 0x5d, 0xf4, 0x13, 0x04, 0x97, 0x61, 0x72, 0x4b, 0xd2, 0xa5, 0x16,
+	0x69, 0xd3, 0xeb, 0xe2, 0x66, 0x2d, 0x97, 0xe9, 0x0f, 0x0e, 0x20, 0x30, 0xcd, 0xbc, 0x18, 0xcc,
+	0x43, 0x62, 0x0d, 0x5e, 0xc3, 0xb9, 0xa1, 0x90, 0x28, 0xd3, 0x52, 0x9e, 0xae, 0x94, 0x4b, 0xde,
+	0xe3, 0x5f, 0xa3, 0x71, 0xac, 0x66, 0x37, 0x2c, 0x25, 0x97, 0xac, 0xf1, 0xaf, 0xea, 0x5b, 0x20,
+	0x0c, 0xa9, 0xee, 0x9d, 0x6c, 0x17, 0x9f, 0x74, 0x51, 0xfc, 0xa8, 0x8b, 0x62, 0xf4, 0x64, 0x7b,
+	0xbb, 0xf4, 0xce, 0x27, 0xbe, 0x6a, 0x37, 0xa3, 0xc9, 0x58, 0x36, 0x5e, 0xfc, 0x43, 0x04, 0x33,
+	0xa3, 0xc2, 0x0d, 0x97, 0x20, 0xe9, 0xc9, 0xc4, 0xa3, 0x3c, 0xeb, 0x45, 0x79, 0xc2, 0x8a, 0x65,
+	0x11, 0xad, 0xb7, 0x7c, 0x04, 0xbe, 0x06, 0x49, 0x4f, 0xb2, 0x17, 0xbb, 0x7e, 0x84, 0x44, 0x9f,
+	0xa0, 0xf8, 0x9f, 0x08, 0x84, 0x93, 0xa2, 0x11, 0x7f, 0x08, 0xd0, 0x6b, 0x00, 0x70, 0xde, 0xc5,
+	0x01, 0xde, 0xac, 0x0b, 0x5f, 0xbe, 0xd3, 0xfc, 0x7d, 0x22, 0x3b, 0x22, 0xd9, 0x65, 0x8b, 0xe0,
+	0x9f, 0x3f, 0x98, 0x0a, 0x74, 0x0e, 0x34, 0xd5, 0x76, 0xe8, 0xd5, 0xd2, 0x6f, 0x06, 0xe0, 0x1a,
+	0x08, 0xf6, 0xbe, 0x6a, 0x7a, 0x91, 0x7c, 0x40, 0x2c, 0x77, 0x6d, 0x5a, 0x15, 0x8d, 0xaf, 0x24,
+	0xce, 0x53, 0x3a, 0x37, 0x6c, 0x77, 0x02, 0x54, 0xd5, 0xd7, 0x41, 0xf0, 0x98, 0xb9, 0xcf, 0x0a,
+	0xf4, 0xde, 0xc4, 0x1d, 0x91, 0x1e, 0x2e, 0x2f, 0xfe, 0x35, 0x02, 0xe7, 0x46, 0x6c, 0x0c, 0xfc,
+	0x2e, 0x4c, 0x10, 0x9d, 0xd6, 0x36, 0x4a, 0xc3, 0xd0, 0xb5, 0xc3, 0x53, 0x0a, 0xa1, 0x34, 0xc7,
+	0xde, 0xd1, 0xb5, 0x43, 0xbc, 0x0a, 0x59, 0x55, 0x97, 0xb5, 0x8e, 0x42, 0x1a, 0xbc, 0x3e, 0x52,
+	0x4e, 0xd1, 0x65, 0x8a, 0xe3, 0xd7, 0x39, 0x1c, 0x2f, 0x02, 0x50, 0x8f, 0x36, 0x2c, 0xd2, 0x22,
+	0x1f, 0xf3, 0x86, 0xf3, 0xb4, 0xe7, 0xf9, 0xa4, 0x15, 0x17, 0x1e, 0x86, 0x9f, 0xd0, 0xcb, 0x23,
+	0x05, 0x89, 0x14, 0x83, 0xdf, 0x83, 0x69, 0x85, 0xd8, 0xb2, 0xa5, 0xb2, 0x87, 0x12, 0x4e, 0x18,
+	0x3b, 0x89, 0x30, 0x1b, 0xc0, 0xba, 0xf4, 0x37, 0x21, 0xe5, 0x75, 0xf2, 0xdd, 0xfe, 0x71, 0xaa,
+	0x5a, 0xfa, 0x55, 0x17, 0xc5, 0x36, 0xee, 0xde, 0xad, 0xd5, 0x7b, 0xd9, 0x9f, 0x7e, 0xcd, 0x58,
+	0x58, 0x74, 0xc7, 0xc5, 0x28, 0xfd, 0x23, 0x46, 0xee, 0xae, 0xd5, 0xc4, 0x1e, 0x39, 0x7e, 0x1f,
+	0xd2, 0xac, 0x97, 0x6c, 0x49, 0x7a, 0x8b, 0xd8, 0x2c, 0x01, 0xa4, 0xaa, 0x97, 0xfd, 0x2b, 0x42,
+	0x94, 0xb7, 0x88, 0x8e, 0xa2, 0x7e, 0x8b, 0xe8, 0x59, 0x14, 0x89, 0x40, 0x69, 0x44, 0x46, 0x52,
+	0x7d, 0x13, 0x04, 0x2f, 0x41, 0xf8, 0x36, 0x3c, 0xa5, 0x4e, 0x6c, 0x43, 0x76, 0x30, 0x93, 0xe0,
+	0x1f, 0x43, 0x4c, 0x75, 0x48, 0xdb, 0x2b, 0x15, 0xe6, 0x5f, 0x38, 0x07, 0x6d, 0x3a, 0xa4, 0x1d,
+	0x38, 0xfe, 0x0a, 0x81, 0xe3, 0xcf, 0xe5, 0x58, 0x7c, 0x84, 0x60, 0x66, 0x14, 0x15, 0x7e, 0x1f,
+	0xa6, 0x4c, 0xc9, 0x72, 0xd4, 0x80, 0x1b, 0x78, 0x4b, 0xf2, 0x57, 0x5d, 0x14, 0x2e, 0xcf, 0x0d,
+	0x3b, 0x23, 0xe3, 0xe3, 0x5d, 0x57, 0x2c, 0x0e, 0x3f, 0x66, 0xe0, 0x5f, 0x3c, 0x46, 0x99, 0x24,
+	0x9a, 0x45, 0x8b, 0xa8, 0x12, 0x77, 0x7b, 0x21, 0xc1, 0xbb, 0xda, 0x4f, 0x52, 0x90, 0xb9, 0xa1,
+	0x19, 0x4d, 0x49, 0xab, 0x9b, 0x44, 0x66, 0xd5, 0xd2, 0x35, 0x88, 0xdd, 0xdf, 0x23, 0x16, 0xe1,
+	0x55, 0xc3, 0x60, 0x23, 0x79, 0xdb, 0xed, 0x93, 0xd4, 0x55, 0x87, 0x88, 0x64, 0xb7, 0x4e, 0x34,
+	0x22, 0x3b, 0x86, 0x25, 0xba, 0x34, 0x78, 0x07, 0x26, 0x7d, 0xdb, 0x34, 0xf6, 0x57, 0x6c, 0x21,
+	0x79, 0x4a, 0x0e, 0x1f, 0x2c, 0xd0, 0xfd, 0x3e, 0xd6, 0x84, 0x8f, 0xb9, 0xb5, 0x62, 0xe3, 0x06,
+	0x64, 0x7b, 0x7c, 0x65, 0x56, 0x4f, 0x0a, 0xa9, 0x53, 0x4e, 0xad, 0x11, 0x65, 0xb0, 0xcf, 0x7d,
+	0xca, 0x87, 0xb9, 0x28, 0xbc, 0x0b, 0x99, 0xc0, 0x02, 0x4d, 0xd5, 0x14, 0x32, 0xa7, 0x5c, 0xad,
+	0x86, 0xea, 0xcc, 0xea, 0xf4, 0x57, 0x0f, 0x32, 0x0a, 0x69, 0x1b, 0x4b, 0x25, 0x87, 0xd8, 0x4e,
+	0x49, 0xb6, 0x1c, 0x76, 0xdb, 0xf2, 0x57, 0x6a, 0xaa, 0x26, 0x7e, 0xb7, 0xaf, 0x8f, 0x30, 0xf6,
+	0x6d, 0xb0, 0x57, 0x30, 0xba, 0x7d, 0x83, 0x0f, 0x21, 0xdd, 0x6b, 0x5b, 0x98, 0x3c, 0x31, 0xcc,
+	0x8f, 0x39, 0xb4, 0x87, 0xeb, 0xed, 0x1e, 0x4b, 0xf0, 0x3b, 0x1c, 0x26, 0x5e, 0x83, 0x08, 0x75,
+	0x55, 0xf4, 0x2c, 0x77, 0xa1, 0x5e, 0xc3, 0x0f, 0x89, 0x94, 0x1a, 0xdf, 0x86, 0x38, 0xf7, 0x4b,
+	0xec, 0x8c, 0x77, 0x8b, 0x20, 0x2b, 0xce, 0x03, 0x7f, 0x00, 0xd8, 0x6f, 0xe0, 0xb3, 0x33, 0x6d,
+	0x57, 0x25, 0x96, 0x00, 0xee, 0x76, 0xe0, 0xf0, 0xfe, 0xee, 0x81, 0x80, 0xc4, 0x69, 0xef, 0xa5,
+	0xc5, 0xa7, 0xc0, 0x15, 0x98, 0xd4, 0x8d, 0x46, 0x8f, 0x95, 0x30, 0x31, 0x26, 0x9d, 0x86, 0xc5,
+	0xb4, 0x6e, 0xac, 0x79, 0x3c, 0xf0, 0x42, 0xe0, 0x11, 0x41, 0x11, 0x26, 0x47, 0xb5, 0x2c, 0x36,
+	0xc2, 0xbd, 0xe7, 0x3b, 0x05, 0x4b, 0x30, 0xc9, 0x9e, 0x9c, 0xbd, 0xf2, 0x5e, 0xf8, 0x32, 0xf1,
+	0xc2, 0xe7, 0xdd, 0x85, 0x9f, 0x3f, 0xe8, 0x27, 0xf6, 0x1c, 0x35, 0x41, 0x47, 0x37, 0xf9, 0x60,
+	0xe5, 0xd6, 0x67, 0x5d, 0x74, 0x03, 0x00, 0x62, 0x1f, 0xb2, 0xed, 0x86, 0x96, 0xe0, 0x25, 0xc8,
+	0xfa, 0x6e, 0x2e, 0x6c, 0x11, 0x67, 0xcf, 0x50, 0x30, 0x7a, 0x07, 0x8a, 0x70, 0xa9, 0x37, 0xec,
+	0xd5, 0xd4, 0x01, 0xc3, 0x84, 0x97, 0x96, 0xaa, 0xaf, 0xf5, 0x6d, 0x2a, 0x37, 0x47, 0xe2, 0x27,
+	0x5d, 0x94, 0x3c, 0xea, 0xa2, 0xc4, 0x71, 0x17, 0xc5, 0x57, 0x4a, 0xef, 0x96, 0x96, 0xae, 0x56,
+	0x8b, 0x7d, 0x77, 0x47, 0xb7, 0x35, 0x7a, 0xd4, 0x45, 0x71, 0xde, 0x16, 0xfd, 0xba, 0x8b, 0x50,
+	0xb5, 0x0c, 0x17, 0x87, 0x1d, 0xe6, 0x31, 0x9d, 0x7e, 0xd2, 0x45, 0x13, 0xbc, 0x91, 0x1a, 0x5b,
+	0x5a, 0x2e, 0x2d, 0xd1, 0xd4, 0x9b, 0xc8, 0x26, 0x6f, 0x46, 0x93, 0xf1, 0x6c, 0x82, 0x37, 0x54,
+	0xff, 0x26, 0x0a, 0x99, 0x35, 0x8b, 0x48, 0x0e, 0xf9, 0x6e, 0x52, 0x51, 0xed, 0xdb, 0xa6, 0xa2,
+	0xa1, 0x24, 0xf4, 0xe3, 0xef, 0x26, 0x09, 0x8d, 0x4a, 0x3f, 0xf5, 0x6f, 0x9f, 0x7e, 0x86, 0x73,
+	0xcd, 0x99, 0x82, 0x1f, 0xf5, 0x07, 0xff, 0xe5, 0xe1, 0xe0, 0xdf, 0x08, 0xbc, 0x55, 0x2b, 0x95,
+	0xe9, 0xa7, 0xef, 0x0d, 0x9c, 0x1c, 0xd5, 0xd9, 0x11, 0xf1, 0x34, 0xf3, 0xc9, 0x6f, 0xd0, 0xd0,
+	0x68, 0xb5, 0x32, 0x2e, 0x5a, 0xfe, 0xdf, 0x27, 0xbf, 0x41, 0x27, 0x4f, 0x17, 0xff, 0x36, 0x0a,
+	0x53, 0x22, 0x31, 0x35, 0x49, 0xfe, 0x3e, 0x50, 0xbe, 0x0f, 0x94, 0x31, 0x81, 0xf2, 0xd7, 0x31,
+	0x48, 0xdf, 0x20, 0xce, 0x77, 0x13, 0x24, 0x8b, 0x2f, 0x7e, 0x6e, 0xf3, 0xe3, 0x7a, 0xfb, 0xdb,
+	0x1f, 0xd7, 0x7d, 0xa7, 0xf4, 0xf7, 0x61, 0xfa, 0x7f, 0x32, 0x4c, 0xe7, 0x5e, 0x01, 0xe8, 0x3d,
+	0x97, 0xe1, 0x24, 0xb0, 0x9b, 0x51, 0x36, 0x84, 0x53, 0xe0, 0x5e, 0x95, 0xb2, 0x68, 0x6e, 0x15,
+	0xce, 0x8f, 0x7e, 0x57, 0xc2, 0x18, 0x32, 0xeb, 0xdb, 0xf5, 0xc6, 0xfa, 0xf5, 0xdb, 0xd7, 0x6f,
+	0xac, 0xde, 0xdd, 0xbc, 0xb3, 0x9d, 0x0d, 0xe1, 0x73, 0x30, 0x55, 0xbb, 0x57, 0xbd, 0xbd, 0x59,
+	0xdf, 0x68, 0xd4, 0xaf, 0x8b, 0x3b, 0x9b, 0x6b, 0xd7, 0xb3, 0x68, 0x6e, 0x16, 0xa0, 0xf7, 0x4e,
+	0x82, 0x27, 0x20, 0xb9, 0x76, 0x47, 0xbc, 0xde, 0x58, 0xdf, 0xae, 0x67, 0x43, 0xf4, 0xd7, 0xad,
+	0x7b, 0x55, 0xf7, 0x17, 0xaa, 0xfe, 0x19, 0x3a, 0xfa, 0x22, 0x1f, 0x7a, 0xf6, 0x45, 0x3e, 0xf4,
+	0xf5, 0x17, 0x79, 0xf4, 0xf0, 0x38, 0x8f, 0xfe, 0xee, 0x38, 0x8f, 0x7e, 0x79, 0x9c, 0x47, 0x47,
+	0xc7, 0x79, 0xf4, 0xec, 0x38, 0x8f, 0x3e, 0x3f, 0xce, 0xa3, 0x2f, 0x8f, 0xf3, 0xa1, 0xaf, 0x8f,
+	0xf3, 0xe8, 0x67, 0xcf, 0xf3, 0xa1, 0x27, 0xcf, 0xf3, 0xe8, 0xe8, 0x79, 0x3e, 0xf4, 0xec, 0x79,
+	0x3e, 0xf4, 0xd1, 0x56, 0xcb, 0x30, 0xf7, 0x5b, 0xe5, 0x03, 0x83, 0x5e, 0x86, 0x2d, 0xa9, 0xdc,
+	0xb1, 0x17, 0xd8, 0xc7, 0xae, 0x61, 0xb5, 0xe7, 0x4d, 0xcb, 0x38, 0x50, 0x15, 0x62, 0xcd, 0x7b,
+	0xd3, 0x0b, 0x66, 0xb3, 0x65, 0x2c, 0x90, 0x8f, 0x1d, 0xfe, 0x0f, 0x79, 0x83, 0xff, 0x7c, 0xd8,
+	0x8c, 0xb3, 0xcb, 0xe1, 0x95, 0xff, 0x0e, 0x00, 0x00, 0xff, 0xff, 0x20, 0xe9, 0xee, 0xaf, 0x9e,
+	0x28, 0x00, 0x00,
 }
 
 func (x SchemeType) String() string {
@@ -3172,6 +3981,416 @@ func (this *ConsulDiscoveryType) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *CbipDiscoveryType) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CbipDiscoveryType)
+	if !ok {
+		that2, ok := that.(CbipDiscoveryType)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if len(this.CbipClusters) != len(that1.CbipClusters) {
+		return false
+	}
+	for i := range this.CbipClusters {
+		if !this.CbipClusters[i].Equal(that1.CbipClusters[i]) {
+			return false
+		}
+	}
+	if this.InternalLbDomain != that1.InternalLbDomain {
+		return false
+	}
+	return true
+}
+func (this *CbipCluster) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CbipCluster)
+	if !ok {
+		that2, ok := that.(CbipCluster)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.Metadata.Equal(that1.Metadata) {
+		return false
+	}
+	if len(this.CbipDevices) != len(that1.CbipDevices) {
+		return false
+	}
+	for i := range this.CbipDevices {
+		if !this.CbipDevices[i].Equal(that1.CbipDevices[i]) {
+			return false
+		}
+	}
+	return true
+}
+func (this *CbipDeviceConfig) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CbipDeviceConfig)
+	if !ok {
+		that2, ok := that.(CbipDeviceConfig)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.CbipMgmtIp != that1.CbipMgmtIp {
+		return false
+	}
+	if !this.AdminCredentials.Equal(that1.AdminCredentials) {
+		return false
+	}
+	if !this.CbipCertificateAuthority.Equal(that1.CbipCertificateAuthority) {
+		return false
+	}
+	if !this.VirtualServerFilter.Equal(that1.VirtualServerFilter) {
+		return false
+	}
+	if that1.NamespaceMappingChoice == nil {
+		if this.NamespaceMappingChoice != nil {
+			return false
+		}
+	} else if this.NamespaceMappingChoice == nil {
+		return false
+	} else if !this.NamespaceMappingChoice.Equal(that1.NamespaceMappingChoice) {
+		return false
+	}
+	return true
+}
+func (this *CbipDeviceConfig_DefaultAll) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CbipDeviceConfig_DefaultAll)
+	if !ok {
+		that2, ok := that.(CbipDeviceConfig_DefaultAll)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.DefaultAll.Equal(that1.DefaultAll) {
+		return false
+	}
+	return true
+}
+func (this *CbipDeviceConfig_NamespaceMapping) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CbipDeviceConfig_NamespaceMapping)
+	if !ok {
+		that2, ok := that.(CbipDeviceConfig_NamespaceMapping)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.NamespaceMapping.Equal(that1.NamespaceMapping) {
+		return false
+	}
+	return true
+}
+func (this *CbipAdminCredentials) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CbipAdminCredentials)
+	if !ok {
+		that2, ok := that.(CbipAdminCredentials)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Username != that1.Username {
+		return false
+	}
+	if !this.Password.Equal(that1.Password) {
+		return false
+	}
+	return true
+}
+func (this *CbipCertificateAuthority) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CbipCertificateAuthority)
+	if !ok {
+		that2, ok := that.(CbipCertificateAuthority)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if that1.ServerValidationChoice == nil {
+		if this.ServerValidationChoice != nil {
+			return false
+		}
+	} else if this.ServerValidationChoice == nil {
+		return false
+	} else if !this.ServerValidationChoice.Equal(that1.ServerValidationChoice) {
+		return false
+	}
+	return true
+}
+func (this *CbipCertificateAuthority_TrustedCa) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CbipCertificateAuthority_TrustedCa)
+	if !ok {
+		that2, ok := that.(CbipCertificateAuthority_TrustedCa)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.TrustedCa.Equal(that1.TrustedCa) {
+		return false
+	}
+	return true
+}
+func (this *CbipCertificateAuthority_SkipServerVerification) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CbipCertificateAuthority_SkipServerVerification)
+	if !ok {
+		that2, ok := that.(CbipCertificateAuthority_SkipServerVerification)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.SkipServerVerification.Equal(that1.SkipServerVerification) {
+		return false
+	}
+	return true
+}
+func (this *VirtualServerFilter) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*VirtualServerFilter)
+	if !ok {
+		that2, ok := that.(VirtualServerFilter)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if that1.DiscoverDisabledChoice == nil {
+		if this.DiscoverDisabledChoice != nil {
+			return false
+		}
+	} else if this.DiscoverDisabledChoice == nil {
+		return false
+	} else if !this.DiscoverDisabledChoice.Equal(that1.DiscoverDisabledChoice) {
+		return false
+	}
+	if this.NameRegex != that1.NameRegex {
+		return false
+	}
+	if this.DescriptionRegex != that1.DescriptionRegex {
+		return false
+	}
+	if len(this.Protocols) != len(that1.Protocols) {
+		return false
+	}
+	for i := range this.Protocols {
+		if this.Protocols[i] != that1.Protocols[i] {
+			return false
+		}
+	}
+	if this.PortRanges != that1.PortRanges {
+		return false
+	}
+	return true
+}
+func (this *VirtualServerFilter_EnabledOnly) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*VirtualServerFilter_EnabledOnly)
+	if !ok {
+		that2, ok := that.(VirtualServerFilter_EnabledOnly)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.EnabledOnly.Equal(that1.EnabledOnly) {
+		return false
+	}
+	return true
+}
+func (this *VirtualServerFilter_IncludeDisabled) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*VirtualServerFilter_IncludeDisabled)
+	if !ok {
+		that2, ok := that.(VirtualServerFilter_IncludeDisabled)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.IncludeDisabled.Equal(that1.IncludeDisabled) {
+		return false
+	}
+	return true
+}
+func (this *NamespaceMapping) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*NamespaceMapping)
+	if !ok {
+		that2, ok := that.(NamespaceMapping)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if len(this.Items) != len(that1.Items) {
+		return false
+	}
+	for i := range this.Items {
+		if !this.Items[i].Equal(that1.Items[i]) {
+			return false
+		}
+	}
+	return true
+}
+func (this *NamespaceMappingItem) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*NamespaceMappingItem)
+	if !ok {
+		that2, ok := that.(NamespaceMappingItem)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.PartitionRegex != that1.PartitionRegex {
+		return false
+	}
+	if this.Namespace != that1.Namespace {
+		return false
+	}
+	return true
+}
 func (this *GlobalSpecType) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -3230,6 +4449,9 @@ func (this *GlobalSpecType) Equal(that interface{}) bool {
 	} else if !this.ClusterIdentifierChoice.Equal(that1.ClusterIdentifierChoice) {
 		return false
 	}
+	if !this.ViewInternal.Equal(that1.ViewInternal) {
+		return false
+	}
 	return true
 }
 func (this *GlobalSpecType_DiscoveryK8S) Equal(that interface{}) bool {
@@ -3276,6 +4498,30 @@ func (this *GlobalSpecType_DiscoveryConsul) Equal(that interface{}) bool {
 		return false
 	}
 	if !this.DiscoveryConsul.Equal(that1.DiscoveryConsul) {
+		return false
+	}
+	return true
+}
+func (this *GlobalSpecType_DiscoveryCbip) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GlobalSpecType_DiscoveryCbip)
+	if !ok {
+		that2, ok := that.(GlobalSpecType_DiscoveryCbip)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.DiscoveryCbip.Equal(that1.DiscoveryCbip) {
 		return false
 	}
 	return true
@@ -3466,6 +4712,30 @@ func (this *CreateSpecType_DiscoveryConsul) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *CreateSpecType_DiscoveryCbip) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CreateSpecType_DiscoveryCbip)
+	if !ok {
+		that2, ok := that.(CreateSpecType_DiscoveryCbip)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.DiscoveryCbip.Equal(that1.DiscoveryCbip) {
+		return false
+	}
+	return true
+}
 func (this *CreateSpecType_NoClusterId) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -3600,6 +4870,30 @@ func (this *ReplaceSpecType_DiscoveryConsul) Equal(that interface{}) bool {
 		return false
 	}
 	if !this.DiscoveryConsul.Equal(that1.DiscoveryConsul) {
+		return false
+	}
+	return true
+}
+func (this *ReplaceSpecType_DiscoveryCbip) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ReplaceSpecType_DiscoveryCbip)
+	if !ok {
+		that2, ok := that.(ReplaceSpecType_DiscoveryCbip)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.DiscoveryCbip.Equal(that1.DiscoveryCbip) {
 		return false
 	}
 	return true
@@ -3744,6 +5038,30 @@ func (this *GetSpecType_DiscoveryConsul) Equal(that interface{}) bool {
 		return false
 	}
 	if !this.DiscoveryConsul.Equal(that1.DiscoveryConsul) {
+		return false
+	}
+	return true
+}
+func (this *GetSpecType_DiscoveryCbip) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GetSpecType_DiscoveryCbip)
+	if !ok {
+		that2, ok := that.(GetSpecType_DiscoveryCbip)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.DiscoveryCbip.Equal(that1.DiscoveryCbip) {
 		return false
 	}
 	return true
@@ -4134,11 +5452,173 @@ func (this *ConsulDiscoveryType) GoString() string {
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
+func (this *CbipDiscoveryType) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 6)
+	s = append(s, "&discovery.CbipDiscoveryType{")
+	if this.CbipClusters != nil {
+		s = append(s, "CbipClusters: "+fmt.Sprintf("%#v", this.CbipClusters)+",\n")
+	}
+	s = append(s, "InternalLbDomain: "+fmt.Sprintf("%#v", this.InternalLbDomain)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *CbipCluster) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 6)
+	s = append(s, "&discovery.CbipCluster{")
+	if this.Metadata != nil {
+		s = append(s, "Metadata: "+fmt.Sprintf("%#v", this.Metadata)+",\n")
+	}
+	if this.CbipDevices != nil {
+		s = append(s, "CbipDevices: "+fmt.Sprintf("%#v", this.CbipDevices)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *CbipDeviceConfig) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 10)
+	s = append(s, "&discovery.CbipDeviceConfig{")
+	s = append(s, "CbipMgmtIp: "+fmt.Sprintf("%#v", this.CbipMgmtIp)+",\n")
+	if this.AdminCredentials != nil {
+		s = append(s, "AdminCredentials: "+fmt.Sprintf("%#v", this.AdminCredentials)+",\n")
+	}
+	if this.CbipCertificateAuthority != nil {
+		s = append(s, "CbipCertificateAuthority: "+fmt.Sprintf("%#v", this.CbipCertificateAuthority)+",\n")
+	}
+	if this.VirtualServerFilter != nil {
+		s = append(s, "VirtualServerFilter: "+fmt.Sprintf("%#v", this.VirtualServerFilter)+",\n")
+	}
+	if this.NamespaceMappingChoice != nil {
+		s = append(s, "NamespaceMappingChoice: "+fmt.Sprintf("%#v", this.NamespaceMappingChoice)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *CbipDeviceConfig_DefaultAll) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&discovery.CbipDeviceConfig_DefaultAll{` +
+		`DefaultAll:` + fmt.Sprintf("%#v", this.DefaultAll) + `}`}, ", ")
+	return s
+}
+func (this *CbipDeviceConfig_NamespaceMapping) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&discovery.CbipDeviceConfig_NamespaceMapping{` +
+		`NamespaceMapping:` + fmt.Sprintf("%#v", this.NamespaceMapping) + `}`}, ", ")
+	return s
+}
+func (this *CbipAdminCredentials) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 6)
+	s = append(s, "&discovery.CbipAdminCredentials{")
+	s = append(s, "Username: "+fmt.Sprintf("%#v", this.Username)+",\n")
+	if this.Password != nil {
+		s = append(s, "Password: "+fmt.Sprintf("%#v", this.Password)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *CbipCertificateAuthority) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 6)
+	s = append(s, "&discovery.CbipCertificateAuthority{")
+	if this.ServerValidationChoice != nil {
+		s = append(s, "ServerValidationChoice: "+fmt.Sprintf("%#v", this.ServerValidationChoice)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *CbipCertificateAuthority_TrustedCa) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&discovery.CbipCertificateAuthority_TrustedCa{` +
+		`TrustedCa:` + fmt.Sprintf("%#v", this.TrustedCa) + `}`}, ", ")
+	return s
+}
+func (this *CbipCertificateAuthority_SkipServerVerification) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&discovery.CbipCertificateAuthority_SkipServerVerification{` +
+		`SkipServerVerification:` + fmt.Sprintf("%#v", this.SkipServerVerification) + `}`}, ", ")
+	return s
+}
+func (this *VirtualServerFilter) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 10)
+	s = append(s, "&discovery.VirtualServerFilter{")
+	if this.DiscoverDisabledChoice != nil {
+		s = append(s, "DiscoverDisabledChoice: "+fmt.Sprintf("%#v", this.DiscoverDisabledChoice)+",\n")
+	}
+	s = append(s, "NameRegex: "+fmt.Sprintf("%#v", this.NameRegex)+",\n")
+	s = append(s, "DescriptionRegex: "+fmt.Sprintf("%#v", this.DescriptionRegex)+",\n")
+	s = append(s, "Protocols: "+fmt.Sprintf("%#v", this.Protocols)+",\n")
+	s = append(s, "PortRanges: "+fmt.Sprintf("%#v", this.PortRanges)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *VirtualServerFilter_EnabledOnly) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&discovery.VirtualServerFilter_EnabledOnly{` +
+		`EnabledOnly:` + fmt.Sprintf("%#v", this.EnabledOnly) + `}`}, ", ")
+	return s
+}
+func (this *VirtualServerFilter_IncludeDisabled) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&discovery.VirtualServerFilter_IncludeDisabled{` +
+		`IncludeDisabled:` + fmt.Sprintf("%#v", this.IncludeDisabled) + `}`}, ", ")
+	return s
+}
+func (this *NamespaceMapping) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 5)
+	s = append(s, "&discovery.NamespaceMapping{")
+	if this.Items != nil {
+		s = append(s, "Items: "+fmt.Sprintf("%#v", this.Items)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *NamespaceMappingItem) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 6)
+	s = append(s, "&discovery.NamespaceMappingItem{")
+	s = append(s, "PartitionRegex: "+fmt.Sprintf("%#v", this.PartitionRegex)+",\n")
+	s = append(s, "Namespace: "+fmt.Sprintf("%#v", this.Namespace)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
 func (this *GlobalSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 14)
+	s := make([]string, 0, 16)
 	s = append(s, "&discovery.GlobalSpecType{")
 	if this.Where != nil {
 		s = append(s, "Where: "+fmt.Sprintf("%#v", this.Where)+",\n")
@@ -4157,6 +5637,9 @@ func (this *GlobalSpecType) GoString() string {
 	if this.ClusterIdentifierChoice != nil {
 		s = append(s, "ClusterIdentifierChoice: "+fmt.Sprintf("%#v", this.ClusterIdentifierChoice)+",\n")
 	}
+	if this.ViewInternal != nil {
+		s = append(s, "ViewInternal: "+fmt.Sprintf("%#v", this.ViewInternal)+",\n")
+	}
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
@@ -4174,6 +5657,14 @@ func (this *GlobalSpecType_DiscoveryConsul) GoString() string {
 	}
 	s := strings.Join([]string{`&discovery.GlobalSpecType_DiscoveryConsul{` +
 		`DiscoveryConsul:` + fmt.Sprintf("%#v", this.DiscoveryConsul) + `}`}, ", ")
+	return s
+}
+func (this *GlobalSpecType_DiscoveryCbip) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&discovery.GlobalSpecType_DiscoveryCbip{` +
+		`DiscoveryCbip:` + fmt.Sprintf("%#v", this.DiscoveryCbip) + `}`}, ", ")
 	return s
 }
 func (this *GlobalSpecType_K8S) GoString() string {
@@ -4212,7 +5703,7 @@ func (this *CreateSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 9)
+	s := make([]string, 0, 10)
 	s = append(s, "&discovery.CreateSpecType{")
 	if this.Where != nil {
 		s = append(s, "Where: "+fmt.Sprintf("%#v", this.Where)+",\n")
@@ -4242,6 +5733,14 @@ func (this *CreateSpecType_DiscoveryConsul) GoString() string {
 		`DiscoveryConsul:` + fmt.Sprintf("%#v", this.DiscoveryConsul) + `}`}, ", ")
 	return s
 }
+func (this *CreateSpecType_DiscoveryCbip) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&discovery.CreateSpecType_DiscoveryCbip{` +
+		`DiscoveryCbip:` + fmt.Sprintf("%#v", this.DiscoveryCbip) + `}`}, ", ")
+	return s
+}
 func (this *CreateSpecType_NoClusterId) GoString() string {
 	if this == nil {
 		return "nil"
@@ -4262,7 +5761,7 @@ func (this *ReplaceSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 9)
+	s := make([]string, 0, 10)
 	s = append(s, "&discovery.ReplaceSpecType{")
 	if this.Where != nil {
 		s = append(s, "Where: "+fmt.Sprintf("%#v", this.Where)+",\n")
@@ -4292,6 +5791,14 @@ func (this *ReplaceSpecType_DiscoveryConsul) GoString() string {
 		`DiscoveryConsul:` + fmt.Sprintf("%#v", this.DiscoveryConsul) + `}`}, ", ")
 	return s
 }
+func (this *ReplaceSpecType_DiscoveryCbip) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&discovery.ReplaceSpecType_DiscoveryCbip{` +
+		`DiscoveryCbip:` + fmt.Sprintf("%#v", this.DiscoveryCbip) + `}`}, ", ")
+	return s
+}
 func (this *ReplaceSpecType_NoClusterId) GoString() string {
 	if this == nil {
 		return "nil"
@@ -4312,7 +5819,7 @@ func (this *GetSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 11)
+	s := make([]string, 0, 12)
 	s = append(s, "&discovery.GetSpecType{")
 	if this.Where != nil {
 		s = append(s, "Where: "+fmt.Sprintf("%#v", this.Where)+",\n")
@@ -4344,6 +5851,14 @@ func (this *GetSpecType_DiscoveryConsul) GoString() string {
 	}
 	s := strings.Join([]string{`&discovery.GetSpecType_DiscoveryConsul{` +
 		`DiscoveryConsul:` + fmt.Sprintf("%#v", this.DiscoveryConsul) + `}`}, ", ")
+	return s
+}
+func (this *GetSpecType_DiscoveryCbip) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&discovery.GetSpecType_DiscoveryCbip{` +
+		`DiscoveryCbip:` + fmt.Sprintf("%#v", this.DiscoveryCbip) + `}`}, ", ")
 	return s
 }
 func (this *GetSpecType_NoClusterId) GoString() string {
@@ -5393,6 +6908,510 @@ func (m *ConsulDiscoveryType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
+func (m *CbipDiscoveryType) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *CbipDiscoveryType) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CbipDiscoveryType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.InternalLbDomain) > 0 {
+		i -= len(m.InternalLbDomain)
+		copy(dAtA[i:], m.InternalLbDomain)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.InternalLbDomain)))
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.CbipClusters) > 0 {
+		for iNdEx := len(m.CbipClusters) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.CbipClusters[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0xa
+		}
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *CbipCluster) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *CbipCluster) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CbipCluster) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.CbipDevices) > 0 {
+		for iNdEx := len(m.CbipDevices) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.CbipDevices[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x12
+		}
+	}
+	if m.Metadata != nil {
+		{
+			size, err := m.Metadata.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *CbipDeviceConfig) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *CbipDeviceConfig) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CbipDeviceConfig) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.NamespaceMappingChoice != nil {
+		{
+			size := m.NamespaceMappingChoice.Size()
+			i -= size
+			if _, err := m.NamespaceMappingChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if m.VirtualServerFilter != nil {
+		{
+			size, err := m.VirtualServerFilter.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x22
+	}
+	if m.CbipCertificateAuthority != nil {
+		{
+			size, err := m.CbipCertificateAuthority.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1a
+	}
+	if m.AdminCredentials != nil {
+		{
+			size, err := m.AdminCredentials.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.CbipMgmtIp) > 0 {
+		i -= len(m.CbipMgmtIp)
+		copy(dAtA[i:], m.CbipMgmtIp)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.CbipMgmtIp)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *CbipDeviceConfig_DefaultAll) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CbipDeviceConfig_DefaultAll) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.DefaultAll != nil {
+		{
+			size, err := m.DefaultAll.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x32
+	}
+	return len(dAtA) - i, nil
+}
+func (m *CbipDeviceConfig_NamespaceMapping) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CbipDeviceConfig_NamespaceMapping) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.NamespaceMapping != nil {
+		{
+			size, err := m.NamespaceMapping.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x3a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *CbipAdminCredentials) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *CbipAdminCredentials) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CbipAdminCredentials) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.Password != nil {
+		{
+			size, err := m.Password.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.Username) > 0 {
+		i -= len(m.Username)
+		copy(dAtA[i:], m.Username)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.Username)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *CbipCertificateAuthority) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *CbipCertificateAuthority) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CbipCertificateAuthority) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.ServerValidationChoice != nil {
+		{
+			size := m.ServerValidationChoice.Size()
+			i -= size
+			if _, err := m.ServerValidationChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *CbipCertificateAuthority_TrustedCa) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CbipCertificateAuthority_TrustedCa) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.TrustedCa != nil {
+		{
+			size, err := m.TrustedCa.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x12
+	}
+	return len(dAtA) - i, nil
+}
+func (m *CbipCertificateAuthority_SkipServerVerification) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CbipCertificateAuthority_SkipServerVerification) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.SkipServerVerification != nil {
+		{
+			size, err := m.SkipServerVerification.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *VirtualServerFilter) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *VirtualServerFilter) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *VirtualServerFilter) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.PortRanges) > 0 {
+		i -= len(m.PortRanges)
+		copy(dAtA[i:], m.PortRanges)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.PortRanges)))
+		i--
+		dAtA[i] = 0x3a
+	}
+	if len(m.Protocols) > 0 {
+		for iNdEx := len(m.Protocols) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.Protocols[iNdEx])
+			copy(dAtA[i:], m.Protocols[iNdEx])
+			i = encodeVarintTypes(dAtA, i, uint64(len(m.Protocols[iNdEx])))
+			i--
+			dAtA[i] = 0x32
+		}
+	}
+	if len(m.DescriptionRegex) > 0 {
+		i -= len(m.DescriptionRegex)
+		copy(dAtA[i:], m.DescriptionRegex)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.DescriptionRegex)))
+		i--
+		dAtA[i] = 0x2a
+	}
+	if len(m.NameRegex) > 0 {
+		i -= len(m.NameRegex)
+		copy(dAtA[i:], m.NameRegex)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.NameRegex)))
+		i--
+		dAtA[i] = 0x22
+	}
+	if m.DiscoverDisabledChoice != nil {
+		{
+			size := m.DiscoverDisabledChoice.Size()
+			i -= size
+			if _, err := m.DiscoverDisabledChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *VirtualServerFilter_EnabledOnly) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *VirtualServerFilter_EnabledOnly) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.EnabledOnly != nil {
+		{
+			size, err := m.EnabledOnly.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x12
+	}
+	return len(dAtA) - i, nil
+}
+func (m *VirtualServerFilter_IncludeDisabled) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *VirtualServerFilter_IncludeDisabled) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.IncludeDisabled != nil {
+		{
+			size, err := m.IncludeDisabled.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *NamespaceMapping) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *NamespaceMapping) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *NamespaceMapping) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Items) > 0 {
+		for iNdEx := len(m.Items) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Items[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0xa
+		}
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *NamespaceMappingItem) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *NamespaceMappingItem) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *NamespaceMappingItem) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Namespace) > 0 {
+		i -= len(m.Namespace)
+		copy(dAtA[i:], m.Namespace)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.Namespace)))
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.PartitionRegex) > 0 {
+		i -= len(m.PartitionRegex)
+		copy(dAtA[i:], m.PartitionRegex)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.PartitionRegex)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
 func (m *GlobalSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -5413,6 +7432,29 @@ func (m *GlobalSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if m.ViewInternal != nil {
+		{
+			size, err := m.ViewInternal.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x3e
+		i--
+		dAtA[i] = 0xc2
+	}
+	if m.DiscoveryChoice != nil {
+		{
+			size := m.DiscoveryChoice.Size()
+			i -= size
+			if _, err := m.DiscoveryChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
 	if m.ClusterIdentifierChoice != nil {
 		{
 			size := m.ClusterIdentifierChoice.Size()
@@ -5428,15 +7470,6 @@ func (m *GlobalSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i = encodeVarintTypes(dAtA, i, uint64(len(m.ClusterIdentifier)))
 		i--
 		dAtA[i] = 0x52
-	}
-	if m.DiscoveryChoice != nil {
-		{
-			size := m.DiscoveryChoice.Size()
-			i -= size
-			if _, err := m.DiscoveryChoice.MarshalTo(dAtA[i:]); err != nil {
-				return 0, err
-			}
-		}
 	}
 	if m.AccessInfo != nil {
 		{
@@ -5598,6 +7631,27 @@ func (m *GlobalSpecType_ClusterId) MarshalToSizedBuffer(dAtA []byte) (int, error
 	dAtA[i] = 0x6a
 	return len(dAtA) - i, nil
 }
+func (m *GlobalSpecType_DiscoveryCbip) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_DiscoveryCbip) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.DiscoveryCbip != nil {
+		{
+			size, err := m.DiscoveryCbip.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x72
+	}
+	return len(dAtA) - i, nil
+}
 func (m *CreateSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -5618,20 +7672,20 @@ func (m *CreateSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
-	if m.ClusterIdentifierChoice != nil {
-		{
-			size := m.ClusterIdentifierChoice.Size()
-			i -= size
-			if _, err := m.ClusterIdentifierChoice.MarshalTo(dAtA[i:]); err != nil {
-				return 0, err
-			}
-		}
-	}
 	if m.DiscoveryChoice != nil {
 		{
 			size := m.DiscoveryChoice.Size()
 			i -= size
 			if _, err := m.DiscoveryChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if m.ClusterIdentifierChoice != nil {
+		{
+			size := m.ClusterIdentifierChoice.Size()
+			i -= size
+			if _, err := m.ClusterIdentifierChoice.MarshalTo(dAtA[i:]); err != nil {
 				return 0, err
 			}
 		}
@@ -5728,6 +7782,27 @@ func (m *CreateSpecType_ClusterId) MarshalToSizedBuffer(dAtA []byte) (int, error
 	dAtA[i] = 0x6a
 	return len(dAtA) - i, nil
 }
+func (m *CreateSpecType_DiscoveryCbip) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_DiscoveryCbip) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.DiscoveryCbip != nil {
+		{
+			size, err := m.DiscoveryCbip.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x72
+	}
+	return len(dAtA) - i, nil
+}
 func (m *ReplaceSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -5748,20 +7823,20 @@ func (m *ReplaceSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
-	if m.ClusterIdentifierChoice != nil {
-		{
-			size := m.ClusterIdentifierChoice.Size()
-			i -= size
-			if _, err := m.ClusterIdentifierChoice.MarshalTo(dAtA[i:]); err != nil {
-				return 0, err
-			}
-		}
-	}
 	if m.DiscoveryChoice != nil {
 		{
 			size := m.DiscoveryChoice.Size()
 			i -= size
 			if _, err := m.DiscoveryChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if m.ClusterIdentifierChoice != nil {
+		{
+			size := m.ClusterIdentifierChoice.Size()
+			i -= size
+			if _, err := m.ClusterIdentifierChoice.MarshalTo(dAtA[i:]); err != nil {
 				return 0, err
 			}
 		}
@@ -5858,6 +7933,27 @@ func (m *ReplaceSpecType_ClusterId) MarshalToSizedBuffer(dAtA []byte) (int, erro
 	dAtA[i] = 0x6a
 	return len(dAtA) - i, nil
 }
+func (m *ReplaceSpecType_DiscoveryCbip) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_DiscoveryCbip) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.DiscoveryCbip != nil {
+		{
+			size, err := m.DiscoveryCbip.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x72
+	}
+	return len(dAtA) - i, nil
+}
 func (m *GetSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -5878,20 +7974,20 @@ func (m *GetSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
-	if m.ClusterIdentifierChoice != nil {
-		{
-			size := m.ClusterIdentifierChoice.Size()
-			i -= size
-			if _, err := m.ClusterIdentifierChoice.MarshalTo(dAtA[i:]); err != nil {
-				return 0, err
-			}
-		}
-	}
 	if m.DiscoveryChoice != nil {
 		{
 			size := m.DiscoveryChoice.Size()
 			i -= size
 			if _, err := m.DiscoveryChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if m.ClusterIdentifierChoice != nil {
+		{
+			size := m.ClusterIdentifierChoice.Size()
+			i -= size
+			if _, err := m.ClusterIdentifierChoice.MarshalTo(dAtA[i:]); err != nil {
 				return 0, err
 			}
 		}
@@ -6003,6 +8099,27 @@ func (m *GetSpecType_ClusterId) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i = encodeVarintTypes(dAtA, i, uint64(len(m.ClusterId)))
 	i--
 	dAtA[i] = 0x6a
+	return len(dAtA) - i, nil
+}
+func (m *GetSpecType_DiscoveryCbip) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_DiscoveryCbip) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.DiscoveryCbip != nil {
+		{
+			size, err := m.DiscoveryCbip.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x72
+	}
 	return len(dAtA) - i, nil
 }
 func encodeVarintTypes(dAtA []byte, offset int, v uint64) int {
@@ -6474,6 +8591,235 @@ func (m *ConsulDiscoveryType) Size() (n int) {
 	return n
 }
 
+func (m *CbipDiscoveryType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if len(m.CbipClusters) > 0 {
+		for _, e := range m.CbipClusters {
+			l = e.Size()
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	l = len(m.InternalLbDomain)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+
+func (m *CbipCluster) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Metadata != nil {
+		l = m.Metadata.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if len(m.CbipDevices) > 0 {
+		for _, e := range m.CbipDevices {
+			l = e.Size()
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	return n
+}
+
+func (m *CbipDeviceConfig) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.CbipMgmtIp)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.AdminCredentials != nil {
+		l = m.AdminCredentials.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.CbipCertificateAuthority != nil {
+		l = m.CbipCertificateAuthority.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.VirtualServerFilter != nil {
+		l = m.VirtualServerFilter.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.NamespaceMappingChoice != nil {
+		n += m.NamespaceMappingChoice.Size()
+	}
+	return n
+}
+
+func (m *CbipDeviceConfig_DefaultAll) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.DefaultAll != nil {
+		l = m.DefaultAll.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *CbipDeviceConfig_NamespaceMapping) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.NamespaceMapping != nil {
+		l = m.NamespaceMapping.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *CbipAdminCredentials) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Username)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.Password != nil {
+		l = m.Password.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+
+func (m *CbipCertificateAuthority) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.ServerValidationChoice != nil {
+		n += m.ServerValidationChoice.Size()
+	}
+	return n
+}
+
+func (m *CbipCertificateAuthority_TrustedCa) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.TrustedCa != nil {
+		l = m.TrustedCa.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *CbipCertificateAuthority_SkipServerVerification) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.SkipServerVerification != nil {
+		l = m.SkipServerVerification.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *VirtualServerFilter) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.DiscoverDisabledChoice != nil {
+		n += m.DiscoverDisabledChoice.Size()
+	}
+	l = len(m.NameRegex)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	l = len(m.DescriptionRegex)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if len(m.Protocols) > 0 {
+		for _, s := range m.Protocols {
+			l = len(s)
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	l = len(m.PortRanges)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+
+func (m *VirtualServerFilter_EnabledOnly) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.EnabledOnly != nil {
+		l = m.EnabledOnly.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *VirtualServerFilter_IncludeDisabled) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.IncludeDisabled != nil {
+		l = m.IncludeDisabled.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *NamespaceMapping) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if len(m.Items) > 0 {
+		for _, e := range m.Items {
+			l = e.Size()
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	return n
+}
+
+func (m *NamespaceMappingItem) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.PartitionRegex)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	l = len(m.Namespace)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+
 func (m *GlobalSpecType) Size() (n int) {
 	if m == nil {
 		return 0
@@ -6503,6 +8849,10 @@ func (m *GlobalSpecType) Size() (n int) {
 	}
 	if m.ClusterIdentifierChoice != nil {
 		n += m.ClusterIdentifierChoice.Size()
+	}
+	if m.ViewInternal != nil {
+		l = m.ViewInternal.Size()
+		n += 2 + l + sovTypes(uint64(l))
 	}
 	return n
 }
@@ -6577,6 +8927,18 @@ func (m *GlobalSpecType_ClusterId) Size() (n int) {
 	n += 1 + l + sovTypes(uint64(l))
 	return n
 }
+func (m *GlobalSpecType_DiscoveryCbip) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.DiscoveryCbip != nil {
+		l = m.DiscoveryCbip.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
 func (m *CreateSpecType) Size() (n int) {
 	if m == nil {
 		return 0
@@ -6642,6 +9004,18 @@ func (m *CreateSpecType_ClusterId) Size() (n int) {
 	n += 1 + l + sovTypes(uint64(l))
 	return n
 }
+func (m *CreateSpecType_DiscoveryCbip) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.DiscoveryCbip != nil {
+		l = m.DiscoveryCbip.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
 func (m *ReplaceSpecType) Size() (n int) {
 	if m == nil {
 		return 0
@@ -6705,6 +9079,18 @@ func (m *ReplaceSpecType_ClusterId) Size() (n int) {
 	_ = l
 	l = len(m.ClusterId)
 	n += 1 + l + sovTypes(uint64(l))
+	return n
+}
+func (m *ReplaceSpecType_DiscoveryCbip) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.DiscoveryCbip != nil {
+		l = m.DiscoveryCbip.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
 	return n
 }
 func (m *GetSpecType) Size() (n int) {
@@ -6777,6 +9163,18 @@ func (m *GetSpecType_ClusterId) Size() (n int) {
 	_ = l
 	l = len(m.ClusterId)
 	n += 1 + l + sovTypes(uint64(l))
+	return n
+}
+func (m *GetSpecType_DiscoveryCbip) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.DiscoveryCbip != nil {
+		l = m.DiscoveryCbip.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
 	return n
 }
 
@@ -7121,6 +9519,173 @@ func (this *ConsulDiscoveryType) String() string {
 	}, "")
 	return s
 }
+func (this *CbipDiscoveryType) String() string {
+	if this == nil {
+		return "nil"
+	}
+	repeatedStringForCbipClusters := "[]*CbipCluster{"
+	for _, f := range this.CbipClusters {
+		repeatedStringForCbipClusters += strings.Replace(f.String(), "CbipCluster", "CbipCluster", 1) + ","
+	}
+	repeatedStringForCbipClusters += "}"
+	s := strings.Join([]string{`&CbipDiscoveryType{`,
+		`CbipClusters:` + repeatedStringForCbipClusters + `,`,
+		`InternalLbDomain:` + fmt.Sprintf("%v", this.InternalLbDomain) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CbipCluster) String() string {
+	if this == nil {
+		return "nil"
+	}
+	repeatedStringForCbipDevices := "[]*CbipDeviceConfig{"
+	for _, f := range this.CbipDevices {
+		repeatedStringForCbipDevices += strings.Replace(f.String(), "CbipDeviceConfig", "CbipDeviceConfig", 1) + ","
+	}
+	repeatedStringForCbipDevices += "}"
+	s := strings.Join([]string{`&CbipCluster{`,
+		`Metadata:` + strings.Replace(fmt.Sprintf("%v", this.Metadata), "MessageMetaType", "schema.MessageMetaType", 1) + `,`,
+		`CbipDevices:` + repeatedStringForCbipDevices + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CbipDeviceConfig) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CbipDeviceConfig{`,
+		`CbipMgmtIp:` + fmt.Sprintf("%v", this.CbipMgmtIp) + `,`,
+		`AdminCredentials:` + strings.Replace(this.AdminCredentials.String(), "CbipAdminCredentials", "CbipAdminCredentials", 1) + `,`,
+		`CbipCertificateAuthority:` + strings.Replace(this.CbipCertificateAuthority.String(), "CbipCertificateAuthority", "CbipCertificateAuthority", 1) + `,`,
+		`VirtualServerFilter:` + strings.Replace(this.VirtualServerFilter.String(), "VirtualServerFilter", "VirtualServerFilter", 1) + `,`,
+		`NamespaceMappingChoice:` + fmt.Sprintf("%v", this.NamespaceMappingChoice) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CbipDeviceConfig_DefaultAll) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CbipDeviceConfig_DefaultAll{`,
+		`DefaultAll:` + strings.Replace(fmt.Sprintf("%v", this.DefaultAll), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CbipDeviceConfig_NamespaceMapping) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CbipDeviceConfig_NamespaceMapping{`,
+		`NamespaceMapping:` + strings.Replace(fmt.Sprintf("%v", this.NamespaceMapping), "NamespaceMapping", "NamespaceMapping", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CbipAdminCredentials) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CbipAdminCredentials{`,
+		`Username:` + fmt.Sprintf("%v", this.Username) + `,`,
+		`Password:` + strings.Replace(fmt.Sprintf("%v", this.Password), "SecretType", "schema.SecretType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CbipCertificateAuthority) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CbipCertificateAuthority{`,
+		`ServerValidationChoice:` + fmt.Sprintf("%v", this.ServerValidationChoice) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CbipCertificateAuthority_TrustedCa) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CbipCertificateAuthority_TrustedCa{`,
+		`TrustedCa:` + strings.Replace(fmt.Sprintf("%v", this.TrustedCa), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CbipCertificateAuthority_SkipServerVerification) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CbipCertificateAuthority_SkipServerVerification{`,
+		`SkipServerVerification:` + strings.Replace(fmt.Sprintf("%v", this.SkipServerVerification), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *VirtualServerFilter) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&VirtualServerFilter{`,
+		`DiscoverDisabledChoice:` + fmt.Sprintf("%v", this.DiscoverDisabledChoice) + `,`,
+		`NameRegex:` + fmt.Sprintf("%v", this.NameRegex) + `,`,
+		`DescriptionRegex:` + fmt.Sprintf("%v", this.DescriptionRegex) + `,`,
+		`Protocols:` + fmt.Sprintf("%v", this.Protocols) + `,`,
+		`PortRanges:` + fmt.Sprintf("%v", this.PortRanges) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *VirtualServerFilter_EnabledOnly) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&VirtualServerFilter_EnabledOnly{`,
+		`EnabledOnly:` + strings.Replace(fmt.Sprintf("%v", this.EnabledOnly), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *VirtualServerFilter_IncludeDisabled) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&VirtualServerFilter_IncludeDisabled{`,
+		`IncludeDisabled:` + strings.Replace(fmt.Sprintf("%v", this.IncludeDisabled), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *NamespaceMapping) String() string {
+	if this == nil {
+		return "nil"
+	}
+	repeatedStringForItems := "[]*NamespaceMappingItem{"
+	for _, f := range this.Items {
+		repeatedStringForItems += strings.Replace(f.String(), "NamespaceMappingItem", "NamespaceMappingItem", 1) + ","
+	}
+	repeatedStringForItems += "}"
+	s := strings.Join([]string{`&NamespaceMapping{`,
+		`Items:` + repeatedStringForItems + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *NamespaceMappingItem) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&NamespaceMappingItem{`,
+		`PartitionRegex:` + fmt.Sprintf("%v", this.PartitionRegex) + `,`,
+		`Namespace:` + fmt.Sprintf("%v", this.Namespace) + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *GlobalSpecType) String() string {
 	if this == nil {
 		return "nil"
@@ -7133,6 +9698,7 @@ func (this *GlobalSpecType) String() string {
 		`DiscoveryChoice:` + fmt.Sprintf("%v", this.DiscoveryChoice) + `,`,
 		`ClusterIdentifier:` + fmt.Sprintf("%v", this.ClusterIdentifier) + `,`,
 		`ClusterIdentifierChoice:` + fmt.Sprintf("%v", this.ClusterIdentifierChoice) + `,`,
+		`ViewInternal:` + strings.Replace(fmt.Sprintf("%v", this.ViewInternal), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -7197,6 +9763,16 @@ func (this *GlobalSpecType_ClusterId) String() string {
 	}, "")
 	return s
 }
+func (this *GlobalSpecType_DiscoveryCbip) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GlobalSpecType_DiscoveryCbip{`,
+		`DiscoveryCbip:` + strings.Replace(fmt.Sprintf("%v", this.DiscoveryCbip), "CbipDiscoveryType", "CbipDiscoveryType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *CreateSpecType) String() string {
 	if this == nil {
 		return "nil"
@@ -7245,6 +9821,16 @@ func (this *CreateSpecType_ClusterId) String() string {
 	}
 	s := strings.Join([]string{`&CreateSpecType_ClusterId{`,
 		`ClusterId:` + fmt.Sprintf("%v", this.ClusterId) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CreateSpecType_DiscoveryCbip) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CreateSpecType_DiscoveryCbip{`,
+		`DiscoveryCbip:` + strings.Replace(fmt.Sprintf("%v", this.DiscoveryCbip), "CbipDiscoveryType", "CbipDiscoveryType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -7301,6 +9887,16 @@ func (this *ReplaceSpecType_ClusterId) String() string {
 	}, "")
 	return s
 }
+func (this *ReplaceSpecType_DiscoveryCbip) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ReplaceSpecType_DiscoveryCbip{`,
+		`DiscoveryCbip:` + strings.Replace(fmt.Sprintf("%v", this.DiscoveryCbip), "CbipDiscoveryType", "CbipDiscoveryType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *GetSpecType) String() string {
 	if this == nil {
 		return "nil"
@@ -7351,6 +9947,16 @@ func (this *GetSpecType_ClusterId) String() string {
 	}
 	s := strings.Join([]string{`&GetSpecType_ClusterId{`,
 		`ClusterId:` + fmt.Sprintf("%v", this.ClusterId) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GetSpecType_DiscoveryCbip) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GetSpecType_DiscoveryCbip{`,
+		`DiscoveryCbip:` + strings.Replace(fmt.Sprintf("%v", this.DiscoveryCbip), "CbipDiscoveryType", "CbipDiscoveryType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -10023,6 +12629,1210 @@ func (m *ConsulDiscoveryType) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
+func (m *CbipDiscoveryType) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: CbipDiscoveryType: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: CbipDiscoveryType: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field CbipClusters", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.CbipClusters = append(m.CbipClusters, &CbipCluster{})
+			if err := m.CbipClusters[len(m.CbipClusters)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field InternalLbDomain", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.InternalLbDomain = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *CbipCluster) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: CbipCluster: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: CbipCluster: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Metadata", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Metadata == nil {
+				m.Metadata = &schema.MessageMetaType{}
+			}
+			if err := m.Metadata.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field CbipDevices", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.CbipDevices = append(m.CbipDevices, &CbipDeviceConfig{})
+			if err := m.CbipDevices[len(m.CbipDevices)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *CbipDeviceConfig) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: CbipDeviceConfig: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: CbipDeviceConfig: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field CbipMgmtIp", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.CbipMgmtIp = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AdminCredentials", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.AdminCredentials == nil {
+				m.AdminCredentials = &CbipAdminCredentials{}
+			}
+			if err := m.AdminCredentials.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field CbipCertificateAuthority", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.CbipCertificateAuthority == nil {
+				m.CbipCertificateAuthority = &CbipCertificateAuthority{}
+			}
+			if err := m.CbipCertificateAuthority.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field VirtualServerFilter", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.VirtualServerFilter == nil {
+				m.VirtualServerFilter = &VirtualServerFilter{}
+			}
+			if err := m.VirtualServerFilter.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 6:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DefaultAll", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.NamespaceMappingChoice = &CbipDeviceConfig_DefaultAll{v}
+			iNdEx = postIndex
+		case 7:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field NamespaceMapping", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &NamespaceMapping{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.NamespaceMappingChoice = &CbipDeviceConfig_NamespaceMapping{v}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *CbipAdminCredentials) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: CbipAdminCredentials: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: CbipAdminCredentials: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Username", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Username = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Password", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Password == nil {
+				m.Password = &schema.SecretType{}
+			}
+			if err := m.Password.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *CbipCertificateAuthority) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: CbipCertificateAuthority: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: CbipCertificateAuthority: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field TrustedCa", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &views.ObjectRefType{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ServerValidationChoice = &CbipCertificateAuthority_TrustedCa{v}
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field SkipServerVerification", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ServerValidationChoice = &CbipCertificateAuthority_SkipServerVerification{v}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *VirtualServerFilter) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: VirtualServerFilter: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: VirtualServerFilter: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field EnabledOnly", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.DiscoverDisabledChoice = &VirtualServerFilter_EnabledOnly{v}
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field IncludeDisabled", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.DiscoverDisabledChoice = &VirtualServerFilter_IncludeDisabled{v}
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field NameRegex", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.NameRegex = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DescriptionRegex", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.DescriptionRegex = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 6:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Protocols", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Protocols = append(m.Protocols, string(dAtA[iNdEx:postIndex]))
+			iNdEx = postIndex
+		case 7:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field PortRanges", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.PortRanges = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *NamespaceMapping) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: NamespaceMapping: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: NamespaceMapping: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Items", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Items = append(m.Items, &NamespaceMappingItem{})
+			if err := m.Items[len(m.Items)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *NamespaceMappingItem) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: NamespaceMappingItem: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: NamespaceMappingItem: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field PartitionRegex", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.PartitionRegex = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Namespace", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Namespace = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
 func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
@@ -10382,6 +14192,77 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 			}
 			m.ClusterIdentifierChoice = &GlobalSpecType_ClusterId{string(dAtA[iNdEx:postIndex])}
 			iNdEx = postIndex
+		case 14:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DiscoveryCbip", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &CbipDiscoveryType{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.DiscoveryChoice = &GlobalSpecType_DiscoveryCbip{v}
+			iNdEx = postIndex
+		case 1000:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ViewInternal", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.ViewInternal == nil {
+				m.ViewInternal = &views.ObjectRefType{}
+			}
+			if err := m.ViewInternal.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTypes(dAtA[iNdEx:])
@@ -10608,6 +14489,41 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 			}
 			m.ClusterIdentifierChoice = &CreateSpecType_ClusterId{string(dAtA[iNdEx:postIndex])}
 			iNdEx = postIndex
+		case 14:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DiscoveryCbip", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &CbipDiscoveryType{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.DiscoveryChoice = &CreateSpecType_DiscoveryCbip{v}
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTypes(dAtA[iNdEx:])
@@ -10833,6 +14749,41 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			m.ClusterIdentifierChoice = &ReplaceSpecType_ClusterId{string(dAtA[iNdEx:postIndex])}
+			iNdEx = postIndex
+		case 14:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DiscoveryCbip", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &CbipDiscoveryType{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.DiscoveryChoice = &ReplaceSpecType_DiscoveryCbip{v}
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
@@ -11114,6 +15065,41 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			m.ClusterIdentifierChoice = &GetSpecType_ClusterId{string(dAtA[iNdEx:postIndex])}
+			iNdEx = postIndex
+		case 14:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DiscoveryCbip", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &CbipDiscoveryType{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.DiscoveryChoice = &GetSpecType_DiscoveryCbip{v}
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex

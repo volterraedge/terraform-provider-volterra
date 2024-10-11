@@ -221,12 +221,6 @@ type GlobalSpecType struct {
 	// in the virtual_host matcher.
 	// Hidden because this will be used only in system generated rate limiting service_policy_sets.
 	VirtualHostMatcher *policy.MatcherType `protobuf:"bytes,24,opt,name=virtual_host_matcher,json=virtualHostMatcher,proto3" json:"virtual_host_matcher,omitempty"`
-	// TLS JA3 fingerprint matcher
-	//
-	// x-displayName: "TLS Fingerprint Matcher"
-	// TLS JA3 fingerprints to be matched.
-	// The predicate evaluates to true if the TLS fingerprint matches any of the exact values or classes of known TLS fingerprints.
-	TlsFingerprintMatcher *policy.TlsFingerprintMatcherType `protobuf:"bytes,25,opt,name=tls_fingerprint_matcher,json=tlsFingerprintMatcher,proto3" json:"tls_fingerprint_matcher,omitempty"`
 	// Forwarding Classes
 	//
 	// x-displayName: "Forwarding Classes"
@@ -244,12 +238,6 @@ type GlobalSpecType struct {
 	// x-displayName: "URL Matcher"
 	// A URL matcher specifies a list of URL items as match criteria. The match is considered successful if the domain and path match any of the URL items.
 	UrlMatcher *policy.URLMatcherType `protobuf:"bytes,39,opt,name=url_matcher,json=urlMatcher,proto3" json:"url_matcher,omitempty"`
-	// l4 dest matcher
-	//
-	// x-displayName: "L4 Destination Matcher"
-	// A L4 Destination matcher specifies a list of IPv4 prefixes and a TCP port range as match criteria. The match is considered successful if the destination
-	// IP matches one of the prefixes and the destination port belongs to the port range.
-	L4DestMatcher *policy.L4DestMatcherType `protobuf:"bytes,44,opt,name=l4_dest_matcher,json=l4DestMatcher,proto3" json:"l4_dest_matcher,omitempty"`
 	// Challenge Action
 	//
 	// x-displayName: "Select Challenge Action Type"
@@ -338,6 +326,17 @@ type GlobalSpecType struct {
 	// x-displayName: "Response Masking Configuration"
 	// Sensitive data masking configuration to be applied for the response
 	ResponseMaskingConfig *policy.MaskingConfig `protobuf:"bytes,98,opt,name=response_masking_config,json=responseMaskingConfig,proto3" json:"response_masking_config,omitempty"`
+	// tls_fingerprint
+	//
+	// x-displayName: "TLS Fingerprint Matcher"
+	// TLS fingerprints to be matches. The predicate evaluates to true.
+	// If the TLS fingerprint matches any of the exact values or classes
+	// of known TLS fingerprints.
+	//
+	// Types that are valid to be assigned to TlsFingerprintChoice:
+	//	*GlobalSpecType_Ja4TlsFingerprint
+	//	*GlobalSpecType_TlsFingerprintMatcher
+	TlsFingerprintChoice isGlobalSpecType_TlsFingerprintChoice `protobuf_oneof:"tls_fingerprint_choice"`
 }
 
 func (m *GlobalSpecType) Reset()      { *m = GlobalSpecType{} }
@@ -398,6 +397,12 @@ type isGlobalSpecType_DstAsnChoice interface {
 	MarshalTo([]byte) (int, error)
 	Size() int
 }
+type isGlobalSpecType_TlsFingerprintChoice interface {
+	isGlobalSpecType_TlsFingerprintChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
 
 type GlobalSpecType_AnyClient struct {
 	AnyClient *schema.Empty `protobuf:"bytes,37,opt,name=any_client,json=anyClient,proto3,oneof" json:"any_client,omitempty"`
@@ -450,24 +455,32 @@ type GlobalSpecType_DstAsnList struct {
 type GlobalSpecType_DstAsnMatcher struct {
 	DstAsnMatcher *policy.AsnMatcherType `protobuf:"bytes,53,opt,name=dst_asn_matcher,json=dstAsnMatcher,proto3,oneof" json:"dst_asn_matcher,omitempty"`
 }
+type GlobalSpecType_Ja4TlsFingerprint struct {
+	Ja4TlsFingerprint *policy.JA4TlsFingerprintMatcherType `protobuf:"bytes,100,opt,name=ja4_tls_fingerprint,json=ja4TlsFingerprint,proto3,oneof" json:"ja4_tls_fingerprint,omitempty"`
+}
+type GlobalSpecType_TlsFingerprintMatcher struct {
+	TlsFingerprintMatcher *policy.TlsFingerprintMatcherType `protobuf:"bytes,25,opt,name=tls_fingerprint_matcher,json=tlsFingerprintMatcher,proto3,oneof" json:"tls_fingerprint_matcher,omitempty"`
+}
 
-func (*GlobalSpecType_AnyClient) isGlobalSpecType_ClientChoice()            {}
-func (*GlobalSpecType_ClientName) isGlobalSpecType_ClientChoice()           {}
-func (*GlobalSpecType_IpThreatCategoryList) isGlobalSpecType_ClientChoice() {}
-func (*GlobalSpecType_ClientSelector) isGlobalSpecType_ClientChoice()       {}
-func (*GlobalSpecType_ClientNameMatcher) isGlobalSpecType_ClientChoice()    {}
-func (*GlobalSpecType_AnyIp) isGlobalSpecType_IpChoice()                    {}
-func (*GlobalSpecType_IpPrefixList) isGlobalSpecType_IpChoice()             {}
-func (*GlobalSpecType_IpMatcher) isGlobalSpecType_IpChoice()                {}
-func (*GlobalSpecType_AnyDstIp) isGlobalSpecType_DstIpChoice()              {}
-func (*GlobalSpecType_DstIpPrefixList) isGlobalSpecType_DstIpChoice()       {}
-func (*GlobalSpecType_DstIpMatcher) isGlobalSpecType_DstIpChoice()          {}
-func (*GlobalSpecType_AnyAsn) isGlobalSpecType_AsnChoice()                  {}
-func (*GlobalSpecType_AsnList) isGlobalSpecType_AsnChoice()                 {}
-func (*GlobalSpecType_AsnMatcher) isGlobalSpecType_AsnChoice()              {}
-func (*GlobalSpecType_AnyDstAsn) isGlobalSpecType_DstAsnChoice()            {}
-func (*GlobalSpecType_DstAsnList) isGlobalSpecType_DstAsnChoice()           {}
-func (*GlobalSpecType_DstAsnMatcher) isGlobalSpecType_DstAsnChoice()        {}
+func (*GlobalSpecType_AnyClient) isGlobalSpecType_ClientChoice()                     {}
+func (*GlobalSpecType_ClientName) isGlobalSpecType_ClientChoice()                    {}
+func (*GlobalSpecType_IpThreatCategoryList) isGlobalSpecType_ClientChoice()          {}
+func (*GlobalSpecType_ClientSelector) isGlobalSpecType_ClientChoice()                {}
+func (*GlobalSpecType_ClientNameMatcher) isGlobalSpecType_ClientChoice()             {}
+func (*GlobalSpecType_AnyIp) isGlobalSpecType_IpChoice()                             {}
+func (*GlobalSpecType_IpPrefixList) isGlobalSpecType_IpChoice()                      {}
+func (*GlobalSpecType_IpMatcher) isGlobalSpecType_IpChoice()                         {}
+func (*GlobalSpecType_AnyDstIp) isGlobalSpecType_DstIpChoice()                       {}
+func (*GlobalSpecType_DstIpPrefixList) isGlobalSpecType_DstIpChoice()                {}
+func (*GlobalSpecType_DstIpMatcher) isGlobalSpecType_DstIpChoice()                   {}
+func (*GlobalSpecType_AnyAsn) isGlobalSpecType_AsnChoice()                           {}
+func (*GlobalSpecType_AsnList) isGlobalSpecType_AsnChoice()                          {}
+func (*GlobalSpecType_AsnMatcher) isGlobalSpecType_AsnChoice()                       {}
+func (*GlobalSpecType_AnyDstAsn) isGlobalSpecType_DstAsnChoice()                     {}
+func (*GlobalSpecType_DstAsnList) isGlobalSpecType_DstAsnChoice()                    {}
+func (*GlobalSpecType_DstAsnMatcher) isGlobalSpecType_DstAsnChoice()                 {}
+func (*GlobalSpecType_Ja4TlsFingerprint) isGlobalSpecType_TlsFingerprintChoice()     {}
+func (*GlobalSpecType_TlsFingerprintMatcher) isGlobalSpecType_TlsFingerprintChoice() {}
 
 func (m *GlobalSpecType) GetClientChoice() isGlobalSpecType_ClientChoice {
 	if m != nil {
@@ -496,6 +509,12 @@ func (m *GlobalSpecType) GetAsnChoice() isGlobalSpecType_AsnChoice {
 func (m *GlobalSpecType) GetDstAsnChoice() isGlobalSpecType_DstAsnChoice {
 	if m != nil {
 		return m.DstAsnChoice
+	}
+	return nil
+}
+func (m *GlobalSpecType) GetTlsFingerprintChoice() isGlobalSpecType_TlsFingerprintChoice {
+	if m != nil {
+		return m.TlsFingerprintChoice
 	}
 	return nil
 }
@@ -752,13 +771,6 @@ func (m *GlobalSpecType) GetVirtualHostMatcher() *policy.MatcherType {
 	return nil
 }
 
-func (m *GlobalSpecType) GetTlsFingerprintMatcher() *policy.TlsFingerprintMatcherType {
-	if m != nil {
-		return m.TlsFingerprintMatcher
-	}
-	return nil
-}
-
 func (m *GlobalSpecType) GetForwardingClass() []*schema.ObjectRefType {
 	if m != nil {
 		return m.ForwardingClass
@@ -776,13 +788,6 @@ func (m *GlobalSpecType) GetScheme() []string {
 func (m *GlobalSpecType) GetUrlMatcher() *policy.URLMatcherType {
 	if m != nil {
 		return m.UrlMatcher
-	}
-	return nil
-}
-
-func (m *GlobalSpecType) GetL4DestMatcher() *policy.L4DestMatcherType {
-	if m != nil {
-		return m.L4DestMatcher
 	}
 	return nil
 }
@@ -899,6 +904,20 @@ func (m *GlobalSpecType) GetResponseMaskingConfig() *policy.MaskingConfig {
 	return nil
 }
 
+func (m *GlobalSpecType) GetJa4TlsFingerprint() *policy.JA4TlsFingerprintMatcherType {
+	if x, ok := m.GetTlsFingerprintChoice().(*GlobalSpecType_Ja4TlsFingerprint); ok {
+		return x.Ja4TlsFingerprint
+	}
+	return nil
+}
+
+func (m *GlobalSpecType) GetTlsFingerprintMatcher() *policy.TlsFingerprintMatcherType {
+	if x, ok := m.GetTlsFingerprintChoice().(*GlobalSpecType_TlsFingerprintMatcher); ok {
+		return x.TlsFingerprintMatcher
+	}
+	return nil
+}
+
 // XXX_OneofWrappers is for the internal use of the proto package.
 func (*GlobalSpecType) XXX_OneofWrappers() []interface{} {
 	return []interface{}{
@@ -919,6 +938,8 @@ func (*GlobalSpecType) XXX_OneofWrappers() []interface{} {
 		(*GlobalSpecType_AnyDstAsn)(nil),
 		(*GlobalSpecType_DstAsnList)(nil),
 		(*GlobalSpecType_DstAsnMatcher)(nil),
+		(*GlobalSpecType_Ja4TlsFingerprint)(nil),
+		(*GlobalSpecType_TlsFingerprintMatcher)(nil),
 	}
 }
 
@@ -1009,32 +1030,34 @@ type CreateSpecType struct {
 	//	*CreateSpecType_AnyDstAsn
 	//	*CreateSpecType_DstAsnList
 	//	*CreateSpecType_DstAsnMatcher
-	DstAsnChoice                 isCreateSpecType_DstAsnChoice        `protobuf_oneof:"dst_asn_choice"`
-	ApiGroupMatcher              *policy.StringMatcherType            `protobuf:"bytes,14,opt,name=api_group_matcher,json=apiGroupMatcher,proto3" json:"api_group_matcher,omitempty"`
-	PortMatcher                  *policy.PortMatcherType              `protobuf:"bytes,15,opt,name=port_matcher,json=portMatcher,proto3" json:"port_matcher,omitempty"`
-	ExpirationTimestamp          *types.Timestamp                     `protobuf:"bytes,16,opt,name=expiration_timestamp,json=expirationTimestamp,proto3" json:"expiration_timestamp,omitempty"`
-	BodyMatcher                  *policy.MatcherType                  `protobuf:"bytes,21,opt,name=body_matcher,json=bodyMatcher,proto3" json:"body_matcher,omitempty"`
-	ArgMatchers                  []*policy.ArgMatcherType             `protobuf:"bytes,18,rep,name=arg_matchers,json=argMatchers,proto3" json:"arg_matchers,omitempty"`
-	CookieMatchers               []*policy.CookieMatcherType          `protobuf:"bytes,19,rep,name=cookie_matchers,json=cookieMatchers,proto3" json:"cookie_matchers,omitempty"`
-	WafAction                    *policy.WafAction                    `protobuf:"bytes,20,opt,name=waf_action,json=wafAction,proto3" json:"waf_action,omitempty"`
-	DomainMatcher                *policy.MatcherTypeBasic             `protobuf:"bytes,22,opt,name=domain_matcher,json=domainMatcher,proto3" json:"domain_matcher,omitempty"`
-	RateLimiter                  []*schema.ObjectRefType              `protobuf:"bytes,23,rep,name=rate_limiter,json=rateLimiter,proto3" json:"rate_limiter,omitempty"`
-	VirtualHostMatcher           *policy.MatcherTypeBasic             `protobuf:"bytes,24,opt,name=virtual_host_matcher,json=virtualHostMatcher,proto3" json:"virtual_host_matcher,omitempty"`
-	TlsFingerprintMatcher        *policy.TlsFingerprintMatcherType    `protobuf:"bytes,25,opt,name=tls_fingerprint_matcher,json=tlsFingerprintMatcher,proto3" json:"tls_fingerprint_matcher,omitempty"`
-	Scheme                       []string                             `protobuf:"bytes,38,rep,name=scheme,proto3" json:"scheme,omitempty"`
-	UrlMatcher                   *policy.URLMatcherType               `protobuf:"bytes,39,opt,name=url_matcher,json=urlMatcher,proto3" json:"url_matcher,omitempty"`
-	L4DestMatcher                *policy.L4DestMatcherType            `protobuf:"bytes,44,opt,name=l4_dest_matcher,json=l4DestMatcher,proto3" json:"l4_dest_matcher,omitempty"`
-	ChallengeAction              policy.ChallengeAction               `protobuf:"varint,54,opt,name=challenge_action,json=challengeAction,proto3,enum=ves.io.schema.policy.ChallengeAction" json:"challenge_action,omitempty"`
-	GotoPolicy                   []*schema.ObjectRefType              `protobuf:"bytes,55,rep,name=goto_policy,json=gotoPolicy,proto3" json:"goto_policy,omitempty"`
-	ContentRewriteAction         *policy.ContentRewriteAction         `protobuf:"bytes,56,opt,name=content_rewrite_action,json=contentRewriteAction,proto3" json:"content_rewrite_action,omitempty"`
-	ShapeProtectedEndpointAction *policy.ShapeProtectedEndpointAction `protobuf:"bytes,57,opt,name=shape_protected_endpoint_action,json=shapeProtectedEndpointAction,proto3" json:"shape_protected_endpoint_action,omitempty"`
-	BotAction                    *policy.BotAction                    `protobuf:"bytes,58,opt,name=bot_action,json=botAction,proto3" json:"bot_action,omitempty"`
-	MumAction                    *policy.ModifyAction                 `protobuf:"bytes,60,opt,name=mum_action,json=mumAction,proto3" json:"mum_action,omitempty"`
-	IpReputationAction           *policy.ModifyAction                 `protobuf:"bytes,61,opt,name=ip_reputation_action,json=ipReputationAction,proto3" json:"ip_reputation_action,omitempty"`
-	RequestConstraints           *policy.RequestConstraintType        `protobuf:"bytes,63,opt,name=request_constraints,json=requestConstraints,proto3" json:"request_constraints,omitempty"`
-	SegmentPolicy                *policy.SegmentPolicyType            `protobuf:"bytes,68,opt,name=segment_policy,json=segmentPolicy,proto3" json:"segment_policy,omitempty"`
-	OriginServerSubsetsAction    map[string]string                    `protobuf:"bytes,96,rep,name=origin_server_subsets_action,json=originServerSubsetsAction,proto3" json:"origin_server_subsets_action,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
-	JwtClaims                    []*policy.JWTClaimMatcherType        `protobuf:"bytes,97,rep,name=jwt_claims,json=jwtClaims,proto3" json:"jwt_claims,omitempty"`
+	DstAsnChoice        isCreateSpecType_DstAsnChoice `protobuf_oneof:"dst_asn_choice"`
+	ApiGroupMatcher     *policy.StringMatcherType     `protobuf:"bytes,14,opt,name=api_group_matcher,json=apiGroupMatcher,proto3" json:"api_group_matcher,omitempty"`
+	PortMatcher         *policy.PortMatcherType       `protobuf:"bytes,15,opt,name=port_matcher,json=portMatcher,proto3" json:"port_matcher,omitempty"`
+	ExpirationTimestamp *types.Timestamp              `protobuf:"bytes,16,opt,name=expiration_timestamp,json=expirationTimestamp,proto3" json:"expiration_timestamp,omitempty"`
+	BodyMatcher         *policy.MatcherType           `protobuf:"bytes,21,opt,name=body_matcher,json=bodyMatcher,proto3" json:"body_matcher,omitempty"`
+	ArgMatchers         []*policy.ArgMatcherType      `protobuf:"bytes,18,rep,name=arg_matchers,json=argMatchers,proto3" json:"arg_matchers,omitempty"`
+	CookieMatchers      []*policy.CookieMatcherType   `protobuf:"bytes,19,rep,name=cookie_matchers,json=cookieMatchers,proto3" json:"cookie_matchers,omitempty"`
+	WafAction           *policy.WafAction             `protobuf:"bytes,20,opt,name=waf_action,json=wafAction,proto3" json:"waf_action,omitempty"`
+	DomainMatcher       *policy.MatcherTypeBasic      `protobuf:"bytes,22,opt,name=domain_matcher,json=domainMatcher,proto3" json:"domain_matcher,omitempty"`
+	RateLimiter         []*schema.ObjectRefType       `protobuf:"bytes,23,rep,name=rate_limiter,json=rateLimiter,proto3" json:"rate_limiter,omitempty"`
+	VirtualHostMatcher  *policy.MatcherTypeBasic      `protobuf:"bytes,24,opt,name=virtual_host_matcher,json=virtualHostMatcher,proto3" json:"virtual_host_matcher,omitempty"`
+	// Types that are valid to be assigned to TlsFingerprintChoice:
+	//	*CreateSpecType_Ja4TlsFingerprint
+	//	*CreateSpecType_TlsFingerprintMatcher
+	TlsFingerprintChoice         isCreateSpecType_TlsFingerprintChoice `protobuf_oneof:"tls_fingerprint_choice"`
+	Scheme                       []string                              `protobuf:"bytes,38,rep,name=scheme,proto3" json:"scheme,omitempty"`
+	UrlMatcher                   *policy.URLMatcherType                `protobuf:"bytes,39,opt,name=url_matcher,json=urlMatcher,proto3" json:"url_matcher,omitempty"`
+	ChallengeAction              policy.ChallengeAction                `protobuf:"varint,54,opt,name=challenge_action,json=challengeAction,proto3,enum=ves.io.schema.policy.ChallengeAction" json:"challenge_action,omitempty"`
+	GotoPolicy                   []*schema.ObjectRefType               `protobuf:"bytes,55,rep,name=goto_policy,json=gotoPolicy,proto3" json:"goto_policy,omitempty"`
+	ContentRewriteAction         *policy.ContentRewriteAction          `protobuf:"bytes,56,opt,name=content_rewrite_action,json=contentRewriteAction,proto3" json:"content_rewrite_action,omitempty"`
+	ShapeProtectedEndpointAction *policy.ShapeProtectedEndpointAction  `protobuf:"bytes,57,opt,name=shape_protected_endpoint_action,json=shapeProtectedEndpointAction,proto3" json:"shape_protected_endpoint_action,omitempty"`
+	BotAction                    *policy.BotAction                     `protobuf:"bytes,58,opt,name=bot_action,json=botAction,proto3" json:"bot_action,omitempty"`
+	MumAction                    *policy.ModifyAction                  `protobuf:"bytes,60,opt,name=mum_action,json=mumAction,proto3" json:"mum_action,omitempty"`
+	IpReputationAction           *policy.ModifyAction                  `protobuf:"bytes,61,opt,name=ip_reputation_action,json=ipReputationAction,proto3" json:"ip_reputation_action,omitempty"`
+	RequestConstraints           *policy.RequestConstraintType         `protobuf:"bytes,63,opt,name=request_constraints,json=requestConstraints,proto3" json:"request_constraints,omitempty"`
+	SegmentPolicy                *policy.SegmentPolicyType             `protobuf:"bytes,68,opt,name=segment_policy,json=segmentPolicy,proto3" json:"segment_policy,omitempty"`
+	OriginServerSubsetsAction    map[string]string                     `protobuf:"bytes,96,rep,name=origin_server_subsets_action,json=originServerSubsetsAction,proto3" json:"origin_server_subsets_action,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
+	JwtClaims                    []*policy.JWTClaimMatcherType         `protobuf:"bytes,97,rep,name=jwt_claims,json=jwtClaims,proto3" json:"jwt_claims,omitempty"`
 }
 
 func (m *CreateSpecType) Reset()      { *m = CreateSpecType{} }
@@ -1095,6 +1118,12 @@ type isCreateSpecType_DstAsnChoice interface {
 	MarshalTo([]byte) (int, error)
 	Size() int
 }
+type isCreateSpecType_TlsFingerprintChoice interface {
+	isCreateSpecType_TlsFingerprintChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
 
 type CreateSpecType_AnyClient struct {
 	AnyClient *schema.Empty `protobuf:"bytes,37,opt,name=any_client,json=anyClient,proto3,oneof" json:"any_client,omitempty"`
@@ -1147,24 +1176,32 @@ type CreateSpecType_DstAsnList struct {
 type CreateSpecType_DstAsnMatcher struct {
 	DstAsnMatcher *policy.AsnMatcherType `protobuf:"bytes,53,opt,name=dst_asn_matcher,json=dstAsnMatcher,proto3,oneof" json:"dst_asn_matcher,omitempty"`
 }
+type CreateSpecType_Ja4TlsFingerprint struct {
+	Ja4TlsFingerprint *policy.JA4TlsFingerprintMatcherType `protobuf:"bytes,100,opt,name=ja4_tls_fingerprint,json=ja4TlsFingerprint,proto3,oneof" json:"ja4_tls_fingerprint,omitempty"`
+}
+type CreateSpecType_TlsFingerprintMatcher struct {
+	TlsFingerprintMatcher *policy.TlsFingerprintMatcherType `protobuf:"bytes,25,opt,name=tls_fingerprint_matcher,json=tlsFingerprintMatcher,proto3,oneof" json:"tls_fingerprint_matcher,omitempty"`
+}
 
-func (*CreateSpecType_AnyClient) isCreateSpecType_ClientChoice()            {}
-func (*CreateSpecType_ClientName) isCreateSpecType_ClientChoice()           {}
-func (*CreateSpecType_IpThreatCategoryList) isCreateSpecType_ClientChoice() {}
-func (*CreateSpecType_ClientSelector) isCreateSpecType_ClientChoice()       {}
-func (*CreateSpecType_ClientNameMatcher) isCreateSpecType_ClientChoice()    {}
-func (*CreateSpecType_AnyIp) isCreateSpecType_IpChoice()                    {}
-func (*CreateSpecType_IpPrefixList) isCreateSpecType_IpChoice()             {}
-func (*CreateSpecType_IpMatcher) isCreateSpecType_IpChoice()                {}
-func (*CreateSpecType_AnyDstIp) isCreateSpecType_DstIpChoice()              {}
-func (*CreateSpecType_DstIpPrefixList) isCreateSpecType_DstIpChoice()       {}
-func (*CreateSpecType_DstIpMatcher) isCreateSpecType_DstIpChoice()          {}
-func (*CreateSpecType_AnyAsn) isCreateSpecType_AsnChoice()                  {}
-func (*CreateSpecType_AsnList) isCreateSpecType_AsnChoice()                 {}
-func (*CreateSpecType_AsnMatcher) isCreateSpecType_AsnChoice()              {}
-func (*CreateSpecType_AnyDstAsn) isCreateSpecType_DstAsnChoice()            {}
-func (*CreateSpecType_DstAsnList) isCreateSpecType_DstAsnChoice()           {}
-func (*CreateSpecType_DstAsnMatcher) isCreateSpecType_DstAsnChoice()        {}
+func (*CreateSpecType_AnyClient) isCreateSpecType_ClientChoice()                     {}
+func (*CreateSpecType_ClientName) isCreateSpecType_ClientChoice()                    {}
+func (*CreateSpecType_IpThreatCategoryList) isCreateSpecType_ClientChoice()          {}
+func (*CreateSpecType_ClientSelector) isCreateSpecType_ClientChoice()                {}
+func (*CreateSpecType_ClientNameMatcher) isCreateSpecType_ClientChoice()             {}
+func (*CreateSpecType_AnyIp) isCreateSpecType_IpChoice()                             {}
+func (*CreateSpecType_IpPrefixList) isCreateSpecType_IpChoice()                      {}
+func (*CreateSpecType_IpMatcher) isCreateSpecType_IpChoice()                         {}
+func (*CreateSpecType_AnyDstIp) isCreateSpecType_DstIpChoice()                       {}
+func (*CreateSpecType_DstIpPrefixList) isCreateSpecType_DstIpChoice()                {}
+func (*CreateSpecType_DstIpMatcher) isCreateSpecType_DstIpChoice()                   {}
+func (*CreateSpecType_AnyAsn) isCreateSpecType_AsnChoice()                           {}
+func (*CreateSpecType_AsnList) isCreateSpecType_AsnChoice()                          {}
+func (*CreateSpecType_AsnMatcher) isCreateSpecType_AsnChoice()                       {}
+func (*CreateSpecType_AnyDstAsn) isCreateSpecType_DstAsnChoice()                     {}
+func (*CreateSpecType_DstAsnList) isCreateSpecType_DstAsnChoice()                    {}
+func (*CreateSpecType_DstAsnMatcher) isCreateSpecType_DstAsnChoice()                 {}
+func (*CreateSpecType_Ja4TlsFingerprint) isCreateSpecType_TlsFingerprintChoice()     {}
+func (*CreateSpecType_TlsFingerprintMatcher) isCreateSpecType_TlsFingerprintChoice() {}
 
 func (m *CreateSpecType) GetClientChoice() isCreateSpecType_ClientChoice {
 	if m != nil {
@@ -1193,6 +1230,12 @@ func (m *CreateSpecType) GetAsnChoice() isCreateSpecType_AsnChoice {
 func (m *CreateSpecType) GetDstAsnChoice() isCreateSpecType_DstAsnChoice {
 	if m != nil {
 		return m.DstAsnChoice
+	}
+	return nil
+}
+func (m *CreateSpecType) GetTlsFingerprintChoice() isCreateSpecType_TlsFingerprintChoice {
+	if m != nil {
+		return m.TlsFingerprintChoice
 	}
 	return nil
 }
@@ -1442,9 +1485,16 @@ func (m *CreateSpecType) GetVirtualHostMatcher() *policy.MatcherTypeBasic {
 	return nil
 }
 
+func (m *CreateSpecType) GetJa4TlsFingerprint() *policy.JA4TlsFingerprintMatcherType {
+	if x, ok := m.GetTlsFingerprintChoice().(*CreateSpecType_Ja4TlsFingerprint); ok {
+		return x.Ja4TlsFingerprint
+	}
+	return nil
+}
+
 func (m *CreateSpecType) GetTlsFingerprintMatcher() *policy.TlsFingerprintMatcherType {
-	if m != nil {
-		return m.TlsFingerprintMatcher
+	if x, ok := m.GetTlsFingerprintChoice().(*CreateSpecType_TlsFingerprintMatcher); ok {
+		return x.TlsFingerprintMatcher
 	}
 	return nil
 }
@@ -1459,13 +1509,6 @@ func (m *CreateSpecType) GetScheme() []string {
 func (m *CreateSpecType) GetUrlMatcher() *policy.URLMatcherType {
 	if m != nil {
 		return m.UrlMatcher
-	}
-	return nil
-}
-
-func (m *CreateSpecType) GetL4DestMatcher() *policy.L4DestMatcherType {
-	if m != nil {
-		return m.L4DestMatcher
 	}
 	return nil
 }
@@ -1567,6 +1610,8 @@ func (*CreateSpecType) XXX_OneofWrappers() []interface{} {
 		(*CreateSpecType_AnyDstAsn)(nil),
 		(*CreateSpecType_DstAsnList)(nil),
 		(*CreateSpecType_DstAsnMatcher)(nil),
+		(*CreateSpecType_Ja4TlsFingerprint)(nil),
+		(*CreateSpecType_TlsFingerprintMatcher)(nil),
 	}
 }
 
@@ -1609,32 +1654,34 @@ type ReplaceSpecType struct {
 	//	*ReplaceSpecType_AnyDstAsn
 	//	*ReplaceSpecType_DstAsnList
 	//	*ReplaceSpecType_DstAsnMatcher
-	DstAsnChoice                 isReplaceSpecType_DstAsnChoice       `protobuf_oneof:"dst_asn_choice"`
-	ApiGroupMatcher              *policy.StringMatcherType            `protobuf:"bytes,14,opt,name=api_group_matcher,json=apiGroupMatcher,proto3" json:"api_group_matcher,omitempty"`
-	PortMatcher                  *policy.PortMatcherType              `protobuf:"bytes,15,opt,name=port_matcher,json=portMatcher,proto3" json:"port_matcher,omitempty"`
-	ExpirationTimestamp          *types.Timestamp                     `protobuf:"bytes,16,opt,name=expiration_timestamp,json=expirationTimestamp,proto3" json:"expiration_timestamp,omitempty"`
-	BodyMatcher                  *policy.MatcherType                  `protobuf:"bytes,21,opt,name=body_matcher,json=bodyMatcher,proto3" json:"body_matcher,omitempty"`
-	ArgMatchers                  []*policy.ArgMatcherType             `protobuf:"bytes,18,rep,name=arg_matchers,json=argMatchers,proto3" json:"arg_matchers,omitempty"`
-	CookieMatchers               []*policy.CookieMatcherType          `protobuf:"bytes,19,rep,name=cookie_matchers,json=cookieMatchers,proto3" json:"cookie_matchers,omitempty"`
-	WafAction                    *policy.WafAction                    `protobuf:"bytes,20,opt,name=waf_action,json=wafAction,proto3" json:"waf_action,omitempty"`
-	DomainMatcher                *policy.MatcherTypeBasic             `protobuf:"bytes,22,opt,name=domain_matcher,json=domainMatcher,proto3" json:"domain_matcher,omitempty"`
-	RateLimiter                  []*schema.ObjectRefType              `protobuf:"bytes,23,rep,name=rate_limiter,json=rateLimiter,proto3" json:"rate_limiter,omitempty"`
-	VirtualHostMatcher           *policy.MatcherTypeBasic             `protobuf:"bytes,24,opt,name=virtual_host_matcher,json=virtualHostMatcher,proto3" json:"virtual_host_matcher,omitempty"`
-	TlsFingerprintMatcher        *policy.TlsFingerprintMatcherType    `protobuf:"bytes,25,opt,name=tls_fingerprint_matcher,json=tlsFingerprintMatcher,proto3" json:"tls_fingerprint_matcher,omitempty"`
-	Scheme                       []string                             `protobuf:"bytes,38,rep,name=scheme,proto3" json:"scheme,omitempty"`
-	UrlMatcher                   *policy.URLMatcherType               `protobuf:"bytes,39,opt,name=url_matcher,json=urlMatcher,proto3" json:"url_matcher,omitempty"`
-	L4DestMatcher                *policy.L4DestMatcherType            `protobuf:"bytes,44,opt,name=l4_dest_matcher,json=l4DestMatcher,proto3" json:"l4_dest_matcher,omitempty"`
-	ChallengeAction              policy.ChallengeAction               `protobuf:"varint,54,opt,name=challenge_action,json=challengeAction,proto3,enum=ves.io.schema.policy.ChallengeAction" json:"challenge_action,omitempty"`
-	GotoPolicy                   []*schema.ObjectRefType              `protobuf:"bytes,55,rep,name=goto_policy,json=gotoPolicy,proto3" json:"goto_policy,omitempty"`
-	ContentRewriteAction         *policy.ContentRewriteAction         `protobuf:"bytes,56,opt,name=content_rewrite_action,json=contentRewriteAction,proto3" json:"content_rewrite_action,omitempty"`
-	ShapeProtectedEndpointAction *policy.ShapeProtectedEndpointAction `protobuf:"bytes,57,opt,name=shape_protected_endpoint_action,json=shapeProtectedEndpointAction,proto3" json:"shape_protected_endpoint_action,omitempty"`
-	BotAction                    *policy.BotAction                    `protobuf:"bytes,58,opt,name=bot_action,json=botAction,proto3" json:"bot_action,omitempty"`
-	MumAction                    *policy.ModifyAction                 `protobuf:"bytes,60,opt,name=mum_action,json=mumAction,proto3" json:"mum_action,omitempty"`
-	IpReputationAction           *policy.ModifyAction                 `protobuf:"bytes,61,opt,name=ip_reputation_action,json=ipReputationAction,proto3" json:"ip_reputation_action,omitempty"`
-	RequestConstraints           *policy.RequestConstraintType        `protobuf:"bytes,63,opt,name=request_constraints,json=requestConstraints,proto3" json:"request_constraints,omitempty"`
-	SegmentPolicy                *policy.SegmentPolicyType            `protobuf:"bytes,68,opt,name=segment_policy,json=segmentPolicy,proto3" json:"segment_policy,omitempty"`
-	OriginServerSubsetsAction    map[string]string                    `protobuf:"bytes,96,rep,name=origin_server_subsets_action,json=originServerSubsetsAction,proto3" json:"origin_server_subsets_action,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
-	JwtClaims                    []*policy.JWTClaimMatcherType        `protobuf:"bytes,97,rep,name=jwt_claims,json=jwtClaims,proto3" json:"jwt_claims,omitempty"`
+	DstAsnChoice        isReplaceSpecType_DstAsnChoice `protobuf_oneof:"dst_asn_choice"`
+	ApiGroupMatcher     *policy.StringMatcherType      `protobuf:"bytes,14,opt,name=api_group_matcher,json=apiGroupMatcher,proto3" json:"api_group_matcher,omitempty"`
+	PortMatcher         *policy.PortMatcherType        `protobuf:"bytes,15,opt,name=port_matcher,json=portMatcher,proto3" json:"port_matcher,omitempty"`
+	ExpirationTimestamp *types.Timestamp               `protobuf:"bytes,16,opt,name=expiration_timestamp,json=expirationTimestamp,proto3" json:"expiration_timestamp,omitempty"`
+	BodyMatcher         *policy.MatcherType            `protobuf:"bytes,21,opt,name=body_matcher,json=bodyMatcher,proto3" json:"body_matcher,omitempty"`
+	ArgMatchers         []*policy.ArgMatcherType       `protobuf:"bytes,18,rep,name=arg_matchers,json=argMatchers,proto3" json:"arg_matchers,omitempty"`
+	CookieMatchers      []*policy.CookieMatcherType    `protobuf:"bytes,19,rep,name=cookie_matchers,json=cookieMatchers,proto3" json:"cookie_matchers,omitempty"`
+	WafAction           *policy.WafAction              `protobuf:"bytes,20,opt,name=waf_action,json=wafAction,proto3" json:"waf_action,omitempty"`
+	DomainMatcher       *policy.MatcherTypeBasic       `protobuf:"bytes,22,opt,name=domain_matcher,json=domainMatcher,proto3" json:"domain_matcher,omitempty"`
+	RateLimiter         []*schema.ObjectRefType        `protobuf:"bytes,23,rep,name=rate_limiter,json=rateLimiter,proto3" json:"rate_limiter,omitempty"`
+	VirtualHostMatcher  *policy.MatcherTypeBasic       `protobuf:"bytes,24,opt,name=virtual_host_matcher,json=virtualHostMatcher,proto3" json:"virtual_host_matcher,omitempty"`
+	// Types that are valid to be assigned to TlsFingerprintChoice:
+	//	*ReplaceSpecType_Ja4TlsFingerprint
+	//	*ReplaceSpecType_TlsFingerprintMatcher
+	TlsFingerprintChoice         isReplaceSpecType_TlsFingerprintChoice `protobuf_oneof:"tls_fingerprint_choice"`
+	Scheme                       []string                               `protobuf:"bytes,38,rep,name=scheme,proto3" json:"scheme,omitempty"`
+	UrlMatcher                   *policy.URLMatcherType                 `protobuf:"bytes,39,opt,name=url_matcher,json=urlMatcher,proto3" json:"url_matcher,omitempty"`
+	ChallengeAction              policy.ChallengeAction                 `protobuf:"varint,54,opt,name=challenge_action,json=challengeAction,proto3,enum=ves.io.schema.policy.ChallengeAction" json:"challenge_action,omitempty"`
+	GotoPolicy                   []*schema.ObjectRefType                `protobuf:"bytes,55,rep,name=goto_policy,json=gotoPolicy,proto3" json:"goto_policy,omitempty"`
+	ContentRewriteAction         *policy.ContentRewriteAction           `protobuf:"bytes,56,opt,name=content_rewrite_action,json=contentRewriteAction,proto3" json:"content_rewrite_action,omitempty"`
+	ShapeProtectedEndpointAction *policy.ShapeProtectedEndpointAction   `protobuf:"bytes,57,opt,name=shape_protected_endpoint_action,json=shapeProtectedEndpointAction,proto3" json:"shape_protected_endpoint_action,omitempty"`
+	BotAction                    *policy.BotAction                      `protobuf:"bytes,58,opt,name=bot_action,json=botAction,proto3" json:"bot_action,omitempty"`
+	MumAction                    *policy.ModifyAction                   `protobuf:"bytes,60,opt,name=mum_action,json=mumAction,proto3" json:"mum_action,omitempty"`
+	IpReputationAction           *policy.ModifyAction                   `protobuf:"bytes,61,opt,name=ip_reputation_action,json=ipReputationAction,proto3" json:"ip_reputation_action,omitempty"`
+	RequestConstraints           *policy.RequestConstraintType          `protobuf:"bytes,63,opt,name=request_constraints,json=requestConstraints,proto3" json:"request_constraints,omitempty"`
+	SegmentPolicy                *policy.SegmentPolicyType              `protobuf:"bytes,68,opt,name=segment_policy,json=segmentPolicy,proto3" json:"segment_policy,omitempty"`
+	OriginServerSubsetsAction    map[string]string                      `protobuf:"bytes,96,rep,name=origin_server_subsets_action,json=originServerSubsetsAction,proto3" json:"origin_server_subsets_action,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
+	JwtClaims                    []*policy.JWTClaimMatcherType          `protobuf:"bytes,97,rep,name=jwt_claims,json=jwtClaims,proto3" json:"jwt_claims,omitempty"`
 }
 
 func (m *ReplaceSpecType) Reset()      { *m = ReplaceSpecType{} }
@@ -1695,6 +1742,12 @@ type isReplaceSpecType_DstAsnChoice interface {
 	MarshalTo([]byte) (int, error)
 	Size() int
 }
+type isReplaceSpecType_TlsFingerprintChoice interface {
+	isReplaceSpecType_TlsFingerprintChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
 
 type ReplaceSpecType_AnyClient struct {
 	AnyClient *schema.Empty `protobuf:"bytes,37,opt,name=any_client,json=anyClient,proto3,oneof" json:"any_client,omitempty"`
@@ -1747,24 +1800,32 @@ type ReplaceSpecType_DstAsnList struct {
 type ReplaceSpecType_DstAsnMatcher struct {
 	DstAsnMatcher *policy.AsnMatcherType `protobuf:"bytes,53,opt,name=dst_asn_matcher,json=dstAsnMatcher,proto3,oneof" json:"dst_asn_matcher,omitempty"`
 }
+type ReplaceSpecType_Ja4TlsFingerprint struct {
+	Ja4TlsFingerprint *policy.JA4TlsFingerprintMatcherType `protobuf:"bytes,100,opt,name=ja4_tls_fingerprint,json=ja4TlsFingerprint,proto3,oneof" json:"ja4_tls_fingerprint,omitempty"`
+}
+type ReplaceSpecType_TlsFingerprintMatcher struct {
+	TlsFingerprintMatcher *policy.TlsFingerprintMatcherType `protobuf:"bytes,25,opt,name=tls_fingerprint_matcher,json=tlsFingerprintMatcher,proto3,oneof" json:"tls_fingerprint_matcher,omitempty"`
+}
 
-func (*ReplaceSpecType_AnyClient) isReplaceSpecType_ClientChoice()            {}
-func (*ReplaceSpecType_ClientName) isReplaceSpecType_ClientChoice()           {}
-func (*ReplaceSpecType_IpThreatCategoryList) isReplaceSpecType_ClientChoice() {}
-func (*ReplaceSpecType_ClientSelector) isReplaceSpecType_ClientChoice()       {}
-func (*ReplaceSpecType_ClientNameMatcher) isReplaceSpecType_ClientChoice()    {}
-func (*ReplaceSpecType_AnyIp) isReplaceSpecType_IpChoice()                    {}
-func (*ReplaceSpecType_IpPrefixList) isReplaceSpecType_IpChoice()             {}
-func (*ReplaceSpecType_IpMatcher) isReplaceSpecType_IpChoice()                {}
-func (*ReplaceSpecType_AnyDstIp) isReplaceSpecType_DstIpChoice()              {}
-func (*ReplaceSpecType_DstIpPrefixList) isReplaceSpecType_DstIpChoice()       {}
-func (*ReplaceSpecType_DstIpMatcher) isReplaceSpecType_DstIpChoice()          {}
-func (*ReplaceSpecType_AnyAsn) isReplaceSpecType_AsnChoice()                  {}
-func (*ReplaceSpecType_AsnList) isReplaceSpecType_AsnChoice()                 {}
-func (*ReplaceSpecType_AsnMatcher) isReplaceSpecType_AsnChoice()              {}
-func (*ReplaceSpecType_AnyDstAsn) isReplaceSpecType_DstAsnChoice()            {}
-func (*ReplaceSpecType_DstAsnList) isReplaceSpecType_DstAsnChoice()           {}
-func (*ReplaceSpecType_DstAsnMatcher) isReplaceSpecType_DstAsnChoice()        {}
+func (*ReplaceSpecType_AnyClient) isReplaceSpecType_ClientChoice()                     {}
+func (*ReplaceSpecType_ClientName) isReplaceSpecType_ClientChoice()                    {}
+func (*ReplaceSpecType_IpThreatCategoryList) isReplaceSpecType_ClientChoice()          {}
+func (*ReplaceSpecType_ClientSelector) isReplaceSpecType_ClientChoice()                {}
+func (*ReplaceSpecType_ClientNameMatcher) isReplaceSpecType_ClientChoice()             {}
+func (*ReplaceSpecType_AnyIp) isReplaceSpecType_IpChoice()                             {}
+func (*ReplaceSpecType_IpPrefixList) isReplaceSpecType_IpChoice()                      {}
+func (*ReplaceSpecType_IpMatcher) isReplaceSpecType_IpChoice()                         {}
+func (*ReplaceSpecType_AnyDstIp) isReplaceSpecType_DstIpChoice()                       {}
+func (*ReplaceSpecType_DstIpPrefixList) isReplaceSpecType_DstIpChoice()                {}
+func (*ReplaceSpecType_DstIpMatcher) isReplaceSpecType_DstIpChoice()                   {}
+func (*ReplaceSpecType_AnyAsn) isReplaceSpecType_AsnChoice()                           {}
+func (*ReplaceSpecType_AsnList) isReplaceSpecType_AsnChoice()                          {}
+func (*ReplaceSpecType_AsnMatcher) isReplaceSpecType_AsnChoice()                       {}
+func (*ReplaceSpecType_AnyDstAsn) isReplaceSpecType_DstAsnChoice()                     {}
+func (*ReplaceSpecType_DstAsnList) isReplaceSpecType_DstAsnChoice()                    {}
+func (*ReplaceSpecType_DstAsnMatcher) isReplaceSpecType_DstAsnChoice()                 {}
+func (*ReplaceSpecType_Ja4TlsFingerprint) isReplaceSpecType_TlsFingerprintChoice()     {}
+func (*ReplaceSpecType_TlsFingerprintMatcher) isReplaceSpecType_TlsFingerprintChoice() {}
 
 func (m *ReplaceSpecType) GetClientChoice() isReplaceSpecType_ClientChoice {
 	if m != nil {
@@ -1793,6 +1854,12 @@ func (m *ReplaceSpecType) GetAsnChoice() isReplaceSpecType_AsnChoice {
 func (m *ReplaceSpecType) GetDstAsnChoice() isReplaceSpecType_DstAsnChoice {
 	if m != nil {
 		return m.DstAsnChoice
+	}
+	return nil
+}
+func (m *ReplaceSpecType) GetTlsFingerprintChoice() isReplaceSpecType_TlsFingerprintChoice {
+	if m != nil {
+		return m.TlsFingerprintChoice
 	}
 	return nil
 }
@@ -2042,9 +2109,16 @@ func (m *ReplaceSpecType) GetVirtualHostMatcher() *policy.MatcherTypeBasic {
 	return nil
 }
 
+func (m *ReplaceSpecType) GetJa4TlsFingerprint() *policy.JA4TlsFingerprintMatcherType {
+	if x, ok := m.GetTlsFingerprintChoice().(*ReplaceSpecType_Ja4TlsFingerprint); ok {
+		return x.Ja4TlsFingerprint
+	}
+	return nil
+}
+
 func (m *ReplaceSpecType) GetTlsFingerprintMatcher() *policy.TlsFingerprintMatcherType {
-	if m != nil {
-		return m.TlsFingerprintMatcher
+	if x, ok := m.GetTlsFingerprintChoice().(*ReplaceSpecType_TlsFingerprintMatcher); ok {
+		return x.TlsFingerprintMatcher
 	}
 	return nil
 }
@@ -2059,13 +2133,6 @@ func (m *ReplaceSpecType) GetScheme() []string {
 func (m *ReplaceSpecType) GetUrlMatcher() *policy.URLMatcherType {
 	if m != nil {
 		return m.UrlMatcher
-	}
-	return nil
-}
-
-func (m *ReplaceSpecType) GetL4DestMatcher() *policy.L4DestMatcherType {
-	if m != nil {
-		return m.L4DestMatcher
 	}
 	return nil
 }
@@ -2167,6 +2234,8 @@ func (*ReplaceSpecType) XXX_OneofWrappers() []interface{} {
 		(*ReplaceSpecType_AnyDstAsn)(nil),
 		(*ReplaceSpecType_DstAsnList)(nil),
 		(*ReplaceSpecType_DstAsnMatcher)(nil),
+		(*ReplaceSpecType_Ja4TlsFingerprint)(nil),
+		(*ReplaceSpecType_TlsFingerprintMatcher)(nil),
 	}
 }
 
@@ -2209,21 +2278,23 @@ type GetSpecType struct {
 	//	*GetSpecType_AnyDstAsn
 	//	*GetSpecType_DstAsnList
 	//	*GetSpecType_DstAsnMatcher
-	DstAsnChoice                 isGetSpecType_DstAsnChoice           `protobuf_oneof:"dst_asn_choice"`
-	ApiGroupMatcher              *policy.StringMatcherType            `protobuf:"bytes,14,opt,name=api_group_matcher,json=apiGroupMatcher,proto3" json:"api_group_matcher,omitempty"`
-	PortMatcher                  *policy.PortMatcherType              `protobuf:"bytes,15,opt,name=port_matcher,json=portMatcher,proto3" json:"port_matcher,omitempty"`
-	ExpirationTimestamp          *types.Timestamp                     `protobuf:"bytes,16,opt,name=expiration_timestamp,json=expirationTimestamp,proto3" json:"expiration_timestamp,omitempty"`
-	BodyMatcher                  *policy.MatcherType                  `protobuf:"bytes,21,opt,name=body_matcher,json=bodyMatcher,proto3" json:"body_matcher,omitempty"`
-	ArgMatchers                  []*policy.ArgMatcherType             `protobuf:"bytes,18,rep,name=arg_matchers,json=argMatchers,proto3" json:"arg_matchers,omitempty"`
-	CookieMatchers               []*policy.CookieMatcherType          `protobuf:"bytes,19,rep,name=cookie_matchers,json=cookieMatchers,proto3" json:"cookie_matchers,omitempty"`
-	WafAction                    *policy.WafAction                    `protobuf:"bytes,20,opt,name=waf_action,json=wafAction,proto3" json:"waf_action,omitempty"`
-	DomainMatcher                *policy.MatcherTypeBasic             `protobuf:"bytes,22,opt,name=domain_matcher,json=domainMatcher,proto3" json:"domain_matcher,omitempty"`
-	RateLimiter                  []*schema.ObjectRefType              `protobuf:"bytes,23,rep,name=rate_limiter,json=rateLimiter,proto3" json:"rate_limiter,omitempty"`
-	VirtualHostMatcher           *policy.MatcherTypeBasic             `protobuf:"bytes,24,opt,name=virtual_host_matcher,json=virtualHostMatcher,proto3" json:"virtual_host_matcher,omitempty"`
-	TlsFingerprintMatcher        *policy.TlsFingerprintMatcherType    `protobuf:"bytes,25,opt,name=tls_fingerprint_matcher,json=tlsFingerprintMatcher,proto3" json:"tls_fingerprint_matcher,omitempty"`
+	DstAsnChoice        isGetSpecType_DstAsnChoice  `protobuf_oneof:"dst_asn_choice"`
+	ApiGroupMatcher     *policy.StringMatcherType   `protobuf:"bytes,14,opt,name=api_group_matcher,json=apiGroupMatcher,proto3" json:"api_group_matcher,omitempty"`
+	PortMatcher         *policy.PortMatcherType     `protobuf:"bytes,15,opt,name=port_matcher,json=portMatcher,proto3" json:"port_matcher,omitempty"`
+	ExpirationTimestamp *types.Timestamp            `protobuf:"bytes,16,opt,name=expiration_timestamp,json=expirationTimestamp,proto3" json:"expiration_timestamp,omitempty"`
+	BodyMatcher         *policy.MatcherType         `protobuf:"bytes,21,opt,name=body_matcher,json=bodyMatcher,proto3" json:"body_matcher,omitempty"`
+	ArgMatchers         []*policy.ArgMatcherType    `protobuf:"bytes,18,rep,name=arg_matchers,json=argMatchers,proto3" json:"arg_matchers,omitempty"`
+	CookieMatchers      []*policy.CookieMatcherType `protobuf:"bytes,19,rep,name=cookie_matchers,json=cookieMatchers,proto3" json:"cookie_matchers,omitempty"`
+	WafAction           *policy.WafAction           `protobuf:"bytes,20,opt,name=waf_action,json=wafAction,proto3" json:"waf_action,omitempty"`
+	DomainMatcher       *policy.MatcherTypeBasic    `protobuf:"bytes,22,opt,name=domain_matcher,json=domainMatcher,proto3" json:"domain_matcher,omitempty"`
+	RateLimiter         []*schema.ObjectRefType     `protobuf:"bytes,23,rep,name=rate_limiter,json=rateLimiter,proto3" json:"rate_limiter,omitempty"`
+	VirtualHostMatcher  *policy.MatcherTypeBasic    `protobuf:"bytes,24,opt,name=virtual_host_matcher,json=virtualHostMatcher,proto3" json:"virtual_host_matcher,omitempty"`
+	// Types that are valid to be assigned to TlsFingerprintChoice:
+	//	*GetSpecType_Ja4TlsFingerprint
+	//	*GetSpecType_TlsFingerprintMatcher
+	TlsFingerprintChoice         isGetSpecType_TlsFingerprintChoice   `protobuf_oneof:"tls_fingerprint_choice"`
 	Scheme                       []string                             `protobuf:"bytes,38,rep,name=scheme,proto3" json:"scheme,omitempty"`
 	UrlMatcher                   *policy.URLMatcherType               `protobuf:"bytes,39,opt,name=url_matcher,json=urlMatcher,proto3" json:"url_matcher,omitempty"`
-	L4DestMatcher                *policy.L4DestMatcherType            `protobuf:"bytes,44,opt,name=l4_dest_matcher,json=l4DestMatcher,proto3" json:"l4_dest_matcher,omitempty"`
 	ChallengeAction              policy.ChallengeAction               `protobuf:"varint,54,opt,name=challenge_action,json=challengeAction,proto3,enum=ves.io.schema.policy.ChallengeAction" json:"challenge_action,omitempty"`
 	GotoPolicy                   []*schema.ObjectRefType              `protobuf:"bytes,55,rep,name=goto_policy,json=gotoPolicy,proto3" json:"goto_policy,omitempty"`
 	ContentRewriteAction         *policy.ContentRewriteAction         `protobuf:"bytes,56,opt,name=content_rewrite_action,json=contentRewriteAction,proto3" json:"content_rewrite_action,omitempty"`
@@ -2295,6 +2366,12 @@ type isGetSpecType_DstAsnChoice interface {
 	MarshalTo([]byte) (int, error)
 	Size() int
 }
+type isGetSpecType_TlsFingerprintChoice interface {
+	isGetSpecType_TlsFingerprintChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
 
 type GetSpecType_AnyClient struct {
 	AnyClient *schema.Empty `protobuf:"bytes,37,opt,name=any_client,json=anyClient,proto3,oneof" json:"any_client,omitempty"`
@@ -2347,24 +2424,32 @@ type GetSpecType_DstAsnList struct {
 type GetSpecType_DstAsnMatcher struct {
 	DstAsnMatcher *policy.AsnMatcherType `protobuf:"bytes,53,opt,name=dst_asn_matcher,json=dstAsnMatcher,proto3,oneof" json:"dst_asn_matcher,omitempty"`
 }
+type GetSpecType_Ja4TlsFingerprint struct {
+	Ja4TlsFingerprint *policy.JA4TlsFingerprintMatcherType `protobuf:"bytes,100,opt,name=ja4_tls_fingerprint,json=ja4TlsFingerprint,proto3,oneof" json:"ja4_tls_fingerprint,omitempty"`
+}
+type GetSpecType_TlsFingerprintMatcher struct {
+	TlsFingerprintMatcher *policy.TlsFingerprintMatcherType `protobuf:"bytes,25,opt,name=tls_fingerprint_matcher,json=tlsFingerprintMatcher,proto3,oneof" json:"tls_fingerprint_matcher,omitempty"`
+}
 
-func (*GetSpecType_AnyClient) isGetSpecType_ClientChoice()            {}
-func (*GetSpecType_ClientName) isGetSpecType_ClientChoice()           {}
-func (*GetSpecType_IpThreatCategoryList) isGetSpecType_ClientChoice() {}
-func (*GetSpecType_ClientSelector) isGetSpecType_ClientChoice()       {}
-func (*GetSpecType_ClientNameMatcher) isGetSpecType_ClientChoice()    {}
-func (*GetSpecType_AnyIp) isGetSpecType_IpChoice()                    {}
-func (*GetSpecType_IpPrefixList) isGetSpecType_IpChoice()             {}
-func (*GetSpecType_IpMatcher) isGetSpecType_IpChoice()                {}
-func (*GetSpecType_AnyDstIp) isGetSpecType_DstIpChoice()              {}
-func (*GetSpecType_DstIpPrefixList) isGetSpecType_DstIpChoice()       {}
-func (*GetSpecType_DstIpMatcher) isGetSpecType_DstIpChoice()          {}
-func (*GetSpecType_AnyAsn) isGetSpecType_AsnChoice()                  {}
-func (*GetSpecType_AsnList) isGetSpecType_AsnChoice()                 {}
-func (*GetSpecType_AsnMatcher) isGetSpecType_AsnChoice()              {}
-func (*GetSpecType_AnyDstAsn) isGetSpecType_DstAsnChoice()            {}
-func (*GetSpecType_DstAsnList) isGetSpecType_DstAsnChoice()           {}
-func (*GetSpecType_DstAsnMatcher) isGetSpecType_DstAsnChoice()        {}
+func (*GetSpecType_AnyClient) isGetSpecType_ClientChoice()                     {}
+func (*GetSpecType_ClientName) isGetSpecType_ClientChoice()                    {}
+func (*GetSpecType_IpThreatCategoryList) isGetSpecType_ClientChoice()          {}
+func (*GetSpecType_ClientSelector) isGetSpecType_ClientChoice()                {}
+func (*GetSpecType_ClientNameMatcher) isGetSpecType_ClientChoice()             {}
+func (*GetSpecType_AnyIp) isGetSpecType_IpChoice()                             {}
+func (*GetSpecType_IpPrefixList) isGetSpecType_IpChoice()                      {}
+func (*GetSpecType_IpMatcher) isGetSpecType_IpChoice()                         {}
+func (*GetSpecType_AnyDstIp) isGetSpecType_DstIpChoice()                       {}
+func (*GetSpecType_DstIpPrefixList) isGetSpecType_DstIpChoice()                {}
+func (*GetSpecType_DstIpMatcher) isGetSpecType_DstIpChoice()                   {}
+func (*GetSpecType_AnyAsn) isGetSpecType_AsnChoice()                           {}
+func (*GetSpecType_AsnList) isGetSpecType_AsnChoice()                          {}
+func (*GetSpecType_AsnMatcher) isGetSpecType_AsnChoice()                       {}
+func (*GetSpecType_AnyDstAsn) isGetSpecType_DstAsnChoice()                     {}
+func (*GetSpecType_DstAsnList) isGetSpecType_DstAsnChoice()                    {}
+func (*GetSpecType_DstAsnMatcher) isGetSpecType_DstAsnChoice()                 {}
+func (*GetSpecType_Ja4TlsFingerprint) isGetSpecType_TlsFingerprintChoice()     {}
+func (*GetSpecType_TlsFingerprintMatcher) isGetSpecType_TlsFingerprintChoice() {}
 
 func (m *GetSpecType) GetClientChoice() isGetSpecType_ClientChoice {
 	if m != nil {
@@ -2393,6 +2478,12 @@ func (m *GetSpecType) GetAsnChoice() isGetSpecType_AsnChoice {
 func (m *GetSpecType) GetDstAsnChoice() isGetSpecType_DstAsnChoice {
 	if m != nil {
 		return m.DstAsnChoice
+	}
+	return nil
+}
+func (m *GetSpecType) GetTlsFingerprintChoice() isGetSpecType_TlsFingerprintChoice {
+	if m != nil {
+		return m.TlsFingerprintChoice
 	}
 	return nil
 }
@@ -2642,9 +2733,16 @@ func (m *GetSpecType) GetVirtualHostMatcher() *policy.MatcherTypeBasic {
 	return nil
 }
 
+func (m *GetSpecType) GetJa4TlsFingerprint() *policy.JA4TlsFingerprintMatcherType {
+	if x, ok := m.GetTlsFingerprintChoice().(*GetSpecType_Ja4TlsFingerprint); ok {
+		return x.Ja4TlsFingerprint
+	}
+	return nil
+}
+
 func (m *GetSpecType) GetTlsFingerprintMatcher() *policy.TlsFingerprintMatcherType {
-	if m != nil {
-		return m.TlsFingerprintMatcher
+	if x, ok := m.GetTlsFingerprintChoice().(*GetSpecType_TlsFingerprintMatcher); ok {
+		return x.TlsFingerprintMatcher
 	}
 	return nil
 }
@@ -2659,13 +2757,6 @@ func (m *GetSpecType) GetScheme() []string {
 func (m *GetSpecType) GetUrlMatcher() *policy.URLMatcherType {
 	if m != nil {
 		return m.UrlMatcher
-	}
-	return nil
-}
-
-func (m *GetSpecType) GetL4DestMatcher() *policy.L4DestMatcherType {
-	if m != nil {
-		return m.L4DestMatcher
 	}
 	return nil
 }
@@ -2767,6 +2858,8 @@ func (*GetSpecType) XXX_OneofWrappers() []interface{} {
 		(*GetSpecType_AnyDstAsn)(nil),
 		(*GetSpecType_DstAsnList)(nil),
 		(*GetSpecType_DstAsnMatcher)(nil),
+		(*GetSpecType_Ja4TlsFingerprint)(nil),
+		(*GetSpecType_TlsFingerprintMatcher)(nil),
 	}
 }
 
@@ -2790,40 +2883,39 @@ type ChallengeRuleSpec struct {
 	// by setting the action to disable_challenge
 	//
 	// Types that are valid to be assigned to ChallengeAction:
-	//
 	//	*ChallengeRuleSpec_DisableChallenge
 	//	*ChallengeRuleSpec_EnableJavascriptChallenge
 	//	*ChallengeRuleSpec_EnableCaptchaChallenge
 	ChallengeAction isChallengeRuleSpec_ChallengeAction `protobuf_oneof:"challenge_action"`
 	// Types that are valid to be assigned to IpChoice:
-	//
 	//	*ChallengeRuleSpec_AnyIp
 	//	*ChallengeRuleSpec_IpPrefixList
 	//	*ChallengeRuleSpec_IpMatcher
 	IpChoice isChallengeRuleSpec_IpChoice `protobuf_oneof:"ip_choice"`
 	// Types that are valid to be assigned to AsnChoice:
-	//
 	//	*ChallengeRuleSpec_AnyAsn
 	//	*ChallengeRuleSpec_AsnList
 	//	*ChallengeRuleSpec_AsnMatcher
-	AsnChoice             isChallengeRuleSpec_AsnChoice       `protobuf_oneof:"asn_choice"`
-	DomainMatcher         *policy.MatcherTypeBasic            `protobuf:"bytes,5,opt,name=domain_matcher,json=domainMatcher,proto3" json:"domain_matcher,omitempty"`
-	Path                  *policy.PathMatcherType             `protobuf:"bytes,6,opt,name=path,proto3" json:"path,omitempty"`
-	Headers               []*policy.HeaderMatcherType         `protobuf:"bytes,7,rep,name=headers,proto3" json:"headers,omitempty"`
-	HttpMethod            *policy.HttpMethodMatcherType       `protobuf:"bytes,8,opt,name=http_method,json=httpMethod,proto3" json:"http_method,omitempty"`
-	TlsFingerprintMatcher *policy.TlsFingerprintMatcherType   `protobuf:"bytes,10,opt,name=tls_fingerprint_matcher,json=tlsFingerprintMatcher,proto3" json:"tls_fingerprint_matcher,omitempty"`
-	QueryParams           []*policy.QueryParameterMatcherType `protobuf:"bytes,11,rep,name=query_params,json=queryParams,proto3" json:"query_params,omitempty"`
-	BodyMatcher           *policy.MatcherType                 `protobuf:"bytes,12,opt,name=body_matcher,json=bodyMatcher,proto3" json:"body_matcher,omitempty"`
-	ArgMatchers           []*policy.ArgMatcherType            `protobuf:"bytes,13,rep,name=arg_matchers,json=argMatchers,proto3" json:"arg_matchers,omitempty"`
-	CookieMatchers        []*policy.CookieMatcherType         `protobuf:"bytes,14,rep,name=cookie_matchers,json=cookieMatchers,proto3" json:"cookie_matchers,omitempty"`
+	AsnChoice      isChallengeRuleSpec_AsnChoice       `protobuf_oneof:"asn_choice"`
+	DomainMatcher  *policy.MatcherTypeBasic            `protobuf:"bytes,5,opt,name=domain_matcher,json=domainMatcher,proto3" json:"domain_matcher,omitempty"`
+	Path           *policy.PathMatcherType             `protobuf:"bytes,6,opt,name=path,proto3" json:"path,omitempty"`
+	Headers        []*policy.HeaderMatcherType         `protobuf:"bytes,7,rep,name=headers,proto3" json:"headers,omitempty"`
+	HttpMethod     *policy.HttpMethodMatcherType       `protobuf:"bytes,8,opt,name=http_method,json=httpMethod,proto3" json:"http_method,omitempty"`
+	QueryParams    []*policy.QueryParameterMatcherType `protobuf:"bytes,11,rep,name=query_params,json=queryParams,proto3" json:"query_params,omitempty"`
+	BodyMatcher    *policy.MatcherType                 `protobuf:"bytes,12,opt,name=body_matcher,json=bodyMatcher,proto3" json:"body_matcher,omitempty"`
+	ArgMatchers    []*policy.ArgMatcherType            `protobuf:"bytes,13,rep,name=arg_matchers,json=argMatchers,proto3" json:"arg_matchers,omitempty"`
+	CookieMatchers []*policy.CookieMatcherType         `protobuf:"bytes,14,rep,name=cookie_matchers,json=cookieMatchers,proto3" json:"cookie_matchers,omitempty"`
 	// Types that are valid to be assigned to ClientChoice:
-	//
 	//	*ChallengeRuleSpec_AnyClient
 	//	*ChallengeRuleSpec_ClientName
 	//	*ChallengeRuleSpec_ClientSelector
 	//	*ChallengeRuleSpec_ClientNameMatcher
 	ClientChoice        isChallengeRuleSpec_ClientChoice `protobuf_oneof:"client_choice"`
 	ExpirationTimestamp *types.Timestamp                 `protobuf:"bytes,20,opt,name=expiration_timestamp,json=expirationTimestamp,proto3" json:"expiration_timestamp,omitempty"`
+	// Types that are valid to be assigned to TlsFingerprintChoice:
+	//	*ChallengeRuleSpec_Ja4TlsFingerprint
+	//	*ChallengeRuleSpec_TlsFingerprintMatcher
+	TlsFingerprintChoice isChallengeRuleSpec_TlsFingerprintChoice `protobuf_oneof:"tls_fingerprint_choice"`
 }
 
 func (m *ChallengeRuleSpec) Reset()      { *m = ChallengeRuleSpec{} }
@@ -2878,6 +2970,12 @@ type isChallengeRuleSpec_ClientChoice interface {
 	MarshalTo([]byte) (int, error)
 	Size() int
 }
+type isChallengeRuleSpec_TlsFingerprintChoice interface {
+	isChallengeRuleSpec_TlsFingerprintChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
 
 type ChallengeRuleSpec_DisableChallenge struct {
 	DisableChallenge *schema.Empty `protobuf:"bytes,2,opt,name=disable_challenge,json=disableChallenge,proto3,oneof" json:"disable_challenge,omitempty"`
@@ -2918,20 +3016,28 @@ type ChallengeRuleSpec_ClientSelector struct {
 type ChallengeRuleSpec_ClientNameMatcher struct {
 	ClientNameMatcher *policy.MatcherType `protobuf:"bytes,19,opt,name=client_name_matcher,json=clientNameMatcher,proto3,oneof" json:"client_name_matcher,omitempty"`
 }
+type ChallengeRuleSpec_Ja4TlsFingerprint struct {
+	Ja4TlsFingerprint *policy.JA4TlsFingerprintMatcherType `protobuf:"bytes,22,opt,name=ja4_tls_fingerprint,json=ja4TlsFingerprint,proto3,oneof" json:"ja4_tls_fingerprint,omitempty"`
+}
+type ChallengeRuleSpec_TlsFingerprintMatcher struct {
+	TlsFingerprintMatcher *policy.TlsFingerprintMatcherType `protobuf:"bytes,10,opt,name=tls_fingerprint_matcher,json=tlsFingerprintMatcher,proto3,oneof" json:"tls_fingerprint_matcher,omitempty"`
+}
 
-func (*ChallengeRuleSpec_DisableChallenge) isChallengeRuleSpec_ChallengeAction()          {}
-func (*ChallengeRuleSpec_EnableJavascriptChallenge) isChallengeRuleSpec_ChallengeAction() {}
-func (*ChallengeRuleSpec_EnableCaptchaChallenge) isChallengeRuleSpec_ChallengeAction()    {}
-func (*ChallengeRuleSpec_AnyIp) isChallengeRuleSpec_IpChoice()                            {}
-func (*ChallengeRuleSpec_IpPrefixList) isChallengeRuleSpec_IpChoice()                     {}
-func (*ChallengeRuleSpec_IpMatcher) isChallengeRuleSpec_IpChoice()                        {}
-func (*ChallengeRuleSpec_AnyAsn) isChallengeRuleSpec_AsnChoice()                          {}
-func (*ChallengeRuleSpec_AsnList) isChallengeRuleSpec_AsnChoice()                         {}
-func (*ChallengeRuleSpec_AsnMatcher) isChallengeRuleSpec_AsnChoice()                      {}
-func (*ChallengeRuleSpec_AnyClient) isChallengeRuleSpec_ClientChoice()                    {}
-func (*ChallengeRuleSpec_ClientName) isChallengeRuleSpec_ClientChoice()                   {}
-func (*ChallengeRuleSpec_ClientSelector) isChallengeRuleSpec_ClientChoice()               {}
-func (*ChallengeRuleSpec_ClientNameMatcher) isChallengeRuleSpec_ClientChoice()            {}
+func (*ChallengeRuleSpec_DisableChallenge) isChallengeRuleSpec_ChallengeAction()           {}
+func (*ChallengeRuleSpec_EnableJavascriptChallenge) isChallengeRuleSpec_ChallengeAction()  {}
+func (*ChallengeRuleSpec_EnableCaptchaChallenge) isChallengeRuleSpec_ChallengeAction()     {}
+func (*ChallengeRuleSpec_AnyIp) isChallengeRuleSpec_IpChoice()                             {}
+func (*ChallengeRuleSpec_IpPrefixList) isChallengeRuleSpec_IpChoice()                      {}
+func (*ChallengeRuleSpec_IpMatcher) isChallengeRuleSpec_IpChoice()                         {}
+func (*ChallengeRuleSpec_AnyAsn) isChallengeRuleSpec_AsnChoice()                           {}
+func (*ChallengeRuleSpec_AsnList) isChallengeRuleSpec_AsnChoice()                          {}
+func (*ChallengeRuleSpec_AsnMatcher) isChallengeRuleSpec_AsnChoice()                       {}
+func (*ChallengeRuleSpec_AnyClient) isChallengeRuleSpec_ClientChoice()                     {}
+func (*ChallengeRuleSpec_ClientName) isChallengeRuleSpec_ClientChoice()                    {}
+func (*ChallengeRuleSpec_ClientSelector) isChallengeRuleSpec_ClientChoice()                {}
+func (*ChallengeRuleSpec_ClientNameMatcher) isChallengeRuleSpec_ClientChoice()             {}
+func (*ChallengeRuleSpec_Ja4TlsFingerprint) isChallengeRuleSpec_TlsFingerprintChoice()     {}
+func (*ChallengeRuleSpec_TlsFingerprintMatcher) isChallengeRuleSpec_TlsFingerprintChoice() {}
 
 func (m *ChallengeRuleSpec) GetChallengeAction() isChallengeRuleSpec_ChallengeAction {
 	if m != nil {
@@ -2954,6 +3060,12 @@ func (m *ChallengeRuleSpec) GetAsnChoice() isChallengeRuleSpec_AsnChoice {
 func (m *ChallengeRuleSpec) GetClientChoice() isChallengeRuleSpec_ClientChoice {
 	if m != nil {
 		return m.ClientChoice
+	}
+	return nil
+}
+func (m *ChallengeRuleSpec) GetTlsFingerprintChoice() isChallengeRuleSpec_TlsFingerprintChoice {
+	if m != nil {
+		return m.TlsFingerprintChoice
 	}
 	return nil
 }
@@ -3049,13 +3161,6 @@ func (m *ChallengeRuleSpec) GetHttpMethod() *policy.HttpMethodMatcherType {
 	return nil
 }
 
-func (m *ChallengeRuleSpec) GetTlsFingerprintMatcher() *policy.TlsFingerprintMatcherType {
-	if m != nil {
-		return m.TlsFingerprintMatcher
-	}
-	return nil
-}
-
 func (m *ChallengeRuleSpec) GetQueryParams() []*policy.QueryParameterMatcherType {
 	if m != nil {
 		return m.QueryParams
@@ -3119,6 +3224,20 @@ func (m *ChallengeRuleSpec) GetExpirationTimestamp() *types.Timestamp {
 	return nil
 }
 
+func (m *ChallengeRuleSpec) GetJa4TlsFingerprint() *policy.JA4TlsFingerprintMatcherType {
+	if x, ok := m.GetTlsFingerprintChoice().(*ChallengeRuleSpec_Ja4TlsFingerprint); ok {
+		return x.Ja4TlsFingerprint
+	}
+	return nil
+}
+
+func (m *ChallengeRuleSpec) GetTlsFingerprintMatcher() *policy.TlsFingerprintMatcherType {
+	if x, ok := m.GetTlsFingerprintChoice().(*ChallengeRuleSpec_TlsFingerprintMatcher); ok {
+		return x.TlsFingerprintMatcher
+	}
+	return nil
+}
+
 // XXX_OneofWrappers is for the internal use of the proto package.
 func (*ChallengeRuleSpec) XXX_OneofWrappers() []interface{} {
 	return []interface{}{
@@ -3135,6 +3254,8 @@ func (*ChallengeRuleSpec) XXX_OneofWrappers() []interface{} {
 		(*ChallengeRuleSpec_ClientName)(nil),
 		(*ChallengeRuleSpec_ClientSelector)(nil),
 		(*ChallengeRuleSpec_ClientNameMatcher)(nil),
+		(*ChallengeRuleSpec_Ja4TlsFingerprint)(nil),
+		(*ChallengeRuleSpec_TlsFingerprintMatcher)(nil),
 	}
 }
 
@@ -3464,240 +3585,245 @@ func init() {
 }
 
 var fileDescriptor_771e54eb594e8c4b = []byte{
-	// 3719 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x5c, 0x4f, 0x70, 0x13, 0xc7,
-	0x9a, 0x77, 0x4b, 0xb2, 0x2d, 0xb7, 0x64, 0x69, 0x3c, 0x36, 0x20, 0x1b, 0x23, 0x1b, 0x05, 0x88,
-	0x81, 0xb1, 0x6c, 0xfd, 0xb1, 0x31, 0x24, 0x81, 0xb5, 0x6c, 0xc0, 0x28, 0x36, 0x98, 0xb1, 0x37,
-	0x40, 0x36, 0xac, 0x32, 0x92, 0xda, 0xd2, 0x80, 0x34, 0x33, 0xcc, 0x8c, 0x4c, 0x74, 0xa0, 0x2a,
-	0xc5, 0x61, 0x0f, 0xbb, 0x55, 0x5b, 0xbb, 0xa9, 0xda, 0x0b, 0xe7, 0x3d, 0xec, 0xe6, 0xb4, 0xe7,
-	0x15, 0x07, 0x57, 0xaa, 0x5e, 0x55, 0xea, 0x9d, 0x7c, 0xa4, 0x5e, 0xbd, 0x43, 0x62, 0xde, 0x21,
-	0xef, 0xc6, 0xed, 0x55, 0x71, 0x7a, 0x35, 0x3d, 0xff, 0x47, 0x23, 0x21, 0xcb, 0x4e, 0x55, 0x2a,
-	0xa5, 0x53, 0xac, 0xe9, 0xef, 0xfb, 0x75, 0x7f, 0xdd, 0xd3, 0x5f, 0x7f, 0xbf, 0x5f, 0x98, 0x86,
-	0xb3, 0xbb, 0x48, 0x8a, 0xb3, 0xfc, 0x9c, 0x54, 0x28, 0xa3, 0x2a, 0x33, 0x27, 0x21, 0x71, 0x97,
-	0x2d, 0xa0, 0x9c, 0xc0, 0x57, 0xd8, 0x42, 0x3d, 0x27, 0xd6, 0x2a, 0x68, 0x4e, 0xae, 0x0b, 0x48,
-	0x8a, 0x0b, 0x22, 0x2f, 0xf3, 0xe4, 0x59, 0xd5, 0x3c, 0xae, 0x9a, 0xc7, 0x5d, 0xcc, 0x27, 0x66,
-	0x4b, 0xac, 0x5c, 0xae, 0xe5, 0xe3, 0x05, 0xbe, 0x3a, 0x57, 0xe2, 0x4b, 0xfc, 0x1c, 0xf6, 0xcc,
-	0xd7, 0x76, 0xf0, 0x2f, 0xfc, 0x03, 0xff, 0xa5, 0x22, 0x4e, 0x4c, 0x95, 0x78, 0xbe, 0x54, 0x41,
-	0xa6, 0x95, 0xcc, 0x56, 0x91, 0x24, 0x33, 0x55, 0x41, 0x33, 0x38, 0x6d, 0x1f, 0x21, 0x2f, 0xc8,
-	0x2c, 0xcf, 0x69, 0xe3, 0x99, 0x98, 0xb6, 0x37, 0xaa, 0xe3, 0xb0, 0x8e, 0x78, 0x62, 0xdc, 0x6e,
-	0x61, 0x6d, 0x9a, 0xb4, 0x37, 0xed, 0x32, 0x15, 0xb6, 0xc8, 0xc8, 0xc8, 0x1d, 0x7a, 0x97, 0x45,
-	0xcf, 0x73, 0xf6, 0xce, 0xa7, 0x9a, 0x2d, 0x24, 0x6b, 0x07, 0xb1, 0xbf, 0x5d, 0x86, 0xa1, 0xdb,
-	0x15, 0x3e, 0xcf, 0x54, 0xb6, 0x04, 0x54, 0xd8, 0xae, 0x0b, 0x88, 0xcc, 0xc0, 0x01, 0xa6, 0xa0,
-	0x80, 0x44, 0xc0, 0x34, 0x98, 0x09, 0x25, 0xa7, 0xe3, 0xf6, 0x19, 0x55, 0x23, 0x88, 0xd3, 0xb5,
-	0x0a, 0x5a, 0xc6, 0x76, 0x19, 0xff, 0x9f, 0x1a, 0xc0, 0xb7, 0x7a, 0xf3, 0xee, 0x23, 0x5a, 0xf3,
-	0x24, 0x17, 0x20, 0x64, 0xb8, 0x7a, 0xae, 0x50, 0x61, 0x11, 0x27, 0x47, 0xce, 0x4f, 0x83, 0x99,
-	0x40, 0x72, 0xcc, 0x81, 0x73, 0xb3, 0x2a, 0xc8, 0xf5, 0xb5, 0x3e, 0x7a, 0x88, 0xe1, 0xea, 0x2b,
-	0xd8, 0x90, 0x9c, 0x85, 0x01, 0xd5, 0x25, 0xc7, 0x31, 0x55, 0x14, 0xf1, 0x4c, 0x83, 0x99, 0xa1,
-	0x0c, 0xfc, 0xff, 0xbf, 0xee, 0x79, 0xfb, 0x45, 0xef, 0xcc, 0xb7, 0x9e, 0xb5, 0x3e, 0x1a, 0xaa,
-	0x06, 0x77, 0x99, 0x2a, 0x22, 0xff, 0x0d, 0xc0, 0x53, 0xac, 0x90, 0x93, 0xcb, 0x22, 0x62, 0xe4,
-	0x5c, 0x81, 0x91, 0x51, 0x89, 0x17, 0xeb, 0xb9, 0x0a, 0x2b, 0xc9, 0x91, 0x4f, 0x70, 0x9f, 0x9f,
-	0xc4, 0x3f, 0xf8, 0x36, 0xc4, 0xef, 0x6c, 0x6e, 0x63, 0x80, 0x15, 0xcd, 0x7f, 0x9d, 0x95, 0x64,
-	0x65, 0x22, 0x32, 0x27, 0x0e, 0x7e, 0xfa, 0x83, 0x97, 0x78, 0xf5, 0x1a, 0x04, 0xa5, 0x32, 0x23,
-	0xa2, 0x22, 0x35, 0x5d, 0x93, 0x90, 0xb8, 0xd6, 0x47, 0x8f, 0xb1, 0x42, 0xb3, 0x0b, 0xf9, 0x00,
-	0x86, 0xb5, 0xc1, 0x4b, 0xa8, 0x82, 0x0a, 0x32, 0x2f, 0x46, 0xbc, 0x78, 0x10, 0xce, 0x09, 0x5c,
-	0x67, 0xf2, 0xa8, 0xb2, 0xa5, 0xd9, 0xe0, 0x9e, 0xe0, 0xab, 0xd7, 0x60, 0x00, 0xfa, 0x80, 0xc7,
-	0xeb, 0x5b, 0xeb, 0xa3, 0x43, 0x2a, 0x8c, 0x6e, 0x41, 0x6e, 0xc1, 0x51, 0xcb, 0xac, 0xe4, 0xaa,
-	0x8c, 0x5c, 0x28, 0x23, 0x31, 0x02, 0x31, 0xf8, 0x59, 0xf7, 0xd5, 0xd9, 0x50, 0x8d, 0x14, 0xf4,
-	0xb5, 0x3e, 0x7a, 0xc4, 0x9c, 0x34, 0xad, 0x81, 0xbc, 0x67, 0x4c, 0xb5, 0xc8, 0x57, 0x50, 0x64,
-	0x08, 0x83, 0x9d, 0x6f, 0xb1, 0xd4, 0x7c, 0x05, 0x59, 0x00, 0x33, 0x83, 0x6f, 0x5e, 0x80, 0x5f,
-	0x1a, 0x00, 0xe8, 0x8b, 0xa1, 0xb4, 0x93, 0x5f, 0xc2, 0xb0, 0x32, 0xbb, 0x48, 0x34, 0xc3, 0x9f,
-	0xed, 0x30, 0xfc, 0xb0, 0x86, 0xf7, 0xea, 0x35, 0xf0, 0x41, 0x0f, 0xf0, 0xd0, 0x21, 0x15, 0xc9,
-	0x32, 0x03, 0xc3, 0x15, 0xc5, 0xcb, 0x88, 0xdd, 0x87, 0x91, 0xa7, 0xdc, 0x90, 0xad, 0x03, 0x1d,
-	0x7e, 0xf5, 0x1a, 0xf4, 0x43, 0x2f, 0xf0, 0x78, 0xff, 0xef, 0x35, 0x00, 0x74, 0xb0, 0x62, 0x31,
-	0x20, 0x6f, 0x40, 0x9f, 0xc0, 0xc8, 0xe5, 0x48, 0x7f, 0xbb, 0xd0, 0x37, 0x19, 0xb9, 0x6c, 0x45,
-	0xf4, 0xed, 0x2b, 0x71, 0x63, 0x47, 0x72, 0x03, 0x0e, 0x96, 0x11, 0x53, 0x44, 0xa2, 0x14, 0x19,
-	0x98, 0xf6, 0xce, 0x04, 0x92, 0x1f, 0xbb, 0x63, 0xac, 0x61, 0x23, 0x2b, 0x8a, 0xfa, 0x4a, 0x7f,
-	0x07, 0x3c, 0x04, 0x41, 0xeb, 0x18, 0xe4, 0x3f, 0xc3, 0xe0, 0xb3, 0x1a, 0x12, 0xeb, 0x39, 0x81,
-	0x11, 0x99, 0xaa, 0x14, 0x19, 0xc4, 0x98, 0x73, 0xee, 0x98, 0xf7, 0x15, 0xcb, 0x4d, 0xc5, 0x10,
-	0xc9, 0xad, 0xb1, 0x03, 0xcf, 0x0c, 0x33, 0x89, 0x5c, 0x87, 0x81, 0xb2, 0x2c, 0x0b, 0xb9, 0x2a,
-	0x92, 0xcb, 0x7c, 0x31, 0xe2, 0xc7, 0x61, 0x5f, 0x6e, 0x31, 0x64, 0x59, 0x16, 0x36, 0xb0, 0x9d,
-	0x05, 0x9a, 0x86, 0x65, 0xe3, 0x31, 0x39, 0x0b, 0x07, 0x94, 0x1d, 0xce, 0x0a, 0x91, 0xa9, 0x36,
-	0xbb, 0x1b, 0xd0, 0xfd, 0x0c, 0x57, 0xbf, 0x23, 0x90, 0x1b, 0x30, 0xc4, 0x0a, 0x39, 0x41, 0x44,
-	0x3b, 0xec, 0x37, 0xea, 0x06, 0x9d, 0x6e, 0x3b, 0xed, 0xd8, 0x10, 0xf7, 0xad, 0xec, 0xad, 0x35,
-	0x40, 0x07, 0x59, 0x41, 0x7d, 0x88, 0xf7, 0xda, 0x2a, 0x84, 0xac, 0x60, 0xbc, 0x0d, 0x41, 0x0c,
-	0xf5, 0x91, 0x3b, 0xd4, 0x1d, 0xc1, 0xba, 0x17, 0x00, 0x3d, 0xc4, 0xea, 0x0f, 0xc8, 0xcf, 0xd4,
-	0x2c, 0x55, 0x94, 0x64, 0x25, 0x8e, 0x8b, 0xad, 0xe3, 0x30, 0xde, 0xf8, 0x35, 0x0f, 0xed, 0x67,
-	0xb8, 0xfa, 0xaa, 0x24, 0xdf, 0x11, 0xc8, 0xc7, 0x90, 0x54, 0x5d, 0x6d, 0x71, 0x5d, 0x3a, 0x44,
-	0x5c, 0x56, 0xdc, 0x70, 0x51, 0x01, 0xb5, 0xc4, 0xb8, 0x0d, 0x43, 0x1a, 0xbc, 0x1e, 0xe7, 0xe5,
-	0x8e, 0xe3, 0xb4, 0x02, 0x07, 0x31, 0xb0, 0x1e, 0xf3, 0x1c, 0x1c, 0x54, 0x62, 0x66, 0x24, 0x2e,
-	0x12, 0x6b, 0xb3, 0x70, 0x5e, 0x5a, 0x59, 0xde, 0x65, 0x89, 0x23, 0x6f, 0x40, 0x3f, 0x23, 0x71,
-	0x6a, 0x6c, 0x1f, 0x61, 0x8f, 0x98, 0xfb, 0x00, 0x96, 0x25, 0xce, 0x5c, 0x30, 0x2f, 0x3d, 0xc8,
-	0x48, 0x1c, 0x8e, 0xe3, 0x36, 0x0c, 0x28, 0x00, 0x7a, 0x10, 0xc3, 0x18, 0xe3, 0x5c, 0x7b, 0x0c,
-	0x6d, 0xb5, 0xbc, 0x34, 0x64, 0x8c, 0x27, 0xe4, 0x0d, 0x18, 0xd0, 0x97, 0x4b, 0x19, 0x7e, 0xaa,
-	0x93, 0xf5, 0xf2, 0xe1, 0xe3, 0x65, 0x55, 0x92, 0x95, 0x50, 0xee, 0xc1, 0xa0, 0xe6, 0xac, 0x86,
-	0x93, 0xee, 0x34, 0x1c, 0x2b, 0x1e, 0x2c, 0x62, 0x30, 0x3d, 0xe5, 0xeb, 0x80, 0x7a, 0x78, 0x0b,
-	0x9d, 0x87, 0x67, 0x45, 0x1d, 0x56, 0x51, 0xf5, 0x50, 0x39, 0x38, 0xc2, 0x08, 0x6c, 0xae, 0x24,
-	0xf2, 0x35, 0x73, 0xf9, 0x43, 0x18, 0xba, 0x45, 0x92, 0xd9, 0x92, 0x45, 0x96, 0x2b, 0x59, 0xd1,
-	0xc7, 0x95, 0x54, 0xe5, 0x7a, 0x84, 0xd1, 0x61, 0x46, 0x60, 0x6f, 0x2b, 0xd8, 0x7a, 0x7f, 0x2f,
-	0xe0, 0x19, 0xa6, 0x58, 0x64, 0x95, 0xb3, 0x9b, 0xa9, 0xe4, 0x9a, 0xba, 0x96, 0x22, 0x99, 0x76,
-	0x09, 0xae, 0xb9, 0xef, 0x11, 0x2d, 0x32, 0x23, 0x17, 0xf9, 0xe8, 0x09, 0xb3, 0x83, 0x65, 0x7b,
-	0xef, 0x12, 0x49, 0xc3, 0xa0, 0xc0, 0x8b, 0xb2, 0x11, 0x69, 0xb8, 0xed, 0x1e, 0xe2, 0x45, 0xd9,
-	0xda, 0x97, 0x7f, 0xaf, 0x01, 0x00, 0x4e, 0xcb, 0x01, 0xc1, 0x6c, 0x22, 0xb7, 0xe0, 0x18, 0xfa,
-	0x46, 0x60, 0x45, 0x46, 0xe9, 0x33, 0x67, 0x94, 0x6c, 0x11, 0x02, 0x63, 0x4f, 0xc4, 0xd5, 0xa2,
-	0x2e, 0xae, 0x17, 0x75, 0xf1, 0x6d, 0xdd, 0x22, 0xe3, 0x53, 0x00, 0xe9, 0x51, 0xd3, 0xdb, 0x68,
-	0x22, 0xb3, 0x30, 0x98, 0xe7, 0x8b, 0x75, 0x63, 0xa0, 0x27, 0x3a, 0x3c, 0x83, 0x35, 0xcc, 0x80,
-	0xe2, 0xac, 0x0f, 0xf0, 0x01, 0x0c, 0x32, 0x62, 0xc9, 0x9c, 0x62, 0x12, 0x4f, 0x71, 0xab, 0x37,
-	0x47, 0xb4, 0xcd, 0x6f, 0x68, 0xcf, 0x3a, 0xb9, 0x04, 0x1d, 0x60, 0x8c, 0x76, 0x89, 0xfc, 0x1a,
-	0x86, 0x0b, 0x3c, 0xff, 0x94, 0x45, 0x26, 0xf6, 0x68, 0xbb, 0xe5, 0x5b, 0xc1, 0xc6, 0xed, 0xe0,
-	0x43, 0x05, 0xab, 0x89, 0x44, 0xae, 0x41, 0xf8, 0x9c, 0xd9, 0xc9, 0x69, 0x65, 0xe2, 0x98, 0xeb,
-	0x61, 0xac, 0x81, 0x3f, 0x60, 0x76, 0xf4, 0x2a, 0x51, 0x01, 0x7d, 0xa7, 0x4c, 0xc3, 0xd0, 0x73,
-	0xfd, 0x21, 0xb9, 0x06, 0x43, 0x45, 0xbe, 0xca, 0xb0, 0xe6, 0x06, 0x3a, 0xd9, 0xe1, 0x94, 0xd2,
-	0xc3, 0xaa, 0xa3, 0x3e, 0x9d, 0x0c, 0x0c, 0x8a, 0x8c, 0x8c, 0x72, 0x15, 0xb6, 0xca, 0xca, 0x48,
-	0x8c, 0x9c, 0xc2, 0x21, 0x4f, 0x3a, 0x70, 0xee, 0xe5, 0x9f, 0xa0, 0x82, 0x4c, 0xa3, 0x1d, 0x1c,
-	0xe7, 0xf4, 0xf7, 0x2f, 0x6c, 0x4e, 0xce, 0xb7, 0xd6, 0x43, 0x07, 0x94, 0xe6, 0x75, 0xb5, 0x95,
-	0xfc, 0x0a, 0x8e, 0xed, 0xb2, 0xa2, 0x5c, 0x63, 0x2a, 0xb9, 0x32, 0x2f, 0x99, 0xaf, 0x6b, 0xa4,
-	0xd3, 0xb7, 0xc0, 0x28, 0x9c, 0x48, 0x0d, 0x67, 0x8d, 0x97, 0x8c, 0x17, 0xf6, 0x5f, 0x00, 0x3c,
-	0x25, 0x57, 0xa4, 0xdc, 0x0e, 0xcb, 0x95, 0x90, 0x28, 0x88, 0x2c, 0x67, 0xf6, 0x30, 0x8e, 0x7b,
-	0x68, 0x51, 0x0b, 0x6c, 0x57, 0xa4, 0x5b, 0xa6, 0x8f, 0xb5, 0xbf, 0x33, 0xfa, 0xd6, 0x70, 0x4f,
-	0x03, 0x27, 0x64, 0x37, 0x4f, 0xb2, 0x0a, 0x89, 0x1d, 0x5e, 0x7c, 0xce, 0x88, 0x45, 0x96, 0x2b,
-	0xe5, 0x0a, 0x15, 0x46, 0x92, 0x22, 0x13, 0x1d, 0xcc, 0xe6, 0xb9, 0xef, 0x5f, 0x34, 0x39, 0x3a,
-	0x67, 0xd4, 0x4b, 0x87, 0x4d, 0x93, 0x15, 0xc5, 0x82, 0x2c, 0xc1, 0x01, 0x0c, 0x87, 0x22, 0x17,
-	0xa6, 0xbd, 0x33, 0x43, 0x99, 0x7b, 0x16, 0x9f, 0xb9, 0xef, 0x00, 0x15, 0xbb, 0x24, 0xce, 0xd0,
-	0x17, 0xfe, 0x29, 0xb6, 0x7c, 0xf7, 0x51, 0x8c, 0x9a, 0x8e, 0xad, 0x6d, 0x6f, 0x6f, 0xea, 0xff,
-	0xdd, 0x52, 0xfe, 0xd8, 0x5e, 0xc1, 0xbf, 0xb7, 0xd7, 0xb7, 0x62, 0x8f, 0xcd, 0x7c, 0xa3, 0xff,
-	0x15, 0x01, 0xb4, 0x06, 0x4f, 0xde, 0x85, 0x81, 0x9a, 0x68, 0xd6, 0x90, 0x1f, 0xb7, 0xcb, 0xd4,
-	0xff, 0x48, 0xaf, 0xbb, 0x57, 0xbc, 0x35, 0xd1, 0x28, 0x20, 0x1f, 0xc2, 0x70, 0x25, 0x9d, 0x2b,
-	0x22, 0xcb, 0x9b, 0x40, 0xb5, 0x4b, 0xd1, 0xeb, 0xe9, 0x55, 0x24, 0xc9, 0xae, 0xb0, 0xc3, 0x15,
-	0x6b, 0x1b, 0xf9, 0x08, 0x12, 0x85, 0x32, 0x53, 0xa9, 0x20, 0xae, 0x84, 0xf4, 0x5d, 0xb6, 0x88,
-	0xc9, 0x58, 0x8b, 0x9c, 0xb8, 0xa2, 0x5b, 0x6b, 0x7b, 0xcd, 0x00, 0x0e, 0x17, 0xec, 0x2d, 0x24,
-	0x03, 0x03, 0x25, 0x5e, 0xe6, 0x35, 0x06, 0x14, 0xb9, 0xd2, 0xc1, 0xba, 0xc6, 0xbe, 0x7f, 0x11,
-	0xb2, 0x13, 0x27, 0xe7, 0xaa, 0x02, 0x1a, 0x2a, 0xa0, 0x9b, 0xb8, 0x91, 0x64, 0xe1, 0xc9, 0x02,
-	0xcf, 0xc9, 0x98, 0x5b, 0xa0, 0xe7, 0x22, 0x2b, 0x1b, 0x31, 0x2c, 0xe1, 0xe9, 0xb9, 0xd4, 0x2a,
-	0x0d, 0x61, 0x1f, 0x5a, 0x75, 0x71, 0x06, 0x32, 0x56, 0x70, 0x69, 0x26, 0x5f, 0x02, 0x38, 0x25,
-	0x95, 0x19, 0x01, 0xe5, 0x94, 0x3c, 0x8e, 0x0a, 0x32, 0x2a, 0xe6, 0x10, 0x57, 0x14, 0x78, 0x65,
-	0xf3, 0x68, 0x9d, 0x5e, 0xc5, 0x9d, 0x26, 0x5b, 0x1c, 0x5d, 0x8a, 0xf3, 0xa6, 0xee, 0x7b, 0x53,
-	0x73, 0x75, 0x76, 0x3e, 0x29, 0xb5, 0x31, 0x53, 0xb2, 0x61, 0x9e, 0x37, 0xba, 0xbb, 0xd6, 0x2e,
-	0x1b, 0x66, 0x78, 0xb9, 0x39, 0x1b, 0xe6, 0xf5, 0x87, 0xe4, 0xe7, 0x10, 0x56, 0x6b, 0x55, 0x1d,
-	0xe9, 0xd3, 0x76, 0xe5, 0xc9, 0x06, 0x5f, 0x64, 0x77, 0xea, 0x56, 0x30, 0x4c, 0x71, 0x86, 0xaa,
-	0xb5, 0xaa, 0x06, 0xf6, 0x18, 0x8e, 0xb1, 0x42, 0x4e, 0x44, 0x42, 0x4d, 0x56, 0xcf, 0x40, 0x0d,
-	0xf6, 0xb3, 0x8e, 0x61, 0xcd, 0x74, 0xc5, 0x0a, 0xb4, 0x81, 0xa3, 0xc1, 0x7f, 0x09, 0x4f, 0x28,
-	0x49, 0x24, 0xc7, 0x16, 0x11, 0x27, 0xb3, 0xb2, 0x79, 0x26, 0x5e, 0xc7, 0xf8, 0x17, 0x3e, 0x9c,
-	0x0d, 0x19, 0x89, 0x2d, 0xd0, 0xa3, 0x0a, 0xc8, 0x1d, 0x0d, 0x43, 0x7f, 0xff, 0xf3, 0x70, 0x54,
-	0x44, 0xcf, 0x6a, 0xca, 0xce, 0x2a, 0xf0, 0x9c, 0x24, 0x8b, 0x0c, 0xcb, 0xc9, 0x52, 0xe4, 0x46,
-	0x3b, 0xca, 0x42, 0xab, 0x0e, 0x2b, 0x86, 0xbd, 0x85, 0xaf, 0x91, 0xa2, 0xb3, 0x51, 0x22, 0x1f,
-	0x43, 0xa2, 0x24, 0x32, 0x42, 0xf9, 0x59, 0x25, 0x27, 0x21, 0x59, 0x66, 0xb9, 0x92, 0x14, 0xf9,
-	0x07, 0xdc, 0xc1, 0x45, 0xf7, 0x0e, 0x6e, 0x2b, 0xd6, 0xf7, 0xd7, 0xb7, 0x34, 0x63, 0xfb, 0x06,
-	0x0e, 0x6b, 0x58, 0x7a, 0x2b, 0x29, 0xc2, 0x71, 0x5e, 0x40, 0x9c, 0x52, 0x4a, 0x69, 0xaa, 0x8d,
-	0x65, 0x09, 0x96, 0x71, 0x3f, 0xb3, 0xee, 0xfd, 0xdc, 0x13, 0x10, 0xb7, 0x2c, 0xb0, 0x5f, 0x18,
-	0x5e, 0xce, 0xd5, 0x38, 0xa5, 0x01, 0x3b, 0x2d, 0xc8, 0x47, 0x90, 0xd4, 0xb4, 0x90, 0x2a, 0x92,
-	0xca, 0x7a, 0x67, 0x2b, 0x87, 0x5f, 0x6f, 0x42, 0x85, 0xd9, 0x40, 0x52, 0x59, 0x83, 0xde, 0x86,
-	0x21, 0x09, 0x95, 0xaa, 0xca, 0x9e, 0xd6, 0x32, 0xc7, 0x6a, 0xdb, 0x6a, 0x54, 0xb5, 0x55, 0x13,
-	0x82, 0xba, 0x10, 0xf8, 0x5d, 0x1f, 0x96, 0xac, 0x0d, 0xe4, 0x2b, 0x00, 0x27, 0x79, 0x91, 0x2d,
-	0xb1, 0x5c, 0x4e, 0xd7, 0x0e, 0x6a, 0x79, 0x09, 0xc9, 0x92, 0x3e, 0xf6, 0xaf, 0x71, 0x7a, 0xda,
-	0xec, 0x40, 0xc5, 0xb1, 0x8b, 0x58, 0xf1, 0x7b, 0x18, 0x75, 0x4b, 0x95, 0x11, 0x54, 0x4c, 0x35,
-	0x92, 0x9b, 0x9c, 0x2c, 0x9a, 0xfc, 0x80, 0x1e, 0xe7, 0x5b, 0x19, 0x92, 0x0f, 0x21, 0x7c, 0xf2,
-	0x5c, 0x56, 0x8e, 0x31, 0xb6, 0x2a, 0x45, 0x18, 0x3c, 0x92, 0x16, 0xaf, 0x46, 0xf6, 0xc1, 0xf6,
-	0x8a, 0x62, 0xd6, 0xae, 0x86, 0x1a, 0x7a, 0xf2, 0x5c, 0xc6, 0x46, 0x12, 0x59, 0x84, 0xa7, 0x44,
-	0x24, 0x09, 0x3c, 0x27, 0x29, 0x25, 0x9a, 0xf4, 0x14, 0x9f, 0x96, 0x3c, 0xb7, 0xc3, 0x96, 0x22,
-	0xf9, 0x76, 0x14, 0x6f, 0x43, 0xb5, 0x5d, 0xc1, 0xa6, 0x66, 0x0c, 0x27, 0x74, 0x30, 0x5b, 0xfb,
-	0xc4, 0x3a, 0x8c, 0xb6, 0x9f, 0x05, 0x92, 0x80, 0xde, 0xa7, 0xa8, 0x8e, 0x65, 0xbe, 0x21, 0x5a,
-	0xf9, 0x93, 0x1c, 0x83, 0xfd, 0xbb, 0x4c, 0xa5, 0xa6, 0x49, 0x6f, 0xb4, 0xfa, 0xe3, 0x9a, 0x67,
-	0x09, 0x5c, 0xfb, 0x5f, 0xf0, 0x43, 0x03, 0xfc, 0x37, 0x80, 0x63, 0x70, 0x40, 0x9b, 0x1f, 0x98,
-	0xa0, 0x92, 0xf3, 0xd4, 0xc2, 0x12, 0xb5, 0x38, 0x0f, 0x4f, 0xc2, 0x41, 0x55, 0xc2, 0x93, 0xc8,
-	0x40, 0x6a, 0x91, 0x4a, 0xcd, 0x53, 0xa9, 0x14, 0x95, 0x5c, 0x80, 0x04, 0x1c, 0x54, 0x7b, 0x97,
-	0xc8, 0xfe, 0x64, 0x92, 0x4a, 0x2c, 0xc0, 0x73, 0x70, 0x58, 0xdb, 0xa9, 0xd3, 0x78, 0xb6, 0xc8,
-	0xd1, 0x25, 0x6a, 0x81, 0xba, 0x42, 0x2d, 0x52, 0x57, 0xaf, 0x50, 0x89, 0xab, 0x54, 0x62, 0x89,
-	0x4a, 0x26, 0xe0, 0x69, 0x38, 0xaa, 0x5b, 0x59, 0xf7, 0xac, 0x67, 0x31, 0x35, 0x03, 0xe0, 0x14,
-	0x0c, 0x2d, 0x17, 0x77, 0x19, 0xae, 0x80, 0x8a, 0x1a, 0xc6, 0x70, 0x9a, 0x4a, 0xa4, 0xa9, 0xc5,
-	0x25, 0x2a, 0xb1, 0x48, 0x2d, 0x26, 0x33, 0x17, 0xe1, 0xb0, 0xa6, 0x6d, 0x15, 0xca, 0x3c, 0x5b,
-	0x40, 0x64, 0x64, 0xaf, 0x01, 0xce, 0xef, 0x37, 0xc0, 0xb9, 0x83, 0x06, 0x08, 0xa6, 0xae, 0x50,
-	0x49, 0x2a, 0x31, 0x4f, 0x2d, 0x5c, 0xa5, 0x52, 0x99, 0xf3, 0x70, 0x88, 0x15, 0xac, 0x66, 0x53,
-	0x3f, 0xaa, 0x25, 0x53, 0xf4, 0xa0, 0x01, 0xfc, 0xa9, 0x04, 0x95, 0x4a, 0x52, 0x89, 0x64, 0x66,
-	0x16, 0x0e, 0x6b, 0x5c, 0x5c, 0x33, 0x9d, 0xdc, 0x6b, 0x80, 0x8b, 0x9a, 0xe9, 0x8c, 0x62, 0x9a,
-	0x4e, 0x50, 0xe9, 0x24, 0x95, 0x4e, 0x29, 0xaf, 0x79, 0x66, 0x11, 0x2a, 0xbc, 0x55, 0xb7, 0x9d,
-	0xd9, 0x6b, 0x80, 0x98, 0x66, 0x7b, 0x16, 0xc3, 0xa6, 0xa9, 0xd4, 0x02, 0x95, 0x48, 0xbd, 0x74,
-	0x14, 0x64, 0x99, 0xb8, 0x4a, 0xf9, 0x2d, 0xbe, 0x4a, 0x3f, 0x29, 0xcd, 0x37, 0xa9, 0xf8, 0x2e,
-	0x24, 0xa8, 0x85, 0x24, 0xb5, 0x80, 0xfb, 0xc9, 0xfa, 0xfc, 0xe7, 0x88, 0xf3, 0x59, 0x9f, 0x3f,
-	0x40, 0x04, 0xb3, 0x3e, 0x7f, 0x94, 0x98, 0xca, 0xfa, 0xfc, 0x33, 0xc4, 0xc5, 0xac, 0xcf, 0x7f,
-	0x96, 0x88, 0x65, 0x7d, 0xfe, 0x24, 0x91, 0xca, 0xfa, 0xfc, 0x23, 0x04, 0x99, 0xf5, 0xf9, 0x4f,
-	0x13, 0x93, 0x59, 0x9f, 0x7f, 0x92, 0x38, 0x93, 0xf5, 0xf9, 0xcf, 0x10, 0xd1, 0xd8, 0xbf, 0x02,
-	0x18, 0x69, 0x25, 0x7d, 0x92, 0x1c, 0x3e, 0x3b, 0xec, 0xc2, 0x2a, 0x8b, 0xa4, 0xc8, 0xf8, 0xb4,
-	0x77, 0x26, 0xd4, 0x2a, 0xb7, 0x3b, 0xd1, 0x32, 0x63, 0xc6, 0xeb, 0x3f, 0x6d, 0x29, 0xc7, 0x48,
-	0x87, 0x7a, 0xca, 0x22, 0x29, 0x76, 0x30, 0x05, 0x43, 0x2b, 0xca, 0x33, 0x64, 0xc8, 0xd0, 0x4b,
-	0x87, 0x95, 0xa1, 0x8f, 0x2a, 0x3e, 0x9f, 0x75, 0x11, 0x9f, 0x1d, 0x82, 0xb3, 0xfc, 0x6b, 0xea,
-	0xcd, 0x2d, 0x85, 0xe5, 0xcf, 0xbb, 0x16, 0x96, 0x5d, 0xc4, 0xe4, 0x87, 0xed, 0xc4, 0xe4, 0x0e,
-	0x0f, 0x6d, 0x77, 0x45, 0xf9, 0x56, 0xf7, 0x8a, 0xb2, 0x4d, 0x48, 0xbe, 0xd3, 0xb5, 0x90, 0xdc,
-	0xa4, 0x1b, 0xaf, 0x76, 0xa7, 0x1b, 0x3b, 0x84, 0xe2, 0xab, 0x5d, 0x08, 0xc5, 0x9a, 0x44, 0xbc,
-	0xdc, 0xad, 0x44, 0x6c, 0xca, 0xc2, 0xf4, 0xb1, 0xc8, 0xc2, 0x3d, 0x29, 0xb8, 0xbd, 0x14, 0x9c,
-	0xee, 0x54, 0x0a, 0xb6, 0x29, 0xc0, 0xdb, 0x47, 0x56, 0x80, 0xdd, 0x84, 0xdf, 0xcf, 0x8f, 0x20,
-	0xfc, 0xfe, 0x9e, 0xf4, 0xde, 0xc5, 0x8e, 0xf5, 0x5e, 0xbb, 0xcc, 0x7b, 0xab, 0x5b, 0x99, 0xd7,
-	0xa1, 0xee, 0xde, 0x3d, 0x92, 0xba, 0xdb, 0x2c, 0xea, 0x6e, 0x1d, 0x5d, 0xd4, 0x6d, 0x56, 0x6e,
-	0xd7, 0x8e, 0x20, 0x9d, 0xda, 0x05, 0xd3, 0x8d, 0x6e, 0x05, 0x53, 0x77, 0xa9, 0x74, 0xb5, 0x4b,
-	0xa9, 0xd4, 0x2e, 0x92, 0xde, 0xee, 0x5e, 0x24, 0xb5, 0x8b, 0xa2, 0x9b, 0x47, 0x15, 0x45, 0x9b,
-	0x44, 0xd0, 0xeb, 0x5d, 0x88, 0xa0, 0x56, 0xe9, 0x73, 0xa3, 0x85, 0xf4, 0xd9, 0x29, 0x73, 0x76,
-	0xe8, 0x9f, 0x37, 0x0e, 0xaf, 0x7f, 0xda, 0xd5, 0xcd, 0x87, 0x6d, 0xd5, 0xcd, 0x4e, 0x47, 0xe5,
-	0xa6, 0x6c, 0x96, 0x8e, 0x5b, 0xd8, 0x6c, 0xa5, 0x5c, 0x9e, 0xb4, 0x4b, 0x89, 0x86, 0xf2, 0x77,
-	0xb3, 0x6b, 0xe5, 0xcf, 0x26, 0xf8, 0xdd, 0x3b, 0xaa, 0xe0, 0xe7, 0xd4, 0xf9, 0x36, 0x8f, 0xa8,
-	0xf3, 0x35, 0xcb, 0x7b, 0x9f, 0x1d, 0x5a, 0xde, 0xb3, 0x49, 0x77, 0x5f, 0x1f, 0x9f, 0x74, 0xd7,
-	0x42, 0xb1, 0xab, 0xff, 0x8a, 0x82, 0xdd, 0x07, 0x74, 0xba, 0xeb, 0x5d, 0xe8, 0x74, 0x56, 0x75,
-	0x6e, 0xb9, 0x3b, 0x75, 0xce, 0xaa, 0xc9, 0x6d, 0x1f, 0x55, 0x93, 0x73, 0x95, 0xe2, 0xbe, 0x3a,
-	0x2e, 0xb9, 0xcc, 0x55, 0x28, 0xbb, 0x7b, 0x44, 0xe9, 0xc7, 0x29, 0xfa, 0xfc, 0xe7, 0xf1, 0x89,
-	0x3e, 0x76, 0xca, 0xf8, 0x01, 0xd1, 0xa7, 0x9d, 0xd6, 0xb3, 0x76, 0x24, 0xad, 0xc7, 0xa2, 0xed,
-	0x1c, 0xb3, 0xea, 0x32, 0xf2, 0xc7, 0xeb, 0x8e, 0x7f, 0x9e, 0x95, 0x89, 0x39, 0xc5, 0x8d, 0x91,
-	0x97, 0xef, 0x81, 0xfd, 0x51, 0x66, 0xc2, 0xaa, 0x6a, 0x0c, 0xbf, 0x7c, 0x0f, 0xcc, 0x9f, 0x8a,
-	0xbf, 0x5d, 0xca, 0xc0, 0xfe, 0xb6, 0x47, 0x99, 0x49, 0x9b, 0x7e, 0x11, 0x7a, 0xf9, 0x1e, 0x58,
-	0x7e, 0x67, 0xce, 0x35, 0xa9, 0x14, 0xe4, 0xcb, 0xf7, 0xc0, 0xf1, 0xcc, 0x50, 0x25, 0x54, 0xf5,
-	0x61, 0x92, 0x38, 0x13, 0xfb, 0xcb, 0x14, 0x0c, 0xd3, 0x48, 0xa8, 0x30, 0x85, 0x1e, 0xcb, 0xef,
-	0xb1, 0xfc, 0x1e, 0xcb, 0xef, 0xb1, 0xfc, 0x1e, 0xcb, 0xef, 0xb1, 0xfc, 0x1e, 0xcb, 0xef, 0xb1,
-	0xfc, 0x1e, 0xcb, 0xef, 0xb1, 0xfc, 0x1e, 0xcb, 0xef, 0xb1, 0xfc, 0x1e, 0xcb, 0xff, 0xdd, 0xb0,
-	0xfc, 0xef, 0x3a, 0x63, 0xf9, 0xf7, 0x3b, 0xa0, 0x52, 0x0e, 0xce, 0xd8, 0xa3, 0xf9, 0xbf, 0x6d,
-	0x9a, 0xff, 0xe7, 0x29, 0x18, 0xb8, 0x8d, 0xe4, 0x1e, 0xc5, 0xef, 0x51, 0xfc, 0x1e, 0xc5, 0xef,
-	0x51, 0xfc, 0x1e, 0xc5, 0xef, 0x51, 0xfc, 0x1e, 0xc5, 0xef, 0x51, 0xfc, 0x1e, 0xc5, 0xef, 0x51,
-	0xfc, 0x1e, 0xc5, 0xef, 0x51, 0xfc, 0x1e, 0xc5, 0xff, 0xbd, 0x50, 0xfc, 0x7f, 0xef, 0x8c, 0xe2,
-	0x6f, 0x74, 0xf2, 0xf5, 0x86, 0xc9, 0x17, 0x7b, 0xf4, 0xfe, 0x37, 0x4e, 0xef, 0x09, 0x38, 0x62,
-	0x64, 0x2f, 0x85, 0xb4, 0x2b, 0x31, 0x91, 0x2b, 0x70, 0xa4, 0xc8, 0x4a, 0x4c, 0xbe, 0x82, 0x72,
-	0x46, 0x26, 0xc3, 0x13, 0xd1, 0x9a, 0xb1, 0x13, 0x9a, 0x83, 0x01, 0x46, 0x7e, 0x01, 0x4f, 0x23,
-	0x0e, 0x63, 0x3c, 0x61, 0x76, 0x19, 0xa9, 0x20, 0xb2, 0x82, 0x6c, 0x81, 0xf3, 0xb6, 0x85, 0x1b,
-	0x57, 0x5d, 0xb3, 0x86, 0xa7, 0x89, 0xbb, 0x09, 0x23, 0x1a, 0x6e, 0x81, 0x11, 0xe4, 0x42, 0x99,
-	0xb1, 0x80, 0xfa, 0xda, 0x82, 0x9e, 0x54, 0xfd, 0x56, 0x54, 0x37, 0x13, 0xf1, 0xb7, 0xc4, 0x94,
-	0xce, 0x76, 0xc9, 0x94, 0x2c, 0x84, 0xa2, 0x3d, 0x4d, 0x72, 0x23, 0x14, 0x97, 0x3a, 0x2e, 0xc5,
-	0x3d, 0x2d, 0x09, 0xc5, 0xe5, 0x43, 0xd4, 0xe0, 0x1e, 0x1b, 0xa1, 0x68, 0xae, 0xb8, 0xfa, 0x8f,
-	0x52, 0x71, 0xe9, 0xba, 0xc0, 0xc0, 0xe1, 0x75, 0x81, 0xfb, 0xa6, 0x2e, 0x30, 0x78, 0xb8, 0x3b,
-	0x60, 0x9c, 0xdf, 0x87, 0x19, 0x3a, 0xc1, 0xf1, 0x72, 0xfa, 0x6a, 0xeb, 0x92, 0x0d, 0x76, 0xf7,
-	0x51, 0xb9, 0xfa, 0x49, 0x65, 0x8b, 0xc2, 0x2d, 0xef, 0x10, 0x39, 0x02, 0xdd, 0x5d, 0x62, 0xd3,
-	0x74, 0xbf, 0x81, 0x55, 0xf4, 0x70, 0x5e, 0xc2, 0x10, 0x3c, 0xc6, 0x4b, 0x18, 0x86, 0x7f, 0xc5,
-	0x4b, 0x18, 0x42, 0xc7, 0x7b, 0x09, 0x83, 0x5d, 0x1d, 0x25, 0xda, 0x6a, 0x02, 0x16, 0x75, 0x34,
-	0x6d, 0x57, 0x47, 0x47, 0xf0, 0x1d, 0x5b, 0xb6, 0xfb, 0x3a, 0xd4, 0xab, 0xb6, 0xbc, 0x36, 0xc1,
-	0x74, 0xbb, 0x59, 0xba, 0x24, 0x3b, 0xbc, 0xdd, 0x69, 0xf0, 0xd5, 0x6b, 0xe0, 0x85, 0x40, 0x41,
-	0x74, 0x6a, 0x98, 0x5f, 0xb9, 0x6b, 0x98, 0xa3, 0x87, 0xbd, 0x4f, 0x61, 0xcd, 0xeb, 0xa6, 0x63,
-	0xb6, 0xe2, 0xc1, 0x63, 0x5d, 0xf1, 0xe0, 0x6b, 0xbb, 0x4d, 0xa7, 0xf8, 0x0f, 0x0d, 0xc0, 0xc0,
-	0x80, 0xf1, 0x41, 0x24, 0x48, 0xd8, 0xbf, 0x83, 0x9c, 0xa7, 0xd2, 0xf3, 0x54, 0x62, 0x81, 0x4a,
-	0xcc, 0xbb, 0x7c, 0xf5, 0xb8, 0x40, 0x2d, 0x51, 0x8b, 0xd4, 0x15, 0x2a, 0x91, 0xa0, 0x12, 0x49,
-	0x2a, 0x91, 0xa2, 0x12, 0x69, 0x38, 0xd6, 0xf4, 0x61, 0xa3, 0x27, 0x39, 0x9f, 0x99, 0x6b, 0xe6,
-	0x16, 0xe4, 0xe9, 0xbd, 0x06, 0xf0, 0xe0, 0x8b, 0x1d, 0x1a, 0xa0, 0x3f, 0x49, 0xa5, 0xa8, 0xf4,
-	0xcb, 0xf7, 0x60, 0xe0, 0x53, 0x8e, 0xe7, 0xd0, 0xf5, 0x4c, 0xd2, 0x5a, 0x37, 0x9c, 0xd7, 0xbe,
-	0x69, 0xec, 0xb3, 0x7f, 0xd3, 0x98, 0x4a, 0xd9, 0xeb, 0x89, 0xb4, 0xad, 0x56, 0xb8, 0xa0, 0x7d,
-	0xdd, 0xd8, 0xe7, 0xfc, 0xba, 0xd1, 0x51, 0x43, 0xa4, 0x9c, 0x55, 0x4c, 0x6c, 0xaf, 0x01, 0x88,
-	0xfd, 0x06, 0x08, 0x2b, 0xe3, 0x4a, 0x2c, 0x52, 0x89, 0xa5, 0xa6, 0xb2, 0x26, 0xeb, 0xf3, 0x03,
-	0xc2, 0xe3, 0xf8, 0x5c, 0x71, 0x88, 0x80, 0x59, 0x9f, 0x3f, 0x4c, 0x10, 0xb1, 0x77, 0x10, 0x8e,
-	0xd2, 0x26, 0x99, 0x35, 0x0a, 0x8c, 0x5b, 0x70, 0x34, 0x5f, 0x17, 0x18, 0x49, 0xca, 0xd9, 0xc8,
-	0x71, 0xfb, 0x9a, 0x60, 0x44, 0x75, 0xb1, 0xe0, 0x91, 0xab, 0x90, 0x64, 0x04, 0xa1, 0x52, 0xb7,
-	0xc3, 0xb4, 0xaf, 0x02, 0x08, 0xec, 0x61, 0x45, 0x41, 0x70, 0xb4, 0x50, 0x93, 0x64, 0xbe, 0x6a,
-	0x87, 0xe9, 0x77, 0x3d, 0x15, 0xf1, 0xad, 0x7b, 0x8e, 0x3b, 0x15, 0xc2, 0x8e, 0x9b, 0x47, 0xb0,
-	0x12, 0x8f, 0x11, 0xad, 0xdd, 0x98, 0x65, 0x46, 0xb0, 0xbb, 0x32, 0x63, 0xf8, 0xf8, 0xca, 0x8c,
-	0xd0, 0xd1, 0xcb, 0x0c, 0xe2, 0xd0, 0x65, 0xc6, 0xc8, 0x31, 0x94, 0x19, 0x64, 0xd7, 0x65, 0xc6,
-	0x15, 0x55, 0xb7, 0x2c, 0xf0, 0x35, 0xa5, 0xe4, 0xd7, 0xf2, 0x46, 0xab, 0x14, 0xab, 0x24, 0xe3,
-	0x15, 0xd5, 0x52, 0x39, 0xa1, 0x34, 0x27, 0x35, 0x8c, 0x13, 0xed, 0x96, 0x41, 0x73, 0x5a, 0xe1,
-	0x8b, 0x48, 0x53, 0x60, 0x03, 0x9a, 0x33, 0x8e, 0x86, 0xb6, 0x97, 0x03, 0x03, 0x87, 0x2e, 0x07,
-	0xb4, 0x03, 0xdb, 0x5a, 0x14, 0x6c, 0x35, 0xd5, 0x4f, 0x87, 0xfa, 0xdf, 0x46, 0x1a, 0x62, 0x93,
-	0x6e, 0xa5, 0x56, 0x51, 0xfe, 0x6e, 0xef, 0xd3, 0x7b, 0x60, 0xd6, 0x52, 0x43, 0x87, 0xab, 0xa5,
-	0xc6, 0x5c, 0xef, 0x7d, 0xd1, 0xd1, 0xae, 0x6d, 0xbb, 0x65, 0xee, 0x1b, 0x70, 0xd8, 0xcc, 0xdc,
-	0xc9, 0x19, 0x00, 0x47, 0xcd, 0xdc, 0xed, 0x57, 0xb2, 0xf2, 0x02, 0x95, 0xb8, 0x0a, 0xc7, 0x9d,
-	0x89, 0xdb, 0xbf, 0x48, 0x25, 0xe6, 0xa9, 0x25, 0xea, 0xaa, 0x42, 0xc1, 0xd4, 0x6c, 0x6c, 0x50,
-	0xb0, 0xbd, 0x06, 0xf0, 0xee, 0x37, 0x80, 0x47, 0x49, 0x7e, 0x29, 0x2a, 0x4d, 0x2d, 0x64, 0xe2,
-	0xd6, 0x54, 0x7c, 0x76, 0xaf, 0x01, 0x82, 0xfb, 0x0d, 0x10, 0x50, 0x32, 0xaa, 0x9e, 0xf4, 0xed,
-	0x69, 0x78, 0xde, 0x96, 0x86, 0xad, 0xd9, 0xd4, 0xaf, 0x64, 0xd3, 0x2b, 0x6a, 0x42, 0xb5, 0xa6,
-	0xe0, 0x8f, 0x60, 0x48, 0x7f, 0xd5, 0x2c, 0xc3, 0x18, 0xdb, 0x6f, 0x80, 0x51, 0x7c, 0x36, 0xcc,
-	0x53, 0xc9, 0x44, 0xd6, 0xe7, 0xf7, 0x10, 0xde, 0xac, 0xcf, 0x3f, 0x48, 0xf8, 0x0d, 0x46, 0x17,
-	0x26, 0x88, 0xac, 0xcf, 0x3f, 0x4a, 0x8c, 0x65, 0xfe, 0x0b, 0xec, 0xff, 0x1c, 0xed, 0x7b, 0xf3,
-	0x73, 0xb4, 0xef, 0xdd, 0xcf, 0x51, 0xf0, 0xed, 0x41, 0x14, 0xfc, 0xcf, 0x41, 0x14, 0xfc, 0x78,
-	0x10, 0x05, 0xfb, 0x07, 0x51, 0xf0, 0xe6, 0x20, 0x0a, 0x7e, 0x3a, 0x88, 0x82, 0x5f, 0x0e, 0xa2,
-	0x7d, 0xef, 0x0e, 0xa2, 0xe0, 0x3f, 0xde, 0x46, 0xfb, 0xf6, 0xde, 0x46, 0xc1, 0xfe, 0xdb, 0x68,
-	0xdf, 0x9b, 0xb7, 0xd1, 0xbe, 0x2f, 0x1f, 0x94, 0x78, 0xe1, 0x69, 0x29, 0xbe, 0xcb, 0x57, 0x64,
-	0x24, 0x8a, 0x4c, 0xbc, 0x26, 0xcd, 0xe1, 0x3f, 0x76, 0x78, 0xb1, 0x3a, 0x2b, 0x88, 0xfc, 0x2e,
-	0x5b, 0x44, 0xe2, 0xac, 0xde, 0x3c, 0x27, 0xe4, 0x4b, 0xfc, 0x1c, 0xfa, 0x46, 0xd6, 0xaf, 0x73,
-	0x6d, 0x79, 0xab, 0x6b, 0x7e, 0x00, 0x9f, 0xcc, 0xa9, 0xbf, 0x07, 0x00, 0x00, 0xff, 0xff, 0x2a,
-	0x21, 0x49, 0x51, 0x01, 0x56, 0x00, 0x00,
+	// 3808 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x9c, 0x4d, 0x70, 0xdb, 0xd6,
+	0x76, 0xc7, 0x75, 0x49, 0x4a, 0xa2, 0x2e, 0x29, 0x0a, 0xba, 0x92, 0x65, 0x5a, 0x76, 0x68, 0x9a,
+	0xb1, 0xf3, 0xe4, 0x04, 0xa2, 0xc4, 0x0f, 0xc9, 0x92, 0xdf, 0x8b, 0x5d, 0x51, 0x72, 0x4c, 0x33,
+	0x92, 0xad, 0x40, 0xea, 0x73, 0x92, 0x26, 0x65, 0x40, 0xf0, 0x8a, 0x84, 0x43, 0x02, 0x08, 0x00,
+	0xca, 0xe1, 0xc2, 0xd3, 0x37, 0x9a, 0xae, 0xda, 0x99, 0x4e, 0x9b, 0x99, 0x6e, 0xbc, 0x69, 0x17,
+	0x5d, 0xb4, 0xd9, 0xb4, 0x9b, 0x4e, 0x67, 0x4a, 0x2f, 0x34, 0x6f, 0xa6, 0x33, 0x6f, 0xba, 0xd2,
+	0x32, 0xf3, 0x56, 0x2f, 0xca, 0xe6, 0x75, 0x97, 0xb5, 0x57, 0x1d, 0x5c, 0x7c, 0x10, 0x00, 0x41,
+	0x86, 0xa2, 0x94, 0x99, 0x37, 0x1e, 0xae, 0x22, 0xe2, 0x9e, 0xf3, 0xbf, 0x1f, 0x00, 0xce, 0x3d,
+	0xe7, 0xe7, 0xe0, 0xc2, 0xc5, 0x43, 0xac, 0x24, 0x79, 0x71, 0x49, 0xe1, 0xaa, 0xb8, 0xce, 0x2e,
+	0x29, 0x58, 0x3e, 0xe4, 0x39, 0x5c, 0x94, 0xc4, 0x1a, 0xcf, 0x35, 0x8b, 0x72, 0xa3, 0x86, 0x97,
+	0xd4, 0xa6, 0x84, 0x95, 0xa4, 0x24, 0x8b, 0xaa, 0x88, 0x6e, 0xe8, 0xe6, 0x49, 0xdd, 0x3c, 0xe9,
+	0x61, 0x3e, 0xbf, 0x58, 0xe1, 0xd5, 0x6a, 0xa3, 0x94, 0xe4, 0xc4, 0xfa, 0x52, 0x45, 0xac, 0x88,
+	0x4b, 0xc4, 0xb3, 0xd4, 0x38, 0x20, 0xbf, 0xc8, 0x0f, 0xf2, 0x97, 0xae, 0x38, 0x7f, 0xbd, 0x22,
+	0x8a, 0x95, 0x1a, 0x6e, 0x5b, 0xa9, 0x7c, 0x1d, 0x2b, 0x2a, 0x5b, 0x97, 0x0c, 0x83, 0xab, 0xce,
+	0x11, 0x8a, 0x92, 0xca, 0x8b, 0x82, 0x31, 0x9e, 0xf9, 0xb8, 0xb3, 0x51, 0x1f, 0x87, 0x7d, 0xc4,
+	0xf3, 0x57, 0x9c, 0x16, 0xf6, 0xa6, 0x6b, 0xce, 0xa6, 0x43, 0xb6, 0xc6, 0x97, 0x59, 0x15, 0x7b,
+	0x4b, 0x1f, 0xf2, 0xf8, 0x79, 0xd1, 0xd9, 0xf9, 0xf5, 0x4e, 0x0b, 0xc5, 0xde, 0x41, 0xe2, 0xf7,
+	0x34, 0x8c, 0x3c, 0xac, 0x89, 0x25, 0xb6, 0xb6, 0x27, 0x61, 0x6e, 0xbf, 0x29, 0x61, 0x94, 0x83,
+	0x63, 0x2c, 0xa7, 0x89, 0x44, 0x41, 0x1c, 0x2c, 0x44, 0xd2, 0xf1, 0xa4, 0x73, 0x45, 0xf5, 0x19,
+	0x24, 0x99, 0x46, 0x0d, 0x6f, 0x10, 0xbb, 0x5c, 0xf0, 0xf7, 0x2d, 0x10, 0xd8, 0x7a, 0xf0, 0xf8,
+	0x13, 0xc6, 0xf0, 0x44, 0x2b, 0x10, 0xb2, 0x42, 0xb3, 0xc8, 0xd5, 0x78, 0x2c, 0xa8, 0xd1, 0x5b,
+	0x71, 0xb0, 0x10, 0x4a, 0xcf, 0xba, 0x74, 0x1e, 0xd4, 0x25, 0xb5, 0x99, 0x1f, 0x61, 0x26, 0x58,
+	0xa1, 0xb9, 0x49, 0x0c, 0xd1, 0x22, 0x0c, 0xe9, 0x2e, 0x45, 0x81, 0xad, 0xe3, 0xa8, 0x2f, 0x0e,
+	0x16, 0x26, 0x72, 0xf0, 0xbf, 0xff, 0xef, 0xd8, 0x3f, 0x2a, 0xfb, 0x17, 0x7e, 0xe3, 0xcb, 0x8f,
+	0x30, 0x50, 0x37, 0x78, 0xcc, 0xd6, 0x31, 0xfa, 0x5b, 0x00, 0x2f, 0xf3, 0x52, 0x51, 0xad, 0xca,
+	0x98, 0x55, 0x8b, 0x1c, 0xab, 0xe2, 0x8a, 0x28, 0x37, 0x8b, 0x35, 0x5e, 0x51, 0xa3, 0xbf, 0x24,
+	0x7d, 0xfe, 0x32, 0xf9, 0x93, 0x4f, 0x43, 0xf2, 0xd1, 0xee, 0x3e, 0x11, 0xd8, 0x34, 0xfc, 0xb7,
+	0x79, 0x45, 0xd5, 0x16, 0x22, 0x77, 0xe9, 0xf4, 0x0f, 0xff, 0xe3, 0xa7, 0x5e, 0xbe, 0x02, 0x61,
+	0xa5, 0xca, 0xca, 0xb8, 0x4c, 0xc7, 0x1b, 0x0a, 0x96, 0xf3, 0x23, 0xcc, 0x2c, 0x2f, 0x75, 0xba,
+	0xa0, 0xa7, 0x70, 0xca, 0x18, 0xbc, 0x82, 0x6b, 0x98, 0x53, 0x45, 0x39, 0xea, 0x27, 0x83, 0x70,
+	0x2f, 0xe0, 0x36, 0x5b, 0xc2, 0xb5, 0x3d, 0xc3, 0x86, 0xf4, 0x04, 0x5f, 0xbe, 0x02, 0x63, 0x30,
+	0x00, 0x7c, 0xfe, 0x40, 0x7e, 0x84, 0x89, 0xe8, 0x32, 0xa6, 0x05, 0xda, 0x83, 0x33, 0xb6, 0x55,
+	0x29, 0xd6, 0x59, 0x95, 0xab, 0x62, 0x39, 0x0a, 0x89, 0xf8, 0x0d, 0xef, 0xbb, 0xb3, 0xa3, 0x1b,
+	0x69, 0xea, 0xf9, 0x11, 0x66, 0xba, 0xbd, 0x68, 0x46, 0x03, 0x7a, 0x62, 0x2d, 0xb5, 0x2c, 0xd6,
+	0x70, 0x74, 0x82, 0x88, 0xdd, 0xea, 0x72, 0xab, 0xc5, 0x1a, 0xb6, 0x09, 0xe6, 0xc6, 0xbf, 0x7b,
+	0x01, 0xfe, 0xd8, 0x02, 0xc0, 0xbc, 0x19, 0x5a, 0x3b, 0xfa, 0x14, 0x4e, 0x69, 0xab, 0x8b, 0xe5,
+	0xf6, 0xf4, 0x17, 0xfb, 0x9c, 0xfe, 0x94, 0xa1, 0xf7, 0xf2, 0x15, 0x08, 0x40, 0x1f, 0xf0, 0x31,
+	0x11, 0x5d, 0xc9, 0xb6, 0x02, 0x93, 0x35, 0xcd, 0xcb, 0x9a, 0x7b, 0x80, 0x28, 0x5f, 0xf7, 0x52,
+	0xb6, 0x0f, 0x74, 0xf2, 0xe5, 0x2b, 0x30, 0x0a, 0xfd, 0xc0, 0xe7, 0xff, 0x8f, 0x57, 0x00, 0x30,
+	0xe1, 0x9a, 0xcd, 0x00, 0xdd, 0x87, 0x01, 0x89, 0x55, 0xab, 0xd1, 0xd1, 0x5e, 0x53, 0xdf, 0x65,
+	0xd5, 0xaa, 0x5d, 0x31, 0x70, 0xa2, 0xcd, 0x9b, 0x38, 0xa2, 0x1d, 0x38, 0x5e, 0xc5, 0x6c, 0x19,
+	0xcb, 0x4a, 0x74, 0x2c, 0xee, 0x5f, 0x08, 0xa5, 0x7f, 0xe1, 0xad, 0x91, 0x27, 0x46, 0x76, 0x15,
+	0xfd, 0x91, 0xfe, 0x06, 0xf8, 0x28, 0x8a, 0x31, 0x35, 0xd0, 0x5f, 0xc2, 0xf0, 0x57, 0x0d, 0x2c,
+	0x37, 0x8b, 0x12, 0x2b, 0xb3, 0x75, 0x25, 0x3a, 0x4e, 0x34, 0x97, 0xbc, 0x35, 0x3f, 0xd2, 0x2c,
+	0x77, 0x35, 0x43, 0xac, 0x76, 0xd7, 0x0e, 0x7d, 0x65, 0x99, 0x29, 0x68, 0x1b, 0x86, 0xaa, 0xaa,
+	0x2a, 0x15, 0xeb, 0x58, 0xad, 0x8a, 0xe5, 0x68, 0x90, 0x4c, 0xfb, 0xbd, 0x2e, 0x43, 0x56, 0x55,
+	0x69, 0x87, 0xd8, 0xd9, 0xa4, 0x19, 0x58, 0xb5, 0x2e, 0xa3, 0x45, 0x38, 0xa6, 0xbd, 0xe1, 0xbc,
+	0x14, 0xbd, 0xde, 0xe3, 0xed, 0x06, 0xcc, 0x28, 0x2b, 0x34, 0x1f, 0x49, 0x68, 0x07, 0x46, 0x78,
+	0xa9, 0x28, 0xc9, 0xf8, 0x80, 0xff, 0x5a, 0x7f, 0x41, 0xe3, 0x3d, 0x97, 0x9d, 0x18, 0x92, 0xbe,
+	0xb5, 0x77, 0x2b, 0x0f, 0x98, 0x30, 0x2f, 0xe9, 0x17, 0xc9, 0xbb, 0xb6, 0x05, 0x21, 0x2f, 0x59,
+	0x4f, 0x43, 0x98, 0x48, 0xbd, 0xed, 0x2d, 0xf5, 0x48, 0xb2, 0xbf, 0x0b, 0x80, 0x99, 0xe0, 0xcd,
+	0x0b, 0xe8, 0x7d, 0x3d, 0x4a, 0x95, 0x15, 0x55, 0x9b, 0xc7, 0xed, 0xee, 0xf3, 0xb0, 0x9e, 0xf8,
+	0xbc, 0x8f, 0x09, 0xb2, 0x42, 0x73, 0x4b, 0x51, 0x1f, 0x49, 0xe8, 0x73, 0x88, 0x74, 0x57, 0xc7,
+	0xbc, 0xde, 0x3d, 0xc3, 0xbc, 0xec, 0xba, 0x53, 0x65, 0x4d, 0xd4, 0x36, 0xc7, 0x7d, 0x18, 0x31,
+	0xe4, 0xcd, 0x79, 0xbe, 0xd7, 0xf7, 0x3c, 0xed, 0xc2, 0x61, 0x22, 0x6c, 0xce, 0x79, 0x09, 0x8e,
+	0x6b, 0x73, 0x66, 0x15, 0x21, 0x9a, 0xe8, 0x71, 0xe3, 0xfc, 0x8c, 0x76, 0x7b, 0x37, 0x14, 0x01,
+	0xdd, 0x87, 0x41, 0x56, 0x11, 0xf4, 0xb9, 0xbd, 0x4d, 0x3c, 0x12, 0xde, 0x03, 0xd8, 0x50, 0x84,
+	0xf6, 0x0d, 0xf3, 0x33, 0xe3, 0xac, 0x22, 0x90, 0x79, 0x3c, 0x84, 0x21, 0x4d, 0xc0, 0x9c, 0xc4,
+	0x24, 0xd1, 0xb8, 0xd9, 0x5b, 0xc3, 0xb8, 0x5b, 0x7e, 0x06, 0xb2, 0xd6, 0x15, 0x74, 0x1f, 0x86,
+	0xcc, 0xdb, 0xa5, 0x0d, 0x3f, 0xd3, 0xcf, 0xfd, 0x0a, 0x90, 0xed, 0x65, 0x4b, 0x51, 0xb5, 0xa9,
+	0x3c, 0x81, 0x61, 0xc3, 0x59, 0x9f, 0x4e, 0xb6, 0xdf, 0xe9, 0xd8, 0xf5, 0x60, 0x99, 0x88, 0x99,
+	0x21, 0xdf, 0x14, 0x34, 0xa7, 0xb7, 0xd2, 0xff, 0xf4, 0xec, 0xaa, 0x93, 0xba, 0xaa, 0x39, 0x55,
+	0x01, 0x4e, 0xb3, 0x12, 0x5f, 0xac, 0xc8, 0x62, 0xa3, 0x7d, 0xfb, 0x23, 0x44, 0xba, 0x4b, 0x90,
+	0xd9, 0x53, 0x65, 0x5e, 0xa8, 0xd8, 0xd5, 0xaf, 0x68, 0xa1, 0xca, 0x73, 0x0b, 0x63, 0xa6, 0x58,
+	0x89, 0x7f, 0xa8, 0x69, 0x9b, 0xfd, 0xbd, 0x80, 0x6f, 0xb1, 0xe5, 0x32, 0xaf, 0xed, 0xdd, 0x6c,
+	0xad, 0xd8, 0xd1, 0xb5, 0x12, 0xcd, 0xf5, 0x0a, 0x70, 0x9d, 0x7d, 0x4f, 0x1b, 0x33, 0xb3, 0x62,
+	0x51, 0x80, 0x99, 0x6f, 0x77, 0xb0, 0xe1, 0xec, 0x5d, 0x41, 0x0c, 0x0c, 0x4b, 0xa2, 0xac, 0x5a,
+	0x33, 0x9d, 0xea, 0xf9, 0x0e, 0x89, 0xb2, 0x6a, 0xef, 0x2b, 0x78, 0xdc, 0x02, 0x80, 0x84, 0xe5,
+	0x90, 0xd4, 0x6e, 0x42, 0x7b, 0x70, 0x16, 0x7f, 0x2d, 0xf1, 0x32, 0xab, 0xf5, 0x59, 0xb4, 0x52,
+	0xb6, 0x28, 0x45, 0xb4, 0xe7, 0x93, 0x7a, 0x52, 0x97, 0x34, 0x93, 0xba, 0xe4, 0xbe, 0x69, 0x91,
+	0x0b, 0x68, 0x82, 0xcc, 0x4c, 0xdb, 0xdb, 0x6a, 0x42, 0x05, 0x18, 0x2e, 0x89, 0xe5, 0xa6, 0x35,
+	0xd0, 0x4b, 0x7d, 0xee, 0xc1, 0x86, 0x66, 0x48, 0x73, 0x36, 0x07, 0xf8, 0x14, 0x86, 0x59, 0xb9,
+	0xd2, 0x5e, 0x62, 0x44, 0x96, 0xb8, 0xdb, 0x93, 0x23, 0x3b, 0xd6, 0x37, 0x72, 0x6c, 0x5f, 0x5c,
+	0x8a, 0x09, 0xb1, 0x56, 0xbb, 0x82, 0xbe, 0x80, 0x53, 0x9c, 0x28, 0x7e, 0xc9, 0xe3, 0xb6, 0xf6,
+	0x4c, 0xaf, 0xdb, 0xb7, 0x49, 0x8c, 0x7b, 0xc9, 0x47, 0x38, 0xbb, 0x89, 0x82, 0xf2, 0x10, 0x3e,
+	0x67, 0x0f, 0x8a, 0x46, 0x9a, 0x38, 0xeb, 0xb9, 0x19, 0x1b, 0xe2, 0x4f, 0xd9, 0x03, 0x33, 0x4b,
+	0xd4, 0x44, 0x7f, 0xd4, 0x96, 0x61, 0xe2, 0xb9, 0x79, 0x11, 0xe5, 0x61, 0xa4, 0x2c, 0xd6, 0x59,
+	0xbe, 0xfd, 0x02, 0xcd, 0xf5, 0xb9, 0xa4, 0xcc, 0xa4, 0xee, 0x68, 0x2e, 0x27, 0x0b, 0xc3, 0x32,
+	0xab, 0xe2, 0x62, 0x8d, 0xaf, 0xf3, 0x2a, 0x96, 0xa3, 0x97, 0xc9, 0x94, 0xaf, 0xb9, 0x74, 0x9e,
+	0x94, 0x9e, 0x61, 0x4e, 0x65, 0xf0, 0x01, 0x99, 0x67, 0xfc, 0xdb, 0x17, 0x0e, 0x27, 0xf7, 0x53,
+	0xeb, 0x63, 0x42, 0x5a, 0xf3, 0xb6, 0xde, 0x8a, 0x3e, 0x83, 0xb3, 0x87, 0xbc, 0xac, 0x36, 0xd8,
+	0x5a, 0xb1, 0x2a, 0x2a, 0xed, 0xc7, 0x35, 0xda, 0xef, 0x53, 0x60, 0x25, 0x4e, 0xc8, 0xd0, 0xc9,
+	0x8b, 0x8a, 0xf5, 0xc0, 0xd6, 0x21, 0x75, 0x20, 0xca, 0xcf, 0x59, 0xb9, 0xcc, 0x0b, 0x95, 0x22,
+	0x57, 0x63, 0x15, 0x25, 0x3a, 0xdf, 0xc7, 0x24, 0x6e, 0x7e, 0xfb, 0xa2, 0xc3, 0xd1, 0x3d, 0x11,
+	0x3f, 0x33, 0xd5, 0x36, 0xd9, 0xd4, 0x2c, 0x50, 0x05, 0x8e, 0x11, 0x39, 0x1c, 0x7d, 0x27, 0xee,
+	0x5f, 0x98, 0xc8, 0x3d, 0xb1, 0xf9, 0x2c, 0x7d, 0x03, 0xe8, 0xc4, 0xbb, 0xf2, 0x02, 0xf3, 0xce,
+	0x5f, 0x24, 0x36, 0x1e, 0x7f, 0x92, 0xa0, 0xe3, 0x89, 0xfc, 0xfe, 0xfe, 0xae, 0xf9, 0xdf, 0x3d,
+	0xed, 0x8f, 0xfd, 0x4d, 0xf2, 0x7b, 0x7f, 0x7b, 0x2f, 0xf1, 0x79, 0xfb, 0x35, 0x37, 0xff, 0x8a,
+	0x02, 0xc6, 0x90, 0x47, 0x8f, 0x61, 0xa8, 0x21, 0xb7, 0x53, 0xb7, 0x5f, 0xf4, 0x0a, 0x90, 0x7f,
+	0xce, 0x6c, 0x7b, 0x27, 0x9a, 0x0d, 0xd9, 0xca, 0xdb, 0x3e, 0x81, 0x14, 0x57, 0x65, 0x6b, 0x35,
+	0x2c, 0x54, 0xb0, 0xf9, 0x08, 0xae, 0x92, 0x4a, 0xa5, 0x4b, 0xc0, 0xd8, 0x34, 0xad, 0x8d, 0x07,
+	0xd1, 0x52, 0x9d, 0xe2, 0x9c, 0x2d, 0x88, 0x85, 0xa1, 0x8a, 0xa8, 0x8a, 0x46, 0x79, 0x10, 0xbd,
+	0xd3, 0xc7, 0xea, 0x27, 0xbe, 0x7d, 0x11, 0x71, 0x56, 0x15, 0xee, 0xb5, 0x07, 0x0c, 0xd4, 0x44,
+	0x77, 0x49, 0x23, 0xe2, 0xe1, 0x1c, 0x27, 0x0a, 0x2a, 0x49, 0xbc, 0xf1, 0x73, 0x99, 0x57, 0xad,
+	0x39, 0xac, 0x91, 0x85, 0x79, 0xb7, 0xdb, 0x3b, 0x4a, 0x7c, 0x18, 0xdd, 0xc5, 0x3d, 0x91, 0x59,
+	0xce, 0xa3, 0x19, 0x1d, 0x01, 0x78, 0x5d, 0xa9, 0xb2, 0x12, 0x2e, 0x6a, 0x41, 0x0e, 0x73, 0x2a,
+	0x2e, 0x17, 0xb1, 0x50, 0x96, 0x44, 0x5e, 0x50, 0xcd, 0x4e, 0xd7, 0x49, 0xa7, 0xe9, 0x2e, 0x71,
+	0x5d, 0x73, 0xde, 0x35, 0x7d, 0x1f, 0x18, 0xae, 0xee, 0xce, 0xaf, 0x29, 0x3d, 0xcc, 0xb4, 0x50,
+	0x51, 0x12, 0xad, 0xee, 0xee, 0xf6, 0x0a, 0x15, 0x39, 0x51, 0xed, 0x0c, 0x15, 0x25, 0xf3, 0x22,
+	0xfa, 0x10, 0xc2, 0x7a, 0xa3, 0x6e, 0x2a, 0xfd, 0xaa, 0xd7, 0xde, 0xbd, 0x23, 0x96, 0xf9, 0x83,
+	0xa6, 0x5d, 0x8c, 0xe4, 0xff, 0x13, 0xf5, 0x46, 0xdd, 0x10, 0xfb, 0x1c, 0xce, 0xf2, 0x52, 0x51,
+	0xc6, 0x52, 0x43, 0xd5, 0x37, 0x08, 0x43, 0xf6, 0xfd, 0xbe, 0x65, 0xdb, 0xef, 0x32, 0x2f, 0x31,
+	0x96, 0x8e, 0x21, 0xff, 0x29, 0xbc, 0xa4, 0x6d, 0xb4, 0x45, 0xbe, 0x8c, 0x05, 0x95, 0x57, 0xdb,
+	0x1b, 0xc6, 0x3d, 0xa2, 0xff, 0xce, 0x4f, 0x87, 0x0a, 0x56, 0xe1, 0x39, 0x66, 0x46, 0x13, 0x79,
+	0x64, 0x68, 0x98, 0xcf, 0x7f, 0x09, 0xce, 0xc8, 0xf8, 0xab, 0x06, 0x56, 0xd4, 0x22, 0x27, 0x0a,
+	0x8a, 0x2a, 0xb3, 0xbc, 0xa0, 0x2a, 0xd1, 0xfb, 0xbd, 0xf2, 0x79, 0x46, 0x77, 0xd8, 0xb4, 0xec,
+	0x6d, 0xc5, 0x0c, 0x92, 0xdd, 0x8d, 0x0a, 0xfa, 0x1c, 0x52, 0x15, 0x99, 0x95, 0xaa, 0x5f, 0xd5,
+	0x8a, 0x0a, 0x56, 0x55, 0x5e, 0xa8, 0x28, 0xd1, 0x3f, 0x23, 0x1d, 0xdc, 0xf6, 0xee, 0xe0, 0xa1,
+	0x66, 0xfd, 0xd1, 0xf6, 0x9e, 0x61, 0xec, 0x7c, 0x7b, 0xa7, 0x0c, 0x2d, 0xb3, 0x15, 0xc9, 0xf0,
+	0x8a, 0x28, 0x61, 0x41, 0xcb, 0x33, 0x0c, 0xa4, 0x61, 0xbb, 0x05, 0x1b, 0xa4, 0x9f, 0x45, 0xef,
+	0x7e, 0x9e, 0x48, 0x58, 0xd8, 0x90, 0xf8, 0x5f, 0x5b, 0x5e, 0xee, 0xbb, 0x71, 0xd9, 0x10, 0x76,
+	0x5b, 0xa0, 0x4f, 0x20, 0x32, 0x40, 0x41, 0x1d, 0x2b, 0x55, 0xb3, 0xb3, 0xcd, 0xb3, 0xdf, 0x6f,
+	0x4a, 0x97, 0xd9, 0xc1, 0x4a, 0xd5, 0x90, 0xde, 0x87, 0x11, 0x05, 0x57, 0xea, 0xda, 0x3b, 0x6d,
+	0x44, 0x8e, 0xad, 0x9e, 0xa9, 0x9a, 0x6e, 0xab, 0x07, 0x04, 0xfd, 0x46, 0x90, 0x67, 0x7d, 0x52,
+	0xb1, 0x37, 0xa0, 0x97, 0x00, 0x5e, 0x13, 0x65, 0xbe, 0xc2, 0x0b, 0x45, 0xb3, 0xb0, 0x6e, 0x94,
+	0x14, 0xac, 0x2a, 0xe6, 0xd8, 0xbf, 0x20, 0xe1, 0x69, 0xb7, 0x0f, 0xc4, 0xe1, 0x24, 0x3c, 0xc9,
+	0x27, 0x44, 0x75, 0x4f, 0xaf, 0xb1, 0x75, 0x4d, 0x7d, 0x26, 0x0f, 0x04, 0x55, 0x6e, 0x27, 0xcf,
+	0xcc, 0x15, 0xb1, 0x9b, 0x21, 0xfa, 0x18, 0xc2, 0x67, 0xcf, 0x55, 0x6d, 0xb3, 0xe1, 0xeb, 0x4a,
+	0x94, 0x25, 0x23, 0xe9, 0xf2, 0x68, 0x14, 0x9e, 0xee, 0x6f, 0x6a, 0x66, 0xbd, 0x12, 0x8c, 0x89,
+	0x67, 0xcf, 0x55, 0x62, 0xa4, 0xa0, 0x32, 0xbc, 0x2c, 0x63, 0x45, 0x12, 0x05, 0x45, 0xcb, 0x5f,
+	0x94, 0x2f, 0xc9, 0x9e, 0x26, 0x0a, 0x07, 0x7c, 0x25, 0x5a, 0xea, 0x55, 0xff, 0xec, 0xe8, 0xb6,
+	0x9b, 0xc4, 0xb4, 0x3d, 0x87, 0x4b, 0xa6, 0x98, 0xa3, 0x1d, 0xfd, 0x15, 0x9c, 0x79, 0xc6, 0x66,
+	0x8b, 0x6a, 0x4d, 0x29, 0x1e, 0xf0, 0x42, 0x05, 0xcb, 0x92, 0xcc, 0x0b, 0x6a, 0xb4, 0xdc, 0x2b,
+	0x1c, 0x16, 0x36, 0xb2, 0xfb, 0x35, 0xe5, 0x83, 0xb6, 0x79, 0x7f, 0xd9, 0x76, 0x7e, 0x94, 0x99,
+	0x7e, 0xc6, 0xba, 0x5c, 0xd1, 0x5f, 0x03, 0x78, 0xd9, 0xd5, 0xbb, 0x15, 0x24, 0xae, 0x90, 0x51,
+	0x74, 0xa9, 0xfc, 0x07, 0x1c, 0xc2, 0x25, 0xd5, 0xcb, 0x6f, 0x7e, 0x1b, 0xc6, 0x7a, 0x3f, 0x0d,
+	0x88, 0x82, 0xfe, 0x2f, 0x71, 0x93, 0xb0, 0xc0, 0x09, 0x46, 0xfb, 0x13, 0xcd, 0xc2, 0xd1, 0x43,
+	0xb6, 0xd6, 0x30, 0xf8, 0x1c, 0xa3, 0xff, 0xb8, 0xeb, 0x5b, 0x03, 0x77, 0xff, 0x0d, 0xfc, 0xb6,
+	0x05, 0xfe, 0x05, 0xc0, 0x59, 0x38, 0x66, 0x3c, 0x27, 0x30, 0x45, 0xa7, 0x97, 0xe9, 0x95, 0x35,
+	0x7a, 0x75, 0x19, 0xce, 0xc1, 0x71, 0x9d, 0xf3, 0x29, 0x28, 0x94, 0x59, 0xa5, 0x33, 0xcb, 0x74,
+	0x26, 0x43, 0xaf, 0xaf, 0x43, 0x0a, 0x8e, 0xeb, 0xbd, 0x2b, 0x68, 0x34, 0x9d, 0xa6, 0x53, 0x2b,
+	0xf0, 0x26, 0x9c, 0x34, 0x22, 0x56, 0x9c, 0x0c, 0x14, 0xcd, 0xac, 0xd1, 0x2b, 0xf4, 0x1d, 0x7a,
+	0x95, 0x5e, 0xbf, 0x43, 0xa7, 0xd6, 0xe9, 0xd4, 0x1a, 0x9d, 0x4e, 0xc1, 0xab, 0x70, 0xc6, 0xb4,
+	0xb2, 0xc7, 0x2e, 0xdf, 0x6a, 0x66, 0x01, 0xc0, 0xeb, 0x30, 0xb2, 0x51, 0x3e, 0x64, 0x05, 0x0e,
+	0x97, 0x0d, 0x8d, 0xc9, 0x2c, 0x9d, 0xca, 0xd2, 0xab, 0x6b, 0x74, 0x6a, 0x95, 0x5e, 0x4d, 0xe7,
+	0x6e, 0xc3, 0x49, 0x03, 0x80, 0x71, 0x55, 0x91, 0xe7, 0x30, 0x8a, 0x1e, 0xb7, 0xc0, 0xad, 0x93,
+	0x16, 0xb8, 0x79, 0xda, 0x02, 0xe1, 0xcc, 0x1d, 0x3a, 0x4d, 0xa7, 0x96, 0xe9, 0x95, 0x75, 0x3a,
+	0x93, 0xbb, 0x05, 0x27, 0x78, 0xc9, 0x6e, 0x76, 0xfd, 0x77, 0x7a, 0xc9, 0x11, 0x3b, 0x6d, 0x81,
+	0x60, 0x26, 0x45, 0x67, 0xd2, 0x74, 0x2a, 0x9d, 0x5b, 0x84, 0x93, 0x46, 0xc1, 0x6e, 0x98, 0x5e,
+	0x3b, 0x6e, 0x81, 0xdb, 0x86, 0xe9, 0x82, 0x66, 0x9a, 0x4d, 0xd1, 0xd9, 0x34, 0x9d, 0xcd, 0x68,
+	0xaf, 0x7b, 0x6e, 0x15, 0x6a, 0xc5, 0xad, 0x69, 0xbb, 0x70, 0xdc, 0x02, 0x09, 0xc3, 0xf6, 0x06,
+	0x91, 0xcd, 0xd2, 0x99, 0x15, 0x3a, 0x95, 0x39, 0x72, 0xdd, 0xcb, 0x5c, 0x52, 0xe7, 0x02, 0x36,
+	0x5f, 0xad, 0x9f, 0x8c, 0xe1, 0x9b, 0xd6, 0x7c, 0x57, 0x52, 0xf4, 0x4a, 0x9a, 0x5e, 0xd1, 0xfb,
+	0x59, 0x86, 0x73, 0xee, 0x07, 0xcd, 0xf0, 0x9b, 0x3b, 0x6e, 0x81, 0xb2, 0xe1, 0xc7, 0x9d, 0xb6,
+	0xc0, 0x58, 0x6a, 0x79, 0x99, 0x4e, 0xaf, 0x14, 0x02, 0xc1, 0x9b, 0xd4, 0xad, 0x42, 0x20, 0x18,
+	0xa2, 0xc2, 0x85, 0x40, 0x30, 0x46, 0x5d, 0x2f, 0x04, 0x82, 0x0b, 0xd4, 0xed, 0x42, 0x20, 0x78,
+	0x83, 0x4a, 0x14, 0x02, 0xc1, 0x34, 0x95, 0x29, 0x04, 0x82, 0xd3, 0x14, 0x2a, 0x04, 0x82, 0x57,
+	0xa9, 0x6b, 0x85, 0x40, 0xf0, 0x1a, 0xf5, 0x56, 0x21, 0x10, 0x7c, 0x8b, 0x8a, 0x15, 0x02, 0x41,
+	0x9a, 0x5a, 0x2c, 0x04, 0x82, 0x1c, 0x55, 0x4e, 0xfc, 0x0d, 0x80, 0xd1, 0x6e, 0x74, 0x15, 0x09,
+	0x64, 0x07, 0x76, 0xb2, 0x5b, 0x1e, 0x2b, 0xd1, 0x2b, 0x71, 0xff, 0x42, 0xa4, 0xdb, 0x0e, 0xe9,
+	0x56, 0xcb, 0xcd, 0x5a, 0x41, 0x24, 0x6e, 0x4b, 0x3d, 0x91, 0x0b, 0xd0, 0xf2, 0x58, 0x49, 0xfc,
+	0x67, 0x1c, 0x46, 0x36, 0xb5, 0x6b, 0xd8, 0x22, 0xdd, 0x6b, 0x67, 0x25, 0xdd, 0xe7, 0xe5, 0xdb,
+	0x37, 0x3c, 0xf8, 0xb6, 0x8b, 0x69, 0xab, 0x3f, 0x27, 0xd2, 0xee, 0xca, 0xae, 0x3f, 0x1c, 0x98,
+	0x5d, 0x7b, 0xf0, 0xea, 0x8f, 0x7b, 0xf1, 0xea, 0x3e, 0x53, 0x1f, 0x6f, 0x68, 0xfd, 0xc1, 0xe0,
+	0xd0, 0xda, 0xc1, 0xaa, 0x1f, 0x0d, 0xcc, 0xaa, 0x3b, 0xd0, 0xf4, 0xd6, 0x60, 0x68, 0xda, 0xc5,
+	0xa2, 0xd7, 0x07, 0x60, 0xd1, 0x06, 0x85, 0xde, 0x18, 0x94, 0x42, 0xb7, 0xc9, 0x33, 0x73, 0x21,
+	0xe4, 0x79, 0x48, 0x9b, 0x7b, 0xd3, 0xe6, 0x6c, 0xbf, 0xb4, 0xd9, 0x01, 0x99, 0xf7, 0xcf, 0x0d,
+	0x99, 0xbd, 0xd8, 0xf2, 0x87, 0xe7, 0x60, 0xcb, 0x6f, 0x12, 0x52, 0x5e, 0xed, 0x1b, 0x29, 0x3b,
+	0x49, 0xf2, 0x07, 0x83, 0x92, 0x64, 0x17, 0x40, 0x7e, 0x7c, 0x2e, 0x80, 0xdc, 0xc9, 0x8d, 0xf7,
+	0xce, 0xcf, 0x8d, 0x3b, 0xe1, 0x70, 0xfe, 0x1c, 0x74, 0xd6, 0xc9, 0x64, 0x77, 0x06, 0x65, 0xb2,
+	0xde, 0x34, 0x76, 0x6b, 0x40, 0x1a, 0xeb, 0xe4, 0xb0, 0x0f, 0x07, 0xe7, 0xb0, 0x4e, 0xee, 0xba,
+	0x7b, 0x5e, 0xee, 0xda, 0xc1, 0x59, 0xef, 0x0d, 0xc0, 0x59, 0xed, 0x74, 0x75, 0xa7, 0x0b, 0x5d,
+	0xed, 0x97, 0x3f, 0xb8, 0x10, 0xeb, 0xfd, 0xb3, 0x23, 0x56, 0x27, 0x40, 0xfd, 0xb8, 0x27, 0x40,
+	0xed, 0x77, 0x54, 0x5e, 0xf0, 0xb4, 0x7c, 0xc1, 0xf5, 0x9c, 0x77, 0xd1, 0xc6, 0x5f, 0x74, 0xcd,
+	0xd6, 0xb5, 0x30, 0x43, 0x73, 0x4e, 0x3c, 0x6b, 0xd1, 0xd4, 0x07, 0x03, 0xd3, 0x54, 0x07, 0x44,
+	0xdd, 0x3d, 0x27, 0x44, 0xed, 0x64, 0xa7, 0xef, 0x9f, 0x99, 0x9d, 0x3a, 0xb8, 0xe8, 0x17, 0x17,
+	0xc7, 0x45, 0xbb, 0xe0, 0xd0, 0xe6, 0xcf, 0x48, 0x43, 0x7f, 0x02, 0x82, 0xde, 0x1b, 0x00, 0x82,
+	0xda, 0xd1, 0xe7, 0xc6, 0x60, 0xe8, 0xd3, 0x0e, 0x3c, 0xf7, 0xcf, 0x0b, 0x3c, 0x3d, 0x39, 0xe7,
+	0x67, 0x17, 0xc5, 0x22, 0x3d, 0x29, 0xe4, 0xe3, 0x73, 0x72, 0x35, 0x37, 0x51, 0xfb, 0x87, 0x8b,
+	0x23, 0x6a, 0xce, 0x4a, 0xf2, 0x27, 0x88, 0x5a, 0x2f, 0x90, 0x96, 0x3f, 0x17, 0x48, 0xb3, 0x81,
+	0xb3, 0x0b, 0x46, 0x39, 0xd3, 0xff, 0x7b, 0xcf, 0xf5, 0x3f, 0x86, 0xe5, 0x12, 0x6e, 0x62, 0x32,
+	0x7d, 0xf4, 0x1a, 0x38, 0x2f, 0xe5, 0xe6, 0xed, 0xa8, 0x64, 0xf2, 0xe8, 0x35, 0x68, 0xff, 0xd4,
+	0xfc, 0x9d, 0x7c, 0x84, 0xf8, 0x3b, 0x2e, 0xe5, 0xae, 0x39, 0xa0, 0x48, 0xe4, 0xe8, 0x35, 0xb0,
+	0xfd, 0xce, 0xdd, 0xec, 0x40, 0x1f, 0xe8, 0xe8, 0x35, 0x70, 0x5d, 0xcb, 0x65, 0xbb, 0x02, 0x8f,
+	0xf9, 0xa3, 0xd7, 0xa0, 0x4b, 0x9b, 0x85, 0x3b, 0x74, 0xac, 0xa1, 0x03, 0x0d, 0x9a, 0x5a, 0x4c,
+	0xfc, 0x57, 0x1c, 0x4e, 0x31, 0x58, 0xaa, 0xb1, 0xdc, 0x10, 0x1c, 0x0c, 0xc1, 0xc1, 0x10, 0x1c,
+	0x0c, 0xc1, 0xc1, 0x10, 0x1c, 0x0c, 0xc1, 0xc1, 0x10, 0x1c, 0x0c, 0xc1, 0xc1, 0x10, 0x1c, 0x0c,
+	0xc1, 0xc1, 0x10, 0x1c, 0x0c, 0xc1, 0xc1, 0x10, 0x1c, 0xbc, 0xe9, 0xe0, 0xe0, 0x9b, 0xfe, 0xc0,
+	0xc1, 0x47, 0x7d, 0x54, 0x58, 0xae, 0x52, 0x72, 0x48, 0x0e, 0xde, 0x5c, 0x72, 0xf0, 0xef, 0x71,
+	0x18, 0x7a, 0x88, 0xd5, 0x21, 0x35, 0x18, 0x52, 0x83, 0x21, 0x35, 0x18, 0x52, 0x83, 0x21, 0x35,
+	0x18, 0x52, 0x83, 0x21, 0x35, 0x18, 0x52, 0x83, 0x21, 0x35, 0x18, 0x52, 0x83, 0x21, 0x35, 0x18,
+	0x52, 0x83, 0x21, 0x35, 0x78, 0xc3, 0xa9, 0xc1, 0xdf, 0xf5, 0x47, 0x0d, 0x76, 0xfa, 0xf9, 0x80,
+	0xa7, 0x5d, 0x46, 0x0e, 0x89, 0xc1, 0x9b, 0x4b, 0x0c, 0xfe, 0x09, 0xc1, 0x69, 0x2b, 0xf2, 0x31,
+	0x8d, 0x1a, 0xc1, 0x44, 0x68, 0x13, 0x4e, 0x97, 0x79, 0x85, 0x2d, 0xd5, 0x70, 0xd1, 0x8a, 0x82,
+	0x64, 0x11, 0xbb, 0x43, 0x00, 0xca, 0x70, 0xb0, 0xc4, 0xd0, 0xaf, 0xe1, 0x55, 0x2c, 0x10, 0x8d,
+	0x67, 0xec, 0x21, 0xab, 0x70, 0x32, 0x2f, 0xa9, 0x36, 0x39, 0x7f, 0x4f, 0xb9, 0x2b, 0xba, 0x6b,
+	0xc1, 0xf2, 0x6c, 0xeb, 0xee, 0xc2, 0xa8, 0xa1, 0xcb, 0xb1, 0x92, 0xca, 0x55, 0x59, 0x9b, 0x68,
+	0xa0, 0xa7, 0xe8, 0x9c, 0xee, 0xb7, 0xa9, 0xbb, 0xb5, 0x15, 0xff, 0x94, 0x8a, 0xaf, 0x1b, 0x03,
+	0x16, 0x5f, 0xb6, 0x1a, 0xa5, 0x77, 0xe5, 0xe5, 0x55, 0xa3, 0xbc, 0xdb, 0x77, 0x76, 0xef, 0xeb,
+	0x5a, 0xa3, 0xbc, 0x77, 0x86, 0xb4, 0xde, 0xe7, 0xa8, 0x51, 0x3a, 0x93, 0xb8, 0xd1, 0xf3, 0x24,
+	0x71, 0x26, 0x6a, 0x18, 0x3b, 0x3b, 0x6a, 0xf8, 0xa8, 0x8d, 0x1a, 0xc6, 0xcf, 0x76, 0xbe, 0x8e,
+	0xfb, 0xf3, 0x42, 0x0b, 0x3d, 0x5c, 0x2c, 0x26, 0x28, 0xb9, 0x40, 0x46, 0x68, 0xb0, 0x13, 0x7b,
+	0x3a, 0x0e, 0x73, 0xb0, 0x83, 0x0d, 0xf7, 0x89, 0x13, 0xe1, 0x0b, 0x3c, 0x71, 0x62, 0xf2, 0x67,
+	0x3c, 0x71, 0x22, 0x72, 0xb1, 0x27, 0x4e, 0x38, 0x09, 0x28, 0xd5, 0xb3, 0xee, 0xb7, 0x11, 0xd0,
+	0xac, 0x93, 0x80, 0x4e, 0x93, 0x03, 0xc5, 0x1c, 0x87, 0x93, 0xe8, 0xe7, 0x8a, 0xf9, 0x1d, 0x50,
+	0x74, 0xbf, 0x13, 0x4f, 0xa2, 0x3e, 0x8f, 0xb2, 0x1a, 0x7f, 0xf9, 0x0a, 0xf8, 0x21, 0xd0, 0x14,
+	0xdd, 0x9c, 0xf2, 0x33, 0x6f, 0x4e, 0x39, 0x73, 0xd6, 0xc3, 0x23, 0xf2, 0x7e, 0x2f, 0x56, 0xd9,
+	0xad, 0xd6, 0x9d, 0x1d, 0xac, 0xd6, 0xad, 0x7b, 0x17, 0x38, 0x73, 0x03, 0x7f, 0x1f, 0x6b, 0x3b,
+	0xeb, 0xc6, 0xa3, 0xd2, 0x11, 0xbb, 0x57, 0x3a, 0x70, 0xb0, 0x8f, 0x61, 0xc9, 0xb7, 0xed, 0xf9,
+	0x40, 0x97, 0x7a, 0xe7, 0xee, 0x61, 0x47, 0xca, 0xf1, 0xdb, 0x16, 0x60, 0x61, 0xc8, 0xfa, 0x70,
+	0x15, 0xa4, 0x9c, 0xdf, 0xab, 0x2e, 0xd3, 0xd9, 0x65, 0x3a, 0xb5, 0x42, 0xa7, 0x53, 0x1e, 0x5f,
+	0xa7, 0xae, 0xd0, 0x6b, 0xf4, 0x2a, 0x7d, 0x87, 0x4e, 0xa5, 0xe8, 0x54, 0x9a, 0x4e, 0x65, 0xe8,
+	0x54, 0x16, 0xce, 0x76, 0x7c, 0x80, 0xea, 0x4b, 0x2f, 0xe7, 0x96, 0x3a, 0x0b, 0x21, 0x74, 0xf5,
+	0xb8, 0x05, 0x7c, 0xe4, 0xdb, 0xdd, 0x16, 0x18, 0x4d, 0xd3, 0x19, 0x3a, 0x7b, 0xf4, 0x1a, 0x8c,
+	0xfd, 0x4a, 0x10, 0x05, 0x7c, 0x2f, 0x97, 0xb6, 0x27, 0x39, 0xb7, 0x8c, 0x6f, 0x4f, 0x47, 0x9c,
+	0xdf, 0x9e, 0x66, 0x32, 0xce, 0xe4, 0x27, 0xeb, 0x48, 0x6c, 0xde, 0x31, 0xbe, 0x42, 0x1d, 0x71,
+	0x7f, 0x85, 0xea, 0x4a, 0x78, 0x32, 0xee, 0x94, 0x2b, 0x71, 0xdc, 0x02, 0xd4, 0x49, 0x0b, 0x4c,
+	0x69, 0xe3, 0x4a, 0xad, 0xd2, 0xa9, 0xb5, 0xce, 0x1c, 0xac, 0xd0, 0x35, 0xff, 0x59, 0x3e, 0x6e,
+	0x01, 0x68, 0x74, 0x7b, 0xe9, 0xb4, 0x05, 0x7c, 0xa9, 0xe5, 0x7f, 0x7e, 0x05, 0x40, 0xcf, 0xac,
+	0x08, 0x50, 0x3e, 0xd7, 0x07, 0xa7, 0x13, 0x14, 0x2c, 0x04, 0x82, 0x53, 0x14, 0x55, 0x08, 0x04,
+	0x2f, 0x51, 0x73, 0x89, 0x1f, 0x21, 0x9c, 0x61, 0xda, 0x25, 0xbe, 0x95, 0x23, 0x7d, 0x00, 0x67,
+	0x4a, 0x4d, 0x89, 0x55, 0x94, 0xa2, 0x03, 0x19, 0xf4, 0x4e, 0x6b, 0xa6, 0x75, 0x17, 0x9b, 0x1e,
+	0xda, 0x82, 0x88, 0x95, 0xa4, 0x5a, 0xd3, 0x29, 0xd3, 0x3b, 0x91, 0xa1, 0x88, 0x87, 0x5d, 0x05,
+	0xc3, 0x19, 0xae, 0xa1, 0xa8, 0x62, 0xdd, 0x29, 0x33, 0xea, 0xb9, 0xb1, 0x93, 0x43, 0x19, 0x5d,
+	0xa7, 0x8a, 0x4c, 0xb9, 0x0e, 0xa6, 0x21, 0xff, 0x3e, 0x41, 0x14, 0xed, 0xdd, 0xb4, 0x33, 0xa5,
+	0xf0, 0x60, 0x99, 0xd2, 0xe4, 0xc5, 0x65, 0x4a, 0x91, 0xf3, 0x67, 0x4a, 0xd4, 0x99, 0x33, 0xa5,
+	0xe9, 0x0b, 0xc8, 0x94, 0xd0, 0xc0, 0x99, 0xd2, 0x1d, 0x9d, 0xe6, 0x72, 0x62, 0x43, 0xab, 0x78,
+	0x8c, 0x48, 0xdb, 0x6d, 0x53, 0xd2, 0xb6, 0xaf, 0x4d, 0xdd, 0x52, 0xdb, 0xd3, 0x0d, 0x27, 0x7d,
+	0x1a, 0x97, 0x7a, 0xdd, 0x06, 0xc3, 0x69, 0x53, 0x2c, 0x63, 0x83, 0x4b, 0x87, 0x0c, 0x67, 0x32,
+	0x1b, 0xc6, 0x99, 0xd1, 0x8c, 0x9d, 0x39, 0xa3, 0x31, 0x4e, 0x01, 0xb1, 0xe7, 0x35, 0x7b, 0x1d,
+	0x29, 0xe0, 0x99, 0xfe, 0x31, 0xcd, 0x50, 0xec, 0xa0, 0x79, 0x7a, 0x22, 0x18, 0x1c, 0xf4, 0xb8,
+	0xc5, 0xa7, 0xed, 0x74, 0x70, 0xe2, 0x6c, 0xe9, 0xe0, 0xac, 0xe7, 0xf9, 0x44, 0xa6, 0xda, 0xdd,
+	0x7d, 0xaf, 0xbd, 0xe0, 0x3e, 0x9c, 0x6c, 0xef, 0x05, 0xe9, 0x05, 0x00, 0x67, 0xda, 0xbb, 0x41,
+	0x50, 0x8b, 0xf3, 0x2b, 0x74, 0x6a, 0x1d, 0x5e, 0x71, 0x6f, 0x05, 0xc1, 0x55, 0x3a, 0xb5, 0x4c,
+	0xaf, 0xd1, 0xeb, 0x5a, 0x05, 0xaa, 0xc7, 0x77, 0xab, 0x02, 0x3d, 0x6e, 0x01, 0xff, 0x49, 0x0b,
+	0xf8, 0xb4, 0x70, 0x9a, 0xa1, 0xb3, 0xf4, 0x4a, 0x2e, 0x69, 0x0f, 0xee, 0x37, 0x8e, 0x5b, 0x20,
+	0x7c, 0xd2, 0x02, 0x21, 0x2d, 0x46, 0x9b, 0xdb, 0x88, 0x33, 0xb0, 0x2f, 0x3b, 0x02, 0xbb, 0x3d,
+	0x3e, 0x07, 0xb5, 0xf8, 0x7c, 0x47, 0x0f, 0xd1, 0xf6, 0xa0, 0xfe, 0x36, 0x8c, 0x98, 0x8f, 0x9a,
+	0x6d, 0x18, 0xb3, 0x27, 0x2d, 0x30, 0x43, 0x76, 0x9b, 0x65, 0x3a, 0x9d, 0x2a, 0x04, 0x82, 0x3e,
+	0xca, 0x5f, 0x08, 0x04, 0xc7, 0xa9, 0xa0, 0x55, 0x9a, 0xea, 0x21, 0x77, 0x86, 0x9a, 0xcd, 0xfd,
+	0x23, 0x38, 0xf9, 0x3e, 0x36, 0xf2, 0xdd, 0xf7, 0xb1, 0x91, 0x1f, 0xbf, 0x8f, 0x81, 0xdf, 0x9c,
+	0xc6, 0xc0, 0xbf, 0x9e, 0xc6, 0xc0, 0xef, 0x4e, 0x63, 0xe0, 0xe4, 0x34, 0x06, 0xbe, 0x3b, 0x8d,
+	0x81, 0x3f, 0x9c, 0xc6, 0xc0, 0x1f, 0x4f, 0x63, 0x23, 0x3f, 0x9e, 0xc6, 0xc0, 0xdf, 0xff, 0x10,
+	0x1b, 0x39, 0xfe, 0x21, 0x06, 0x4e, 0x7e, 0x88, 0x8d, 0x7c, 0xf7, 0x43, 0x6c, 0xe4, 0xd3, 0xa7,
+	0x15, 0x51, 0xfa, 0xb2, 0x92, 0x3c, 0x14, 0x6b, 0x2a, 0x96, 0x65, 0x36, 0xd9, 0x50, 0x96, 0xc8,
+	0x1f, 0x07, 0xa2, 0x5c, 0x5f, 0x94, 0x64, 0xf1, 0x90, 0x2f, 0x63, 0x79, 0xd1, 0x6c, 0x5e, 0x92,
+	0x4a, 0x15, 0x71, 0x09, 0x7f, 0xad, 0x9a, 0xa7, 0xfd, 0x76, 0x3d, 0xf4, 0xb7, 0x34, 0x46, 0x72,
+	0x99, 0xcc, 0xff, 0x07, 0x00, 0x00, 0xff, 0xff, 0x8e, 0xc8, 0xf2, 0x63, 0x20, 0x58, 0x00, 0x00,
 }
 
 func (this *GlobalSpecType) Equal(that interface{}) bool {
@@ -3851,9 +3977,6 @@ func (this *GlobalSpecType) Equal(that interface{}) bool {
 	if !this.VirtualHostMatcher.Equal(that1.VirtualHostMatcher) {
 		return false
 	}
-	if !this.TlsFingerprintMatcher.Equal(that1.TlsFingerprintMatcher) {
-		return false
-	}
 	if len(this.ForwardingClass) != len(that1.ForwardingClass) {
 		return false
 	}
@@ -3871,9 +3994,6 @@ func (this *GlobalSpecType) Equal(that interface{}) bool {
 		}
 	}
 	if !this.UrlMatcher.Equal(that1.UrlMatcher) {
-		return false
-	}
-	if !this.L4DestMatcher.Equal(that1.L4DestMatcher) {
 		return false
 	}
 	if this.ChallengeAction != that1.ChallengeAction {
@@ -3937,6 +4057,15 @@ func (this *GlobalSpecType) Equal(that interface{}) bool {
 		}
 	}
 	if !this.ResponseMaskingConfig.Equal(that1.ResponseMaskingConfig) {
+		return false
+	}
+	if that1.TlsFingerprintChoice == nil {
+		if this.TlsFingerprintChoice != nil {
+			return false
+		}
+	} else if this.TlsFingerprintChoice == nil {
+		return false
+	} else if !this.TlsFingerprintChoice.Equal(that1.TlsFingerprintChoice) {
 		return false
 	}
 	return true
@@ -4349,6 +4478,54 @@ func (this *GlobalSpecType_DstAsnMatcher) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *GlobalSpecType_Ja4TlsFingerprint) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GlobalSpecType_Ja4TlsFingerprint)
+	if !ok {
+		that2, ok := that.(GlobalSpecType_Ja4TlsFingerprint)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.Ja4TlsFingerprint.Equal(that1.Ja4TlsFingerprint) {
+		return false
+	}
+	return true
+}
+func (this *GlobalSpecType_TlsFingerprintMatcher) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GlobalSpecType_TlsFingerprintMatcher)
+	if !ok {
+		that2, ok := that.(GlobalSpecType_TlsFingerprintMatcher)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.TlsFingerprintMatcher.Equal(that1.TlsFingerprintMatcher) {
+		return false
+	}
+	return true
+}
 func (this *IPThreatCategoryListType) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -4521,7 +4698,13 @@ func (this *CreateSpecType) Equal(that interface{}) bool {
 	if !this.VirtualHostMatcher.Equal(that1.VirtualHostMatcher) {
 		return false
 	}
-	if !this.TlsFingerprintMatcher.Equal(that1.TlsFingerprintMatcher) {
+	if that1.TlsFingerprintChoice == nil {
+		if this.TlsFingerprintChoice != nil {
+			return false
+		}
+	} else if this.TlsFingerprintChoice == nil {
+		return false
+	} else if !this.TlsFingerprintChoice.Equal(that1.TlsFingerprintChoice) {
 		return false
 	}
 	if len(this.Scheme) != len(that1.Scheme) {
@@ -4533,9 +4716,6 @@ func (this *CreateSpecType) Equal(that interface{}) bool {
 		}
 	}
 	if !this.UrlMatcher.Equal(that1.UrlMatcher) {
-		return false
-	}
-	if !this.L4DestMatcher.Equal(that1.L4DestMatcher) {
 		return false
 	}
 	if this.ChallengeAction != that1.ChallengeAction {
@@ -4996,6 +5176,54 @@ func (this *CreateSpecType_DstAsnMatcher) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *CreateSpecType_Ja4TlsFingerprint) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CreateSpecType_Ja4TlsFingerprint)
+	if !ok {
+		that2, ok := that.(CreateSpecType_Ja4TlsFingerprint)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.Ja4TlsFingerprint.Equal(that1.Ja4TlsFingerprint) {
+		return false
+	}
+	return true
+}
+func (this *CreateSpecType_TlsFingerprintMatcher) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CreateSpecType_TlsFingerprintMatcher)
+	if !ok {
+		that2, ok := that.(CreateSpecType_TlsFingerprintMatcher)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.TlsFingerprintMatcher.Equal(that1.TlsFingerprintMatcher) {
+		return false
+	}
+	return true
+}
 func (this *ReplaceSpecType) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -5139,7 +5367,13 @@ func (this *ReplaceSpecType) Equal(that interface{}) bool {
 	if !this.VirtualHostMatcher.Equal(that1.VirtualHostMatcher) {
 		return false
 	}
-	if !this.TlsFingerprintMatcher.Equal(that1.TlsFingerprintMatcher) {
+	if that1.TlsFingerprintChoice == nil {
+		if this.TlsFingerprintChoice != nil {
+			return false
+		}
+	} else if this.TlsFingerprintChoice == nil {
+		return false
+	} else if !this.TlsFingerprintChoice.Equal(that1.TlsFingerprintChoice) {
 		return false
 	}
 	if len(this.Scheme) != len(that1.Scheme) {
@@ -5151,9 +5385,6 @@ func (this *ReplaceSpecType) Equal(that interface{}) bool {
 		}
 	}
 	if !this.UrlMatcher.Equal(that1.UrlMatcher) {
-		return false
-	}
-	if !this.L4DestMatcher.Equal(that1.L4DestMatcher) {
 		return false
 	}
 	if this.ChallengeAction != that1.ChallengeAction {
@@ -5614,6 +5845,54 @@ func (this *ReplaceSpecType_DstAsnMatcher) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *ReplaceSpecType_Ja4TlsFingerprint) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ReplaceSpecType_Ja4TlsFingerprint)
+	if !ok {
+		that2, ok := that.(ReplaceSpecType_Ja4TlsFingerprint)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.Ja4TlsFingerprint.Equal(that1.Ja4TlsFingerprint) {
+		return false
+	}
+	return true
+}
+func (this *ReplaceSpecType_TlsFingerprintMatcher) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ReplaceSpecType_TlsFingerprintMatcher)
+	if !ok {
+		that2, ok := that.(ReplaceSpecType_TlsFingerprintMatcher)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.TlsFingerprintMatcher.Equal(that1.TlsFingerprintMatcher) {
+		return false
+	}
+	return true
+}
 func (this *GetSpecType) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -5757,7 +6036,13 @@ func (this *GetSpecType) Equal(that interface{}) bool {
 	if !this.VirtualHostMatcher.Equal(that1.VirtualHostMatcher) {
 		return false
 	}
-	if !this.TlsFingerprintMatcher.Equal(that1.TlsFingerprintMatcher) {
+	if that1.TlsFingerprintChoice == nil {
+		if this.TlsFingerprintChoice != nil {
+			return false
+		}
+	} else if this.TlsFingerprintChoice == nil {
+		return false
+	} else if !this.TlsFingerprintChoice.Equal(that1.TlsFingerprintChoice) {
 		return false
 	}
 	if len(this.Scheme) != len(that1.Scheme) {
@@ -5769,9 +6054,6 @@ func (this *GetSpecType) Equal(that interface{}) bool {
 		}
 	}
 	if !this.UrlMatcher.Equal(that1.UrlMatcher) {
-		return false
-	}
-	if !this.L4DestMatcher.Equal(that1.L4DestMatcher) {
 		return false
 	}
 	if this.ChallengeAction != that1.ChallengeAction {
@@ -6232,6 +6514,54 @@ func (this *GetSpecType_DstAsnMatcher) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *GetSpecType_Ja4TlsFingerprint) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GetSpecType_Ja4TlsFingerprint)
+	if !ok {
+		that2, ok := that.(GetSpecType_Ja4TlsFingerprint)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.Ja4TlsFingerprint.Equal(that1.Ja4TlsFingerprint) {
+		return false
+	}
+	return true
+}
+func (this *GetSpecType_TlsFingerprintMatcher) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GetSpecType_TlsFingerprintMatcher)
+	if !ok {
+		that2, ok := that.(GetSpecType_TlsFingerprintMatcher)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.TlsFingerprintMatcher.Equal(that1.TlsFingerprintMatcher) {
+		return false
+	}
+	return true
+}
 func (this *ChallengeRuleSpec) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -6295,9 +6625,6 @@ func (this *ChallengeRuleSpec) Equal(that interface{}) bool {
 	if !this.HttpMethod.Equal(that1.HttpMethod) {
 		return false
 	}
-	if !this.TlsFingerprintMatcher.Equal(that1.TlsFingerprintMatcher) {
-		return false
-	}
 	if len(this.QueryParams) != len(that1.QueryParams) {
 		return false
 	}
@@ -6335,6 +6662,15 @@ func (this *ChallengeRuleSpec) Equal(that interface{}) bool {
 		return false
 	}
 	if !this.ExpirationTimestamp.Equal(that1.ExpirationTimestamp) {
+		return false
+	}
+	if that1.TlsFingerprintChoice == nil {
+		if this.TlsFingerprintChoice != nil {
+			return false
+		}
+	} else if this.TlsFingerprintChoice == nil {
+		return false
+	} else if !this.TlsFingerprintChoice.Equal(that1.TlsFingerprintChoice) {
 		return false
 	}
 	return true
@@ -6647,6 +6983,54 @@ func (this *ChallengeRuleSpec_ClientNameMatcher) Equal(that interface{}) bool {
 		return false
 	}
 	if !this.ClientNameMatcher.Equal(that1.ClientNameMatcher) {
+		return false
+	}
+	return true
+}
+func (this *ChallengeRuleSpec_Ja4TlsFingerprint) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ChallengeRuleSpec_Ja4TlsFingerprint)
+	if !ok {
+		that2, ok := that.(ChallengeRuleSpec_Ja4TlsFingerprint)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.Ja4TlsFingerprint.Equal(that1.Ja4TlsFingerprint) {
+		return false
+	}
+	return true
+}
+func (this *ChallengeRuleSpec_TlsFingerprintMatcher) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ChallengeRuleSpec_TlsFingerprintMatcher)
+	if !ok {
+		that2, ok := that.(ChallengeRuleSpec_TlsFingerprintMatcher)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.TlsFingerprintMatcher.Equal(that1.TlsFingerprintMatcher) {
 		return false
 	}
 	return true
@@ -7065,18 +7449,12 @@ func (this *GlobalSpecType) GoString() string {
 	if this.VirtualHostMatcher != nil {
 		s = append(s, "VirtualHostMatcher: "+fmt.Sprintf("%#v", this.VirtualHostMatcher)+",\n")
 	}
-	if this.TlsFingerprintMatcher != nil {
-		s = append(s, "TlsFingerprintMatcher: "+fmt.Sprintf("%#v", this.TlsFingerprintMatcher)+",\n")
-	}
 	if this.ForwardingClass != nil {
 		s = append(s, "ForwardingClass: "+fmt.Sprintf("%#v", this.ForwardingClass)+",\n")
 	}
 	s = append(s, "Scheme: "+fmt.Sprintf("%#v", this.Scheme)+",\n")
 	if this.UrlMatcher != nil {
 		s = append(s, "UrlMatcher: "+fmt.Sprintf("%#v", this.UrlMatcher)+",\n")
-	}
-	if this.L4DestMatcher != nil {
-		s = append(s, "L4DestMatcher: "+fmt.Sprintf("%#v", this.L4DestMatcher)+",\n")
 	}
 	s = append(s, "ChallengeAction: "+fmt.Sprintf("%#v", this.ChallengeAction)+",\n")
 	if this.GotoPolicy != nil {
@@ -7133,6 +7511,9 @@ func (this *GlobalSpecType) GoString() string {
 	}
 	if this.ResponseMaskingConfig != nil {
 		s = append(s, "ResponseMaskingConfig: "+fmt.Sprintf("%#v", this.ResponseMaskingConfig)+",\n")
+	}
+	if this.TlsFingerprintChoice != nil {
+		s = append(s, "TlsFingerprintChoice: "+fmt.Sprintf("%#v", this.TlsFingerprintChoice)+",\n")
 	}
 	s = append(s, "}")
 	return strings.Join(s, "")
@@ -7273,6 +7654,22 @@ func (this *GlobalSpecType_DstAsnMatcher) GoString() string {
 		`DstAsnMatcher:` + fmt.Sprintf("%#v", this.DstAsnMatcher) + `}`}, ", ")
 	return s
 }
+func (this *GlobalSpecType_Ja4TlsFingerprint) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&service_policy_rule.GlobalSpecType_Ja4TlsFingerprint{` +
+		`Ja4TlsFingerprint:` + fmt.Sprintf("%#v", this.Ja4TlsFingerprint) + `}`}, ", ")
+	return s
+}
+func (this *GlobalSpecType_TlsFingerprintMatcher) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&service_policy_rule.GlobalSpecType_TlsFingerprintMatcher{` +
+		`TlsFingerprintMatcher:` + fmt.Sprintf("%#v", this.TlsFingerprintMatcher) + `}`}, ", ")
+	return s
+}
 func (this *IPThreatCategoryListType) GoString() string {
 	if this == nil {
 		return "nil"
@@ -7356,15 +7753,12 @@ func (this *CreateSpecType) GoString() string {
 	if this.VirtualHostMatcher != nil {
 		s = append(s, "VirtualHostMatcher: "+fmt.Sprintf("%#v", this.VirtualHostMatcher)+",\n")
 	}
-	if this.TlsFingerprintMatcher != nil {
-		s = append(s, "TlsFingerprintMatcher: "+fmt.Sprintf("%#v", this.TlsFingerprintMatcher)+",\n")
+	if this.TlsFingerprintChoice != nil {
+		s = append(s, "TlsFingerprintChoice: "+fmt.Sprintf("%#v", this.TlsFingerprintChoice)+",\n")
 	}
 	s = append(s, "Scheme: "+fmt.Sprintf("%#v", this.Scheme)+",\n")
 	if this.UrlMatcher != nil {
 		s = append(s, "UrlMatcher: "+fmt.Sprintf("%#v", this.UrlMatcher)+",\n")
-	}
-	if this.L4DestMatcher != nil {
-		s = append(s, "L4DestMatcher: "+fmt.Sprintf("%#v", this.L4DestMatcher)+",\n")
 	}
 	s = append(s, "ChallengeAction: "+fmt.Sprintf("%#v", this.ChallengeAction)+",\n")
 	if this.GotoPolicy != nil {
@@ -7546,6 +7940,22 @@ func (this *CreateSpecType_DstAsnMatcher) GoString() string {
 		`DstAsnMatcher:` + fmt.Sprintf("%#v", this.DstAsnMatcher) + `}`}, ", ")
 	return s
 }
+func (this *CreateSpecType_Ja4TlsFingerprint) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&service_policy_rule.CreateSpecType_Ja4TlsFingerprint{` +
+		`Ja4TlsFingerprint:` + fmt.Sprintf("%#v", this.Ja4TlsFingerprint) + `}`}, ", ")
+	return s
+}
+func (this *CreateSpecType_TlsFingerprintMatcher) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&service_policy_rule.CreateSpecType_TlsFingerprintMatcher{` +
+		`TlsFingerprintMatcher:` + fmt.Sprintf("%#v", this.TlsFingerprintMatcher) + `}`}, ", ")
+	return s
+}
 func (this *ReplaceSpecType) GoString() string {
 	if this == nil {
 		return "nil"
@@ -7619,15 +8029,12 @@ func (this *ReplaceSpecType) GoString() string {
 	if this.VirtualHostMatcher != nil {
 		s = append(s, "VirtualHostMatcher: "+fmt.Sprintf("%#v", this.VirtualHostMatcher)+",\n")
 	}
-	if this.TlsFingerprintMatcher != nil {
-		s = append(s, "TlsFingerprintMatcher: "+fmt.Sprintf("%#v", this.TlsFingerprintMatcher)+",\n")
+	if this.TlsFingerprintChoice != nil {
+		s = append(s, "TlsFingerprintChoice: "+fmt.Sprintf("%#v", this.TlsFingerprintChoice)+",\n")
 	}
 	s = append(s, "Scheme: "+fmt.Sprintf("%#v", this.Scheme)+",\n")
 	if this.UrlMatcher != nil {
 		s = append(s, "UrlMatcher: "+fmt.Sprintf("%#v", this.UrlMatcher)+",\n")
-	}
-	if this.L4DestMatcher != nil {
-		s = append(s, "L4DestMatcher: "+fmt.Sprintf("%#v", this.L4DestMatcher)+",\n")
 	}
 	s = append(s, "ChallengeAction: "+fmt.Sprintf("%#v", this.ChallengeAction)+",\n")
 	if this.GotoPolicy != nil {
@@ -7809,6 +8216,22 @@ func (this *ReplaceSpecType_DstAsnMatcher) GoString() string {
 		`DstAsnMatcher:` + fmt.Sprintf("%#v", this.DstAsnMatcher) + `}`}, ", ")
 	return s
 }
+func (this *ReplaceSpecType_Ja4TlsFingerprint) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&service_policy_rule.ReplaceSpecType_Ja4TlsFingerprint{` +
+		`Ja4TlsFingerprint:` + fmt.Sprintf("%#v", this.Ja4TlsFingerprint) + `}`}, ", ")
+	return s
+}
+func (this *ReplaceSpecType_TlsFingerprintMatcher) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&service_policy_rule.ReplaceSpecType_TlsFingerprintMatcher{` +
+		`TlsFingerprintMatcher:` + fmt.Sprintf("%#v", this.TlsFingerprintMatcher) + `}`}, ", ")
+	return s
+}
 func (this *GetSpecType) GoString() string {
 	if this == nil {
 		return "nil"
@@ -7882,15 +8305,12 @@ func (this *GetSpecType) GoString() string {
 	if this.VirtualHostMatcher != nil {
 		s = append(s, "VirtualHostMatcher: "+fmt.Sprintf("%#v", this.VirtualHostMatcher)+",\n")
 	}
-	if this.TlsFingerprintMatcher != nil {
-		s = append(s, "TlsFingerprintMatcher: "+fmt.Sprintf("%#v", this.TlsFingerprintMatcher)+",\n")
+	if this.TlsFingerprintChoice != nil {
+		s = append(s, "TlsFingerprintChoice: "+fmt.Sprintf("%#v", this.TlsFingerprintChoice)+",\n")
 	}
 	s = append(s, "Scheme: "+fmt.Sprintf("%#v", this.Scheme)+",\n")
 	if this.UrlMatcher != nil {
 		s = append(s, "UrlMatcher: "+fmt.Sprintf("%#v", this.UrlMatcher)+",\n")
-	}
-	if this.L4DestMatcher != nil {
-		s = append(s, "L4DestMatcher: "+fmt.Sprintf("%#v", this.L4DestMatcher)+",\n")
 	}
 	s = append(s, "ChallengeAction: "+fmt.Sprintf("%#v", this.ChallengeAction)+",\n")
 	if this.GotoPolicy != nil {
@@ -8072,11 +8492,27 @@ func (this *GetSpecType_DstAsnMatcher) GoString() string {
 		`DstAsnMatcher:` + fmt.Sprintf("%#v", this.DstAsnMatcher) + `}`}, ", ")
 	return s
 }
+func (this *GetSpecType_Ja4TlsFingerprint) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&service_policy_rule.GetSpecType_Ja4TlsFingerprint{` +
+		`Ja4TlsFingerprint:` + fmt.Sprintf("%#v", this.Ja4TlsFingerprint) + `}`}, ", ")
+	return s
+}
+func (this *GetSpecType_TlsFingerprintMatcher) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&service_policy_rule.GetSpecType_TlsFingerprintMatcher{` +
+		`TlsFingerprintMatcher:` + fmt.Sprintf("%#v", this.TlsFingerprintMatcher) + `}`}, ", ")
+	return s
+}
 func (this *ChallengeRuleSpec) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 27)
+	s := make([]string, 0, 28)
 	s = append(s, "&service_policy_rule.ChallengeRuleSpec{")
 	if this.ChallengeAction != nil {
 		s = append(s, "ChallengeAction: "+fmt.Sprintf("%#v", this.ChallengeAction)+",\n")
@@ -8099,9 +8535,6 @@ func (this *ChallengeRuleSpec) GoString() string {
 	if this.HttpMethod != nil {
 		s = append(s, "HttpMethod: "+fmt.Sprintf("%#v", this.HttpMethod)+",\n")
 	}
-	if this.TlsFingerprintMatcher != nil {
-		s = append(s, "TlsFingerprintMatcher: "+fmt.Sprintf("%#v", this.TlsFingerprintMatcher)+",\n")
-	}
 	if this.QueryParams != nil {
 		s = append(s, "QueryParams: "+fmt.Sprintf("%#v", this.QueryParams)+",\n")
 	}
@@ -8119,6 +8552,9 @@ func (this *ChallengeRuleSpec) GoString() string {
 	}
 	if this.ExpirationTimestamp != nil {
 		s = append(s, "ExpirationTimestamp: "+fmt.Sprintf("%#v", this.ExpirationTimestamp)+",\n")
+	}
+	if this.TlsFingerprintChoice != nil {
+		s = append(s, "TlsFingerprintChoice: "+fmt.Sprintf("%#v", this.TlsFingerprintChoice)+",\n")
 	}
 	s = append(s, "}")
 	return strings.Join(s, "")
@@ -8225,6 +8661,22 @@ func (this *ChallengeRuleSpec_ClientNameMatcher) GoString() string {
 	}
 	s := strings.Join([]string{`&service_policy_rule.ChallengeRuleSpec_ClientNameMatcher{` +
 		`ClientNameMatcher:` + fmt.Sprintf("%#v", this.ClientNameMatcher) + `}`}, ", ")
+	return s
+}
+func (this *ChallengeRuleSpec_Ja4TlsFingerprint) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&service_policy_rule.ChallengeRuleSpec_Ja4TlsFingerprint{` +
+		`Ja4TlsFingerprint:` + fmt.Sprintf("%#v", this.Ja4TlsFingerprint) + `}`}, ", ")
+	return s
+}
+func (this *ChallengeRuleSpec_TlsFingerprintMatcher) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&service_policy_rule.ChallengeRuleSpec_TlsFingerprintMatcher{` +
+		`TlsFingerprintMatcher:` + fmt.Sprintf("%#v", this.TlsFingerprintMatcher) + `}`}, ", ")
 	return s
 }
 func (this *RateLimiterRuleSpec) GoString() string {
@@ -8376,6 +8828,15 @@ func (m *GlobalSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if m.TlsFingerprintChoice != nil {
+		{
+			size := m.TlsFingerprintChoice.Size()
+			i -= size
+			if _, err := m.TlsFingerprintChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
 	if m.ResponseMaskingConfig != nil {
 		{
 			size, err := m.ResponseMaskingConfig.MarshalToSizedBuffer(dAtA[:i])
@@ -8657,20 +9118,6 @@ func (m *GlobalSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i--
 		dAtA[i] = 0xea
 	}
-	if m.L4DestMatcher != nil {
-		{
-			size, err := m.L4DestMatcher.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x2
-		i--
-		dAtA[i] = 0xe2
-	}
 	if m.DstIpChoice != nil {
 		{
 			size := m.DstIpChoice.Size()
@@ -8738,20 +9185,6 @@ func (m *GlobalSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 			i--
 			dAtA[i] = 0xd2
 		}
-	}
-	if m.TlsFingerprintMatcher != nil {
-		{
-			size, err := m.TlsFingerprintMatcher.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x1
-		i--
-		dAtA[i] = 0xca
 	}
 	if m.VirtualHostMatcher != nil {
 		{
@@ -9077,6 +9510,29 @@ func (m *GlobalSpecType_AsnMatcher) MarshalToSizedBuffer(dAtA []byte) (int, erro
 	}
 	return len(dAtA) - i, nil
 }
+func (m *GlobalSpecType_TlsFingerprintMatcher) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_TlsFingerprintMatcher) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.TlsFingerprintMatcher != nil {
+		{
+			size, err := m.TlsFingerprintMatcher.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xca
+	}
+	return len(dAtA) - i, nil
+}
 func (m *GlobalSpecType_AnyIp) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
@@ -9353,6 +9809,29 @@ func (m *GlobalSpecType_IpThreatCategoryList) MarshalToSizedBuffer(dAtA []byte) 
 	}
 	return len(dAtA) - i, nil
 }
+func (m *GlobalSpecType_Ja4TlsFingerprint) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_Ja4TlsFingerprint) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.Ja4TlsFingerprint != nil {
+		{
+			size, err := m.Ja4TlsFingerprint.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x6
+		i--
+		dAtA[i] = 0xa2
+	}
+	return len(dAtA) - i, nil
+}
 func (m *IPThreatCategoryListType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -9416,6 +9895,15 @@ func (m *CreateSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if m.TlsFingerprintChoice != nil {
+		{
+			size := m.TlsFingerprintChoice.Size()
+			i -= size
+			if _, err := m.TlsFingerprintChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
 	if len(m.JwtClaims) > 0 {
 		for iNdEx := len(m.JwtClaims) - 1; iNdEx >= 0; iNdEx-- {
 			{
@@ -9611,20 +10099,6 @@ func (m *CreateSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i--
 		dAtA[i] = 0xea
 	}
-	if m.L4DestMatcher != nil {
-		{
-			size, err := m.L4DestMatcher.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x2
-		i--
-		dAtA[i] = 0xe2
-	}
 	if m.DstIpChoice != nil {
 		{
 			size := m.DstIpChoice.Size()
@@ -9676,20 +10150,6 @@ func (m *CreateSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 				return 0, err
 			}
 		}
-	}
-	if m.TlsFingerprintMatcher != nil {
-		{
-			size, err := m.TlsFingerprintMatcher.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x1
-		i--
-		dAtA[i] = 0xca
 	}
 	if m.VirtualHostMatcher != nil {
 		{
@@ -10015,6 +10475,29 @@ func (m *CreateSpecType_AsnMatcher) MarshalToSizedBuffer(dAtA []byte) (int, erro
 	}
 	return len(dAtA) - i, nil
 }
+func (m *CreateSpecType_TlsFingerprintMatcher) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_TlsFingerprintMatcher) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.TlsFingerprintMatcher != nil {
+		{
+			size, err := m.TlsFingerprintMatcher.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xca
+	}
+	return len(dAtA) - i, nil
+}
 func (m *CreateSpecType_AnyIp) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
@@ -10291,6 +10774,29 @@ func (m *CreateSpecType_IpThreatCategoryList) MarshalToSizedBuffer(dAtA []byte) 
 	}
 	return len(dAtA) - i, nil
 }
+func (m *CreateSpecType_Ja4TlsFingerprint) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_Ja4TlsFingerprint) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.Ja4TlsFingerprint != nil {
+		{
+			size, err := m.Ja4TlsFingerprint.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x6
+		i--
+		dAtA[i] = 0xa2
+	}
+	return len(dAtA) - i, nil
+}
 func (m *ReplaceSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -10311,6 +10817,15 @@ func (m *ReplaceSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if m.TlsFingerprintChoice != nil {
+		{
+			size := m.TlsFingerprintChoice.Size()
+			i -= size
+			if _, err := m.TlsFingerprintChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
 	if len(m.JwtClaims) > 0 {
 		for iNdEx := len(m.JwtClaims) - 1; iNdEx >= 0; iNdEx-- {
 			{
@@ -10506,20 +11021,6 @@ func (m *ReplaceSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i--
 		dAtA[i] = 0xea
 	}
-	if m.L4DestMatcher != nil {
-		{
-			size, err := m.L4DestMatcher.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x2
-		i--
-		dAtA[i] = 0xe2
-	}
 	if m.DstIpChoice != nil {
 		{
 			size := m.DstIpChoice.Size()
@@ -10571,20 +11072,6 @@ func (m *ReplaceSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 				return 0, err
 			}
 		}
-	}
-	if m.TlsFingerprintMatcher != nil {
-		{
-			size, err := m.TlsFingerprintMatcher.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x1
-		i--
-		dAtA[i] = 0xca
 	}
 	if m.VirtualHostMatcher != nil {
 		{
@@ -10910,6 +11397,29 @@ func (m *ReplaceSpecType_AsnMatcher) MarshalToSizedBuffer(dAtA []byte) (int, err
 	}
 	return len(dAtA) - i, nil
 }
+func (m *ReplaceSpecType_TlsFingerprintMatcher) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_TlsFingerprintMatcher) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.TlsFingerprintMatcher != nil {
+		{
+			size, err := m.TlsFingerprintMatcher.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xca
+	}
+	return len(dAtA) - i, nil
+}
 func (m *ReplaceSpecType_AnyIp) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
@@ -11186,6 +11696,29 @@ func (m *ReplaceSpecType_IpThreatCategoryList) MarshalToSizedBuffer(dAtA []byte)
 	}
 	return len(dAtA) - i, nil
 }
+func (m *ReplaceSpecType_Ja4TlsFingerprint) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_Ja4TlsFingerprint) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.Ja4TlsFingerprint != nil {
+		{
+			size, err := m.Ja4TlsFingerprint.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x6
+		i--
+		dAtA[i] = 0xa2
+	}
+	return len(dAtA) - i, nil
+}
 func (m *GetSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -11206,6 +11739,15 @@ func (m *GetSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if m.TlsFingerprintChoice != nil {
+		{
+			size := m.TlsFingerprintChoice.Size()
+			i -= size
+			if _, err := m.TlsFingerprintChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
 	if len(m.JwtClaims) > 0 {
 		for iNdEx := len(m.JwtClaims) - 1; iNdEx >= 0; iNdEx-- {
 			{
@@ -11401,20 +11943,6 @@ func (m *GetSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i--
 		dAtA[i] = 0xea
 	}
-	if m.L4DestMatcher != nil {
-		{
-			size, err := m.L4DestMatcher.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x2
-		i--
-		dAtA[i] = 0xe2
-	}
 	if m.DstIpChoice != nil {
 		{
 			size := m.DstIpChoice.Size()
@@ -11466,20 +11994,6 @@ func (m *GetSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 				return 0, err
 			}
 		}
-	}
-	if m.TlsFingerprintMatcher != nil {
-		{
-			size, err := m.TlsFingerprintMatcher.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x1
-		i--
-		dAtA[i] = 0xca
 	}
 	if m.VirtualHostMatcher != nil {
 		{
@@ -11805,6 +12319,29 @@ func (m *GetSpecType_AsnMatcher) MarshalToSizedBuffer(dAtA []byte) (int, error) 
 	}
 	return len(dAtA) - i, nil
 }
+func (m *GetSpecType_TlsFingerprintMatcher) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_TlsFingerprintMatcher) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.TlsFingerprintMatcher != nil {
+		{
+			size, err := m.TlsFingerprintMatcher.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xca
+	}
+	return len(dAtA) - i, nil
+}
 func (m *GetSpecType_AnyIp) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
@@ -12081,6 +12618,29 @@ func (m *GetSpecType_IpThreatCategoryList) MarshalToSizedBuffer(dAtA []byte) (in
 	}
 	return len(dAtA) - i, nil
 }
+func (m *GetSpecType_Ja4TlsFingerprint) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_Ja4TlsFingerprint) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.Ja4TlsFingerprint != nil {
+		{
+			size, err := m.Ja4TlsFingerprint.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x6
+		i--
+		dAtA[i] = 0xa2
+	}
+	return len(dAtA) - i, nil
+}
 func (m *ChallengeRuleSpec) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -12115,6 +12675,15 @@ func (m *ChallengeRuleSpec) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 			size := m.IpChoice.Size()
 			i -= size
 			if _, err := m.IpChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if m.TlsFingerprintChoice != nil {
+		{
+			size := m.TlsFingerprintChoice.Size()
+			i -= size
+			if _, err := m.TlsFingerprintChoice.MarshalTo(dAtA[i:]); err != nil {
 				return 0, err
 			}
 		}
@@ -12195,18 +12764,6 @@ func (m *ChallengeRuleSpec) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 			i--
 			dAtA[i] = 0x5a
 		}
-	}
-	if m.TlsFingerprintMatcher != nil {
-		{
-			size, err := m.TlsFingerprintMatcher.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x52
 	}
 	if m.HttpMethod != nil {
 		{
@@ -12333,6 +12890,27 @@ func (m *ChallengeRuleSpec_EnableCaptchaChallenge) MarshalToSizedBuffer(dAtA []b
 	}
 	return len(dAtA) - i, nil
 }
+func (m *ChallengeRuleSpec_TlsFingerprintMatcher) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ChallengeRuleSpec_TlsFingerprintMatcher) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.TlsFingerprintMatcher != nil {
+		{
+			size, err := m.TlsFingerprintMatcher.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x52
+	}
+	return len(dAtA) - i, nil
+}
 func (m *ChallengeRuleSpec_AnyClient) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
@@ -12415,6 +12993,29 @@ func (m *ChallengeRuleSpec_ClientNameMatcher) MarshalToSizedBuffer(dAtA []byte) 
 		dAtA[i] = 0x1
 		i--
 		dAtA[i] = 0x9a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *ChallengeRuleSpec_Ja4TlsFingerprint) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ChallengeRuleSpec_Ja4TlsFingerprint) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.Ja4TlsFingerprint != nil {
+		{
+			size, err := m.Ja4TlsFingerprint.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xb2
 	}
 	return len(dAtA) - i, nil
 }
@@ -13009,9 +13610,8 @@ func (m *GlobalSpecType) Size() (n int) {
 		l = m.VirtualHostMatcher.Size()
 		n += 2 + l + sovTypes(uint64(l))
 	}
-	if m.TlsFingerprintMatcher != nil {
-		l = m.TlsFingerprintMatcher.Size()
-		n += 2 + l + sovTypes(uint64(l))
+	if m.TlsFingerprintChoice != nil {
+		n += m.TlsFingerprintChoice.Size()
 	}
 	if len(m.ForwardingClass) > 0 {
 		for _, e := range m.ForwardingClass {
@@ -13031,10 +13631,6 @@ func (m *GlobalSpecType) Size() (n int) {
 	}
 	if m.DstIpChoice != nil {
 		n += m.DstIpChoice.Size()
-	}
-	if m.L4DestMatcher != nil {
-		l = m.L4DestMatcher.Size()
-		n += 2 + l + sovTypes(uint64(l))
 	}
 	if m.ServerSelector != nil {
 		l = m.ServerSelector.Size()
@@ -13178,6 +13774,18 @@ func (m *GlobalSpecType_AsnMatcher) Size() (n int) {
 	if m.AsnMatcher != nil {
 		l = m.AsnMatcher.Size()
 		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *GlobalSpecType_TlsFingerprintMatcher) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.TlsFingerprintMatcher != nil {
+		l = m.TlsFingerprintMatcher.Size()
+		n += 2 + l + sovTypes(uint64(l))
 	}
 	return n
 }
@@ -13325,6 +13933,18 @@ func (m *GlobalSpecType_IpThreatCategoryList) Size() (n int) {
 	}
 	return n
 }
+func (m *GlobalSpecType_Ja4TlsFingerprint) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Ja4TlsFingerprint != nil {
+		l = m.Ja4TlsFingerprint.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
 func (m *IPThreatCategoryListType) Size() (n int) {
 	if m == nil {
 		return 0
@@ -13433,9 +14053,8 @@ func (m *CreateSpecType) Size() (n int) {
 		l = m.VirtualHostMatcher.Size()
 		n += 2 + l + sovTypes(uint64(l))
 	}
-	if m.TlsFingerprintMatcher != nil {
-		l = m.TlsFingerprintMatcher.Size()
-		n += 2 + l + sovTypes(uint64(l))
+	if m.TlsFingerprintChoice != nil {
+		n += m.TlsFingerprintChoice.Size()
 	}
 	if len(m.Scheme) > 0 {
 		for _, s := range m.Scheme {
@@ -13449,10 +14068,6 @@ func (m *CreateSpecType) Size() (n int) {
 	}
 	if m.DstIpChoice != nil {
 		n += m.DstIpChoice.Size()
-	}
-	if m.L4DestMatcher != nil {
-		l = m.L4DestMatcher.Size()
-		n += 2 + l + sovTypes(uint64(l))
 	}
 	if m.ServerSelector != nil {
 		l = m.ServerSelector.Size()
@@ -13570,6 +14185,18 @@ func (m *CreateSpecType_AsnMatcher) Size() (n int) {
 	if m.AsnMatcher != nil {
 		l = m.AsnMatcher.Size()
 		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *CreateSpecType_TlsFingerprintMatcher) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.TlsFingerprintMatcher != nil {
+		l = m.TlsFingerprintMatcher.Size()
+		n += 2 + l + sovTypes(uint64(l))
 	}
 	return n
 }
@@ -13717,6 +14344,18 @@ func (m *CreateSpecType_IpThreatCategoryList) Size() (n int) {
 	}
 	return n
 }
+func (m *CreateSpecType_Ja4TlsFingerprint) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Ja4TlsFingerprint != nil {
+		l = m.Ja4TlsFingerprint.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
 func (m *ReplaceSpecType) Size() (n int) {
 	if m == nil {
 		return 0
@@ -13809,9 +14448,8 @@ func (m *ReplaceSpecType) Size() (n int) {
 		l = m.VirtualHostMatcher.Size()
 		n += 2 + l + sovTypes(uint64(l))
 	}
-	if m.TlsFingerprintMatcher != nil {
-		l = m.TlsFingerprintMatcher.Size()
-		n += 2 + l + sovTypes(uint64(l))
+	if m.TlsFingerprintChoice != nil {
+		n += m.TlsFingerprintChoice.Size()
 	}
 	if len(m.Scheme) > 0 {
 		for _, s := range m.Scheme {
@@ -13825,10 +14463,6 @@ func (m *ReplaceSpecType) Size() (n int) {
 	}
 	if m.DstIpChoice != nil {
 		n += m.DstIpChoice.Size()
-	}
-	if m.L4DestMatcher != nil {
-		l = m.L4DestMatcher.Size()
-		n += 2 + l + sovTypes(uint64(l))
 	}
 	if m.ServerSelector != nil {
 		l = m.ServerSelector.Size()
@@ -13946,6 +14580,18 @@ func (m *ReplaceSpecType_AsnMatcher) Size() (n int) {
 	if m.AsnMatcher != nil {
 		l = m.AsnMatcher.Size()
 		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *ReplaceSpecType_TlsFingerprintMatcher) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.TlsFingerprintMatcher != nil {
+		l = m.TlsFingerprintMatcher.Size()
+		n += 2 + l + sovTypes(uint64(l))
 	}
 	return n
 }
@@ -14093,6 +14739,18 @@ func (m *ReplaceSpecType_IpThreatCategoryList) Size() (n int) {
 	}
 	return n
 }
+func (m *ReplaceSpecType_Ja4TlsFingerprint) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Ja4TlsFingerprint != nil {
+		l = m.Ja4TlsFingerprint.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
 func (m *GetSpecType) Size() (n int) {
 	if m == nil {
 		return 0
@@ -14185,9 +14843,8 @@ func (m *GetSpecType) Size() (n int) {
 		l = m.VirtualHostMatcher.Size()
 		n += 2 + l + sovTypes(uint64(l))
 	}
-	if m.TlsFingerprintMatcher != nil {
-		l = m.TlsFingerprintMatcher.Size()
-		n += 2 + l + sovTypes(uint64(l))
+	if m.TlsFingerprintChoice != nil {
+		n += m.TlsFingerprintChoice.Size()
 	}
 	if len(m.Scheme) > 0 {
 		for _, s := range m.Scheme {
@@ -14201,10 +14858,6 @@ func (m *GetSpecType) Size() (n int) {
 	}
 	if m.DstIpChoice != nil {
 		n += m.DstIpChoice.Size()
-	}
-	if m.L4DestMatcher != nil {
-		l = m.L4DestMatcher.Size()
-		n += 2 + l + sovTypes(uint64(l))
 	}
 	if m.ServerSelector != nil {
 		l = m.ServerSelector.Size()
@@ -14322,6 +14975,18 @@ func (m *GetSpecType_AsnMatcher) Size() (n int) {
 	if m.AsnMatcher != nil {
 		l = m.AsnMatcher.Size()
 		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *GetSpecType_TlsFingerprintMatcher) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.TlsFingerprintMatcher != nil {
+		l = m.TlsFingerprintMatcher.Size()
+		n += 2 + l + sovTypes(uint64(l))
 	}
 	return n
 }
@@ -14469,6 +15134,18 @@ func (m *GetSpecType_IpThreatCategoryList) Size() (n int) {
 	}
 	return n
 }
+func (m *GetSpecType_Ja4TlsFingerprint) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Ja4TlsFingerprint != nil {
+		l = m.Ja4TlsFingerprint.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
 func (m *ChallengeRuleSpec) Size() (n int) {
 	if m == nil {
 		return 0
@@ -14496,9 +15173,8 @@ func (m *ChallengeRuleSpec) Size() (n int) {
 		l = m.HttpMethod.Size()
 		n += 1 + l + sovTypes(uint64(l))
 	}
-	if m.TlsFingerprintMatcher != nil {
-		l = m.TlsFingerprintMatcher.Size()
-		n += 1 + l + sovTypes(uint64(l))
+	if m.TlsFingerprintChoice != nil {
+		n += m.TlsFingerprintChoice.Size()
 	}
 	if len(m.QueryParams) > 0 {
 		for _, e := range m.QueryParams {
@@ -14574,6 +15250,18 @@ func (m *ChallengeRuleSpec_EnableCaptchaChallenge) Size() (n int) {
 	}
 	return n
 }
+func (m *ChallengeRuleSpec_TlsFingerprintMatcher) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.TlsFingerprintMatcher != nil {
+		l = m.TlsFingerprintMatcher.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
 func (m *ChallengeRuleSpec_AnyClient) Size() (n int) {
 	if m == nil {
 		return 0
@@ -14616,6 +15304,18 @@ func (m *ChallengeRuleSpec_ClientNameMatcher) Size() (n int) {
 	_ = l
 	if m.ClientNameMatcher != nil {
 		l = m.ClientNameMatcher.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *ChallengeRuleSpec_Ja4TlsFingerprint) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Ja4TlsFingerprint != nil {
+		l = m.Ja4TlsFingerprint.Size()
 		n += 2 + l + sovTypes(uint64(l))
 	}
 	return n
@@ -14950,12 +15650,11 @@ func (this *GlobalSpecType) String() string {
 		`DomainMatcher:` + strings.Replace(fmt.Sprintf("%v", this.DomainMatcher), "MatcherType", "policy.MatcherType", 1) + `,`,
 		`RateLimiter:` + repeatedStringForRateLimiter + `,`,
 		`VirtualHostMatcher:` + strings.Replace(fmt.Sprintf("%v", this.VirtualHostMatcher), "MatcherType", "policy.MatcherType", 1) + `,`,
-		`TlsFingerprintMatcher:` + strings.Replace(fmt.Sprintf("%v", this.TlsFingerprintMatcher), "TlsFingerprintMatcherType", "policy.TlsFingerprintMatcherType", 1) + `,`,
+		`TlsFingerprintChoice:` + fmt.Sprintf("%v", this.TlsFingerprintChoice) + `,`,
 		`ForwardingClass:` + repeatedStringForForwardingClass + `,`,
 		`Scheme:` + fmt.Sprintf("%v", this.Scheme) + `,`,
 		`UrlMatcher:` + strings.Replace(fmt.Sprintf("%v", this.UrlMatcher), "URLMatcherType", "policy.URLMatcherType", 1) + `,`,
 		`DstIpChoice:` + fmt.Sprintf("%v", this.DstIpChoice) + `,`,
-		`L4DestMatcher:` + strings.Replace(fmt.Sprintf("%v", this.L4DestMatcher), "L4DestMatcherType", "policy.L4DestMatcherType", 1) + `,`,
 		`ServerSelector:` + strings.Replace(fmt.Sprintf("%v", this.ServerSelector), "LabelSelectorType", "schema.LabelSelectorType", 1) + `,`,
 		`DstAsnChoice:` + fmt.Sprintf("%v", this.DstAsnChoice) + `,`,
 		`ChallengeAction:` + fmt.Sprintf("%v", this.ChallengeAction) + `,`,
@@ -15025,6 +15724,16 @@ func (this *GlobalSpecType_AsnMatcher) String() string {
 	}
 	s := strings.Join([]string{`&GlobalSpecType_AsnMatcher{`,
 		`AsnMatcher:` + strings.Replace(fmt.Sprintf("%v", this.AsnMatcher), "AsnMatcherType", "policy.AsnMatcherType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GlobalSpecType_TlsFingerprintMatcher) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GlobalSpecType_TlsFingerprintMatcher{`,
+		`TlsFingerprintMatcher:` + strings.Replace(fmt.Sprintf("%v", this.TlsFingerprintMatcher), "TlsFingerprintMatcherType", "policy.TlsFingerprintMatcherType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -15149,6 +15858,16 @@ func (this *GlobalSpecType_IpThreatCategoryList) String() string {
 	}, "")
 	return s
 }
+func (this *GlobalSpecType_Ja4TlsFingerprint) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GlobalSpecType_Ja4TlsFingerprint{`,
+		`Ja4TlsFingerprint:` + strings.Replace(fmt.Sprintf("%v", this.Ja4TlsFingerprint), "JA4TlsFingerprintMatcherType", "policy.JA4TlsFingerprintMatcherType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *IPThreatCategoryListType) String() string {
 	if this == nil {
 		return "nil"
@@ -15229,11 +15948,10 @@ func (this *CreateSpecType) String() string {
 		`DomainMatcher:` + strings.Replace(fmt.Sprintf("%v", this.DomainMatcher), "MatcherTypeBasic", "policy.MatcherTypeBasic", 1) + `,`,
 		`RateLimiter:` + repeatedStringForRateLimiter + `,`,
 		`VirtualHostMatcher:` + strings.Replace(fmt.Sprintf("%v", this.VirtualHostMatcher), "MatcherTypeBasic", "policy.MatcherTypeBasic", 1) + `,`,
-		`TlsFingerprintMatcher:` + strings.Replace(fmt.Sprintf("%v", this.TlsFingerprintMatcher), "TlsFingerprintMatcherType", "policy.TlsFingerprintMatcherType", 1) + `,`,
+		`TlsFingerprintChoice:` + fmt.Sprintf("%v", this.TlsFingerprintChoice) + `,`,
 		`Scheme:` + fmt.Sprintf("%v", this.Scheme) + `,`,
 		`UrlMatcher:` + strings.Replace(fmt.Sprintf("%v", this.UrlMatcher), "URLMatcherType", "policy.URLMatcherType", 1) + `,`,
 		`DstIpChoice:` + fmt.Sprintf("%v", this.DstIpChoice) + `,`,
-		`L4DestMatcher:` + strings.Replace(fmt.Sprintf("%v", this.L4DestMatcher), "L4DestMatcherType", "policy.L4DestMatcherType", 1) + `,`,
 		`ServerSelector:` + strings.Replace(fmt.Sprintf("%v", this.ServerSelector), "LabelSelectorType", "schema.LabelSelectorType", 1) + `,`,
 		`DstAsnChoice:` + fmt.Sprintf("%v", this.DstAsnChoice) + `,`,
 		`ChallengeAction:` + fmt.Sprintf("%v", this.ChallengeAction) + `,`,
@@ -15297,6 +16015,16 @@ func (this *CreateSpecType_AsnMatcher) String() string {
 	}
 	s := strings.Join([]string{`&CreateSpecType_AsnMatcher{`,
 		`AsnMatcher:` + strings.Replace(fmt.Sprintf("%v", this.AsnMatcher), "AsnMatcherType", "policy.AsnMatcherType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CreateSpecType_TlsFingerprintMatcher) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CreateSpecType_TlsFingerprintMatcher{`,
+		`TlsFingerprintMatcher:` + strings.Replace(fmt.Sprintf("%v", this.TlsFingerprintMatcher), "TlsFingerprintMatcherType", "policy.TlsFingerprintMatcherType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -15421,6 +16149,16 @@ func (this *CreateSpecType_IpThreatCategoryList) String() string {
 	}, "")
 	return s
 }
+func (this *CreateSpecType_Ja4TlsFingerprint) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CreateSpecType_Ja4TlsFingerprint{`,
+		`Ja4TlsFingerprint:` + strings.Replace(fmt.Sprintf("%v", this.Ja4TlsFingerprint), "JA4TlsFingerprintMatcherType", "policy.JA4TlsFingerprintMatcherType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *ReplaceSpecType) String() string {
 	if this == nil {
 		return "nil"
@@ -15491,11 +16229,10 @@ func (this *ReplaceSpecType) String() string {
 		`DomainMatcher:` + strings.Replace(fmt.Sprintf("%v", this.DomainMatcher), "MatcherTypeBasic", "policy.MatcherTypeBasic", 1) + `,`,
 		`RateLimiter:` + repeatedStringForRateLimiter + `,`,
 		`VirtualHostMatcher:` + strings.Replace(fmt.Sprintf("%v", this.VirtualHostMatcher), "MatcherTypeBasic", "policy.MatcherTypeBasic", 1) + `,`,
-		`TlsFingerprintMatcher:` + strings.Replace(fmt.Sprintf("%v", this.TlsFingerprintMatcher), "TlsFingerprintMatcherType", "policy.TlsFingerprintMatcherType", 1) + `,`,
+		`TlsFingerprintChoice:` + fmt.Sprintf("%v", this.TlsFingerprintChoice) + `,`,
 		`Scheme:` + fmt.Sprintf("%v", this.Scheme) + `,`,
 		`UrlMatcher:` + strings.Replace(fmt.Sprintf("%v", this.UrlMatcher), "URLMatcherType", "policy.URLMatcherType", 1) + `,`,
 		`DstIpChoice:` + fmt.Sprintf("%v", this.DstIpChoice) + `,`,
-		`L4DestMatcher:` + strings.Replace(fmt.Sprintf("%v", this.L4DestMatcher), "L4DestMatcherType", "policy.L4DestMatcherType", 1) + `,`,
 		`ServerSelector:` + strings.Replace(fmt.Sprintf("%v", this.ServerSelector), "LabelSelectorType", "schema.LabelSelectorType", 1) + `,`,
 		`DstAsnChoice:` + fmt.Sprintf("%v", this.DstAsnChoice) + `,`,
 		`ChallengeAction:` + fmt.Sprintf("%v", this.ChallengeAction) + `,`,
@@ -15559,6 +16296,16 @@ func (this *ReplaceSpecType_AsnMatcher) String() string {
 	}
 	s := strings.Join([]string{`&ReplaceSpecType_AsnMatcher{`,
 		`AsnMatcher:` + strings.Replace(fmt.Sprintf("%v", this.AsnMatcher), "AsnMatcherType", "policy.AsnMatcherType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ReplaceSpecType_TlsFingerprintMatcher) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ReplaceSpecType_TlsFingerprintMatcher{`,
+		`TlsFingerprintMatcher:` + strings.Replace(fmt.Sprintf("%v", this.TlsFingerprintMatcher), "TlsFingerprintMatcherType", "policy.TlsFingerprintMatcherType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -15683,6 +16430,16 @@ func (this *ReplaceSpecType_IpThreatCategoryList) String() string {
 	}, "")
 	return s
 }
+func (this *ReplaceSpecType_Ja4TlsFingerprint) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ReplaceSpecType_Ja4TlsFingerprint{`,
+		`Ja4TlsFingerprint:` + strings.Replace(fmt.Sprintf("%v", this.Ja4TlsFingerprint), "JA4TlsFingerprintMatcherType", "policy.JA4TlsFingerprintMatcherType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *GetSpecType) String() string {
 	if this == nil {
 		return "nil"
@@ -15753,11 +16510,10 @@ func (this *GetSpecType) String() string {
 		`DomainMatcher:` + strings.Replace(fmt.Sprintf("%v", this.DomainMatcher), "MatcherTypeBasic", "policy.MatcherTypeBasic", 1) + `,`,
 		`RateLimiter:` + repeatedStringForRateLimiter + `,`,
 		`VirtualHostMatcher:` + strings.Replace(fmt.Sprintf("%v", this.VirtualHostMatcher), "MatcherTypeBasic", "policy.MatcherTypeBasic", 1) + `,`,
-		`TlsFingerprintMatcher:` + strings.Replace(fmt.Sprintf("%v", this.TlsFingerprintMatcher), "TlsFingerprintMatcherType", "policy.TlsFingerprintMatcherType", 1) + `,`,
+		`TlsFingerprintChoice:` + fmt.Sprintf("%v", this.TlsFingerprintChoice) + `,`,
 		`Scheme:` + fmt.Sprintf("%v", this.Scheme) + `,`,
 		`UrlMatcher:` + strings.Replace(fmt.Sprintf("%v", this.UrlMatcher), "URLMatcherType", "policy.URLMatcherType", 1) + `,`,
 		`DstIpChoice:` + fmt.Sprintf("%v", this.DstIpChoice) + `,`,
-		`L4DestMatcher:` + strings.Replace(fmt.Sprintf("%v", this.L4DestMatcher), "L4DestMatcherType", "policy.L4DestMatcherType", 1) + `,`,
 		`ServerSelector:` + strings.Replace(fmt.Sprintf("%v", this.ServerSelector), "LabelSelectorType", "schema.LabelSelectorType", 1) + `,`,
 		`DstAsnChoice:` + fmt.Sprintf("%v", this.DstAsnChoice) + `,`,
 		`ChallengeAction:` + fmt.Sprintf("%v", this.ChallengeAction) + `,`,
@@ -15821,6 +16577,16 @@ func (this *GetSpecType_AsnMatcher) String() string {
 	}
 	s := strings.Join([]string{`&GetSpecType_AsnMatcher{`,
 		`AsnMatcher:` + strings.Replace(fmt.Sprintf("%v", this.AsnMatcher), "AsnMatcherType", "policy.AsnMatcherType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GetSpecType_TlsFingerprintMatcher) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GetSpecType_TlsFingerprintMatcher{`,
+		`TlsFingerprintMatcher:` + strings.Replace(fmt.Sprintf("%v", this.TlsFingerprintMatcher), "TlsFingerprintMatcherType", "policy.TlsFingerprintMatcherType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -15945,6 +16711,16 @@ func (this *GetSpecType_IpThreatCategoryList) String() string {
 	}, "")
 	return s
 }
+func (this *GetSpecType_Ja4TlsFingerprint) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GetSpecType_Ja4TlsFingerprint{`,
+		`Ja4TlsFingerprint:` + strings.Replace(fmt.Sprintf("%v", this.Ja4TlsFingerprint), "JA4TlsFingerprintMatcherType", "policy.JA4TlsFingerprintMatcherType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *ChallengeRuleSpec) String() string {
 	if this == nil {
 		return "nil"
@@ -15975,7 +16751,7 @@ func (this *ChallengeRuleSpec) String() string {
 		`Path:` + strings.Replace(fmt.Sprintf("%v", this.Path), "PathMatcherType", "policy.PathMatcherType", 1) + `,`,
 		`Headers:` + repeatedStringForHeaders + `,`,
 		`HttpMethod:` + strings.Replace(fmt.Sprintf("%v", this.HttpMethod), "HttpMethodMatcherType", "policy.HttpMethodMatcherType", 1) + `,`,
-		`TlsFingerprintMatcher:` + strings.Replace(fmt.Sprintf("%v", this.TlsFingerprintMatcher), "TlsFingerprintMatcherType", "policy.TlsFingerprintMatcherType", 1) + `,`,
+		`TlsFingerprintChoice:` + fmt.Sprintf("%v", this.TlsFingerprintChoice) + `,`,
 		`QueryParams:` + repeatedStringForQueryParams + `,`,
 		`BodyMatcher:` + strings.Replace(fmt.Sprintf("%v", this.BodyMatcher), "MatcherType", "policy.MatcherType", 1) + `,`,
 		`ArgMatchers:` + repeatedStringForArgMatchers + `,`,
@@ -16018,6 +16794,16 @@ func (this *ChallengeRuleSpec_EnableCaptchaChallenge) String() string {
 	}, "")
 	return s
 }
+func (this *ChallengeRuleSpec_TlsFingerprintMatcher) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ChallengeRuleSpec_TlsFingerprintMatcher{`,
+		`TlsFingerprintMatcher:` + strings.Replace(fmt.Sprintf("%v", this.TlsFingerprintMatcher), "TlsFingerprintMatcherType", "policy.TlsFingerprintMatcherType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *ChallengeRuleSpec_AnyClient) String() string {
 	if this == nil {
 		return "nil"
@@ -16054,6 +16840,16 @@ func (this *ChallengeRuleSpec_ClientNameMatcher) String() string {
 	}
 	s := strings.Join([]string{`&ChallengeRuleSpec_ClientNameMatcher{`,
 		`ClientNameMatcher:` + strings.Replace(fmt.Sprintf("%v", this.ClientNameMatcher), "MatcherType", "policy.MatcherType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ChallengeRuleSpec_Ja4TlsFingerprint) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ChallengeRuleSpec_Ja4TlsFingerprint{`,
+		`Ja4TlsFingerprint:` + strings.Replace(fmt.Sprintf("%v", this.Ja4TlsFingerprint), "JA4TlsFingerprintMatcherType", "policy.JA4TlsFingerprintMatcherType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -17073,12 +17869,11 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			if m.TlsFingerprintMatcher == nil {
-				m.TlsFingerprintMatcher = &policy.TlsFingerprintMatcherType{}
-			}
-			if err := m.TlsFingerprintMatcher.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+			v := &policy.TlsFingerprintMatcherType{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
+			m.TlsFingerprintChoice = &GlobalSpecType_TlsFingerprintMatcher{v}
 			iNdEx = postIndex
 		case 26:
 			if wireType != 2 {
@@ -17461,42 +18256,6 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			m.DstIpChoice = &GlobalSpecType_DstIpMatcher{v}
-			iNdEx = postIndex
-		case 44:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field L4DestMatcher", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.L4DestMatcher == nil {
-				m.L4DestMatcher = &policy.L4DestMatcherType{}
-			}
-			if err := m.L4DestMatcher.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
 			iNdEx = postIndex
 		case 45:
 			if wireType != 2 {
@@ -18353,6 +19112,41 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 			if err := m.ResponseMaskingConfig.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
+			iNdEx = postIndex
+		case 100:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Ja4TlsFingerprint", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &policy.JA4TlsFingerprintMatcherType{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.TlsFingerprintChoice = &GlobalSpecType_Ja4TlsFingerprint{v}
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
@@ -19315,12 +20109,11 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			if m.TlsFingerprintMatcher == nil {
-				m.TlsFingerprintMatcher = &policy.TlsFingerprintMatcherType{}
-			}
-			if err := m.TlsFingerprintMatcher.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+			v := &policy.TlsFingerprintMatcherType{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
+			m.TlsFingerprintChoice = &CreateSpecType_TlsFingerprintMatcher{v}
 			iNdEx = postIndex
 		case 31:
 			if wireType != 2 {
@@ -19669,42 +20462,6 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			m.DstIpChoice = &CreateSpecType_DstIpMatcher{v}
-			iNdEx = postIndex
-		case 44:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field L4DestMatcher", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.L4DestMatcher == nil {
-				m.L4DestMatcher = &policy.L4DestMatcherType{}
-			}
-			if err := m.L4DestMatcher.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
 			iNdEx = postIndex
 		case 45:
 			if wireType != 2 {
@@ -20347,6 +21104,41 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 			if err := m.JwtClaims[len(m.JwtClaims)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
+			iNdEx = postIndex
+		case 100:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Ja4TlsFingerprint", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &policy.JA4TlsFingerprintMatcherType{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.TlsFingerprintChoice = &CreateSpecType_Ja4TlsFingerprint{v}
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
@@ -21187,12 +21979,11 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			if m.TlsFingerprintMatcher == nil {
-				m.TlsFingerprintMatcher = &policy.TlsFingerprintMatcherType{}
-			}
-			if err := m.TlsFingerprintMatcher.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+			v := &policy.TlsFingerprintMatcherType{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
+			m.TlsFingerprintChoice = &ReplaceSpecType_TlsFingerprintMatcher{v}
 			iNdEx = postIndex
 		case 31:
 			if wireType != 2 {
@@ -21541,42 +22332,6 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			m.DstIpChoice = &ReplaceSpecType_DstIpMatcher{v}
-			iNdEx = postIndex
-		case 44:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field L4DestMatcher", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.L4DestMatcher == nil {
-				m.L4DestMatcher = &policy.L4DestMatcherType{}
-			}
-			if err := m.L4DestMatcher.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
 			iNdEx = postIndex
 		case 45:
 			if wireType != 2 {
@@ -22219,6 +22974,41 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 			if err := m.JwtClaims[len(m.JwtClaims)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
+			iNdEx = postIndex
+		case 100:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Ja4TlsFingerprint", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &policy.JA4TlsFingerprintMatcherType{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.TlsFingerprintChoice = &ReplaceSpecType_Ja4TlsFingerprint{v}
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
@@ -23059,12 +23849,11 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			if m.TlsFingerprintMatcher == nil {
-				m.TlsFingerprintMatcher = &policy.TlsFingerprintMatcherType{}
-			}
-			if err := m.TlsFingerprintMatcher.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+			v := &policy.TlsFingerprintMatcherType{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
+			m.TlsFingerprintChoice = &GetSpecType_TlsFingerprintMatcher{v}
 			iNdEx = postIndex
 		case 31:
 			if wireType != 2 {
@@ -23413,42 +24202,6 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			m.DstIpChoice = &GetSpecType_DstIpMatcher{v}
-			iNdEx = postIndex
-		case 44:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field L4DestMatcher", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.L4DestMatcher == nil {
-				m.L4DestMatcher = &policy.L4DestMatcherType{}
-			}
-			if err := m.L4DestMatcher.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
 			iNdEx = postIndex
 		case 45:
 			if wireType != 2 {
@@ -24092,6 +24845,41 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			iNdEx = postIndex
+		case 100:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Ja4TlsFingerprint", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &policy.JA4TlsFingerprintMatcherType{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.TlsFingerprintChoice = &GetSpecType_Ja4TlsFingerprint{v}
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTypes(dAtA[iNdEx:])
@@ -24421,12 +25209,11 @@ func (m *ChallengeRuleSpec) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			if m.TlsFingerprintMatcher == nil {
-				m.TlsFingerprintMatcher = &policy.TlsFingerprintMatcherType{}
-			}
-			if err := m.TlsFingerprintMatcher.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+			v := &policy.TlsFingerprintMatcherType{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
+			m.TlsFingerprintChoice = &ChallengeRuleSpec_TlsFingerprintMatcher{v}
 			iNdEx = postIndex
 		case 11:
 			if wireType != 2 {
@@ -24738,6 +25525,41 @@ func (m *ChallengeRuleSpec) Unmarshal(dAtA []byte) error {
 			if err := m.ExpirationTimestamp.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
+			iNdEx = postIndex
+		case 22:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Ja4TlsFingerprint", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &policy.JA4TlsFingerprintMatcherType{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.TlsFingerprintChoice = &ChallengeRuleSpec_Ja4TlsFingerprint{v}
 			iNdEx = postIndex
 		case 31:
 			if wireType != 2 {

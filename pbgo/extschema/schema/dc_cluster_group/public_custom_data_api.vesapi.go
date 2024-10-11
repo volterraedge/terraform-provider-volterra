@@ -434,6 +434,12 @@ var CustomDataAPISwaggerJSON string = `{
                     "title": "Type",
                     "$ref": "#/definitions/schemadc_cluster_groupMetricType",
                     "x-displayname": "Type"
+                },
+                "unit": {
+                    "description": " Unit for the metric value",
+                    "title": "Unit",
+                    "$ref": "#/definitions/schemaUnitType",
+                    "x-displayname": "Unit"
                 }
             }
         },
@@ -648,6 +654,43 @@ var CustomDataAPISwaggerJSON string = `{
                     "x-ves-example": "-15"
                 }
             }
+        },
+        "schemaUnitType": {
+            "type": "string",
+            "description": "UnitType is enumeration of units for scalar fields",
+            "title": "UnitType",
+            "enum": [
+                "UNIT_MILLISECONDS",
+                "UNIT_SECONDS",
+                "UNIT_MINUTES",
+                "UNIT_HOURS",
+                "UNIT_DAYS",
+                "UNIT_BYTES",
+                "UNIT_KBYTES",
+                "UNIT_MBYTES",
+                "UNIT_GBYTES",
+                "UNIT_TBYTES",
+                "UNIT_KIBIBYTES",
+                "UNIT_MIBIBYTES",
+                "UNIT_GIBIBYTES",
+                "UNIT_TEBIBYTES",
+                "UNIT_BITS_PER_SECOND",
+                "UNIT_BYTES_PER_SECOND",
+                "UNIT_KBITS_PER_SECOND",
+                "UNIT_KBYTES_PER_SECOND",
+                "UNIT_MBITS_PER_SECOND",
+                "UNIT_MBYTES_PER_SECOND",
+                "UNIT_CONNECTIONS_PER_SECOND",
+                "UNIT_ERRORS_PER_SECOND",
+                "UNIT_PACKETS_PER_SECOND",
+                "UNIT_REQUESTS_PER_SECOND",
+                "UNIT_PACKETS",
+                "UNIT_PERCENTAGE",
+                "UNIT_COUNT"
+            ],
+            "default": "UNIT_MILLISECONDS",
+            "x-displayname": "Unit",
+            "x-ves-proto-enum": "ves.io.schema.UnitType"
         },
         "schemadc_cluster_groupMetricType": {
             "type": "string",

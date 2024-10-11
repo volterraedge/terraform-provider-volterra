@@ -19,16 +19,18 @@ import (
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
-	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+	schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 	common "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/ai_assistant/common"
 	explain_log_record "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/ai_assistant/explain_log_record"
 	gen_dashboard_filter "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/ai_assistant/gen_dashboard_filter"
 	site_analysis "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/ai_assistant/site_analysis"
+	widget "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/ai_assistant/widget"
 	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/vesenv"
 	io "io"
 	math "math"
 	math_bits "math/bits"
 	reflect "reflect"
+	strconv "strconv"
 	strings "strings"
 )
 
@@ -43,6 +45,50 @@ var _ = math.Inf
 // A compilation error at this line likely means your copy of the
 // proto package needs to be updated.
 const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
+
+// Negative Feedback Type
+//
+// x-displayName "Negative Feedback Type"
+// Type of Negative Feedback
+type NegativeFeedbackType int32
+
+const (
+	// x-displayName "Other"
+	// Other
+	OTHER NegativeFeedbackType = 0
+	// x-displayName "Inaccurate data"
+	// Inaccurate data
+	INACCURATE_DATA NegativeFeedbackType = 1
+	// x-displayName "Irrelevant content"
+	// Irrelevant content
+	IRRELEVANT_CONTENT NegativeFeedbackType = 2
+	// x-displayName "Poor format"
+	// Poor format
+	POOR_FORMAT NegativeFeedbackType = 3
+	// x-displayName "Slow response"
+	// Slow response
+	SLOW_RESPONSE NegativeFeedbackType = 4
+)
+
+var NegativeFeedbackType_name = map[int32]string{
+	0: "OTHER",
+	1: "INACCURATE_DATA",
+	2: "IRRELEVANT_CONTENT",
+	3: "POOR_FORMAT",
+	4: "SLOW_RESPONSE",
+}
+
+var NegativeFeedbackType_value = map[string]int32{
+	"OTHER":              0,
+	"INACCURATE_DATA":    1,
+	"IRRELEVANT_CONTENT": 2,
+	"POOR_FORMAT":        3,
+	"SLOW_RESPONSE":      4,
+}
+
+func (NegativeFeedbackType) EnumDescriptor() ([]byte, []int) {
+	return fileDescriptor_bddde4c8c6689ac0, []int{0}
+}
 
 // AI Assistant Query Request
 //
@@ -130,7 +176,20 @@ type AIAssistantQueryResponse struct {
 	//	*AIAssistantQueryResponse_GenDashboardFilter
 	//	*AIAssistantQueryResponse_GenericResponse
 	//	*AIAssistantQueryResponse_SiteAnalysisResponse
+	//	*AIAssistantQueryResponse_WidgetResponse
 	ResponseChoice isAIAssistantQueryResponse_ResponseChoice `protobuf_oneof:"response_choice"`
+	// query_id
+	//
+	// x-example: "07e03bc6-81d4-4c86-a865-67b5763fe294"
+	// x-displayName: "Query Id"
+	// Query Identifier
+	QueryId string `protobuf:"bytes,7,opt,name=query_id,json=queryId,proto3" json:"query_id,omitempty"`
+	// follow_up_queries
+	//
+	// x-example: "Explain following violation in whole namespace"
+	// x-displayName: "Follow up Queries"
+	// Follow up Queries to be given as suggestion to users
+	FollowUpQueries []string `protobuf:"bytes,8,rep,name=follow_up_queries,json=followUpQueries,proto3" json:"follow_up_queries,omitempty"`
 }
 
 func (m *AIAssistantQueryResponse) Reset()      { *m = AIAssistantQueryResponse{} }
@@ -184,11 +243,15 @@ type AIAssistantQueryResponse_GenericResponse struct {
 type AIAssistantQueryResponse_SiteAnalysisResponse struct {
 	SiteAnalysisResponse *site_analysis.SiteAnalysisResponse `protobuf:"bytes,6,opt,name=site_analysis_response,json=siteAnalysisResponse,proto3,oneof" json:"site_analysis_response,omitempty"`
 }
+type AIAssistantQueryResponse_WidgetResponse struct {
+	WidgetResponse *widget.WidgetResponse `protobuf:"bytes,9,opt,name=widget_response,json=widgetResponse,proto3,oneof" json:"widget_response,omitempty"`
+}
 
 func (*AIAssistantQueryResponse_ExplainLog) isAIAssistantQueryResponse_ResponseChoice()           {}
 func (*AIAssistantQueryResponse_GenDashboardFilter) isAIAssistantQueryResponse_ResponseChoice()   {}
 func (*AIAssistantQueryResponse_GenericResponse) isAIAssistantQueryResponse_ResponseChoice()      {}
 func (*AIAssistantQueryResponse_SiteAnalysisResponse) isAIAssistantQueryResponse_ResponseChoice() {}
+func (*AIAssistantQueryResponse_WidgetResponse) isAIAssistantQueryResponse_ResponseChoice()       {}
 
 func (m *AIAssistantQueryResponse) GetResponseChoice() isAIAssistantQueryResponse_ResponseChoice {
 	if m != nil {
@@ -232,6 +295,27 @@ func (m *AIAssistantQueryResponse) GetSiteAnalysisResponse() *site_analysis.Site
 	return nil
 }
 
+func (m *AIAssistantQueryResponse) GetWidgetResponse() *widget.WidgetResponse {
+	if x, ok := m.GetResponseChoice().(*AIAssistantQueryResponse_WidgetResponse); ok {
+		return x.WidgetResponse
+	}
+	return nil
+}
+
+func (m *AIAssistantQueryResponse) GetQueryId() string {
+	if m != nil {
+		return m.QueryId
+	}
+	return ""
+}
+
+func (m *AIAssistantQueryResponse) GetFollowUpQueries() []string {
+	if m != nil {
+		return m.FollowUpQueries
+	}
+	return nil
+}
+
 // XXX_OneofWrappers is for the internal use of the proto package.
 func (*AIAssistantQueryResponse) XXX_OneofWrappers() []interface{} {
 	return []interface{}{
@@ -239,14 +323,219 @@ func (*AIAssistantQueryResponse) XXX_OneofWrappers() []interface{} {
 		(*AIAssistantQueryResponse_GenDashboardFilter)(nil),
 		(*AIAssistantQueryResponse_GenericResponse)(nil),
 		(*AIAssistantQueryResponse_SiteAnalysisResponse)(nil),
+		(*AIAssistantQueryResponse_WidgetResponse)(nil),
 	}
 }
 
+// AI Assistant Query Feedback Request
+//
+// x-displayName: "AI Assistant Query Feedback Request"
+// AI Assistant Query Feedback Request
+type AIAssistantQueryFeedbackRequest struct {
+	// namespace
+	//
+	// x-displayName: "Namespace"
+	// x-example: "system"
+	// Namespace of the HTTP Load Balancer for current request
+	Namespace string `protobuf:"bytes,1,opt,name=namespace,proto3" json:"namespace,omitempty"`
+	// query
+	//
+	// x-displayName: "Query"
+	// x-example: "How to investigate request log"
+	// Query will be in text format
+	Query string `protobuf:"bytes,2,opt,name=query,proto3" json:"query,omitempty"`
+	// query_id
+	//
+	// x-example: "07e03bc6-81d4-4c86-a865-67b5763fe294"
+	// x-displayName: "Query Id"
+	// Query Identifier
+	QueryId string `protobuf:"bytes,3,opt,name=query_id,json=queryId,proto3" json:"query_id,omitempty"`
+	// Feedback Choice
+	//
+	// x-displayName: "Feedback Choice"
+	// Response will have different types of responses
+	//
+	// Types that are valid to be assigned to FeedbackChoice:
+	//	*AIAssistantQueryFeedbackRequest_PositiveFeedback
+	//	*AIAssistantQueryFeedbackRequest_NegativeFeedback
+	FeedbackChoice isAIAssistantQueryFeedbackRequest_FeedbackChoice `protobuf_oneof:"feedback_choice"`
+	// comment
+	//
+	// x-example: "Response is biased"
+	// x-displayName: "Comment"
+	Comment string `protobuf:"bytes,7,opt,name=comment,proto3" json:"comment,omitempty"`
+}
+
+func (m *AIAssistantQueryFeedbackRequest) Reset()      { *m = AIAssistantQueryFeedbackRequest{} }
+func (*AIAssistantQueryFeedbackRequest) ProtoMessage() {}
+func (*AIAssistantQueryFeedbackRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_bddde4c8c6689ac0, []int{2}
+}
+func (m *AIAssistantQueryFeedbackRequest) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *AIAssistantQueryFeedbackRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_AIAssistantQueryFeedbackRequest.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *AIAssistantQueryFeedbackRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AIAssistantQueryFeedbackRequest.Merge(m, src)
+}
+func (m *AIAssistantQueryFeedbackRequest) XXX_Size() int {
+	return m.Size()
+}
+func (m *AIAssistantQueryFeedbackRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_AIAssistantQueryFeedbackRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_AIAssistantQueryFeedbackRequest proto.InternalMessageInfo
+
+type isAIAssistantQueryFeedbackRequest_FeedbackChoice interface {
+	isAIAssistantQueryFeedbackRequest_FeedbackChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+
+type AIAssistantQueryFeedbackRequest_PositiveFeedback struct {
+	PositiveFeedback *schema.Empty `protobuf:"bytes,5,opt,name=positive_feedback,json=positiveFeedback,proto3,oneof" json:"positive_feedback,omitempty"`
+}
+type AIAssistantQueryFeedbackRequest_NegativeFeedback struct {
+	NegativeFeedback *NegativeFeedbackDetails `protobuf:"bytes,6,opt,name=negative_feedback,json=negativeFeedback,proto3,oneof" json:"negative_feedback,omitempty"`
+}
+
+func (*AIAssistantQueryFeedbackRequest_PositiveFeedback) isAIAssistantQueryFeedbackRequest_FeedbackChoice() {
+}
+func (*AIAssistantQueryFeedbackRequest_NegativeFeedback) isAIAssistantQueryFeedbackRequest_FeedbackChoice() {
+}
+
+func (m *AIAssistantQueryFeedbackRequest) GetFeedbackChoice() isAIAssistantQueryFeedbackRequest_FeedbackChoice {
+	if m != nil {
+		return m.FeedbackChoice
+	}
+	return nil
+}
+
+func (m *AIAssistantQueryFeedbackRequest) GetNamespace() string {
+	if m != nil {
+		return m.Namespace
+	}
+	return ""
+}
+
+func (m *AIAssistantQueryFeedbackRequest) GetQuery() string {
+	if m != nil {
+		return m.Query
+	}
+	return ""
+}
+
+func (m *AIAssistantQueryFeedbackRequest) GetQueryId() string {
+	if m != nil {
+		return m.QueryId
+	}
+	return ""
+}
+
+func (m *AIAssistantQueryFeedbackRequest) GetPositiveFeedback() *schema.Empty {
+	if x, ok := m.GetFeedbackChoice().(*AIAssistantQueryFeedbackRequest_PositiveFeedback); ok {
+		return x.PositiveFeedback
+	}
+	return nil
+}
+
+func (m *AIAssistantQueryFeedbackRequest) GetNegativeFeedback() *NegativeFeedbackDetails {
+	if x, ok := m.GetFeedbackChoice().(*AIAssistantQueryFeedbackRequest_NegativeFeedback); ok {
+		return x.NegativeFeedback
+	}
+	return nil
+}
+
+func (m *AIAssistantQueryFeedbackRequest) GetComment() string {
+	if m != nil {
+		return m.Comment
+	}
+	return ""
+}
+
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*AIAssistantQueryFeedbackRequest) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
+		(*AIAssistantQueryFeedbackRequest_PositiveFeedback)(nil),
+		(*AIAssistantQueryFeedbackRequest_NegativeFeedback)(nil),
+	}
+}
+
+// NegativeFeedbackDetails
+//
+// x-displayName: "Negative Feedback Details"
+// Negative Feedback Details
+type NegativeFeedbackDetails struct {
+	// remarks
+	//
+	// x-example: "Inaccurate data"
+	// x-displayName: "Feedback"
+	Remarks []NegativeFeedbackType `protobuf:"varint,1,rep,packed,name=remarks,proto3,enum=ves.io.schema.ai_assistant.NegativeFeedbackType" json:"remarks,omitempty"`
+}
+
+func (m *NegativeFeedbackDetails) Reset()      { *m = NegativeFeedbackDetails{} }
+func (*NegativeFeedbackDetails) ProtoMessage() {}
+func (*NegativeFeedbackDetails) Descriptor() ([]byte, []int) {
+	return fileDescriptor_bddde4c8c6689ac0, []int{3}
+}
+func (m *NegativeFeedbackDetails) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *NegativeFeedbackDetails) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_NegativeFeedbackDetails.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *NegativeFeedbackDetails) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_NegativeFeedbackDetails.Merge(m, src)
+}
+func (m *NegativeFeedbackDetails) XXX_Size() int {
+	return m.Size()
+}
+func (m *NegativeFeedbackDetails) XXX_DiscardUnknown() {
+	xxx_messageInfo_NegativeFeedbackDetails.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_NegativeFeedbackDetails proto.InternalMessageInfo
+
+func (m *NegativeFeedbackDetails) GetRemarks() []NegativeFeedbackType {
+	if m != nil {
+		return m.Remarks
+	}
+	return nil
+}
+
 func init() {
+	proto.RegisterEnum("ves.io.schema.ai_assistant.NegativeFeedbackType", NegativeFeedbackType_name, NegativeFeedbackType_value)
+	golang_proto.RegisterEnum("ves.io.schema.ai_assistant.NegativeFeedbackType", NegativeFeedbackType_name, NegativeFeedbackType_value)
 	proto.RegisterType((*AIAssistantQueryRequest)(nil), "ves.io.schema.ai_assistant.AIAssistantQueryRequest")
 	golang_proto.RegisterType((*AIAssistantQueryRequest)(nil), "ves.io.schema.ai_assistant.AIAssistantQueryRequest")
 	proto.RegisterType((*AIAssistantQueryResponse)(nil), "ves.io.schema.ai_assistant.AIAssistantQueryResponse")
 	golang_proto.RegisterType((*AIAssistantQueryResponse)(nil), "ves.io.schema.ai_assistant.AIAssistantQueryResponse")
+	proto.RegisterType((*AIAssistantQueryFeedbackRequest)(nil), "ves.io.schema.ai_assistant.AIAssistantQueryFeedbackRequest")
+	golang_proto.RegisterType((*AIAssistantQueryFeedbackRequest)(nil), "ves.io.schema.ai_assistant.AIAssistantQueryFeedbackRequest")
+	proto.RegisterType((*NegativeFeedbackDetails)(nil), "ves.io.schema.ai_assistant.NegativeFeedbackDetails")
+	golang_proto.RegisterType((*NegativeFeedbackDetails)(nil), "ves.io.schema.ai_assistant.NegativeFeedbackDetails")
 }
 
 func init() {
@@ -257,55 +546,89 @@ func init() {
 }
 
 var fileDescriptor_bddde4c8c6689ac0 = []byte{
-	// 724 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x94, 0x54, 0x4f, 0x6b, 0xd4, 0x40,
-	0x1c, 0xdd, 0xd9, 0x5d, 0x8b, 0x4d, 0x95, 0x96, 0x50, 0x6c, 0x58, 0x4b, 0x2c, 0xab, 0x87, 0x2a,
-	0x26, 0xc1, 0x56, 0x51, 0x44, 0x84, 0x2d, 0xda, 0xda, 0xea, 0xa1, 0x6e, 0x6f, 0x22, 0x84, 0xd9,
-	0x64, 0x36, 0x3b, 0x35, 0x99, 0x49, 0x67, 0x26, 0x6b, 0x8b, 0x88, 0x52, 0x3c, 0x79, 0x12, 0xfc,
-	0x0a, 0x1e, 0xfc, 0x0e, 0xbd, 0xf4, 0xa6, 0x27, 0x59, 0xf0, 0xd2, 0xa3, 0xcd, 0x7a, 0xd0, 0x5b,
-	0x3f, 0x82, 0xec, 0x6c, 0x76, 0xbb, 0x7f, 0xd2, 0x80, 0x97, 0x90, 0x79, 0xbf, 0xdf, 0x7b, 0xef,
-	0xc7, 0xcc, 0x9b, 0x51, 0x6e, 0x35, 0x11, 0x37, 0x31, 0xb5, 0xb8, 0xd3, 0x40, 0x01, 0xb4, 0x20,
-	0xb6, 0x21, 0xe7, 0x98, 0x0b, 0x48, 0x84, 0x15, 0x46, 0x35, 0x1f, 0x3b, 0xb6, 0x13, 0x71, 0x41,
-	0x03, 0x18, 0x62, 0x33, 0x64, 0x54, 0x50, 0xb5, 0xd4, 0xa5, 0x98, 0x5d, 0x8a, 0x39, 0x48, 0x29,
-	0x19, 0x1e, 0x16, 0x8d, 0xa8, 0x66, 0x3a, 0x34, 0xb0, 0x3c, 0xea, 0x51, 0x4b, 0x52, 0x6a, 0x51,
-	0x5d, 0xae, 0xe4, 0x42, 0xfe, 0x75, 0xa5, 0x4a, 0xf3, 0x1e, 0xa5, 0x9e, 0x8f, 0x2c, 0x18, 0x62,
-	0x0b, 0x12, 0x42, 0x05, 0x14, 0x98, 0x12, 0x9e, 0x54, 0xaf, 0x24, 0xd5, 0xbe, 0x86, 0xc0, 0x01,
-	0xe2, 0x02, 0x06, 0x61, 0xd2, 0x70, 0x2f, 0x63, 0x78, 0x87, 0x06, 0x01, 0x25, 0x96, 0x87, 0x08,
-	0x62, 0xd8, 0xb1, 0x19, 0xe2, 0x21, 0x25, 0x1c, 0x25, 0xcc, 0xd5, 0x0c, 0x26, 0xda, 0x0d, 0x7d,
-	0x88, 0x89, 0xed, 0x53, 0xcf, 0x66, 0xc8, 0xa1, 0xcc, 0x4d, 0x81, 0x12, 0x9d, 0x8d, 0x0c, 0x1d,
-	0x0f, 0x11, 0xdb, 0x85, 0xbc, 0x51, 0xa3, 0x90, 0xb9, 0x76, 0x1d, 0xfb, 0x02, 0xb1, 0x54, 0x30,
-	0xd1, 0x7a, 0x90, 0xa1, 0xc5, 0xb1, 0x40, 0x36, 0x24, 0xd0, 0xdf, 0xe3, 0x98, 0x0f, 0xaf, 0x12,
-	0xf6, 0xe5, 0x61, 0x36, 0x0d, 0x07, 0x77, 0x72, 0x7e, 0xb8, 0xd8, 0x84, 0x3e, 0x76, 0xa1, 0xe8,
-	0x6d, 0x46, 0x79, 0xa4, 0x8a, 0x38, 0x22, 0xcd, 0x11, 0x85, 0x85, 0x91, 0x1e, 0x8c, 0x5e, 0xdb,
-	0x43, 0x1d, 0xe5, 0x97, 0xca, 0x5c, 0x65, 0xbd, 0xd2, 0x9b, 0xf8, 0x79, 0x84, 0xd8, 0x5e, 0x15,
-	0xed, 0x44, 0x88, 0x0b, 0x75, 0x5e, 0x99, 0x24, 0x30, 0x40, 0x3c, 0x84, 0x0e, 0xd2, 0xc0, 0x02,
-	0x58, 0x9c, 0xac, 0x9e, 0x02, 0xea, 0x55, 0xe5, 0xa2, 0x13, 0x31, 0x86, 0x88, 0xb0, 0x77, 0x3a,
-	0x2c, 0x2d, 0x2f, 0x3b, 0x2e, 0x24, 0xa0, 0x54, 0x2a, 0x7f, 0x29, 0x2a, 0xda, 0xb8, 0x7c, 0xf7,
-	0x4c, 0xc7, 0x15, 0xc0, 0xb8, 0x82, 0xba, 0xad, 0x4c, 0x0d, 0x1c, 0xa3, 0x56, 0x58, 0x00, 0x8b,
-	0x53, 0x4b, 0x6b, 0xe6, 0xd9, 0x61, 0x36, 0x53, 0x4e, 0xfd, 0x71, 0x17, 0x7a, 0x46, 0xbd, 0xaa,
-	0x04, 0x7a, 0x23, 0x3c, 0xc9, 0x55, 0x15, 0xd4, 0xaf, 0xa9, 0xef, 0x94, 0xd9, 0xb4, 0x83, 0xd6,
-	0x8a, 0xd2, 0xf4, 0x69, 0x96, 0x69, 0x6a, 0x40, 0xd6, 0x10, 0x79, 0xd4, 0xc3, 0x56, 0x25, 0x34,
-	0x60, 0xac, 0x7a, 0x63, 0x55, 0xd5, 0x56, 0x66, 0x46, 0x93, 0xaf, 0x9d, 0x93, 0xe6, 0x4b, 0x59,
-	0xe6, 0xdd, 0x4b, 0xd3, 0xb1, 0xeb, 0x50, 0x07, 0x3c, 0xa6, 0xbd, 0x61, 0x48, 0x6d, 0x2a, 0x97,
-	0x86, 0x52, 0x78, 0x6a, 0x33, 0x21, 0x6d, 0x1e, 0x66, 0xd9, 0x0c, 0xe7, 0x77, 0x0b, 0x0b, 0x54,
-	0x49, 0x16, 0x03, 0x96, 0xb3, 0x3c, 0x05, 0x5f, 0x99, 0x53, 0xa6, 0x7b, 0x4e, 0xb6, 0xd3, 0xa0,
-	0xd8, 0x41, 0x6a, 0xb1, 0x75, 0x00, 0xf2, 0x1b, 0xc5, 0xf3, 0xf9, 0x99, 0xc2, 0xd2, 0x87, 0xbc,
-	0x32, 0xb9, 0x05, 0x1b, 0x70, 0x0f, 0x56, 0x36, 0xd7, 0xd5, 0xbf, 0x40, 0x99, 0x19, 0x0d, 0x8d,
-	0xba, 0x9c, 0x35, 0xd9, 0x19, 0x09, 0x2e, 0xdd, 0xfe, 0x3f, 0x52, 0x77, 0xc0, 0xf2, 0x76, 0xfc,
-	0x4d, 0xbb, 0x5b, 0xbf, 0xb3, 0xeb, 0x18, 0x10, 0x1b, 0xfd, 0x7e, 0xa3, 0xf3, 0x75, 0x21, 0x73,
-	0x8d, 0x80, 0x12, 0x2c, 0x28, 0xbb, 0xd9, 0xb9, 0x5c, 0x06, 0xa6, 0x86, 0xdc, 0x64, 0xe8, 0x1b,
-	0x0c, 0x41, 0x77, 0xff, 0xe7, 0xef, 0xcf, 0xf9, 0xeb, 0xe5, 0x6b, 0xc9, 0x2b, 0x6c, 0xf5, 0xef,
-	0x0b, 0xb7, 0xde, 0xf4, 0xff, 0xdf, 0x5a, 0x32, 0xef, 0xf7, 0xc1, 0x8d, 0xd2, 0xd4, 0xe1, 0x01,
-	0x28, 0xec, 0xff, 0xd0, 0x0a, 0x47, 0x79, 0xb0, 0xf2, 0x11, 0xb4, 0x8e, 0xf5, 0xdc, 0xd1, 0xb1,
-	0x9e, 0x3b, 0x39, 0xd6, 0xc1, 0xfb, 0x58, 0x07, 0x5f, 0x63, 0x1d, 0x7c, 0x8f, 0x75, 0xd0, 0x8a,
-	0x75, 0xf0, 0x2b, 0xd6, 0xc1, 0x9f, 0x58, 0xcf, 0x9d, 0xc4, 0x3a, 0xf8, 0xd4, 0xd6, 0x73, 0x87,
-	0x6d, 0x1d, 0xb4, 0xda, 0x7a, 0xee, 0xa8, 0xad, 0xe7, 0x5e, 0x6c, 0x7a, 0x34, 0x7c, 0xe5, 0x99,
-	0x4d, 0xda, 0xc9, 0x11, 0x83, 0x66, 0xc4, 0x2d, 0xf9, 0x53, 0xa7, 0x2c, 0x30, 0x42, 0x46, 0x9b,
-	0xd8, 0x45, 0xcc, 0xe8, 0x95, 0xad, 0xb0, 0xe6, 0x51, 0x0b, 0xed, 0x8a, 0xe4, 0x5d, 0x48, 0x79,
-	0xbb, 0x6a, 0x13, 0xf2, 0x7d, 0x58, 0xfe, 0x17, 0x00, 0x00, 0xff, 0xff, 0xcf, 0xed, 0x42, 0x61,
-	0x6b, 0x06, 0x00, 0x00,
+	// 1160 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xac, 0x56, 0x4f, 0x6f, 0x13, 0x47,
+	0x1c, 0xf5, 0x78, 0x6d, 0x12, 0x4f, 0x0a, 0x76, 0x86, 0x08, 0x16, 0x17, 0x2d, 0x96, 0xcb, 0x21,
+	0x20, 0xad, 0x97, 0x18, 0x8a, 0x28, 0x54, 0x95, 0x9c, 0xe0, 0x40, 0x28, 0xb5, 0xc3, 0xc6, 0x80,
+	0xd4, 0x52, 0x56, 0xe3, 0xf5, 0x78, 0x33, 0xc5, 0xbb, 0xb3, 0xec, 0xac, 0x1d, 0x2c, 0x14, 0x15,
+	0x71, 0xec, 0xa9, 0xa2, 0xc7, 0x7e, 0x81, 0x7e, 0x06, 0xb8, 0x70, 0x2b, 0xa7, 0x2a, 0x52, 0x7b,
+	0xe0, 0x58, 0x9c, 0x1e, 0xda, 0x1b, 0x1f, 0xa1, 0xda, 0x7f, 0xce, 0xda, 0x71, 0x5c, 0x22, 0xf5,
+	0x62, 0xef, 0xfc, 0xfe, 0xbc, 0xf7, 0x9b, 0x9d, 0xf7, 0xb4, 0x03, 0x97, 0x7a, 0x84, 0x97, 0x28,
+	0x53, 0xb8, 0xbe, 0x49, 0x4c, 0xac, 0x60, 0xaa, 0x61, 0xce, 0x29, 0x77, 0xb1, 0xe5, 0x2a, 0x76,
+	0xb7, 0xd9, 0xa1, 0xba, 0xa6, 0x77, 0xb9, 0xcb, 0x4c, 0x6c, 0xd3, 0x92, 0xed, 0x30, 0x97, 0xa1,
+	0x7c, 0xd0, 0x52, 0x0a, 0x5a, 0x4a, 0xf1, 0x96, 0xbc, 0x6c, 0x50, 0x77, 0xb3, 0xdb, 0x2c, 0xe9,
+	0xcc, 0x54, 0x0c, 0x66, 0x30, 0xc5, 0x6f, 0x69, 0x76, 0xdb, 0xfe, 0xca, 0x5f, 0xf8, 0x4f, 0x01,
+	0x54, 0xfe, 0xb4, 0xc1, 0x98, 0xd1, 0x21, 0x0a, 0xb6, 0xa9, 0x82, 0x2d, 0x8b, 0xb9, 0xd8, 0xa5,
+	0xcc, 0xe2, 0x61, 0xf6, 0x4c, 0x98, 0x1d, 0x62, 0xb8, 0xd4, 0x24, 0xdc, 0xc5, 0xa6, 0x1d, 0x16,
+	0x5c, 0x99, 0x32, 0xbc, 0xce, 0x4c, 0x93, 0x59, 0x8a, 0x41, 0x2c, 0xe2, 0x50, 0x5d, 0x73, 0x08,
+	0xb7, 0x99, 0xc5, 0x49, 0xd8, 0x29, 0xff, 0x77, 0xa7, 0xdb, 0xb7, 0x49, 0x34, 0xc9, 0xea, 0x94,
+	0x72, 0xf2, 0xc4, 0xee, 0x60, 0x6a, 0x69, 0x1d, 0x66, 0x68, 0x0e, 0xd1, 0x99, 0xd3, 0x9a, 0x10,
+	0x0a, 0x71, 0x6e, 0x4d, 0xc1, 0x31, 0x88, 0xa5, 0xb5, 0x30, 0xdf, 0x6c, 0x32, 0xec, 0xb4, 0xb4,
+	0x36, 0xed, 0xb8, 0xc4, 0x99, 0x18, 0x0c, 0xb1, 0x3e, 0x9f, 0x82, 0xc5, 0xa9, 0x4b, 0x34, 0x6c,
+	0xe1, 0x4e, 0x9f, 0x53, 0x3e, 0xba, 0x0a, 0xbb, 0x4b, 0x53, 0xba, 0xb7, 0x68, 0xcb, 0x20, 0xd1,
+	0x5f, 0x58, 0xff, 0xf1, 0x68, 0x3d, 0xb3, 0xe3, 0x07, 0x75, 0x6a, 0x34, 0x19, 0x7f, 0x73, 0xa7,
+	0x47, 0x53, 0x3d, 0xdc, 0xa1, 0x2d, 0xec, 0x46, 0xc7, 0x50, 0x1c, 0xcb, 0x12, 0x4e, 0xac, 0xde,
+	0x18, 0x78, 0x61, 0xac, 0x86, 0x92, 0x2d, 0x6d, 0xa4, 0xa2, 0xf8, 0x00, 0x9e, 0xac, 0xac, 0x55,
+	0xa2, 0xf1, 0xef, 0x74, 0x89, 0xd3, 0x57, 0xc9, 0xe3, 0x2e, 0xe1, 0x2e, 0x3a, 0x0d, 0x33, 0x16,
+	0x36, 0x09, 0xb7, 0xb1, 0x4e, 0x44, 0x50, 0x00, 0x8b, 0x19, 0x75, 0x2f, 0x80, 0x3e, 0x81, 0x47,
+	0xf5, 0xae, 0xe3, 0x10, 0xcb, 0xd5, 0x1e, 0x7b, 0x5d, 0x62, 0xd2, 0xaf, 0xf8, 0x28, 0x0c, 0xfa,
+	0x48, 0xc5, 0x17, 0x47, 0xa0, 0xb8, 0x1f, 0x3e, 0x50, 0xd3, 0x7e, 0x04, 0xb0, 0x1f, 0x01, 0x7d,
+	0x07, 0xe7, 0x62, 0x8a, 0x10, 0x85, 0x02, 0x58, 0x9c, 0x2b, 0xdf, 0x28, 0x1d, 0x6c, 0xa3, 0xd2,
+	0x04, 0x01, 0x55, 0x83, 0xd0, 0x6d, 0x66, 0xa8, 0x7e, 0x20, 0x1a, 0xe1, 0x66, 0x42, 0x85, 0x64,
+	0x98, 0x43, 0xdf, 0xc3, 0x85, 0x49, 0x9a, 0x11, 0x53, 0x3e, 0xe9, 0x97, 0xd3, 0x48, 0x27, 0x6a,
+	0xed, 0x06, 0xb1, 0xae, 0x47, 0xb1, 0x55, 0x3f, 0x14, 0x23, 0x46, 0xc6, 0xbe, 0x2c, 0xd2, 0x60,
+	0x6e, 0xdc, 0x73, 0x62, 0xda, 0x27, 0x2f, 0x4f, 0x23, 0x0f, 0x4c, 0xe7, 0xd1, 0x79, 0xad, 0x31,
+	0x8e, 0xac, 0x31, 0x1a, 0x42, 0x3d, 0x78, 0x62, 0x44, 0xd0, 0x7b, 0x34, 0x47, 0x7c, 0x9a, 0x2f,
+	0xa6, 0xd1, 0x8c, 0x5a, 0x61, 0x83, 0xba, 0xa4, 0x12, 0x2e, 0x62, 0x94, 0x0b, 0x7c, 0x42, 0x1c,
+	0x3d, 0x80, 0xd9, 0xc0, 0x11, 0x7b, 0x84, 0x19, 0x9f, 0x70, 0x69, 0x1a, 0x61, 0x68, 0xa2, 0xfb,
+	0xfe, 0x5f, 0x8c, 0xe3, 0xd8, 0xd6, 0x48, 0x04, 0xdd, 0x83, 0xb3, 0xbe, 0x80, 0x34, 0xda, 0x12,
+	0x67, 0x3c, 0x0d, 0x2d, 0x5f, 0x7b, 0xf9, 0xcf, 0x6b, 0xe1, 0xb2, 0x73, 0xa9, 0x5c, 0x7e, 0xb8,
+	0xf8, 0xcd, 0x05, 0xf9, 0x33, 0x2c, 0xb7, 0xbf, 0x7d, 0x7a, 0x65, 0x5b, 0x3e, 0xf7, 0x74, 0x69,
+	0x7b, 0x2f, 0x70, 0xc9, 0x0b, 0x5c, 0x8c, 0x05, 0x96, 0xca, 0xdb, 0xe7, 0xce, 0xaa, 0x33, 0x3e,
+	0xd8, 0x5a, 0x0b, 0x5d, 0x86, 0xf3, 0x6d, 0xd6, 0xe9, 0xb0, 0x2d, 0xad, 0x6b, 0xfb, 0x12, 0xa5,
+	0x84, 0x8b, 0xb3, 0x05, 0x61, 0x31, 0xb3, 0x0c, 0x3d, 0x82, 0xf4, 0x0b, 0x90, 0x14, 0x81, 0x9a,
+	0x0d, 0x8a, 0xee, 0xda, 0x77, 0x82, 0x92, 0xe5, 0x93, 0x30, 0x1b, 0x6d, 0x53, 0xd3, 0x37, 0x19,
+	0xd5, 0x09, 0x4a, 0xed, 0xbc, 0x02, 0xc9, 0x5b, 0xa9, 0xd9, 0x64, 0x4e, 0x28, 0xfe, 0x2c, 0xc0,
+	0x33, 0xe3, 0xa6, 0x58, 0x25, 0xa4, 0xd5, 0xc4, 0xfa, 0xa3, 0x0f, 0xf3, 0xde, 0x02, 0x4c, 0xc7,
+	0x3d, 0x17, 0x2c, 0x46, 0x5e, 0x83, 0xf0, 0x3f, 0xbe, 0x86, 0x15, 0x38, 0x6f, 0x33, 0x4e, 0x5d,
+	0xda, 0x23, 0x5a, 0x3b, 0x9c, 0x33, 0x94, 0xe5, 0xc2, 0xd8, 0xf1, 0x55, 0x4d, 0xdb, 0xed, 0xdf,
+	0x4c, 0xa8, 0xb9, 0xa8, 0x21, 0xda, 0x17, 0x6a, 0xc2, 0x79, 0x8b, 0x18, 0x78, 0x14, 0x24, 0x10,
+	0xdd, 0xc5, 0x69, 0x1a, 0xa8, 0x85, 0x4d, 0x11, 0xd0, 0x75, 0xe2, 0x62, 0xda, 0xe1, 0x1e, 0x87,
+	0x35, 0x96, 0x42, 0x67, 0xe1, 0x8c, 0x67, 0x05, 0x62, 0xb9, 0xa1, 0x0c, 0x82, 0x53, 0x72, 0x04,
+	0xf1, 0x59, 0x41, 0x8d, 0x52, 0xde, 0xe9, 0x44, 0x03, 0xc4, 0x4f, 0x27, 0x75, 0x2b, 0x35, 0x9b,
+	0xca, 0xa5, 0x8b, 0xcf, 0x00, 0x3c, 0x79, 0x00, 0x29, 0x22, 0x70, 0xc6, 0x21, 0x26, 0x76, 0x1e,
+	0x71, 0x11, 0x14, 0x84, 0xc5, 0x63, 0xe5, 0x0b, 0x87, 0x19, 0xbd, 0xd1, 0xb7, 0xc9, 0xf2, 0x29,
+	0x6f, 0x24, 0xf8, 0x02, 0xcc, 0x14, 0xd3, 0xcf, 0x41, 0x32, 0x07, 0x62, 0x3a, 0x8a, 0xb0, 0xcf,
+	0x3b, 0x70, 0x61, 0x52, 0x2f, 0xca, 0xc0, 0x74, 0xbd, 0x71, 0xb3, 0xaa, 0xe6, 0x12, 0xe8, 0x38,
+	0xcc, 0xae, 0xd5, 0x2a, 0x2b, 0x2b, 0x77, 0xd5, 0x4a, 0xa3, 0xaa, 0x5d, 0xaf, 0x34, 0x2a, 0x39,
+	0x80, 0x4e, 0x40, 0xb4, 0xa6, 0xaa, 0xd5, 0xdb, 0xd5, 0x7b, 0x95, 0x5a, 0x43, 0x5b, 0xa9, 0xd7,
+	0x1a, 0xd5, 0x5a, 0x23, 0x97, 0x44, 0x59, 0x38, 0xb7, 0x5e, 0xaf, 0xab, 0xda, 0x6a, 0x5d, 0xfd,
+	0xaa, 0xd2, 0xc8, 0x09, 0x68, 0x1e, 0x1e, 0xdd, 0xb8, 0x5d, 0xbf, 0xaf, 0xa9, 0xd5, 0x8d, 0xf5,
+	0x7a, 0x6d, 0xa3, 0x9a, 0x4b, 0x95, 0x5f, 0x0a, 0x30, 0xb3, 0x81, 0x37, 0x71, 0x1f, 0x57, 0xd6,
+	0xd7, 0xd0, 0x1f, 0x00, 0xe6, 0xc6, 0x25, 0x8a, 0xa6, 0x9e, 0xd3, 0x01, 0x1f, 0x91, 0xfc, 0xa5,
+	0xc3, 0x35, 0x05, 0xae, 0x29, 0xde, 0x1d, 0xfc, 0x2a, 0x16, 0xdb, 0x9f, 0x3e, 0xd1, 0x65, 0x4c,
+	0xe5, 0x61, 0xbd, 0xec, 0xfd, 0xb6, 0xb0, 0xd3, 0x92, 0x4d, 0x66, 0x51, 0x97, 0x39, 0xcf, 0x7f,
+	0xff, 0xeb, 0xa7, 0xe4, 0xb9, 0xe2, 0xd9, 0xf0, 0xb6, 0xa5, 0x0c, 0x1d, 0xc2, 0x95, 0xa7, 0xc3,
+	0xe7, 0x6d, 0xc5, 0x17, 0xf2, 0x55, 0x70, 0x1e, 0xbd, 0x01, 0xf0, 0x78, 0x8c, 0x73, 0x28, 0x9c,
+	0x6b, 0x87, 0x19, 0x72, 0xcc, 0xaa, 0xf9, 0x89, 0x1e, 0x28, 0x3e, 0x3c, 0xc4, 0x0e, 0xca, 0x45,
+	0xf9, 0x43, 0x76, 0x30, 0xf4, 0xcd, 0x55, 0x70, 0x3e, 0x3f, 0xf7, 0xfa, 0x15, 0x10, 0x9e, 0xff,
+	0x26, 0x0a, 0x6f, 0x93, 0x60, 0xf9, 0x07, 0xb0, 0xf3, 0x4e, 0x4a, 0xbc, 0x7d, 0x27, 0x25, 0xde,
+	0xbf, 0x93, 0xc0, 0xb3, 0x81, 0x04, 0x7e, 0x19, 0x48, 0xe0, 0xcd, 0x40, 0x02, 0x3b, 0x03, 0x09,
+	0xfc, 0x39, 0x90, 0xc0, 0xdf, 0x03, 0x29, 0xf1, 0x7e, 0x20, 0x81, 0x1f, 0x77, 0xa5, 0xc4, 0xeb,
+	0x5d, 0x09, 0xec, 0xec, 0x4a, 0x89, 0xb7, 0xbb, 0x52, 0xe2, 0xeb, 0x75, 0x83, 0xd9, 0x8f, 0x8c,
+	0x52, 0x8f, 0x79, 0x1f, 0x20, 0x07, 0x97, 0xba, 0x5c, 0xf1, 0x1f, 0xda, 0xcc, 0x31, 0x65, 0xdb,
+	0x61, 0x3d, 0xda, 0x22, 0x8e, 0x1c, 0xa5, 0x15, 0xbb, 0x69, 0x30, 0x85, 0x3c, 0x71, 0xc3, 0x0b,
+	0xc5, 0x84, 0x1b, 0x50, 0xf3, 0x88, 0x7f, 0xb1, 0xb8, 0xf8, 0x6f, 0x00, 0x00, 0x00, 0xff, 0xff,
+	0x79, 0xe2, 0x2c, 0x37, 0x1e, 0x0b, 0x00, 0x00,
 }
 
+func (x NegativeFeedbackType) String() string {
+	s, ok := NegativeFeedbackType_name[int32(x)]
+	if ok {
+		return s
+	}
+	return strconv.Itoa(int(x))
+}
 func (this *AIAssistantQueryRequest) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -363,6 +686,17 @@ func (this *AIAssistantQueryResponse) Equal(that interface{}) bool {
 		return false
 	} else if !this.ResponseChoice.Equal(that1.ResponseChoice) {
 		return false
+	}
+	if this.QueryId != that1.QueryId {
+		return false
+	}
+	if len(this.FollowUpQueries) != len(that1.FollowUpQueries) {
+		return false
+	}
+	for i := range this.FollowUpQueries {
+		if this.FollowUpQueries[i] != that1.FollowUpQueries[i] {
+			return false
+		}
 	}
 	return true
 }
@@ -462,6 +796,149 @@ func (this *AIAssistantQueryResponse_SiteAnalysisResponse) Equal(that interface{
 	}
 	return true
 }
+func (this *AIAssistantQueryResponse_WidgetResponse) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*AIAssistantQueryResponse_WidgetResponse)
+	if !ok {
+		that2, ok := that.(AIAssistantQueryResponse_WidgetResponse)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.WidgetResponse.Equal(that1.WidgetResponse) {
+		return false
+	}
+	return true
+}
+func (this *AIAssistantQueryFeedbackRequest) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*AIAssistantQueryFeedbackRequest)
+	if !ok {
+		that2, ok := that.(AIAssistantQueryFeedbackRequest)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Namespace != that1.Namespace {
+		return false
+	}
+	if this.Query != that1.Query {
+		return false
+	}
+	if this.QueryId != that1.QueryId {
+		return false
+	}
+	if that1.FeedbackChoice == nil {
+		if this.FeedbackChoice != nil {
+			return false
+		}
+	} else if this.FeedbackChoice == nil {
+		return false
+	} else if !this.FeedbackChoice.Equal(that1.FeedbackChoice) {
+		return false
+	}
+	if this.Comment != that1.Comment {
+		return false
+	}
+	return true
+}
+func (this *AIAssistantQueryFeedbackRequest_PositiveFeedback) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*AIAssistantQueryFeedbackRequest_PositiveFeedback)
+	if !ok {
+		that2, ok := that.(AIAssistantQueryFeedbackRequest_PositiveFeedback)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.PositiveFeedback.Equal(that1.PositiveFeedback) {
+		return false
+	}
+	return true
+}
+func (this *AIAssistantQueryFeedbackRequest_NegativeFeedback) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*AIAssistantQueryFeedbackRequest_NegativeFeedback)
+	if !ok {
+		that2, ok := that.(AIAssistantQueryFeedbackRequest_NegativeFeedback)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.NegativeFeedback.Equal(that1.NegativeFeedback) {
+		return false
+	}
+	return true
+}
+func (this *NegativeFeedbackDetails) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*NegativeFeedbackDetails)
+	if !ok {
+		that2, ok := that.(NegativeFeedbackDetails)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if len(this.Remarks) != len(that1.Remarks) {
+		return false
+	}
+	for i := range this.Remarks {
+		if this.Remarks[i] != that1.Remarks[i] {
+			return false
+		}
+	}
+	return true
+}
 func (this *AIAssistantQueryRequest) GoString() string {
 	if this == nil {
 		return "nil"
@@ -477,12 +954,14 @@ func (this *AIAssistantQueryResponse) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 9)
+	s := make([]string, 0, 12)
 	s = append(s, "&ai_assistant.AIAssistantQueryResponse{")
 	s = append(s, "CurrentQuery: "+fmt.Sprintf("%#v", this.CurrentQuery)+",\n")
 	if this.ResponseChoice != nil {
 		s = append(s, "ResponseChoice: "+fmt.Sprintf("%#v", this.ResponseChoice)+",\n")
 	}
+	s = append(s, "QueryId: "+fmt.Sprintf("%#v", this.QueryId)+",\n")
+	s = append(s, "FollowUpQueries: "+fmt.Sprintf("%#v", this.FollowUpQueries)+",\n")
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
@@ -518,6 +997,56 @@ func (this *AIAssistantQueryResponse_SiteAnalysisResponse) GoString() string {
 		`SiteAnalysisResponse:` + fmt.Sprintf("%#v", this.SiteAnalysisResponse) + `}`}, ", ")
 	return s
 }
+func (this *AIAssistantQueryResponse_WidgetResponse) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ai_assistant.AIAssistantQueryResponse_WidgetResponse{` +
+		`WidgetResponse:` + fmt.Sprintf("%#v", this.WidgetResponse) + `}`}, ", ")
+	return s
+}
+func (this *AIAssistantQueryFeedbackRequest) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 10)
+	s = append(s, "&ai_assistant.AIAssistantQueryFeedbackRequest{")
+	s = append(s, "Namespace: "+fmt.Sprintf("%#v", this.Namespace)+",\n")
+	s = append(s, "Query: "+fmt.Sprintf("%#v", this.Query)+",\n")
+	s = append(s, "QueryId: "+fmt.Sprintf("%#v", this.QueryId)+",\n")
+	if this.FeedbackChoice != nil {
+		s = append(s, "FeedbackChoice: "+fmt.Sprintf("%#v", this.FeedbackChoice)+",\n")
+	}
+	s = append(s, "Comment: "+fmt.Sprintf("%#v", this.Comment)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *AIAssistantQueryFeedbackRequest_PositiveFeedback) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ai_assistant.AIAssistantQueryFeedbackRequest_PositiveFeedback{` +
+		`PositiveFeedback:` + fmt.Sprintf("%#v", this.PositiveFeedback) + `}`}, ", ")
+	return s
+}
+func (this *AIAssistantQueryFeedbackRequest_NegativeFeedback) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ai_assistant.AIAssistantQueryFeedbackRequest_NegativeFeedback{` +
+		`NegativeFeedback:` + fmt.Sprintf("%#v", this.NegativeFeedback) + `}`}, ", ")
+	return s
+}
+func (this *NegativeFeedbackDetails) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 5)
+	s = append(s, "&ai_assistant.NegativeFeedbackDetails{")
+	s = append(s, "Remarks: "+fmt.Sprintf("%#v", this.Remarks)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
 func valueToGoStringPublicCustomapi(v interface{}, typ string) string {
 	rv := reflect.ValueOf(v)
 	if rv.IsNil() {
@@ -544,6 +1073,11 @@ type SahayaAPIClient interface {
 	// x-displayName: "AI Assistant Query"
 	// Enable service by returning service account details
 	AIAssistantQuery(ctx context.Context, in *AIAssistantQueryRequest, opts ...grpc.CallOption) (*AIAssistantQueryResponse, error)
+	// Feedback of AI Assistant Query
+	//
+	// x-displayName: "Feedback of AI Assistant Query"
+	// Enable service by returning service account details
+	AIAssistantFeedback(ctx context.Context, in *AIAssistantQueryFeedbackRequest, opts ...grpc.CallOption) (*schema.Empty, error)
 }
 
 type sahayaAPIClient struct {
@@ -563,6 +1097,15 @@ func (c *sahayaAPIClient) AIAssistantQuery(ctx context.Context, in *AIAssistantQ
 	return out, nil
 }
 
+func (c *sahayaAPIClient) AIAssistantFeedback(ctx context.Context, in *AIAssistantQueryFeedbackRequest, opts ...grpc.CallOption) (*schema.Empty, error) {
+	out := new(schema.Empty)
+	err := c.cc.Invoke(ctx, "/ves.io.schema.ai_assistant.SahayaAPI/AIAssistantFeedback", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // SahayaAPIServer is the server API for SahayaAPI service.
 type SahayaAPIServer interface {
 	// AI Assistant Query
@@ -570,6 +1113,11 @@ type SahayaAPIServer interface {
 	// x-displayName: "AI Assistant Query"
 	// Enable service by returning service account details
 	AIAssistantQuery(context.Context, *AIAssistantQueryRequest) (*AIAssistantQueryResponse, error)
+	// Feedback of AI Assistant Query
+	//
+	// x-displayName: "Feedback of AI Assistant Query"
+	// Enable service by returning service account details
+	AIAssistantFeedback(context.Context, *AIAssistantQueryFeedbackRequest) (*schema.Empty, error)
 }
 
 // UnimplementedSahayaAPIServer can be embedded to have forward compatible implementations.
@@ -578,6 +1126,9 @@ type UnimplementedSahayaAPIServer struct {
 
 func (*UnimplementedSahayaAPIServer) AIAssistantQuery(ctx context.Context, req *AIAssistantQueryRequest) (*AIAssistantQueryResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AIAssistantQuery not implemented")
+}
+func (*UnimplementedSahayaAPIServer) AIAssistantFeedback(ctx context.Context, req *AIAssistantQueryFeedbackRequest) (*schema.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method AIAssistantFeedback not implemented")
 }
 
 func RegisterSahayaAPIServer(s *grpc.Server, srv SahayaAPIServer) {
@@ -602,6 +1153,24 @@ func _SahayaAPI_AIAssistantQuery_Handler(srv interface{}, ctx context.Context, d
 	return interceptor(ctx, in, info, handler)
 }
 
+func _SahayaAPI_AIAssistantFeedback_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AIAssistantQueryFeedbackRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SahayaAPIServer).AIAssistantFeedback(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/ves.io.schema.ai_assistant.SahayaAPI/AIAssistantFeedback",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SahayaAPIServer).AIAssistantFeedback(ctx, req.(*AIAssistantQueryFeedbackRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 var _SahayaAPI_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "ves.io.schema.ai_assistant.SahayaAPI",
 	HandlerType: (*SahayaAPIServer)(nil),
@@ -609,6 +1178,10 @@ var _SahayaAPI_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "AIAssistantQuery",
 			Handler:    _SahayaAPI_AIAssistantQuery_Handler,
+		},
+		{
+			MethodName: "AIAssistantFeedback",
+			Handler:    _SahayaAPI_AIAssistantFeedback_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
@@ -680,6 +1253,22 @@ func (m *AIAssistantQueryResponse) MarshalToSizedBuffer(dAtA []byte) (int, error
 				return 0, err
 			}
 		}
+	}
+	if len(m.FollowUpQueries) > 0 {
+		for iNdEx := len(m.FollowUpQueries) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.FollowUpQueries[iNdEx])
+			copy(dAtA[i:], m.FollowUpQueries[iNdEx])
+			i = encodeVarintPublicCustomapi(dAtA, i, uint64(len(m.FollowUpQueries[iNdEx])))
+			i--
+			dAtA[i] = 0x42
+		}
+	}
+	if len(m.QueryId) > 0 {
+		i -= len(m.QueryId)
+		copy(dAtA[i:], m.QueryId)
+		i = encodeVarintPublicCustomapi(dAtA, i, uint64(len(m.QueryId)))
+		i--
+		dAtA[i] = 0x3a
 	}
 	if len(m.CurrentQuery) > 0 {
 		i -= len(m.CurrentQuery)
@@ -775,6 +1364,170 @@ func (m *AIAssistantQueryResponse_SiteAnalysisResponse) MarshalToSizedBuffer(dAt
 	}
 	return len(dAtA) - i, nil
 }
+func (m *AIAssistantQueryResponse_WidgetResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *AIAssistantQueryResponse_WidgetResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.WidgetResponse != nil {
+		{
+			size, err := m.WidgetResponse.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintPublicCustomapi(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x4a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *AIAssistantQueryFeedbackRequest) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *AIAssistantQueryFeedbackRequest) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *AIAssistantQueryFeedbackRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Comment) > 0 {
+		i -= len(m.Comment)
+		copy(dAtA[i:], m.Comment)
+		i = encodeVarintPublicCustomapi(dAtA, i, uint64(len(m.Comment)))
+		i--
+		dAtA[i] = 0x3a
+	}
+	if m.FeedbackChoice != nil {
+		{
+			size := m.FeedbackChoice.Size()
+			i -= size
+			if _, err := m.FeedbackChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if len(m.QueryId) > 0 {
+		i -= len(m.QueryId)
+		copy(dAtA[i:], m.QueryId)
+		i = encodeVarintPublicCustomapi(dAtA, i, uint64(len(m.QueryId)))
+		i--
+		dAtA[i] = 0x1a
+	}
+	if len(m.Query) > 0 {
+		i -= len(m.Query)
+		copy(dAtA[i:], m.Query)
+		i = encodeVarintPublicCustomapi(dAtA, i, uint64(len(m.Query)))
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.Namespace) > 0 {
+		i -= len(m.Namespace)
+		copy(dAtA[i:], m.Namespace)
+		i = encodeVarintPublicCustomapi(dAtA, i, uint64(len(m.Namespace)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *AIAssistantQueryFeedbackRequest_PositiveFeedback) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *AIAssistantQueryFeedbackRequest_PositiveFeedback) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.PositiveFeedback != nil {
+		{
+			size, err := m.PositiveFeedback.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintPublicCustomapi(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x2a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *AIAssistantQueryFeedbackRequest_NegativeFeedback) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *AIAssistantQueryFeedbackRequest_NegativeFeedback) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.NegativeFeedback != nil {
+		{
+			size, err := m.NegativeFeedback.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintPublicCustomapi(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x32
+	}
+	return len(dAtA) - i, nil
+}
+func (m *NegativeFeedbackDetails) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *NegativeFeedbackDetails) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *NegativeFeedbackDetails) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Remarks) > 0 {
+		dAtA9 := make([]byte, len(m.Remarks)*10)
+		var j8 int
+		for _, num := range m.Remarks {
+			for num >= 1<<7 {
+				dAtA9[j8] = uint8(uint64(num)&0x7f | 0x80)
+				num >>= 7
+				j8++
+			}
+			dAtA9[j8] = uint8(num)
+			j8++
+		}
+		i -= j8
+		copy(dAtA[i:], dAtA9[:j8])
+		i = encodeVarintPublicCustomapi(dAtA, i, uint64(j8))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
 func encodeVarintPublicCustomapi(dAtA []byte, offset int, v uint64) int {
 	offset -= sovPublicCustomapi(v)
 	base := offset
@@ -815,6 +1568,16 @@ func (m *AIAssistantQueryResponse) Size() (n int) {
 	}
 	if m.ResponseChoice != nil {
 		n += m.ResponseChoice.Size()
+	}
+	l = len(m.QueryId)
+	if l > 0 {
+		n += 1 + l + sovPublicCustomapi(uint64(l))
+	}
+	if len(m.FollowUpQueries) > 0 {
+		for _, s := range m.FollowUpQueries {
+			l = len(s)
+			n += 1 + l + sovPublicCustomapi(uint64(l))
+		}
 	}
 	return n
 }
@@ -867,6 +1630,85 @@ func (m *AIAssistantQueryResponse_SiteAnalysisResponse) Size() (n int) {
 	}
 	return n
 }
+func (m *AIAssistantQueryResponse_WidgetResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.WidgetResponse != nil {
+		l = m.WidgetResponse.Size()
+		n += 1 + l + sovPublicCustomapi(uint64(l))
+	}
+	return n
+}
+func (m *AIAssistantQueryFeedbackRequest) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Namespace)
+	if l > 0 {
+		n += 1 + l + sovPublicCustomapi(uint64(l))
+	}
+	l = len(m.Query)
+	if l > 0 {
+		n += 1 + l + sovPublicCustomapi(uint64(l))
+	}
+	l = len(m.QueryId)
+	if l > 0 {
+		n += 1 + l + sovPublicCustomapi(uint64(l))
+	}
+	if m.FeedbackChoice != nil {
+		n += m.FeedbackChoice.Size()
+	}
+	l = len(m.Comment)
+	if l > 0 {
+		n += 1 + l + sovPublicCustomapi(uint64(l))
+	}
+	return n
+}
+
+func (m *AIAssistantQueryFeedbackRequest_PositiveFeedback) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.PositiveFeedback != nil {
+		l = m.PositiveFeedback.Size()
+		n += 1 + l + sovPublicCustomapi(uint64(l))
+	}
+	return n
+}
+func (m *AIAssistantQueryFeedbackRequest_NegativeFeedback) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.NegativeFeedback != nil {
+		l = m.NegativeFeedback.Size()
+		n += 1 + l + sovPublicCustomapi(uint64(l))
+	}
+	return n
+}
+func (m *NegativeFeedbackDetails) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if len(m.Remarks) > 0 {
+		l = 0
+		for _, e := range m.Remarks {
+			l += sovPublicCustomapi(uint64(e))
+		}
+		n += 1 + sovPublicCustomapi(uint64(l)) + l
+	}
+	return n
+}
 
 func sovPublicCustomapi(x uint64) (n int) {
 	return (math_bits.Len64(x|1) + 6) / 7
@@ -892,6 +1734,8 @@ func (this *AIAssistantQueryResponse) String() string {
 	s := strings.Join([]string{`&AIAssistantQueryResponse{`,
 		`CurrentQuery:` + fmt.Sprintf("%v", this.CurrentQuery) + `,`,
 		`ResponseChoice:` + fmt.Sprintf("%v", this.ResponseChoice) + `,`,
+		`QueryId:` + fmt.Sprintf("%v", this.QueryId) + `,`,
+		`FollowUpQueries:` + fmt.Sprintf("%v", this.FollowUpQueries) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -932,6 +1776,60 @@ func (this *AIAssistantQueryResponse_SiteAnalysisResponse) String() string {
 	}
 	s := strings.Join([]string{`&AIAssistantQueryResponse_SiteAnalysisResponse{`,
 		`SiteAnalysisResponse:` + strings.Replace(fmt.Sprintf("%v", this.SiteAnalysisResponse), "SiteAnalysisResponse", "site_analysis.SiteAnalysisResponse", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *AIAssistantQueryResponse_WidgetResponse) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&AIAssistantQueryResponse_WidgetResponse{`,
+		`WidgetResponse:` + strings.Replace(fmt.Sprintf("%v", this.WidgetResponse), "WidgetResponse", "widget.WidgetResponse", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *AIAssistantQueryFeedbackRequest) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&AIAssistantQueryFeedbackRequest{`,
+		`Namespace:` + fmt.Sprintf("%v", this.Namespace) + `,`,
+		`Query:` + fmt.Sprintf("%v", this.Query) + `,`,
+		`QueryId:` + fmt.Sprintf("%v", this.QueryId) + `,`,
+		`FeedbackChoice:` + fmt.Sprintf("%v", this.FeedbackChoice) + `,`,
+		`Comment:` + fmt.Sprintf("%v", this.Comment) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *AIAssistantQueryFeedbackRequest_PositiveFeedback) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&AIAssistantQueryFeedbackRequest_PositiveFeedback{`,
+		`PositiveFeedback:` + strings.Replace(fmt.Sprintf("%v", this.PositiveFeedback), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *AIAssistantQueryFeedbackRequest_NegativeFeedback) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&AIAssistantQueryFeedbackRequest_NegativeFeedback{`,
+		`NegativeFeedback:` + strings.Replace(fmt.Sprintf("%v", this.NegativeFeedback), "NegativeFeedbackDetails", "NegativeFeedbackDetails", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *NegativeFeedbackDetails) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&NegativeFeedbackDetails{`,
+		`Remarks:` + fmt.Sprintf("%v", this.Remarks) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -1262,6 +2160,478 @@ func (m *AIAssistantQueryResponse) Unmarshal(dAtA []byte) error {
 			}
 			m.ResponseChoice = &AIAssistantQueryResponse_SiteAnalysisResponse{v}
 			iNdEx = postIndex
+		case 7:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field QueryId", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.QueryId = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 8:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field FollowUpQueries", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.FollowUpQueries = append(m.FollowUpQueries, string(dAtA[iNdEx:postIndex]))
+			iNdEx = postIndex
+		case 9:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field WidgetResponse", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &widget.WidgetResponse{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ResponseChoice = &AIAssistantQueryResponse_WidgetResponse{v}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipPublicCustomapi(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *AIAssistantQueryFeedbackRequest) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowPublicCustomapi
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: AIAssistantQueryFeedbackRequest: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: AIAssistantQueryFeedbackRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Namespace", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Namespace = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Query", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Query = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field QueryId", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.QueryId = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field PositiveFeedback", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.FeedbackChoice = &AIAssistantQueryFeedbackRequest_PositiveFeedback{v}
+			iNdEx = postIndex
+		case 6:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field NegativeFeedback", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &NegativeFeedbackDetails{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.FeedbackChoice = &AIAssistantQueryFeedbackRequest_NegativeFeedback{v}
+			iNdEx = postIndex
+		case 7:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Comment", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Comment = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipPublicCustomapi(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *NegativeFeedbackDetails) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowPublicCustomapi
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: NegativeFeedbackDetails: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: NegativeFeedbackDetails: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType == 0 {
+				var v NegativeFeedbackType
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return ErrIntOverflowPublicCustomapi
+					}
+					if iNdEx >= l {
+						return io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					v |= NegativeFeedbackType(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				m.Remarks = append(m.Remarks, v)
+			} else if wireType == 2 {
+				var packedLen int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return ErrIntOverflowPublicCustomapi
+					}
+					if iNdEx >= l {
+						return io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					packedLen |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				if packedLen < 0 {
+					return ErrInvalidLengthPublicCustomapi
+				}
+				postIndex := iNdEx + packedLen
+				if postIndex < 0 {
+					return ErrInvalidLengthPublicCustomapi
+				}
+				if postIndex > l {
+					return io.ErrUnexpectedEOF
+				}
+				var elementCount int
+				if elementCount != 0 && len(m.Remarks) == 0 {
+					m.Remarks = make([]NegativeFeedbackType, 0, elementCount)
+				}
+				for iNdEx < postIndex {
+					var v NegativeFeedbackType
+					for shift := uint(0); ; shift += 7 {
+						if shift >= 64 {
+							return ErrIntOverflowPublicCustomapi
+						}
+						if iNdEx >= l {
+							return io.ErrUnexpectedEOF
+						}
+						b := dAtA[iNdEx]
+						iNdEx++
+						v |= NegativeFeedbackType(b&0x7F) << shift
+						if b < 0x80 {
+							break
+						}
+					}
+					m.Remarks = append(m.Remarks, v)
+				}
+			} else {
+				return fmt.Errorf("proto: wrong wireType = %d for field Remarks", wireType)
+			}
 		default:
 			iNdEx = preIndex
 			skippy, err := skipPublicCustomapi(dAtA[iNdEx:])

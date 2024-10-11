@@ -138,6 +138,7 @@ func (c *CustomAPIRestClient) doRPCAllocateIP(ctx context.Context, callOpts *ser
 		hReq = newReq
 		q := hReq.URL.Query()
 		_ = q
+		q.Add("use_v6_range", fmt.Sprintf("%v", req.UseV6Range))
 
 		hReq.URL.RawQuery += q.Encode()
 	case "delete":
@@ -630,7 +631,16 @@ var CustomAPISwaggerJSON string = `{
             "description": "This is the input message of the 'AllocateIP' RPC",
             "title": "AllocateIP Request",
             "x-displayname": "AllocateIP Request",
-            "x-ves-proto-message": "ves.io.schema.gia.AllocateIPRequest"
+            "x-ves-proto-message": "ves.io.schema.gia.AllocateIPRequest",
+            "properties": {
+                "use_v6_range": {
+                    "type": "boolean",
+                    "description": " Optional: If not specified, v4 range for this tenant will be used\n\nExample: - false-",
+                    "title": "use_v6_range",
+                    "format": "boolean",
+                    "x-displayname": "Use IPv6 Range"
+                }
+            }
         },
         "giaAllocateIPResponse": {
             "type": "object",

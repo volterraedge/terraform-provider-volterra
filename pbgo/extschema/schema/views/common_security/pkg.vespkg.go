@@ -9,6 +9,12 @@ import (
 )
 
 func initializeValidatorRegistry(vr map[string]db.Validator) {
+	vr["ves.io.schema.views.common_security.DeleteDoSAutoMitigationRuleReq"] = DeleteDoSAutoMitigationRuleReqValidator()
+	vr["ves.io.schema.views.common_security.DeleteDoSAutoMitigationRuleRsp"] = DeleteDoSAutoMitigationRuleRspValidator()
+	vr["ves.io.schema.views.common_security.GetDoSAutoMitigationRulesReq"] = GetDoSAutoMitigationRulesReqValidator()
+	vr["ves.io.schema.views.common_security.GetDoSAutoMitigationRulesRsp"] = GetDoSAutoMitigationRulesRspValidator()
+	vr["ves.io.schema.views.common_security.GetSecurityConfigRsp"] = GetSecurityConfigRspValidator()
+
 	vr["ves.io.schema.views.common_security.AppEndpointType"] = AppEndpointTypeValidator()
 	vr["ves.io.schema.views.common_security.BotAdvancedMobileSDKConfigType"] = BotAdvancedMobileSDKConfigTypeValidator()
 	vr["ves.io.schema.views.common_security.BotDefenseAdvancedPolicyType"] = BotDefenseAdvancedPolicyTypeValidator()

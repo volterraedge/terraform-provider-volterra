@@ -1,9 +1,9 @@
 ---
 
 page_title: "Volterra: volterra_site_state"
-
 description: "The volterra_site_state changes state of the site"
-----------------------------------------------------------------
+
+---
 
 Resource volterra_site_state
 ============================

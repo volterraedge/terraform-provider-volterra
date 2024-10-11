@@ -4031,14 +4031,14 @@ var APISwaggerJSON string = `{
             "properties": {
                 "route_table_id": {
                     "type": "string",
-                    "description": " Route table ID in the format /\u003cresource-group-name\u003e/\u003croute-name\u003e\n\nExample: - \"/rg-1/rtb-12345678901234567\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n  ves.io.schema.rules.string.pattern: ^\\\\/[-\\\\w\\\\._\\\\(\\\\)]+\\\\/(rtb-)[a-zA-Z0-9-]{0,76}[a-zA-Z0-9]$\n",
+                    "description": " Route table ID in the format /\u003cresource-group-name\u003e/\u003croute-table-name\u003e\n\nExample: - \"/rg-1/rtb-12345678901234567\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n  ves.io.schema.rules.string.pattern: ^\\\\/[-\\\\w\\\\._\\\\(\\\\)]+\\\\/[a-zA-Z0-9][a-zA-Z0-9-._]+[a-zA-Z0-9_]$\n",
                     "title": "Route table ID",
                     "maxLength": 256,
                     "x-displayname": "Route table ID",
                     "x-ves-example": "/rg-1/rtb-12345678901234567",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.string.max_len": "256",
-                        "ves.io.schema.rules.string.pattern": "^\\\\/[-\\\\w\\\\._\\\\(\\\\)]+\\\\/(rtb-)[a-zA-Z0-9-]{0,76}[a-zA-Z0-9]$"
+                        "ves.io.schema.rules.string.pattern": "^\\\\/[-\\\\w\\\\._\\\\(\\\\)]+\\\\/[a-zA-Z0-9][a-zA-Z0-9-._]+[a-zA-Z0-9_]$"
                     }
                 },
                 "static_routes": {
@@ -6623,7 +6623,7 @@ var APISwaggerJSON string = `{
             "type": "object",
             "description": "Specify how worker nodes within a site will be upgraded.",
             "title": "Node by Node Upgrade",
-            "x-displayname": "Node by Node Upgrade [BETA]",
+            "x-displayname": "Node by Node Upgrade",
             "x-ves-displayorder": "1",
             "x-ves-oneof-field-kubernetes_upgrade_drain_enable_choice": "[\"disable_upgrade_drain\",\"enable_upgrade_drain\"]",
             "x-ves-proto-message": "ves.io.schema.views.KubernetesUpgradeDrain",
@@ -6963,6 +6963,12 @@ var APISwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.string.max_len": "256"
                     }
+                },
+                "admin_password": {
+                    "description": "Admin password user for accessing site through serial console .",
+                    "title": "Admin Password",
+                    "$ref": "#/definitions/schemaSecretType",
+                    "x-displayname": "Admin Password"
                 },
                 "alternate_region": {
                     "type": "string",

@@ -6,6 +6,7 @@ import (
 	"os"
 	"testing"
 
+	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 	ves_io_schema_ap "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/alert_policy"
 	ves_io_schema_ap_receiver "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/alert_receiver"
@@ -15,12 +16,13 @@ import (
 	ves_io_schema_policer "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/policer"
 	ves_io_schema_pp "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/protocol_policer"
 	ves_io_schema_sp "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/service_policy"
+	ves_io_schema_tenant "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/tenant"
 )
 
 // TestNamespaceCustomAPI namespace custom api test
 func TestNamespaceCustomAPI(t *testing.T) {
 	name := generateResourceName()
-	testURL, stopFunc, _ := createTestCustomAPIServer(t, []string{
+	testURL, stopFunc, f := createTestCustomAPIServer(t, []string{
 		ves_io_schema_sp.ObjectType,
 		ves_io_schema_np.ObjectType,
 		ves_io_schema_pp.ObjectType,
@@ -29,8 +31,13 @@ func TestNamespaceCustomAPI(t *testing.T) {
 		ves_io_schema_ns.ObjectType,
 		ves_io_schema_ap.ObjectType,
 		ves_io_schema_ap_receiver.ObjectType,
+		ves_io_schema_tenant.ObjectType,
 	})
 	defer stopFunc()
+	tenantName := "ves-io"
+	tenantObj := mkDBObjTenant(tenantName, uuid.New().String(), withAddonServices("f5xc-flow-collection", "f5xc-ipv6-standard", "f5xc-waap-standard"))
+	f.MustCreateEntry(tenantObj)
+
 	os.Setenv("VOLT_API_TEST", "true")
 	os.Setenv("VOLT_API_URL", testURL)
 	os.Setenv("TF_ACC", "true")

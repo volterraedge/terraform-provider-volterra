@@ -34,6 +34,7 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.app_firewall.MetricsRequest"] = MetricsRequestValidator()
 	vr["ves.io.schema.app_firewall.MetricsResponse"] = MetricsResponseValidator()
 
+	vr["ves.io.schema.app_firewall.AiRiskBasedBlocking"] = AiRiskBasedBlockingValidator()
 	vr["ves.io.schema.app_firewall.AllowedResponseCodes"] = AllowedResponseCodesValidator()
 	vr["ves.io.schema.app_firewall.AnonymizationConfiguration"] = AnonymizationConfigurationValidator()
 	vr["ves.io.schema.app_firewall.AnonymizationSetting"] = AnonymizationSettingValidator()
@@ -69,10 +70,12 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.app_firewall.API.Create"] = []string{
+		"spec.ai_risk_based_blocking",
 		"spec.use_loadbalancer_setting",
 	}
 
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.app_firewall.API.Replace"] = []string{
+		"spec.ai_risk_based_blocking",
 		"spec.use_loadbalancer_setting",
 	}
 

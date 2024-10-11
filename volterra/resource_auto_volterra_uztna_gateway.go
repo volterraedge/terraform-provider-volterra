@@ -60,14 +60,14 @@ func resourceVolterraUztnaGateway() *schema.Resource {
 				ForceNew: true,
 			},
 
-			"big_ip_ce_site": {
+			"big_ip_instance": {
 
 				Type:     schema.TypeSet,
 				Required: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 
-						"secure_mesh_site": {
+						"bigip_site": {
 
 							Type:     schema.TypeList,
 							Required: true,
@@ -98,41 +98,23 @@ func resourceVolterraUztnaGateway() *schema.Resource {
 				},
 			},
 
-			"private_ip": {
+			"listeners": {
 
-				Type:     schema.TypeSet,
+				Type:     schema.TypeList,
 				Required: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 
 						"ipv4": {
 
-							Type:     schema.TypeSet,
+							Type:     schema.TypeString,
 							Optional: true,
-							Elem: &schema.Resource{
-								Schema: map[string]*schema.Schema{
-
-									"addr": {
-										Type:     schema.TypeString,
-										Optional: true,
-									},
-								},
-							},
 						},
 
 						"ipv6": {
 
-							Type:     schema.TypeSet,
+							Type:     schema.TypeString,
 							Optional: true,
-							Elem: &schema.Resource{
-								Schema: map[string]*schema.Schema{
-
-									"addr": {
-										Type:     schema.TypeString,
-										Optional: true,
-									},
-								},
-							},
 						},
 					},
 				},
@@ -194,41 +176,41 @@ func resourceVolterraUztnaGatewayCreate(d *schema.ResourceData, meta interface{}
 			v.(string)
 	}
 
-	//big_ip_ce_site
-	if v, ok := d.GetOk("big_ip_ce_site"); ok && !isIntfNil(v) {
+	//big_ip_instance
+	if v, ok := d.GetOk("big_ip_instance"); ok && !isIntfNil(v) {
 
 		sl := v.(*schema.Set).List()
-		bigIpCeSite := &ves_io_schema_uztna_uztna_gateway.BigIpAccessSiteList{}
-		createSpec.BigIpCeSite = bigIpCeSite
+		bigIpInstance := &ves_io_schema_uztna_uztna_gateway.BigIpAccessSiteList{}
+		createSpec.BigIpInstance = bigIpInstance
 		for _, set := range sl {
-			bigIpCeSiteMapStrToI := set.(map[string]interface{})
+			bigIpInstanceMapStrToI := set.(map[string]interface{})
 
-			if v, ok := bigIpCeSiteMapStrToI["secure_mesh_site"]; ok && !isIntfNil(v) {
+			if v, ok := bigIpInstanceMapStrToI["bigip_site"]; ok && !isIntfNil(v) {
 
 				sl := v.([]interface{})
-				secureMeshSiteInt := make([]*ves_io_schema.ObjectRefType, len(sl))
-				bigIpCeSite.SecureMeshSite = secureMeshSiteInt
+				bigipSiteInt := make([]*ves_io_schema.ObjectRefType, len(sl))
+				bigIpInstance.BigipSite = bigipSiteInt
 				for i, ps := range sl {
 
-					smsMapToStrVal := ps.(map[string]interface{})
-					secureMeshSiteInt[i] = &ves_io_schema.ObjectRefType{}
+					bsMapToStrVal := ps.(map[string]interface{})
+					bigipSiteInt[i] = &ves_io_schema.ObjectRefType{}
 
-					secureMeshSiteInt[i].Kind = "securemesh_site"
+					bigipSiteInt[i].Kind = "bigip_instance_site"
 
-					if v, ok := smsMapToStrVal["name"]; ok && !isIntfNil(v) {
-						secureMeshSiteInt[i].Name = v.(string)
+					if v, ok := bsMapToStrVal["name"]; ok && !isIntfNil(v) {
+						bigipSiteInt[i].Name = v.(string)
 					}
 
-					if v, ok := smsMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-						secureMeshSiteInt[i].Namespace = v.(string)
+					if v, ok := bsMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+						bigipSiteInt[i].Namespace = v.(string)
 					}
 
-					if v, ok := smsMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-						secureMeshSiteInt[i].Tenant = v.(string)
+					if v, ok := bsMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+						bigipSiteInt[i].Tenant = v.(string)
 					}
 
-					if v, ok := smsMapToStrVal["uid"]; ok && !isIntfNil(v) {
-						secureMeshSiteInt[i].Uid = v.(string)
+					if v, ok := bsMapToStrVal["uid"]; ok && !isIntfNil(v) {
+						bigipSiteInt[i].Uid = v.(string)
 					}
 
 				}
@@ -239,56 +221,37 @@ func resourceVolterraUztnaGatewayCreate(d *schema.ResourceData, meta interface{}
 
 	}
 
-	//private_ip
-	if v, ok := d.GetOk("private_ip"); ok && !isIntfNil(v) {
+	//listeners
+	if v, ok := d.GetOk("listeners"); ok && !isIntfNil(v) {
 
-		sl := v.(*schema.Set).List()
-		privateIp := &ves_io_schema.IpAddressType{}
-		createSpec.PrivateIp = privateIp
-		for _, set := range sl {
-			privateIpMapStrToI := set.(map[string]interface{})
+		sl := v.([]interface{})
+		listeners := make([]*ves_io_schema_uztna_uztna_gateway.Listeners, len(sl))
+		createSpec.Listeners = listeners
+		for i, set := range sl {
+			listeners[i] = &ves_io_schema_uztna_uztna_gateway.Listeners{}
+			listenersMapStrToI := set.(map[string]interface{})
 
-			verTypeFound := false
+			flowTypeTypeFound := false
 
-			if v, ok := privateIpMapStrToI["ipv4"]; ok && !isIntfNil(v) && !verTypeFound {
+			if v, ok := listenersMapStrToI["ipv4"]; ok && !isIntfNil(v) && !flowTypeTypeFound {
 
-				verTypeFound = true
-				verInt := &ves_io_schema.IpAddressType_Ipv4{}
-				verInt.Ipv4 = &ves_io_schema.Ipv4AddressType{}
-				privateIp.Ver = verInt
+				flowTypeTypeFound = true
+				flowTypeInt := &ves_io_schema_uztna_uztna_gateway.Listeners_Ipv4{}
 
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
+				listeners[i].FlowType = flowTypeInt
 
-					if v, ok := cs["addr"]; ok && !isIntfNil(v) {
-
-						verInt.Ipv4.Addr = v.(string)
-
-					}
-
-				}
+				flowTypeInt.Ipv4 = v.(string)
 
 			}
 
-			if v, ok := privateIpMapStrToI["ipv6"]; ok && !isIntfNil(v) && !verTypeFound {
+			if v, ok := listenersMapStrToI["ipv6"]; ok && !isIntfNil(v) && !flowTypeTypeFound {
 
-				verTypeFound = true
-				verInt := &ves_io_schema.IpAddressType_Ipv6{}
-				verInt.Ipv6 = &ves_io_schema.Ipv6AddressType{}
-				privateIp.Ver = verInt
+				flowTypeTypeFound = true
+				flowTypeInt := &ves_io_schema_uztna_uztna_gateway.Listeners_Ipv6{}
 
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
+				listeners[i].FlowType = flowTypeInt
 
-					if v, ok := cs["addr"]; ok && !isIntfNil(v) {
-
-						verInt.Ipv6.Addr = v.(string)
-
-					}
-
-				}
+				flowTypeInt.Ipv6 = v.(string)
 
 			}
 
@@ -395,40 +358,40 @@ func resourceVolterraUztnaGatewayUpdate(d *schema.ResourceData, meta interface{}
 			v.(string)
 	}
 
-	if v, ok := d.GetOk("big_ip_ce_site"); ok && !isIntfNil(v) {
+	if v, ok := d.GetOk("big_ip_instance"); ok && !isIntfNil(v) {
 
 		sl := v.(*schema.Set).List()
-		bigIpCeSite := &ves_io_schema_uztna_uztna_gateway.BigIpAccessSiteList{}
-		updateSpec.BigIpCeSite = bigIpCeSite
+		bigIpInstance := &ves_io_schema_uztna_uztna_gateway.BigIpAccessSiteList{}
+		updateSpec.BigIpInstance = bigIpInstance
 		for _, set := range sl {
-			bigIpCeSiteMapStrToI := set.(map[string]interface{})
+			bigIpInstanceMapStrToI := set.(map[string]interface{})
 
-			if v, ok := bigIpCeSiteMapStrToI["secure_mesh_site"]; ok && !isIntfNil(v) {
+			if v, ok := bigIpInstanceMapStrToI["bigip_site"]; ok && !isIntfNil(v) {
 
 				sl := v.([]interface{})
-				secureMeshSiteInt := make([]*ves_io_schema.ObjectRefType, len(sl))
-				bigIpCeSite.SecureMeshSite = secureMeshSiteInt
+				bigipSiteInt := make([]*ves_io_schema.ObjectRefType, len(sl))
+				bigIpInstance.BigipSite = bigipSiteInt
 				for i, ps := range sl {
 
-					smsMapToStrVal := ps.(map[string]interface{})
-					secureMeshSiteInt[i] = &ves_io_schema.ObjectRefType{}
+					bsMapToStrVal := ps.(map[string]interface{})
+					bigipSiteInt[i] = &ves_io_schema.ObjectRefType{}
 
-					secureMeshSiteInt[i].Kind = "securemesh_site"
+					bigipSiteInt[i].Kind = "bigip_instance_site"
 
-					if v, ok := smsMapToStrVal["name"]; ok && !isIntfNil(v) {
-						secureMeshSiteInt[i].Name = v.(string)
+					if v, ok := bsMapToStrVal["name"]; ok && !isIntfNil(v) {
+						bigipSiteInt[i].Name = v.(string)
 					}
 
-					if v, ok := smsMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-						secureMeshSiteInt[i].Namespace = v.(string)
+					if v, ok := bsMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+						bigipSiteInt[i].Namespace = v.(string)
 					}
 
-					if v, ok := smsMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-						secureMeshSiteInt[i].Tenant = v.(string)
+					if v, ok := bsMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+						bigipSiteInt[i].Tenant = v.(string)
 					}
 
-					if v, ok := smsMapToStrVal["uid"]; ok && !isIntfNil(v) {
-						secureMeshSiteInt[i].Uid = v.(string)
+					if v, ok := bsMapToStrVal["uid"]; ok && !isIntfNil(v) {
+						bigipSiteInt[i].Uid = v.(string)
 					}
 
 				}
@@ -439,55 +402,36 @@ func resourceVolterraUztnaGatewayUpdate(d *schema.ResourceData, meta interface{}
 
 	}
 
-	if v, ok := d.GetOk("private_ip"); ok && !isIntfNil(v) {
+	if v, ok := d.GetOk("listeners"); ok && !isIntfNil(v) {
 
-		sl := v.(*schema.Set).List()
-		privateIp := &ves_io_schema.IpAddressType{}
-		updateSpec.PrivateIp = privateIp
-		for _, set := range sl {
-			privateIpMapStrToI := set.(map[string]interface{})
+		sl := v.([]interface{})
+		listeners := make([]*ves_io_schema_uztna_uztna_gateway.Listeners, len(sl))
+		updateSpec.Listeners = listeners
+		for i, set := range sl {
+			listeners[i] = &ves_io_schema_uztna_uztna_gateway.Listeners{}
+			listenersMapStrToI := set.(map[string]interface{})
 
-			verTypeFound := false
+			flowTypeTypeFound := false
 
-			if v, ok := privateIpMapStrToI["ipv4"]; ok && !isIntfNil(v) && !verTypeFound {
+			if v, ok := listenersMapStrToI["ipv4"]; ok && !isIntfNil(v) && !flowTypeTypeFound {
 
-				verTypeFound = true
-				verInt := &ves_io_schema.IpAddressType_Ipv4{}
-				verInt.Ipv4 = &ves_io_schema.Ipv4AddressType{}
-				privateIp.Ver = verInt
+				flowTypeTypeFound = true
+				flowTypeInt := &ves_io_schema_uztna_uztna_gateway.Listeners_Ipv4{}
 
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
+				listeners[i].FlowType = flowTypeInt
 
-					if v, ok := cs["addr"]; ok && !isIntfNil(v) {
-
-						verInt.Ipv4.Addr = v.(string)
-
-					}
-
-				}
+				flowTypeInt.Ipv4 = v.(string)
 
 			}
 
-			if v, ok := privateIpMapStrToI["ipv6"]; ok && !isIntfNil(v) && !verTypeFound {
+			if v, ok := listenersMapStrToI["ipv6"]; ok && !isIntfNil(v) && !flowTypeTypeFound {
 
-				verTypeFound = true
-				verInt := &ves_io_schema.IpAddressType_Ipv6{}
-				verInt.Ipv6 = &ves_io_schema.Ipv6AddressType{}
-				privateIp.Ver = verInt
+				flowTypeTypeFound = true
+				flowTypeInt := &ves_io_schema_uztna_uztna_gateway.Listeners_Ipv6{}
 
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
+				listeners[i].FlowType = flowTypeInt
 
-					if v, ok := cs["addr"]; ok && !isIntfNil(v) {
-
-						verInt.Ipv6.Addr = v.(string)
-
-					}
-
-				}
+				flowTypeInt.Ipv6 = v.(string)
 
 			}
 

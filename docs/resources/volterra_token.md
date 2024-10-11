@@ -1,9 +1,9 @@
 ---
 
 page_title: "Volterra: token"
-
 description: "The token allows CRUD of Token resource on Volterra SaaS"
------------------------------------------------------------------------
+
+---
 
 Resource volterra_token
 =======================

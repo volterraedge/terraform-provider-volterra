@@ -10560,6 +10560,15 @@ func (v *ValidateSiteStatusMetricsData) Validate(ctx context.Context, pm interfa
 
 	}
 
+	if fv, exists := v.FldValidators["unit"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("unit"))
+		if err := fv(ctx, m.GetUnit(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	return nil
 }
 

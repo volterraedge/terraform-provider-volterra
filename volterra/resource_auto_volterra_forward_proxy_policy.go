@@ -155,6 +155,16 @@ func resourceVolterraForwardProxyPolicy() *schema.Resource {
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
+									"ipv6_prefixes": {
+
+										Type: schema.TypeList,
+
+										Optional: true,
+										Elem: &schema.Schema{
+											Type: schema.TypeString,
+										},
+									},
+
 									"port_ranges": {
 										Type:     schema.TypeString,
 										Required: true,
@@ -164,7 +174,7 @@ func resourceVolterraForwardProxyPolicy() *schema.Resource {
 
 										Type: schema.TypeList,
 
-										Required: true,
+										Optional: true,
 										Elem: &schema.Schema{
 											Type: schema.TypeString,
 										},
@@ -288,6 +298,16 @@ func resourceVolterraForwardProxyPolicy() *schema.Resource {
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
+									"ipv6_prefixes": {
+
+										Type: schema.TypeList,
+
+										Optional: true,
+										Elem: &schema.Schema{
+											Type: schema.TypeString,
+										},
+									},
+
 									"port_ranges": {
 										Type:     schema.TypeString,
 										Required: true,
@@ -297,7 +317,7 @@ func resourceVolterraForwardProxyPolicy() *schema.Resource {
 
 										Type: schema.TypeList,
 
-										Required: true,
+										Optional: true,
 										Elem: &schema.Schema{
 											Type: schema.TypeString,
 										},
@@ -1165,6 +1185,14 @@ func resourceVolterraForwardProxyPolicyCreate(d *schema.ResourceData, meta inter
 					destList[i] = &ves_io_schema.L4DestType{}
 					destListMapStrToI := set.(map[string]interface{})
 
+					if w, ok := destListMapStrToI["ipv6_prefixes"]; ok && !isIntfNil(w) {
+						ls := make([]string, len(w.([]interface{})))
+						for i, v := range w.([]interface{}) {
+							ls[i] = v.(string)
+						}
+						destList[i].Ipv6Prefixes = ls
+					}
+
 					if w, ok := destListMapStrToI["port_ranges"]; ok && !isIntfNil(w) {
 						destList[i].PortRanges = w.(string)
 					}
@@ -1385,6 +1413,14 @@ func resourceVolterraForwardProxyPolicyCreate(d *schema.ResourceData, meta inter
 				for i, set := range sl {
 					destList[i] = &ves_io_schema.L4DestType{}
 					destListMapStrToI := set.(map[string]interface{})
+
+					if w, ok := destListMapStrToI["ipv6_prefixes"]; ok && !isIntfNil(w) {
+						ls := make([]string, len(w.([]interface{})))
+						for i, v := range w.([]interface{}) {
+							ls[i] = v.(string)
+						}
+						destList[i].Ipv6Prefixes = ls
+					}
 
 					if w, ok := destListMapStrToI["port_ranges"]; ok && !isIntfNil(w) {
 						destList[i].PortRanges = w.(string)
@@ -2576,6 +2612,14 @@ func resourceVolterraForwardProxyPolicyUpdate(d *schema.ResourceData, meta inter
 					destList[i] = &ves_io_schema.L4DestType{}
 					destListMapStrToI := set.(map[string]interface{})
 
+					if w, ok := destListMapStrToI["ipv6_prefixes"]; ok && !isIntfNil(w) {
+						ls := make([]string, len(w.([]interface{})))
+						for i, v := range w.([]interface{}) {
+							ls[i] = v.(string)
+						}
+						destList[i].Ipv6Prefixes = ls
+					}
+
 					if w, ok := destListMapStrToI["port_ranges"]; ok && !isIntfNil(w) {
 						destList[i].PortRanges = w.(string)
 					}
@@ -2796,6 +2840,14 @@ func resourceVolterraForwardProxyPolicyUpdate(d *schema.ResourceData, meta inter
 				for i, set := range sl {
 					destList[i] = &ves_io_schema.L4DestType{}
 					destListMapStrToI := set.(map[string]interface{})
+
+					if w, ok := destListMapStrToI["ipv6_prefixes"]; ok && !isIntfNil(w) {
+						ls := make([]string, len(w.([]interface{})))
+						for i, v := range w.([]interface{}) {
+							ls[i] = v.(string)
+						}
+						destList[i].Ipv6Prefixes = ls
+					}
 
 					if w, ok := destListMapStrToI["port_ranges"]; ok && !isIntfNil(w) {
 						destList[i].PortRanges = w.(string)

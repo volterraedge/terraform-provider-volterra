@@ -86,6 +86,17 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 
+	mdr.RPCSubscriptionFieldsRegistry["ves.io.schema.nfv_service.API.Create"] = []svcfw.SubscriptionField{
+		{
+			FieldPath:     "ves.io.schema.nfv_service.CreateRequest.spec.service_provider_choice.f5_big_ip_aws_service.nodes.mgmt_subnet_choice.mgmt_subnet.choice.subnet_param.ipv6",
+			AddonServices: []string{"f5xc-ipv6-standard"},
+		},
+		{
+			FieldPath:     "ves.io.schema.nfv_service.CreateRequest.spec.service_provider_choice.palo_alto_fw_service.service_nodes.nodes.mgmt_subnet_choice.mgmt_subnet.choice.subnet_param.ipv6",
+			AddonServices: []string{"f5xc-ipv6-standard"},
+		},
+	}
+
 	mdr.RPCDeprecatedRequestFieldsRegistry["ves.io.schema.nfv_service.API.Create"] = []string{
 		"spec.enabled_ssh_access.advertise_on_public",
 	}

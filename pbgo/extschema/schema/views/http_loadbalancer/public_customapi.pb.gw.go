@@ -20,6 +20,7 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/grpclog"
 	"google.golang.org/grpc/status"
+	"github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/common_security"
 )
 
 var _ codes.Code
@@ -175,7 +176,7 @@ func local_request_CustomAPI_GetSecurityConfig_0(ctx context.Context, marshaler 
 }
 
 func request_CustomAPI_GetDoSAutoMitigationRules_0(ctx context.Context, marshaler runtime.Marshaler, client CustomAPIClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq GetDoSAutoMitigationRulesReq
+	var protoReq common_security.GetDoSAutoMitigationRulesReq
 	var metadata runtime.ServerMetadata
 
 	var (
@@ -213,7 +214,7 @@ func request_CustomAPI_GetDoSAutoMitigationRules_0(ctx context.Context, marshale
 }
 
 func local_request_CustomAPI_GetDoSAutoMitigationRules_0(ctx context.Context, marshaler runtime.Marshaler, server CustomAPIServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq GetDoSAutoMitigationRulesReq
+	var protoReq common_security.GetDoSAutoMitigationRulesReq
 	var metadata runtime.ServerMetadata
 
 	var (
@@ -251,7 +252,7 @@ func local_request_CustomAPI_GetDoSAutoMitigationRules_0(ctx context.Context, ma
 }
 
 func request_CustomAPI_DeleteDoSAutoMitigationRule_0(ctx context.Context, marshaler runtime.Marshaler, client CustomAPIClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq DeleteDoSAutoMitigationRuleReq
+	var protoReq common_security.DeleteDoSAutoMitigationRuleReq
 	var metadata runtime.ServerMetadata
 
 	var (
@@ -300,7 +301,7 @@ func request_CustomAPI_DeleteDoSAutoMitigationRule_0(ctx context.Context, marsha
 }
 
 func local_request_CustomAPI_DeleteDoSAutoMitigationRule_0(ctx context.Context, marshaler runtime.Marshaler, server CustomAPIServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq DeleteDoSAutoMitigationRuleReq
+	var protoReq common_security.DeleteDoSAutoMitigationRuleReq
 	var metadata runtime.ServerMetadata
 
 	var (

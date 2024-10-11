@@ -54,11 +54,15 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 
 	vr["ves.io.schema.cloud_connect.AWSAttachmentsListStatusType"] = AWSAttachmentsListStatusTypeValidator()
 	vr["ves.io.schema.cloud_connect.AWSAttachmentsStatusType"] = AWSAttachmentsStatusTypeValidator()
+	vr["ves.io.schema.cloud_connect.AWSConnectAttachmentStatusType"] = AWSConnectAttachmentStatusTypeValidator()
+	vr["ves.io.schema.cloud_connect.AWSConnectPeerStatusType"] = AWSConnectPeerStatusTypeValidator()
 	vr["ves.io.schema.cloud_connect.AWSDefaultRoutesRouteTable"] = AWSDefaultRoutesRouteTableValidator()
 	vr["ves.io.schema.cloud_connect.AWSREType"] = AWSRETypeValidator()
 	vr["ves.io.schema.cloud_connect.AWSRouteTableListType"] = AWSRouteTableListTypeValidator()
 	vr["ves.io.schema.cloud_connect.AWSRouteTableType"] = AWSRouteTableTypeValidator()
 	vr["ves.io.schema.cloud_connect.AWSSubnetIDListType"] = AWSSubnetIDListTypeValidator()
+	vr["ves.io.schema.cloud_connect.AWSTGWResourceReference"] = AWSTGWResourceReferenceValidator()
+	vr["ves.io.schema.cloud_connect.AWSTGWRouteTableStatusType"] = AWSTGWRouteTableStatusTypeValidator()
 	vr["ves.io.schema.cloud_connect.AWSTGWSiteType"] = AWSTGWSiteTypeValidator()
 	vr["ves.io.schema.cloud_connect.AWSVPCAttachmentListType"] = AWSVPCAttachmentListTypeValidator()
 	vr["ves.io.schema.cloud_connect.AWSVPCAttachmentType"] = AWSVPCAttachmentTypeValidator()
@@ -109,6 +113,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.cloud_connect.API.Create"] = []string{
 		"spec.aws_re.peers.#",
 		"spec.aws_re.tgw",
+		"spec.aws_tgw_site.peers.#",
 		"spec.azure_vnet_site.cred",
 	}
 

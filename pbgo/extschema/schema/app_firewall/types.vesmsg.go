@@ -26,6 +26,191 @@ var (
 
 // augmented methods on protoc/std generated struct
 
+func (m *AiRiskBasedBlocking) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *AiRiskBasedBlocking) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *AiRiskBasedBlocking) DeepCopy() *AiRiskBasedBlocking {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &AiRiskBasedBlocking{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *AiRiskBasedBlocking) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *AiRiskBasedBlocking) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return AiRiskBasedBlockingValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateAiRiskBasedBlocking struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateAiRiskBasedBlocking) HighRiskActionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	var conv db.EnumConvFn
+	conv = func(v interface{}) int32 {
+		i := v.(RiskBasedBlockingAction)
+		return int32(i)
+	}
+	// RiskBasedBlockingAction_name is generated in .pb.go
+	validatorFn, err := db.NewEnumValidationRuleHandler(rules, RiskBasedBlockingAction_name, conv)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for high_risk_action")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateAiRiskBasedBlocking) MediumRiskActionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	var conv db.EnumConvFn
+	conv = func(v interface{}) int32 {
+		i := v.(RiskBasedBlockingAction)
+		return int32(i)
+	}
+	// RiskBasedBlockingAction_name is generated in .pb.go
+	validatorFn, err := db.NewEnumValidationRuleHandler(rules, RiskBasedBlockingAction_name, conv)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for medium_risk_action")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateAiRiskBasedBlocking) LowRiskActionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	var conv db.EnumConvFn
+	conv = func(v interface{}) int32 {
+		i := v.(RiskBasedBlockingAction)
+		return int32(i)
+	}
+	// RiskBasedBlockingAction_name is generated in .pb.go
+	validatorFn, err := db.NewEnumValidationRuleHandler(rules, RiskBasedBlockingAction_name, conv)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for low_risk_action")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateAiRiskBasedBlocking) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*AiRiskBasedBlocking)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *AiRiskBasedBlocking got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["high_risk_action"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("high_risk_action"))
+		if err := fv(ctx, m.GetHighRiskAction(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["low_risk_action"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("low_risk_action"))
+		if err := fv(ctx, m.GetLowRiskAction(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["medium_risk_action"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("medium_risk_action"))
+		if err := fv(ctx, m.GetMediumRiskAction(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultAiRiskBasedBlockingValidator = func() *ValidateAiRiskBasedBlocking {
+	v := &ValidateAiRiskBasedBlocking{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhHighRiskAction := v.HighRiskActionValidationRuleHandler
+	rulesHighRiskAction := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhHighRiskAction(rulesHighRiskAction)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AiRiskBasedBlocking.high_risk_action: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["high_risk_action"] = vFn
+
+	vrhMediumRiskAction := v.MediumRiskActionValidationRuleHandler
+	rulesMediumRiskAction := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhMediumRiskAction(rulesMediumRiskAction)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AiRiskBasedBlocking.medium_risk_action: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["medium_risk_action"] = vFn
+
+	vrhLowRiskAction := v.LowRiskActionValidationRuleHandler
+	rulesLowRiskAction := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhLowRiskAction(rulesLowRiskAction)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AiRiskBasedBlocking.low_risk_action: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["low_risk_action"] = vFn
+
+	return v
+}()
+
+func AiRiskBasedBlockingValidator() db.Validator {
+	return DefaultAiRiskBasedBlockingValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *AllowedResponseCodes) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -1317,6 +1502,17 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
+	case *CreateSpecType_AiRiskBasedBlocking:
+		if fv, exists := v.FldValidators["detection_setting_choice.ai_risk_based_blocking"]; exists {
+			val := m.GetDetectionSettingChoice().(*CreateSpecType_AiRiskBasedBlocking).AiRiskBasedBlocking
+			vOpts := append(opts,
+				db.WithValidateField("detection_setting_choice"),
+				db.WithValidateField("ai_risk_based_blocking"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
@@ -1455,6 +1651,7 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v.FldValidators["blocking_page_choice.blocking_page"] = CustomBlockingPageValidator().Validate
 
 	v.FldValidators["detection_setting_choice.detection_settings"] = DetectionSettingValidator().Validate
+	v.FldValidators["detection_setting_choice.ai_risk_based_blocking"] = AiRiskBasedBlockingValidator().Validate
 
 	return v
 }()
@@ -2194,6 +2391,17 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
+	case *GetSpecType_AiRiskBasedBlocking:
+		if fv, exists := v.FldValidators["detection_setting_choice.ai_risk_based_blocking"]; exists {
+			val := m.GetDetectionSettingChoice().(*GetSpecType_AiRiskBasedBlocking).AiRiskBasedBlocking
+			vOpts := append(opts,
+				db.WithValidateField("detection_setting_choice"),
+				db.WithValidateField("ai_risk_based_blocking"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
@@ -2332,6 +2540,7 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v.FldValidators["blocking_page_choice.blocking_page"] = CustomBlockingPageValidator().Validate
 
 	v.FldValidators["detection_setting_choice.detection_settings"] = DetectionSettingValidator().Validate
+	v.FldValidators["detection_setting_choice.ai_risk_based_blocking"] = AiRiskBasedBlockingValidator().Validate
 
 	return v
 }()
@@ -2631,6 +2840,17 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
+	case *GlobalSpecType_AiRiskBasedBlocking:
+		if fv, exists := v.FldValidators["detection_setting_choice.ai_risk_based_blocking"]; exists {
+			val := m.GetDetectionSettingChoice().(*GlobalSpecType_AiRiskBasedBlocking).AiRiskBasedBlocking
+			vOpts := append(opts,
+				db.WithValidateField("detection_setting_choice"),
+				db.WithValidateField("ai_risk_based_blocking"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
@@ -2769,6 +2989,7 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v.FldValidators["blocking_page_choice.blocking_page"] = CustomBlockingPageValidator().Validate
 
 	v.FldValidators["detection_setting_choice.detection_settings"] = DetectionSettingValidator().Validate
+	v.FldValidators["detection_setting_choice.ai_risk_based_blocking"] = AiRiskBasedBlockingValidator().Validate
 
 	return v
 }()
@@ -3068,6 +3289,17 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
+	case *ReplaceSpecType_AiRiskBasedBlocking:
+		if fv, exists := v.FldValidators["detection_setting_choice.ai_risk_based_blocking"]; exists {
+			val := m.GetDetectionSettingChoice().(*ReplaceSpecType_AiRiskBasedBlocking).AiRiskBasedBlocking
+			vOpts := append(opts,
+				db.WithValidateField("detection_setting_choice"),
+				db.WithValidateField("ai_risk_based_blocking"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
@@ -3206,6 +3438,7 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v.FldValidators["blocking_page_choice.blocking_page"] = CustomBlockingPageValidator().Validate
 
 	v.FldValidators["detection_setting_choice.detection_settings"] = DetectionSettingValidator().Validate
+	v.FldValidators["detection_setting_choice.ai_risk_based_blocking"] = AiRiskBasedBlockingValidator().Validate
 
 	return v
 }()
@@ -3821,6 +4054,9 @@ func (r *CreateSpecType) SetDetectionSettingChoiceToGlobalSpecType(o *GlobalSpec
 	case nil:
 		o.DetectionSettingChoice = nil
 
+	case *CreateSpecType_AiRiskBasedBlocking:
+		o.DetectionSettingChoice = &GlobalSpecType_AiRiskBasedBlocking{AiRiskBasedBlocking: of.AiRiskBasedBlocking}
+
 	case *CreateSpecType_DefaultDetectionSettings:
 		o.DetectionSettingChoice = &GlobalSpecType_DefaultDetectionSettings{DefaultDetectionSettings: of.DefaultDetectionSettings}
 
@@ -3837,6 +4073,9 @@ func (r *CreateSpecType) GetDetectionSettingChoiceFromGlobalSpecType(o *GlobalSp
 	switch of := o.DetectionSettingChoice.(type) {
 	case nil:
 		r.DetectionSettingChoice = nil
+
+	case *GlobalSpecType_AiRiskBasedBlocking:
+		r.DetectionSettingChoice = &CreateSpecType_AiRiskBasedBlocking{AiRiskBasedBlocking: of.AiRiskBasedBlocking}
 
 	case *GlobalSpecType_DefaultDetectionSettings:
 		r.DetectionSettingChoice = &CreateSpecType_DefaultDetectionSettings{DefaultDetectionSettings: of.DefaultDetectionSettings}
@@ -4086,6 +4325,9 @@ func (r *GetSpecType) SetDetectionSettingChoiceToGlobalSpecType(o *GlobalSpecTyp
 	case nil:
 		o.DetectionSettingChoice = nil
 
+	case *GetSpecType_AiRiskBasedBlocking:
+		o.DetectionSettingChoice = &GlobalSpecType_AiRiskBasedBlocking{AiRiskBasedBlocking: of.AiRiskBasedBlocking}
+
 	case *GetSpecType_DefaultDetectionSettings:
 		o.DetectionSettingChoice = &GlobalSpecType_DefaultDetectionSettings{DefaultDetectionSettings: of.DefaultDetectionSettings}
 
@@ -4102,6 +4344,9 @@ func (r *GetSpecType) GetDetectionSettingChoiceFromGlobalSpecType(o *GlobalSpecT
 	switch of := o.DetectionSettingChoice.(type) {
 	case nil:
 		r.DetectionSettingChoice = nil
+
+	case *GlobalSpecType_AiRiskBasedBlocking:
+		r.DetectionSettingChoice = &GetSpecType_AiRiskBasedBlocking{AiRiskBasedBlocking: of.AiRiskBasedBlocking}
 
 	case *GlobalSpecType_DefaultDetectionSettings:
 		r.DetectionSettingChoice = &GetSpecType_DefaultDetectionSettings{DefaultDetectionSettings: of.DefaultDetectionSettings}
@@ -4351,6 +4596,9 @@ func (r *ReplaceSpecType) SetDetectionSettingChoiceToGlobalSpecType(o *GlobalSpe
 	case nil:
 		o.DetectionSettingChoice = nil
 
+	case *ReplaceSpecType_AiRiskBasedBlocking:
+		o.DetectionSettingChoice = &GlobalSpecType_AiRiskBasedBlocking{AiRiskBasedBlocking: of.AiRiskBasedBlocking}
+
 	case *ReplaceSpecType_DefaultDetectionSettings:
 		o.DetectionSettingChoice = &GlobalSpecType_DefaultDetectionSettings{DefaultDetectionSettings: of.DefaultDetectionSettings}
 
@@ -4367,6 +4615,9 @@ func (r *ReplaceSpecType) GetDetectionSettingChoiceFromGlobalSpecType(o *GlobalS
 	switch of := o.DetectionSettingChoice.(type) {
 	case nil:
 		r.DetectionSettingChoice = nil
+
+	case *GlobalSpecType_AiRiskBasedBlocking:
+		r.DetectionSettingChoice = &ReplaceSpecType_AiRiskBasedBlocking{AiRiskBasedBlocking: of.AiRiskBasedBlocking}
 
 	case *GlobalSpecType_DefaultDetectionSettings:
 		r.DetectionSettingChoice = &ReplaceSpecType_DefaultDetectionSettings{DefaultDetectionSettings: of.DefaultDetectionSettings}

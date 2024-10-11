@@ -3068,9 +3068,16 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-security_group_choice": "[\"custom_security_group\",\"f5xc_security_group\"]",
             "x-ves-oneof-field-service_vpc_choice": "[\"new_vpc\",\"vpc_id\"]",
             "x-ves-oneof-field-tgw_choice": "[\"existing_tgw\",\"new_tgw\"]",
+            "x-ves-oneof-field-tgw_cidr_choice": "[\"reserved_tgw_cidr\",\"tgw_cidr\"]",
             "x-ves-oneof-field-worker_nodes": "[\"no_worker_nodes\",\"nodes_per_az\",\"total_nodes\"]",
             "x-ves-proto-message": "ves.io.schema.views.aws_tgw_site.ServicesVPCType",
             "properties": {
+                "admin_password": {
+                    "description": " Admin password user for accessing site through serial console .",
+                    "title": "Admin Password",
+                    "$ref": "#/definitions/schemaSecretType",
+                    "x-displayname": "Admin Password"
+                },
                 "aws_cred": {
                     "description": "Exclusive with []\n Reference to AWS cloud credential object used to deploy cloud resources",
                     "title": "Automatic Deployment",
@@ -3186,6 +3193,12 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.uint32.lte": "21"
                     }
                 },
+                "reserved_tgw_cidr": {
+                    "description": "Exclusive with [tgw_cidr]\n Autogenerate and reserve a TGW CIDR Block from the Primary CIDR",
+                    "title": "Reserved TGW CIDR Choice",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Autogenerate TGW CIDR Block"
+                },
                 "ssh_key": {
                     "type": "string",
                     "description": " Public SSH key for accessing nodes of the site.\n\nExample: - \"ssh-rsa AAAAB...\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 8192\n  ves.io.schema.rules.string.min_len: 1\n",
@@ -3200,6 +3213,12 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.string.max_len": "8192",
                         "ves.io.schema.rules.string.min_len": "1"
                     }
+                },
+                "tgw_cidr": {
+                    "description": "Exclusive with [reserved_tgw_cidr]\n Specify TGW CIDR block",
+                    "title": "TGW CIDR Choice",
+                    "$ref": "#/definitions/viewsCloudSubnetParamType",
+                    "x-displayname": "Specify TGW CIDR block"
                 },
                 "total_nodes": {
                     "type": "integer",
@@ -3544,6 +3563,24 @@ var APISwaggerJSON string = `{
                         "$ref": "#/definitions/cloud_connectAWSAttachmentsStatusType"
                     },
                     "x-displayname": "AWS VPC Attachment Status"
+                },
+                "connect_attachment_status": {
+                    "type": "array",
+                    "description": " AWS Connect Attachment Status Typ",
+                    "title": "AWS Connect Attachment Status Type",
+                    "items": {
+                        "$ref": "#/definitions/cloud_connectAWSConnectAttachmentStatusType"
+                    },
+                    "x-displayname": "AWS Connect Attachment Status Type"
+                },
+                "tgw_route_table_status": {
+                    "type": "array",
+                    "description": " AWS Transit Gateway Route Table Status Type",
+                    "title": "AWS Transit Gateway Route Table Status Type",
+                    "items": {
+                        "$ref": "#/definitions/cloud_connectAWSTGWRouteTableStatusType"
+                    },
+                    "x-displayname": "AWS Transit Gateway Route Table Status Type"
                 }
             }
         },
@@ -3554,6 +3591,18 @@ var APISwaggerJSON string = `{
             "x-displayname": "AWS Attachment Status Type",
             "x-ves-proto-message": "ves.io.schema.cloud_connect.AWSAttachmentsStatusType",
             "properties": {
+                "association_route_table_id": {
+                    "type": "string",
+                    "description": " Association route table ID",
+                    "title": "Association route table ID",
+                    "x-displayname": "Association route table ID"
+                },
+                "association_state": {
+                    "type": "string",
+                    "description": " Association state",
+                    "title": "Association state",
+                    "x-displayname": "Association state"
+                },
                 "creation_time": {
                     "type": "string",
                     "description": " Attachment Creation Time",
@@ -3594,6 +3643,12 @@ var APISwaggerJSON string = `{
                     "title": "TGW Attachment ID",
                     "x-displayname": "TGW Attachment ID"
                 },
+                "tgw_attachment_name": {
+                    "type": "string",
+                    "description": " TGW Attachment Name",
+                    "title": "TGW Attachment Name",
+                    "x-displayname": "TGW Attachment Name"
+                },
                 "vpc_cidr": {
                     "type": "string",
                     "description": " VPC CIDR",
@@ -3612,11 +3667,170 @@ var APISwaggerJSON string = `{
                     "title": "VPC ID",
                     "x-displayname": "VPC ID"
                 },
+                "vpc_name": {
+                    "type": "string",
+                    "description": " VPC Name",
+                    "title": "VPC Name",
+                    "x-displayname": "VPC Name"
+                },
                 "vpc_owner_id": {
                     "type": "string",
                     "description": " VPC Owner Account",
                     "title": "VPC Owner Account",
                     "x-displayname": "VPC Owner Account"
+                }
+            }
+        },
+        "cloud_connectAWSConnectAttachmentStatusType": {
+            "type": "object",
+            "description": "AWS Connect Attachment Status Type",
+            "title": "AWS Connect Attachment Status Type",
+            "x-displayname": "AWS Connect Attachment Type Status",
+            "x-ves-proto-message": "ves.io.schema.cloud_connect.AWSConnectAttachmentStatusType",
+            "properties": {
+                "association_route_table_id": {
+                    "type": "string",
+                    "description": " Association route table ID",
+                    "title": "Association route table ID",
+                    "x-displayname": "Association route table ID"
+                },
+                "association_state": {
+                    "type": "string",
+                    "description": " Association state",
+                    "title": "Association state",
+                    "x-displayname": "Association state"
+                },
+                "peers": {
+                    "type": "array",
+                    "description": " Connect Peers",
+                    "title": "Connect Peers",
+                    "items": {
+                        "$ref": "#/definitions/cloud_connectAWSConnectPeerStatusType"
+                    },
+                    "x-displayname": "Connect Peers"
+                },
+                "protocol": {
+                    "type": "string",
+                    "description": " Connect protocol",
+                    "title": "Connect protocol",
+                    "x-displayname": "Connect protocol"
+                },
+                "state": {
+                    "type": "string",
+                    "description": " State",
+                    "title": "State",
+                    "x-displayname": "State"
+                },
+                "tags": {
+                    "type": "object",
+                    "description": " Attachment Tags",
+                    "title": "Attachment Tags",
+                    "x-displayname": "Attachment Tags"
+                },
+                "transit_gateway_asn": {
+                    "type": "string",
+                    "description": " Transit Gateway ASN",
+                    "title": "Transit Gateway ASN",
+                    "x-displayname": "Transit Gateway ASN"
+                },
+                "transit_gateway_attachment_id": {
+                    "type": "string",
+                    "description": " Transit Gateway Attachment ID",
+                    "title": "Transit Gateway Attachment ID",
+                    "x-displayname": "Transit Gateway Attachment ID"
+                },
+                "transit_gateway_attachment_name": {
+                    "type": "string",
+                    "description": " Transit Gateway Attachment Name",
+                    "title": "Transit Gateway Attachment Name",
+                    "x-displayname": "Transit Gateway Attachment Name"
+                },
+                "transit_gateway_id": {
+                    "type": "string",
+                    "description": " Transit Gateway ID",
+                    "title": "Transit Gateway ID",
+                    "x-displayname": "Transit Gateway ID"
+                },
+                "transport_attachment_id": {
+                    "type": "string",
+                    "description": " Transport attachment ID",
+                    "title": "Transport attachment ID",
+                    "x-displayname": "Transport attachment ID"
+                }
+            }
+        },
+        "cloud_connectAWSConnectPeerStatusType": {
+            "type": "object",
+            "description": "AWS Connect Peer Status Type",
+            "title": "AWS Connect Peer Status Type",
+            "x-displayname": "AWS Connect Peer Status Type",
+            "x-ves-proto-message": "ves.io.schema.cloud_connect.AWSConnectPeerStatusType",
+            "properties": {
+                "bgp_inside_cidr_block": {
+                    "type": "string",
+                    "description": " BGP Inside CIDR blocks",
+                    "title": "BGP Inside CIDR blocks",
+                    "x-displayname": "BGP Inside CIDR blocks"
+                },
+                "connect_attachment_id": {
+                    "type": "string",
+                    "description": " Connect attachment ID",
+                    "title": "Connect attachment ID",
+                    "x-displayname": "Connect attachment ID"
+                },
+                "connect_peer_id": {
+                    "type": "string",
+                    "description": " Connect Peer ID",
+                    "title": "Connect Peer ID",
+                    "x-displayname": "Connect Peer ID"
+                },
+                "name": {
+                    "type": "string",
+                    "description": " Connect Peer Name",
+                    "title": "Connect Peer Name",
+                    "x-displayname": "Connect Peer Name"
+                },
+                "peer_asn": {
+                    "type": "string",
+                    "description": " Peer ASN",
+                    "title": "Peer ASN",
+                    "x-displayname": "Peer ASN"
+                },
+                "peer_bgp_address": {
+                    "type": "string",
+                    "description": " Peer BGP address",
+                    "title": "Peer BGP address",
+                    "x-displayname": "Peer BGP address"
+                },
+                "peer_gre_address": {
+                    "type": "string",
+                    "description": " Peer GRE address",
+                    "title": "Peer GRE address",
+                    "x-displayname": "Peer GRE address"
+                },
+                "state": {
+                    "type": "string",
+                    "description": " State",
+                    "title": "State",
+                    "x-displayname": "State"
+                },
+                "transit_gateway_bgp_1_address": {
+                    "type": "string",
+                    "description": " Transit gateway BGP 1 address",
+                    "title": "Transit gateway BGP 1 address",
+                    "x-displayname": "Transit gateway BGP 1 address"
+                },
+                "transit_gateway_bgp_2_address": {
+                    "type": "string",
+                    "description": " Transit gateway BGP 2 address",
+                    "title": "Transit gateway BGP 2 address",
+                    "x-displayname": "Transit gateway BGP 2 address"
+                },
+                "transit_gateway_gre_address": {
+                    "type": "string",
+                    "description": " Transit gateway GRE address",
+                    "title": "Transit gateway GRE address",
+                    "x-displayname": "Transit gateway GRE address"
                 }
             }
         },
@@ -3685,6 +3899,96 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.repeated.min_items": "1",
                         "ves.io.schema.rules.repeated.unique": "true"
                     }
+                }
+            }
+        },
+        "cloud_connectAWSTGWResourceReference": {
+            "type": "object",
+            "description": "AWS Transit Gateway Route Table Associations",
+            "title": "AWS Transit Gateway Route Table Associations",
+            "x-displayname": "AWS Transit Gateway Route Table Associations",
+            "x-ves-proto-message": "ves.io.schema.cloud_connect.AWSTGWResourceReference",
+            "properties": {
+                "attachment_id": {
+                    "type": "string",
+                    "description": " Attachment ID",
+                    "title": "Attachment ID",
+                    "x-displayname": "Attachment ID"
+                },
+                "resource_id": {
+                    "type": "string",
+                    "description": " Resource ID",
+                    "title": "Resource ID",
+                    "x-displayname": "Resource ID"
+                },
+                "resource_type": {
+                    "type": "string",
+                    "description": " Resource type",
+                    "title": "Resource type",
+                    "x-displayname": "Resource type"
+                },
+                "state": {
+                    "type": "string",
+                    "description": " State",
+                    "title": "State",
+                    "x-displayname": "State"
+                }
+            }
+        },
+        "cloud_connectAWSTGWRouteTableStatusType": {
+            "type": "object",
+            "description": "AWS Transit Gateway Route Table Status Type",
+            "title": "AWS Transit Gateway Route Table Status Type",
+            "x-displayname": "AWS Transit Gateway Route Table Status Type",
+            "x-ves-proto-message": "ves.io.schema.cloud_connect.AWSTGWRouteTableStatusType",
+            "properties": {
+                "associations": {
+                    "type": "array",
+                    "description": " Associations",
+                    "title": "Assciations",
+                    "items": {
+                        "$ref": "#/definitions/cloud_connectAWSTGWResourceReference"
+                    },
+                    "x-displayname": "Associations"
+                },
+                "propagations": {
+                    "type": "array",
+                    "description": " Propagations",
+                    "title": "Propagations",
+                    "items": {
+                        "$ref": "#/definitions/cloud_connectAWSTGWResourceReference"
+                    },
+                    "x-displayname": "Propagations"
+                },
+                "state": {
+                    "type": "string",
+                    "description": " State",
+                    "title": "State",
+                    "x-displayname": "State"
+                },
+                "tags": {
+                    "type": "object",
+                    "description": " Attachment Tags",
+                    "title": "Attachment Tags",
+                    "x-displayname": "Attachment Tags"
+                },
+                "transit_gateway_id": {
+                    "type": "string",
+                    "description": " Transit Gateway ID",
+                    "title": "Transit Gateway ID",
+                    "x-displayname": "Transit Gateway ID"
+                },
+                "transit_gateway_route_table_id": {
+                    "type": "string",
+                    "description": " Transit gateway route table ID",
+                    "title": "Transit gateway route table ID",
+                    "x-displayname": "Transit gateway route table ID"
+                },
+                "transit_gateway_route_table_name": {
+                    "type": "string",
+                    "description": " Transit gateway route table Name",
+                    "title": "Transit gateway route table Name",
+                    "x-displayname": "Transit gateway route table Name"
                 }
             }
         },
@@ -4149,40 +4453,68 @@ var APISwaggerJSON string = `{
         },
         "schemaBlindfoldSecretInfoType": {
             "type": "object",
-            "description": "x-displayName: \"Blindfold Secret\"\nBlindfoldSecretInfoType specifies information about the Secret managed by F5XC Secret Management",
+            "description": "BlindfoldSecretInfoType specifies information about the Secret managed by F5XC Secret Management",
             "title": "BlindfoldSecretInfoType",
+            "x-displayname": "Blindfold Secret",
+            "x-ves-displayorder": "3,1,2",
+            "x-ves-proto-message": "ves.io.schema.BlindfoldSecretInfoType",
             "properties": {
                 "decryption_provider": {
                     "type": "string",
-                    "description": "x-displayName: \"Decryption Provider\"\nx-example: \"value\"\nName of the Secret Management Access object that contains information about the backend Secret Management service.",
-                    "title": "Decryption Provider"
+                    "description": " Name of the Secret Management Access object that contains information about the backend Secret Management service.\n\nExample: - \"value\"-",
+                    "title": "Decryption Provider",
+                    "x-displayname": "Decryption Provider",
+                    "x-ves-example": "value"
                 },
                 "location": {
                     "type": "string",
-                    "description": "x-displayName: \"Location\"\nx-required\nx-example: \"string:///U2VjcmV0SW5mb3JtYXRpb24=\"\nLocation is the uri_ref. It could be in url format for string:///\nOr it could be a path if the store provider is an http/https location",
-                    "title": "Location"
+                    "description": " Location is the uri_ref. It could be in url format for string:///\n Or it could be a path if the store provider is an http/https location\n\nExample: - \"string:///U2VjcmV0SW5mb3JtYXRpb24=\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.uri_ref: true\n",
+                    "title": "Location",
+                    "x-displayname": "Location",
+                    "x-ves-example": "string:///U2VjcmV0SW5mb3JtYXRpb24=",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.uri_ref": "true"
+                    }
                 },
                 "store_provider": {
                     "type": "string",
-                    "description": "x-displayName: \"Store Provider\"\nx-example: \"value\"\nName of the Secret Management Access object that contains information about the store to get encrypted bytes\nThis field needs to be provided only if the url scheme is not string:///",
-                    "title": "Store Provider"
+                    "description": " Name of the Secret Management Access object that contains information about the store to get encrypted bytes\n This field needs to be provided only if the url scheme is not string:///\n\nExample: - \"value\"-",
+                    "title": "Store Provider",
+                    "x-displayname": "Store Provider",
+                    "x-ves-example": "value"
                 }
             }
         },
         "schemaClearSecretInfoType": {
             "type": "object",
-            "description": "x-displayName: \"In-Clear Secret\"\nClearSecretInfoType specifies information about the Secret that is not encrypted.",
+            "description": "ClearSecretInfoType specifies information about the Secret that is not encrypted.",
             "title": "ClearSecretInfoType",
+            "x-displayname": "In-Clear Secret",
+            "x-ves-displayorder": "2,1",
+            "x-ves-proto-message": "ves.io.schema.ClearSecretInfoType",
             "properties": {
                 "provider": {
                     "type": "string",
-                    "description": "x-displayName: \"Provider\"\nx-example: \"box-provider\"\nName of the Secret Management Access object that contains information about the store to get encrypted bytes\nThis field needs to be provided only if the url scheme is not string:///",
-                    "title": "Provider"
+                    "description": " Name of the Secret Management Access object that contains information about the store to get encrypted bytes\n This field needs to be provided only if the url scheme is not string:///\n\nExample: - \"box-provider\"-",
+                    "title": "Provider",
+                    "x-displayname": "Provider",
+                    "x-ves-example": "box-provider"
                 },
                 "url": {
                     "type": "string",
-                    "description": "x-displayName: \"URL\"\nx-required\nx-example: \"string:///U2VjcmV0SW5mb3JtYXRpb24=\"\nURL of the secret. Currently supported URL schemes is string:///.\nFor string:/// scheme, Secret needs to be encoded Base64 format.\nWhen asked for this secret, caller will get Secret bytes after Base64 decoding.",
-                    "title": "URL"
+                    "description": " URL of the secret. Currently supported URL schemes is string:///.\n For string:/// scheme, Secret needs to be encoded Base64 format.\n When asked for this secret, caller will get Secret bytes after Base64 decoding.\n\nExample: - \"string:///U2VjcmV0SW5mb3JtYXRpb24=\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_bytes: 131072\n  ves.io.schema.rules.string.uri_ref: true\n",
+                    "title": "URL",
+                    "maxLength": 131072,
+                    "x-displayname": "URL",
+                    "x-ves-example": "string:///U2VjcmV0SW5mb3JtYXRpb24=",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_bytes": "131072",
+                        "ves.io.schema.rules.string.uri_ref": "true"
+                    }
                 }
             }
         },
@@ -4679,38 +5011,23 @@ var APISwaggerJSON string = `{
         },
         "schemaSecretType": {
             "type": "object",
-            "description": "x-displayName: \"Secret\"\nSecretType is used in an object to indicate a sensitive/confidential field",
+            "description": "SecretType is used in an object to indicate a sensitive/confidential field",
             "title": "SecretType",
+            "x-displayname": "Secret",
+            "x-ves-oneof-field-secret_info_oneof": "[\"blindfold_secret_info\",\"clear_secret_info\"]",
+            "x-ves-proto-message": "ves.io.schema.SecretType",
             "properties": {
                 "blindfold_secret_info": {
-                    "description": "x-displayName: \"Blindfold Secret\"\nBlindfold Secret is used for the secrets managed by F5XC Secret Management Service",
+                    "description": "Exclusive with [clear_secret_info]\n Blindfold Secret is used for the secrets managed by F5XC Secret Management Service",
                     "title": "Blindfold Secret",
-                    "$ref": "#/definitions/schemaBlindfoldSecretInfoType"
-                },
-                "blindfold_secret_info_internal": {
-                    "description": "x-displayName: \"Blindfold Secret Internal\"\nBlindfold Secret Internal is used for the putting re-encrypted blindfold secret",
-                    "title": "Blindfold Secret Internal",
-                    "$ref": "#/definitions/schemaBlindfoldSecretInfoType"
+                    "$ref": "#/definitions/schemaBlindfoldSecretInfoType",
+                    "x-displayname": "Blindfold Secret"
                 },
                 "clear_secret_info": {
-                    "description": "x-displayName: \"Clear Secret\"\nClear Secret is used for the secrets that are not encrypted",
+                    "description": "Exclusive with [blindfold_secret_info]\n Clear Secret is used for the secrets that are not encrypted",
                     "title": "Clear Secret",
-                    "$ref": "#/definitions/schemaClearSecretInfoType"
-                },
-                "secret_encoding_type": {
-                    "description": "x-displayName: \"Secret Encoding\"\nThis field defines the encoding type of the secret BEFORE the secret is given to any Secret Management System.\nthis will be set if the secret is encoded and not plaintext BEFORE it is encrypted and put it in SecretType.\nNote - Do NOT set this field for Clear Secret with string:/// scheme.\ne.g. if a secret is base64 encoded and then put into vault.",
-                    "title": "secret_encoding_type",
-                    "$ref": "#/definitions/schemaSecretEncodingType"
-                },
-                "vault_secret_info": {
-                    "description": "x-displayName: \"Vault Secret\"\nVault Secret is used for the secrets managed by Hashicorp Vault",
-                    "title": "Vault Secret",
-                    "$ref": "#/definitions/schemaVaultSecretInfoType"
-                },
-                "wingman_secret_info": {
-                    "description": "x-displayName: \"Bootstrap Secret\"\nSecret is given as bootstrap secret in F5XC Security Sidecar",
-                    "title": "Wingman Secret",
-                    "$ref": "#/definitions/schemaWingmanSecretInfoType"
+                    "$ref": "#/definitions/schemaClearSecretInfoType",
+                    "x-displayname": "Clear Secret"
                 }
             }
         },
@@ -6279,7 +6596,7 @@ var APISwaggerJSON string = `{
             "type": "object",
             "description": "Specify how worker nodes within a site will be upgraded.",
             "title": "Node by Node Upgrade",
-            "x-displayname": "Node by Node Upgrade [BETA]",
+            "x-displayname": "Node by Node Upgrade",
             "x-ves-displayorder": "1",
             "x-ves-oneof-field-kubernetes_upgrade_drain_enable_choice": "[\"disable_upgrade_drain\",\"enable_upgrade_drain\"]",
             "x-ves-proto-message": "ves.io.schema.views.KubernetesUpgradeDrain",

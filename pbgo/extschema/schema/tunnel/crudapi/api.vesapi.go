@@ -3683,13 +3683,13 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Tunnel To AWS TGW"
                 },
                 "tunnel_type": {
-                    "description": " Tunnel type supported is IPSEC with pre-shared key (IPSEC_PSK)\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.enum.in: [0]\n  ves.io.schema.rules.message.required: true\n",
+                    "description": " Tunnel type supported is IPSEC with pre-shared key (IPSEC_PSK)\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.enum.in: [0,2]\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Tunnel Type",
                     "$ref": "#/definitions/tunnelTunnelType",
                     "x-displayname": "Tunnel Type",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.enum.in": "[0]",
+                        "ves.io.schema.rules.enum.in": "[0,2]",
                         "ves.io.schema.rules.message.required": "true"
                     }
                 }
@@ -3905,10 +3905,11 @@ var APISwaggerJSON string = `{
         },
         "tunnelTunnelType": {
             "type": "string",
-            "description": "Supported tunnel types are IPSec\n\nIPSEC tunnel type with PSK",
+            "description": "Supported tunnel types are IPSec\n\nIPSEC tunnel type with PSK\nGRE tunnel type",
             "title": "Tunnel Type",
             "enum": [
-                "IPSEC_PSK"
+                "IPSEC_PSK",
+                "GRE"
             ],
             "default": "IPSEC_PSK",
             "x-displayname": "Tunnel Type",

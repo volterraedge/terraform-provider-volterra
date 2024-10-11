@@ -1,9 +1,9 @@
 ---
 
 page_title: "Volterra: dns_zone_record"
-
 description: "The dns_zone_record allows CRUD of Dns Load Balancer resource on Volterra SaaS"
----------------------------------------------------------------------------------------------
+
+---
 
 Resource volterra_dns_zone_record
 =================================

@@ -4316,22 +4316,18 @@ func (*ReplaceSpecType) XXX_OneofWrappers() []interface{} {
 // Gets NFV Service parameters
 type GetSpecType struct {
 	// Types that are valid to be assigned to ServiceProviderChoice:
-	//
 	//	*GetSpecType_F5BigIpAwsService
 	//	*GetSpecType_PaloAltoFwService
 	ServiceProviderChoice isGetSpecType_ServiceProviderChoice `protobuf_oneof:"service_provider_choice"`
 	// Types that are valid to be assigned to HttpManagementChoice:
-	//
 	//	*GetSpecType_DisableHttpsManagement
 	//	*GetSpecType_HttpsManagement
 	HttpManagementChoice isGetSpecType_HttpManagementChoice `protobuf_oneof:"http_management_choice"`
 	// Types that are valid to be assigned to SshManagementChoice:
-	//
 	//	*GetSpecType_DisableSshAccess
 	//	*GetSpecType_EnabledSshAccess
 	SshManagementChoice isGetSpecType_SshManagementChoice `protobuf_oneof:"ssh_management_choice"`
 	// Types that are valid to be assigned to ServiceTypeChoice:
-	//
 	//	*GetSpecType_EndpointService
 	//	*GetSpecType_ForwardingService
 	//	*GetSpecType_TransparentService

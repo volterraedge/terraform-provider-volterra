@@ -44,6 +44,8 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 
 	vr["ves.io.schema.dns_zone.CloneReq"] = CloneReqValidator()
 	vr["ves.io.schema.dns_zone.CloneResp"] = CloneRespValidator()
+	vr["ves.io.schema.dns_zone.ExportZoneFileRequest"] = ExportZoneFileRequestValidator()
+	vr["ves.io.schema.dns_zone.ExportZoneFileResponse"] = ExportZoneFileResponseValidator()
 	vr["ves.io.schema.dns_zone.F5CSDNSZoneConfiguration"] = F5CSDNSZoneConfigurationValidator()
 	vr["ves.io.schema.dns_zone.GetLocalZoneFileRequest"] = GetLocalZoneFileRequestValidator()
 	vr["ves.io.schema.dns_zone.GetLocalZoneFileResponse"] = GetLocalZoneFileResponseValidator()

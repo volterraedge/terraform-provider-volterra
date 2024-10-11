@@ -139,6 +139,7 @@ func (c *CloudDataCustomAPIRestClient) doRPCDiscoverVPC(ctx context.Context, cal
 		q := hReq.URL.Query()
 		_ = q
 		q.Add("cred", fmt.Sprintf("%v", req.Cred))
+		q.Add("edge_site", fmt.Sprintf("%v", req.EdgeSite))
 		q.Add("provider", fmt.Sprintf("%v", req.Provider))
 		q.Add("region", fmt.Sprintf("%v", req.Region))
 
@@ -663,6 +664,12 @@ var CloudDataCustomAPISwaggerJSON string = `{
                     "$ref": "#/definitions/schemaviewsObjectRefType",
                     "x-displayname": "Cloud Credential"
                 },
+                "edge_site": {
+                    "description": " Reference to a edge site",
+                    "title": "Edge Site",
+                    "$ref": "#/definitions/ioschemaObjectRefType",
+                    "x-displayname": "Egde Site Reference"
+                },
                 "provider": {
                     "description": " Cloud connect backend provider.",
                     "title": "Cloud Provider",
@@ -767,6 +774,50 @@ var CloudDataCustomAPISwaggerJSON string = `{
             "title": "ReApplyVPCAttachmentResponse",
             "x-displayname": "ReApplyVPCAttachmentResponse",
             "x-ves-proto-message": "ves.io.schema.cloud_connect.ReApplyVPCAttachmentResponse"
+        },
+        "ioschemaObjectRefType": {
+            "type": "object",
+            "description": "This type establishes a 'direct reference' from one object(the referrer) to another(the referred).\nSuch a reference is in form of tenant/namespace/name for public API and Uid for private API\nThis type of reference is called direct because the relation is explicit and concrete (as opposed\nto selector reference which builds a group based on labels of selectee objects)",
+            "title": "ObjectRefType",
+            "x-displayname": "Object reference",
+            "x-ves-proto-message": "ves.io.schema.ObjectRefType",
+            "properties": {
+                "kind": {
+                    "type": "string",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then kind will hold the referred object's kind (e.g. \"route\")\n\nExample: - \"virtual_site\"-",
+                    "title": "kind",
+                    "x-displayname": "Kind",
+                    "x-ves-example": "virtual_site"
+                },
+                "name": {
+                    "type": "string",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then name will hold the referred object's(e.g. route's) name.\n\nExample: - \"contactus-route\"-",
+                    "title": "name",
+                    "x-displayname": "Name",
+                    "x-ves-example": "contactus-route"
+                },
+                "namespace": {
+                    "type": "string",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then namespace will hold the referred object's(e.g. route's) namespace.\n\nExample: - \"ns1\"-",
+                    "title": "namespace",
+                    "x-displayname": "Namespace",
+                    "x-ves-example": "ns1"
+                },
+                "tenant": {
+                    "type": "string",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then tenant will hold the referred object's(e.g. route's) tenant.\n\nExample: - \"acmecorp\"-",
+                    "title": "tenant",
+                    "x-displayname": "Tenant",
+                    "x-ves-example": "acmecorp"
+                },
+                "uid": {
+                    "type": "string",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then uid will hold the referred object's(e.g. route's) uid.\n\nExample: - \"d15f1fad-4d37-48c0-8706-df1824d76d31\"-",
+                    "title": "uid",
+                    "x-displayname": "UID",
+                    "x-ves-example": "d15f1fad-4d37-48c0-8706-df1824d76d31"
+                }
+            }
         },
         "schemaviewsObjectRefType": {
             "type": "object",

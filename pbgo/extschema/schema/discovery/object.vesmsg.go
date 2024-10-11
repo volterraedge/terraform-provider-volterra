@@ -13,6 +13,8 @@ import (
 	"gopkg.volterra.us/stdlib/codec"
 	"gopkg.volterra.us/stdlib/db"
 	"gopkg.volterra.us/stdlib/errors"
+
+	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 )
 
 var (
@@ -21,6 +23,217 @@ var (
 	_ = errors.Wrap
 	_ = strings.Split
 )
+
+// augmented methods on protoc/std generated struct
+
+func (m *CBIPDeviceStatus) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *CBIPDeviceStatus) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *CBIPDeviceStatus) DeepCopy() *CBIPDeviceStatus {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &CBIPDeviceStatus{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *CBIPDeviceStatus) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *CBIPDeviceStatus) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return CBIPDeviceStatusValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateCBIPDeviceStatus struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateCBIPDeviceStatus) CbipMgmtIpValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for cbip_mgmt_ip")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateCBIPDeviceStatus) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*CBIPDeviceStatus)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *CBIPDeviceStatus got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["cbip_mgmt_ip"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("cbip_mgmt_ip"))
+		if err := fv(ctx, m.GetCbipMgmtIp(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["condition"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("condition"))
+		if err := fv(ctx, m.GetCondition(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultCBIPDeviceStatusValidator = func() *ValidateCBIPDeviceStatus {
+	v := &ValidateCBIPDeviceStatus{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhCbipMgmtIp := v.CbipMgmtIpValidationRuleHandler
+	rulesCbipMgmtIp := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.ipv4":      "true",
+	}
+	vFn, err = vrhCbipMgmtIp(rulesCbipMgmtIp)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CBIPDeviceStatus.cbip_mgmt_ip: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["cbip_mgmt_ip"] = vFn
+
+	v.FldValidators["condition"] = ves_io_schema.ConditionTypeValidator().Validate
+
+	return v
+}()
+
+func CBIPDeviceStatusValidator() db.Validator {
+	return DefaultCBIPDeviceStatusValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *CBIPStatusType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *CBIPStatusType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *CBIPStatusType) DeepCopy() *CBIPStatusType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &CBIPStatusType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *CBIPStatusType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *CBIPStatusType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return CBIPStatusTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateCBIPStatusType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateCBIPStatusType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*CBIPStatusType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *CBIPStatusType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["device_status"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("device_status"))
+		for idx, item := range m.GetDeviceStatus() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["domain"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("domain"))
+		if err := fv(ctx, m.GetDomain(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultCBIPStatusTypeValidator = func() *ValidateCBIPStatusType {
+	v := &ValidateCBIPStatusType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	v.FldValidators["device_status"] = CBIPDeviceStatusValidator().Validate
+
+	return v
+}()
+
+func CBIPStatusTypeValidator() db.Validator {
+	return DefaultCBIPStatusTypeValidator
+}
 
 // augmented methods on protoc/std generated struct
 

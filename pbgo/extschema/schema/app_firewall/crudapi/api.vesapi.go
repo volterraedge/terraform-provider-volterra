@@ -2656,6 +2656,28 @@ var APISwaggerJSON string = `{
         }
     },
     "definitions": {
+        "app_firewallAiRiskBasedBlocking": {
+            "type": "object",
+            "description": "x-displayName: \"Risk-based blocking (powered by AI)\"\nDefault policy settings will be applied. All attack types, including high, medium, and low accuracy signatures,\nautomatic attack signature tuning, threat campaigns, and all violations will be enabled. ML algorithms will\nassess transaction risk, and only high-risk transactions will be blocked.",
+            "title": "AI Risk Based Blocking",
+            "properties": {
+                "high_risk_action": {
+                    "description": "x-displayName: \"High Risk\"\nx-required\nHigh-risk HTTP transactions are associated with attack attempts or requests that violate the application firewall policy.",
+                    "title": "high_risk_action",
+                    "$ref": "#/definitions/app_firewallRiskBasedBlockingAction"
+                },
+                "low_risk_action": {
+                    "description": "x-displayName: \"Low Risk\"\nx-required\nLow-risk HTTP transactions are associated with findings that do not present an actual threat to the protected application.",
+                    "title": "low_risk_action",
+                    "$ref": "#/definitions/app_firewallRiskBasedBlockingAction"
+                },
+                "medium_risk_action": {
+                    "description": "x-displayName: \"Medium Risk\"\nx-required\nMedium-risk HTTP transactions are associated with suspicious requests.",
+                    "title": "medium_risk_action",
+                    "$ref": "#/definitions/app_firewallRiskBasedBlockingAction"
+                }
+            }
+        },
         "app_firewallAllowedResponseCodes": {
             "type": "object",
             "description": "List of HTTP response status codes that are allowed",
@@ -3154,6 +3176,16 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Default"
                 }
             }
+        },
+        "app_firewallRiskBasedBlockingAction": {
+            "type": "string",
+            "description": "x-displayName: \"Risk Based Blocking Action\"\nAction to be performed on the request\n\n - AI_BLOCK: x-displayName: \"Block\"\nLog and block\n - AI_REPORT: x-displayName: \"Report\"\nLog only",
+            "title": "Risk Based Blocking Action",
+            "enum": [
+                "AI_BLOCK",
+                "AI_REPORT"
+            ],
+            "default": "AI_BLOCK"
         },
         "app_firewallSignatureSelectionSetting": {
             "type": "object",

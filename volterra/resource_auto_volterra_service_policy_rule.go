@@ -1039,51 +1039,6 @@ func resourceVolterraServicePolicyRule() *schema.Resource {
 				},
 			},
 
-			"l4_dest_matcher": {
-
-				Type:       schema.TypeSet,
-				Optional:   true,
-				Deprecated: "This field is deprecated and will be removed in future release.",
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-
-						"invert_matcher": {
-							Type:       schema.TypeBool,
-							Optional:   true,
-							Deprecated: "This field is deprecated and will be removed in future release.",
-						},
-
-						"l4_dests": {
-
-							Type:       schema.TypeList,
-							Required:   true,
-							Deprecated: "This field is deprecated and will be removed in future release.",
-							Elem: &schema.Resource{
-								Schema: map[string]*schema.Schema{
-
-									"port_ranges": {
-										Type:       schema.TypeString,
-										Required:   true,
-										Deprecated: "This field is deprecated and will be removed in future release.",
-									},
-
-									"prefixes": {
-
-										Type: schema.TypeList,
-
-										Required:   true,
-										Deprecated: "This field is deprecated and will be removed in future release.",
-										Elem: &schema.Schema{
-											Type: schema.TypeString,
-										},
-									},
-								},
-							},
-						},
-					},
-				},
-			},
-
 			"label_matcher": {
 
 				Type:     schema.TypeSet,
@@ -1851,6 +1806,26 @@ func resourceVolterraServicePolicyRule() *schema.Resource {
 							Type:       schema.TypeBool,
 							Required:   true,
 							Deprecated: "This field is deprecated and will be removed in future release.",
+						},
+					},
+				},
+			},
+
+			"ja4_tls_fingerprint": {
+
+				Type:     schema.TypeSet,
+				Optional: true,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+
+						"exact_values": {
+
+							Type: schema.TypeList,
+
+							Optional: true,
+							Elem: &schema.Schema{
+								Type: schema.TypeString,
+							},
 						},
 					},
 				},
@@ -2998,6 +2973,16 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 
 			}
 
+			if v, ok := cs["ipv6_prefixes"]; ok && !isIntfNil(v) {
+
+				ls := make([]string, len(v.([]interface{})))
+				for i, v := range v.([]interface{}) {
+					ls[i] = v.(string)
+				}
+				dstIpChoiceInt.DstIpPrefixList.Ipv6Prefixes = ls
+
+			}
+
 		}
 
 	}
@@ -3273,6 +3258,16 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 
 			}
 
+			if v, ok := cs["ipv6_prefixes"]; ok && !isIntfNil(v) {
+
+				ls := make([]string, len(v.([]interface{})))
+				for i, v := range v.([]interface{}) {
+					ls[i] = v.(string)
+				}
+				ipChoiceInt.IpPrefixList.Ipv6Prefixes = ls
+
+			}
+
 		}
 
 	}
@@ -3403,48 +3398,6 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 
 			if w, ok := jwtClaimsMapStrToI["name"]; ok && !isIntfNil(w) {
 				jwtClaims[i].Name = w.(string)
-			}
-
-		}
-
-	}
-
-	//l4_dest_matcher
-	if v, ok := d.GetOk("l4_dest_matcher"); ok && !isIntfNil(v) {
-
-		sl := v.(*schema.Set).List()
-		l4DestMatcher := &ves_io_schema_policy.L4DestMatcherType{}
-		createSpec.L4DestMatcher = l4DestMatcher
-		for _, set := range sl {
-			l4DestMatcherMapStrToI := set.(map[string]interface{})
-
-			if w, ok := l4DestMatcherMapStrToI["invert_matcher"]; ok && !isIntfNil(w) {
-				l4DestMatcher.InvertMatcher = w.(bool)
-			}
-
-			if v, ok := l4DestMatcherMapStrToI["l4_dests"]; ok && !isIntfNil(v) {
-
-				sl := v.([]interface{})
-				l4Dests := make([]*ves_io_schema.L4DestType, len(sl))
-				l4DestMatcher.L4Dests = l4Dests
-				for i, set := range sl {
-					l4Dests[i] = &ves_io_schema.L4DestType{}
-					l4DestsMapStrToI := set.(map[string]interface{})
-
-					if w, ok := l4DestsMapStrToI["port_ranges"]; ok && !isIntfNil(w) {
-						l4Dests[i].PortRanges = w.(string)
-					}
-
-					if w, ok := l4DestsMapStrToI["prefixes"]; ok && !isIntfNil(w) {
-						ls := make([]string, len(w.([]interface{})))
-						for i, v := range w.([]interface{}) {
-							ls[i] = v.(string)
-						}
-						l4Dests[i].Prefixes = ls
-					}
-
-				}
-
 			}
 
 		}
@@ -4488,39 +4441,74 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 
 	}
 
-	//tls_fingerprint_matcher
-	if v, ok := d.GetOk("tls_fingerprint_matcher"); ok && !isIntfNil(v) {
+	//tls_fingerprint_choice
+
+	tlsFingerprintChoiceTypeFound := false
+
+	if v, ok := d.GetOk("ja4_tls_fingerprint"); ok && !tlsFingerprintChoiceTypeFound {
+
+		tlsFingerprintChoiceTypeFound = true
+		tlsFingerprintChoiceInt := &ves_io_schema_service_policy_rule.CreateSpecType_Ja4TlsFingerprint{}
+		tlsFingerprintChoiceInt.Ja4TlsFingerprint = &ves_io_schema_policy.JA4TlsFingerprintMatcherType{}
+		createSpec.TlsFingerprintChoice = tlsFingerprintChoiceInt
 
 		sl := v.(*schema.Set).List()
-		tlsFingerprintMatcher := &ves_io_schema_policy.TlsFingerprintMatcherType{}
-		createSpec.TlsFingerprintMatcher = tlsFingerprintMatcher
 		for _, set := range sl {
-			tlsFingerprintMatcherMapStrToI := set.(map[string]interface{})
+			cs := set.(map[string]interface{})
 
-			if v, ok := tlsFingerprintMatcherMapStrToI["classes"]; ok && !isIntfNil(v) {
+			if v, ok := cs["exact_values"]; ok && !isIntfNil(v) {
+
+				ls := make([]string, len(v.([]interface{})))
+				for i, v := range v.([]interface{}) {
+					ls[i] = v.(string)
+				}
+				tlsFingerprintChoiceInt.Ja4TlsFingerprint.ExactValues = ls
+
+			}
+
+		}
+
+	}
+
+	if v, ok := d.GetOk("tls_fingerprint_matcher"); ok && !tlsFingerprintChoiceTypeFound {
+
+		tlsFingerprintChoiceTypeFound = true
+		tlsFingerprintChoiceInt := &ves_io_schema_service_policy_rule.CreateSpecType_TlsFingerprintMatcher{}
+		tlsFingerprintChoiceInt.TlsFingerprintMatcher = &ves_io_schema_policy.TlsFingerprintMatcherType{}
+		createSpec.TlsFingerprintChoice = tlsFingerprintChoiceInt
+
+		sl := v.(*schema.Set).List()
+		for _, set := range sl {
+			cs := set.(map[string]interface{})
+
+			if v, ok := cs["classes"]; ok && !isIntfNil(v) {
 
 				classesList := []ves_io_schema_policy.KnownTlsFingerprintClass{}
 				for _, j := range v.([]interface{}) {
 					classesList = append(classesList, ves_io_schema_policy.KnownTlsFingerprintClass(ves_io_schema_policy.KnownTlsFingerprintClass_value[j.(string)]))
 				}
-				tlsFingerprintMatcher.Classes = classesList
+				tlsFingerprintChoiceInt.TlsFingerprintMatcher.Classes = classesList
 
 			}
 
-			if w, ok := tlsFingerprintMatcherMapStrToI["exact_values"]; ok && !isIntfNil(w) {
-				ls := make([]string, len(w.([]interface{})))
-				for i, v := range w.([]interface{}) {
+			if v, ok := cs["exact_values"]; ok && !isIntfNil(v) {
+
+				ls := make([]string, len(v.([]interface{})))
+				for i, v := range v.([]interface{}) {
 					ls[i] = v.(string)
 				}
-				tlsFingerprintMatcher.ExactValues = ls
+				tlsFingerprintChoiceInt.TlsFingerprintMatcher.ExactValues = ls
+
 			}
 
-			if w, ok := tlsFingerprintMatcherMapStrToI["excluded_values"]; ok && !isIntfNil(w) {
-				ls := make([]string, len(w.([]interface{})))
-				for i, v := range w.([]interface{}) {
+			if v, ok := cs["excluded_values"]; ok && !isIntfNil(v) {
+
+				ls := make([]string, len(v.([]interface{})))
+				for i, v := range v.([]interface{}) {
 					ls[i] = v.(string)
 				}
-				tlsFingerprintMatcher.ExcludedValues = ls
+				tlsFingerprintChoiceInt.TlsFingerprintMatcher.ExcludedValues = ls
+
 			}
 
 		}
@@ -5729,6 +5717,16 @@ func resourceVolterraServicePolicyRuleUpdate(d *schema.ResourceData, meta interf
 
 			}
 
+			if v, ok := cs["ipv6_prefixes"]; ok && !isIntfNil(v) {
+
+				ls := make([]string, len(v.([]interface{})))
+				for i, v := range v.([]interface{}) {
+					ls[i] = v.(string)
+				}
+				dstIpChoiceInt.DstIpPrefixList.Ipv6Prefixes = ls
+
+			}
+
 		}
 
 	}
@@ -5998,6 +5996,16 @@ func resourceVolterraServicePolicyRuleUpdate(d *schema.ResourceData, meta interf
 
 			}
 
+			if v, ok := cs["ipv6_prefixes"]; ok && !isIntfNil(v) {
+
+				ls := make([]string, len(v.([]interface{})))
+				for i, v := range v.([]interface{}) {
+					ls[i] = v.(string)
+				}
+				ipChoiceInt.IpPrefixList.Ipv6Prefixes = ls
+
+			}
+
 		}
 
 	}
@@ -6126,47 +6134,6 @@ func resourceVolterraServicePolicyRuleUpdate(d *schema.ResourceData, meta interf
 
 			if w, ok := jwtClaimsMapStrToI["name"]; ok && !isIntfNil(w) {
 				jwtClaims[i].Name = w.(string)
-			}
-
-		}
-
-	}
-
-	if v, ok := d.GetOk("l4_dest_matcher"); ok && !isIntfNil(v) {
-
-		sl := v.(*schema.Set).List()
-		l4DestMatcher := &ves_io_schema_policy.L4DestMatcherType{}
-		updateSpec.L4DestMatcher = l4DestMatcher
-		for _, set := range sl {
-			l4DestMatcherMapStrToI := set.(map[string]interface{})
-
-			if w, ok := l4DestMatcherMapStrToI["invert_matcher"]; ok && !isIntfNil(w) {
-				l4DestMatcher.InvertMatcher = w.(bool)
-			}
-
-			if v, ok := l4DestMatcherMapStrToI["l4_dests"]; ok && !isIntfNil(v) {
-
-				sl := v.([]interface{})
-				l4Dests := make([]*ves_io_schema.L4DestType, len(sl))
-				l4DestMatcher.L4Dests = l4Dests
-				for i, set := range sl {
-					l4Dests[i] = &ves_io_schema.L4DestType{}
-					l4DestsMapStrToI := set.(map[string]interface{})
-
-					if w, ok := l4DestsMapStrToI["port_ranges"]; ok && !isIntfNil(w) {
-						l4Dests[i].PortRanges = w.(string)
-					}
-
-					if w, ok := l4DestsMapStrToI["prefixes"]; ok && !isIntfNil(w) {
-						ls := make([]string, len(w.([]interface{})))
-						for i, v := range w.([]interface{}) {
-							ls[i] = v.(string)
-						}
-						l4Dests[i].Prefixes = ls
-					}
-
-				}
-
 			}
 
 		}
@@ -7198,38 +7165,72 @@ func resourceVolterraServicePolicyRuleUpdate(d *schema.ResourceData, meta interf
 
 	}
 
-	if v, ok := d.GetOk("tls_fingerprint_matcher"); ok && !isIntfNil(v) {
+	tlsFingerprintChoiceTypeFound := false
+
+	if v, ok := d.GetOk("ja4_tls_fingerprint"); ok && !tlsFingerprintChoiceTypeFound {
+
+		tlsFingerprintChoiceTypeFound = true
+		tlsFingerprintChoiceInt := &ves_io_schema_service_policy_rule.ReplaceSpecType_Ja4TlsFingerprint{}
+		tlsFingerprintChoiceInt.Ja4TlsFingerprint = &ves_io_schema_policy.JA4TlsFingerprintMatcherType{}
+		updateSpec.TlsFingerprintChoice = tlsFingerprintChoiceInt
 
 		sl := v.(*schema.Set).List()
-		tlsFingerprintMatcher := &ves_io_schema_policy.TlsFingerprintMatcherType{}
-		updateSpec.TlsFingerprintMatcher = tlsFingerprintMatcher
 		for _, set := range sl {
-			tlsFingerprintMatcherMapStrToI := set.(map[string]interface{})
+			cs := set.(map[string]interface{})
 
-			if v, ok := tlsFingerprintMatcherMapStrToI["classes"]; ok && !isIntfNil(v) {
+			if v, ok := cs["exact_values"]; ok && !isIntfNil(v) {
+
+				ls := make([]string, len(v.([]interface{})))
+				for i, v := range v.([]interface{}) {
+					ls[i] = v.(string)
+				}
+				tlsFingerprintChoiceInt.Ja4TlsFingerprint.ExactValues = ls
+
+			}
+
+		}
+
+	}
+
+	if v, ok := d.GetOk("tls_fingerprint_matcher"); ok && !tlsFingerprintChoiceTypeFound {
+
+		tlsFingerprintChoiceTypeFound = true
+		tlsFingerprintChoiceInt := &ves_io_schema_service_policy_rule.ReplaceSpecType_TlsFingerprintMatcher{}
+		tlsFingerprintChoiceInt.TlsFingerprintMatcher = &ves_io_schema_policy.TlsFingerprintMatcherType{}
+		updateSpec.TlsFingerprintChoice = tlsFingerprintChoiceInt
+
+		sl := v.(*schema.Set).List()
+		for _, set := range sl {
+			cs := set.(map[string]interface{})
+
+			if v, ok := cs["classes"]; ok && !isIntfNil(v) {
 
 				classesList := []ves_io_schema_policy.KnownTlsFingerprintClass{}
 				for _, j := range v.([]interface{}) {
 					classesList = append(classesList, ves_io_schema_policy.KnownTlsFingerprintClass(ves_io_schema_policy.KnownTlsFingerprintClass_value[j.(string)]))
 				}
-				tlsFingerprintMatcher.Classes = classesList
+				tlsFingerprintChoiceInt.TlsFingerprintMatcher.Classes = classesList
 
 			}
 
-			if w, ok := tlsFingerprintMatcherMapStrToI["exact_values"]; ok && !isIntfNil(w) {
-				ls := make([]string, len(w.([]interface{})))
-				for i, v := range w.([]interface{}) {
+			if v, ok := cs["exact_values"]; ok && !isIntfNil(v) {
+
+				ls := make([]string, len(v.([]interface{})))
+				for i, v := range v.([]interface{}) {
 					ls[i] = v.(string)
 				}
-				tlsFingerprintMatcher.ExactValues = ls
+				tlsFingerprintChoiceInt.TlsFingerprintMatcher.ExactValues = ls
+
 			}
 
-			if w, ok := tlsFingerprintMatcherMapStrToI["excluded_values"]; ok && !isIntfNil(w) {
-				ls := make([]string, len(w.([]interface{})))
-				for i, v := range w.([]interface{}) {
+			if v, ok := cs["excluded_values"]; ok && !isIntfNil(v) {
+
+				ls := make([]string, len(v.([]interface{})))
+				for i, v := range v.([]interface{}) {
 					ls[i] = v.(string)
 				}
-				tlsFingerprintMatcher.ExcludedValues = ls
+				tlsFingerprintChoiceInt.TlsFingerprintMatcher.ExcludedValues = ls
+
 			}
 
 		}

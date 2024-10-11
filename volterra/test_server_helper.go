@@ -145,6 +145,10 @@ func (s *apiCredentialCustomAPIServer) GetScimToken(ctx context.Context, req *ve
 	return &ves_io_schema_api_credential.GetResponse{}, nil
 }
 
+func (s *apiCredentialCustomAPIServer) GetServiceCredentials(ctx context.Context, req *ves_io_schema_api_credential.GetRequest) (*ves_io_schema_api_credential.GetServiceCredentialsResponse, error) {
+	return &ves_io_schema_api_credential.GetServiceCredentialsResponse{}, nil
+}
+
 var _ ves_io_schema_api_credential.CustomAPIServer = &apiCredentialCustomAPIServer{}
 
 // ves.io.schema.virtual_host.CustomAPI handling - start

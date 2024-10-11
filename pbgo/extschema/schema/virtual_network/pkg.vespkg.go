@@ -72,6 +72,17 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 
+	mdr.RPCSubscriptionFieldsRegistry["ves.io.schema.virtual_network.API.Create"] = []svcfw.SubscriptionField{
+		{
+			FieldPath:     "ves.io.schema.virtual_network.CreateRequest.spec.network_choice.srv6_network.snat_pool_choice.site_snat_pool.node_snat_pool.ipv6_prefixes",
+			AddonServices: []string{"f5xc-ipv6-standard"},
+		},
+		{
+			FieldPath:     "ves.io.schema.virtual_network.CreateRequest.spec.static_v6_routes",
+			AddonServices: []string{"f5xc-ipv6-standard"},
+		},
+	}
+
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.virtual_network.API.Create"] = []string{
 		"spec.srv6_network",
 	}
@@ -121,6 +132,17 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		{
 			FieldPath:           "items.#.get_spec.srv6_network.site_snat_pool.node_snat_pool.ipv6_prefixes.#",
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
+		},
+	}
+
+	mdr.RPCSubscriptionFieldsRegistry["ves.io.schema.virtual_network.API.Replace"] = []svcfw.SubscriptionField{
+		{
+			FieldPath:     "ves.io.schema.virtual_network.ReplaceRequest.spec.network_choice.srv6_network.snat_pool_choice.site_snat_pool.node_snat_pool.ipv6_prefixes",
+			AddonServices: []string{"f5xc-ipv6-standard"},
+		},
+		{
+			FieldPath:     "ves.io.schema.virtual_network.ReplaceRequest.spec.static_v6_routes",
+			AddonServices: []string{"f5xc-ipv6-standard"},
 		},
 	}
 

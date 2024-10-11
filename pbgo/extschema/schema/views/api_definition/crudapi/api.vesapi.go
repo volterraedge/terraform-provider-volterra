@@ -3748,9 +3748,9 @@ var APISwaggerJSON string = `{
                 },
                 "swagger_specs": {
                     "type": "array",
-                    "description": " Define your application API by single or multiple OpenAPI files.\n 1. Upload your OpenAPI files via Web App \u0026 API Protection-\u003e Files-\u003e Swagger Files.\n 2. Select from the list of uploaded files.\n Notice file versions. If OpenAPI file is updated, need to select a new version here to redefine the API.\n\nExample: - \"https://my.tenant.domain/api/object_store/namespaces/my-ns/stored_objects/swagger/file-name/v1-22-01-12\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.max_bytes: 512\n  ves.io.schema.rules.repeated.items.string.pattern: /api/object_store/namespaces/([a-z]([-a-z0-9]*[a-z0-9])?)/stored_objects/swagger/([a-z]([-a-z0-9]*[a-z0-9])?)/(v|V)[0-9]+(-[0-9]{2}){3}$\n  ves.io.schema.rules.repeated.max_items: 10\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " Define your application API by single or multiple OpenAPI files.\n 1. Upload your OpenAPI files via Web App \u0026 API Protection-\u003e Files-\u003e Swagger Files.\n 2. Select from the list of uploaded files.\n Notice file versions. If OpenAPI file is updated, need to select a new version here to redefine the API.\n\nExample: - \"https://my.tenant.domain/api/object_store/namespaces/my-ns/stored_objects/swagger/file-name/v1-22-01-12\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.max_bytes: 512\n  ves.io.schema.rules.repeated.items.string.pattern: /api/object_store/namespaces/([a-z]([-a-z0-9]*[a-z0-9])?)/stored_objects/swagger/([a-z]([-a-z0-9]*[a-z0-9])?)/(v|V)[0-9]+(-[0-9]{2}){3}$\n  ves.io.schema.rules.repeated.max_items: 20\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "swagger_specs",
-                    "maxItems": 10,
+                    "maxItems": 20,
                     "items": {
                         "type": "string",
                         "maxLength": 512
@@ -3760,7 +3760,7 @@ var APISwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.repeated.items.string.max_bytes": "512",
                         "ves.io.schema.rules.repeated.items.string.pattern": "/api/object_store/namespaces/([a-z]([-a-z0-9]*[a-z0-9])?)/stored_objects/swagger/([a-z]([-a-z0-9]*[a-z0-9])?)/(v|V)[0-9]+(-[0-9]{2}){3}$",
-                        "ves.io.schema.rules.repeated.max_items": "10",
+                        "ves.io.schema.rules.repeated.max_items": "20",
                         "ves.io.schema.rules.repeated.unique": "true"
                     }
                 }

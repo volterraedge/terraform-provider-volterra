@@ -223,7 +223,7 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 
 	vrhTunnelType := v.TunnelTypeValidationRuleHandler
 	rulesTunnelType := map[string]string{
-		"ves.io.schema.rules.enum.in":          "[0]",
+		"ves.io.schema.rules.enum.in":          "[0,2]",
 		"ves.io.schema.rules.message.required": "true",
 	}
 	vFn, err = vrhTunnelType(rulesTunnelType)
@@ -463,7 +463,7 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 
 	vrhTunnelType := v.TunnelTypeValidationRuleHandler
 	rulesTunnelType := map[string]string{
-		"ves.io.schema.rules.enum.in":          "[0]",
+		"ves.io.schema.rules.enum.in":          "[0,2]",
 		"ves.io.schema.rules.message.required": "true",
 	}
 	vFn, err = vrhTunnelType(rulesTunnelType)
@@ -767,7 +767,7 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 	vrhTunnelType := v.TunnelTypeValidationRuleHandler
 	rulesTunnelType := map[string]string{
-		"ves.io.schema.rules.enum.in":          "[0]",
+		"ves.io.schema.rules.enum.in":          "[0,2]",
 		"ves.io.schema.rules.message.required": "true",
 	}
 	vFn, err = vrhTunnelType(rulesTunnelType)
@@ -1921,7 +1921,7 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 
 	vrhTunnelType := v.TunnelTypeValidationRuleHandler
 	rulesTunnelType := map[string]string{
-		"ves.io.schema.rules.enum.in":          "[0]",
+		"ves.io.schema.rules.enum.in":          "[0,2]",
 		"ves.io.schema.rules.message.required": "true",
 	}
 	vFn, err = vrhTunnelType(rulesTunnelType)

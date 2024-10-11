@@ -56,6 +56,21 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 
+	mdr.RPCSubscriptionFieldsRegistry["ves.io.schema.views.network_policy_view.API.Create"] = []svcfw.SubscriptionField{
+		{
+			FieldPath:     "ves.io.schema.views.network_policy_view.CreateRequest.spec.egress_rules.other_endpoint.prefix_list.ipv6_prefixes",
+			AddonServices: []string{"f5xc-ipv6-standard"},
+		},
+		{
+			FieldPath:     "ves.io.schema.views.network_policy_view.CreateRequest.spec.endpoint.endpoint_choice.prefix_list.ipv6_prefixes",
+			AddonServices: []string{"f5xc-ipv6-standard"},
+		},
+		{
+			FieldPath:     "ves.io.schema.views.network_policy_view.CreateRequest.spec.ingress_rules.other_endpoint.prefix_list.ipv6_prefixes",
+			AddonServices: []string{"f5xc-ipv6-standard"},
+		},
+	}
+
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.views.network_policy_view.API.Create"] = []string{
 		"spec.egress_rules.#.keys.#",
 		"spec.egress_rules.#.metadata.disable",
@@ -148,6 +163,21 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		{
 			FieldPath:           "items.#.get_spec.ingress_rules.#.prefix_list.ipv6_prefixes.#",
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
+		},
+	}
+
+	mdr.RPCSubscriptionFieldsRegistry["ves.io.schema.views.network_policy_view.API.Replace"] = []svcfw.SubscriptionField{
+		{
+			FieldPath:     "ves.io.schema.views.network_policy_view.ReplaceRequest.spec.egress_rules.other_endpoint.prefix_list.ipv6_prefixes",
+			AddonServices: []string{"f5xc-ipv6-standard"},
+		},
+		{
+			FieldPath:     "ves.io.schema.views.network_policy_view.ReplaceRequest.spec.endpoint.endpoint_choice.prefix_list.ipv6_prefixes",
+			AddonServices: []string{"f5xc-ipv6-standard"},
+		},
+		{
+			FieldPath:     "ves.io.schema.views.network_policy_view.ReplaceRequest.spec.ingress_rules.other_endpoint.prefix_list.ipv6_prefixes",
+			AddonServices: []string{"f5xc-ipv6-standard"},
 		},
 	}
 

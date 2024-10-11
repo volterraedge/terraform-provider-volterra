@@ -3239,12 +3239,13 @@ var APISwaggerJSON string = `{
         },
         "schemaSignupOrigin": {
             "type": "string",
-            "description": "x-required\nSignupOrigin indicates, from which platform signup is originated, example f5xc, aws..etc\n\n - ORIGIN_UNKNOWN: ORIGIN_UNKNOWN\n\nIndicates, the origin of the signup is unknown\n - ORIGIN_F5XC: ORIGIN_F5XC\n\nORIGIN_F5XC as an origin indicates, signup is initiated from console or by internal scaling/testing/support teams using private API\n - ORIGIN_AWS: ORIGIN_AWS\n\nORIGIN_AWS as an origin indicates, signup is initiated from AWS marketplace \u0026 it comes to eywaprime via tsahik",
+            "description": "x-required\nSignupOrigin indicates, from which platform signup is originated, example f5xc, aws..etc\n\n - ORIGIN_UNKNOWN: ORIGIN_UNKNOWN\n\nIndicates, the origin of the signup is unknown\n - ORIGIN_F5XC: ORIGIN_F5XC\n\nORIGIN_F5XC as an origin indicates, signup is initiated from console or by internal scaling/testing/support teams using private API\n - ORIGIN_AWS: ORIGIN_AWS\n\nORIGIN_AWS as an origin indicates, signup is initiated from AWS marketplace \u0026 it comes to eywaprime via tsahik\n - ORIGIN_ASB: ORIGIN_ASB\n\nORIGIN_ASB as an origin indicates signup originated from Azure service bus provisioning messages \u0026 it comes to eywaprime via tsahik",
             "title": "SignupOrigin",
             "enum": [
                 "ORIGIN_UNKNOWN",
                 "ORIGIN_F5XC",
-                "ORIGIN_AWS"
+                "ORIGIN_AWS",
+                "ORIGIN_ASB"
             ],
             "default": "ORIGIN_UNKNOWN",
             "x-displayname": "Signup Origin",

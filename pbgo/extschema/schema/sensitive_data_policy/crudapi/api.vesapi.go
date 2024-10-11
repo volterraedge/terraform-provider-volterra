@@ -2837,10 +2837,9 @@ var APISwaggerJSON string = `{
         },
         "data_typeCompliance": {
             "type": "string",
-            "description": "x-displayName: \"Compliance\"\nSupported compliances frameworks\n\n - UNSPECIFIED: x-displayName: \"Unspecified\"\n - GDPR: x-displayName: \"GDPR\"\n - CCPA: x-displayName: \"CCPA\"\n - PIPEDA: x-displayName: \"PIPEDA\"\n - LGPD: x-displayName: \"LGPD\"\n - DPA_UK: x-displayName: \"DPA(UK)\"\n - PDPA_SG: x-displayName: \"PDPA (SG)\"\n - APPI: x-displayName: \"APPI\"\n - HIPAA: x-displayName: \"HIPPA\"\n - CPRA_2023: x-displayName: \"CPRA 2023\"\n - CPA_CO: x-displayName: \"CPA (CO)\"\n - SOC2: x-displayName: \"SOC2\"\n - PCI_DSS: x-displayName: \"PCI-DSS\"\n - ISO_IEC_27001: x-displayName: \"ISO/IEC 27001\"\n - ISO_IEC_27701: x-displayName: \"ISO/IEC 27701\"\n - EPRIVACY_DIRECTIVE: x-displayName: \"ePrivacy Directive\"\n - GLBA: x-displayName: \"GLBA\"\n - SOX: x-displayName: \"SOX\"",
+            "description": "Supported compliances frameworks\n",
             "title": "Compliance",
             "enum": [
-                "UNSPECIFIED",
                 "GDPR",
                 "CCPA",
                 "PIPEDA",
@@ -2859,7 +2858,9 @@ var APISwaggerJSON string = `{
                 "GLBA",
                 "SOX"
             ],
-            "default": "UNSPECIFIED"
+            "default": "UNSPECIFIED",
+            "x-displayname": "Compliance",
+            "x-ves-proto-enum": "ves.io.schema.data_type.Compliance"
         },
         "ioschemaObjectRefType": {
             "type": "object",
@@ -3411,6 +3412,22 @@ var APISwaggerJSON string = `{
             "x-displayname": "Specification",
             "x-ves-proto-message": "ves.io.schema.sensitive_data_policy.GlobalSpecType",
             "properties": {
+                "compliances": {
+                    "type": "array",
+                    "description": " Select relevant compliance frameworks, such as GDPR, HIPAA, or PCI-DSS, to ensure monitoring under your sensitive data discovery.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.enum.defined_only: true\n  ves.io.schema.rules.repeated.items.enum.not_in: [0]\n  ves.io.schema.rules.repeated.max_items: 17\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "compliances",
+                    "maxItems": 17,
+                    "items": {
+                        "$ref": "#/definitions/data_typeCompliance"
+                    },
+                    "x-displayname": "Compliance Frameworks",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.items.enum.defined_only": "true",
+                        "ves.io.schema.rules.repeated.items.enum.not_in": "[0]",
+                        "ves.io.schema.rules.repeated.max_items": "17",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                },
                 "custom_data_types": {
                     "type": "array",
                     "description": " Select your custom data types to be monitored in the API discovery\n\nValidation Rules:\n  ves.io.schema.rules.repeated.unique: true\n",

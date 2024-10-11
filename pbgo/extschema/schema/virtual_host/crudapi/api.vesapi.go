@@ -5251,6 +5251,15 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.repeated.max_items": "256"
                     }
                 },
+                "sensitive_data_policy": {
+                    "type": "array",
+                    "description": " References to sensitive_data_policy  objects.",
+                    "title": "sensitive_data_policy",
+                    "items": {
+                        "$ref": "#/definitions/ioschemaObjectRefType"
+                    },
+                    "x-displayname": "Sensitive Data Discovery"
+                },
                 "server_name": {
                     "type": "string",
                     "description": "Exclusive with [append_server_name default_header pass_through]\n Specifies the value to be used for Server header inserted in responses.\n This will overwrite existing values if any for Server Header\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 8096\n",

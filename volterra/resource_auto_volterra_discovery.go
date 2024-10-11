@@ -16,6 +16,7 @@ import (
 
 	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 	ves_io_schema_discovery "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/discovery"
+	ves_io_schema_views "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
 )
 
 // resourceVolterraDiscovery is implementation of Volterra's Discovery resources
@@ -70,6 +71,358 @@ func resourceVolterraDiscovery() *schema.Resource {
 
 				Type:     schema.TypeBool,
 				Optional: true,
+			},
+
+			"discovery_cbip": {
+
+				Type:     schema.TypeSet,
+				Optional: true,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+
+						"cbip_clusters": {
+
+							Type:     schema.TypeList,
+							Required: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"cbip_devices": {
+
+										Type:     schema.TypeList,
+										Required: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"admin_credentials": {
+
+													Type:     schema.TypeSet,
+													Required: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"password": {
+
+																Type:     schema.TypeSet,
+																Required: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"blindfold_secret_info_internal": {
+
+																			Type:       schema.TypeSet,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"decryption_provider": {
+																						Type:       schema.TypeString,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+
+																					"location": {
+																						Type:       schema.TypeString,
+																						Required:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+
+																					"store_provider": {
+																						Type:       schema.TypeString,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+																				},
+																			},
+																		},
+
+																		"secret_encoding_type": {
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+
+																		"blindfold_secret_info": {
+
+																			Type:     schema.TypeSet,
+																			Optional: true,
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"decryption_provider": {
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+
+																					"location": {
+																						Type:     schema.TypeString,
+																						Required: true,
+																					},
+
+																					"store_provider": {
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+																				},
+																			},
+																		},
+
+																		"clear_secret_info": {
+
+																			Type:     schema.TypeSet,
+																			Optional: true,
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"provider": {
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+
+																					"url": {
+																						Type:     schema.TypeString,
+																						Required: true,
+																					},
+																				},
+																			},
+																		},
+
+																		"vault_secret_info": {
+
+																			Type:       schema.TypeSet,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"key": {
+																						Type:       schema.TypeString,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+
+																					"location": {
+																						Type:       schema.TypeString,
+																						Required:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+
+																					"provider": {
+																						Type:       schema.TypeString,
+																						Required:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+
+																					"secret_encoding": {
+																						Type:       schema.TypeString,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+
+																					"version": {
+																						Type:       schema.TypeInt,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+																				},
+																			},
+																		},
+
+																		"wingman_secret_info": {
+
+																			Type:       schema.TypeSet,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"name": {
+																						Type:       schema.TypeString,
+																						Required:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+																				},
+																			},
+																		},
+																	},
+																},
+															},
+
+															"username": {
+																Type:     schema.TypeString,
+																Required: true,
+															},
+														},
+													},
+												},
+
+												"cbip_certificate_authority": {
+
+													Type:     schema.TypeSet,
+													Required: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"skip_server_verification": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"trusted_ca": {
+
+																Type:     schema.TypeSet,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"name": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+																		"namespace": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+																		"tenant": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+																	},
+																},
+															},
+														},
+													},
+												},
+
+												"cbip_mgmt_ip": {
+													Type:     schema.TypeString,
+													Required: true,
+												},
+
+												"default_all": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
+												"namespace_mapping": {
+
+													Type:     schema.TypeSet,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"items": {
+
+																Type:     schema.TypeList,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"namespace": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+
+																		"partition_regex": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+																	},
+																},
+															},
+														},
+													},
+												},
+
+												"virtual_server_filter": {
+
+													Type:     schema.TypeSet,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"description_regex": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+
+															"enabled_only": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"include_disabled": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"name_regex": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+
+															"port_ranges": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+
+															"protocols": {
+
+																Type: schema.TypeList,
+
+																Optional: true,
+																Elem: &schema.Schema{
+																	Type: schema.TypeString,
+																},
+															},
+														},
+													},
+												},
+											},
+										},
+									},
+
+									"metadata": {
+
+										Type:     schema.TypeSet,
+										Required: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"description": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+
+												"disable": {
+													Type:       schema.TypeBool,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+
+												"name": {
+													Type:     schema.TypeString,
+													Required: true,
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+
+						"internal_lb_domain": {
+							Type:       schema.TypeString,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
+						},
+					},
+				},
 			},
 
 			"discovery_consul": {
@@ -1837,6 +2190,434 @@ func resourceVolterraDiscoveryCreate(d *schema.ResourceData, meta interface{}) e
 	//discovery_choice
 
 	discoveryChoiceTypeFound := false
+
+	if v, ok := d.GetOk("discovery_cbip"); ok && !discoveryChoiceTypeFound {
+
+		discoveryChoiceTypeFound = true
+		discoveryChoiceInt := &ves_io_schema_discovery.CreateSpecType_DiscoveryCbip{}
+		discoveryChoiceInt.DiscoveryCbip = &ves_io_schema_discovery.CbipDiscoveryType{}
+		createSpec.DiscoveryChoice = discoveryChoiceInt
+
+		sl := v.(*schema.Set).List()
+		for _, set := range sl {
+			cs := set.(map[string]interface{})
+
+			if v, ok := cs["cbip_clusters"]; ok && !isIntfNil(v) {
+
+				sl := v.([]interface{})
+				cbipClusters := make([]*ves_io_schema_discovery.CbipCluster, len(sl))
+				discoveryChoiceInt.DiscoveryCbip.CbipClusters = cbipClusters
+				for i, set := range sl {
+					cbipClusters[i] = &ves_io_schema_discovery.CbipCluster{}
+					cbipClustersMapStrToI := set.(map[string]interface{})
+
+					if v, ok := cbipClustersMapStrToI["cbip_devices"]; ok && !isIntfNil(v) {
+
+						sl := v.([]interface{})
+						cbipDevices := make([]*ves_io_schema_discovery.CbipDeviceConfig, len(sl))
+						cbipClusters[i].CbipDevices = cbipDevices
+						for i, set := range sl {
+							cbipDevices[i] = &ves_io_schema_discovery.CbipDeviceConfig{}
+							cbipDevicesMapStrToI := set.(map[string]interface{})
+
+							if v, ok := cbipDevicesMapStrToI["admin_credentials"]; ok && !isIntfNil(v) {
+
+								sl := v.(*schema.Set).List()
+								adminCredentials := &ves_io_schema_discovery.CbipAdminCredentials{}
+								cbipDevices[i].AdminCredentials = adminCredentials
+								for _, set := range sl {
+									adminCredentialsMapStrToI := set.(map[string]interface{})
+
+									if v, ok := adminCredentialsMapStrToI["password"]; ok && !isIntfNil(v) {
+
+										sl := v.(*schema.Set).List()
+										password := &ves_io_schema.SecretType{}
+										adminCredentials.Password = password
+										for _, set := range sl {
+											passwordMapStrToI := set.(map[string]interface{})
+
+											if v, ok := passwordMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
+
+												sl := v.(*schema.Set).List()
+												blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
+												password.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
+												for _, set := range sl {
+													blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
+
+													if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
+														blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
+													}
+
+													if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
+														blindfoldSecretInfoInternal.Location = w.(string)
+													}
+
+													if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
+														blindfoldSecretInfoInternal.StoreProvider = w.(string)
+													}
+
+												}
+
+											}
+
+											if v, ok := passwordMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
+
+												password.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+											}
+
+											secretInfoOneofTypeFound := false
+
+											if v, ok := passwordMapStrToI["blindfold_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+												secretInfoOneofTypeFound = true
+												secretInfoOneofInt := &ves_io_schema.SecretType_BlindfoldSecretInfo{}
+												secretInfoOneofInt.BlindfoldSecretInfo = &ves_io_schema.BlindfoldSecretInfoType{}
+												password.SecretInfoOneof = secretInfoOneofInt
+
+												sl := v.(*schema.Set).List()
+												for _, set := range sl {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["decryption_provider"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.BlindfoldSecretInfo.DecryptionProvider = v.(string)
+
+													}
+
+													if v, ok := cs["location"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.BlindfoldSecretInfo.Location = v.(string)
+
+													}
+
+													if v, ok := cs["store_provider"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.BlindfoldSecretInfo.StoreProvider = v.(string)
+
+													}
+
+												}
+
+											}
+
+											if v, ok := passwordMapStrToI["clear_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+												secretInfoOneofTypeFound = true
+												secretInfoOneofInt := &ves_io_schema.SecretType_ClearSecretInfo{}
+												secretInfoOneofInt.ClearSecretInfo = &ves_io_schema.ClearSecretInfoType{}
+												password.SecretInfoOneof = secretInfoOneofInt
+
+												sl := v.(*schema.Set).List()
+												for _, set := range sl {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.ClearSecretInfo.Provider = v.(string)
+
+													}
+
+													if v, ok := cs["url"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+
+													}
+
+												}
+
+											}
+
+											if v, ok := passwordMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+												secretInfoOneofTypeFound = true
+												secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
+												secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
+												password.SecretInfoOneof = secretInfoOneofInt
+
+												sl := v.(*schema.Set).List()
+												for _, set := range sl {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["key"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
+													}
+
+													if v, ok := cs["location"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
+													}
+
+													if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
+													}
+
+													if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+													}
+
+													if v, ok := cs["version"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
+													}
+
+												}
+
+											}
+
+											if v, ok := passwordMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+												secretInfoOneofTypeFound = true
+												secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
+												secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
+												password.SecretInfoOneof = secretInfoOneofInt
+
+												sl := v.(*schema.Set).List()
+												for _, set := range sl {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
+
+													}
+
+												}
+
+											}
+
+										}
+
+									}
+
+									if w, ok := adminCredentialsMapStrToI["username"]; ok && !isIntfNil(w) {
+										adminCredentials.Username = w.(string)
+									}
+
+								}
+
+							}
+
+							if v, ok := cbipDevicesMapStrToI["cbip_certificate_authority"]; ok && !isIntfNil(v) {
+
+								sl := v.(*schema.Set).List()
+								cbipCertificateAuthority := &ves_io_schema_discovery.CbipCertificateAuthority{}
+								cbipDevices[i].CbipCertificateAuthority = cbipCertificateAuthority
+								for _, set := range sl {
+									cbipCertificateAuthorityMapStrToI := set.(map[string]interface{})
+
+									serverValidationChoiceTypeFound := false
+
+									if v, ok := cbipCertificateAuthorityMapStrToI["skip_server_verification"]; ok && !isIntfNil(v) && !serverValidationChoiceTypeFound {
+
+										serverValidationChoiceTypeFound = true
+
+										if v.(bool) {
+											serverValidationChoiceInt := &ves_io_schema_discovery.CbipCertificateAuthority_SkipServerVerification{}
+											serverValidationChoiceInt.SkipServerVerification = &ves_io_schema.Empty{}
+											cbipCertificateAuthority.ServerValidationChoice = serverValidationChoiceInt
+										}
+
+									}
+
+									if v, ok := cbipCertificateAuthorityMapStrToI["trusted_ca"]; ok && !isIntfNil(v) && !serverValidationChoiceTypeFound {
+
+										serverValidationChoiceTypeFound = true
+										serverValidationChoiceInt := &ves_io_schema_discovery.CbipCertificateAuthority_TrustedCa{}
+										serverValidationChoiceInt.TrustedCa = &ves_io_schema_views.ObjectRefType{}
+										cbipCertificateAuthority.ServerValidationChoice = serverValidationChoiceInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+												serverValidationChoiceInt.TrustedCa.Name = v.(string)
+
+											}
+
+											if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+												serverValidationChoiceInt.TrustedCa.Namespace = v.(string)
+
+											}
+
+											if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+												serverValidationChoiceInt.TrustedCa.Tenant = v.(string)
+
+											}
+
+										}
+
+									}
+
+								}
+
+							}
+
+							if w, ok := cbipDevicesMapStrToI["cbip_mgmt_ip"]; ok && !isIntfNil(w) {
+								cbipDevices[i].CbipMgmtIp = w.(string)
+							}
+
+							namespaceMappingChoiceTypeFound := false
+
+							if v, ok := cbipDevicesMapStrToI["default_all"]; ok && !isIntfNil(v) && !namespaceMappingChoiceTypeFound {
+
+								namespaceMappingChoiceTypeFound = true
+
+								if v.(bool) {
+									namespaceMappingChoiceInt := &ves_io_schema_discovery.CbipDeviceConfig_DefaultAll{}
+									namespaceMappingChoiceInt.DefaultAll = &ves_io_schema.Empty{}
+									cbipDevices[i].NamespaceMappingChoice = namespaceMappingChoiceInt
+								}
+
+							}
+
+							if v, ok := cbipDevicesMapStrToI["namespace_mapping"]; ok && !isIntfNil(v) && !namespaceMappingChoiceTypeFound {
+
+								namespaceMappingChoiceTypeFound = true
+								namespaceMappingChoiceInt := &ves_io_schema_discovery.CbipDeviceConfig_NamespaceMapping{}
+								namespaceMappingChoiceInt.NamespaceMapping = &ves_io_schema_discovery.NamespaceMapping{}
+								cbipDevices[i].NamespaceMappingChoice = namespaceMappingChoiceInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									if v, ok := cs["items"]; ok && !isIntfNil(v) {
+
+										sl := v.([]interface{})
+										items := make([]*ves_io_schema_discovery.NamespaceMappingItem, len(sl))
+										namespaceMappingChoiceInt.NamespaceMapping.Items = items
+										for i, set := range sl {
+											items[i] = &ves_io_schema_discovery.NamespaceMappingItem{}
+											itemsMapStrToI := set.(map[string]interface{})
+
+											if w, ok := itemsMapStrToI["namespace"]; ok && !isIntfNil(w) {
+												items[i].Namespace = w.(string)
+											}
+
+											if w, ok := itemsMapStrToI["partition_regex"]; ok && !isIntfNil(w) {
+												items[i].PartitionRegex = w.(string)
+											}
+
+										}
+
+									}
+
+								}
+
+							}
+
+							if v, ok := cbipDevicesMapStrToI["virtual_server_filter"]; ok && !isIntfNil(v) {
+
+								sl := v.(*schema.Set).List()
+								virtualServerFilter := &ves_io_schema_discovery.VirtualServerFilter{}
+								cbipDevices[i].VirtualServerFilter = virtualServerFilter
+								for _, set := range sl {
+									virtualServerFilterMapStrToI := set.(map[string]interface{})
+
+									if w, ok := virtualServerFilterMapStrToI["description_regex"]; ok && !isIntfNil(w) {
+										virtualServerFilter.DescriptionRegex = w.(string)
+									}
+
+									discoverDisabledChoiceTypeFound := false
+
+									if v, ok := virtualServerFilterMapStrToI["enabled_only"]; ok && !isIntfNil(v) && !discoverDisabledChoiceTypeFound {
+
+										discoverDisabledChoiceTypeFound = true
+
+										if v.(bool) {
+											discoverDisabledChoiceInt := &ves_io_schema_discovery.VirtualServerFilter_EnabledOnly{}
+											discoverDisabledChoiceInt.EnabledOnly = &ves_io_schema.Empty{}
+											virtualServerFilter.DiscoverDisabledChoice = discoverDisabledChoiceInt
+										}
+
+									}
+
+									if v, ok := virtualServerFilterMapStrToI["include_disabled"]; ok && !isIntfNil(v) && !discoverDisabledChoiceTypeFound {
+
+										discoverDisabledChoiceTypeFound = true
+
+										if v.(bool) {
+											discoverDisabledChoiceInt := &ves_io_schema_discovery.VirtualServerFilter_IncludeDisabled{}
+											discoverDisabledChoiceInt.IncludeDisabled = &ves_io_schema.Empty{}
+											virtualServerFilter.DiscoverDisabledChoice = discoverDisabledChoiceInt
+										}
+
+									}
+
+									if w, ok := virtualServerFilterMapStrToI["name_regex"]; ok && !isIntfNil(w) {
+										virtualServerFilter.NameRegex = w.(string)
+									}
+
+									if w, ok := virtualServerFilterMapStrToI["port_ranges"]; ok && !isIntfNil(w) {
+										virtualServerFilter.PortRanges = w.(string)
+									}
+
+									if w, ok := virtualServerFilterMapStrToI["protocols"]; ok && !isIntfNil(w) {
+										ls := make([]string, len(w.([]interface{})))
+										for i, v := range w.([]interface{}) {
+											ls[i] = v.(string)
+										}
+										virtualServerFilter.Protocols = ls
+									}
+
+								}
+
+							}
+
+						}
+
+					}
+
+					if v, ok := cbipClustersMapStrToI["metadata"]; ok && !isIntfNil(v) {
+
+						sl := v.(*schema.Set).List()
+						metadata := &ves_io_schema.MessageMetaType{}
+						cbipClusters[i].Metadata = metadata
+						for _, set := range sl {
+							metadataMapStrToI := set.(map[string]interface{})
+
+							if w, ok := metadataMapStrToI["description"]; ok && !isIntfNil(w) {
+								metadata.Description = w.(string)
+							}
+
+							if w, ok := metadataMapStrToI["disable"]; ok && !isIntfNil(w) {
+								metadata.Disable = w.(bool)
+							}
+
+							if w, ok := metadataMapStrToI["name"]; ok && !isIntfNil(w) {
+								metadata.Name = w.(string)
+							}
+
+						}
+
+					}
+
+				}
+
+			}
+
+			if v, ok := cs["internal_lb_domain"]; ok && !isIntfNil(v) {
+
+				discoveryChoiceInt.DiscoveryCbip.InternalLbDomain = v.(string)
+
+			}
+
+		}
+
+	}
 
 	if v, ok := d.GetOk("discovery_consul"); ok && !discoveryChoiceTypeFound {
 
@@ -3934,6 +4715,434 @@ func resourceVolterraDiscoveryUpdate(d *schema.ResourceData, meta interface{}) e
 	}
 
 	discoveryChoiceTypeFound := false
+
+	if v, ok := d.GetOk("discovery_cbip"); ok && !discoveryChoiceTypeFound {
+
+		discoveryChoiceTypeFound = true
+		discoveryChoiceInt := &ves_io_schema_discovery.ReplaceSpecType_DiscoveryCbip{}
+		discoveryChoiceInt.DiscoveryCbip = &ves_io_schema_discovery.CbipDiscoveryType{}
+		updateSpec.DiscoveryChoice = discoveryChoiceInt
+
+		sl := v.(*schema.Set).List()
+		for _, set := range sl {
+			cs := set.(map[string]interface{})
+
+			if v, ok := cs["cbip_clusters"]; ok && !isIntfNil(v) {
+
+				sl := v.([]interface{})
+				cbipClusters := make([]*ves_io_schema_discovery.CbipCluster, len(sl))
+				discoveryChoiceInt.DiscoveryCbip.CbipClusters = cbipClusters
+				for i, set := range sl {
+					cbipClusters[i] = &ves_io_schema_discovery.CbipCluster{}
+					cbipClustersMapStrToI := set.(map[string]interface{})
+
+					if v, ok := cbipClustersMapStrToI["cbip_devices"]; ok && !isIntfNil(v) {
+
+						sl := v.([]interface{})
+						cbipDevices := make([]*ves_io_schema_discovery.CbipDeviceConfig, len(sl))
+						cbipClusters[i].CbipDevices = cbipDevices
+						for i, set := range sl {
+							cbipDevices[i] = &ves_io_schema_discovery.CbipDeviceConfig{}
+							cbipDevicesMapStrToI := set.(map[string]interface{})
+
+							if v, ok := cbipDevicesMapStrToI["admin_credentials"]; ok && !isIntfNil(v) {
+
+								sl := v.(*schema.Set).List()
+								adminCredentials := &ves_io_schema_discovery.CbipAdminCredentials{}
+								cbipDevices[i].AdminCredentials = adminCredentials
+								for _, set := range sl {
+									adminCredentialsMapStrToI := set.(map[string]interface{})
+
+									if v, ok := adminCredentialsMapStrToI["password"]; ok && !isIntfNil(v) {
+
+										sl := v.(*schema.Set).List()
+										password := &ves_io_schema.SecretType{}
+										adminCredentials.Password = password
+										for _, set := range sl {
+											passwordMapStrToI := set.(map[string]interface{})
+
+											if v, ok := passwordMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
+
+												sl := v.(*schema.Set).List()
+												blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
+												password.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
+												for _, set := range sl {
+													blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
+
+													if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
+														blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
+													}
+
+													if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
+														blindfoldSecretInfoInternal.Location = w.(string)
+													}
+
+													if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
+														blindfoldSecretInfoInternal.StoreProvider = w.(string)
+													}
+
+												}
+
+											}
+
+											if v, ok := passwordMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
+
+												password.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+											}
+
+											secretInfoOneofTypeFound := false
+
+											if v, ok := passwordMapStrToI["blindfold_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+												secretInfoOneofTypeFound = true
+												secretInfoOneofInt := &ves_io_schema.SecretType_BlindfoldSecretInfo{}
+												secretInfoOneofInt.BlindfoldSecretInfo = &ves_io_schema.BlindfoldSecretInfoType{}
+												password.SecretInfoOneof = secretInfoOneofInt
+
+												sl := v.(*schema.Set).List()
+												for _, set := range sl {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["decryption_provider"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.BlindfoldSecretInfo.DecryptionProvider = v.(string)
+
+													}
+
+													if v, ok := cs["location"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.BlindfoldSecretInfo.Location = v.(string)
+
+													}
+
+													if v, ok := cs["store_provider"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.BlindfoldSecretInfo.StoreProvider = v.(string)
+
+													}
+
+												}
+
+											}
+
+											if v, ok := passwordMapStrToI["clear_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+												secretInfoOneofTypeFound = true
+												secretInfoOneofInt := &ves_io_schema.SecretType_ClearSecretInfo{}
+												secretInfoOneofInt.ClearSecretInfo = &ves_io_schema.ClearSecretInfoType{}
+												password.SecretInfoOneof = secretInfoOneofInt
+
+												sl := v.(*schema.Set).List()
+												for _, set := range sl {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.ClearSecretInfo.Provider = v.(string)
+
+													}
+
+													if v, ok := cs["url"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+
+													}
+
+												}
+
+											}
+
+											if v, ok := passwordMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+												secretInfoOneofTypeFound = true
+												secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
+												secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
+												password.SecretInfoOneof = secretInfoOneofInt
+
+												sl := v.(*schema.Set).List()
+												for _, set := range sl {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["key"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
+													}
+
+													if v, ok := cs["location"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
+													}
+
+													if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
+													}
+
+													if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+													}
+
+													if v, ok := cs["version"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
+													}
+
+												}
+
+											}
+
+											if v, ok := passwordMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+												secretInfoOneofTypeFound = true
+												secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
+												secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
+												password.SecretInfoOneof = secretInfoOneofInt
+
+												sl := v.(*schema.Set).List()
+												for _, set := range sl {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
+
+													}
+
+												}
+
+											}
+
+										}
+
+									}
+
+									if w, ok := adminCredentialsMapStrToI["username"]; ok && !isIntfNil(w) {
+										adminCredentials.Username = w.(string)
+									}
+
+								}
+
+							}
+
+							if v, ok := cbipDevicesMapStrToI["cbip_certificate_authority"]; ok && !isIntfNil(v) {
+
+								sl := v.(*schema.Set).List()
+								cbipCertificateAuthority := &ves_io_schema_discovery.CbipCertificateAuthority{}
+								cbipDevices[i].CbipCertificateAuthority = cbipCertificateAuthority
+								for _, set := range sl {
+									cbipCertificateAuthorityMapStrToI := set.(map[string]interface{})
+
+									serverValidationChoiceTypeFound := false
+
+									if v, ok := cbipCertificateAuthorityMapStrToI["skip_server_verification"]; ok && !isIntfNil(v) && !serverValidationChoiceTypeFound {
+
+										serverValidationChoiceTypeFound = true
+
+										if v.(bool) {
+											serverValidationChoiceInt := &ves_io_schema_discovery.CbipCertificateAuthority_SkipServerVerification{}
+											serverValidationChoiceInt.SkipServerVerification = &ves_io_schema.Empty{}
+											cbipCertificateAuthority.ServerValidationChoice = serverValidationChoiceInt
+										}
+
+									}
+
+									if v, ok := cbipCertificateAuthorityMapStrToI["trusted_ca"]; ok && !isIntfNil(v) && !serverValidationChoiceTypeFound {
+
+										serverValidationChoiceTypeFound = true
+										serverValidationChoiceInt := &ves_io_schema_discovery.CbipCertificateAuthority_TrustedCa{}
+										serverValidationChoiceInt.TrustedCa = &ves_io_schema_views.ObjectRefType{}
+										cbipCertificateAuthority.ServerValidationChoice = serverValidationChoiceInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+												serverValidationChoiceInt.TrustedCa.Name = v.(string)
+
+											}
+
+											if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+												serverValidationChoiceInt.TrustedCa.Namespace = v.(string)
+
+											}
+
+											if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+												serverValidationChoiceInt.TrustedCa.Tenant = v.(string)
+
+											}
+
+										}
+
+									}
+
+								}
+
+							}
+
+							if w, ok := cbipDevicesMapStrToI["cbip_mgmt_ip"]; ok && !isIntfNil(w) {
+								cbipDevices[i].CbipMgmtIp = w.(string)
+							}
+
+							namespaceMappingChoiceTypeFound := false
+
+							if v, ok := cbipDevicesMapStrToI["default_all"]; ok && !isIntfNil(v) && !namespaceMappingChoiceTypeFound {
+
+								namespaceMappingChoiceTypeFound = true
+
+								if v.(bool) {
+									namespaceMappingChoiceInt := &ves_io_schema_discovery.CbipDeviceConfig_DefaultAll{}
+									namespaceMappingChoiceInt.DefaultAll = &ves_io_schema.Empty{}
+									cbipDevices[i].NamespaceMappingChoice = namespaceMappingChoiceInt
+								}
+
+							}
+
+							if v, ok := cbipDevicesMapStrToI["namespace_mapping"]; ok && !isIntfNil(v) && !namespaceMappingChoiceTypeFound {
+
+								namespaceMappingChoiceTypeFound = true
+								namespaceMappingChoiceInt := &ves_io_schema_discovery.CbipDeviceConfig_NamespaceMapping{}
+								namespaceMappingChoiceInt.NamespaceMapping = &ves_io_schema_discovery.NamespaceMapping{}
+								cbipDevices[i].NamespaceMappingChoice = namespaceMappingChoiceInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									if v, ok := cs["items"]; ok && !isIntfNil(v) {
+
+										sl := v.([]interface{})
+										items := make([]*ves_io_schema_discovery.NamespaceMappingItem, len(sl))
+										namespaceMappingChoiceInt.NamespaceMapping.Items = items
+										for i, set := range sl {
+											items[i] = &ves_io_schema_discovery.NamespaceMappingItem{}
+											itemsMapStrToI := set.(map[string]interface{})
+
+											if w, ok := itemsMapStrToI["namespace"]; ok && !isIntfNil(w) {
+												items[i].Namespace = w.(string)
+											}
+
+											if w, ok := itemsMapStrToI["partition_regex"]; ok && !isIntfNil(w) {
+												items[i].PartitionRegex = w.(string)
+											}
+
+										}
+
+									}
+
+								}
+
+							}
+
+							if v, ok := cbipDevicesMapStrToI["virtual_server_filter"]; ok && !isIntfNil(v) {
+
+								sl := v.(*schema.Set).List()
+								virtualServerFilter := &ves_io_schema_discovery.VirtualServerFilter{}
+								cbipDevices[i].VirtualServerFilter = virtualServerFilter
+								for _, set := range sl {
+									virtualServerFilterMapStrToI := set.(map[string]interface{})
+
+									if w, ok := virtualServerFilterMapStrToI["description_regex"]; ok && !isIntfNil(w) {
+										virtualServerFilter.DescriptionRegex = w.(string)
+									}
+
+									discoverDisabledChoiceTypeFound := false
+
+									if v, ok := virtualServerFilterMapStrToI["enabled_only"]; ok && !isIntfNil(v) && !discoverDisabledChoiceTypeFound {
+
+										discoverDisabledChoiceTypeFound = true
+
+										if v.(bool) {
+											discoverDisabledChoiceInt := &ves_io_schema_discovery.VirtualServerFilter_EnabledOnly{}
+											discoverDisabledChoiceInt.EnabledOnly = &ves_io_schema.Empty{}
+											virtualServerFilter.DiscoverDisabledChoice = discoverDisabledChoiceInt
+										}
+
+									}
+
+									if v, ok := virtualServerFilterMapStrToI["include_disabled"]; ok && !isIntfNil(v) && !discoverDisabledChoiceTypeFound {
+
+										discoverDisabledChoiceTypeFound = true
+
+										if v.(bool) {
+											discoverDisabledChoiceInt := &ves_io_schema_discovery.VirtualServerFilter_IncludeDisabled{}
+											discoverDisabledChoiceInt.IncludeDisabled = &ves_io_schema.Empty{}
+											virtualServerFilter.DiscoverDisabledChoice = discoverDisabledChoiceInt
+										}
+
+									}
+
+									if w, ok := virtualServerFilterMapStrToI["name_regex"]; ok && !isIntfNil(w) {
+										virtualServerFilter.NameRegex = w.(string)
+									}
+
+									if w, ok := virtualServerFilterMapStrToI["port_ranges"]; ok && !isIntfNil(w) {
+										virtualServerFilter.PortRanges = w.(string)
+									}
+
+									if w, ok := virtualServerFilterMapStrToI["protocols"]; ok && !isIntfNil(w) {
+										ls := make([]string, len(w.([]interface{})))
+										for i, v := range w.([]interface{}) {
+											ls[i] = v.(string)
+										}
+										virtualServerFilter.Protocols = ls
+									}
+
+								}
+
+							}
+
+						}
+
+					}
+
+					if v, ok := cbipClustersMapStrToI["metadata"]; ok && !isIntfNil(v) {
+
+						sl := v.(*schema.Set).List()
+						metadata := &ves_io_schema.MessageMetaType{}
+						cbipClusters[i].Metadata = metadata
+						for _, set := range sl {
+							metadataMapStrToI := set.(map[string]interface{})
+
+							if w, ok := metadataMapStrToI["description"]; ok && !isIntfNil(w) {
+								metadata.Description = w.(string)
+							}
+
+							if w, ok := metadataMapStrToI["disable"]; ok && !isIntfNil(w) {
+								metadata.Disable = w.(bool)
+							}
+
+							if w, ok := metadataMapStrToI["name"]; ok && !isIntfNil(w) {
+								metadata.Name = w.(string)
+							}
+
+						}
+
+					}
+
+				}
+
+			}
+
+			if v, ok := cs["internal_lb_domain"]; ok && !isIntfNil(v) {
+
+				discoveryChoiceInt.DiscoveryCbip.InternalLbDomain = v.(string)
+
+			}
+
+		}
+
+	}
 
 	if v, ok := d.GetOk("discovery_consul"); ok && !discoveryChoiceTypeFound {
 

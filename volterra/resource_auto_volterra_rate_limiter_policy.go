@@ -1130,6 +1130,16 @@ func resourceVolterraRateLimiterPolicyCreate(d *schema.ResourceData, meta interf
 
 							}
 
+							if v, ok := cs["ipv6_prefixes"]; ok && !isIntfNil(v) {
+
+								ls := make([]string, len(v.([]interface{})))
+								for i, v := range v.([]interface{}) {
+									ls[i] = v.(string)
+								}
+								ipChoiceInt.IpPrefixList.Ipv6Prefixes = ls
+
+							}
+
 						}
 
 					}
@@ -1865,6 +1875,16 @@ func resourceVolterraRateLimiterPolicyUpdate(d *schema.ResourceData, meta interf
 									ls[i] = v.(string)
 								}
 								ipChoiceInt.IpPrefixList.IpPrefixes = ls
+
+							}
+
+							if v, ok := cs["ipv6_prefixes"]; ok && !isIntfNil(v) {
+
+								ls := make([]string, len(v.([]interface{})))
+								for i, v := range v.([]interface{}) {
+									ls[i] = v.(string)
+								}
+								ipChoiceInt.IpPrefixList.Ipv6Prefixes = ls
 
 							}
 

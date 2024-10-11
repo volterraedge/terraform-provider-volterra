@@ -5019,7 +5019,7 @@ var APISwaggerJSON string = `{
             "type": "object",
             "description": "Specify how worker nodes within a site will be upgraded.",
             "title": "Node by Node Upgrade",
-            "x-displayname": "Node by Node Upgrade [BETA]",
+            "x-displayname": "Node by Node Upgrade",
             "x-ves-displayorder": "1",
             "x-ves-oneof-field-kubernetes_upgrade_drain_enable_choice": "[\"disable_upgrade_drain\",\"enable_upgrade_drain\"]",
             "x-ves-proto-message": "ves.io.schema.views.KubernetesUpgradeDrain",

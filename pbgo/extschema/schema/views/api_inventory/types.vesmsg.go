@@ -17,6 +17,7 @@ import (
 	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 	ves_io_schema_views "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
 	ves_io_schema_views_api_definition "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/api_definition"
+	ves_io_schema_views_common_waf "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/common_waf"
 )
 
 var (
@@ -71,6 +72,12 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	var drInfos []db.DRefInfo
 	if fdrInfos, err := m.GetApiDefinitionRefDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetApiDefinitionRefDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetSelectedCodeBaseIntegrationsDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetSelectedCodeBaseIntegrationsDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
@@ -138,6 +145,28 @@ func (m *GlobalSpecType) GetApiDefinitionRefDBEntries(ctx context.Context, d db.
 	}
 
 	return entries, nil
+}
+
+// GetDRefInfo for the field's type
+func (m *GlobalSpecType) GetSelectedCodeBaseIntegrationsDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetSelectedCodeBaseIntegrations() == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	for idx, e := range m.GetSelectedCodeBaseIntegrations() {
+		driSet, err := e.GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetSelectedCodeBaseIntegrations() GetDRefInfo() FAILED")
+		}
+		for i := range driSet {
+			dri := &driSet[i]
+			dri.DRField = fmt.Sprintf("selected_code_base_integrations[%v].%s", idx, dri.DRField)
+		}
+		drInfos = append(drInfos, driSet...)
+	}
+	return drInfos, nil
+
 }
 
 func (m *GlobalSpecType) GetSensitiveDataPolicyRefDRefInfo() ([]db.DRefInfo, error) {
@@ -277,6 +306,18 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["selected_code_base_integrations"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("selected_code_base_integrations"))
+		for idx, item := range m.GetSelectedCodeBaseIntegrations() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["sensitive_data_policy_ref"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("sensitive_data_policy_ref"))
@@ -307,6 +348,8 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v.FldValidators["api_definition_ref"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	v.FldValidators["sensitive_data_policy_ref"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
+
+	v.FldValidators["selected_code_base_integrations"] = ves_io_schema_views_common_waf.CodeBaseIntegrationSelectionValidator().Validate
 
 	v.FldValidators["view_internal"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 

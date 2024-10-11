@@ -89,67 +89,12 @@ func (v *ValidateAddonServiceChoice) Validate(ctx context.Context, pm interface{
 				return err
 			}
 		}
-	case *AddonServiceChoice_F5XcChildManagement:
-		if fv, exists := v.FldValidators["choice.f5xc_child_management"]; exists {
-			val := m.GetChoice().(*AddonServiceChoice_F5XcChildManagement).F5XcChildManagement
+	case *AddonServiceChoice_F5XcSupportManagementStandard:
+		if fv, exists := v.FldValidators["choice.f5xc_support_management_standard"]; exists {
+			val := m.GetChoice().(*AddonServiceChoice_F5XcSupportManagementStandard).F5XcSupportManagementStandard
 			vOpts := append(opts,
 				db.WithValidateField("choice"),
-				db.WithValidateField("f5xc_child_management"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *AddonServiceChoice_VesIoSupportManagement:
-		if fv, exists := v.FldValidators["choice.ves_io_support_management"]; exists {
-			val := m.GetChoice().(*AddonServiceChoice_VesIoSupportManagement).VesIoSupportManagement
-			vOpts := append(opts,
-				db.WithValidateField("choice"),
-				db.WithValidateField("ves_io_support_management"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *AddonServiceChoice_F5XcSupportOperations:
-		if fv, exists := v.FldValidators["choice.f5xc_support_operations"]; exists {
-			val := m.GetChoice().(*AddonServiceChoice_F5XcSupportOperations).F5XcSupportOperations
-			vOpts := append(opts,
-				db.WithValidateField("choice"),
-				db.WithValidateField("f5xc_support_operations"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *AddonServiceChoice_F5XcConsoleBase:
-		if fv, exists := v.FldValidators["choice.f5xc_console_base"]; exists {
-			val := m.GetChoice().(*AddonServiceChoice_F5XcConsoleBase).F5XcConsoleBase
-			vOpts := append(opts,
-				db.WithValidateField("choice"),
-				db.WithValidateField("f5xc_console_base"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *AddonServiceChoice_F5XcConsoleBaseAdvanced:
-		if fv, exists := v.FldValidators["choice.f5xc_console_base_advanced"]; exists {
-			val := m.GetChoice().(*AddonServiceChoice_F5XcConsoleBaseAdvanced).F5XcConsoleBaseAdvanced
-			vOpts := append(opts,
-				db.WithValidateField("choice"),
-				db.WithValidateField("f5xc_console_base_advanced"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *AddonServiceChoice_F5XcConsoleBasePremium:
-		if fv, exists := v.FldValidators["choice.f5xc_console_base_premium"]; exists {
-			val := m.GetChoice().(*AddonServiceChoice_F5XcConsoleBasePremium).F5XcConsoleBasePremium
-			vOpts := append(opts,
-				db.WithValidateField("choice"),
-				db.WithValidateField("f5xc_console_base_premium"),
+				db.WithValidateField("f5xc_support_management_standard"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
@@ -199,23 +144,12 @@ func (v *ValidateAddonServiceChoice) Validate(ctx context.Context, pm interface{
 				return err
 			}
 		}
-	case *AddonServiceChoice_VesIoTenantManagement:
-		if fv, exists := v.FldValidators["choice.ves_io_tenant_management"]; exists {
-			val := m.GetChoice().(*AddonServiceChoice_VesIoTenantManagement).VesIoTenantManagement
+	case *AddonServiceChoice_F5XcDelegatedAccessStandard:
+		if fv, exists := v.FldValidators["choice.f5xc_delegated_access_standard"]; exists {
+			val := m.GetChoice().(*AddonServiceChoice_F5XcDelegatedAccessStandard).F5XcDelegatedAccessStandard
 			vOpts := append(opts,
 				db.WithValidateField("choice"),
-				db.WithValidateField("ves_io_tenant_management"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *AddonServiceChoice_VesIoScim:
-		if fv, exists := v.FldValidators["choice.ves_io_scim"]; exists {
-			val := m.GetChoice().(*AddonServiceChoice_VesIoScim).VesIoScim
-			vOpts := append(opts,
-				db.WithValidateField("choice"),
-				db.WithValidateField("ves_io_scim"),
+				db.WithValidateField("f5xc_delegated_access_standard"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
@@ -375,17 +309,6 @@ func (v *ValidateAddonServiceChoice) Validate(ctx context.Context, pm interface{
 				return err
 			}
 		}
-	case *AddonServiceChoice_DataIntelligence:
-		if fv, exists := v.FldValidators["choice.data_intelligence"]; exists {
-			val := m.GetChoice().(*AddonServiceChoice_DataIntelligence).DataIntelligence
-			vOpts := append(opts,
-				db.WithValidateField("choice"),
-				db.WithValidateField("data_intelligence"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
 	case *AddonServiceChoice_F5XcRoutedDdosBasic:
 		if fv, exists := v.FldValidators["choice.f5xc_routed_ddos_basic"]; exists {
 			val := m.GetChoice().(*AddonServiceChoice_F5XcRoutedDdosBasic).F5XcRoutedDdosBasic
@@ -425,17 +348,6 @@ func (v *ValidateAddonServiceChoice) Validate(ctx context.Context, pm interface{
 			vOpts := append(opts,
 				db.WithValidateField("choice"),
 				db.WithValidateField("f5xc_site_management_basic"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *AddonServiceChoice_F5XcDnsBasic:
-		if fv, exists := v.FldValidators["choice.f5xc_dns_basic"]; exists {
-			val := m.GetChoice().(*AddonServiceChoice_F5XcDnsBasic).F5XcDnsBasic
-			vOpts := append(opts,
-				db.WithValidateField("choice"),
-				db.WithValidateField("f5xc_dns_basic"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
@@ -491,17 +403,6 @@ func (v *ValidateAddonServiceChoice) Validate(ctx context.Context, pm interface{
 			vOpts := append(opts,
 				db.WithValidateField("choice"),
 				db.WithValidateField("f5xc_application_traffic_insight_basic"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *AddonServiceChoice_Clearview:
-		if fv, exists := v.FldValidators["choice.clearview"]; exists {
-			val := m.GetChoice().(*AddonServiceChoice_Clearview).Clearview
-			vOpts := append(opts,
-				db.WithValidateField("choice"),
-				db.WithValidateField("clearview"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
@@ -656,6 +557,61 @@ func (v *ValidateAddonServiceChoice) Validate(ctx context.Context, pm interface{
 			vOpts := append(opts,
 				db.WithValidateField("choice"),
 				db.WithValidateField("f5xc_bot_defense_advanced_selfservice"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *AddonServiceChoice_F5XcScim:
+		if fv, exists := v.FldValidators["choice.f5xc_scim"]; exists {
+			val := m.GetChoice().(*AddonServiceChoice_F5XcScim).F5XcScim
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("f5xc_scim"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *AddonServiceChoice_F5XcChildManagementStandard:
+		if fv, exists := v.FldValidators["choice.f5xc_child_management_standard"]; exists {
+			val := m.GetChoice().(*AddonServiceChoice_F5XcChildManagementStandard).F5XcChildManagementStandard
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("f5xc_child_management_standard"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *AddonServiceChoice_F5XcSupportOperations:
+		if fv, exists := v.FldValidators["choice.f5xc_support_operations"]; exists {
+			val := m.GetChoice().(*AddonServiceChoice_F5XcSupportOperations).F5XcSupportOperations
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("f5xc_support_operations"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *AddonServiceChoice_F5XcDataIntelligenceStandard:
+		if fv, exists := v.FldValidators["choice.f5xc_data_intelligence_standard"]; exists {
+			val := m.GetChoice().(*AddonServiceChoice_F5XcDataIntelligenceStandard).F5XcDataIntelligenceStandard
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("f5xc_data_intelligence_standard"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *AddonServiceChoice_F5XcClearview:
+		if fv, exists := v.FldValidators["choice.f5xc_clearview"]; exists {
+			val := m.GetChoice().(*AddonServiceChoice_F5XcClearview).F5XcClearview
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("f5xc_clearview"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err

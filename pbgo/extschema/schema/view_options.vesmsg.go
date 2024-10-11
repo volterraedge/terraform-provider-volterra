@@ -3029,6 +3029,15 @@ func (v *ValidateTile) Validate(ctx context.Context, pm interface{}, opts ...db.
 
 	}
 
+	if fv, exists := v.FldValidators["collapse"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("collapse"))
+		if err := fv(ctx, m.GetCollapse(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["fields"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("fields"))

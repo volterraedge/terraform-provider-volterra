@@ -27,36 +27,37 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
-// LeasePool
+// IPV4 Lease Pool IP Range
 //
-// x-displayName: "LeasePool IP Range"
-// Start and End address of the pool.
-type LeasePool struct {
-	// StartAddress
+// x-displayName: "Lease Pool IP Range"
+//
+// IPV4 Lease Pool IP Range
+type IPV4LeasePoolRange struct {
+	// IPV4 Start Address
 	//
 	// x-displayName: "Start Address"
-	// x-required
-	// startAddress of Lease Pool member
-	StartAddress *schema.IpAddressType `protobuf:"bytes,1,opt,name=start_address,json=startAddress,proto3" json:"start_address,omitempty"`
-	// endaddress
+	//
+	// IPV4 Start Address
+	StartAddress *schema.Ipv4AddressType `protobuf:"bytes,3,opt,name=start_address,json=startAddress,proto3" json:"start_address,omitempty"`
+	// IPV4 End Address
 	//
 	// x-displayName: "End Address"
-	// x-required
-	// End Address of Lease Pool member
-	EndAddress *schema.IpAddressType `protobuf:"bytes,2,opt,name=end_address,json=endAddress,proto3" json:"end_address,omitempty"`
+	//
+	// IPV4 End Address
+	EndAddress *schema.Ipv4AddressType `protobuf:"bytes,4,opt,name=end_address,json=endAddress,proto3" json:"end_address,omitempty"`
 }
 
-func (m *LeasePool) Reset()      { *m = LeasePool{} }
-func (*LeasePool) ProtoMessage() {}
-func (*LeasePool) Descriptor() ([]byte, []int) {
+func (m *IPV4LeasePoolRange) Reset()      { *m = IPV4LeasePoolRange{} }
+func (*IPV4LeasePoolRange) ProtoMessage() {}
+func (*IPV4LeasePoolRange) Descriptor() ([]byte, []int) {
 	return fileDescriptor_16543978451c6ad7, []int{0}
 }
-func (m *LeasePool) XXX_Unmarshal(b []byte) error {
+func (m *IPV4LeasePoolRange) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *LeasePool) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *IPV4LeasePoolRange) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_LeasePool.Marshal(b, m, deterministic)
+		return xxx_messageInfo_IPV4LeasePoolRange.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -66,30 +67,324 @@ func (m *LeasePool) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 		return b[:n], nil
 	}
 }
-func (m *LeasePool) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_LeasePool.Merge(m, src)
+func (m *IPV4LeasePoolRange) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_IPV4LeasePoolRange.Merge(m, src)
 }
-func (m *LeasePool) XXX_Size() int {
+func (m *IPV4LeasePoolRange) XXX_Size() int {
 	return m.Size()
 }
-func (m *LeasePool) XXX_DiscardUnknown() {
-	xxx_messageInfo_LeasePool.DiscardUnknown(m)
+func (m *IPV4LeasePoolRange) XXX_DiscardUnknown() {
+	xxx_messageInfo_IPV4LeasePoolRange.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_LeasePool proto.InternalMessageInfo
+var xxx_messageInfo_IPV4LeasePoolRange proto.InternalMessageInfo
 
-func (m *LeasePool) GetStartAddress() *schema.IpAddressType {
+func (m *IPV4LeasePoolRange) GetStartAddress() *schema.Ipv4AddressType {
 	if m != nil {
 		return m.StartAddress
 	}
 	return nil
 }
 
-func (m *LeasePool) GetEndAddress() *schema.IpAddressType {
+func (m *IPV4LeasePoolRange) GetEndAddress() *schema.Ipv4AddressType {
 	if m != nil {
 		return m.EndAddress
 	}
 	return nil
+}
+
+// IPV6 Lease Pool Range
+//
+// x-displayName: "Lease Pool Range"
+//
+// IPV6 Lease Pool Range
+type IPV6LeasePoolRange struct {
+	// IPV6 Start Address
+	//
+	// x-displayName: "Start Address"
+	//
+	// IPV6 Start Address
+	StartAddress *schema.Ipv6AddressType `protobuf:"bytes,1,opt,name=start_address,json=startAddress,proto3" json:"start_address,omitempty"`
+	// IPV6 End Address
+	//
+	// x-displayName: "End Address"
+	//
+	// IPV6 End Address
+	EndAddress *schema.Ipv6AddressType `protobuf:"bytes,2,opt,name=end_address,json=endAddress,proto3" json:"end_address,omitempty"`
+}
+
+func (m *IPV6LeasePoolRange) Reset()      { *m = IPV6LeasePoolRange{} }
+func (*IPV6LeasePoolRange) ProtoMessage() {}
+func (*IPV6LeasePoolRange) Descriptor() ([]byte, []int) {
+	return fileDescriptor_16543978451c6ad7, []int{1}
+}
+func (m *IPV6LeasePoolRange) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *IPV6LeasePoolRange) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_IPV6LeasePoolRange.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *IPV6LeasePoolRange) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_IPV6LeasePoolRange.Merge(m, src)
+}
+func (m *IPV6LeasePoolRange) XXX_Size() int {
+	return m.Size()
+}
+func (m *IPV6LeasePoolRange) XXX_DiscardUnknown() {
+	xxx_messageInfo_IPV6LeasePoolRange.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_IPV6LeasePoolRange proto.InternalMessageInfo
+
+func (m *IPV6LeasePoolRange) GetStartAddress() *schema.Ipv6AddressType {
+	if m != nil {
+		return m.StartAddress
+	}
+	return nil
+}
+
+func (m *IPV6LeasePoolRange) GetEndAddress() *schema.Ipv6AddressType {
+	if m != nil {
+		return m.EndAddress
+	}
+	return nil
+}
+
+// IPV4 Lease Pool Config
+//
+// x-displayName: "IPV4 Pool Config "
+//
+// IPV4 Lease Pool Network
+type IPV4LeasePoolConfig struct {
+	// LeasePool Network
+	//
+	// x-displayName: "Lease Pool Network"
+	// x-example: "['10.2.1.0/24', '192.168.8.0/29', '10.7.64.160/27']"
+	// IPV4 Lease Pool Network
+	Prefix []string `protobuf:"bytes,3,rep,name=prefix,proto3" json:"prefix,omitempty"`
+	// IPV4 Lease Pool Range
+	//
+	// x-displayName: "Lease Pool Range"
+	// x-required
+	// IPV4 Lease Pool Range
+	Vip4Range []*IPV4LeasePoolRange `protobuf:"bytes,2,rep,name=vip4_range,json=vip4Range,proto3" json:"vip4_range,omitempty"`
+}
+
+func (m *IPV4LeasePoolConfig) Reset()      { *m = IPV4LeasePoolConfig{} }
+func (*IPV4LeasePoolConfig) ProtoMessage() {}
+func (*IPV4LeasePoolConfig) Descriptor() ([]byte, []int) {
+	return fileDescriptor_16543978451c6ad7, []int{2}
+}
+func (m *IPV4LeasePoolConfig) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *IPV4LeasePoolConfig) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_IPV4LeasePoolConfig.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *IPV4LeasePoolConfig) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_IPV4LeasePoolConfig.Merge(m, src)
+}
+func (m *IPV4LeasePoolConfig) XXX_Size() int {
+	return m.Size()
+}
+func (m *IPV4LeasePoolConfig) XXX_DiscardUnknown() {
+	xxx_messageInfo_IPV4LeasePoolConfig.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_IPV4LeasePoolConfig proto.InternalMessageInfo
+
+func (m *IPV4LeasePoolConfig) GetPrefix() []string {
+	if m != nil {
+		return m.Prefix
+	}
+	return nil
+}
+
+func (m *IPV4LeasePoolConfig) GetVip4Range() []*IPV4LeasePoolRange {
+	if m != nil {
+		return m.Vip4Range
+	}
+	return nil
+}
+
+// IPV6 Lease Pool Config
+//
+// x-displayName: "IPV6 Lease Pool"
+//
+// IPV6 Lease Pool Config
+type IPV6LeasePoolConfig struct {
+	// IPV6 Lease Pool Network
+	//
+	// x-displayName: "Lease Pool Network"
+	// x-example: "['2001:db8:abcd:0012::0/64', 'fd48:fa09:d9d4::/48', 'fdd8:3a62:45c7:98a5::/64']"
+	// IPV6 Lease Pool Network
+	Ipv6Prefix []string `protobuf:"bytes,1,rep,name=ipv6_prefix,json=ipv6Prefix,proto3" json:"ipv6_prefix,omitempty"`
+	// IPV6 Lease Pool Range
+	//
+	// x-displayName: "Lease Pool Range"
+	// x-required
+	// IPV6 Lease Pool Range
+	Vip6Range []*IPV6LeasePoolRange `protobuf:"bytes,3,rep,name=vip6_range,json=vip6Range,proto3" json:"vip6_range,omitempty"`
+}
+
+func (m *IPV6LeasePoolConfig) Reset()      { *m = IPV6LeasePoolConfig{} }
+func (*IPV6LeasePoolConfig) ProtoMessage() {}
+func (*IPV6LeasePoolConfig) Descriptor() ([]byte, []int) {
+	return fileDescriptor_16543978451c6ad7, []int{3}
+}
+func (m *IPV6LeasePoolConfig) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *IPV6LeasePoolConfig) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_IPV6LeasePoolConfig.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *IPV6LeasePoolConfig) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_IPV6LeasePoolConfig.Merge(m, src)
+}
+func (m *IPV6LeasePoolConfig) XXX_Size() int {
+	return m.Size()
+}
+func (m *IPV6LeasePoolConfig) XXX_DiscardUnknown() {
+	xxx_messageInfo_IPV6LeasePoolConfig.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_IPV6LeasePoolConfig proto.InternalMessageInfo
+
+func (m *IPV6LeasePoolConfig) GetIpv6Prefix() []string {
+	if m != nil {
+		return m.Ipv6Prefix
+	}
+	return nil
+}
+
+func (m *IPV6LeasePoolConfig) GetVip6Range() []*IPV6LeasePoolRange {
+	if m != nil {
+		return m.Vip6Range
+	}
+	return nil
+}
+
+// Lease Pool IP
+//
+// x-displayName: "Lease Pool IP"
+//
+// Lease pool network and subnet ip
+type IPVersion struct {
+	// IPV4/IPV6 Lease Pool
+	//
+	// x-displayName: "IPV4/IPV6 Lease Pool"
+	//
+	// IPV4/IPV6 Lease Pool
+	//
+	// Types that are valid to be assigned to IpVip:
+	//	*IPVersion_Ipv4Vip
+	//	*IPVersion_Ipv6Vip
+	IpVip isIPVersion_IpVip `protobuf_oneof:"ip_vip"`
+}
+
+func (m *IPVersion) Reset()      { *m = IPVersion{} }
+func (*IPVersion) ProtoMessage() {}
+func (*IPVersion) Descriptor() ([]byte, []int) {
+	return fileDescriptor_16543978451c6ad7, []int{4}
+}
+func (m *IPVersion) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *IPVersion) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_IPVersion.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *IPVersion) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_IPVersion.Merge(m, src)
+}
+func (m *IPVersion) XXX_Size() int {
+	return m.Size()
+}
+func (m *IPVersion) XXX_DiscardUnknown() {
+	xxx_messageInfo_IPVersion.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_IPVersion proto.InternalMessageInfo
+
+type isIPVersion_IpVip interface {
+	isIPVersion_IpVip()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+
+type IPVersion_Ipv4Vip struct {
+	Ipv4Vip *IPV4LeasePoolConfig `protobuf:"bytes,1,opt,name=ipv4_vip,json=ipv4Vip,proto3,oneof" json:"ipv4_vip,omitempty"`
+}
+type IPVersion_Ipv6Vip struct {
+	Ipv6Vip *IPV6LeasePoolConfig `protobuf:"bytes,2,opt,name=ipv6_vip,json=ipv6Vip,proto3,oneof" json:"ipv6_vip,omitempty"`
+}
+
+func (*IPVersion_Ipv4Vip) isIPVersion_IpVip() {}
+func (*IPVersion_Ipv6Vip) isIPVersion_IpVip() {}
+
+func (m *IPVersion) GetIpVip() isIPVersion_IpVip {
+	if m != nil {
+		return m.IpVip
+	}
+	return nil
+}
+
+func (m *IPVersion) GetIpv4Vip() *IPV4LeasePoolConfig {
+	if x, ok := m.GetIpVip().(*IPVersion_Ipv4Vip); ok {
+		return x.Ipv4Vip
+	}
+	return nil
+}
+
+func (m *IPVersion) GetIpv6Vip() *IPV6LeasePoolConfig {
+	if x, ok := m.GetIpVip().(*IPVersion_Ipv6Vip); ok {
+		return x.Ipv6Vip
+	}
+	return nil
+}
+
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*IPVersion) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
+		(*IPVersion_Ipv4Vip)(nil),
+		(*IPVersion_Ipv6Vip)(nil),
+	}
 }
 
 // GlobalSpecType
@@ -98,24 +393,18 @@ func (m *LeasePool) GetEndAddress() *schema.IpAddressType {
 //
 // Shape of the UZTNA LeasePool
 type GlobalSpecType struct {
-	// Network
+	// IP Version
 	//
-	// x-displayName: "LeasePool Network"
+	// x-displayName: "IP Version"
 	// x-required
-	// IPv4 or IPv6 network addresses
-	Network []*schema.IpSubnetType `protobuf:"bytes,1,rep,name=network,proto3" json:"network,omitempty"`
-	// LeasePool
-	//
-	// x-displayName: "LeasePool IP Range"
-	// x-required
-	// IP address ranges for the lease pool
-	LeasePool []*LeasePool `protobuf:"bytes,2,rep,name=lease_pool,json=leasePool,proto3" json:"lease_pool,omitempty"`
+	// IP address ranges for the Lease Pool Range
+	IpVersion *IPVersion `protobuf:"bytes,3,opt,name=ip_version,json=ipVersion,proto3" json:"ip_version,omitempty"`
 }
 
 func (m *GlobalSpecType) Reset()      { *m = GlobalSpecType{} }
 func (*GlobalSpecType) ProtoMessage() {}
 func (*GlobalSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_16543978451c6ad7, []int{1}
+	return fileDescriptor_16543978451c6ad7, []int{5}
 }
 func (m *GlobalSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -144,16 +433,9 @@ func (m *GlobalSpecType) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_GlobalSpecType proto.InternalMessageInfo
 
-func (m *GlobalSpecType) GetNetwork() []*schema.IpSubnetType {
+func (m *GlobalSpecType) GetIpVersion() *IPVersion {
 	if m != nil {
-		return m.Network
-	}
-	return nil
-}
-
-func (m *GlobalSpecType) GetLeasePool() []*LeasePool {
-	if m != nil {
-		return m.LeasePool
+		return m.IpVersion
 	}
 	return nil
 }
@@ -163,14 +445,13 @@ func (m *GlobalSpecType) GetLeasePool() []*LeasePool {
 // x-displayName: "Create Specification"
 // Shape of the UZTNA Tenant
 type CreateSpecType struct {
-	Network   []*schema.IpSubnetType `protobuf:"bytes,1,rep,name=network,proto3" json:"network,omitempty"`
-	LeasePool []*LeasePool           `protobuf:"bytes,2,rep,name=lease_pool,json=leasePool,proto3" json:"lease_pool,omitempty"`
+	IpVersion *IPVersion `protobuf:"bytes,3,opt,name=ip_version,json=ipVersion,proto3" json:"ip_version,omitempty"`
 }
 
 func (m *CreateSpecType) Reset()      { *m = CreateSpecType{} }
 func (*CreateSpecType) ProtoMessage() {}
 func (*CreateSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_16543978451c6ad7, []int{2}
+	return fileDescriptor_16543978451c6ad7, []int{6}
 }
 func (m *CreateSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -199,16 +480,9 @@ func (m *CreateSpecType) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_CreateSpecType proto.InternalMessageInfo
 
-func (m *CreateSpecType) GetNetwork() []*schema.IpSubnetType {
+func (m *CreateSpecType) GetIpVersion() *IPVersion {
 	if m != nil {
-		return m.Network
-	}
-	return nil
-}
-
-func (m *CreateSpecType) GetLeasePool() []*LeasePool {
-	if m != nil {
-		return m.LeasePool
+		return m.IpVersion
 	}
 	return nil
 }
@@ -218,14 +492,13 @@ func (m *CreateSpecType) GetLeasePool() []*LeasePool {
 // x-displayName: "Replace Specification"
 // Shape of the UZTNA Tenant
 type ReplaceSpecType struct {
-	Network   []*schema.IpSubnetType `protobuf:"bytes,1,rep,name=network,proto3" json:"network,omitempty"`
-	LeasePool []*LeasePool           `protobuf:"bytes,2,rep,name=lease_pool,json=leasePool,proto3" json:"lease_pool,omitempty"`
+	IpVersion *IPVersion `protobuf:"bytes,3,opt,name=ip_version,json=ipVersion,proto3" json:"ip_version,omitempty"`
 }
 
 func (m *ReplaceSpecType) Reset()      { *m = ReplaceSpecType{} }
 func (*ReplaceSpecType) ProtoMessage() {}
 func (*ReplaceSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_16543978451c6ad7, []int{3}
+	return fileDescriptor_16543978451c6ad7, []int{7}
 }
 func (m *ReplaceSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -254,16 +527,9 @@ func (m *ReplaceSpecType) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_ReplaceSpecType proto.InternalMessageInfo
 
-func (m *ReplaceSpecType) GetNetwork() []*schema.IpSubnetType {
+func (m *ReplaceSpecType) GetIpVersion() *IPVersion {
 	if m != nil {
-		return m.Network
-	}
-	return nil
-}
-
-func (m *ReplaceSpecType) GetLeasePool() []*LeasePool {
-	if m != nil {
-		return m.LeasePool
+		return m.IpVersion
 	}
 	return nil
 }
@@ -273,14 +539,13 @@ func (m *ReplaceSpecType) GetLeasePool() []*LeasePool {
 // x-displayName: "Get Tenant schema"
 // Get a new gateways object.
 type GetSpecType struct {
-	Network   []*schema.IpSubnetType `protobuf:"bytes,1,rep,name=network,proto3" json:"network,omitempty"`
-	LeasePool []*LeasePool           `protobuf:"bytes,2,rep,name=lease_pool,json=leasePool,proto3" json:"lease_pool,omitempty"`
+	IpVersion *IPVersion `protobuf:"bytes,3,opt,name=ip_version,json=ipVersion,proto3" json:"ip_version,omitempty"`
 }
 
 func (m *GetSpecType) Reset()      { *m = GetSpecType{} }
 func (*GetSpecType) ProtoMessage() {}
 func (*GetSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_16543978451c6ad7, []int{4}
+	return fileDescriptor_16543978451c6ad7, []int{8}
 }
 func (m *GetSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -309,22 +574,19 @@ func (m *GetSpecType) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_GetSpecType proto.InternalMessageInfo
 
-func (m *GetSpecType) GetNetwork() []*schema.IpSubnetType {
+func (m *GetSpecType) GetIpVersion() *IPVersion {
 	if m != nil {
-		return m.Network
-	}
-	return nil
-}
-
-func (m *GetSpecType) GetLeasePool() []*LeasePool {
-	if m != nil {
-		return m.LeasePool
+		return m.IpVersion
 	}
 	return nil
 }
 
 func init() {
-	proto.RegisterType((*LeasePool)(nil), "ves.io.schema.uztna.uztna_leasepool.LeasePool")
+	proto.RegisterType((*IPV4LeasePoolRange)(nil), "ves.io.schema.uztna.uztna_leasepool.IPV4LeasePoolRange")
+	proto.RegisterType((*IPV6LeasePoolRange)(nil), "ves.io.schema.uztna.uztna_leasepool.IPV6LeasePoolRange")
+	proto.RegisterType((*IPV4LeasePoolConfig)(nil), "ves.io.schema.uztna.uztna_leasepool.IPV4LeasePoolConfig")
+	proto.RegisterType((*IPV6LeasePoolConfig)(nil), "ves.io.schema.uztna.uztna_leasepool.IPV6LeasePoolConfig")
+	proto.RegisterType((*IPVersion)(nil), "ves.io.schema.uztna.uztna_leasepool.IPVersion")
 	proto.RegisterType((*GlobalSpecType)(nil), "ves.io.schema.uztna.uztna_leasepool.GlobalSpecType")
 	proto.RegisterType((*CreateSpecType)(nil), "ves.io.schema.uztna.uztna_leasepool.CreateSpecType")
 	proto.RegisterType((*ReplaceSpecType)(nil), "ves.io.schema.uztna.uztna_leasepool.ReplaceSpecType")
@@ -336,53 +598,67 @@ func init() {
 }
 
 var fileDescriptor_16543978451c6ad7 = []byte{
-	// 562 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xd4, 0x54, 0x4f, 0x6b, 0x13, 0x4d,
-	0x18, 0xdf, 0x69, 0x79, 0xdb, 0x66, 0xd2, 0x36, 0x7d, 0x83, 0x62, 0xba, 0x2d, 0xe3, 0x92, 0x5e,
-	0x0a, 0xd2, 0x59, 0xac, 0xf4, 0x52, 0x50, 0x68, 0x44, 0x42, 0xb0, 0x4a, 0x48, 0xbc, 0xd8, 0xcb,
-	0x32, 0xc9, 0x3e, 0xc6, 0xa5, 0x9b, 0x9d, 0x61, 0x76, 0x92, 0x5a, 0x4f, 0xfd, 0x06, 0x4a, 0x3f,
-	0x84, 0xa8, 0x1f, 0xc1, 0x5e, 0x3c, 0x4a, 0x4e, 0x39, 0x16, 0x4f, 0x66, 0x73, 0xd1, 0x5b, 0xfd,
-	0x06, 0xb2, 0x9b, 0x4d, 0xdc, 0x4d, 0x41, 0x2a, 0x5e, 0xf4, 0x12, 0x26, 0xf3, 0x7b, 0x9e, 0xdf,
-	0x9f, 0xd9, 0x87, 0x07, 0x9b, 0x5d, 0xf0, 0xa9, 0xc3, 0x4d, 0xbf, 0xf9, 0x1c, 0xda, 0xcc, 0xec,
-	0xbc, 0x54, 0x5e, 0xfc, 0x6b, 0xb9, 0xc0, 0x7c, 0x10, 0x9c, 0xbb, 0xa6, 0x3a, 0x16, 0xe0, 0x53,
-	0x21, 0xb9, 0xe2, 0xf9, 0x8d, 0x51, 0x03, 0x1d, 0x35, 0xd0, 0xa8, 0x94, 0x4e, 0x35, 0xe8, 0xb7,
-	0xd2, 0xac, 0x4c, 0x38, 0x56, 0x4b, 0xf2, 0x8e, 0xb0, 0xc0, 0x85, 0x36, 0x78, 0x2a, 0xc9, 0xa8,
-	0xdf, 0x48, 0x17, 0x7b, 0xa0, 0x62, 0x60, 0x2d, 0x0d, 0x70, 0xa1, 0x1c, 0xee, 0x8d, 0xbb, 0x56,
-	0xd3, 0x60, 0x92, 0x70, 0x3d, 0x0d, 0x75, 0x99, 0xeb, 0xd8, 0x4c, 0x41, 0x8c, 0x1a, 0x53, 0xa8,
-	0x03, 0x47, 0x56, 0x9a, 0xfa, 0xe6, 0xe5, 0x0a, 0x3f, 0x29, 0x50, 0xfc, 0x8c, 0x70, 0x66, 0x3f,
-	0x0c, 0x5b, 0xe5, 0xdc, 0xcd, 0xef, 0xe1, 0x25, 0x5f, 0x31, 0xa9, 0x2c, 0x66, 0xdb, 0x12, 0x7c,
-	0xbf, 0x80, 0x0c, 0xb4, 0x99, 0xdd, 0x5e, 0xa7, 0xe9, 0x97, 0xaa, 0x88, 0xbd, 0x11, 0xfe, 0xe4,
-	0x58, 0x40, 0x6d, 0x31, 0x6a, 0x89, 0x6f, 0xf2, 0x77, 0x71, 0x16, 0x3c, 0x7b, 0x42, 0x30, 0x73,
-	0x05, 0x02, 0x0c, 0x9e, 0x1d, 0xff, 0xdf, 0x7d, 0xd8, 0x3b, 0x43, 0x65, 0xbc, 0x81, 0x57, 0xea,
-	0x21, 0xa9, 0x51, 0xa9, 0x1a, 0x31, 0xa2, 0xe7, 0xa6, 0xbc, 0x61, 0x03, 0xe7, 0x1e, 0x78, 0x76,
-	0xa2, 0xc4, 0xd0, 0x97, 0x52, 0xe2, 0xc5, 0xef, 0x08, 0x2f, 0x97, 0x5d, 0xde, 0x60, 0x6e, 0x5d,
-	0x40, 0x33, 0xd4, 0xca, 0xef, 0xe3, 0x79, 0x0f, 0xd4, 0x11, 0x97, 0x87, 0x05, 0x64, 0xcc, 0x6e,
-	0x66, 0xb7, 0xd7, 0x2e, 0x59, 0xab, 0x77, 0x1a, 0x1e, 0xa8, 0xb0, 0xba, 0x74, 0xfd, 0xc3, 0xb7,
-	0x8f, 0xb3, 0x73, 0xa7, 0x68, 0x76, 0xe5, 0x64, 0x21, 0x3c, 0xfe, 0x77, 0x8a, 0x66, 0x16, 0x50,
-	0x6d, 0x4c, 0x91, 0x3f, 0xc0, 0x38, 0x9a, 0x14, 0x2b, 0x1c, 0x95, 0xc2, 0x4c, 0x44, 0x48, 0xe9,
-	0x15, 0xc6, 0x8a, 0x4e, 0xde, 0xbc, 0x94, 0x4d, 0x68, 0xd4, 0x32, 0xee, 0xf8, 0x7e, 0x77, 0xa7,
-	0x77, 0x86, 0x6e, 0xe3, 0x6b, 0x78, 0xfe, 0xf1, 0x48, 0x4c, 0xcf, 0x4c, 0xac, 0xe3, 0x55, 0x9c,
-	0xa9, 0x54, 0x8d, 0x1a, 0xf3, 0x5a, 0x60, 0xe8, 0x8b, 0x49, 0x13, 0xc5, 0x77, 0x08, 0x2f, 0xdf,
-	0x97, 0xc0, 0x14, 0x4c, 0x32, 0xef, 0xfc, 0x4e, 0xe6, 0x9f, 0xe1, 0x1e, 0xfd, 0x79, 0xb8, 0x64,
-	0x9e, 0xff, 0x7b, 0xf7, 0xa6, 0x3e, 0x46, 0xf1, 0x3d, 0xc2, 0xb9, 0x1a, 0x08, 0x97, 0x35, 0xff,
-	0x01, 0xb3, 0x6f, 0x10, 0xce, 0x96, 0x41, 0xfd, 0xf5, 0x46, 0x4b, 0xaf, 0x50, 0x7f, 0x40, 0xb4,
-	0xf3, 0x01, 0xd1, 0x2e, 0x06, 0x04, 0x9d, 0x04, 0x04, 0xbd, 0x0d, 0x08, 0xfa, 0x14, 0x10, 0xd4,
-	0x0f, 0x08, 0xfa, 0x12, 0x10, 0xf4, 0x35, 0x20, 0xda, 0x45, 0x40, 0xd0, 0xeb, 0x21, 0xd1, 0xfa,
-	0x43, 0xa2, 0x9d, 0x0f, 0x89, 0x76, 0xf0, 0xb4, 0xc5, 0xc5, 0x61, 0x8b, 0x76, 0xb9, 0xab, 0x40,
-	0x4a, 0x46, 0x3b, 0xbe, 0x19, 0x1d, 0x9e, 0x71, 0xd9, 0xde, 0x12, 0x92, 0x77, 0x1d, 0x1b, 0xe4,
-	0xd6, 0x18, 0x36, 0x45, 0xa3, 0xc5, 0x4d, 0x78, 0xa1, 0xe2, 0xcd, 0xf2, 0xab, 0xa5, 0xdb, 0x98,
-	0x8b, 0x76, 0xcd, 0x9d, 0x1f, 0x01, 0x00, 0x00, 0xff, 0xff, 0xc4, 0x59, 0x15, 0x62, 0xa2, 0x05,
-	0x00, 0x00,
+	// 785 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xc4, 0x96, 0x41, 0x4f, 0xe3, 0x46,
+	0x14, 0xc7, 0x3d, 0x76, 0x08, 0xc9, 0x4b, 0x81, 0xd4, 0x45, 0x6a, 0xa0, 0x95, 0xeb, 0xa6, 0xaa,
+	0x84, 0xda, 0xe2, 0xa8, 0x69, 0xe4, 0x56, 0x1c, 0xa8, 0x0a, 0x6d, 0x69, 0xa2, 0xb6, 0x8a, 0x02,
+	0x8d, 0x54, 0x2e, 0x96, 0x21, 0x43, 0x3a, 0xc2, 0x78, 0x46, 0xb6, 0x71, 0xa1, 0x95, 0x5a, 0xbe,
+	0x41, 0xab, 0x7c, 0x8a, 0xfd, 0x04, 0x7b, 0xd8, 0xec, 0x81, 0xcb, 0x4a, 0x2b, 0xf6, 0x92, 0xc3,
+	0x1e, 0x38, 0x82, 0xb9, 0xec, 0xee, 0x89, 0xd3, 0x6a, 0x8f, 0x2b, 0xdb, 0x03, 0x1b, 0x07, 0x76,
+	0x37, 0x39, 0x20, 0x2e, 0xc9, 0x8c, 0xdf, 0xff, 0xfd, 0xdf, 0xfb, 0x8d, 0xc7, 0x1e, 0x43, 0xc9,
+	0xc7, 0xae, 0x46, 0x68, 0xc9, 0xdd, 0xfc, 0x03, 0xef, 0x98, 0xa5, 0xdd, 0xbf, 0x3c, 0x9b, 0xff,
+	0x1a, 0x16, 0x36, 0x5d, 0xcc, 0x28, 0xb5, 0x4a, 0xde, 0x3e, 0xc3, 0xae, 0xc6, 0x1c, 0xea, 0x51,
+	0xf9, 0x93, 0x38, 0x41, 0x8b, 0x13, 0xb4, 0x48, 0xaa, 0x0d, 0x24, 0xcc, 0x7e, 0x9e, 0x74, 0x35,
+	0x19, 0x31, 0xda, 0x0e, 0xdd, 0x65, 0x06, 0xb6, 0xf0, 0x0e, 0xb6, 0xbd, 0x7e, 0xc7, 0xd9, 0xf7,
+	0x93, 0x62, 0x1b, 0x7b, 0x3c, 0xf0, 0x41, 0x32, 0x40, 0x99, 0x47, 0xa8, 0x7d, 0x91, 0x35, 0x93,
+	0x0c, 0xf6, 0x1b, 0x7e, 0x98, 0x0c, 0xf9, 0xa6, 0x45, 0x5a, 0xa6, 0x87, 0x79, 0x54, 0x1d, 0x88,
+	0x12, 0xfc, 0xa7, 0x91, 0xb4, 0xfe, 0xe8, 0xaa, 0xc2, 0xed, 0x2f, 0x50, 0x7c, 0x8e, 0x40, 0xae,
+	0xd6, 0x9b, 0x95, 0x9f, 0x43, 0xe0, 0x3a, 0xa5, 0x56, 0xc3, 0xb4, 0xdb, 0x58, 0x5e, 0x86, 0x09,
+	0xd7, 0x33, 0x1d, 0xcf, 0x30, 0x5b, 0x2d, 0x07, 0xbb, 0x6e, 0x41, 0x52, 0xd1, 0x5c, 0xae, 0xac,
+	0x68, 0xc9, 0x25, 0xab, 0x32, 0xbf, 0xf2, 0x5d, 0xac, 0x58, 0xdb, 0x67, 0xb8, 0xf1, 0x4e, 0x94,
+	0xc4, 0xaf, 0xc8, 0xdf, 0x42, 0x0e, 0xdb, 0xad, 0x4b, 0x8b, 0xd4, 0x50, 0x16, 0x80, 0xed, 0x16,
+	0x9f, 0x2f, 0xfc, 0x7a, 0xd4, 0x45, 0x35, 0xf8, 0x14, 0x26, 0x56, 0x43, 0x5b, 0x95, 0x5f, 0x9e,
+	0x9d, 0x06, 0x39, 0xd1, 0x9c, 0x16, 0xfe, 0xc3, 0xc7, 0x90, 0xfb, 0xc1, 0x6e, 0x5d, 0x8a, 0x64,
+	0xc8, 0xf7, 0x15, 0x8f, 0x24, 0xb5, 0x54, 0x06, 0xe5, 0xc5, 0x5a, 0x2a, 0x23, 0xe6, 0xa5, 0xe2,
+	0xb3, 0x18, 0x5c, 0x7f, 0x1b, 0x38, 0x7a, 0x5d, 0xd7, 0xfa, 0xd0, 0xe0, 0xe2, 0x50, 0x16, 0x37,
+	0x08, 0x5e, 0x7c, 0x84, 0xe0, 0xbd, 0xc4, 0x5d, 0x5e, 0xa6, 0xf6, 0x16, 0x69, 0xcb, 0x4d, 0x48,
+	0x33, 0x07, 0x6f, 0x91, 0xbd, 0x82, 0xa4, 0x4a, 0x73, 0xd9, 0xa5, 0xc5, 0x7b, 0x4f, 0x0f, 0x25,
+	0xe8, 0xa0, 0xf1, 0xe2, 0x98, 0x23, 0xbd, 0x40, 0xa8, 0x7f, 0x7a, 0x1c, 0x4f, 0xd3, 0x1d, 0x24,
+	0xe5, 0x0f, 0x32, 0xe1, 0x70, 0xac, 0x83, 0xc4, 0x02, 0x0a, 0x4e, 0x1e, 0x48, 0xe9, 0xce, 0x7d,
+	0x24, 0xe6, 0x85, 0x06, 0x77, 0x93, 0x9b, 0x00, 0x3e, 0x61, 0x15, 0xc3, 0x09, 0xd7, 0xb4, 0x20,
+	0xaa, 0xd2, 0x5c, 0xae, 0xfc, 0xb5, 0x36, 0xc4, 0xe3, 0xa6, 0x5d, 0xdd, 0x8b, 0x8d, 0x6c, 0x68,
+	0x15, 0x0d, 0xe3, 0x1b, 0x58, 0x7c, 0x1c, 0xd3, 0xe8, 0x83, 0x34, 0x06, 0xe4, 0x08, 0xf3, 0x75,
+	0x83, 0x23, 0xa1, 0xab, 0x48, 0x07, 0xe2, 0xc8, 0x48, 0x10, 0x5a, 0xd6, 0xfb, 0xb1, 0x74, 0x8e,
+	0x25, 0x8d, 0x86, 0xa5, 0x5f, 0x83, 0xa5, 0x5f, 0x60, 0x85, 0x3b, 0xf2, 0xae, 0x08, 0xd9, 0x6a,
+	0xbd, 0x89, 0x1d, 0x97, 0x50, 0x5b, 0xfe, 0x0d, 0x32, 0x84, 0xf9, 0x15, 0xc3, 0x27, 0x8c, 0xef,
+	0xc1, 0x6f, 0x46, 0x5f, 0xc0, 0x78, 0x61, 0x7e, 0x12, 0x1a, 0xe3, 0xa1, 0x57, 0x93, 0x30, 0x6e,
+	0xab, 0x47, 0xb6, 0xe2, 0x68, 0xb6, 0xfa, 0xf5, 0xb6, 0x7a, 0x93, 0xb0, 0x85, 0xf5, 0xa3, 0x2e,
+	0x6a, 0xc2, 0x1a, 0x40, 0xb5, 0xae, 0x72, 0x82, 0xcf, 0x7e, 0x84, 0xef, 0x41, 0x7d, 0x45, 0x51,
+	0x9e, 0x0e, 0x5b, 0x53, 0xa9, 0x6d, 0xed, 0xab, 0x91, 0x93, 0x1a, 0x5a, 0x71, 0x85, 0x7e, 0xa9,
+	0xd0, 0x07, 0x15, 0x4b, 0x33, 0x90, 0x26, 0x2c, 0x8c, 0xcb, 0x53, 0x87, 0x5d, 0x84, 0x7a, 0x5d,
+	0x24, 0x05, 0x5d, 0x24, 0x7d, 0xf9, 0x45, 0xb9, 0x96, 0xca, 0x48, 0xf9, 0x54, 0x71, 0x1b, 0x26,
+	0x57, 0x2c, 0xba, 0x61, 0x5a, 0xab, 0x0c, 0x6f, 0x86, 0xcf, 0x92, 0xfc, 0x0b, 0x40, 0x98, 0x12,
+	0x37, 0xc2, 0xdf, 0x5d, 0xda, 0xb0, 0x9c, 0x71, 0x56, 0x23, 0x4b, 0x18, 0x1f, 0x26, 0xde, 0x1b,
+	0xff, 0xc0, 0xe4, 0xb2, 0x83, 0x4d, 0x0f, 0xdf, 0x50, 0xb1, 0x85, 0x77, 0x8f, 0x16, 0x07, 0x70,
+	0x12, 0xf5, 0xff, 0x85, 0xa9, 0x06, 0x66, 0x96, 0xb9, 0x79, 0x5b, 0x0d, 0xfc, 0x0d, 0xb9, 0x15,
+	0xec, 0xdd, 0x4e, 0xf1, 0xa5, 0xff, 0x50, 0xef, 0x54, 0x11, 0x8e, 0x4f, 0x15, 0xe1, 0xfc, 0x54,
+	0x41, 0x07, 0x81, 0x82, 0xee, 0x04, 0x0a, 0x7a, 0x18, 0x28, 0xa8, 0x17, 0x28, 0xe8, 0x24, 0x50,
+	0xd0, 0x93, 0x40, 0x11, 0xce, 0x03, 0x05, 0xfd, 0x7f, 0xa6, 0x08, 0xbd, 0x33, 0x45, 0x38, 0x3e,
+	0x53, 0x84, 0xf5, 0xdf, 0xdb, 0x94, 0x6d, 0xb7, 0x35, 0x9f, 0x5a, 0x1e, 0x76, 0x1c, 0x53, 0xdb,
+	0x75, 0x4b, 0xd1, 0x60, 0x8b, 0x3a, 0x3b, 0xf3, 0xcc, 0xa1, 0x3e, 0x69, 0x61, 0x67, 0xfe, 0x22,
+	0x5c, 0x62, 0x1b, 0x6d, 0x5a, 0xc2, 0x7b, 0x1e, 0x3f, 0x35, 0xdf, 0xf4, 0x41, 0xb1, 0x91, 0x8e,
+	0xce, 0xd1, 0xaf, 0x5e, 0x06, 0x00, 0x00, 0xff, 0xff, 0xe3, 0xf3, 0x04, 0x6b, 0x7e, 0x08, 0x00,
+	0x00,
 }
 
-func (this *LeasePool) Equal(that interface{}) bool {
+func (this *IPV4LeasePoolRange) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
 	}
 
-	that1, ok := that.(*LeasePool)
+	that1, ok := that.(*IPV4LeasePoolRange)
 	if !ok {
-		that2, ok := that.(LeasePool)
+		that2, ok := that.(IPV4LeasePoolRange)
 		if ok {
 			that1 = &that2
 		} else {
@@ -398,6 +674,185 @@ func (this *LeasePool) Equal(that interface{}) bool {
 		return false
 	}
 	if !this.EndAddress.Equal(that1.EndAddress) {
+		return false
+	}
+	return true
+}
+func (this *IPV6LeasePoolRange) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*IPV6LeasePoolRange)
+	if !ok {
+		that2, ok := that.(IPV6LeasePoolRange)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.StartAddress.Equal(that1.StartAddress) {
+		return false
+	}
+	if !this.EndAddress.Equal(that1.EndAddress) {
+		return false
+	}
+	return true
+}
+func (this *IPV4LeasePoolConfig) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*IPV4LeasePoolConfig)
+	if !ok {
+		that2, ok := that.(IPV4LeasePoolConfig)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if len(this.Prefix) != len(that1.Prefix) {
+		return false
+	}
+	for i := range this.Prefix {
+		if this.Prefix[i] != that1.Prefix[i] {
+			return false
+		}
+	}
+	if len(this.Vip4Range) != len(that1.Vip4Range) {
+		return false
+	}
+	for i := range this.Vip4Range {
+		if !this.Vip4Range[i].Equal(that1.Vip4Range[i]) {
+			return false
+		}
+	}
+	return true
+}
+func (this *IPV6LeasePoolConfig) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*IPV6LeasePoolConfig)
+	if !ok {
+		that2, ok := that.(IPV6LeasePoolConfig)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if len(this.Ipv6Prefix) != len(that1.Ipv6Prefix) {
+		return false
+	}
+	for i := range this.Ipv6Prefix {
+		if this.Ipv6Prefix[i] != that1.Ipv6Prefix[i] {
+			return false
+		}
+	}
+	if len(this.Vip6Range) != len(that1.Vip6Range) {
+		return false
+	}
+	for i := range this.Vip6Range {
+		if !this.Vip6Range[i].Equal(that1.Vip6Range[i]) {
+			return false
+		}
+	}
+	return true
+}
+func (this *IPVersion) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*IPVersion)
+	if !ok {
+		that2, ok := that.(IPVersion)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if that1.IpVip == nil {
+		if this.IpVip != nil {
+			return false
+		}
+	} else if this.IpVip == nil {
+		return false
+	} else if !this.IpVip.Equal(that1.IpVip) {
+		return false
+	}
+	return true
+}
+func (this *IPVersion_Ipv4Vip) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*IPVersion_Ipv4Vip)
+	if !ok {
+		that2, ok := that.(IPVersion_Ipv4Vip)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.Ipv4Vip.Equal(that1.Ipv4Vip) {
+		return false
+	}
+	return true
+}
+func (this *IPVersion_Ipv6Vip) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*IPVersion_Ipv6Vip)
+	if !ok {
+		that2, ok := that.(IPVersion_Ipv6Vip)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.Ipv6Vip.Equal(that1.Ipv6Vip) {
 		return false
 	}
 	return true
@@ -421,21 +876,8 @@ func (this *GlobalSpecType) Equal(that interface{}) bool {
 	} else if this == nil {
 		return false
 	}
-	if len(this.Network) != len(that1.Network) {
+	if !this.IpVersion.Equal(that1.IpVersion) {
 		return false
-	}
-	for i := range this.Network {
-		if !this.Network[i].Equal(that1.Network[i]) {
-			return false
-		}
-	}
-	if len(this.LeasePool) != len(that1.LeasePool) {
-		return false
-	}
-	for i := range this.LeasePool {
-		if !this.LeasePool[i].Equal(that1.LeasePool[i]) {
-			return false
-		}
 	}
 	return true
 }
@@ -458,21 +900,8 @@ func (this *CreateSpecType) Equal(that interface{}) bool {
 	} else if this == nil {
 		return false
 	}
-	if len(this.Network) != len(that1.Network) {
+	if !this.IpVersion.Equal(that1.IpVersion) {
 		return false
-	}
-	for i := range this.Network {
-		if !this.Network[i].Equal(that1.Network[i]) {
-			return false
-		}
-	}
-	if len(this.LeasePool) != len(that1.LeasePool) {
-		return false
-	}
-	for i := range this.LeasePool {
-		if !this.LeasePool[i].Equal(that1.LeasePool[i]) {
-			return false
-		}
 	}
 	return true
 }
@@ -495,21 +924,8 @@ func (this *ReplaceSpecType) Equal(that interface{}) bool {
 	} else if this == nil {
 		return false
 	}
-	if len(this.Network) != len(that1.Network) {
+	if !this.IpVersion.Equal(that1.IpVersion) {
 		return false
-	}
-	for i := range this.Network {
-		if !this.Network[i].Equal(that1.Network[i]) {
-			return false
-		}
-	}
-	if len(this.LeasePool) != len(that1.LeasePool) {
-		return false
-	}
-	for i := range this.LeasePool {
-		if !this.LeasePool[i].Equal(that1.LeasePool[i]) {
-			return false
-		}
 	}
 	return true
 }
@@ -532,30 +948,17 @@ func (this *GetSpecType) Equal(that interface{}) bool {
 	} else if this == nil {
 		return false
 	}
-	if len(this.Network) != len(that1.Network) {
+	if !this.IpVersion.Equal(that1.IpVersion) {
 		return false
-	}
-	for i := range this.Network {
-		if !this.Network[i].Equal(that1.Network[i]) {
-			return false
-		}
-	}
-	if len(this.LeasePool) != len(that1.LeasePool) {
-		return false
-	}
-	for i := range this.LeasePool {
-		if !this.LeasePool[i].Equal(that1.LeasePool[i]) {
-			return false
-		}
 	}
 	return true
 }
-func (this *LeasePool) GoString() string {
+func (this *IPV4LeasePoolRange) GoString() string {
 	if this == nil {
 		return "nil"
 	}
 	s := make([]string, 0, 6)
-	s = append(s, "&uztna_leasepool.LeasePool{")
+	s = append(s, "&uztna_leasepool.IPV4LeasePoolRange{")
 	if this.StartAddress != nil {
 		s = append(s, "StartAddress: "+fmt.Sprintf("%#v", this.StartAddress)+",\n")
 	}
@@ -565,17 +968,83 @@ func (this *LeasePool) GoString() string {
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
-func (this *GlobalSpecType) GoString() string {
+func (this *IPV6LeasePoolRange) GoString() string {
 	if this == nil {
 		return "nil"
 	}
 	s := make([]string, 0, 6)
-	s = append(s, "&uztna_leasepool.GlobalSpecType{")
-	if this.Network != nil {
-		s = append(s, "Network: "+fmt.Sprintf("%#v", this.Network)+",\n")
+	s = append(s, "&uztna_leasepool.IPV6LeasePoolRange{")
+	if this.StartAddress != nil {
+		s = append(s, "StartAddress: "+fmt.Sprintf("%#v", this.StartAddress)+",\n")
 	}
-	if this.LeasePool != nil {
-		s = append(s, "LeasePool: "+fmt.Sprintf("%#v", this.LeasePool)+",\n")
+	if this.EndAddress != nil {
+		s = append(s, "EndAddress: "+fmt.Sprintf("%#v", this.EndAddress)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *IPV4LeasePoolConfig) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 6)
+	s = append(s, "&uztna_leasepool.IPV4LeasePoolConfig{")
+	s = append(s, "Prefix: "+fmt.Sprintf("%#v", this.Prefix)+",\n")
+	if this.Vip4Range != nil {
+		s = append(s, "Vip4Range: "+fmt.Sprintf("%#v", this.Vip4Range)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *IPV6LeasePoolConfig) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 6)
+	s = append(s, "&uztna_leasepool.IPV6LeasePoolConfig{")
+	s = append(s, "Ipv6Prefix: "+fmt.Sprintf("%#v", this.Ipv6Prefix)+",\n")
+	if this.Vip6Range != nil {
+		s = append(s, "Vip6Range: "+fmt.Sprintf("%#v", this.Vip6Range)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *IPVersion) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 6)
+	s = append(s, "&uztna_leasepool.IPVersion{")
+	if this.IpVip != nil {
+		s = append(s, "IpVip: "+fmt.Sprintf("%#v", this.IpVip)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *IPVersion_Ipv4Vip) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&uztna_leasepool.IPVersion_Ipv4Vip{` +
+		`Ipv4Vip:` + fmt.Sprintf("%#v", this.Ipv4Vip) + `}`}, ", ")
+	return s
+}
+func (this *IPVersion_Ipv6Vip) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&uztna_leasepool.IPVersion_Ipv6Vip{` +
+		`Ipv6Vip:` + fmt.Sprintf("%#v", this.Ipv6Vip) + `}`}, ", ")
+	return s
+}
+func (this *GlobalSpecType) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 5)
+	s = append(s, "&uztna_leasepool.GlobalSpecType{")
+	if this.IpVersion != nil {
+		s = append(s, "IpVersion: "+fmt.Sprintf("%#v", this.IpVersion)+",\n")
 	}
 	s = append(s, "}")
 	return strings.Join(s, "")
@@ -584,13 +1053,10 @@ func (this *CreateSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 6)
+	s := make([]string, 0, 5)
 	s = append(s, "&uztna_leasepool.CreateSpecType{")
-	if this.Network != nil {
-		s = append(s, "Network: "+fmt.Sprintf("%#v", this.Network)+",\n")
-	}
-	if this.LeasePool != nil {
-		s = append(s, "LeasePool: "+fmt.Sprintf("%#v", this.LeasePool)+",\n")
+	if this.IpVersion != nil {
+		s = append(s, "IpVersion: "+fmt.Sprintf("%#v", this.IpVersion)+",\n")
 	}
 	s = append(s, "}")
 	return strings.Join(s, "")
@@ -599,13 +1065,10 @@ func (this *ReplaceSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 6)
+	s := make([]string, 0, 5)
 	s = append(s, "&uztna_leasepool.ReplaceSpecType{")
-	if this.Network != nil {
-		s = append(s, "Network: "+fmt.Sprintf("%#v", this.Network)+",\n")
-	}
-	if this.LeasePool != nil {
-		s = append(s, "LeasePool: "+fmt.Sprintf("%#v", this.LeasePool)+",\n")
+	if this.IpVersion != nil {
+		s = append(s, "IpVersion: "+fmt.Sprintf("%#v", this.IpVersion)+",\n")
 	}
 	s = append(s, "}")
 	return strings.Join(s, "")
@@ -614,13 +1077,10 @@ func (this *GetSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 6)
+	s := make([]string, 0, 5)
 	s = append(s, "&uztna_leasepool.GetSpecType{")
-	if this.Network != nil {
-		s = append(s, "Network: "+fmt.Sprintf("%#v", this.Network)+",\n")
-	}
-	if this.LeasePool != nil {
-		s = append(s, "LeasePool: "+fmt.Sprintf("%#v", this.LeasePool)+",\n")
+	if this.IpVersion != nil {
+		s = append(s, "IpVersion: "+fmt.Sprintf("%#v", this.IpVersion)+",\n")
 	}
 	s = append(s, "}")
 	return strings.Join(s, "")
@@ -633,7 +1093,7 @@ func valueToGoStringTypes(v interface{}, typ string) string {
 	pv := reflect.Indirect(rv).Interface()
 	return fmt.Sprintf("func(v %v) *%v { return &v } ( %#v )", typ, typ, pv)
 }
-func (m *LeasePool) Marshal() (dAtA []byte, err error) {
+func (m *IPV4LeasePoolRange) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -643,12 +1103,59 @@ func (m *LeasePool) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *LeasePool) MarshalTo(dAtA []byte) (int, error) {
+func (m *IPV4LeasePoolRange) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *LeasePool) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *IPV4LeasePoolRange) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.EndAddress != nil {
+		{
+			size, err := m.EndAddress.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x22
+	}
+	if m.StartAddress != nil {
+		{
+			size, err := m.StartAddress.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1a
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *IPV6LeasePoolRange) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *IPV6LeasePoolRange) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *IPV6LeasePoolRange) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -680,6 +1187,172 @@ func (m *LeasePool) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
+func (m *IPV4LeasePoolConfig) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *IPV4LeasePoolConfig) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *IPV4LeasePoolConfig) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Prefix) > 0 {
+		for iNdEx := len(m.Prefix) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.Prefix[iNdEx])
+			copy(dAtA[i:], m.Prefix[iNdEx])
+			i = encodeVarintTypes(dAtA, i, uint64(len(m.Prefix[iNdEx])))
+			i--
+			dAtA[i] = 0x1a
+		}
+	}
+	if len(m.Vip4Range) > 0 {
+		for iNdEx := len(m.Vip4Range) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Vip4Range[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x12
+		}
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *IPV6LeasePoolConfig) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *IPV6LeasePoolConfig) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *IPV6LeasePoolConfig) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Vip6Range) > 0 {
+		for iNdEx := len(m.Vip6Range) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Vip6Range[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x1a
+		}
+	}
+	if len(m.Ipv6Prefix) > 0 {
+		for iNdEx := len(m.Ipv6Prefix) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.Ipv6Prefix[iNdEx])
+			copy(dAtA[i:], m.Ipv6Prefix[iNdEx])
+			i = encodeVarintTypes(dAtA, i, uint64(len(m.Ipv6Prefix[iNdEx])))
+			i--
+			dAtA[i] = 0xa
+		}
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *IPVersion) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *IPVersion) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *IPVersion) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.IpVip != nil {
+		{
+			size := m.IpVip.Size()
+			i -= size
+			if _, err := m.IpVip.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *IPVersion_Ipv4Vip) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *IPVersion_Ipv4Vip) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.Ipv4Vip != nil {
+		{
+			size, err := m.Ipv4Vip.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+func (m *IPVersion_Ipv6Vip) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *IPVersion_Ipv6Vip) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.Ipv6Vip != nil {
+		{
+			size, err := m.Ipv6Vip.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x12
+	}
+	return len(dAtA) - i, nil
+}
 func (m *GlobalSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -700,33 +1373,17 @@ func (m *GlobalSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
-	if len(m.LeasePool) > 0 {
-		for iNdEx := len(m.LeasePool) - 1; iNdEx >= 0; iNdEx-- {
-			{
-				size, err := m.LeasePool[iNdEx].MarshalToSizedBuffer(dAtA[:i])
-				if err != nil {
-					return 0, err
-				}
-				i -= size
-				i = encodeVarintTypes(dAtA, i, uint64(size))
+	if m.IpVersion != nil {
+		{
+			size, err := m.IpVersion.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
 			}
-			i--
-			dAtA[i] = 0x12
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-	}
-	if len(m.Network) > 0 {
-		for iNdEx := len(m.Network) - 1; iNdEx >= 0; iNdEx-- {
-			{
-				size, err := m.Network[iNdEx].MarshalToSizedBuffer(dAtA[:i])
-				if err != nil {
-					return 0, err
-				}
-				i -= size
-				i = encodeVarintTypes(dAtA, i, uint64(size))
-			}
-			i--
-			dAtA[i] = 0xa
-		}
+		i--
+		dAtA[i] = 0x1a
 	}
 	return len(dAtA) - i, nil
 }
@@ -751,33 +1408,17 @@ func (m *CreateSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
-	if len(m.LeasePool) > 0 {
-		for iNdEx := len(m.LeasePool) - 1; iNdEx >= 0; iNdEx-- {
-			{
-				size, err := m.LeasePool[iNdEx].MarshalToSizedBuffer(dAtA[:i])
-				if err != nil {
-					return 0, err
-				}
-				i -= size
-				i = encodeVarintTypes(dAtA, i, uint64(size))
+	if m.IpVersion != nil {
+		{
+			size, err := m.IpVersion.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
 			}
-			i--
-			dAtA[i] = 0x12
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-	}
-	if len(m.Network) > 0 {
-		for iNdEx := len(m.Network) - 1; iNdEx >= 0; iNdEx-- {
-			{
-				size, err := m.Network[iNdEx].MarshalToSizedBuffer(dAtA[:i])
-				if err != nil {
-					return 0, err
-				}
-				i -= size
-				i = encodeVarintTypes(dAtA, i, uint64(size))
-			}
-			i--
-			dAtA[i] = 0xa
-		}
+		i--
+		dAtA[i] = 0x1a
 	}
 	return len(dAtA) - i, nil
 }
@@ -802,33 +1443,17 @@ func (m *ReplaceSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
-	if len(m.LeasePool) > 0 {
-		for iNdEx := len(m.LeasePool) - 1; iNdEx >= 0; iNdEx-- {
-			{
-				size, err := m.LeasePool[iNdEx].MarshalToSizedBuffer(dAtA[:i])
-				if err != nil {
-					return 0, err
-				}
-				i -= size
-				i = encodeVarintTypes(dAtA, i, uint64(size))
+	if m.IpVersion != nil {
+		{
+			size, err := m.IpVersion.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
 			}
-			i--
-			dAtA[i] = 0x12
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-	}
-	if len(m.Network) > 0 {
-		for iNdEx := len(m.Network) - 1; iNdEx >= 0; iNdEx-- {
-			{
-				size, err := m.Network[iNdEx].MarshalToSizedBuffer(dAtA[:i])
-				if err != nil {
-					return 0, err
-				}
-				i -= size
-				i = encodeVarintTypes(dAtA, i, uint64(size))
-			}
-			i--
-			dAtA[i] = 0xa
-		}
+		i--
+		dAtA[i] = 0x1a
 	}
 	return len(dAtA) - i, nil
 }
@@ -853,33 +1478,17 @@ func (m *GetSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
-	if len(m.LeasePool) > 0 {
-		for iNdEx := len(m.LeasePool) - 1; iNdEx >= 0; iNdEx-- {
-			{
-				size, err := m.LeasePool[iNdEx].MarshalToSizedBuffer(dAtA[:i])
-				if err != nil {
-					return 0, err
-				}
-				i -= size
-				i = encodeVarintTypes(dAtA, i, uint64(size))
+	if m.IpVersion != nil {
+		{
+			size, err := m.IpVersion.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
 			}
-			i--
-			dAtA[i] = 0x12
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
-	}
-	if len(m.Network) > 0 {
-		for iNdEx := len(m.Network) - 1; iNdEx >= 0; iNdEx-- {
-			{
-				size, err := m.Network[iNdEx].MarshalToSizedBuffer(dAtA[:i])
-				if err != nil {
-					return 0, err
-				}
-				i -= size
-				i = encodeVarintTypes(dAtA, i, uint64(size))
-			}
-			i--
-			dAtA[i] = 0xa
-		}
+		i--
+		dAtA[i] = 0x1a
 	}
 	return len(dAtA) - i, nil
 }
@@ -895,7 +1504,7 @@ func encodeVarintTypes(dAtA []byte, offset int, v uint64) int {
 	dAtA[offset] = uint8(v)
 	return base
 }
-func (m *LeasePool) Size() (n int) {
+func (m *IPV4LeasePoolRange) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -912,23 +1521,110 @@ func (m *LeasePool) Size() (n int) {
 	return n
 }
 
+func (m *IPV6LeasePoolRange) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.StartAddress != nil {
+		l = m.StartAddress.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.EndAddress != nil {
+		l = m.EndAddress.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+
+func (m *IPV4LeasePoolConfig) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if len(m.Vip4Range) > 0 {
+		for _, e := range m.Vip4Range {
+			l = e.Size()
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	if len(m.Prefix) > 0 {
+		for _, s := range m.Prefix {
+			l = len(s)
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	return n
+}
+
+func (m *IPV6LeasePoolConfig) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if len(m.Ipv6Prefix) > 0 {
+		for _, s := range m.Ipv6Prefix {
+			l = len(s)
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	if len(m.Vip6Range) > 0 {
+		for _, e := range m.Vip6Range {
+			l = e.Size()
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	return n
+}
+
+func (m *IPVersion) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.IpVip != nil {
+		n += m.IpVip.Size()
+	}
+	return n
+}
+
+func (m *IPVersion_Ipv4Vip) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Ipv4Vip != nil {
+		l = m.Ipv4Vip.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *IPVersion_Ipv6Vip) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Ipv6Vip != nil {
+		l = m.Ipv6Vip.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
 func (m *GlobalSpecType) Size() (n int) {
 	if m == nil {
 		return 0
 	}
 	var l int
 	_ = l
-	if len(m.Network) > 0 {
-		for _, e := range m.Network {
-			l = e.Size()
-			n += 1 + l + sovTypes(uint64(l))
-		}
-	}
-	if len(m.LeasePool) > 0 {
-		for _, e := range m.LeasePool {
-			l = e.Size()
-			n += 1 + l + sovTypes(uint64(l))
-		}
+	if m.IpVersion != nil {
+		l = m.IpVersion.Size()
+		n += 1 + l + sovTypes(uint64(l))
 	}
 	return n
 }
@@ -939,17 +1635,9 @@ func (m *CreateSpecType) Size() (n int) {
 	}
 	var l int
 	_ = l
-	if len(m.Network) > 0 {
-		for _, e := range m.Network {
-			l = e.Size()
-			n += 1 + l + sovTypes(uint64(l))
-		}
-	}
-	if len(m.LeasePool) > 0 {
-		for _, e := range m.LeasePool {
-			l = e.Size()
-			n += 1 + l + sovTypes(uint64(l))
-		}
+	if m.IpVersion != nil {
+		l = m.IpVersion.Size()
+		n += 1 + l + sovTypes(uint64(l))
 	}
 	return n
 }
@@ -960,17 +1648,9 @@ func (m *ReplaceSpecType) Size() (n int) {
 	}
 	var l int
 	_ = l
-	if len(m.Network) > 0 {
-		for _, e := range m.Network {
-			l = e.Size()
-			n += 1 + l + sovTypes(uint64(l))
-		}
-	}
-	if len(m.LeasePool) > 0 {
-		for _, e := range m.LeasePool {
-			l = e.Size()
-			n += 1 + l + sovTypes(uint64(l))
-		}
+	if m.IpVersion != nil {
+		l = m.IpVersion.Size()
+		n += 1 + l + sovTypes(uint64(l))
 	}
 	return n
 }
@@ -981,17 +1661,9 @@ func (m *GetSpecType) Size() (n int) {
 	}
 	var l int
 	_ = l
-	if len(m.Network) > 0 {
-		for _, e := range m.Network {
-			l = e.Size()
-			n += 1 + l + sovTypes(uint64(l))
-		}
-	}
-	if len(m.LeasePool) > 0 {
-		for _, e := range m.LeasePool {
-			l = e.Size()
-			n += 1 + l + sovTypes(uint64(l))
-		}
+	if m.IpVersion != nil {
+		l = m.IpVersion.Size()
+		n += 1 + l + sovTypes(uint64(l))
 	}
 	return n
 }
@@ -1002,13 +1674,86 @@ func sovTypes(x uint64) (n int) {
 func sozTypes(x uint64) (n int) {
 	return sovTypes(uint64((x << 1) ^ uint64((int64(x) >> 63))))
 }
-func (this *LeasePool) String() string {
+func (this *IPV4LeasePoolRange) String() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&LeasePool{`,
-		`StartAddress:` + strings.Replace(fmt.Sprintf("%v", this.StartAddress), "IpAddressType", "schema.IpAddressType", 1) + `,`,
-		`EndAddress:` + strings.Replace(fmt.Sprintf("%v", this.EndAddress), "IpAddressType", "schema.IpAddressType", 1) + `,`,
+	s := strings.Join([]string{`&IPV4LeasePoolRange{`,
+		`StartAddress:` + strings.Replace(fmt.Sprintf("%v", this.StartAddress), "Ipv4AddressType", "schema.Ipv4AddressType", 1) + `,`,
+		`EndAddress:` + strings.Replace(fmt.Sprintf("%v", this.EndAddress), "Ipv4AddressType", "schema.Ipv4AddressType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *IPV6LeasePoolRange) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&IPV6LeasePoolRange{`,
+		`StartAddress:` + strings.Replace(fmt.Sprintf("%v", this.StartAddress), "Ipv6AddressType", "schema.Ipv6AddressType", 1) + `,`,
+		`EndAddress:` + strings.Replace(fmt.Sprintf("%v", this.EndAddress), "Ipv6AddressType", "schema.Ipv6AddressType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *IPV4LeasePoolConfig) String() string {
+	if this == nil {
+		return "nil"
+	}
+	repeatedStringForVip4Range := "[]*IPV4LeasePoolRange{"
+	for _, f := range this.Vip4Range {
+		repeatedStringForVip4Range += strings.Replace(f.String(), "IPV4LeasePoolRange", "IPV4LeasePoolRange", 1) + ","
+	}
+	repeatedStringForVip4Range += "}"
+	s := strings.Join([]string{`&IPV4LeasePoolConfig{`,
+		`Vip4Range:` + repeatedStringForVip4Range + `,`,
+		`Prefix:` + fmt.Sprintf("%v", this.Prefix) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *IPV6LeasePoolConfig) String() string {
+	if this == nil {
+		return "nil"
+	}
+	repeatedStringForVip6Range := "[]*IPV6LeasePoolRange{"
+	for _, f := range this.Vip6Range {
+		repeatedStringForVip6Range += strings.Replace(f.String(), "IPV6LeasePoolRange", "IPV6LeasePoolRange", 1) + ","
+	}
+	repeatedStringForVip6Range += "}"
+	s := strings.Join([]string{`&IPV6LeasePoolConfig{`,
+		`Ipv6Prefix:` + fmt.Sprintf("%v", this.Ipv6Prefix) + `,`,
+		`Vip6Range:` + repeatedStringForVip6Range + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *IPVersion) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&IPVersion{`,
+		`IpVip:` + fmt.Sprintf("%v", this.IpVip) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *IPVersion_Ipv4Vip) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&IPVersion_Ipv4Vip{`,
+		`Ipv4Vip:` + strings.Replace(fmt.Sprintf("%v", this.Ipv4Vip), "IPV4LeasePoolConfig", "IPV4LeasePoolConfig", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *IPVersion_Ipv6Vip) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&IPVersion_Ipv6Vip{`,
+		`Ipv6Vip:` + strings.Replace(fmt.Sprintf("%v", this.Ipv6Vip), "IPV6LeasePoolConfig", "IPV6LeasePoolConfig", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -1017,19 +1762,8 @@ func (this *GlobalSpecType) String() string {
 	if this == nil {
 		return "nil"
 	}
-	repeatedStringForNetwork := "[]*IpSubnetType{"
-	for _, f := range this.Network {
-		repeatedStringForNetwork += strings.Replace(fmt.Sprintf("%v", f), "IpSubnetType", "schema.IpSubnetType", 1) + ","
-	}
-	repeatedStringForNetwork += "}"
-	repeatedStringForLeasePool := "[]*LeasePool{"
-	for _, f := range this.LeasePool {
-		repeatedStringForLeasePool += strings.Replace(f.String(), "LeasePool", "LeasePool", 1) + ","
-	}
-	repeatedStringForLeasePool += "}"
 	s := strings.Join([]string{`&GlobalSpecType{`,
-		`Network:` + repeatedStringForNetwork + `,`,
-		`LeasePool:` + repeatedStringForLeasePool + `,`,
+		`IpVersion:` + strings.Replace(this.IpVersion.String(), "IPVersion", "IPVersion", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -1038,19 +1772,8 @@ func (this *CreateSpecType) String() string {
 	if this == nil {
 		return "nil"
 	}
-	repeatedStringForNetwork := "[]*IpSubnetType{"
-	for _, f := range this.Network {
-		repeatedStringForNetwork += strings.Replace(fmt.Sprintf("%v", f), "IpSubnetType", "schema.IpSubnetType", 1) + ","
-	}
-	repeatedStringForNetwork += "}"
-	repeatedStringForLeasePool := "[]*LeasePool{"
-	for _, f := range this.LeasePool {
-		repeatedStringForLeasePool += strings.Replace(f.String(), "LeasePool", "LeasePool", 1) + ","
-	}
-	repeatedStringForLeasePool += "}"
 	s := strings.Join([]string{`&CreateSpecType{`,
-		`Network:` + repeatedStringForNetwork + `,`,
-		`LeasePool:` + repeatedStringForLeasePool + `,`,
+		`IpVersion:` + strings.Replace(this.IpVersion.String(), "IPVersion", "IPVersion", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -1059,19 +1782,8 @@ func (this *ReplaceSpecType) String() string {
 	if this == nil {
 		return "nil"
 	}
-	repeatedStringForNetwork := "[]*IpSubnetType{"
-	for _, f := range this.Network {
-		repeatedStringForNetwork += strings.Replace(fmt.Sprintf("%v", f), "IpSubnetType", "schema.IpSubnetType", 1) + ","
-	}
-	repeatedStringForNetwork += "}"
-	repeatedStringForLeasePool := "[]*LeasePool{"
-	for _, f := range this.LeasePool {
-		repeatedStringForLeasePool += strings.Replace(f.String(), "LeasePool", "LeasePool", 1) + ","
-	}
-	repeatedStringForLeasePool += "}"
 	s := strings.Join([]string{`&ReplaceSpecType{`,
-		`Network:` + repeatedStringForNetwork + `,`,
-		`LeasePool:` + repeatedStringForLeasePool + `,`,
+		`IpVersion:` + strings.Replace(this.IpVersion.String(), "IPVersion", "IPVersion", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -1080,19 +1792,8 @@ func (this *GetSpecType) String() string {
 	if this == nil {
 		return "nil"
 	}
-	repeatedStringForNetwork := "[]*IpSubnetType{"
-	for _, f := range this.Network {
-		repeatedStringForNetwork += strings.Replace(fmt.Sprintf("%v", f), "IpSubnetType", "schema.IpSubnetType", 1) + ","
-	}
-	repeatedStringForNetwork += "}"
-	repeatedStringForLeasePool := "[]*LeasePool{"
-	for _, f := range this.LeasePool {
-		repeatedStringForLeasePool += strings.Replace(f.String(), "LeasePool", "LeasePool", 1) + ","
-	}
-	repeatedStringForLeasePool += "}"
 	s := strings.Join([]string{`&GetSpecType{`,
-		`Network:` + repeatedStringForNetwork + `,`,
-		`LeasePool:` + repeatedStringForLeasePool + `,`,
+		`IpVersion:` + strings.Replace(this.IpVersion.String(), "IPVersion", "IPVersion", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -1105,7 +1806,7 @@ func valueToStringTypes(v interface{}) string {
 	pv := reflect.Indirect(rv).Interface()
 	return fmt.Sprintf("*%v", pv)
 }
-func (m *LeasePool) Unmarshal(dAtA []byte) error {
+func (m *IPV4LeasePoolRange) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -1128,10 +1829,135 @@ func (m *LeasePool) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: LeasePool: wiretype end group for non-group")
+			return fmt.Errorf("proto: IPV4LeasePoolRange: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: LeasePool: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: IPV4LeasePoolRange: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field StartAddress", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.StartAddress == nil {
+				m.StartAddress = &schema.Ipv4AddressType{}
+			}
+			if err := m.StartAddress.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field EndAddress", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.EndAddress == nil {
+				m.EndAddress = &schema.Ipv4AddressType{}
+			}
+			if err := m.EndAddress.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *IPV6LeasePoolRange) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: IPV6LeasePoolRange: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: IPV6LeasePoolRange: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
@@ -1164,7 +1990,7 @@ func (m *LeasePool) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			if m.StartAddress == nil {
-				m.StartAddress = &schema.IpAddressType{}
+				m.StartAddress = &schema.Ipv6AddressType{}
 			}
 			if err := m.StartAddress.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -1200,11 +2026,372 @@ func (m *LeasePool) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			if m.EndAddress == nil {
-				m.EndAddress = &schema.IpAddressType{}
+				m.EndAddress = &schema.Ipv6AddressType{}
 			}
 			if err := m.EndAddress.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *IPV4LeasePoolConfig) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: IPV4LeasePoolConfig: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: IPV4LeasePoolConfig: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Vip4Range", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Vip4Range = append(m.Vip4Range, &IPV4LeasePoolRange{})
+			if err := m.Vip4Range[len(m.Vip4Range)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Prefix", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Prefix = append(m.Prefix, string(dAtA[iNdEx:postIndex]))
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *IPV6LeasePoolConfig) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: IPV6LeasePoolConfig: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: IPV6LeasePoolConfig: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Ipv6Prefix", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Ipv6Prefix = append(m.Ipv6Prefix, string(dAtA[iNdEx:postIndex]))
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Vip6Range", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Vip6Range = append(m.Vip6Range, &IPV6LeasePoolRange{})
+			if err := m.Vip6Range[len(m.Vip6Range)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *IPVersion) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: IPVersion: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: IPVersion: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Ipv4Vip", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &IPV4LeasePoolConfig{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.IpVip = &IPVersion_Ipv4Vip{v}
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Ipv6Vip", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &IPV6LeasePoolConfig{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.IpVip = &IPVersion_Ipv6Vip{v}
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
@@ -1259,9 +2446,9 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 			return fmt.Errorf("proto: GlobalSpecType: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
-		case 1:
+		case 3:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Network", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field IpVersion", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -1288,42 +2475,10 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.Network = append(m.Network, &schema.IpSubnetType{})
-			if err := m.Network[len(m.Network)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
+			if m.IpVersion == nil {
+				m.IpVersion = &IPVersion{}
 			}
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field LeasePool", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.LeasePool = append(m.LeasePool, &LeasePool{})
-			if err := m.LeasePool[len(m.LeasePool)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+			if err := m.IpVersion.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
@@ -1380,9 +2535,9 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 			return fmt.Errorf("proto: CreateSpecType: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
-		case 1:
+		case 3:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Network", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field IpVersion", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -1409,42 +2564,10 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.Network = append(m.Network, &schema.IpSubnetType{})
-			if err := m.Network[len(m.Network)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
+			if m.IpVersion == nil {
+				m.IpVersion = &IPVersion{}
 			}
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field LeasePool", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.LeasePool = append(m.LeasePool, &LeasePool{})
-			if err := m.LeasePool[len(m.LeasePool)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+			if err := m.IpVersion.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
@@ -1501,9 +2624,9 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 			return fmt.Errorf("proto: ReplaceSpecType: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
-		case 1:
+		case 3:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Network", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field IpVersion", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -1530,42 +2653,10 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.Network = append(m.Network, &schema.IpSubnetType{})
-			if err := m.Network[len(m.Network)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
+			if m.IpVersion == nil {
+				m.IpVersion = &IPVersion{}
 			}
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field LeasePool", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.LeasePool = append(m.LeasePool, &LeasePool{})
-			if err := m.LeasePool[len(m.LeasePool)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+			if err := m.IpVersion.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
@@ -1622,9 +2713,9 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 			return fmt.Errorf("proto: GetSpecType: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
-		case 1:
+		case 3:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Network", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field IpVersion", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -1651,42 +2742,10 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.Network = append(m.Network, &schema.IpSubnetType{})
-			if err := m.Network[len(m.Network)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
+			if m.IpVersion == nil {
+				m.IpVersion = &IPVersion{}
 			}
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field LeasePool", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.LeasePool = append(m.LeasePool, &LeasePool{})
-			if err := m.LeasePool[len(m.LeasePool)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+			if err := m.IpVersion.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex

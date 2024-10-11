@@ -60,6 +60,21 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 
+	mdr.RPCSubscriptionFieldsRegistry["ves.io.schema.views.origin_pool.API.Create"] = []svcfw.SubscriptionField{
+		{
+			FieldPath:     "ves.io.schema.views.origin_pool.CreateRequest.spec.origin_servers.choice.private_ip.private_ip_choice.ipv6",
+			AddonServices: []string{"f5xc-ipv6-standard"},
+		},
+		{
+			FieldPath:     "ves.io.schema.views.origin_pool.CreateRequest.spec.origin_servers.choice.public_ip.public_ip_choice.ipv6",
+			AddonServices: []string{"f5xc-ipv6-standard"},
+		},
+		{
+			FieldPath:     "ves.io.schema.views.origin_pool.CreateRequest.spec.origin_servers.choice.vn_private_ip.virtual_network_ip_choice.ipv6",
+			AddonServices: []string{"f5xc-ipv6-standard"},
+		},
+	}
+
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.views.origin_pool.API.Create"] = []string{
 		"spec.advanced_options.header_transformation_type",
 		"spec.origin_servers.#.k8s_service.service_selector",
@@ -152,6 +167,21 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		{
 			FieldPath:           "items.#.get_spec.origin_servers.#.vn_private_ip.ipv6",
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
+		},
+	}
+
+	mdr.RPCSubscriptionFieldsRegistry["ves.io.schema.views.origin_pool.API.Replace"] = []svcfw.SubscriptionField{
+		{
+			FieldPath:     "ves.io.schema.views.origin_pool.ReplaceRequest.spec.origin_servers.choice.private_ip.private_ip_choice.ipv6",
+			AddonServices: []string{"f5xc-ipv6-standard"},
+		},
+		{
+			FieldPath:     "ves.io.schema.views.origin_pool.ReplaceRequest.spec.origin_servers.choice.public_ip.public_ip_choice.ipv6",
+			AddonServices: []string{"f5xc-ipv6-standard"},
+		},
+		{
+			FieldPath:     "ves.io.schema.views.origin_pool.ReplaceRequest.spec.origin_servers.choice.vn_private_ip.virtual_network_ip_choice.ipv6",
+			AddonServices: []string{"f5xc-ipv6-standard"},
 		},
 	}
 

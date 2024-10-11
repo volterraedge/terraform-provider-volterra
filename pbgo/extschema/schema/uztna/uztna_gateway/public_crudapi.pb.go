@@ -9,7 +9,7 @@
 // where the end user can connect to terminate
 // the mTLS/DTLS tunnels.The gateways associated with a UZTNA ZeroTrust Domains
 // would all be front ending the same set of applications and will
-// enforce same set of policies for authentication and authorisation
+// enforce same set of policies for authentication and authorization
 // to grant access to these applications.
 // This ensures same user experience no matter which gateway is reached for tunnel termination.
 // Each Gateway will have a lease pool defined to allocate IP address to client for the

@@ -818,7 +818,7 @@ var DefaultAppFirewallAttackTypeContextValidator = func() *ValidateAppFirewallAt
 
 	vrhContextName := v.ContextNameValidationRuleHandler
 	rulesContextName := map[string]string{
-		"ves.io.schema.rules.string.max_len": "64",
+		"ves.io.schema.rules.string.max_len": "128",
 	}
 	vFn, err = vrhContextName(rulesContextName)
 	if err != nil {
@@ -1342,7 +1342,7 @@ var DefaultAppFirewallSignatureContextValidator = func() *ValidateAppFirewallSig
 
 	vrhContextName := v.ContextNameValidationRuleHandler
 	rulesContextName := map[string]string{
-		"ves.io.schema.rules.string.max_len": "64",
+		"ves.io.schema.rules.string.max_len": "128",
 	}
 	vFn, err = vrhContextName(rulesContextName)
 	if err != nil {
@@ -1521,7 +1521,7 @@ var DefaultAppFirewallViolationContextValidator = func() *ValidateAppFirewallVio
 
 	vrhContextName := v.ContextNameValidationRuleHandler
 	rulesContextName := map[string]string{
-		"ves.io.schema.rules.string.max_len": "64",
+		"ves.io.schema.rules.string.max_len": "128",
 	}
 	vFn, err = vrhContextName(rulesContextName)
 	if err != nil {
@@ -5171,6 +5171,145 @@ var DefaultIpMatcherTypeValidator = func() *ValidateIpMatcherType {
 
 func IpMatcherTypeValidator() db.Validator {
 	return DefaultIpMatcherTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *JA4TlsFingerprintMatcherType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *JA4TlsFingerprintMatcherType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *JA4TlsFingerprintMatcherType) DeepCopy() *JA4TlsFingerprintMatcherType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &JA4TlsFingerprintMatcherType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *JA4TlsFingerprintMatcherType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *JA4TlsFingerprintMatcherType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return JA4TlsFingerprintMatcherTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateJA4TlsFingerprintMatcherType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateJA4TlsFingerprintMatcherType) ExactValuesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepStringItemRules(rules)
+	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Item ValidationRuleHandler for exact_values")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []string, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for exact_values")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]string)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []string, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal := fmt.Sprintf("%v", elem)
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated exact_values")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items exact_values")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateJA4TlsFingerprintMatcherType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*JA4TlsFingerprintMatcherType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *JA4TlsFingerprintMatcherType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["exact_values"]; exists {
+		vOpts := append(opts, db.WithValidateField("exact_values"))
+		if err := fv(ctx, m.GetExactValues(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultJA4TlsFingerprintMatcherTypeValidator = func() *ValidateJA4TlsFingerprintMatcherType {
+	v := &ValidateJA4TlsFingerprintMatcherType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhExactValues := v.ExactValuesValidationRuleHandler
+	rulesExactValues := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "16",
+		"ves.io.schema.rules.repeated.unique":    "true",
+	}
+	vFn, err = vrhExactValues(rulesExactValues)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for JA4TlsFingerprintMatcherType.exact_values: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["exact_values"] = vFn
+
+	return v
+}()
+
+func JA4TlsFingerprintMatcherTypeValidator() db.Validator {
+	return DefaultJA4TlsFingerprintMatcherTypeValidator
 }
 
 // augmented methods on protoc/std generated struct

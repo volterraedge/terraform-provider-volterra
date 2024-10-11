@@ -77,6 +77,15 @@ func (v *ValidateGenericResponse) Validate(ctx context.Context, pm interface{}, 
 		return nil
 	}
 
+	if fv, exists := v.FldValidators["error"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("error"))
+		if err := fv(ctx, m.GetError(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["is_error"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("is_error"))

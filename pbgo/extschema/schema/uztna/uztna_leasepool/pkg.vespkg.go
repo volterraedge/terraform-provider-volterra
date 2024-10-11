@@ -31,7 +31,11 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.uztna.uztna_leasepool.CreateSpecType"] = CreateSpecTypeValidator()
 	vr["ves.io.schema.uztna.uztna_leasepool.GetSpecType"] = GetSpecTypeValidator()
 	vr["ves.io.schema.uztna.uztna_leasepool.GlobalSpecType"] = GlobalSpecTypeValidator()
-	vr["ves.io.schema.uztna.uztna_leasepool.LeasePool"] = LeasePoolValidator()
+	vr["ves.io.schema.uztna.uztna_leasepool.IPV4LeasePoolConfig"] = IPV4LeasePoolConfigValidator()
+	vr["ves.io.schema.uztna.uztna_leasepool.IPV4LeasePoolRange"] = IPV4LeasePoolRangeValidator()
+	vr["ves.io.schema.uztna.uztna_leasepool.IPV6LeasePoolConfig"] = IPV6LeasePoolConfigValidator()
+	vr["ves.io.schema.uztna.uztna_leasepool.IPV6LeasePoolRange"] = IPV6LeasePoolRangeValidator()
+	vr["ves.io.schema.uztna.uztna_leasepool.IPVersion"] = IPVersionValidator()
 	vr["ves.io.schema.uztna.uztna_leasepool.ReplaceSpecType"] = ReplaceSpecTypeValidator()
 
 }
