@@ -863,6 +863,28 @@ func (v *ValidateUserIdentificationRule) Validate(ctx context.Context, pm interf
 				return err
 			}
 		}
+	case *UserIdentificationRule_Ja4TlsFingerprint:
+		if fv, exists := v.FldValidators["identifier.ja4_tls_fingerprint"]; exists {
+			val := m.GetIdentifier().(*UserIdentificationRule_Ja4TlsFingerprint).Ja4TlsFingerprint
+			vOpts := append(opts,
+				db.WithValidateField("identifier"),
+				db.WithValidateField("ja4_tls_fingerprint"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *UserIdentificationRule_IpAndJa4TlsFingerprint:
+		if fv, exists := v.FldValidators["identifier.ip_and_ja4_tls_fingerprint"]; exists {
+			val := m.GetIdentifier().(*UserIdentificationRule_IpAndJa4TlsFingerprint).IpAndJa4TlsFingerprint
+			vOpts := append(opts,
+				db.WithValidateField("identifier"),
+				db.WithValidateField("ip_and_ja4_tls_fingerprint"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 

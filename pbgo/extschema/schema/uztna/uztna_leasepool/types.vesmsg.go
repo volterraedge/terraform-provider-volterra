@@ -65,96 +65,17 @@ type ValidateCreateSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
-func (v *ValidateCreateSpecType) NetworkValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+func (v *ValidateCreateSpecType) IpVersionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
-	itemRules := db.GetRepMessageItemRules(rules)
-	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
-		return nil, errors.Wrap(err, "Message ValidationRuleHandler for network")
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for ip_version")
 	}
-	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.IpSubnetType, opts ...db.ValidateOpt) error {
-		for i, el := range elems {
-			if err := itemValFn(ctx, el, opts...); err != nil {
-				return errors.Wrap(err, fmt.Sprintf("element %d", i))
-			}
-			if err := ves_io_schema.IpSubnetTypeValidator().Validate(ctx, el, opts...); err != nil {
-				return errors.Wrap(err, fmt.Sprintf("element %d", i))
-			}
-		}
-		return nil
-	}
-	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for network")
-	}
-
 	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
-		elems, ok := val.([]*ves_io_schema.IpSubnetType)
-		if !ok {
-			return fmt.Errorf("Repeated validation expected []*ves_io_schema.IpSubnetType, got %T", val)
+		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
 		}
-		l := []string{}
-		for _, elem := range elems {
-			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
-			if err != nil {
-				return errors.Wrapf(err, "Converting %v to JSON", elem)
-			}
-			l = append(l, strVal)
-		}
-		if err := repValFn(ctx, l, opts...); err != nil {
-			return errors.Wrap(err, "repeated network")
-		}
-		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
-			return errors.Wrap(err, "items network")
-		}
-		return nil
-	}
 
-	return validatorFn, nil
-}
-
-func (v *ValidateCreateSpecType) LeasePoolValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	itemRules := db.GetRepMessageItemRules(rules)
-	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
-	if err != nil {
-		return nil, errors.Wrap(err, "Message ValidationRuleHandler for lease_pool")
-	}
-	itemsValidatorFn := func(ctx context.Context, elems []*LeasePool, opts ...db.ValidateOpt) error {
-		for i, el := range elems {
-			if err := itemValFn(ctx, el, opts...); err != nil {
-				return errors.Wrap(err, fmt.Sprintf("element %d", i))
-			}
-			if err := LeasePoolValidator().Validate(ctx, el, opts...); err != nil {
-				return errors.Wrap(err, fmt.Sprintf("element %d", i))
-			}
-		}
-		return nil
-	}
-	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for lease_pool")
-	}
-
-	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
-		elems, ok := val.([]*LeasePool)
-		if !ok {
-			return fmt.Errorf("Repeated validation expected []*LeasePool, got %T", val)
-		}
-		l := []string{}
-		for _, elem := range elems {
-			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
-			if err != nil {
-				return errors.Wrapf(err, "Converting %v to JSON", elem)
-			}
-			l = append(l, strVal)
-		}
-		if err := repValFn(ctx, l, opts...); err != nil {
-			return errors.Wrap(err, "repeated lease_pool")
-		}
-		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
-			return errors.Wrap(err, "items lease_pool")
-		}
 		return nil
 	}
 
@@ -175,17 +96,10 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 		return nil
 	}
 
-	if fv, exists := v.FldValidators["lease_pool"]; exists {
-		vOpts := append(opts, db.WithValidateField("lease_pool"))
-		if err := fv(ctx, m.GetLeasePool(), vOpts...); err != nil {
-			return err
-		}
+	if fv, exists := v.FldValidators["ip_version"]; exists {
 
-	}
-
-	if fv, exists := v.FldValidators["network"]; exists {
-		vOpts := append(opts, db.WithValidateField("network"))
-		if err := fv(ctx, m.GetNetwork(), vOpts...); err != nil {
+		vOpts := append(opts, db.WithValidateField("ip_version"))
+		if err := fv(ctx, m.GetIpVersion(), vOpts...); err != nil {
 			return err
 		}
 
@@ -206,30 +120,16 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
 
-	vrhNetwork := v.NetworkValidationRuleHandler
-	rulesNetwork := map[string]string{
-		"ves.io.schema.rules.message.required":   "true",
-		"ves.io.schema.rules.repeated.max_items": "1024",
-		"ves.io.schema.rules.repeated.min_items": "1",
+	vrhIpVersion := v.IpVersionValidationRuleHandler
+	rulesIpVersion := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
 	}
-	vFn, err = vrhNetwork(rulesNetwork)
+	vFn, err = vrhIpVersion(rulesIpVersion)
 	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.network: %s", err)
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.ip_version: %s", err)
 		panic(errMsg)
 	}
-	v.FldValidators["network"] = vFn
-
-	vrhLeasePool := v.LeasePoolValidationRuleHandler
-	rulesLeasePool := map[string]string{
-		"ves.io.schema.rules.message.required":   "true",
-		"ves.io.schema.rules.repeated.max_items": "1024",
-	}
-	vFn, err = vrhLeasePool(rulesLeasePool)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.lease_pool: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["lease_pool"] = vFn
+	v.FldValidators["ip_version"] = vFn
 
 	return v
 }()
@@ -279,96 +179,17 @@ type ValidateGetSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
-func (v *ValidateGetSpecType) NetworkValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+func (v *ValidateGetSpecType) IpVersionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
-	itemRules := db.GetRepMessageItemRules(rules)
-	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
-		return nil, errors.Wrap(err, "Message ValidationRuleHandler for network")
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for ip_version")
 	}
-	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.IpSubnetType, opts ...db.ValidateOpt) error {
-		for i, el := range elems {
-			if err := itemValFn(ctx, el, opts...); err != nil {
-				return errors.Wrap(err, fmt.Sprintf("element %d", i))
-			}
-			if err := ves_io_schema.IpSubnetTypeValidator().Validate(ctx, el, opts...); err != nil {
-				return errors.Wrap(err, fmt.Sprintf("element %d", i))
-			}
-		}
-		return nil
-	}
-	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for network")
-	}
-
 	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
-		elems, ok := val.([]*ves_io_schema.IpSubnetType)
-		if !ok {
-			return fmt.Errorf("Repeated validation expected []*ves_io_schema.IpSubnetType, got %T", val)
+		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
 		}
-		l := []string{}
-		for _, elem := range elems {
-			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
-			if err != nil {
-				return errors.Wrapf(err, "Converting %v to JSON", elem)
-			}
-			l = append(l, strVal)
-		}
-		if err := repValFn(ctx, l, opts...); err != nil {
-			return errors.Wrap(err, "repeated network")
-		}
-		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
-			return errors.Wrap(err, "items network")
-		}
-		return nil
-	}
 
-	return validatorFn, nil
-}
-
-func (v *ValidateGetSpecType) LeasePoolValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	itemRules := db.GetRepMessageItemRules(rules)
-	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
-	if err != nil {
-		return nil, errors.Wrap(err, "Message ValidationRuleHandler for lease_pool")
-	}
-	itemsValidatorFn := func(ctx context.Context, elems []*LeasePool, opts ...db.ValidateOpt) error {
-		for i, el := range elems {
-			if err := itemValFn(ctx, el, opts...); err != nil {
-				return errors.Wrap(err, fmt.Sprintf("element %d", i))
-			}
-			if err := LeasePoolValidator().Validate(ctx, el, opts...); err != nil {
-				return errors.Wrap(err, fmt.Sprintf("element %d", i))
-			}
-		}
-		return nil
-	}
-	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for lease_pool")
-	}
-
-	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
-		elems, ok := val.([]*LeasePool)
-		if !ok {
-			return fmt.Errorf("Repeated validation expected []*LeasePool, got %T", val)
-		}
-		l := []string{}
-		for _, elem := range elems {
-			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
-			if err != nil {
-				return errors.Wrapf(err, "Converting %v to JSON", elem)
-			}
-			l = append(l, strVal)
-		}
-		if err := repValFn(ctx, l, opts...); err != nil {
-			return errors.Wrap(err, "repeated lease_pool")
-		}
-		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
-			return errors.Wrap(err, "items lease_pool")
-		}
 		return nil
 	}
 
@@ -389,17 +210,10 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 		return nil
 	}
 
-	if fv, exists := v.FldValidators["lease_pool"]; exists {
-		vOpts := append(opts, db.WithValidateField("lease_pool"))
-		if err := fv(ctx, m.GetLeasePool(), vOpts...); err != nil {
-			return err
-		}
+	if fv, exists := v.FldValidators["ip_version"]; exists {
 
-	}
-
-	if fv, exists := v.FldValidators["network"]; exists {
-		vOpts := append(opts, db.WithValidateField("network"))
-		if err := fv(ctx, m.GetNetwork(), vOpts...); err != nil {
+		vOpts := append(opts, db.WithValidateField("ip_version"))
+		if err := fv(ctx, m.GetIpVersion(), vOpts...); err != nil {
 			return err
 		}
 
@@ -420,30 +234,16 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
 
-	vrhNetwork := v.NetworkValidationRuleHandler
-	rulesNetwork := map[string]string{
-		"ves.io.schema.rules.message.required":   "true",
-		"ves.io.schema.rules.repeated.max_items": "1024",
-		"ves.io.schema.rules.repeated.min_items": "1",
+	vrhIpVersion := v.IpVersionValidationRuleHandler
+	rulesIpVersion := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
 	}
-	vFn, err = vrhNetwork(rulesNetwork)
+	vFn, err = vrhIpVersion(rulesIpVersion)
 	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.network: %s", err)
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.ip_version: %s", err)
 		panic(errMsg)
 	}
-	v.FldValidators["network"] = vFn
-
-	vrhLeasePool := v.LeasePoolValidationRuleHandler
-	rulesLeasePool := map[string]string{
-		"ves.io.schema.rules.message.required":   "true",
-		"ves.io.schema.rules.repeated.max_items": "1024",
-	}
-	vFn, err = vrhLeasePool(rulesLeasePool)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.lease_pool: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["lease_pool"] = vFn
+	v.FldValidators["ip_version"] = vFn
 
 	return v
 }()
@@ -493,96 +293,17 @@ type ValidateGlobalSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
-func (v *ValidateGlobalSpecType) NetworkValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+func (v *ValidateGlobalSpecType) IpVersionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
-	itemRules := db.GetRepMessageItemRules(rules)
-	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
-		return nil, errors.Wrap(err, "Message ValidationRuleHandler for network")
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for ip_version")
 	}
-	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.IpSubnetType, opts ...db.ValidateOpt) error {
-		for i, el := range elems {
-			if err := itemValFn(ctx, el, opts...); err != nil {
-				return errors.Wrap(err, fmt.Sprintf("element %d", i))
-			}
-			if err := ves_io_schema.IpSubnetTypeValidator().Validate(ctx, el, opts...); err != nil {
-				return errors.Wrap(err, fmt.Sprintf("element %d", i))
-			}
-		}
-		return nil
-	}
-	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for network")
-	}
-
 	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
-		elems, ok := val.([]*ves_io_schema.IpSubnetType)
-		if !ok {
-			return fmt.Errorf("Repeated validation expected []*ves_io_schema.IpSubnetType, got %T", val)
+		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
 		}
-		l := []string{}
-		for _, elem := range elems {
-			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
-			if err != nil {
-				return errors.Wrapf(err, "Converting %v to JSON", elem)
-			}
-			l = append(l, strVal)
-		}
-		if err := repValFn(ctx, l, opts...); err != nil {
-			return errors.Wrap(err, "repeated network")
-		}
-		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
-			return errors.Wrap(err, "items network")
-		}
-		return nil
-	}
 
-	return validatorFn, nil
-}
-
-func (v *ValidateGlobalSpecType) LeasePoolValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	itemRules := db.GetRepMessageItemRules(rules)
-	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
-	if err != nil {
-		return nil, errors.Wrap(err, "Message ValidationRuleHandler for lease_pool")
-	}
-	itemsValidatorFn := func(ctx context.Context, elems []*LeasePool, opts ...db.ValidateOpt) error {
-		for i, el := range elems {
-			if err := itemValFn(ctx, el, opts...); err != nil {
-				return errors.Wrap(err, fmt.Sprintf("element %d", i))
-			}
-			if err := LeasePoolValidator().Validate(ctx, el, opts...); err != nil {
-				return errors.Wrap(err, fmt.Sprintf("element %d", i))
-			}
-		}
-		return nil
-	}
-	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for lease_pool")
-	}
-
-	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
-		elems, ok := val.([]*LeasePool)
-		if !ok {
-			return fmt.Errorf("Repeated validation expected []*LeasePool, got %T", val)
-		}
-		l := []string{}
-		for _, elem := range elems {
-			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
-			if err != nil {
-				return errors.Wrapf(err, "Converting %v to JSON", elem)
-			}
-			l = append(l, strVal)
-		}
-		if err := repValFn(ctx, l, opts...); err != nil {
-			return errors.Wrap(err, "repeated lease_pool")
-		}
-		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
-			return errors.Wrap(err, "items lease_pool")
-		}
 		return nil
 	}
 
@@ -603,17 +324,10 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 		return nil
 	}
 
-	if fv, exists := v.FldValidators["lease_pool"]; exists {
-		vOpts := append(opts, db.WithValidateField("lease_pool"))
-		if err := fv(ctx, m.GetLeasePool(), vOpts...); err != nil {
-			return err
-		}
+	if fv, exists := v.FldValidators["ip_version"]; exists {
 
-	}
-
-	if fv, exists := v.FldValidators["network"]; exists {
-		vOpts := append(opts, db.WithValidateField("network"))
-		if err := fv(ctx, m.GetNetwork(), vOpts...); err != nil {
+		vOpts := append(opts, db.WithValidateField("ip_version"))
+		if err := fv(ctx, m.GetIpVersion(), vOpts...); err != nil {
 			return err
 		}
 
@@ -634,30 +348,16 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
 
-	vrhNetwork := v.NetworkValidationRuleHandler
-	rulesNetwork := map[string]string{
-		"ves.io.schema.rules.message.required":   "true",
-		"ves.io.schema.rules.repeated.max_items": "1024",
-		"ves.io.schema.rules.repeated.min_items": "1",
+	vrhIpVersion := v.IpVersionValidationRuleHandler
+	rulesIpVersion := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
 	}
-	vFn, err = vrhNetwork(rulesNetwork)
+	vFn, err = vrhIpVersion(rulesIpVersion)
 	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.network: %s", err)
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.ip_version: %s", err)
 		panic(errMsg)
 	}
-	v.FldValidators["network"] = vFn
-
-	vrhLeasePool := v.LeasePoolValidationRuleHandler
-	rulesLeasePool := map[string]string{
-		"ves.io.schema.rules.message.required":   "true",
-		"ves.io.schema.rules.repeated.max_items": "1024",
-	}
-	vFn, err = vrhLeasePool(rulesLeasePool)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.lease_pool: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["lease_pool"] = vFn
+	v.FldValidators["ip_version"] = vFn
 
 	return v
 }()
@@ -668,15 +368,15 @@ func GlobalSpecTypeValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
-func (m *LeasePool) ToJSON() (string, error) {
+func (m *IPV4LeasePoolConfig) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
 
-func (m *LeasePool) ToYAML() (string, error) {
+func (m *IPV4LeasePoolConfig) ToYAML() (string, error) {
 	return codec.ToYAML(m)
 }
 
-func (m *LeasePool) DeepCopy() *LeasePool {
+func (m *IPV4LeasePoolConfig) DeepCopy() *IPV4LeasePoolConfig {
 	if m == nil {
 		return nil
 	}
@@ -684,7 +384,7 @@ func (m *LeasePool) DeepCopy() *LeasePool {
 	if err != nil {
 		return nil
 	}
-	c := &LeasePool{}
+	c := &IPV4LeasePoolConfig{}
 	err = c.Unmarshal(ser)
 	if err != nil {
 		return nil
@@ -692,63 +392,237 @@ func (m *LeasePool) DeepCopy() *LeasePool {
 	return c
 }
 
-func (m *LeasePool) DeepCopyProto() proto.Message {
+func (m *IPV4LeasePoolConfig) DeepCopyProto() proto.Message {
 	if m == nil {
 		return nil
 	}
 	return m.DeepCopy()
 }
 
-func (m *LeasePool) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
-	return LeasePoolValidator().Validate(ctx, m, opts...)
+func (m *IPV4LeasePoolConfig) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return IPV4LeasePoolConfigValidator().Validate(ctx, m, opts...)
 }
 
-type ValidateLeasePool struct {
+type ValidateIPV4LeasePoolConfig struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
-func (v *ValidateLeasePool) StartAddressValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+func (v *ValidateIPV4LeasePoolConfig) Vip4RangeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
-	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
-		return nil, errors.Wrap(err, "MessageValidationRuleHandler for start_address")
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for vip4_range")
 	}
-	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
-		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
-			return err
+	itemsValidatorFn := func(ctx context.Context, elems []*IPV4LeasePoolRange, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := IPV4LeasePoolRangeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for vip4_range")
+	}
 
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*IPV4LeasePoolRange)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*IPV4LeasePoolRange, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated vip4_range")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items vip4_range")
+		}
 		return nil
 	}
 
 	return validatorFn, nil
 }
 
-func (v *ValidateLeasePool) EndAddressValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+func (v *ValidateIPV4LeasePoolConfig) PrefixValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
-	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	itemRules := db.GetRepStringItemRules(rules)
+	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
 	if err != nil {
-		return nil, errors.Wrap(err, "MessageValidationRuleHandler for end_address")
+		return nil, errors.Wrap(err, "Item ValidationRuleHandler for prefix")
 	}
-	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
-		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
-			return err
+	itemsValidatorFn := func(ctx context.Context, elems []string, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
 		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for prefix")
+	}
 
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]string)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []string, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal := fmt.Sprintf("%v", elem)
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated prefix")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items prefix")
+		}
 		return nil
 	}
 
 	return validatorFn, nil
 }
 
-func (v *ValidateLeasePool) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
-	m, ok := pm.(*LeasePool)
+func (v *ValidateIPV4LeasePoolConfig) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*IPV4LeasePoolConfig)
 	if !ok {
 		switch t := pm.(type) {
 		case nil:
 			return nil
 		default:
-			return fmt.Errorf("Expected type *LeasePool got type %s", t)
+			return fmt.Errorf("Expected type *IPV4LeasePoolConfig got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["prefix"]; exists {
+		vOpts := append(opts, db.WithValidateField("prefix"))
+		if err := fv(ctx, m.GetPrefix(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["vip4_range"]; exists {
+		vOpts := append(opts, db.WithValidateField("vip4_range"))
+		if err := fv(ctx, m.GetVip4Range(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultIPV4LeasePoolConfigValidator = func() *ValidateIPV4LeasePoolConfig {
+	v := &ValidateIPV4LeasePoolConfig{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhVip4Range := v.Vip4RangeValidationRuleHandler
+	rulesVip4Range := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhVip4Range(rulesVip4Range)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for IPV4LeasePoolConfig.vip4_range: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["vip4_range"] = vFn
+
+	vrhPrefix := v.PrefixValidationRuleHandler
+	rulesPrefix := map[string]string{
+		"ves.io.schema.rules.repeated.items.string.ipv4_prefix": "true",
+		"ves.io.schema.rules.repeated.items.string.not_empty":   "true",
+		"ves.io.schema.rules.repeated.max_items":                "1024",
+		"ves.io.schema.rules.repeated.unique":                   "true",
+	}
+	vFn, err = vrhPrefix(rulesPrefix)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for IPV4LeasePoolConfig.prefix: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["prefix"] = vFn
+
+	return v
+}()
+
+func IPV4LeasePoolConfigValidator() db.Validator {
+	return DefaultIPV4LeasePoolConfigValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *IPV4LeasePoolRange) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *IPV4LeasePoolRange) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *IPV4LeasePoolRange) DeepCopy() *IPV4LeasePoolRange {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &IPV4LeasePoolRange{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *IPV4LeasePoolRange) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *IPV4LeasePoolRange) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return IPV4LeasePoolRangeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateIPV4LeasePoolRange struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateIPV4LeasePoolRange) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*IPV4LeasePoolRange)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *IPV4LeasePoolRange got type %s", t)
 		}
 	}
 	if m == nil {
@@ -777,8 +651,187 @@ func (v *ValidateLeasePool) Validate(ctx context.Context, pm interface{}, opts .
 }
 
 // Well-known symbol for default validator implementation
-var DefaultLeasePoolValidator = func() *ValidateLeasePool {
-	v := &ValidateLeasePool{FldValidators: map[string]db.ValidatorFunc{}}
+var DefaultIPV4LeasePoolRangeValidator = func() *ValidateIPV4LeasePoolRange {
+	v := &ValidateIPV4LeasePoolRange{FldValidators: map[string]db.ValidatorFunc{}}
+
+	v.FldValidators["start_address"] = ves_io_schema.Ipv4AddressTypeValidator().Validate
+
+	v.FldValidators["end_address"] = ves_io_schema.Ipv4AddressTypeValidator().Validate
+
+	return v
+}()
+
+func IPV4LeasePoolRangeValidator() db.Validator {
+	return DefaultIPV4LeasePoolRangeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *IPV6LeasePoolConfig) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *IPV6LeasePoolConfig) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *IPV6LeasePoolConfig) DeepCopy() *IPV6LeasePoolConfig {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &IPV6LeasePoolConfig{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *IPV6LeasePoolConfig) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *IPV6LeasePoolConfig) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return IPV6LeasePoolConfigValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateIPV6LeasePoolConfig struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateIPV6LeasePoolConfig) Ipv6PrefixValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepStringItemRules(rules)
+	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Item ValidationRuleHandler for ipv6_prefix")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []string, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for ipv6_prefix")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]string)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []string, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal := fmt.Sprintf("%v", elem)
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated ipv6_prefix")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items ipv6_prefix")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateIPV6LeasePoolConfig) Vip6RangeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for vip6_range")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*IPV6LeasePoolRange, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := IPV6LeasePoolRangeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for vip6_range")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*IPV6LeasePoolRange)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*IPV6LeasePoolRange, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated vip6_range")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items vip6_range")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateIPV6LeasePoolConfig) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*IPV6LeasePoolConfig)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *IPV6LeasePoolConfig got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["ipv6_prefix"]; exists {
+		vOpts := append(opts, db.WithValidateField("ipv6_prefix"))
+		if err := fv(ctx, m.GetIpv6Prefix(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["vip6_range"]; exists {
+		vOpts := append(opts, db.WithValidateField("vip6_range"))
+		if err := fv(ctx, m.GetVip6Range(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultIPV6LeasePoolConfigValidator = func() *ValidateIPV6LeasePoolConfig {
+	v := &ValidateIPV6LeasePoolConfig{FldValidators: map[string]db.ValidatorFunc{}}
 
 	var (
 		err error
@@ -788,33 +841,225 @@ var DefaultLeasePoolValidator = func() *ValidateLeasePool {
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
 
-	vrhStartAddress := v.StartAddressValidationRuleHandler
-	rulesStartAddress := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+	vrhIpv6Prefix := v.Ipv6PrefixValidationRuleHandler
+	rulesIpv6Prefix := map[string]string{
+		"ves.io.schema.rules.repeated.items.string.ipv6_prefix": "true",
+		"ves.io.schema.rules.repeated.items.string.not_empty":   "true",
+		"ves.io.schema.rules.repeated.max_items":                "1024",
+		"ves.io.schema.rules.repeated.unique":                   "true",
 	}
-	vFn, err = vrhStartAddress(rulesStartAddress)
+	vFn, err = vrhIpv6Prefix(rulesIpv6Prefix)
 	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for LeasePool.start_address: %s", err)
+		errMsg := fmt.Sprintf("ValidationRuleHandler for IPV6LeasePoolConfig.ipv6_prefix: %s", err)
 		panic(errMsg)
 	}
-	v.FldValidators["start_address"] = vFn
+	v.FldValidators["ipv6_prefix"] = vFn
 
-	vrhEndAddress := v.EndAddressValidationRuleHandler
-	rulesEndAddress := map[string]string{
+	vrhVip6Range := v.Vip6RangeValidationRuleHandler
+	rulesVip6Range := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
 	}
-	vFn, err = vrhEndAddress(rulesEndAddress)
+	vFn, err = vrhVip6Range(rulesVip6Range)
 	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for LeasePool.end_address: %s", err)
+		errMsg := fmt.Sprintf("ValidationRuleHandler for IPV6LeasePoolConfig.vip6_range: %s", err)
 		panic(errMsg)
 	}
-	v.FldValidators["end_address"] = vFn
+	v.FldValidators["vip6_range"] = vFn
 
 	return v
 }()
 
-func LeasePoolValidator() db.Validator {
-	return DefaultLeasePoolValidator
+func IPV6LeasePoolConfigValidator() db.Validator {
+	return DefaultIPV6LeasePoolConfigValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *IPV6LeasePoolRange) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *IPV6LeasePoolRange) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *IPV6LeasePoolRange) DeepCopy() *IPV6LeasePoolRange {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &IPV6LeasePoolRange{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *IPV6LeasePoolRange) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *IPV6LeasePoolRange) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return IPV6LeasePoolRangeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateIPV6LeasePoolRange struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateIPV6LeasePoolRange) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*IPV6LeasePoolRange)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *IPV6LeasePoolRange got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["end_address"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("end_address"))
+		if err := fv(ctx, m.GetEndAddress(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["start_address"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("start_address"))
+		if err := fv(ctx, m.GetStartAddress(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultIPV6LeasePoolRangeValidator = func() *ValidateIPV6LeasePoolRange {
+	v := &ValidateIPV6LeasePoolRange{FldValidators: map[string]db.ValidatorFunc{}}
+
+	v.FldValidators["start_address"] = ves_io_schema.Ipv6AddressTypeValidator().Validate
+
+	v.FldValidators["end_address"] = ves_io_schema.Ipv6AddressTypeValidator().Validate
+
+	return v
+}()
+
+func IPV6LeasePoolRangeValidator() db.Validator {
+	return DefaultIPV6LeasePoolRangeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *IPVersion) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *IPVersion) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *IPVersion) DeepCopy() *IPVersion {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &IPVersion{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *IPVersion) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *IPVersion) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return IPVersionValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateIPVersion struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateIPVersion) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*IPVersion)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *IPVersion got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	switch m.GetIpVip().(type) {
+	case *IPVersion_Ipv4Vip:
+		if fv, exists := v.FldValidators["ip_vip.ipv4_vip"]; exists {
+			val := m.GetIpVip().(*IPVersion_Ipv4Vip).Ipv4Vip
+			vOpts := append(opts,
+				db.WithValidateField("ip_vip"),
+				db.WithValidateField("ipv4_vip"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *IPVersion_Ipv6Vip:
+		if fv, exists := v.FldValidators["ip_vip.ipv6_vip"]; exists {
+			val := m.GetIpVip().(*IPVersion_Ipv6Vip).Ipv6Vip
+			vOpts := append(opts,
+				db.WithValidateField("ip_vip"),
+				db.WithValidateField("ipv6_vip"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultIPVersionValidator = func() *ValidateIPVersion {
+	v := &ValidateIPVersion{FldValidators: map[string]db.ValidatorFunc{}}
+
+	v.FldValidators["ip_vip.ipv4_vip"] = IPV4LeasePoolConfigValidator().Validate
+	v.FldValidators["ip_vip.ipv6_vip"] = IPV6LeasePoolConfigValidator().Validate
+
+	return v
+}()
+
+func IPVersionValidator() db.Validator {
+	return DefaultIPVersionValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -858,96 +1103,17 @@ type ValidateReplaceSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
-func (v *ValidateReplaceSpecType) NetworkValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+func (v *ValidateReplaceSpecType) IpVersionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
-	itemRules := db.GetRepMessageItemRules(rules)
-	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
-		return nil, errors.Wrap(err, "Message ValidationRuleHandler for network")
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for ip_version")
 	}
-	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.IpSubnetType, opts ...db.ValidateOpt) error {
-		for i, el := range elems {
-			if err := itemValFn(ctx, el, opts...); err != nil {
-				return errors.Wrap(err, fmt.Sprintf("element %d", i))
-			}
-			if err := ves_io_schema.IpSubnetTypeValidator().Validate(ctx, el, opts...); err != nil {
-				return errors.Wrap(err, fmt.Sprintf("element %d", i))
-			}
-		}
-		return nil
-	}
-	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for network")
-	}
-
 	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
-		elems, ok := val.([]*ves_io_schema.IpSubnetType)
-		if !ok {
-			return fmt.Errorf("Repeated validation expected []*ves_io_schema.IpSubnetType, got %T", val)
+		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
 		}
-		l := []string{}
-		for _, elem := range elems {
-			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
-			if err != nil {
-				return errors.Wrapf(err, "Converting %v to JSON", elem)
-			}
-			l = append(l, strVal)
-		}
-		if err := repValFn(ctx, l, opts...); err != nil {
-			return errors.Wrap(err, "repeated network")
-		}
-		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
-			return errors.Wrap(err, "items network")
-		}
-		return nil
-	}
 
-	return validatorFn, nil
-}
-
-func (v *ValidateReplaceSpecType) LeasePoolValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	itemRules := db.GetRepMessageItemRules(rules)
-	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
-	if err != nil {
-		return nil, errors.Wrap(err, "Message ValidationRuleHandler for lease_pool")
-	}
-	itemsValidatorFn := func(ctx context.Context, elems []*LeasePool, opts ...db.ValidateOpt) error {
-		for i, el := range elems {
-			if err := itemValFn(ctx, el, opts...); err != nil {
-				return errors.Wrap(err, fmt.Sprintf("element %d", i))
-			}
-			if err := LeasePoolValidator().Validate(ctx, el, opts...); err != nil {
-				return errors.Wrap(err, fmt.Sprintf("element %d", i))
-			}
-		}
-		return nil
-	}
-	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for lease_pool")
-	}
-
-	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
-		elems, ok := val.([]*LeasePool)
-		if !ok {
-			return fmt.Errorf("Repeated validation expected []*LeasePool, got %T", val)
-		}
-		l := []string{}
-		for _, elem := range elems {
-			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
-			if err != nil {
-				return errors.Wrapf(err, "Converting %v to JSON", elem)
-			}
-			l = append(l, strVal)
-		}
-		if err := repValFn(ctx, l, opts...); err != nil {
-			return errors.Wrap(err, "repeated lease_pool")
-		}
-		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
-			return errors.Wrap(err, "items lease_pool")
-		}
 		return nil
 	}
 
@@ -968,17 +1134,10 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 		return nil
 	}
 
-	if fv, exists := v.FldValidators["lease_pool"]; exists {
-		vOpts := append(opts, db.WithValidateField("lease_pool"))
-		if err := fv(ctx, m.GetLeasePool(), vOpts...); err != nil {
-			return err
-		}
+	if fv, exists := v.FldValidators["ip_version"]; exists {
 
-	}
-
-	if fv, exists := v.FldValidators["network"]; exists {
-		vOpts := append(opts, db.WithValidateField("network"))
-		if err := fv(ctx, m.GetNetwork(), vOpts...); err != nil {
+		vOpts := append(opts, db.WithValidateField("ip_version"))
+		if err := fv(ctx, m.GetIpVersion(), vOpts...); err != nil {
 			return err
 		}
 
@@ -999,30 +1158,16 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
 
-	vrhNetwork := v.NetworkValidationRuleHandler
-	rulesNetwork := map[string]string{
-		"ves.io.schema.rules.message.required":   "true",
-		"ves.io.schema.rules.repeated.max_items": "1024",
-		"ves.io.schema.rules.repeated.min_items": "1",
+	vrhIpVersion := v.IpVersionValidationRuleHandler
+	rulesIpVersion := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
 	}
-	vFn, err = vrhNetwork(rulesNetwork)
+	vFn, err = vrhIpVersion(rulesIpVersion)
 	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.network: %s", err)
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.ip_version: %s", err)
 		panic(errMsg)
 	}
-	v.FldValidators["network"] = vFn
-
-	vrhLeasePool := v.LeasePoolValidationRuleHandler
-	rulesLeasePool := map[string]string{
-		"ves.io.schema.rules.message.required":   "true",
-		"ves.io.schema.rules.repeated.max_items": "1024",
-	}
-	vFn, err = vrhLeasePool(rulesLeasePool)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.lease_pool: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["lease_pool"] = vFn
+	v.FldValidators["ip_version"] = vFn
 
 	return v
 }()
@@ -1035,8 +1180,7 @@ func (m *CreateSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool
 	if f == nil {
 		return
 	}
-	m.LeasePool = f.GetLeasePool()
-	m.Network = f.GetNetwork()
+	m.IpVersion = f.GetIpVersion()
 }
 
 func (m *CreateSpecType) FromGlobalSpecType(f *GlobalSpecType) {
@@ -1054,8 +1198,7 @@ func (m *CreateSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) 
 	}
 	_ = m1
 
-	f.LeasePool = m1.LeasePool
-	f.Network = m1.Network
+	f.IpVersion = m1.IpVersion
 }
 
 func (m *CreateSpecType) ToGlobalSpecType(f *GlobalSpecType) {
@@ -1070,8 +1213,7 @@ func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	if f == nil {
 		return
 	}
-	m.LeasePool = f.GetLeasePool()
-	m.Network = f.GetNetwork()
+	m.IpVersion = f.GetIpVersion()
 }
 
 func (m *GetSpecType) FromGlobalSpecType(f *GlobalSpecType) {
@@ -1089,8 +1231,7 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	}
 	_ = m1
 
-	f.LeasePool = m1.LeasePool
-	f.Network = m1.Network
+	f.IpVersion = m1.IpVersion
 }
 
 func (m *GetSpecType) ToGlobalSpecType(f *GlobalSpecType) {
@@ -1105,8 +1246,7 @@ func (m *ReplaceSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy boo
 	if f == nil {
 		return
 	}
-	m.LeasePool = f.GetLeasePool()
-	m.Network = f.GetNetwork()
+	m.IpVersion = f.GetIpVersion()
 }
 
 func (m *ReplaceSpecType) FromGlobalSpecType(f *GlobalSpecType) {
@@ -1124,8 +1264,7 @@ func (m *ReplaceSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool)
 	}
 	_ = m1
 
-	f.LeasePool = m1.LeasePool
-	f.Network = m1.Network
+	f.IpVersion = m1.IpVersion
 }
 
 func (m *ReplaceSpecType) ToGlobalSpecType(f *GlobalSpecType) {

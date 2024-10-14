@@ -32,6 +32,7 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.uztna.uztna_gateway.CreateSpecType"] = CreateSpecTypeValidator()
 	vr["ves.io.schema.uztna.uztna_gateway.GetSpecType"] = GetSpecTypeValidator()
 	vr["ves.io.schema.uztna.uztna_gateway.GlobalSpecType"] = GlobalSpecTypeValidator()
+	vr["ves.io.schema.uztna.uztna_gateway.Listeners"] = ListenersValidator()
 	vr["ves.io.schema.uztna.uztna_gateway.ReplaceSpecType"] = ReplaceSpecTypeValidator()
 
 }

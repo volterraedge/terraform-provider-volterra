@@ -7,9 +7,11 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 	ves_io_schema_site "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/site"
+	ves_io_schema_tenant "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/tenant"
 	"gopkg.volterra.us/stdlib/client"
 	"gopkg.volterra.us/stdlib/server"
 )
@@ -20,9 +22,20 @@ const (
 
 func TestAccSiteUpdate(t *testing.T) {
 	name := generateResourceName()
-	testURL, stopFunc := createSiteTestServer(t)
+	testURL, stopFunc, f := createTestCustomAPIServer(t, []string{
+		ves_io_schema_site.ObjectType,
+		ves_io_schema_tenant.ObjectType,
+	})
 	resourceName := fmt.Sprintf("%s.%s", modifySite, name)
 	defer stopFunc()
+	tenantName := "ves-io"
+	tenantObj := mkDBObjTenant(tenantName, uuid.New().String(), withAddonServices("f5xc-flow-collection", "f5xc-ipv6-standard", "f5xc-waap-standard"))
+	f.MustCreateEntry(tenantObj)
+
+	siteObj := mkDBObjSite(systemNS, siteName)
+	ctx := client.NewContextWithHeaders(nil, client.WithTenant("ves-io"))
+	f.MustCreateEntry(siteObj, server.WithCtx(ctx))
+
 	os.Setenv("VOLT_API_TEST", "true")
 	os.Setenv("VOLT_API_URL", testURL)
 	os.Setenv("TF_ACC", "true")
@@ -55,16 +68,6 @@ func testConfgSite(objType, resourceName, name, namespace string) string {
 		  desired_pool_count = 5
 		}
 		`, resourceName, name, namespace, tfResourceName)
-}
-
-func createSiteTestServer(t *testing.T) (string, func()) {
-
-	f, stop := makeTestServer(t, ves_io_schema_site.ObjectType)
-	siteObj := mkDBObjSite(systemNS, siteName)
-	ctx := client.NewContextWithHeaders(nil, client.WithTenant("ves-io"))
-	f.MustCreateEntry(siteObj, server.WithCtx(ctx))
-
-	return fmt.Sprintf("https://localhost:%d", f.Svc.RestServerTLSPort()), stop
 }
 
 func mkDBObjSite(namespace, name string) *ves_io_schema_site.DBObject {

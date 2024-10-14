@@ -155,6 +155,30 @@ func (v *ValidateDNSLBHealthStatusListResponse) Validate(ctx context.Context, pm
 		return nil
 	}
 
+	if fv, exists := v.FldValidators["dns_lb_pools_status_summary"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("dns_lb_pools_status_summary"))
+		for idx, item := range m.GetDnsLbPoolsStatusSummary() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["dns_load_balancer_status_summary"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("dns_load_balancer_status_summary"))
+		for idx, item := range m.GetDnsLoadBalancerStatusSummary() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["items"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("items"))
@@ -765,6 +789,273 @@ func DNSLBPoolHealthStatusResponseValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *DNSLBPoolMemberHealthStatusEvent) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *DNSLBPoolMemberHealthStatusEvent) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *DNSLBPoolMemberHealthStatusEvent) DeepCopy() *DNSLBPoolMemberHealthStatusEvent {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &DNSLBPoolMemberHealthStatusEvent{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *DNSLBPoolMemberHealthStatusEvent) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *DNSLBPoolMemberHealthStatusEvent) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return DNSLBPoolMemberHealthStatusEventValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateDNSLBPoolMemberHealthStatusEvent struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateDNSLBPoolMemberHealthStatusEvent) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*DNSLBPoolMemberHealthStatusEvent)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *DNSLBPoolMemberHealthStatusEvent got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["error_code"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("error_code"))
+		if err := fv(ctx, m.GetErrorCode(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["error_description"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("error_description"))
+		if err := fv(ctx, m.GetErrorDescription(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["pool_member_address"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("pool_member_address"))
+		if err := fv(ctx, m.GetPoolMemberAddress(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["status"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("status"))
+		for idx, item := range m.GetStatus() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultDNSLBPoolMemberHealthStatusEventValidator = func() *ValidateDNSLBPoolMemberHealthStatusEvent {
+	v := &ValidateDNSLBPoolMemberHealthStatusEvent{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func DNSLBPoolMemberHealthStatusEventValidator() db.Validator {
+	return DefaultDNSLBPoolMemberHealthStatusEventValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *DNSLBPoolMemberHealthStatusListRequest) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *DNSLBPoolMemberHealthStatusListRequest) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *DNSLBPoolMemberHealthStatusListRequest) DeepCopy() *DNSLBPoolMemberHealthStatusListRequest {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &DNSLBPoolMemberHealthStatusListRequest{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *DNSLBPoolMemberHealthStatusListRequest) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *DNSLBPoolMemberHealthStatusListRequest) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return DNSLBPoolMemberHealthStatusListRequestValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateDNSLBPoolMemberHealthStatusListRequest struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateDNSLBPoolMemberHealthStatusListRequest) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*DNSLBPoolMemberHealthStatusListRequest)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *DNSLBPoolMemberHealthStatusListRequest got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["namespace"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("namespace"))
+		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultDNSLBPoolMemberHealthStatusListRequestValidator = func() *ValidateDNSLBPoolMemberHealthStatusListRequest {
+	v := &ValidateDNSLBPoolMemberHealthStatusListRequest{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func DNSLBPoolMemberHealthStatusListRequestValidator() db.Validator {
+	return DefaultDNSLBPoolMemberHealthStatusListRequestValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *DNSLBPoolMemberHealthStatusListResponse) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *DNSLBPoolMemberHealthStatusListResponse) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *DNSLBPoolMemberHealthStatusListResponse) DeepCopy() *DNSLBPoolMemberHealthStatusListResponse {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &DNSLBPoolMemberHealthStatusListResponse{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *DNSLBPoolMemberHealthStatusListResponse) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *DNSLBPoolMemberHealthStatusListResponse) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return DNSLBPoolMemberHealthStatusListResponseValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateDNSLBPoolMemberHealthStatusListResponse struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateDNSLBPoolMemberHealthStatusListResponse) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*DNSLBPoolMemberHealthStatusListResponse)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *DNSLBPoolMemberHealthStatusListResponse got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["items"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("items"))
+		for idx, item := range m.GetItems() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultDNSLBPoolMemberHealthStatusListResponseValidator = func() *ValidateDNSLBPoolMemberHealthStatusListResponse {
+	v := &ValidateDNSLBPoolMemberHealthStatusListResponse{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func DNSLBPoolMemberHealthStatusListResponseValidator() db.Validator {
+	return DefaultDNSLBPoolMemberHealthStatusListResponseValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *DNSLBPoolMemberHealthStatusListResponseItem) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -816,6 +1107,24 @@ func (v *ValidateDNSLBPoolMemberHealthStatusListResponseItem) Validate(ctx conte
 	}
 	if m == nil {
 		return nil
+	}
+
+	if fv, exists := v.FldValidators["dns_lb_name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("dns_lb_name"))
+		if err := fv(ctx, m.GetDnsLbName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["dns_lb_pool_name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("dns_lb_pool_name"))
+		if err := fv(ctx, m.GetDnsLbPoolName(), vOpts...); err != nil {
+			return err
+		}
+
 	}
 
 	if fv, exists := v.FldValidators["error_code"]; exists {
@@ -878,6 +1187,284 @@ var DefaultDNSLBPoolMemberHealthStatusListResponseItemValidator = func() *Valida
 
 func DNSLBPoolMemberHealthStatusListResponseItemValidator() db.Validator {
 	return DefaultDNSLBPoolMemberHealthStatusListResponseItemValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *DNSLBPoolMemberHealthStatusRequest) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *DNSLBPoolMemberHealthStatusRequest) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *DNSLBPoolMemberHealthStatusRequest) DeepCopy() *DNSLBPoolMemberHealthStatusRequest {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &DNSLBPoolMemberHealthStatusRequest{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *DNSLBPoolMemberHealthStatusRequest) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *DNSLBPoolMemberHealthStatusRequest) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return DNSLBPoolMemberHealthStatusRequestValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateDNSLBPoolMemberHealthStatusRequest struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateDNSLBPoolMemberHealthStatusRequest) NamespaceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for namespace")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateDNSLBPoolMemberHealthStatusRequest) DnsLbNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for dns_lb_name")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateDNSLBPoolMemberHealthStatusRequest) DnsLbPoolNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for dns_lb_pool_name")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateDNSLBPoolMemberHealthStatusRequest) PoolMemberAddressValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for pool_member_address")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateDNSLBPoolMemberHealthStatusRequest) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*DNSLBPoolMemberHealthStatusRequest)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *DNSLBPoolMemberHealthStatusRequest got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["dns_lb_name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("dns_lb_name"))
+		if err := fv(ctx, m.GetDnsLbName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["dns_lb_pool_name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("dns_lb_pool_name"))
+		if err := fv(ctx, m.GetDnsLbPoolName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["namespace"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("namespace"))
+		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["pool_member_address"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("pool_member_address"))
+		if err := fv(ctx, m.GetPoolMemberAddress(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultDNSLBPoolMemberHealthStatusRequestValidator = func() *ValidateDNSLBPoolMemberHealthStatusRequest {
+	v := &ValidateDNSLBPoolMemberHealthStatusRequest{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhNamespace := v.NamespaceValidationRuleHandler
+	rulesNamespace := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhNamespace(rulesNamespace)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for DNSLBPoolMemberHealthStatusRequest.namespace: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["namespace"] = vFn
+
+	vrhDnsLbName := v.DnsLbNameValidationRuleHandler
+	rulesDnsLbName := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhDnsLbName(rulesDnsLbName)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for DNSLBPoolMemberHealthStatusRequest.dns_lb_name: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["dns_lb_name"] = vFn
+
+	vrhDnsLbPoolName := v.DnsLbPoolNameValidationRuleHandler
+	rulesDnsLbPoolName := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhDnsLbPoolName(rulesDnsLbPoolName)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for DNSLBPoolMemberHealthStatusRequest.dns_lb_pool_name: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["dns_lb_pool_name"] = vFn
+
+	vrhPoolMemberAddress := v.PoolMemberAddressValidationRuleHandler
+	rulesPoolMemberAddress := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhPoolMemberAddress(rulesPoolMemberAddress)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for DNSLBPoolMemberHealthStatusRequest.pool_member_address: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["pool_member_address"] = vFn
+
+	return v
+}()
+
+func DNSLBPoolMemberHealthStatusRequestValidator() db.Validator {
+	return DefaultDNSLBPoolMemberHealthStatusRequestValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *DNSLBPoolMemberHealthStatusResponse) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *DNSLBPoolMemberHealthStatusResponse) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *DNSLBPoolMemberHealthStatusResponse) DeepCopy() *DNSLBPoolMemberHealthStatusResponse {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &DNSLBPoolMemberHealthStatusResponse{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *DNSLBPoolMemberHealthStatusResponse) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *DNSLBPoolMemberHealthStatusResponse) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return DNSLBPoolMemberHealthStatusResponseValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateDNSLBPoolMemberHealthStatusResponse struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateDNSLBPoolMemberHealthStatusResponse) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*DNSLBPoolMemberHealthStatusResponse)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *DNSLBPoolMemberHealthStatusResponse got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["dns_lb_pool_member_events"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("dns_lb_pool_member_events"))
+		for idx, item := range m.GetDnsLbPoolMemberEvents() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultDNSLBPoolMemberHealthStatusResponseValidator = func() *ValidateDNSLBPoolMemberHealthStatusResponse {
+	v := &ValidateDNSLBPoolMemberHealthStatusResponse{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func DNSLBPoolMemberHealthStatusResponseValidator() db.Validator {
+	return DefaultDNSLBPoolMemberHealthStatusResponseValidator
 }
 
 // augmented methods on protoc/std generated struct

@@ -50,7 +50,7 @@ func TestHTTPLB(t *testing.T) {
 		client.WithTenant(tenantName),
 		client.WithCreatorClass("test"),
 		client.WithCreatorID("test-"+t.Name()))
-	tenantObj := mkDBObjTenant(tenantName, uuid.New().String(), withAddonServices("f5xc-waap-standard"))
+	tenantObj := mkDBObjTenant(tenantName, uuid.New().String(), withAddonServices("f5xc-flow-collection", "f5xc-ipv6-standard", "f5xc-waap-standard"))
 	f.MustCreateEntry(tenantObj)
 
 	nsName := "default"

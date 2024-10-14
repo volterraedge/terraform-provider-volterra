@@ -264,6 +264,12 @@ func (m *ApiProtection) GetDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
+	if fdrInfos, err := m.GetApiDiscoveryChoiceDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetApiDiscoveryChoiceDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
 	if fdrInfos, err := m.GetApiProtectionRulesDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetApiProtectionRulesDRefInfo() FAILED")
 	} else {
@@ -311,6 +317,46 @@ func (m *ApiProtection) GetApiDefinitionChoiceDRefInfo() ([]db.DRefInfo, error) 
 		for i := range drInfos {
 			dri := &drInfos[i]
 			dri.DRField = "api_specification_on_cache_miss." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
+	}
+
+}
+
+// GetDRefInfo for the field's type
+func (m *ApiProtection) GetApiDiscoveryChoiceDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetApiDiscoveryChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetApiDiscoveryChoice().(type) {
+	case *ApiProtection_EnableApiDiscovery:
+
+		drInfos, err := m.GetEnableApiDiscovery().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetEnableApiDiscovery().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "enable_api_discovery." + dri.DRField
+		}
+		return drInfos, err
+
+	case *ApiProtection_DisableApiDiscovery:
+
+		return nil, nil
+
+	case *ApiProtection_ApiDiscoveryOnCacheMiss:
+
+		drInfos, err := m.GetApiDiscoveryOnCacheMiss().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetApiDiscoveryOnCacheMiss().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "api_discovery_on_cache_miss." + dri.DRField
 		}
 		return drInfos, err
 
@@ -2035,6 +2081,10 @@ func (m *CDNHTTPSCustomCertsType) Redact(ctx context.Context) error {
 		return errors.Wrapf(err, "Redacting CDNHTTPSCustomCertsType.tls_parameters")
 	}
 
+	if err := m.GetTlsCertOptions().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting CDNHTTPSCustomCertsType.tls_cert_options")
+	}
+
 	return nil
 }
 
@@ -2063,6 +2113,33 @@ func (m *CDNHTTPSCustomCertsType) DeepCopyProto() proto.Message {
 
 func (m *CDNHTTPSCustomCertsType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
 	return CDNHTTPSCustomCertsTypeValidator().Validate(ctx, m, opts...)
+}
+
+func (m *CDNHTTPSCustomCertsType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetTlsCertOptionsDRefInfo()
+
+}
+
+// GetDRefInfo for the field's type
+func (m *CDNHTTPSCustomCertsType) GetTlsCertOptionsDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetTlsCertOptions() == nil {
+		return nil, nil
+	}
+
+	drInfos, err := m.GetTlsCertOptions().GetDRefInfo()
+	if err != nil {
+		return nil, errors.Wrap(err, "GetTlsCertOptions().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "tls_cert_options." + dri.DRField
+	}
+	return drInfos, err
+
 }
 
 type ValidateCDNHTTPSCustomCertsType struct {
@@ -2101,6 +2178,15 @@ func (v *ValidateCDNHTTPSCustomCertsType) Validate(ctx context.Context, pm inter
 
 	}
 
+	if fv, exists := v.FldValidators["tls_cert_options"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("tls_cert_options"))
+		if err := fv(ctx, m.GetTlsCertOptions(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["tls_parameters"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("tls_parameters"))
@@ -2118,6 +2204,8 @@ var DefaultCDNHTTPSCustomCertsTypeValidator = func() *ValidateCDNHTTPSCustomCert
 	v := &ValidateCDNHTTPSCustomCertsType{FldValidators: map[string]db.ValidatorFunc{}}
 
 	v.FldValidators["tls_parameters"] = CDNDownstreamTlsParamsTypeValidator().Validate
+
+	v.FldValidators["tls_cert_options"] = TlsCertOptionsValidator().Validate
 
 	return v
 }()
@@ -5116,6 +5204,12 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
+	if fdrInfos, err := m.GetApiDiscoveryChoiceDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetApiDiscoveryChoiceDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
 	if fdrInfos, err := m.GetApiProtectionRulesDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetApiProtectionRulesDRefInfo() FAILED")
 	} else {
@@ -5130,6 +5224,12 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	if fdrInfos, err := m.GetChallengeTypeDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetChallengeTypeDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetLoadbalancerTypeDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetLoadbalancerTypeDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
@@ -5211,6 +5311,46 @@ func (m *CreateSpecType) GetApiDefinitionChoiceDRefInfo() ([]db.DRefInfo, error)
 		for i := range drInfos {
 			dri := &drInfos[i]
 			dri.DRField = "api_specification_on_cache_miss." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
+	}
+
+}
+
+// GetDRefInfo for the field's type
+func (m *CreateSpecType) GetApiDiscoveryChoiceDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetApiDiscoveryChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetApiDiscoveryChoice().(type) {
+	case *CreateSpecType_DisableApiDiscovery:
+
+		return nil, nil
+
+	case *CreateSpecType_EnableApiDiscovery:
+
+		drInfos, err := m.GetEnableApiDiscovery().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetEnableApiDiscovery().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "enable_api_discovery." + dri.DRField
+		}
+		return drInfos, err
+
+	case *CreateSpecType_ApiDiscoveryOnCacheMiss:
+
+		drInfos, err := m.GetApiDiscoveryOnCacheMiss().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetApiDiscoveryOnCacheMiss().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "api_discovery_on_cache_miss." + dri.DRField
 		}
 		return drInfos, err
 
@@ -5321,6 +5461,38 @@ func (m *CreateSpecType) GetChallengeTypeDRefInfo() ([]db.DRefInfo, error) {
 		for i := range drInfos {
 			dri := &drInfos[i]
 			dri.DRField = "policy_based_challenge." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
+	}
+
+}
+
+// GetDRefInfo for the field's type
+func (m *CreateSpecType) GetLoadbalancerTypeDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetLoadbalancerType() == nil {
+		return nil, nil
+	}
+	switch m.GetLoadbalancerType().(type) {
+	case *CreateSpecType_Http:
+
+		return nil, nil
+
+	case *CreateSpecType_HttpsAutoCert:
+
+		return nil, nil
+
+	case *CreateSpecType_Https:
+
+		drInfos, err := m.GetHttps().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetHttps().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "https." + dri.DRField
 		}
 		return drInfos, err
 
@@ -8203,6 +8375,12 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
+	if fdrInfos, err := m.GetApiDiscoveryChoiceDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetApiDiscoveryChoiceDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
 	if fdrInfos, err := m.GetApiProtectionRulesDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetApiProtectionRulesDRefInfo() FAILED")
 	} else {
@@ -8217,6 +8395,12 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	if fdrInfos, err := m.GetChallengeTypeDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetChallengeTypeDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetLoadbalancerTypeDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetLoadbalancerTypeDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
@@ -8298,6 +8482,46 @@ func (m *GetSpecType) GetApiDefinitionChoiceDRefInfo() ([]db.DRefInfo, error) {
 		for i := range drInfos {
 			dri := &drInfos[i]
 			dri.DRField = "api_specification_on_cache_miss." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
+	}
+
+}
+
+// GetDRefInfo for the field's type
+func (m *GetSpecType) GetApiDiscoveryChoiceDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetApiDiscoveryChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetApiDiscoveryChoice().(type) {
+	case *GetSpecType_DisableApiDiscovery:
+
+		return nil, nil
+
+	case *GetSpecType_EnableApiDiscovery:
+
+		drInfos, err := m.GetEnableApiDiscovery().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetEnableApiDiscovery().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "enable_api_discovery." + dri.DRField
+		}
+		return drInfos, err
+
+	case *GetSpecType_ApiDiscoveryOnCacheMiss:
+
+		drInfos, err := m.GetApiDiscoveryOnCacheMiss().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetApiDiscoveryOnCacheMiss().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "api_discovery_on_cache_miss." + dri.DRField
 		}
 		return drInfos, err
 
@@ -8408,6 +8632,38 @@ func (m *GetSpecType) GetChallengeTypeDRefInfo() ([]db.DRefInfo, error) {
 		for i := range drInfos {
 			dri := &drInfos[i]
 			dri.DRField = "policy_based_challenge." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
+	}
+
+}
+
+// GetDRefInfo for the field's type
+func (m *GetSpecType) GetLoadbalancerTypeDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetLoadbalancerType() == nil {
+		return nil, nil
+	}
+	switch m.GetLoadbalancerType().(type) {
+	case *GetSpecType_Http:
+
+		return nil, nil
+
+	case *GetSpecType_HttpsAutoCert:
+
+		return nil, nil
+
+	case *GetSpecType_Https:
+
+		drInfos, err := m.GetHttps().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetHttps().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "https." + dri.DRField
 		}
 		return drInfos, err
 
@@ -10701,6 +10957,12 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
+	if fdrInfos, err := m.GetApiDiscoveryChoiceDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetApiDiscoveryChoiceDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
 	if fdrInfos, err := m.GetApiProtectionRulesDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetApiProtectionRulesDRefInfo() FAILED")
 	} else {
@@ -10715,6 +10977,12 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	if fdrInfos, err := m.GetChallengeTypeDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetChallengeTypeDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetLoadbalancerTypeDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetLoadbalancerTypeDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
@@ -10802,6 +11070,46 @@ func (m *GlobalSpecType) GetApiDefinitionChoiceDRefInfo() ([]db.DRefInfo, error)
 		for i := range drInfos {
 			dri := &drInfos[i]
 			dri.DRField = "api_specification_on_cache_miss." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
+	}
+
+}
+
+// GetDRefInfo for the field's type
+func (m *GlobalSpecType) GetApiDiscoveryChoiceDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetApiDiscoveryChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetApiDiscoveryChoice().(type) {
+	case *GlobalSpecType_DisableApiDiscovery:
+
+		return nil, nil
+
+	case *GlobalSpecType_EnableApiDiscovery:
+
+		drInfos, err := m.GetEnableApiDiscovery().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetEnableApiDiscovery().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "enable_api_discovery." + dri.DRField
+		}
+		return drInfos, err
+
+	case *GlobalSpecType_ApiDiscoveryOnCacheMiss:
+
+		drInfos, err := m.GetApiDiscoveryOnCacheMiss().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetApiDiscoveryOnCacheMiss().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "api_discovery_on_cache_miss." + dri.DRField
 		}
 		return drInfos, err
 
@@ -10912,6 +11220,38 @@ func (m *GlobalSpecType) GetChallengeTypeDRefInfo() ([]db.DRefInfo, error) {
 		for i := range drInfos {
 			dri := &drInfos[i]
 			dri.DRField = "policy_based_challenge." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
+	}
+
+}
+
+// GetDRefInfo for the field's type
+func (m *GlobalSpecType) GetLoadbalancerTypeDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetLoadbalancerType() == nil {
+		return nil, nil
+	}
+	switch m.GetLoadbalancerType().(type) {
+	case *GlobalSpecType_Http:
+
+		return nil, nil
+
+	case *GlobalSpecType_HttpsAutoCert:
+
+		return nil, nil
+
+	case *GlobalSpecType_Https:
+
+		drInfos, err := m.GetHttps().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetHttps().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "https." + dri.DRField
 		}
 		return drInfos, err
 
@@ -14984,6 +15324,12 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
+	if fdrInfos, err := m.GetApiDiscoveryChoiceDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetApiDiscoveryChoiceDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
 	if fdrInfos, err := m.GetApiProtectionRulesDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetApiProtectionRulesDRefInfo() FAILED")
 	} else {
@@ -14998,6 +15344,12 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	if fdrInfos, err := m.GetChallengeTypeDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetChallengeTypeDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetLoadbalancerTypeDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetLoadbalancerTypeDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
@@ -15079,6 +15431,46 @@ func (m *ReplaceSpecType) GetApiDefinitionChoiceDRefInfo() ([]db.DRefInfo, error
 		for i := range drInfos {
 			dri := &drInfos[i]
 			dri.DRField = "api_specification_on_cache_miss." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
+	}
+
+}
+
+// GetDRefInfo for the field's type
+func (m *ReplaceSpecType) GetApiDiscoveryChoiceDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetApiDiscoveryChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetApiDiscoveryChoice().(type) {
+	case *ReplaceSpecType_DisableApiDiscovery:
+
+		return nil, nil
+
+	case *ReplaceSpecType_EnableApiDiscovery:
+
+		drInfos, err := m.GetEnableApiDiscovery().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetEnableApiDiscovery().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "enable_api_discovery." + dri.DRField
+		}
+		return drInfos, err
+
+	case *ReplaceSpecType_ApiDiscoveryOnCacheMiss:
+
+		drInfos, err := m.GetApiDiscoveryOnCacheMiss().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetApiDiscoveryOnCacheMiss().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "api_discovery_on_cache_miss." + dri.DRField
 		}
 		return drInfos, err
 
@@ -15189,6 +15581,38 @@ func (m *ReplaceSpecType) GetChallengeTypeDRefInfo() ([]db.DRefInfo, error) {
 		for i := range drInfos {
 			dri := &drInfos[i]
 			dri.DRField = "policy_based_challenge." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
+	}
+
+}
+
+// GetDRefInfo for the field's type
+func (m *ReplaceSpecType) GetLoadbalancerTypeDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetLoadbalancerType() == nil {
+		return nil, nil
+	}
+	switch m.GetLoadbalancerType().(type) {
+	case *ReplaceSpecType_Http:
+
+		return nil, nil
+
+	case *ReplaceSpecType_HttpsAutoCert:
+
+		return nil, nil
+
+	case *ReplaceSpecType_Https:
+
+		drInfos, err := m.GetHttps().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetHttps().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "https." + dri.DRField
 		}
 		return drInfos, err
 
@@ -17574,6 +17998,200 @@ var DefaultSecurityOptionsTypeValidator = func() *ValidateSecurityOptionsType {
 
 func SecurityOptionsTypeValidator() db.Validator {
 	return DefaultSecurityOptionsTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *TlsCertOptions) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *TlsCertOptions) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+// Redact squashes sensitive info in m (in-place)
+func (m *TlsCertOptions) Redact(ctx context.Context) error {
+	// clear fields with confidential option set (at message or field level)
+	if m == nil {
+		return nil
+	}
+
+	if err := m.GetTlsInlineParams().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting TlsCertOptions.tls_inline_params")
+	}
+
+	return nil
+}
+
+func (m *TlsCertOptions) DeepCopy() *TlsCertOptions {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &TlsCertOptions{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *TlsCertOptions) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *TlsCertOptions) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return TlsCertOptionsValidator().Validate(ctx, m, opts...)
+}
+
+func (m *TlsCertOptions) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetTlsCertificatesChoiceDRefInfo()
+
+}
+
+// GetDRefInfo for the field's type
+func (m *TlsCertOptions) GetTlsCertificatesChoiceDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetTlsCertificatesChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetTlsCertificatesChoice().(type) {
+	case *TlsCertOptions_TlsCertParams:
+
+		drInfos, err := m.GetTlsCertParams().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetTlsCertParams().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "tls_cert_params." + dri.DRField
+		}
+		return drInfos, err
+
+	case *TlsCertOptions_TlsInlineParams:
+
+		drInfos, err := m.GetTlsInlineParams().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetTlsInlineParams().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "tls_inline_params." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
+	}
+
+}
+
+type ValidateTlsCertOptions struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateTlsCertOptions) TlsCertificatesChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for tls_certificates_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateTlsCertOptions) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*TlsCertOptions)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *TlsCertOptions got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["tls_certificates_choice"]; exists {
+		val := m.GetTlsCertificatesChoice()
+		vOpts := append(opts,
+			db.WithValidateField("tls_certificates_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetTlsCertificatesChoice().(type) {
+	case *TlsCertOptions_TlsCertParams:
+		if fv, exists := v.FldValidators["tls_certificates_choice.tls_cert_params"]; exists {
+			val := m.GetTlsCertificatesChoice().(*TlsCertOptions_TlsCertParams).TlsCertParams
+			vOpts := append(opts,
+				db.WithValidateField("tls_certificates_choice"),
+				db.WithValidateField("tls_cert_params"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *TlsCertOptions_TlsInlineParams:
+		if fv, exists := v.FldValidators["tls_certificates_choice.tls_inline_params"]; exists {
+			val := m.GetTlsCertificatesChoice().(*TlsCertOptions_TlsInlineParams).TlsInlineParams
+			vOpts := append(opts,
+				db.WithValidateField("tls_certificates_choice"),
+				db.WithValidateField("tls_inline_params"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultTlsCertOptionsValidator = func() *ValidateTlsCertOptions {
+	v := &ValidateTlsCertOptions{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhTlsCertificatesChoice := v.TlsCertificatesChoiceValidationRuleHandler
+	rulesTlsCertificatesChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhTlsCertificatesChoice(rulesTlsCertificatesChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for TlsCertOptions.tls_certificates_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["tls_certificates_choice"] = vFn
+
+	v.FldValidators["tls_certificates_choice.tls_cert_params"] = ves_io_schema_views.DownstreamTLSCertsParamsValidator().Validate
+	v.FldValidators["tls_certificates_choice.tls_inline_params"] = ves_io_schema_views.DownstreamTlsParamsTypeValidator().Validate
+
+	return v
+}()
+
+func TlsCertOptionsValidator() db.Validator {
+	return DefaultTlsCertOptionsValidator
 }
 
 // augmented methods on protoc/std generated struct

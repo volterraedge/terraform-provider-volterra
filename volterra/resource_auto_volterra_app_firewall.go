@@ -220,6 +220,35 @@ func resourceVolterraAppFirewall() *schema.Resource {
 				Optional: true,
 			},
 
+			"ai_risk_based_blocking": {
+
+				Type:       schema.TypeSet,
+				Optional:   true,
+				Deprecated: "This field is deprecated and will be removed in future release.",
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+
+						"high_risk_action": {
+							Type:       schema.TypeString,
+							Required:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
+						},
+
+						"low_risk_action": {
+							Type:       schema.TypeString,
+							Required:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
+						},
+
+						"medium_risk_action": {
+							Type:       schema.TypeString,
+							Required:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
+						},
+					},
+				},
+			},
+
 			"default_detection_settings": {
 
 				Type:     schema.TypeBool,
@@ -708,6 +737,39 @@ func resourceVolterraAppFirewallCreate(d *schema.ResourceData, meta interface{})
 	//detection_setting_choice
 
 	detectionSettingChoiceTypeFound := false
+
+	if v, ok := d.GetOk("ai_risk_based_blocking"); ok && !detectionSettingChoiceTypeFound {
+
+		detectionSettingChoiceTypeFound = true
+		detectionSettingChoiceInt := &ves_io_schema_app_firewall.CreateSpecType_AiRiskBasedBlocking{}
+		detectionSettingChoiceInt.AiRiskBasedBlocking = &ves_io_schema_app_firewall.AiRiskBasedBlocking{}
+		createSpec.DetectionSettingChoice = detectionSettingChoiceInt
+
+		sl := v.(*schema.Set).List()
+		for _, set := range sl {
+			cs := set.(map[string]interface{})
+
+			if v, ok := cs["high_risk_action"]; ok && !isIntfNil(v) {
+
+				detectionSettingChoiceInt.AiRiskBasedBlocking.HighRiskAction = ves_io_schema_app_firewall.RiskBasedBlockingAction(ves_io_schema_app_firewall.RiskBasedBlockingAction_value[v.(string)])
+
+			}
+
+			if v, ok := cs["low_risk_action"]; ok && !isIntfNil(v) {
+
+				detectionSettingChoiceInt.AiRiskBasedBlocking.LowRiskAction = ves_io_schema_app_firewall.RiskBasedBlockingAction(ves_io_schema_app_firewall.RiskBasedBlockingAction_value[v.(string)])
+
+			}
+
+			if v, ok := cs["medium_risk_action"]; ok && !isIntfNil(v) {
+
+				detectionSettingChoiceInt.AiRiskBasedBlocking.MediumRiskAction = ves_io_schema_app_firewall.RiskBasedBlockingAction(ves_io_schema_app_firewall.RiskBasedBlockingAction_value[v.(string)])
+
+			}
+
+		}
+
+	}
 
 	if v, ok := d.GetOk("default_detection_settings"); ok && !detectionSettingChoiceTypeFound {
 
@@ -1358,6 +1420,39 @@ func resourceVolterraAppFirewallUpdate(d *schema.ResourceData, meta interface{})
 	}
 
 	detectionSettingChoiceTypeFound := false
+
+	if v, ok := d.GetOk("ai_risk_based_blocking"); ok && !detectionSettingChoiceTypeFound {
+
+		detectionSettingChoiceTypeFound = true
+		detectionSettingChoiceInt := &ves_io_schema_app_firewall.ReplaceSpecType_AiRiskBasedBlocking{}
+		detectionSettingChoiceInt.AiRiskBasedBlocking = &ves_io_schema_app_firewall.AiRiskBasedBlocking{}
+		updateSpec.DetectionSettingChoice = detectionSettingChoiceInt
+
+		sl := v.(*schema.Set).List()
+		for _, set := range sl {
+			cs := set.(map[string]interface{})
+
+			if v, ok := cs["high_risk_action"]; ok && !isIntfNil(v) {
+
+				detectionSettingChoiceInt.AiRiskBasedBlocking.HighRiskAction = ves_io_schema_app_firewall.RiskBasedBlockingAction(ves_io_schema_app_firewall.RiskBasedBlockingAction_value[v.(string)])
+
+			}
+
+			if v, ok := cs["low_risk_action"]; ok && !isIntfNil(v) {
+
+				detectionSettingChoiceInt.AiRiskBasedBlocking.LowRiskAction = ves_io_schema_app_firewall.RiskBasedBlockingAction(ves_io_schema_app_firewall.RiskBasedBlockingAction_value[v.(string)])
+
+			}
+
+			if v, ok := cs["medium_risk_action"]; ok && !isIntfNil(v) {
+
+				detectionSettingChoiceInt.AiRiskBasedBlocking.MediumRiskAction = ves_io_schema_app_firewall.RiskBasedBlockingAction(ves_io_schema_app_firewall.RiskBasedBlockingAction_value[v.(string)])
+
+			}
+
+		}
+
+	}
 
 	if v, ok := d.GetOk("default_detection_settings"); ok && !detectionSettingChoiceTypeFound {
 

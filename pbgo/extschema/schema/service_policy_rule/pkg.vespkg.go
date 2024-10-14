@@ -52,6 +52,17 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 
+	mdr.RPCSubscriptionFieldsRegistry["ves.io.schema.service_policy_rule.API.Create"] = []svcfw.SubscriptionField{
+		{
+			FieldPath:     "ves.io.schema.service_policy_rule.CreateRequest.spec.dst_ip_choice.dst_ip_prefix_list.ipv6_prefixes",
+			AddonServices: []string{"f5xc-ipv6-standard"},
+		},
+		{
+			FieldPath:     "ves.io.schema.service_policy_rule.CreateRequest.spec.ip_choice.ip_prefix_list.ipv6_prefixes",
+			AddonServices: []string{"f5xc-ipv6-standard"},
+		},
+	}
+
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.service_policy_rule.API.Create"] = []string{
 		"spec.any_dst_asn",
 		"spec.any_dst_ip",
@@ -64,7 +75,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.dst_ip_prefix_list",
 		"spec.goto_policy.#",
 		"spec.ip_reputation_action",
-		"spec.l4_dest_matcher",
 		"spec.origin_server_subsets_action",
 		"spec.rate_limiter.#",
 		"spec.scheme.#",
@@ -76,6 +86,77 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.waf_action.jwt_claims_validation",
 		"spec.waf_action.jwt_validation",
 		"spec.waf_action.waf_in_monitoring_mode",
+	}
+
+	mdr.RPCAvailableInReqFieldRegistry["ves.io.schema.service_policy_rule.API.Create"] = []svcfw.EnvironmentField{
+		{
+			FieldPath:           "spec.dst_ip_prefix_list.ipv6_prefixes.#",
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.ip_prefix_list.ipv6_prefixes.#",
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
+		},
+	}
+
+	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.service_policy_rule.API.Create"] = []svcfw.EnvironmentField{
+		{
+			FieldPath:           "spec.dst_ip_prefix_list.ipv6_prefixes.#",
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.ip_prefix_list.ipv6_prefixes.#",
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
+		},
+	}
+
+	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.service_policy_rule.API.Get"] = []svcfw.EnvironmentField{
+		{
+			FieldPath:           "create_form.spec.dst_ip_prefix_list.ipv6_prefixes.#",
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "create_form.spec.ip_prefix_list.ipv6_prefixes.#",
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "replace_form.spec.dst_ip_prefix_list.ipv6_prefixes.#",
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "replace_form.spec.ip_prefix_list.ipv6_prefixes.#",
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.dst_ip_prefix_list.ipv6_prefixes.#",
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.ip_prefix_list.ipv6_prefixes.#",
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
+		},
+	}
+
+	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.service_policy_rule.API.List"] = []svcfw.EnvironmentField{
+		{
+			FieldPath:           "items.#.get_spec.dst_ip_prefix_list.ipv6_prefixes.#",
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "items.#.get_spec.ip_prefix_list.ipv6_prefixes.#",
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
+		},
+	}
+
+	mdr.RPCSubscriptionFieldsRegistry["ves.io.schema.service_policy_rule.API.Replace"] = []svcfw.SubscriptionField{
+		{
+			FieldPath:     "ves.io.schema.service_policy_rule.ReplaceRequest.spec.dst_ip_choice.dst_ip_prefix_list.ipv6_prefixes",
+			AddonServices: []string{"f5xc-ipv6-standard"},
+		},
+		{
+			FieldPath:     "ves.io.schema.service_policy_rule.ReplaceRequest.spec.ip_choice.ip_prefix_list.ipv6_prefixes",
+			AddonServices: []string{"f5xc-ipv6-standard"},
+		},
 	}
 
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.service_policy_rule.API.Replace"] = []string{
@@ -90,7 +171,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.dst_ip_prefix_list",
 		"spec.goto_policy.#",
 		"spec.ip_reputation_action",
-		"spec.l4_dest_matcher",
 		"spec.origin_server_subsets_action",
 		"spec.rate_limiter.#",
 		"spec.scheme.#",
@@ -102,6 +182,17 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.waf_action.jwt_claims_validation",
 		"spec.waf_action.jwt_validation",
 		"spec.waf_action.waf_in_monitoring_mode",
+	}
+
+	mdr.RPCAvailableInReqFieldRegistry["ves.io.schema.service_policy_rule.API.Replace"] = []svcfw.EnvironmentField{
+		{
+			FieldPath:           "spec.dst_ip_prefix_list.ipv6_prefixes.#",
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.ip_prefix_list.ipv6_prefixes.#",
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
+		},
 	}
 
 }

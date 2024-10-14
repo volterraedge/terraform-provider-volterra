@@ -3659,7 +3659,7 @@ var APISwaggerJSON string = `{
             "title": "Ethernet Interface",
             "x-displayname": "Ethernet Interface",
             "x-ves-oneof-field-address_choice": "[\"dhcp_client\",\"dhcp_server\",\"static_ip\"]",
-            "x-ves-oneof-field-ipv6_address_choice": "[\"no_ipv6_address\",\"static_ipv6_address\"]",
+            "x-ves-oneof-field-ipv6_address_choice": "[\"ipv6_auto_config\",\"no_ipv6_address\",\"static_ipv6_address\"]",
             "x-ves-oneof-field-monitoring_choice": "[\"monitor\",\"monitor_disabled\"]",
             "x-ves-oneof-field-network_choice": "[\"segment_network\",\"site_local_inside_network\",\"site_local_network\",\"storage_network\"]",
             "x-ves-oneof-field-node_choice": "[\"cluster\",\"node\"]",
@@ -3701,7 +3701,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "DHCP Server"
                 },
                 "ipv6_auto_config": {
-                    "description": " Configuration corresponding to IPV6 auto configuration",
+                    "description": "Exclusive with [no_ipv6_address static_ipv6_address]\n Configuration corresponding to IPV6 auto configuration",
                     "title": "IPV6 Auto configuration",
                     "$ref": "#/definitions/network_interfaceIPV6AutoConfigType",
                     "x-displayname": "IPV6 AutoConfiguration"
@@ -3736,7 +3736,7 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "no_ipv6_address": {
-                    "description": "Exclusive with [static_ipv6_address]\n Interface does not have an IPv6 Address.",
+                    "description": "Exclusive with [ipv6_auto_config static_ipv6_address]\n Interface does not have an IPv6 Address.",
                     "title": "no_ipv6_address",
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "No IPv6 Address"
@@ -3796,7 +3796,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Static IP"
                 },
                 "static_ipv6_address": {
-                    "description": "Exclusive with [no_ipv6_address]\n Interface IP is configured statically",
+                    "description": "Exclusive with [ipv6_auto_config no_ipv6_address]\n Interface IP is configured statically",
                     "title": "Static IP",
                     "$ref": "#/definitions/network_interfaceStaticIPParametersType",
                     "x-displayname": "Static IP"
@@ -5580,7 +5580,7 @@ var APISwaggerJSON string = `{
             "type": "object",
             "description": "Specify how worker nodes within a site will be upgraded.",
             "title": "Node by Node Upgrade",
-            "x-displayname": "Node by Node Upgrade [BETA]",
+            "x-displayname": "Node by Node Upgrade",
             "x-ves-displayorder": "1",
             "x-ves-oneof-field-kubernetes_upgrade_drain_enable_choice": "[\"disable_upgrade_drain\",\"enable_upgrade_drain\"]",
             "x-ves-proto-message": "ves.io.schema.views.KubernetesUpgradeDrain",

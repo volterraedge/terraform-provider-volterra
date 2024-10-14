@@ -1,9 +1,9 @@
 ---
 
 page_title: "Volterra: dc_cluster_group"
-
 description: "The dc_cluster_group allows CRUD of Dc Cluster Group resource on Volterra SaaS"
----------------------------------------------------------------------------------------------
+
+---
 
 Resource volterra_dc_cluster_group
 ==================================

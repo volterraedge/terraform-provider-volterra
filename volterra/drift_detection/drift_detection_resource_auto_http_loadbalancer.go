@@ -528,10 +528,46 @@ func FlattenEnableApiDiscovery(x *ves_io_schema_views_common_waf.ApiDiscoverySet
 	val := make([]interface{}, 0)
 	if x != nil {
 		test := map[string]interface{}{
+			"api_discovery_from_code_scan":        FlattenApiDiscoveryFromCodeScan(x.GetApiDiscoveryFromCodeScan()),
 			"discovered_api_settings":             FlattenDiscoveredApiSettings(x.GetDiscoveredApiSettings()),
 			"disable_learn_from_redirect_traffic": isEmpty(x.GetDisableLearnFromRedirectTraffic()),
 			"enable_learn_from_redirect_traffic":  isEmpty(x.GetEnableLearnFromRedirectTraffic()),
 			"sensitive_data_detection_rules":      FlattenSensitiveDataDetectionRules(x.GetSensitiveDataDetectionRules()),
+		}
+		val = append(val, test)
+	}
+	return val
+}
+
+func FlattenApiDiscoveryFromCodeScan(f *ves_io_schema_views_common_waf.ApiDiscoveryFromCodeScan) []interface{} {
+	val := make([]interface{}, 0)
+	if f != nil {
+		test := map[string]interface{}{
+			"code_base_integrations": FlattenCodeBaseIntegrations(f.GetCodeBaseIntegrations()),
+		}
+		val = append(val, test)
+	}
+	return val
+}
+
+func FlattenCodeBaseIntegrations(x []*ves_io_schema_views_common_waf.CodeBaseIntegrationSelection) []interface{} {
+	rslt := make([]interface{}, 0)
+	for _, v := range x {
+		val := map[string]interface{}{
+			"all_repos":             isEmpty(v.GetAllRepos()),
+			"selected_repos":        FlattenSelectedRepos(v.GetSelectedRepos()),
+			"code_base_integration": FlattenObjectRefTypeSet(v.GetCodeBaseIntegration()),
+		}
+		rslt = append(rslt, val)
+	}
+	return rslt
+}
+
+func FlattenSelectedRepos(x *ves_io_schema_views_common_waf.ApiCodeRepos) []interface{} {
+	val := make([]interface{}, 0)
+	if x != nil {
+		test := map[string]interface{}{
+			"api_code_repo": x.GetApiCodeRepo(),
 		}
 		val = append(val, test)
 	}
@@ -1576,10 +1612,22 @@ func FlattenSpec(x *ves_io_schema_service_policy_rule.ChallengeRuleSpec) []inter
 			"path":                        FlattenSpecPath(x.GetPath()),
 			"query_params":                FlattenQueryParams(x.GetQueryParams()),
 			"tls_fingerprint_matcher":     FlattenTlsFingerPrintMatcher(x.GetTlsFingerprintMatcher()),
+			"ja4_tls_fingerprint":         FlattenJa4TlsFingerprint(x.GetJa4TlsFingerprint()),
 		}
 		sValue = append(sValue, sVal)
 	}
 	return sValue
+}
+
+func FlattenJa4TlsFingerprint(x *ves_io_schema_policy.JA4TlsFingerprintMatcherType) []interface{} {
+	rslt := make([]interface{}, 0)
+	if x != nil {
+		val := map[string]interface{}{
+			"exact_values": x.GetExactValues(),
+		}
+		rslt = append(rslt, val)
+	}
+	return rslt
 }
 
 func FlattenSpecPath(x *ves_io_schema_policy.PathMatcherType) []interface{} {
@@ -3183,9 +3231,7 @@ func FlattenWebSocketConfig(x *ves_io_schema_route.WebsocketConfigType) []interf
 	wscValue := make([]interface{}, 0)
 	if x != nil {
 		wscVal := map[string]interface{}{
-			"use_websocket":        x.GetUseWebsocket(),
-			"idle_timeout":         x.GetIdleTimeout(),
-			"max_connect_attempts": x.GetMaxConnectAttempts(),
+			"use_websocket": x.GetUseWebsocket(),
 		}
 		wscValue = append(wscValue, wscVal)
 	}
@@ -3623,7 +3669,6 @@ func FlattenSensitiveDataTypesInResponse(x []*ves_io_schema_views_http_loadbalan
 			"body":         FlattenBody(val.GetBody()),
 			"mask":         isEmpty(val.GetMask()),
 			"report":       isEmpty(val.GetReport()),
-			"metadata":     FlattenMetadata(val.GetMetadata()),
 			"api_endpoint": FlattenApiEndPoint(val.GetApiEndpoint()),
 			"api_group":    val.GetApiGroup(),
 			"base_path":    val.GetBasePath(),

@@ -80,29 +80,34 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 			"api_specification": {
 
-				Type:     schema.TypeSet,
-				Optional: true,
+				Type:       schema.TypeSet,
+				Optional:   true,
+				Deprecated: "This field is deprecated and will be removed in future release.",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 
 						"api_definition": {
 
-							Type:     schema.TypeSet,
-							Required: true,
+							Type:       schema.TypeSet,
+							Required:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
 									"name": {
-										Type:     schema.TypeString,
-										Optional: true,
+										Type:       schema.TypeString,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 									"namespace": {
-										Type:     schema.TypeString,
-										Optional: true,
+										Type:       schema.TypeString,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 									"tenant": {
-										Type:     schema.TypeString,
-										Optional: true,
+										Type:       schema.TypeString,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 								},
 							},
@@ -110,60 +115,69 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 						"validation_all_spec_endpoints": {
 
-							Type:     schema.TypeSet,
-							Optional: true,
+							Type:       schema.TypeSet,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
 									"fall_through_mode": {
 
-										Type:     schema.TypeSet,
-										Required: true,
+										Type:       schema.TypeSet,
+										Required:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
 												"fall_through_mode_allow": {
 
-													Type:     schema.TypeBool,
-													Optional: true,
+													Type:       schema.TypeBool,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 
 												"fall_through_mode_custom": {
 
-													Type:     schema.TypeSet,
-													Optional: true,
+													Type:       schema.TypeSet,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
 															"open_api_validation_rules": {
 
-																Type:     schema.TypeList,
-																Required: true,
+																Type:       schema.TypeList,
+																Required:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
 																		"action_block": {
 
-																			Type:     schema.TypeBool,
-																			Optional: true,
+																			Type:       schema.TypeBool,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"action_report": {
 
-																			Type:     schema.TypeBool,
-																			Optional: true,
+																			Type:       schema.TypeBool,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"action_skip": {
 
-																			Type:     schema.TypeBool,
-																			Optional: true,
+																			Type:       schema.TypeBool,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"api_endpoint": {
 
-																			Type:     schema.TypeSet,
-																			Optional: true,
+																			Type:       schema.TypeSet,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																			Elem: &schema.Resource{
 																				Schema: map[string]*schema.Schema{
 
@@ -171,15 +185,17 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 																						Type: schema.TypeList,
 
-																						Optional: true,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
 																						Elem: &schema.Schema{
 																							Type: schema.TypeString,
 																						},
 																					},
 
 																					"path": {
-																						Type:     schema.TypeString,
-																						Required: true,
+																						Type:       schema.TypeString,
+																						Required:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
 																					},
 																				},
 																			},
@@ -187,26 +203,30 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 																		"api_group": {
 
-																			Type:     schema.TypeString,
-																			Optional: true,
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"base_path": {
 
-																			Type:     schema.TypeString,
-																			Optional: true,
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"metadata": {
 
-																			Type:     schema.TypeSet,
-																			Required: true,
+																			Type:       schema.TypeSet,
+																			Required:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																			Elem: &schema.Resource{
 																				Schema: map[string]*schema.Schema{
 
 																					"description": {
-																						Type:     schema.TypeString,
-																						Optional: true,
+																						Type:       schema.TypeString,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
 																					},
 
 																					"disable": {
@@ -216,8 +236,9 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 																					},
 
 																					"name": {
-																						Type:     schema.TypeString,
-																						Required: true,
+																						Type:       schema.TypeString,
+																						Required:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
 																					},
 																				},
 																			},
@@ -248,8 +269,9 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 									"settings": {
 
-										Type:     schema.TypeSet,
-										Optional: true,
+										Type:       schema.TypeSet,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
@@ -269,20 +291,23 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 												"oversized_body_fail_validation": {
 
-													Type:     schema.TypeBool,
-													Optional: true,
+													Type:       schema.TypeBool,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 
 												"oversized_body_skip_validation": {
 
-													Type:     schema.TypeBool,
-													Optional: true,
+													Type:       schema.TypeBool,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 
 												"property_validation_settings_custom": {
 
-													Type:     schema.TypeSet,
-													Optional: true,
+													Type:       schema.TypeSet,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
@@ -313,21 +338,24 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 															"query_parameters": {
 
-																Type:     schema.TypeSet,
-																Optional: true,
+																Type:       schema.TypeSet,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
 																		"allow_additional_parameters": {
 
-																			Type:     schema.TypeBool,
-																			Optional: true,
+																			Type:       schema.TypeBool,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"disallow_additional_parameters": {
 
-																			Type:     schema.TypeBool,
-																			Optional: true,
+																			Type:       schema.TypeBool,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 																	},
 																},
@@ -338,8 +366,9 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 												"property_validation_settings_default": {
 
-													Type:     schema.TypeBool,
-													Optional: true,
+													Type:       schema.TypeBool,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 											},
 										},
@@ -347,15 +376,17 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 									"validation_mode": {
 
-										Type:     schema.TypeSet,
-										Required: true,
+										Type:       schema.TypeSet,
+										Required:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
 												"response_validation_mode_active": {
 
-													Type:     schema.TypeSet,
-													Optional: true,
+													Type:       schema.TypeSet,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
@@ -363,7 +394,8 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 																Type: schema.TypeList,
 
-																Required: true,
+																Required:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Schema{
 																	Type: schema.TypeString,
 																},
@@ -371,14 +403,16 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 															"enforcement_block": {
 
-																Type:     schema.TypeBool,
-																Optional: true,
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 
 															"enforcement_report": {
 
-																Type:     schema.TypeBool,
-																Optional: true,
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 														},
 													},
@@ -386,20 +420,23 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 												"skip_response_validation": {
 
-													Type:     schema.TypeBool,
-													Optional: true,
+													Type:       schema.TypeBool,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 
 												"skip_validation": {
 
-													Type:     schema.TypeBool,
-													Optional: true,
+													Type:       schema.TypeBool,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 
 												"validation_mode_active": {
 
-													Type:     schema.TypeSet,
-													Optional: true,
+													Type:       schema.TypeSet,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
@@ -407,7 +444,8 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 																Type: schema.TypeList,
 
-																Required: true,
+																Required:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Schema{
 																	Type: schema.TypeString,
 																},
@@ -415,14 +453,16 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 															"enforcement_block": {
 
-																Type:     schema.TypeBool,
-																Optional: true,
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 
 															"enforcement_report": {
 
-																Type:     schema.TypeBool,
-																Optional: true,
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 														},
 													},
@@ -436,60 +476,69 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 						"validation_custom_list": {
 
-							Type:     schema.TypeSet,
-							Optional: true,
+							Type:       schema.TypeSet,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
 									"fall_through_mode": {
 
-										Type:     schema.TypeSet,
-										Required: true,
+										Type:       schema.TypeSet,
+										Required:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
 												"fall_through_mode_allow": {
 
-													Type:     schema.TypeBool,
-													Optional: true,
+													Type:       schema.TypeBool,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 
 												"fall_through_mode_custom": {
 
-													Type:     schema.TypeSet,
-													Optional: true,
+													Type:       schema.TypeSet,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
 															"open_api_validation_rules": {
 
-																Type:     schema.TypeList,
-																Required: true,
+																Type:       schema.TypeList,
+																Required:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
 																		"action_block": {
 
-																			Type:     schema.TypeBool,
-																			Optional: true,
+																			Type:       schema.TypeBool,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"action_report": {
 
-																			Type:     schema.TypeBool,
-																			Optional: true,
+																			Type:       schema.TypeBool,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"action_skip": {
 
-																			Type:     schema.TypeBool,
-																			Optional: true,
+																			Type:       schema.TypeBool,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"api_endpoint": {
 
-																			Type:     schema.TypeSet,
-																			Optional: true,
+																			Type:       schema.TypeSet,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																			Elem: &schema.Resource{
 																				Schema: map[string]*schema.Schema{
 
@@ -497,15 +546,17 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 																						Type: schema.TypeList,
 
-																						Optional: true,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
 																						Elem: &schema.Schema{
 																							Type: schema.TypeString,
 																						},
 																					},
 
 																					"path": {
-																						Type:     schema.TypeString,
-																						Required: true,
+																						Type:       schema.TypeString,
+																						Required:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
 																					},
 																				},
 																			},
@@ -513,26 +564,30 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 																		"api_group": {
 
-																			Type:     schema.TypeString,
-																			Optional: true,
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"base_path": {
 
-																			Type:     schema.TypeString,
-																			Optional: true,
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"metadata": {
 
-																			Type:     schema.TypeSet,
-																			Required: true,
+																			Type:       schema.TypeSet,
+																			Required:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																			Elem: &schema.Resource{
 																				Schema: map[string]*schema.Schema{
 
 																					"description": {
-																						Type:     schema.TypeString,
-																						Optional: true,
+																						Type:       schema.TypeString,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
 																					},
 
 																					"disable": {
@@ -542,8 +597,9 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 																					},
 
 																					"name": {
-																						Type:     schema.TypeString,
-																						Required: true,
+																						Type:       schema.TypeString,
+																						Required:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
 																					},
 																				},
 																			},
@@ -560,15 +616,17 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 									"open_api_validation_rules": {
 
-										Type:     schema.TypeList,
-										Required: true,
+										Type:       schema.TypeList,
+										Required:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
 												"api_endpoint": {
 
-													Type:     schema.TypeSet,
-													Optional: true,
+													Type:       schema.TypeSet,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
@@ -576,15 +634,17 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 																Type: schema.TypeList,
 
-																Optional: true,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Schema{
 																	Type: schema.TypeString,
 																},
 															},
 
 															"path": {
-																Type:     schema.TypeString,
-																Required: true,
+																Type:       schema.TypeString,
+																Required:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 														},
 													},
@@ -592,38 +652,44 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 												"api_group": {
 
-													Type:     schema.TypeString,
-													Optional: true,
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 
 												"base_path": {
 
-													Type:     schema.TypeString,
-													Optional: true,
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 
 												"any_domain": {
 
-													Type:     schema.TypeBool,
-													Optional: true,
+													Type:       schema.TypeBool,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 
 												"specific_domain": {
 
-													Type:     schema.TypeString,
-													Optional: true,
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 
 												"metadata": {
 
-													Type:     schema.TypeSet,
-													Required: true,
+													Type:       schema.TypeSet,
+													Required:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
 															"description": {
-																Type:     schema.TypeString,
-																Optional: true,
+																Type:       schema.TypeString,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 
 															"disable": {
@@ -633,8 +699,9 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 															},
 
 															"name": {
-																Type:     schema.TypeString,
-																Required: true,
+																Type:       schema.TypeString,
+																Required:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 														},
 													},
@@ -642,15 +709,17 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 												"validation_mode": {
 
-													Type:     schema.TypeSet,
-													Required: true,
+													Type:       schema.TypeSet,
+													Required:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
 															"response_validation_mode_active": {
 
-																Type:     schema.TypeSet,
-																Optional: true,
+																Type:       schema.TypeSet,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
@@ -658,7 +727,8 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 																			Type: schema.TypeList,
 
-																			Required: true,
+																			Required:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																			Elem: &schema.Schema{
 																				Type: schema.TypeString,
 																			},
@@ -666,14 +736,16 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 																		"enforcement_block": {
 
-																			Type:     schema.TypeBool,
-																			Optional: true,
+																			Type:       schema.TypeBool,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"enforcement_report": {
 
-																			Type:     schema.TypeBool,
-																			Optional: true,
+																			Type:       schema.TypeBool,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 																	},
 																},
@@ -681,20 +753,23 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 															"skip_response_validation": {
 
-																Type:     schema.TypeBool,
-																Optional: true,
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 
 															"skip_validation": {
 
-																Type:     schema.TypeBool,
-																Optional: true,
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 
 															"validation_mode_active": {
 
-																Type:     schema.TypeSet,
-																Optional: true,
+																Type:       schema.TypeSet,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
@@ -702,7 +777,8 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 																			Type: schema.TypeList,
 
-																			Required: true,
+																			Required:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																			Elem: &schema.Schema{
 																				Type: schema.TypeString,
 																			},
@@ -710,14 +786,16 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 																		"enforcement_block": {
 
-																			Type:     schema.TypeBool,
-																			Optional: true,
+																			Type:       schema.TypeBool,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"enforcement_report": {
 
-																			Type:     schema.TypeBool,
-																			Optional: true,
+																			Type:       schema.TypeBool,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 																	},
 																},
@@ -745,8 +823,9 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 									"settings": {
 
-										Type:     schema.TypeSet,
-										Optional: true,
+										Type:       schema.TypeSet,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
@@ -766,20 +845,23 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 												"oversized_body_fail_validation": {
 
-													Type:     schema.TypeBool,
-													Optional: true,
+													Type:       schema.TypeBool,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 
 												"oversized_body_skip_validation": {
 
-													Type:     schema.TypeBool,
-													Optional: true,
+													Type:       schema.TypeBool,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 
 												"property_validation_settings_custom": {
 
-													Type:     schema.TypeSet,
-													Optional: true,
+													Type:       schema.TypeSet,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
@@ -810,21 +892,24 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 															"query_parameters": {
 
-																Type:     schema.TypeSet,
-																Optional: true,
+																Type:       schema.TypeSet,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
 																		"allow_additional_parameters": {
 
-																			Type:     schema.TypeBool,
-																			Optional: true,
+																			Type:       schema.TypeBool,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"disallow_additional_parameters": {
 
-																			Type:     schema.TypeBool,
-																			Optional: true,
+																			Type:       schema.TypeBool,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 																	},
 																},
@@ -835,8 +920,9 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 												"property_validation_settings_default": {
 
-													Type:     schema.TypeBool,
-													Optional: true,
+													Type:       schema.TypeBool,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 											},
 										},
@@ -847,8 +933,9 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 						"validation_disabled": {
 
-							Type:     schema.TypeBool,
-							Optional: true,
+							Type:       schema.TypeBool,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 						},
 					},
 				},
@@ -1719,8 +1806,9 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 			"disable_api_definition": {
 
-				Type:     schema.TypeBool,
-				Optional: true,
+				Type:       schema.TypeBool,
+				Optional:   true,
+				Deprecated: "This field is deprecated and will be removed in future release.",
 			},
 
 			"api_discovery_on_cache_miss": {
@@ -1730,6 +1818,84 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 				Deprecated: "This field is deprecated and will be removed in future release.",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
+
+						"api_discovery_from_code_scan": {
+
+							Type:       schema.TypeSet,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"code_base_integrations": {
+
+										Type:       schema.TypeList,
+										Required:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"all_repos": {
+
+													Type:       schema.TypeBool,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+
+												"selected_repos": {
+
+													Type:       schema.TypeSet,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"api_code_repo": {
+
+																Type: schema.TypeList,
+
+																Required:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+																Elem: &schema.Schema{
+																	Type: schema.TypeString,
+																},
+															},
+														},
+													},
+												},
+
+												"code_base_integration": {
+
+													Type:       schema.TypeSet,
+													Required:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"name": {
+																Type:       schema.TypeString,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+															"namespace": {
+																Type:       schema.TypeString,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+															"tenant": {
+																Type:       schema.TypeString,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+														},
+													},
+												},
+											},
+										},
+									},
+								},
+							},
+						},
 
 						"discovered_api_settings": {
 
@@ -1770,21 +1936,102 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 			"disable_api_discovery": {
 
-				Type:     schema.TypeBool,
-				Optional: true,
+				Type:       schema.TypeBool,
+				Optional:   true,
+				Deprecated: "This field is deprecated and will be removed in future release.",
 			},
 
 			"enable_api_discovery": {
 
-				Type:     schema.TypeSet,
-				Optional: true,
+				Type:       schema.TypeSet,
+				Optional:   true,
+				Deprecated: "This field is deprecated and will be removed in future release.",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 
+						"api_discovery_from_code_scan": {
+
+							Type:       schema.TypeSet,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"code_base_integrations": {
+
+										Type:       schema.TypeList,
+										Required:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"all_repos": {
+
+													Type:       schema.TypeBool,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+
+												"selected_repos": {
+
+													Type:       schema.TypeSet,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"api_code_repo": {
+
+																Type: schema.TypeList,
+
+																Required:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+																Elem: &schema.Schema{
+																	Type: schema.TypeString,
+																},
+															},
+														},
+													},
+												},
+
+												"code_base_integration": {
+
+													Type:       schema.TypeSet,
+													Required:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"name": {
+																Type:       schema.TypeString,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+															"namespace": {
+																Type:       schema.TypeString,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+															"tenant": {
+																Type:       schema.TypeString,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+														},
+													},
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+
 						"discovered_api_settings": {
 
-							Type:     schema.TypeSet,
-							Optional: true,
+							Type:       schema.TypeSet,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{},
 							},
@@ -1792,14 +2039,16 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 						"disable_learn_from_redirect_traffic": {
 
-							Type:     schema.TypeBool,
-							Optional: true,
+							Type:       schema.TypeBool,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 						},
 
 						"enable_learn_from_redirect_traffic": {
 
-							Type:     schema.TypeBool,
-							Optional: true,
+							Type:       schema.TypeBool,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 						},
 
 						"sensitive_data_detection_rules": {
@@ -1817,35 +2066,40 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 			"api_protection_rules": {
 
-				Type:     schema.TypeSet,
-				Optional: true,
+				Type:       schema.TypeSet,
+				Optional:   true,
+				Deprecated: "This field is deprecated and will be removed in future release.",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 
 						"api_endpoint_rules": {
 
-							Type:     schema.TypeList,
-							Optional: true,
+							Type:       schema.TypeList,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
 									"action": {
 
-										Type:     schema.TypeSet,
-										Required: true,
+										Type:       schema.TypeSet,
+										Required:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
 												"allow": {
 
-													Type:     schema.TypeBool,
-													Optional: true,
+													Type:       schema.TypeBool,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 
 												"deny": {
 
-													Type:     schema.TypeBool,
-													Optional: true,
+													Type:       schema.TypeBool,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 											},
 										},
@@ -1853,21 +2107,24 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 									"api_endpoint_method": {
 
-										Type:     schema.TypeSet,
-										Optional: true,
+										Type:       schema.TypeSet,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
 												"invert_matcher": {
-													Type:     schema.TypeBool,
-													Optional: true,
+													Type:       schema.TypeBool,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 
 												"methods": {
 
 													Type: schema.TypeList,
 
-													Optional: true,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Schema{
 														Type: schema.TypeString,
 													},
@@ -1877,27 +2134,31 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 									},
 
 									"api_endpoint_path": {
-										Type:     schema.TypeString,
-										Required: true,
+										Type:       schema.TypeString,
+										Required:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 
 									"client_matcher": {
 
-										Type:     schema.TypeSet,
-										Optional: true,
+										Type:       schema.TypeSet,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
 												"any_client": {
 
-													Type:     schema.TypeBool,
-													Optional: true,
+													Type:       schema.TypeBool,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 
 												"client_selector": {
 
-													Type:     schema.TypeSet,
-													Optional: true,
+													Type:       schema.TypeSet,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
@@ -1905,7 +2166,8 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 																Type: schema.TypeList,
 
-																Required: true,
+																Required:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Schema{
 																	Type: schema.TypeString,
 																},
@@ -1916,8 +2178,9 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 												"ip_threat_category_list": {
 
-													Type:     schema.TypeSet,
-													Optional: true,
+													Type:       schema.TypeSet,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
@@ -1925,7 +2188,8 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 																Type: schema.TypeList,
 
-																Required: true,
+																Required:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Schema{
 																	Type: schema.TypeString,
 																},
@@ -1936,14 +2200,16 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 												"any_ip": {
 
-													Type:     schema.TypeBool,
-													Optional: true,
+													Type:       schema.TypeBool,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 
 												"asn_list": {
 
-													Type:     schema.TypeSet,
-													Optional: true,
+													Type:       schema.TypeSet,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
@@ -1951,7 +2217,8 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 																Type: schema.TypeList,
 
-																Required: true,
+																Required:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Schema{
 																	Type: schema.TypeInt,
 																},
@@ -1962,34 +2229,40 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 												"asn_matcher": {
 
-													Type:     schema.TypeSet,
-													Optional: true,
+													Type:       schema.TypeSet,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
 															"asn_sets": {
 
-																Type:     schema.TypeList,
-																Required: true,
+																Type:       schema.TypeList,
+																Required:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
 																		"kind": {
-																			Type:     schema.TypeString,
-																			Computed: true,
+																			Type:       schema.TypeString,
+																			Computed:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"name": {
-																			Type:     schema.TypeString,
-																			Optional: true,
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 																		"namespace": {
-																			Type:     schema.TypeString,
-																			Optional: true,
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 																		"tenant": {
-																			Type:     schema.TypeString,
-																			Optional: true,
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 																	},
 																},
@@ -2000,39 +2273,46 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 												"ip_matcher": {
 
-													Type:     schema.TypeSet,
-													Optional: true,
+													Type:       schema.TypeSet,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
 															"invert_matcher": {
-																Type:     schema.TypeBool,
-																Optional: true,
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 
 															"prefix_sets": {
 
-																Type:     schema.TypeList,
-																Required: true,
+																Type:       schema.TypeList,
+																Required:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
 																		"kind": {
-																			Type:     schema.TypeString,
-																			Computed: true,
+																			Type:       schema.TypeString,
+																			Computed:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"name": {
-																			Type:     schema.TypeString,
-																			Optional: true,
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 																		"namespace": {
-																			Type:     schema.TypeString,
-																			Optional: true,
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 																		"tenant": {
-																			Type:     schema.TypeString,
-																			Optional: true,
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 																	},
 																},
@@ -2043,21 +2323,24 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 												"ip_prefix_list": {
 
-													Type:     schema.TypeSet,
-													Optional: true,
+													Type:       schema.TypeSet,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
 															"invert_match": {
-																Type:     schema.TypeBool,
-																Optional: true,
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 
 															"ip_prefixes": {
 
 																Type: schema.TypeList,
 
-																Optional: true,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Schema{
 																	Type: schema.TypeString,
 																},
@@ -2067,7 +2350,8 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 																Type: schema.TypeList,
 
-																Optional: true,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Schema{
 																	Type: schema.TypeString,
 																},
@@ -2078,8 +2362,9 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 												"tls_fingerprint_matcher": {
 
-													Type:     schema.TypeSet,
-													Optional: true,
+													Type:       schema.TypeSet,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
@@ -2087,7 +2372,8 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 																Type: schema.TypeList,
 
-																Optional: true,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Schema{
 																	Type: schema.TypeString,
 																},
@@ -2097,7 +2383,8 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 																Type: schema.TypeList,
 
-																Optional: true,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Schema{
 																	Type: schema.TypeString,
 																},
@@ -2107,7 +2394,8 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 																Type: schema.TypeList,
 
-																Optional: true,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Schema{
 																	Type: schema.TypeString,
 																},
@@ -2121,26 +2409,30 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 									"any_domain": {
 
-										Type:     schema.TypeBool,
-										Optional: true,
+										Type:       schema.TypeBool,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 
 									"specific_domain": {
 
-										Type:     schema.TypeString,
-										Optional: true,
+										Type:       schema.TypeString,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 
 									"metadata": {
 
-										Type:     schema.TypeSet,
-										Required: true,
+										Type:       schema.TypeSet,
+										Required:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
 												"description": {
-													Type:     schema.TypeString,
-													Optional: true,
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 
 												"disable": {
@@ -2150,8 +2442,9 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 												},
 
 												"name": {
-													Type:     schema.TypeString,
-													Required: true,
+													Type:       schema.TypeString,
+													Required:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 											},
 										},
@@ -2159,39 +2452,45 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 									"request_matcher": {
 
-										Type:     schema.TypeSet,
-										Optional: true,
+										Type:       schema.TypeSet,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
 												"cookie_matchers": {
 
-													Type:     schema.TypeList,
-													Optional: true,
+													Type:       schema.TypeList,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
 															"invert_matcher": {
-																Type:     schema.TypeBool,
-																Optional: true,
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 
 															"check_not_present": {
 
-																Type:     schema.TypeBool,
-																Optional: true,
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 
 															"check_present": {
 
-																Type:     schema.TypeBool,
-																Optional: true,
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 
 															"item": {
 
-																Type:     schema.TypeSet,
-																Optional: true,
+																Type:       schema.TypeSet,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
@@ -2199,7 +2498,8 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 																			Type: schema.TypeList,
 
-																			Optional: true,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																			Elem: &schema.Schema{
 																				Type: schema.TypeString,
 																			},
@@ -2209,7 +2509,8 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 																			Type: schema.TypeList,
 
-																			Optional: true,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																			Elem: &schema.Schema{
 																				Type: schema.TypeString,
 																			},
@@ -2219,7 +2520,8 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 																			Type: schema.TypeList,
 
-																			Optional: true,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																			Elem: &schema.Schema{
 																				Type: schema.TypeString,
 																			},
@@ -2236,8 +2538,9 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 															},
 
 															"name": {
-																Type:     schema.TypeString,
-																Required: true,
+																Type:       schema.TypeString,
+																Required:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 														},
 													},
@@ -2245,32 +2548,37 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 												"headers": {
 
-													Type:     schema.TypeList,
-													Optional: true,
+													Type:       schema.TypeList,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
 															"invert_matcher": {
-																Type:     schema.TypeBool,
-																Optional: true,
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 
 															"check_not_present": {
 
-																Type:     schema.TypeBool,
-																Optional: true,
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 
 															"check_present": {
 
-																Type:     schema.TypeBool,
-																Optional: true,
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 
 															"item": {
 
-																Type:     schema.TypeSet,
-																Optional: true,
+																Type:       schema.TypeSet,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
@@ -2278,7 +2586,8 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 																			Type: schema.TypeList,
 
-																			Optional: true,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																			Elem: &schema.Schema{
 																				Type: schema.TypeString,
 																			},
@@ -2288,7 +2597,8 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 																			Type: schema.TypeList,
 
-																			Optional: true,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																			Elem: &schema.Schema{
 																				Type: schema.TypeString,
 																			},
@@ -2298,7 +2608,8 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 																			Type: schema.TypeList,
 
-																			Optional: true,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																			Elem: &schema.Schema{
 																				Type: schema.TypeString,
 																			},
@@ -2315,8 +2626,9 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 															},
 
 															"name": {
-																Type:     schema.TypeString,
-																Required: true,
+																Type:       schema.TypeString,
+																Required:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 														},
 													},
@@ -2324,32 +2636,37 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 												"jwt_claims": {
 
-													Type:     schema.TypeList,
-													Optional: true,
+													Type:       schema.TypeList,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
 															"invert_matcher": {
-																Type:     schema.TypeBool,
-																Optional: true,
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 
 															"check_not_present": {
 
-																Type:     schema.TypeBool,
-																Optional: true,
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 
 															"check_present": {
 
-																Type:     schema.TypeBool,
-																Optional: true,
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 
 															"item": {
 
-																Type:     schema.TypeSet,
-																Optional: true,
+																Type:       schema.TypeSet,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
@@ -2357,7 +2674,8 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 																			Type: schema.TypeList,
 
-																			Optional: true,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																			Elem: &schema.Schema{
 																				Type: schema.TypeString,
 																			},
@@ -2367,7 +2685,8 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 																			Type: schema.TypeList,
 
-																			Optional: true,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																			Elem: &schema.Schema{
 																				Type: schema.TypeString,
 																			},
@@ -2377,7 +2696,8 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 																			Type: schema.TypeList,
 
-																			Optional: true,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																			Elem: &schema.Schema{
 																				Type: schema.TypeString,
 																			},
@@ -2387,8 +2707,9 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 															},
 
 															"name": {
-																Type:     schema.TypeString,
-																Required: true,
+																Type:       schema.TypeString,
+																Required:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 														},
 													},
@@ -2396,37 +2717,43 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 												"query_params": {
 
-													Type:     schema.TypeList,
-													Optional: true,
+													Type:       schema.TypeList,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
 															"invert_matcher": {
-																Type:     schema.TypeBool,
-																Optional: true,
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 
 															"key": {
-																Type:     schema.TypeString,
-																Required: true,
+																Type:       schema.TypeString,
+																Required:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 
 															"check_not_present": {
 
-																Type:     schema.TypeBool,
-																Optional: true,
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 
 															"check_present": {
 
-																Type:     schema.TypeBool,
-																Optional: true,
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 
 															"item": {
 
-																Type:     schema.TypeSet,
-																Optional: true,
+																Type:       schema.TypeSet,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
@@ -2434,7 +2761,8 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 																			Type: schema.TypeList,
 
-																			Optional: true,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																			Elem: &schema.Schema{
 																				Type: schema.TypeString,
 																			},
@@ -2444,7 +2772,8 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 																			Type: schema.TypeList,
 
-																			Optional: true,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																			Elem: &schema.Schema{
 																				Type: schema.TypeString,
 																			},
@@ -2454,7 +2783,8 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 																			Type: schema.TypeList,
 
-																			Optional: true,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																			Elem: &schema.Schema{
 																				Type: schema.TypeString,
 																			},
@@ -2481,60 +2811,69 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 						"api_groups_rules": {
 
-							Type:     schema.TypeList,
-							Optional: true,
+							Type:       schema.TypeList,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
 									"action": {
 
-										Type:     schema.TypeSet,
-										Required: true,
+										Type:       schema.TypeSet,
+										Required:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
 												"allow": {
 
-													Type:     schema.TypeBool,
-													Optional: true,
+													Type:       schema.TypeBool,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 
 												"deny": {
 
-													Type:     schema.TypeBool,
-													Optional: true,
+													Type:       schema.TypeBool,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 											},
 										},
 									},
 
 									"api_group": {
-										Type:     schema.TypeString,
-										Optional: true,
+										Type:       schema.TypeString,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 
 									"base_path": {
-										Type:     schema.TypeString,
-										Required: true,
+										Type:       schema.TypeString,
+										Required:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 
 									"client_matcher": {
 
-										Type:     schema.TypeSet,
-										Optional: true,
+										Type:       schema.TypeSet,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
 												"any_client": {
 
-													Type:     schema.TypeBool,
-													Optional: true,
+													Type:       schema.TypeBool,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 
 												"client_selector": {
 
-													Type:     schema.TypeSet,
-													Optional: true,
+													Type:       schema.TypeSet,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
@@ -2542,7 +2881,8 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 																Type: schema.TypeList,
 
-																Required: true,
+																Required:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Schema{
 																	Type: schema.TypeString,
 																},
@@ -2553,8 +2893,9 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 												"ip_threat_category_list": {
 
-													Type:     schema.TypeSet,
-													Optional: true,
+													Type:       schema.TypeSet,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
@@ -2562,7 +2903,8 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 																Type: schema.TypeList,
 
-																Required: true,
+																Required:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Schema{
 																	Type: schema.TypeString,
 																},
@@ -2573,14 +2915,16 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 												"any_ip": {
 
-													Type:     schema.TypeBool,
-													Optional: true,
+													Type:       schema.TypeBool,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 
 												"asn_list": {
 
-													Type:     schema.TypeSet,
-													Optional: true,
+													Type:       schema.TypeSet,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
@@ -2588,7 +2932,8 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 																Type: schema.TypeList,
 
-																Required: true,
+																Required:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Schema{
 																	Type: schema.TypeInt,
 																},
@@ -2599,34 +2944,40 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 												"asn_matcher": {
 
-													Type:     schema.TypeSet,
-													Optional: true,
+													Type:       schema.TypeSet,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
 															"asn_sets": {
 
-																Type:     schema.TypeList,
-																Required: true,
+																Type:       schema.TypeList,
+																Required:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
 																		"kind": {
-																			Type:     schema.TypeString,
-																			Computed: true,
+																			Type:       schema.TypeString,
+																			Computed:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"name": {
-																			Type:     schema.TypeString,
-																			Optional: true,
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 																		"namespace": {
-																			Type:     schema.TypeString,
-																			Optional: true,
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 																		"tenant": {
-																			Type:     schema.TypeString,
-																			Optional: true,
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 																	},
 																},
@@ -2637,39 +2988,46 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 												"ip_matcher": {
 
-													Type:     schema.TypeSet,
-													Optional: true,
+													Type:       schema.TypeSet,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
 															"invert_matcher": {
-																Type:     schema.TypeBool,
-																Optional: true,
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 
 															"prefix_sets": {
 
-																Type:     schema.TypeList,
-																Required: true,
+																Type:       schema.TypeList,
+																Required:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
 																		"kind": {
-																			Type:     schema.TypeString,
-																			Computed: true,
+																			Type:       schema.TypeString,
+																			Computed:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"name": {
-																			Type:     schema.TypeString,
-																			Optional: true,
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 																		"namespace": {
-																			Type:     schema.TypeString,
-																			Optional: true,
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 																		"tenant": {
-																			Type:     schema.TypeString,
-																			Optional: true,
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 																	},
 																},
@@ -2680,21 +3038,24 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 												"ip_prefix_list": {
 
-													Type:     schema.TypeSet,
-													Optional: true,
+													Type:       schema.TypeSet,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
 															"invert_match": {
-																Type:     schema.TypeBool,
-																Optional: true,
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 
 															"ip_prefixes": {
 
 																Type: schema.TypeList,
 
-																Optional: true,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Schema{
 																	Type: schema.TypeString,
 																},
@@ -2704,7 +3065,8 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 																Type: schema.TypeList,
 
-																Optional: true,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Schema{
 																	Type: schema.TypeString,
 																},
@@ -2715,8 +3077,9 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 												"tls_fingerprint_matcher": {
 
-													Type:     schema.TypeSet,
-													Optional: true,
+													Type:       schema.TypeSet,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
@@ -2724,7 +3087,8 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 																Type: schema.TypeList,
 
-																Optional: true,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Schema{
 																	Type: schema.TypeString,
 																},
@@ -2734,7 +3098,8 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 																Type: schema.TypeList,
 
-																Optional: true,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Schema{
 																	Type: schema.TypeString,
 																},
@@ -2744,7 +3109,8 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 																Type: schema.TypeList,
 
-																Optional: true,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Schema{
 																	Type: schema.TypeString,
 																},
@@ -2758,26 +3124,30 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 									"any_domain": {
 
-										Type:     schema.TypeBool,
-										Optional: true,
+										Type:       schema.TypeBool,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 
 									"specific_domain": {
 
-										Type:     schema.TypeString,
-										Optional: true,
+										Type:       schema.TypeString,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 
 									"metadata": {
 
-										Type:     schema.TypeSet,
-										Required: true,
+										Type:       schema.TypeSet,
+										Required:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
 												"description": {
-													Type:     schema.TypeString,
-													Optional: true,
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 
 												"disable": {
@@ -2787,8 +3157,9 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 												},
 
 												"name": {
-													Type:     schema.TypeString,
-													Required: true,
+													Type:       schema.TypeString,
+													Required:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 											},
 										},
@@ -2796,39 +3167,45 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 									"request_matcher": {
 
-										Type:     schema.TypeSet,
-										Optional: true,
+										Type:       schema.TypeSet,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
 												"cookie_matchers": {
 
-													Type:     schema.TypeList,
-													Optional: true,
+													Type:       schema.TypeList,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
 															"invert_matcher": {
-																Type:     schema.TypeBool,
-																Optional: true,
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 
 															"check_not_present": {
 
-																Type:     schema.TypeBool,
-																Optional: true,
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 
 															"check_present": {
 
-																Type:     schema.TypeBool,
-																Optional: true,
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 
 															"item": {
 
-																Type:     schema.TypeSet,
-																Optional: true,
+																Type:       schema.TypeSet,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
@@ -2836,7 +3213,8 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 																			Type: schema.TypeList,
 
-																			Optional: true,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																			Elem: &schema.Schema{
 																				Type: schema.TypeString,
 																			},
@@ -2846,7 +3224,8 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 																			Type: schema.TypeList,
 
-																			Optional: true,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																			Elem: &schema.Schema{
 																				Type: schema.TypeString,
 																			},
@@ -2856,7 +3235,8 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 																			Type: schema.TypeList,
 
-																			Optional: true,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																			Elem: &schema.Schema{
 																				Type: schema.TypeString,
 																			},
@@ -2873,8 +3253,9 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 															},
 
 															"name": {
-																Type:     schema.TypeString,
-																Required: true,
+																Type:       schema.TypeString,
+																Required:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 														},
 													},
@@ -2882,32 +3263,37 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 												"headers": {
 
-													Type:     schema.TypeList,
-													Optional: true,
+													Type:       schema.TypeList,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
 															"invert_matcher": {
-																Type:     schema.TypeBool,
-																Optional: true,
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 
 															"check_not_present": {
 
-																Type:     schema.TypeBool,
-																Optional: true,
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 
 															"check_present": {
 
-																Type:     schema.TypeBool,
-																Optional: true,
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 
 															"item": {
 
-																Type:     schema.TypeSet,
-																Optional: true,
+																Type:       schema.TypeSet,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
@@ -2915,7 +3301,8 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 																			Type: schema.TypeList,
 
-																			Optional: true,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																			Elem: &schema.Schema{
 																				Type: schema.TypeString,
 																			},
@@ -2925,7 +3312,8 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 																			Type: schema.TypeList,
 
-																			Optional: true,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																			Elem: &schema.Schema{
 																				Type: schema.TypeString,
 																			},
@@ -2935,7 +3323,8 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 																			Type: schema.TypeList,
 
-																			Optional: true,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																			Elem: &schema.Schema{
 																				Type: schema.TypeString,
 																			},
@@ -2952,8 +3341,9 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 															},
 
 															"name": {
-																Type:     schema.TypeString,
-																Required: true,
+																Type:       schema.TypeString,
+																Required:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 														},
 													},
@@ -2961,32 +3351,37 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 												"jwt_claims": {
 
-													Type:     schema.TypeList,
-													Optional: true,
+													Type:       schema.TypeList,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
 															"invert_matcher": {
-																Type:     schema.TypeBool,
-																Optional: true,
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 
 															"check_not_present": {
 
-																Type:     schema.TypeBool,
-																Optional: true,
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 
 															"check_present": {
 
-																Type:     schema.TypeBool,
-																Optional: true,
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 
 															"item": {
 
-																Type:     schema.TypeSet,
-																Optional: true,
+																Type:       schema.TypeSet,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
@@ -2994,7 +3389,8 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 																			Type: schema.TypeList,
 
-																			Optional: true,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																			Elem: &schema.Schema{
 																				Type: schema.TypeString,
 																			},
@@ -3004,7 +3400,8 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 																			Type: schema.TypeList,
 
-																			Optional: true,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																			Elem: &schema.Schema{
 																				Type: schema.TypeString,
 																			},
@@ -3014,7 +3411,8 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 																			Type: schema.TypeList,
 
-																			Optional: true,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																			Elem: &schema.Schema{
 																				Type: schema.TypeString,
 																			},
@@ -3024,8 +3422,9 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 															},
 
 															"name": {
-																Type:     schema.TypeString,
-																Required: true,
+																Type:       schema.TypeString,
+																Required:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 														},
 													},
@@ -3033,37 +3432,43 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 												"query_params": {
 
-													Type:     schema.TypeList,
-													Optional: true,
+													Type:       schema.TypeList,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
 															"invert_matcher": {
-																Type:     schema.TypeBool,
-																Optional: true,
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 
 															"key": {
-																Type:     schema.TypeString,
-																Required: true,
+																Type:       schema.TypeString,
+																Required:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 
 															"check_not_present": {
 
-																Type:     schema.TypeBool,
-																Optional: true,
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 
 															"check_present": {
 
-																Type:     schema.TypeBool,
-																Optional: true,
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 
 															"item": {
 
-																Type:     schema.TypeSet,
-																Optional: true,
+																Type:       schema.TypeSet,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
@@ -3071,7 +3476,8 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 																			Type: schema.TypeList,
 
-																			Optional: true,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																			Elem: &schema.Schema{
 																				Type: schema.TypeString,
 																			},
@@ -3081,7 +3487,8 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 																			Type: schema.TypeList,
 
-																			Optional: true,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																			Elem: &schema.Schema{
 																				Type: schema.TypeString,
 																			},
@@ -3091,7 +3498,8 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 																			Type: schema.TypeList,
 
-																			Optional: true,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																			Elem: &schema.Schema{
 																				Type: schema.TypeString,
 																			},
@@ -3259,8 +3667,9 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 			"bot_defense": {
 
-				Type:     schema.TypeSet,
-				Optional: true,
+				Type:       schema.TypeSet,
+				Optional:   true,
+				Deprecated: "This field is deprecated and will be removed in future release.",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 
@@ -3280,27 +3689,31 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 						"policy": {
 
-							Type:     schema.TypeSet,
-							Required: true,
+							Type:       schema.TypeSet,
+							Required:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
 									"disable_js_insert": {
 
-										Type:     schema.TypeBool,
-										Optional: true,
+										Type:       schema.TypeBool,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 
 									"js_insert_all_pages": {
 
-										Type:     schema.TypeSet,
-										Optional: true,
+										Type:       schema.TypeSet,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
 												"javascript_location": {
-													Type:     schema.TypeString,
-													Optional: true,
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 											},
 										},
@@ -3308,47 +3721,54 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 									"js_insert_all_pages_except": {
 
-										Type:     schema.TypeSet,
-										Optional: true,
+										Type:       schema.TypeSet,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
 												"exclude_list": {
 
-													Type:     schema.TypeList,
-													Optional: true,
+													Type:       schema.TypeList,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
 															"any_domain": {
 
-																Type:     schema.TypeBool,
-																Optional: true,
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 
 															"domain": {
 
-																Type:     schema.TypeSet,
-																Optional: true,
+																Type:       schema.TypeSet,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
 																		"exact_value": {
 
-																			Type:     schema.TypeString,
-																			Optional: true,
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"regex_value": {
 
-																			Type:     schema.TypeString,
-																			Optional: true,
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"suffix_value": {
 
-																			Type:     schema.TypeString,
-																			Optional: true,
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 																	},
 																},
@@ -3356,14 +3776,16 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 															"metadata": {
 
-																Type:     schema.TypeSet,
-																Required: true,
+																Type:       schema.TypeSet,
+																Required:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
 																		"description": {
-																			Type:     schema.TypeString,
-																			Optional: true,
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"disable": {
@@ -3373,8 +3795,9 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 																		},
 
 																		"name": {
-																			Type:     schema.TypeString,
-																			Required: true,
+																			Type:       schema.TypeString,
+																			Required:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 																	},
 																},
@@ -3382,27 +3805,31 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 															"path": {
 
-																Type:     schema.TypeSet,
-																Required: true,
+																Type:       schema.TypeSet,
+																Required:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
 																		"path": {
 
-																			Type:     schema.TypeString,
-																			Optional: true,
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"prefix": {
 
-																			Type:     schema.TypeString,
-																			Optional: true,
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"regex": {
 
-																			Type:     schema.TypeString,
-																			Optional: true,
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 																	},
 																},
@@ -3412,8 +3839,9 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 												},
 
 												"javascript_location": {
-													Type:     schema.TypeString,
-													Optional: true,
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 											},
 										},
@@ -3421,47 +3849,54 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 									"js_insertion_rules": {
 
-										Type:     schema.TypeSet,
-										Optional: true,
+										Type:       schema.TypeSet,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
 												"exclude_list": {
 
-													Type:     schema.TypeList,
-													Optional: true,
+													Type:       schema.TypeList,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
 															"any_domain": {
 
-																Type:     schema.TypeBool,
-																Optional: true,
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 
 															"domain": {
 
-																Type:     schema.TypeSet,
-																Optional: true,
+																Type:       schema.TypeSet,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
 																		"exact_value": {
 
-																			Type:     schema.TypeString,
-																			Optional: true,
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"regex_value": {
 
-																			Type:     schema.TypeString,
-																			Optional: true,
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"suffix_value": {
 
-																			Type:     schema.TypeString,
-																			Optional: true,
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 																	},
 																},
@@ -3469,14 +3904,16 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 															"metadata": {
 
-																Type:     schema.TypeSet,
-																Required: true,
+																Type:       schema.TypeSet,
+																Required:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
 																		"description": {
-																			Type:     schema.TypeString,
-																			Optional: true,
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"disable": {
@@ -3486,8 +3923,9 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 																		},
 
 																		"name": {
-																			Type:     schema.TypeString,
-																			Required: true,
+																			Type:       schema.TypeString,
+																			Required:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 																	},
 																},
@@ -3495,27 +3933,31 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 															"path": {
 
-																Type:     schema.TypeSet,
-																Required: true,
+																Type:       schema.TypeSet,
+																Required:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
 																		"path": {
 
-																			Type:     schema.TypeString,
-																			Optional: true,
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"prefix": {
 
-																			Type:     schema.TypeString,
-																			Optional: true,
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"regex": {
 
-																			Type:     schema.TypeString,
-																			Optional: true,
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 																	},
 																},
@@ -3526,60 +3968,69 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 												"rules": {
 
-													Type:     schema.TypeList,
-													Required: true,
+													Type:       schema.TypeList,
+													Required:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
 															"any_domain": {
 
-																Type:     schema.TypeBool,
-																Optional: true,
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 
 															"domain": {
 
-																Type:     schema.TypeSet,
-																Optional: true,
+																Type:       schema.TypeSet,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
 																		"exact_value": {
 
-																			Type:     schema.TypeString,
-																			Optional: true,
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"regex_value": {
 
-																			Type:     schema.TypeString,
-																			Optional: true,
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"suffix_value": {
 
-																			Type:     schema.TypeString,
-																			Optional: true,
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 																	},
 																},
 															},
 
 															"javascript_location": {
-																Type:     schema.TypeString,
-																Optional: true,
+																Type:       schema.TypeString,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 
 															"metadata": {
 
-																Type:     schema.TypeSet,
-																Required: true,
+																Type:       schema.TypeSet,
+																Required:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
 																		"description": {
-																			Type:     schema.TypeString,
-																			Optional: true,
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"disable": {
@@ -3589,8 +4040,9 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 																		},
 
 																		"name": {
-																			Type:     schema.TypeString,
-																			Required: true,
+																			Type:       schema.TypeString,
+																			Required:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 																	},
 																},
@@ -3598,27 +4050,31 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 															"path": {
 
-																Type:     schema.TypeSet,
-																Required: true,
+																Type:       schema.TypeSet,
+																Required:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
 																		"path": {
 
-																			Type:     schema.TypeString,
-																			Optional: true,
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"prefix": {
 
-																			Type:     schema.TypeString,
-																			Optional: true,
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"regex": {
 
-																			Type:     schema.TypeString,
-																			Optional: true,
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 																	},
 																},
@@ -3631,58 +4087,67 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 									},
 
 									"javascript_mode": {
-										Type:     schema.TypeString,
-										Required: true,
+										Type:       schema.TypeString,
+										Required:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 
 									"js_download_path": {
-										Type:     schema.TypeString,
-										Optional: true,
+										Type:       schema.TypeString,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 
 									"disable_mobile_sdk": {
 
-										Type:     schema.TypeBool,
-										Optional: true,
+										Type:       schema.TypeBool,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 
 									"mobile_sdk_config": {
 
-										Type:     schema.TypeSet,
-										Optional: true,
+										Type:       schema.TypeSet,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
 												"mobile_identifier": {
 
-													Type:     schema.TypeSet,
-													Optional: true,
+													Type:       schema.TypeSet,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
 															"headers": {
 
-																Type:     schema.TypeList,
-																Optional: true,
+																Type:       schema.TypeList,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
 																		"check_not_present": {
 
-																			Type:     schema.TypeBool,
-																			Optional: true,
+																			Type:       schema.TypeBool,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"check_present": {
 
-																			Type:     schema.TypeBool,
-																			Optional: true,
+																			Type:       schema.TypeBool,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"item": {
 
-																			Type:     schema.TypeSet,
-																			Optional: true,
+																			Type:       schema.TypeSet,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																			Elem: &schema.Resource{
 																				Schema: map[string]*schema.Schema{
 
@@ -3690,7 +4155,8 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 																						Type: schema.TypeList,
 
-																						Optional: true,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
 																						Elem: &schema.Schema{
 																							Type: schema.TypeString,
 																						},
@@ -3700,7 +4166,8 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 																						Type: schema.TypeList,
 
-																						Optional: true,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
 																						Elem: &schema.Schema{
 																							Type: schema.TypeString,
 																						},
@@ -3710,7 +4177,8 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 																						Type: schema.TypeList,
 
-																						Optional: true,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
 																						Elem: &schema.Schema{
 																							Type: schema.TypeString,
 																						},
@@ -3720,8 +4188,9 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 																		},
 
 																		"name": {
-																			Type:     schema.TypeString,
-																			Required: true,
+																			Type:       schema.TypeString,
+																			Required:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 																	},
 																},
@@ -3741,27 +4210,31 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 									"protected_app_endpoints": {
 
-										Type:     schema.TypeList,
-										Required: true,
+										Type:       schema.TypeList,
+										Required:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
 												"mobile": {
 
-													Type:     schema.TypeBool,
-													Optional: true,
+													Type:       schema.TypeBool,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 
 												"web": {
 
-													Type:     schema.TypeBool,
-													Optional: true,
+													Type:       schema.TypeBool,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 
 												"web_mobile": {
 
-													Type:     schema.TypeSet,
-													Optional: true,
+													Type:       schema.TypeSet,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
@@ -3916,8 +4389,9 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 															},
 
 															"mobile_identifier": {
-																Type:     schema.TypeString,
-																Optional: true,
+																Type:       schema.TypeString,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 														},
 													},
@@ -3925,33 +4399,38 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 												"any_domain": {
 
-													Type:     schema.TypeBool,
-													Optional: true,
+													Type:       schema.TypeBool,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 
 												"domain": {
 
-													Type:     schema.TypeSet,
-													Optional: true,
+													Type:       schema.TypeSet,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
 															"exact_value": {
 
-																Type:     schema.TypeString,
-																Optional: true,
+																Type:       schema.TypeString,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 
 															"regex_value": {
 
-																Type:     schema.TypeString,
-																Optional: true,
+																Type:       schema.TypeString,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 
 															"suffix_value": {
 
-																Type:     schema.TypeString,
-																Optional: true,
+																Type:       schema.TypeString,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 														},
 													},
@@ -3959,28 +4438,32 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 												"flow_label": {
 
-													Type:     schema.TypeSet,
-													Optional: true,
+													Type:       schema.TypeSet,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
 															"account_management": {
 
-																Type:     schema.TypeSet,
-																Optional: true,
+																Type:       schema.TypeSet,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
 																		"create": {
 
-																			Type:     schema.TypeBool,
-																			Optional: true,
+																			Type:       schema.TypeBool,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"password_reset": {
 
-																			Type:     schema.TypeBool,
-																			Optional: true,
+																			Type:       schema.TypeBool,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 																	},
 																},
@@ -3988,56 +4471,64 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 															"authentication": {
 
-																Type:     schema.TypeSet,
-																Optional: true,
+																Type:       schema.TypeSet,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
 																		"login": {
 
-																			Type:     schema.TypeSet,
-																			Optional: true,
+																			Type:       schema.TypeSet,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																			Elem: &schema.Resource{
 																				Schema: map[string]*schema.Schema{
 
 																					"disable_transaction_result": {
 
-																						Type:     schema.TypeBool,
-																						Optional: true,
+																						Type:       schema.TypeBool,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
 																					},
 
 																					"transaction_result": {
 
-																						Type:     schema.TypeSet,
-																						Optional: true,
+																						Type:       schema.TypeSet,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
 																						Elem: &schema.Resource{
 																							Schema: map[string]*schema.Schema{
 
 																								"failure_conditions": {
 
-																									Type:     schema.TypeList,
-																									Optional: true,
+																									Type:       schema.TypeList,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
 																									Elem: &schema.Resource{
 																										Schema: map[string]*schema.Schema{
 
 																											"name": {
-																												Type:     schema.TypeString,
-																												Optional: true,
+																												Type:       schema.TypeString,
+																												Optional:   true,
+																												Deprecated: "This field is deprecated and will be removed in future release.",
 																											},
 
 																											"regex_values": {
 
 																												Type: schema.TypeList,
 
-																												Optional: true,
+																												Optional:   true,
+																												Deprecated: "This field is deprecated and will be removed in future release.",
 																												Elem: &schema.Schema{
 																													Type: schema.TypeString,
 																												},
 																											},
 
 																											"status": {
-																												Type:     schema.TypeString,
-																												Required: true,
+																												Type:       schema.TypeString,
+																												Required:   true,
+																												Deprecated: "This field is deprecated and will be removed in future release.",
 																											},
 																										},
 																									},
@@ -4045,29 +4536,33 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 																								"success_conditions": {
 
-																									Type:     schema.TypeList,
-																									Optional: true,
+																									Type:       schema.TypeList,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
 																									Elem: &schema.Resource{
 																										Schema: map[string]*schema.Schema{
 
 																											"name": {
-																												Type:     schema.TypeString,
-																												Optional: true,
+																												Type:       schema.TypeString,
+																												Optional:   true,
+																												Deprecated: "This field is deprecated and will be removed in future release.",
 																											},
 
 																											"regex_values": {
 
 																												Type: schema.TypeList,
 
-																												Optional: true,
+																												Optional:   true,
+																												Deprecated: "This field is deprecated and will be removed in future release.",
 																												Elem: &schema.Schema{
 																													Type: schema.TypeString,
 																												},
 																											},
 
 																											"status": {
-																												Type:     schema.TypeString,
-																												Required: true,
+																												Type:       schema.TypeString,
+																												Required:   true,
+																												Deprecated: "This field is deprecated and will be removed in future release.",
 																											},
 																										},
 																									},
@@ -4081,26 +4576,30 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 																		"login_mfa": {
 
-																			Type:     schema.TypeBool,
-																			Optional: true,
+																			Type:       schema.TypeBool,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"login_partner": {
 
-																			Type:     schema.TypeBool,
-																			Optional: true,
+																			Type:       schema.TypeBool,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"logout": {
 
-																			Type:     schema.TypeBool,
-																			Optional: true,
+																			Type:       schema.TypeBool,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"token_refresh": {
 
-																			Type:     schema.TypeBool,
-																			Optional: true,
+																			Type:       schema.TypeBool,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 																	},
 																},
@@ -4108,21 +4607,24 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 															"financial_services": {
 
-																Type:     schema.TypeSet,
-																Optional: true,
+																Type:       schema.TypeSet,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
 																		"apply": {
 
-																			Type:     schema.TypeBool,
-																			Optional: true,
+																			Type:       schema.TypeBool,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"money_transfer": {
 
-																			Type:     schema.TypeBool,
-																			Optional: true,
+																			Type:       schema.TypeBool,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 																	},
 																},
@@ -4130,15 +4632,17 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 															"flight": {
 
-																Type:     schema.TypeSet,
-																Optional: true,
+																Type:       schema.TypeSet,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
 																		"checkin": {
 
-																			Type:     schema.TypeBool,
-																			Optional: true,
+																			Type:       schema.TypeBool,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 																	},
 																},
@@ -4146,27 +4650,31 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 															"profile_management": {
 
-																Type:     schema.TypeSet,
-																Optional: true,
+																Type:       schema.TypeSet,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
 																		"create": {
 
-																			Type:     schema.TypeBool,
-																			Optional: true,
+																			Type:       schema.TypeBool,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"update": {
 
-																			Type:     schema.TypeBool,
-																			Optional: true,
+																			Type:       schema.TypeBool,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"view": {
 
-																			Type:     schema.TypeBool,
-																			Optional: true,
+																			Type:       schema.TypeBool,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 																	},
 																},
@@ -4174,33 +4682,38 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 															"search": {
 
-																Type:     schema.TypeSet,
-																Optional: true,
+																Type:       schema.TypeSet,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
 																		"flight_search": {
 
-																			Type:     schema.TypeBool,
-																			Optional: true,
+																			Type:       schema.TypeBool,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"product_search": {
 
-																			Type:     schema.TypeBool,
-																			Optional: true,
+																			Type:       schema.TypeBool,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"reservation_search": {
 
-																			Type:     schema.TypeBool,
-																			Optional: true,
+																			Type:       schema.TypeBool,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"room_search": {
 
-																			Type:     schema.TypeBool,
-																			Optional: true,
+																			Type:       schema.TypeBool,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 																	},
 																},
@@ -4208,81 +4721,94 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 															"shopping_gift_cards": {
 
-																Type:     schema.TypeSet,
-																Optional: true,
+																Type:       schema.TypeSet,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
 																		"gift_card_make_purchase_with_gift_card": {
 
-																			Type:     schema.TypeBool,
-																			Optional: true,
+																			Type:       schema.TypeBool,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"gift_card_validation": {
 
-																			Type:     schema.TypeBool,
-																			Optional: true,
+																			Type:       schema.TypeBool,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"shop_add_to_cart": {
 
-																			Type:     schema.TypeBool,
-																			Optional: true,
+																			Type:       schema.TypeBool,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"shop_checkout": {
 
-																			Type:     schema.TypeBool,
-																			Optional: true,
+																			Type:       schema.TypeBool,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"shop_choose_seat": {
 
-																			Type:     schema.TypeBool,
-																			Optional: true,
+																			Type:       schema.TypeBool,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"shop_enter_drawing_submission": {
 
-																			Type:     schema.TypeBool,
-																			Optional: true,
+																			Type:       schema.TypeBool,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"shop_make_payment": {
 
-																			Type:     schema.TypeBool,
-																			Optional: true,
+																			Type:       schema.TypeBool,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"shop_order": {
 
-																			Type:     schema.TypeBool,
-																			Optional: true,
+																			Type:       schema.TypeBool,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"shop_price_inquiry": {
 
-																			Type:     schema.TypeBool,
-																			Optional: true,
+																			Type:       schema.TypeBool,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"shop_promo_code_validation": {
 
-																			Type:     schema.TypeBool,
-																			Optional: true,
+																			Type:       schema.TypeBool,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"shop_purchase_gift_card": {
 
-																			Type:     schema.TypeBool,
-																			Optional: true,
+																			Type:       schema.TypeBool,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"shop_update_quantity": {
 
-																			Type:     schema.TypeBool,
-																			Optional: true,
+																			Type:       schema.TypeBool,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 																	},
 																},
@@ -4293,27 +4819,31 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 												"undefined_flow_label": {
 
-													Type:     schema.TypeBool,
-													Optional: true,
+													Type:       schema.TypeBool,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 
 												"allow_good_bots": {
 
-													Type:     schema.TypeBool,
-													Optional: true,
+													Type:       schema.TypeBool,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 
 												"mitigate_good_bots": {
 
-													Type:     schema.TypeBool,
-													Optional: true,
+													Type:       schema.TypeBool,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 
 												"http_methods": {
 
 													Type: schema.TypeList,
 
-													Required: true,
+													Required:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Schema{
 														Type: schema.TypeString,
 													},
@@ -4321,14 +4851,16 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 												"metadata": {
 
-													Type:     schema.TypeSet,
-													Required: true,
+													Type:       schema.TypeSet,
+													Required:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
 															"description": {
-																Type:     schema.TypeString,
-																Optional: true,
+																Type:       schema.TypeString,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 
 															"disable": {
@@ -4338,8 +4870,9 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 															},
 
 															"name": {
-																Type:     schema.TypeString,
-																Required: true,
+																Type:       schema.TypeString,
+																Required:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 														},
 													},
@@ -4347,21 +4880,24 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 												"mitigation": {
 
-													Type:     schema.TypeSet,
-													Required: true,
+													Type:       schema.TypeSet,
+													Required:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
 															"block": {
 
-																Type:     schema.TypeSet,
-																Optional: true,
+																Type:       schema.TypeSet,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
 																		"body": {
-																			Type:     schema.TypeString,
-																			Optional: true,
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"body_hash": {
@@ -4371,8 +4907,9 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 																		},
 
 																		"status": {
-																			Type:     schema.TypeString,
-																			Optional: true,
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 																	},
 																},
@@ -4380,26 +4917,30 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 															"flag": {
 
-																Type:     schema.TypeSet,
-																Optional: true,
+																Type:       schema.TypeSet,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
 																		"append_headers": {
 
-																			Type:     schema.TypeSet,
-																			Optional: true,
+																			Type:       schema.TypeSet,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																			Elem: &schema.Resource{
 																				Schema: map[string]*schema.Schema{
 
 																					"auto_type_header_name": {
-																						Type:     schema.TypeString,
-																						Required: true,
+																						Type:       schema.TypeString,
+																						Required:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
 																					},
 
 																					"inference_header_name": {
-																						Type:     schema.TypeString,
-																						Required: true,
+																						Type:       schema.TypeString,
+																						Required:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
 																					},
 																				},
 																			},
@@ -4407,8 +4948,9 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 																		"no_headers": {
 
-																			Type:     schema.TypeBool,
-																			Optional: true,
+																			Type:       schema.TypeBool,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 																	},
 																},
@@ -4423,14 +4965,16 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 															"redirect": {
 
-																Type:     schema.TypeSet,
-																Optional: true,
+																Type:       schema.TypeSet,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
 																		"uri": {
-																			Type:     schema.TypeString,
-																			Required: true,
+																			Type:       schema.TypeString,
+																			Required:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 																	},
 																},
@@ -4441,35 +4985,40 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 												"path": {
 
-													Type:     schema.TypeSet,
-													Required: true,
+													Type:       schema.TypeSet,
+													Required:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
 															"path": {
 
-																Type:     schema.TypeString,
-																Optional: true,
+																Type:       schema.TypeString,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 
 															"prefix": {
 
-																Type:     schema.TypeString,
-																Optional: true,
+																Type:       schema.TypeString,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 
 															"regex": {
 
-																Type:     schema.TypeString,
-																Optional: true,
+																Type:       schema.TypeString,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 														},
 													},
 												},
 
 												"protocol": {
-													Type:     schema.TypeString,
-													Optional: true,
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 											},
 										},
@@ -4479,13 +5028,15 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 						},
 
 						"regional_endpoint": {
-							Type:     schema.TypeString,
-							Required: true,
+							Type:       schema.TypeString,
+							Required:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 						},
 
 						"timeout": {
-							Type:     schema.TypeInt,
-							Optional: true,
+							Type:       schema.TypeInt,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 						},
 					},
 				},
@@ -5439,8 +5990,9 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 			"disable_bot_defense": {
 
-				Type:     schema.TypeBool,
-				Optional: true,
+				Type:       schema.TypeBool,
+				Optional:   true,
+				Deprecated: "This field is deprecated and will be removed in future release.",
 			},
 
 			"cache_rules": {
@@ -7116,6 +7668,28 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 																},
 															},
 
+															"ja4_tls_fingerprint": {
+
+																Type:       schema.TypeSet,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"exact_values": {
+
+																			Type: schema.TypeList,
+
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																			Elem: &schema.Schema{
+																				Type: schema.TypeString,
+																			},
+																		},
+																	},
+																},
+															},
+
 															"tls_fingerprint_matcher": {
 
 																Type:     schema.TypeSet,
@@ -7194,73 +7768,84 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 			"client_side_defense": {
 
-				Type:     schema.TypeSet,
-				Optional: true,
+				Type:       schema.TypeSet,
+				Optional:   true,
+				Deprecated: "This field is deprecated and will be removed in future release.",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 
 						"policy": {
 
-							Type:     schema.TypeSet,
-							Required: true,
+							Type:       schema.TypeSet,
+							Required:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
 									"disable_js_insert": {
 
-										Type:     schema.TypeBool,
-										Optional: true,
+										Type:       schema.TypeBool,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 
 									"js_insert_all_pages": {
 
-										Type:     schema.TypeBool,
-										Optional: true,
+										Type:       schema.TypeBool,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 
 									"js_insert_all_pages_except": {
 
-										Type:     schema.TypeSet,
-										Optional: true,
+										Type:       schema.TypeSet,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
 												"exclude_list": {
 
-													Type:     schema.TypeList,
-													Optional: true,
+													Type:       schema.TypeList,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
 															"any_domain": {
 
-																Type:     schema.TypeBool,
-																Optional: true,
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 
 															"domain": {
 
-																Type:     schema.TypeSet,
-																Optional: true,
+																Type:       schema.TypeSet,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
 																		"exact_value": {
 
-																			Type:     schema.TypeString,
-																			Optional: true,
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"regex_value": {
 
-																			Type:     schema.TypeString,
-																			Optional: true,
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"suffix_value": {
 
-																			Type:     schema.TypeString,
-																			Optional: true,
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 																	},
 																},
@@ -7268,14 +7853,16 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 															"metadata": {
 
-																Type:     schema.TypeSet,
-																Required: true,
+																Type:       schema.TypeSet,
+																Required:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
 																		"description": {
-																			Type:     schema.TypeString,
-																			Optional: true,
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"disable": {
@@ -7285,8 +7872,9 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 																		},
 
 																		"name": {
-																			Type:     schema.TypeString,
-																			Required: true,
+																			Type:       schema.TypeString,
+																			Required:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 																	},
 																},
@@ -7294,27 +7882,31 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 															"path": {
 
-																Type:     schema.TypeSet,
-																Required: true,
+																Type:       schema.TypeSet,
+																Required:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
 																		"path": {
 
-																			Type:     schema.TypeString,
-																			Optional: true,
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"prefix": {
 
-																			Type:     schema.TypeString,
-																			Optional: true,
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"regex": {
 
-																			Type:     schema.TypeString,
-																			Optional: true,
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 																	},
 																},
@@ -7328,47 +7920,54 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 									"js_insertion_rules": {
 
-										Type:     schema.TypeSet,
-										Optional: true,
+										Type:       schema.TypeSet,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
 												"exclude_list": {
 
-													Type:     schema.TypeList,
-													Optional: true,
+													Type:       schema.TypeList,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
 															"any_domain": {
 
-																Type:     schema.TypeBool,
-																Optional: true,
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 
 															"domain": {
 
-																Type:     schema.TypeSet,
-																Optional: true,
+																Type:       schema.TypeSet,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
 																		"exact_value": {
 
-																			Type:     schema.TypeString,
-																			Optional: true,
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"regex_value": {
 
-																			Type:     schema.TypeString,
-																			Optional: true,
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"suffix_value": {
 
-																			Type:     schema.TypeString,
-																			Optional: true,
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 																	},
 																},
@@ -7376,14 +7975,16 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 															"metadata": {
 
-																Type:     schema.TypeSet,
-																Required: true,
+																Type:       schema.TypeSet,
+																Required:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
 																		"description": {
-																			Type:     schema.TypeString,
-																			Optional: true,
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"disable": {
@@ -7393,8 +7994,9 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 																		},
 
 																		"name": {
-																			Type:     schema.TypeString,
-																			Required: true,
+																			Type:       schema.TypeString,
+																			Required:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 																	},
 																},
@@ -7402,27 +8004,31 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 															"path": {
 
-																Type:     schema.TypeSet,
-																Required: true,
+																Type:       schema.TypeSet,
+																Required:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
 																		"path": {
 
-																			Type:     schema.TypeString,
-																			Optional: true,
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"prefix": {
 
-																			Type:     schema.TypeString,
-																			Optional: true,
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"regex": {
 
-																			Type:     schema.TypeString,
-																			Optional: true,
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 																	},
 																},
@@ -7433,40 +8039,46 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 												"rules": {
 
-													Type:     schema.TypeList,
-													Required: true,
+													Type:       schema.TypeList,
+													Required:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
 															"any_domain": {
 
-																Type:     schema.TypeBool,
-																Optional: true,
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 
 															"domain": {
 
-																Type:     schema.TypeSet,
-																Optional: true,
+																Type:       schema.TypeSet,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
 																		"exact_value": {
 
-																			Type:     schema.TypeString,
-																			Optional: true,
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"regex_value": {
 
-																			Type:     schema.TypeString,
-																			Optional: true,
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"suffix_value": {
 
-																			Type:     schema.TypeString,
-																			Optional: true,
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 																	},
 																},
@@ -7474,14 +8086,16 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 															"metadata": {
 
-																Type:     schema.TypeSet,
-																Required: true,
+																Type:       schema.TypeSet,
+																Required:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
 																		"description": {
-																			Type:     schema.TypeString,
-																			Optional: true,
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"disable": {
@@ -7491,8 +8105,9 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 																		},
 
 																		"name": {
-																			Type:     schema.TypeString,
-																			Required: true,
+																			Type:       schema.TypeString,
+																			Required:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 																	},
 																},
@@ -7500,27 +8115,31 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 															"path": {
 
-																Type:     schema.TypeSet,
-																Required: true,
+																Type:       schema.TypeSet,
+																Required:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
 																		"path": {
 
-																			Type:     schema.TypeString,
-																			Optional: true,
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"prefix": {
 
-																			Type:     schema.TypeString,
-																			Optional: true,
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"regex": {
 
-																			Type:     schema.TypeString,
-																			Optional: true,
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 																	},
 																},
@@ -7540,8 +8159,9 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 			"disable_client_side_defense": {
 
-				Type:     schema.TypeBool,
-				Optional: true,
+				Type:       schema.TypeBool,
+				Optional:   true,
+				Deprecated: "This field is deprecated and will be removed in future release.",
 			},
 
 			"cors_policy": {
@@ -8453,34 +9073,649 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 							Optional: true,
 						},
 
-						"tls_parameters": {
+						"tls_cert_options": {
 
 							Type:     schema.TypeSet,
 							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
+									"tls_cert_params": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"certificates": {
+
+													Type:     schema.TypeList,
+													Required: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"kind": {
+																Type:     schema.TypeString,
+																Computed: true,
+															},
+
+															"name": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+															"namespace": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+															"tenant": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+														},
+													},
+												},
+
+												"no_mtls": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
+												"use_mtls": {
+
+													Type:     schema.TypeSet,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"client_certificate_optional": {
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"crl": {
+
+																Type:     schema.TypeSet,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"kind": {
+																			Type:     schema.TypeString,
+																			Computed: true,
+																		},
+
+																		"name": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+																		"namespace": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+																		"tenant": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+																	},
+																},
+															},
+
+															"no_crl": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"trusted_ca": {
+
+																Type:     schema.TypeSet,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"kind": {
+																			Type:     schema.TypeString,
+																			Computed: true,
+																		},
+
+																		"name": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+																		"namespace": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+																		"tenant": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+																	},
+																},
+															},
+
+															"trusted_ca_url": {
+
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+
+															"xfcc_disabled": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"xfcc_options": {
+
+																Type:     schema.TypeSet,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"xfcc_header_elements": {
+
+																			Type: schema.TypeList,
+
+																			Required: true,
+																			Elem: &schema.Schema{
+																				Type: schema.TypeString,
+																			},
+																		},
+																	},
+																},
+															},
+														},
+													},
+												},
+
+												"tls_config": {
+
+													Type:     schema.TypeSet,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"custom_security": {
+
+																Type:     schema.TypeSet,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"cipher_suites": {
+
+																			Type: schema.TypeList,
+
+																			Required: true,
+																			Elem: &schema.Schema{
+																				Type: schema.TypeString,
+																			},
+																		},
+
+																		"max_version": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+
+																		"min_version": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+																	},
+																},
+															},
+
+															"default_security": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"low_security": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"medium_security": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+														},
+													},
+												},
+											},
+										},
+									},
+
+									"tls_inline_params": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"no_mtls": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
+												"use_mtls": {
+
+													Type:     schema.TypeSet,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"client_certificate_optional": {
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"crl": {
+
+																Type:     schema.TypeSet,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"kind": {
+																			Type:     schema.TypeString,
+																			Computed: true,
+																		},
+
+																		"name": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+																		"namespace": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+																		"tenant": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+																	},
+																},
+															},
+
+															"no_crl": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"trusted_ca": {
+
+																Type:     schema.TypeSet,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"kind": {
+																			Type:     schema.TypeString,
+																			Computed: true,
+																		},
+
+																		"name": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+																		"namespace": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+																		"tenant": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+																	},
+																},
+															},
+
+															"trusted_ca_url": {
+
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+
+															"xfcc_disabled": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"xfcc_options": {
+
+																Type:     schema.TypeSet,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"xfcc_header_elements": {
+
+																			Type: schema.TypeList,
+
+																			Required: true,
+																			Elem: &schema.Schema{
+																				Type: schema.TypeString,
+																			},
+																		},
+																	},
+																},
+															},
+														},
+													},
+												},
+
+												"tls_certificates": {
+
+													Type:     schema.TypeList,
+													Required: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"certificate_url": {
+																Type:     schema.TypeString,
+																Required: true,
+															},
+
+															"description": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+
+															"custom_hash_algorithms": {
+
+																Type:     schema.TypeSet,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"hash_algorithms": {
+
+																			Type: schema.TypeList,
+
+																			Required: true,
+																			Elem: &schema.Schema{
+																				Type: schema.TypeString,
+																			},
+																		},
+																	},
+																},
+															},
+
+															"disable_ocsp_stapling": {
+
+																Type:     schema.TypeSet,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{},
+																},
+															},
+
+															"use_system_defaults": {
+
+																Type:     schema.TypeSet,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{},
+																},
+															},
+
+															"private_key": {
+
+																Type:     schema.TypeSet,
+																Required: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"blindfold_secret_info_internal": {
+
+																			Type:       schema.TypeSet,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"decryption_provider": {
+																						Type:       schema.TypeString,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+
+																					"location": {
+																						Type:       schema.TypeString,
+																						Required:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+
+																					"store_provider": {
+																						Type:       schema.TypeString,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+																				},
+																			},
+																		},
+
+																		"secret_encoding_type": {
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+
+																		"blindfold_secret_info": {
+
+																			Type:     schema.TypeSet,
+																			Optional: true,
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"decryption_provider": {
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+
+																					"location": {
+																						Type:     schema.TypeString,
+																						Required: true,
+																					},
+
+																					"store_provider": {
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+																				},
+																			},
+																		},
+
+																		"clear_secret_info": {
+
+																			Type:     schema.TypeSet,
+																			Optional: true,
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"provider": {
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+
+																					"url": {
+																						Type:     schema.TypeString,
+																						Required: true,
+																					},
+																				},
+																			},
+																		},
+
+																		"vault_secret_info": {
+
+																			Type:       schema.TypeSet,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"key": {
+																						Type:       schema.TypeString,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+
+																					"location": {
+																						Type:       schema.TypeString,
+																						Required:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+
+																					"provider": {
+																						Type:       schema.TypeString,
+																						Required:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+
+																					"secret_encoding": {
+																						Type:       schema.TypeString,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+
+																					"version": {
+																						Type:       schema.TypeInt,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+																				},
+																			},
+																		},
+
+																		"wingman_secret_info": {
+
+																			Type:       schema.TypeSet,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"name": {
+																						Type:       schema.TypeString,
+																						Required:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+																				},
+																			},
+																		},
+																	},
+																},
+															},
+														},
+													},
+												},
+
+												"tls_config": {
+
+													Type:     schema.TypeSet,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"custom_security": {
+
+																Type:     schema.TypeSet,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"cipher_suites": {
+
+																			Type: schema.TypeList,
+
+																			Required: true,
+																			Elem: &schema.Schema{
+																				Type: schema.TypeString,
+																			},
+																		},
+
+																		"max_version": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+
+																		"min_version": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+																	},
+																},
+															},
+
+															"default_security": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"low_security": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"medium_security": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+														},
+													},
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+
+						"tls_parameters": {
+
+							Type:       schema.TypeSet,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
 									"tls_certificates": {
 
-										Type:     schema.TypeList,
-										Required: true,
+										Type:       schema.TypeList,
+										Required:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
 												"certificate_url": {
-													Type:     schema.TypeString,
-													Required: true,
+													Type:       schema.TypeString,
+													Required:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 
 												"description": {
-													Type:     schema.TypeString,
-													Optional: true,
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 
 												"custom_hash_algorithms": {
 
-													Type:     schema.TypeSet,
-													Optional: true,
+													Type:       schema.TypeSet,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
@@ -8488,7 +9723,8 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 																Type: schema.TypeList,
 
-																Required: true,
+																Required:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Schema{
 																	Type: schema.TypeString,
 																},
@@ -8499,8 +9735,9 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 												"disable_ocsp_stapling": {
 
-													Type:     schema.TypeSet,
-													Optional: true,
+													Type:       schema.TypeSet,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{},
 													},
@@ -8508,8 +9745,9 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 												"use_system_defaults": {
 
-													Type:     schema.TypeSet,
-													Optional: true,
+													Type:       schema.TypeSet,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{},
 													},
@@ -8517,8 +9755,9 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 												"private_key": {
 
-													Type:     schema.TypeSet,
-													Required: true,
+													Type:       schema.TypeSet,
+													Required:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
@@ -8559,24 +9798,28 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 															"blindfold_secret_info": {
 
-																Type:     schema.TypeSet,
-																Optional: true,
+																Type:       schema.TypeSet,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
 																		"decryption_provider": {
-																			Type:     schema.TypeString,
-																			Optional: true,
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"location": {
-																			Type:     schema.TypeString,
-																			Required: true,
+																			Type:       schema.TypeString,
+																			Required:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"store_provider": {
-																			Type:     schema.TypeString,
-																			Optional: true,
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 																	},
 																},
@@ -8584,19 +9827,22 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 															"clear_secret_info": {
 
-																Type:     schema.TypeSet,
-																Optional: true,
+																Type:       schema.TypeSet,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
 																		"provider": {
-																			Type:     schema.TypeString,
-																			Optional: true,
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"url": {
-																			Type:     schema.TypeString,
-																			Required: true,
+																			Type:       schema.TypeString,
+																			Required:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 																	},
 																},
@@ -8668,21 +9914,24 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 									"tls_config": {
 
-										Type:     schema.TypeSet,
-										Optional: true,
+										Type:       schema.TypeSet,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
 												"tls_11_plus": {
 
-													Type:     schema.TypeBool,
-													Optional: true,
+													Type:       schema.TypeBool,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 
 												"tls_12_plus": {
 
-													Type:     schema.TypeBool,
-													Optional: true,
+													Type:       schema.TypeBool,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 											},
 										},
@@ -11667,6 +12916,84 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
+															"api_discovery_from_code_scan": {
+
+																Type:       schema.TypeSet,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"code_base_integrations": {
+
+																			Type:       schema.TypeList,
+																			Required:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"all_repos": {
+
+																						Type:       schema.TypeBool,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+
+																					"selected_repos": {
+
+																						Type:       schema.TypeSet,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																						Elem: &schema.Resource{
+																							Schema: map[string]*schema.Schema{
+
+																								"api_code_repo": {
+
+																									Type: schema.TypeList,
+
+																									Required:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																									Elem: &schema.Schema{
+																										Type: schema.TypeString,
+																									},
+																								},
+																							},
+																						},
+																					},
+
+																					"code_base_integration": {
+
+																						Type:       schema.TypeSet,
+																						Required:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																						Elem: &schema.Resource{
+																							Schema: map[string]*schema.Schema{
+
+																								"name": {
+																									Type:       schema.TypeString,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+																								"namespace": {
+																									Type:       schema.TypeString,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+																								"tenant": {
+																									Type:       schema.TypeString,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+																							},
+																						},
+																					},
+																				},
+																			},
+																		},
+																	},
+																},
+															},
+
 															"discovered_api_settings": {
 
 																Type:       schema.TypeSet,
@@ -11718,6 +13045,84 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
+
+															"api_discovery_from_code_scan": {
+
+																Type:       schema.TypeSet,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"code_base_integrations": {
+
+																			Type:       schema.TypeList,
+																			Required:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"all_repos": {
+
+																						Type:       schema.TypeBool,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+
+																					"selected_repos": {
+
+																						Type:       schema.TypeSet,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																						Elem: &schema.Resource{
+																							Schema: map[string]*schema.Schema{
+
+																								"api_code_repo": {
+
+																									Type: schema.TypeList,
+
+																									Required:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																									Elem: &schema.Schema{
+																										Type: schema.TypeString,
+																									},
+																								},
+																							},
+																						},
+																					},
+
+																					"code_base_integration": {
+
+																						Type:       schema.TypeSet,
+																						Required:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																						Elem: &schema.Resource{
+																							Schema: map[string]*schema.Schema{
+
+																								"name": {
+																									Type:       schema.TypeString,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+																								"namespace": {
+																									Type:       schema.TypeString,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+																								"tenant": {
+																									Type:       schema.TypeString,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+																							},
+																						},
+																					},
+																				},
+																			},
+																		},
+																	},
+																},
+															},
 
 															"discovered_api_settings": {
 
@@ -15366,6 +16771,28 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 																												Type:       schema.TypeBool,
 																												Optional:   true,
 																												Deprecated: "This field is deprecated and will be removed in future release.",
+																											},
+																										},
+																									},
+																								},
+
+																								"ja4_tls_fingerprint": {
+
+																									Type:       schema.TypeSet,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																									Elem: &schema.Resource{
+																										Schema: map[string]*schema.Schema{
+
+																											"exact_values": {
+
+																												Type: schema.TypeList,
+
+																												Optional:   true,
+																												Deprecated: "This field is deprecated and will be removed in future release.",
+																												Elem: &schema.Schema{
+																													Type: schema.TypeString,
+																												},
 																											},
 																										},
 																									},
@@ -22638,35 +24065,41 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 			"default_sensitive_data_policy": {
 
-				Type:     schema.TypeBool,
-				Optional: true,
+				Type:       schema.TypeBool,
+				Optional:   true,
+				Deprecated: "This field is deprecated and will be removed in future release.",
 			},
 
 			"sensitive_data_policy": {
 
-				Type:     schema.TypeSet,
-				Optional: true,
+				Type:       schema.TypeSet,
+				Optional:   true,
+				Deprecated: "This field is deprecated and will be removed in future release.",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 
 						"sensitive_data_policy_ref": {
 
-							Type:     schema.TypeSet,
-							Required: true,
+							Type:       schema.TypeSet,
+							Required:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
 									"name": {
-										Type:     schema.TypeString,
-										Optional: true,
+										Type:       schema.TypeString,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 									"namespace": {
-										Type:     schema.TypeString,
-										Optional: true,
+										Type:       schema.TypeString,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 									"tenant": {
-										Type:     schema.TypeString,
-										Optional: true,
+										Type:       schema.TypeString,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 								},
 							},
@@ -22755,14 +24188,16 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 			"disable_threat_mesh": {
 
-				Type:     schema.TypeBool,
-				Optional: true,
+				Type:       schema.TypeBool,
+				Optional:   true,
+				Deprecated: "This field is deprecated and will be removed in future release.",
 			},
 
 			"enable_threat_mesh": {
 
-				Type:     schema.TypeBool,
-				Optional: true,
+				Type:       schema.TypeBool,
+				Optional:   true,
+				Deprecated: "This field is deprecated and will be removed in future release.",
 			},
 
 			"trusted_clients": {
@@ -25704,6 +27139,92 @@ func resourceVolterraCdnLoadbalancerCreate(d *schema.ResourceData, meta interfac
 		for _, set := range sl {
 			cs := set.(map[string]interface{})
 
+			if v, ok := cs["api_discovery_from_code_scan"]; ok && !isIntfNil(v) {
+
+				sl := v.(*schema.Set).List()
+				apiDiscoveryFromCodeScan := &ves_io_schema_views_common_waf.ApiDiscoveryFromCodeScan{}
+				apiDiscoveryChoiceInt.ApiDiscoveryOnCacheMiss.ApiDiscoveryFromCodeScan = apiDiscoveryFromCodeScan
+				for _, set := range sl {
+					apiDiscoveryFromCodeScanMapStrToI := set.(map[string]interface{})
+
+					if v, ok := apiDiscoveryFromCodeScanMapStrToI["code_base_integrations"]; ok && !isIntfNil(v) {
+
+						sl := v.([]interface{})
+						codeBaseIntegrations := make([]*ves_io_schema_views_common_waf.CodeBaseIntegrationSelection, len(sl))
+						apiDiscoveryFromCodeScan.CodeBaseIntegrations = codeBaseIntegrations
+						for i, set := range sl {
+							codeBaseIntegrations[i] = &ves_io_schema_views_common_waf.CodeBaseIntegrationSelection{}
+							codeBaseIntegrationsMapStrToI := set.(map[string]interface{})
+
+							apiReposChoiceTypeFound := false
+
+							if v, ok := codeBaseIntegrationsMapStrToI["all_repos"]; ok && !isIntfNil(v) && !apiReposChoiceTypeFound {
+
+								apiReposChoiceTypeFound = true
+
+								if v.(bool) {
+									apiReposChoiceInt := &ves_io_schema_views_common_waf.CodeBaseIntegrationSelection_AllRepos{}
+									apiReposChoiceInt.AllRepos = &ves_io_schema.Empty{}
+									codeBaseIntegrations[i].ApiReposChoice = apiReposChoiceInt
+								}
+
+							}
+
+							if v, ok := codeBaseIntegrationsMapStrToI["selected_repos"]; ok && !isIntfNil(v) && !apiReposChoiceTypeFound {
+
+								apiReposChoiceTypeFound = true
+								apiReposChoiceInt := &ves_io_schema_views_common_waf.CodeBaseIntegrationSelection_SelectedRepos{}
+								apiReposChoiceInt.SelectedRepos = &ves_io_schema_views_common_waf.ApiCodeRepos{}
+								codeBaseIntegrations[i].ApiReposChoice = apiReposChoiceInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									if v, ok := cs["api_code_repo"]; ok && !isIntfNil(v) {
+
+										ls := make([]string, len(v.([]interface{})))
+										for i, v := range v.([]interface{}) {
+											ls[i] = v.(string)
+										}
+										apiReposChoiceInt.SelectedRepos.ApiCodeRepo = ls
+
+									}
+
+								}
+
+							}
+
+							if v, ok := codeBaseIntegrationsMapStrToI["code_base_integration"]; ok && !isIntfNil(v) {
+
+								sl := v.(*schema.Set).List()
+								codeBaseIntegrationInt := &ves_io_schema_views.ObjectRefType{}
+								codeBaseIntegrations[i].CodeBaseIntegration = codeBaseIntegrationInt
+
+								for _, set := range sl {
+									cbiMapToStrVal := set.(map[string]interface{})
+									if val, ok := cbiMapToStrVal["name"]; ok && !isIntfNil(v) {
+										codeBaseIntegrationInt.Name = val.(string)
+									}
+									if val, ok := cbiMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+										codeBaseIntegrationInt.Namespace = val.(string)
+									}
+
+									if val, ok := cbiMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+										codeBaseIntegrationInt.Tenant = val.(string)
+									}
+								}
+
+							}
+
+						}
+
+					}
+
+				}
+
+			}
+
 			if v, ok := cs["discovered_api_settings"]; ok && !isIntfNil(v) {
 
 				sl := v.(*schema.Set).List()
@@ -25780,6 +27301,92 @@ func resourceVolterraCdnLoadbalancerCreate(d *schema.ResourceData, meta interfac
 		sl := v.(*schema.Set).List()
 		for _, set := range sl {
 			cs := set.(map[string]interface{})
+
+			if v, ok := cs["api_discovery_from_code_scan"]; ok && !isIntfNil(v) {
+
+				sl := v.(*schema.Set).List()
+				apiDiscoveryFromCodeScan := &ves_io_schema_views_common_waf.ApiDiscoveryFromCodeScan{}
+				apiDiscoveryChoiceInt.EnableApiDiscovery.ApiDiscoveryFromCodeScan = apiDiscoveryFromCodeScan
+				for _, set := range sl {
+					apiDiscoveryFromCodeScanMapStrToI := set.(map[string]interface{})
+
+					if v, ok := apiDiscoveryFromCodeScanMapStrToI["code_base_integrations"]; ok && !isIntfNil(v) {
+
+						sl := v.([]interface{})
+						codeBaseIntegrations := make([]*ves_io_schema_views_common_waf.CodeBaseIntegrationSelection, len(sl))
+						apiDiscoveryFromCodeScan.CodeBaseIntegrations = codeBaseIntegrations
+						for i, set := range sl {
+							codeBaseIntegrations[i] = &ves_io_schema_views_common_waf.CodeBaseIntegrationSelection{}
+							codeBaseIntegrationsMapStrToI := set.(map[string]interface{})
+
+							apiReposChoiceTypeFound := false
+
+							if v, ok := codeBaseIntegrationsMapStrToI["all_repos"]; ok && !isIntfNil(v) && !apiReposChoiceTypeFound {
+
+								apiReposChoiceTypeFound = true
+
+								if v.(bool) {
+									apiReposChoiceInt := &ves_io_schema_views_common_waf.CodeBaseIntegrationSelection_AllRepos{}
+									apiReposChoiceInt.AllRepos = &ves_io_schema.Empty{}
+									codeBaseIntegrations[i].ApiReposChoice = apiReposChoiceInt
+								}
+
+							}
+
+							if v, ok := codeBaseIntegrationsMapStrToI["selected_repos"]; ok && !isIntfNil(v) && !apiReposChoiceTypeFound {
+
+								apiReposChoiceTypeFound = true
+								apiReposChoiceInt := &ves_io_schema_views_common_waf.CodeBaseIntegrationSelection_SelectedRepos{}
+								apiReposChoiceInt.SelectedRepos = &ves_io_schema_views_common_waf.ApiCodeRepos{}
+								codeBaseIntegrations[i].ApiReposChoice = apiReposChoiceInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									if v, ok := cs["api_code_repo"]; ok && !isIntfNil(v) {
+
+										ls := make([]string, len(v.([]interface{})))
+										for i, v := range v.([]interface{}) {
+											ls[i] = v.(string)
+										}
+										apiReposChoiceInt.SelectedRepos.ApiCodeRepo = ls
+
+									}
+
+								}
+
+							}
+
+							if v, ok := codeBaseIntegrationsMapStrToI["code_base_integration"]; ok && !isIntfNil(v) {
+
+								sl := v.(*schema.Set).List()
+								codeBaseIntegrationInt := &ves_io_schema_views.ObjectRefType{}
+								codeBaseIntegrations[i].CodeBaseIntegration = codeBaseIntegrationInt
+
+								for _, set := range sl {
+									cbiMapToStrVal := set.(map[string]interface{})
+									if val, ok := cbiMapToStrVal["name"]; ok && !isIntfNil(v) {
+										codeBaseIntegrationInt.Name = val.(string)
+									}
+									if val, ok := cbiMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+										codeBaseIntegrationInt.Namespace = val.(string)
+									}
+
+									if val, ok := cbiMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+										codeBaseIntegrationInt.Tenant = val.(string)
+									}
+								}
+
+							}
+
+						}
+
+					}
+
+				}
+
+			}
 
 			if v, ok := cs["discovered_api_settings"]; ok && !isIntfNil(v) {
 
@@ -26156,6 +27763,16 @@ func resourceVolterraCdnLoadbalancerCreate(d *schema.ResourceData, meta interfac
 											ls[i] = v.(string)
 										}
 										ipAsnChoiceInt.IpPrefixList.IpPrefixes = ls
+
+									}
+
+									if v, ok := cs["ipv6_prefixes"]; ok && !isIntfNil(v) {
+
+										ls := make([]string, len(v.([]interface{})))
+										for i, v := range v.([]interface{}) {
+											ls[i] = v.(string)
+										}
+										ipAsnChoiceInt.IpPrefixList.Ipv6Prefixes = ls
 
 									}
 
@@ -26961,6 +28578,16 @@ func resourceVolterraCdnLoadbalancerCreate(d *schema.ResourceData, meta interfac
 											ls[i] = v.(string)
 										}
 										ipAsnChoiceInt.IpPrefixList.IpPrefixes = ls
+
+									}
+
+									if v, ok := cs["ipv6_prefixes"]; ok && !isIntfNil(v) {
+
+										ls := make([]string, len(v.([]interface{})))
+										for i, v := range v.([]interface{}) {
+											ls[i] = v.(string)
+										}
+										ipAsnChoiceInt.IpPrefixList.Ipv6Prefixes = ls
 
 									}
 
@@ -32780,6 +34407,16 @@ func resourceVolterraCdnLoadbalancerCreate(d *schema.ResourceData, meta interfac
 
 											}
 
+											if v, ok := cs["ipv6_prefixes"]; ok && !isIntfNil(v) {
+
+												ls := make([]string, len(v.([]interface{})))
+												for i, v := range v.([]interface{}) {
+													ls[i] = v.(string)
+												}
+												ipChoiceInt.IpPrefixList.Ipv6Prefixes = ls
+
+											}
+
 										}
 
 									}
@@ -32945,38 +34582,72 @@ func resourceVolterraCdnLoadbalancerCreate(d *schema.ResourceData, meta interfac
 
 									}
 
-									if v, ok := specMapStrToI["tls_fingerprint_matcher"]; ok && !isIntfNil(v) {
+									tlsFingerprintChoiceTypeFound := false
+
+									if v, ok := specMapStrToI["ja4_tls_fingerprint"]; ok && !isIntfNil(v) && !tlsFingerprintChoiceTypeFound {
+
+										tlsFingerprintChoiceTypeFound = true
+										tlsFingerprintChoiceInt := &ves_io_schema_service_policy_rule.ChallengeRuleSpec_Ja4TlsFingerprint{}
+										tlsFingerprintChoiceInt.Ja4TlsFingerprint = &ves_io_schema_policy.JA4TlsFingerprintMatcherType{}
+										spec.TlsFingerprintChoice = tlsFingerprintChoiceInt
 
 										sl := v.(*schema.Set).List()
-										tlsFingerprintMatcher := &ves_io_schema_policy.TlsFingerprintMatcherType{}
-										spec.TlsFingerprintMatcher = tlsFingerprintMatcher
 										for _, set := range sl {
-											tlsFingerprintMatcherMapStrToI := set.(map[string]interface{})
+											cs := set.(map[string]interface{})
 
-											if v, ok := tlsFingerprintMatcherMapStrToI["classes"]; ok && !isIntfNil(v) {
+											if v, ok := cs["exact_values"]; ok && !isIntfNil(v) {
+
+												ls := make([]string, len(v.([]interface{})))
+												for i, v := range v.([]interface{}) {
+													ls[i] = v.(string)
+												}
+												tlsFingerprintChoiceInt.Ja4TlsFingerprint.ExactValues = ls
+
+											}
+
+										}
+
+									}
+
+									if v, ok := specMapStrToI["tls_fingerprint_matcher"]; ok && !isIntfNil(v) && !tlsFingerprintChoiceTypeFound {
+
+										tlsFingerprintChoiceTypeFound = true
+										tlsFingerprintChoiceInt := &ves_io_schema_service_policy_rule.ChallengeRuleSpec_TlsFingerprintMatcher{}
+										tlsFingerprintChoiceInt.TlsFingerprintMatcher = &ves_io_schema_policy.TlsFingerprintMatcherType{}
+										spec.TlsFingerprintChoice = tlsFingerprintChoiceInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											if v, ok := cs["classes"]; ok && !isIntfNil(v) {
 
 												classesList := []ves_io_schema_policy.KnownTlsFingerprintClass{}
 												for _, j := range v.([]interface{}) {
 													classesList = append(classesList, ves_io_schema_policy.KnownTlsFingerprintClass(ves_io_schema_policy.KnownTlsFingerprintClass_value[j.(string)]))
 												}
-												tlsFingerprintMatcher.Classes = classesList
+												tlsFingerprintChoiceInt.TlsFingerprintMatcher.Classes = classesList
 
 											}
 
-											if w, ok := tlsFingerprintMatcherMapStrToI["exact_values"]; ok && !isIntfNil(w) {
-												ls := make([]string, len(w.([]interface{})))
-												for i, v := range w.([]interface{}) {
+											if v, ok := cs["exact_values"]; ok && !isIntfNil(v) {
+
+												ls := make([]string, len(v.([]interface{})))
+												for i, v := range v.([]interface{}) {
 													ls[i] = v.(string)
 												}
-												tlsFingerprintMatcher.ExactValues = ls
+												tlsFingerprintChoiceInt.TlsFingerprintMatcher.ExactValues = ls
+
 											}
 
-											if w, ok := tlsFingerprintMatcherMapStrToI["excluded_values"]; ok && !isIntfNil(w) {
-												ls := make([]string, len(w.([]interface{})))
-												for i, v := range w.([]interface{}) {
+											if v, ok := cs["excluded_values"]; ok && !isIntfNil(v) {
+
+												ls := make([]string, len(v.([]interface{})))
+												for i, v := range v.([]interface{}) {
 													ls[i] = v.(string)
 												}
-												tlsFingerprintMatcher.ExcludedValues = ls
+												tlsFingerprintChoiceInt.TlsFingerprintMatcher.ExcludedValues = ls
+
 											}
 
 										}
@@ -34013,6 +35684,16 @@ func resourceVolterraCdnLoadbalancerCreate(d *schema.ResourceData, meta interfac
 
 					}
 
+					if v, ok := cs["ipv6_prefixes"]; ok && !isIntfNil(v) {
+
+						ls := make([]string, len(v.([]interface{})))
+						for i, v := range v.([]interface{}) {
+							ls[i] = v.(string)
+						}
+						mitigationChoiceInt.IpPrefixList.Ipv6Prefixes = ls
+
+					}
+
 				}
 
 			}
@@ -34825,6 +36506,820 @@ func resourceVolterraCdnLoadbalancerCreate(d *schema.ResourceData, meta interfac
 			if v, ok := cs["http_redirect"]; ok && !isIntfNil(v) {
 
 				loadbalancerTypeInt.Https.HttpRedirect = v.(bool)
+
+			}
+
+			if v, ok := cs["tls_cert_options"]; ok && !isIntfNil(v) {
+
+				sl := v.(*schema.Set).List()
+				tlsCertOptions := &ves_io_schema_views_cdn_loadbalancer.TlsCertOptions{}
+				loadbalancerTypeInt.Https.TlsCertOptions = tlsCertOptions
+				for _, set := range sl {
+					tlsCertOptionsMapStrToI := set.(map[string]interface{})
+
+					tlsCertificatesChoiceTypeFound := false
+
+					if v, ok := tlsCertOptionsMapStrToI["tls_cert_params"]; ok && !isIntfNil(v) && !tlsCertificatesChoiceTypeFound {
+
+						tlsCertificatesChoiceTypeFound = true
+						tlsCertificatesChoiceInt := &ves_io_schema_views_cdn_loadbalancer.TlsCertOptions_TlsCertParams{}
+						tlsCertificatesChoiceInt.TlsCertParams = &ves_io_schema_views.DownstreamTLSCertsParams{}
+						tlsCertOptions.TlsCertificatesChoice = tlsCertificatesChoiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["certificates"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								certificatesInt := make([]*ves_io_schema_views.ObjectRefType, len(sl))
+								tlsCertificatesChoiceInt.TlsCertParams.Certificates = certificatesInt
+								for i, ps := range sl {
+
+									cMapToStrVal := ps.(map[string]interface{})
+									certificatesInt[i] = &ves_io_schema_views.ObjectRefType{}
+
+									if v, ok := cMapToStrVal["name"]; ok && !isIntfNil(v) {
+										certificatesInt[i].Name = v.(string)
+									}
+
+									if v, ok := cMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+										certificatesInt[i].Namespace = v.(string)
+									}
+
+									if v, ok := cMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+										certificatesInt[i].Tenant = v.(string)
+									}
+
+								}
+
+							}
+
+							mtlsChoiceTypeFound := false
+
+							if v, ok := cs["no_mtls"]; ok && !isIntfNil(v) && !mtlsChoiceTypeFound {
+
+								mtlsChoiceTypeFound = true
+
+								if v.(bool) {
+									mtlsChoiceInt := &ves_io_schema_views.DownstreamTLSCertsParams_NoMtls{}
+									mtlsChoiceInt.NoMtls = &ves_io_schema.Empty{}
+									tlsCertificatesChoiceInt.TlsCertParams.MtlsChoice = mtlsChoiceInt
+								}
+
+							}
+
+							if v, ok := cs["use_mtls"]; ok && !isIntfNil(v) && !mtlsChoiceTypeFound {
+
+								mtlsChoiceTypeFound = true
+								mtlsChoiceInt := &ves_io_schema_views.DownstreamTLSCertsParams_UseMtls{}
+								mtlsChoiceInt.UseMtls = &ves_io_schema_views.DownstreamTlsValidationContext{}
+								tlsCertificatesChoiceInt.TlsCertParams.MtlsChoice = mtlsChoiceInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									if v, ok := cs["client_certificate_optional"]; ok && !isIntfNil(v) {
+
+										mtlsChoiceInt.UseMtls.ClientCertificateOptional = v.(bool)
+
+									}
+
+									crlChoiceTypeFound := false
+
+									if v, ok := cs["crl"]; ok && !isIntfNil(v) && !crlChoiceTypeFound {
+
+										crlChoiceTypeFound = true
+										crlChoiceInt := &ves_io_schema_views.DownstreamTlsValidationContext_Crl{}
+										crlChoiceInt.Crl = &ves_io_schema_views.ObjectRefType{}
+										mtlsChoiceInt.UseMtls.CrlChoice = crlChoiceInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+												crlChoiceInt.Crl.Name = v.(string)
+
+											}
+
+											if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+												crlChoiceInt.Crl.Namespace = v.(string)
+
+											}
+
+											if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+												crlChoiceInt.Crl.Tenant = v.(string)
+
+											}
+
+										}
+
+									}
+
+									if v, ok := cs["no_crl"]; ok && !isIntfNil(v) && !crlChoiceTypeFound {
+
+										crlChoiceTypeFound = true
+
+										if v.(bool) {
+											crlChoiceInt := &ves_io_schema_views.DownstreamTlsValidationContext_NoCrl{}
+											crlChoiceInt.NoCrl = &ves_io_schema.Empty{}
+											mtlsChoiceInt.UseMtls.CrlChoice = crlChoiceInt
+										}
+
+									}
+
+									trustedCaChoiceTypeFound := false
+
+									if v, ok := cs["trusted_ca"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
+
+										trustedCaChoiceTypeFound = true
+										trustedCaChoiceInt := &ves_io_schema_views.DownstreamTlsValidationContext_TrustedCa{}
+										trustedCaChoiceInt.TrustedCa = &ves_io_schema_views.ObjectRefType{}
+										mtlsChoiceInt.UseMtls.TrustedCaChoice = trustedCaChoiceInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+												trustedCaChoiceInt.TrustedCa.Name = v.(string)
+
+											}
+
+											if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+												trustedCaChoiceInt.TrustedCa.Namespace = v.(string)
+
+											}
+
+											if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+												trustedCaChoiceInt.TrustedCa.Tenant = v.(string)
+
+											}
+
+										}
+
+									}
+
+									if v, ok := cs["trusted_ca_url"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
+
+										trustedCaChoiceTypeFound = true
+										trustedCaChoiceInt := &ves_io_schema_views.DownstreamTlsValidationContext_TrustedCaUrl{}
+
+										mtlsChoiceInt.UseMtls.TrustedCaChoice = trustedCaChoiceInt
+
+										trustedCaChoiceInt.TrustedCaUrl = v.(string)
+
+									}
+
+									xfccHeaderTypeFound := false
+
+									if v, ok := cs["xfcc_disabled"]; ok && !isIntfNil(v) && !xfccHeaderTypeFound {
+
+										xfccHeaderTypeFound = true
+
+										if v.(bool) {
+											xfccHeaderInt := &ves_io_schema_views.DownstreamTlsValidationContext_XfccDisabled{}
+											xfccHeaderInt.XfccDisabled = &ves_io_schema.Empty{}
+											mtlsChoiceInt.UseMtls.XfccHeader = xfccHeaderInt
+										}
+
+									}
+
+									if v, ok := cs["xfcc_options"]; ok && !isIntfNil(v) && !xfccHeaderTypeFound {
+
+										xfccHeaderTypeFound = true
+										xfccHeaderInt := &ves_io_schema_views.DownstreamTlsValidationContext_XfccOptions{}
+										xfccHeaderInt.XfccOptions = &ves_io_schema_views.XfccHeaderKeys{}
+										mtlsChoiceInt.UseMtls.XfccHeader = xfccHeaderInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											if v, ok := cs["xfcc_header_elements"]; ok && !isIntfNil(v) {
+
+												xfcc_header_elementsList := []ves_io_schema.XfccElement{}
+												for _, j := range v.([]interface{}) {
+													xfcc_header_elementsList = append(xfcc_header_elementsList, ves_io_schema.XfccElement(ves_io_schema.XfccElement_value[j.(string)]))
+												}
+												xfccHeaderInt.XfccOptions.XfccHeaderElements = xfcc_header_elementsList
+
+											}
+
+										}
+
+									}
+
+								}
+
+							}
+
+							if v, ok := cs["tls_config"]; ok && !isIntfNil(v) {
+
+								sl := v.(*schema.Set).List()
+								tlsConfig := &ves_io_schema_views.TlsConfig{}
+								tlsCertificatesChoiceInt.TlsCertParams.TlsConfig = tlsConfig
+								for _, set := range sl {
+									tlsConfigMapStrToI := set.(map[string]interface{})
+
+									choiceTypeFound := false
+
+									if v, ok := tlsConfigMapStrToI["custom_security"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+										choiceTypeFound = true
+										choiceInt := &ves_io_schema_views.TlsConfig_CustomSecurity{}
+										choiceInt.CustomSecurity = &ves_io_schema_views.CustomCiphers{}
+										tlsConfig.Choice = choiceInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											if v, ok := cs["cipher_suites"]; ok && !isIntfNil(v) {
+
+												ls := make([]string, len(v.([]interface{})))
+												for i, v := range v.([]interface{}) {
+													ls[i] = v.(string)
+												}
+												choiceInt.CustomSecurity.CipherSuites = ls
+
+											}
+
+											if v, ok := cs["max_version"]; ok && !isIntfNil(v) {
+
+												choiceInt.CustomSecurity.MaxVersion = ves_io_schema.TlsProtocol(ves_io_schema.TlsProtocol_value[v.(string)])
+
+											}
+
+											if v, ok := cs["min_version"]; ok && !isIntfNil(v) {
+
+												choiceInt.CustomSecurity.MinVersion = ves_io_schema.TlsProtocol(ves_io_schema.TlsProtocol_value[v.(string)])
+
+											}
+
+										}
+
+									}
+
+									if v, ok := tlsConfigMapStrToI["default_security"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+										choiceTypeFound = true
+
+										if v.(bool) {
+											choiceInt := &ves_io_schema_views.TlsConfig_DefaultSecurity{}
+											choiceInt.DefaultSecurity = &ves_io_schema.Empty{}
+											tlsConfig.Choice = choiceInt
+										}
+
+									}
+
+									if v, ok := tlsConfigMapStrToI["low_security"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+										choiceTypeFound = true
+
+										if v.(bool) {
+											choiceInt := &ves_io_schema_views.TlsConfig_LowSecurity{}
+											choiceInt.LowSecurity = &ves_io_schema.Empty{}
+											tlsConfig.Choice = choiceInt
+										}
+
+									}
+
+									if v, ok := tlsConfigMapStrToI["medium_security"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+										choiceTypeFound = true
+
+										if v.(bool) {
+											choiceInt := &ves_io_schema_views.TlsConfig_MediumSecurity{}
+											choiceInt.MediumSecurity = &ves_io_schema.Empty{}
+											tlsConfig.Choice = choiceInt
+										}
+
+									}
+
+								}
+
+							}
+
+						}
+
+					}
+
+					if v, ok := tlsCertOptionsMapStrToI["tls_inline_params"]; ok && !isIntfNil(v) && !tlsCertificatesChoiceTypeFound {
+
+						tlsCertificatesChoiceTypeFound = true
+						tlsCertificatesChoiceInt := &ves_io_schema_views_cdn_loadbalancer.TlsCertOptions_TlsInlineParams{}
+						tlsCertificatesChoiceInt.TlsInlineParams = &ves_io_schema_views.DownstreamTlsParamsType{}
+						tlsCertOptions.TlsCertificatesChoice = tlsCertificatesChoiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							mtlsChoiceTypeFound := false
+
+							if v, ok := cs["no_mtls"]; ok && !isIntfNil(v) && !mtlsChoiceTypeFound {
+
+								mtlsChoiceTypeFound = true
+
+								if v.(bool) {
+									mtlsChoiceInt := &ves_io_schema_views.DownstreamTlsParamsType_NoMtls{}
+									mtlsChoiceInt.NoMtls = &ves_io_schema.Empty{}
+									tlsCertificatesChoiceInt.TlsInlineParams.MtlsChoice = mtlsChoiceInt
+								}
+
+							}
+
+							if v, ok := cs["use_mtls"]; ok && !isIntfNil(v) && !mtlsChoiceTypeFound {
+
+								mtlsChoiceTypeFound = true
+								mtlsChoiceInt := &ves_io_schema_views.DownstreamTlsParamsType_UseMtls{}
+								mtlsChoiceInt.UseMtls = &ves_io_schema_views.DownstreamTlsValidationContext{}
+								tlsCertificatesChoiceInt.TlsInlineParams.MtlsChoice = mtlsChoiceInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									if v, ok := cs["client_certificate_optional"]; ok && !isIntfNil(v) {
+
+										mtlsChoiceInt.UseMtls.ClientCertificateOptional = v.(bool)
+
+									}
+
+									crlChoiceTypeFound := false
+
+									if v, ok := cs["crl"]; ok && !isIntfNil(v) && !crlChoiceTypeFound {
+
+										crlChoiceTypeFound = true
+										crlChoiceInt := &ves_io_schema_views.DownstreamTlsValidationContext_Crl{}
+										crlChoiceInt.Crl = &ves_io_schema_views.ObjectRefType{}
+										mtlsChoiceInt.UseMtls.CrlChoice = crlChoiceInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+												crlChoiceInt.Crl.Name = v.(string)
+
+											}
+
+											if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+												crlChoiceInt.Crl.Namespace = v.(string)
+
+											}
+
+											if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+												crlChoiceInt.Crl.Tenant = v.(string)
+
+											}
+
+										}
+
+									}
+
+									if v, ok := cs["no_crl"]; ok && !isIntfNil(v) && !crlChoiceTypeFound {
+
+										crlChoiceTypeFound = true
+
+										if v.(bool) {
+											crlChoiceInt := &ves_io_schema_views.DownstreamTlsValidationContext_NoCrl{}
+											crlChoiceInt.NoCrl = &ves_io_schema.Empty{}
+											mtlsChoiceInt.UseMtls.CrlChoice = crlChoiceInt
+										}
+
+									}
+
+									trustedCaChoiceTypeFound := false
+
+									if v, ok := cs["trusted_ca"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
+
+										trustedCaChoiceTypeFound = true
+										trustedCaChoiceInt := &ves_io_schema_views.DownstreamTlsValidationContext_TrustedCa{}
+										trustedCaChoiceInt.TrustedCa = &ves_io_schema_views.ObjectRefType{}
+										mtlsChoiceInt.UseMtls.TrustedCaChoice = trustedCaChoiceInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+												trustedCaChoiceInt.TrustedCa.Name = v.(string)
+
+											}
+
+											if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+												trustedCaChoiceInt.TrustedCa.Namespace = v.(string)
+
+											}
+
+											if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+												trustedCaChoiceInt.TrustedCa.Tenant = v.(string)
+
+											}
+
+										}
+
+									}
+
+									if v, ok := cs["trusted_ca_url"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
+
+										trustedCaChoiceTypeFound = true
+										trustedCaChoiceInt := &ves_io_schema_views.DownstreamTlsValidationContext_TrustedCaUrl{}
+
+										mtlsChoiceInt.UseMtls.TrustedCaChoice = trustedCaChoiceInt
+
+										trustedCaChoiceInt.TrustedCaUrl = v.(string)
+
+									}
+
+									xfccHeaderTypeFound := false
+
+									if v, ok := cs["xfcc_disabled"]; ok && !isIntfNil(v) && !xfccHeaderTypeFound {
+
+										xfccHeaderTypeFound = true
+
+										if v.(bool) {
+											xfccHeaderInt := &ves_io_schema_views.DownstreamTlsValidationContext_XfccDisabled{}
+											xfccHeaderInt.XfccDisabled = &ves_io_schema.Empty{}
+											mtlsChoiceInt.UseMtls.XfccHeader = xfccHeaderInt
+										}
+
+									}
+
+									if v, ok := cs["xfcc_options"]; ok && !isIntfNil(v) && !xfccHeaderTypeFound {
+
+										xfccHeaderTypeFound = true
+										xfccHeaderInt := &ves_io_schema_views.DownstreamTlsValidationContext_XfccOptions{}
+										xfccHeaderInt.XfccOptions = &ves_io_schema_views.XfccHeaderKeys{}
+										mtlsChoiceInt.UseMtls.XfccHeader = xfccHeaderInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											if v, ok := cs["xfcc_header_elements"]; ok && !isIntfNil(v) {
+
+												xfcc_header_elementsList := []ves_io_schema.XfccElement{}
+												for _, j := range v.([]interface{}) {
+													xfcc_header_elementsList = append(xfcc_header_elementsList, ves_io_schema.XfccElement(ves_io_schema.XfccElement_value[j.(string)]))
+												}
+												xfccHeaderInt.XfccOptions.XfccHeaderElements = xfcc_header_elementsList
+
+											}
+
+										}
+
+									}
+
+								}
+
+							}
+
+							if v, ok := cs["tls_certificates"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								tlsCertificates := make([]*ves_io_schema.TlsCertificateType, len(sl))
+								tlsCertificatesChoiceInt.TlsInlineParams.TlsCertificates = tlsCertificates
+								for i, set := range sl {
+									tlsCertificates[i] = &ves_io_schema.TlsCertificateType{}
+									tlsCertificatesMapStrToI := set.(map[string]interface{})
+
+									if w, ok := tlsCertificatesMapStrToI["certificate_url"]; ok && !isIntfNil(w) {
+										tlsCertificates[i].CertificateUrl = w.(string)
+									}
+
+									if w, ok := tlsCertificatesMapStrToI["description"]; ok && !isIntfNil(w) {
+										tlsCertificates[i].Description = w.(string)
+									}
+
+									ocspStaplingChoiceTypeFound := false
+
+									if v, ok := tlsCertificatesMapStrToI["custom_hash_algorithms"]; ok && !isIntfNil(v) && !ocspStaplingChoiceTypeFound {
+
+										ocspStaplingChoiceTypeFound = true
+										ocspStaplingChoiceInt := &ves_io_schema.TlsCertificateType_CustomHashAlgorithms{}
+										ocspStaplingChoiceInt.CustomHashAlgorithms = &ves_io_schema.HashAlgorithms{}
+										tlsCertificates[i].OcspStaplingChoice = ocspStaplingChoiceInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											if v, ok := cs["hash_algorithms"]; ok && !isIntfNil(v) {
+
+												hash_algorithmsList := []ves_io_schema.HashAlgorithm{}
+												for _, j := range v.([]interface{}) {
+													hash_algorithmsList = append(hash_algorithmsList, ves_io_schema.HashAlgorithm(ves_io_schema.HashAlgorithm_value[j.(string)]))
+												}
+												ocspStaplingChoiceInt.CustomHashAlgorithms.HashAlgorithms = hash_algorithmsList
+
+											}
+
+										}
+
+									}
+
+									if _, ok := tlsCertificatesMapStrToI["disable_ocsp_stapling"]; ok && !ocspStaplingChoiceTypeFound {
+
+										ocspStaplingChoiceTypeFound = true
+										ocspStaplingChoiceInt := &ves_io_schema.TlsCertificateType_DisableOcspStapling{}
+										ocspStaplingChoiceInt.DisableOcspStapling = &ves_io_schema.Empty{}
+										tlsCertificates[i].OcspStaplingChoice = ocspStaplingChoiceInt
+
+									}
+
+									if _, ok := tlsCertificatesMapStrToI["use_system_defaults"]; ok && !ocspStaplingChoiceTypeFound {
+
+										ocspStaplingChoiceTypeFound = true
+										ocspStaplingChoiceInt := &ves_io_schema.TlsCertificateType_UseSystemDefaults{}
+										ocspStaplingChoiceInt.UseSystemDefaults = &ves_io_schema.Empty{}
+										tlsCertificates[i].OcspStaplingChoice = ocspStaplingChoiceInt
+
+									}
+
+									if v, ok := tlsCertificatesMapStrToI["private_key"]; ok && !isIntfNil(v) {
+
+										sl := v.(*schema.Set).List()
+										privateKey := &ves_io_schema.SecretType{}
+										tlsCertificates[i].PrivateKey = privateKey
+										for _, set := range sl {
+											privateKeyMapStrToI := set.(map[string]interface{})
+
+											if v, ok := privateKeyMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
+
+												sl := v.(*schema.Set).List()
+												blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
+												privateKey.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
+												for _, set := range sl {
+													blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
+
+													if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
+														blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
+													}
+
+													if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
+														blindfoldSecretInfoInternal.Location = w.(string)
+													}
+
+													if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
+														blindfoldSecretInfoInternal.StoreProvider = w.(string)
+													}
+
+												}
+
+											}
+
+											if v, ok := privateKeyMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
+
+												privateKey.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+											}
+
+											secretInfoOneofTypeFound := false
+
+											if v, ok := privateKeyMapStrToI["blindfold_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+												secretInfoOneofTypeFound = true
+												secretInfoOneofInt := &ves_io_schema.SecretType_BlindfoldSecretInfo{}
+												secretInfoOneofInt.BlindfoldSecretInfo = &ves_io_schema.BlindfoldSecretInfoType{}
+												privateKey.SecretInfoOneof = secretInfoOneofInt
+
+												sl := v.(*schema.Set).List()
+												for _, set := range sl {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["decryption_provider"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.BlindfoldSecretInfo.DecryptionProvider = v.(string)
+
+													}
+
+													if v, ok := cs["location"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.BlindfoldSecretInfo.Location = v.(string)
+
+													}
+
+													if v, ok := cs["store_provider"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.BlindfoldSecretInfo.StoreProvider = v.(string)
+
+													}
+
+												}
+
+											}
+
+											if v, ok := privateKeyMapStrToI["clear_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+												secretInfoOneofTypeFound = true
+												secretInfoOneofInt := &ves_io_schema.SecretType_ClearSecretInfo{}
+												secretInfoOneofInt.ClearSecretInfo = &ves_io_schema.ClearSecretInfoType{}
+												privateKey.SecretInfoOneof = secretInfoOneofInt
+
+												sl := v.(*schema.Set).List()
+												for _, set := range sl {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.ClearSecretInfo.Provider = v.(string)
+
+													}
+
+													if v, ok := cs["url"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+
+													}
+
+												}
+
+											}
+
+											if v, ok := privateKeyMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+												secretInfoOneofTypeFound = true
+												secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
+												secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
+												privateKey.SecretInfoOneof = secretInfoOneofInt
+
+												sl := v.(*schema.Set).List()
+												for _, set := range sl {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["key"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
+													}
+
+													if v, ok := cs["location"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
+													}
+
+													if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
+													}
+
+													if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+													}
+
+													if v, ok := cs["version"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
+													}
+
+												}
+
+											}
+
+											if v, ok := privateKeyMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+												secretInfoOneofTypeFound = true
+												secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
+												secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
+												privateKey.SecretInfoOneof = secretInfoOneofInt
+
+												sl := v.(*schema.Set).List()
+												for _, set := range sl {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
+
+													}
+
+												}
+
+											}
+
+										}
+
+									}
+
+								}
+
+							}
+
+							if v, ok := cs["tls_config"]; ok && !isIntfNil(v) {
+
+								sl := v.(*schema.Set).List()
+								tlsConfig := &ves_io_schema_views.TlsConfig{}
+								tlsCertificatesChoiceInt.TlsInlineParams.TlsConfig = tlsConfig
+								for _, set := range sl {
+									tlsConfigMapStrToI := set.(map[string]interface{})
+
+									choiceTypeFound := false
+
+									if v, ok := tlsConfigMapStrToI["custom_security"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+										choiceTypeFound = true
+										choiceInt := &ves_io_schema_views.TlsConfig_CustomSecurity{}
+										choiceInt.CustomSecurity = &ves_io_schema_views.CustomCiphers{}
+										tlsConfig.Choice = choiceInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											if v, ok := cs["cipher_suites"]; ok && !isIntfNil(v) {
+
+												ls := make([]string, len(v.([]interface{})))
+												for i, v := range v.([]interface{}) {
+													ls[i] = v.(string)
+												}
+												choiceInt.CustomSecurity.CipherSuites = ls
+
+											}
+
+											if v, ok := cs["max_version"]; ok && !isIntfNil(v) {
+
+												choiceInt.CustomSecurity.MaxVersion = ves_io_schema.TlsProtocol(ves_io_schema.TlsProtocol_value[v.(string)])
+
+											}
+
+											if v, ok := cs["min_version"]; ok && !isIntfNil(v) {
+
+												choiceInt.CustomSecurity.MinVersion = ves_io_schema.TlsProtocol(ves_io_schema.TlsProtocol_value[v.(string)])
+
+											}
+
+										}
+
+									}
+
+									if v, ok := tlsConfigMapStrToI["default_security"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+										choiceTypeFound = true
+
+										if v.(bool) {
+											choiceInt := &ves_io_schema_views.TlsConfig_DefaultSecurity{}
+											choiceInt.DefaultSecurity = &ves_io_schema.Empty{}
+											tlsConfig.Choice = choiceInt
+										}
+
+									}
+
+									if v, ok := tlsConfigMapStrToI["low_security"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+										choiceTypeFound = true
+
+										if v.(bool) {
+											choiceInt := &ves_io_schema_views.TlsConfig_LowSecurity{}
+											choiceInt.LowSecurity = &ves_io_schema.Empty{}
+											tlsConfig.Choice = choiceInt
+										}
+
+									}
+
+									if v, ok := tlsConfigMapStrToI["medium_security"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+										choiceTypeFound = true
+
+										if v.(bool) {
+											choiceInt := &ves_io_schema_views.TlsConfig_MediumSecurity{}
+											choiceInt.MediumSecurity = &ves_io_schema.Empty{}
+											tlsConfig.Choice = choiceInt
+										}
+
+									}
+
+								}
+
+							}
+
+						}
+
+					}
+
+				}
 
 			}
 
@@ -39119,6 +41614,92 @@ func resourceVolterraCdnLoadbalancerCreate(d *schema.ResourceData, meta interfac
 								for _, set := range sl {
 									cs := set.(map[string]interface{})
 
+									if v, ok := cs["api_discovery_from_code_scan"]; ok && !isIntfNil(v) {
+
+										sl := v.(*schema.Set).List()
+										apiDiscoveryFromCodeScan := &ves_io_schema_views_common_waf.ApiDiscoveryFromCodeScan{}
+										apiDiscoveryChoiceInt.ApiDiscoveryOnCacheMiss.ApiDiscoveryFromCodeScan = apiDiscoveryFromCodeScan
+										for _, set := range sl {
+											apiDiscoveryFromCodeScanMapStrToI := set.(map[string]interface{})
+
+											if v, ok := apiDiscoveryFromCodeScanMapStrToI["code_base_integrations"]; ok && !isIntfNil(v) {
+
+												sl := v.([]interface{})
+												codeBaseIntegrations := make([]*ves_io_schema_views_common_waf.CodeBaseIntegrationSelection, len(sl))
+												apiDiscoveryFromCodeScan.CodeBaseIntegrations = codeBaseIntegrations
+												for i, set := range sl {
+													codeBaseIntegrations[i] = &ves_io_schema_views_common_waf.CodeBaseIntegrationSelection{}
+													codeBaseIntegrationsMapStrToI := set.(map[string]interface{})
+
+													apiReposChoiceTypeFound := false
+
+													if v, ok := codeBaseIntegrationsMapStrToI["all_repos"]; ok && !isIntfNil(v) && !apiReposChoiceTypeFound {
+
+														apiReposChoiceTypeFound = true
+
+														if v.(bool) {
+															apiReposChoiceInt := &ves_io_schema_views_common_waf.CodeBaseIntegrationSelection_AllRepos{}
+															apiReposChoiceInt.AllRepos = &ves_io_schema.Empty{}
+															codeBaseIntegrations[i].ApiReposChoice = apiReposChoiceInt
+														}
+
+													}
+
+													if v, ok := codeBaseIntegrationsMapStrToI["selected_repos"]; ok && !isIntfNil(v) && !apiReposChoiceTypeFound {
+
+														apiReposChoiceTypeFound = true
+														apiReposChoiceInt := &ves_io_schema_views_common_waf.CodeBaseIntegrationSelection_SelectedRepos{}
+														apiReposChoiceInt.SelectedRepos = &ves_io_schema_views_common_waf.ApiCodeRepos{}
+														codeBaseIntegrations[i].ApiReposChoice = apiReposChoiceInt
+
+														sl := v.(*schema.Set).List()
+														for _, set := range sl {
+															cs := set.(map[string]interface{})
+
+															if v, ok := cs["api_code_repo"]; ok && !isIntfNil(v) {
+
+																ls := make([]string, len(v.([]interface{})))
+																for i, v := range v.([]interface{}) {
+																	ls[i] = v.(string)
+																}
+																apiReposChoiceInt.SelectedRepos.ApiCodeRepo = ls
+
+															}
+
+														}
+
+													}
+
+													if v, ok := codeBaseIntegrationsMapStrToI["code_base_integration"]; ok && !isIntfNil(v) {
+
+														sl := v.(*schema.Set).List()
+														codeBaseIntegrationInt := &ves_io_schema_views.ObjectRefType{}
+														codeBaseIntegrations[i].CodeBaseIntegration = codeBaseIntegrationInt
+
+														for _, set := range sl {
+															cbiMapToStrVal := set.(map[string]interface{})
+															if val, ok := cbiMapToStrVal["name"]; ok && !isIntfNil(v) {
+																codeBaseIntegrationInt.Name = val.(string)
+															}
+															if val, ok := cbiMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+																codeBaseIntegrationInt.Namespace = val.(string)
+															}
+
+															if val, ok := cbiMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+																codeBaseIntegrationInt.Tenant = val.(string)
+															}
+														}
+
+													}
+
+												}
+
+											}
+
+										}
+
+									}
+
 									if v, ok := cs["discovered_api_settings"]; ok && !isIntfNil(v) {
 
 										sl := v.(*schema.Set).List()
@@ -39195,6 +41776,92 @@ func resourceVolterraCdnLoadbalancerCreate(d *schema.ResourceData, meta interfac
 								sl := v.(*schema.Set).List()
 								for _, set := range sl {
 									cs := set.(map[string]interface{})
+
+									if v, ok := cs["api_discovery_from_code_scan"]; ok && !isIntfNil(v) {
+
+										sl := v.(*schema.Set).List()
+										apiDiscoveryFromCodeScan := &ves_io_schema_views_common_waf.ApiDiscoveryFromCodeScan{}
+										apiDiscoveryChoiceInt.EnableApiDiscovery.ApiDiscoveryFromCodeScan = apiDiscoveryFromCodeScan
+										for _, set := range sl {
+											apiDiscoveryFromCodeScanMapStrToI := set.(map[string]interface{})
+
+											if v, ok := apiDiscoveryFromCodeScanMapStrToI["code_base_integrations"]; ok && !isIntfNil(v) {
+
+												sl := v.([]interface{})
+												codeBaseIntegrations := make([]*ves_io_schema_views_common_waf.CodeBaseIntegrationSelection, len(sl))
+												apiDiscoveryFromCodeScan.CodeBaseIntegrations = codeBaseIntegrations
+												for i, set := range sl {
+													codeBaseIntegrations[i] = &ves_io_schema_views_common_waf.CodeBaseIntegrationSelection{}
+													codeBaseIntegrationsMapStrToI := set.(map[string]interface{})
+
+													apiReposChoiceTypeFound := false
+
+													if v, ok := codeBaseIntegrationsMapStrToI["all_repos"]; ok && !isIntfNil(v) && !apiReposChoiceTypeFound {
+
+														apiReposChoiceTypeFound = true
+
+														if v.(bool) {
+															apiReposChoiceInt := &ves_io_schema_views_common_waf.CodeBaseIntegrationSelection_AllRepos{}
+															apiReposChoiceInt.AllRepos = &ves_io_schema.Empty{}
+															codeBaseIntegrations[i].ApiReposChoice = apiReposChoiceInt
+														}
+
+													}
+
+													if v, ok := codeBaseIntegrationsMapStrToI["selected_repos"]; ok && !isIntfNil(v) && !apiReposChoiceTypeFound {
+
+														apiReposChoiceTypeFound = true
+														apiReposChoiceInt := &ves_io_schema_views_common_waf.CodeBaseIntegrationSelection_SelectedRepos{}
+														apiReposChoiceInt.SelectedRepos = &ves_io_schema_views_common_waf.ApiCodeRepos{}
+														codeBaseIntegrations[i].ApiReposChoice = apiReposChoiceInt
+
+														sl := v.(*schema.Set).List()
+														for _, set := range sl {
+															cs := set.(map[string]interface{})
+
+															if v, ok := cs["api_code_repo"]; ok && !isIntfNil(v) {
+
+																ls := make([]string, len(v.([]interface{})))
+																for i, v := range v.([]interface{}) {
+																	ls[i] = v.(string)
+																}
+																apiReposChoiceInt.SelectedRepos.ApiCodeRepo = ls
+
+															}
+
+														}
+
+													}
+
+													if v, ok := codeBaseIntegrationsMapStrToI["code_base_integration"]; ok && !isIntfNil(v) {
+
+														sl := v.(*schema.Set).List()
+														codeBaseIntegrationInt := &ves_io_schema_views.ObjectRefType{}
+														codeBaseIntegrations[i].CodeBaseIntegration = codeBaseIntegrationInt
+
+														for _, set := range sl {
+															cbiMapToStrVal := set.(map[string]interface{})
+															if val, ok := cbiMapToStrVal["name"]; ok && !isIntfNil(v) {
+																codeBaseIntegrationInt.Name = val.(string)
+															}
+															if val, ok := cbiMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+																codeBaseIntegrationInt.Namespace = val.(string)
+															}
+
+															if val, ok := cbiMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+																codeBaseIntegrationInt.Tenant = val.(string)
+															}
+														}
+
+													}
+
+												}
+
+											}
+
+										}
+
+									}
 
 									if v, ok := cs["discovered_api_settings"]; ok && !isIntfNil(v) {
 
@@ -39570,6 +42237,16 @@ func resourceVolterraCdnLoadbalancerCreate(d *schema.ResourceData, meta interfac
 																	ls[i] = v.(string)
 																}
 																ipAsnChoiceInt.IpPrefixList.IpPrefixes = ls
+
+															}
+
+															if v, ok := cs["ipv6_prefixes"]; ok && !isIntfNil(v) {
+
+																ls := make([]string, len(v.([]interface{})))
+																for i, v := range v.([]interface{}) {
+																	ls[i] = v.(string)
+																}
+																ipAsnChoiceInt.IpPrefixList.Ipv6Prefixes = ls
 
 															}
 
@@ -40375,6 +43052,16 @@ func resourceVolterraCdnLoadbalancerCreate(d *schema.ResourceData, meta interfac
 																	ls[i] = v.(string)
 																}
 																ipAsnChoiceInt.IpPrefixList.IpPrefixes = ls
+
+															}
+
+															if v, ok := cs["ipv6_prefixes"]; ok && !isIntfNil(v) {
+
+																ls := make([]string, len(v.([]interface{})))
+																for i, v := range v.([]interface{}) {
+																	ls[i] = v.(string)
+																}
+																ipAsnChoiceInt.IpPrefixList.Ipv6Prefixes = ls
 
 															}
 
@@ -43316,6 +46003,16 @@ func resourceVolterraCdnLoadbalancerCreate(d *schema.ResourceData, meta interfac
 
 																	}
 
+																	if v, ok := cs["ipv6_prefixes"]; ok && !isIntfNil(v) {
+
+																		ls := make([]string, len(v.([]interface{})))
+																		for i, v := range v.([]interface{}) {
+																			ls[i] = v.(string)
+																		}
+																		ipChoiceInt.IpPrefixList.Ipv6Prefixes = ls
+
+																	}
+
 																}
 
 															}
@@ -43481,38 +46178,72 @@ func resourceVolterraCdnLoadbalancerCreate(d *schema.ResourceData, meta interfac
 
 															}
 
-															if v, ok := specMapStrToI["tls_fingerprint_matcher"]; ok && !isIntfNil(v) {
+															tlsFingerprintChoiceTypeFound := false
+
+															if v, ok := specMapStrToI["ja4_tls_fingerprint"]; ok && !isIntfNil(v) && !tlsFingerprintChoiceTypeFound {
+
+																tlsFingerprintChoiceTypeFound = true
+																tlsFingerprintChoiceInt := &ves_io_schema_service_policy_rule.ChallengeRuleSpec_Ja4TlsFingerprint{}
+																tlsFingerprintChoiceInt.Ja4TlsFingerprint = &ves_io_schema_policy.JA4TlsFingerprintMatcherType{}
+																spec.TlsFingerprintChoice = tlsFingerprintChoiceInt
 
 																sl := v.(*schema.Set).List()
-																tlsFingerprintMatcher := &ves_io_schema_policy.TlsFingerprintMatcherType{}
-																spec.TlsFingerprintMatcher = tlsFingerprintMatcher
 																for _, set := range sl {
-																	tlsFingerprintMatcherMapStrToI := set.(map[string]interface{})
+																	cs := set.(map[string]interface{})
 
-																	if v, ok := tlsFingerprintMatcherMapStrToI["classes"]; ok && !isIntfNil(v) {
+																	if v, ok := cs["exact_values"]; ok && !isIntfNil(v) {
+
+																		ls := make([]string, len(v.([]interface{})))
+																		for i, v := range v.([]interface{}) {
+																			ls[i] = v.(string)
+																		}
+																		tlsFingerprintChoiceInt.Ja4TlsFingerprint.ExactValues = ls
+
+																	}
+
+																}
+
+															}
+
+															if v, ok := specMapStrToI["tls_fingerprint_matcher"]; ok && !isIntfNil(v) && !tlsFingerprintChoiceTypeFound {
+
+																tlsFingerprintChoiceTypeFound = true
+																tlsFingerprintChoiceInt := &ves_io_schema_service_policy_rule.ChallengeRuleSpec_TlsFingerprintMatcher{}
+																tlsFingerprintChoiceInt.TlsFingerprintMatcher = &ves_io_schema_policy.TlsFingerprintMatcherType{}
+																spec.TlsFingerprintChoice = tlsFingerprintChoiceInt
+
+																sl := v.(*schema.Set).List()
+																for _, set := range sl {
+																	cs := set.(map[string]interface{})
+
+																	if v, ok := cs["classes"]; ok && !isIntfNil(v) {
 
 																		classesList := []ves_io_schema_policy.KnownTlsFingerprintClass{}
 																		for _, j := range v.([]interface{}) {
 																			classesList = append(classesList, ves_io_schema_policy.KnownTlsFingerprintClass(ves_io_schema_policy.KnownTlsFingerprintClass_value[j.(string)]))
 																		}
-																		tlsFingerprintMatcher.Classes = classesList
+																		tlsFingerprintChoiceInt.TlsFingerprintMatcher.Classes = classesList
 
 																	}
 
-																	if w, ok := tlsFingerprintMatcherMapStrToI["exact_values"]; ok && !isIntfNil(w) {
-																		ls := make([]string, len(w.([]interface{})))
-																		for i, v := range w.([]interface{}) {
+																	if v, ok := cs["exact_values"]; ok && !isIntfNil(v) {
+
+																		ls := make([]string, len(v.([]interface{})))
+																		for i, v := range v.([]interface{}) {
 																			ls[i] = v.(string)
 																		}
-																		tlsFingerprintMatcher.ExactValues = ls
+																		tlsFingerprintChoiceInt.TlsFingerprintMatcher.ExactValues = ls
+
 																	}
 
-																	if w, ok := tlsFingerprintMatcherMapStrToI["excluded_values"]; ok && !isIntfNil(w) {
-																		ls := make([]string, len(w.([]interface{})))
-																		for i, v := range w.([]interface{}) {
+																	if v, ok := cs["excluded_values"]; ok && !isIntfNil(v) {
+
+																		ls := make([]string, len(v.([]interface{})))
+																		for i, v := range v.([]interface{}) {
 																			ls[i] = v.(string)
 																		}
-																		tlsFingerprintMatcher.ExcludedValues = ls
+																		tlsFingerprintChoiceInt.TlsFingerprintMatcher.ExcludedValues = ls
+
 																	}
 
 																}
@@ -44019,6 +46750,16 @@ func resourceVolterraCdnLoadbalancerCreate(d *schema.ResourceData, meta interfac
 																	ls[i] = v.(string)
 																}
 																ipAsnChoiceInt.IpPrefixList.IpPrefixes = ls
+
+															}
+
+															if v, ok := cs["ipv6_prefixes"]; ok && !isIntfNil(v) {
+
+																ls := make([]string, len(v.([]interface{})))
+																for i, v := range v.([]interface{}) {
+																	ls[i] = v.(string)
+																}
+																ipAsnChoiceInt.IpPrefixList.Ipv6Prefixes = ls
 
 															}
 
@@ -44876,6 +47617,16 @@ func resourceVolterraCdnLoadbalancerCreate(d *schema.ResourceData, meta interfac
 																			ls[i] = v.(string)
 																		}
 																		ipAsnChoiceInt.IpPrefixList.IpPrefixes = ls
+
+																	}
+
+																	if v, ok := cs["ipv6_prefixes"]; ok && !isIntfNil(v) {
+
+																		ls := make([]string, len(v.([]interface{})))
+																		for i, v := range v.([]interface{}) {
+																			ls[i] = v.(string)
+																		}
+																		ipAsnChoiceInt.IpPrefixList.Ipv6Prefixes = ls
 
 																	}
 
@@ -45792,6 +48543,16 @@ func resourceVolterraCdnLoadbalancerCreate(d *schema.ResourceData, meta interfac
 																	ls[i] = v.(string)
 																}
 																ipAsnChoiceInt.IpPrefixList.IpPrefixes = ls
+
+															}
+
+															if v, ok := cs["ipv6_prefixes"]; ok && !isIntfNil(v) {
+
+																ls := make([]string, len(v.([]interface{})))
+																for i, v := range v.([]interface{}) {
+																	ls[i] = v.(string)
+																}
+																ipAsnChoiceInt.IpPrefixList.Ipv6Prefixes = ls
 
 															}
 
@@ -47050,6 +49811,16 @@ func resourceVolterraCdnLoadbalancerCreate(d *schema.ResourceData, meta interfac
 
 									}
 
+									if v, ok := cs["ipv6_prefixes"]; ok && !isIntfNil(v) {
+
+										ls := make([]string, len(v.([]interface{})))
+										for i, v := range v.([]interface{}) {
+											ls[i] = v.(string)
+										}
+										ipFilteringTypeInt.AllowList.Ipv6Prefixes = ls
+
+									}
+
 								}
 
 							}
@@ -47078,6 +49849,16 @@ func resourceVolterraCdnLoadbalancerCreate(d *schema.ResourceData, meta interfac
 											ls[i] = v.(string)
 										}
 										ipFilteringTypeInt.BlockList.IpPrefixes = ls
+
+									}
+
+									if v, ok := cs["ipv6_prefixes"]; ok && !isIntfNil(v) {
+
+										ls := make([]string, len(v.([]interface{})))
+										for i, v := range v.([]interface{}) {
+											ls[i] = v.(string)
+										}
+										ipFilteringTypeInt.BlockList.Ipv6Prefixes = ls
 
 									}
 
@@ -49276,6 +52057,16 @@ func resourceVolterraCdnLoadbalancerCreate(d *schema.ResourceData, meta interfac
 
 							}
 
+							if v, ok := cs["ipv6_prefixes"]; ok && !isIntfNil(v) {
+
+								ls := make([]string, len(v.([]interface{})))
+								for i, v := range v.([]interface{}) {
+									ls[i] = v.(string)
+								}
+								ipFilteringTypeInt.AllowList.Ipv6Prefixes = ls
+
+							}
+
 						}
 
 					}
@@ -49304,6 +52095,16 @@ func resourceVolterraCdnLoadbalancerCreate(d *schema.ResourceData, meta interfac
 									ls[i] = v.(string)
 								}
 								ipFilteringTypeInt.BlockList.IpPrefixes = ls
+
+							}
+
+							if v, ok := cs["ipv6_prefixes"]; ok && !isIntfNil(v) {
+
+								ls := make([]string, len(v.([]interface{})))
+								for i, v := range v.([]interface{}) {
+									ls[i] = v.(string)
+								}
+								ipFilteringTypeInt.BlockList.Ipv6Prefixes = ls
 
 							}
 
@@ -49835,6 +52636,16 @@ func resourceVolterraCdnLoadbalancerCreate(d *schema.ResourceData, meta interfac
 											ls[i] = v.(string)
 										}
 										ipAsnChoiceInt.IpPrefixList.IpPrefixes = ls
+
+									}
+
+									if v, ok := cs["ipv6_prefixes"]; ok && !isIntfNil(v) {
+
+										ls := make([]string, len(v.([]interface{})))
+										for i, v := range v.([]interface{}) {
+											ls[i] = v.(string)
+										}
+										ipAsnChoiceInt.IpPrefixList.Ipv6Prefixes = ls
 
 									}
 
@@ -50692,6 +53503,16 @@ func resourceVolterraCdnLoadbalancerCreate(d *schema.ResourceData, meta interfac
 													ls[i] = v.(string)
 												}
 												ipAsnChoiceInt.IpPrefixList.IpPrefixes = ls
+
+											}
+
+											if v, ok := cs["ipv6_prefixes"]; ok && !isIntfNil(v) {
+
+												ls := make([]string, len(v.([]interface{})))
+												for i, v := range v.([]interface{}) {
+													ls[i] = v.(string)
+												}
+												ipAsnChoiceInt.IpPrefixList.Ipv6Prefixes = ls
 
 											}
 
@@ -51608,6 +54429,16 @@ func resourceVolterraCdnLoadbalancerCreate(d *schema.ResourceData, meta interfac
 											ls[i] = v.(string)
 										}
 										ipAsnChoiceInt.IpPrefixList.IpPrefixes = ls
+
+									}
+
+									if v, ok := cs["ipv6_prefixes"]; ok && !isIntfNil(v) {
+
+										ls := make([]string, len(v.([]interface{})))
+										for i, v := range v.([]interface{}) {
+											ls[i] = v.(string)
+										}
+										ipAsnChoiceInt.IpPrefixList.Ipv6Prefixes = ls
 
 									}
 
@@ -55773,6 +58604,92 @@ func resourceVolterraCdnLoadbalancerUpdate(d *schema.ResourceData, meta interfac
 		for _, set := range sl {
 			cs := set.(map[string]interface{})
 
+			if v, ok := cs["api_discovery_from_code_scan"]; ok && !isIntfNil(v) {
+
+				sl := v.(*schema.Set).List()
+				apiDiscoveryFromCodeScan := &ves_io_schema_views_common_waf.ApiDiscoveryFromCodeScan{}
+				apiDiscoveryChoiceInt.ApiDiscoveryOnCacheMiss.ApiDiscoveryFromCodeScan = apiDiscoveryFromCodeScan
+				for _, set := range sl {
+					apiDiscoveryFromCodeScanMapStrToI := set.(map[string]interface{})
+
+					if v, ok := apiDiscoveryFromCodeScanMapStrToI["code_base_integrations"]; ok && !isIntfNil(v) {
+
+						sl := v.([]interface{})
+						codeBaseIntegrations := make([]*ves_io_schema_views_common_waf.CodeBaseIntegrationSelection, len(sl))
+						apiDiscoveryFromCodeScan.CodeBaseIntegrations = codeBaseIntegrations
+						for i, set := range sl {
+							codeBaseIntegrations[i] = &ves_io_schema_views_common_waf.CodeBaseIntegrationSelection{}
+							codeBaseIntegrationsMapStrToI := set.(map[string]interface{})
+
+							apiReposChoiceTypeFound := false
+
+							if v, ok := codeBaseIntegrationsMapStrToI["all_repos"]; ok && !isIntfNil(v) && !apiReposChoiceTypeFound {
+
+								apiReposChoiceTypeFound = true
+
+								if v.(bool) {
+									apiReposChoiceInt := &ves_io_schema_views_common_waf.CodeBaseIntegrationSelection_AllRepos{}
+									apiReposChoiceInt.AllRepos = &ves_io_schema.Empty{}
+									codeBaseIntegrations[i].ApiReposChoice = apiReposChoiceInt
+								}
+
+							}
+
+							if v, ok := codeBaseIntegrationsMapStrToI["selected_repos"]; ok && !isIntfNil(v) && !apiReposChoiceTypeFound {
+
+								apiReposChoiceTypeFound = true
+								apiReposChoiceInt := &ves_io_schema_views_common_waf.CodeBaseIntegrationSelection_SelectedRepos{}
+								apiReposChoiceInt.SelectedRepos = &ves_io_schema_views_common_waf.ApiCodeRepos{}
+								codeBaseIntegrations[i].ApiReposChoice = apiReposChoiceInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									if v, ok := cs["api_code_repo"]; ok && !isIntfNil(v) {
+
+										ls := make([]string, len(v.([]interface{})))
+										for i, v := range v.([]interface{}) {
+											ls[i] = v.(string)
+										}
+										apiReposChoiceInt.SelectedRepos.ApiCodeRepo = ls
+
+									}
+
+								}
+
+							}
+
+							if v, ok := codeBaseIntegrationsMapStrToI["code_base_integration"]; ok && !isIntfNil(v) {
+
+								sl := v.(*schema.Set).List()
+								codeBaseIntegrationInt := &ves_io_schema_views.ObjectRefType{}
+								codeBaseIntegrations[i].CodeBaseIntegration = codeBaseIntegrationInt
+
+								for _, set := range sl {
+									cbiMapToStrVal := set.(map[string]interface{})
+									if val, ok := cbiMapToStrVal["name"]; ok && !isIntfNil(v) {
+										codeBaseIntegrationInt.Name = val.(string)
+									}
+									if val, ok := cbiMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+										codeBaseIntegrationInt.Namespace = val.(string)
+									}
+
+									if val, ok := cbiMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+										codeBaseIntegrationInt.Tenant = val.(string)
+									}
+								}
+
+							}
+
+						}
+
+					}
+
+				}
+
+			}
+
 			if v, ok := cs["discovered_api_settings"]; ok && !isIntfNil(v) {
 
 				sl := v.(*schema.Set).List()
@@ -55849,6 +58766,92 @@ func resourceVolterraCdnLoadbalancerUpdate(d *schema.ResourceData, meta interfac
 		sl := v.(*schema.Set).List()
 		for _, set := range sl {
 			cs := set.(map[string]interface{})
+
+			if v, ok := cs["api_discovery_from_code_scan"]; ok && !isIntfNil(v) {
+
+				sl := v.(*schema.Set).List()
+				apiDiscoveryFromCodeScan := &ves_io_schema_views_common_waf.ApiDiscoveryFromCodeScan{}
+				apiDiscoveryChoiceInt.EnableApiDiscovery.ApiDiscoveryFromCodeScan = apiDiscoveryFromCodeScan
+				for _, set := range sl {
+					apiDiscoveryFromCodeScanMapStrToI := set.(map[string]interface{})
+
+					if v, ok := apiDiscoveryFromCodeScanMapStrToI["code_base_integrations"]; ok && !isIntfNil(v) {
+
+						sl := v.([]interface{})
+						codeBaseIntegrations := make([]*ves_io_schema_views_common_waf.CodeBaseIntegrationSelection, len(sl))
+						apiDiscoveryFromCodeScan.CodeBaseIntegrations = codeBaseIntegrations
+						for i, set := range sl {
+							codeBaseIntegrations[i] = &ves_io_schema_views_common_waf.CodeBaseIntegrationSelection{}
+							codeBaseIntegrationsMapStrToI := set.(map[string]interface{})
+
+							apiReposChoiceTypeFound := false
+
+							if v, ok := codeBaseIntegrationsMapStrToI["all_repos"]; ok && !isIntfNil(v) && !apiReposChoiceTypeFound {
+
+								apiReposChoiceTypeFound = true
+
+								if v.(bool) {
+									apiReposChoiceInt := &ves_io_schema_views_common_waf.CodeBaseIntegrationSelection_AllRepos{}
+									apiReposChoiceInt.AllRepos = &ves_io_schema.Empty{}
+									codeBaseIntegrations[i].ApiReposChoice = apiReposChoiceInt
+								}
+
+							}
+
+							if v, ok := codeBaseIntegrationsMapStrToI["selected_repos"]; ok && !isIntfNil(v) && !apiReposChoiceTypeFound {
+
+								apiReposChoiceTypeFound = true
+								apiReposChoiceInt := &ves_io_schema_views_common_waf.CodeBaseIntegrationSelection_SelectedRepos{}
+								apiReposChoiceInt.SelectedRepos = &ves_io_schema_views_common_waf.ApiCodeRepos{}
+								codeBaseIntegrations[i].ApiReposChoice = apiReposChoiceInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									if v, ok := cs["api_code_repo"]; ok && !isIntfNil(v) {
+
+										ls := make([]string, len(v.([]interface{})))
+										for i, v := range v.([]interface{}) {
+											ls[i] = v.(string)
+										}
+										apiReposChoiceInt.SelectedRepos.ApiCodeRepo = ls
+
+									}
+
+								}
+
+							}
+
+							if v, ok := codeBaseIntegrationsMapStrToI["code_base_integration"]; ok && !isIntfNil(v) {
+
+								sl := v.(*schema.Set).List()
+								codeBaseIntegrationInt := &ves_io_schema_views.ObjectRefType{}
+								codeBaseIntegrations[i].CodeBaseIntegration = codeBaseIntegrationInt
+
+								for _, set := range sl {
+									cbiMapToStrVal := set.(map[string]interface{})
+									if val, ok := cbiMapToStrVal["name"]; ok && !isIntfNil(v) {
+										codeBaseIntegrationInt.Name = val.(string)
+									}
+									if val, ok := cbiMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+										codeBaseIntegrationInt.Namespace = val.(string)
+									}
+
+									if val, ok := cbiMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+										codeBaseIntegrationInt.Tenant = val.(string)
+									}
+								}
+
+							}
+
+						}
+
+					}
+
+				}
+
+			}
 
 			if v, ok := cs["discovered_api_settings"]; ok && !isIntfNil(v) {
 
@@ -56224,6 +59227,16 @@ func resourceVolterraCdnLoadbalancerUpdate(d *schema.ResourceData, meta interfac
 											ls[i] = v.(string)
 										}
 										ipAsnChoiceInt.IpPrefixList.IpPrefixes = ls
+
+									}
+
+									if v, ok := cs["ipv6_prefixes"]; ok && !isIntfNil(v) {
+
+										ls := make([]string, len(v.([]interface{})))
+										for i, v := range v.([]interface{}) {
+											ls[i] = v.(string)
+										}
+										ipAsnChoiceInt.IpPrefixList.Ipv6Prefixes = ls
 
 									}
 
@@ -57029,6 +60042,16 @@ func resourceVolterraCdnLoadbalancerUpdate(d *schema.ResourceData, meta interfac
 											ls[i] = v.(string)
 										}
 										ipAsnChoiceInt.IpPrefixList.IpPrefixes = ls
+
+									}
+
+									if v, ok := cs["ipv6_prefixes"]; ok && !isIntfNil(v) {
+
+										ls := make([]string, len(v.([]interface{})))
+										for i, v := range v.([]interface{}) {
+											ls[i] = v.(string)
+										}
+										ipAsnChoiceInt.IpPrefixList.Ipv6Prefixes = ls
 
 									}
 
@@ -62842,6 +65865,16 @@ func resourceVolterraCdnLoadbalancerUpdate(d *schema.ResourceData, meta interfac
 
 											}
 
+											if v, ok := cs["ipv6_prefixes"]; ok && !isIntfNil(v) {
+
+												ls := make([]string, len(v.([]interface{})))
+												for i, v := range v.([]interface{}) {
+													ls[i] = v.(string)
+												}
+												ipChoiceInt.IpPrefixList.Ipv6Prefixes = ls
+
+											}
+
 										}
 
 									}
@@ -63007,38 +66040,72 @@ func resourceVolterraCdnLoadbalancerUpdate(d *schema.ResourceData, meta interfac
 
 									}
 
-									if v, ok := specMapStrToI["tls_fingerprint_matcher"]; ok && !isIntfNil(v) {
+									tlsFingerprintChoiceTypeFound := false
+
+									if v, ok := specMapStrToI["ja4_tls_fingerprint"]; ok && !isIntfNil(v) && !tlsFingerprintChoiceTypeFound {
+
+										tlsFingerprintChoiceTypeFound = true
+										tlsFingerprintChoiceInt := &ves_io_schema_service_policy_rule.ChallengeRuleSpec_Ja4TlsFingerprint{}
+										tlsFingerprintChoiceInt.Ja4TlsFingerprint = &ves_io_schema_policy.JA4TlsFingerprintMatcherType{}
+										spec.TlsFingerprintChoice = tlsFingerprintChoiceInt
 
 										sl := v.(*schema.Set).List()
-										tlsFingerprintMatcher := &ves_io_schema_policy.TlsFingerprintMatcherType{}
-										spec.TlsFingerprintMatcher = tlsFingerprintMatcher
 										for _, set := range sl {
-											tlsFingerprintMatcherMapStrToI := set.(map[string]interface{})
+											cs := set.(map[string]interface{})
 
-											if v, ok := tlsFingerprintMatcherMapStrToI["classes"]; ok && !isIntfNil(v) {
+											if v, ok := cs["exact_values"]; ok && !isIntfNil(v) {
+
+												ls := make([]string, len(v.([]interface{})))
+												for i, v := range v.([]interface{}) {
+													ls[i] = v.(string)
+												}
+												tlsFingerprintChoiceInt.Ja4TlsFingerprint.ExactValues = ls
+
+											}
+
+										}
+
+									}
+
+									if v, ok := specMapStrToI["tls_fingerprint_matcher"]; ok && !isIntfNil(v) && !tlsFingerprintChoiceTypeFound {
+
+										tlsFingerprintChoiceTypeFound = true
+										tlsFingerprintChoiceInt := &ves_io_schema_service_policy_rule.ChallengeRuleSpec_TlsFingerprintMatcher{}
+										tlsFingerprintChoiceInt.TlsFingerprintMatcher = &ves_io_schema_policy.TlsFingerprintMatcherType{}
+										spec.TlsFingerprintChoice = tlsFingerprintChoiceInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											if v, ok := cs["classes"]; ok && !isIntfNil(v) {
 
 												classesList := []ves_io_schema_policy.KnownTlsFingerprintClass{}
 												for _, j := range v.([]interface{}) {
 													classesList = append(classesList, ves_io_schema_policy.KnownTlsFingerprintClass(ves_io_schema_policy.KnownTlsFingerprintClass_value[j.(string)]))
 												}
-												tlsFingerprintMatcher.Classes = classesList
+												tlsFingerprintChoiceInt.TlsFingerprintMatcher.Classes = classesList
 
 											}
 
-											if w, ok := tlsFingerprintMatcherMapStrToI["exact_values"]; ok && !isIntfNil(w) {
-												ls := make([]string, len(w.([]interface{})))
-												for i, v := range w.([]interface{}) {
+											if v, ok := cs["exact_values"]; ok && !isIntfNil(v) {
+
+												ls := make([]string, len(v.([]interface{})))
+												for i, v := range v.([]interface{}) {
 													ls[i] = v.(string)
 												}
-												tlsFingerprintMatcher.ExactValues = ls
+												tlsFingerprintChoiceInt.TlsFingerprintMatcher.ExactValues = ls
+
 											}
 
-											if w, ok := tlsFingerprintMatcherMapStrToI["excluded_values"]; ok && !isIntfNil(w) {
-												ls := make([]string, len(w.([]interface{})))
-												for i, v := range w.([]interface{}) {
+											if v, ok := cs["excluded_values"]; ok && !isIntfNil(v) {
+
+												ls := make([]string, len(v.([]interface{})))
+												for i, v := range v.([]interface{}) {
 													ls[i] = v.(string)
 												}
-												tlsFingerprintMatcher.ExcludedValues = ls
+												tlsFingerprintChoiceInt.TlsFingerprintMatcher.ExcludedValues = ls
+
 											}
 
 										}
@@ -64069,6 +67136,16 @@ func resourceVolterraCdnLoadbalancerUpdate(d *schema.ResourceData, meta interfac
 
 					}
 
+					if v, ok := cs["ipv6_prefixes"]; ok && !isIntfNil(v) {
+
+						ls := make([]string, len(v.([]interface{})))
+						for i, v := range v.([]interface{}) {
+							ls[i] = v.(string)
+						}
+						mitigationChoiceInt.IpPrefixList.Ipv6Prefixes = ls
+
+					}
+
 				}
 
 			}
@@ -64871,6 +67948,820 @@ func resourceVolterraCdnLoadbalancerUpdate(d *schema.ResourceData, meta interfac
 			if v, ok := cs["http_redirect"]; ok && !isIntfNil(v) {
 
 				loadbalancerTypeInt.Https.HttpRedirect = v.(bool)
+
+			}
+
+			if v, ok := cs["tls_cert_options"]; ok && !isIntfNil(v) {
+
+				sl := v.(*schema.Set).List()
+				tlsCertOptions := &ves_io_schema_views_cdn_loadbalancer.TlsCertOptions{}
+				loadbalancerTypeInt.Https.TlsCertOptions = tlsCertOptions
+				for _, set := range sl {
+					tlsCertOptionsMapStrToI := set.(map[string]interface{})
+
+					tlsCertificatesChoiceTypeFound := false
+
+					if v, ok := tlsCertOptionsMapStrToI["tls_cert_params"]; ok && !isIntfNil(v) && !tlsCertificatesChoiceTypeFound {
+
+						tlsCertificatesChoiceTypeFound = true
+						tlsCertificatesChoiceInt := &ves_io_schema_views_cdn_loadbalancer.TlsCertOptions_TlsCertParams{}
+						tlsCertificatesChoiceInt.TlsCertParams = &ves_io_schema_views.DownstreamTLSCertsParams{}
+						tlsCertOptions.TlsCertificatesChoice = tlsCertificatesChoiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["certificates"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								certificatesInt := make([]*ves_io_schema_views.ObjectRefType, len(sl))
+								tlsCertificatesChoiceInt.TlsCertParams.Certificates = certificatesInt
+								for i, ps := range sl {
+
+									cMapToStrVal := ps.(map[string]interface{})
+									certificatesInt[i] = &ves_io_schema_views.ObjectRefType{}
+
+									if v, ok := cMapToStrVal["name"]; ok && !isIntfNil(v) {
+										certificatesInt[i].Name = v.(string)
+									}
+
+									if v, ok := cMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+										certificatesInt[i].Namespace = v.(string)
+									}
+
+									if v, ok := cMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+										certificatesInt[i].Tenant = v.(string)
+									}
+
+								}
+
+							}
+
+							mtlsChoiceTypeFound := false
+
+							if v, ok := cs["no_mtls"]; ok && !isIntfNil(v) && !mtlsChoiceTypeFound {
+
+								mtlsChoiceTypeFound = true
+
+								if v.(bool) {
+									mtlsChoiceInt := &ves_io_schema_views.DownstreamTLSCertsParams_NoMtls{}
+									mtlsChoiceInt.NoMtls = &ves_io_schema.Empty{}
+									tlsCertificatesChoiceInt.TlsCertParams.MtlsChoice = mtlsChoiceInt
+								}
+
+							}
+
+							if v, ok := cs["use_mtls"]; ok && !isIntfNil(v) && !mtlsChoiceTypeFound {
+
+								mtlsChoiceTypeFound = true
+								mtlsChoiceInt := &ves_io_schema_views.DownstreamTLSCertsParams_UseMtls{}
+								mtlsChoiceInt.UseMtls = &ves_io_schema_views.DownstreamTlsValidationContext{}
+								tlsCertificatesChoiceInt.TlsCertParams.MtlsChoice = mtlsChoiceInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									if v, ok := cs["client_certificate_optional"]; ok && !isIntfNil(v) {
+
+										mtlsChoiceInt.UseMtls.ClientCertificateOptional = v.(bool)
+
+									}
+
+									crlChoiceTypeFound := false
+
+									if v, ok := cs["crl"]; ok && !isIntfNil(v) && !crlChoiceTypeFound {
+
+										crlChoiceTypeFound = true
+										crlChoiceInt := &ves_io_schema_views.DownstreamTlsValidationContext_Crl{}
+										crlChoiceInt.Crl = &ves_io_schema_views.ObjectRefType{}
+										mtlsChoiceInt.UseMtls.CrlChoice = crlChoiceInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+												crlChoiceInt.Crl.Name = v.(string)
+
+											}
+
+											if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+												crlChoiceInt.Crl.Namespace = v.(string)
+
+											}
+
+											if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+												crlChoiceInt.Crl.Tenant = v.(string)
+
+											}
+
+										}
+
+									}
+
+									if v, ok := cs["no_crl"]; ok && !isIntfNil(v) && !crlChoiceTypeFound {
+
+										crlChoiceTypeFound = true
+
+										if v.(bool) {
+											crlChoiceInt := &ves_io_schema_views.DownstreamTlsValidationContext_NoCrl{}
+											crlChoiceInt.NoCrl = &ves_io_schema.Empty{}
+											mtlsChoiceInt.UseMtls.CrlChoice = crlChoiceInt
+										}
+
+									}
+
+									trustedCaChoiceTypeFound := false
+
+									if v, ok := cs["trusted_ca"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
+
+										trustedCaChoiceTypeFound = true
+										trustedCaChoiceInt := &ves_io_schema_views.DownstreamTlsValidationContext_TrustedCa{}
+										trustedCaChoiceInt.TrustedCa = &ves_io_schema_views.ObjectRefType{}
+										mtlsChoiceInt.UseMtls.TrustedCaChoice = trustedCaChoiceInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+												trustedCaChoiceInt.TrustedCa.Name = v.(string)
+
+											}
+
+											if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+												trustedCaChoiceInt.TrustedCa.Namespace = v.(string)
+
+											}
+
+											if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+												trustedCaChoiceInt.TrustedCa.Tenant = v.(string)
+
+											}
+
+										}
+
+									}
+
+									if v, ok := cs["trusted_ca_url"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
+
+										trustedCaChoiceTypeFound = true
+										trustedCaChoiceInt := &ves_io_schema_views.DownstreamTlsValidationContext_TrustedCaUrl{}
+
+										mtlsChoiceInt.UseMtls.TrustedCaChoice = trustedCaChoiceInt
+
+										trustedCaChoiceInt.TrustedCaUrl = v.(string)
+
+									}
+
+									xfccHeaderTypeFound := false
+
+									if v, ok := cs["xfcc_disabled"]; ok && !isIntfNil(v) && !xfccHeaderTypeFound {
+
+										xfccHeaderTypeFound = true
+
+										if v.(bool) {
+											xfccHeaderInt := &ves_io_schema_views.DownstreamTlsValidationContext_XfccDisabled{}
+											xfccHeaderInt.XfccDisabled = &ves_io_schema.Empty{}
+											mtlsChoiceInt.UseMtls.XfccHeader = xfccHeaderInt
+										}
+
+									}
+
+									if v, ok := cs["xfcc_options"]; ok && !isIntfNil(v) && !xfccHeaderTypeFound {
+
+										xfccHeaderTypeFound = true
+										xfccHeaderInt := &ves_io_schema_views.DownstreamTlsValidationContext_XfccOptions{}
+										xfccHeaderInt.XfccOptions = &ves_io_schema_views.XfccHeaderKeys{}
+										mtlsChoiceInt.UseMtls.XfccHeader = xfccHeaderInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											if v, ok := cs["xfcc_header_elements"]; ok && !isIntfNil(v) {
+
+												xfcc_header_elementsList := []ves_io_schema.XfccElement{}
+												for _, j := range v.([]interface{}) {
+													xfcc_header_elementsList = append(xfcc_header_elementsList, ves_io_schema.XfccElement(ves_io_schema.XfccElement_value[j.(string)]))
+												}
+												xfccHeaderInt.XfccOptions.XfccHeaderElements = xfcc_header_elementsList
+
+											}
+
+										}
+
+									}
+
+								}
+
+							}
+
+							if v, ok := cs["tls_config"]; ok && !isIntfNil(v) {
+
+								sl := v.(*schema.Set).List()
+								tlsConfig := &ves_io_schema_views.TlsConfig{}
+								tlsCertificatesChoiceInt.TlsCertParams.TlsConfig = tlsConfig
+								for _, set := range sl {
+									tlsConfigMapStrToI := set.(map[string]interface{})
+
+									choiceTypeFound := false
+
+									if v, ok := tlsConfigMapStrToI["custom_security"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+										choiceTypeFound = true
+										choiceInt := &ves_io_schema_views.TlsConfig_CustomSecurity{}
+										choiceInt.CustomSecurity = &ves_io_schema_views.CustomCiphers{}
+										tlsConfig.Choice = choiceInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											if v, ok := cs["cipher_suites"]; ok && !isIntfNil(v) {
+
+												ls := make([]string, len(v.([]interface{})))
+												for i, v := range v.([]interface{}) {
+													ls[i] = v.(string)
+												}
+												choiceInt.CustomSecurity.CipherSuites = ls
+
+											}
+
+											if v, ok := cs["max_version"]; ok && !isIntfNil(v) {
+
+												choiceInt.CustomSecurity.MaxVersion = ves_io_schema.TlsProtocol(ves_io_schema.TlsProtocol_value[v.(string)])
+
+											}
+
+											if v, ok := cs["min_version"]; ok && !isIntfNil(v) {
+
+												choiceInt.CustomSecurity.MinVersion = ves_io_schema.TlsProtocol(ves_io_schema.TlsProtocol_value[v.(string)])
+
+											}
+
+										}
+
+									}
+
+									if v, ok := tlsConfigMapStrToI["default_security"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+										choiceTypeFound = true
+
+										if v.(bool) {
+											choiceInt := &ves_io_schema_views.TlsConfig_DefaultSecurity{}
+											choiceInt.DefaultSecurity = &ves_io_schema.Empty{}
+											tlsConfig.Choice = choiceInt
+										}
+
+									}
+
+									if v, ok := tlsConfigMapStrToI["low_security"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+										choiceTypeFound = true
+
+										if v.(bool) {
+											choiceInt := &ves_io_schema_views.TlsConfig_LowSecurity{}
+											choiceInt.LowSecurity = &ves_io_schema.Empty{}
+											tlsConfig.Choice = choiceInt
+										}
+
+									}
+
+									if v, ok := tlsConfigMapStrToI["medium_security"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+										choiceTypeFound = true
+
+										if v.(bool) {
+											choiceInt := &ves_io_schema_views.TlsConfig_MediumSecurity{}
+											choiceInt.MediumSecurity = &ves_io_schema.Empty{}
+											tlsConfig.Choice = choiceInt
+										}
+
+									}
+
+								}
+
+							}
+
+						}
+
+					}
+
+					if v, ok := tlsCertOptionsMapStrToI["tls_inline_params"]; ok && !isIntfNil(v) && !tlsCertificatesChoiceTypeFound {
+
+						tlsCertificatesChoiceTypeFound = true
+						tlsCertificatesChoiceInt := &ves_io_schema_views_cdn_loadbalancer.TlsCertOptions_TlsInlineParams{}
+						tlsCertificatesChoiceInt.TlsInlineParams = &ves_io_schema_views.DownstreamTlsParamsType{}
+						tlsCertOptions.TlsCertificatesChoice = tlsCertificatesChoiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							mtlsChoiceTypeFound := false
+
+							if v, ok := cs["no_mtls"]; ok && !isIntfNil(v) && !mtlsChoiceTypeFound {
+
+								mtlsChoiceTypeFound = true
+
+								if v.(bool) {
+									mtlsChoiceInt := &ves_io_schema_views.DownstreamTlsParamsType_NoMtls{}
+									mtlsChoiceInt.NoMtls = &ves_io_schema.Empty{}
+									tlsCertificatesChoiceInt.TlsInlineParams.MtlsChoice = mtlsChoiceInt
+								}
+
+							}
+
+							if v, ok := cs["use_mtls"]; ok && !isIntfNil(v) && !mtlsChoiceTypeFound {
+
+								mtlsChoiceTypeFound = true
+								mtlsChoiceInt := &ves_io_schema_views.DownstreamTlsParamsType_UseMtls{}
+								mtlsChoiceInt.UseMtls = &ves_io_schema_views.DownstreamTlsValidationContext{}
+								tlsCertificatesChoiceInt.TlsInlineParams.MtlsChoice = mtlsChoiceInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									if v, ok := cs["client_certificate_optional"]; ok && !isIntfNil(v) {
+
+										mtlsChoiceInt.UseMtls.ClientCertificateOptional = v.(bool)
+
+									}
+
+									crlChoiceTypeFound := false
+
+									if v, ok := cs["crl"]; ok && !isIntfNil(v) && !crlChoiceTypeFound {
+
+										crlChoiceTypeFound = true
+										crlChoiceInt := &ves_io_schema_views.DownstreamTlsValidationContext_Crl{}
+										crlChoiceInt.Crl = &ves_io_schema_views.ObjectRefType{}
+										mtlsChoiceInt.UseMtls.CrlChoice = crlChoiceInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+												crlChoiceInt.Crl.Name = v.(string)
+
+											}
+
+											if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+												crlChoiceInt.Crl.Namespace = v.(string)
+
+											}
+
+											if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+												crlChoiceInt.Crl.Tenant = v.(string)
+
+											}
+
+										}
+
+									}
+
+									if v, ok := cs["no_crl"]; ok && !isIntfNil(v) && !crlChoiceTypeFound {
+
+										crlChoiceTypeFound = true
+
+										if v.(bool) {
+											crlChoiceInt := &ves_io_schema_views.DownstreamTlsValidationContext_NoCrl{}
+											crlChoiceInt.NoCrl = &ves_io_schema.Empty{}
+											mtlsChoiceInt.UseMtls.CrlChoice = crlChoiceInt
+										}
+
+									}
+
+									trustedCaChoiceTypeFound := false
+
+									if v, ok := cs["trusted_ca"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
+
+										trustedCaChoiceTypeFound = true
+										trustedCaChoiceInt := &ves_io_schema_views.DownstreamTlsValidationContext_TrustedCa{}
+										trustedCaChoiceInt.TrustedCa = &ves_io_schema_views.ObjectRefType{}
+										mtlsChoiceInt.UseMtls.TrustedCaChoice = trustedCaChoiceInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+												trustedCaChoiceInt.TrustedCa.Name = v.(string)
+
+											}
+
+											if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+												trustedCaChoiceInt.TrustedCa.Namespace = v.(string)
+
+											}
+
+											if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+												trustedCaChoiceInt.TrustedCa.Tenant = v.(string)
+
+											}
+
+										}
+
+									}
+
+									if v, ok := cs["trusted_ca_url"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
+
+										trustedCaChoiceTypeFound = true
+										trustedCaChoiceInt := &ves_io_schema_views.DownstreamTlsValidationContext_TrustedCaUrl{}
+
+										mtlsChoiceInt.UseMtls.TrustedCaChoice = trustedCaChoiceInt
+
+										trustedCaChoiceInt.TrustedCaUrl = v.(string)
+
+									}
+
+									xfccHeaderTypeFound := false
+
+									if v, ok := cs["xfcc_disabled"]; ok && !isIntfNil(v) && !xfccHeaderTypeFound {
+
+										xfccHeaderTypeFound = true
+
+										if v.(bool) {
+											xfccHeaderInt := &ves_io_schema_views.DownstreamTlsValidationContext_XfccDisabled{}
+											xfccHeaderInt.XfccDisabled = &ves_io_schema.Empty{}
+											mtlsChoiceInt.UseMtls.XfccHeader = xfccHeaderInt
+										}
+
+									}
+
+									if v, ok := cs["xfcc_options"]; ok && !isIntfNil(v) && !xfccHeaderTypeFound {
+
+										xfccHeaderTypeFound = true
+										xfccHeaderInt := &ves_io_schema_views.DownstreamTlsValidationContext_XfccOptions{}
+										xfccHeaderInt.XfccOptions = &ves_io_schema_views.XfccHeaderKeys{}
+										mtlsChoiceInt.UseMtls.XfccHeader = xfccHeaderInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											if v, ok := cs["xfcc_header_elements"]; ok && !isIntfNil(v) {
+
+												xfcc_header_elementsList := []ves_io_schema.XfccElement{}
+												for _, j := range v.([]interface{}) {
+													xfcc_header_elementsList = append(xfcc_header_elementsList, ves_io_schema.XfccElement(ves_io_schema.XfccElement_value[j.(string)]))
+												}
+												xfccHeaderInt.XfccOptions.XfccHeaderElements = xfcc_header_elementsList
+
+											}
+
+										}
+
+									}
+
+								}
+
+							}
+
+							if v, ok := cs["tls_certificates"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								tlsCertificates := make([]*ves_io_schema.TlsCertificateType, len(sl))
+								tlsCertificatesChoiceInt.TlsInlineParams.TlsCertificates = tlsCertificates
+								for i, set := range sl {
+									tlsCertificates[i] = &ves_io_schema.TlsCertificateType{}
+									tlsCertificatesMapStrToI := set.(map[string]interface{})
+
+									if w, ok := tlsCertificatesMapStrToI["certificate_url"]; ok && !isIntfNil(w) {
+										tlsCertificates[i].CertificateUrl = w.(string)
+									}
+
+									if w, ok := tlsCertificatesMapStrToI["description"]; ok && !isIntfNil(w) {
+										tlsCertificates[i].Description = w.(string)
+									}
+
+									ocspStaplingChoiceTypeFound := false
+
+									if v, ok := tlsCertificatesMapStrToI["custom_hash_algorithms"]; ok && !isIntfNil(v) && !ocspStaplingChoiceTypeFound {
+
+										ocspStaplingChoiceTypeFound = true
+										ocspStaplingChoiceInt := &ves_io_schema.TlsCertificateType_CustomHashAlgorithms{}
+										ocspStaplingChoiceInt.CustomHashAlgorithms = &ves_io_schema.HashAlgorithms{}
+										tlsCertificates[i].OcspStaplingChoice = ocspStaplingChoiceInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											if v, ok := cs["hash_algorithms"]; ok && !isIntfNil(v) {
+
+												hash_algorithmsList := []ves_io_schema.HashAlgorithm{}
+												for _, j := range v.([]interface{}) {
+													hash_algorithmsList = append(hash_algorithmsList, ves_io_schema.HashAlgorithm(ves_io_schema.HashAlgorithm_value[j.(string)]))
+												}
+												ocspStaplingChoiceInt.CustomHashAlgorithms.HashAlgorithms = hash_algorithmsList
+
+											}
+
+										}
+
+									}
+
+									if _, ok := tlsCertificatesMapStrToI["disable_ocsp_stapling"]; ok && !ocspStaplingChoiceTypeFound {
+
+										ocspStaplingChoiceTypeFound = true
+										ocspStaplingChoiceInt := &ves_io_schema.TlsCertificateType_DisableOcspStapling{}
+										ocspStaplingChoiceInt.DisableOcspStapling = &ves_io_schema.Empty{}
+										tlsCertificates[i].OcspStaplingChoice = ocspStaplingChoiceInt
+
+									}
+
+									if _, ok := tlsCertificatesMapStrToI["use_system_defaults"]; ok && !ocspStaplingChoiceTypeFound {
+
+										ocspStaplingChoiceTypeFound = true
+										ocspStaplingChoiceInt := &ves_io_schema.TlsCertificateType_UseSystemDefaults{}
+										ocspStaplingChoiceInt.UseSystemDefaults = &ves_io_schema.Empty{}
+										tlsCertificates[i].OcspStaplingChoice = ocspStaplingChoiceInt
+
+									}
+
+									if v, ok := tlsCertificatesMapStrToI["private_key"]; ok && !isIntfNil(v) {
+
+										sl := v.(*schema.Set).List()
+										privateKey := &ves_io_schema.SecretType{}
+										tlsCertificates[i].PrivateKey = privateKey
+										for _, set := range sl {
+											privateKeyMapStrToI := set.(map[string]interface{})
+
+											if v, ok := privateKeyMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
+
+												sl := v.(*schema.Set).List()
+												blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
+												privateKey.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
+												for _, set := range sl {
+													blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
+
+													if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
+														blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
+													}
+
+													if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
+														blindfoldSecretInfoInternal.Location = w.(string)
+													}
+
+													if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
+														blindfoldSecretInfoInternal.StoreProvider = w.(string)
+													}
+
+												}
+
+											}
+
+											if v, ok := privateKeyMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
+
+												privateKey.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+											}
+
+											secretInfoOneofTypeFound := false
+
+											if v, ok := privateKeyMapStrToI["blindfold_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+												secretInfoOneofTypeFound = true
+												secretInfoOneofInt := &ves_io_schema.SecretType_BlindfoldSecretInfo{}
+												secretInfoOneofInt.BlindfoldSecretInfo = &ves_io_schema.BlindfoldSecretInfoType{}
+												privateKey.SecretInfoOneof = secretInfoOneofInt
+
+												sl := v.(*schema.Set).List()
+												for _, set := range sl {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["decryption_provider"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.BlindfoldSecretInfo.DecryptionProvider = v.(string)
+
+													}
+
+													if v, ok := cs["location"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.BlindfoldSecretInfo.Location = v.(string)
+
+													}
+
+													if v, ok := cs["store_provider"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.BlindfoldSecretInfo.StoreProvider = v.(string)
+
+													}
+
+												}
+
+											}
+
+											if v, ok := privateKeyMapStrToI["clear_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+												secretInfoOneofTypeFound = true
+												secretInfoOneofInt := &ves_io_schema.SecretType_ClearSecretInfo{}
+												secretInfoOneofInt.ClearSecretInfo = &ves_io_schema.ClearSecretInfoType{}
+												privateKey.SecretInfoOneof = secretInfoOneofInt
+
+												sl := v.(*schema.Set).List()
+												for _, set := range sl {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.ClearSecretInfo.Provider = v.(string)
+
+													}
+
+													if v, ok := cs["url"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+
+													}
+
+												}
+
+											}
+
+											if v, ok := privateKeyMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+												secretInfoOneofTypeFound = true
+												secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
+												secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
+												privateKey.SecretInfoOneof = secretInfoOneofInt
+
+												sl := v.(*schema.Set).List()
+												for _, set := range sl {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["key"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
+													}
+
+													if v, ok := cs["location"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
+													}
+
+													if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
+													}
+
+													if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+													}
+
+													if v, ok := cs["version"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
+													}
+
+												}
+
+											}
+
+											if v, ok := privateKeyMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+												secretInfoOneofTypeFound = true
+												secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
+												secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
+												privateKey.SecretInfoOneof = secretInfoOneofInt
+
+												sl := v.(*schema.Set).List()
+												for _, set := range sl {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
+
+													}
+
+												}
+
+											}
+
+										}
+
+									}
+
+								}
+
+							}
+
+							if v, ok := cs["tls_config"]; ok && !isIntfNil(v) {
+
+								sl := v.(*schema.Set).List()
+								tlsConfig := &ves_io_schema_views.TlsConfig{}
+								tlsCertificatesChoiceInt.TlsInlineParams.TlsConfig = tlsConfig
+								for _, set := range sl {
+									tlsConfigMapStrToI := set.(map[string]interface{})
+
+									choiceTypeFound := false
+
+									if v, ok := tlsConfigMapStrToI["custom_security"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+										choiceTypeFound = true
+										choiceInt := &ves_io_schema_views.TlsConfig_CustomSecurity{}
+										choiceInt.CustomSecurity = &ves_io_schema_views.CustomCiphers{}
+										tlsConfig.Choice = choiceInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											if v, ok := cs["cipher_suites"]; ok && !isIntfNil(v) {
+
+												ls := make([]string, len(v.([]interface{})))
+												for i, v := range v.([]interface{}) {
+													ls[i] = v.(string)
+												}
+												choiceInt.CustomSecurity.CipherSuites = ls
+
+											}
+
+											if v, ok := cs["max_version"]; ok && !isIntfNil(v) {
+
+												choiceInt.CustomSecurity.MaxVersion = ves_io_schema.TlsProtocol(ves_io_schema.TlsProtocol_value[v.(string)])
+
+											}
+
+											if v, ok := cs["min_version"]; ok && !isIntfNil(v) {
+
+												choiceInt.CustomSecurity.MinVersion = ves_io_schema.TlsProtocol(ves_io_schema.TlsProtocol_value[v.(string)])
+
+											}
+
+										}
+
+									}
+
+									if v, ok := tlsConfigMapStrToI["default_security"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+										choiceTypeFound = true
+
+										if v.(bool) {
+											choiceInt := &ves_io_schema_views.TlsConfig_DefaultSecurity{}
+											choiceInt.DefaultSecurity = &ves_io_schema.Empty{}
+											tlsConfig.Choice = choiceInt
+										}
+
+									}
+
+									if v, ok := tlsConfigMapStrToI["low_security"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+										choiceTypeFound = true
+
+										if v.(bool) {
+											choiceInt := &ves_io_schema_views.TlsConfig_LowSecurity{}
+											choiceInt.LowSecurity = &ves_io_schema.Empty{}
+											tlsConfig.Choice = choiceInt
+										}
+
+									}
+
+									if v, ok := tlsConfigMapStrToI["medium_security"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+										choiceTypeFound = true
+
+										if v.(bool) {
+											choiceInt := &ves_io_schema_views.TlsConfig_MediumSecurity{}
+											choiceInt.MediumSecurity = &ves_io_schema.Empty{}
+											tlsConfig.Choice = choiceInt
+										}
+
+									}
+
+								}
+
+							}
+
+						}
+
+					}
+
+				}
 
 			}
 
@@ -69162,6 +73053,92 @@ func resourceVolterraCdnLoadbalancerUpdate(d *schema.ResourceData, meta interfac
 								for _, set := range sl {
 									cs := set.(map[string]interface{})
 
+									if v, ok := cs["api_discovery_from_code_scan"]; ok && !isIntfNil(v) {
+
+										sl := v.(*schema.Set).List()
+										apiDiscoveryFromCodeScan := &ves_io_schema_views_common_waf.ApiDiscoveryFromCodeScan{}
+										apiDiscoveryChoiceInt.ApiDiscoveryOnCacheMiss.ApiDiscoveryFromCodeScan = apiDiscoveryFromCodeScan
+										for _, set := range sl {
+											apiDiscoveryFromCodeScanMapStrToI := set.(map[string]interface{})
+
+											if v, ok := apiDiscoveryFromCodeScanMapStrToI["code_base_integrations"]; ok && !isIntfNil(v) {
+
+												sl := v.([]interface{})
+												codeBaseIntegrations := make([]*ves_io_schema_views_common_waf.CodeBaseIntegrationSelection, len(sl))
+												apiDiscoveryFromCodeScan.CodeBaseIntegrations = codeBaseIntegrations
+												for i, set := range sl {
+													codeBaseIntegrations[i] = &ves_io_schema_views_common_waf.CodeBaseIntegrationSelection{}
+													codeBaseIntegrationsMapStrToI := set.(map[string]interface{})
+
+													apiReposChoiceTypeFound := false
+
+													if v, ok := codeBaseIntegrationsMapStrToI["all_repos"]; ok && !isIntfNil(v) && !apiReposChoiceTypeFound {
+
+														apiReposChoiceTypeFound = true
+
+														if v.(bool) {
+															apiReposChoiceInt := &ves_io_schema_views_common_waf.CodeBaseIntegrationSelection_AllRepos{}
+															apiReposChoiceInt.AllRepos = &ves_io_schema.Empty{}
+															codeBaseIntegrations[i].ApiReposChoice = apiReposChoiceInt
+														}
+
+													}
+
+													if v, ok := codeBaseIntegrationsMapStrToI["selected_repos"]; ok && !isIntfNil(v) && !apiReposChoiceTypeFound {
+
+														apiReposChoiceTypeFound = true
+														apiReposChoiceInt := &ves_io_schema_views_common_waf.CodeBaseIntegrationSelection_SelectedRepos{}
+														apiReposChoiceInt.SelectedRepos = &ves_io_schema_views_common_waf.ApiCodeRepos{}
+														codeBaseIntegrations[i].ApiReposChoice = apiReposChoiceInt
+
+														sl := v.(*schema.Set).List()
+														for _, set := range sl {
+															cs := set.(map[string]interface{})
+
+															if v, ok := cs["api_code_repo"]; ok && !isIntfNil(v) {
+
+																ls := make([]string, len(v.([]interface{})))
+																for i, v := range v.([]interface{}) {
+																	ls[i] = v.(string)
+																}
+																apiReposChoiceInt.SelectedRepos.ApiCodeRepo = ls
+
+															}
+
+														}
+
+													}
+
+													if v, ok := codeBaseIntegrationsMapStrToI["code_base_integration"]; ok && !isIntfNil(v) {
+
+														sl := v.(*schema.Set).List()
+														codeBaseIntegrationInt := &ves_io_schema_views.ObjectRefType{}
+														codeBaseIntegrations[i].CodeBaseIntegration = codeBaseIntegrationInt
+
+														for _, set := range sl {
+															cbiMapToStrVal := set.(map[string]interface{})
+															if val, ok := cbiMapToStrVal["name"]; ok && !isIntfNil(v) {
+																codeBaseIntegrationInt.Name = val.(string)
+															}
+															if val, ok := cbiMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+																codeBaseIntegrationInt.Namespace = val.(string)
+															}
+
+															if val, ok := cbiMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+																codeBaseIntegrationInt.Tenant = val.(string)
+															}
+														}
+
+													}
+
+												}
+
+											}
+
+										}
+
+									}
+
 									if v, ok := cs["discovered_api_settings"]; ok && !isIntfNil(v) {
 
 										sl := v.(*schema.Set).List()
@@ -69238,6 +73215,92 @@ func resourceVolterraCdnLoadbalancerUpdate(d *schema.ResourceData, meta interfac
 								sl := v.(*schema.Set).List()
 								for _, set := range sl {
 									cs := set.(map[string]interface{})
+
+									if v, ok := cs["api_discovery_from_code_scan"]; ok && !isIntfNil(v) {
+
+										sl := v.(*schema.Set).List()
+										apiDiscoveryFromCodeScan := &ves_io_schema_views_common_waf.ApiDiscoveryFromCodeScan{}
+										apiDiscoveryChoiceInt.EnableApiDiscovery.ApiDiscoveryFromCodeScan = apiDiscoveryFromCodeScan
+										for _, set := range sl {
+											apiDiscoveryFromCodeScanMapStrToI := set.(map[string]interface{})
+
+											if v, ok := apiDiscoveryFromCodeScanMapStrToI["code_base_integrations"]; ok && !isIntfNil(v) {
+
+												sl := v.([]interface{})
+												codeBaseIntegrations := make([]*ves_io_schema_views_common_waf.CodeBaseIntegrationSelection, len(sl))
+												apiDiscoveryFromCodeScan.CodeBaseIntegrations = codeBaseIntegrations
+												for i, set := range sl {
+													codeBaseIntegrations[i] = &ves_io_schema_views_common_waf.CodeBaseIntegrationSelection{}
+													codeBaseIntegrationsMapStrToI := set.(map[string]interface{})
+
+													apiReposChoiceTypeFound := false
+
+													if v, ok := codeBaseIntegrationsMapStrToI["all_repos"]; ok && !isIntfNil(v) && !apiReposChoiceTypeFound {
+
+														apiReposChoiceTypeFound = true
+
+														if v.(bool) {
+															apiReposChoiceInt := &ves_io_schema_views_common_waf.CodeBaseIntegrationSelection_AllRepos{}
+															apiReposChoiceInt.AllRepos = &ves_io_schema.Empty{}
+															codeBaseIntegrations[i].ApiReposChoice = apiReposChoiceInt
+														}
+
+													}
+
+													if v, ok := codeBaseIntegrationsMapStrToI["selected_repos"]; ok && !isIntfNil(v) && !apiReposChoiceTypeFound {
+
+														apiReposChoiceTypeFound = true
+														apiReposChoiceInt := &ves_io_schema_views_common_waf.CodeBaseIntegrationSelection_SelectedRepos{}
+														apiReposChoiceInt.SelectedRepos = &ves_io_schema_views_common_waf.ApiCodeRepos{}
+														codeBaseIntegrations[i].ApiReposChoice = apiReposChoiceInt
+
+														sl := v.(*schema.Set).List()
+														for _, set := range sl {
+															cs := set.(map[string]interface{})
+
+															if v, ok := cs["api_code_repo"]; ok && !isIntfNil(v) {
+
+																ls := make([]string, len(v.([]interface{})))
+																for i, v := range v.([]interface{}) {
+																	ls[i] = v.(string)
+																}
+																apiReposChoiceInt.SelectedRepos.ApiCodeRepo = ls
+
+															}
+
+														}
+
+													}
+
+													if v, ok := codeBaseIntegrationsMapStrToI["code_base_integration"]; ok && !isIntfNil(v) {
+
+														sl := v.(*schema.Set).List()
+														codeBaseIntegrationInt := &ves_io_schema_views.ObjectRefType{}
+														codeBaseIntegrations[i].CodeBaseIntegration = codeBaseIntegrationInt
+
+														for _, set := range sl {
+															cbiMapToStrVal := set.(map[string]interface{})
+															if val, ok := cbiMapToStrVal["name"]; ok && !isIntfNil(v) {
+																codeBaseIntegrationInt.Name = val.(string)
+															}
+															if val, ok := cbiMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+																codeBaseIntegrationInt.Namespace = val.(string)
+															}
+
+															if val, ok := cbiMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+																codeBaseIntegrationInt.Tenant = val.(string)
+															}
+														}
+
+													}
+
+												}
+
+											}
+
+										}
+
+									}
 
 									if v, ok := cs["discovered_api_settings"]; ok && !isIntfNil(v) {
 
@@ -69613,6 +73676,16 @@ func resourceVolterraCdnLoadbalancerUpdate(d *schema.ResourceData, meta interfac
 																	ls[i] = v.(string)
 																}
 																ipAsnChoiceInt.IpPrefixList.IpPrefixes = ls
+
+															}
+
+															if v, ok := cs["ipv6_prefixes"]; ok && !isIntfNil(v) {
+
+																ls := make([]string, len(v.([]interface{})))
+																for i, v := range v.([]interface{}) {
+																	ls[i] = v.(string)
+																}
+																ipAsnChoiceInt.IpPrefixList.Ipv6Prefixes = ls
 
 															}
 
@@ -70418,6 +74491,16 @@ func resourceVolterraCdnLoadbalancerUpdate(d *schema.ResourceData, meta interfac
 																	ls[i] = v.(string)
 																}
 																ipAsnChoiceInt.IpPrefixList.IpPrefixes = ls
+
+															}
+
+															if v, ok := cs["ipv6_prefixes"]; ok && !isIntfNil(v) {
+
+																ls := make([]string, len(v.([]interface{})))
+																for i, v := range v.([]interface{}) {
+																	ls[i] = v.(string)
+																}
+																ipAsnChoiceInt.IpPrefixList.Ipv6Prefixes = ls
 
 															}
 
@@ -73359,6 +77442,16 @@ func resourceVolterraCdnLoadbalancerUpdate(d *schema.ResourceData, meta interfac
 
 																	}
 
+																	if v, ok := cs["ipv6_prefixes"]; ok && !isIntfNil(v) {
+
+																		ls := make([]string, len(v.([]interface{})))
+																		for i, v := range v.([]interface{}) {
+																			ls[i] = v.(string)
+																		}
+																		ipChoiceInt.IpPrefixList.Ipv6Prefixes = ls
+
+																	}
+
 																}
 
 															}
@@ -73524,38 +77617,72 @@ func resourceVolterraCdnLoadbalancerUpdate(d *schema.ResourceData, meta interfac
 
 															}
 
-															if v, ok := specMapStrToI["tls_fingerprint_matcher"]; ok && !isIntfNil(v) {
+															tlsFingerprintChoiceTypeFound := false
+
+															if v, ok := specMapStrToI["ja4_tls_fingerprint"]; ok && !isIntfNil(v) && !tlsFingerprintChoiceTypeFound {
+
+																tlsFingerprintChoiceTypeFound = true
+																tlsFingerprintChoiceInt := &ves_io_schema_service_policy_rule.ChallengeRuleSpec_Ja4TlsFingerprint{}
+																tlsFingerprintChoiceInt.Ja4TlsFingerprint = &ves_io_schema_policy.JA4TlsFingerprintMatcherType{}
+																spec.TlsFingerprintChoice = tlsFingerprintChoiceInt
 
 																sl := v.(*schema.Set).List()
-																tlsFingerprintMatcher := &ves_io_schema_policy.TlsFingerprintMatcherType{}
-																spec.TlsFingerprintMatcher = tlsFingerprintMatcher
 																for _, set := range sl {
-																	tlsFingerprintMatcherMapStrToI := set.(map[string]interface{})
+																	cs := set.(map[string]interface{})
 
-																	if v, ok := tlsFingerprintMatcherMapStrToI["classes"]; ok && !isIntfNil(v) {
+																	if v, ok := cs["exact_values"]; ok && !isIntfNil(v) {
+
+																		ls := make([]string, len(v.([]interface{})))
+																		for i, v := range v.([]interface{}) {
+																			ls[i] = v.(string)
+																		}
+																		tlsFingerprintChoiceInt.Ja4TlsFingerprint.ExactValues = ls
+
+																	}
+
+																}
+
+															}
+
+															if v, ok := specMapStrToI["tls_fingerprint_matcher"]; ok && !isIntfNil(v) && !tlsFingerprintChoiceTypeFound {
+
+																tlsFingerprintChoiceTypeFound = true
+																tlsFingerprintChoiceInt := &ves_io_schema_service_policy_rule.ChallengeRuleSpec_TlsFingerprintMatcher{}
+																tlsFingerprintChoiceInt.TlsFingerprintMatcher = &ves_io_schema_policy.TlsFingerprintMatcherType{}
+																spec.TlsFingerprintChoice = tlsFingerprintChoiceInt
+
+																sl := v.(*schema.Set).List()
+																for _, set := range sl {
+																	cs := set.(map[string]interface{})
+
+																	if v, ok := cs["classes"]; ok && !isIntfNil(v) {
 
 																		classesList := []ves_io_schema_policy.KnownTlsFingerprintClass{}
 																		for _, j := range v.([]interface{}) {
 																			classesList = append(classesList, ves_io_schema_policy.KnownTlsFingerprintClass(ves_io_schema_policy.KnownTlsFingerprintClass_value[j.(string)]))
 																		}
-																		tlsFingerprintMatcher.Classes = classesList
+																		tlsFingerprintChoiceInt.TlsFingerprintMatcher.Classes = classesList
 
 																	}
 
-																	if w, ok := tlsFingerprintMatcherMapStrToI["exact_values"]; ok && !isIntfNil(w) {
-																		ls := make([]string, len(w.([]interface{})))
-																		for i, v := range w.([]interface{}) {
+																	if v, ok := cs["exact_values"]; ok && !isIntfNil(v) {
+
+																		ls := make([]string, len(v.([]interface{})))
+																		for i, v := range v.([]interface{}) {
 																			ls[i] = v.(string)
 																		}
-																		tlsFingerprintMatcher.ExactValues = ls
+																		tlsFingerprintChoiceInt.TlsFingerprintMatcher.ExactValues = ls
+
 																	}
 
-																	if w, ok := tlsFingerprintMatcherMapStrToI["excluded_values"]; ok && !isIntfNil(w) {
-																		ls := make([]string, len(w.([]interface{})))
-																		for i, v := range w.([]interface{}) {
+																	if v, ok := cs["excluded_values"]; ok && !isIntfNil(v) {
+
+																		ls := make([]string, len(v.([]interface{})))
+																		for i, v := range v.([]interface{}) {
 																			ls[i] = v.(string)
 																		}
-																		tlsFingerprintMatcher.ExcludedValues = ls
+																		tlsFingerprintChoiceInt.TlsFingerprintMatcher.ExcludedValues = ls
+
 																	}
 
 																}
@@ -74062,6 +78189,16 @@ func resourceVolterraCdnLoadbalancerUpdate(d *schema.ResourceData, meta interfac
 																	ls[i] = v.(string)
 																}
 																ipAsnChoiceInt.IpPrefixList.IpPrefixes = ls
+
+															}
+
+															if v, ok := cs["ipv6_prefixes"]; ok && !isIntfNil(v) {
+
+																ls := make([]string, len(v.([]interface{})))
+																for i, v := range v.([]interface{}) {
+																	ls[i] = v.(string)
+																}
+																ipAsnChoiceInt.IpPrefixList.Ipv6Prefixes = ls
 
 															}
 
@@ -74919,6 +79056,16 @@ func resourceVolterraCdnLoadbalancerUpdate(d *schema.ResourceData, meta interfac
 																			ls[i] = v.(string)
 																		}
 																		ipAsnChoiceInt.IpPrefixList.IpPrefixes = ls
+
+																	}
+
+																	if v, ok := cs["ipv6_prefixes"]; ok && !isIntfNil(v) {
+
+																		ls := make([]string, len(v.([]interface{})))
+																		for i, v := range v.([]interface{}) {
+																			ls[i] = v.(string)
+																		}
+																		ipAsnChoiceInt.IpPrefixList.Ipv6Prefixes = ls
 
 																	}
 
@@ -75835,6 +79982,16 @@ func resourceVolterraCdnLoadbalancerUpdate(d *schema.ResourceData, meta interfac
 																	ls[i] = v.(string)
 																}
 																ipAsnChoiceInt.IpPrefixList.IpPrefixes = ls
+
+															}
+
+															if v, ok := cs["ipv6_prefixes"]; ok && !isIntfNil(v) {
+
+																ls := make([]string, len(v.([]interface{})))
+																for i, v := range v.([]interface{}) {
+																	ls[i] = v.(string)
+																}
+																ipAsnChoiceInt.IpPrefixList.Ipv6Prefixes = ls
 
 															}
 
@@ -77093,6 +81250,16 @@ func resourceVolterraCdnLoadbalancerUpdate(d *schema.ResourceData, meta interfac
 
 									}
 
+									if v, ok := cs["ipv6_prefixes"]; ok && !isIntfNil(v) {
+
+										ls := make([]string, len(v.([]interface{})))
+										for i, v := range v.([]interface{}) {
+											ls[i] = v.(string)
+										}
+										ipFilteringTypeInt.AllowList.Ipv6Prefixes = ls
+
+									}
+
 								}
 
 							}
@@ -77121,6 +81288,16 @@ func resourceVolterraCdnLoadbalancerUpdate(d *schema.ResourceData, meta interfac
 											ls[i] = v.(string)
 										}
 										ipFilteringTypeInt.BlockList.IpPrefixes = ls
+
+									}
+
+									if v, ok := cs["ipv6_prefixes"]; ok && !isIntfNil(v) {
+
+										ls := make([]string, len(v.([]interface{})))
+										for i, v := range v.([]interface{}) {
+											ls[i] = v.(string)
+										}
+										ipFilteringTypeInt.BlockList.Ipv6Prefixes = ls
 
 									}
 
@@ -79317,6 +83494,16 @@ func resourceVolterraCdnLoadbalancerUpdate(d *schema.ResourceData, meta interfac
 
 							}
 
+							if v, ok := cs["ipv6_prefixes"]; ok && !isIntfNil(v) {
+
+								ls := make([]string, len(v.([]interface{})))
+								for i, v := range v.([]interface{}) {
+									ls[i] = v.(string)
+								}
+								ipFilteringTypeInt.AllowList.Ipv6Prefixes = ls
+
+							}
+
 						}
 
 					}
@@ -79345,6 +83532,16 @@ func resourceVolterraCdnLoadbalancerUpdate(d *schema.ResourceData, meta interfac
 									ls[i] = v.(string)
 								}
 								ipFilteringTypeInt.BlockList.IpPrefixes = ls
+
+							}
+
+							if v, ok := cs["ipv6_prefixes"]; ok && !isIntfNil(v) {
+
+								ls := make([]string, len(v.([]interface{})))
+								for i, v := range v.([]interface{}) {
+									ls[i] = v.(string)
+								}
+								ipFilteringTypeInt.BlockList.Ipv6Prefixes = ls
 
 							}
 
@@ -79873,6 +84070,16 @@ func resourceVolterraCdnLoadbalancerUpdate(d *schema.ResourceData, meta interfac
 											ls[i] = v.(string)
 										}
 										ipAsnChoiceInt.IpPrefixList.IpPrefixes = ls
+
+									}
+
+									if v, ok := cs["ipv6_prefixes"]; ok && !isIntfNil(v) {
+
+										ls := make([]string, len(v.([]interface{})))
+										for i, v := range v.([]interface{}) {
+											ls[i] = v.(string)
+										}
+										ipAsnChoiceInt.IpPrefixList.Ipv6Prefixes = ls
 
 									}
 
@@ -80730,6 +84937,16 @@ func resourceVolterraCdnLoadbalancerUpdate(d *schema.ResourceData, meta interfac
 													ls[i] = v.(string)
 												}
 												ipAsnChoiceInt.IpPrefixList.IpPrefixes = ls
+
+											}
+
+											if v, ok := cs["ipv6_prefixes"]; ok && !isIntfNil(v) {
+
+												ls := make([]string, len(v.([]interface{})))
+												for i, v := range v.([]interface{}) {
+													ls[i] = v.(string)
+												}
+												ipAsnChoiceInt.IpPrefixList.Ipv6Prefixes = ls
 
 											}
 
@@ -81646,6 +85863,16 @@ func resourceVolterraCdnLoadbalancerUpdate(d *schema.ResourceData, meta interfac
 											ls[i] = v.(string)
 										}
 										ipAsnChoiceInt.IpPrefixList.IpPrefixes = ls
+
+									}
+
+									if v, ok := cs["ipv6_prefixes"]; ok && !isIntfNil(v) {
+
+										ls := make([]string, len(v.([]interface{})))
+										for i, v := range v.([]interface{}) {
+											ls[i] = v.(string)
+										}
+										ipAsnChoiceInt.IpPrefixList.Ipv6Prefixes = ls
 
 									}
 

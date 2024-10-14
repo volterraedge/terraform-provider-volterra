@@ -1,9 +1,9 @@
 ---
 
 page_title: "Volterra: volterra_known_label_key"
-
 description: "The volterra_known_label_key allows CRD of namespace resource on Volterra SaaS"
----------------------------------------------------------------------------------------------
+
+---
 
 Resource: volterra_known_label_key
 ==================================

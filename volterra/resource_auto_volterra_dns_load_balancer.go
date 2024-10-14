@@ -753,6 +753,16 @@ func resourceVolterraDnsLoadBalancerCreate(d *schema.ResourceData, meta interfac
 
 							}
 
+							if v, ok := cs["ipv6_prefixes"]; ok && !isIntfNil(v) {
+
+								ls := make([]string, len(v.([]interface{})))
+								for i, v := range v.([]interface{}) {
+									ls[i] = v.(string)
+								}
+								clientChoiceInt.IpPrefixList.Ipv6Prefixes = ls
+
+							}
+
 						}
 
 					}
@@ -1240,6 +1250,16 @@ func resourceVolterraDnsLoadBalancerUpdate(d *schema.ResourceData, meta interfac
 									ls[i] = v.(string)
 								}
 								clientChoiceInt.IpPrefixList.IpPrefixes = ls
+
+							}
+
+							if v, ok := cs["ipv6_prefixes"]; ok && !isIntfNil(v) {
+
+								ls := make([]string, len(v.([]interface{})))
+								for i, v := range v.([]interface{}) {
+									ls[i] = v.(string)
+								}
+								clientChoiceInt.IpPrefixList.Ipv6Prefixes = ls
 
 							}
 

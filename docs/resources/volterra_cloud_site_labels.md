@@ -1,9 +1,9 @@
 ---
 
 page_title: "Volterra: volterra_cloud_site_labels"
-
 description: "The volterra_cloud_site_labels helps to update the site labels for cloud sites"
----------------------------------------------------------------------------------------------
+
+---
 
 Resource volterra_cloud_site_labels
 ===================================

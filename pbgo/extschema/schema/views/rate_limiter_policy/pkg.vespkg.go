@@ -51,12 +51,69 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 
+	mdr.RPCSubscriptionFieldsRegistry["ves.io.schema.views.rate_limiter_policy.API.Create"] = []svcfw.SubscriptionField{
+		{
+			FieldPath:     "ves.io.schema.views.rate_limiter_policy.CreateRequest.spec.rules.spec.ip_choice.ip_prefix_list.ipv6_prefixes",
+			AddonServices: []string{"f5xc-ipv6-standard"},
+		},
+	}
+
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.views.rate_limiter_policy.API.Create"] = []string{
 		"spec.rules.#.metadata.disable",
 	}
 
+	mdr.RPCAvailableInReqFieldRegistry["ves.io.schema.views.rate_limiter_policy.API.Create"] = []svcfw.EnvironmentField{
+		{
+			FieldPath:           "spec.rules.#.spec.ip_prefix_list.ipv6_prefixes.#",
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
+		},
+	}
+
+	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.views.rate_limiter_policy.API.Create"] = []svcfw.EnvironmentField{
+		{
+			FieldPath:           "spec.rules.#.spec.ip_prefix_list.ipv6_prefixes.#",
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
+		},
+	}
+
+	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.views.rate_limiter_policy.API.Get"] = []svcfw.EnvironmentField{
+		{
+			FieldPath:           "create_form.spec.rules.#.spec.ip_prefix_list.ipv6_prefixes.#",
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "replace_form.spec.rules.#.spec.ip_prefix_list.ipv6_prefixes.#",
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.rules.#.spec.ip_prefix_list.ipv6_prefixes.#",
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
+		},
+	}
+
+	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.views.rate_limiter_policy.API.List"] = []svcfw.EnvironmentField{
+		{
+			FieldPath:           "items.#.get_spec.rules.#.spec.ip_prefix_list.ipv6_prefixes.#",
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
+		},
+	}
+
+	mdr.RPCSubscriptionFieldsRegistry["ves.io.schema.views.rate_limiter_policy.API.Replace"] = []svcfw.SubscriptionField{
+		{
+			FieldPath:     "ves.io.schema.views.rate_limiter_policy.ReplaceRequest.spec.rules.spec.ip_choice.ip_prefix_list.ipv6_prefixes",
+			AddonServices: []string{"f5xc-ipv6-standard"},
+		},
+	}
+
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.views.rate_limiter_policy.API.Replace"] = []string{
 		"spec.rules.#.metadata.disable",
+	}
+
+	mdr.RPCAvailableInReqFieldRegistry["ves.io.schema.views.rate_limiter_policy.API.Replace"] = []svcfw.EnvironmentField{
+		{
+			FieldPath:           "spec.rules.#.spec.ip_prefix_list.ipv6_prefixes.#",
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
+		},
 	}
 
 }

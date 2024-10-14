@@ -1665,7 +1665,7 @@ var APISwaggerJSON string = `{
     "swagger": "2.0",
     "info": {
         "title": "gateway",
-        "description": "\nThe gateways represent the sites \nwhere the end user can connect to terminate \nthe mTLS/DTLS tunnels.The gateways associated with a UZTNA ZeroTrust Domains \nwould all be front ending the same set of applications and will \nenforce same set of policies for authentication and authorisation \nto grant access to these applications. \nThis ensures same user experience no matter which gateway is reached for tunnel termination.\nEach Gateway will have a lease pool defined to allocate IP address to client for the \nterminated tunnel.",
+        "description": "\nThe gateways represent the sites \nwhere the end user can connect to terminate \nthe mTLS/DTLS tunnels.The gateways associated with a UZTNA ZeroTrust Domains \nwould all be front ending the same set of applications and will \nenforce same set of policies for authentication and authorization \nto grant access to these applications. \nThis ensures same user experience no matter which gateway is reached for tunnel termination.\nEach Gateway will have a lease pool defined to allocate IP address to client for the \nterminated tunnel.",
         "version": "version not set"
     },
     "schemes": [
@@ -2354,67 +2354,6 @@ var APISwaggerJSON string = `{
                 }
             }
         },
-        "schemaIpAddressType": {
-            "type": "object",
-            "description": "IP Address used to specify an IPv4 or IPv6 address",
-            "title": "IP Address",
-            "x-displayname": "IP Address",
-            "x-ves-displayorder": "3",
-            "x-ves-oneof-field-ver": "[\"ipv4\",\"ipv6\"]",
-            "x-ves-proto-message": "ves.io.schema.IpAddressType",
-            "properties": {
-                "ipv4": {
-                    "description": "Exclusive with [ipv6]\n IPv4 Address",
-                    "title": "IPv4 Address",
-                    "$ref": "#/definitions/schemaIpv4AddressType",
-                    "x-displayname": "IPv4 Address"
-                },
-                "ipv6": {
-                    "description": "Exclusive with [ipv4]\n IPv6 Address",
-                    "title": "IPv6 ADDRESS",
-                    "$ref": "#/definitions/schemaIpv6AddressType",
-                    "x-displayname": "IPv6 Address"
-                }
-            }
-        },
-        "schemaIpv4AddressType": {
-            "type": "object",
-            "description": "IPv4 Address in dot-decimal notation",
-            "title": "IPv4 Address",
-            "x-displayname": "IPv4 Address",
-            "x-ves-proto-message": "ves.io.schema.Ipv4AddressType",
-            "properties": {
-                "addr": {
-                    "type": "string",
-                    "description": " IPv4 Address in string form with dot-decimal notation\n\nExample: - \"192.168.1.1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv4: true\n",
-                    "title": "IPv4 Address",
-                    "x-displayname": "IPv4 Address",
-                    "x-ves-example": "192.168.1.1",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.ipv4": "true"
-                    }
-                }
-            }
-        },
-        "schemaIpv6AddressType": {
-            "type": "object",
-            "description": "IPv6 Address specified as hexadecimal numbers separated by ':'",
-            "title": "IPv6 Address",
-            "x-displayname": "IPv6 Address",
-            "x-ves-proto-message": "ves.io.schema.Ipv6AddressType",
-            "properties": {
-                "addr": {
-                    "type": "string",
-                    "description": " IPv6 Address in form of string. IPv6 address must be specified as hexadecimal numbers separated by ':'\n The address can be compacted by suppressing zeros\n e.g. '2001:db8:0:0:0:0:2:1' becomes '2001:db8::2:1' or '2001:db8:0:0:0:2:0:0' becomes '2001:db8::2::'\n\nExample: - \"2001:db8:0:0:0:0:2:1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6: true\n",
-                    "title": "IPv6 Address",
-                    "x-displayname": "IPv6 Address",
-                    "x-ves-example": "2001:db8:0:0:0:0:2:1",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.ipv6": "true"
-                    }
-                }
-            }
-        },
         "schemaObjectCreateMetaType": {
             "type": "object",
             "description": "ObjectCreateMetaType is metadata that can be specified in Create request of an object.",
@@ -2891,20 +2830,20 @@ var APISwaggerJSON string = `{
         },
         "uztna_gatewayBigIpAccessSiteList": {
             "type": "object",
-            "description": "\nSelected securemesh site .",
-            "title": "BigIpAccessSiteList",
-            "x-displayname": "BigIpAccessSiteList",
+            "description": "\nBIG-IP Instances. Maximum limit for one gateway is one.",
+            "title": "BIG-IP Instance",
+            "x-displayname": "BIG-IP Instance",
             "x-ves-proto-message": "ves.io.schema.uztna.uztna_gateway.BigIpAccessSiteList",
             "properties": {
-                "secure_mesh_site": {
+                "bigip_site": {
                     "type": "array",
-                    "description": " Selected Big IP Sites\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 1\n",
-                    "title": "Selected BigIP CE Sites",
+                    "description": " Selected BIG-IP Instance\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 1\n",
+                    "title": "Selected BigIP Instance",
                     "maxItems": 1,
                     "items": {
                         "$ref": "#/definitions/schemaObjectRefType"
                     },
-                    "x-displayname": "Selected Big IP Sites",
+                    "x-displayname": "BIG-IP Instance",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
@@ -2965,19 +2904,22 @@ var APISwaggerJSON string = `{
             "x-displayname": "Create Gateways schema",
             "x-ves-proto-message": "ves.io.schema.uztna.uztna_gateway.CreateSpecType",
             "properties": {
-                "big_ip_ce_site": {
-                    "description": " Site instances for BIG IP CE.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                "big_ip_instance": {
+                    "description": " BIG-IP Instance.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "$ref": "#/definitions/uztna_gatewayBigIpAccessSiteList",
-                    "x-displayname": "Site instances for BIG IP CE",
+                    "x-displayname": "BIG-IP Instance",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true"
                     }
                 },
-                "private_ip": {
-                    "description": " Listener private ip Address Assignment.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
-                    "$ref": "#/definitions/schemaIpAddressType",
-                    "x-displayname": "Private IP Address",
+                "listeners": {
+                    "type": "array",
+                    "description": " BIG-IP Edge Gateway Listener.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "items": {
+                        "$ref": "#/definitions/uztna_gatewayListeners"
+                    },
+                    "x-displayname": "Listeners",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true"
@@ -3112,19 +3054,22 @@ var APISwaggerJSON string = `{
             "x-displayname": "Get Gateways schema",
             "x-ves-proto-message": "ves.io.schema.uztna.uztna_gateway.GetSpecType",
             "properties": {
-                "big_ip_ce_site": {
-                    "description": " Site instances for BIG IP CE.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                "big_ip_instance": {
+                    "description": " BIG-IP Instance.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "$ref": "#/definitions/uztna_gatewayBigIpAccessSiteList",
-                    "x-displayname": "Site instances for BIG IP CE",
+                    "x-displayname": "BIG-IP Instance",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true"
                     }
                 },
-                "private_ip": {
-                    "description": " Listener private ip Address Assignment.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
-                    "$ref": "#/definitions/schemaIpAddressType",
-                    "x-displayname": "Private IP Address",
+                "listeners": {
+                    "type": "array",
+                    "description": " BIG-IP Edge Gateway Listener.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "items": {
+                        "$ref": "#/definitions/uztna_gatewayListeners"
+                    },
+                    "x-displayname": "Listeners",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true"
@@ -3254,6 +3199,34 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "uztna_gatewayListeners": {
+            "type": "object",
+            "description": "\nConfigure BIG-IP Edge Gateway Listener IP",
+            "title": "Listeners",
+            "x-displayname": "Listeners",
+            "x-ves-oneof-field-flow_type": "[\"ipv4\",\"ipv6\"]",
+            "x-ves-proto-message": "ves.io.schema.uztna.uztna_gateway.Listeners",
+            "properties": {
+                "ipv4": {
+                    "type": "string",
+                    "description": "Exclusive with [ipv6]\n\n IPv4 Address\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv4: true\n",
+                    "title": "IPv4",
+                    "x-displayname": "IPv4 Address",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.ipv4": "true"
+                    }
+                },
+                "ipv6": {
+                    "type": "string",
+                    "description": "Exclusive with [ipv4]\n\n IPv6 Address\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6: true\n",
+                    "title": "IPv6",
+                    "x-displayname": "IPv6 Address",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.ipv6": "true"
+                    }
+                }
+            }
+        },
         "uztna_gatewayReplaceRequest": {
             "type": "object",
             "description": "This is the input message of the 'Replace' RPC",
@@ -3286,19 +3259,22 @@ var APISwaggerJSON string = `{
             "x-displayname": "Replace Gateways schema",
             "x-ves-proto-message": "ves.io.schema.uztna.uztna_gateway.ReplaceSpecType",
             "properties": {
-                "big_ip_ce_site": {
-                    "description": " Site instances for BIG IP CE.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                "big_ip_instance": {
+                    "description": " BIG-IP Instance.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "$ref": "#/definitions/uztna_gatewayBigIpAccessSiteList",
-                    "x-displayname": "Site instances for BIG IP CE",
+                    "x-displayname": "BIG-IP Instance",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true"
                     }
                 },
-                "private_ip": {
-                    "description": " Listener private ip Address Assignment.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
-                    "$ref": "#/definitions/schemaIpAddressType",
-                    "x-displayname": "Private IP Address",
+                "listeners": {
+                    "type": "array",
+                    "description": " BIG-IP Edge Gateway Listener.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "items": {
+                        "$ref": "#/definitions/uztna_gatewayListeners"
+                    },
+                    "x-displayname": "Listeners",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true"
@@ -3308,7 +3284,7 @@ var APISwaggerJSON string = `{
         },
         "uztna_gatewayStatusObject": {
             "type": "object",
-            "description": "Most recently observed status of object\nDisplays status of an object",
+            "description": "Most recently observed status of object",
             "title": "Status for User object",
             "x-displayname": "Status",
             "x-ves-proto-message": "ves.io.schema.uztna.uztna_gateway.StatusObject",

@@ -197,6 +197,171 @@ func CloneRespValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *ExportZoneFileRequest) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *ExportZoneFileRequest) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *ExportZoneFileRequest) DeepCopy() *ExportZoneFileRequest {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &ExportZoneFileRequest{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *ExportZoneFileRequest) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *ExportZoneFileRequest) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return ExportZoneFileRequestValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateExportZoneFileRequest struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateExportZoneFileRequest) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*ExportZoneFileRequest)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *ExportZoneFileRequest got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["dns_zone_name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("dns_zone_name"))
+		if err := fv(ctx, m.GetDnsZoneName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["namespace"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("namespace"))
+		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultExportZoneFileRequestValidator = func() *ValidateExportZoneFileRequest {
+	v := &ValidateExportZoneFileRequest{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func ExportZoneFileRequestValidator() db.Validator {
+	return DefaultExportZoneFileRequestValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *ExportZoneFileResponse) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *ExportZoneFileResponse) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *ExportZoneFileResponse) DeepCopy() *ExportZoneFileResponse {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &ExportZoneFileResponse{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *ExportZoneFileResponse) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *ExportZoneFileResponse) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return ExportZoneFileResponseValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateExportZoneFileResponse struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateExportZoneFileResponse) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*ExportZoneFileResponse)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *ExportZoneFileResponse got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["html_data"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("html_data"))
+		if err := fv(ctx, m.GetHtmlData(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultExportZoneFileResponseValidator = func() *ValidateExportZoneFileResponse {
+	v := &ValidateExportZoneFileResponse{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func ExportZoneFileResponseValidator() db.Validator {
+	return DefaultExportZoneFileResponseValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *F5CSDNSZoneConfiguration) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }

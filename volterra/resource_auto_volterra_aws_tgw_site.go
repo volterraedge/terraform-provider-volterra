@@ -73,9 +73,8 @@ func resourceVolterraAwsTgwSite() *schema.Resource {
 
 						"admin_password": {
 
-							Type:       schema.TypeSet,
-							Optional:   true,
-							Deprecated: "This field is deprecated and will be removed in future release.",
+							Type:     schema.TypeSet,
+							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
@@ -116,28 +115,24 @@ func resourceVolterraAwsTgwSite() *schema.Resource {
 
 									"blindfold_secret_info": {
 
-										Type:       schema.TypeSet,
-										Optional:   true,
-										Deprecated: "This field is deprecated and will be removed in future release.",
+										Type:     schema.TypeSet,
+										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
 												"decryption_provider": {
-													Type:       schema.TypeString,
-													Optional:   true,
-													Deprecated: "This field is deprecated and will be removed in future release.",
+													Type:     schema.TypeString,
+													Optional: true,
 												},
 
 												"location": {
-													Type:       schema.TypeString,
-													Required:   true,
-													Deprecated: "This field is deprecated and will be removed in future release.",
+													Type:     schema.TypeString,
+													Required: true,
 												},
 
 												"store_provider": {
-													Type:       schema.TypeString,
-													Optional:   true,
-													Deprecated: "This field is deprecated and will be removed in future release.",
+													Type:     schema.TypeString,
+													Optional: true,
 												},
 											},
 										},
@@ -145,22 +140,19 @@ func resourceVolterraAwsTgwSite() *schema.Resource {
 
 									"clear_secret_info": {
 
-										Type:       schema.TypeSet,
-										Optional:   true,
-										Deprecated: "This field is deprecated and will be removed in future release.",
+										Type:     schema.TypeSet,
+										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
 												"provider": {
-													Type:       schema.TypeString,
-													Optional:   true,
-													Deprecated: "This field is deprecated and will be removed in future release.",
+													Type:     schema.TypeString,
+													Optional: true,
 												},
 
 												"url": {
-													Type:       schema.TypeString,
-													Required:   true,
-													Deprecated: "This field is deprecated and will be removed in future release.",
+													Type:     schema.TypeString,
+													Required: true,
 												},
 											},
 										},
@@ -551,6 +543,32 @@ func resourceVolterraAwsTgwSite() *schema.Resource {
 												},
 											},
 										},
+									},
+								},
+							},
+						},
+
+						"reserved_tgw_cidr": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"tgw_cidr": {
+
+							Type:     schema.TypeSet,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"ipv4": {
+										Type:     schema.TypeString,
+										Required: true,
+									},
+
+									"ipv6": {
+										Type:     schema.TypeString,
+										Optional: true,
 									},
 								},
 							},
@@ -3013,6 +3031,47 @@ func resourceVolterraAwsTgwSiteCreate(d *schema.ResourceData, meta interface{}) 
 							}
 
 						}
+
+					}
+
+				}
+
+			}
+
+			tgwCidrChoiceTypeFound := false
+
+			if v, ok := awsParametersMapStrToI["reserved_tgw_cidr"]; ok && !isIntfNil(v) && !tgwCidrChoiceTypeFound {
+
+				tgwCidrChoiceTypeFound = true
+
+				if v.(bool) {
+					tgwCidrChoiceInt := &ves_io_schema_views_aws_tgw_site.ServicesVPCType_ReservedTgwCidr{}
+					tgwCidrChoiceInt.ReservedTgwCidr = &ves_io_schema.Empty{}
+					awsParameters.TgwCidrChoice = tgwCidrChoiceInt
+				}
+
+			}
+
+			if v, ok := awsParametersMapStrToI["tgw_cidr"]; ok && !isIntfNil(v) && !tgwCidrChoiceTypeFound {
+
+				tgwCidrChoiceTypeFound = true
+				tgwCidrChoiceInt := &ves_io_schema_views_aws_tgw_site.ServicesVPCType_TgwCidr{}
+				tgwCidrChoiceInt.TgwCidr = &ves_io_schema_views.CloudSubnetParamType{}
+				awsParameters.TgwCidrChoice = tgwCidrChoiceInt
+
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
+
+					if v, ok := cs["ipv4"]; ok && !isIntfNil(v) {
+
+						tgwCidrChoiceInt.TgwCidr.Ipv4 = v.(string)
+
+					}
+
+					if v, ok := cs["ipv6"]; ok && !isIntfNil(v) {
+
+						tgwCidrChoiceInt.TgwCidr.Ipv6 = v.(string)
 
 					}
 

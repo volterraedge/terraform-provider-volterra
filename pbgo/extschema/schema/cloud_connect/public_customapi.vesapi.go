@@ -1205,6 +1205,12 @@ var CustomAPISwaggerJSON string = `{
                     "title": "Labels",
                     "x-displayname": "Labels"
                 },
+                "status": {
+                    "description": " Status",
+                    "title": "Status",
+                    "$ref": "#/definitions/cloud_connectStatus",
+                    "x-displayname": "Status"
+                },
                 "value": {
                     "type": "array",
                     "description": " List of metric values.",
@@ -1569,6 +1575,20 @@ var CustomAPISwaggerJSON string = `{
                     "x-displayname": "Type"
                 }
             }
+        },
+        "cloud_connectStatus": {
+            "type": "string",
+            "description": "Enumerates Status of CloudConnect\n\n - STATUS_UNKNOWN: Unknown\n\n - STATUS_DOWN: Down\n\n - STATUS_DEGRADED: Degraded\n\n - STATUS_UP: Up\n",
+            "title": "Status",
+            "enum": [
+                "STATUS_UNKNOWN",
+                "STATUS_DOWN",
+                "STATUS_DEGRADED",
+                "STATUS_UP"
+            ],
+            "default": "STATUS_UNKNOWN",
+            "x-displayname": "Status",
+            "x-ves-proto-enum": "ves.io.schema.cloud_connect.Status"
         },
         "cloud_connectTopCloudConnectData": {
             "type": "object",

@@ -1050,6 +1050,12 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
+	if fdrInfos, err := m.GetApiDiscoveryChoiceDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetApiDiscoveryChoiceDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
 	if fdrInfos, err := m.GetApiProtectionRulesDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetApiProtectionRulesDRefInfo() FAILED")
 	} else {
@@ -1088,6 +1094,12 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	if fdrInfos, err := m.GetMaliciousUserMitigationDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetMaliciousUserMitigationDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetMlConfigChoiceDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetMlConfigChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
@@ -1245,6 +1257,34 @@ func (m *CreateSpecType) GetApiDefinitionChoiceDRefInfo() ([]db.DRefInfo, error)
 			Ref:        vdRef,
 		}
 		return []db.DRefInfo{dri}, nil
+
+	default:
+		return nil, nil
+	}
+
+}
+
+// GetDRefInfo for the field's type
+func (m *CreateSpecType) GetApiDiscoveryChoiceDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetApiDiscoveryChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetApiDiscoveryChoice().(type) {
+	case *CreateSpecType_EnableApiDiscovery:
+
+		drInfos, err := m.GetEnableApiDiscovery().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetEnableApiDiscovery().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "enable_api_discovery." + dri.DRField
+		}
+		return drInfos, err
+
+	case *CreateSpecType_DisableApiDiscovery:
+
+		return nil, nil
 
 	default:
 		return nil, nil
@@ -1477,6 +1517,34 @@ func (m *CreateSpecType) GetMaliciousUserMitigationDBEntries(ctx context.Context
 	}
 
 	return entries, nil
+}
+
+// GetDRefInfo for the field's type
+func (m *CreateSpecType) GetMlConfigChoiceDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetMlConfigChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetMlConfigChoice().(type) {
+	case *CreateSpecType_SingleLbApp:
+
+		drInfos, err := m.GetSingleLbApp().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetSingleLbApp().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "single_lb_app." + dri.DRField
+		}
+		return drInfos, err
+
+	case *CreateSpecType_MultiLbApp:
+
+		return nil, nil
+
+	default:
+		return nil, nil
+	}
+
 }
 
 // GetDRefInfo for the field's type
@@ -3935,6 +4003,12 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
+	if fdrInfos, err := m.GetApiDiscoveryChoiceDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetApiDiscoveryChoiceDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
 	if fdrInfos, err := m.GetApiProtectionRulesDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetApiProtectionRulesDRefInfo() FAILED")
 	} else {
@@ -3973,6 +4047,12 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	if fdrInfos, err := m.GetMaliciousUserMitigationDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetMaliciousUserMitigationDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetMlConfigChoiceDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetMlConfigChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
@@ -4130,6 +4210,34 @@ func (m *GetSpecType) GetApiDefinitionChoiceDRefInfo() ([]db.DRefInfo, error) {
 			Ref:        vdRef,
 		}
 		return []db.DRefInfo{dri}, nil
+
+	default:
+		return nil, nil
+	}
+
+}
+
+// GetDRefInfo for the field's type
+func (m *GetSpecType) GetApiDiscoveryChoiceDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetApiDiscoveryChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetApiDiscoveryChoice().(type) {
+	case *GetSpecType_EnableApiDiscovery:
+
+		drInfos, err := m.GetEnableApiDiscovery().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetEnableApiDiscovery().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "enable_api_discovery." + dri.DRField
+		}
+		return drInfos, err
+
+	case *GetSpecType_DisableApiDiscovery:
+
+		return nil, nil
 
 	default:
 		return nil, nil
@@ -4362,6 +4470,34 @@ func (m *GetSpecType) GetMaliciousUserMitigationDBEntries(ctx context.Context, d
 	}
 
 	return entries, nil
+}
+
+// GetDRefInfo for the field's type
+func (m *GetSpecType) GetMlConfigChoiceDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetMlConfigChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetMlConfigChoice().(type) {
+	case *GetSpecType_SingleLbApp:
+
+		drInfos, err := m.GetSingleLbApp().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetSingleLbApp().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "single_lb_app." + dri.DRField
+		}
+		return drInfos, err
+
+	case *GetSpecType_MultiLbApp:
+
+		return nil, nil
+
+	default:
+		return nil, nil
+	}
+
 }
 
 // GetDRefInfo for the field's type
@@ -6894,6 +7030,12 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
+	if fdrInfos, err := m.GetApiDiscoveryChoiceDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetApiDiscoveryChoiceDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
 	if fdrInfos, err := m.GetApiProtectionRulesDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetApiProtectionRulesDRefInfo() FAILED")
 	} else {
@@ -6932,6 +7074,12 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	if fdrInfos, err := m.GetMaliciousUserMitigationDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetMaliciousUserMitigationDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetMlConfigChoiceDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetMlConfigChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
@@ -7095,6 +7243,34 @@ func (m *GlobalSpecType) GetApiDefinitionChoiceDRefInfo() ([]db.DRefInfo, error)
 			Ref:        vdRef,
 		}
 		return []db.DRefInfo{dri}, nil
+
+	default:
+		return nil, nil
+	}
+
+}
+
+// GetDRefInfo for the field's type
+func (m *GlobalSpecType) GetApiDiscoveryChoiceDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetApiDiscoveryChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetApiDiscoveryChoice().(type) {
+	case *GlobalSpecType_EnableApiDiscovery:
+
+		drInfos, err := m.GetEnableApiDiscovery().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetEnableApiDiscovery().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "enable_api_discovery." + dri.DRField
+		}
+		return drInfos, err
+
+	case *GlobalSpecType_DisableApiDiscovery:
+
+		return nil, nil
 
 	default:
 		return nil, nil
@@ -7327,6 +7503,34 @@ func (m *GlobalSpecType) GetMaliciousUserMitigationDBEntries(ctx context.Context
 	}
 
 	return entries, nil
+}
+
+// GetDRefInfo for the field's type
+func (m *GlobalSpecType) GetMlConfigChoiceDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetMlConfigChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetMlConfigChoice().(type) {
+	case *GlobalSpecType_SingleLbApp:
+
+		drInfos, err := m.GetSingleLbApp().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetSingleLbApp().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "single_lb_app." + dri.DRField
+		}
+		return drInfos, err
+
+	case *GlobalSpecType_MultiLbApp:
+
+		return nil, nil
+
+	default:
+		return nil, nil
+	}
+
 }
 
 // GetDRefInfo for the field's type
@@ -11714,6 +11918,12 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
+	if fdrInfos, err := m.GetApiDiscoveryChoiceDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetApiDiscoveryChoiceDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
 	if fdrInfos, err := m.GetApiProtectionRulesDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetApiProtectionRulesDRefInfo() FAILED")
 	} else {
@@ -11752,6 +11962,12 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	if fdrInfos, err := m.GetMaliciousUserMitigationDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetMaliciousUserMitigationDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetMlConfigChoiceDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetMlConfigChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
@@ -11909,6 +12125,34 @@ func (m *ReplaceSpecType) GetApiDefinitionChoiceDRefInfo() ([]db.DRefInfo, error
 			Ref:        vdRef,
 		}
 		return []db.DRefInfo{dri}, nil
+
+	default:
+		return nil, nil
+	}
+
+}
+
+// GetDRefInfo for the field's type
+func (m *ReplaceSpecType) GetApiDiscoveryChoiceDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetApiDiscoveryChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetApiDiscoveryChoice().(type) {
+	case *ReplaceSpecType_EnableApiDiscovery:
+
+		drInfos, err := m.GetEnableApiDiscovery().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetEnableApiDiscovery().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "enable_api_discovery." + dri.DRField
+		}
+		return drInfos, err
+
+	case *ReplaceSpecType_DisableApiDiscovery:
+
+		return nil, nil
 
 	default:
 		return nil, nil
@@ -12141,6 +12385,34 @@ func (m *ReplaceSpecType) GetMaliciousUserMitigationDBEntries(ctx context.Contex
 	}
 
 	return entries, nil
+}
+
+// GetDRefInfo for the field's type
+func (m *ReplaceSpecType) GetMlConfigChoiceDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetMlConfigChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetMlConfigChoice().(type) {
+	case *ReplaceSpecType_SingleLbApp:
+
+		drInfos, err := m.GetSingleLbApp().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetSingleLbApp().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "single_lb_app." + dri.DRField
+		}
+		return drInfos, err
+
+	case *ReplaceSpecType_MultiLbApp:
+
+		return nil, nil
+
+	default:
+		return nil, nil
+	}
+
 }
 
 // GetDRefInfo for the field's type
@@ -17278,9 +17550,8 @@ var DefaultSensitiveDataDisclosureRulesValidator = func() *ValidateSensitiveData
 
 	vrhSensitiveDataTypesInResponse := v.SensitiveDataTypesInResponseValidationRuleHandler
 	rulesSensitiveDataTypesInResponse := map[string]string{
-		"ves.io.schema.rules.repeated.max_items":            "100",
-		"ves.io.schema.rules.repeated.unique":               "true",
-		"ves.io.schema.rules.repeated.unique_metadata_name": "true",
+		"ves.io.schema.rules.repeated.max_items": "100",
+		"ves.io.schema.rules.repeated.unique":    "true",
 	}
 	vFn, err = vrhSensitiveDataTypesInResponse(rulesSensitiveDataTypesInResponse)
 	if err != nil {
@@ -17337,14 +17608,6 @@ type ValidateSensitiveDataTypes struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
-func (v *ValidateSensitiveDataTypes) MaskingModeChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for masking_mode_choice")
-	}
-	return validatorFn, nil
-}
-
 func (v *ValidateSensitiveDataTypes) TypeConditionTypeChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -17366,27 +17629,6 @@ func (v *ValidateSensitiveDataTypes) TypeConditionTypeChoiceApiGroupValidationRu
 		return nil, errors.Wrap(err, "ValidationRuleHandler for api_group")
 	}
 	return oValidatorFn_ApiGroup, nil
-}
-
-func (v *ValidateSensitiveDataTypes) MetadataValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "MessageValidationRuleHandler for metadata")
-	}
-	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
-		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
-			return err
-		}
-
-		if err := ves_io_schema.MessageMetaTypeValidator().Validate(ctx, val, opts...); err != nil {
-			return err
-		}
-
-		return nil
-	}
-
-	return validatorFn, nil
 }
 
 func (v *ValidateSensitiveDataTypes) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
@@ -17412,16 +17654,6 @@ func (v *ValidateSensitiveDataTypes) Validate(ctx context.Context, pm interface{
 
 	}
 
-	if fv, exists := v.FldValidators["masking_mode_choice"]; exists {
-		val := m.GetMaskingModeChoice()
-		vOpts := append(opts,
-			db.WithValidateField("masking_mode_choice"),
-		)
-		if err := fv(ctx, val, vOpts...); err != nil {
-			return err
-		}
-	}
-
 	switch m.GetMaskingModeChoice().(type) {
 	case *SensitiveDataTypes_Mask:
 		if fv, exists := v.FldValidators["masking_mode_choice.mask"]; exists {
@@ -17444,15 +17676,6 @@ func (v *ValidateSensitiveDataTypes) Validate(ctx context.Context, pm interface{
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
-		}
-
-	}
-
-	if fv, exists := v.FldValidators["metadata"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("metadata"))
-		if err := fv(ctx, m.GetMetadata(), vOpts...); err != nil {
-			return err
 		}
 
 	}
@@ -17519,17 +17742,6 @@ var DefaultSensitiveDataTypesValidator = func() *ValidateSensitiveDataTypes {
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
 
-	vrhMaskingModeChoice := v.MaskingModeChoiceValidationRuleHandler
-	rulesMaskingModeChoice := map[string]string{
-		"ves.io.schema.rules.message.required_oneof": "true",
-	}
-	vFn, err = vrhMaskingModeChoice(rulesMaskingModeChoice)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for SensitiveDataTypes.masking_mode_choice: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["masking_mode_choice"] = vFn
-
 	vrhTypeConditionTypeChoice := v.TypeConditionTypeChoiceValidationRuleHandler
 	rulesTypeConditionTypeChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -17563,17 +17775,6 @@ var DefaultSensitiveDataTypesValidator = func() *ValidateSensitiveDataTypes {
 
 	v.FldValidators["type_condition_type_choice.base_path"] = vFnMap["type_condition_type_choice.base_path"]
 	v.FldValidators["type_condition_type_choice.api_group"] = vFnMap["type_condition_type_choice.api_group"]
-
-	vrhMetadata := v.MetadataValidationRuleHandler
-	rulesMetadata := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
-	}
-	vFn, err = vrhMetadata(rulesMetadata)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for SensitiveDataTypes.metadata: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["metadata"] = vFn
 
 	v.FldValidators["type_condition_type_choice.api_endpoint"] = ves_io_schema_views_common_waf.ApiEndpointDetailsValidator().Validate
 
@@ -17621,6 +17822,43 @@ func (m *SingleLoadBalancerAppSetting) DeepCopyProto() proto.Message {
 
 func (m *SingleLoadBalancerAppSetting) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
 	return SingleLoadBalancerAppSettingValidator().Validate(ctx, m, opts...)
+}
+
+func (m *SingleLoadBalancerAppSetting) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetApiDiscoveryChoiceDRefInfo()
+
+}
+
+// GetDRefInfo for the field's type
+func (m *SingleLoadBalancerAppSetting) GetApiDiscoveryChoiceDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetApiDiscoveryChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetApiDiscoveryChoice().(type) {
+	case *SingleLoadBalancerAppSetting_EnableDiscovery:
+
+		drInfos, err := m.GetEnableDiscovery().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetEnableDiscovery().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "enable_discovery." + dri.DRField
+		}
+		return drInfos, err
+
+	case *SingleLoadBalancerAppSetting_DisableDiscovery:
+
+		return nil, nil
+
+	default:
+		return nil, nil
+	}
+
 }
 
 type ValidateSingleLoadBalancerAppSetting struct {

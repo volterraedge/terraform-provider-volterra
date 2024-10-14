@@ -64,17 +64,15 @@ func resourceVolterraDataType() *schema.Resource {
 
 				Type: schema.TypeList,
 
-				Optional:   true,
-				Deprecated: "This field is deprecated and will be removed in future release.",
+				Optional: true,
 				Elem: &schema.Schema{
 					Type: schema.TypeString,
 				},
 			},
 
 			"is_pii": {
-				Type:       schema.TypeBool,
-				Optional:   true,
-				Deprecated: "This field is deprecated and will be removed in future release.",
+				Type:     schema.TypeBool,
+				Optional: true,
 			},
 
 			"is_sensitive_data": {

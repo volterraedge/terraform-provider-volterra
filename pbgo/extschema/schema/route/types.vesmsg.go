@@ -2173,6 +2173,16 @@ func (v *ValidateRouteDestination) ClusterValidationRuleHandler(rules map[string
 	return validatorFn, nil
 }
 
+func (v *ValidateRouteDestination) WeightValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for weight")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateRouteDestination) EndpointSubsetsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	itemKeyRules := db.GetMapStringKeyRules(rules)
@@ -2302,6 +2312,17 @@ var DefaultRouteDestinationValidator = func() *ValidateRouteDestination {
 		panic(errMsg)
 	}
 	v.FldValidators["cluster"] = vFn
+
+	vrhWeight := v.WeightValidationRuleHandler
+	rulesWeight := map[string]string{
+		"ves.io.schema.rules.uint32.lte": "65535",
+	}
+	vFn, err = vrhWeight(rulesWeight)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for RouteDestination.weight: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["weight"] = vFn
 
 	vrhEndpointSubsets := v.EndpointSubsetsValidationRuleHandler
 	rulesEndpointSubsets := map[string]string{
@@ -2443,6 +2464,14 @@ func (v *ValidateRouteDestinationList) HostRewriteParamsValidationRuleHandler(ru
 	return validatorFn, nil
 }
 
+func (v *ValidateRouteDestinationList) HostRewriteParamsHostRewriteValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_HostRewrite, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for host_rewrite")
+	}
+	return oValidatorFn_HostRewrite, nil
+}
+
 func (v *ValidateRouteDestinationList) RouteDestinationRewritePrefixRewriteValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	oValidatorFn_PrefixRewrite, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
@@ -2494,6 +2523,16 @@ func (v *ValidateRouteDestinationList) DestinationsValidationRuleHandler(rules m
 			return errors.Wrap(err, "items destinations")
 		}
 		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateRouteDestinationList) TimeoutValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for timeout")
 	}
 
 	return validatorFn, nil
@@ -2825,6 +2864,19 @@ var DefaultRouteDestinationListValidator = func() *ValidateRouteDestinationList 
 	}
 	v.FldValidators["host_rewrite_params"] = vFn
 
+	vrhHostRewriteParamsHostRewrite := v.HostRewriteParamsHostRewriteValidationRuleHandler
+	rulesHostRewriteParamsHostRewrite := map[string]string{
+		"ves.io.schema.rules.string.max_len": "256",
+		"ves.io.schema.rules.string.min_len": "1",
+	}
+	vFnMap["host_rewrite_params.host_rewrite"], err = vrhHostRewriteParamsHostRewrite(rulesHostRewriteParamsHostRewrite)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field RouteDestinationList.host_rewrite_params_host_rewrite: %s", err)
+		panic(errMsg)
+	}
+
+	v.FldValidators["host_rewrite_params.host_rewrite"] = vFnMap["host_rewrite_params.host_rewrite"]
+
 	vrhRouteDestinationRewritePrefixRewrite := v.RouteDestinationRewritePrefixRewriteValidationRuleHandler
 	rulesRouteDestinationRewritePrefixRewrite := map[string]string{
 		"ves.io.schema.rules.string.http_path": "true",
@@ -2849,6 +2901,17 @@ var DefaultRouteDestinationListValidator = func() *ValidateRouteDestinationList 
 		panic(errMsg)
 	}
 	v.FldValidators["destinations"] = vFn
+
+	vrhTimeout := v.TimeoutValidationRuleHandler
+	rulesTimeout := map[string]string{
+		"ves.io.schema.rules.uint32.lte": "1800000",
+	}
+	vFn, err = vrhTimeout(rulesTimeout)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for RouteDestinationList.timeout: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["timeout"] = vFn
 
 	vrhEndpointSubsets := v.EndpointSubsetsValidationRuleHandler
 	rulesEndpointSubsets := map[string]string{
@@ -4607,24 +4670,6 @@ func (v *ValidateWebsocketConfigType) Validate(ctx context.Context, pm interface
 	}
 	if m == nil {
 		return nil
-	}
-
-	if fv, exists := v.FldValidators["idle_timeout"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("idle_timeout"))
-		if err := fv(ctx, m.GetIdleTimeout(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
-	if fv, exists := v.FldValidators["max_connect_attempts"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("max_connect_attempts"))
-		if err := fv(ctx, m.GetMaxConnectAttempts(), vOpts...); err != nil {
-			return err
-		}
-
 	}
 
 	if fv, exists := v.FldValidators["use_websocket"]; exists {

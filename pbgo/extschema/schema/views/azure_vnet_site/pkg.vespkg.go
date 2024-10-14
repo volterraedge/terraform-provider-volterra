@@ -77,8 +77,70 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 
+	mdr.RPCSubscriptionFieldsRegistry["ves.io.schema.views.azure_vnet_site.API.Create"] = []svcfw.SubscriptionField{
+		{
+			FieldPath:     "ves.io.schema.views.azure_vnet_site.CreateRequest.spec.custom_dns.inside_nameserver_v6",
+			AddonServices: []string{"f5xc-ipv6-standard"},
+		},
+		{
+			FieldPath:     "ves.io.schema.views.azure_vnet_site.CreateRequest.spec.custom_dns.outside_nameserver_v6",
+			AddonServices: []string{"f5xc-ipv6-standard"},
+		},
+		{
+			FieldPath:     "ves.io.schema.views.azure_vnet_site.CreateRequest.spec.site_type.ingress_egress_gw.az_nodes.inside_subnet.choice.subnet_param.ipv6",
+			AddonServices: []string{"f5xc-ipv6-standard"},
+		},
+		{
+			FieldPath:     "ves.io.schema.views.azure_vnet_site.CreateRequest.spec.site_type.ingress_egress_gw.az_nodes.outside_subnet.choice.subnet_param.ipv6",
+			AddonServices: []string{"f5xc-ipv6-standard"},
+		},
+		{
+			FieldPath:     "ves.io.schema.views.azure_vnet_site.CreateRequest.spec.site_type.ingress_egress_gw.hub_choice.hub.express_route_choice.express_route_enabled.gateway_subnet.choice.subnet_param.ipv6",
+			AddonServices: []string{"f5xc-ipv6-standard"},
+		},
+		{
+			FieldPath:     "ves.io.schema.views.azure_vnet_site.CreateRequest.spec.site_type.ingress_egress_gw.hub_choice.hub.express_route_choice.express_route_enabled.route_server_subnet.choice.subnet_param.ipv6",
+			AddonServices: []string{"f5xc-ipv6-standard"},
+		},
+		{
+			FieldPath:     "ves.io.schema.views.azure_vnet_site.CreateRequest.spec.site_type.ingress_egress_gw_ar.hub_choice.hub.express_route_choice.express_route_enabled.gateway_subnet.choice.subnet_param.ipv6",
+			AddonServices: []string{"f5xc-ipv6-standard"},
+		},
+		{
+			FieldPath:     "ves.io.schema.views.azure_vnet_site.CreateRequest.spec.site_type.ingress_egress_gw_ar.hub_choice.hub.express_route_choice.express_route_enabled.route_server_subnet.choice.subnet_param.ipv6",
+			AddonServices: []string{"f5xc-ipv6-standard"},
+		},
+		{
+			FieldPath:     "ves.io.schema.views.azure_vnet_site.CreateRequest.spec.site_type.ingress_egress_gw_ar.node.inside_subnet.choice.subnet_param.ipv6",
+			AddonServices: []string{"f5xc-ipv6-standard"},
+		},
+		{
+			FieldPath:     "ves.io.schema.views.azure_vnet_site.CreateRequest.spec.site_type.ingress_egress_gw_ar.node.outside_subnet.choice.subnet_param.ipv6",
+			AddonServices: []string{"f5xc-ipv6-standard"},
+		},
+		{
+			FieldPath:     "ves.io.schema.views.azure_vnet_site.CreateRequest.spec.site_type.ingress_gw.az_nodes.local_subnet.choice.subnet_param.ipv6",
+			AddonServices: []string{"f5xc-ipv6-standard"},
+		},
+		{
+			FieldPath:     "ves.io.schema.views.azure_vnet_site.CreateRequest.spec.site_type.ingress_gw_ar.node.local_subnet.choice.subnet_param.ipv6",
+			AddonServices: []string{"f5xc-ipv6-standard"},
+		},
+		{
+			FieldPath:     "ves.io.schema.views.azure_vnet_site.CreateRequest.spec.site_type.voltstack_cluster.az_nodes.local_subnet.choice.subnet_param.ipv6",
+			AddonServices: []string{"f5xc-ipv6-standard"},
+		},
+		{
+			FieldPath:     "ves.io.schema.views.azure_vnet_site.CreateRequest.spec.site_type.voltstack_cluster_ar.node.local_subnet.choice.subnet_param.ipv6",
+			AddonServices: []string{"f5xc-ipv6-standard"},
+		},
+	}
+
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.views.azure_vnet_site.API.Create"] = []string{
-		"spec.admin_password",
+		"spec.admin_password.blindfold_secret_info_internal",
+		"spec.admin_password.secret_encoding_type",
+		"spec.admin_password.vault_secret_info",
+		"spec.admin_password.wingman_secret_info",
 		"spec.ingress_egress_gw.az_nodes.#.disk_size",
 		"spec.ingress_egress_gw.global_network_list.global_network_connections.#.enable_forward_proxy.tls_intercept.custom_certificate.private_key.blindfold_secret_info_internal",
 		"spec.ingress_egress_gw.global_network_list.global_network_connections.#.enable_forward_proxy.tls_intercept.custom_certificate.private_key.secret_encoding_type",
@@ -113,11 +175,11 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 	mdr.RPCAvailableInReqFieldRegistry["ves.io.schema.views.azure_vnet_site.API.Create"] = []svcfw.EnvironmentField{
 		{
 			FieldPath:           "spec.custom_dns.inside_nameserver_v6",
-			AllowedEnvironments: []string{"crt", "softbank_mec", "staging", "test"},
+			AllowedEnvironments: []string{"crt", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
 			FieldPath:           "spec.custom_dns.outside_nameserver_v6",
-			AllowedEnvironments: []string{"crt", "softbank_mec", "staging", "test"},
+			AllowedEnvironments: []string{"crt", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
 			FieldPath:           "spec.ingress_egress_gw.az_nodes.#.inside_subnet.subnet_param.ipv6",
@@ -172,11 +234,11 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.views.azure_vnet_site.API.Create"] = []svcfw.EnvironmentField{
 		{
 			FieldPath:           "spec.custom_dns.inside_nameserver_v6",
-			AllowedEnvironments: []string{"crt", "softbank_mec", "staging", "test"},
+			AllowedEnvironments: []string{"crt", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
 			FieldPath:           "spec.custom_dns.outside_nameserver_v6",
-			AllowedEnvironments: []string{"crt", "softbank_mec", "staging", "test"},
+			AllowedEnvironments: []string{"crt", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
 			FieldPath:           "spec.ingress_egress_gw.az_nodes.#.inside_subnet.subnet_param.ipv6",
@@ -233,11 +295,11 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.views.azure_vnet_site.API.Get"] = []svcfw.EnvironmentField{
 		{
 			FieldPath:           "create_form.spec.custom_dns.inside_nameserver_v6",
-			AllowedEnvironments: []string{"crt", "softbank_mec", "staging", "test"},
+			AllowedEnvironments: []string{"crt", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
 			FieldPath:           "create_form.spec.custom_dns.outside_nameserver_v6",
-			AllowedEnvironments: []string{"crt", "softbank_mec", "staging", "test"},
+			AllowedEnvironments: []string{"crt", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
 			FieldPath:           "create_form.spec.ingress_egress_gw.az_nodes.#.inside_subnet.subnet_param.ipv6",
@@ -289,11 +351,11 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		},
 		{
 			FieldPath:           "replace_form.spec.custom_dns.inside_nameserver_v6",
-			AllowedEnvironments: []string{"crt", "softbank_mec", "staging", "test"},
+			AllowedEnvironments: []string{"crt", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
 			FieldPath:           "replace_form.spec.custom_dns.outside_nameserver_v6",
-			AllowedEnvironments: []string{"crt", "softbank_mec", "staging", "test"},
+			AllowedEnvironments: []string{"crt", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
 			FieldPath:           "replace_form.spec.ingress_egress_gw.hub.express_route_enabled.gateway_subnet.subnet_param.ipv6",
@@ -321,11 +383,11 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		},
 		{
 			FieldPath:           "spec.custom_dns.inside_nameserver_v6",
-			AllowedEnvironments: []string{"crt", "softbank_mec", "staging", "test"},
+			AllowedEnvironments: []string{"crt", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
 			FieldPath:           "spec.custom_dns.outside_nameserver_v6",
-			AllowedEnvironments: []string{"crt", "softbank_mec", "staging", "test"},
+			AllowedEnvironments: []string{"crt", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
 			FieldPath:           "spec.ingress_egress_gw.az_nodes.#.inside_subnet.subnet_param.ipv6",
@@ -380,11 +442,11 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.views.azure_vnet_site.API.List"] = []svcfw.EnvironmentField{
 		{
 			FieldPath:           "items.#.get_spec.custom_dns.inside_nameserver_v6",
-			AllowedEnvironments: []string{"crt", "softbank_mec", "staging", "test"},
+			AllowedEnvironments: []string{"crt", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
 			FieldPath:           "items.#.get_spec.custom_dns.outside_nameserver_v6",
-			AllowedEnvironments: []string{"crt", "softbank_mec", "staging", "test"},
+			AllowedEnvironments: []string{"crt", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
 			FieldPath:           "items.#.get_spec.ingress_egress_gw.az_nodes.#.inside_subnet.subnet_param.ipv6",
@@ -436,6 +498,41 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		},
 	}
 
+	mdr.RPCSubscriptionFieldsRegistry["ves.io.schema.views.azure_vnet_site.API.Replace"] = []svcfw.SubscriptionField{
+		{
+			FieldPath:     "ves.io.schema.views.azure_vnet_site.ReplaceRequest.spec.custom_dns.inside_nameserver_v6",
+			AddonServices: []string{"f5xc-ipv6-standard"},
+		},
+		{
+			FieldPath:     "ves.io.schema.views.azure_vnet_site.ReplaceRequest.spec.custom_dns.outside_nameserver_v6",
+			AddonServices: []string{"f5xc-ipv6-standard"},
+		},
+		{
+			FieldPath:     "ves.io.schema.views.azure_vnet_site.ReplaceRequest.spec.site_type.ingress_egress_gw.hub_choice.hub.express_route_choice.express_route_enabled.gateway_subnet.choice.subnet_param.ipv6",
+			AddonServices: []string{"f5xc-ipv6-standard"},
+		},
+		{
+			FieldPath:     "ves.io.schema.views.azure_vnet_site.ReplaceRequest.spec.site_type.ingress_egress_gw.hub_choice.hub.express_route_choice.express_route_enabled.route_server_subnet.choice.subnet_param.ipv6",
+			AddonServices: []string{"f5xc-ipv6-standard"},
+		},
+		{
+			FieldPath:     "ves.io.schema.views.azure_vnet_site.ReplaceRequest.spec.site_type.ingress_egress_gw_ar.hub_choice.hub.express_route_choice.express_route_enabled.gateway_subnet.choice.subnet_param.ipv6",
+			AddonServices: []string{"f5xc-ipv6-standard"},
+		},
+		{
+			FieldPath:     "ves.io.schema.views.azure_vnet_site.ReplaceRequest.spec.site_type.ingress_egress_gw_ar.hub_choice.hub.express_route_choice.express_route_enabled.route_server_subnet.choice.subnet_param.ipv6",
+			AddonServices: []string{"f5xc-ipv6-standard"},
+		},
+		{
+			FieldPath:     "ves.io.schema.views.azure_vnet_site.ReplaceRequest.spec.site_type.ingress_egress_gw_ar.node.inside_subnet.choice.subnet_param.ipv6",
+			AddonServices: []string{"f5xc-ipv6-standard"},
+		},
+		{
+			FieldPath:     "ves.io.schema.views.azure_vnet_site.ReplaceRequest.spec.site_type.ingress_egress_gw_ar.node.outside_subnet.choice.subnet_param.ipv6",
+			AddonServices: []string{"f5xc-ipv6-standard"},
+		},
+	}
+
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.views.azure_vnet_site.API.Replace"] = []string{
 		"spec.ingress_egress_gw.global_network_list.global_network_connections.#.enable_forward_proxy.tls_intercept.custom_certificate.private_key.blindfold_secret_info_internal",
 		"spec.ingress_egress_gw.global_network_list.global_network_connections.#.enable_forward_proxy.tls_intercept.custom_certificate.private_key.secret_encoding_type",
@@ -468,11 +565,11 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 	mdr.RPCAvailableInReqFieldRegistry["ves.io.schema.views.azure_vnet_site.API.Replace"] = []svcfw.EnvironmentField{
 		{
 			FieldPath:           "spec.custom_dns.inside_nameserver_v6",
-			AllowedEnvironments: []string{"crt", "softbank_mec", "staging", "test"},
+			AllowedEnvironments: []string{"crt", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
 			FieldPath:           "spec.custom_dns.outside_nameserver_v6",
-			AllowedEnvironments: []string{"crt", "softbank_mec", "staging", "test"},
+			AllowedEnvironments: []string{"crt", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
 			FieldPath:           "spec.ingress_egress_gw.hub.express_route_enabled.gateway_subnet.subnet_param.ipv6",

@@ -5971,10 +5971,12 @@ var CustomAPISwaggerJSON string = `{
         },
         "access_logMultiKeyField": {
             "type": "string",
-            "description": "x-displayName: \"Multi-Key Field\"\nSecurity events can be aggregated based on these multiple key fields\n\n - VH_NAME_NAMESPACE: x-displayName: \"VH Name, Namespace\"\nAggregated by (KeyField.VH_NAME, KeyField.NAMESPACE)",
+            "description": "x-displayName: \"Multi-Key Field\"\nSecurity events can be aggregated based on these multiple key fields\n\n - VH_NAME_NAMESPACE: x-displayName: \"VH Name, Namespace\"\nAggregated by (KeyField.VH_NAME, KeyField.NAMESPACE)\n - API_ENDPOINT_METHOD: x-displayName: \"api_endpoint, method\"\nAggregated by (KeyField.API_ENDPOINT, KeyField.METHOD)\n - API_ENDPOINT_METHOD_RSP_CODE_CLASS: x-displayName: \"api_endpoint, method, rsp_code_class\"\nAggregated by (KeyField.API_ENDPOINT, KeyField.METHOD, KeyField.rsp_code_class)",
             "title": "Multi-Key Field",
             "enum": [
-                "VH_NAME_NAMESPACE"
+                "VH_NAME_NAMESPACE",
+                "API_ENDPOINT_METHOD",
+                "API_ENDPOINT_METHOD_RSP_CODE_CLASS"
             ],
             "default": "VH_NAME_NAMESPACE"
         },

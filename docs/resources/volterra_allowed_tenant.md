@@ -1,9 +1,9 @@
 ---
 
 page_title: "Volterra: allowed_tenant"
-
 description: "The allowed_tenant allows CRUD of Allowed Tenant resource on Volterra SaaS"
------------------------------------------------------------------------------------------
+
+---
 
 Resource volterra_allowed_tenant
 ================================

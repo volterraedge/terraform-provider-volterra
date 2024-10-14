@@ -2317,6 +2317,145 @@ func APISpecificationSettingsValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *ApiCodeRepos) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *ApiCodeRepos) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *ApiCodeRepos) DeepCopy() *ApiCodeRepos {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &ApiCodeRepos{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *ApiCodeRepos) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *ApiCodeRepos) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return ApiCodeReposValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateApiCodeRepos struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateApiCodeRepos) ApiCodeRepoValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepStringItemRules(rules)
+	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Item ValidationRuleHandler for api_code_repo")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []string, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for api_code_repo")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]string)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []string, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal := fmt.Sprintf("%v", elem)
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated api_code_repo")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items api_code_repo")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateApiCodeRepos) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*ApiCodeRepos)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *ApiCodeRepos got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["api_code_repo"]; exists {
+		vOpts := append(opts, db.WithValidateField("api_code_repo"))
+		if err := fv(ctx, m.GetApiCodeRepo(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultApiCodeReposValidator = func() *ValidateApiCodeRepos {
+	v := &ValidateApiCodeRepos{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhApiCodeRepo := v.ApiCodeRepoValidationRuleHandler
+	rulesApiCodeRepo := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.max_len":   "256",
+	}
+	vFn, err = vrhApiCodeRepo(rulesApiCodeRepo)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ApiCodeRepos.api_code_repo: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["api_code_repo"] = vFn
+
+	return v
+}()
+
+func ApiCodeReposValidator() db.Validator {
+	return DefaultApiCodeReposValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *ApiDefinitionList) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -2526,6 +2665,183 @@ func ApiDefinitionListValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *ApiDiscoveryFromCodeScan) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *ApiDiscoveryFromCodeScan) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *ApiDiscoveryFromCodeScan) DeepCopy() *ApiDiscoveryFromCodeScan {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &ApiDiscoveryFromCodeScan{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *ApiDiscoveryFromCodeScan) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *ApiDiscoveryFromCodeScan) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return ApiDiscoveryFromCodeScanValidator().Validate(ctx, m, opts...)
+}
+
+func (m *ApiDiscoveryFromCodeScan) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetCodeBaseIntegrationsDRefInfo()
+
+}
+
+// GetDRefInfo for the field's type
+func (m *ApiDiscoveryFromCodeScan) GetCodeBaseIntegrationsDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetCodeBaseIntegrations() == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	for idx, e := range m.GetCodeBaseIntegrations() {
+		driSet, err := e.GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetCodeBaseIntegrations() GetDRefInfo() FAILED")
+		}
+		for i := range driSet {
+			dri := &driSet[i]
+			dri.DRField = fmt.Sprintf("code_base_integrations[%v].%s", idx, dri.DRField)
+		}
+		drInfos = append(drInfos, driSet...)
+	}
+	return drInfos, nil
+
+}
+
+type ValidateApiDiscoveryFromCodeScan struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateApiDiscoveryFromCodeScan) CodeBaseIntegrationsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for code_base_integrations")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*CodeBaseIntegrationSelection, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := CodeBaseIntegrationSelectionValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for code_base_integrations")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*CodeBaseIntegrationSelection)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*CodeBaseIntegrationSelection, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated code_base_integrations")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items code_base_integrations")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateApiDiscoveryFromCodeScan) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*ApiDiscoveryFromCodeScan)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *ApiDiscoveryFromCodeScan got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["code_base_integrations"]; exists {
+		vOpts := append(opts, db.WithValidateField("code_base_integrations"))
+		if err := fv(ctx, m.GetCodeBaseIntegrations(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultApiDiscoveryFromCodeScanValidator = func() *ValidateApiDiscoveryFromCodeScan {
+	v := &ValidateApiDiscoveryFromCodeScan{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhCodeBaseIntegrations := v.CodeBaseIntegrationsValidationRuleHandler
+	rulesCodeBaseIntegrations := map[string]string{
+		"ves.io.schema.rules.message.required":   "true",
+		"ves.io.schema.rules.repeated.max_items": "5",
+		"ves.io.schema.rules.repeated.unique":    "true",
+	}
+	vFn, err = vrhCodeBaseIntegrations(rulesCodeBaseIntegrations)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ApiDiscoveryFromCodeScan.code_base_integrations: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["code_base_integrations"] = vFn
+
+	return v
+}()
+
+func ApiDiscoveryFromCodeScanValidator() db.Validator {
+	return DefaultApiDiscoveryFromCodeScanValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *ApiDiscoverySetting) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -2561,6 +2877,33 @@ func (m *ApiDiscoverySetting) Validate(ctx context.Context, opts ...db.ValidateO
 	return ApiDiscoverySettingValidator().Validate(ctx, m, opts...)
 }
 
+func (m *ApiDiscoverySetting) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetApiDiscoveryFromCodeScanDRefInfo()
+
+}
+
+// GetDRefInfo for the field's type
+func (m *ApiDiscoverySetting) GetApiDiscoveryFromCodeScanDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetApiDiscoveryFromCodeScan() == nil {
+		return nil, nil
+	}
+
+	drInfos, err := m.GetApiDiscoveryFromCodeScan().GetDRefInfo()
+	if err != nil {
+		return nil, errors.Wrap(err, "GetApiDiscoveryFromCodeScan().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "api_discovery_from_code_scan." + dri.DRField
+	}
+	return drInfos, err
+
+}
+
 type ValidateApiDiscoverySetting struct {
 	FldValidators map[string]db.ValidatorFunc
 }
@@ -2585,6 +2928,15 @@ func (v *ValidateApiDiscoverySetting) Validate(ctx context.Context, pm interface
 	}
 	if m == nil {
 		return nil
+	}
+
+	if fv, exists := v.FldValidators["api_discovery_from_code_scan"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("api_discovery_from_code_scan"))
+		if err := fv(ctx, m.GetApiDiscoveryFromCodeScan(), vOpts...); err != nil {
+			return err
+		}
+
 	}
 
 	if fv, exists := v.FldValidators["discovered_api_settings"]; exists {
@@ -2670,6 +3022,8 @@ var DefaultApiDiscoverySettingValidator = func() *ValidateApiDiscoverySetting {
 	v.FldValidators["sensitive_data_detection_rules"] = ves_io_schema_app_type.SensitiveDataDetectionRulesValidator().Validate
 
 	v.FldValidators["discovered_api_settings"] = ves_io_schema_app_type.DiscoveredAPISettingsValidator().Validate
+
+	v.FldValidators["api_discovery_from_code_scan"] = ApiDiscoveryFromCodeScanValidator().Validate
 
 	return v
 }()
@@ -4357,6 +4711,239 @@ var DefaultChallengeRuleListValidator = func() *ValidateChallengeRuleList {
 
 func ChallengeRuleListValidator() db.Validator {
 	return DefaultChallengeRuleListValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *CodeBaseIntegrationSelection) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *CodeBaseIntegrationSelection) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *CodeBaseIntegrationSelection) DeepCopy() *CodeBaseIntegrationSelection {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &CodeBaseIntegrationSelection{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *CodeBaseIntegrationSelection) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *CodeBaseIntegrationSelection) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return CodeBaseIntegrationSelectionValidator().Validate(ctx, m, opts...)
+}
+
+func (m *CodeBaseIntegrationSelection) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetCodeBaseIntegrationDRefInfo()
+
+}
+
+func (m *CodeBaseIntegrationSelection) GetCodeBaseIntegrationDRefInfo() ([]db.DRefInfo, error) {
+
+	vref := m.GetCodeBaseIntegration()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("code_base_integration.Object")
+	dri := db.DRefInfo{
+		RefdType:   "code_base_integration.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "code_base_integration",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+
+}
+
+// GetCodeBaseIntegrationDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *CodeBaseIntegrationSelection) GetCodeBaseIntegrationDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "code_base_integration.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: code_base_integration")
+	}
+
+	vref := m.GetCodeBaseIntegration()
+	if vref == nil {
+		return nil, nil
+	}
+	ref := &ves_io_schema.ObjectRefType{
+		Kind:      "code_base_integration.Object",
+		Tenant:    vref.Tenant,
+		Namespace: vref.Namespace,
+		Name:      vref.Name,
+	}
+	refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+	if err != nil {
+		return nil, errors.Wrap(err, "Getting referred entry")
+	}
+	if refdEnt != nil {
+		entries = append(entries, refdEnt)
+	}
+
+	return entries, nil
+}
+
+type ValidateCodeBaseIntegrationSelection struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateCodeBaseIntegrationSelection) ApiReposChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for api_repos_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateCodeBaseIntegrationSelection) CodeBaseIntegrationValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for code_base_integration")
+	}
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		if err := ves_io_schema_views.ObjectRefTypeValidator().Validate(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateCodeBaseIntegrationSelection) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*CodeBaseIntegrationSelection)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *CodeBaseIntegrationSelection got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["api_repos_choice"]; exists {
+		val := m.GetApiReposChoice()
+		vOpts := append(opts,
+			db.WithValidateField("api_repos_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetApiReposChoice().(type) {
+	case *CodeBaseIntegrationSelection_AllRepos:
+		if fv, exists := v.FldValidators["api_repos_choice.all_repos"]; exists {
+			val := m.GetApiReposChoice().(*CodeBaseIntegrationSelection_AllRepos).AllRepos
+			vOpts := append(opts,
+				db.WithValidateField("api_repos_choice"),
+				db.WithValidateField("all_repos"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CodeBaseIntegrationSelection_SelectedRepos:
+		if fv, exists := v.FldValidators["api_repos_choice.selected_repos"]; exists {
+			val := m.GetApiReposChoice().(*CodeBaseIntegrationSelection_SelectedRepos).SelectedRepos
+			vOpts := append(opts,
+				db.WithValidateField("api_repos_choice"),
+				db.WithValidateField("selected_repos"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["code_base_integration"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("code_base_integration"))
+		if err := fv(ctx, m.GetCodeBaseIntegration(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultCodeBaseIntegrationSelectionValidator = func() *ValidateCodeBaseIntegrationSelection {
+	v := &ValidateCodeBaseIntegrationSelection{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhApiReposChoice := v.ApiReposChoiceValidationRuleHandler
+	rulesApiReposChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhApiReposChoice(rulesApiReposChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CodeBaseIntegrationSelection.api_repos_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["api_repos_choice"] = vFn
+
+	vrhCodeBaseIntegration := v.CodeBaseIntegrationValidationRuleHandler
+	rulesCodeBaseIntegration := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhCodeBaseIntegration(rulesCodeBaseIntegration)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CodeBaseIntegrationSelection.code_base_integration: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["code_base_integration"] = vFn
+
+	v.FldValidators["api_repos_choice.selected_repos"] = ApiCodeReposValidator().Validate
+
+	return v
+}()
+
+func CodeBaseIntegrationSelectionValidator() db.Validator {
+	return DefaultCodeBaseIntegrationSelectionValidator
 }
 
 // augmented methods on protoc/std generated struct

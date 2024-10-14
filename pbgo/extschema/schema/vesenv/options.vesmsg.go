@@ -792,6 +792,28 @@ func (v *ValidateBFSecretChoice) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
+	case *BFSecretChoice_VesSiteAdminPasswordSecret:
+		if fv, exists := v.FldValidators["choice.ves_site_admin_password_secret"]; exists {
+			val := m.GetChoice().(*BFSecretChoice_VesSiteAdminPasswordSecret).VesSiteAdminPasswordSecret
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("ves_site_admin_password_secret"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *BFSecretChoice_VesApisecSecret:
+		if fv, exists := v.FldValidators["choice.ves_apisec_secret"]; exists {
+			val := m.GetChoice().(*BFSecretChoice_VesApisecSecret).VesApisecSecret
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("ves_apisec_secret"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
@@ -2042,6 +2064,17 @@ func (v *ValidateServiceSlugChoice) Validate(ctx context.Context, pm interface{}
 			vOpts := append(opts,
 				db.WithValidateField("choice"),
 				db.WithValidateField("gia"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ServiceSlugChoice_Discovery:
+		if fv, exists := v.FldValidators["choice.discovery"]; exists {
+			val := m.GetChoice().(*ServiceSlugChoice_Discovery).Discovery
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("discovery"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err

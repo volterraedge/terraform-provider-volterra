@@ -77,6 +77,15 @@ func (v *ValidateAllocateIPRequest) Validate(ctx context.Context, pm interface{}
 		return nil
 	}
 
+	if fv, exists := v.FldValidators["use_v6_range"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("use_v6_range"))
+		if err := fv(ctx, m.GetUseV6Range(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	return nil
 }
 

@@ -232,6 +232,16 @@ type DNSLBHealthStatusListResponse struct {
 	// x-displayName: "Items"
 	// Collection of DNS Load Balancer Health status
 	Items []*DNSLBHealthStatusListResponseItem `protobuf:"bytes,1,rep,name=items,proto3" json:"items,omitempty"`
+	// DNS Load Balancer Status Summary
+	//
+	// x-displayName: "DNS Load Balancer Pools Summary"
+	// Summary of DNS Load Balancers by Health Status
+	DnsLoadBalancerStatusSummary []*HealthStatusSummary `protobuf:"bytes,2,rep,name=dns_load_balancer_status_summary,json=dnsLoadBalancerStatusSummary,proto3" json:"dns_load_balancer_status_summary,omitempty"`
+	// DNS Load Balancer Pools Status Summary
+	//
+	// x-displayName: "DNS Load Balancer Pools Status Summary"
+	// Summary of DNS Load Balancer Pools by Health Status
+	DnsLbPoolsStatusSummary []*HealthStatusSummary `protobuf:"bytes,3,rep,name=dns_lb_pools_status_summary,json=dnsLbPoolsStatusSummary,proto3" json:"dns_lb_pools_status_summary,omitempty"`
 }
 
 func (m *DNSLBHealthStatusListResponse) Reset()      { *m = DNSLBHealthStatusListResponse{} }
@@ -269,6 +279,20 @@ var xxx_messageInfo_DNSLBHealthStatusListResponse proto.InternalMessageInfo
 func (m *DNSLBHealthStatusListResponse) GetItems() []*DNSLBHealthStatusListResponseItem {
 	if m != nil {
 		return m.Items
+	}
+	return nil
+}
+
+func (m *DNSLBHealthStatusListResponse) GetDnsLoadBalancerStatusSummary() []*HealthStatusSummary {
+	if m != nil {
+		return m.DnsLoadBalancerStatusSummary
+	}
+	return nil
+}
+
+func (m *DNSLBHealthStatusListResponse) GetDnsLbPoolsStatusSummary() []*HealthStatusSummary {
+	if m != nil {
+		return m.DnsLbPoolsStatusSummary
 	}
 	return nil
 }
@@ -707,6 +731,113 @@ func (m *DNSLBPoolHealthStatusListResponseItem) GetHealthCheckType() string {
 	return ""
 }
 
+// DNSLBPoolMemberHealthStatusListRequest
+//
+// x-displayName: "DNS Load Balancer Pool Member Health Status List Request"
+// Request to get Health Status of all DNS Load Balancer Pool Members in a namespace
+type DNSLBPoolMemberHealthStatusListRequest struct {
+	// Namespace
+	//
+	// x-displayName: "Namespace"
+	// x-example: "ns1"
+	// Namespace to scope the listing of DNS LB health status
+	Namespace string `protobuf:"bytes,1,opt,name=namespace,proto3" json:"namespace,omitempty"`
+}
+
+func (m *DNSLBPoolMemberHealthStatusListRequest) Reset() {
+	*m = DNSLBPoolMemberHealthStatusListRequest{}
+}
+func (*DNSLBPoolMemberHealthStatusListRequest) ProtoMessage() {}
+func (*DNSLBPoolMemberHealthStatusListRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_fe61b9267aedb241, []int{8}
+}
+func (m *DNSLBPoolMemberHealthStatusListRequest) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *DNSLBPoolMemberHealthStatusListRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_DNSLBPoolMemberHealthStatusListRequest.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *DNSLBPoolMemberHealthStatusListRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_DNSLBPoolMemberHealthStatusListRequest.Merge(m, src)
+}
+func (m *DNSLBPoolMemberHealthStatusListRequest) XXX_Size() int {
+	return m.Size()
+}
+func (m *DNSLBPoolMemberHealthStatusListRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_DNSLBPoolMemberHealthStatusListRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_DNSLBPoolMemberHealthStatusListRequest proto.InternalMessageInfo
+
+func (m *DNSLBPoolMemberHealthStatusListRequest) GetNamespace() string {
+	if m != nil {
+		return m.Namespace
+	}
+	return ""
+}
+
+// DNSLBPoolMemberHealthStatusListResponse
+//
+// x-displayName: "DNS Load Balancer Pool Member Health Status List Response"
+// Response for DNS Load Balancer Pool Member Health Status List Request
+type DNSLBPoolMemberHealthStatusListResponse struct {
+	// Items
+	//
+	// x-displayName: "Items"
+	// Collection of DNS Load Balancer Pool Member Health Status
+	Items []*DNSLBPoolMemberHealthStatusListResponseItem `protobuf:"bytes,1,rep,name=items,proto3" json:"items,omitempty"`
+}
+
+func (m *DNSLBPoolMemberHealthStatusListResponse) Reset() {
+	*m = DNSLBPoolMemberHealthStatusListResponse{}
+}
+func (*DNSLBPoolMemberHealthStatusListResponse) ProtoMessage() {}
+func (*DNSLBPoolMemberHealthStatusListResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_fe61b9267aedb241, []int{9}
+}
+func (m *DNSLBPoolMemberHealthStatusListResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *DNSLBPoolMemberHealthStatusListResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_DNSLBPoolMemberHealthStatusListResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *DNSLBPoolMemberHealthStatusListResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_DNSLBPoolMemberHealthStatusListResponse.Merge(m, src)
+}
+func (m *DNSLBPoolMemberHealthStatusListResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *DNSLBPoolMemberHealthStatusListResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_DNSLBPoolMemberHealthStatusListResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_DNSLBPoolMemberHealthStatusListResponse proto.InternalMessageInfo
+
+func (m *DNSLBPoolMemberHealthStatusListResponse) GetItems() []*DNSLBPoolMemberHealthStatusListResponseItem {
+	if m != nil {
+		return m.Items
+	}
+	return nil
+}
+
 // DNSLBPoolMemberHealthStatusListResponseItem
 //
 // x-displayName: "DNS Load Balancer Pool Member Health Status List Item"
@@ -741,6 +872,18 @@ type DNSLBPoolMemberHealthStatusListResponseItem struct {
 	// x-example: "received string mismatch"
 	// Error Description of DNS Load Balancer Pool Member health check failure
 	ErrorDescription string `protobuf:"bytes,5,opt,name=error_description,json=errorDescription,proto3" json:"error_description,omitempty"`
+	// DNS Load Balancer Name
+	//
+	// x-displayName: "DNS Load Balancer Name"
+	// x-example: "dns_lb1"
+	// Name of the DNS Load Balancer containing the Pool Member
+	DnsLbName string `protobuf:"bytes,6,opt,name=dns_lb_name,json=dnsLbName,proto3" json:"dns_lb_name,omitempty"`
+	// DNS Load Balancer Pool Name
+	//
+	// x-displayName: "DNS Load Balancer Pool Name"
+	// x-example: "dns_lb_pool1"
+	// Name of the DNS Load Balancer Pool
+	DnsLbPoolName string `protobuf:"bytes,7,opt,name=dns_lb_pool_name,json=dnsLbPoolName,proto3" json:"dns_lb_pool_name,omitempty"`
 }
 
 func (m *DNSLBPoolMemberHealthStatusListResponseItem) Reset() {
@@ -748,7 +891,7 @@ func (m *DNSLBPoolMemberHealthStatusListResponseItem) Reset() {
 }
 func (*DNSLBPoolMemberHealthStatusListResponseItem) ProtoMessage() {}
 func (*DNSLBPoolMemberHealthStatusListResponseItem) Descriptor() ([]byte, []int) {
-	return fileDescriptor_fe61b9267aedb241, []int{8}
+	return fileDescriptor_fe61b9267aedb241, []int{10}
 }
 func (m *DNSLBPoolMemberHealthStatusListResponseItem) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -812,6 +955,20 @@ func (m *DNSLBPoolMemberHealthStatusListResponseItem) GetErrorDescription() stri
 	return ""
 }
 
+func (m *DNSLBPoolMemberHealthStatusListResponseItem) GetDnsLbName() string {
+	if m != nil {
+		return m.DnsLbName
+	}
+	return ""
+}
+
+func (m *DNSLBPoolMemberHealthStatusListResponseItem) GetDnsLbPoolName() string {
+	if m != nil {
+		return m.DnsLbPoolName
+	}
+	return ""
+}
+
 // HealthStatusSummary
 //
 // x-displayName: "Health Status Summary"
@@ -832,7 +989,7 @@ type HealthStatusSummary struct {
 func (m *HealthStatusSummary) Reset()      { *m = HealthStatusSummary{} }
 func (*HealthStatusSummary) ProtoMessage() {}
 func (*HealthStatusSummary) Descriptor() ([]byte, []int) {
-	return fileDescriptor_fe61b9267aedb241, []int{9}
+	return fileDescriptor_fe61b9267aedb241, []int{11}
 }
 func (m *HealthStatusSummary) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -875,6 +1032,242 @@ func (m *HealthStatusSummary) GetCount() []*schema.MetricValue {
 	return nil
 }
 
+// DNSLBPoolMemberHealthStatusEvent
+//
+// x-displayName: "DNS Load Balancer Pool Member Health Status Event"
+// Pool member health status change event data
+type DNSLBPoolMemberHealthStatusEvent struct {
+	// Pool Member Address
+	//
+	// x-displayName: "Pool Member Address"
+	// x-example: "10.0.0.1"
+	// Address of pool member
+	PoolMemberAddress string `protobuf:"bytes,1,opt,name=pool_member_address,json=poolMemberAddress,proto3" json:"pool_member_address,omitempty"`
+	// Status
+	//
+	// x-displayName: "Status"
+	// Health status of pool member
+	Status []*schema.MetricValue `protobuf:"bytes,2,rep,name=status,proto3" json:"status,omitempty"`
+	// Error Code
+	//
+	// x-displayName: "Error Code"
+	// x-example: "2"
+	// Error Code of DNS Load Balancer Pool Member health check failure
+	ErrorCode ErrorCode `protobuf:"varint,4,opt,name=error_code,json=errorCode,proto3,enum=ves.io.schema.dns_load_balancer.ErrorCode" json:"error_code,omitempty"`
+	// Error Description
+	//
+	// x-displayName: "Error Description"
+	// x-example: "received string mismatch"
+	// Error Description of DNS Load Balancer Pool Member health check failure
+	ErrorDescription string `protobuf:"bytes,5,opt,name=error_description,json=errorDescription,proto3" json:"error_description,omitempty"`
+}
+
+func (m *DNSLBPoolMemberHealthStatusEvent) Reset()      { *m = DNSLBPoolMemberHealthStatusEvent{} }
+func (*DNSLBPoolMemberHealthStatusEvent) ProtoMessage() {}
+func (*DNSLBPoolMemberHealthStatusEvent) Descriptor() ([]byte, []int) {
+	return fileDescriptor_fe61b9267aedb241, []int{12}
+}
+func (m *DNSLBPoolMemberHealthStatusEvent) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *DNSLBPoolMemberHealthStatusEvent) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_DNSLBPoolMemberHealthStatusEvent.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *DNSLBPoolMemberHealthStatusEvent) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_DNSLBPoolMemberHealthStatusEvent.Merge(m, src)
+}
+func (m *DNSLBPoolMemberHealthStatusEvent) XXX_Size() int {
+	return m.Size()
+}
+func (m *DNSLBPoolMemberHealthStatusEvent) XXX_DiscardUnknown() {
+	xxx_messageInfo_DNSLBPoolMemberHealthStatusEvent.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_DNSLBPoolMemberHealthStatusEvent proto.InternalMessageInfo
+
+func (m *DNSLBPoolMemberHealthStatusEvent) GetPoolMemberAddress() string {
+	if m != nil {
+		return m.PoolMemberAddress
+	}
+	return ""
+}
+
+func (m *DNSLBPoolMemberHealthStatusEvent) GetStatus() []*schema.MetricValue {
+	if m != nil {
+		return m.Status
+	}
+	return nil
+}
+
+func (m *DNSLBPoolMemberHealthStatusEvent) GetErrorCode() ErrorCode {
+	if m != nil {
+		return m.ErrorCode
+	}
+	return ERR_NIL
+}
+
+func (m *DNSLBPoolMemberHealthStatusEvent) GetErrorDescription() string {
+	if m != nil {
+		return m.ErrorDescription
+	}
+	return ""
+}
+
+// DNSLBPoolMemberHealthStatusRequest
+//
+// x-displayName: "DNS Load Balancer Pool Member Health Status Events Request"
+// Request to get health status events of a DNS Load Balancer Pool Member
+type DNSLBPoolMemberHealthStatusRequest struct {
+	// Namespace
+	//
+	// x-displayName: "Namespace"
+	// x-example: "ns1"
+	// x-required
+	// Namespace in which the DNS Load Balancer Pool is present
+	Namespace string `protobuf:"bytes,1,opt,name=namespace,proto3" json:"namespace,omitempty"`
+	// DNS Load Balancer Name
+	//
+	// x-displayName: "DNS Load Balancer Name"
+	// x-example: "dns_lb1"
+	// x-required
+	// Name of the DNS Load Balancer
+	DnsLbName string `protobuf:"bytes,2,opt,name=dns_lb_name,json=dnsLbName,proto3" json:"dns_lb_name,omitempty"`
+	// DNS Load Balancer Pool Name
+	//
+	// x-displayName: "DNS Load Balancer Pool Name"
+	// x-example: "dns_lb_pool1"
+	// x-required
+	// Name of the DNS Load Balancer Pool
+	DnsLbPoolName string `protobuf:"bytes,3,opt,name=dns_lb_pool_name,json=dnsLbPoolName,proto3" json:"dns_lb_pool_name,omitempty"`
+	// DNS Load Balancer Pool Member Address
+	//
+	// x-displayName: "DNS Load Balancer Pool Member Address"
+	// x-example: "10.0.0.1"
+	// x-required
+	// IP Address of the DNS Load Balancer Pool Member
+	PoolMemberAddress string `protobuf:"bytes,4,opt,name=pool_member_address,json=poolMemberAddress,proto3" json:"pool_member_address,omitempty"`
+}
+
+func (m *DNSLBPoolMemberHealthStatusRequest) Reset()      { *m = DNSLBPoolMemberHealthStatusRequest{} }
+func (*DNSLBPoolMemberHealthStatusRequest) ProtoMessage() {}
+func (*DNSLBPoolMemberHealthStatusRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_fe61b9267aedb241, []int{13}
+}
+func (m *DNSLBPoolMemberHealthStatusRequest) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *DNSLBPoolMemberHealthStatusRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_DNSLBPoolMemberHealthStatusRequest.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *DNSLBPoolMemberHealthStatusRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_DNSLBPoolMemberHealthStatusRequest.Merge(m, src)
+}
+func (m *DNSLBPoolMemberHealthStatusRequest) XXX_Size() int {
+	return m.Size()
+}
+func (m *DNSLBPoolMemberHealthStatusRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_DNSLBPoolMemberHealthStatusRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_DNSLBPoolMemberHealthStatusRequest proto.InternalMessageInfo
+
+func (m *DNSLBPoolMemberHealthStatusRequest) GetNamespace() string {
+	if m != nil {
+		return m.Namespace
+	}
+	return ""
+}
+
+func (m *DNSLBPoolMemberHealthStatusRequest) GetDnsLbName() string {
+	if m != nil {
+		return m.DnsLbName
+	}
+	return ""
+}
+
+func (m *DNSLBPoolMemberHealthStatusRequest) GetDnsLbPoolName() string {
+	if m != nil {
+		return m.DnsLbPoolName
+	}
+	return ""
+}
+
+func (m *DNSLBPoolMemberHealthStatusRequest) GetPoolMemberAddress() string {
+	if m != nil {
+		return m.PoolMemberAddress
+	}
+	return ""
+}
+
+// DNSLBPoolMemberHealthStatusResponse
+//
+// x-displayName: "DNS Load Balancer Pool Member Health Status Events Response"
+// Response for DNS Load Balancer Pool Member Health Status Events Request
+type DNSLBPoolMemberHealthStatusResponse struct {
+	// DNS Load Balancer Pool Members
+	//
+	// x-displayName: "DNS Load Balancer Pool Member Items"
+	// Collection of DNS Load Balancer Pool Members
+	DnsLbPoolMemberEvents []*DNSLBPoolMemberHealthStatusEvent `protobuf:"bytes,1,rep,name=dns_lb_pool_member_events,json=dnsLbPoolMemberEvents,proto3" json:"dns_lb_pool_member_events,omitempty"`
+}
+
+func (m *DNSLBPoolMemberHealthStatusResponse) Reset()      { *m = DNSLBPoolMemberHealthStatusResponse{} }
+func (*DNSLBPoolMemberHealthStatusResponse) ProtoMessage() {}
+func (*DNSLBPoolMemberHealthStatusResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_fe61b9267aedb241, []int{14}
+}
+func (m *DNSLBPoolMemberHealthStatusResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *DNSLBPoolMemberHealthStatusResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_DNSLBPoolMemberHealthStatusResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *DNSLBPoolMemberHealthStatusResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_DNSLBPoolMemberHealthStatusResponse.Merge(m, src)
+}
+func (m *DNSLBPoolMemberHealthStatusResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *DNSLBPoolMemberHealthStatusResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_DNSLBPoolMemberHealthStatusResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_DNSLBPoolMemberHealthStatusResponse proto.InternalMessageInfo
+
+func (m *DNSLBPoolMemberHealthStatusResponse) GetDnsLbPoolMemberEvents() []*DNSLBPoolMemberHealthStatusEvent {
+	if m != nil {
+		return m.DnsLbPoolMemberEvents
+	}
+	return nil
+}
+
 func init() {
 	proto.RegisterEnum("ves.io.schema.dns_load_balancer.ErrorCode", ErrorCode_name, ErrorCode_value)
 	golang_proto.RegisterEnum("ves.io.schema.dns_load_balancer.ErrorCode", ErrorCode_name, ErrorCode_value)
@@ -896,10 +1289,20 @@ func init() {
 	golang_proto.RegisterType((*DNSLBHealthStatusListResponseItem)(nil), "ves.io.schema.dns_load_balancer.DNSLBHealthStatusListResponseItem")
 	proto.RegisterType((*DNSLBPoolHealthStatusListResponseItem)(nil), "ves.io.schema.dns_load_balancer.DNSLBPoolHealthStatusListResponseItem")
 	golang_proto.RegisterType((*DNSLBPoolHealthStatusListResponseItem)(nil), "ves.io.schema.dns_load_balancer.DNSLBPoolHealthStatusListResponseItem")
+	proto.RegisterType((*DNSLBPoolMemberHealthStatusListRequest)(nil), "ves.io.schema.dns_load_balancer.DNSLBPoolMemberHealthStatusListRequest")
+	golang_proto.RegisterType((*DNSLBPoolMemberHealthStatusListRequest)(nil), "ves.io.schema.dns_load_balancer.DNSLBPoolMemberHealthStatusListRequest")
+	proto.RegisterType((*DNSLBPoolMemberHealthStatusListResponse)(nil), "ves.io.schema.dns_load_balancer.DNSLBPoolMemberHealthStatusListResponse")
+	golang_proto.RegisterType((*DNSLBPoolMemberHealthStatusListResponse)(nil), "ves.io.schema.dns_load_balancer.DNSLBPoolMemberHealthStatusListResponse")
 	proto.RegisterType((*DNSLBPoolMemberHealthStatusListResponseItem)(nil), "ves.io.schema.dns_load_balancer.DNSLBPoolMemberHealthStatusListResponseItem")
 	golang_proto.RegisterType((*DNSLBPoolMemberHealthStatusListResponseItem)(nil), "ves.io.schema.dns_load_balancer.DNSLBPoolMemberHealthStatusListResponseItem")
 	proto.RegisterType((*HealthStatusSummary)(nil), "ves.io.schema.dns_load_balancer.HealthStatusSummary")
 	golang_proto.RegisterType((*HealthStatusSummary)(nil), "ves.io.schema.dns_load_balancer.HealthStatusSummary")
+	proto.RegisterType((*DNSLBPoolMemberHealthStatusEvent)(nil), "ves.io.schema.dns_load_balancer.DNSLBPoolMemberHealthStatusEvent")
+	golang_proto.RegisterType((*DNSLBPoolMemberHealthStatusEvent)(nil), "ves.io.schema.dns_load_balancer.DNSLBPoolMemberHealthStatusEvent")
+	proto.RegisterType((*DNSLBPoolMemberHealthStatusRequest)(nil), "ves.io.schema.dns_load_balancer.DNSLBPoolMemberHealthStatusRequest")
+	golang_proto.RegisterType((*DNSLBPoolMemberHealthStatusRequest)(nil), "ves.io.schema.dns_load_balancer.DNSLBPoolMemberHealthStatusRequest")
+	proto.RegisterType((*DNSLBPoolMemberHealthStatusResponse)(nil), "ves.io.schema.dns_load_balancer.DNSLBPoolMemberHealthStatusResponse")
+	golang_proto.RegisterType((*DNSLBPoolMemberHealthStatusResponse)(nil), "ves.io.schema.dns_load_balancer.DNSLBPoolMemberHealthStatusResponse")
 }
 
 func init() {
@@ -910,114 +1313,131 @@ func init() {
 }
 
 var fileDescriptor_fe61b9267aedb241 = []byte{
-	// 1708 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xb4, 0x58, 0xcf, 0x8f, 0xdb, 0x58,
-	0x1d, 0x1f, 0x67, 0xfa, 0x63, 0xe7, 0x4d, 0xa7, 0xf5, 0x98, 0xed, 0x36, 0xe3, 0x76, 0x83, 0x37,
-	0x08, 0x28, 0x5d, 0x92, 0x40, 0x59, 0x0e, 0xac, 0xba, 0x2d, 0x99, 0xc4, 0x33, 0x31, 0x4d, 0x3c,
-	0xb3, 0xb1, 0xb3, 0xb4, 0x85, 0xca, 0xbc, 0xd8, 0x2f, 0x89, 0x99, 0xd8, 0x2f, 0xfb, 0xde, 0xf3,
-	0x74, 0x46, 0xc8, 0x80, 0x56, 0x70, 0x05, 0x24, 0x24, 0x24, 0xa4, 0x3d, 0x85, 0x0b, 0x47, 0x2e,
-	0x48, 0x48, 0x7b, 0x59, 0x71, 0x61, 0xc5, 0x01, 0x55, 0x70, 0x59, 0x71, 0x81, 0xce, 0x70, 0xe0,
-	0xb8, 0xfc, 0x07, 0xc8, 0xcf, 0x4e, 0x9a, 0x5f, 0xd3, 0x49, 0xba, 0xdb, 0x53, 0xec, 0xf7, 0xfd,
-	0xf9, 0xf9, 0x7c, 0xbf, 0xef, 0xbd, 0x7c, 0x0d, 0x6e, 0xed, 0x23, 0x9a, 0x77, 0x71, 0x81, 0xda,
-	0x1d, 0xe4, 0xc1, 0x82, 0xe3, 0x53, 0xab, 0x8b, 0xa1, 0x63, 0x35, 0x61, 0x17, 0xfa, 0x36, 0x22,
-	0x85, 0x5e, 0xd0, 0xec, 0xba, 0xb6, 0x65, 0x07, 0x94, 0x61, 0xcf, 0x72, 0x20, 0x83, 0x16, 0xec,
-	0xb9, 0xf9, 0x1e, 0xc1, 0x0c, 0x4b, 0x9f, 0x8f, 0xad, 0xf3, 0xb1, 0x75, 0x7e, 0xca, 0x5a, 0xce,
-	0xb5, 0x5d, 0xd6, 0x09, 0x9a, 0x79, 0x1b, 0x7b, 0x85, 0x36, 0x6e, 0xe3, 0x02, 0xb7, 0x6b, 0x06,
-	0x2d, 0xfe, 0xc6, 0x5f, 0xf8, 0x53, 0xec, 0x4f, 0xbe, 0xd6, 0xc6, 0xb8, 0xdd, 0x45, 0x05, 0xd8,
-	0x73, 0x0b, 0xd0, 0xf7, 0x31, 0x83, 0xcc, 0xc5, 0x3e, 0x4d, 0xa4, 0x57, 0xc7, 0x73, 0xc5, 0xbd,
-	0x51, 0xe1, 0xc6, 0xb8, 0x90, 0x1d, 0xf6, 0xd0, 0x40, 0x74, 0x6d, 0x5c, 0xb4, 0x0f, 0xbb, 0xae,
-	0x03, 0x19, 0x4a, 0xa4, 0xd9, 0x09, 0x29, 0xa2, 0xc8, 0xdf, 0x1f, 0x77, 0x9e, 0xbd, 0x05, 0xae,
-	0x95, 0x75, 0xa3, 0xba, 0x59, 0x41, 0xb0, 0xcb, 0x3a, 0x06, 0x83, 0x2c, 0xa0, 0x55, 0x97, 0xb2,
-	0x3a, 0x7a, 0x37, 0x40, 0x94, 0x49, 0xd7, 0xc0, 0x8a, 0x0f, 0x3d, 0x44, 0x7b, 0xd0, 0x46, 0x69,
-	0x41, 0x11, 0xae, 0xaf, 0xd4, 0x9f, 0x2e, 0x64, 0x0f, 0xc1, 0xab, 0x27, 0x58, 0xd3, 0x1e, 0xf6,
-	0x29, 0x92, 0xee, 0x81, 0xb3, 0x2e, 0x43, 0x1e, 0x4d, 0x0b, 0xca, 0xf2, 0xf5, 0xd5, 0x9b, 0x9b,
-	0xf9, 0x53, 0x68, 0xcd, 0x3f, 0xd3, 0x9d, 0xc6, 0x90, 0x57, 0x8f, 0x1d, 0x66, 0xab, 0x20, 0x3d,
-	0xa5, 0x3b, 0x57, 0xd2, 0x92, 0x04, 0xce, 0x44, 0x2f, 0xe9, 0x14, 0x17, 0xf0, 0xe7, 0xec, 0x9f,
-	0x05, 0xb0, 0x31, 0xc3, 0x5d, 0x82, 0xe2, 0x26, 0x38, 0x47, 0xf9, 0x4a, 0x02, 0x43, 0x9e, 0x80,
-	0x51, 0x43, 0x8c, 0xb8, 0xf6, 0x3b, 0xb0, 0x1b, 0xa0, 0x7a, 0xa2, 0x29, 0xbd, 0x0b, 0xd6, 0x39,
-	0xba, 0xa6, 0xd5, 0xc3, 0xb8, 0x6b, 0xc5, 0x2c, 0xa4, 0xb8, 0xf9, 0xd6, 0x7c, 0x2c, 0xec, 0x62,
-	0xdc, 0x7d, 0x26, 0x13, 0x17, 0x1d, 0x9f, 0x56, 0x9b, 0x91, 0x9a, 0xc6, 0x29, 0xf9, 0xb9, 0x90,
-	0x14, 0x73, 0xd2, 0x72, 0x3e, 0x5e, 0x32, 0x60, 0x35, 0xc9, 0x78, 0x84, 0x9e, 0x15, 0x1e, 0x43,
-	0x87, 0x1e, 0x92, 0xbe, 0x0c, 0xc4, 0x51, 0x44, 0x5c, 0x69, 0x99, 0x2b, 0xad, 0x0d, 0x13, 0x89,
-	0x14, 0xb3, 0xff, 0x14, 0x92, 0xb6, 0x98, 0xce, 0xe3, 0x53, 0x10, 0xfa, 0x33, 0x01, 0xa4, 0x47,
-	0xe3, 0x7b, 0xc8, 0x6b, 0x22, 0x32, 0x46, 0x6c, 0x75, 0x7e, 0x62, 0x6b, 0xdc, 0xfa, 0x99, 0xf4,
-	0xbe, 0x3c, 0x44, 0x15, 0x2b, 0xc7, 0x24, 0xff, 0x4b, 0x00, 0xaf, 0x9d, 0xda, 0xa4, 0xc3, 0x1e,
-	0x13, 0x9e, 0xf6, 0xd8, 0x08, 0xe8, 0xd4, 0xdc, 0xa0, 0x09, 0xb8, 0x3a, 0x82, 0x99, 0x5a, 0xf1,
-	0xb2, 0x45, 0x03, 0xcf, 0x83, 0xe4, 0x30, 0xbd, 0xcc, 0x1d, 0xbd, 0x71, 0x2a, 0xec, 0xd1, 0x5c,
-	0x8d, 0xd8, 0xb6, 0x7e, 0x65, 0x08, 0x8f, 0x8e, 0x09, 0xb2, 0xef, 0xa7, 0xc0, 0x17, 0xe7, 0x6a,
-	0xc0, 0xcf, 0x0c, 0xe5, 0x4f, 0x40, 0x76, 0xba, 0xb2, 0x9f, 0x29, 0xd8, 0x57, 0x27, 0x6a, 0x39,
-	0x0e, 0x59, 0xba, 0x01, 0xd6, 0x3b, 0xdc, 0xca, 0xb2, 0x3b, 0xc8, 0xde, 0xb3, 0xa2, 0x33, 0x36,
-	0x7d, 0x86, 0xa3, 0xba, 0x14, 0x0b, 0x4a, 0xd1, 0xba, 0x79, 0xd8, 0x43, 0xd9, 0xdf, 0xa6, 0xc0,
-	0xeb, 0x0b, 0xb4, 0xd1, 0x4c, 0x92, 0x66, 0xc6, 0x4b, 0xcd, 0x8c, 0x37, 0x42, 0xe8, 0xf2, 0xdc,
-	0x84, 0x6a, 0x00, 0x20, 0x42, 0x30, 0xb1, 0x6c, 0xec, 0xc4, 0x40, 0x2e, 0xde, 0xbc, 0x71, 0x2a,
-	0x71, 0x6a, 0x64, 0x52, 0xc2, 0x0e, 0xaa, 0xaf, 0xa0, 0xc1, 0xa3, 0xf4, 0x3a, 0x58, 0x8f, 0x5d,
-	0x39, 0x88, 0xda, 0xc4, 0xe5, 0x97, 0x47, 0xfa, 0x2c, 0x4f, 0x55, 0xe4, 0x82, 0xf2, 0xd3, 0xf5,
-	0xec, 0x2f, 0x04, 0xf0, 0xb9, 0x19, 0xf4, 0x4b, 0xea, 0xc8, 0x7e, 0x8f, 0x72, 0xc9, 0x2d, 0x54,
-	0xc4, 0x21, 0xac, 0xaf, 0x81, 0xb3, 0x36, 0x0e, 0x7c, 0x36, 0x47, 0x6b, 0xc5, 0x8a, 0x37, 0xfe,
-	0xb7, 0x0a, 0x56, 0x86, 0xb0, 0xa4, 0x0d, 0x70, 0x5e, 0xad, 0xd7, 0x2d, 0x5d, 0xab, 0x8a, 0x4b,
-	0xf2, 0x85, 0x7e, 0xb8, 0x02, 0xce, 0x1b, 0x81, 0x6d, 0x23, 0x4a, 0xa5, 0xd7, 0xc0, 0x5a, 0x24,
-	0x6a, 0xe8, 0x65, 0x75, 0x4b, 0xd3, 0xd5, 0xb2, 0x28, 0xc8, 0x17, 0xfb, 0xe1, 0x2a, 0x58, 0x69,
-	0xf8, 0x0e, 0x6a, 0xb9, 0x3e, 0x72, 0x24, 0x17, 0x5c, 0x8d, 0x54, 0xea, 0x6a, 0x49, 0xd5, 0xde,
-	0x51, 0x2d, 0xc3, 0xac, 0x6b, 0xfa, 0xb6, 0x55, 0xd3, 0x8c, 0x5a, 0xd1, 0x2c, 0x55, 0xc4, 0x94,
-	0x5c, 0xe9, 0x87, 0x2a, 0x28, 0xd5, 0x91, 0x8d, 0xdc, 0x7d, 0xe4, 0x28, 0x94, 0x11, 0xd7, 0x6f,
-	0x2b, 0x8e, 0xeb, 0x28, 0x3e, 0x66, 0x8a, 0x07, 0x99, 0xdd, 0x51, 0x6c, 0xec, 0xb7, 0xdc, 0x76,
-	0x40, 0x90, 0xa3, 0xec, 0x47, 0x89, 0x2a, 0x2d, 0x4c, 0x14, 0xd6, 0x41, 0x4a, 0x5c, 0x76, 0x85,
-	0xf7, 0x83, 0xf4, 0x3d, 0x70, 0x21, 0x0a, 0xa5, 0xe9, 0xa6, 0x5a, 0xd7, 0x8b, 0x55, 0x71, 0x59,
-	0xd6, 0xfa, 0xe1, 0x16, 0x28, 0xab, 0x3e, 0x87, 0x85, 0x22, 0x73, 0x37, 0xfa, 0xf5, 0x61, 0x57,
-	0xe1, 0x55, 0xe0, 0x7e, 0x46, 0x7d, 0x28, 0x2d, 0x82, 0x3d, 0x05, 0x32, 0xa5, 0x8b, 0x20, 0x65,
-	0x0a, 0xf6, 0x91, 0x42, 0x50, 0xdb, 0xc5, 0xbe, 0x64, 0xc7, 0xce, 0x6b, 0xc6, 0xb6, 0x65, 0xa8,
-	0x7a, 0x59, 0x3c, 0x23, 0xbf, 0xdd, 0x0f, 0x75, 0x50, 0xe5, 0x3c, 0x29, 0x68, 0x2c, 0x84, 0x42,
-	0x91, 0xef, 0x44, 0x28, 0xe0, 0xb8, 0x73, 0x12, 0xdf, 0x28, 0x27, 0x07, 0x71, 0xc0, 0x6a, 0x14,
-	0xc4, 0xd4, 0x6a, 0xea, 0x4e, 0xc3, 0x14, 0xcf, 0xca, 0x46, 0x3f, 0xdc, 0x05, 0xba, 0xe9, 0x7a,
-	0x08, 0x07, 0x4c, 0x79, 0x04, 0x5d, 0x16, 0xb9, 0x8d, 0xb2, 0x26, 0xc9, 0x6e, 0x99, 0x86, 0x70,
-	0x6a, 0x14, 0x17, 0x5c, 0x1a, 0x40, 0x49, 0xca, 0x22, 0x9e, 0x93, 0xcd, 0x7e, 0xf8, 0x36, 0xd8,
-	0x99, 0x89, 0x86, 0xf0, 0xda, 0xcc, 0xc4, 0x33, 0xc8, 0xe1, 0xa4, 0x50, 0x07, 0xe0, 0x32, 0x0f,
-	0x55, 0xbc, 0x37, 0xec, 0x80, 0xcd, 0xfb, 0xa6, 0x6a, 0x88, 0xe7, 0xe5, 0x87, 0xfd, 0xf0, 0x01,
-	0xb8, 0xa7, 0x1e, 0xd8, 0x08, 0x39, 0xc8, 0x51, 0x3c, 0x78, 0x90, 0x6b, 0x1e, 0x32, 0x44, 0x95,
-	0xeb, 0x5f, 0xaf, 0x6d, 0x7e, 0x65, 0x1c, 0x23, 0x19, 0x74, 0xc7, 0xfc, 0xf5, 0x7a, 0x18, 0xb7,
-	0xa6, 0x56, 0xaa, 0xed, 0x5a, 0xbb, 0x9a, 0xbe, 0x2d, 0xbe, 0x24, 0x7f, 0xa7, 0x1f, 0x6e, 0x03,
-	0x35, 0x5a, 0x51, 0x7a, 0x9c, 0x46, 0xe8, 0x76, 0x03, 0x82, 0xe6, 0x77, 0xaa, 0x10, 0x04, 0x1d,
-	0xc5, 0xc3, 0x04, 0x49, 0x6d, 0xf0, 0x4a, 0xe4, 0xbe, 0xb4, 0xa3, 0xeb, 0x6a, 0xc9, 0xd4, 0x76,
-	0x74, 0xab, 0xae, 0x6e, 0x35, 0x0c, 0xb5, 0x2c, 0xae, 0xc8, 0x77, 0xfb, 0x61, 0x05, 0x6c, 0x95,
-	0xb0, 0xef, 0x23, 0x9b, 0xc5, 0x66, 0xad, 0x80, 0x2e, 0x92, 0xfd, 0x48, 0xa0, 0x87, 0x53, 0x81,
-	0x8a, 0x9b, 0x3b, 0x75, 0x53, 0x2d, 0x8b, 0x40, 0x2e, 0xf6, 0xc3, 0xdb, 0xe0, 0xd6, 0x48, 0x20,
-	0xd8, 0xc4, 0x84, 0x2d, 0x44, 0xd3, 0x7d, 0xf0, 0xf2, 0x14, 0x0e, 0x43, 0x35, 0xc5, 0x55, 0xf9,
-	0x4e, 0x3f, 0xbc, 0x05, 0xde, 0x1c, 0x43, 0x41, 0x11, 0x5b, 0xc0, 0xf5, 0xf7, 0x63, 0xd7, 0xba,
-	0x6a, 0x5a, 0x8d, 0xc8, 0x6d, 0xb1, 0x54, 0x29, 0x6e, 0x56, 0x55, 0xf1, 0x82, 0xbc, 0xd9, 0x0f,
-	0xef, 0x80, 0xb7, 0x74, 0xc4, 0x1e, 0x61, 0xb2, 0xa7, 0x04, 0x3e, 0x41, 0xd0, 0xee, 0xc0, 0x66,
-	0x77, 0x81, 0x52, 0x48, 0x0f, 0xe2, 0xce, 0xaa, 0xec, 0x18, 0x13, 0xee, 0xd7, 0x92, 0xcc, 0x2b,
-	0x98, 0xb2, 0xe7, 0xf4, 0xfd, 0x85, 0x78, 0x1b, 0x36, 0xf4, 0xbb, 0xfa, 0xce, 0x77, 0x75, 0xf1,
-	0xa2, 0x2c, 0xf5, 0xc3, 0x4b, 0x60, 0xad, 0xe1, 0xef, 0xf9, 0xf8, 0x91, 0x1f, 0x1f, 0x1d, 0xd2,
-	0x1e, 0xd8, 0xe0, 0x7b, 0xb5, 0x6a, 0x58, 0x95, 0xa2, 0x5e, 0x36, 0x2a, 0xc5, 0xbb, 0xaa, 0xb5,
-	0x55, 0xd4, 0xaa, 0x8d, 0xba, 0x2a, 0x8a, 0x72, 0xb5, 0x1f, 0x6a, 0x60, 0xdb, 0xac, 0x1a, 0x4a,
-	0x07, 0xfa, 0x0e, 0xed, 0xc0, 0x3d, 0x74, 0x72, 0xc3, 0x9d, 0xba, 0x65, 0x7f, 0x00, 0xae, 0x4c,
-	0x94, 0x29, 0x3a, 0x23, 0xca, 0xd1, 0x21, 0xb1, 0x2e, 0x97, 0xfa, 0xe1, 0xb7, 0xc1, 0xed, 0x91,
-	0x4a, 0x31, 0xd7, 0x43, 0x8e, 0x12, 0x9d, 0x18, 0x73, 0x63, 0xbe, 0xf1, 0x63, 0x70, 0x61, 0xf4,
-	0xf6, 0x90, 0xae, 0x82, 0x2b, 0x15, 0xb5, 0x58, 0x35, 0x2b, 0x96, 0x61, 0x16, 0xcd, 0x86, 0x61,
-	0x35, 0xf4, 0xf8, 0xfd, 0xbe, 0xb8, 0x24, 0xc9, 0xe0, 0x95, 0x71, 0x61, 0x59, 0xdd, 0xae, 0x17,
-	0xcb, 0xd1, 0x05, 0x20, 0x6d, 0x80, 0xcb, 0xe3, 0xb2, 0x81, 0x59, 0x6a, 0x86, 0x99, 0x66, 0x44,
-	0x35, 0x2b, 0x8b, 0xcb, 0x37, 0x7f, 0xf3, 0x12, 0x58, 0x2b, 0xf1, 0xa1, 0xb2, 0x0c, 0x19, 0x2c,
-	0xee, 0x6a, 0xd2, 0x1f, 0x53, 0xe0, 0xf2, 0xcc, 0xff, 0x8c, 0xd2, 0x5b, 0xcf, 0x3b, 0x10, 0x71,
-	0x96, 0xe5, 0xdb, 0x9f, 0x6e, 0x9e, 0xca, 0xbe, 0x2f, 0x7c, 0xf4, 0xa7, 0x94, 0x70, 0xf4, 0x97,
-	0x74, 0x6d, 0x1f, 0xd1, 0x9c, 0x8b, 0x73, 0xae, 0xdf, 0x22, 0x90, 0x32, 0x12, 0xd8, 0x2c, 0x20,
-	0x28, 0x17, 0x6d, 0xde, 0xaf, 0x2a, 0xad, 0x6f, 0x1e, 0xd8, 0x39, 0xc7, 0xa7, 0xb9, 0x26, 0xa4,
-	0xae, 0x9d, 0xf3, 0xb0, 0xef, 0x32, 0x4c, 0x46, 0xd6, 0x29, 0x83, 0xbe, 0x03, 0x89, 0x33, 0x10,
-	0xbd, 0xf7, 0x8f, 0xff, 0xfc, 0x3a, 0x55, 0x94, 0xee, 0x24, 0x23, 0x76, 0x61, 0x38, 0x63, 0xd0,
-	0xc2, 0x8f, 0x86, 0xcf, 0xe1, 0xf4, 0x48, 0x4e, 0x0b, 0xc9, 0xbf, 0xa2, 0xe4, 0xbe, 0xff, 0x43,
-	0x0a, 0xac, 0x4f, 0x01, 0x90, 0xbe, 0xb5, 0x38, 0xe8, 0x01, 0x5f, 0x6f, 0x3e, 0x8f, 0x69, 0xc2,
-	0xd5, 0xef, 0x5e, 0x20, 0x57, 0x15, 0x69, 0x6b, 0x71, 0xae, 0xb8, 0x38, 0x9c, 0xa0, 0xec, 0x78,
-	0xd0, 0x6a, 0x93, 0x7f, 0xde, 0xe7, 0x6d, 0xb5, 0x13, 0x66, 0xc7, 0x79, 0x5b, 0xed, 0xa4, 0x91,
-	0x2f, 0xfb, 0xd7, 0x17, 0x48, 0x1f, 0x96, 0xbc, 0xe7, 0xa0, 0x6f, 0x64, 0xd8, 0x4d, 0x14, 0x92,
-	0x29, 0x6b, 0x28, 0x1a, 0xce, 0xb9, 0x13, 0x2c, 0xcb, 0x6f, 0x7c, 0xf8, 0x81, 0xb0, 0xfc, 0xf7,
-	0x0f, 0x84, 0x2f, 0x9d, 0xc6, 0xc9, 0x4e, 0xf3, 0x87, 0xc8, 0x66, 0xef, 0xfd, 0x2d, 0x9d, 0x4a,
-	0x0b, 0x9b, 0xbf, 0x14, 0x1e, 0x3f, 0xc9, 0x2c, 0x7d, 0xfc, 0x24, 0xb3, 0xf4, 0xc9, 0x93, 0x8c,
-	0xf0, 0xd3, 0xa3, 0x8c, 0xf0, 0xfb, 0xa3, 0x8c, 0xf0, 0xd1, 0x51, 0x46, 0x78, 0x7c, 0x94, 0x11,
-	0xfe, 0x7d, 0x94, 0x11, 0xfe, 0x7b, 0x94, 0x59, 0xfa, 0xe4, 0x28, 0x23, 0xfc, 0xea, 0x38, 0xb3,
-	0xf4, 0xe1, 0x71, 0x46, 0x78, 0x7c, 0x9c, 0x59, 0xfa, 0xf8, 0x38, 0xb3, 0xf4, 0xa0, 0xd1, 0xc6,
-	0xbd, 0xbd, 0x76, 0x7e, 0x1f, 0x77, 0x19, 0x22, 0x04, 0xe6, 0x03, 0x5a, 0xe0, 0x0f, 0x2d, 0x4c,
-	0xbc, 0x5c, 0x8f, 0xe0, 0x7d, 0xd7, 0x41, 0x24, 0x37, 0x10, 0x17, 0x7a, 0xcd, 0x36, 0x2e, 0xa0,
-	0x03, 0x96, 0x7c, 0xf9, 0x39, 0xe9, 0x13, 0x58, 0xf3, 0x1c, 0xff, 0x08, 0xf4, 0x8d, 0xff, 0x07,
-	0x00, 0x00, 0xff, 0xff, 0x42, 0x7f, 0xd2, 0xee, 0x2c, 0x13, 0x00, 0x00,
+	// 1978 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xc4, 0x59, 0xcf, 0x8f, 0x1b, 0x49,
+	0x15, 0x9e, 0xf6, 0xe4, 0x07, 0x53, 0x93, 0x49, 0x7a, 0x7a, 0x37, 0x1b, 0x4f, 0x67, 0xe2, 0xed,
+	0xf5, 0x8a, 0xdd, 0x90, 0xc5, 0x36, 0x84, 0x5d, 0x24, 0x56, 0xd9, 0x04, 0x8f, 0xdd, 0x33, 0x36,
+	0xf1, 0xf4, 0xcc, 0xba, 0xed, 0x25, 0x09, 0x44, 0x4d, 0xb9, 0xbb, 0xc6, 0x6e, 0xc6, 0xdd, 0xe5,
+	0xad, 0x2a, 0x3b, 0x13, 0x05, 0x03, 0x5a, 0xb1, 0x27, 0xc4, 0x0f, 0xc1, 0x85, 0x03, 0xac, 0x84,
+	0x4f, 0x9c, 0x39, 0x21, 0xe5, 0xb2, 0xe2, 0xc2, 0x22, 0x24, 0x14, 0xc1, 0x65, 0xc5, 0x05, 0x32,
+	0x41, 0x08, 0x89, 0xcb, 0xf2, 0x0f, 0x20, 0xd4, 0xd5, 0x6d, 0xa7, 0xdb, 0xf6, 0xcc, 0xd8, 0x33,
+	0x03, 0x39, 0xb9, 0xbb, 0x5f, 0xbd, 0xf7, 0xea, 0x7d, 0xdf, 0x57, 0xaf, 0xab, 0xcb, 0xe0, 0x5a,
+	0x07, 0xd1, 0xb4, 0x8d, 0x33, 0xd4, 0x6c, 0x20, 0x07, 0x66, 0x2c, 0x97, 0x1a, 0x4d, 0x0c, 0x2d,
+	0xa3, 0x06, 0x9b, 0xd0, 0x35, 0x11, 0xc9, 0xb4, 0xda, 0xb5, 0xa6, 0x6d, 0x1a, 0x66, 0x9b, 0x32,
+	0xec, 0x18, 0x16, 0x64, 0xd0, 0x80, 0x2d, 0x3b, 0xdd, 0x22, 0x98, 0x61, 0xe9, 0x45, 0xdf, 0x3b,
+	0xed, 0x7b, 0xa7, 0x47, 0xbc, 0xe5, 0x54, 0xdd, 0x66, 0x8d, 0x76, 0x2d, 0x6d, 0x62, 0x27, 0x53,
+	0xc7, 0x75, 0x9c, 0xe1, 0x7e, 0xb5, 0xf6, 0x16, 0xbf, 0xe3, 0x37, 0xfc, 0xca, 0x8f, 0x27, 0x2f,
+	0xd7, 0x31, 0xae, 0x37, 0x51, 0x06, 0xb6, 0xec, 0x0c, 0x74, 0x5d, 0xcc, 0x20, 0xb3, 0xb1, 0x4b,
+	0x03, 0xeb, 0x85, 0xe8, 0x5c, 0x5d, 0xc4, 0x02, 0xc3, 0xc5, 0xa8, 0x01, 0xb7, 0xc2, 0x5e, 0x97,
+	0xa2, 0xc6, 0x56, 0x87, 0x19, 0xec, 0x7e, 0x0b, 0xf5, 0xcd, 0x4b, 0x51, 0x73, 0xd8, 0xb4, 0x1c,
+	0x35, 0x75, 0x60, 0xd3, 0xb6, 0x20, 0x43, 0x81, 0x35, 0x39, 0x64, 0x45, 0x14, 0xb9, 0x9d, 0xa1,
+	0xdc, 0xca, 0xd0, 0x18, 0x1b, 0xdd, 0x33, 0x22, 0x23, 0x92, 0xd7, 0xc0, 0x72, 0x5e, 0xd3, 0x4b,
+	0x2b, 0x05, 0x04, 0x9b, 0xac, 0xa1, 0x33, 0xc8, 0xda, 0xb4, 0x64, 0x53, 0x56, 0x46, 0xef, 0xb6,
+	0x11, 0x65, 0xd2, 0x32, 0x98, 0x73, 0xa1, 0x83, 0x68, 0x0b, 0x9a, 0x28, 0x2e, 0x28, 0xc2, 0xe5,
+	0xb9, 0xf2, 0xd3, 0x07, 0xc9, 0x7f, 0xc5, 0xc0, 0xa5, 0x3d, 0xdc, 0x69, 0x0b, 0xbb, 0x14, 0x49,
+	0xb7, 0xc0, 0x49, 0x9b, 0x21, 0x87, 0xc6, 0x05, 0x65, 0xf6, 0xf2, 0xfc, 0xd5, 0x95, 0xf4, 0x01,
+	0x8c, 0xa5, 0xf7, 0x0d, 0x57, 0x64, 0xc8, 0x29, 0xfb, 0x01, 0xa5, 0x6f, 0x01, 0x65, 0xc4, 0xdb,
+	0xa0, 0xdc, 0xc5, 0xa0, 0x6d, 0xc7, 0x81, 0xe4, 0x7e, 0x3c, 0xc6, 0x93, 0xbe, 0x7e, 0x60, 0xd2,
+	0x70, 0x3e, 0xdd, 0xf7, 0x2d, 0x2f, 0x5b, 0x2e, 0x2d, 0x61, 0x68, 0xad, 0x04, 0x83, 0x22, 0x56,
+	0x89, 0x80, 0x8b, 0x3c, 0x4c, 0xcd, 0x68, 0x61, 0xdc, 0xa4, 0xc3, 0x89, 0x67, 0x8f, 0x90, 0xf8,
+	0x82, 0x97, 0xb8, 0xb6, 0xe9, 0x85, 0x8d, 0x18, 0x92, 0x25, 0x10, 0x1f, 0x41, 0x67, 0x22, 0x9e,
+	0x24, 0x09, 0x9c, 0xf0, 0x6e, 0xe2, 0x31, 0x6e, 0xe0, 0xd7, 0xc9, 0xdf, 0x0a, 0x60, 0x69, 0x4c,
+	0xb8, 0x80, 0xb7, 0xab, 0xe0, 0x94, 0x5f, 0x52, 0x40, 0x9c, 0x3c, 0x54, 0xca, 0x3a, 0x62, 0xc4,
+	0x36, 0xdf, 0x81, 0xcd, 0x36, 0x2a, 0x07, 0x23, 0xa5, 0x77, 0xc1, 0x62, 0x08, 0x13, 0xc3, 0xe7,
+	0xdd, 0xa7, 0x60, 0x75, 0x32, 0xde, 0xbd, 0xa2, 0xf7, 0xe5, 0xfe, 0xec, 0x00, 0x1b, 0xef, 0x96,
+	0x26, 0xdf, 0x17, 0x02, 0xfd, 0x0e, 0x7b, 0x4e, 0x86, 0x4b, 0x02, 0xcc, 0x07, 0x33, 0x0e, 0xc1,
+	0x33, 0xc7, 0x73, 0x68, 0xd0, 0x41, 0xd2, 0xab, 0x40, 0x0c, 0x57, 0xc4, 0x07, 0xcd, 0xf2, 0x41,
+	0x0b, 0x83, 0x89, 0x78, 0x03, 0x93, 0x7f, 0x11, 0x82, 0x85, 0x30, 0x3a, 0x8f, 0x23, 0x00, 0xfa,
+	0x3d, 0x01, 0xc4, 0xc3, 0xf9, 0x1d, 0xe4, 0xd4, 0x10, 0x89, 0x00, 0x5b, 0x9a, 0x1c, 0xd8, 0x75,
+	0xee, 0xbd, 0x2f, 0xbc, 0xcf, 0x0f, 0xaa, 0xf2, 0x07, 0xfb, 0x20, 0xff, 0x55, 0x00, 0x2f, 0x1d,
+	0xb8, 0x2c, 0x07, 0x1a, 0x13, 0x9e, 0x6a, 0x2c, 0x54, 0x74, 0x6c, 0xe2, 0xa2, 0x9f, 0xc5, 0xca,
+	0xfa, 0x79, 0x0c, 0x7c, 0x7a, 0x22, 0x01, 0x1e, 0x5b, 0x95, 0xdf, 0x01, 0xc9, 0x51, 0x66, 0x8f,
+	0xb5, 0xd8, 0x4b, 0x43, 0x5c, 0x46, 0x4b, 0x96, 0xae, 0x80, 0xc5, 0x06, 0xf7, 0x32, 0xcc, 0x06,
+	0x32, 0xb7, 0xf9, 0x3b, 0x29, 0x7e, 0x82, 0x57, 0x75, 0xce, 0x37, 0xe4, 0xbc, 0xe7, 0x95, 0xfb,
+	0x2d, 0x94, 0x5c, 0x05, 0xaf, 0x1c, 0xa8, 0xa2, 0x49, 0x5e, 0x17, 0x3f, 0x10, 0xc0, 0xab, 0x13,
+	0xca, 0x51, 0xaa, 0x45, 0x5f, 0x1c, 0xc7, 0xab, 0x73, 0x3f, 0x74, 0x72, 0x37, 0x06, 0x5e, 0x9b,
+	0xc2, 0x6d, 0x2c, 0xf9, 0x63, 0x71, 0x8c, 0x8d, 0xc5, 0x31, 0x24, 0x94, 0xd9, 0x89, 0x85, 0x52,
+	0x04, 0x00, 0x11, 0x82, 0x89, 0x61, 0x62, 0xcb, 0x27, 0xe8, 0xec, 0xd5, 0x2b, 0x07, 0x82, 0xa1,
+	0x7a, 0x2e, 0x39, 0x6c, 0xa1, 0xf2, 0x1c, 0xea, 0x5f, 0x4a, 0xaf, 0x81, 0x45, 0x3f, 0x94, 0x85,
+	0xa8, 0x49, 0x6c, 0xbe, 0x0f, 0x88, 0x9f, 0xe4, 0x53, 0x15, 0xb9, 0x21, 0xff, 0xf4, 0xf9, 0x70,
+	0x6b, 0x3c, 0x35, 0x49, 0x6b, 0x3c, 0x3d, 0xae, 0x35, 0xfe, 0x50, 0x00, 0xcf, 0x8d, 0xd1, 0xa7,
+	0xa4, 0x86, 0x1a, 0xa2, 0x57, 0x54, 0x6a, 0x2a, 0x95, 0x0f, 0xf0, 0xf9, 0x1c, 0x38, 0x69, 0xe2,
+	0xb6, 0xcb, 0x26, 0x58, 0x7b, 0xfe, 0xc0, 0xe4, 0x7f, 0x04, 0xa0, 0xec, 0xc3, 0xba, 0xda, 0x41,
+	0x2e, 0x93, 0xd2, 0xe0, 0xb9, 0x70, 0xcb, 0x85, 0x96, 0x45, 0x10, 0xa5, 0x01, 0xf3, 0x8b, 0xad,
+	0x81, 0x67, 0xd6, 0x37, 0x1c, 0xaa, 0x07, 0x3c, 0x23, 0x6a, 0x93, 0x0f, 0x05, 0x90, 0xdc, 0x07,
+	0x80, 0xff, 0xef, 0xab, 0x73, 0x2f, 0xa4, 0x4f, 0xec, 0x81, 0x74, 0xb2, 0x27, 0x80, 0x97, 0xf7,
+	0x9d, 0x7d, 0xd0, 0x40, 0x1e, 0x80, 0xa5, 0x31, 0xef, 0x4e, 0xe4, 0xb1, 0xdb, 0x6f, 0x2a, 0xd9,
+	0xa3, 0x34, 0x15, 0xae, 0x93, 0xf2, 0xf9, 0xa1, 0x2e, 0xcb, 0x9f, 0xd2, 0x2b, 0xff, 0x9e, 0x07,
+	0x73, 0x03, 0xa2, 0xa4, 0x25, 0x70, 0x5a, 0x2d, 0x97, 0x0d, 0xad, 0x58, 0x12, 0x67, 0xe4, 0x33,
+	0xbd, 0xee, 0x1c, 0x38, 0xad, 0xb7, 0x4d, 0xd3, 0xd3, 0xcd, 0x4b, 0x60, 0xc1, 0x33, 0x55, 0xb5,
+	0xbc, 0xba, 0x5a, 0xd4, 0xd4, 0xbc, 0x28, 0xc8, 0x67, 0x7b, 0xdd, 0x79, 0x30, 0x57, 0x75, 0x2d,
+	0xb4, 0x65, 0xbb, 0xc8, 0x92, 0x6c, 0x70, 0xd1, 0x1b, 0x52, 0x56, 0x73, 0x6a, 0xf1, 0x1d, 0xd5,
+	0xd0, 0x2b, 0xe5, 0xa2, 0xb6, 0x66, 0xac, 0x17, 0xf5, 0xf5, 0x6c, 0x25, 0x57, 0x10, 0x63, 0x72,
+	0xa1, 0xd7, 0x55, 0x41, 0xae, 0x8c, 0x4c, 0x64, 0x77, 0x90, 0xa5, 0x50, 0x46, 0x6c, 0xb7, 0xae,
+	0x58, 0xb6, 0xa5, 0xb8, 0x98, 0x29, 0x0e, 0x64, 0x66, 0x43, 0x31, 0xb1, 0xbb, 0x65, 0xd7, 0xdb,
+	0x04, 0x59, 0x4a, 0xc7, 0x13, 0xa1, 0xb2, 0x85, 0x89, 0xc2, 0x1a, 0x48, 0xf1, 0x7b, 0x94, 0xc2,
+	0x9b, 0x97, 0xf4, 0x35, 0x70, 0xc6, 0x4b, 0x55, 0xd4, 0x2a, 0x6a, 0x59, 0xcb, 0x96, 0xc4, 0x59,
+	0xb9, 0xd8, 0xeb, 0xae, 0x82, 0xbc, 0xea, 0xf2, 0xa5, 0x83, 0x3c, 0x77, 0xdb, 0xfb, 0x75, 0x61,
+	0x53, 0xe1, 0xba, 0xe2, 0x71, 0xc2, 0x31, 0x94, 0x2d, 0x82, 0x1d, 0x05, 0x32, 0xa5, 0x89, 0x20,
+	0x65, 0x0a, 0x76, 0x91, 0x42, 0x50, 0xdd, 0xeb, 0x28, 0xa6, 0x1f, 0x7c, 0x5d, 0x5f, 0x33, 0x74,
+	0x55, 0xcb, 0x8b, 0x27, 0xe4, 0xb7, 0x7b, 0x5d, 0x0d, 0x94, 0x38, 0x4e, 0x0a, 0x8a, 0xa4, 0x50,
+	0x28, 0x72, 0x2d, 0xaf, 0x0a, 0x18, 0x0d, 0x4e, 0x7c, 0x6d, 0xee, 0x9d, 0xc4, 0x02, 0xf3, 0x5e,
+	0x92, 0x4a, 0x71, 0x5d, 0xdd, 0xa8, 0x56, 0xc4, 0x93, 0xb2, 0xde, 0xeb, 0x6e, 0x02, 0xad, 0x62,
+	0x3b, 0x08, 0xb7, 0x99, 0x72, 0x0f, 0xda, 0xcc, 0x0b, 0xeb, 0xcd, 0x9a, 0x04, 0x4a, 0x19, 0x2d,
+	0xe1, 0xc0, 0x2c, 0x36, 0x38, 0xd7, 0x2f, 0x25, 0xa0, 0x45, 0x3c, 0x25, 0x57, 0x7a, 0xdd, 0xb7,
+	0xc1, 0xc6, 0xd8, 0x6a, 0x08, 0xe7, 0x66, 0x6c, 0x3d, 0xfd, 0x39, 0xec, 0x95, 0x6a, 0x07, 0x9c,
+	0xe7, 0xa9, 0xb2, 0xb7, 0x06, 0x0a, 0x58, 0xb9, 0x5d, 0x51, 0x75, 0xf1, 0xb4, 0x7c, 0xb7, 0xd7,
+	0xbd, 0x03, 0x6e, 0xa9, 0x3b, 0x26, 0x42, 0x16, 0xb2, 0x14, 0x07, 0xee, 0xa4, 0x6a, 0xf7, 0x19,
+	0xa2, 0xca, 0xe5, 0xcf, 0xaf, 0xaf, 0x7c, 0x26, 0x5a, 0x23, 0xe9, 0xab, 0x63, 0x72, 0xbe, 0xee,
+	0xfa, 0xd2, 0x2c, 0xe6, 0xd6, 0x37, 0x8d, 0xcd, 0xa2, 0xb6, 0x26, 0x7e, 0x4a, 0xfe, 0x4a, 0xaf,
+	0xbb, 0x06, 0x54, 0xef, 0x89, 0xd2, 0xe2, 0x30, 0x42, 0xbb, 0xd9, 0x26, 0x68, 0xf2, 0xa0, 0x0a,
+	0x41, 0xd0, 0x52, 0x1c, 0x4c, 0x90, 0x54, 0x07, 0x2f, 0x78, 0xe1, 0x73, 0x1b, 0x9a, 0xa6, 0xe6,
+	0x2a, 0xc5, 0x0d, 0xcd, 0x28, 0xab, 0xab, 0x55, 0x5d, 0xcd, 0x8b, 0x73, 0xf2, 0xcd, 0x5e, 0xb7,
+	0x00, 0x56, 0x73, 0xd8, 0x75, 0x91, 0xc9, 0x7c, 0xb7, 0xad, 0x36, 0x9d, 0x66, 0xf6, 0xa1, 0x44,
+	0x77, 0x47, 0x12, 0x65, 0x57, 0x36, 0xca, 0x15, 0x35, 0x2f, 0x02, 0x39, 0xdb, 0xeb, 0x5e, 0x07,
+	0xd7, 0x42, 0x89, 0x60, 0x0d, 0x13, 0x36, 0x15, 0x4c, 0xb7, 0xc1, 0xf3, 0x23, 0x75, 0xe8, 0x6a,
+	0x45, 0x9c, 0x97, 0x6f, 0xf4, 0xba, 0xd7, 0xc0, 0x9b, 0x91, 0x2a, 0x28, 0x62, 0x53, 0x84, 0xfe,
+	0xba, 0x1f, 0x5a, 0x53, 0x2b, 0x46, 0xd5, 0x0b, 0x9b, 0xcd, 0x15, 0xb2, 0x2b, 0x25, 0x55, 0x3c,
+	0x23, 0xaf, 0xf4, 0xba, 0x37, 0xc0, 0x5b, 0x1a, 0x62, 0xf7, 0x30, 0xd9, 0x56, 0xda, 0x2e, 0x41,
+	0xd0, 0x6c, 0xc0, 0x5a, 0x73, 0x0a, 0x2a, 0xa4, 0x3b, 0xbe, 0xb2, 0x0a, 0x1b, 0xfa, 0x50, 0xf8,
+	0x85, 0x60, 0xe6, 0x05, 0x4c, 0xd9, 0x21, 0x63, 0xbf, 0xec, 0x2f, 0xc3, 0xaa, 0x76, 0x53, 0xdb,
+	0xf8, 0xaa, 0x26, 0x9e, 0x95, 0xa5, 0x5e, 0xf7, 0x1c, 0x58, 0xa8, 0xba, 0xdb, 0x2e, 0xbe, 0xe7,
+	0xfa, 0xad, 0x43, 0xda, 0x06, 0x4b, 0x7c, 0xad, 0x96, 0x74, 0xa3, 0x90, 0xd5, 0xf2, 0x7a, 0x21,
+	0x7b, 0x53, 0x35, 0x56, 0xb3, 0xc5, 0x52, 0xb5, 0xac, 0x8a, 0xa2, 0x5c, 0xea, 0x75, 0x8b, 0x60,
+	0xad, 0x52, 0xd2, 0x95, 0x06, 0x74, 0x2d, 0xda, 0x80, 0xdb, 0x68, 0x6f, 0xc1, 0x1d, 0xb8, 0x64,
+	0xbf, 0x01, 0x2e, 0x0c, 0xd1, 0xe4, 0xf5, 0x88, 0xbc, 0xd7, 0x24, 0x16, 0xe5, 0x5c, 0xaf, 0xfb,
+	0x65, 0x70, 0x3d, 0xc4, 0x14, 0xb3, 0x1d, 0x64, 0x29, 0x5e, 0xc7, 0x98, 0xb8, 0xe6, 0x2b, 0xdf,
+	0x06, 0x67, 0xc2, 0xef, 0x07, 0xe9, 0x22, 0xb8, 0x50, 0x50, 0xb3, 0xa5, 0x4a, 0xc1, 0xd0, 0x2b,
+	0xd9, 0x4a, 0x55, 0x37, 0xaa, 0x9a, 0x7f, 0x7f, 0x5b, 0x9c, 0x91, 0x64, 0xf0, 0x42, 0xd4, 0x98,
+	0x57, 0xd7, 0xca, 0xd9, 0xbc, 0xf7, 0x02, 0x90, 0x96, 0xc0, 0xf9, 0xa8, 0xad, 0xef, 0x16, 0x1b,
+	0xe3, 0x56, 0xd4, 0x3d, 0xce, 0xf2, 0xe2, 0xec, 0xd5, 0x87, 0x0b, 0x60, 0x21, 0xc7, 0x8f, 0xc9,
+	0xf2, 0x90, 0xc1, 0xec, 0x66, 0x51, 0xfa, 0x20, 0x06, 0xce, 0x8f, 0xfd, 0x70, 0x93, 0xde, 0x3a,
+	0xec, 0x39, 0x0c, 0x47, 0x59, 0xbe, 0x7e, 0xb4, 0x63, 0x9c, 0xe4, 0xfb, 0xc2, 0x47, 0xbf, 0x89,
+	0x09, 0xbb, 0xbf, 0x8b, 0x7f, 0xb1, 0x83, 0x68, 0xca, 0xc6, 0x29, 0xdb, 0xdd, 0x22, 0x90, 0x32,
+	0xd2, 0x36, 0x59, 0x9b, 0xa0, 0x94, 0xb7, 0x78, 0x3f, 0xab, 0x28, 0x5b, 0x6f, 0xec, 0x98, 0x29,
+	0xcb, 0xa5, 0x29, 0xca, 0xa0, 0x6b, 0x41, 0x62, 0xa5, 0x1c, 0xec, 0xda, 0x0c, 0x93, 0xf7, 0xfe,
+	0xfc, 0xf7, 0x9f, 0xc6, 0xb2, 0xd2, 0x8d, 0xe0, 0x74, 0x30, 0x33, 0xd8, 0x96, 0xd0, 0xcc, 0x83,
+	0xc1, 0x75, 0x77, 0xf4, 0x34, 0x91, 0x66, 0x82, 0xbd, 0x7a, 0xb0, 0x03, 0xfb, 0x59, 0x0c, 0x2c,
+	0x8e, 0xcc, 0x54, 0xfa, 0xd2, 0xf4, 0xd5, 0xf5, 0x81, 0x79, 0xf3, 0x30, 0xae, 0x01, 0x28, 0xdf,
+	0xef, 0x83, 0xf2, 0xc6, 0x7e, 0xa0, 0xec, 0x8f, 0x49, 0x41, 0x5a, 0x9d, 0x1e, 0x13, 0x6e, 0xee,
+	0x0e, 0x41, 0xf3, 0x87, 0xbe, 0x76, 0x86, 0x3f, 0x89, 0x27, 0xd5, 0xce, 0x1e, 0x27, 0x32, 0x93,
+	0x6a, 0x67, 0xaf, 0x83, 0x94, 0xe4, 0xaf, 0x8f, 0x01, 0x26, 0x2c, 0x39, 0x87, 0x80, 0x29, 0xb4,
+	0xdf, 0x0d, 0x06, 0x04, 0x67, 0x14, 0x03, 0xd3, 0x60, 0xab, 0x3b, 0x8c, 0xe6, 0x2f, 0x66, 0xf7,
+	0xfd, 0xf2, 0xcd, 0x35, 0xa0, 0x5b, 0x47, 0xfe, 0xde, 0x51, 0xca, 0x1d, 0x65, 0x57, 0xda, 0x47,
+	0x39, 0x7f, 0xb4, 0x20, 0x01, 0xd6, 0xff, 0x38, 0x8e, 0x75, 0xfa, 0x4b, 0x41, 0xfa, 0x40, 0xf8,
+	0x5f, 0xc3, 0x1d, 0x3e, 0x45, 0xc9, 0x3c, 0x18, 0xf3, 0x41, 0x31, 0xc4, 0x88, 0x61, 0x72, 0xc8,
+	0x83, 0xef, 0x01, 0xe9, 0xf7, 0x31, 0xf0, 0xe2, 0x01, 0x27, 0x01, 0xd2, 0xda, 0xd1, 0x8f, 0x20,
+	0x7c, 0x6e, 0x0a, 0xc7, 0x75, 0x96, 0x91, 0xfc, 0xc9, 0x71, 0xf0, 0xa3, 0x49, 0xa5, 0xe9, 0xd9,
+	0x89, 0x9c, 0x5a, 0x45, 0x90, 0x95, 0x5f, 0xff, 0xf0, 0xa1, 0x30, 0xfb, 0xa7, 0x87, 0xc2, 0x2b,
+	0x07, 0x55, 0xb9, 0x51, 0xfb, 0x26, 0x32, 0xd9, 0x7b, 0x7f, 0x8c, 0xc7, 0xe2, 0xc2, 0xca, 0x8f,
+	0x84, 0x47, 0x8f, 0x13, 0x33, 0x1f, 0x3f, 0x4e, 0xcc, 0x7c, 0xf2, 0x38, 0x21, 0x7c, 0x77, 0x37,
+	0x21, 0xfc, 0x6a, 0x37, 0x21, 0x7c, 0xb4, 0x9b, 0x10, 0x1e, 0xed, 0x26, 0x84, 0xbf, 0xed, 0x26,
+	0x84, 0x7f, 0xee, 0x26, 0x66, 0x3e, 0xd9, 0x4d, 0x08, 0x3f, 0x7e, 0x92, 0x98, 0xf9, 0xf0, 0x49,
+	0x42, 0x78, 0xf4, 0x24, 0x31, 0xf3, 0xf1, 0x93, 0xc4, 0xcc, 0x9d, 0x6a, 0x1d, 0xb7, 0xb6, 0xeb,
+	0xe9, 0x0e, 0x6e, 0x32, 0x44, 0x08, 0x4c, 0xb7, 0x69, 0x86, 0x5f, 0x6c, 0x61, 0xe2, 0xa4, 0x5a,
+	0x04, 0x77, 0x6c, 0x0b, 0x91, 0x54, 0xdf, 0x9c, 0x69, 0xd5, 0xea, 0x38, 0x83, 0x76, 0x58, 0xf0,
+	0xa7, 0xc8, 0x5e, 0xff, 0x3c, 0xd5, 0x4e, 0xf1, 0x7f, 0x48, 0xbe, 0xf0, 0xdf, 0x00, 0x00, 0x00,
+	0xff, 0xff, 0x0c, 0x9b, 0x0d, 0xbd, 0xa3, 0x1a, 0x00, 0x00,
 }
 
 func (x ErrorCode) String() string {
@@ -1082,6 +1502,22 @@ func (this *DNSLBHealthStatusListResponse) Equal(that interface{}) bool {
 	}
 	for i := range this.Items {
 		if !this.Items[i].Equal(that1.Items[i]) {
+			return false
+		}
+	}
+	if len(this.DnsLoadBalancerStatusSummary) != len(that1.DnsLoadBalancerStatusSummary) {
+		return false
+	}
+	for i := range this.DnsLoadBalancerStatusSummary {
+		if !this.DnsLoadBalancerStatusSummary[i].Equal(that1.DnsLoadBalancerStatusSummary[i]) {
+			return false
+		}
+	}
+	if len(this.DnsLbPoolsStatusSummary) != len(that1.DnsLbPoolsStatusSummary) {
+		return false
+	}
+	for i := range this.DnsLbPoolsStatusSummary {
+		if !this.DnsLbPoolsStatusSummary[i].Equal(that1.DnsLbPoolsStatusSummary[i]) {
 			return false
 		}
 	}
@@ -1301,6 +1737,59 @@ func (this *DNSLBPoolHealthStatusListResponseItem) Equal(that interface{}) bool 
 	}
 	return true
 }
+func (this *DNSLBPoolMemberHealthStatusListRequest) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*DNSLBPoolMemberHealthStatusListRequest)
+	if !ok {
+		that2, ok := that.(DNSLBPoolMemberHealthStatusListRequest)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Namespace != that1.Namespace {
+		return false
+	}
+	return true
+}
+func (this *DNSLBPoolMemberHealthStatusListResponse) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*DNSLBPoolMemberHealthStatusListResponse)
+	if !ok {
+		that2, ok := that.(DNSLBPoolMemberHealthStatusListResponse)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if len(this.Items) != len(that1.Items) {
+		return false
+	}
+	for i := range this.Items {
+		if !this.Items[i].Equal(that1.Items[i]) {
+			return false
+		}
+	}
+	return true
+}
 func (this *DNSLBPoolMemberHealthStatusListResponseItem) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -1340,6 +1829,12 @@ func (this *DNSLBPoolMemberHealthStatusListResponseItem) Equal(that interface{})
 	if this.ErrorDescription != that1.ErrorDescription {
 		return false
 	}
+	if this.DnsLbName != that1.DnsLbName {
+		return false
+	}
+	if this.DnsLbPoolName != that1.DnsLbPoolName {
+		return false
+	}
 	return true
 }
 func (this *HealthStatusSummary) Equal(that interface{}) bool {
@@ -1374,6 +1869,106 @@ func (this *HealthStatusSummary) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *DNSLBPoolMemberHealthStatusEvent) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*DNSLBPoolMemberHealthStatusEvent)
+	if !ok {
+		that2, ok := that.(DNSLBPoolMemberHealthStatusEvent)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.PoolMemberAddress != that1.PoolMemberAddress {
+		return false
+	}
+	if len(this.Status) != len(that1.Status) {
+		return false
+	}
+	for i := range this.Status {
+		if !this.Status[i].Equal(that1.Status[i]) {
+			return false
+		}
+	}
+	if this.ErrorCode != that1.ErrorCode {
+		return false
+	}
+	if this.ErrorDescription != that1.ErrorDescription {
+		return false
+	}
+	return true
+}
+func (this *DNSLBPoolMemberHealthStatusRequest) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*DNSLBPoolMemberHealthStatusRequest)
+	if !ok {
+		that2, ok := that.(DNSLBPoolMemberHealthStatusRequest)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Namespace != that1.Namespace {
+		return false
+	}
+	if this.DnsLbName != that1.DnsLbName {
+		return false
+	}
+	if this.DnsLbPoolName != that1.DnsLbPoolName {
+		return false
+	}
+	if this.PoolMemberAddress != that1.PoolMemberAddress {
+		return false
+	}
+	return true
+}
+func (this *DNSLBPoolMemberHealthStatusResponse) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*DNSLBPoolMemberHealthStatusResponse)
+	if !ok {
+		that2, ok := that.(DNSLBPoolMemberHealthStatusResponse)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if len(this.DnsLbPoolMemberEvents) != len(that1.DnsLbPoolMemberEvents) {
+		return false
+	}
+	for i := range this.DnsLbPoolMemberEvents {
+		if !this.DnsLbPoolMemberEvents[i].Equal(that1.DnsLbPoolMemberEvents[i]) {
+			return false
+		}
+	}
+	return true
+}
 func (this *DNSLBHealthStatusListRequest) GoString() string {
 	if this == nil {
 		return "nil"
@@ -1388,10 +1983,16 @@ func (this *DNSLBHealthStatusListResponse) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 5)
+	s := make([]string, 0, 7)
 	s = append(s, "&dns_load_balancer.DNSLBHealthStatusListResponse{")
 	if this.Items != nil {
 		s = append(s, "Items: "+fmt.Sprintf("%#v", this.Items)+",\n")
+	}
+	if this.DnsLoadBalancerStatusSummary != nil {
+		s = append(s, "DnsLoadBalancerStatusSummary: "+fmt.Sprintf("%#v", this.DnsLoadBalancerStatusSummary)+",\n")
+	}
+	if this.DnsLbPoolsStatusSummary != nil {
+		s = append(s, "DnsLbPoolsStatusSummary: "+fmt.Sprintf("%#v", this.DnsLbPoolsStatusSummary)+",\n")
 	}
 	s = append(s, "}")
 	return strings.Join(s, "")
@@ -1482,11 +2083,33 @@ func (this *DNSLBPoolHealthStatusListResponseItem) GoString() string {
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
+func (this *DNSLBPoolMemberHealthStatusListRequest) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 5)
+	s = append(s, "&dns_load_balancer.DNSLBPoolMemberHealthStatusListRequest{")
+	s = append(s, "Namespace: "+fmt.Sprintf("%#v", this.Namespace)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *DNSLBPoolMemberHealthStatusListResponse) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 5)
+	s = append(s, "&dns_load_balancer.DNSLBPoolMemberHealthStatusListResponse{")
+	if this.Items != nil {
+		s = append(s, "Items: "+fmt.Sprintf("%#v", this.Items)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
 func (this *DNSLBPoolMemberHealthStatusListResponseItem) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 9)
+	s := make([]string, 0, 11)
 	s = append(s, "&dns_load_balancer.DNSLBPoolMemberHealthStatusListResponseItem{")
 	s = append(s, "Name: "+fmt.Sprintf("%#v", this.Name)+",\n")
 	s = append(s, "HealthCheckType: "+fmt.Sprintf("%#v", this.HealthCheckType)+",\n")
@@ -1495,6 +2118,8 @@ func (this *DNSLBPoolMemberHealthStatusListResponseItem) GoString() string {
 	}
 	s = append(s, "ErrorCode: "+fmt.Sprintf("%#v", this.ErrorCode)+",\n")
 	s = append(s, "ErrorDescription: "+fmt.Sprintf("%#v", this.ErrorDescription)+",\n")
+	s = append(s, "DnsLbName: "+fmt.Sprintf("%#v", this.DnsLbName)+",\n")
+	s = append(s, "DnsLbPoolName: "+fmt.Sprintf("%#v", this.DnsLbPoolName)+",\n")
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
@@ -1507,6 +2132,46 @@ func (this *HealthStatusSummary) GoString() string {
 	s = append(s, "Status: "+fmt.Sprintf("%#v", this.Status)+",\n")
 	if this.Count != nil {
 		s = append(s, "Count: "+fmt.Sprintf("%#v", this.Count)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *DNSLBPoolMemberHealthStatusEvent) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 8)
+	s = append(s, "&dns_load_balancer.DNSLBPoolMemberHealthStatusEvent{")
+	s = append(s, "PoolMemberAddress: "+fmt.Sprintf("%#v", this.PoolMemberAddress)+",\n")
+	if this.Status != nil {
+		s = append(s, "Status: "+fmt.Sprintf("%#v", this.Status)+",\n")
+	}
+	s = append(s, "ErrorCode: "+fmt.Sprintf("%#v", this.ErrorCode)+",\n")
+	s = append(s, "ErrorDescription: "+fmt.Sprintf("%#v", this.ErrorDescription)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *DNSLBPoolMemberHealthStatusRequest) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 8)
+	s = append(s, "&dns_load_balancer.DNSLBPoolMemberHealthStatusRequest{")
+	s = append(s, "Namespace: "+fmt.Sprintf("%#v", this.Namespace)+",\n")
+	s = append(s, "DnsLbName: "+fmt.Sprintf("%#v", this.DnsLbName)+",\n")
+	s = append(s, "DnsLbPoolName: "+fmt.Sprintf("%#v", this.DnsLbPoolName)+",\n")
+	s = append(s, "PoolMemberAddress: "+fmt.Sprintf("%#v", this.PoolMemberAddress)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *DNSLBPoolMemberHealthStatusResponse) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 5)
+	s = append(s, "&dns_load_balancer.DNSLBPoolMemberHealthStatusResponse{")
+	if this.DnsLbPoolMemberEvents != nil {
+		s = append(s, "DnsLbPoolMemberEvents: "+fmt.Sprintf("%#v", this.DnsLbPoolMemberEvents)+",\n")
 	}
 	s = append(s, "}")
 	return strings.Join(s, "")
@@ -1547,6 +2212,16 @@ type CustomDataAPIClient interface {
 	// x-displayName: "DNS Load Balancer Pool Health Status"
 	// Get DNS Load Balancer Pool Health Status
 	DNSLBPoolHealthStatus(ctx context.Context, in *DNSLBPoolHealthStatusRequest, opts ...grpc.CallOption) (*DNSLBPoolHealthStatusResponse, error)
+	// DNS Load Balancer Pool Health Status Change Events
+	//
+	// x-displayName: "DNS Load Balancer Pool Member Health Status Change Events"
+	// Get DNS Load Balancer Pool Health Status Changes
+	DNSLBPoolMemberHealthStatusChangeEvents(ctx context.Context, in *DNSLBPoolMemberHealthStatusRequest, opts ...grpc.CallOption) (*DNSLBPoolMemberHealthStatusResponse, error)
+	// DNS Load Balancer Pool Member Health Status List
+	//
+	// x-displayName: "DNS Load Balancer Pool Members Health Status List"
+	// Get Health Status of all DNS Load Balancer Pool Members in a namespace
+	DNSLBPoolMemberHealthStatusList(ctx context.Context, in *DNSLBPoolMemberHealthStatusListRequest, opts ...grpc.CallOption) (*DNSLBPoolMemberHealthStatusListResponse, error)
 }
 
 type customDataAPIClient struct {
@@ -1584,6 +2259,24 @@ func (c *customDataAPIClient) DNSLBPoolHealthStatus(ctx context.Context, in *DNS
 	return out, nil
 }
 
+func (c *customDataAPIClient) DNSLBPoolMemberHealthStatusChangeEvents(ctx context.Context, in *DNSLBPoolMemberHealthStatusRequest, opts ...grpc.CallOption) (*DNSLBPoolMemberHealthStatusResponse, error) {
+	out := new(DNSLBPoolMemberHealthStatusResponse)
+	err := c.cc.Invoke(ctx, "/ves.io.schema.dns_load_balancer.CustomDataAPI/DNSLBPoolMemberHealthStatusChangeEvents", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *customDataAPIClient) DNSLBPoolMemberHealthStatusList(ctx context.Context, in *DNSLBPoolMemberHealthStatusListRequest, opts ...grpc.CallOption) (*DNSLBPoolMemberHealthStatusListResponse, error) {
+	out := new(DNSLBPoolMemberHealthStatusListResponse)
+	err := c.cc.Invoke(ctx, "/ves.io.schema.dns_load_balancer.CustomDataAPI/DNSLBPoolMemberHealthStatusList", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // CustomDataAPIServer is the server API for CustomDataAPI service.
 type CustomDataAPIServer interface {
 	// DNS Load Balancer Health Status List
@@ -1601,6 +2294,16 @@ type CustomDataAPIServer interface {
 	// x-displayName: "DNS Load Balancer Pool Health Status"
 	// Get DNS Load Balancer Pool Health Status
 	DNSLBPoolHealthStatus(context.Context, *DNSLBPoolHealthStatusRequest) (*DNSLBPoolHealthStatusResponse, error)
+	// DNS Load Balancer Pool Health Status Change Events
+	//
+	// x-displayName: "DNS Load Balancer Pool Member Health Status Change Events"
+	// Get DNS Load Balancer Pool Health Status Changes
+	DNSLBPoolMemberHealthStatusChangeEvents(context.Context, *DNSLBPoolMemberHealthStatusRequest) (*DNSLBPoolMemberHealthStatusResponse, error)
+	// DNS Load Balancer Pool Member Health Status List
+	//
+	// x-displayName: "DNS Load Balancer Pool Members Health Status List"
+	// Get Health Status of all DNS Load Balancer Pool Members in a namespace
+	DNSLBPoolMemberHealthStatusList(context.Context, *DNSLBPoolMemberHealthStatusListRequest) (*DNSLBPoolMemberHealthStatusListResponse, error)
 }
 
 // UnimplementedCustomDataAPIServer can be embedded to have forward compatible implementations.
@@ -1615,6 +2318,12 @@ func (*UnimplementedCustomDataAPIServer) DNSLBHealthStatus(ctx context.Context, 
 }
 func (*UnimplementedCustomDataAPIServer) DNSLBPoolHealthStatus(ctx context.Context, req *DNSLBPoolHealthStatusRequest) (*DNSLBPoolHealthStatusResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DNSLBPoolHealthStatus not implemented")
+}
+func (*UnimplementedCustomDataAPIServer) DNSLBPoolMemberHealthStatusChangeEvents(ctx context.Context, req *DNSLBPoolMemberHealthStatusRequest) (*DNSLBPoolMemberHealthStatusResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DNSLBPoolMemberHealthStatusChangeEvents not implemented")
+}
+func (*UnimplementedCustomDataAPIServer) DNSLBPoolMemberHealthStatusList(ctx context.Context, req *DNSLBPoolMemberHealthStatusListRequest) (*DNSLBPoolMemberHealthStatusListResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DNSLBPoolMemberHealthStatusList not implemented")
 }
 
 func RegisterCustomDataAPIServer(s *grpc.Server, srv CustomDataAPIServer) {
@@ -1675,6 +2384,42 @@ func _CustomDataAPI_DNSLBPoolHealthStatus_Handler(srv interface{}, ctx context.C
 	return interceptor(ctx, in, info, handler)
 }
 
+func _CustomDataAPI_DNSLBPoolMemberHealthStatusChangeEvents_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DNSLBPoolMemberHealthStatusRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CustomDataAPIServer).DNSLBPoolMemberHealthStatusChangeEvents(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/ves.io.schema.dns_load_balancer.CustomDataAPI/DNSLBPoolMemberHealthStatusChangeEvents",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CustomDataAPIServer).DNSLBPoolMemberHealthStatusChangeEvents(ctx, req.(*DNSLBPoolMemberHealthStatusRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _CustomDataAPI_DNSLBPoolMemberHealthStatusList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DNSLBPoolMemberHealthStatusListRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CustomDataAPIServer).DNSLBPoolMemberHealthStatusList(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/ves.io.schema.dns_load_balancer.CustomDataAPI/DNSLBPoolMemberHealthStatusList",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CustomDataAPIServer).DNSLBPoolMemberHealthStatusList(ctx, req.(*DNSLBPoolMemberHealthStatusListRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 var _CustomDataAPI_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "ves.io.schema.dns_load_balancer.CustomDataAPI",
 	HandlerType: (*CustomDataAPIServer)(nil),
@@ -1690,6 +2435,14 @@ var _CustomDataAPI_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "DNSLBPoolHealthStatus",
 			Handler:    _CustomDataAPI_DNSLBPoolHealthStatus_Handler,
+		},
+		{
+			MethodName: "DNSLBPoolMemberHealthStatusChangeEvents",
+			Handler:    _CustomDataAPI_DNSLBPoolMemberHealthStatusChangeEvents_Handler,
+		},
+		{
+			MethodName: "DNSLBPoolMemberHealthStatusList",
+			Handler:    _CustomDataAPI_DNSLBPoolMemberHealthStatusList_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
@@ -1746,6 +2499,34 @@ func (m *DNSLBHealthStatusListResponse) MarshalToSizedBuffer(dAtA []byte) (int, 
 	_ = i
 	var l int
 	_ = l
+	if len(m.DnsLbPoolsStatusSummary) > 0 {
+		for iNdEx := len(m.DnsLbPoolsStatusSummary) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.DnsLbPoolsStatusSummary[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintPublicCustomDataApi(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x1a
+		}
+	}
+	if len(m.DnsLoadBalancerStatusSummary) > 0 {
+		for iNdEx := len(m.DnsLoadBalancerStatusSummary) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.DnsLoadBalancerStatusSummary[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintPublicCustomDataApi(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x12
+		}
+	}
 	if len(m.Items) > 0 {
 		for iNdEx := len(m.Items) - 1; iNdEx >= 0; iNdEx-- {
 			{
@@ -2069,6 +2850,73 @@ func (m *DNSLBPoolHealthStatusListResponseItem) MarshalToSizedBuffer(dAtA []byte
 	return len(dAtA) - i, nil
 }
 
+func (m *DNSLBPoolMemberHealthStatusListRequest) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *DNSLBPoolMemberHealthStatusListRequest) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *DNSLBPoolMemberHealthStatusListRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Namespace) > 0 {
+		i -= len(m.Namespace)
+		copy(dAtA[i:], m.Namespace)
+		i = encodeVarintPublicCustomDataApi(dAtA, i, uint64(len(m.Namespace)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *DNSLBPoolMemberHealthStatusListResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *DNSLBPoolMemberHealthStatusListResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *DNSLBPoolMemberHealthStatusListResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Items) > 0 {
+		for iNdEx := len(m.Items) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Items[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintPublicCustomDataApi(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0xa
+		}
+	}
+	return len(dAtA) - i, nil
+}
+
 func (m *DNSLBPoolMemberHealthStatusListResponseItem) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -2089,6 +2937,20 @@ func (m *DNSLBPoolMemberHealthStatusListResponseItem) MarshalToSizedBuffer(dAtA 
 	_ = i
 	var l int
 	_ = l
+	if len(m.DnsLbPoolName) > 0 {
+		i -= len(m.DnsLbPoolName)
+		copy(dAtA[i:], m.DnsLbPoolName)
+		i = encodeVarintPublicCustomDataApi(dAtA, i, uint64(len(m.DnsLbPoolName)))
+		i--
+		dAtA[i] = 0x3a
+	}
+	if len(m.DnsLbName) > 0 {
+		i -= len(m.DnsLbName)
+		copy(dAtA[i:], m.DnsLbName)
+		i = encodeVarintPublicCustomDataApi(dAtA, i, uint64(len(m.DnsLbName)))
+		i--
+		dAtA[i] = 0x32
+	}
 	if len(m.ErrorDescription) > 0 {
 		i -= len(m.ErrorDescription)
 		copy(dAtA[i:], m.ErrorDescription)
@@ -2174,6 +3036,150 @@ func (m *HealthStatusSummary) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
+func (m *DNSLBPoolMemberHealthStatusEvent) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *DNSLBPoolMemberHealthStatusEvent) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *DNSLBPoolMemberHealthStatusEvent) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.ErrorDescription) > 0 {
+		i -= len(m.ErrorDescription)
+		copy(dAtA[i:], m.ErrorDescription)
+		i = encodeVarintPublicCustomDataApi(dAtA, i, uint64(len(m.ErrorDescription)))
+		i--
+		dAtA[i] = 0x2a
+	}
+	if m.ErrorCode != 0 {
+		i = encodeVarintPublicCustomDataApi(dAtA, i, uint64(m.ErrorCode))
+		i--
+		dAtA[i] = 0x20
+	}
+	if len(m.Status) > 0 {
+		for iNdEx := len(m.Status) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Status[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintPublicCustomDataApi(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x12
+		}
+	}
+	if len(m.PoolMemberAddress) > 0 {
+		i -= len(m.PoolMemberAddress)
+		copy(dAtA[i:], m.PoolMemberAddress)
+		i = encodeVarintPublicCustomDataApi(dAtA, i, uint64(len(m.PoolMemberAddress)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *DNSLBPoolMemberHealthStatusRequest) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *DNSLBPoolMemberHealthStatusRequest) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *DNSLBPoolMemberHealthStatusRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.PoolMemberAddress) > 0 {
+		i -= len(m.PoolMemberAddress)
+		copy(dAtA[i:], m.PoolMemberAddress)
+		i = encodeVarintPublicCustomDataApi(dAtA, i, uint64(len(m.PoolMemberAddress)))
+		i--
+		dAtA[i] = 0x22
+	}
+	if len(m.DnsLbPoolName) > 0 {
+		i -= len(m.DnsLbPoolName)
+		copy(dAtA[i:], m.DnsLbPoolName)
+		i = encodeVarintPublicCustomDataApi(dAtA, i, uint64(len(m.DnsLbPoolName)))
+		i--
+		dAtA[i] = 0x1a
+	}
+	if len(m.DnsLbName) > 0 {
+		i -= len(m.DnsLbName)
+		copy(dAtA[i:], m.DnsLbName)
+		i = encodeVarintPublicCustomDataApi(dAtA, i, uint64(len(m.DnsLbName)))
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.Namespace) > 0 {
+		i -= len(m.Namespace)
+		copy(dAtA[i:], m.Namespace)
+		i = encodeVarintPublicCustomDataApi(dAtA, i, uint64(len(m.Namespace)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *DNSLBPoolMemberHealthStatusResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *DNSLBPoolMemberHealthStatusResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *DNSLBPoolMemberHealthStatusResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.DnsLbPoolMemberEvents) > 0 {
+		for iNdEx := len(m.DnsLbPoolMemberEvents) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.DnsLbPoolMemberEvents[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintPublicCustomDataApi(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0xa
+		}
+	}
+	return len(dAtA) - i, nil
+}
+
 func encodeVarintPublicCustomDataApi(dAtA []byte, offset int, v uint64) int {
 	offset -= sovPublicCustomDataApi(v)
 	base := offset
@@ -2206,6 +3212,18 @@ func (m *DNSLBHealthStatusListResponse) Size() (n int) {
 	_ = l
 	if len(m.Items) > 0 {
 		for _, e := range m.Items {
+			l = e.Size()
+			n += 1 + l + sovPublicCustomDataApi(uint64(l))
+		}
+	}
+	if len(m.DnsLoadBalancerStatusSummary) > 0 {
+		for _, e := range m.DnsLoadBalancerStatusSummary {
+			l = e.Size()
+			n += 1 + l + sovPublicCustomDataApi(uint64(l))
+		}
+	}
+	if len(m.DnsLbPoolsStatusSummary) > 0 {
+		for _, e := range m.DnsLbPoolsStatusSummary {
 			l = e.Size()
 			n += 1 + l + sovPublicCustomDataApi(uint64(l))
 		}
@@ -2347,6 +3365,34 @@ func (m *DNSLBPoolHealthStatusListResponseItem) Size() (n int) {
 	return n
 }
 
+func (m *DNSLBPoolMemberHealthStatusListRequest) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Namespace)
+	if l > 0 {
+		n += 1 + l + sovPublicCustomDataApi(uint64(l))
+	}
+	return n
+}
+
+func (m *DNSLBPoolMemberHealthStatusListResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if len(m.Items) > 0 {
+		for _, e := range m.Items {
+			l = e.Size()
+			n += 1 + l + sovPublicCustomDataApi(uint64(l))
+		}
+	}
+	return n
+}
+
 func (m *DNSLBPoolMemberHealthStatusListResponseItem) Size() (n int) {
 	if m == nil {
 		return 0
@@ -2374,6 +3420,14 @@ func (m *DNSLBPoolMemberHealthStatusListResponseItem) Size() (n int) {
 	if l > 0 {
 		n += 1 + l + sovPublicCustomDataApi(uint64(l))
 	}
+	l = len(m.DnsLbName)
+	if l > 0 {
+		n += 1 + l + sovPublicCustomDataApi(uint64(l))
+	}
+	l = len(m.DnsLbPoolName)
+	if l > 0 {
+		n += 1 + l + sovPublicCustomDataApi(uint64(l))
+	}
 	return n
 }
 
@@ -2388,6 +3442,72 @@ func (m *HealthStatusSummary) Size() (n int) {
 	}
 	if len(m.Count) > 0 {
 		for _, e := range m.Count {
+			l = e.Size()
+			n += 1 + l + sovPublicCustomDataApi(uint64(l))
+		}
+	}
+	return n
+}
+
+func (m *DNSLBPoolMemberHealthStatusEvent) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.PoolMemberAddress)
+	if l > 0 {
+		n += 1 + l + sovPublicCustomDataApi(uint64(l))
+	}
+	if len(m.Status) > 0 {
+		for _, e := range m.Status {
+			l = e.Size()
+			n += 1 + l + sovPublicCustomDataApi(uint64(l))
+		}
+	}
+	if m.ErrorCode != 0 {
+		n += 1 + sovPublicCustomDataApi(uint64(m.ErrorCode))
+	}
+	l = len(m.ErrorDescription)
+	if l > 0 {
+		n += 1 + l + sovPublicCustomDataApi(uint64(l))
+	}
+	return n
+}
+
+func (m *DNSLBPoolMemberHealthStatusRequest) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Namespace)
+	if l > 0 {
+		n += 1 + l + sovPublicCustomDataApi(uint64(l))
+	}
+	l = len(m.DnsLbName)
+	if l > 0 {
+		n += 1 + l + sovPublicCustomDataApi(uint64(l))
+	}
+	l = len(m.DnsLbPoolName)
+	if l > 0 {
+		n += 1 + l + sovPublicCustomDataApi(uint64(l))
+	}
+	l = len(m.PoolMemberAddress)
+	if l > 0 {
+		n += 1 + l + sovPublicCustomDataApi(uint64(l))
+	}
+	return n
+}
+
+func (m *DNSLBPoolMemberHealthStatusResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if len(m.DnsLbPoolMemberEvents) > 0 {
+		for _, e := range m.DnsLbPoolMemberEvents {
 			l = e.Size()
 			n += 1 + l + sovPublicCustomDataApi(uint64(l))
 		}
@@ -2420,8 +3540,20 @@ func (this *DNSLBHealthStatusListResponse) String() string {
 		repeatedStringForItems += strings.Replace(f.String(), "DNSLBHealthStatusListResponseItem", "DNSLBHealthStatusListResponseItem", 1) + ","
 	}
 	repeatedStringForItems += "}"
+	repeatedStringForDnsLoadBalancerStatusSummary := "[]*HealthStatusSummary{"
+	for _, f := range this.DnsLoadBalancerStatusSummary {
+		repeatedStringForDnsLoadBalancerStatusSummary += strings.Replace(f.String(), "HealthStatusSummary", "HealthStatusSummary", 1) + ","
+	}
+	repeatedStringForDnsLoadBalancerStatusSummary += "}"
+	repeatedStringForDnsLbPoolsStatusSummary := "[]*HealthStatusSummary{"
+	for _, f := range this.DnsLbPoolsStatusSummary {
+		repeatedStringForDnsLbPoolsStatusSummary += strings.Replace(f.String(), "HealthStatusSummary", "HealthStatusSummary", 1) + ","
+	}
+	repeatedStringForDnsLbPoolsStatusSummary += "}"
 	s := strings.Join([]string{`&DNSLBHealthStatusListResponse{`,
 		`Items:` + repeatedStringForItems + `,`,
+		`DnsLoadBalancerStatusSummary:` + repeatedStringForDnsLoadBalancerStatusSummary + `,`,
+		`DnsLbPoolsStatusSummary:` + repeatedStringForDnsLbPoolsStatusSummary + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2536,6 +3668,31 @@ func (this *DNSLBPoolHealthStatusListResponseItem) String() string {
 	}, "")
 	return s
 }
+func (this *DNSLBPoolMemberHealthStatusListRequest) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&DNSLBPoolMemberHealthStatusListRequest{`,
+		`Namespace:` + fmt.Sprintf("%v", this.Namespace) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *DNSLBPoolMemberHealthStatusListResponse) String() string {
+	if this == nil {
+		return "nil"
+	}
+	repeatedStringForItems := "[]*DNSLBPoolMemberHealthStatusListResponseItem{"
+	for _, f := range this.Items {
+		repeatedStringForItems += strings.Replace(f.String(), "DNSLBPoolMemberHealthStatusListResponseItem", "DNSLBPoolMemberHealthStatusListResponseItem", 1) + ","
+	}
+	repeatedStringForItems += "}"
+	s := strings.Join([]string{`&DNSLBPoolMemberHealthStatusListResponse{`,
+		`Items:` + repeatedStringForItems + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *DNSLBPoolMemberHealthStatusListResponseItem) String() string {
 	if this == nil {
 		return "nil"
@@ -2551,6 +3708,8 @@ func (this *DNSLBPoolMemberHealthStatusListResponseItem) String() string {
 		`Status:` + repeatedStringForStatus + `,`,
 		`ErrorCode:` + fmt.Sprintf("%v", this.ErrorCode) + `,`,
 		`ErrorDescription:` + fmt.Sprintf("%v", this.ErrorDescription) + `,`,
+		`DnsLbName:` + fmt.Sprintf("%v", this.DnsLbName) + `,`,
+		`DnsLbPoolName:` + fmt.Sprintf("%v", this.DnsLbPoolName) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2567,6 +3726,52 @@ func (this *HealthStatusSummary) String() string {
 	s := strings.Join([]string{`&HealthStatusSummary{`,
 		`Status:` + fmt.Sprintf("%v", this.Status) + `,`,
 		`Count:` + repeatedStringForCount + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *DNSLBPoolMemberHealthStatusEvent) String() string {
+	if this == nil {
+		return "nil"
+	}
+	repeatedStringForStatus := "[]*MetricValue{"
+	for _, f := range this.Status {
+		repeatedStringForStatus += strings.Replace(fmt.Sprintf("%v", f), "MetricValue", "schema.MetricValue", 1) + ","
+	}
+	repeatedStringForStatus += "}"
+	s := strings.Join([]string{`&DNSLBPoolMemberHealthStatusEvent{`,
+		`PoolMemberAddress:` + fmt.Sprintf("%v", this.PoolMemberAddress) + `,`,
+		`Status:` + repeatedStringForStatus + `,`,
+		`ErrorCode:` + fmt.Sprintf("%v", this.ErrorCode) + `,`,
+		`ErrorDescription:` + fmt.Sprintf("%v", this.ErrorDescription) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *DNSLBPoolMemberHealthStatusRequest) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&DNSLBPoolMemberHealthStatusRequest{`,
+		`Namespace:` + fmt.Sprintf("%v", this.Namespace) + `,`,
+		`DnsLbName:` + fmt.Sprintf("%v", this.DnsLbName) + `,`,
+		`DnsLbPoolName:` + fmt.Sprintf("%v", this.DnsLbPoolName) + `,`,
+		`PoolMemberAddress:` + fmt.Sprintf("%v", this.PoolMemberAddress) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *DNSLBPoolMemberHealthStatusResponse) String() string {
+	if this == nil {
+		return "nil"
+	}
+	repeatedStringForDnsLbPoolMemberEvents := "[]*DNSLBPoolMemberHealthStatusEvent{"
+	for _, f := range this.DnsLbPoolMemberEvents {
+		repeatedStringForDnsLbPoolMemberEvents += strings.Replace(f.String(), "DNSLBPoolMemberHealthStatusEvent", "DNSLBPoolMemberHealthStatusEvent", 1) + ","
+	}
+	repeatedStringForDnsLbPoolMemberEvents += "}"
+	s := strings.Join([]string{`&DNSLBPoolMemberHealthStatusResponse{`,
+		`DnsLbPoolMemberEvents:` + repeatedStringForDnsLbPoolMemberEvents + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2724,6 +3929,74 @@ func (m *DNSLBHealthStatusListResponse) Unmarshal(dAtA []byte) error {
 			}
 			m.Items = append(m.Items, &DNSLBHealthStatusListResponseItem{})
 			if err := m.Items[len(m.Items)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DnsLoadBalancerStatusSummary", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomDataApi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthPublicCustomDataApi
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomDataApi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.DnsLoadBalancerStatusSummary = append(m.DnsLoadBalancerStatusSummary, &HealthStatusSummary{})
+			if err := m.DnsLoadBalancerStatusSummary[len(m.DnsLoadBalancerStatusSummary)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DnsLbPoolsStatusSummary", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomDataApi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthPublicCustomDataApi
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomDataApi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.DnsLbPoolsStatusSummary = append(m.DnsLbPoolsStatusSummary, &HealthStatusSummary{})
+			if err := m.DnsLbPoolsStatusSummary[len(m.DnsLbPoolsStatusSummary)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
@@ -3597,6 +4870,178 @@ func (m *DNSLBPoolHealthStatusListResponseItem) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
+func (m *DNSLBPoolMemberHealthStatusListRequest) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowPublicCustomDataApi
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: DNSLBPoolMemberHealthStatusListRequest: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: DNSLBPoolMemberHealthStatusListRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Namespace", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomDataApi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicCustomDataApi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomDataApi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Namespace = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipPublicCustomDataApi(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthPublicCustomDataApi
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthPublicCustomDataApi
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *DNSLBPoolMemberHealthStatusListResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowPublicCustomDataApi
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: DNSLBPoolMemberHealthStatusListResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: DNSLBPoolMemberHealthStatusListResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Items", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomDataApi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthPublicCustomDataApi
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomDataApi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Items = append(m.Items, &DNSLBPoolMemberHealthStatusListResponseItem{})
+			if err := m.Items[len(m.Items)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipPublicCustomDataApi(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthPublicCustomDataApi
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthPublicCustomDataApi
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
 func (m *DNSLBPoolMemberHealthStatusListResponseItem) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
@@ -3775,6 +5220,70 @@ func (m *DNSLBPoolMemberHealthStatusListResponseItem) Unmarshal(dAtA []byte) err
 			}
 			m.ErrorDescription = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
+		case 6:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DnsLbName", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomDataApi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicCustomDataApi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomDataApi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.DnsLbName = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 7:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DnsLbPoolName", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomDataApi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicCustomDataApi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomDataApi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.DnsLbPoolName = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipPublicCustomDataApi(dAtA[iNdEx:])
@@ -3878,6 +5387,444 @@ func (m *HealthStatusSummary) Unmarshal(dAtA []byte) error {
 			}
 			m.Count = append(m.Count, &schema.MetricValue{})
 			if err := m.Count[len(m.Count)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipPublicCustomDataApi(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthPublicCustomDataApi
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthPublicCustomDataApi
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *DNSLBPoolMemberHealthStatusEvent) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowPublicCustomDataApi
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: DNSLBPoolMemberHealthStatusEvent: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: DNSLBPoolMemberHealthStatusEvent: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field PoolMemberAddress", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomDataApi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicCustomDataApi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomDataApi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.PoolMemberAddress = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Status", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomDataApi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthPublicCustomDataApi
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomDataApi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Status = append(m.Status, &schema.MetricValue{})
+			if err := m.Status[len(m.Status)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 4:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ErrorCode", wireType)
+			}
+			m.ErrorCode = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomDataApi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.ErrorCode |= ErrorCode(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ErrorDescription", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomDataApi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicCustomDataApi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomDataApi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ErrorDescription = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipPublicCustomDataApi(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthPublicCustomDataApi
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthPublicCustomDataApi
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *DNSLBPoolMemberHealthStatusRequest) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowPublicCustomDataApi
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: DNSLBPoolMemberHealthStatusRequest: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: DNSLBPoolMemberHealthStatusRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Namespace", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomDataApi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicCustomDataApi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomDataApi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Namespace = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DnsLbName", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomDataApi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicCustomDataApi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomDataApi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.DnsLbName = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DnsLbPoolName", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomDataApi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicCustomDataApi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomDataApi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.DnsLbPoolName = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field PoolMemberAddress", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomDataApi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicCustomDataApi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomDataApi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.PoolMemberAddress = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipPublicCustomDataApi(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthPublicCustomDataApi
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthPublicCustomDataApi
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *DNSLBPoolMemberHealthStatusResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowPublicCustomDataApi
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: DNSLBPoolMemberHealthStatusResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: DNSLBPoolMemberHealthStatusResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DnsLbPoolMemberEvents", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomDataApi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthPublicCustomDataApi
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomDataApi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.DnsLbPoolMemberEvents = append(m.DnsLbPoolMemberEvents, &DNSLBPoolMemberHealthStatusEvent{})
+			if err := m.DnsLbPoolMemberEvents[len(m.DnsLbPoolMemberEvents)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex

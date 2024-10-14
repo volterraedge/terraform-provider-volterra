@@ -12,6 +12,7 @@ import (
 	ves_io_schema_advertise_policy "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/advertise_policy"
 	ves_io_schema_alert_policy "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/alert_policy"
 	ves_io_schema_alert_receiver "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/alert_receiver"
+	ves_io_schema_code_base_integration "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/api_sec/code_base_integration"
 	ves_io_schema_app_firewall "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/app_firewall"
 	ves_io_schema_app_setting "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/app_setting"
 	ves_io_schema_app_type "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/app_type"
@@ -25,8 +26,11 @@ import (
 	ves_io_schema_cluster "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/cluster"
 	ves_io_schema_container_registry "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/container_registry"
 	ves_io_schema_crl "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/crl"
+	ves_io_schema_geo_config "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/data_privacy/geo_config"
+	ves_io_schema_lma_region "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/data_privacy/lma_region"
 	ves_io_schema_data_type "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/data_type"
 	ves_io_schema_dc_cluster_group "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/dc_cluster_group"
+	ves_io_schema_discovered_service "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/discovered_service"
 	ves_io_schema_discovery "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/discovery"
 	ves_io_schema_dns_compliance_checks "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/dns_compliance_checks"
 	ves_io_schema_dns_domain "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/dns_domain"
@@ -75,14 +79,18 @@ import (
 	ves_io_schema_usb_policy "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/usb_policy"
 	ves_io_schema_user_identification "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/user_identification"
 	ves_io_schema_uztna_domain "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/uztna/uztna_domain"
+	ves_io_schema_uztna_flow "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/uztna/uztna_flow"
 	ves_io_schema_uztna_gateway "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/uztna/uztna_gateway"
 	ves_io_schema_uztna_leasepool "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/uztna/uztna_leasepool"
+	ves_io_schema_uztna_policy_template "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/uztna/uztna_policy_template"
 	ves_io_schema_uztna_domain_view "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/uztna/views/uztna_domain_view"
 	ves_io_schema_api_definition "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/api_definition"
 	ves_io_schema_app_api_group "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/app_api_group"
 	ves_io_schema_aws_tgw_site "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/aws_tgw_site"
 	ves_io_schema_aws_vpc_site "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/aws_vpc_site"
 	ves_io_schema_azure_vnet_site "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/azure_vnet_site"
+	ves_io_schema_bigip_centralmanager_site "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/bigip_centralmanager_site"
+	ves_io_schema_bigip_instance_site "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/bigip_instance_site"
 	ves_io_schema_cdn_loadbalancer "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/cdn_loadbalancer"
 	ves_io_schema_forward_proxy_policy "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/forward_proxy_policy"
 	ves_io_schema_gcp_vpc_site "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/gcp_vpc_site"
@@ -108,6 +116,7 @@ func getVolterraResourceMap() map[string]*schema.Resource {
 		"volterra_advertise_policy":           resourceVolterraAdvertisePolicy(),
 		"volterra_alert_policy":               resourceVolterraAlertPolicy(),
 		"volterra_alert_receiver":             resourceVolterraAlertReceiver(),
+		"volterra_code_base_integration":      resourceVolterraCodeBaseIntegration(),
 		"volterra_app_firewall":               resourceVolterraAppFirewall(),
 		"volterra_app_setting":                resourceVolterraAppSetting(),
 		"volterra_app_type":                   resourceVolterraAppType(),
@@ -166,14 +175,18 @@ func getVolterraResourceMap() map[string]*schema.Resource {
 		"volterra_usb_policy":                 resourceVolterraUsbPolicy(),
 		"volterra_user_identification":        resourceVolterraUserIdentification(),
 		"volterra_uztna_domain":               resourceVolterraUztnaDomain(),
+		"volterra_uztna_flow":                 resourceVolterraUztnaFlow(),
 		"volterra_uztna_gateway":              resourceVolterraUztnaGateway(),
 		"volterra_uztna_leasepool":            resourceVolterraUztnaLeasepool(),
+		"volterra_uztna_policy_template":      resourceVolterraUztnaPolicyTemplate(),
 		"volterra_uztna_domain_view":          resourceVolterraUztnaDomainView(),
 		"volterra_api_definition":             resourceVolterraApiDefinition(),
 		"volterra_app_api_group":              resourceVolterraAppApiGroup(),
 		"volterra_aws_tgw_site":               resourceVolterraAwsTgwSite(),
 		"volterra_aws_vpc_site":               resourceVolterraAwsVpcSite(),
 		"volterra_azure_vnet_site":            resourceVolterraAzureVnetSite(),
+		"volterra_bigip_centralmanager_site":  resourceVolterraBigipCentralmanagerSite(),
+		"volterra_bigip_instance_site":        resourceVolterraBigipInstanceSite(),
 		"volterra_cdn_loadbalancer":           resourceVolterraCdnLoadbalancer(),
 		"volterra_forward_proxy_policy":       resourceVolterraForwardProxyPolicy(),
 		"volterra_gcp_vpc_site":               resourceVolterraGcpVpcSite(),
@@ -201,6 +214,7 @@ func getAllAkarObjectTypes() sets.String {
 		ves_io_schema_advertise_policy.ObjectType,
 		ves_io_schema_alert_policy.ObjectType,
 		ves_io_schema_alert_receiver.ObjectType,
+		ves_io_schema_code_base_integration.ObjectType,
 		ves_io_schema_app_firewall.ObjectType,
 		ves_io_schema_app_setting.ObjectType,
 		ves_io_schema_app_type.ObjectType,
@@ -214,8 +228,11 @@ func getAllAkarObjectTypes() sets.String {
 		ves_io_schema_cluster.ObjectType,
 		ves_io_schema_container_registry.ObjectType,
 		ves_io_schema_crl.ObjectType,
+		ves_io_schema_geo_config.ObjectType,
+		ves_io_schema_lma_region.ObjectType,
 		ves_io_schema_data_type.ObjectType,
 		ves_io_schema_dc_cluster_group.ObjectType,
+		ves_io_schema_discovered_service.ObjectType,
 		ves_io_schema_discovery.ObjectType,
 		ves_io_schema_dns_compliance_checks.ObjectType,
 		ves_io_schema_dns_domain.ObjectType,
@@ -264,14 +281,18 @@ func getAllAkarObjectTypes() sets.String {
 		ves_io_schema_usb_policy.ObjectType,
 		ves_io_schema_user_identification.ObjectType,
 		ves_io_schema_uztna_domain.ObjectType,
+		ves_io_schema_uztna_flow.ObjectType,
 		ves_io_schema_uztna_gateway.ObjectType,
 		ves_io_schema_uztna_leasepool.ObjectType,
+		ves_io_schema_uztna_policy_template.ObjectType,
 		ves_io_schema_uztna_domain_view.ObjectType,
 		ves_io_schema_api_definition.ObjectType,
 		ves_io_schema_app_api_group.ObjectType,
 		ves_io_schema_aws_tgw_site.ObjectType,
 		ves_io_schema_aws_vpc_site.ObjectType,
 		ves_io_schema_azure_vnet_site.ObjectType,
+		ves_io_schema_bigip_centralmanager_site.ObjectType,
+		ves_io_schema_bigip_instance_site.ObjectType,
 		ves_io_schema_cdn_loadbalancer.ObjectType,
 		ves_io_schema_forward_proxy_policy.ObjectType,
 		ves_io_schema_gcp_vpc_site.ObjectType,

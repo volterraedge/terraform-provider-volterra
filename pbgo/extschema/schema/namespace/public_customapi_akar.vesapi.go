@@ -4952,6 +4952,12 @@ var NamespaceCustomAPISwaggerJSON string = `{
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "WAF Enabled or Disabled"
                 },
+                "waf_enforcement_mode": {
+                    "type": "string",
+                    "description": " WAF Enforcement Mode",
+                    "title": "WAF Enforcement Mode",
+                    "x-displayname": "WAF Enforcement Mode"
+                },
                 "waf_exclusion_enabled": {
                     "description": " WAF Exclusion configured ",
                     "title": "WAF Exclusion Status",

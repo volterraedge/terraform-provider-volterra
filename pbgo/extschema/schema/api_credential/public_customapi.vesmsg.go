@@ -629,6 +629,18 @@ func (v *ValidateCreateServiceCredentialsRequest) Validate(ctx context.Context, 
 
 	}
 
+	if fv, exists := v.FldValidators["user_group_names"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("user_group_names"))
+		for idx, item := range m.GetUserGroupNames() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["virtual_k8s_name"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("virtual_k8s_name"))
@@ -1246,6 +1258,170 @@ var DefaultGetResponseValidator = func() *ValidateGetResponse {
 
 func GetResponseValidator() db.Validator {
 	return DefaultGetResponseValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *GetServiceCredentialsResponse) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *GetServiceCredentialsResponse) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *GetServiceCredentialsResponse) DeepCopy() *GetServiceCredentialsResponse {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &GetServiceCredentialsResponse{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *GetServiceCredentialsResponse) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *GetServiceCredentialsResponse) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return GetServiceCredentialsResponseValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateGetServiceCredentialsResponse struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateGetServiceCredentialsResponse) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*GetServiceCredentialsResponse)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *GetServiceCredentialsResponse got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["active"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("active"))
+		if err := fv(ctx, m.GetActive(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["create_timestamp"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("create_timestamp"))
+		if err := fv(ctx, m.GetCreateTimestamp(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["expiry_timestamp"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("expiry_timestamp"))
+		if err := fv(ctx, m.GetExpiryTimestamp(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("name"))
+		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["namespace"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("namespace"))
+		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["namespace_access"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("namespace_access"))
+		if err := fv(ctx, m.GetNamespaceAccess(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["type"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("type"))
+		if err := fv(ctx, m.GetType(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["uid"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("uid"))
+		if err := fv(ctx, m.GetUid(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["user_email"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("user_email"))
+		if err := fv(ctx, m.GetUserEmail(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["user_group_names"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("user_group_names"))
+		for idx, item := range m.GetUserGroupNames() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultGetServiceCredentialsResponseValidator = func() *ValidateGetServiceCredentialsResponse {
+	v := &ValidateGetServiceCredentialsResponse{FldValidators: map[string]db.ValidatorFunc{}}
+
+	v.FldValidators["namespace_access"] = ves_io_schema.NamespaceAccessTypeValidator().Validate
+
+	return v
+}()
+
+func GetServiceCredentialsResponseValidator() db.Validator {
+	return DefaultGetServiceCredentialsResponseValidator
 }
 
 // augmented methods on protoc/std generated struct

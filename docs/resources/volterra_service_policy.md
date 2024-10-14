@@ -1,9 +1,9 @@
 ---
 
 page_title: "Volterra: service_policy"
-
 description: "The service_policy allows CRUD of Service Policy resource on Volterra SaaS"
------------------------------------------------------------------------------------------
+
+---
 
 Resource volterra_service_policy
 ================================
@@ -656,7 +656,6 @@ App Firewall action to be enforced if the input request matches the rule..
 
 App Firewall will run in monitoring mode without blocking the request.
 
-
 ### Waf Skip Processing
 
 Skip all App Firewall processing for this request.
@@ -681,13 +680,13 @@ Specifies how Malicious User Mitigation is handled
 
 `skip_processing` - (Optional) Do not perform enforcement for this request (`Bool`).
 
-### Client Choice Ip Threat Category List 
+### Client Choice Ip Threat Category List
 
 IP threat categories to choose from.
 
 `ip_threat_categories` - (Required) The IP threat categories is obtained from the list and is used to auto-generate equivalent label selection expressions (`List of Strings`).
 
-### Content Rewrite Action 
+### Content Rewrite Action
 
 Rewrite HTML response action to insert HTML content such as Javascript script tags into the HTML document.
 
@@ -715,7 +714,7 @@ Shape Protected Endpoint Action that include application traffic type and mitiga
 
 `web_scraping` - (Required) Web scraping protection enabled for protected endpoint (`Bool`).
 
-### Shape Protected Endpoint Action Mitigation 
+### Shape Protected Endpoint Action Mitigation
 
 Mitigation action for protected endpoint.
 
@@ -729,15 +728,15 @@ Mitigation action for protected endpoint.
 
 `redirect` - (Optional) Redirect bot request to a custom URI.. See [Action Type Redirect ](#action-type-redirect) below for details.
 
-### Shape Protected Endpoint Action Transaction Result 
- 
+### Shape Protected Endpoint Action Transaction Result
+
 Success/failure Criteria for transaction result.
- 
+
 `failure_conditions` - (Optional) Failure Conditions. See [Transaction Result Failure Conditions ](#transaction-result-failure-conditions) below for details.
- 
+
 `success_conditions` - (Optional) Success Conditions. See [Transaction Result Success Conditions ](#transaction-result-success-conditions) below for details.
 
-### Transaction Result Failure Conditions 
+### Transaction Result Failure Conditions
 
 Failure Conditions.
 
@@ -747,7 +746,7 @@ Failure Conditions.
 
 `status` - (Required) HTTP Status code (`String`).
 
-### Transaction Result Success Conditions 
+### Transaction Result Success Conditions
 
 Success Conditions.
 
@@ -757,7 +756,7 @@ Success Conditions.
 
 `status` - (Required) HTTP Status code (`String`).
 
-### Action Type Block 
+### Action Type Block
 
 Block bot request and send response with custom content..
 
@@ -767,7 +766,7 @@ Block bot request and send response with custom content..
 
 `status` - (Optional) HTTP Status code to respond with (`String`).
 
-### Action Type Flag 
+### Action Type Flag
 
 Flag the request while not taking any invasive actions..
 
@@ -777,7 +776,7 @@ Flag the request while not taking any invasive actions..
 
 `no_headers` - (Optional) No mitigation headers. (`Bool`).
 
-### Send Headers Choice Append Headers 
+### Send Headers Choice Append Headers
 
 Append mitigation headers..
 
@@ -785,13 +784,13 @@ Append mitigation headers..
 
 `inference_header_name` - (Required) A case-insensitive HTTP header name. (`String`).
 
-### Action Type Redirect 
+### Action Type Redirect
 
 Redirect bot request to a custom URI..
 
 `uri` - (Required) URI location for redirect may be relative or absolute. (`String`).
 
-### Waf Advanced Configuration App Firewall Detection Control 
+### Waf Advanced Configuration App Firewall Detection Control
 
 Define the list of Signature IDs, Violations, Attack Types and Bot Names that should be excluded from triggering on the defined match criteria..
 
@@ -803,7 +802,7 @@ Define the list of Signature IDs, Violations, Attack Types and Bot Names that sh
 
 `exclude_violation_contexts` - (Optional) Violations to be excluded for the defined match criteria. See [App Firewall Detection Control Exclude Violation Contexts ](#app-firewall-detection-control-exclude-violation-contexts) below for details.
 
-### App Firewall Detection Control Exclude Attack Type Contexts 
+### App Firewall Detection Control Exclude Attack Type Contexts
 
 Attack Types to be excluded for the defined match criteria.
 
@@ -813,13 +812,13 @@ Attack Types to be excluded for the defined match criteria.
 
 `exclude_attack_type` - (Required) x-required (`String`).
 
-### App Firewall Detection Control Exclude Bot Name Contexts 
+### App Firewall Detection Control Exclude Bot Name Contexts
 
 Bot Names to be excluded for the defined match criteria.
 
 `bot_name` - (Required) x-example: "Hydra" (`String`).
 
-### App Firewall Detection Control Exclude Signature Contexts 
+### App Firewall Detection Control Exclude Signature Contexts
 
 Signature IDs to be excluded for the defined match criteria.
 
@@ -829,7 +828,7 @@ Signature IDs to be excluded for the defined match criteria.
 
 `signature_id` - (Required) 0 implies that all signatures will be excluded for the specified context. (`Int`).
 
-### App Firewall Detection Control Exclude Violation Contexts 
+### App Firewall Detection Control Exclude Violation Contexts
 
 Violations to be excluded for the defined match criteria.
 
@@ -839,9 +838,9 @@ Violations to be excluded for the defined match criteria.
 
 `exclude_violation` - (Required) x-required (`String`).
 
-### Jwt Claims 
+### Jwt Claims
 
-List of predicates for various JWT claims that need to match. 
+List of predicates for various JWT claims that need to match.
 
 `invert_matcher` - (Optional) Invert the match result. (`Bool`).
 
@@ -855,7 +854,7 @@ List of predicates for various JWT claims that need to match.
 
 `name` - (Required) JWT claim name. (`String`).
 
-### Match Item 
+### Match Item
 
 Criteria for matching the values for the JWT Claim. The match is successful if any of the values in the input satisfies the criteria in the matcher.
 
@@ -865,7 +864,7 @@ Criteria for matching the values for the JWT Claim. The match is successful if a
 
 `transformers` - (Optional) An ordered list of transformers (starting from index 0) to be applied to the path before matching. (`List of Strings`).
 
-### Request Constraints 
+### Request Constraints
 
 Place limits on request based on the request attributes. The request matches if any of the attribute sizes exceed the corresponding maximum value..
 
@@ -955,7 +954,7 @@ Match the specified user identity. The format is prefixed by the type.
 
 `regex_values` - (Optional) A list of regular expressions to match the input against. (`String`).
 
-### Segment Policy 
+### Segment Policy
 
 Skip the configuration or set option as Any to ignore corresponding segment match.
 

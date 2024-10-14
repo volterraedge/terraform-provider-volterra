@@ -147,6 +147,15 @@ func (v *ValidateDiscoverVPCRequest) Validate(ctx context.Context, pm interface{
 
 	}
 
+	if fv, exists := v.FldValidators["edge_site"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("edge_site"))
+		if err := fv(ctx, m.GetEdgeSite(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["provider"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("provider"))

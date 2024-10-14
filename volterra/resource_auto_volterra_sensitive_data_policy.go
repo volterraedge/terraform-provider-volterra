@@ -66,8 +66,7 @@ func resourceVolterraSensitiveDataPolicy() *schema.Resource {
 
 				Type: schema.TypeList,
 
-				Optional:   true,
-				Deprecated: "This field is deprecated and will be removed in future release.",
+				Optional: true,
 				Elem: &schema.Schema{
 					Type: schema.TypeString,
 				},

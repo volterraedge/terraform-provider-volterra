@@ -20,6 +20,8 @@ import (
 	"gopkg.volterra.us/stdlib/errors"
 	"gopkg.volterra.us/stdlib/server"
 	"gopkg.volterra.us/stdlib/svcfw"
+
+	ves_io_schema_views_common_security "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/common_security"
 )
 
 var (
@@ -44,9 +46,9 @@ func (c *CustomAPIGrpcClient) doRPCAssignAPIDefinition(ctx context.Context, yaml
 }
 
 func (c *CustomAPIGrpcClient) doRPCDeleteDoSAutoMitigationRule(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
-	req := &DeleteDoSAutoMitigationRuleReq{}
+	req := &ves_io_schema_views_common_security.DeleteDoSAutoMitigationRuleReq{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
-		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.views.http_loadbalancer.DeleteDoSAutoMitigationRuleReq", yamlReq)
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.views.common_security.DeleteDoSAutoMitigationRuleReq", yamlReq)
 	}
 	rsp, err := c.grpcClient.DeleteDoSAutoMitigationRule(ctx, req, opts...)
 	return rsp, err
@@ -62,9 +64,9 @@ func (c *CustomAPIGrpcClient) doRPCGetDnsInfo(ctx context.Context, yamlReq strin
 }
 
 func (c *CustomAPIGrpcClient) doRPCGetDoSAutoMitigationRules(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
-	req := &GetDoSAutoMitigationRulesReq{}
+	req := &ves_io_schema_views_common_security.GetDoSAutoMitigationRulesReq{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
-		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.views.http_loadbalancer.GetDoSAutoMitigationRulesReq", yamlReq)
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.views.common_security.GetDoSAutoMitigationRulesReq", yamlReq)
 	}
 	rsp, err := c.grpcClient.GetDoSAutoMitigationRules(ctx, req, opts...)
 	return rsp, err
@@ -236,9 +238,9 @@ func (c *CustomAPIRestClient) doRPCDeleteDoSAutoMitigationRule(ctx context.Conte
 	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
 
 	yamlReq := callOpts.YAMLReq
-	req := &DeleteDoSAutoMitigationRuleReq{}
+	req := &ves_io_schema_views_common_security.DeleteDoSAutoMitigationRuleReq{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
-		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.views.http_loadbalancer.DeleteDoSAutoMitigationRuleReq: %s", yamlReq, err)
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.views.common_security.DeleteDoSAutoMitigationRuleReq: %s", yamlReq, err)
 	}
 
 	var hReq *http.Request
@@ -302,9 +304,9 @@ func (c *CustomAPIRestClient) doRPCDeleteDoSAutoMitigationRule(ctx context.Conte
 	if err != nil {
 		return nil, errors.Wrap(err, "Custom API RestClient read body")
 	}
-	pbRsp := &DeleteDoSAutoMitigationRuleRsp{}
+	pbRsp := &ves_io_schema_views_common_security.DeleteDoSAutoMitigationRuleRsp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.views.http_loadbalancer.DeleteDoSAutoMitigationRuleRsp", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.views.common_security.DeleteDoSAutoMitigationRuleRsp", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -405,9 +407,9 @@ func (c *CustomAPIRestClient) doRPCGetDoSAutoMitigationRules(ctx context.Context
 	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
 
 	yamlReq := callOpts.YAMLReq
-	req := &GetDoSAutoMitigationRulesReq{}
+	req := &ves_io_schema_views_common_security.GetDoSAutoMitigationRulesReq{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
-		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.views.http_loadbalancer.GetDoSAutoMitigationRulesReq: %s", yamlReq, err)
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.views.common_security.GetDoSAutoMitigationRulesReq: %s", yamlReq, err)
 	}
 
 	var hReq *http.Request
@@ -470,9 +472,9 @@ func (c *CustomAPIRestClient) doRPCGetDoSAutoMitigationRules(ctx context.Context
 	if err != nil {
 		return nil, errors.Wrap(err, "Custom API RestClient read body")
 	}
-	pbRsp := &GetDoSAutoMitigationRulesRsp{}
+	pbRsp := &ves_io_schema_views_common_security.GetDoSAutoMitigationRulesRsp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.views.http_loadbalancer.GetDoSAutoMitigationRulesRsp", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.views.common_security.GetDoSAutoMitigationRulesRsp", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -554,9 +556,9 @@ func (c *CustomAPIRestClient) doRPCGetSecurityConfig(ctx context.Context, callOp
 	if err != nil {
 		return nil, errors.Wrap(err, "Custom API RestClient read body")
 	}
-	pbRsp := &GetSecurityConfigRsp{}
+	pbRsp := &ves_io_schema_views_common_security.GetSecurityConfigRsp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.views.http_loadbalancer.GetSecurityConfigRsp", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.views.common_security.GetSecurityConfigRsp", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -702,7 +704,7 @@ func (c *customAPIInprocClient) AssignAPIDefinition(ctx context.Context, in *Ass
 	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.views.http_loadbalancer.CustomAPI.AssignAPIDefinition")
 	return c.CustomAPIServer.AssignAPIDefinition(ctx, in)
 }
-func (c *customAPIInprocClient) DeleteDoSAutoMitigationRule(ctx context.Context, in *DeleteDoSAutoMitigationRuleReq, opts ...grpc.CallOption) (*DeleteDoSAutoMitigationRuleRsp, error) {
+func (c *customAPIInprocClient) DeleteDoSAutoMitigationRule(ctx context.Context, in *ves_io_schema_views_common_security.DeleteDoSAutoMitigationRuleReq, opts ...grpc.CallOption) (*ves_io_schema_views_common_security.DeleteDoSAutoMitigationRuleRsp, error) {
 	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.views.http_loadbalancer.CustomAPI.DeleteDoSAutoMitigationRule")
 	return c.CustomAPIServer.DeleteDoSAutoMitigationRule(ctx, in)
 }
@@ -710,11 +712,11 @@ func (c *customAPIInprocClient) GetDnsInfo(ctx context.Context, in *GetDnsInfoRe
 	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.views.http_loadbalancer.CustomAPI.GetDnsInfo")
 	return c.CustomAPIServer.GetDnsInfo(ctx, in)
 }
-func (c *customAPIInprocClient) GetDoSAutoMitigationRules(ctx context.Context, in *GetDoSAutoMitigationRulesReq, opts ...grpc.CallOption) (*GetDoSAutoMitigationRulesRsp, error) {
+func (c *customAPIInprocClient) GetDoSAutoMitigationRules(ctx context.Context, in *ves_io_schema_views_common_security.GetDoSAutoMitigationRulesReq, opts ...grpc.CallOption) (*ves_io_schema_views_common_security.GetDoSAutoMitigationRulesRsp, error) {
 	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.views.http_loadbalancer.CustomAPI.GetDoSAutoMitigationRules")
 	return c.CustomAPIServer.GetDoSAutoMitigationRules(ctx, in)
 }
-func (c *customAPIInprocClient) GetSecurityConfig(ctx context.Context, in *GetSecurityConfigReq, opts ...grpc.CallOption) (*GetSecurityConfigRsp, error) {
+func (c *customAPIInprocClient) GetSecurityConfig(ctx context.Context, in *GetSecurityConfigReq, opts ...grpc.CallOption) (*ves_io_schema_views_common_security.GetSecurityConfigRsp, error) {
 	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.views.http_loadbalancer.CustomAPI.GetSecurityConfig")
 	return c.CustomAPIServer.GetSecurityConfig(ctx, in)
 }
@@ -796,7 +798,7 @@ func (s *customAPISrv) AssignAPIDefinition(ctx context.Context, in *AssignAPIDef
 
 	return rsp, nil
 }
-func (s *customAPISrv) DeleteDoSAutoMitigationRule(ctx context.Context, in *DeleteDoSAutoMitigationRuleReq) (*DeleteDoSAutoMitigationRuleRsp, error) {
+func (s *customAPISrv) DeleteDoSAutoMitigationRule(ctx context.Context, in *ves_io_schema_views_common_security.DeleteDoSAutoMitigationRuleReq) (*ves_io_schema_views_common_security.DeleteDoSAutoMitigationRuleRsp, error) {
 	ah := s.svc.GetAPIHandler("ves.io.schema.views.http_loadbalancer.CustomAPI")
 	cah, ok := ah.(CustomAPIServer)
 	if !ok {
@@ -804,11 +806,11 @@ func (s *customAPISrv) DeleteDoSAutoMitigationRule(ctx context.Context, in *Dele
 	}
 
 	var (
-		rsp *DeleteDoSAutoMitigationRuleRsp
+		rsp *ves_io_schema_views_common_security.DeleteDoSAutoMitigationRuleRsp
 		err error
 	)
 
-	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.views.http_loadbalancer.DeleteDoSAutoMitigationRuleReq", in)
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.views.common_security.DeleteDoSAutoMitigationRuleReq", in)
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
@@ -841,7 +843,7 @@ func (s *customAPISrv) DeleteDoSAutoMitigationRule(ctx context.Context, in *Dele
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
 
-	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.views.http_loadbalancer.DeleteDoSAutoMitigationRuleRsp", rsp)...)
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.views.common_security.DeleteDoSAutoMitigationRuleRsp", rsp)...)
 
 	return rsp, nil
 }
@@ -894,7 +896,7 @@ func (s *customAPISrv) GetDnsInfo(ctx context.Context, in *GetDnsInfoRequest) (*
 
 	return rsp, nil
 }
-func (s *customAPISrv) GetDoSAutoMitigationRules(ctx context.Context, in *GetDoSAutoMitigationRulesReq) (*GetDoSAutoMitigationRulesRsp, error) {
+func (s *customAPISrv) GetDoSAutoMitigationRules(ctx context.Context, in *ves_io_schema_views_common_security.GetDoSAutoMitigationRulesReq) (*ves_io_schema_views_common_security.GetDoSAutoMitigationRulesRsp, error) {
 	ah := s.svc.GetAPIHandler("ves.io.schema.views.http_loadbalancer.CustomAPI")
 	cah, ok := ah.(CustomAPIServer)
 	if !ok {
@@ -902,11 +904,11 @@ func (s *customAPISrv) GetDoSAutoMitigationRules(ctx context.Context, in *GetDoS
 	}
 
 	var (
-		rsp *GetDoSAutoMitigationRulesRsp
+		rsp *ves_io_schema_views_common_security.GetDoSAutoMitigationRulesRsp
 		err error
 	)
 
-	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.views.http_loadbalancer.GetDoSAutoMitigationRulesReq", in)
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.views.common_security.GetDoSAutoMitigationRulesReq", in)
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
@@ -939,11 +941,11 @@ func (s *customAPISrv) GetDoSAutoMitigationRules(ctx context.Context, in *GetDoS
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
 
-	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.views.http_loadbalancer.GetDoSAutoMitigationRulesRsp", rsp)...)
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.views.common_security.GetDoSAutoMitigationRulesRsp", rsp)...)
 
 	return rsp, nil
 }
-func (s *customAPISrv) GetSecurityConfig(ctx context.Context, in *GetSecurityConfigReq) (*GetSecurityConfigRsp, error) {
+func (s *customAPISrv) GetSecurityConfig(ctx context.Context, in *GetSecurityConfigReq) (*ves_io_schema_views_common_security.GetSecurityConfigRsp, error) {
 	ah := s.svc.GetAPIHandler("ves.io.schema.views.http_loadbalancer.CustomAPI")
 	cah, ok := ah.(CustomAPIServer)
 	if !ok {
@@ -951,7 +953,7 @@ func (s *customAPISrv) GetSecurityConfig(ctx context.Context, in *GetSecurityCon
 	}
 
 	var (
-		rsp *GetSecurityConfigRsp
+		rsp *ves_io_schema_views_common_security.GetSecurityConfigRsp
 		err error
 	)
 
@@ -988,7 +990,7 @@ func (s *customAPISrv) GetSecurityConfig(ctx context.Context, in *GetSecurityCon
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
 
-	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.views.http_loadbalancer.GetSecurityConfigRsp", rsp)...)
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.views.common_security.GetSecurityConfigRsp", rsp)...)
 
 	return rsp, nil
 }
@@ -1074,7 +1076,7 @@ var CustomAPISwaggerJSON string = `{
                     "200": {
                         "description": "A successful response.",
                         "schema": {
-                            "$ref": "#/definitions/http_loadbalancerGetSecurityConfigRsp"
+                            "$ref": "#/definitions/common_securityGetSecurityConfigRsp"
                         }
                     },
                     "401": {
@@ -1358,7 +1360,7 @@ var CustomAPISwaggerJSON string = `{
                     "200": {
                         "description": "A successful response.",
                         "schema": {
-                            "$ref": "#/definitions/http_loadbalancerGetDoSAutoMitigationRulesRsp"
+                            "$ref": "#/definitions/common_securityGetDoSAutoMitigationRulesRsp"
                         }
                     },
                     "401": {
@@ -1413,7 +1415,7 @@ var CustomAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "namespace",
-                        "description": "Namespace\n\nx-example: \"shared\"\nNamespace of the HTTP Load Balancer",
+                        "description": "Namespace\n\nx-example: \"shared\"\nNamespace of the Load Balancer",
                         "in": "path",
                         "required": true,
                         "type": "string",
@@ -1421,7 +1423,7 @@ var CustomAPISwaggerJSON string = `{
                     },
                     {
                         "name": "name",
-                        "description": "Name\n\nx-example: \"blogging-app\"\nName of the HTTP Load Balancer",
+                        "description": "Name\n\nx-example: \"blogging-app\"\nName of the Load Balancer",
                         "in": "path",
                         "required": true,
                         "type": "string",
@@ -1450,7 +1452,7 @@ var CustomAPISwaggerJSON string = `{
                     "200": {
                         "description": "A successful response.",
                         "schema": {
-                            "$ref": "#/definitions/http_loadbalancerDeleteDoSAutoMitigationRuleRsp"
+                            "$ref": "#/definitions/common_securityDeleteDoSAutoMitigationRuleRsp"
                         }
                     },
                     "401": {
@@ -1505,7 +1507,7 @@ var CustomAPISwaggerJSON string = `{
                 "parameters": [
                     {
                         "name": "namespace",
-                        "description": "Namespace\n\nx-example: \"shared\"\nNamespace of the HTTP Load Balancer",
+                        "description": "Namespace\n\nx-example: \"shared\"\nNamespace of the Load Balancer",
                         "in": "path",
                         "required": true,
                         "type": "string",
@@ -1513,7 +1515,7 @@ var CustomAPISwaggerJSON string = `{
                     },
                     {
                         "name": "name",
-                        "description": "Name\n\nx-example: \"blogging-app\"\nName of the HTTP Load Balancer",
+                        "description": "Name\n\nx-example: \"blogging-app\"\nName of the Load Balancer",
                         "in": "path",
                         "required": true,
                         "type": "string",
@@ -1635,6 +1637,95 @@ var CustomAPISwaggerJSON string = `{
         }
     },
     "definitions": {
+        "common_securityDeleteDoSAutoMitigationRuleRsp": {
+            "type": "object",
+            "description": "Response of Delete DoS Auto-Mitigation Rule API",
+            "title": "Delete DoS Auto-Mitigation Rule response",
+            "x-displayname": "Delete DoS Auto-Mitigation Rule response",
+            "x-ves-proto-message": "ves.io.schema.views.common_security.DeleteDoSAutoMitigationRuleRsp",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "description": " Name of the deleted DoS Auto-Mitigation loadbalancer Rule\n\nExample: - \"dos-auto-mitigation-ves-io-http-loadbalancer-ce22\"-",
+                    "title": "DoS Auto-Mitigation Rule Name",
+                    "x-displayname": "DoS Auto-Mitigation Rule Name",
+                    "x-ves-example": "dos-auto-mitigation-ves-io-http-loadbalancer-ce22"
+                }
+            }
+        },
+        "common_securityGetDoSAutoMitigationRulesRsp": {
+            "type": "object",
+            "description": "Response of GET DDoS Auto-Mitigation Rules API",
+            "title": "Get DoS Auto-Mitigation Rules response",
+            "x-displayname": "Get DDoS Auto-Mitigation Rules Response",
+            "x-ves-proto-message": "ves.io.schema.views.common_security.GetDoSAutoMitigationRulesRsp",
+            "properties": {
+                "dos_automitigation_rules": {
+                    "type": "array",
+                    "title": "DoS Auto-Mitigation Rules",
+                    "items": {
+                        "$ref": "#/definitions/dos_mitigationDoSMitigationRuleInfo"
+                    },
+                    "x-displayname": "DoS Auto-Mitigation Rules"
+                }
+            }
+        },
+        "common_securityGetSecurityConfigRsp": {
+            "type": "object",
+            "title": "Get Security Config Response",
+            "x-displayname": "Get Security Config Response",
+            "x-ves-proto-message": "ves.io.schema.views.common_security.GetSecurityConfigRsp",
+            "properties": {
+                "api_protection": {
+                    "type": "array",
+                    "title": "API Protection Configured",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "API Protection Configured"
+                },
+                "app_firewall": {
+                    "type": "array",
+                    "title": "App Firewall Configured",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "App Firewall Configured"
+                },
+                "app_firewall_per_route": {
+                    "type": "array",
+                    "title": "App Firewall Configured Per Route",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "List of Load Balancers Where App Firewall is Configured Per Route"
+                },
+                "bot_defense": {
+                    "type": "array",
+                    "title": "Bot Defense Configured",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "Bot Defense Configured"
+                },
+                "ddos_detection": {
+                    "type": "array",
+                    "title": "DDOS Detection Configured",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "DDOS Detection Configured"
+                },
+                "protected": {
+                    "type": "array",
+                    "title": "Protected LoadBalancers Configured",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "List of Load Balancers Secured"
+                }
+            }
+        },
         "dos_mitigationDestination": {
             "type": "object",
             "description": "A reference to the object on which the DoS Attack is going to be mitigated",
@@ -1743,22 +1834,6 @@ var CustomAPISwaggerJSON string = `{
             "x-displayname": "Assign API Definition Response",
             "x-ves-proto-message": "ves.io.schema.views.http_loadbalancer.AssignAPIDefinitionResp"
         },
-        "http_loadbalancerDeleteDoSAutoMitigationRuleRsp": {
-            "type": "object",
-            "description": "Response of Delete DoS Auto-Mitigation Rule API",
-            "title": "Delete DoS Auto-Mitigation Rule response",
-            "x-displayname": "Delete DoS Auto-Mitigation Rule response",
-            "x-ves-proto-message": "ves.io.schema.views.http_loadbalancer.DeleteDoSAutoMitigationRuleRsp",
-            "properties": {
-                "name": {
-                    "type": "string",
-                    "description": " Name of the deleted DoS Auto-Mitigation HTTP Rule\n\nExample: - \"dos-auto-mitigation-ves-io-http-loadbalancer-ce22\"-",
-                    "title": "DoS Auto-Mitigation Rule Name",
-                    "x-displayname": "DoS Auto-Mitigation Rule Name",
-                    "x-ves-example": "dos-auto-mitigation-ves-io-http-loadbalancer-ce22"
-                }
-            }
-        },
         "http_loadbalancerGetDnsInfoResponse": {
             "type": "object",
             "description": "Response for get-dns-info API",
@@ -1771,23 +1846,6 @@ var CustomAPISwaggerJSON string = `{
                     "title": "DNS information",
                     "$ref": "#/definitions/schemavirtual_host_dns_infoGlobalSpecType",
                     "x-displayname": "DNS information"
-                }
-            }
-        },
-        "http_loadbalancerGetDoSAutoMitigationRulesRsp": {
-            "type": "object",
-            "description": "Response of GET DDoS Auto-Mitigation Rules API",
-            "title": "Get DoS Auto-Mitigation Rules response",
-            "x-displayname": "Get DDoS Auto-Mitigation Rules Response",
-            "x-ves-proto-message": "ves.io.schema.views.http_loadbalancer.GetDoSAutoMitigationRulesRsp",
-            "properties": {
-                "dos_automitigation_rules": {
-                    "type": "array",
-                    "title": "DoS Auto-Mitigation Rules",
-                    "items": {
-                        "$ref": "#/definitions/dos_mitigationDoSMitigationRuleInfo"
-                    },
-                    "x-displayname": "DoS Auto-Mitigation Rules"
                 }
             }
         },
@@ -1817,62 +1875,6 @@ var CustomAPISwaggerJSON string = `{
                     "title": "Namespace",
                     "x-displayname": "Namespace",
                     "x-ves-example": "shared"
-                }
-            }
-        },
-        "http_loadbalancerGetSecurityConfigRsp": {
-            "type": "object",
-            "title": "Get Security Config Response",
-            "x-displayname": "Get Security Config Response",
-            "x-ves-proto-message": "ves.io.schema.views.http_loadbalancer.GetSecurityConfigRsp",
-            "properties": {
-                "api_protection": {
-                    "type": "array",
-                    "title": "API Protection Configured",
-                    "items": {
-                        "type": "string"
-                    },
-                    "x-displayname": "API Protection Configured"
-                },
-                "app_firewall": {
-                    "type": "array",
-                    "title": "App Firewall Configured",
-                    "items": {
-                        "type": "string"
-                    },
-                    "x-displayname": "App Firewall Configured"
-                },
-                "app_firewall_per_route": {
-                    "type": "array",
-                    "title": "App Firewall Configured Per Route",
-                    "items": {
-                        "type": "string"
-                    },
-                    "x-displayname": "List of Load Balancers Where App Firewall is Configured Per Route"
-                },
-                "bot_defense": {
-                    "type": "array",
-                    "title": "Bot Defense Configured",
-                    "items": {
-                        "type": "string"
-                    },
-                    "x-displayname": "Bot Defense Configured"
-                },
-                "ddos_detection": {
-                    "type": "array",
-                    "title": "DDOS Detection Configured",
-                    "items": {
-                        "type": "string"
-                    },
-                    "x-displayname": "DDOS Detection Configured"
-                },
-                "protected": {
-                    "type": "array",
-                    "title": "Protected LoadBalancers Configured",
-                    "items": {
-                        "type": "string"
-                    },
-                    "x-displayname": "List of Load Balancers Secured"
                 }
             }
         },

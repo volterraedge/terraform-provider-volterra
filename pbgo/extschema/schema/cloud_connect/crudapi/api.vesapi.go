@@ -2671,6 +2671,24 @@ var APISwaggerJSON string = `{
                         "$ref": "#/definitions/cloud_connectAWSAttachmentsStatusType"
                     },
                     "x-displayname": "AWS VPC Attachment Status"
+                },
+                "connect_attachment_status": {
+                    "type": "array",
+                    "description": " AWS Connect Attachment Status Typ",
+                    "title": "AWS Connect Attachment Status Type",
+                    "items": {
+                        "$ref": "#/definitions/cloud_connectAWSConnectAttachmentStatusType"
+                    },
+                    "x-displayname": "AWS Connect Attachment Status Type"
+                },
+                "tgw_route_table_status": {
+                    "type": "array",
+                    "description": " AWS Transit Gateway Route Table Status Type",
+                    "title": "AWS Transit Gateway Route Table Status Type",
+                    "items": {
+                        "$ref": "#/definitions/cloud_connectAWSTGWRouteTableStatusType"
+                    },
+                    "x-displayname": "AWS Transit Gateway Route Table Status Type"
                 }
             }
         },
@@ -2681,6 +2699,18 @@ var APISwaggerJSON string = `{
             "x-displayname": "AWS Attachment Status Type",
             "x-ves-proto-message": "ves.io.schema.cloud_connect.AWSAttachmentsStatusType",
             "properties": {
+                "association_route_table_id": {
+                    "type": "string",
+                    "description": " Association route table ID",
+                    "title": "Association route table ID",
+                    "x-displayname": "Association route table ID"
+                },
+                "association_state": {
+                    "type": "string",
+                    "description": " Association state",
+                    "title": "Association state",
+                    "x-displayname": "Association state"
+                },
                 "creation_time": {
                     "type": "string",
                     "description": " Attachment Creation Time",
@@ -2721,6 +2751,12 @@ var APISwaggerJSON string = `{
                     "title": "TGW Attachment ID",
                     "x-displayname": "TGW Attachment ID"
                 },
+                "tgw_attachment_name": {
+                    "type": "string",
+                    "description": " TGW Attachment Name",
+                    "title": "TGW Attachment Name",
+                    "x-displayname": "TGW Attachment Name"
+                },
                 "vpc_cidr": {
                     "type": "string",
                     "description": " VPC CIDR",
@@ -2739,11 +2775,170 @@ var APISwaggerJSON string = `{
                     "title": "VPC ID",
                     "x-displayname": "VPC ID"
                 },
+                "vpc_name": {
+                    "type": "string",
+                    "description": " VPC Name",
+                    "title": "VPC Name",
+                    "x-displayname": "VPC Name"
+                },
                 "vpc_owner_id": {
                     "type": "string",
                     "description": " VPC Owner Account",
                     "title": "VPC Owner Account",
                     "x-displayname": "VPC Owner Account"
+                }
+            }
+        },
+        "cloud_connectAWSConnectAttachmentStatusType": {
+            "type": "object",
+            "description": "AWS Connect Attachment Status Type",
+            "title": "AWS Connect Attachment Status Type",
+            "x-displayname": "AWS Connect Attachment Type Status",
+            "x-ves-proto-message": "ves.io.schema.cloud_connect.AWSConnectAttachmentStatusType",
+            "properties": {
+                "association_route_table_id": {
+                    "type": "string",
+                    "description": " Association route table ID",
+                    "title": "Association route table ID",
+                    "x-displayname": "Association route table ID"
+                },
+                "association_state": {
+                    "type": "string",
+                    "description": " Association state",
+                    "title": "Association state",
+                    "x-displayname": "Association state"
+                },
+                "peers": {
+                    "type": "array",
+                    "description": " Connect Peers",
+                    "title": "Connect Peers",
+                    "items": {
+                        "$ref": "#/definitions/cloud_connectAWSConnectPeerStatusType"
+                    },
+                    "x-displayname": "Connect Peers"
+                },
+                "protocol": {
+                    "type": "string",
+                    "description": " Connect protocol",
+                    "title": "Connect protocol",
+                    "x-displayname": "Connect protocol"
+                },
+                "state": {
+                    "type": "string",
+                    "description": " State",
+                    "title": "State",
+                    "x-displayname": "State"
+                },
+                "tags": {
+                    "type": "object",
+                    "description": " Attachment Tags",
+                    "title": "Attachment Tags",
+                    "x-displayname": "Attachment Tags"
+                },
+                "transit_gateway_asn": {
+                    "type": "string",
+                    "description": " Transit Gateway ASN",
+                    "title": "Transit Gateway ASN",
+                    "x-displayname": "Transit Gateway ASN"
+                },
+                "transit_gateway_attachment_id": {
+                    "type": "string",
+                    "description": " Transit Gateway Attachment ID",
+                    "title": "Transit Gateway Attachment ID",
+                    "x-displayname": "Transit Gateway Attachment ID"
+                },
+                "transit_gateway_attachment_name": {
+                    "type": "string",
+                    "description": " Transit Gateway Attachment Name",
+                    "title": "Transit Gateway Attachment Name",
+                    "x-displayname": "Transit Gateway Attachment Name"
+                },
+                "transit_gateway_id": {
+                    "type": "string",
+                    "description": " Transit Gateway ID",
+                    "title": "Transit Gateway ID",
+                    "x-displayname": "Transit Gateway ID"
+                },
+                "transport_attachment_id": {
+                    "type": "string",
+                    "description": " Transport attachment ID",
+                    "title": "Transport attachment ID",
+                    "x-displayname": "Transport attachment ID"
+                }
+            }
+        },
+        "cloud_connectAWSConnectPeerStatusType": {
+            "type": "object",
+            "description": "AWS Connect Peer Status Type",
+            "title": "AWS Connect Peer Status Type",
+            "x-displayname": "AWS Connect Peer Status Type",
+            "x-ves-proto-message": "ves.io.schema.cloud_connect.AWSConnectPeerStatusType",
+            "properties": {
+                "bgp_inside_cidr_block": {
+                    "type": "string",
+                    "description": " BGP Inside CIDR blocks",
+                    "title": "BGP Inside CIDR blocks",
+                    "x-displayname": "BGP Inside CIDR blocks"
+                },
+                "connect_attachment_id": {
+                    "type": "string",
+                    "description": " Connect attachment ID",
+                    "title": "Connect attachment ID",
+                    "x-displayname": "Connect attachment ID"
+                },
+                "connect_peer_id": {
+                    "type": "string",
+                    "description": " Connect Peer ID",
+                    "title": "Connect Peer ID",
+                    "x-displayname": "Connect Peer ID"
+                },
+                "name": {
+                    "type": "string",
+                    "description": " Connect Peer Name",
+                    "title": "Connect Peer Name",
+                    "x-displayname": "Connect Peer Name"
+                },
+                "peer_asn": {
+                    "type": "string",
+                    "description": " Peer ASN",
+                    "title": "Peer ASN",
+                    "x-displayname": "Peer ASN"
+                },
+                "peer_bgp_address": {
+                    "type": "string",
+                    "description": " Peer BGP address",
+                    "title": "Peer BGP address",
+                    "x-displayname": "Peer BGP address"
+                },
+                "peer_gre_address": {
+                    "type": "string",
+                    "description": " Peer GRE address",
+                    "title": "Peer GRE address",
+                    "x-displayname": "Peer GRE address"
+                },
+                "state": {
+                    "type": "string",
+                    "description": " State",
+                    "title": "State",
+                    "x-displayname": "State"
+                },
+                "transit_gateway_bgp_1_address": {
+                    "type": "string",
+                    "description": " Transit gateway BGP 1 address",
+                    "title": "Transit gateway BGP 1 address",
+                    "x-displayname": "Transit gateway BGP 1 address"
+                },
+                "transit_gateway_bgp_2_address": {
+                    "type": "string",
+                    "description": " Transit gateway BGP 2 address",
+                    "title": "Transit gateway BGP 2 address",
+                    "x-displayname": "Transit gateway BGP 2 address"
+                },
+                "transit_gateway_gre_address": {
+                    "type": "string",
+                    "description": " Transit gateway GRE address",
+                    "title": "Transit gateway GRE address",
+                    "x-displayname": "Transit gateway GRE address"
                 }
             }
         },
@@ -2880,6 +3075,96 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "cloud_connectAWSTGWResourceReference": {
+            "type": "object",
+            "description": "AWS Transit Gateway Route Table Associations",
+            "title": "AWS Transit Gateway Route Table Associations",
+            "x-displayname": "AWS Transit Gateway Route Table Associations",
+            "x-ves-proto-message": "ves.io.schema.cloud_connect.AWSTGWResourceReference",
+            "properties": {
+                "attachment_id": {
+                    "type": "string",
+                    "description": " Attachment ID",
+                    "title": "Attachment ID",
+                    "x-displayname": "Attachment ID"
+                },
+                "resource_id": {
+                    "type": "string",
+                    "description": " Resource ID",
+                    "title": "Resource ID",
+                    "x-displayname": "Resource ID"
+                },
+                "resource_type": {
+                    "type": "string",
+                    "description": " Resource type",
+                    "title": "Resource type",
+                    "x-displayname": "Resource type"
+                },
+                "state": {
+                    "type": "string",
+                    "description": " State",
+                    "title": "State",
+                    "x-displayname": "State"
+                }
+            }
+        },
+        "cloud_connectAWSTGWRouteTableStatusType": {
+            "type": "object",
+            "description": "AWS Transit Gateway Route Table Status Type",
+            "title": "AWS Transit Gateway Route Table Status Type",
+            "x-displayname": "AWS Transit Gateway Route Table Status Type",
+            "x-ves-proto-message": "ves.io.schema.cloud_connect.AWSTGWRouteTableStatusType",
+            "properties": {
+                "associations": {
+                    "type": "array",
+                    "description": " Associations",
+                    "title": "Assciations",
+                    "items": {
+                        "$ref": "#/definitions/cloud_connectAWSTGWResourceReference"
+                    },
+                    "x-displayname": "Associations"
+                },
+                "propagations": {
+                    "type": "array",
+                    "description": " Propagations",
+                    "title": "Propagations",
+                    "items": {
+                        "$ref": "#/definitions/cloud_connectAWSTGWResourceReference"
+                    },
+                    "x-displayname": "Propagations"
+                },
+                "state": {
+                    "type": "string",
+                    "description": " State",
+                    "title": "State",
+                    "x-displayname": "State"
+                },
+                "tags": {
+                    "type": "object",
+                    "description": " Attachment Tags",
+                    "title": "Attachment Tags",
+                    "x-displayname": "Attachment Tags"
+                },
+                "transit_gateway_id": {
+                    "type": "string",
+                    "description": " Transit Gateway ID",
+                    "title": "Transit Gateway ID",
+                    "x-displayname": "Transit Gateway ID"
+                },
+                "transit_gateway_route_table_id": {
+                    "type": "string",
+                    "description": " Transit gateway route table ID",
+                    "title": "Transit gateway route table ID",
+                    "x-displayname": "Transit gateway route table ID"
+                },
+                "transit_gateway_route_table_name": {
+                    "type": "string",
+                    "description": " Transit gateway route table Name",
+                    "title": "Transit gateway route table Name",
+                    "x-displayname": "Transit gateway route table Name"
+                }
+            }
+        },
         "cloud_connectAWSTGWSiteType": {
             "type": "object",
             "description": "Cloud Connect AWS TGW Site Type",
@@ -2958,6 +3243,13 @@ var APISwaggerJSON string = `{
                     "title": "Override Default Route",
                     "$ref": "#/definitions/cloud_connectDefaultRoute",
                     "x-displayname": "Override Default Route"
+                },
+                "labels": {
+                    "type": "object",
+                    "description": " Add labels for the VPC attachment. These labels can then be used in policies such as enhanced firewall.\n\nExample: - \"value\"-",
+                    "title": "Labels",
+                    "x-displayname": "Labels",
+                    "x-ves-example": "value"
                 },
                 "manual_routing": {
                     "description": "Exclusive with [custom_routing default_route]\n No route tables will be programmed by F5. User will manage routing",
@@ -3095,18 +3387,23 @@ var APISwaggerJSON string = `{
         },
         "cloud_connectAzureDefaultRoute": {
             "type": "object",
-            "description": "x-displayName: \"Override Default Route Choice\"\nSelect Override Default Route Choice",
+            "description": "Select Override Default Route Choice",
             "title": "Default Route Override Choice",
+            "x-displayname": "Override Default Route Choice",
+            "x-ves-oneof-field-default_route_choice": "[\"all_route_tables\",\"selective_route_tables\"]",
+            "x-ves-proto-message": "ves.io.schema.cloud_connect.AzureDefaultRoute",
             "properties": {
                 "all_route_tables": {
-                    "description": "x-displayName: \"All RouteTables\"\nOverride default route for all route tables",
+                    "description": "Exclusive with [selective_route_tables]\n Override default route for all route tables",
                     "title": "Override for all route tables",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "All RouteTables"
                 },
                 "selective_route_tables": {
-                    "description": "x-displayName: \"Selective RouteTables for Azure Site\"\nOverride default route for selective route tables for Azure Site",
+                    "description": "Exclusive with [all_route_tables]\n Override default route for selective route tables for Azure Site",
                     "title": "Override for selective route tables for Azure Site",
-                    "$ref": "#/definitions/cloud_connectAzureRouteTables"
+                    "$ref": "#/definitions/cloud_connectAzureRouteTables",
+                    "x-displayname": "Selective RouteTables for Azure Site"
                 }
             }
         },
@@ -3119,14 +3416,14 @@ var APISwaggerJSON string = `{
             "properties": {
                 "route_table_id": {
                     "type": "string",
-                    "description": " Route table ID in the format /\u003cresource-group-name\u003e/\u003croute-name\u003e\n\nExample: - \"/rg-1/rtb-12345678901234567\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n  ves.io.schema.rules.string.pattern: ^\\\\/[-\\\\w\\\\._\\\\(\\\\)]+\\\\/(rtb-)[a-zA-Z0-9-]{0,76}[a-zA-Z0-9]$\n",
+                    "description": " Route table ID in the format /\u003cresource-group-name\u003e/\u003croute-table-name\u003e\n\nExample: - \"/rg-1/rtb-12345678901234567\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n  ves.io.schema.rules.string.pattern: ^\\\\/[-\\\\w\\\\._\\\\(\\\\)]+\\\\/[a-zA-Z0-9][a-zA-Z0-9-._]+[a-zA-Z0-9_]$\n",
                     "title": "Route table ID",
                     "maxLength": 256,
                     "x-displayname": "Route table ID",
                     "x-ves-example": "/rg-1/rtb-12345678901234567",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.string.max_len": "256",
-                        "ves.io.schema.rules.string.pattern": "^\\\\/[-\\\\w\\\\._\\\\(\\\\)]+\\\\/(rtb-)[a-zA-Z0-9-]{0,76}[a-zA-Z0-9]$"
+                        "ves.io.schema.rules.string.pattern": "^\\\\/[-\\\\w\\\\._\\\\(\\\\)]+\\\\/[a-zA-Z0-9][a-zA-Z0-9-._]+[a-zA-Z0-9_]$"
                     }
                 },
                 "static_routes": {
@@ -3180,15 +3477,25 @@ var APISwaggerJSON string = `{
         },
         "cloud_connectAzureRouteTables": {
             "type": "object",
-            "description": "x-displayName: \"Azure Route Table\"\nAzure Route Table",
+            "description": "Azure Route Table",
             "title": "Azure Route Table",
+            "x-displayname": "Azure Route Table",
+            "x-ves-proto-message": "ves.io.schema.cloud_connect.AzureRouteTables",
             "properties": {
                 "route_table_id": {
                     "type": "array",
-                    "description": "x-displayName: \"Route table ID\"\nx-example: \"/rg-1/rtb-12345678901234567\"\nRoute table ID in the format /\u003cresource-group-name\u003e/\u003croute-name\u003e",
+                    "description": " Route table ID in the format /\u003cresource-group-name\u003e/\u003croute-table-name\u003e\n\nExample: - \"/rg-1/rtb-12345678901234567\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.unique: true\n  ves.io.schema.rules.string.max_len: 256\n  ves.io.schema.rules.string.pattern: ^\\\\/[-\\\\w\\\\._\\\\(\\\\)]+\\\\/[a-zA-Z0-9][a-zA-Z0-9-._]+[a-zA-Z0-9_]$\n",
                     "title": "Route table ID",
                     "items": {
-                        "type": "string"
+                        "type": "string",
+                        "maxLength": 256
+                    },
+                    "x-displayname": "Route table ID",
+                    "x-ves-example": "/rg-1/rtb-12345678901234567",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.unique": "true",
+                        "ves.io.schema.rules.string.max_len": "256",
+                        "ves.io.schema.rules.string.pattern": "^\\\\/[-\\\\w\\\\._\\\\(\\\\)]+\\\\/[a-zA-Z0-9][a-zA-Z0-9-._]+[a-zA-Z0-9_]$"
                     }
                 }
             }
@@ -3197,11 +3504,23 @@ var APISwaggerJSON string = `{
             "type": "object",
             "title": "Azure VNET attachment",
             "x-displayname": "Azure VNET Attachment",
-            "x-ves-oneof-field-routing_choice": "[\"manual_routing\"]",
+            "x-ves-oneof-field-routing_choice": "[\"custom_routing\",\"default_route\",\"manual_routing\"]",
             "x-ves-proto-message": "ves.io.schema.cloud_connect.AzureVNETAttachmentType",
             "properties": {
+                "custom_routing": {
+                    "description": "Exclusive with [default_route manual_routing]\n Routes for user specified CIDRs towards the CE will be installed for this subnet",
+                    "title": "Advertise Custom CIDRs",
+                    "$ref": "#/definitions/cloud_connectAzureRouteTableWithStaticRouteListType",
+                    "x-displayname": "Advertise Custom CIDRs"
+                },
+                "default_route": {
+                    "description": "Exclusive with [custom_routing manual_routing]\n Default route towards the CE will be added to the route table",
+                    "title": "Override Default Route",
+                    "$ref": "#/definitions/cloud_connectAzureDefaultRoute",
+                    "x-displayname": "Override Default Route"
+                },
                 "manual_routing": {
-                    "description": "Exclusive with []\n No route tables will be programmed by F5. User will manage routing",
+                    "description": "Exclusive with [custom_routing default_route]\n No route tables will be programmed by F5. User will manage routing",
                     "title": "Manual Routing",
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "Manual"
@@ -3241,7 +3560,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.cloud_connect.AzureVNETSiteType",
             "properties": {
                 "site": {
-                    "description": " Azure VNET Site Reference\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": " Online Azure VNET Sites with Hub Configured\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Azure VNET Site Reference",
                     "$ref": "#/definitions/schemaviewsObjectRefType",
                     "x-displayname": "Azure VNET Site Reference",

@@ -2694,19 +2694,6 @@ var APISwaggerJSON string = `{
                 }
             }
         },
-        "api_inventorySpecType": {
-            "type": "object",
-            "title": "Shape of the api definition specification",
-            "x-displayname": "Specification",
-            "x-ves-proto-message": "ves.io.schema.views.api_inventory.SpecType",
-            "properties": {
-                "gc_spec": {
-                    "title": "gc_spec",
-                    "$ref": "#/definitions/viewsapi_inventoryGlobalSpecType",
-                    "x-displayname": "GC Spec"
-                }
-            }
-        },
         "api_inventoryStatusObject": {
             "type": "object",
             "title": "Most recently observed status of object",
@@ -2751,6 +2738,43 @@ var APISwaggerJSON string = `{
             "x-displayname": "",
             "x-ves-proto-enum": "ves.io.schema.views.api_inventory.crudapi.ErrorCode"
         },
+        "common_wafApiCodeRepos": {
+            "type": "object",
+            "description": "x-displayName: \"API Code Repositories\"\nSelect which API repositories represent the LB applications",
+            "title": "API Code Repositories",
+            "properties": {
+                "api_code_repo": {
+                    "type": "array",
+                    "description": "x-displayName: \"API Code Repository\"\nx-required\nCode repository which contain API endpoints",
+                    "title": "API Code Repository",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "common_wafCodeBaseIntegrationSelection": {
+            "type": "object",
+            "description": "x-displayName: \"Code Base Integration\"",
+            "title": "Code Base Integration",
+            "properties": {
+                "all_repos": {
+                    "description": "x-displayName: \"All API Repositories\"",
+                    "title": "All API Repositories",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "code_base_integration": {
+                    "description": "x-displayName: \"Select Code Base\"\nx-required\nSelect the code base integration for use in code-based API discovery",
+                    "title": "Code Base Integration Selection",
+                    "$ref": "#/definitions/schemaviewsObjectRefType"
+                },
+                "selected_repos": {
+                    "description": "x-displayName: \"Selected API Repositories\"",
+                    "title": "Selected API Repositories",
+                    "$ref": "#/definitions/common_wafApiCodeRepos"
+                }
+            }
+        },
         "crudapiObjectCreateReq": {
             "type": "object",
             "x-ves-proto-message": "ves.io.schema.views.api_inventory.crudapi.ObjectCreateReq",
@@ -2759,7 +2783,7 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/schemaObjectMetaType"
                 },
                 "spec": {
-                    "$ref": "#/definitions/api_inventorySpecType"
+                    "$ref": "#/definitions/viewsapi_inventorySpecType"
                 },
                 "system_metadata": {
                     "$ref": "#/definitions/schemaSystemObjectMetaType"
@@ -2780,7 +2804,7 @@ var APISwaggerJSON string = `{
                     "type": "string"
                 },
                 "spec": {
-                    "$ref": "#/definitions/api_inventorySpecType"
+                    "$ref": "#/definitions/viewsapi_inventorySpecType"
                 },
                 "system_metadata": {
                     "$ref": "#/definitions/schemaSystemObjectMetaType"
@@ -2816,7 +2840,7 @@ var APISwaggerJSON string = `{
                     "type": "string"
                 },
                 "spec": {
-                    "$ref": "#/definitions/api_inventorySpecType"
+                    "$ref": "#/definitions/viewsapi_inventorySpecType"
                 },
                 "status": {
                     "type": "array",
@@ -2878,7 +2902,7 @@ var APISwaggerJSON string = `{
                     "type": "string"
                 },
                 "spec": {
-                    "$ref": "#/definitions/api_inventorySpecType"
+                    "$ref": "#/definitions/viewsapi_inventorySpecType"
                 },
                 "status": {
                     "type": "array",
@@ -2908,7 +2932,7 @@ var APISwaggerJSON string = `{
                     "type": "string"
                 },
                 "spec": {
-                    "$ref": "#/definitions/api_inventorySpecType"
+                    "$ref": "#/definitions/viewsapi_inventorySpecType"
                 }
             }
         },
@@ -2923,7 +2947,7 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/schemaObjectMetaType"
                 },
                 "spec": {
-                    "$ref": "#/definitions/api_inventorySpecType"
+                    "$ref": "#/definitions/viewsapi_inventorySpecType"
                 },
                 "system_metadata": {
                     "$ref": "#/definitions/schemaSystemObjectMetaType"
@@ -3068,6 +3092,11 @@ var APISwaggerJSON string = `{
                     }
                 }
             }
+        },
+        "schemaEmpty": {
+            "type": "object",
+            "description": "x-displayName: \"Empty\"\nThis can be used for messages where no values are needed",
+            "title": "Empty"
         },
         "schemaHttpMethod": {
             "type": "string",
@@ -3575,6 +3604,19 @@ var APISwaggerJSON string = `{
             "title": "GlobalSpecType",
             "x-displayname": "Specification",
             "x-ves-proto-message": "ves.io.schema.views.api_inventory.GlobalSpecType"
+        },
+        "viewsapi_inventorySpecType": {
+            "type": "object",
+            "title": "Shape of the api definition specification",
+            "x-displayname": "Specification",
+            "x-ves-proto-message": "ves.io.schema.views.api_inventory.SpecType",
+            "properties": {
+                "gc_spec": {
+                    "title": "gc_spec",
+                    "$ref": "#/definitions/viewsapi_inventoryGlobalSpecType",
+                    "x-displayname": "GC Spec"
+                }
+            }
         }
     },
     "x-displayname": "",

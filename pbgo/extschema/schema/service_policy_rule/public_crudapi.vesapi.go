@@ -2350,13 +2350,13 @@ var APISwaggerJSON string = `{
                 },
                 "context_name": {
                     "type": "string",
-                    "description": " Relevant only for contexts: Header, Cookie and Parameter. Name of the Context that the WAF Exclusion Rules will check.\n\nExample: - \"exampleuser-agent for Header\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 64\n",
+                    "description": " Relevant only for contexts: Header, Cookie and Parameter.\n Name of the Context that the WAF Exclusion Rules will check.\n Wildcard matching can be used by prefixing or suffixing the context name\n with an wildcard asterisk (*).\n\nExample: - \"exampleuser-agent for Header\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 128\n",
                     "title": "Context Name",
-                    "maxLength": 64,
+                    "maxLength": 128,
                     "x-displayname": "Context Name",
                     "x-ves-example": "example: user-agent for Header",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.max_len": "64"
+                        "ves.io.schema.rules.string.max_len": "128"
                     }
                 },
                 "exclude_attack_type": {
@@ -2456,13 +2456,13 @@ var APISwaggerJSON string = `{
                 },
                 "context_name": {
                     "type": "string",
-                    "description": " Relevant only for contexts: Header, Cookie and Parameter. Name of the Context that the WAF Exclusion Rules will check.\n\nExample: - \"exampleuser-agent for Header\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 64\n",
+                    "description": " Relevant only for contexts: Header, Cookie and Parameter.\n Name of the Context that the WAF Exclusion Rules will check.\n Wildcard matching can be used by prefixing or suffixing the context name\n with an wildcard asterisk (*).\n\nExample: - \"exampleuser-agent for Header\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 128\n",
                     "title": "Context Name",
-                    "maxLength": 64,
+                    "maxLength": 128,
                     "x-displayname": "Context Name",
                     "x-ves-example": "example: user-agent for Header",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.max_len": "64"
+                        "ves.io.schema.rules.string.max_len": "128"
                     }
                 },
                 "signature_id": {
@@ -2500,13 +2500,13 @@ var APISwaggerJSON string = `{
                 },
                 "context_name": {
                     "type": "string",
-                    "description": " Relevant only for contexts: Header, Cookie and Parameter. Name of the Context that the WAF Exclusion Rules will check.\n\nExample: - \"exampleuser-agent for Header\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 64\n",
+                    "description": " Relevant only for contexts: Header, Cookie and Parameter.\n Name of the Context that the WAF Exclusion Rules will check.\n Wildcard matching can be used by prefixing or suffixing the context name\n with an wildcard asterisk (*).\n\nExample: - \"exampleuser-agent for Header\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 128\n",
                     "title": "Context Name",
-                    "maxLength": 64,
+                    "maxLength": 128,
                     "x-displayname": "Context Name",
                     "x-ves-example": "example: user-agent for Header",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.max_len": "64"
+                        "ves.io.schema.rules.string.max_len": "128"
                     }
                 },
                 "exclude_violation": {
@@ -2872,6 +2872,29 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "policyJA4TlsFingerprintMatcherType": {
+            "type": "object",
+            "description": "JA4 TLS fingerprints to be matched",
+            "title": "JA4TlsFingerprintMatcherType",
+            "x-displayname": "JA4 TLS Fingerprint Matcher",
+            "x-ves-proto-message": "ves.io.schema.policy.JA4TlsFingerprintMatcherType",
+            "properties": {
+                "exact_values": {
+                    "type": "array",
+                    "description": " A list of exact JA4 TLS fingerprint to match the input JA4 TLS fingerprint against\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 16\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "exact values",
+                    "maxItems": 16,
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "Exact Values",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "16",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                }
+            }
+        },
         "policyJWTClaimMatcherType": {
             "type": "object",
             "description": "A JWT claim matcher specifies the name of a single JWT claim and the criteria for the input request to match it.\nThe input has a list of actual values for each JWT claim name in the JWT payload.\nA JWT claim matcher can check for one of the following:\n* Presence or absence of the JWT Claim in the input\n* At least one of the values for the JWT Claim in the input satisfies the MatcherType item",
@@ -2944,27 +2967,6 @@ var APISwaggerJSON string = `{
             "default": "TLS_FINGERPRINT_NONE",
             "x-displayname": "TLS known fingerprint class",
             "x-ves-proto-enum": "ves.io.schema.policy.KnownTlsFingerprintClass"
-        },
-        "policyL4DestMatcherType": {
-            "type": "object",
-            "description": "x-displayName: \"L4 Destination Matcher\"\nA L4 Destination matcher specifies a list of L4 Destinations as match criteria. The match is considered successful if the destination IP and port match any\nof the L4 Destinations.\nThe result of the match is inverted if invert_matcher is true.",
-            "title": "l4 dest matcher type",
-            "properties": {
-                "invert_matcher": {
-                    "type": "boolean",
-                    "description": "x-displayName: \"Invert L4 Destination Matcher\"\nInvert the match result.",
-                    "title": "invert_matcher",
-                    "format": "boolean"
-                },
-                "l4_dests": {
-                    "type": "array",
-                    "description": "x-displayName: \"L4 Destinations\"\nx-required\nA list of L4 destinations used as match criteria. The match is considered successful if the destination IP and path match any of the L4 destinations.",
-                    "title": "prefixes",
-                    "items": {
-                        "$ref": "#/definitions/schemaL4DestType"
-                    }
-                }
-            }
         },
         "policyMatcherType": {
             "type": "object",
@@ -4082,26 +4084,6 @@ var APISwaggerJSON string = `{
                 }
             }
         },
-        "schemaL4DestType": {
-            "type": "object",
-            "description": "x-displayName: \"L4 Destination\"\nL4 Destination consisting of IPv4 Prefixes and TCP Port Range",
-            "title": "L4 Dest Type",
-            "properties": {
-                "port_ranges": {
-                    "type": "string",
-                    "description": "x-displayName: \"Port Ranges\"\nx-required\nx-example: \"80,443,8080-8191,9080\"\nA string containing a comma separated list of port ranges.\nEach port range consists of a single port or two ports separated by \"-\".",
-                    "title": "port_ranges"
-                },
-                "prefixes": {
-                    "type": "array",
-                    "description": "x-displayName: \"IPv4 Prefixes\"\nx-example: \"10.0.0.1/24\"\nx-required\nDestination IPv4 prefixes.",
-                    "title": "prefixes",
-                    "items": {
-                        "type": "string"
-                    }
-                }
-            }
-        },
         "schemaLabelMatcherType": {
             "type": "object",
             "description": "A label matcher specifies a list of label keys whose values need to match for\nsource/client and destination/server. Note that the actual label values are not\nspecified and do not matter. This allows an ability to scope grouping by the\nlabel key name.",
@@ -4860,6 +4842,7 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-dst_asn_choice": "[]",
             "x-ves-oneof-field-dst_ip_choice": "[]",
             "x-ves-oneof-field-ip_choice": "[\"any_ip\",\"ip_matcher\",\"ip_prefix_list\"]",
+            "x-ves-oneof-field-tls_fingerprint_choice": "[\"ja4_tls_fingerprint\",\"tls_fingerprint_matcher\"]",
             "x-ves-proto-message": "ves.io.schema.service_policy_rule.CreateSpecType",
             "properties": {
                 "action": {
@@ -4999,6 +4982,11 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/schemaservice_policy_ruleIPThreatCategoryListType",
                     "x-displayname": "List of IP Threat Categories"
                 },
+                "ja4_tls_fingerprint": {
+                    "description": "Exclusive with [tls_fingerprint_matcher]\n JA4 TLS fingerprints to be matched",
+                    "$ref": "#/definitions/policyJA4TlsFingerprintMatcherType",
+                    "x-displayname": "JA4 TLS Fingerprint"
+                },
                 "jwt_claims": {
                     "type": "array",
                     "description": " A list of predicates for various JWT claims that need to match. The criteria for matching each JWT claim are described in individual JWTClaimMatcherType\n instances. The actual JWT claims values are extracted from the JWT payload as a list of strings.\n Note that all specified JWT claim predicates must evaluate to true.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 16\n",
@@ -5055,9 +5043,9 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Configure Segments"
                 },
                 "tls_fingerprint_matcher": {
-                    "description": " TLS JA3 fingerprints to be matched.\n The predicate evaluates to true if the TLS fingerprint matches any of the exact values or classes of known TLS fingerprints.",
+                    "description": "Exclusive with [ja4_tls_fingerprint]\n JA3 TLS fingerprints to be matched",
                     "$ref": "#/definitions/policyTlsFingerprintMatcherType",
-                    "x-displayname": "TLS Fingerprint Matcher"
+                    "x-displayname": "JA3 TLS Fingerprint"
                 },
                 "waf_action": {
                     "description": " App Firewall action to be enforced if the input request matches the rule.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
@@ -5080,6 +5068,7 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-dst_asn_choice": "[]",
             "x-ves-oneof-field-dst_ip_choice": "[]",
             "x-ves-oneof-field-ip_choice": "[\"any_ip\",\"ip_matcher\",\"ip_prefix_list\"]",
+            "x-ves-oneof-field-tls_fingerprint_choice": "[\"ja4_tls_fingerprint\",\"tls_fingerprint_matcher\"]",
             "x-ves-proto-message": "ves.io.schema.service_policy_rule.GetSpecType",
             "properties": {
                 "action": {
@@ -5219,6 +5208,11 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/schemaservice_policy_ruleIPThreatCategoryListType",
                     "x-displayname": "List of IP Threat Categories"
                 },
+                "ja4_tls_fingerprint": {
+                    "description": "Exclusive with [tls_fingerprint_matcher]\n JA4 TLS fingerprints to be matched",
+                    "$ref": "#/definitions/policyJA4TlsFingerprintMatcherType",
+                    "x-displayname": "JA4 TLS Fingerprint"
+                },
                 "jwt_claims": {
                     "type": "array",
                     "description": " A list of predicates for various JWT claims that need to match. The criteria for matching each JWT claim are described in individual JWTClaimMatcherType\n instances. The actual JWT claims values are extracted from the JWT payload as a list of strings.\n Note that all specified JWT claim predicates must evaluate to true.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 16\n",
@@ -5275,9 +5269,9 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Configure Segments"
                 },
                 "tls_fingerprint_matcher": {
-                    "description": " TLS JA3 fingerprints to be matched.\n The predicate evaluates to true if the TLS fingerprint matches any of the exact values or classes of known TLS fingerprints.",
+                    "description": "Exclusive with [ja4_tls_fingerprint]\n JA3 TLS fingerprints to be matched",
                     "$ref": "#/definitions/policyTlsFingerprintMatcherType",
-                    "x-displayname": "TLS Fingerprint Matcher"
+                    "x-displayname": "JA3 TLS Fingerprint"
                 },
                 "waf_action": {
                     "description": " App Firewall action to be enforced if the input request matches the rule.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
@@ -5325,6 +5319,7 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-dst_asn_choice": "[]",
             "x-ves-oneof-field-dst_ip_choice": "[]",
             "x-ves-oneof-field-ip_choice": "[\"any_ip\",\"ip_matcher\",\"ip_prefix_list\"]",
+            "x-ves-oneof-field-tls_fingerprint_choice": "[\"ja4_tls_fingerprint\",\"tls_fingerprint_matcher\"]",
             "x-ves-proto-message": "ves.io.schema.service_policy_rule.ReplaceSpecType",
             "properties": {
                 "action": {
@@ -5464,6 +5459,11 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/schemaservice_policy_ruleIPThreatCategoryListType",
                     "x-displayname": "List of IP Threat Categories"
                 },
+                "ja4_tls_fingerprint": {
+                    "description": "Exclusive with [tls_fingerprint_matcher]\n JA4 TLS fingerprints to be matched",
+                    "$ref": "#/definitions/policyJA4TlsFingerprintMatcherType",
+                    "x-displayname": "JA4 TLS Fingerprint"
+                },
                 "jwt_claims": {
                     "type": "array",
                     "description": " A list of predicates for various JWT claims that need to match. The criteria for matching each JWT claim are described in individual JWTClaimMatcherType\n instances. The actual JWT claims values are extracted from the JWT payload as a list of strings.\n Note that all specified JWT claim predicates must evaluate to true.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 16\n",
@@ -5520,9 +5520,9 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Configure Segments"
                 },
                 "tls_fingerprint_matcher": {
-                    "description": " TLS JA3 fingerprints to be matched.\n The predicate evaluates to true if the TLS fingerprint matches any of the exact values or classes of known TLS fingerprints.",
+                    "description": "Exclusive with [ja4_tls_fingerprint]\n JA3 TLS fingerprints to be matched",
                     "$ref": "#/definitions/policyTlsFingerprintMatcherType",
-                    "x-displayname": "TLS Fingerprint Matcher"
+                    "x-displayname": "JA3 TLS Fingerprint"
                 },
                 "waf_action": {
                     "description": " App Firewall action to be enforced if the input request matches the rule.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",

@@ -1173,18 +1173,6 @@ func resourceVolterraRoute() *schema.Resource {
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
-												"idle_timeout": {
-													Type:       schema.TypeInt,
-													Optional:   true,
-													Deprecated: "This field is deprecated and will be removed in future release.",
-												},
-
-												"max_connect_attempts": {
-													Type:       schema.TypeInt,
-													Optional:   true,
-													Deprecated: "This field is deprecated and will be removed in future release.",
-												},
-
 												"use_websocket": {
 													Type:     schema.TypeBool,
 													Optional: true,
@@ -2877,14 +2865,6 @@ func resourceVolterraRouteCreate(d *schema.ResourceData, meta interface{}) error
 						routeActionInt.RouteDestination.WebSocketConfig = webSocketConfig
 						for _, set := range sl {
 							webSocketConfigMapStrToI := set.(map[string]interface{})
-
-							if w, ok := webSocketConfigMapStrToI["idle_timeout"]; ok && !isIntfNil(w) {
-								webSocketConfig.IdleTimeout = uint32(w.(int))
-							}
-
-							if w, ok := webSocketConfigMapStrToI["max_connect_attempts"]; ok && !isIntfNil(w) {
-								webSocketConfig.MaxConnectAttempts = uint32(w.(int))
-							}
 
 							if w, ok := webSocketConfigMapStrToI["use_websocket"]; ok && !isIntfNil(w) {
 								webSocketConfig.UseWebsocket = w.(bool)
@@ -4714,14 +4694,6 @@ func resourceVolterraRouteUpdate(d *schema.ResourceData, meta interface{}) error
 						routeActionInt.RouteDestination.WebSocketConfig = webSocketConfig
 						for _, set := range sl {
 							webSocketConfigMapStrToI := set.(map[string]interface{})
-
-							if w, ok := webSocketConfigMapStrToI["idle_timeout"]; ok && !isIntfNil(w) {
-								webSocketConfig.IdleTimeout = uint32(w.(int))
-							}
-
-							if w, ok := webSocketConfigMapStrToI["max_connect_attempts"]; ok && !isIntfNil(w) {
-								webSocketConfig.MaxConnectAttempts = uint32(w.(int))
-							}
 
 							if w, ok := webSocketConfigMapStrToI["use_websocket"]; ok && !isIntfNil(w) {
 								webSocketConfig.UseWebsocket = w.(bool)

@@ -6,23 +6,30 @@ import (
 	"os"
 	"testing"
 
+	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 	ves_io_schema_fleet "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/fleet"
 	ves_io_schema_ns "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/namespace"
 	ves_io_schema_nc "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/network_connector"
+	ves_io_schema_tenant "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/tenant"
 	ves_io_schema_vn "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/virtual_network"
 )
 
 // TestFleet token creation test
 func TestFleet(t *testing.T) {
 	name := generateResourceName()
-	testURL, stopFunc, _ := createTestCustomAPIServer(t, []string{
+	testURL, stopFunc, f := createTestCustomAPIServer(t, []string{
 		ves_io_schema_fleet.ObjectType,
 		ves_io_schema_vn.ObjectType,
 		ves_io_schema_nc.ObjectType,
 		ves_io_schema_ns.ObjectType,
+		ves_io_schema_tenant.ObjectType,
 	})
 	defer stopFunc()
+	tenantName := "ves-io"
+	tenantObj := mkDBObjTenant(tenantName, uuid.New().String(), withAddonServices("f5xc-flow-collection", "f5xc-ipv6-standard", "f5xc-waap-standard"))
+	f.MustCreateEntry(tenantObj)
+
 	os.Setenv("VOLT_API_TEST", "true")
 	os.Setenv("VOLT_API_URL", testURL)
 	os.Setenv("TF_ACC", "true")

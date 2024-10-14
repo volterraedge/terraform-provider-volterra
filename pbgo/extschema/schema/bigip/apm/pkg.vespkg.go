@@ -64,6 +64,13 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 
+	mdr.RPCSubscriptionFieldsRegistry["ves.io.schema.bigip.apm.API.Create"] = []svcfw.SubscriptionField{
+		{
+			FieldPath:     "ves.io.schema.bigip.apm.CreateRequest.spec.site_type_choice.aws_site_type_choice.apm_aws_site.nodes.mgmt_subnet_choice.mgmt_subnet.choice.subnet_param.ipv6",
+			AddonServices: []string{"f5xc-ipv6-standard"},
+		},
+	}
+
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.bigip.apm.API.Create"] = []string{
 		"spec.aws_site_type_choice.apm_aws_site.admin_password.blindfold_secret_info_internal",
 		"spec.aws_site_type_choice.apm_aws_site.admin_password.secret_encoding_type",

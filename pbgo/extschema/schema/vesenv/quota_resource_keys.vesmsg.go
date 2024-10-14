@@ -474,6 +474,28 @@ func (v *ValidateQuotaResourceKeyChoice) Validate(ctx context.Context, pm interf
 				return err
 			}
 		}
+	case *QuotaResourceKeyChoice_UserNamespaceRoles:
+		if fv, exists := v.FldValidators["choice.user_namespace_roles"]; exists {
+			val := m.GetChoice().(*QuotaResourceKeyChoice_UserNamespaceRoles).UserNamespaceRoles
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("user_namespace_roles"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *QuotaResourceKeyChoice_CdnLoadbalancerOasValidation:
+		if fv, exists := v.FldValidators["choice.cdn_loadbalancer_oas_validation"]; exists {
+			val := m.GetChoice().(*QuotaResourceKeyChoice_CdnLoadbalancerOasValidation).CdnLoadbalancerOasValidation
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("cdn_loadbalancer_oas_validation"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 

@@ -37,7 +37,12 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.dns_load_balancer.DNSLBPoolHealthStatusListResponseItem"] = DNSLBPoolHealthStatusListResponseItemValidator()
 	vr["ves.io.schema.dns_load_balancer.DNSLBPoolHealthStatusRequest"] = DNSLBPoolHealthStatusRequestValidator()
 	vr["ves.io.schema.dns_load_balancer.DNSLBPoolHealthStatusResponse"] = DNSLBPoolHealthStatusResponseValidator()
+	vr["ves.io.schema.dns_load_balancer.DNSLBPoolMemberHealthStatusEvent"] = DNSLBPoolMemberHealthStatusEventValidator()
+	vr["ves.io.schema.dns_load_balancer.DNSLBPoolMemberHealthStatusListRequest"] = DNSLBPoolMemberHealthStatusListRequestValidator()
+	vr["ves.io.schema.dns_load_balancer.DNSLBPoolMemberHealthStatusListResponse"] = DNSLBPoolMemberHealthStatusListResponseValidator()
 	vr["ves.io.schema.dns_load_balancer.DNSLBPoolMemberHealthStatusListResponseItem"] = DNSLBPoolMemberHealthStatusListResponseItemValidator()
+	vr["ves.io.schema.dns_load_balancer.DNSLBPoolMemberHealthStatusRequest"] = DNSLBPoolMemberHealthStatusRequestValidator()
+	vr["ves.io.schema.dns_load_balancer.DNSLBPoolMemberHealthStatusResponse"] = DNSLBPoolMemberHealthStatusResponseValidator()
 	vr["ves.io.schema.dns_load_balancer.HealthStatusSummary"] = HealthStatusSummaryValidator()
 
 	vr["ves.io.schema.dns_load_balancer.SuggestValuesReq"] = SuggestValuesReqValidator()
@@ -69,12 +74,69 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 
+	mdr.RPCSubscriptionFieldsRegistry["ves.io.schema.dns_load_balancer.API.Create"] = []svcfw.SubscriptionField{
+		{
+			FieldPath:     "ves.io.schema.dns_load_balancer.CreateRequest.spec.rule_list.rules.client_choice.ip_prefix_list.ipv6_prefixes",
+			AddonServices: []string{"f5xc-ipv6-standard"},
+		},
+	}
+
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.dns_load_balancer.API.Create"] = []string{
 		"spec.rule_list.rules.#.nxdomain",
 	}
 
+	mdr.RPCAvailableInReqFieldRegistry["ves.io.schema.dns_load_balancer.API.Create"] = []svcfw.EnvironmentField{
+		{
+			FieldPath:           "spec.rule_list.rules.#.ip_prefix_list.ipv6_prefixes.#",
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
+		},
+	}
+
+	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.dns_load_balancer.API.Create"] = []svcfw.EnvironmentField{
+		{
+			FieldPath:           "spec.rule_list.rules.#.ip_prefix_list.ipv6_prefixes.#",
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
+		},
+	}
+
+	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.dns_load_balancer.API.Get"] = []svcfw.EnvironmentField{
+		{
+			FieldPath:           "create_form.spec.rule_list.rules.#.ip_prefix_list.ipv6_prefixes.#",
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "replace_form.spec.rule_list.rules.#.ip_prefix_list.ipv6_prefixes.#",
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.rule_list.rules.#.ip_prefix_list.ipv6_prefixes.#",
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
+		},
+	}
+
+	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.dns_load_balancer.API.List"] = []svcfw.EnvironmentField{
+		{
+			FieldPath:           "items.#.get_spec.rule_list.rules.#.ip_prefix_list.ipv6_prefixes.#",
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
+		},
+	}
+
+	mdr.RPCSubscriptionFieldsRegistry["ves.io.schema.dns_load_balancer.API.Replace"] = []svcfw.SubscriptionField{
+		{
+			FieldPath:     "ves.io.schema.dns_load_balancer.ReplaceRequest.spec.rule_list.rules.client_choice.ip_prefix_list.ipv6_prefixes",
+			AddonServices: []string{"f5xc-ipv6-standard"},
+		},
+	}
+
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.dns_load_balancer.API.Replace"] = []string{
 		"spec.rule_list.rules.#.nxdomain",
+	}
+
+	mdr.RPCAvailableInReqFieldRegistry["ves.io.schema.dns_load_balancer.API.Replace"] = []svcfw.EnvironmentField{
+		{
+			FieldPath:           "spec.rule_list.rules.#.ip_prefix_list.ipv6_prefixes.#",
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
+		},
 	}
 
 }

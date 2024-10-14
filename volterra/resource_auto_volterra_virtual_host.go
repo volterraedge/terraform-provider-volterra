@@ -1907,6 +1907,34 @@ func resourceVolterraVirtualHost() *schema.Resource {
 				},
 			},
 
+			"sensitive_data_policy": {
+
+				Type:     schema.TypeList,
+				Optional: true,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+
+						"kind": {
+							Type:     schema.TypeString,
+							Computed: true,
+						},
+
+						"name": {
+							Type:     schema.TypeString,
+							Optional: true,
+						},
+						"namespace": {
+							Type:     schema.TypeString,
+							Optional: true,
+						},
+						"tenant": {
+							Type:     schema.TypeString,
+							Optional: true,
+						},
+					},
+				},
+			},
+
 			"append_server_name": {
 
 				Type:     schema.TypeString,
@@ -5126,6 +5154,39 @@ func resourceVolterraVirtualHostCreate(d *schema.ResourceData, meta interface{})
 
 			if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
 				routesInt[i].Uid = v.(string)
+			}
+
+		}
+
+	}
+
+	//sensitive_data_policy
+	if v, ok := d.GetOk("sensitive_data_policy"); ok && !isIntfNil(v) {
+
+		sl := v.([]interface{})
+		sensitiveDataPolicyInt := make([]*ves_io_schema.ObjectRefType, len(sl))
+		createSpec.SensitiveDataPolicy = sensitiveDataPolicyInt
+		for i, ps := range sl {
+
+			sdpMapToStrVal := ps.(map[string]interface{})
+			sensitiveDataPolicyInt[i] = &ves_io_schema.ObjectRefType{}
+
+			sensitiveDataPolicyInt[i].Kind = "sensitive_data_policy"
+
+			if v, ok := sdpMapToStrVal["name"]; ok && !isIntfNil(v) {
+				sensitiveDataPolicyInt[i].Name = v.(string)
+			}
+
+			if v, ok := sdpMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+				sensitiveDataPolicyInt[i].Namespace = v.(string)
+			}
+
+			if v, ok := sdpMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+				sensitiveDataPolicyInt[i].Tenant = v.(string)
+			}
+
+			if v, ok := sdpMapToStrVal["uid"]; ok && !isIntfNil(v) {
+				sensitiveDataPolicyInt[i].Uid = v.(string)
 			}
 
 		}
@@ -8460,6 +8521,38 @@ func resourceVolterraVirtualHostUpdate(d *schema.ResourceData, meta interface{})
 
 			if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
 				routesInt[i].Uid = v.(string)
+			}
+
+		}
+
+	}
+
+	if v, ok := d.GetOk("sensitive_data_policy"); ok && !isIntfNil(v) {
+
+		sl := v.([]interface{})
+		sensitiveDataPolicyInt := make([]*ves_io_schema.ObjectRefType, len(sl))
+		updateSpec.SensitiveDataPolicy = sensitiveDataPolicyInt
+		for i, ps := range sl {
+
+			sdpMapToStrVal := ps.(map[string]interface{})
+			sensitiveDataPolicyInt[i] = &ves_io_schema.ObjectRefType{}
+
+			sensitiveDataPolicyInt[i].Kind = "sensitive_data_policy"
+
+			if v, ok := sdpMapToStrVal["name"]; ok && !isIntfNil(v) {
+				sensitiveDataPolicyInt[i].Name = v.(string)
+			}
+
+			if v, ok := sdpMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+				sensitiveDataPolicyInt[i].Namespace = v.(string)
+			}
+
+			if v, ok := sdpMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+				sensitiveDataPolicyInt[i].Tenant = v.(string)
+			}
+
+			if v, ok := sdpMapToStrVal["uid"]; ok && !isIntfNil(v) {
+				sensitiveDataPolicyInt[i].Uid = v.(string)
 			}
 
 		}

@@ -20,6 +20,8 @@ import (
 	"gopkg.volterra.us/stdlib/errors"
 	"gopkg.volterra.us/stdlib/server"
 	"gopkg.volterra.us/stdlib/svcfw"
+
+	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 )
 
 var (
@@ -32,6 +34,15 @@ type SahayaAPIGrpcClient struct {
 	grpcClient SahayaAPIClient
 	// map of rpc name to its invocation
 	rpcFns map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error)
+}
+
+func (c *SahayaAPIGrpcClient) doRPCAIAssistantFeedback(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
+	req := &AIAssistantQueryFeedbackRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.ai_assistant.AIAssistantQueryFeedbackRequest", yamlReq)
+	}
+	rsp, err := c.grpcClient.AIAssistantFeedback(ctx, req, opts...)
+	return rsp, err
 }
 
 func (c *SahayaAPIGrpcClient) doRPCAIAssistantQuery(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
@@ -73,6 +84,8 @@ func NewSahayaAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 		grpcClient: NewSahayaAPIClient(cc),
 	}
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
+	rpcFns["AIAssistantFeedback"] = ccl.doRPCAIAssistantFeedback
+
 	rpcFns["AIAssistantQuery"] = ccl.doRPCAIAssistantQuery
 
 	ccl.rpcFns = rpcFns
@@ -86,6 +99,93 @@ type SahayaAPIRestClient struct {
 	client  http.Client
 	// map of rpc name to its invocation
 	rpcFns map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error)
+}
+
+func (c *SahayaAPIRestClient) doRPCAIAssistantFeedback(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
+	if callOpts.URI == "" {
+		return nil, fmt.Errorf("Error, URI should be specified, got empty")
+	}
+	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
+
+	yamlReq := callOpts.YAMLReq
+	req := &AIAssistantQueryFeedbackRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.ai_assistant.AIAssistantQueryFeedbackRequest: %s", yamlReq, err)
+	}
+
+	var hReq *http.Request
+	hm := strings.ToLower(callOpts.HTTPMethod)
+	switch hm {
+	case "post", "put":
+		jsn, err := codec.ToJSON(req, codec.ToWithUseProtoFieldName())
+		if err != nil {
+			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
+		}
+		var op string
+		if hm == "post" {
+			op = http.MethodPost
+		} else {
+			op = http.MethodPut
+		}
+		newReq, err := http.NewRequest(op, url, bytes.NewBuffer([]byte(jsn)))
+		if err != nil {
+			return nil, errors.Wrapf(err, "Creating new HTTP %s request for custom API", op)
+		}
+		hReq = newReq
+	case "get":
+		newReq, err := http.NewRequest(http.MethodGet, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP GET request for custom API")
+		}
+		hReq = newReq
+		q := hReq.URL.Query()
+		_ = q
+		q.Add("comment", fmt.Sprintf("%v", req.Comment))
+		q.Add("feedback_choice", fmt.Sprintf("%v", req.FeedbackChoice))
+		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
+		q.Add("query", fmt.Sprintf("%v", req.Query))
+		q.Add("query_id", fmt.Sprintf("%v", req.QueryId))
+
+		hReq.URL.RawQuery += q.Encode()
+	case "delete":
+		newReq, err := http.NewRequest(http.MethodDelete, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP DELETE request for custom API")
+		}
+		hReq = newReq
+	default:
+		return nil, fmt.Errorf("Error, invalid/empty HTTPMethod(%s) specified, should be POST|DELETE|GET", callOpts.HTTPMethod)
+	}
+	hReq = hReq.WithContext(ctx)
+	hReq.Header.Set("Content-Type", "application/json")
+	client.AddHdrsToReq(callOpts.Headers, hReq)
+
+	rsp, err := c.client.Do(hReq)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient")
+	}
+	defer rsp.Body.Close()
+
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
+		body, err := io.ReadAll(rsp.Body)
+		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
+	}
+
+	body, err := io.ReadAll(rsp.Body)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient read body")
+	}
+	pbRsp := &ves_io_schema.Empty{}
+	if err := codec.FromJSON(string(body), pbRsp); err != nil {
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.Empty", body)
+
+	}
+	if callOpts.OutCallResponse != nil {
+		callOpts.OutCallResponse.ProtoMsg = pbRsp
+		callOpts.OutCallResponse.JSON = string(body)
+	}
+	return pbRsp, nil
 }
 
 func (c *SahayaAPIRestClient) doRPCAIAssistantQuery(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
@@ -196,6 +296,8 @@ func NewSahayaAPIRestClient(baseURL string, hc http.Client) server.CustomClient 
 	}
 
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
+	rpcFns["AIAssistantFeedback"] = ccl.doRPCAIAssistantFeedback
+
 	rpcFns["AIAssistantQuery"] = ccl.doRPCAIAssistantQuery
 
 	ccl.rpcFns = rpcFns
@@ -210,6 +312,10 @@ type sahayaAPIInprocClient struct {
 	SahayaAPIServer
 }
 
+func (c *sahayaAPIInprocClient) AIAssistantFeedback(ctx context.Context, in *AIAssistantQueryFeedbackRequest, opts ...grpc.CallOption) (*ves_io_schema.Empty, error) {
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.ai_assistant.SahayaAPI.AIAssistantFeedback")
+	return c.SahayaAPIServer.AIAssistantFeedback(ctx, in)
+}
 func (c *sahayaAPIInprocClient) AIAssistantQuery(ctx context.Context, in *AIAssistantQueryRequest, opts ...grpc.CallOption) (*AIAssistantQueryResponse, error) {
 	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.ai_assistant.SahayaAPI.AIAssistantQuery")
 	return c.SahayaAPIServer.AIAssistantQuery(ctx, in)
@@ -236,6 +342,55 @@ type sahayaAPISrv struct {
 	svc svcfw.Service
 }
 
+func (s *sahayaAPISrv) AIAssistantFeedback(ctx context.Context, in *AIAssistantQueryFeedbackRequest) (*ves_io_schema.Empty, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.ai_assistant.SahayaAPI")
+	cah, ok := ah.(SahayaAPIServer)
+	if !ok {
+		return nil, fmt.Errorf("ah %v is not of type *SahayaAPIServer", ah)
+	}
+
+	var (
+		rsp *ves_io_schema.Empty
+		err error
+	)
+
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.ai_assistant.AIAssistantQueryFeedbackRequest", in)
+	defer func() {
+		if len(bodyFields) > 0 {
+			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
+		}
+		userMsg := "The 'SahayaAPI.AIAssistantFeedback' operation on 'ai_assistant'"
+		if err == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
+	}()
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.ai_assistant.SahayaAPI.AIAssistantFeedback"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
+	rsp, err = cah.AIAssistantFeedback(ctx, in)
+	if err != nil {
+		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
+	}
+
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.Empty", rsp)...)
+
+	return rsp, nil
+}
 func (s *sahayaAPISrv) AIAssistantQuery(ctx context.Context, in *AIAssistantQueryRequest) (*AIAssistantQueryResponse, error) {
 	ah := s.svc.GetAPIHandler("ves.io.schema.ai_assistant.SahayaAPI")
 	cah, ok := ah.(SahayaAPIServer)
@@ -400,9 +555,158 @@ var SahayaAPISwaggerJSON string = `{
             "x-displayname": "SahayaAPI",
             "x-ves-proto-service": "ves.io.schema.ai_assistant.SahayaAPI",
             "x-ves-proto-service-type": "CUSTOM_PUBLIC"
+        },
+        "/public/namespaces/{namespace}/query_feedback": {
+            "post": {
+                "summary": "Feedback of AI Assistant Query",
+                "description": "Enable service by returning service account details",
+                "operationId": "ves.io.schema.ai_assistant.SahayaAPI.AIAssistantFeedback",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/schemaEmpty"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "namespace",
+                        "description": "namespace\n\nx-example: \"system\"\nNamespace of the HTTP Load Balancer for current request",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "x-displayname": "Namespace"
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/ai_assistantAIAssistantQueryFeedbackRequest"
+                        }
+                    }
+                ],
+                "tags": [
+                    "SahayaAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-ai_assistant-sahayaapi-aiassistantfeedback"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.ai_assistant.SahayaAPI.AIAssistantFeedback"
+            },
+            "x-displayname": "SahayaAPI",
+            "x-ves-proto-service": "ves.io.schema.ai_assistant.SahayaAPI",
+            "x-ves-proto-service-type": "CUSTOM_PUBLIC"
         }
     },
     "definitions": {
+        "ai_assistantAIAssistantQueryFeedbackRequest": {
+            "type": "object",
+            "description": "AI Assistant Query Feedback Request",
+            "title": "AI Assistant Query Feedback Request",
+            "x-displayname": "AI Assistant Query Feedback Request",
+            "x-ves-oneof-field-feedback_choice": "[\"negative_feedback\",\"positive_feedback\"]",
+            "x-ves-proto-message": "ves.io.schema.ai_assistant.AIAssistantQueryFeedbackRequest",
+            "properties": {
+                "comment": {
+                    "type": "string",
+                    "description": "\n\nExample: - \"Response is biased\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 4096\n",
+                    "title": "comment",
+                    "maxLength": 4096,
+                    "x-displayname": "Comment",
+                    "x-ves-example": "Response is biased",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "4096"
+                    }
+                },
+                "namespace": {
+                    "type": "string",
+                    "description": " Namespace of the HTTP Load Balancer for current request\n\nExample: - \"system\"-",
+                    "title": "namespace",
+                    "x-displayname": "Namespace",
+                    "x-ves-example": "system"
+                },
+                "negative_feedback": {
+                    "description": "Exclusive with [positive_feedback]\n Negative Feedback",
+                    "title": "negative_feedback",
+                    "$ref": "#/definitions/ai_assistantNegativeFeedbackDetails",
+                    "x-displayname": "Negative Feedback"
+                },
+                "positive_feedback": {
+                    "description": "Exclusive with [negative_feedback]\n Postive Feedback",
+                    "title": "positive_feedback",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Positive Feedback"
+                },
+                "query": {
+                    "type": "string",
+                    "description": " Query will be in text format\n\nExample: - \"How to investigate request log\"-",
+                    "title": "query",
+                    "x-displayname": "Query",
+                    "x-ves-example": "How to investigate request log"
+                },
+                "query_id": {
+                    "type": "string",
+                    "description": " Query Identifier\n\nExample: - \"07e03bc6-81d4-4c86-a865-67b5763fe294\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.pattern: ^([0-9a-f]{8}-){1}([0-9a-f]{4}-){3}([0-9a-f]{12})$\n",
+                    "title": "query_id",
+                    "x-displayname": "Query Id",
+                    "x-ves-example": "07e03bc6-81d4-4c86-a865-67b5763fe294",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.pattern": "^([0-9a-f]{8}-){1}([0-9a-f]{4}-){3}([0-9a-f]{12})$"
+                    }
+                }
+            }
+        },
         "ai_assistantAIAssistantQueryRequest": {
             "type": "object",
             "description": "AI Assistant Query Request",
@@ -431,7 +735,7 @@ var SahayaAPISwaggerJSON string = `{
             "description": "AI Assistant Query Response",
             "title": "AI Assistant Query Response",
             "x-displayname": "AI Assistant Query Response",
-            "x-ves-oneof-field-response_choice": "[\"explain_log\",\"gen_dashboard_filter\",\"generic_response\",\"site_analysis_response\"]",
+            "x-ves-oneof-field-response_choice": "[\"explain_log\",\"gen_dashboard_filter\",\"generic_response\",\"site_analysis_response\",\"widget_response\"]",
             "x-ves-proto-message": "ves.io.schema.ai_assistant.AIAssistantQueryResponse",
             "properties": {
                 "current_query": {
@@ -442,30 +746,109 @@ var SahayaAPISwaggerJSON string = `{
                     "x-ves-example": "Explain security event 07e03bc6-81d4-4c86-a865-67b5763fe294"
                 },
                 "explain_log": {
-                    "description": "Exclusive with [gen_dashboard_filter generic_response site_analysis_response]\n Explain log response",
+                    "description": "Exclusive with [gen_dashboard_filter generic_response site_analysis_response widget_response]\n Explain log response",
                     "title": "explain_log",
                     "$ref": "#/definitions/explain_log_recordExplainLogRecordResponse",
                     "x-displayname": "Explain log"
                 },
+                "follow_up_queries": {
+                    "type": "array",
+                    "description": " Follow up Queries to be given as suggestion to users\n\nExample: - \"Explain following violation in whole namespace\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "follow_up_queries",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "Follow up Queries",
+                    "x-ves-example": "Explain following violation in whole namespace",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                },
                 "gen_dashboard_filter": {
-                    "description": "Exclusive with [explain_log generic_response site_analysis_response]\n Generate dashboard filter response",
+                    "description": "Exclusive with [explain_log generic_response site_analysis_response widget_response]\n Generate dashboard filter response",
                     "title": "gen_dashboard_filter",
                     "$ref": "#/definitions/gen_dashboard_filterGenDashboardFilterResponse",
                     "x-displayname": "Generate dashboard filter"
                 },
                 "generic_response": {
-                    "description": "Exclusive with [explain_log gen_dashboard_filter site_analysis_response]\n Generic Response",
+                    "description": "Exclusive with [explain_log gen_dashboard_filter site_analysis_response widget_response]\n Generic Response",
                     "title": "generic_response",
                     "$ref": "#/definitions/commonGenericResponse",
                     "x-displayname": "Generic Response"
                 },
+                "query_id": {
+                    "type": "string",
+                    "description": " Query Identifier\n\nExample: - \"07e03bc6-81d4-4c86-a865-67b5763fe294\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.pattern: ^([0-9a-f]{8}-){1}([0-9a-f]{4}-){3}([0-9a-f]{12})$\n",
+                    "title": "query_id",
+                    "x-displayname": "Query Id",
+                    "x-ves-example": "07e03bc6-81d4-4c86-a865-67b5763fe294",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.pattern": "^([0-9a-f]{8}-){1}([0-9a-f]{4}-){3}([0-9a-f]{12})$"
+                    }
+                },
                 "site_analysis_response": {
-                    "description": "Exclusive with [explain_log gen_dashboard_filter generic_response]\n Site Analysis",
+                    "description": "Exclusive with [explain_log gen_dashboard_filter generic_response widget_response]\n Site Analysis",
                     "title": "site_analysis",
                     "$ref": "#/definitions/site_analysisSiteAnalysisResponse",
                     "x-displayname": "Site analysis"
+                },
+                "widget_response": {
+                    "description": "Exclusive with [explain_log gen_dashboard_filter generic_response site_analysis_response]\n Widget Response",
+                    "title": "widget_response",
+                    "$ref": "#/definitions/widgetWidgetResponse",
+                    "x-displayname": "Generic Widget Response"
                 }
             }
+        },
+        "ai_assistantNegativeFeedbackDetails": {
+            "type": "object",
+            "description": "Negative Feedback Details",
+            "title": "NegativeFeedbackDetails",
+            "x-displayname": "Negative Feedback Details",
+            "x-ves-proto-message": "ves.io.schema.ai_assistant.NegativeFeedbackDetails",
+            "properties": {
+                "remarks": {
+                    "type": "array",
+                    "description": "\n\nExample: - \"Inaccurate data\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.enum.defined_only: true\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "remarks",
+                    "items": {
+                        "$ref": "#/definitions/ai_assistantNegativeFeedbackType"
+                    },
+                    "x-displayname": "Feedback",
+                    "x-ves-example": "Inaccurate data",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.items.enum.defined_only": "true",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                }
+            }
+        },
+        "ai_assistantNegativeFeedbackType": {
+            "type": "string",
+            "description": "x-displayName \"Negative Feedback Type\"\nType of Negative Feedback\n\n - OTHER: x-displayName \"Other\"\nOther\n - INACCURATE_DATA: x-displayName \"Inaccurate data\"\nInaccurate data\n - IRRELEVANT_CONTENT: x-displayName \"Irrelevant content\"\nIrrelevant content\n - POOR_FORMAT: x-displayName \"Poor format\"\nPoor format\n - SLOW_RESPONSE: x-displayName \"Slow response\"\nSlow response",
+            "title": "Negative Feedback Type",
+            "enum": [
+                "OTHER",
+                "INACCURATE_DATA",
+                "IRRELEVANT_CONTENT",
+                "POOR_FORMAT",
+                "SLOW_RESPONSE"
+            ],
+            "default": "OTHER",
+            "x-displayname": "",
+            "x-ves-proto-enum": "ves.io.schema.ai_assistant.NegativeFeedbackType"
+        },
+        "ai_assistantcommonUnitType": {
+            "type": "string",
+            "description": "Unit Type defines the unit for each fields.\n\n - UNIT_TYPE_NONE: None\n\nNone type\n - GB: GB\n",
+            "title": "UnitType",
+            "enum": [
+                "UNIT_TYPE_NONE",
+                "GB"
+            ],
+            "default": "UNIT_TYPE_NONE",
+            "x-displayname": "Unit Type",
+            "x-ves-proto-enum": "ves.io.schema.ai_assistant.common.UnitType"
         },
         "ai_assistantexplain_log_recordAction": {
             "type": "string",
@@ -480,6 +863,37 @@ var SahayaAPISwaggerJSON string = `{
             "default": "ACTION_NONE",
             "x-displayname": "Action",
             "x-ves-proto-enum": "ves.io.schema.ai_assistant.explain_log_record.Action"
+        },
+        "commonColourType": {
+            "type": "string",
+            "description": "Colour Type defines the colour of fields to be displayed.\n\n - COLOUR_TYPE_NONE: None\n\nNo colour\n - DANGER: danger\n\ncolour type red\n - INFO: info\n\ncolour type blue\n - WARNING: warning\n\ncolour type orange\n - AMBER: amber\n\ncolour type yellow\n - SUCCESS: success\n\ncolour type  green",
+            "title": "ColourType",
+            "enum": [
+                "COLOUR_TYPE_NONE",
+                "DANGER",
+                "INFO",
+                "WARNING",
+                "AMBER",
+                "SUCCESS"
+            ],
+            "default": "COLOUR_TYPE_NONE",
+            "x-displayname": "Colour Type",
+            "x-ves-proto-enum": "ves.io.schema.ai_assistant.common.ColourType"
+        },
+        "commonColumnType": {
+            "type": "string",
+            "description": "Column Type defines the data type for each column.\n\n - COLUMN_TYPE_NONE: None\n\n - STRING: string\n\n - INT: integer\n\n - FLOAT: float\n\n - BOOL: boolean\n",
+            "title": "ColumnType",
+            "enum": [
+                "COLUMN_TYPE_NONE",
+                "STRING",
+                "INT",
+                "FLOAT",
+                "BOOL"
+            ],
+            "default": "COLUMN_TYPE_NONE",
+            "x-displayname": "Column Type",
+            "x-ves-proto-enum": "ves.io.schema.ai_assistant.common.ColumnType"
         },
         "commonDashboardLink": {
             "type": "object",
@@ -547,17 +961,103 @@ var SahayaAPISwaggerJSON string = `{
         },
         "commonDashboardLinkType": {
             "type": "string",
-            "description": "Link Type to be presented\n\n - SECURITY_ANALYTICS_EVENTS: SECURITY_ANALYTICS_EVENTS\n\nSecurity analytics dashboard: /web/workspaces/web-app-and-api-protection/../dashboard/security-dashboard/../security_analytics/events\n - REQUESTS_EVENTS: REQUESTS_EVENTS\n\nRequests dashboard: /web/workspaces/web-app-and-api-protection/../dashboard/security-dashboard/../security_monitoring/request\n - SITES: SITES\n\nSites dashboard: /web/workspaces/multi-cloud-network-connect/overview/sites/dashboard\n - CLOUD_CREDENTIALS: CLOUD_CREDENTIALS\n\nCLOUD_CREDENTIALS --\u003e /web/workspaces/multi-cloud-network-connect/manage/site_management/cloud_sites/cloud_credential",
+            "description": "Link Type to be presented\n\n - SECURITY_ANALYTICS_EVENTS: SECURITY_ANALYTICS_EVENTS\n\nSecurity analytics dashboard: /web/workspaces/web-app-and-api-protection/../dashboard/security-dashboard/../security_analytics/events\n - REQUESTS_EVENTS: REQUESTS_EVENTS\n\nRequests dashboard: /web/workspaces/web-app-and-api-protection/../dashboard/security-dashboard/../security_monitoring/request\n - SITES: SITES\n\nSites dashboard: /web/workspaces/multi-cloud-network-connect/overview/sites/dashboard\n - CLOUD_CREDENTIALS: CLOUD_CREDENTIALS\n\nCLOUD_CREDENTIALS --\u003e /web/workspaces/multi-cloud-network-connect/manage/site_management/cloud_sites/cloud_credential\n - SITES_UBER: SITES_UBER\n\nSites dashboard: /web/workspaces/multi-cloud-network-connect/overview/sites/dashboard",
             "title": "LinkType",
             "enum": [
                 "SECURITY_ANALYTICS_EVENTS",
                 "REQUESTS_EVENTS",
                 "SITES",
-                "CLOUD_CREDENTIALS"
+                "CLOUD_CREDENTIALS",
+                "SITES_UBER"
             ],
             "default": "SECURITY_ANALYTICS_EVENTS",
             "x-displayname": "Link Type",
             "x-ves-proto-enum": "ves.io.schema.ai_assistant.common.DashboardLinkType"
+        },
+        "commonDisplay": {
+            "type": "object",
+            "x-ves-proto-message": "ves.io.schema.ai_assistant.common.Display",
+            "properties": {
+                "colour": {
+                    "description": "\n\nExample: - \"Green\"-",
+                    "title": "colour",
+                    "$ref": "#/definitions/commonColourType",
+                    "x-displayname": "colour",
+                    "x-ves-example": "Green"
+                },
+                "display_type": {
+                    "description": "\n\nExample: - \"Icon\"-",
+                    "title": "Display Type",
+                    "$ref": "#/definitions/commonDisplayType",
+                    "x-displayname": "Display Type",
+                    "x-ves-example": "Icon"
+                },
+                "formats": {
+                    "type": "array",
+                    "description": "\n\nExample: - \"Bold Italic\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "format",
+                    "items": {
+                        "$ref": "#/definitions/commonFormatType"
+                    },
+                    "x-displayname": "formats",
+                    "x-ves-example": "Bold Italic",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                }
+            }
+        },
+        "commonDisplayType": {
+            "type": "string",
+            "description": "Render Type defines the format to which data has to be rendered on UI.\n\n - DISPLAY_TYPE_NONE: None\n\nNone type\n - ICON: icon\n\nValue to be displayed as ICON",
+            "title": "DisplayType",
+            "enum": [
+                "DISPLAY_TYPE_NONE",
+                "ICON"
+            ],
+            "default": "DISPLAY_TYPE_NONE",
+            "x-displayname": "DisplayType Type",
+            "x-ves-proto-enum": "ves.io.schema.ai_assistant.common.DisplayType"
+        },
+        "commonFieldProperties": {
+            "type": "object",
+            "x-ves-proto-message": "ves.io.schema.ai_assistant.common.FieldProperties",
+            "properties": {
+                "data_type": {
+                    "description": "\n\nExample: - \"Bool\"-",
+                    "title": "Type",
+                    "$ref": "#/definitions/commonColumnType",
+                    "x-displayname": "type",
+                    "x-ves-example": "Bool"
+                },
+                "display": {
+                    "description": " Display details for the field",
+                    "title": "Display",
+                    "$ref": "#/definitions/commonDisplay",
+                    "x-displayname": "display"
+                },
+                "name": {
+                    "type": "string",
+                    "description": "\n\nExample: - \"provider\"-",
+                    "title": "Name",
+                    "x-displayname": "name",
+                    "x-ves-example": "provider"
+                },
+                "title": {
+                    "type": "string",
+                    "description": "\n\nExample: - \"Site Name\"-",
+                    "title": "Title",
+                    "x-displayname": "title",
+                    "x-ves-example": "Site Name"
+                },
+                "unit": {
+                    "description": "\n\nExample: - \"GB\"-",
+                    "title": "Unit",
+                    "$ref": "#/definitions/ai_assistantcommonUnitType",
+                    "x-displayname": "unit",
+                    "x-ves-example": "GB"
+                }
+            }
         },
         "commonFilterOperator": {
             "type": "string",
@@ -570,6 +1070,20 @@ var SahayaAPISwaggerJSON string = `{
             "default": "IN",
             "x-displayname": "Filter Operator",
             "x-ves-proto-enum": "ves.io.schema.ai_assistant.common.FilterOperator"
+        },
+        "commonFormatType": {
+            "type": "string",
+            "description": "Format Type defines the format type for each fields.\n\n - FORMAT_TYPE_NONE: None\n\nNo format\n - INLINE: Inline\n\nKey value to be displayed in inline format\n - BOLD: Bold\n\nValue to be displayed in bold format\n - REVERSE_KEY_VALUE_ORDER: ReverseKeyValueOrder\n\nKey value to be displayed in Reverse Key Value Order format",
+            "title": "FormatType",
+            "enum": [
+                "FORMAT_TYPE_NONE",
+                "INLINE",
+                "BOLD",
+                "REVERSE_KEY_VALUE_ORDER"
+            ],
+            "default": "FORMAT_TYPE_NONE",
+            "x-displayname": "Format Type",
+            "x-ves-proto-enum": "ves.io.schema.ai_assistant.common.FormatType"
         },
         "commonGenericLink": {
             "type": "object",
@@ -612,6 +1126,12 @@ var SahayaAPISwaggerJSON string = `{
             "x-displayname": "Generic Response",
             "x-ves-proto-message": "ves.io.schema.ai_assistant.common.GenericResponse",
             "properties": {
+                "error": {
+                    "description": " Error(if any) while processing the query",
+                    "title": "error",
+                    "$ref": "#/definitions/schemaErrorType",
+                    "x-displayname": "Error"
+                },
                 "is_error": {
                     "type": "boolean",
                     "description": "\n\nExample: - \"true\"-",
@@ -674,15 +1194,35 @@ var SahayaAPISwaggerJSON string = `{
                 },
                 "values": {
                     "type": "array",
-                    "description": " Values to be presented in the filter\n\nExample: - \"ATTACK_TYPE_CROSS_SITE_SCRIPTING\"-",
+                    "description": " Values to be presented in the filter\n\nExample: - \"ATTACK_TYPE_CROSS_SITE_SCRIPTING\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "values",
                     "items": {
                         "type": "string"
                     },
                     "x-displayname": "Values",
-                    "x-ves-example": "ATTACK_TYPE_CROSS_SITE_SCRIPTING"
+                    "x-ves-example": "ATTACK_TYPE_CROSS_SITE_SCRIPTING",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
                 }
             }
+        },
+        "commonWidgetType": {
+            "type": "string",
+            "description": "Widget Type defines the data type for widget.\n\n - WIDGET_TYPE_NONE: None\n\nNone type\n - TWO_VALUE: two_value\n\nTwo Value type widget\n - DISTRIBUTION_CHART: distribution_chart\n\nDistribution Chart type widget\n - TABLE: table\n\nTable type widget\n - LIST: list\n\nList type widget\n - GRID: grid\n\nGrid type widget\n - PIE: pie\n\npie type widget",
+            "title": "WidgetType",
+            "enum": [
+                "WIDGET_TYPE_NONE",
+                "TWO_VALUE",
+                "DISTRIBUTION_CHART",
+                "TABLE",
+                "LIST",
+                "GRID",
+                "PIE"
+            ],
+            "default": "WIDGET_TYPE_NONE",
+            "x-displayname": "Widget Type",
+            "x-ves-proto-enum": "ves.io.schema.ai_assistant.common.WidgetType"
         },
         "explain_log_recordAccuracy": {
             "type": "string",
@@ -1201,6 +1741,75 @@ var SahayaAPISwaggerJSON string = `{
             "x-displayname": "IP Threat Category",
             "x-ves-proto-enum": "ves.io.schema.policy.IPThreatCategory"
         },
+        "protobufAny": {
+            "type": "object",
+            "description": "-Any- contains an arbitrary serialized protocol buffer message along with a\nURL that describes the type of the serialized message.\n\nProtobuf library provides support to pack/unpack Any values in the form\nof utility functions or additional generated methods of the Any type.\n\nExample 1: Pack and unpack a message in C++.\n\n    Foo foo = ...;\n    Any any;\n    any.PackFrom(foo);\n    ...\n    if (any.UnpackTo(\u0026foo)) {\n      ...\n    }\n\nExample 2: Pack and unpack a message in Java.\n\n    Foo foo = ...;\n    Any any = Any.pack(foo);\n    ...\n    if (any.is(Foo.class)) {\n      foo = any.unpack(Foo.class);\n    }\n\n Example 3: Pack and unpack a message in Python.\n\n    foo = Foo(...)\n    any = Any()\n    any.Pack(foo)\n    ...\n    if any.Is(Foo.DESCRIPTOR):\n      any.Unpack(foo)\n      ...\n\n Example 4: Pack and unpack a message in Go\n\n     foo := \u0026pb.Foo{...}\n     any, err := ptypes.MarshalAny(foo)\n     ...\n     foo := \u0026pb.Foo{}\n     if err := ptypes.UnmarshalAny(any, foo); err != nil {\n       ...\n     }\n\nThe pack methods provided by protobuf library will by default use\n'type.googleapis.com/full.type.name' as the type URL and the unpack\nmethods only use the fully qualified type name after the last '/'\nin the type URL, for example \"foo.bar.com/x/y.z\" will yield type\nname \"y.z\".\n\n\nJSON\n====\nThe JSON representation of an -Any- value uses the regular\nrepresentation of the deserialized, embedded message, with an\nadditional field -@type- which contains the type URL. Example:\n\n    package google.profile;\n    message Person {\n      string first_name = 1;\n      string last_name = 2;\n    }\n\n    {\n      \"@type\": \"type.googleapis.com/google.profile.Person\",\n      \"firstName\": \u003cstring\u003e,\n      \"lastName\": \u003cstring\u003e\n    }\n\nIf the embedded message type is well-known and has a custom JSON\nrepresentation, that representation will be embedded adding a field\n-value- which holds the custom JSON in addition to the -@type-\nfield. Example (for message [google.protobuf.Duration][]):\n\n    {\n      \"@type\": \"type.googleapis.com/google.protobuf.Duration\",\n      \"value\": \"1.212s\"\n    }",
+            "properties": {
+                "type_url": {
+                    "type": "string",
+                    "description": "A URL/resource name that uniquely identifies the type of the serialized\nprotocol buffer message. This string must contain at least\none \"/\" character. The last segment of the URL's path must represent\nthe fully qualified name of the type (as in\n-path/google.protobuf.Duration-). The name should be in a canonical form\n(e.g., leading \".\" is not accepted).\n\nIn practice, teams usually precompile into the binary all types that they\nexpect it to use in the context of Any. However, for URLs which use the\nscheme -http-, -https-, or no scheme, one can optionally set up a type\nserver that maps type URLs to message definitions as follows:\n\n* If no scheme is provided, -https- is assumed.\n* An HTTP GET on the URL must yield a [google.protobuf.Type][]\n  value in binary format, or produce an error.\n* Applications are allowed to cache lookup results based on the\n  URL, or have them precompiled into a binary to avoid any\n  lookup. Therefore, binary compatibility needs to be preserved\n  on changes to types. (Use versioned type names to manage\n  breaking changes.)\n\nNote: this functionality is not currently available in the official\nprotobuf release, and it is not used for type URLs beginning with\ntype.googleapis.com.\n\nSchemes other than -http-, -https- (or the empty scheme) might be\nused with implementation specific semantics."
+                },
+                "value": {
+                    "type": "string",
+                    "description": "Must be a valid serialized protocol buffer of the above specified type.",
+                    "format": "byte"
+                }
+            }
+        },
+        "schemaEmpty": {
+            "type": "object",
+            "description": "This can be used for messages where no values are needed",
+            "title": "Empty",
+            "x-displayname": "Empty",
+            "x-ves-proto-message": "ves.io.schema.Empty"
+        },
+        "schemaErrorCode": {
+            "type": "string",
+            "description": "Union of all possible error-codes from system\n\n - EOK: No error\n - EPERMS: Permissions error\n - EBADINPUT: Input is not correct\n - ENOTFOUND: Not found\n - EEXISTS: Already exists\n - EUNKNOWN: Unknown/catchall error\n - ESERIALIZE: Error in serializing/de-serializing\n - EINTERNAL: Server error\n - EPARTIAL: Partial error",
+            "title": "ErrorCode",
+            "enum": [
+                "EOK",
+                "EPERMS",
+                "EBADINPUT",
+                "ENOTFOUND",
+                "EEXISTS",
+                "EUNKNOWN",
+                "ESERIALIZE",
+                "EINTERNAL",
+                "EPARTIAL"
+            ],
+            "default": "EOK",
+            "x-displayname": "Error Code",
+            "x-ves-proto-enum": "ves.io.schema.ErrorCode"
+        },
+        "schemaErrorType": {
+            "type": "object",
+            "description": "Information about a error in API operation",
+            "title": "ErrorType",
+            "x-displayname": "Error Type",
+            "x-ves-proto-message": "ves.io.schema.ErrorType",
+            "properties": {
+                "code": {
+                    "description": " A simple general code by category",
+                    "title": "code",
+                    "$ref": "#/definitions/schemaErrorCode",
+                    "x-displayname": "Code"
+                },
+                "error_obj": {
+                    "description": " A structured error object for machine parsing",
+                    "title": "error_obj",
+                    "$ref": "#/definitions/protobufAny",
+                    "x-displayname": "Error Object"
+                },
+                "message": {
+                    "type": "string",
+                    "description": " A human readable string of the error\n\nExample: - \"value\"-",
+                    "title": "message",
+                    "x-displayname": "Message",
+                    "x-ves-example": "value"
+                }
+            }
+        },
         "site_analysisAnalysisAndAction": {
             "type": "object",
             "description": "Analysis and Action",
@@ -1259,6 +1868,126 @@ var SahayaAPISwaggerJSON string = `{
                     "title": "summary",
                     "x-displayname": "Summary",
                     "x-ves-example": "This site analysis response provides status of sites."
+                }
+            }
+        },
+        "widgetCell": {
+            "type": "object",
+            "x-ves-proto-message": "ves.io.schema.ai_assistant.widget.Cell",
+            "properties": {
+                "link": {
+                    "description": " Link for the field that will be presented to the user",
+                    "title": "Link",
+                    "$ref": "#/definitions/commonLink",
+                    "x-displayname": "link"
+                },
+                "value": {
+                    "type": "string",
+                    "description": "\n\nExample: - \"site1\"-",
+                    "title": "Value",
+                    "x-displayname": "value",
+                    "x-ves-example": "site1"
+                }
+            }
+        },
+        "widgetRow": {
+            "type": "object",
+            "description": "Contains the value for each rows of table",
+            "title": "Row",
+            "x-displayname": "Table Rows",
+            "x-ves-proto-message": "ves.io.schema.ai_assistant.widget.Row",
+            "properties": {
+                "cells": {
+                    "type": "array",
+                    "description": "\n\nExample: - \"Site Name:\"site-1\"-",
+                    "title": "Values",
+                    "items": {
+                        "$ref": "#/definitions/widgetCell"
+                    },
+                    "x-displayname": "Values",
+                    "x-ves-example": "Site Name:\"site-1"
+                }
+            }
+        },
+        "widgetTable": {
+            "type": "object",
+            "x-ves-proto-message": "ves.io.schema.ai_assistant.widget.Table",
+            "properties": {
+                "field_properties": {
+                    "type": "array",
+                    "description": " Lists the name of the field \u0026 corresponding properties\n\nValidation Rules:\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "Field Properties\nx-displayName: \"Field Properties\"\nLists the name of the field \u0026 corresponding properties",
+                    "items": {
+                        "$ref": "#/definitions/commonFieldProperties"
+                    },
+                    "x-displayname": "Field Properties",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                },
+                "rows": {
+                    "type": "array",
+                    "description": " List of table rows\n\nExample: - \"Entries for each rows\"-",
+                    "title": "rows",
+                    "items": {
+                        "$ref": "#/definitions/widgetRow"
+                    },
+                    "x-displayname": "Row",
+                    "x-ves-example": "Entries for each rows"
+                },
+                "widget_type": {
+                    "description": " Type of widget\n\nExample: - \"Table, Grid\"-",
+                    "title": "widget_type",
+                    "$ref": "#/definitions/commonWidgetType",
+                    "x-displayname": "widget_type",
+                    "x-ves-example": "Table, Grid"
+                }
+            }
+        },
+        "widgetWidgetResponse": {
+            "type": "object",
+            "description": "Widget response",
+            "title": "Widget Response",
+            "x-displayname": "Widget Response",
+            "x-ves-proto-message": "ves.io.schema.ai_assistant.widget.WidgetResponse",
+            "properties": {
+                "item_links": {
+                    "type": "array",
+                    "description": " Links that will be presented to the user",
+                    "title": "item_links",
+                    "items": {
+                        "$ref": "#/definitions/commonLink"
+                    },
+                    "x-displayname": "Links"
+                },
+                "items": {
+                    "type": "array",
+                    "description": " Response will have different types of widgets",
+                    "title": "Items",
+                    "items": {
+                        "$ref": "#/definitions/widgetWidgetView"
+                    },
+                    "x-displayname": "Widget View "
+                },
+                "summary": {
+                    "type": "string",
+                    "description": "\n\nExample: - \"This is summary of widget response\"-",
+                    "title": "summary",
+                    "x-displayname": "Summary",
+                    "x-ves-example": "This is summary of widget response"
+                }
+            }
+        },
+        "widgetWidgetView": {
+            "type": "object",
+            "x-ves-proto-message": "ves.io.schema.ai_assistant.widget.WidgetView",
+            "properties": {
+                "item": {
+                    "description": " List of table rows\n\nExample: - \"Entries for each rows \u0026 properties of table\"-",
+                    "title": "table",
+                    "$ref": "#/definitions/widgetTable",
+                    "x-displayname": "table",
+                    "x-ves-example": "Entries for each rows \u0026 properties of table"
                 }
             }
         }

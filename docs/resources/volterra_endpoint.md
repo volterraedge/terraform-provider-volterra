@@ -1,26 +1,19 @@
-
-
-
-
-
-
-
-
-
-
-
-
 ---
+
 page_title: "Volterra: endpoint"
-description: "The endpoint allows CRUD of Endpoint  resource on Volterra SaaS"
+description: "The endpoint allows CRUD of Endpoint resource on Volterra SaaS"
+
 ---
-# Resource volterra_endpoint
 
-The Endpoint  allows CRUD of Endpoint  resource on Volterra SaaS
+Resource volterra_endpoint
+==========================
 
-~> **Note:** Please refer to [Endpoint  API docs](https://docs.cloud.f5.com/docs-v2/api/endpoint) to learn more
+The Endpoint allows CRUD of Endpoint resource on Volterra SaaS
 
-## Example Usage
+~> **Note:** Please refer to [Endpoint API docs](https://docs.cloud.f5.com/docs-v2/api/endpoint) to learn more
+
+Example Usage
+-------------
 
 ```hcl
 resource "volterra_endpoint" "example" {
@@ -30,199 +23,90 @@ resource "volterra_endpoint" "example" {
 
 ```
 
-## Argument Reference
+Argument Reference
+------------------
 
 ### Metadata Argument Reference
-`annotations` - (Optional) queryable and should be preserved when modifying objects. (`String`).
 
+`annotations` - (Optional) queryable and should be preserved when modifying objects. (`String`).
 
 `description` - (Optional) Human readable description for the object (`String`).
 
-
 `disable` - (Optional) A value of true will administratively disable the object (`Bool`).
-
 
 `labels` - (Optional) by selector expression (`String`).
 
-
 `name` - (Required) The value of name has to follow DNS-1035 format. (`String`).
-
 
 `namespace` - (Optional) Must be a DNS_LABEL format. For a namespace object itself, namespace value will be "" (`String`).
 
-
-
 ### Spec Argument Reference
 
+###### One of the arguments from this list "dns_name, dns_name_advanced, ip, service_info" can be set
 
 `dns_name` - (Optional) Endpoint's ip address is discovered using DNS name resolution. The name given here is fully qualified domain name. (`String`).
 
-
 `dns_name_advanced` - (Optional) Specifies name and TTL used for DNS resolution.. See [Endpoint Address Dns Name Advanced ](#endpoint-address-dns-name-advanced) below for details.
-		
-
-
-
-
-
-
-		
-
-
-
-
 
 `ip` - (Optional) Endpoint is reachable at the given ipv4/ipv6 address (`String`).
 
-
-`service_info` - (Optional)     In case of Consul, tags on the service is matched against service_selector. See [Endpoint Address Service Info ](#endpoint-address-service-info) below for details.
-		
-
-
-
-
-
-
-		
-
-
-
-
-
-
-
+`service_info` - (Optional) In case of Consul, tags on the service is matched against service_selector. See [Endpoint Address Service Info ](#endpoint-address-service-info) below for details.
 
 `health_check_port` - (Optional) Setting this with a non-zero value allows an endpoint to have different health check port. (`Int`).
 
-
-
 `port` - (Optional) Endpoint service is available on this port (`Int`).
-
-
 
 `protocol` - (Optional) Both TCP and UDP protocols are supported (`String`).
 
-
-
 `where` - (Optional) This endpoint is present in site, virtual_site or virtual_network selected by following field.. See [Where ](#where) below for details.
 
+### Where
 
+This endpoint is present in site, virtual_site or virtual_network selected by following field..
 
-
-		
-
-
-
-
-		
-
-
-
-
-		
-
-
-
-
-
-
-
-
-
-		
-
-
-
-
-
-		
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-### Where 
-
- This endpoint is present in site, virtual_site or virtual_network selected by following field..
-
-
-
-###### One of the arguments from this list "virtual_network, site, virtual_site" must be set
+###### One of the arguments from this list "site, virtual_network, virtual_site" must be set
 
 `site` - (Optional) Direct reference to site object. See [Ref Or Selector Site ](#ref-or-selector-site) below for details.
 
-
 `virtual_network` - (Optional) Direct reference to virtual network object. See [Ref Or Selector Virtual Network ](#ref-or-selector-virtual-network) below for details.
-
 
 `virtual_site` - (Optional) Direct reference to virtual site object. See [Ref Or Selector Virtual Site ](#ref-or-selector-virtual-site) below for details.
 
+### Endpoint Address Dns Name Advanced
 
-
-
-### Endpoint Address Dns Name Advanced 
-
- Specifies name and TTL used for DNS resolution..
+Specifies name and TTL used for DNS resolution..
 
 `name` - (Optional) Endpoint's ip address is discovered using DNS name resolution. The name given here is fully qualified domain name. (`String`).
 
-
-
-
-###### One of the arguments from this list "strict_ttl, refresh_interval" can be set
+###### One of the arguments from this list "refresh_interval, strict_ttl" can be set
 
 `refresh_interval` - (Optional) Interval for DNS refresh in seconds. (`Int`).
 
-
 `strict_ttl` - (Optional) Use TTL value returned by DNS Server during DNS resolution as DNS refresh interval (`Bool`).(Deprecated)
 
+### Endpoint Address Service Info
 
-
-
-### Endpoint Address Service Info 
-
-     In case of Consul, tags on the service is matched against service_selector.
+```
+ In case of Consul, tags on the service is matched against service_selector.
+```
 
 `discovery_type` - (Required) Specifies whether the discovery is from Kubernetes or Consul cluster (`String`).
-
-
-
 
 ###### One of the arguments from this list "service_name, service_selector" can be set
 
 `service_name` - (Optional) discovery objects of the site. (`String`).
 
-
 `service_selector` - (Optional) discovery has to happen. This implicit label is added to service_selector. See [Service Info Service Selector ](#service-info-service-selector) below for details.
 
+### Internet Vip Choice Disable Internet Vip
 
+Do not enable advertise on external internet vip..
 
+### Internet Vip Choice Enable Internet Vip
 
-### Internet Vip Choice Disable Internet Vip 
+Enable advertise on internet vip. Only supported for AWS TGW Site or AWS VPC Site..
 
- Do not enable advertise on external internet vip..
-
-
-
-### Internet Vip Choice Enable Internet Vip 
-
- Enable advertise on internet vip. Only supported for AWS TGW Site or AWS VPC Site..
-
-
-
-### Ref 
-
+### Ref
 
 Reference to another volterra object is shown like below
 
@@ -232,21 +116,15 @@ namespace - (Optional) then namespace will hold the referred object's(e.g. route
 
 tenant - (Optional) then tenant will hold the referred object's(e.g. route's) tenant. (String).
 
+### Ref Or Selector Site
 
-
-### Ref Or Selector Site 
-
- Direct reference to site object.
-
-
+Direct reference to site object.
 
 ###### One of the arguments from this list "disable_internet_vip, enable_internet_vip" must be set
 
 `disable_internet_vip` - (Optional) Do not enable advertise on external internet vip. (`Bool`).
 
-
 `enable_internet_vip` - (Optional) Enable advertise on internet vip. Only supported for AWS TGW Site or AWS VPC Site. (`Bool`).
-
 
 `network_type` - (Optional) The type of network on the referred site (`String`).
 
@@ -254,29 +132,21 @@ tenant - (Optional) then tenant will hold the referred object's(e.g. route's) te
 
 `refs` - (Optional) Reference to virtual network. See [ref](#ref) below for details.(Deprecated)
 
+### Ref Or Selector Virtual Network
 
-
-### Ref Or Selector Virtual Network 
-
- Direct reference to virtual network object.
+Direct reference to virtual network object.
 
 `ref` - (Required) A virtual network direct reference. See [ref](#ref) below for details.
 
+### Ref Or Selector Virtual Site
 
-
-### Ref Or Selector Virtual Site 
-
- Direct reference to virtual site object.
-
-
+Direct reference to virtual site object.
 
 ###### One of the arguments from this list "disable_internet_vip, enable_internet_vip" must be set
 
 `disable_internet_vip` - (Optional) Do not enable advertise on external internet vip. (`Bool`).
 
-
 `enable_internet_vip` - (Optional) Enable advertise on internet vip. Only supported for AWS TGW Site or AWS VPC Site. (`Bool`).
-
 
 `network_type` - (Optional) The type of network on the referred virtual_site (`String`).
 
@@ -284,23 +154,17 @@ tenant - (Optional) then tenant will hold the referred object's(e.g. route's) te
 
 `refs` - (Optional) Reference to virtual network. See [ref](#ref) below for details.(Deprecated)
 
+### Service Info Service Selector
 
-
-### Service Info Service Selector 
-
- discovery has to happen. This implicit label is added to service_selector.
+discovery has to happen. This implicit label is added to service_selector.
 
 `expressions` - (Required) expressions contains the kubernetes style label expression for selections. (`String`).
 
+### Ttl Choice Strict Ttl
 
+Use TTL value returned by DNS Server during DNS resolution as DNS refresh interval.
 
-### Ttl Choice Strict Ttl 
+Attribute Reference
+-------------------
 
- Use TTL value returned by DNS Server during DNS resolution as DNS refresh interval.
-
-
-
-## Attribute Reference
-
-* `id` - This is the id of the configured endpoint.
-
+-	`id` - This is the id of the configured endpoint.

@@ -19,6 +19,7 @@ import (
 	"gopkg.volterra.us/stdlib/store"
 
 	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+	ves_io_schema_views "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
 
 	"github.com/google/uuid"
 	"gopkg.volterra.us/stdlib/db/sro"
@@ -850,6 +851,15 @@ func (o *DBObject) SetVtrpStale(isStale bool) {
 	o.GetSystemMetadata().SetVtrpStale(isStale)
 }
 
+// SetViewInternalRef sets ref from view object(e.g. http_loadbalancer.Object) to view_internal.Object
+func (o *DBObject) SetViewInternalRef(viewIntName string) {
+	o.Spec.GcSpec.ViewInternal = &ves_io_schema_views.ObjectRefType{
+		Tenant:    o.GetObjTenant(),
+		Namespace: o.GetObjNamespace(),
+		Name:      viewIntName,
+	}
+}
+
 type ValidateObject struct {
 	FldValidators map[string]db.ValidatorFunc
 }
@@ -1266,6 +1276,15 @@ func (v *ValidateStatusObject) Validate(ctx context.Context, pm interface{}, opt
 		return nil
 	}
 
+	if fv, exists := v.FldValidators["cbip_status"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("cbip_status"))
+		if err := fv(ctx, e.GetCbipStatus(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["conditions"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("conditions"))
@@ -1318,6 +1337,8 @@ var DefaultStatusObjectValidator = func() *ValidateStatusObject {
 	v.FldValidators["ver_status"] = VerStatusTypeValidator().Validate
 
 	v.FldValidators["conditions"] = ves_io_schema.ConditionTypeValidator().Validate
+
+	v.FldValidators["cbip_status"] = CBIPStatusTypeValidator().Validate
 
 	return v
 }()

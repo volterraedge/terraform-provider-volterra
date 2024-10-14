@@ -88,6 +88,15 @@ func (c *CustomAPIGrpcClient) doRPCGetScimToken(ctx context.Context, yamlReq str
 	return rsp, err
 }
 
+func (c *CustomAPIGrpcClient) doRPCGetServiceCredentials(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
+	req := &GetRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.api_credential.GetRequest", yamlReq)
+	}
+	rsp, err := c.grpcClient.GetServiceCredentials(ctx, req, opts...)
+	return rsp, err
+}
+
 func (c *CustomAPIGrpcClient) doRPCList(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &ListRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -201,6 +210,8 @@ func NewCustomAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 	rpcFns["Get"] = ccl.doRPCGet
 
 	rpcFns["GetScimToken"] = ccl.doRPCGetScimToken
+
+	rpcFns["GetServiceCredentials"] = ccl.doRPCGetServiceCredentials
 
 	rpcFns["List"] = ccl.doRPCList
 
@@ -533,6 +544,9 @@ func (c *CustomAPIRestClient) doRPCCreateServiceCredentials(ctx context.Context,
 		q.Add("password", fmt.Sprintf("%v", req.Password))
 		q.Add("service_credential_choice", fmt.Sprintf("%v", req.ServiceCredentialChoice))
 		q.Add("type", fmt.Sprintf("%v", req.Type))
+		for _, item := range req.UserGroupNames {
+			q.Add("user_group_names", fmt.Sprintf("%v", item))
+		}
 		q.Add("virtual_k8s_name", fmt.Sprintf("%v", req.VirtualK8SName))
 		q.Add("virtual_k8s_namespace", fmt.Sprintf("%v", req.VirtualK8SNamespace))
 
@@ -736,6 +750,90 @@ func (c *CustomAPIRestClient) doRPCGetScimToken(ctx context.Context, callOpts *s
 	pbRsp := &GetResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.api_credential.GetResponse", body)
+
+	}
+	if callOpts.OutCallResponse != nil {
+		callOpts.OutCallResponse.ProtoMsg = pbRsp
+		callOpts.OutCallResponse.JSON = string(body)
+	}
+	return pbRsp, nil
+}
+
+func (c *CustomAPIRestClient) doRPCGetServiceCredentials(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
+	if callOpts.URI == "" {
+		return nil, fmt.Errorf("Error, URI should be specified, got empty")
+	}
+	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
+
+	yamlReq := callOpts.YAMLReq
+	req := &GetRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.api_credential.GetRequest: %s", yamlReq, err)
+	}
+
+	var hReq *http.Request
+	hm := strings.ToLower(callOpts.HTTPMethod)
+	switch hm {
+	case "post", "put":
+		jsn, err := codec.ToJSON(req, codec.ToWithUseProtoFieldName())
+		if err != nil {
+			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
+		}
+		var op string
+		if hm == "post" {
+			op = http.MethodPost
+		} else {
+			op = http.MethodPut
+		}
+		newReq, err := http.NewRequest(op, url, bytes.NewBuffer([]byte(jsn)))
+		if err != nil {
+			return nil, errors.Wrapf(err, "Creating new HTTP %s request for custom API", op)
+		}
+		hReq = newReq
+	case "get":
+		newReq, err := http.NewRequest(http.MethodGet, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP GET request for custom API")
+		}
+		hReq = newReq
+		q := hReq.URL.Query()
+		_ = q
+		q.Add("name", fmt.Sprintf("%v", req.Name))
+		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
+
+		hReq.URL.RawQuery += q.Encode()
+	case "delete":
+		newReq, err := http.NewRequest(http.MethodDelete, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP DELETE request for custom API")
+		}
+		hReq = newReq
+	default:
+		return nil, fmt.Errorf("Error, invalid/empty HTTPMethod(%s) specified, should be POST|DELETE|GET", callOpts.HTTPMethod)
+	}
+	hReq = hReq.WithContext(ctx)
+	hReq.Header.Set("Content-Type", "application/json")
+	client.AddHdrsToReq(callOpts.Headers, hReq)
+
+	rsp, err := c.client.Do(hReq)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient")
+	}
+	defer rsp.Body.Close()
+
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
+		body, err := io.ReadAll(rsp.Body)
+		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
+	}
+
+	body, err := io.ReadAll(rsp.Body)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient read body")
+	}
+	pbRsp := &GetServiceCredentialsResponse{}
+	if err := codec.FromJSON(string(body), pbRsp); err != nil {
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.api_credential.GetServiceCredentialsResponse", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -1452,6 +1550,8 @@ func NewCustomAPIRestClient(baseURL string, hc http.Client) server.CustomClient 
 
 	rpcFns["GetScimToken"] = ccl.doRPCGetScimToken
 
+	rpcFns["GetServiceCredentials"] = ccl.doRPCGetServiceCredentials
+
 	rpcFns["List"] = ccl.doRPCList
 
 	rpcFns["ListServiceCredentials"] = ccl.doRPCListServiceCredentials
@@ -1503,6 +1603,10 @@ func (c *customAPIInprocClient) Get(ctx context.Context, in *GetRequest, opts ..
 func (c *customAPIInprocClient) GetScimToken(ctx context.Context, in *ScimTokenRequest, opts ...grpc.CallOption) (*GetResponse, error) {
 	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.api_credential.CustomAPI.GetScimToken")
 	return c.CustomAPIServer.GetScimToken(ctx, in)
+}
+func (c *customAPIInprocClient) GetServiceCredentials(ctx context.Context, in *GetRequest, opts ...grpc.CallOption) (*GetServiceCredentialsResponse, error) {
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.api_credential.CustomAPI.GetServiceCredentials")
+	return c.CustomAPIServer.GetServiceCredentials(ctx, in)
 }
 func (c *customAPIInprocClient) List(ctx context.Context, in *ListRequest, opts ...grpc.CallOption) (*ListResponse, error) {
 	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.api_credential.CustomAPI.List")
@@ -1849,6 +1953,55 @@ func (s *customAPISrv) GetScimToken(ctx context.Context, in *ScimTokenRequest) (
 	}
 
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.api_credential.GetResponse", rsp)...)
+
+	return rsp, nil
+}
+func (s *customAPISrv) GetServiceCredentials(ctx context.Context, in *GetRequest) (*GetServiceCredentialsResponse, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.api_credential.CustomAPI")
+	cah, ok := ah.(CustomAPIServer)
+	if !ok {
+		return nil, fmt.Errorf("ah %v is not of type *CustomAPIServer", ah)
+	}
+
+	var (
+		rsp *GetServiceCredentialsResponse
+		err error
+	)
+
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.api_credential.GetRequest", in)
+	defer func() {
+		if len(bodyFields) > 0 {
+			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
+		}
+		userMsg := "The 'CustomAPI.GetServiceCredentials' operation on 'api_credential'"
+		if err == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
+	}()
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.api_credential.CustomAPI.GetServiceCredentials"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
+	rsp, err = cah.GetServiceCredentials(ctx, in)
+	if err != nil {
+		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
+	}
+
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.api_credential.GetServiceCredentialsResponse", rsp)...)
 
 	return rsp, nil
 }
@@ -3516,6 +3669,98 @@ var CustomAPISwaggerJSON string = `{
             "x-displayname": "API Credential",
             "x-ves-proto-service": "ves.io.schema.api_credential.CustomAPI",
             "x-ves-proto-service-type": "CUSTOM_PUBLIC"
+        },
+        "/public/namespaces/{namespace}/service_credentials/{name}": {
+            "get": {
+                "summary": "Get Service Credential",
+                "description": "Get implements service credential query by name.\nReturns service credential object. Query will look into tenants system namespace for service credential by name.",
+                "operationId": "ves.io.schema.api_credential.CustomAPI.GetServiceCredentials",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/api_credentialGetServiceCredentialsResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "namespace",
+                        "description": "Namespace\n\nx-required\nx-example: \"system\"\nValue of namespace is always \"system\".",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "x-displayname": "Namespace"
+                    },
+                    {
+                        "name": "name",
+                        "description": "Credential name\n\nx-required\nx-example: \"value\"\nName of API credential.",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "x-displayname": "Name"
+                    }
+                ],
+                "tags": [
+                    "CustomAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-api_credential-customapi-getservicecredentials"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.api_credential.CustomAPI.GetServiceCredentials"
+            },
+            "x-displayname": "API Credential",
+            "x-ves-proto-service": "ves.io.schema.api_credential.CustomAPI",
+            "x-ves-proto-service-type": "CUSTOM_PUBLIC"
         }
     },
     "definitions": {
@@ -3707,6 +3952,16 @@ var CustomAPISwaggerJSON string = `{
                         "ves.io.schema.rules.message.required": "true"
                     }
                 },
+                "user_group_names": {
+                    "type": "array",
+                    "description": " list of user_groups assigned to this service credential\n\nExample: - \"[\"dev-group-1\"]\"-",
+                    "title": "User Groups Names",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "Groups",
+                    "x-ves-example": "[\"dev-group-1\"]"
+                },
                 "virtual_k8s_name": {
                     "type": "string",
                     "description": " Name of virtual_k8s cluster. Applicable for KUBE_CONFIG.\n\nExample: - \"vk8s-product-app1\"-",
@@ -3817,6 +4072,87 @@ var CustomAPISwaggerJSON string = `{
                     "title": "Credential information",
                     "$ref": "#/definitions/api_credentialObject",
                     "x-displayname": "Credential Record"
+                }
+            }
+        },
+        "api_credentialGetServiceCredentialsResponse": {
+            "type": "object",
+            "description": "Response of get service credentials request with a given name.",
+            "title": "Get service credentials response",
+            "x-displayname": "Get Service Credentials Response",
+            "x-ves-proto-message": "ves.io.schema.api_credential.GetServiceCredentialsResponse",
+            "properties": {
+                "active": {
+                    "type": "boolean",
+                    "description": " Possibility to deactivate credential with no deletion.\n\nExample: - \"true\"-",
+                    "title": "Active",
+                    "format": "boolean",
+                    "x-displayname": "Active",
+                    "x-ves-example": "true"
+                },
+                "create_timestamp": {
+                    "type": "string",
+                    "description": " Create time of service credential.",
+                    "title": "Create timestamp",
+                    "format": "date-time",
+                    "x-displayname": "Creation Time"
+                },
+                "expiry_timestamp": {
+                    "type": "string",
+                    "description": " Expiry time of service credential.",
+                    "title": "Expiry time",
+                    "format": "date-time",
+                    "x-displayname": "Expiry Time"
+                },
+                "name": {
+                    "type": "string",
+                    "description": " Name of service credential object.\n\nExample: - \"value\"-",
+                    "title": "Credential name",
+                    "x-displayname": "Name",
+                    "x-ves-example": "value"
+                },
+                "namespace": {
+                    "type": "string",
+                    "description": " Namespace of service credential object.\n\nExample: - \"system\"-",
+                    "title": "Namespace",
+                    "x-displayname": "Namespace",
+                    "x-ves-example": "system"
+                },
+                "namespace_access": {
+                    "description": " List of directly attached roles that the service user has for each namespace.",
+                    "title": "Namespace Access",
+                    "$ref": "#/definitions/schemaNamespaceAccessType",
+                    "x-displayname": "namespace access"
+                },
+                "type": {
+                    "description": " Type of service credential. Possible values include\n     * SERVICE_API_TOKEN\n     * SERVICE_API_CERTIFICATE\n     * SERVICE_KUBE_CONFIG\n     * SERVICE_SITE_GLOBAL_KUBE_CONFIG",
+                    "title": "Type of credential",
+                    "$ref": "#/definitions/api_credentialAPICredentialType",
+                    "x-displayname": "Credential Type"
+                },
+                "uid": {
+                    "type": "string",
+                    "description": " uid of service credential object.\n\nExample: - \"fa45979f-4e41-4f4b-8b0b-c3ab844ab0aa\"-",
+                    "title": "uid of the record",
+                    "x-displayname": "UUID",
+                    "x-ves-example": "fa45979f-4e41-4f4b-8b0b-c3ab844ab0aa"
+                },
+                "user_email": {
+                    "type": "string",
+                    "description": " email of the service user attached to service credential .\n\nExample: - \"admin@acmecorp.com\"-",
+                    "title": "Email of user",
+                    "x-displayname": "User",
+                    "x-ves-example": "admin@acmecorp.com"
+                },
+                "user_group_names": {
+                    "type": "array",
+                    "description": " user group list associated to this service credential.\n\nExample: - \"[\"dev-group-1\"]\"-",
+                    "title": "User Groups Names",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "User Groups",
+                    "x-ves-example": "[\"dev-group-1\"]"
                 }
             }
         },
@@ -4230,6 +4566,26 @@ var CustomAPISwaggerJSON string = `{
                 }
             }
         },
+        "schemaNamespaceAccessType": {
+            "type": "object",
+            "description": "Access info in the namespaces for the entity",
+            "title": "Namespace Access",
+            "x-displayname": "Namespace Access",
+            "x-ves-proto-message": "ves.io.schema.NamespaceAccessType",
+            "properties": {
+                "namespace_role_map": {
+                    "type": "object",
+                    "description": " List of all the roles for the entity in the namespaces\n\nExample: - '\u003cnamespace\u003e [\u003croles\u003e]'-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.max_len: 256\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Namespace Role Map",
+                    "x-displayname": "Namespace Role Map",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.map.keys.string.max_len": "256",
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                }
+            }
+        },
         "schemaNamespaceRoleType": {
             "type": "object",
             "description": "Allows linking namespaces and roles",
@@ -4380,6 +4736,21 @@ var CustomAPISwaggerJSON string = `{
                     "title": "uid",
                     "x-displayname": "UID",
                     "x-ves-example": "d15f1fad-4d37-48c0-8706-df1824d76d31"
+                }
+            }
+        },
+        "schemaRoleListType": {
+            "type": "object",
+            "description": "x-displayName: \"Role List\"\nRole list",
+            "title": "List of Roles",
+            "properties": {
+                "names": {
+                    "type": "array",
+                    "description": "x-displayName: \"Roles List\"\nx-example: [\"ves-io-monitor-role\", \"ves-io-uam-admin-role\"]\nx-required\nList of all the roles",
+                    "title": "Roles List",
+                    "items": {
+                        "type": "string"
+                    }
                 }
             }
         },

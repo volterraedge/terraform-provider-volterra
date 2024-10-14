@@ -71,9 +71,8 @@ func resourceVolterraAwsVpcSite() *schema.Resource {
 
 			"admin_password": {
 
-				Type:       schema.TypeSet,
-				Optional:   true,
-				Deprecated: "This field is deprecated and will be removed in future release.",
+				Type:     schema.TypeSet,
+				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 
@@ -114,28 +113,24 @@ func resourceVolterraAwsVpcSite() *schema.Resource {
 
 						"blindfold_secret_info": {
 
-							Type:       schema.TypeSet,
-							Optional:   true,
-							Deprecated: "This field is deprecated and will be removed in future release.",
+							Type:     schema.TypeSet,
+							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
 									"decryption_provider": {
-										Type:       schema.TypeString,
-										Optional:   true,
-										Deprecated: "This field is deprecated and will be removed in future release.",
+										Type:     schema.TypeString,
+										Optional: true,
 									},
 
 									"location": {
-										Type:       schema.TypeString,
-										Required:   true,
-										Deprecated: "This field is deprecated and will be removed in future release.",
+										Type:     schema.TypeString,
+										Required: true,
 									},
 
 									"store_provider": {
-										Type:       schema.TypeString,
-										Optional:   true,
-										Deprecated: "This field is deprecated and will be removed in future release.",
+										Type:     schema.TypeString,
+										Optional: true,
 									},
 								},
 							},
@@ -143,22 +138,19 @@ func resourceVolterraAwsVpcSite() *schema.Resource {
 
 						"clear_secret_info": {
 
-							Type:       schema.TypeSet,
-							Optional:   true,
-							Deprecated: "This field is deprecated and will be removed in future release.",
+							Type:     schema.TypeSet,
+							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
 									"provider": {
-										Type:       schema.TypeString,
-										Optional:   true,
-										Deprecated: "This field is deprecated and will be removed in future release.",
+										Type:     schema.TypeString,
+										Optional: true,
 									},
 
 									"url": {
-										Type:       schema.TypeString,
-										Required:   true,
-										Deprecated: "This field is deprecated and will be removed in future release.",
+										Type:     schema.TypeString,
+										Required: true,
 									},
 								},
 							},

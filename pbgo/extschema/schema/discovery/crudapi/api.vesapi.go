@@ -2835,6 +2835,231 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "discoveryCBIPDeviceStatus": {
+            "type": "object",
+            "title": "Status for each cbip device",
+            "x-ves-proto-message": "ves.io.schema.discovery.CBIPDeviceStatus",
+            "properties": {
+                "cbip_mgmt_ip": {
+                    "type": "string",
+                    "description": " IP Address of the Classic BIG-IP device\n\nExample: - \"10.1.1.1\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.ipv4: true\n",
+                    "title": "Management IP",
+                    "x-displayname": "Management IP",
+                    "x-ves-example": "10.1.1.1",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.ipv4": "true"
+                    }
+                },
+                "condition": {
+                    "description": " Discovery Status condition of the device",
+                    "title": "Status condition",
+                    "$ref": "#/definitions/schemaConditionType",
+                    "x-displayname": "Conditions"
+                }
+            }
+        },
+        "discoveryCBIPStatusType": {
+            "type": "object",
+            "description": "This status captures the status of the cBIP discovery and its internal objects like LB.",
+            "title": "Status for cBIP Discovery",
+            "x-displayname": "cBIP Discovery Status",
+            "x-ves-proto-message": "ves.io.schema.discovery.CBIPStatusType",
+            "properties": {
+                "device_status": {
+                    "type": "array",
+                    "description": " Status of the discovery task for each cbip device",
+                    "title": "cbip Device Discovery Status",
+                    "items": {
+                        "$ref": "#/definitions/discoveryCBIPDeviceStatus"
+                    },
+                    "x-displayname": "Device Discovery Status"
+                },
+                "domain": {
+                    "type": "string",
+                    "description": " Domain name of the internal LB",
+                    "title": "Internal LB",
+                    "x-displayname": "LB domain"
+                }
+            }
+        },
+        "discoveryCbipAdminCredentials": {
+            "type": "object",
+            "title": "Classic BIG-IP Admin Credentials",
+            "x-displayname": "Classic BIG-IP Admin Credentials",
+            "x-ves-proto-message": "ves.io.schema.discovery.CbipAdminCredentials",
+            "properties": {
+                "password": {
+                    "description": " Password used to log into an admin account on the BIG-IP device\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Classic BIG-IP Admin Password",
+                    "$ref": "#/definitions/schemaSecretType",
+                    "x-displayname": "Classic BIG-IP Admin Password",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "username": {
+                    "type": "string",
+                    "description": " Username used to log into an admin account on the BIG-IP device\n\nExample: - \"admin\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 256\n  ves.io.schema.rules.string.min_len: 1\n",
+                    "title": "Classic BIG-IP Admin Username",
+                    "minLength": 1,
+                    "maxLength": 256,
+                    "x-displayname": "Classic BIG-IP Admin Username",
+                    "x-ves-example": "admin",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_len": "256",
+                        "ves.io.schema.rules.string.min_len": "1"
+                    }
+                }
+            }
+        },
+        "discoveryCbipCertificateAuthority": {
+            "type": "object",
+            "description": "BIG-IP Root CA Certificate",
+            "title": "BIG-IP Root CA Certificate",
+            "x-displayname": "BIG-IP Root CA Certificate",
+            "x-ves-oneof-field-server_validation_choice": "[\"skip_server_verification\",\"trusted_ca\"]",
+            "x-ves-proto-message": "ves.io.schema.discovery.CbipCertificateAuthority",
+            "properties": {
+                "skip_server_verification": {
+                    "description": "Exclusive with [trusted_ca]\n Skip origin server verification",
+                    "title": "Skip Server Verification",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Skip Verification"
+                },
+                "trusted_ca": {
+                    "description": "Exclusive with [skip_server_verification]\n Select/Add a Root CA Certificate object to associate with this Origin Pool for verification of server's certificate",
+                    "title": "trusted_ca",
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "Root CA Certificate"
+                }
+            }
+        },
+        "discoveryCbipCluster": {
+            "type": "object",
+            "description": "A BIG-IP cluster is a set of BIG-IP devices which are in an \nActive-Active or Active-Standby setup or even a standalone BIG-IP device.",
+            "title": "Classic BIG-IP Cluster",
+            "x-displayname": "Classic BIG-IP Cluster",
+            "x-ves-proto-message": "ves.io.schema.discovery.CbipCluster",
+            "properties": {
+                "cbip_devices": {
+                    "type": "array",
+                    "description": " List of Classic BIG-IP devices. Note Namespace Mapping is only available\n in Shared Configuration. Otherwise all devices are imported to current namespace.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 8\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "Classic BIG-IP Devices",
+                    "maxItems": 8,
+                    "items": {
+                        "$ref": "#/definitions/discoveryCbipDeviceConfig"
+                    },
+                    "x-displayname": "Classic BIG-IP Devices",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.max_items": "8",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                },
+                "metadata": {
+                    "description": " Common attributes for the device configuration including name and description.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "metadata",
+                    "$ref": "#/definitions/schemaMessageMetaType",
+                    "x-displayname": "Metadata",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                }
+            }
+        },
+        "discoveryCbipDeviceConfig": {
+            "type": "object",
+            "title": "Classic BIG-IP Configuration",
+            "x-displayname": "Classic BIG-IP Configuration",
+            "x-ves-oneof-field-namespace_mapping_choice": "[\"default_all\",\"namespace_mapping\"]",
+            "x-ves-proto-message": "ves.io.schema.discovery.CbipDeviceConfig",
+            "properties": {
+                "admin_credentials": {
+                    "description": "\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Classic BIG-IP Admin Credentials",
+                    "$ref": "#/definitions/discoveryCbipAdminCredentials",
+                    "x-displayname": "Classic BIG-IP Admin Credentials",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "cbip_certificate_authority": {
+                    "description": "\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Classic BIG-IP Root CA Certificate",
+                    "$ref": "#/definitions/discoveryCbipCertificateAuthority",
+                    "x-displayname": "Classic BIG-IP Root CA Certificate",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "cbip_mgmt_ip": {
+                    "type": "string",
+                    "description": " IP Address of the Classic BIG-IP device\n\nExample: - \"10.1.1.1\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.ipv4: true\n",
+                    "title": "Management IP",
+                    "x-displayname": "Management IP",
+                    "x-ves-example": "10.1.1.1",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.ipv4": "true"
+                    }
+                },
+                "default_all": {
+                    "description": "Exclusive with [namespace_mapping]\n All Partitions added to Shared Namespace",
+                    "title": "Default (All Partitions to Shared Namespace)",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "All Partitions to Shared Namespace"
+                },
+                "namespace_mapping": {
+                    "description": "Exclusive with [default_all]\n Select which partition(s) should map to which XC namespace(s)",
+                    "title": "Custom Mapping",
+                    "$ref": "#/definitions/discoveryNamespaceMapping",
+                    "x-displayname": "Custom Mapping"
+                },
+                "virtual_server_filter": {
+                    "description": " Filters to only discover certain BIG-IP Virtual Servers",
+                    "title": "Virtual Server Filter",
+                    "$ref": "#/definitions/discoveryVirtualServerFilter",
+                    "x-displayname": "Virtual Server Filter"
+                }
+            }
+        },
+        "discoveryCbipDiscoveryType": {
+            "type": "object",
+            "description": "Discovery configuration for Classic BIG-IP",
+            "title": "Classic BIG-IP Discovery Type",
+            "x-displayname": "Classic BIG-IP Discovery Configuration",
+            "x-ves-proto-message": "ves.io.schema.discovery.CbipDiscoveryType",
+            "properties": {
+                "cbip_clusters": {
+                    "type": "array",
+                    "description": " List of Classic BIG-IP clusters. A BIG-IP cluster is a set of BIG-IP devices which\n are in an Active-Active or Active-Standby setup or even a standalone BIG-IP device.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 32\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "Classic BIG-IP Clusters",
+                    "minItems": 1,
+                    "maxItems": 32,
+                    "items": {
+                        "$ref": "#/definitions/discoveryCbipCluster"
+                    },
+                    "x-displayname": "Classic BIG-IP Clusters",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.max_items": "32",
+                        "ves.io.schema.rules.repeated.min_items": "1",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                }
+            }
+        },
         "discoveryConsulAccessInfo": {
             "type": "object",
             "description": "Hashicorp Consul API server information",
@@ -3033,6 +3258,12 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.string.max_len": "256"
                     }
                 },
+                "discovery_cbip": {
+                    "description": " Discovery configuration for Classic BIG-IP",
+                    "title": "discovery Classic BIG-IP",
+                    "$ref": "#/definitions/discoveryCbipDiscoveryType",
+                    "x-displayname": "Classic BIG-IP Discovery Configuration"
+                },
                 "discovery_consul": {
                     "description": "Exclusive with [discovery_k8s]\n Discovery configuration for Hashicorp Consul",
                     "title": "discovery consul",
@@ -3226,6 +3457,55 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "discoveryNamespaceMapping": {
+            "type": "object",
+            "description": "Map BIG-IP partition(s) to an XC namespace. If not specified, all virtual  \nservers will be discovered under shared namespace.",
+            "title": "Namespace Mapping",
+            "x-displayname": "Namespace Mapping",
+            "x-ves-proto-message": "ves.io.schema.discovery.NamespaceMapping",
+            "properties": {
+                "items": {
+                    "type": "array",
+                    "description": " Map BIG-IP partition(s) to XC Namespaces\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 32\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "Partition to Namespace Mapping",
+                    "maxItems": 32,
+                    "items": {
+                        "$ref": "#/definitions/discoveryNamespaceMappingItem"
+                    },
+                    "x-displayname": "Partition to Namespace Mapping",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "32",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                }
+            }
+        },
+        "discoveryNamespaceMappingItem": {
+            "type": "object",
+            "description": "Map BIG-IP partition(s) to an XC namespace. If not specified, all virtual  \nservers will be discovered under shared namespace.",
+            "title": "Namespace Mapping Item",
+            "x-displayname": "Namespace Mapping Item",
+            "x-ves-proto-message": "ves.io.schema.discovery.NamespaceMappingItem",
+            "properties": {
+                "namespace": {
+                    "type": "string",
+                    "description": " Select a namespace",
+                    "title": "XC Namespace",
+                    "x-displayname": "XC Namespace"
+                },
+                "partition_regex": {
+                    "type": "string",
+                    "description": " The regex here will be used to match BIG-IP partition(s).\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n  ves.io.schema.rules.string.regex: true\n",
+                    "title": "Classic BIG-IP Partition Regex",
+                    "maxLength": 256,
+                    "x-displayname": "Regex To Match BIG-IP device partition(s)",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "256",
+                        "ves.io.schema.rules.string.regex": "true"
+                    }
+                }
+            }
+        },
         "discoveryPodInfoType": {
             "type": "object",
             "description": "Information about POD providing the service",
@@ -3358,6 +3638,12 @@ var APISwaggerJSON string = `{
             "x-displayname": "Discovery Status",
             "x-ves-proto-message": "ves.io.schema.discovery.StatusObject",
             "properties": {
+                "cbip_status": {
+                    "description": "\n CBIPStatusType captures the status of the cbip discovery\n workflow, especially the internal LB status on the CE",
+                    "title": "cbip_discovery_status\nThis and VerStatusType should be oneofs",
+                    "$ref": "#/definitions/discoveryCBIPStatusType",
+                    "x-displayname": "cBIP Status"
+                },
                 "conditions": {
                     "type": "array",
                     "description": " Conditions",
@@ -3378,12 +3664,12 @@ var APISwaggerJSON string = `{
                     "description": " Object reference",
                     "title": "object_refs",
                     "items": {
-                        "$ref": "#/definitions/schemaObjectRefType"
+                        "$ref": "#/definitions/ioschemaObjectRefType"
                     },
                     "x-displayname": "Config Object"
                 },
                 "ver_status": {
-                    "description": " VerStatusType shows connection status to external cluster and\n list of services discovered on that cluster",
+                    "description": " VerStatusType shows connection status to external cluster and\n list of services discovered on that cluster. This is applicable\n only for k8s and consul discovery.",
                     "title": "ver_status",
                     "$ref": "#/definitions/discoveryVerStatusType",
                     "x-displayname": "VER Status"
@@ -3443,7 +3729,7 @@ var APISwaggerJSON string = `{
         "discoveryVerStatusType": {
             "type": "object",
             "description": "This VER status is per site on which discovery is happening and it lists all services that site has discovered.",
-            "title": "VER status for Discovery",
+            "title": "VER status for k8s and consul Discovery",
             "x-displayname": "VER Status",
             "x-ves-proto-message": "ves.io.schema.discovery.VerStatusType",
             "properties": {
@@ -3520,6 +3806,77 @@ var APISwaggerJSON string = `{
             ],
             "default": "DNS_DELEGATION"
         },
+        "discoveryVirtualServerFilter": {
+            "type": "object",
+            "description": "Filter to only discover certain BIG-IP Virtual Servers",
+            "title": "Virtual Server Filter",
+            "x-displayname": "Virtual Server Filter",
+            "x-ves-oneof-field-discover_disabled_choice": "[\"enabled_only\",\"include_disabled\"]",
+            "x-ves-proto-message": "ves.io.schema.discovery.VirtualServerFilter",
+            "properties": {
+                "description_regex": {
+                    "type": "string",
+                    "description": " Regex to match Virtual Server description\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n  ves.io.schema.rules.string.regex: true\n",
+                    "title": "Regex To Match Virtual Server Description",
+                    "maxLength": 256,
+                    "x-displayname": "Regex To Match Virtual Server Description",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "256",
+                        "ves.io.schema.rules.string.regex": "true"
+                    }
+                },
+                "enabled_only": {
+                    "description": "Exclusive with [include_disabled]\n Select to only discover enabled Virtual Servers",
+                    "title": "Discover Only Enabled Virtual Servers",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Discover Only Enabled Virtual Servers"
+                },
+                "include_disabled": {
+                    "description": "Exclusive with [enabled_only]\n Select to discover disabled Virtual Servers",
+                    "title": "Discover Disabled Virtual Servers",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Discover Disabled Virtual Servers"
+                },
+                "name_regex": {
+                    "type": "string",
+                    "description": " Regex to match Virtual Server name\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n  ves.io.schema.rules.string.regex: true\n",
+                    "title": "Regex To Match Virtual Server Name",
+                    "maxLength": 256,
+                    "x-displayname": "Regex To Match Virtual Server Name",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "256",
+                        "ves.io.schema.rules.string.regex": "true"
+                    }
+                },
+                "port_ranges": {
+                    "type": "string",
+                    "description": " A string containing a comma separated list of port ranges.\n Each port range consists of a single port or two ports separated by \"-\".\n\nExample: - \"80,443,8080-8191,9080\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 512\n  ves.io.schema.rules.string.max_ports: 1024\n  ves.io.schema.rules.string.unique_port_range_list: true\n",
+                    "title": "Port_ranges",
+                    "maxLength": 512,
+                    "x-displayname": "Port Ranges",
+                    "x-ves-example": "80,443,8080-8191,9080",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "512",
+                        "ves.io.schema.rules.string.max_ports": "1024",
+                        "ves.io.schema.rules.string.unique_port_range_list": "true"
+                    }
+                },
+                "protocols": {
+                    "type": "array",
+                    "description": " Filter by protocol(s)\n\nExample: - \"TCP\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.unique: true\n  ves.io.schema.rules.string.in: [\\\"HTTPS\\\",\\\"HTTP\\\",\\\"TCP\\\"]\n",
+                    "title": "protocols",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "Protocol(s)",
+                    "x-ves-example": "TCP",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.unique": "true",
+                        "ves.io.schema.rules.string.in": "[\\\"HTTPS\\\",\\\"HTTP\\\",\\\"TCP\\\"]"
+                    }
+                }
+            }
+        },
         "discoverycrudapiErrorCode": {
             "type": "string",
             "enum": [
@@ -3531,6 +3888,50 @@ var APISwaggerJSON string = `{
             "default": "EOK",
             "x-displayname": "",
             "x-ves-proto-enum": "ves.io.schema.discovery.crudapi.ErrorCode"
+        },
+        "ioschemaObjectRefType": {
+            "type": "object",
+            "description": "This type establishes a 'direct reference' from one object(the referrer) to another(the referred).\nSuch a reference is in form of tenant/namespace/name for public API and Uid for private API\nThis type of reference is called direct because the relation is explicit and concrete (as opposed\nto selector reference which builds a group based on labels of selectee objects)",
+            "title": "ObjectRefType",
+            "x-displayname": "Object reference",
+            "x-ves-proto-message": "ves.io.schema.ObjectRefType",
+            "properties": {
+                "kind": {
+                    "type": "string",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then kind will hold the referred object's kind (e.g. \"route\")\n\nExample: - \"virtual_site\"-",
+                    "title": "kind",
+                    "x-displayname": "Kind",
+                    "x-ves-example": "virtual_site"
+                },
+                "name": {
+                    "type": "string",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then name will hold the referred object's(e.g. route's) name.\n\nExample: - \"contactus-route\"-",
+                    "title": "name",
+                    "x-displayname": "Name",
+                    "x-ves-example": "contactus-route"
+                },
+                "namespace": {
+                    "type": "string",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then namespace will hold the referred object's(e.g. route's) namespace.\n\nExample: - \"ns1\"-",
+                    "title": "namespace",
+                    "x-displayname": "Namespace",
+                    "x-ves-example": "ns1"
+                },
+                "tenant": {
+                    "type": "string",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then tenant will hold the referred object's(e.g. route's) tenant.\n\nExample: - \"acmecorp\"-",
+                    "title": "tenant",
+                    "x-displayname": "Tenant",
+                    "x-ves-example": "acmecorp"
+                },
+                "uid": {
+                    "type": "string",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then uid will hold the referred object's(e.g. route's) uid.\n\nExample: - \"d15f1fad-4d37-48c0-8706-df1824d76d31\"-",
+                    "title": "uid",
+                    "x-displayname": "UID",
+                    "x-ves-example": "d15f1fad-4d37-48c0-8706-df1824d76d31"
+                }
+            }
         },
         "protobufAny": {
             "type": "object",
@@ -3760,6 +4161,40 @@ var APISwaggerJSON string = `{
             "x-displayname": "List Metadata",
             "x-ves-proto-message": "ves.io.schema.ListMetaType"
         },
+        "schemaMessageMetaType": {
+            "type": "object",
+            "description": "MessageMetaType is metadata (common attributes) of a message that only certain messages\nhave. This information is propagated to the metadata of a child object that gets created\nfrom the containing message during view processing.\nThe information in this type can be specified by user during create and replace APIs.",
+            "title": "MessageMetaType",
+            "x-displayname": "Message Metadata",
+            "x-ves-proto-message": "ves.io.schema.MessageMetaType",
+            "properties": {
+                "description": {
+                    "type": "string",
+                    "description": " Human readable description.\n\nExample: - \"Virtual Host for acmecorp website\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n",
+                    "title": "description",
+                    "maxLength": 256,
+                    "x-displayname": "Description",
+                    "x-ves-example": "Virtual Host for acmecorp website",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "256"
+                    }
+                },
+                "name": {
+                    "type": "string",
+                    "description": " This is the name of the message.\n The value of name has to follow DNS-1035 format.\n\nExample: - \"acmecorp-web\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.min_len: 1\n  ves.io.schema.rules.string.ves_object_name: true\n",
+                    "title": "name",
+                    "minLength": 1,
+                    "x-displayname": "Name",
+                    "x-ves-example": "acmecorp-web",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.min_len": "1",
+                        "ves.io.schema.rules.string.ves_object_name": "true"
+                    }
+                }
+            }
+        },
         "schemaNetworkRefType": {
             "type": "object",
             "description": "This specifies a direct reference to a network configuration object",
@@ -3773,7 +4208,7 @@ var APISwaggerJSON string = `{
                     "title": "ref",
                     "maxItems": 1,
                     "items": {
-                        "$ref": "#/definitions/schemaObjectRefType"
+                        "$ref": "#/definitions/ioschemaObjectRefType"
                     },
                     "x-displayname": "Reference",
                     "x-ves-required": "true",
@@ -3885,50 +4320,6 @@ var APISwaggerJSON string = `{
                 }
             }
         },
-        "schemaObjectRefType": {
-            "type": "object",
-            "description": "This type establishes a 'direct reference' from one object(the referrer) to another(the referred).\nSuch a reference is in form of tenant/namespace/name for public API and Uid for private API\nThis type of reference is called direct because the relation is explicit and concrete (as opposed\nto selector reference which builds a group based on labels of selectee objects)",
-            "title": "ObjectRefType",
-            "x-displayname": "Object reference",
-            "x-ves-proto-message": "ves.io.schema.ObjectRefType",
-            "properties": {
-                "kind": {
-                    "type": "string",
-                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then kind will hold the referred object's kind (e.g. \"route\")\n\nExample: - \"virtual_site\"-",
-                    "title": "kind",
-                    "x-displayname": "Kind",
-                    "x-ves-example": "virtual_site"
-                },
-                "name": {
-                    "type": "string",
-                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then name will hold the referred object's(e.g. route's) name.\n\nExample: - \"contactus-route\"-",
-                    "title": "name",
-                    "x-displayname": "Name",
-                    "x-ves-example": "contactus-route"
-                },
-                "namespace": {
-                    "type": "string",
-                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then namespace will hold the referred object's(e.g. route's) namespace.\n\nExample: - \"ns1\"-",
-                    "title": "namespace",
-                    "x-displayname": "Namespace",
-                    "x-ves-example": "ns1"
-                },
-                "tenant": {
-                    "type": "string",
-                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then tenant will hold the referred object's(e.g. route's) tenant.\n\nExample: - \"acmecorp\"-",
-                    "title": "tenant",
-                    "x-displayname": "Tenant",
-                    "x-ves-example": "acmecorp"
-                },
-                "uid": {
-                    "type": "string",
-                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then uid will hold the referred object's(e.g. route's) uid.\n\nExample: - \"d15f1fad-4d37-48c0-8706-df1824d76d31\"-",
-                    "title": "uid",
-                    "x-displayname": "UID",
-                    "x-ves-example": "d15f1fad-4d37-48c0-8706-df1824d76d31"
-                }
-            }
-        },
         "schemaSecretEncodingType": {
             "type": "string",
             "description": "x-displayName: \"Secret Encoding\"\nSecretEncodingType defines the encoding type of the secret before handled by the Secret Management Service.\n\n - EncodingNone: x-displayName: \"None\"\nNo Encoding\n - EncodingBase64: Base64\n\nx-displayName: \"Base64\"\nBase64 encoding",
@@ -3993,7 +4384,7 @@ var APISwaggerJSON string = `{
                     "title": "ref",
                     "maxItems": 1,
                     "items": {
-                        "$ref": "#/definitions/schemaObjectRefType"
+                        "$ref": "#/definitions/ioschemaObjectRefType"
                     },
                     "x-displayname": "Reference",
                     "x-ves-required": "true",
@@ -4187,7 +4578,7 @@ var APISwaggerJSON string = `{
                     "title": "namespace",
                     "maxItems": 1,
                     "items": {
-                        "$ref": "#/definitions/schemaObjectRefType"
+                        "$ref": "#/definitions/ioschemaObjectRefType"
                     },
                     "x-displayname": "Namespace Reference",
                     "x-ves-validation-rules": {
@@ -4284,7 +4675,7 @@ var APISwaggerJSON string = `{
                     "title": "ref",
                     "maxItems": 1,
                     "items": {
-                        "$ref": "#/definitions/schemaObjectRefType"
+                        "$ref": "#/definitions/ioschemaObjectRefType"
                     },
                     "x-displayname": "Reference",
                     "x-ves-required": "true",
@@ -4397,6 +4788,52 @@ var APISwaggerJSON string = `{
                     "type": "string",
                     "description": "x-displayName: \"Name\"\nx-required\nx-example: \"ChargeBack-API-Key\"\nName of the secret.",
                     "title": "Name"
+                }
+            }
+        },
+        "schemaviewsObjectRefType": {
+            "type": "object",
+            "description": "This type establishes a direct reference from one object(the referrer) to another(the referred).\nSuch a reference is in form of tenant/namespace/name",
+            "title": "ObjectRefType",
+            "x-displayname": "Object reference",
+            "x-ves-proto-message": "ves.io.schema.views.ObjectRefType",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then name will hold the referred object's(e.g. route's) name.\n\nExample: - \"contacts-route\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_bytes: 128\n  ves.io.schema.rules.string.min_bytes: 1\n",
+                    "title": "name",
+                    "minLength": 1,
+                    "maxLength": 128,
+                    "x-displayname": "Name",
+                    "x-ves-example": "contacts-route",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_bytes": "128",
+                        "ves.io.schema.rules.string.min_bytes": "1"
+                    }
+                },
+                "namespace": {
+                    "type": "string",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then namespace will hold the referred object's(e.g. route's) namespace.\n\nExample: - \"ns1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 64\n",
+                    "title": "namespace",
+                    "maxLength": 64,
+                    "x-displayname": "Namespace",
+                    "x-ves-example": "ns1",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_bytes": "64"
+                    }
+                },
+                "tenant": {
+                    "type": "string",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then tenant will hold the referred object's(e.g. route's) tenant.\n\nExample: - \"acmecorp\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 64\n",
+                    "title": "tenant",
+                    "maxLength": 64,
+                    "x-displayname": "Tenant",
+                    "x-ves-example": "acmecorp",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_bytes": "64"
+                    }
                 }
             }
         }

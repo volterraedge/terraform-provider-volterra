@@ -1482,6 +1482,12 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
+	if fdrInfos, err := m.GetSensitiveDataPolicyDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetSensitiveDataPolicyDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
 	if fdrInfos, err := m.GetTlsCertificatesChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetTlsCertificatesChoiceDRefInfo() FAILED")
 	} else {
@@ -1715,6 +1721,51 @@ func (m *CreateSpecType) GetRoutesDBEntries(ctx context.Context, d db.Interface)
 		return nil, errors.Wrap(err, "Cannot find type for kind: route")
 	}
 	for _, ref := range m.GetRoutes() {
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
+	}
+
+	return entries, nil
+}
+
+func (m *CreateSpecType) GetSensitiveDataPolicyDRefInfo() ([]db.DRefInfo, error) {
+	refs := m.GetSensitiveDataPolicy()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("CreateSpecType.sensitive_data_policy[%d] has a nil value", i)
+		}
+		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "sensitive_data_policy.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "sensitive_data_policy",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+
+}
+
+// GetSensitiveDataPolicyDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *CreateSpecType) GetSensitiveDataPolicyDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "sensitive_data_policy.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: sensitive_data_policy")
+	}
+	for _, ref := range m.GetSensitiveDataPolicy() {
 		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
 		if err != nil {
 			return nil, errors.Wrap(err, "Getting referred entry")
@@ -2778,6 +2829,18 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 		vOpts := append(opts, db.WithValidateField("routes"))
 		if err := fv(ctx, m.GetRoutes(), vOpts...); err != nil {
 			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["sensitive_data_policy"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("sensitive_data_policy"))
+		for idx, item := range m.GetSensitiveDataPolicy() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
 		}
 
 	}
@@ -4493,6 +4556,12 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
+	if fdrInfos, err := m.GetSensitiveDataPolicyDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetSensitiveDataPolicyDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
 	if fdrInfos, err := m.GetTlsCertificatesChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetTlsCertificatesChoiceDRefInfo() FAILED")
 	} else {
@@ -4726,6 +4795,51 @@ func (m *GetSpecType) GetRoutesDBEntries(ctx context.Context, d db.Interface) ([
 		return nil, errors.Wrap(err, "Cannot find type for kind: route")
 	}
 	for _, ref := range m.GetRoutes() {
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
+	}
+
+	return entries, nil
+}
+
+func (m *GetSpecType) GetSensitiveDataPolicyDRefInfo() ([]db.DRefInfo, error) {
+	refs := m.GetSensitiveDataPolicy()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("GetSpecType.sensitive_data_policy[%d] has a nil value", i)
+		}
+		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "sensitive_data_policy.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "sensitive_data_policy",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+
+}
+
+// GetSensitiveDataPolicyDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *GetSpecType) GetSensitiveDataPolicyDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "sensitive_data_policy.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: sensitive_data_policy")
+	}
+	for _, ref := range m.GetSensitiveDataPolicy() {
 		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
 		if err != nil {
 			return nil, errors.Wrap(err, "Getting referred entry")
@@ -5851,6 +5965,18 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
+	if fv, exists := v.FldValidators["sensitive_data_policy"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("sensitive_data_policy"))
+		for idx, item := range m.GetSensitiveDataPolicy() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	switch m.GetServerHeaderChoice().(type) {
 	case *GetSpecType_DefaultHeader:
 		if fv, exists := v.FldValidators["server_header_choice.default_header"]; exists {
@@ -6447,6 +6573,12 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	if fdrInfos, err := m.GetRoutesDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetRoutesDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetSensitiveDataPolicyDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetSensitiveDataPolicyDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
@@ -7114,6 +7246,51 @@ func (m *GlobalSpecType) GetRoutesDBEntries(ctx context.Context, d db.Interface)
 		return nil, errors.Wrap(err, "Cannot find type for kind: route")
 	}
 	for _, ref := range m.GetRoutes() {
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
+	}
+
+	return entries, nil
+}
+
+func (m *GlobalSpecType) GetSensitiveDataPolicyDRefInfo() ([]db.DRefInfo, error) {
+	refs := m.GetSensitiveDataPolicy()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("GlobalSpecType.sensitive_data_policy[%d] has a nil value", i)
+		}
+		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "sensitive_data_policy.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "sensitive_data_policy",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+
+}
+
+// GetSensitiveDataPolicyDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *GlobalSpecType) GetSensitiveDataPolicyDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "sensitive_data_policy.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: sensitive_data_policy")
+	}
+	for _, ref := range m.GetSensitiveDataPolicy() {
 		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
 		if err != nil {
 			return nil, errors.Wrap(err, "Getting referred entry")
@@ -8952,6 +9129,18 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["sensitive_data_policy"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("sensitive_data_policy"))
+		for idx, item := range m.GetSensitiveDataPolicy() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	switch m.GetServerHeaderChoice().(type) {
 	case *GlobalSpecType_DefaultHeader:
 		if fv, exists := v.FldValidators["server_header_choice.default_header"]; exists {
@@ -10741,6 +10930,12 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
+	if fdrInfos, err := m.GetSensitiveDataPolicyDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetSensitiveDataPolicyDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
 	if fdrInfos, err := m.GetTlsCertificatesChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetTlsCertificatesChoiceDRefInfo() FAILED")
 	} else {
@@ -10974,6 +11169,51 @@ func (m *ReplaceSpecType) GetRoutesDBEntries(ctx context.Context, d db.Interface
 		return nil, errors.Wrap(err, "Cannot find type for kind: route")
 	}
 	for _, ref := range m.GetRoutes() {
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
+	}
+
+	return entries, nil
+}
+
+func (m *ReplaceSpecType) GetSensitiveDataPolicyDRefInfo() ([]db.DRefInfo, error) {
+	refs := m.GetSensitiveDataPolicy()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("ReplaceSpecType.sensitive_data_policy[%d] has a nil value", i)
+		}
+		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "sensitive_data_policy.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "sensitive_data_policy",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+
+}
+
+// GetSensitiveDataPolicyDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *ReplaceSpecType) GetSensitiveDataPolicyDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "sensitive_data_policy.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: sensitive_data_policy")
+	}
+	for _, ref := range m.GetSensitiveDataPolicy() {
 		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
 		if err != nil {
 			return nil, errors.Wrap(err, "Getting referred entry")
@@ -12037,6 +12277,18 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 		vOpts := append(opts, db.WithValidateField("routes"))
 		if err := fv(ctx, m.GetRoutes(), vOpts...); err != nil {
 			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["sensitive_data_policy"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("sensitive_data_policy"))
+		for idx, item := range m.GetSensitiveDataPolicy() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
 		}
 
 	}
@@ -14229,6 +14481,7 @@ func (m *CreateSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool
 	m.ResponseHeadersToRemove = f.GetResponseHeadersToRemove()
 	m.RetryPolicy = f.GetRetryPolicy()
 	m.Routes = f.GetRoutes()
+	m.SensitiveDataPolicy = f.GetSensitiveDataPolicy()
 	m.GetServerHeaderChoiceFromGlobalSpecType(f)
 	m.SlowDdosMitigation = f.GetSlowDdosMitigation()
 	m.GetStrictSniHostHeaderCheckChoiceFromGlobalSpecType(f)
@@ -14288,6 +14541,7 @@ func (m *CreateSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) 
 	f.ResponseHeadersToRemove = m1.ResponseHeadersToRemove
 	f.RetryPolicy = m1.RetryPolicy
 	f.Routes = m1.Routes
+	f.SensitiveDataPolicy = m1.SensitiveDataPolicy
 	m1.SetServerHeaderChoiceToGlobalSpecType(f)
 	f.SlowDdosMitigation = m1.SlowDdosMitigation
 	m1.SetStrictSniHostHeaderCheckChoiceToGlobalSpecType(f)
@@ -14648,6 +14902,7 @@ func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	m.ResponseHeadersToRemove = f.GetResponseHeadersToRemove()
 	m.RetryPolicy = f.GetRetryPolicy()
 	m.Routes = f.GetRoutes()
+	m.SensitiveDataPolicy = f.GetSensitiveDataPolicy()
 	m.GetServerHeaderChoiceFromGlobalSpecType(f)
 	m.SlowDdosMitigation = f.GetSlowDdosMitigation()
 	m.State = f.GetState()
@@ -14715,6 +14970,7 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	f.ResponseHeadersToRemove = m1.ResponseHeadersToRemove
 	f.RetryPolicy = m1.RetryPolicy
 	f.Routes = m1.Routes
+	f.SensitiveDataPolicy = m1.SensitiveDataPolicy
 	m1.SetServerHeaderChoiceToGlobalSpecType(f)
 	f.SlowDdosMitigation = m1.SlowDdosMitigation
 	f.State = m1.State
@@ -15036,6 +15292,7 @@ func (m *ReplaceSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy boo
 	m.ResponseHeadersToRemove = f.GetResponseHeadersToRemove()
 	m.RetryPolicy = f.GetRetryPolicy()
 	m.Routes = f.GetRoutes()
+	m.SensitiveDataPolicy = f.GetSensitiveDataPolicy()
 	m.GetServerHeaderChoiceFromGlobalSpecType(f)
 	m.SlowDdosMitigation = f.GetSlowDdosMitigation()
 	m.GetStrictSniHostHeaderCheckChoiceFromGlobalSpecType(f)
@@ -15095,6 +15352,7 @@ func (m *ReplaceSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool)
 	f.ResponseHeadersToRemove = m1.ResponseHeadersToRemove
 	f.RetryPolicy = m1.RetryPolicy
 	f.Routes = m1.Routes
+	f.SensitiveDataPolicy = m1.SensitiveDataPolicy
 	m1.SetServerHeaderChoiceToGlobalSpecType(f)
 	f.SlowDdosMitigation = m1.SlowDdosMitigation
 	m1.SetStrictSniHostHeaderCheckChoiceToGlobalSpecType(f)

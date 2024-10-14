@@ -179,6 +179,8 @@ var DefaultDashboardLinkValidator = func() *ValidateDashboardLink {
 	}
 	v.FldValidators["key"] = vFn
 
+	v.FldValidators["log_filters"] = LogFilterValidator().Validate
+
 	return v
 }()
 
@@ -450,6 +452,48 @@ type ValidateLogFilter struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateLogFilter) ValuesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepStringItemRules(rules)
+	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Item ValidationRuleHandler for values")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []string, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for values")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]string)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []string, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal := fmt.Sprintf("%v", elem)
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated values")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items values")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateLogFilter) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*LogFilter)
 	if !ok {
@@ -483,13 +527,9 @@ func (v *ValidateLogFilter) Validate(ctx context.Context, pm interface{}, opts .
 	}
 
 	if fv, exists := v.FldValidators["values"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("values"))
-		for idx, item := range m.GetValues() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
-			if err := fv(ctx, item, vOpts...); err != nil {
-				return err
-			}
+		if err := fv(ctx, m.GetValues(), vOpts...); err != nil {
+			return err
 		}
 
 	}
@@ -500,6 +540,25 @@ func (v *ValidateLogFilter) Validate(ctx context.Context, pm interface{}, opts .
 // Well-known symbol for default validator implementation
 var DefaultLogFilterValidator = func() *ValidateLogFilter {
 	v := &ValidateLogFilter{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhValues := v.ValuesValidationRuleHandler
+	rulesValues := map[string]string{
+		"ves.io.schema.rules.repeated.unique": "true",
+	}
+	vFn, err = vrhValues(rulesValues)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for LogFilter.values: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["values"] = vFn
 
 	return v
 }()

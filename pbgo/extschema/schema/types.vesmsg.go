@@ -2726,6 +2726,2928 @@ func BotDefenseTransactionResultTypeValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *BotPolicyFlowLabelAccountManagementChoiceType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *BotPolicyFlowLabelAccountManagementChoiceType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *BotPolicyFlowLabelAccountManagementChoiceType) DeepCopy() *BotPolicyFlowLabelAccountManagementChoiceType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &BotPolicyFlowLabelAccountManagementChoiceType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *BotPolicyFlowLabelAccountManagementChoiceType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *BotPolicyFlowLabelAccountManagementChoiceType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return BotPolicyFlowLabelAccountManagementChoiceTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateBotPolicyFlowLabelAccountManagementChoiceType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateBotPolicyFlowLabelAccountManagementChoiceType) LabelChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for label_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateBotPolicyFlowLabelAccountManagementChoiceType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*BotPolicyFlowLabelAccountManagementChoiceType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *BotPolicyFlowLabelAccountManagementChoiceType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["label_choice"]; exists {
+		val := m.GetLabelChoice()
+		vOpts := append(opts,
+			db.WithValidateField("label_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetLabelChoice().(type) {
+	case *BotPolicyFlowLabelAccountManagementChoiceType_ChangePassword:
+		if fv, exists := v.FldValidators["label_choice.change_password"]; exists {
+			val := m.GetLabelChoice().(*BotPolicyFlowLabelAccountManagementChoiceType_ChangePassword).ChangePassword
+			vOpts := append(opts,
+				db.WithValidateField("label_choice"),
+				db.WithValidateField("change_password"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *BotPolicyFlowLabelAccountManagementChoiceType_CheckEligibility:
+		if fv, exists := v.FldValidators["label_choice.check_eligibility"]; exists {
+			val := m.GetLabelChoice().(*BotPolicyFlowLabelAccountManagementChoiceType_CheckEligibility).CheckEligibility
+			vOpts := append(opts,
+				db.WithValidateField("label_choice"),
+				db.WithValidateField("check_eligibility"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *BotPolicyFlowLabelAccountManagementChoiceType_Create:
+		if fv, exists := v.FldValidators["label_choice.create"]; exists {
+			val := m.GetLabelChoice().(*BotPolicyFlowLabelAccountManagementChoiceType_Create).Create
+			vOpts := append(opts,
+				db.WithValidateField("label_choice"),
+				db.WithValidateField("create"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *BotPolicyFlowLabelAccountManagementChoiceType_Exists:
+		if fv, exists := v.FldValidators["label_choice.exists"]; exists {
+			val := m.GetLabelChoice().(*BotPolicyFlowLabelAccountManagementChoiceType_Exists).Exists
+			vOpts := append(opts,
+				db.WithValidateField("label_choice"),
+				db.WithValidateField("exists"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *BotPolicyFlowLabelAccountManagementChoiceType_PasswordForgot:
+		if fv, exists := v.FldValidators["label_choice.password_forgot"]; exists {
+			val := m.GetLabelChoice().(*BotPolicyFlowLabelAccountManagementChoiceType_PasswordForgot).PasswordForgot
+			vOpts := append(opts,
+				db.WithValidateField("label_choice"),
+				db.WithValidateField("password_forgot"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *BotPolicyFlowLabelAccountManagementChoiceType_PasswordRecover:
+		if fv, exists := v.FldValidators["label_choice.password_recover"]; exists {
+			val := m.GetLabelChoice().(*BotPolicyFlowLabelAccountManagementChoiceType_PasswordRecover).PasswordRecover
+			vOpts := append(opts,
+				db.WithValidateField("label_choice"),
+				db.WithValidateField("password_recover"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *BotPolicyFlowLabelAccountManagementChoiceType_PasswordReset:
+		if fv, exists := v.FldValidators["label_choice.password_reset"]; exists {
+			val := m.GetLabelChoice().(*BotPolicyFlowLabelAccountManagementChoiceType_PasswordReset).PasswordReset
+			vOpts := append(opts,
+				db.WithValidateField("label_choice"),
+				db.WithValidateField("password_reset"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultBotPolicyFlowLabelAccountManagementChoiceTypeValidator = func() *ValidateBotPolicyFlowLabelAccountManagementChoiceType {
+	v := &ValidateBotPolicyFlowLabelAccountManagementChoiceType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhLabelChoice := v.LabelChoiceValidationRuleHandler
+	rulesLabelChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhLabelChoice(rulesLabelChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for BotPolicyFlowLabelAccountManagementChoiceType.label_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["label_choice"] = vFn
+
+	return v
+}()
+
+func BotPolicyFlowLabelAccountManagementChoiceTypeValidator() db.Validator {
+	return DefaultBotPolicyFlowLabelAccountManagementChoiceTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *BotPolicyFlowLabelAuthenticationChoiceType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *BotPolicyFlowLabelAuthenticationChoiceType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *BotPolicyFlowLabelAuthenticationChoiceType) DeepCopy() *BotPolicyFlowLabelAuthenticationChoiceType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &BotPolicyFlowLabelAuthenticationChoiceType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *BotPolicyFlowLabelAuthenticationChoiceType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *BotPolicyFlowLabelAuthenticationChoiceType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return BotPolicyFlowLabelAuthenticationChoiceTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateBotPolicyFlowLabelAuthenticationChoiceType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateBotPolicyFlowLabelAuthenticationChoiceType) LabelChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for label_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateBotPolicyFlowLabelAuthenticationChoiceType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*BotPolicyFlowLabelAuthenticationChoiceType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *BotPolicyFlowLabelAuthenticationChoiceType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["label_choice"]; exists {
+		val := m.GetLabelChoice()
+		vOpts := append(opts,
+			db.WithValidateField("label_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetLabelChoice().(type) {
+	case *BotPolicyFlowLabelAuthenticationChoiceType_Login:
+		if fv, exists := v.FldValidators["label_choice.login"]; exists {
+			val := m.GetLabelChoice().(*BotPolicyFlowLabelAuthenticationChoiceType_Login).Login
+			vOpts := append(opts,
+				db.WithValidateField("label_choice"),
+				db.WithValidateField("login"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *BotPolicyFlowLabelAuthenticationChoiceType_LoginMfa:
+		if fv, exists := v.FldValidators["label_choice.login_mfa"]; exists {
+			val := m.GetLabelChoice().(*BotPolicyFlowLabelAuthenticationChoiceType_LoginMfa).LoginMfa
+			vOpts := append(opts,
+				db.WithValidateField("label_choice"),
+				db.WithValidateField("login_mfa"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *BotPolicyFlowLabelAuthenticationChoiceType_LoginAlexa:
+		if fv, exists := v.FldValidators["label_choice.login_alexa"]; exists {
+			val := m.GetLabelChoice().(*BotPolicyFlowLabelAuthenticationChoiceType_LoginAlexa).LoginAlexa
+			vOpts := append(opts,
+				db.WithValidateField("label_choice"),
+				db.WithValidateField("login_alexa"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *BotPolicyFlowLabelAuthenticationChoiceType_LoginPartner:
+		if fv, exists := v.FldValidators["label_choice.login_partner"]; exists {
+			val := m.GetLabelChoice().(*BotPolicyFlowLabelAuthenticationChoiceType_LoginPartner).LoginPartner
+			vOpts := append(opts,
+				db.WithValidateField("label_choice"),
+				db.WithValidateField("login_partner"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *BotPolicyFlowLabelAuthenticationChoiceType_Logout:
+		if fv, exists := v.FldValidators["label_choice.logout"]; exists {
+			val := m.GetLabelChoice().(*BotPolicyFlowLabelAuthenticationChoiceType_Logout).Logout
+			vOpts := append(opts,
+				db.WithValidateField("label_choice"),
+				db.WithValidateField("logout"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *BotPolicyFlowLabelAuthenticationChoiceType_TokenRefresh:
+		if fv, exists := v.FldValidators["label_choice.token_refresh"]; exists {
+			val := m.GetLabelChoice().(*BotPolicyFlowLabelAuthenticationChoiceType_TokenRefresh).TokenRefresh
+			vOpts := append(opts,
+				db.WithValidateField("label_choice"),
+				db.WithValidateField("token_refresh"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *BotPolicyFlowLabelAuthenticationChoiceType_TokenValidate:
+		if fv, exists := v.FldValidators["label_choice.token_validate"]; exists {
+			val := m.GetLabelChoice().(*BotPolicyFlowLabelAuthenticationChoiceType_TokenValidate).TokenValidate
+			vOpts := append(opts,
+				db.WithValidateField("label_choice"),
+				db.WithValidateField("token_validate"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *BotPolicyFlowLabelAuthenticationChoiceType_ZelleRetrieveToken:
+		if fv, exists := v.FldValidators["label_choice.zelle_retrieve_token"]; exists {
+			val := m.GetLabelChoice().(*BotPolicyFlowLabelAuthenticationChoiceType_ZelleRetrieveToken).ZelleRetrieveToken
+			vOpts := append(opts,
+				db.WithValidateField("label_choice"),
+				db.WithValidateField("zelle_retrieve_token"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultBotPolicyFlowLabelAuthenticationChoiceTypeValidator = func() *ValidateBotPolicyFlowLabelAuthenticationChoiceType {
+	v := &ValidateBotPolicyFlowLabelAuthenticationChoiceType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhLabelChoice := v.LabelChoiceValidationRuleHandler
+	rulesLabelChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhLabelChoice(rulesLabelChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for BotPolicyFlowLabelAuthenticationChoiceType.label_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["label_choice"] = vFn
+
+	return v
+}()
+
+func BotPolicyFlowLabelAuthenticationChoiceTypeValidator() db.Validator {
+	return DefaultBotPolicyFlowLabelAuthenticationChoiceTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *BotPolicyFlowLabelCategoriesChoiceType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *BotPolicyFlowLabelCategoriesChoiceType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *BotPolicyFlowLabelCategoriesChoiceType) DeepCopy() *BotPolicyFlowLabelCategoriesChoiceType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &BotPolicyFlowLabelCategoriesChoiceType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *BotPolicyFlowLabelCategoriesChoiceType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *BotPolicyFlowLabelCategoriesChoiceType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return BotPolicyFlowLabelCategoriesChoiceTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateBotPolicyFlowLabelCategoriesChoiceType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateBotPolicyFlowLabelCategoriesChoiceType) FlowLabelChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for flow_label_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateBotPolicyFlowLabelCategoriesChoiceType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*BotPolicyFlowLabelCategoriesChoiceType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *BotPolicyFlowLabelCategoriesChoiceType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["flow_label_choice"]; exists {
+		val := m.GetFlowLabelChoice()
+		vOpts := append(opts,
+			db.WithValidateField("flow_label_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetFlowLabelChoice().(type) {
+	case *BotPolicyFlowLabelCategoriesChoiceType_UndefinedFlowLabel:
+		if fv, exists := v.FldValidators["flow_label_choice.undefined_flow_label"]; exists {
+			val := m.GetFlowLabelChoice().(*BotPolicyFlowLabelCategoriesChoiceType_UndefinedFlowLabel).UndefinedFlowLabel
+			vOpts := append(opts,
+				db.WithValidateField("flow_label_choice"),
+				db.WithValidateField("undefined_flow_label"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *BotPolicyFlowLabelCategoriesChoiceType_Authentication:
+		if fv, exists := v.FldValidators["flow_label_choice.authentication"]; exists {
+			val := m.GetFlowLabelChoice().(*BotPolicyFlowLabelCategoriesChoiceType_Authentication).Authentication
+			vOpts := append(opts,
+				db.WithValidateField("flow_label_choice"),
+				db.WithValidateField("authentication"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *BotPolicyFlowLabelCategoriesChoiceType_AccountManagement:
+		if fv, exists := v.FldValidators["flow_label_choice.account_management"]; exists {
+			val := m.GetFlowLabelChoice().(*BotPolicyFlowLabelCategoriesChoiceType_AccountManagement).AccountManagement
+			vOpts := append(opts,
+				db.WithValidateField("flow_label_choice"),
+				db.WithValidateField("account_management"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *BotPolicyFlowLabelCategoriesChoiceType_ProfileManagement:
+		if fv, exists := v.FldValidators["flow_label_choice.profile_management"]; exists {
+			val := m.GetFlowLabelChoice().(*BotPolicyFlowLabelCategoriesChoiceType_ProfileManagement).ProfileManagement
+			vOpts := append(opts,
+				db.WithValidateField("flow_label_choice"),
+				db.WithValidateField("profile_management"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *BotPolicyFlowLabelCategoriesChoiceType_ShoppingGiftCards:
+		if fv, exists := v.FldValidators["flow_label_choice.shopping_gift_cards"]; exists {
+			val := m.GetFlowLabelChoice().(*BotPolicyFlowLabelCategoriesChoiceType_ShoppingGiftCards).ShoppingGiftCards
+			vOpts := append(opts,
+				db.WithValidateField("flow_label_choice"),
+				db.WithValidateField("shopping_gift_cards"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *BotPolicyFlowLabelCategoriesChoiceType_CreditCard:
+		if fv, exists := v.FldValidators["flow_label_choice.credit_card"]; exists {
+			val := m.GetFlowLabelChoice().(*BotPolicyFlowLabelCategoriesChoiceType_CreditCard).CreditCard
+			vOpts := append(opts,
+				db.WithValidateField("flow_label_choice"),
+				db.WithValidateField("credit_card"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *BotPolicyFlowLabelCategoriesChoiceType_FinancialServices:
+		if fv, exists := v.FldValidators["flow_label_choice.financial_services"]; exists {
+			val := m.GetFlowLabelChoice().(*BotPolicyFlowLabelCategoriesChoiceType_FinancialServices).FinancialServices
+			vOpts := append(opts,
+				db.WithValidateField("flow_label_choice"),
+				db.WithValidateField("financial_services"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *BotPolicyFlowLabelCategoriesChoiceType_Search:
+		if fv, exists := v.FldValidators["flow_label_choice.search"]; exists {
+			val := m.GetFlowLabelChoice().(*BotPolicyFlowLabelCategoriesChoiceType_Search).Search
+			vOpts := append(opts,
+				db.WithValidateField("flow_label_choice"),
+				db.WithValidateField("search"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *BotPolicyFlowLabelCategoriesChoiceType_Flight:
+		if fv, exists := v.FldValidators["flow_label_choice.flight"]; exists {
+			val := m.GetFlowLabelChoice().(*BotPolicyFlowLabelCategoriesChoiceType_Flight).Flight
+			vOpts := append(opts,
+				db.WithValidateField("flow_label_choice"),
+				db.WithValidateField("flight"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *BotPolicyFlowLabelCategoriesChoiceType_Quotes:
+		if fv, exists := v.FldValidators["flow_label_choice.quotes"]; exists {
+			val := m.GetFlowLabelChoice().(*BotPolicyFlowLabelCategoriesChoiceType_Quotes).Quotes
+			vOpts := append(opts,
+				db.WithValidateField("flow_label_choice"),
+				db.WithValidateField("quotes"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *BotPolicyFlowLabelCategoriesChoiceType_Loyalty:
+		if fv, exists := v.FldValidators["flow_label_choice.loyalty"]; exists {
+			val := m.GetFlowLabelChoice().(*BotPolicyFlowLabelCategoriesChoiceType_Loyalty).Loyalty
+			vOpts := append(opts,
+				db.WithValidateField("flow_label_choice"),
+				db.WithValidateField("loyalty"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *BotPolicyFlowLabelCategoriesChoiceType_MailingList:
+		if fv, exists := v.FldValidators["flow_label_choice.mailing_list"]; exists {
+			val := m.GetFlowLabelChoice().(*BotPolicyFlowLabelCategoriesChoiceType_MailingList).MailingList
+			vOpts := append(opts,
+				db.WithValidateField("flow_label_choice"),
+				db.WithValidateField("mailing_list"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *BotPolicyFlowLabelCategoriesChoiceType_Miscellaneous:
+		if fv, exists := v.FldValidators["flow_label_choice.miscellaneous"]; exists {
+			val := m.GetFlowLabelChoice().(*BotPolicyFlowLabelCategoriesChoiceType_Miscellaneous).Miscellaneous
+			vOpts := append(opts,
+				db.WithValidateField("flow_label_choice"),
+				db.WithValidateField("miscellaneous"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *BotPolicyFlowLabelCategoriesChoiceType_DeliveryServices:
+		if fv, exists := v.FldValidators["flow_label_choice.delivery_services"]; exists {
+			val := m.GetFlowLabelChoice().(*BotPolicyFlowLabelCategoriesChoiceType_DeliveryServices).DeliveryServices
+			vOpts := append(opts,
+				db.WithValidateField("flow_label_choice"),
+				db.WithValidateField("delivery_services"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *BotPolicyFlowLabelCategoriesChoiceType_GuestSession:
+		if fv, exists := v.FldValidators["flow_label_choice.guest_session"]; exists {
+			val := m.GetFlowLabelChoice().(*BotPolicyFlowLabelCategoriesChoiceType_GuestSession).GuestSession
+			vOpts := append(opts,
+				db.WithValidateField("flow_label_choice"),
+				db.WithValidateField("guest_session"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *BotPolicyFlowLabelCategoriesChoiceType_Media:
+		if fv, exists := v.FldValidators["flow_label_choice.media"]; exists {
+			val := m.GetFlowLabelChoice().(*BotPolicyFlowLabelCategoriesChoiceType_Media).Media
+			vOpts := append(opts,
+				db.WithValidateField("flow_label_choice"),
+				db.WithValidateField("media"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *BotPolicyFlowLabelCategoriesChoiceType_Socials:
+		if fv, exists := v.FldValidators["flow_label_choice.socials"]; exists {
+			val := m.GetFlowLabelChoice().(*BotPolicyFlowLabelCategoriesChoiceType_Socials).Socials
+			vOpts := append(opts,
+				db.WithValidateField("flow_label_choice"),
+				db.WithValidateField("socials"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultBotPolicyFlowLabelCategoriesChoiceTypeValidator = func() *ValidateBotPolicyFlowLabelCategoriesChoiceType {
+	v := &ValidateBotPolicyFlowLabelCategoriesChoiceType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhFlowLabelChoice := v.FlowLabelChoiceValidationRuleHandler
+	rulesFlowLabelChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhFlowLabelChoice(rulesFlowLabelChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for BotPolicyFlowLabelCategoriesChoiceType.flow_label_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["flow_label_choice"] = vFn
+
+	v.FldValidators["flow_label_choice.authentication"] = BotPolicyFlowLabelAuthenticationChoiceTypeValidator().Validate
+	v.FldValidators["flow_label_choice.account_management"] = BotPolicyFlowLabelAccountManagementChoiceTypeValidator().Validate
+	v.FldValidators["flow_label_choice.profile_management"] = BotPolicyFlowLabelProfileManagementChoiceTypeValidator().Validate
+	v.FldValidators["flow_label_choice.credit_card"] = BotPolicyFlowLabelCreditCardChoiceTypeValidator().Validate
+	v.FldValidators["flow_label_choice.financial_services"] = BotPolicyFlowLabelFinancialServicesChoiceTypeValidator().Validate
+	v.FldValidators["flow_label_choice.flight"] = BotPolicyFlowLabelFlightChoiceTypeValidator().Validate
+	v.FldValidators["flow_label_choice.quotes"] = BotPolicyFlowLabelQuotesChoiceTypeValidator().Validate
+	v.FldValidators["flow_label_choice.loyalty"] = BotPolicyFlowLabelLoyaltyChoiceTypeValidator().Validate
+	v.FldValidators["flow_label_choice.mailing_list"] = BotPolicyFlowLabelMailingListChoiceTypeValidator().Validate
+	v.FldValidators["flow_label_choice.miscellaneous"] = BotPolicyFlowLabelMiscellaneousChoiceTypeValidator().Validate
+	v.FldValidators["flow_label_choice.delivery_services"] = BotPolicyFlowLabelDeliveryServicesChoiceTypeValidator().Validate
+	v.FldValidators["flow_label_choice.guest_session"] = BotPolicyFlowLabelGuestSessionChoiceTypeValidator().Validate
+	v.FldValidators["flow_label_choice.media"] = BotPolicyFlowLabelMediaChoiceTypeValidator().Validate
+	v.FldValidators["flow_label_choice.socials"] = BotPolicyFlowLabelSocialsChoiceTypeValidator().Validate
+
+	return v
+}()
+
+func BotPolicyFlowLabelCategoriesChoiceTypeValidator() db.Validator {
+	return DefaultBotPolicyFlowLabelCategoriesChoiceTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *BotPolicyFlowLabelCreditCardChoiceType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *BotPolicyFlowLabelCreditCardChoiceType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *BotPolicyFlowLabelCreditCardChoiceType) DeepCopy() *BotPolicyFlowLabelCreditCardChoiceType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &BotPolicyFlowLabelCreditCardChoiceType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *BotPolicyFlowLabelCreditCardChoiceType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *BotPolicyFlowLabelCreditCardChoiceType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return BotPolicyFlowLabelCreditCardChoiceTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateBotPolicyFlowLabelCreditCardChoiceType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateBotPolicyFlowLabelCreditCardChoiceType) LabelChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for label_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateBotPolicyFlowLabelCreditCardChoiceType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*BotPolicyFlowLabelCreditCardChoiceType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *BotPolicyFlowLabelCreditCardChoiceType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["label_choice"]; exists {
+		val := m.GetLabelChoice()
+		vOpts := append(opts,
+			db.WithValidateField("label_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetLabelChoice().(type) {
+	case *BotPolicyFlowLabelCreditCardChoiceType_Activate:
+		if fv, exists := v.FldValidators["label_choice.activate"]; exists {
+			val := m.GetLabelChoice().(*BotPolicyFlowLabelCreditCardChoiceType_Activate).Activate
+			vOpts := append(opts,
+				db.WithValidateField("label_choice"),
+				db.WithValidateField("activate"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *BotPolicyFlowLabelCreditCardChoiceType_Apply:
+		if fv, exists := v.FldValidators["label_choice.apply"]; exists {
+			val := m.GetLabelChoice().(*BotPolicyFlowLabelCreditCardChoiceType_Apply).Apply
+			vOpts := append(opts,
+				db.WithValidateField("label_choice"),
+				db.WithValidateField("apply"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *BotPolicyFlowLabelCreditCardChoiceType_ViewHistory:
+		if fv, exists := v.FldValidators["label_choice.view_history"]; exists {
+			val := m.GetLabelChoice().(*BotPolicyFlowLabelCreditCardChoiceType_ViewHistory).ViewHistory
+			vOpts := append(opts,
+				db.WithValidateField("label_choice"),
+				db.WithValidateField("view_history"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *BotPolicyFlowLabelCreditCardChoiceType_ViewList:
+		if fv, exists := v.FldValidators["label_choice.view_list"]; exists {
+			val := m.GetLabelChoice().(*BotPolicyFlowLabelCreditCardChoiceType_ViewList).ViewList
+			vOpts := append(opts,
+				db.WithValidateField("label_choice"),
+				db.WithValidateField("view_list"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *BotPolicyFlowLabelCreditCardChoiceType_ApplyToAccount:
+		if fv, exists := v.FldValidators["label_choice.apply_to_account"]; exists {
+			val := m.GetLabelChoice().(*BotPolicyFlowLabelCreditCardChoiceType_ApplyToAccount).ApplyToAccount
+			vOpts := append(opts,
+				db.WithValidateField("label_choice"),
+				db.WithValidateField("apply_to_account"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultBotPolicyFlowLabelCreditCardChoiceTypeValidator = func() *ValidateBotPolicyFlowLabelCreditCardChoiceType {
+	v := &ValidateBotPolicyFlowLabelCreditCardChoiceType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhLabelChoice := v.LabelChoiceValidationRuleHandler
+	rulesLabelChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhLabelChoice(rulesLabelChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for BotPolicyFlowLabelCreditCardChoiceType.label_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["label_choice"] = vFn
+
+	return v
+}()
+
+func BotPolicyFlowLabelCreditCardChoiceTypeValidator() db.Validator {
+	return DefaultBotPolicyFlowLabelCreditCardChoiceTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *BotPolicyFlowLabelDeliveryServicesChoiceType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *BotPolicyFlowLabelDeliveryServicesChoiceType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *BotPolicyFlowLabelDeliveryServicesChoiceType) DeepCopy() *BotPolicyFlowLabelDeliveryServicesChoiceType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &BotPolicyFlowLabelDeliveryServicesChoiceType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *BotPolicyFlowLabelDeliveryServicesChoiceType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *BotPolicyFlowLabelDeliveryServicesChoiceType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return BotPolicyFlowLabelDeliveryServicesChoiceTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateBotPolicyFlowLabelDeliveryServicesChoiceType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateBotPolicyFlowLabelDeliveryServicesChoiceType) LabelChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for label_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateBotPolicyFlowLabelDeliveryServicesChoiceType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*BotPolicyFlowLabelDeliveryServicesChoiceType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *BotPolicyFlowLabelDeliveryServicesChoiceType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["label_choice"]; exists {
+		val := m.GetLabelChoice()
+		vOpts := append(opts,
+			db.WithValidateField("label_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetLabelChoice().(type) {
+	case *BotPolicyFlowLabelDeliveryServicesChoiceType_ViewItems:
+		if fv, exists := v.FldValidators["label_choice.view_items"]; exists {
+			val := m.GetLabelChoice().(*BotPolicyFlowLabelDeliveryServicesChoiceType_ViewItems).ViewItems
+			vOpts := append(opts,
+				db.WithValidateField("label_choice"),
+				db.WithValidateField("view_items"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *BotPolicyFlowLabelDeliveryServicesChoiceType_Hold:
+		if fv, exists := v.FldValidators["label_choice.hold"]; exists {
+			val := m.GetLabelChoice().(*BotPolicyFlowLabelDeliveryServicesChoiceType_Hold).Hold
+			vOpts := append(opts,
+				db.WithValidateField("label_choice"),
+				db.WithValidateField("hold"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *BotPolicyFlowLabelDeliveryServicesChoiceType_IncorrectlyRouted:
+		if fv, exists := v.FldValidators["label_choice.incorrectly_routed"]; exists {
+			val := m.GetLabelChoice().(*BotPolicyFlowLabelDeliveryServicesChoiceType_IncorrectlyRouted).IncorrectlyRouted
+			vOpts := append(opts,
+				db.WithValidateField("label_choice"),
+				db.WithValidateField("incorrectly_routed"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultBotPolicyFlowLabelDeliveryServicesChoiceTypeValidator = func() *ValidateBotPolicyFlowLabelDeliveryServicesChoiceType {
+	v := &ValidateBotPolicyFlowLabelDeliveryServicesChoiceType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhLabelChoice := v.LabelChoiceValidationRuleHandler
+	rulesLabelChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhLabelChoice(rulesLabelChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for BotPolicyFlowLabelDeliveryServicesChoiceType.label_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["label_choice"] = vFn
+
+	return v
+}()
+
+func BotPolicyFlowLabelDeliveryServicesChoiceTypeValidator() db.Validator {
+	return DefaultBotPolicyFlowLabelDeliveryServicesChoiceTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *BotPolicyFlowLabelFinancialServicesChoiceType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *BotPolicyFlowLabelFinancialServicesChoiceType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *BotPolicyFlowLabelFinancialServicesChoiceType) DeepCopy() *BotPolicyFlowLabelFinancialServicesChoiceType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &BotPolicyFlowLabelFinancialServicesChoiceType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *BotPolicyFlowLabelFinancialServicesChoiceType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *BotPolicyFlowLabelFinancialServicesChoiceType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return BotPolicyFlowLabelFinancialServicesChoiceTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateBotPolicyFlowLabelFinancialServicesChoiceType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateBotPolicyFlowLabelFinancialServicesChoiceType) LabelChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for label_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateBotPolicyFlowLabelFinancialServicesChoiceType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*BotPolicyFlowLabelFinancialServicesChoiceType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *BotPolicyFlowLabelFinancialServicesChoiceType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["label_choice"]; exists {
+		val := m.GetLabelChoice()
+		vOpts := append(opts,
+			db.WithValidateField("label_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetLabelChoice().(type) {
+	case *BotPolicyFlowLabelFinancialServicesChoiceType_AccountApply:
+		if fv, exists := v.FldValidators["label_choice.account_apply"]; exists {
+			val := m.GetLabelChoice().(*BotPolicyFlowLabelFinancialServicesChoiceType_AccountApply).AccountApply
+			vOpts := append(opts,
+				db.WithValidateField("label_choice"),
+				db.WithValidateField("account_apply"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *BotPolicyFlowLabelFinancialServicesChoiceType_LoanPersonalApply:
+		if fv, exists := v.FldValidators["label_choice.loan_personal_apply"]; exists {
+			val := m.GetLabelChoice().(*BotPolicyFlowLabelFinancialServicesChoiceType_LoanPersonalApply).LoanPersonalApply
+			vOpts := append(opts,
+				db.WithValidateField("label_choice"),
+				db.WithValidateField("loan_personal_apply"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *BotPolicyFlowLabelFinancialServicesChoiceType_StudentApply:
+		if fv, exists := v.FldValidators["label_choice.student_apply"]; exists {
+			val := m.GetLabelChoice().(*BotPolicyFlowLabelFinancialServicesChoiceType_StudentApply).StudentApply
+			vOpts := append(opts,
+				db.WithValidateField("label_choice"),
+				db.WithValidateField("student_apply"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *BotPolicyFlowLabelFinancialServicesChoiceType_MoneySend:
+		if fv, exists := v.FldValidators["label_choice.money_send"]; exists {
+			val := m.GetLabelChoice().(*BotPolicyFlowLabelFinancialServicesChoiceType_MoneySend).MoneySend
+			vOpts := append(opts,
+				db.WithValidateField("label_choice"),
+				db.WithValidateField("money_send"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *BotPolicyFlowLabelFinancialServicesChoiceType_MoneyTransfer:
+		if fv, exists := v.FldValidators["label_choice.money_transfer"]; exists {
+			val := m.GetLabelChoice().(*BotPolicyFlowLabelFinancialServicesChoiceType_MoneyTransfer).MoneyTransfer
+			vOpts := append(opts,
+				db.WithValidateField("label_choice"),
+				db.WithValidateField("money_transfer"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *BotPolicyFlowLabelFinancialServicesChoiceType_Ofx:
+		if fv, exists := v.FldValidators["label_choice.ofx"]; exists {
+			val := m.GetLabelChoice().(*BotPolicyFlowLabelFinancialServicesChoiceType_Ofx).Ofx
+			vOpts := append(opts,
+				db.WithValidateField("label_choice"),
+				db.WithValidateField("ofx"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *BotPolicyFlowLabelFinancialServicesChoiceType_RequestCreditScore:
+		if fv, exists := v.FldValidators["label_choice.request_credit_score"]; exists {
+			val := m.GetLabelChoice().(*BotPolicyFlowLabelFinancialServicesChoiceType_RequestCreditScore).RequestCreditScore
+			vOpts := append(opts,
+				db.WithValidateField("label_choice"),
+				db.WithValidateField("request_credit_score"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *BotPolicyFlowLabelFinancialServicesChoiceType_ZelleExecuteTransaction:
+		if fv, exists := v.FldValidators["label_choice.zelle_execute_transaction"]; exists {
+			val := m.GetLabelChoice().(*BotPolicyFlowLabelFinancialServicesChoiceType_ZelleExecuteTransaction).ZelleExecuteTransaction
+			vOpts := append(opts,
+				db.WithValidateField("label_choice"),
+				db.WithValidateField("zelle_execute_transaction"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultBotPolicyFlowLabelFinancialServicesChoiceTypeValidator = func() *ValidateBotPolicyFlowLabelFinancialServicesChoiceType {
+	v := &ValidateBotPolicyFlowLabelFinancialServicesChoiceType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhLabelChoice := v.LabelChoiceValidationRuleHandler
+	rulesLabelChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhLabelChoice(rulesLabelChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for BotPolicyFlowLabelFinancialServicesChoiceType.label_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["label_choice"] = vFn
+
+	return v
+}()
+
+func BotPolicyFlowLabelFinancialServicesChoiceTypeValidator() db.Validator {
+	return DefaultBotPolicyFlowLabelFinancialServicesChoiceTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *BotPolicyFlowLabelFlightChoiceType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *BotPolicyFlowLabelFlightChoiceType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *BotPolicyFlowLabelFlightChoiceType) DeepCopy() *BotPolicyFlowLabelFlightChoiceType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &BotPolicyFlowLabelFlightChoiceType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *BotPolicyFlowLabelFlightChoiceType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *BotPolicyFlowLabelFlightChoiceType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return BotPolicyFlowLabelFlightChoiceTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateBotPolicyFlowLabelFlightChoiceType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateBotPolicyFlowLabelFlightChoiceType) LabelChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for label_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateBotPolicyFlowLabelFlightChoiceType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*BotPolicyFlowLabelFlightChoiceType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *BotPolicyFlowLabelFlightChoiceType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["label_choice"]; exists {
+		val := m.GetLabelChoice()
+		vOpts := append(opts,
+			db.WithValidateField("label_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetLabelChoice().(type) {
+	case *BotPolicyFlowLabelFlightChoiceType_SubmitTravelDocuments:
+		if fv, exists := v.FldValidators["label_choice.submit_travel_documents"]; exists {
+			val := m.GetLabelChoice().(*BotPolicyFlowLabelFlightChoiceType_SubmitTravelDocuments).SubmitTravelDocuments
+			vOpts := append(opts,
+				db.WithValidateField("label_choice"),
+				db.WithValidateField("submit_travel_documents"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *BotPolicyFlowLabelFlightChoiceType_TimeTable:
+		if fv, exists := v.FldValidators["label_choice.time_table"]; exists {
+			val := m.GetLabelChoice().(*BotPolicyFlowLabelFlightChoiceType_TimeTable).TimeTable
+			vOpts := append(opts,
+				db.WithValidateField("label_choice"),
+				db.WithValidateField("time_table"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *BotPolicyFlowLabelFlightChoiceType_Checkin:
+		if fv, exists := v.FldValidators["label_choice.checkin"]; exists {
+			val := m.GetLabelChoice().(*BotPolicyFlowLabelFlightChoiceType_Checkin).Checkin
+			vOpts := append(opts,
+				db.WithValidateField("label_choice"),
+				db.WithValidateField("checkin"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *BotPolicyFlowLabelFlightChoiceType_FlightStatus:
+		if fv, exists := v.FldValidators["label_choice.flight_status"]; exists {
+			val := m.GetLabelChoice().(*BotPolicyFlowLabelFlightChoiceType_FlightStatus).FlightStatus
+			vOpts := append(opts,
+				db.WithValidateField("label_choice"),
+				db.WithValidateField("flight_status"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *BotPolicyFlowLabelFlightChoiceType_ChangeFlight:
+		if fv, exists := v.FldValidators["label_choice.change_flight"]; exists {
+			val := m.GetLabelChoice().(*BotPolicyFlowLabelFlightChoiceType_ChangeFlight).ChangeFlight
+			vOpts := append(opts,
+				db.WithValidateField("label_choice"),
+				db.WithValidateField("change_flight"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *BotPolicyFlowLabelFlightChoiceType_ViewFlight:
+		if fv, exists := v.FldValidators["label_choice.view_flight"]; exists {
+			val := m.GetLabelChoice().(*BotPolicyFlowLabelFlightChoiceType_ViewFlight).ViewFlight
+			vOpts := append(opts,
+				db.WithValidateField("label_choice"),
+				db.WithValidateField("view_flight"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultBotPolicyFlowLabelFlightChoiceTypeValidator = func() *ValidateBotPolicyFlowLabelFlightChoiceType {
+	v := &ValidateBotPolicyFlowLabelFlightChoiceType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhLabelChoice := v.LabelChoiceValidationRuleHandler
+	rulesLabelChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhLabelChoice(rulesLabelChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for BotPolicyFlowLabelFlightChoiceType.label_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["label_choice"] = vFn
+
+	return v
+}()
+
+func BotPolicyFlowLabelFlightChoiceTypeValidator() db.Validator {
+	return DefaultBotPolicyFlowLabelFlightChoiceTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *BotPolicyFlowLabelGuestSessionChoiceType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *BotPolicyFlowLabelGuestSessionChoiceType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *BotPolicyFlowLabelGuestSessionChoiceType) DeepCopy() *BotPolicyFlowLabelGuestSessionChoiceType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &BotPolicyFlowLabelGuestSessionChoiceType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *BotPolicyFlowLabelGuestSessionChoiceType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *BotPolicyFlowLabelGuestSessionChoiceType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return BotPolicyFlowLabelGuestSessionChoiceTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateBotPolicyFlowLabelGuestSessionChoiceType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateBotPolicyFlowLabelGuestSessionChoiceType) LabelChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for label_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateBotPolicyFlowLabelGuestSessionChoiceType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*BotPolicyFlowLabelGuestSessionChoiceType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *BotPolicyFlowLabelGuestSessionChoiceType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["label_choice"]; exists {
+		val := m.GetLabelChoice()
+		vOpts := append(opts,
+			db.WithValidateField("label_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetLabelChoice().(type) {
+	case *BotPolicyFlowLabelGuestSessionChoiceType_Create:
+		if fv, exists := v.FldValidators["label_choice.create"]; exists {
+			val := m.GetLabelChoice().(*BotPolicyFlowLabelGuestSessionChoiceType_Create).Create
+			vOpts := append(opts,
+				db.WithValidateField("label_choice"),
+				db.WithValidateField("create"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultBotPolicyFlowLabelGuestSessionChoiceTypeValidator = func() *ValidateBotPolicyFlowLabelGuestSessionChoiceType {
+	v := &ValidateBotPolicyFlowLabelGuestSessionChoiceType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhLabelChoice := v.LabelChoiceValidationRuleHandler
+	rulesLabelChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhLabelChoice(rulesLabelChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for BotPolicyFlowLabelGuestSessionChoiceType.label_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["label_choice"] = vFn
+
+	return v
+}()
+
+func BotPolicyFlowLabelGuestSessionChoiceTypeValidator() db.Validator {
+	return DefaultBotPolicyFlowLabelGuestSessionChoiceTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *BotPolicyFlowLabelLoyaltyChoiceType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *BotPolicyFlowLabelLoyaltyChoiceType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *BotPolicyFlowLabelLoyaltyChoiceType) DeepCopy() *BotPolicyFlowLabelLoyaltyChoiceType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &BotPolicyFlowLabelLoyaltyChoiceType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *BotPolicyFlowLabelLoyaltyChoiceType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *BotPolicyFlowLabelLoyaltyChoiceType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return BotPolicyFlowLabelLoyaltyChoiceTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateBotPolicyFlowLabelLoyaltyChoiceType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateBotPolicyFlowLabelLoyaltyChoiceType) LabelChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for label_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateBotPolicyFlowLabelLoyaltyChoiceType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*BotPolicyFlowLabelLoyaltyChoiceType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *BotPolicyFlowLabelLoyaltyChoiceType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["label_choice"]; exists {
+		val := m.GetLabelChoice()
+		vOpts := append(opts,
+			db.WithValidateField("label_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetLabelChoice().(type) {
+	case *BotPolicyFlowLabelLoyaltyChoiceType_Conversion:
+		if fv, exists := v.FldValidators["label_choice.conversion"]; exists {
+			val := m.GetLabelChoice().(*BotPolicyFlowLabelLoyaltyChoiceType_Conversion).Conversion
+			vOpts := append(opts,
+				db.WithValidateField("label_choice"),
+				db.WithValidateField("conversion"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *BotPolicyFlowLabelLoyaltyChoiceType_ResetMiles:
+		if fv, exists := v.FldValidators["label_choice.reset_miles"]; exists {
+			val := m.GetLabelChoice().(*BotPolicyFlowLabelLoyaltyChoiceType_ResetMiles).ResetMiles
+			vOpts := append(opts,
+				db.WithValidateField("label_choice"),
+				db.WithValidateField("reset_miles"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *BotPolicyFlowLabelLoyaltyChoiceType_ViewAccount:
+		if fv, exists := v.FldValidators["label_choice.view_account"]; exists {
+			val := m.GetLabelChoice().(*BotPolicyFlowLabelLoyaltyChoiceType_ViewAccount).ViewAccount
+			vOpts := append(opts,
+				db.WithValidateField("label_choice"),
+				db.WithValidateField("view_account"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultBotPolicyFlowLabelLoyaltyChoiceTypeValidator = func() *ValidateBotPolicyFlowLabelLoyaltyChoiceType {
+	v := &ValidateBotPolicyFlowLabelLoyaltyChoiceType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhLabelChoice := v.LabelChoiceValidationRuleHandler
+	rulesLabelChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhLabelChoice(rulesLabelChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for BotPolicyFlowLabelLoyaltyChoiceType.label_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["label_choice"] = vFn
+
+	return v
+}()
+
+func BotPolicyFlowLabelLoyaltyChoiceTypeValidator() db.Validator {
+	return DefaultBotPolicyFlowLabelLoyaltyChoiceTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *BotPolicyFlowLabelMailingListChoiceType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *BotPolicyFlowLabelMailingListChoiceType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *BotPolicyFlowLabelMailingListChoiceType) DeepCopy() *BotPolicyFlowLabelMailingListChoiceType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &BotPolicyFlowLabelMailingListChoiceType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *BotPolicyFlowLabelMailingListChoiceType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *BotPolicyFlowLabelMailingListChoiceType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return BotPolicyFlowLabelMailingListChoiceTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateBotPolicyFlowLabelMailingListChoiceType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateBotPolicyFlowLabelMailingListChoiceType) LabelChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for label_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateBotPolicyFlowLabelMailingListChoiceType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*BotPolicyFlowLabelMailingListChoiceType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *BotPolicyFlowLabelMailingListChoiceType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["label_choice"]; exists {
+		val := m.GetLabelChoice()
+		vOpts := append(opts,
+			db.WithValidateField("label_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetLabelChoice().(type) {
+	case *BotPolicyFlowLabelMailingListChoiceType_Signup:
+		if fv, exists := v.FldValidators["label_choice.signup"]; exists {
+			val := m.GetLabelChoice().(*BotPolicyFlowLabelMailingListChoiceType_Signup).Signup
+			vOpts := append(opts,
+				db.WithValidateField("label_choice"),
+				db.WithValidateField("signup"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *BotPolicyFlowLabelMailingListChoiceType_Unsubscribe:
+		if fv, exists := v.FldValidators["label_choice.unsubscribe"]; exists {
+			val := m.GetLabelChoice().(*BotPolicyFlowLabelMailingListChoiceType_Unsubscribe).Unsubscribe
+			vOpts := append(opts,
+				db.WithValidateField("label_choice"),
+				db.WithValidateField("unsubscribe"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *BotPolicyFlowLabelMailingListChoiceType_CreatePassword:
+		if fv, exists := v.FldValidators["label_choice.create_password"]; exists {
+			val := m.GetLabelChoice().(*BotPolicyFlowLabelMailingListChoiceType_CreatePassword).CreatePassword
+			vOpts := append(opts,
+				db.WithValidateField("label_choice"),
+				db.WithValidateField("create_password"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultBotPolicyFlowLabelMailingListChoiceTypeValidator = func() *ValidateBotPolicyFlowLabelMailingListChoiceType {
+	v := &ValidateBotPolicyFlowLabelMailingListChoiceType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhLabelChoice := v.LabelChoiceValidationRuleHandler
+	rulesLabelChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhLabelChoice(rulesLabelChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for BotPolicyFlowLabelMailingListChoiceType.label_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["label_choice"] = vFn
+
+	return v
+}()
+
+func BotPolicyFlowLabelMailingListChoiceTypeValidator() db.Validator {
+	return DefaultBotPolicyFlowLabelMailingListChoiceTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *BotPolicyFlowLabelMediaChoiceType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *BotPolicyFlowLabelMediaChoiceType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *BotPolicyFlowLabelMediaChoiceType) DeepCopy() *BotPolicyFlowLabelMediaChoiceType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &BotPolicyFlowLabelMediaChoiceType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *BotPolicyFlowLabelMediaChoiceType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *BotPolicyFlowLabelMediaChoiceType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return BotPolicyFlowLabelMediaChoiceTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateBotPolicyFlowLabelMediaChoiceType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateBotPolicyFlowLabelMediaChoiceType) LabelChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for label_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateBotPolicyFlowLabelMediaChoiceType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*BotPolicyFlowLabelMediaChoiceType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *BotPolicyFlowLabelMediaChoiceType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["label_choice"]; exists {
+		val := m.GetLabelChoice()
+		vOpts := append(opts,
+			db.WithValidateField("label_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetLabelChoice().(type) {
+	case *BotPolicyFlowLabelMediaChoiceType_Play:
+		if fv, exists := v.FldValidators["label_choice.play"]; exists {
+			val := m.GetLabelChoice().(*BotPolicyFlowLabelMediaChoiceType_Play).Play
+			vOpts := append(opts,
+				db.WithValidateField("label_choice"),
+				db.WithValidateField("play"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *BotPolicyFlowLabelMediaChoiceType_Content:
+		if fv, exists := v.FldValidators["label_choice.content"]; exists {
+			val := m.GetLabelChoice().(*BotPolicyFlowLabelMediaChoiceType_Content).Content
+			vOpts := append(opts,
+				db.WithValidateField("label_choice"),
+				db.WithValidateField("content"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *BotPolicyFlowLabelMediaChoiceType_Record:
+		if fv, exists := v.FldValidators["label_choice.record"]; exists {
+			val := m.GetLabelChoice().(*BotPolicyFlowLabelMediaChoiceType_Record).Record
+			vOpts := append(opts,
+				db.WithValidateField("label_choice"),
+				db.WithValidateField("record"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultBotPolicyFlowLabelMediaChoiceTypeValidator = func() *ValidateBotPolicyFlowLabelMediaChoiceType {
+	v := &ValidateBotPolicyFlowLabelMediaChoiceType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhLabelChoice := v.LabelChoiceValidationRuleHandler
+	rulesLabelChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhLabelChoice(rulesLabelChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for BotPolicyFlowLabelMediaChoiceType.label_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["label_choice"] = vFn
+
+	return v
+}()
+
+func BotPolicyFlowLabelMediaChoiceTypeValidator() db.Validator {
+	return DefaultBotPolicyFlowLabelMediaChoiceTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *BotPolicyFlowLabelMiscellaneousChoiceType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *BotPolicyFlowLabelMiscellaneousChoiceType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *BotPolicyFlowLabelMiscellaneousChoiceType) DeepCopy() *BotPolicyFlowLabelMiscellaneousChoiceType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &BotPolicyFlowLabelMiscellaneousChoiceType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *BotPolicyFlowLabelMiscellaneousChoiceType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *BotPolicyFlowLabelMiscellaneousChoiceType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return BotPolicyFlowLabelMiscellaneousChoiceTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateBotPolicyFlowLabelMiscellaneousChoiceType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateBotPolicyFlowLabelMiscellaneousChoiceType) LabelChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for label_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateBotPolicyFlowLabelMiscellaneousChoiceType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*BotPolicyFlowLabelMiscellaneousChoiceType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *BotPolicyFlowLabelMiscellaneousChoiceType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["label_choice"]; exists {
+		val := m.GetLabelChoice()
+		vOpts := append(opts,
+			db.WithValidateField("label_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetLabelChoice().(type) {
+	case *BotPolicyFlowLabelMiscellaneousChoiceType_ContactUs:
+		if fv, exists := v.FldValidators["label_choice.contact_us"]; exists {
+			val := m.GetLabelChoice().(*BotPolicyFlowLabelMiscellaneousChoiceType_ContactUs).ContactUs
+			vOpts := append(opts,
+				db.WithValidateField("label_choice"),
+				db.WithValidateField("contact_us"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *BotPolicyFlowLabelMiscellaneousChoiceType_Ratings:
+		if fv, exists := v.FldValidators["label_choice.ratings"]; exists {
+			val := m.GetLabelChoice().(*BotPolicyFlowLabelMiscellaneousChoiceType_Ratings).Ratings
+			vOpts := append(opts,
+				db.WithValidateField("label_choice"),
+				db.WithValidateField("ratings"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultBotPolicyFlowLabelMiscellaneousChoiceTypeValidator = func() *ValidateBotPolicyFlowLabelMiscellaneousChoiceType {
+	v := &ValidateBotPolicyFlowLabelMiscellaneousChoiceType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhLabelChoice := v.LabelChoiceValidationRuleHandler
+	rulesLabelChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhLabelChoice(rulesLabelChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for BotPolicyFlowLabelMiscellaneousChoiceType.label_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["label_choice"] = vFn
+
+	return v
+}()
+
+func BotPolicyFlowLabelMiscellaneousChoiceTypeValidator() db.Validator {
+	return DefaultBotPolicyFlowLabelMiscellaneousChoiceTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *BotPolicyFlowLabelProfileManagementChoiceType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *BotPolicyFlowLabelProfileManagementChoiceType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *BotPolicyFlowLabelProfileManagementChoiceType) DeepCopy() *BotPolicyFlowLabelProfileManagementChoiceType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &BotPolicyFlowLabelProfileManagementChoiceType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *BotPolicyFlowLabelProfileManagementChoiceType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *BotPolicyFlowLabelProfileManagementChoiceType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return BotPolicyFlowLabelProfileManagementChoiceTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateBotPolicyFlowLabelProfileManagementChoiceType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateBotPolicyFlowLabelProfileManagementChoiceType) LabelChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for label_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateBotPolicyFlowLabelProfileManagementChoiceType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*BotPolicyFlowLabelProfileManagementChoiceType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *BotPolicyFlowLabelProfileManagementChoiceType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["label_choice"]; exists {
+		val := m.GetLabelChoice()
+		vOpts := append(opts,
+			db.WithValidateField("label_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetLabelChoice().(type) {
+	case *BotPolicyFlowLabelProfileManagementChoiceType_Create:
+		if fv, exists := v.FldValidators["label_choice.create"]; exists {
+			val := m.GetLabelChoice().(*BotPolicyFlowLabelProfileManagementChoiceType_Create).Create
+			vOpts := append(opts,
+				db.WithValidateField("label_choice"),
+				db.WithValidateField("create"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *BotPolicyFlowLabelProfileManagementChoiceType_Update:
+		if fv, exists := v.FldValidators["label_choice.update"]; exists {
+			val := m.GetLabelChoice().(*BotPolicyFlowLabelProfileManagementChoiceType_Update).Update
+			vOpts := append(opts,
+				db.WithValidateField("label_choice"),
+				db.WithValidateField("update"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *BotPolicyFlowLabelProfileManagementChoiceType_View:
+		if fv, exists := v.FldValidators["label_choice.view"]; exists {
+			val := m.GetLabelChoice().(*BotPolicyFlowLabelProfileManagementChoiceType_View).View
+			vOpts := append(opts,
+				db.WithValidateField("label_choice"),
+				db.WithValidateField("view"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultBotPolicyFlowLabelProfileManagementChoiceTypeValidator = func() *ValidateBotPolicyFlowLabelProfileManagementChoiceType {
+	v := &ValidateBotPolicyFlowLabelProfileManagementChoiceType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhLabelChoice := v.LabelChoiceValidationRuleHandler
+	rulesLabelChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhLabelChoice(rulesLabelChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for BotPolicyFlowLabelProfileManagementChoiceType.label_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["label_choice"] = vFn
+
+	return v
+}()
+
+func BotPolicyFlowLabelProfileManagementChoiceTypeValidator() db.Validator {
+	return DefaultBotPolicyFlowLabelProfileManagementChoiceTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *BotPolicyFlowLabelQuotesChoiceType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *BotPolicyFlowLabelQuotesChoiceType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *BotPolicyFlowLabelQuotesChoiceType) DeepCopy() *BotPolicyFlowLabelQuotesChoiceType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &BotPolicyFlowLabelQuotesChoiceType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *BotPolicyFlowLabelQuotesChoiceType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *BotPolicyFlowLabelQuotesChoiceType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return BotPolicyFlowLabelQuotesChoiceTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateBotPolicyFlowLabelQuotesChoiceType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateBotPolicyFlowLabelQuotesChoiceType) LabelChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for label_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateBotPolicyFlowLabelQuotesChoiceType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*BotPolicyFlowLabelQuotesChoiceType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *BotPolicyFlowLabelQuotesChoiceType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["label_choice"]; exists {
+		val := m.GetLabelChoice()
+		vOpts := append(opts,
+			db.WithValidateField("label_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetLabelChoice().(type) {
+	case *BotPolicyFlowLabelQuotesChoiceType_InsuranceFireRequest:
+		if fv, exists := v.FldValidators["label_choice.insurance_fire_request"]; exists {
+			val := m.GetLabelChoice().(*BotPolicyFlowLabelQuotesChoiceType_InsuranceFireRequest).InsuranceFireRequest
+			vOpts := append(opts,
+				db.WithValidateField("label_choice"),
+				db.WithValidateField("insurance_fire_request"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *BotPolicyFlowLabelQuotesChoiceType_Request:
+		if fv, exists := v.FldValidators["label_choice.request"]; exists {
+			val := m.GetLabelChoice().(*BotPolicyFlowLabelQuotesChoiceType_Request).Request
+			vOpts := append(opts,
+				db.WithValidateField("label_choice"),
+				db.WithValidateField("request"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultBotPolicyFlowLabelQuotesChoiceTypeValidator = func() *ValidateBotPolicyFlowLabelQuotesChoiceType {
+	v := &ValidateBotPolicyFlowLabelQuotesChoiceType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhLabelChoice := v.LabelChoiceValidationRuleHandler
+	rulesLabelChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhLabelChoice(rulesLabelChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for BotPolicyFlowLabelQuotesChoiceType.label_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["label_choice"] = vFn
+
+	return v
+}()
+
+func BotPolicyFlowLabelQuotesChoiceTypeValidator() db.Validator {
+	return DefaultBotPolicyFlowLabelQuotesChoiceTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *BotPolicyFlowLabelSearchChoiceType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *BotPolicyFlowLabelSearchChoiceType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *BotPolicyFlowLabelSearchChoiceType) DeepCopy() *BotPolicyFlowLabelSearchChoiceType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &BotPolicyFlowLabelSearchChoiceType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *BotPolicyFlowLabelSearchChoiceType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *BotPolicyFlowLabelSearchChoiceType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return BotPolicyFlowLabelSearchChoiceTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateBotPolicyFlowLabelSearchChoiceType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateBotPolicyFlowLabelSearchChoiceType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*BotPolicyFlowLabelSearchChoiceType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *BotPolicyFlowLabelSearchChoiceType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	switch m.GetLabelChoice().(type) {
+	case *BotPolicyFlowLabelSearchChoiceType_FareSearch:
+		if fv, exists := v.FldValidators["label_choice.fare_search"]; exists {
+			val := m.GetLabelChoice().(*BotPolicyFlowLabelSearchChoiceType_FareSearch).FareSearch
+			vOpts := append(opts,
+				db.WithValidateField("label_choice"),
+				db.WithValidateField("fare_search"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *BotPolicyFlowLabelSearchChoiceType_FlightSearch:
+		if fv, exists := v.FldValidators["label_choice.flight_search"]; exists {
+			val := m.GetLabelChoice().(*BotPolicyFlowLabelSearchChoiceType_FlightSearch).FlightSearch
+			vOpts := append(opts,
+				db.WithValidateField("label_choice"),
+				db.WithValidateField("flight_search"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *BotPolicyFlowLabelSearchChoiceType_LocationSearch:
+		if fv, exists := v.FldValidators["label_choice.location_search"]; exists {
+			val := m.GetLabelChoice().(*BotPolicyFlowLabelSearchChoiceType_LocationSearch).LocationSearch
+			vOpts := append(opts,
+				db.WithValidateField("label_choice"),
+				db.WithValidateField("location_search"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *BotPolicyFlowLabelSearchChoiceType_ProductSearch:
+		if fv, exists := v.FldValidators["label_choice.product_search"]; exists {
+			val := m.GetLabelChoice().(*BotPolicyFlowLabelSearchChoiceType_ProductSearch).ProductSearch
+			vOpts := append(opts,
+				db.WithValidateField("label_choice"),
+				db.WithValidateField("product_search"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *BotPolicyFlowLabelSearchChoiceType_RoomSearch:
+		if fv, exists := v.FldValidators["label_choice.room_search"]; exists {
+			val := m.GetLabelChoice().(*BotPolicyFlowLabelSearchChoiceType_RoomSearch).RoomSearch
+			vOpts := append(opts,
+				db.WithValidateField("label_choice"),
+				db.WithValidateField("room_search"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *BotPolicyFlowLabelSearchChoiceType_ShipmentSearch:
+		if fv, exists := v.FldValidators["label_choice.shipment_search"]; exists {
+			val := m.GetLabelChoice().(*BotPolicyFlowLabelSearchChoiceType_ShipmentSearch).ShipmentSearch
+			vOpts := append(opts,
+				db.WithValidateField("label_choice"),
+				db.WithValidateField("shipment_search"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *BotPolicyFlowLabelSearchChoiceType_TicketSearch:
+		if fv, exists := v.FldValidators["label_choice.ticket_search"]; exists {
+			val := m.GetLabelChoice().(*BotPolicyFlowLabelSearchChoiceType_TicketSearch).TicketSearch
+			vOpts := append(opts,
+				db.WithValidateField("label_choice"),
+				db.WithValidateField("ticket_search"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *BotPolicyFlowLabelSearchChoiceType_FindUser:
+		if fv, exists := v.FldValidators["label_choice.find_user"]; exists {
+			val := m.GetLabelChoice().(*BotPolicyFlowLabelSearchChoiceType_FindUser).FindUser
+			vOpts := append(opts,
+				db.WithValidateField("label_choice"),
+				db.WithValidateField("find_user"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultBotPolicyFlowLabelSearchChoiceTypeValidator = func() *ValidateBotPolicyFlowLabelSearchChoiceType {
+	v := &ValidateBotPolicyFlowLabelSearchChoiceType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func BotPolicyFlowLabelSearchChoiceTypeValidator() db.Validator {
+	return DefaultBotPolicyFlowLabelSearchChoiceTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *BotPolicyFlowLabelShoppingGiftCardsChoiceType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *BotPolicyFlowLabelShoppingGiftCardsChoiceType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *BotPolicyFlowLabelShoppingGiftCardsChoiceType) DeepCopy() *BotPolicyFlowLabelShoppingGiftCardsChoiceType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &BotPolicyFlowLabelShoppingGiftCardsChoiceType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *BotPolicyFlowLabelShoppingGiftCardsChoiceType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *BotPolicyFlowLabelShoppingGiftCardsChoiceType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return BotPolicyFlowLabelShoppingGiftCardsChoiceTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateBotPolicyFlowLabelShoppingGiftCardsChoiceType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateBotPolicyFlowLabelShoppingGiftCardsChoiceType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*BotPolicyFlowLabelShoppingGiftCardsChoiceType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *BotPolicyFlowLabelShoppingGiftCardsChoiceType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	switch m.GetLabelChoice().(type) {
+	case *BotPolicyFlowLabelShoppingGiftCardsChoiceType_ShopAddToCart:
+		if fv, exists := v.FldValidators["label_choice.shop_add_to_cart"]; exists {
+			val := m.GetLabelChoice().(*BotPolicyFlowLabelShoppingGiftCardsChoiceType_ShopAddToCart).ShopAddToCart
+			vOpts := append(opts,
+				db.WithValidateField("label_choice"),
+				db.WithValidateField("shop_add_to_cart"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *BotPolicyFlowLabelShoppingGiftCardsChoiceType_ShopApplyGiftCard:
+		if fv, exists := v.FldValidators["label_choice.shop_apply_gift_card"]; exists {
+			val := m.GetLabelChoice().(*BotPolicyFlowLabelShoppingGiftCardsChoiceType_ShopApplyGiftCard).ShopApplyGiftCard
+			vOpts := append(opts,
+				db.WithValidateField("label_choice"),
+				db.WithValidateField("shop_apply_gift_card"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *BotPolicyFlowLabelShoppingGiftCardsChoiceType_ShopApplyPromoCode:
+		if fv, exists := v.FldValidators["label_choice.shop_apply_promo_code"]; exists {
+			val := m.GetLabelChoice().(*BotPolicyFlowLabelShoppingGiftCardsChoiceType_ShopApplyPromoCode).ShopApplyPromoCode
+			vOpts := append(opts,
+				db.WithValidateField("label_choice"),
+				db.WithValidateField("shop_apply_promo_code"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *BotPolicyFlowLabelShoppingGiftCardsChoiceType_ShopCheckout:
+		if fv, exists := v.FldValidators["label_choice.shop_checkout"]; exists {
+			val := m.GetLabelChoice().(*BotPolicyFlowLabelShoppingGiftCardsChoiceType_ShopCheckout).ShopCheckout
+			vOpts := append(opts,
+				db.WithValidateField("label_choice"),
+				db.WithValidateField("shop_checkout"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *BotPolicyFlowLabelShoppingGiftCardsChoiceType_ShopMakePayment:
+		if fv, exists := v.FldValidators["label_choice.shop_make_payment"]; exists {
+			val := m.GetLabelChoice().(*BotPolicyFlowLabelShoppingGiftCardsChoiceType_ShopMakePayment).ShopMakePayment
+			vOpts := append(opts,
+				db.WithValidateField("label_choice"),
+				db.WithValidateField("shop_make_payment"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *BotPolicyFlowLabelShoppingGiftCardsChoiceType_ShopOffer:
+		if fv, exists := v.FldValidators["label_choice.shop_offer"]; exists {
+			val := m.GetLabelChoice().(*BotPolicyFlowLabelShoppingGiftCardsChoiceType_ShopOffer).ShopOffer
+			vOpts := append(opts,
+				db.WithValidateField("label_choice"),
+				db.WithValidateField("shop_offer"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *BotPolicyFlowLabelShoppingGiftCardsChoiceType_ShopOrder:
+		if fv, exists := v.FldValidators["label_choice.shop_order"]; exists {
+			val := m.GetLabelChoice().(*BotPolicyFlowLabelShoppingGiftCardsChoiceType_ShopOrder).ShopOrder
+			vOpts := append(opts,
+				db.WithValidateField("label_choice"),
+				db.WithValidateField("shop_order"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *BotPolicyFlowLabelShoppingGiftCardsChoiceType_ShopPriceInquiry:
+		if fv, exists := v.FldValidators["label_choice.shop_price_inquiry"]; exists {
+			val := m.GetLabelChoice().(*BotPolicyFlowLabelShoppingGiftCardsChoiceType_ShopPriceInquiry).ShopPriceInquiry
+			vOpts := append(opts,
+				db.WithValidateField("label_choice"),
+				db.WithValidateField("shop_price_inquiry"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *BotPolicyFlowLabelShoppingGiftCardsChoiceType_ShopPurchaseGiftCard:
+		if fv, exists := v.FldValidators["label_choice.shop_purchase_gift_card"]; exists {
+			val := m.GetLabelChoice().(*BotPolicyFlowLabelShoppingGiftCardsChoiceType_ShopPurchaseGiftCard).ShopPurchaseGiftCard
+			vOpts := append(opts,
+				db.WithValidateField("label_choice"),
+				db.WithValidateField("shop_purchase_gift_card"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *BotPolicyFlowLabelShoppingGiftCardsChoiceType_ShopReturn:
+		if fv, exists := v.FldValidators["label_choice.shop_return"]; exists {
+			val := m.GetLabelChoice().(*BotPolicyFlowLabelShoppingGiftCardsChoiceType_ShopReturn).ShopReturn
+			vOpts := append(opts,
+				db.WithValidateField("label_choice"),
+				db.WithValidateField("shop_return"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *BotPolicyFlowLabelShoppingGiftCardsChoiceType_ShopSchedulePickup:
+		if fv, exists := v.FldValidators["label_choice.shop_schedule_pickup"]; exists {
+			val := m.GetLabelChoice().(*BotPolicyFlowLabelShoppingGiftCardsChoiceType_ShopSchedulePickup).ShopSchedulePickup
+			vOpts := append(opts,
+				db.WithValidateField("label_choice"),
+				db.WithValidateField("shop_schedule_pickup"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *BotPolicyFlowLabelShoppingGiftCardsChoiceType_ShopTrackOrder:
+		if fv, exists := v.FldValidators["label_choice.shop_track_order"]; exists {
+			val := m.GetLabelChoice().(*BotPolicyFlowLabelShoppingGiftCardsChoiceType_ShopTrackOrder).ShopTrackOrder
+			vOpts := append(opts,
+				db.WithValidateField("label_choice"),
+				db.WithValidateField("shop_track_order"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *BotPolicyFlowLabelShoppingGiftCardsChoiceType_ShopUpdateQuantity:
+		if fv, exists := v.FldValidators["label_choice.shop_update_quantity"]; exists {
+			val := m.GetLabelChoice().(*BotPolicyFlowLabelShoppingGiftCardsChoiceType_ShopUpdateQuantity).ShopUpdateQuantity
+			vOpts := append(opts,
+				db.WithValidateField("label_choice"),
+				db.WithValidateField("shop_update_quantity"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *BotPolicyFlowLabelShoppingGiftCardsChoiceType_ShopChooseSeat:
+		if fv, exists := v.FldValidators["label_choice.shop_choose_seat"]; exists {
+			val := m.GetLabelChoice().(*BotPolicyFlowLabelShoppingGiftCardsChoiceType_ShopChooseSeat).ShopChooseSeat
+			vOpts := append(opts,
+				db.WithValidateField("label_choice"),
+				db.WithValidateField("shop_choose_seat"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *BotPolicyFlowLabelShoppingGiftCardsChoiceType_ShopEnterDrawingSubmission:
+		if fv, exists := v.FldValidators["label_choice.shop_enter_drawing_submission"]; exists {
+			val := m.GetLabelChoice().(*BotPolicyFlowLabelShoppingGiftCardsChoiceType_ShopEnterDrawingSubmission).ShopEnterDrawingSubmission
+			vOpts := append(opts,
+				db.WithValidateField("label_choice"),
+				db.WithValidateField("shop_enter_drawing_submission"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *BotPolicyFlowLabelShoppingGiftCardsChoiceType_GiftCardCheckBalance:
+		if fv, exists := v.FldValidators["label_choice.gift_card_check_balance"]; exists {
+			val := m.GetLabelChoice().(*BotPolicyFlowLabelShoppingGiftCardsChoiceType_GiftCardCheckBalance).GiftCardCheckBalance
+			vOpts := append(opts,
+				db.WithValidateField("label_choice"),
+				db.WithValidateField("gift_card_check_balance"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *BotPolicyFlowLabelShoppingGiftCardsChoiceType_GiftCardMakePurchesWithCard:
+		if fv, exists := v.FldValidators["label_choice.gift_card_make_purches_with_card"]; exists {
+			val := m.GetLabelChoice().(*BotPolicyFlowLabelShoppingGiftCardsChoiceType_GiftCardMakePurchesWithCard).GiftCardMakePurchesWithCard
+			vOpts := append(opts,
+				db.WithValidateField("label_choice"),
+				db.WithValidateField("gift_card_make_purches_with_card"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *BotPolicyFlowLabelShoppingGiftCardsChoiceType_GiftCardPurchaseCard:
+		if fv, exists := v.FldValidators["label_choice.gift_card_purchase_card"]; exists {
+			val := m.GetLabelChoice().(*BotPolicyFlowLabelShoppingGiftCardsChoiceType_GiftCardPurchaseCard).GiftCardPurchaseCard
+			vOpts := append(opts,
+				db.WithValidateField("label_choice"),
+				db.WithValidateField("gift_card_purchase_card"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *BotPolicyFlowLabelShoppingGiftCardsChoiceType_ShopHoldInventory:
+		if fv, exists := v.FldValidators["label_choice.shop_hold_inventory"]; exists {
+			val := m.GetLabelChoice().(*BotPolicyFlowLabelShoppingGiftCardsChoiceType_ShopHoldInventory).ShopHoldInventory
+			vOpts := append(opts,
+				db.WithValidateField("label_choice"),
+				db.WithValidateField("shop_hold_inventory"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultBotPolicyFlowLabelShoppingGiftCardsChoiceTypeValidator = func() *ValidateBotPolicyFlowLabelShoppingGiftCardsChoiceType {
+	v := &ValidateBotPolicyFlowLabelShoppingGiftCardsChoiceType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func BotPolicyFlowLabelShoppingGiftCardsChoiceTypeValidator() db.Validator {
+	return DefaultBotPolicyFlowLabelShoppingGiftCardsChoiceTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *BotPolicyFlowLabelSocialsChoiceType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *BotPolicyFlowLabelSocialsChoiceType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *BotPolicyFlowLabelSocialsChoiceType) DeepCopy() *BotPolicyFlowLabelSocialsChoiceType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &BotPolicyFlowLabelSocialsChoiceType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *BotPolicyFlowLabelSocialsChoiceType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *BotPolicyFlowLabelSocialsChoiceType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return BotPolicyFlowLabelSocialsChoiceTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateBotPolicyFlowLabelSocialsChoiceType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateBotPolicyFlowLabelSocialsChoiceType) LabelChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for label_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateBotPolicyFlowLabelSocialsChoiceType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*BotPolicyFlowLabelSocialsChoiceType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *BotPolicyFlowLabelSocialsChoiceType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["label_choice"]; exists {
+		val := m.GetLabelChoice()
+		vOpts := append(opts,
+			db.WithValidateField("label_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetLabelChoice().(type) {
+	case *BotPolicyFlowLabelSocialsChoiceType_Like:
+		if fv, exists := v.FldValidators["label_choice.like"]; exists {
+			val := m.GetLabelChoice().(*BotPolicyFlowLabelSocialsChoiceType_Like).Like
+			vOpts := append(opts,
+				db.WithValidateField("label_choice"),
+				db.WithValidateField("like"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *BotPolicyFlowLabelSocialsChoiceType_Follow:
+		if fv, exists := v.FldValidators["label_choice.follow"]; exists {
+			val := m.GetLabelChoice().(*BotPolicyFlowLabelSocialsChoiceType_Follow).Follow
+			vOpts := append(opts,
+				db.WithValidateField("label_choice"),
+				db.WithValidateField("follow"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *BotPolicyFlowLabelSocialsChoiceType_Message:
+		if fv, exists := v.FldValidators["label_choice.message"]; exists {
+			val := m.GetLabelChoice().(*BotPolicyFlowLabelSocialsChoiceType_Message).Message
+			vOpts := append(opts,
+				db.WithValidateField("label_choice"),
+				db.WithValidateField("message"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultBotPolicyFlowLabelSocialsChoiceTypeValidator = func() *ValidateBotPolicyFlowLabelSocialsChoiceType {
+	v := &ValidateBotPolicyFlowLabelSocialsChoiceType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhLabelChoice := v.LabelChoiceValidationRuleHandler
+	rulesLabelChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhLabelChoice(rulesLabelChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for BotPolicyFlowLabelSocialsChoiceType.label_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["label_choice"] = vFn
+
+	return v
+}()
+
+func BotPolicyFlowLabelSocialsChoiceTypeValidator() db.Validator {
+	return DefaultBotPolicyFlowLabelSocialsChoiceTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *BufferConfigType) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -7038,6 +9960,48 @@ func (v *ValidateL4DestType) PortRangesValidationRuleHandler(rules map[string]st
 	return validatorFn, nil
 }
 
+func (v *ValidateL4DestType) Ipv6PrefixesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepStringItemRules(rules)
+	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Item ValidationRuleHandler for ipv6_prefixes")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []string, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for ipv6_prefixes")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]string)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []string, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal := fmt.Sprintf("%v", elem)
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated ipv6_prefixes")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items ipv6_prefixes")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateL4DestType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*L4DestType)
 	if !ok {
@@ -7050,6 +10014,14 @@ func (v *ValidateL4DestType) Validate(ctx context.Context, pm interface{}, opts 
 	}
 	if m == nil {
 		return nil
+	}
+
+	if fv, exists := v.FldValidators["ipv6_prefixes"]; exists {
+		vOpts := append(opts, db.WithValidateField("ipv6_prefixes"))
+		if err := fv(ctx, m.GetIpv6Prefixes(), vOpts...); err != nil {
+			return err
+		}
+
 	}
 
 	if fv, exists := v.FldValidators["port_ranges"]; exists {
@@ -7086,10 +10058,9 @@ var DefaultL4DestTypeValidator = func() *ValidateL4DestType {
 
 	vrhPrefixes := v.PrefixesValidationRuleHandler
 	rulesPrefixes := map[string]string{
-		"ves.io.schema.rules.message.required":                  "true",
 		"ves.io.schema.rules.repeated.items.string.ipv4_prefix": "true",
+		"ves.io.schema.rules.repeated.items.string.not_empty":   "true",
 		"ves.io.schema.rules.repeated.max_items":                "32",
-		"ves.io.schema.rules.repeated.min_items":                "1",
 		"ves.io.schema.rules.repeated.unique":                   "true",
 	}
 	vFn, err = vrhPrefixes(rulesPrefixes)
@@ -7112,6 +10083,20 @@ var DefaultL4DestTypeValidator = func() *ValidateL4DestType {
 		panic(errMsg)
 	}
 	v.FldValidators["port_ranges"] = vFn
+
+	vrhIpv6Prefixes := v.Ipv6PrefixesValidationRuleHandler
+	rulesIpv6Prefixes := map[string]string{
+		"ves.io.schema.rules.repeated.items.string.ipv6_prefix": "true",
+		"ves.io.schema.rules.repeated.items.string.not_empty":   "true",
+		"ves.io.schema.rules.repeated.max_items":                "32",
+		"ves.io.schema.rules.repeated.unique":                   "true",
+	}
+	vFn, err = vrhIpv6Prefixes(rulesIpv6Prefixes)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for L4DestType.ipv6_prefixes: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["ipv6_prefixes"] = vFn
 
 	return v
 }()

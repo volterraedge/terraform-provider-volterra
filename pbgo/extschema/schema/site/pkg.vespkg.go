@@ -50,6 +50,13 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.site.VirtualMachineInstancesMetricsRequest"] = VirtualMachineInstancesMetricsRequestValidator()
 	vr["ves.io.schema.site.VirtualMachineInstancesMetricsResponse"] = VirtualMachineInstancesMetricsResponseValidator()
 
+	vr["ves.io.schema.site.GlobalNetworkItem"] = GlobalNetworkItemValidator()
+	vr["ves.io.schema.site.GlobalNetworkListRequest"] = GlobalNetworkListRequestValidator()
+	vr["ves.io.schema.site.GlobalNetworkListResp"] = GlobalNetworkListRespValidator()
+	vr["ves.io.schema.site.SegmentItem"] = SegmentItemValidator()
+	vr["ves.io.schema.site.SegmentListRequest"] = SegmentListRequestValidator()
+	vr["ves.io.schema.site.SegmentListResp"] = SegmentListRespValidator()
+
 	vr["ves.io.schema.site.SetStateReq"] = SetStateReqValidator()
 	vr["ves.io.schema.site.SetStateResp"] = SetStateRespValidator()
 
@@ -146,6 +153,10 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 
 	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.site.API.Get"] = []svcfw.EnvironmentField{
 		{
+			FieldPath:           "replace_form.spec.bgp_peer_address_v6",
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
+		},
+		{
 			FieldPath:           "replace_form.spec.inside_nameserver_v6",
 			AllowedEnvironments: []string{"crt", "prod", "softbank_mec", "staging", "test"},
 		},
@@ -163,6 +174,10 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		},
 		{
 			FieldPath:           "replace_form.spec.vip_selection",
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.bgp_peer_address_v6",
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
@@ -189,6 +204,10 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 
 	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.site.API.List"] = []svcfw.EnvironmentField{
 		{
+			FieldPath:           "items.#.get_spec.bgp_peer_address_v6",
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
+		},
+		{
 			FieldPath:           "items.#.get_spec.inside_nameserver_v6",
 			AllowedEnvironments: []string{"crt", "prod", "softbank_mec", "staging", "test"},
 		},
@@ -210,7 +229,34 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		},
 	}
 
+	mdr.RPCSubscriptionFieldsRegistry["ves.io.schema.site.API.Replace"] = []svcfw.SubscriptionField{
+		{
+			FieldPath:     "ves.io.schema.site.ReplaceRequest.spec.bgp_peer_address_v6",
+			AddonServices: []string{"f5xc-ipv6-standard"},
+		},
+		{
+			FieldPath:     "ves.io.schema.site.ReplaceRequest.spec.inside_nameserver_v6",
+			AddonServices: []string{"f5xc-ipv6-standard"},
+		},
+		{
+			FieldPath:     "ves.io.schema.site.ReplaceRequest.spec.inside_vip_v6",
+			AddonServices: []string{"f5xc-ipv6-standard"},
+		},
+		{
+			FieldPath:     "ves.io.schema.site.ReplaceRequest.spec.outside_nameserver_v6",
+			AddonServices: []string{"f5xc-ipv6-standard"},
+		},
+		{
+			FieldPath:     "ves.io.schema.site.ReplaceRequest.spec.outside_vip_v6",
+			AddonServices: []string{"f5xc-ipv6-standard"},
+		},
+	}
+
 	mdr.RPCAvailableInReqFieldRegistry["ves.io.schema.site.API.Replace"] = []svcfw.EnvironmentField{
+		{
+			FieldPath:           "spec.bgp_peer_address_v6",
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
+		},
 		{
 			FieldPath:           "spec.inside_nameserver_v6",
 			AllowedEnvironments: []string{"crt", "prod", "softbank_mec", "staging", "test"},
@@ -239,6 +285,7 @@ func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {
 	sm["ves.io.schema.site.ConfigKubeConfigAPI"] = "config"
 	sm["ves.io.schema.site.API"] = "config"
 	sm["ves.io.schema.site.CustomDataK8SAPI"] = "data"
+	sm["ves.io.schema.site.CustomVirtualNetworkListAPI"] = "config"
 	sm["ves.io.schema.site.CustomStateAPI"] = "register"
 	sm["ves.io.schema.site.UamKubeConfigAPI"] = "web"
 	sm["ves.io.schema.site.UpgradeAPI"] = "config"
@@ -336,6 +383,26 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		mdr.SvcGwRegisterHandlers["ves.io.schema.site.CustomDataK8SAPI"] = RegisterGwCustomDataK8SAPIHandler
 		customCSR.ServerRegistry["ves.io.schema.site.CustomDataK8SAPI"] = func(svc svcfw.Service) server.APIHandler {
 			return NewCustomDataK8SAPIServer(svc)
+		}
+
+	}()
+
+	customCSR = mdr.PubCustomServiceRegistry
+
+	func() {
+		// set swagger jsons for our and external schemas
+
+		customCSR.SwaggerRegistry["ves.io.schema.site.Object"] = CustomVirtualNetworkListAPISwaggerJSON
+
+		customCSR.GrpcClientRegistry["ves.io.schema.site.CustomVirtualNetworkListAPI"] = NewCustomVirtualNetworkListAPIGrpcClient
+		customCSR.RestClientRegistry["ves.io.schema.site.CustomVirtualNetworkListAPI"] = NewCustomVirtualNetworkListAPIRestClient
+		if isExternal {
+			return
+		}
+		mdr.SvcRegisterHandlers["ves.io.schema.site.CustomVirtualNetworkListAPI"] = RegisterCustomVirtualNetworkListAPIServer
+		mdr.SvcGwRegisterHandlers["ves.io.schema.site.CustomVirtualNetworkListAPI"] = RegisterGwCustomVirtualNetworkListAPIHandler
+		customCSR.ServerRegistry["ves.io.schema.site.CustomVirtualNetworkListAPI"] = func(svc svcfw.Service) server.APIHandler {
+			return NewCustomVirtualNetworkListAPIServer(svc)
 		}
 
 	}()

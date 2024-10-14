@@ -61,6 +61,24 @@ func (c *CustomDataAPIGrpcClient) doRPCDNSLBPoolHealthStatus(ctx context.Context
 	return rsp, err
 }
 
+func (c *CustomDataAPIGrpcClient) doRPCDNSLBPoolMemberHealthStatusChangeEvents(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
+	req := &DNSLBPoolMemberHealthStatusRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.dns_load_balancer.DNSLBPoolMemberHealthStatusRequest", yamlReq)
+	}
+	rsp, err := c.grpcClient.DNSLBPoolMemberHealthStatusChangeEvents(ctx, req, opts...)
+	return rsp, err
+}
+
+func (c *CustomDataAPIGrpcClient) doRPCDNSLBPoolMemberHealthStatusList(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
+	req := &DNSLBPoolMemberHealthStatusListRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.dns_load_balancer.DNSLBPoolMemberHealthStatusListRequest", yamlReq)
+	}
+	rsp, err := c.grpcClient.DNSLBPoolMemberHealthStatusList(ctx, req, opts...)
+	return rsp, err
+}
+
 func (c *CustomDataAPIGrpcClient) DoRPC(ctx context.Context, rpc string, opts ...server.CustomCallOpt) (proto.Message, error) {
 	rpcFn, exists := c.rpcFns[rpc]
 	if !exists {
@@ -96,6 +114,10 @@ func NewCustomDataAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 	rpcFns["DNSLBHealthStatusList"] = ccl.doRPCDNSLBHealthStatusList
 
 	rpcFns["DNSLBPoolHealthStatus"] = ccl.doRPCDNSLBPoolHealthStatus
+
+	rpcFns["DNSLBPoolMemberHealthStatusChangeEvents"] = ccl.doRPCDNSLBPoolMemberHealthStatusChangeEvents
+
+	rpcFns["DNSLBPoolMemberHealthStatusList"] = ccl.doRPCDNSLBPoolMemberHealthStatusList
 
 	ccl.rpcFns = rpcFns
 
@@ -362,6 +384,175 @@ func (c *CustomDataAPIRestClient) doRPCDNSLBPoolHealthStatus(ctx context.Context
 	return pbRsp, nil
 }
 
+func (c *CustomDataAPIRestClient) doRPCDNSLBPoolMemberHealthStatusChangeEvents(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
+	if callOpts.URI == "" {
+		return nil, fmt.Errorf("Error, URI should be specified, got empty")
+	}
+	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
+
+	yamlReq := callOpts.YAMLReq
+	req := &DNSLBPoolMemberHealthStatusRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.dns_load_balancer.DNSLBPoolMemberHealthStatusRequest: %s", yamlReq, err)
+	}
+
+	var hReq *http.Request
+	hm := strings.ToLower(callOpts.HTTPMethod)
+	switch hm {
+	case "post", "put":
+		jsn, err := codec.ToJSON(req, codec.ToWithUseProtoFieldName())
+		if err != nil {
+			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
+		}
+		var op string
+		if hm == "post" {
+			op = http.MethodPost
+		} else {
+			op = http.MethodPut
+		}
+		newReq, err := http.NewRequest(op, url, bytes.NewBuffer([]byte(jsn)))
+		if err != nil {
+			return nil, errors.Wrapf(err, "Creating new HTTP %s request for custom API", op)
+		}
+		hReq = newReq
+	case "get":
+		newReq, err := http.NewRequest(http.MethodGet, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP GET request for custom API")
+		}
+		hReq = newReq
+		q := hReq.URL.Query()
+		_ = q
+		q.Add("dns_lb_name", fmt.Sprintf("%v", req.DnsLbName))
+		q.Add("dns_lb_pool_name", fmt.Sprintf("%v", req.DnsLbPoolName))
+		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
+		q.Add("pool_member_address", fmt.Sprintf("%v", req.PoolMemberAddress))
+
+		hReq.URL.RawQuery += q.Encode()
+	case "delete":
+		newReq, err := http.NewRequest(http.MethodDelete, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP DELETE request for custom API")
+		}
+		hReq = newReq
+	default:
+		return nil, fmt.Errorf("Error, invalid/empty HTTPMethod(%s) specified, should be POST|DELETE|GET", callOpts.HTTPMethod)
+	}
+	hReq = hReq.WithContext(ctx)
+	hReq.Header.Set("Content-Type", "application/json")
+	client.AddHdrsToReq(callOpts.Headers, hReq)
+
+	rsp, err := c.client.Do(hReq)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient")
+	}
+	defer rsp.Body.Close()
+
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
+		body, err := io.ReadAll(rsp.Body)
+		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
+	}
+
+	body, err := io.ReadAll(rsp.Body)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient read body")
+	}
+	pbRsp := &DNSLBPoolMemberHealthStatusResponse{}
+	if err := codec.FromJSON(string(body), pbRsp); err != nil {
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.dns_load_balancer.DNSLBPoolMemberHealthStatusResponse", body)
+
+	}
+	if callOpts.OutCallResponse != nil {
+		callOpts.OutCallResponse.ProtoMsg = pbRsp
+		callOpts.OutCallResponse.JSON = string(body)
+	}
+	return pbRsp, nil
+}
+
+func (c *CustomDataAPIRestClient) doRPCDNSLBPoolMemberHealthStatusList(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
+	if callOpts.URI == "" {
+		return nil, fmt.Errorf("Error, URI should be specified, got empty")
+	}
+	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
+
+	yamlReq := callOpts.YAMLReq
+	req := &DNSLBPoolMemberHealthStatusListRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.dns_load_balancer.DNSLBPoolMemberHealthStatusListRequest: %s", yamlReq, err)
+	}
+
+	var hReq *http.Request
+	hm := strings.ToLower(callOpts.HTTPMethod)
+	switch hm {
+	case "post", "put":
+		jsn, err := codec.ToJSON(req, codec.ToWithUseProtoFieldName())
+		if err != nil {
+			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
+		}
+		var op string
+		if hm == "post" {
+			op = http.MethodPost
+		} else {
+			op = http.MethodPut
+		}
+		newReq, err := http.NewRequest(op, url, bytes.NewBuffer([]byte(jsn)))
+		if err != nil {
+			return nil, errors.Wrapf(err, "Creating new HTTP %s request for custom API", op)
+		}
+		hReq = newReq
+	case "get":
+		newReq, err := http.NewRequest(http.MethodGet, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP GET request for custom API")
+		}
+		hReq = newReq
+		q := hReq.URL.Query()
+		_ = q
+		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
+
+		hReq.URL.RawQuery += q.Encode()
+	case "delete":
+		newReq, err := http.NewRequest(http.MethodDelete, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP DELETE request for custom API")
+		}
+		hReq = newReq
+	default:
+		return nil, fmt.Errorf("Error, invalid/empty HTTPMethod(%s) specified, should be POST|DELETE|GET", callOpts.HTTPMethod)
+	}
+	hReq = hReq.WithContext(ctx)
+	hReq.Header.Set("Content-Type", "application/json")
+	client.AddHdrsToReq(callOpts.Headers, hReq)
+
+	rsp, err := c.client.Do(hReq)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient")
+	}
+	defer rsp.Body.Close()
+
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
+		body, err := io.ReadAll(rsp.Body)
+		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
+	}
+
+	body, err := io.ReadAll(rsp.Body)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient read body")
+	}
+	pbRsp := &DNSLBPoolMemberHealthStatusListResponse{}
+	if err := codec.FromJSON(string(body), pbRsp); err != nil {
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.dns_load_balancer.DNSLBPoolMemberHealthStatusListResponse", body)
+
+	}
+	if callOpts.OutCallResponse != nil {
+		callOpts.OutCallResponse.ProtoMsg = pbRsp
+		callOpts.OutCallResponse.JSON = string(body)
+	}
+	return pbRsp, nil
+}
+
 func (c *CustomDataAPIRestClient) DoRPC(ctx context.Context, rpc string, opts ...server.CustomCallOpt) (proto.Message, error) {
 	rpcFn, exists := c.rpcFns[rpc]
 	if !exists {
@@ -392,6 +583,10 @@ func NewCustomDataAPIRestClient(baseURL string, hc http.Client) server.CustomCli
 
 	rpcFns["DNSLBPoolHealthStatus"] = ccl.doRPCDNSLBPoolHealthStatus
 
+	rpcFns["DNSLBPoolMemberHealthStatusChangeEvents"] = ccl.doRPCDNSLBPoolMemberHealthStatusChangeEvents
+
+	rpcFns["DNSLBPoolMemberHealthStatusList"] = ccl.doRPCDNSLBPoolMemberHealthStatusList
+
 	ccl.rpcFns = rpcFns
 
 	return ccl
@@ -415,6 +610,14 @@ func (c *customDataAPIInprocClient) DNSLBHealthStatusList(ctx context.Context, i
 func (c *customDataAPIInprocClient) DNSLBPoolHealthStatus(ctx context.Context, in *DNSLBPoolHealthStatusRequest, opts ...grpc.CallOption) (*DNSLBPoolHealthStatusResponse, error) {
 	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.dns_load_balancer.CustomDataAPI.DNSLBPoolHealthStatus")
 	return c.CustomDataAPIServer.DNSLBPoolHealthStatus(ctx, in)
+}
+func (c *customDataAPIInprocClient) DNSLBPoolMemberHealthStatusChangeEvents(ctx context.Context, in *DNSLBPoolMemberHealthStatusRequest, opts ...grpc.CallOption) (*DNSLBPoolMemberHealthStatusResponse, error) {
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.dns_load_balancer.CustomDataAPI.DNSLBPoolMemberHealthStatusChangeEvents")
+	return c.CustomDataAPIServer.DNSLBPoolMemberHealthStatusChangeEvents(ctx, in)
+}
+func (c *customDataAPIInprocClient) DNSLBPoolMemberHealthStatusList(ctx context.Context, in *DNSLBPoolMemberHealthStatusListRequest, opts ...grpc.CallOption) (*DNSLBPoolMemberHealthStatusListResponse, error) {
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.dns_load_balancer.CustomDataAPI.DNSLBPoolMemberHealthStatusList")
+	return c.CustomDataAPIServer.DNSLBPoolMemberHealthStatusList(ctx, in)
 }
 
 func NewCustomDataAPIInprocClient(svc svcfw.Service) CustomDataAPIClient {
@@ -585,6 +788,104 @@ func (s *customDataAPISrv) DNSLBPoolHealthStatus(ctx context.Context, in *DNSLBP
 
 	return rsp, nil
 }
+func (s *customDataAPISrv) DNSLBPoolMemberHealthStatusChangeEvents(ctx context.Context, in *DNSLBPoolMemberHealthStatusRequest) (*DNSLBPoolMemberHealthStatusResponse, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.dns_load_balancer.CustomDataAPI")
+	cah, ok := ah.(CustomDataAPIServer)
+	if !ok {
+		return nil, fmt.Errorf("ah %v is not of type *CustomDataAPIServer", ah)
+	}
+
+	var (
+		rsp *DNSLBPoolMemberHealthStatusResponse
+		err error
+	)
+
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.dns_load_balancer.DNSLBPoolMemberHealthStatusRequest", in)
+	defer func() {
+		if len(bodyFields) > 0 {
+			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
+		}
+		userMsg := "The 'CustomDataAPI.DNSLBPoolMemberHealthStatusChangeEvents' operation on 'dns_load_balancer'"
+		if err == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
+	}()
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.dns_load_balancer.CustomDataAPI.DNSLBPoolMemberHealthStatusChangeEvents"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
+	rsp, err = cah.DNSLBPoolMemberHealthStatusChangeEvents(ctx, in)
+	if err != nil {
+		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
+	}
+
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.dns_load_balancer.DNSLBPoolMemberHealthStatusResponse", rsp)...)
+
+	return rsp, nil
+}
+func (s *customDataAPISrv) DNSLBPoolMemberHealthStatusList(ctx context.Context, in *DNSLBPoolMemberHealthStatusListRequest) (*DNSLBPoolMemberHealthStatusListResponse, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.dns_load_balancer.CustomDataAPI")
+	cah, ok := ah.(CustomDataAPIServer)
+	if !ok {
+		return nil, fmt.Errorf("ah %v is not of type *CustomDataAPIServer", ah)
+	}
+
+	var (
+		rsp *DNSLBPoolMemberHealthStatusListResponse
+		err error
+	)
+
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.dns_load_balancer.DNSLBPoolMemberHealthStatusListRequest", in)
+	defer func() {
+		if len(bodyFields) > 0 {
+			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
+		}
+		userMsg := "The 'CustomDataAPI.DNSLBPoolMemberHealthStatusList' operation on 'dns_load_balancer'"
+		if err == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
+	}()
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.dns_load_balancer.CustomDataAPI.DNSLBPoolMemberHealthStatusList"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
+	rsp, err = cah.DNSLBPoolMemberHealthStatusList(ctx, in)
+	if err != nil {
+		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
+	}
+
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.dns_load_balancer.DNSLBPoolMemberHealthStatusListResponse", rsp)...)
+
+	return rsp, nil
+}
 
 func NewCustomDataAPIServer(svc svcfw.Service) CustomDataAPIServer {
 	return &customDataAPISrv{svc: svc}
@@ -693,6 +994,90 @@ var CustomDataAPISwaggerJSON string = `{
             "x-ves-proto-service": "ves.io.schema.dns_load_balancer.CustomDataAPI",
             "x-ves-proto-service-type": "CUSTOM_PUBLIC"
         },
+        "/public/namespaces/{namespace}/dns_load_balancers/pool_members_health_status": {
+            "get": {
+                "summary": "DNS Load Balancer Pool Members Health Status List",
+                "description": "Get Health Status of all DNS Load Balancer Pool Members in a namespace",
+                "operationId": "ves.io.schema.dns_load_balancer.CustomDataAPI.DNSLBPoolMemberHealthStatusList",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/dns_load_balancerDNSLBPoolMemberHealthStatusListResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "namespace",
+                        "description": "Namespace\n\nx-example: \"ns1\"\nNamespace to scope the listing of DNS LB health status",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "x-displayname": "Namespace"
+                    }
+                ],
+                "tags": [
+                    "CustomDataAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-dns_load_balancer-customdataapi-dnslbpoolmemberhealthstatuslist"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.dns_load_balancer.CustomDataAPI.DNSLBPoolMemberHealthStatusList"
+            },
+            "x-displayname": "DNS Load Balancer Custom Data API",
+            "x-ves-proto-service": "ves.io.schema.dns_load_balancer.CustomDataAPI",
+            "x-ves-proto-service-type": "CUSTOM_PUBLIC"
+        },
         "/public/namespaces/{namespace}/dns_load_balancers/{dns_lb_name}/dns_lb_pools/{dns_lb_pool_name}/health_status": {
             "get": {
                 "summary": "DNS Load Balancer Pool Health Status",
@@ -788,6 +1173,114 @@ var CustomDataAPISwaggerJSON string = `{
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-dns_load_balancer-customdataapi-dnslbpoolhealthstatus"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.dns_load_balancer.CustomDataAPI.DNSLBPoolHealthStatus"
+            },
+            "x-displayname": "DNS Load Balancer Custom Data API",
+            "x-ves-proto-service": "ves.io.schema.dns_load_balancer.CustomDataAPI",
+            "x-ves-proto-service-type": "CUSTOM_PUBLIC"
+        },
+        "/public/namespaces/{namespace}/dns_load_balancers/{dns_lb_name}/dns_lb_pools/{dns_lb_pool_name}/pool_members/{pool_member_address}/health_status_change_events": {
+            "get": {
+                "summary": "DNS Load Balancer Pool Member Health Status Change Events",
+                "description": "Get DNS Load Balancer Pool Health Status Changes",
+                "operationId": "ves.io.schema.dns_load_balancer.CustomDataAPI.DNSLBPoolMemberHealthStatusChangeEvents",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/dns_load_balancerDNSLBPoolMemberHealthStatusResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "namespace",
+                        "description": "Namespace\n\nx-example: \"ns1\"\nx-required\nNamespace in which the DNS Load Balancer Pool is present",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "x-displayname": "Namespace"
+                    },
+                    {
+                        "name": "dns_lb_name",
+                        "description": "DNS Load Balancer Name\n\nx-example: \"dns_lb1\"\nx-required\nName of the DNS Load Balancer",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "x-displayname": "DNS Load Balancer Name"
+                    },
+                    {
+                        "name": "dns_lb_pool_name",
+                        "description": "DNS Load Balancer Pool Name\n\nx-example: \"dns_lb_pool1\"\nx-required\nName of the DNS Load Balancer Pool",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "x-displayname": "DNS Load Balancer Pool Name"
+                    },
+                    {
+                        "name": "pool_member_address",
+                        "description": "DNS Load Balancer Pool Member Address\n\nx-example: \"10.0.0.1\"\nx-required\nIP Address of the DNS Load Balancer Pool Member",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "x-displayname": "DNS Load Balancer Pool Member Address"
+                    }
+                ],
+                "tags": [
+                    "CustomDataAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-dns_load_balancer-customdataapi-dnslbpoolmemberhealthstatuschangeevents"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.dns_load_balancer.CustomDataAPI.DNSLBPoolMemberHealthStatusChangeEvents"
             },
             "x-displayname": "DNS Load Balancer Custom Data API",
             "x-ves-proto-service": "ves.io.schema.dns_load_balancer.CustomDataAPI",
@@ -894,6 +1387,24 @@ var CustomDataAPISwaggerJSON string = `{
             "x-displayname": "DNS Load Balancer Health Status List Response",
             "x-ves-proto-message": "ves.io.schema.dns_load_balancer.DNSLBHealthStatusListResponse",
             "properties": {
+                "dns_lb_pools_status_summary": {
+                    "type": "array",
+                    "description": " Summary of DNS Load Balancer Pools by Health Status",
+                    "title": "DNS Load Balancer Pools Status Summary",
+                    "items": {
+                        "$ref": "#/definitions/dns_load_balancerHealthStatusSummary"
+                    },
+                    "x-displayname": "DNS Load Balancer Pools Status Summary"
+                },
+                "dns_load_balancer_status_summary": {
+                    "type": "array",
+                    "description": " Summary of DNS Load Balancers by Health Status",
+                    "title": "DNS Load Balancer Status Summary",
+                    "items": {
+                        "$ref": "#/definitions/dns_load_balancerHealthStatusSummary"
+                    },
+                    "x-displayname": "DNS Load Balancer Pools Summary"
+                },
                 "items": {
                     "type": "array",
                     "description": " Collection of DNS Load Balancer Health status",
@@ -1034,6 +1545,63 @@ var CustomDataAPISwaggerJSON string = `{
                 }
             }
         },
+        "dns_load_balancerDNSLBPoolMemberHealthStatusEvent": {
+            "type": "object",
+            "description": "Pool member health status change event data",
+            "title": "DNSLBPoolMemberHealthStatusEvent",
+            "x-displayname": "DNS Load Balancer Pool Member Health Status Event",
+            "x-ves-proto-message": "ves.io.schema.dns_load_balancer.DNSLBPoolMemberHealthStatusEvent",
+            "properties": {
+                "error_code": {
+                    "description": " Error Code of DNS Load Balancer Pool Member health check failure\n\nExample: - \"2\"-",
+                    "title": "Error Code",
+                    "$ref": "#/definitions/schemadns_load_balancerErrorCode",
+                    "x-displayname": "Error Code",
+                    "x-ves-example": "2"
+                },
+                "error_description": {
+                    "type": "string",
+                    "description": " Error Description of DNS Load Balancer Pool Member health check failure\n\nExample: - \"received string mismatch\"-",
+                    "title": "Error Description",
+                    "x-displayname": "Error Description",
+                    "x-ves-example": "received string mismatch"
+                },
+                "pool_member_address": {
+                    "type": "string",
+                    "description": " Address of pool member\n\nExample: - \"10.0.0.1\"-",
+                    "title": "Pool Member Address",
+                    "x-displayname": "Pool Member Address",
+                    "x-ves-example": "10.0.0.1"
+                },
+                "status": {
+                    "type": "array",
+                    "description": " Health status of pool member",
+                    "title": "Status",
+                    "items": {
+                        "$ref": "#/definitions/schemaMetricValue"
+                    },
+                    "x-displayname": "Status"
+                }
+            }
+        },
+        "dns_load_balancerDNSLBPoolMemberHealthStatusListResponse": {
+            "type": "object",
+            "description": "Response for DNS Load Balancer Pool Member Health Status List Request",
+            "title": "DNSLBPoolMemberHealthStatusListResponse",
+            "x-displayname": "DNS Load Balancer Pool Member Health Status List Response",
+            "x-ves-proto-message": "ves.io.schema.dns_load_balancer.DNSLBPoolMemberHealthStatusListResponse",
+            "properties": {
+                "items": {
+                    "type": "array",
+                    "description": " Collection of DNS Load Balancer Pool Member Health Status",
+                    "title": "Items",
+                    "items": {
+                        "$ref": "#/definitions/dns_load_balancerDNSLBPoolMemberHealthStatusListResponseItem"
+                    },
+                    "x-displayname": "Items"
+                }
+            }
+        },
         "dns_load_balancerDNSLBPoolMemberHealthStatusListResponseItem": {
             "type": "object",
             "description": "Individual item in a collection of DNS Load Balancer Pool Member",
@@ -1041,6 +1609,20 @@ var CustomDataAPISwaggerJSON string = `{
             "x-displayname": "DNS Load Balancer Pool Member Health Status List Item",
             "x-ves-proto-message": "ves.io.schema.dns_load_balancer.DNSLBPoolMemberHealthStatusListResponseItem",
             "properties": {
+                "dns_lb_name": {
+                    "type": "string",
+                    "description": " Name of the DNS Load Balancer containing the Pool Member\n\nExample: - \"dns_lb1\"-",
+                    "title": "DNS Load Balancer Name",
+                    "x-displayname": "DNS Load Balancer Name",
+                    "x-ves-example": "dns_lb1"
+                },
+                "dns_lb_pool_name": {
+                    "type": "string",
+                    "description": " Name of the DNS Load Balancer Pool\n\nExample: - \"dns_lb_pool1\"-",
+                    "title": "DNS Load Balancer Pool Name",
+                    "x-displayname": "DNS Load Balancer Pool Name",
+                    "x-ves-example": "dns_lb_pool1"
+                },
                 "error_code": {
                     "description": " Error Code of DNS Load Balancer Pool Member health check failure\n\nExample: - \"2\"-",
                     "title": "Error Code",
@@ -1077,6 +1659,24 @@ var CustomDataAPISwaggerJSON string = `{
                         "$ref": "#/definitions/schemaMetricValue"
                     },
                     "x-displayname": "Status"
+                }
+            }
+        },
+        "dns_load_balancerDNSLBPoolMemberHealthStatusResponse": {
+            "type": "object",
+            "description": "Response for DNS Load Balancer Pool Member Health Status Events Request",
+            "title": "DNSLBPoolMemberHealthStatusResponse",
+            "x-displayname": "DNS Load Balancer Pool Member Health Status Events Response",
+            "x-ves-proto-message": "ves.io.schema.dns_load_balancer.DNSLBPoolMemberHealthStatusResponse",
+            "properties": {
+                "dns_lb_pool_member_events": {
+                    "type": "array",
+                    "description": " Collection of DNS Load Balancer Pool Members",
+                    "title": "DNS Load Balancer Pool Members",
+                    "items": {
+                        "$ref": "#/definitions/dns_load_balancerDNSLBPoolMemberHealthStatusEvent"
+                    },
+                    "x-displayname": "DNS Load Balancer Pool Member Items"
                 }
             }
         },

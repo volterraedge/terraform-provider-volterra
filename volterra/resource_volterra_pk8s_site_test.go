@@ -6,24 +6,31 @@ import (
 	"os"
 	"testing"
 
+	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 	ves_io_schema_k8s_cluster "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/k8s_cluster"
 	ves_io_schema_k8s_cluster_role "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/k8s_cluster_role"
 	ves_io_schema_k8s_cluster_role_binding "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/k8s_cluster_role_binding"
 	ves_io_schema_k8s_pod_security_policy "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/k8s_pod_security_policy"
+	ves_io_schema_tenant "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/tenant"
 	ves_io_schema_voltstack_site "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/voltstack_site"
 )
 
 func TestPK8sSite(t *testing.T) {
 	name := generateResourceName()
-	testURL, stopFunc, _ := createTestCustomAPIServer(t, []string{
+	testURL, stopFunc, f := createTestCustomAPIServer(t, []string{
 		ves_io_schema_voltstack_site.ObjectType,
 		ves_io_schema_k8s_cluster.ObjectType,
 		ves_io_schema_k8s_cluster_role.ObjectType,
 		ves_io_schema_k8s_cluster_role_binding.ObjectType,
 		ves_io_schema_k8s_pod_security_policy.ObjectType,
+		ves_io_schema_tenant.ObjectType,
 	})
 	defer stopFunc()
+	tenantName := "ves-io"
+	tenantObj := mkDBObjTenant(tenantName, uuid.New().String(), withAddonServices("f5xc-flow-collection", "f5xc-ipv6-standard", "f5xc-waap-standard"))
+	f.MustCreateEntry(tenantObj)
+
 	os.Setenv("VOLT_API_TEST", "true")
 	os.Setenv("VOLT_API_URL", testURL)
 	os.Setenv("TF_ACC", "true")

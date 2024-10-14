@@ -43,6 +43,15 @@ func (c *CustomAPIGrpcClient) doRPCCloneFromDNSDomain(ctx context.Context, yamlR
 	return rsp, err
 }
 
+func (c *CustomAPIGrpcClient) doRPCExportZoneFile(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
+	req := &ExportZoneFileRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.dns_zone.ExportZoneFileRequest", yamlReq)
+	}
+	rsp, err := c.grpcClient.ExportZoneFile(ctx, req, opts...)
+	return rsp, err
+}
+
 func (c *CustomAPIGrpcClient) doRPCGetLocalZoneFile(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &GetLocalZoneFileRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -128,6 +137,8 @@ func NewCustomAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 	}
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
 	rpcFns["CloneFromDNSDomain"] = ccl.doRPCCloneFromDNSDomain
+
+	rpcFns["ExportZoneFile"] = ccl.doRPCExportZoneFile
 
 	rpcFns["GetLocalZoneFile"] = ccl.doRPCGetLocalZoneFile
 
@@ -228,6 +239,90 @@ func (c *CustomAPIRestClient) doRPCCloneFromDNSDomain(ctx context.Context, callO
 	pbRsp := &CloneResp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.dns_zone.CloneResp", body)
+
+	}
+	if callOpts.OutCallResponse != nil {
+		callOpts.OutCallResponse.ProtoMsg = pbRsp
+		callOpts.OutCallResponse.JSON = string(body)
+	}
+	return pbRsp, nil
+}
+
+func (c *CustomAPIRestClient) doRPCExportZoneFile(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
+	if callOpts.URI == "" {
+		return nil, fmt.Errorf("Error, URI should be specified, got empty")
+	}
+	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
+
+	yamlReq := callOpts.YAMLReq
+	req := &ExportZoneFileRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.dns_zone.ExportZoneFileRequest: %s", yamlReq, err)
+	}
+
+	var hReq *http.Request
+	hm := strings.ToLower(callOpts.HTTPMethod)
+	switch hm {
+	case "post", "put":
+		jsn, err := codec.ToJSON(req, codec.ToWithUseProtoFieldName())
+		if err != nil {
+			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
+		}
+		var op string
+		if hm == "post" {
+			op = http.MethodPost
+		} else {
+			op = http.MethodPut
+		}
+		newReq, err := http.NewRequest(op, url, bytes.NewBuffer([]byte(jsn)))
+		if err != nil {
+			return nil, errors.Wrapf(err, "Creating new HTTP %s request for custom API", op)
+		}
+		hReq = newReq
+	case "get":
+		newReq, err := http.NewRequest(http.MethodGet, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP GET request for custom API")
+		}
+		hReq = newReq
+		q := hReq.URL.Query()
+		_ = q
+		q.Add("dns_zone_name", fmt.Sprintf("%v", req.DnsZoneName))
+		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
+
+		hReq.URL.RawQuery += q.Encode()
+	case "delete":
+		newReq, err := http.NewRequest(http.MethodDelete, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP DELETE request for custom API")
+		}
+		hReq = newReq
+	default:
+		return nil, fmt.Errorf("Error, invalid/empty HTTPMethod(%s) specified, should be POST|DELETE|GET", callOpts.HTTPMethod)
+	}
+	hReq = hReq.WithContext(ctx)
+	hReq.Header.Set("Content-Type", "application/json")
+	client.AddHdrsToReq(callOpts.Headers, hReq)
+
+	rsp, err := c.client.Do(hReq)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient")
+	}
+	defer rsp.Body.Close()
+
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
+		body, err := io.ReadAll(rsp.Body)
+		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
+	}
+
+	body, err := io.ReadAll(rsp.Body)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient read body")
+	}
+	pbRsp := &ExportZoneFileResponse{}
+	if err := codec.FromJSON(string(body), pbRsp); err != nil {
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.dns_zone.ExportZoneFileResponse", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -770,6 +865,8 @@ func NewCustomAPIRestClient(baseURL string, hc http.Client) server.CustomClient 
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
 	rpcFns["CloneFromDNSDomain"] = ccl.doRPCCloneFromDNSDomain
 
+	rpcFns["ExportZoneFile"] = ccl.doRPCExportZoneFile
+
 	rpcFns["GetLocalZoneFile"] = ccl.doRPCGetLocalZoneFile
 
 	rpcFns["GetRemoteZoneFile"] = ccl.doRPCGetRemoteZoneFile
@@ -797,6 +894,10 @@ type customAPIInprocClient struct {
 func (c *customAPIInprocClient) CloneFromDNSDomain(ctx context.Context, in *CloneReq, opts ...grpc.CallOption) (*CloneResp, error) {
 	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.dns_zone.CustomAPI.CloneFromDNSDomain")
 	return c.CustomAPIServer.CloneFromDNSDomain(ctx, in)
+}
+func (c *customAPIInprocClient) ExportZoneFile(ctx context.Context, in *ExportZoneFileRequest, opts ...grpc.CallOption) (*ExportZoneFileResponse, error) {
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.dns_zone.CustomAPI.ExportZoneFile")
+	return c.CustomAPIServer.ExportZoneFile(ctx, in)
 }
 func (c *customAPIInprocClient) GetLocalZoneFile(ctx context.Context, in *GetLocalZoneFileRequest, opts ...grpc.CallOption) (*GetLocalZoneFileResponse, error) {
 	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.dns_zone.CustomAPI.GetLocalZoneFile")
@@ -890,6 +991,55 @@ func (s *customAPISrv) CloneFromDNSDomain(ctx context.Context, in *CloneReq) (*C
 	}
 
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.dns_zone.CloneResp", rsp)...)
+
+	return rsp, nil
+}
+func (s *customAPISrv) ExportZoneFile(ctx context.Context, in *ExportZoneFileRequest) (*ExportZoneFileResponse, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.dns_zone.CustomAPI")
+	cah, ok := ah.(CustomAPIServer)
+	if !ok {
+		return nil, fmt.Errorf("ah %v is not of type *CustomAPIServer", ah)
+	}
+
+	var (
+		rsp *ExportZoneFileResponse
+		err error
+	)
+
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.dns_zone.ExportZoneFileRequest", in)
+	defer func() {
+		if len(bodyFields) > 0 {
+			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
+		}
+		userMsg := "The 'CustomAPI.ExportZoneFile' operation on 'dns_zone'"
+		if err == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
+	}()
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.dns_zone.CustomAPI.ExportZoneFile"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
+	rsp, err = cah.ExportZoneFile(ctx, in)
+	if err != nil {
+		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
+	}
+
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.dns_zone.ExportZoneFileResponse", rsp)...)
 
 	return rsp, nil
 }
@@ -1633,7 +1783,7 @@ var CustomAPISwaggerJSON string = `{
         },
         "/public/namespaces/{namespace}/dns_zone/{dns_zone_name}/local_zone_file": {
             "get": {
-                "summary": "Get local zone file",
+                "summary": "Get Local Zone File",
                 "description": "get local zone file from secondary dns",
                 "operationId": "ves.io.schema.dns_zone.CustomAPI.GetLocalZoneFile",
                 "responses": {
@@ -1725,7 +1875,7 @@ var CustomAPISwaggerJSON string = `{
         },
         "/public/namespaces/{namespace}/dns_zone/{dns_zone_name}/remote_zone_file": {
             "get": {
-                "summary": "Get remote zone file",
+                "summary": "Get Remote Zone File",
                 "description": "get remote zone file from primary dns",
                 "operationId": "ves.io.schema.dns_zone.CustomAPI.GetRemoteZoneFile",
                 "responses": {
@@ -1810,6 +1960,98 @@ var CustomAPISwaggerJSON string = `{
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-dns_zone-customapi-getremotezonefile"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.dns_zone.CustomAPI.GetRemoteZoneFile"
+            },
+            "x-displayname": "DNS Zone Custom API",
+            "x-ves-proto-service": "ves.io.schema.dns_zone.CustomAPI",
+            "x-ves-proto-service-type": "CUSTOM_PUBLIC"
+        },
+        "/public/namespaces/{namespace}/dns_zone/{dns_zone_name}/zone_file/export": {
+            "get": {
+                "summary": "Export Zone File",
+                "description": "Export Zone File",
+                "operationId": "ves.io.schema.dns_zone.CustomAPI.ExportZoneFile",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/dns_zoneExportZoneFileResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "namespace",
+                        "description": "Namespace\n\nx-example: \"system\"\nNamespace is always system for dns_zone",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "x-displayname": "Namespace"
+                    },
+                    {
+                        "name": "dns_zone_name",
+                        "description": "Name\n\nx-example: \"example.com\"\nName dns_zone object which is also the DNS zone",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "x-displayname": "Name"
+                    }
+                ],
+                "tags": [
+                    "CustomAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-dns_zone-customapi-exportzonefile"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.dns_zone.CustomAPI.ExportZoneFile"
             },
             "x-displayname": "DNS Zone Custom API",
             "x-ves-proto-service": "ves.io.schema.dns_zone.CustomAPI",
@@ -2072,7 +2314,7 @@ var CustomAPISwaggerJSON string = `{
                     "items": {
                         "type": "string"
                     },
-                    "x-displayname": "Zones failed"
+                    "x-displayname": "Zones Failed"
                 },
                 "success_zones": {
                     "type": "array",
@@ -2081,7 +2323,7 @@ var CustomAPISwaggerJSON string = `{
                     "items": {
                         "type": "string"
                     },
-                    "x-displayname": "Zones succeeded"
+                    "x-displayname": "Zones Succeeded"
                 }
             }
         },
@@ -2829,11 +3071,26 @@ var CustomAPISwaggerJSON string = `{
                 }
             }
         },
+        "dns_zoneExportZoneFileResponse": {
+            "type": "object",
+            "description": "Export Zone File Response",
+            "title": "Export Zone File Response",
+            "x-displayname": "Export Zone File Response",
+            "x-ves-proto-message": "ves.io.schema.dns_zone.ExportZoneFileResponse",
+            "properties": {
+                "html_data": {
+                    "type": "string",
+                    "description": " report data in HTML",
+                    "title": "HTML data",
+                    "x-displayname": "HTML Data"
+                }
+            }
+        },
         "dns_zoneF5CSDNSZoneConfiguration": {
             "type": "object",
             "description": "F5 Cloud Services DNS primary or secondary zone configuration",
             "title": "F5 Cloud Services DNS zone configuration",
-            "x-displayname": "F5 Cloud Services DNS zone configuration",
+            "x-displayname": "F5 Cloud Services DNS Zone Configuration",
             "x-ves-oneof-field-dns_type": "[\"adns_service\",\"dns_service\"]",
             "x-ves-proto-message": "ves.io.schema.dns_zone.F5CSDNSZoneConfiguration",
             "properties": {
@@ -2841,13 +3098,13 @@ var CustomAPISwaggerJSON string = `{
                     "type": "object",
                     "description": "Exclusive with [dns_service]\n F5 Cloud Services secondary zone configuration",
                     "title": "Secondary zone configuration",
-                    "x-displayname": "Secondary zone configuration"
+                    "x-displayname": "Secondary Zone Configuration"
                 },
                 "dns_service": {
                     "type": "object",
                     "description": "Exclusive with [adns_service]\n F5 Cloud Services primary zone configuration",
                     "title": "Primary zone configuration",
-                    "x-displayname": "Primary zone configuration"
+                    "x-displayname": "Primary Zone Configuration"
                 }
             }
         },
@@ -2855,7 +3112,7 @@ var CustomAPISwaggerJSON string = `{
             "type": "object",
             "description": "Get local zone file Response",
             "title": "Get local zone file Response",
-            "x-displayname": "Get local zone file Response",
+            "x-displayname": "Get Local Zone File Response",
             "x-ves-proto-message": "ves.io.schema.dns_zone.GetLocalZoneFileResponse",
             "properties": {
                 "last_axfr_timestamp": {
@@ -2863,13 +3120,13 @@ var CustomAPISwaggerJSON string = `{
                     "description": " Last successful zone transfer timestamp.",
                     "title": "Last AXFR timestamp",
                     "format": "date-time",
-                    "x-displayname": "Last successful AXFR timestamp"
+                    "x-displayname": "Last Successful AXFR Timestamp"
                 },
                 "zone_file": {
                     "type": "string",
                     "description": " Local zone file from secondary dns",
                     "title": "Local zone file",
-                    "x-displayname": "Local zone file"
+                    "x-displayname": "Local Zone File"
                 }
             }
         },
@@ -2877,14 +3134,14 @@ var CustomAPISwaggerJSON string = `{
             "type": "object",
             "description": "Get remote zone file Response",
             "title": "Get remote zone file Response",
-            "x-displayname": "Get remote zone file Response",
+            "x-displayname": "Get Remote Zone File Response",
             "x-ves-proto-message": "ves.io.schema.dns_zone.GetRemoteZoneFileResponse",
             "properties": {
                 "zone_file": {
                     "type": "string",
                     "description": " Remote zone file from primary dns",
                     "title": "Remote zone file",
-                    "x-displayname": "Remote zone file"
+                    "x-displayname": "Remote Zone File"
                 }
             }
         },
@@ -3074,7 +3331,7 @@ var CustomAPISwaggerJSON string = `{
                     "description": " Configuration of DNS primary or secondary zone to import",
                     "title": "DNS zone configuration",
                     "$ref": "#/definitions/dns_zoneF5CSDNSZoneConfiguration",
-                    "x-displayname": "DNS zone configuration"
+                    "x-displayname": "DNS Zone Configuration"
                 }
             }
         },
@@ -3082,7 +3339,7 @@ var CustomAPISwaggerJSON string = `{
             "type": "object",
             "description": "Import F5 Cloud Services DNS zone response",
             "title": "Import F5 Cloud Services DNS zone response",
-            "x-displayname": "Import F5 Cloud Services DNS zone response",
+            "x-displayname": "Import F5 Cloud Services DNS Zone Response",
             "x-ves-proto-message": "ves.io.schema.dns_zone.ImportF5CSZoneResponse",
             "properties": {
                 "metadata": {
