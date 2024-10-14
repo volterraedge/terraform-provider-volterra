@@ -29,10 +29,10 @@ jobs:
         TOKEN: ${{ secrets.GITLAB_PERSONAL_ACCESS_TOKEN }}
         USER: ${{ secrets.GITLAB_USERNAME }}
       run: git config --global url."https://${USER}:${TOKEN}@gitlab.com".insteadOf "https://gitlab.com"
-    - name: Install Go 1.20
+    - name: Install Go 1.21
       uses: actions/setup-go@v1
       with:
-        go-version: '1.20'
+        go-version: '1.21'
       id: go
 
     - uses: actions/checkout@master
