@@ -175,7 +175,7 @@ func resourceVolterraTokenRead(d *schema.ResourceData, meta interface{}) error {
 	for _, item := range tokenListResp {
 		tok := item.(*ves_io_schema_token.ListResponseItem)
 		if !strings.Contains(tok.Name, "jwt-token") {
-			fmt.Printf(" Token is normal")
+			token = tok
 			break
 		}
 	}
