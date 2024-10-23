@@ -84,7 +84,7 @@ func resourceVolterraTokenCreate(d *schema.ResourceData, meta interface{}) error
 	if err == nil {
 		for _, item := range tokenListResp {
 			tok := item.(*ves_io_schema_token.ListResponseItem)
-			if !strings.Contains(tok.Name, "jwt-token") {
+			if tok.GetSpec == nil || tok.GetSpec.Type == ves_io_schema_token.NORMAL {
 				token = tok
 				break
 			}
@@ -174,7 +174,7 @@ func resourceVolterraTokenRead(d *schema.ResourceData, meta interface{}) error {
 	token = nil
 	for _, item := range tokenListResp {
 		tok := item.(*ves_io_schema_token.ListResponseItem)
-		if !strings.Contains(tok.Name, "jwt-token") {
+		if tok.GetSpec == nil || tok.GetSpec.Type == ves_io_schema_token.NORMAL {
 			token = tok
 			break
 		}
