@@ -270,7 +270,6 @@ func findRegistration(client *APIClient, approvalReq *ves_io_schema_registration
 		if it.GetGetSpec().GetPassport().GetClusterName() == aParams.clusterName && it.GetGetSpec().GetInfra().GetHostname() == aParams.hostname {
 			approvalReq.Passport = it.GetSpec.Passport
 			approvalReq.Passport.ClusterSize = aParams.clusterSize
-			approvalReq.Passport.PrivateNetworkName = aParams.privateNetworkName
 
 			if aParams.latitude != 0 {
 				approvalReq.Passport.Latitude = aParams.latitude
@@ -280,6 +279,9 @@ func findRegistration(client *APIClient, approvalReq *ves_io_schema_registration
 			}
 			if aParams.connectedRegion != "" {
 				approvalReq.ConnectedRegion = aParams.connectedRegion
+			}
+			if aParams.privateNetworkName != "" {
+				approvalReq.Passport.PrivateNetworkName = aParams.privateNetworkName
 			}
 			approvalReq.Name = it.Metadata.Name
 			break
