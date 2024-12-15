@@ -144,27 +144,6 @@ func (v *ValidateCreateSpecType) OnStartFlowValidationRuleHandler(rules map[stri
 	return validatorFn, nil
 }
 
-func (v *ValidateCreateSpecType) ContinuousFlowValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "MessageValidationRuleHandler for continuous_flow")
-	}
-	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
-		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
-			return err
-		}
-
-		if err := TemplateTypeValidator().Validate(ctx, val, opts...); err != nil {
-			return err
-		}
-
-		return nil
-	}
-
-	return validatorFn, nil
-}
-
 func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*CreateSpecType)
 	if !ok {
@@ -223,16 +202,7 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	}
 	v.FldValidators["on_start_flow"] = vFn
 
-	vrhContinuousFlow := v.ContinuousFlowValidationRuleHandler
-	rulesContinuousFlow := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
-	}
-	vFn, err = vrhContinuousFlow(rulesContinuousFlow)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.continuous_flow: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["continuous_flow"] = vFn
+	v.FldValidators["continuous_flow"] = TemplateTypeValidator().Validate
 
 	return v
 }()
@@ -752,27 +722,6 @@ func (v *ValidateGetSpecType) OnStartFlowValidationRuleHandler(rules map[string]
 	return validatorFn, nil
 }
 
-func (v *ValidateGetSpecType) ContinuousFlowValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "MessageValidationRuleHandler for continuous_flow")
-	}
-	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
-		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
-			return err
-		}
-
-		if err := TemplateTypeValidator().Validate(ctx, val, opts...); err != nil {
-			return err
-		}
-
-		return nil
-	}
-
-	return validatorFn, nil
-}
-
 func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*GetSpecType)
 	if !ok {
@@ -831,16 +780,7 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	}
 	v.FldValidators["on_start_flow"] = vFn
 
-	vrhContinuousFlow := v.ContinuousFlowValidationRuleHandler
-	rulesContinuousFlow := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
-	}
-	vFn, err = vrhContinuousFlow(rulesContinuousFlow)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.continuous_flow: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["continuous_flow"] = vFn
+	v.FldValidators["continuous_flow"] = TemplateTypeValidator().Validate
 
 	return v
 }()
@@ -969,27 +909,6 @@ func (v *ValidateGlobalSpecType) OnStartFlowValidationRuleHandler(rules map[stri
 	return validatorFn, nil
 }
 
-func (v *ValidateGlobalSpecType) ContinuousFlowValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "MessageValidationRuleHandler for continuous_flow")
-	}
-	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
-		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
-			return err
-		}
-
-		if err := TemplateTypeValidator().Validate(ctx, val, opts...); err != nil {
-			return err
-		}
-
-		return nil
-	}
-
-	return validatorFn, nil
-}
-
 func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*GlobalSpecType)
 	if !ok {
@@ -1048,16 +967,7 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	}
 	v.FldValidators["on_start_flow"] = vFn
 
-	vrhContinuousFlow := v.ContinuousFlowValidationRuleHandler
-	rulesContinuousFlow := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
-	}
-	vFn, err = vrhContinuousFlow(rulesContinuousFlow)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.continuous_flow: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["continuous_flow"] = vFn
+	v.FldValidators["continuous_flow"] = TemplateTypeValidator().Validate
 
 	return v
 }()
@@ -1186,27 +1096,6 @@ func (v *ValidateReplaceSpecType) OnStartFlowValidationRuleHandler(rules map[str
 	return validatorFn, nil
 }
 
-func (v *ValidateReplaceSpecType) ContinuousFlowValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "MessageValidationRuleHandler for continuous_flow")
-	}
-	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
-		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
-			return err
-		}
-
-		if err := TemplateTypeValidator().Validate(ctx, val, opts...); err != nil {
-			return err
-		}
-
-		return nil
-	}
-
-	return validatorFn, nil
-}
-
 func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*ReplaceSpecType)
 	if !ok {
@@ -1265,16 +1154,7 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	}
 	v.FldValidators["on_start_flow"] = vFn
 
-	vrhContinuousFlow := v.ContinuousFlowValidationRuleHandler
-	rulesContinuousFlow := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
-	}
-	vFn, err = vrhContinuousFlow(rulesContinuousFlow)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.continuous_flow: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["continuous_flow"] = vFn
+	v.FldValidators["continuous_flow"] = TemplateTypeValidator().Validate
 
 	return v
 }()

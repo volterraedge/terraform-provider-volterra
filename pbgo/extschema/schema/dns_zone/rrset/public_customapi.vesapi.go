@@ -758,7 +758,7 @@ var CustomAPISwaggerJSON string = `{
     "swagger": "2.0",
     "info": {
         "title": "F5XC DNS Management RRSet API",
-        "description": "x-required\nAPIs to manage a DNS RRSets",
+        "description": "x-required\nAPIs to create, update or delete individual records of a DNS zone without having to send the whole DNS zone information.",
         "version": "version not set"
     },
     "schemes": [

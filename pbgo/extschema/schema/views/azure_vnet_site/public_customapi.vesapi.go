@@ -1194,6 +1194,13 @@ var CustomAPISwaggerJSON string = `{
                 }
             }
         },
+        "ioschemaEmpty": {
+            "type": "object",
+            "description": "This can be used for messages where no values are needed",
+            "title": "Empty",
+            "x-displayname": "Empty",
+            "x-ves-proto-message": "ves.io.schema.Empty"
+        },
         "sitePublishVIPParamsPerAz": {
             "type": "object",
             "description": "Per AZ parameters needed to publish VIP for public cloud sites",
@@ -1308,8 +1315,21 @@ var CustomAPISwaggerJSON string = `{
             "description": "Resource group and name of existing Azure Vnet",
             "title": "Azure Existing Vnet Type",
             "x-displayname": "Azure Existing Vnet Type",
+            "x-ves-oneof-field-routing_type": "[\"f5_orchestrated_routing\",\"manual_routing\"]",
             "x-ves-proto-message": "ves.io.schema.views.AzureVnetType",
             "properties": {
+                "f5_orchestrated_routing": {
+                    "description": "Exclusive with [manual_routing]\n F5 will orchestrate required routes for SLO Route Table towards Internet and SLI RT towards the CE.",
+                    "title": "F5 Orchestrated Routing",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "F5 Orchestrated Routing"
+                },
+                "manual_routing": {
+                    "description": "Exclusive with [f5_orchestrated_routing]\n  In this mode, F5 will not create nor alter any route tables or routes within the existing VPCs/Vnets providing better integration for existing environments. ",
+                    "title": "Manual Routing",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Manual Routing"
+                },
                 "resource_group": {
                     "type": "string",
                     "description": " Resource group of existing Vnet\n\nExample: - \"MyResourceGroup\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 64\n  ves.io.schema.rules.string.min_len: 1\n",

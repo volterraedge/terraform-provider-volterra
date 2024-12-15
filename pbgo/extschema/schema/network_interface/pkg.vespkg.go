@@ -105,6 +105,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.ethernet_interface.static_ip.fleet_static_ip",
 		"spec.ethernet_interface.static_ipv6_address.fleet_static_ip",
 		"spec.legacy_interface",
+		"spec.tunnel_interface.cloud_connect.#",
 		"spec.tunnel_interface.inside_network",
 		"spec.tunnel_interface.static_ip.fleet_static_ip",
 	}
@@ -167,6 +168,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.ethernet_interface.srv6_network",
 		"spec.ethernet_interface.static_ip.fleet_static_ip",
 		"spec.ethernet_interface.static_ipv6_address.fleet_static_ip",
+		"spec.tunnel_interface.cloud_connect.#",
 		"spec.tunnel_interface.inside_network",
 		"spec.tunnel_interface.static_ip.fleet_static_ip",
 	}

@@ -14,6 +14,8 @@ import (
 	"gopkg.volterra.us/stdlib/db"
 	"gopkg.volterra.us/stdlib/errors"
 
+	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+	ves_io_schema_views "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
 	ves_io_schema_virtual_host_dns_info "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/virtual_host_dns_info"
 )
 
@@ -23,6 +25,278 @@ var (
 	_ = errors.Wrap
 	_ = strings.Split
 )
+
+// augmented methods on protoc/std generated struct
+
+func (m *AssignAPIDefinitionReq) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *AssignAPIDefinitionReq) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *AssignAPIDefinitionReq) DeepCopy() *AssignAPIDefinitionReq {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &AssignAPIDefinitionReq{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *AssignAPIDefinitionReq) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *AssignAPIDefinitionReq) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return AssignAPIDefinitionReqValidator().Validate(ctx, m, opts...)
+}
+
+func (m *AssignAPIDefinitionReq) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetApiDefinitionDRefInfo()
+
+}
+
+func (m *AssignAPIDefinitionReq) GetApiDefinitionDRefInfo() ([]db.DRefInfo, error) {
+
+	vref := m.GetApiDefinition()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("api_definition.Object")
+	dri := db.DRefInfo{
+		RefdType:   "api_definition.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "api_definition",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+
+}
+
+// GetApiDefinitionDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *AssignAPIDefinitionReq) GetApiDefinitionDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "api_definition.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: api_definition")
+	}
+
+	vref := m.GetApiDefinition()
+	if vref == nil {
+		return nil, nil
+	}
+	ref := &ves_io_schema.ObjectRefType{
+		Kind:      "api_definition.Object",
+		Tenant:    vref.Tenant,
+		Namespace: vref.Namespace,
+		Name:      vref.Name,
+	}
+	refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+	if err != nil {
+		return nil, errors.Wrap(err, "Getting referred entry")
+	}
+	if refdEnt != nil {
+		entries = append(entries, refdEnt)
+	}
+
+	return entries, nil
+}
+
+type ValidateAssignAPIDefinitionReq struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateAssignAPIDefinitionReq) ApiDefinitionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for api_definition")
+	}
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		if err := ves_io_schema_views.ObjectRefTypeValidator().Validate(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateAssignAPIDefinitionReq) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*AssignAPIDefinitionReq)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *AssignAPIDefinitionReq got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["api_definition"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("api_definition"))
+		if err := fv(ctx, m.GetApiDefinition(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["create_new"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("create_new"))
+		if err := fv(ctx, m.GetCreateNew(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("name"))
+		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["namespace"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("namespace"))
+		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultAssignAPIDefinitionReqValidator = func() *ValidateAssignAPIDefinitionReq {
+	v := &ValidateAssignAPIDefinitionReq{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhApiDefinition := v.ApiDefinitionValidationRuleHandler
+	rulesApiDefinition := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhApiDefinition(rulesApiDefinition)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AssignAPIDefinitionReq.api_definition: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["api_definition"] = vFn
+
+	return v
+}()
+
+func AssignAPIDefinitionReqValidator() db.Validator {
+	return DefaultAssignAPIDefinitionReqValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *AssignAPIDefinitionResp) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *AssignAPIDefinitionResp) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *AssignAPIDefinitionResp) DeepCopy() *AssignAPIDefinitionResp {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &AssignAPIDefinitionResp{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *AssignAPIDefinitionResp) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *AssignAPIDefinitionResp) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return AssignAPIDefinitionRespValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateAssignAPIDefinitionResp struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateAssignAPIDefinitionResp) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*AssignAPIDefinitionResp)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *AssignAPIDefinitionResp got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultAssignAPIDefinitionRespValidator = func() *ValidateAssignAPIDefinitionResp {
+	v := &ValidateAssignAPIDefinitionResp{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func AssignAPIDefinitionRespValidator() db.Validator {
+	return DefaultAssignAPIDefinitionRespValidator
+}
 
 // augmented methods on protoc/std generated struct
 

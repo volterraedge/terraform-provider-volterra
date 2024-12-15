@@ -63,7 +63,8 @@ func resourceVolterraVirtualSite() *schema.Resource {
 
 			"site_selector": {
 
-				Type:     schema.TypeSet,
+				Type:     schema.TypeList,
+				MaxItems: 1,
 				Required: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
@@ -145,20 +146,22 @@ func resourceVolterraVirtualSiteCreate(d *schema.ResourceData, meta interface{})
 	//site_selector
 	if v, ok := d.GetOk("site_selector"); ok && !isIntfNil(v) {
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		siteSelector := &ves_io_schema.LabelSelectorType{}
 		createSpec.SiteSelector = siteSelector
 		for _, set := range sl {
-			siteSelectorMapStrToI := set.(map[string]interface{})
+			if set != nil {
+				siteSelectorMapStrToI := set.(map[string]interface{})
 
-			if w, ok := siteSelectorMapStrToI["expressions"]; ok && !isIntfNil(w) {
-				ls := make([]string, len(w.([]interface{})))
-				for i, v := range w.([]interface{}) {
-					ls[i] = v.(string)
+				if w, ok := siteSelectorMapStrToI["expressions"]; ok && !isIntfNil(w) {
+					ls := make([]string, len(w.([]interface{})))
+					for i, v := range w.([]interface{}) {
+						ls[i] = v.(string)
+					}
+					siteSelector.Expressions = ls
 				}
-				siteSelector.Expressions = ls
-			}
 
+			}
 		}
 
 	}

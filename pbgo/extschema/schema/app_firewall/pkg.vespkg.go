@@ -70,12 +70,10 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.app_firewall.API.Create"] = []string{
-		"spec.ai_risk_based_blocking",
 		"spec.use_loadbalancer_setting",
 	}
 
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.app_firewall.API.Replace"] = []string{
-		"spec.ai_risk_based_blocking",
 		"spec.use_loadbalancer_setting",
 	}
 

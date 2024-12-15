@@ -4694,6 +4694,14 @@ func (v *ValidateCreateSpecType) LogsReceiverChoiceValidationRuleHandler(rules m
 	return validatorFn, nil
 }
 
+func (v *ValidateCreateSpecType) RoutingTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for routing_type")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidateCreateSpecType) SecurityGroupChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -5170,6 +5178,42 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["routing_type"]; exists {
+		val := m.GetRoutingType()
+		vOpts := append(opts,
+			db.WithValidateField("routing_type"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetRoutingType().(type) {
+	case *CreateSpecType_F5OrchestratedRouting:
+		if fv, exists := v.FldValidators["routing_type.f5_orchestrated_routing"]; exists {
+			val := m.GetRoutingType().(*CreateSpecType_F5OrchestratedRouting).F5OrchestratedRouting
+			vOpts := append(opts,
+				db.WithValidateField("routing_type"),
+				db.WithValidateField("f5_orchestrated_routing"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CreateSpecType_ManualRouting:
+		if fv, exists := v.FldValidators["routing_type.manual_routing"]; exists {
+			val := m.GetRoutingType().(*CreateSpecType_ManualRouting).ManualRouting
+			vOpts := append(opts,
+				db.WithValidateField("routing_type"),
+				db.WithValidateField("manual_routing"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["security_group_choice"]; exists {
 		val := m.GetSecurityGroupChoice()
 		vOpts := append(opts,
@@ -5415,6 +5459,17 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["logs_receiver_choice"] = vFn
+
+	vrhRoutingType := v.RoutingTypeValidationRuleHandler
+	rulesRoutingType := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhRoutingType(rulesRoutingType)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.routing_type: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["routing_type"] = vFn
 
 	vrhSecurityGroupChoice := v.SecurityGroupChoiceValidationRuleHandler
 	rulesSecurityGroupChoice := map[string]string{
@@ -5928,6 +5983,14 @@ func (v *ValidateGetSpecType) LogsReceiverChoiceValidationRuleHandler(rules map[
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for logs_receiver_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateGetSpecType) RoutingTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for routing_type")
 	}
 	return validatorFn, nil
 }
@@ -6514,6 +6577,42 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
+	if fv, exists := v.FldValidators["routing_type"]; exists {
+		val := m.GetRoutingType()
+		vOpts := append(opts,
+			db.WithValidateField("routing_type"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetRoutingType().(type) {
+	case *GetSpecType_F5OrchestratedRouting:
+		if fv, exists := v.FldValidators["routing_type.f5_orchestrated_routing"]; exists {
+			val := m.GetRoutingType().(*GetSpecType_F5OrchestratedRouting).F5OrchestratedRouting
+			vOpts := append(opts,
+				db.WithValidateField("routing_type"),
+				db.WithValidateField("f5_orchestrated_routing"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GetSpecType_ManualRouting:
+		if fv, exists := v.FldValidators["routing_type.manual_routing"]; exists {
+			val := m.GetRoutingType().(*GetSpecType_ManualRouting).ManualRouting
+			vOpts := append(opts,
+				db.WithValidateField("routing_type"),
+				db.WithValidateField("manual_routing"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["security_group_choice"]; exists {
 		val := m.GetSecurityGroupChoice()
 		vOpts := append(opts,
@@ -6815,6 +6914,17 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["logs_receiver_choice"] = vFn
+
+	vrhRoutingType := v.RoutingTypeValidationRuleHandler
+	rulesRoutingType := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhRoutingType(rulesRoutingType)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.routing_type: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["routing_type"] = vFn
 
 	vrhSecurityGroupChoice := v.SecurityGroupChoiceValidationRuleHandler
 	rulesSecurityGroupChoice := map[string]string{
@@ -7476,6 +7586,14 @@ func (v *ValidateGlobalSpecType) LogsReceiverChoiceValidationRuleHandler(rules m
 	return validatorFn, nil
 }
 
+func (v *ValidateGlobalSpecType) RoutingTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for routing_type")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidateGlobalSpecType) SecurityGroupChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -8067,6 +8185,42 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["routing_type"]; exists {
+		val := m.GetRoutingType()
+		vOpts := append(opts,
+			db.WithValidateField("routing_type"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetRoutingType().(type) {
+	case *GlobalSpecType_F5OrchestratedRouting:
+		if fv, exists := v.FldValidators["routing_type.f5_orchestrated_routing"]; exists {
+			val := m.GetRoutingType().(*GlobalSpecType_F5OrchestratedRouting).F5OrchestratedRouting
+			vOpts := append(opts,
+				db.WithValidateField("routing_type"),
+				db.WithValidateField("f5_orchestrated_routing"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_ManualRouting:
+		if fv, exists := v.FldValidators["routing_type.manual_routing"]; exists {
+			val := m.GetRoutingType().(*GlobalSpecType_ManualRouting).ManualRouting
+			vOpts := append(opts,
+				db.WithValidateField("routing_type"),
+				db.WithValidateField("manual_routing"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["security_group_choice"]; exists {
 		val := m.GetSecurityGroupChoice()
 		vOpts := append(opts,
@@ -8395,6 +8549,17 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["logs_receiver_choice"] = vFn
+
+	vrhRoutingType := v.RoutingTypeValidationRuleHandler
+	rulesRoutingType := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhRoutingType(rulesRoutingType)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.routing_type: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["routing_type"] = vFn
 
 	vrhSecurityGroupChoice := v.SecurityGroupChoiceValidationRuleHandler
 	rulesSecurityGroupChoice := map[string]string{
@@ -10581,6 +10746,41 @@ func (r *CreateSpecType) GetLogsReceiverChoiceFromGlobalSpecType(o *GlobalSpecTy
 }
 
 // create setters in CreateSpecType from GlobalSpecType for oneof fields
+func (r *CreateSpecType) SetRoutingTypeToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.RoutingType.(type) {
+	case nil:
+		o.RoutingType = nil
+
+	case *CreateSpecType_F5OrchestratedRouting:
+		o.RoutingType = &GlobalSpecType_F5OrchestratedRouting{F5OrchestratedRouting: of.F5OrchestratedRouting}
+
+	case *CreateSpecType_ManualRouting:
+		o.RoutingType = &GlobalSpecType_ManualRouting{ManualRouting: of.ManualRouting}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *CreateSpecType) GetRoutingTypeFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.RoutingType.(type) {
+	case nil:
+		r.RoutingType = nil
+
+	case *GlobalSpecType_F5OrchestratedRouting:
+		r.RoutingType = &CreateSpecType_F5OrchestratedRouting{F5OrchestratedRouting: of.F5OrchestratedRouting}
+
+	case *GlobalSpecType_ManualRouting:
+		r.RoutingType = &CreateSpecType_ManualRouting{ManualRouting: of.ManualRouting}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+// create setters in CreateSpecType from GlobalSpecType for oneof fields
 func (r *CreateSpecType) SetSecurityGroupChoiceToGlobalSpecType(o *GlobalSpecType) error {
 	switch of := r.SecurityGroupChoice.(type) {
 	case nil:
@@ -10717,6 +10917,7 @@ func (m *CreateSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool
 	m.GetLogsReceiverChoiceFromGlobalSpecType(f)
 	m.OfflineSurvivabilityMode = f.GetOfflineSurvivabilityMode()
 	m.Os = f.GetOs()
+	m.GetRoutingTypeFromGlobalSpecType(f)
 	m.GetSecurityGroupChoiceFromGlobalSpecType(f)
 	m.GetSiteTypeFromGlobalSpecType(f)
 	m.SshKey = f.GetSshKey()
@@ -10757,6 +10958,7 @@ func (m *CreateSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) 
 	m1.SetLogsReceiverChoiceToGlobalSpecType(f)
 	f.OfflineSurvivabilityMode = m1.OfflineSurvivabilityMode
 	f.Os = m1.Os
+	m1.SetRoutingTypeToGlobalSpecType(f)
 	m1.SetSecurityGroupChoiceToGlobalSpecType(f)
 	m1.SetSiteTypeToGlobalSpecType(f)
 	f.SshKey = m1.SshKey
@@ -11003,6 +11205,41 @@ func (r *GetSpecType) GetLogsReceiverChoiceFromGlobalSpecType(o *GlobalSpecType)
 }
 
 // create setters in GetSpecType from GlobalSpecType for oneof fields
+func (r *GetSpecType) SetRoutingTypeToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.RoutingType.(type) {
+	case nil:
+		o.RoutingType = nil
+
+	case *GetSpecType_F5OrchestratedRouting:
+		o.RoutingType = &GlobalSpecType_F5OrchestratedRouting{F5OrchestratedRouting: of.F5OrchestratedRouting}
+
+	case *GetSpecType_ManualRouting:
+		o.RoutingType = &GlobalSpecType_ManualRouting{ManualRouting: of.ManualRouting}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *GetSpecType) GetRoutingTypeFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.RoutingType.(type) {
+	case nil:
+		r.RoutingType = nil
+
+	case *GlobalSpecType_F5OrchestratedRouting:
+		r.RoutingType = &GetSpecType_F5OrchestratedRouting{F5OrchestratedRouting: of.F5OrchestratedRouting}
+
+	case *GlobalSpecType_ManualRouting:
+		r.RoutingType = &GetSpecType_ManualRouting{ManualRouting: of.ManualRouting}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+// create setters in GetSpecType from GlobalSpecType for oneof fields
 func (r *GetSpecType) SetSecurityGroupChoiceToGlobalSpecType(o *GlobalSpecType) error {
 	switch of := r.SecurityGroupChoice.(type) {
 	case nil:
@@ -11142,6 +11379,7 @@ func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	m.GetLogsReceiverChoiceFromGlobalSpecType(f)
 	m.OfflineSurvivabilityMode = f.GetOfflineSurvivabilityMode()
 	m.OperatingSystemVersion = f.GetOperatingSystemVersion()
+	m.GetRoutingTypeFromGlobalSpecType(f)
 	m.GetSecurityGroupChoiceFromGlobalSpecType(f)
 	m.SiteErrors = f.GetSiteErrors()
 
@@ -11191,6 +11429,7 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	m1.SetLogsReceiverChoiceToGlobalSpecType(f)
 	f.OfflineSurvivabilityMode = m1.OfflineSurvivabilityMode
 	f.OperatingSystemVersion = m1.OperatingSystemVersion
+	m1.SetRoutingTypeToGlobalSpecType(f)
 	m1.SetSecurityGroupChoiceToGlobalSpecType(f)
 	f.SiteErrors = m1.SiteErrors
 

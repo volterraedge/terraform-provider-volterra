@@ -62,7 +62,8 @@ func resourceVolterraUztnaGateway() *schema.Resource {
 
 			"big_ip_instance": {
 
-				Type:     schema.TypeSet,
+				Type:     schema.TypeList,
+				MaxItems: 1,
 				Required: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
@@ -179,44 +180,46 @@ func resourceVolterraUztnaGatewayCreate(d *schema.ResourceData, meta interface{}
 	//big_ip_instance
 	if v, ok := d.GetOk("big_ip_instance"); ok && !isIntfNil(v) {
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		bigIpInstance := &ves_io_schema_uztna_uztna_gateway.BigIpAccessSiteList{}
 		createSpec.BigIpInstance = bigIpInstance
 		for _, set := range sl {
-			bigIpInstanceMapStrToI := set.(map[string]interface{})
+			if set != nil {
+				bigIpInstanceMapStrToI := set.(map[string]interface{})
 
-			if v, ok := bigIpInstanceMapStrToI["bigip_site"]; ok && !isIntfNil(v) {
+				if v, ok := bigIpInstanceMapStrToI["bigip_site"]; ok && !isIntfNil(v) {
 
-				sl := v.([]interface{})
-				bigipSiteInt := make([]*ves_io_schema.ObjectRefType, len(sl))
-				bigIpInstance.BigipSite = bigipSiteInt
-				for i, ps := range sl {
+					sl := v.([]interface{})
+					bigipSiteInt := make([]*ves_io_schema.ObjectRefType, len(sl))
+					bigIpInstance.BigipSite = bigipSiteInt
+					for i, ps := range sl {
 
-					bsMapToStrVal := ps.(map[string]interface{})
-					bigipSiteInt[i] = &ves_io_schema.ObjectRefType{}
+						bsMapToStrVal := ps.(map[string]interface{})
+						bigipSiteInt[i] = &ves_io_schema.ObjectRefType{}
 
-					bigipSiteInt[i].Kind = "bigip_instance_site"
+						bigipSiteInt[i].Kind = "bigip_instance_site"
 
-					if v, ok := bsMapToStrVal["name"]; ok && !isIntfNil(v) {
-						bigipSiteInt[i].Name = v.(string)
-					}
+						if v, ok := bsMapToStrVal["name"]; ok && !isIntfNil(v) {
+							bigipSiteInt[i].Name = v.(string)
+						}
 
-					if v, ok := bsMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-						bigipSiteInt[i].Namespace = v.(string)
-					}
+						if v, ok := bsMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+							bigipSiteInt[i].Namespace = v.(string)
+						}
 
-					if v, ok := bsMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-						bigipSiteInt[i].Tenant = v.(string)
-					}
+						if v, ok := bsMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+							bigipSiteInt[i].Tenant = v.(string)
+						}
 
-					if v, ok := bsMapToStrVal["uid"]; ok && !isIntfNil(v) {
-						bigipSiteInt[i].Uid = v.(string)
+						if v, ok := bsMapToStrVal["uid"]; ok && !isIntfNil(v) {
+							bigipSiteInt[i].Uid = v.(string)
+						}
+
 					}
 
 				}
 
 			}
-
 		}
 
 	}
@@ -228,33 +231,35 @@ func resourceVolterraUztnaGatewayCreate(d *schema.ResourceData, meta interface{}
 		listeners := make([]*ves_io_schema_uztna_uztna_gateway.Listeners, len(sl))
 		createSpec.Listeners = listeners
 		for i, set := range sl {
-			listeners[i] = &ves_io_schema_uztna_uztna_gateway.Listeners{}
-			listenersMapStrToI := set.(map[string]interface{})
+			if set != nil {
+				listeners[i] = &ves_io_schema_uztna_uztna_gateway.Listeners{}
+				listenersMapStrToI := set.(map[string]interface{})
 
-			flowTypeTypeFound := false
+				flowTypeTypeFound := false
 
-			if v, ok := listenersMapStrToI["ipv4"]; ok && !isIntfNil(v) && !flowTypeTypeFound {
+				if v, ok := listenersMapStrToI["ipv4"]; ok && !isIntfNil(v) && !flowTypeTypeFound {
 
-				flowTypeTypeFound = true
-				flowTypeInt := &ves_io_schema_uztna_uztna_gateway.Listeners_Ipv4{}
+					flowTypeTypeFound = true
+					flowTypeInt := &ves_io_schema_uztna_uztna_gateway.Listeners_Ipv4{}
 
-				listeners[i].FlowType = flowTypeInt
+					listeners[i].FlowType = flowTypeInt
 
-				flowTypeInt.Ipv4 = v.(string)
+					flowTypeInt.Ipv4 = v.(string)
+
+				}
+
+				if v, ok := listenersMapStrToI["ipv6"]; ok && !isIntfNil(v) && !flowTypeTypeFound {
+
+					flowTypeTypeFound = true
+					flowTypeInt := &ves_io_schema_uztna_uztna_gateway.Listeners_Ipv6{}
+
+					listeners[i].FlowType = flowTypeInt
+
+					flowTypeInt.Ipv6 = v.(string)
+
+				}
 
 			}
-
-			if v, ok := listenersMapStrToI["ipv6"]; ok && !isIntfNil(v) && !flowTypeTypeFound {
-
-				flowTypeTypeFound = true
-				flowTypeInt := &ves_io_schema_uztna_uztna_gateway.Listeners_Ipv6{}
-
-				listeners[i].FlowType = flowTypeInt
-
-				flowTypeInt.Ipv6 = v.(string)
-
-			}
-
 		}
 
 	}
@@ -360,44 +365,46 @@ func resourceVolterraUztnaGatewayUpdate(d *schema.ResourceData, meta interface{}
 
 	if v, ok := d.GetOk("big_ip_instance"); ok && !isIntfNil(v) {
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		bigIpInstance := &ves_io_schema_uztna_uztna_gateway.BigIpAccessSiteList{}
 		updateSpec.BigIpInstance = bigIpInstance
 		for _, set := range sl {
-			bigIpInstanceMapStrToI := set.(map[string]interface{})
+			if set != nil {
+				bigIpInstanceMapStrToI := set.(map[string]interface{})
 
-			if v, ok := bigIpInstanceMapStrToI["bigip_site"]; ok && !isIntfNil(v) {
+				if v, ok := bigIpInstanceMapStrToI["bigip_site"]; ok && !isIntfNil(v) {
 
-				sl := v.([]interface{})
-				bigipSiteInt := make([]*ves_io_schema.ObjectRefType, len(sl))
-				bigIpInstance.BigipSite = bigipSiteInt
-				for i, ps := range sl {
+					sl := v.([]interface{})
+					bigipSiteInt := make([]*ves_io_schema.ObjectRefType, len(sl))
+					bigIpInstance.BigipSite = bigipSiteInt
+					for i, ps := range sl {
 
-					bsMapToStrVal := ps.(map[string]interface{})
-					bigipSiteInt[i] = &ves_io_schema.ObjectRefType{}
+						bsMapToStrVal := ps.(map[string]interface{})
+						bigipSiteInt[i] = &ves_io_schema.ObjectRefType{}
 
-					bigipSiteInt[i].Kind = "bigip_instance_site"
+						bigipSiteInt[i].Kind = "bigip_instance_site"
 
-					if v, ok := bsMapToStrVal["name"]; ok && !isIntfNil(v) {
-						bigipSiteInt[i].Name = v.(string)
-					}
+						if v, ok := bsMapToStrVal["name"]; ok && !isIntfNil(v) {
+							bigipSiteInt[i].Name = v.(string)
+						}
 
-					if v, ok := bsMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-						bigipSiteInt[i].Namespace = v.(string)
-					}
+						if v, ok := bsMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+							bigipSiteInt[i].Namespace = v.(string)
+						}
 
-					if v, ok := bsMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-						bigipSiteInt[i].Tenant = v.(string)
-					}
+						if v, ok := bsMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+							bigipSiteInt[i].Tenant = v.(string)
+						}
 
-					if v, ok := bsMapToStrVal["uid"]; ok && !isIntfNil(v) {
-						bigipSiteInt[i].Uid = v.(string)
+						if v, ok := bsMapToStrVal["uid"]; ok && !isIntfNil(v) {
+							bigipSiteInt[i].Uid = v.(string)
+						}
+
 					}
 
 				}
 
 			}
-
 		}
 
 	}
@@ -408,33 +415,35 @@ func resourceVolterraUztnaGatewayUpdate(d *schema.ResourceData, meta interface{}
 		listeners := make([]*ves_io_schema_uztna_uztna_gateway.Listeners, len(sl))
 		updateSpec.Listeners = listeners
 		for i, set := range sl {
-			listeners[i] = &ves_io_schema_uztna_uztna_gateway.Listeners{}
-			listenersMapStrToI := set.(map[string]interface{})
+			if set != nil {
+				listeners[i] = &ves_io_schema_uztna_uztna_gateway.Listeners{}
+				listenersMapStrToI := set.(map[string]interface{})
 
-			flowTypeTypeFound := false
+				flowTypeTypeFound := false
 
-			if v, ok := listenersMapStrToI["ipv4"]; ok && !isIntfNil(v) && !flowTypeTypeFound {
+				if v, ok := listenersMapStrToI["ipv4"]; ok && !isIntfNil(v) && !flowTypeTypeFound {
 
-				flowTypeTypeFound = true
-				flowTypeInt := &ves_io_schema_uztna_uztna_gateway.Listeners_Ipv4{}
+					flowTypeTypeFound = true
+					flowTypeInt := &ves_io_schema_uztna_uztna_gateway.Listeners_Ipv4{}
 
-				listeners[i].FlowType = flowTypeInt
+					listeners[i].FlowType = flowTypeInt
 
-				flowTypeInt.Ipv4 = v.(string)
+					flowTypeInt.Ipv4 = v.(string)
+
+				}
+
+				if v, ok := listenersMapStrToI["ipv6"]; ok && !isIntfNil(v) && !flowTypeTypeFound {
+
+					flowTypeTypeFound = true
+					flowTypeInt := &ves_io_schema_uztna_uztna_gateway.Listeners_Ipv6{}
+
+					listeners[i].FlowType = flowTypeInt
+
+					flowTypeInt.Ipv6 = v.(string)
+
+				}
 
 			}
-
-			if v, ok := listenersMapStrToI["ipv6"]; ok && !isIntfNil(v) && !flowTypeTypeFound {
-
-				flowTypeTypeFound = true
-				flowTypeInt := &ves_io_schema_uztna_uztna_gateway.Listeners_Ipv6{}
-
-				listeners[i].FlowType = flowTypeInt
-
-				flowTypeInt.Ipv6 = v.(string)
-
-			}
-
 		}
 
 	}

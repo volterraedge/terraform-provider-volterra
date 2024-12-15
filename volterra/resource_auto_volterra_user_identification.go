@@ -223,186 +223,188 @@ func resourceVolterraUserIdentificationCreate(d *schema.ResourceData, meta inter
 		rules := make([]*ves_io_schema_user_identification.UserIdentificationRule, len(sl))
 		createSpec.Rules = rules
 		for i, set := range sl {
-			rules[i] = &ves_io_schema_user_identification.UserIdentificationRule{}
-			rulesMapStrToI := set.(map[string]interface{})
+			if set != nil {
+				rules[i] = &ves_io_schema_user_identification.UserIdentificationRule{}
+				rulesMapStrToI := set.(map[string]interface{})
 
-			identifierTypeFound := false
+				identifierTypeFound := false
 
-			if v, ok := rulesMapStrToI["client_asn"]; ok && !isIntfNil(v) && !identifierTypeFound {
+				if v, ok := rulesMapStrToI["client_asn"]; ok && !isIntfNil(v) && !identifierTypeFound {
 
-				identifierTypeFound = true
+					identifierTypeFound = true
 
-				if v.(bool) {
-					identifierInt := &ves_io_schema_user_identification.UserIdentificationRule_ClientAsn{}
-					identifierInt.ClientAsn = &ves_io_schema.Empty{}
+					if v.(bool) {
+						identifierInt := &ves_io_schema_user_identification.UserIdentificationRule_ClientAsn{}
+						identifierInt.ClientAsn = &ves_io_schema.Empty{}
+						rules[i].Identifier = identifierInt
+					}
+
+				}
+
+				if v, ok := rulesMapStrToI["client_city"]; ok && !isIntfNil(v) && !identifierTypeFound {
+
+					identifierTypeFound = true
+
+					if v.(bool) {
+						identifierInt := &ves_io_schema_user_identification.UserIdentificationRule_ClientCity{}
+						identifierInt.ClientCity = &ves_io_schema.Empty{}
+						rules[i].Identifier = identifierInt
+					}
+
+				}
+
+				if v, ok := rulesMapStrToI["client_country"]; ok && !isIntfNil(v) && !identifierTypeFound {
+
+					identifierTypeFound = true
+
+					if v.(bool) {
+						identifierInt := &ves_io_schema_user_identification.UserIdentificationRule_ClientCountry{}
+						identifierInt.ClientCountry = &ves_io_schema.Empty{}
+						rules[i].Identifier = identifierInt
+					}
+
+				}
+
+				if v, ok := rulesMapStrToI["client_ip"]; ok && !isIntfNil(v) && !identifierTypeFound {
+
+					identifierTypeFound = true
+
+					if v.(bool) {
+						identifierInt := &ves_io_schema_user_identification.UserIdentificationRule_ClientIp{}
+						identifierInt.ClientIp = &ves_io_schema.Empty{}
+						rules[i].Identifier = identifierInt
+					}
+
+				}
+
+				if v, ok := rulesMapStrToI["client_region"]; ok && !isIntfNil(v) && !identifierTypeFound {
+
+					identifierTypeFound = true
+
+					if v.(bool) {
+						identifierInt := &ves_io_schema_user_identification.UserIdentificationRule_ClientRegion{}
+						identifierInt.ClientRegion = &ves_io_schema.Empty{}
+						rules[i].Identifier = identifierInt
+					}
+
+				}
+
+				if v, ok := rulesMapStrToI["cookie_name"]; ok && !isIntfNil(v) && !identifierTypeFound {
+
+					identifierTypeFound = true
+					identifierInt := &ves_io_schema_user_identification.UserIdentificationRule_CookieName{}
+
 					rules[i].Identifier = identifierInt
+
+					identifierInt.CookieName = v.(string)
+
+				}
+
+				if v, ok := rulesMapStrToI["http_header_name"]; ok && !isIntfNil(v) && !identifierTypeFound {
+
+					identifierTypeFound = true
+					identifierInt := &ves_io_schema_user_identification.UserIdentificationRule_HttpHeaderName{}
+
+					rules[i].Identifier = identifierInt
+
+					identifierInt.HttpHeaderName = v.(string)
+
+				}
+
+				if v, ok := rulesMapStrToI["ip_and_http_header_name"]; ok && !isIntfNil(v) && !identifierTypeFound {
+
+					identifierTypeFound = true
+					identifierInt := &ves_io_schema_user_identification.UserIdentificationRule_IpAndHttpHeaderName{}
+
+					rules[i].Identifier = identifierInt
+
+					identifierInt.IpAndHttpHeaderName = v.(string)
+
+				}
+
+				if v, ok := rulesMapStrToI["ip_and_ja4_tls_fingerprint"]; ok && !isIntfNil(v) && !identifierTypeFound {
+
+					identifierTypeFound = true
+
+					if v.(bool) {
+						identifierInt := &ves_io_schema_user_identification.UserIdentificationRule_IpAndJa4TlsFingerprint{}
+						identifierInt.IpAndJa4TlsFingerprint = &ves_io_schema.Empty{}
+						rules[i].Identifier = identifierInt
+					}
+
+				}
+
+				if v, ok := rulesMapStrToI["ip_and_tls_fingerprint"]; ok && !isIntfNil(v) && !identifierTypeFound {
+
+					identifierTypeFound = true
+
+					if v.(bool) {
+						identifierInt := &ves_io_schema_user_identification.UserIdentificationRule_IpAndTlsFingerprint{}
+						identifierInt.IpAndTlsFingerprint = &ves_io_schema.Empty{}
+						rules[i].Identifier = identifierInt
+					}
+
+				}
+
+				if v, ok := rulesMapStrToI["ja4_tls_fingerprint"]; ok && !isIntfNil(v) && !identifierTypeFound {
+
+					identifierTypeFound = true
+
+					if v.(bool) {
+						identifierInt := &ves_io_schema_user_identification.UserIdentificationRule_Ja4TlsFingerprint{}
+						identifierInt.Ja4TlsFingerprint = &ves_io_schema.Empty{}
+						rules[i].Identifier = identifierInt
+					}
+
+				}
+
+				if v, ok := rulesMapStrToI["jwt_claim_name"]; ok && !isIntfNil(v) && !identifierTypeFound {
+
+					identifierTypeFound = true
+					identifierInt := &ves_io_schema_user_identification.UserIdentificationRule_JwtClaimName{}
+
+					rules[i].Identifier = identifierInt
+
+					identifierInt.JwtClaimName = v.(string)
+
+				}
+
+				if v, ok := rulesMapStrToI["none"]; ok && !isIntfNil(v) && !identifierTypeFound {
+
+					identifierTypeFound = true
+
+					if v.(bool) {
+						identifierInt := &ves_io_schema_user_identification.UserIdentificationRule_None{}
+						identifierInt.None = &ves_io_schema.Empty{}
+						rules[i].Identifier = identifierInt
+					}
+
+				}
+
+				if v, ok := rulesMapStrToI["query_param_key"]; ok && !isIntfNil(v) && !identifierTypeFound {
+
+					identifierTypeFound = true
+					identifierInt := &ves_io_schema_user_identification.UserIdentificationRule_QueryParamKey{}
+
+					rules[i].Identifier = identifierInt
+
+					identifierInt.QueryParamKey = v.(string)
+
+				}
+
+				if v, ok := rulesMapStrToI["tls_fingerprint"]; ok && !isIntfNil(v) && !identifierTypeFound {
+
+					identifierTypeFound = true
+
+					if v.(bool) {
+						identifierInt := &ves_io_schema_user_identification.UserIdentificationRule_TlsFingerprint{}
+						identifierInt.TlsFingerprint = &ves_io_schema.Empty{}
+						rules[i].Identifier = identifierInt
+					}
+
 				}
 
 			}
-
-			if v, ok := rulesMapStrToI["client_city"]; ok && !isIntfNil(v) && !identifierTypeFound {
-
-				identifierTypeFound = true
-
-				if v.(bool) {
-					identifierInt := &ves_io_schema_user_identification.UserIdentificationRule_ClientCity{}
-					identifierInt.ClientCity = &ves_io_schema.Empty{}
-					rules[i].Identifier = identifierInt
-				}
-
-			}
-
-			if v, ok := rulesMapStrToI["client_country"]; ok && !isIntfNil(v) && !identifierTypeFound {
-
-				identifierTypeFound = true
-
-				if v.(bool) {
-					identifierInt := &ves_io_schema_user_identification.UserIdentificationRule_ClientCountry{}
-					identifierInt.ClientCountry = &ves_io_schema.Empty{}
-					rules[i].Identifier = identifierInt
-				}
-
-			}
-
-			if v, ok := rulesMapStrToI["client_ip"]; ok && !isIntfNil(v) && !identifierTypeFound {
-
-				identifierTypeFound = true
-
-				if v.(bool) {
-					identifierInt := &ves_io_schema_user_identification.UserIdentificationRule_ClientIp{}
-					identifierInt.ClientIp = &ves_io_schema.Empty{}
-					rules[i].Identifier = identifierInt
-				}
-
-			}
-
-			if v, ok := rulesMapStrToI["client_region"]; ok && !isIntfNil(v) && !identifierTypeFound {
-
-				identifierTypeFound = true
-
-				if v.(bool) {
-					identifierInt := &ves_io_schema_user_identification.UserIdentificationRule_ClientRegion{}
-					identifierInt.ClientRegion = &ves_io_schema.Empty{}
-					rules[i].Identifier = identifierInt
-				}
-
-			}
-
-			if v, ok := rulesMapStrToI["cookie_name"]; ok && !isIntfNil(v) && !identifierTypeFound {
-
-				identifierTypeFound = true
-				identifierInt := &ves_io_schema_user_identification.UserIdentificationRule_CookieName{}
-
-				rules[i].Identifier = identifierInt
-
-				identifierInt.CookieName = v.(string)
-
-			}
-
-			if v, ok := rulesMapStrToI["http_header_name"]; ok && !isIntfNil(v) && !identifierTypeFound {
-
-				identifierTypeFound = true
-				identifierInt := &ves_io_schema_user_identification.UserIdentificationRule_HttpHeaderName{}
-
-				rules[i].Identifier = identifierInt
-
-				identifierInt.HttpHeaderName = v.(string)
-
-			}
-
-			if v, ok := rulesMapStrToI["ip_and_http_header_name"]; ok && !isIntfNil(v) && !identifierTypeFound {
-
-				identifierTypeFound = true
-				identifierInt := &ves_io_schema_user_identification.UserIdentificationRule_IpAndHttpHeaderName{}
-
-				rules[i].Identifier = identifierInt
-
-				identifierInt.IpAndHttpHeaderName = v.(string)
-
-			}
-
-			if v, ok := rulesMapStrToI["ip_and_ja4_tls_fingerprint"]; ok && !isIntfNil(v) && !identifierTypeFound {
-
-				identifierTypeFound = true
-
-				if v.(bool) {
-					identifierInt := &ves_io_schema_user_identification.UserIdentificationRule_IpAndJa4TlsFingerprint{}
-					identifierInt.IpAndJa4TlsFingerprint = &ves_io_schema.Empty{}
-					rules[i].Identifier = identifierInt
-				}
-
-			}
-
-			if v, ok := rulesMapStrToI["ip_and_tls_fingerprint"]; ok && !isIntfNil(v) && !identifierTypeFound {
-
-				identifierTypeFound = true
-
-				if v.(bool) {
-					identifierInt := &ves_io_schema_user_identification.UserIdentificationRule_IpAndTlsFingerprint{}
-					identifierInt.IpAndTlsFingerprint = &ves_io_schema.Empty{}
-					rules[i].Identifier = identifierInt
-				}
-
-			}
-
-			if v, ok := rulesMapStrToI["ja4_tls_fingerprint"]; ok && !isIntfNil(v) && !identifierTypeFound {
-
-				identifierTypeFound = true
-
-				if v.(bool) {
-					identifierInt := &ves_io_schema_user_identification.UserIdentificationRule_Ja4TlsFingerprint{}
-					identifierInt.Ja4TlsFingerprint = &ves_io_schema.Empty{}
-					rules[i].Identifier = identifierInt
-				}
-
-			}
-
-			if v, ok := rulesMapStrToI["jwt_claim_name"]; ok && !isIntfNil(v) && !identifierTypeFound {
-
-				identifierTypeFound = true
-				identifierInt := &ves_io_schema_user_identification.UserIdentificationRule_JwtClaimName{}
-
-				rules[i].Identifier = identifierInt
-
-				identifierInt.JwtClaimName = v.(string)
-
-			}
-
-			if v, ok := rulesMapStrToI["none"]; ok && !isIntfNil(v) && !identifierTypeFound {
-
-				identifierTypeFound = true
-
-				if v.(bool) {
-					identifierInt := &ves_io_schema_user_identification.UserIdentificationRule_None{}
-					identifierInt.None = &ves_io_schema.Empty{}
-					rules[i].Identifier = identifierInt
-				}
-
-			}
-
-			if v, ok := rulesMapStrToI["query_param_key"]; ok && !isIntfNil(v) && !identifierTypeFound {
-
-				identifierTypeFound = true
-				identifierInt := &ves_io_schema_user_identification.UserIdentificationRule_QueryParamKey{}
-
-				rules[i].Identifier = identifierInt
-
-				identifierInt.QueryParamKey = v.(string)
-
-			}
-
-			if v, ok := rulesMapStrToI["tls_fingerprint"]; ok && !isIntfNil(v) && !identifierTypeFound {
-
-				identifierTypeFound = true
-
-				if v.(bool) {
-					identifierInt := &ves_io_schema_user_identification.UserIdentificationRule_TlsFingerprint{}
-					identifierInt.TlsFingerprint = &ves_io_schema.Empty{}
-					rules[i].Identifier = identifierInt
-				}
-
-			}
-
 		}
 
 	}
@@ -512,186 +514,188 @@ func resourceVolterraUserIdentificationUpdate(d *schema.ResourceData, meta inter
 		rules := make([]*ves_io_schema_user_identification.UserIdentificationRule, len(sl))
 		updateSpec.Rules = rules
 		for i, set := range sl {
-			rules[i] = &ves_io_schema_user_identification.UserIdentificationRule{}
-			rulesMapStrToI := set.(map[string]interface{})
+			if set != nil {
+				rules[i] = &ves_io_schema_user_identification.UserIdentificationRule{}
+				rulesMapStrToI := set.(map[string]interface{})
 
-			identifierTypeFound := false
+				identifierTypeFound := false
 
-			if v, ok := rulesMapStrToI["client_asn"]; ok && !isIntfNil(v) && !identifierTypeFound {
+				if v, ok := rulesMapStrToI["client_asn"]; ok && !isIntfNil(v) && !identifierTypeFound {
 
-				identifierTypeFound = true
+					identifierTypeFound = true
 
-				if v.(bool) {
-					identifierInt := &ves_io_schema_user_identification.UserIdentificationRule_ClientAsn{}
-					identifierInt.ClientAsn = &ves_io_schema.Empty{}
+					if v.(bool) {
+						identifierInt := &ves_io_schema_user_identification.UserIdentificationRule_ClientAsn{}
+						identifierInt.ClientAsn = &ves_io_schema.Empty{}
+						rules[i].Identifier = identifierInt
+					}
+
+				}
+
+				if v, ok := rulesMapStrToI["client_city"]; ok && !isIntfNil(v) && !identifierTypeFound {
+
+					identifierTypeFound = true
+
+					if v.(bool) {
+						identifierInt := &ves_io_schema_user_identification.UserIdentificationRule_ClientCity{}
+						identifierInt.ClientCity = &ves_io_schema.Empty{}
+						rules[i].Identifier = identifierInt
+					}
+
+				}
+
+				if v, ok := rulesMapStrToI["client_country"]; ok && !isIntfNil(v) && !identifierTypeFound {
+
+					identifierTypeFound = true
+
+					if v.(bool) {
+						identifierInt := &ves_io_schema_user_identification.UserIdentificationRule_ClientCountry{}
+						identifierInt.ClientCountry = &ves_io_schema.Empty{}
+						rules[i].Identifier = identifierInt
+					}
+
+				}
+
+				if v, ok := rulesMapStrToI["client_ip"]; ok && !isIntfNil(v) && !identifierTypeFound {
+
+					identifierTypeFound = true
+
+					if v.(bool) {
+						identifierInt := &ves_io_schema_user_identification.UserIdentificationRule_ClientIp{}
+						identifierInt.ClientIp = &ves_io_schema.Empty{}
+						rules[i].Identifier = identifierInt
+					}
+
+				}
+
+				if v, ok := rulesMapStrToI["client_region"]; ok && !isIntfNil(v) && !identifierTypeFound {
+
+					identifierTypeFound = true
+
+					if v.(bool) {
+						identifierInt := &ves_io_schema_user_identification.UserIdentificationRule_ClientRegion{}
+						identifierInt.ClientRegion = &ves_io_schema.Empty{}
+						rules[i].Identifier = identifierInt
+					}
+
+				}
+
+				if v, ok := rulesMapStrToI["cookie_name"]; ok && !isIntfNil(v) && !identifierTypeFound {
+
+					identifierTypeFound = true
+					identifierInt := &ves_io_schema_user_identification.UserIdentificationRule_CookieName{}
+
 					rules[i].Identifier = identifierInt
+
+					identifierInt.CookieName = v.(string)
+
+				}
+
+				if v, ok := rulesMapStrToI["http_header_name"]; ok && !isIntfNil(v) && !identifierTypeFound {
+
+					identifierTypeFound = true
+					identifierInt := &ves_io_schema_user_identification.UserIdentificationRule_HttpHeaderName{}
+
+					rules[i].Identifier = identifierInt
+
+					identifierInt.HttpHeaderName = v.(string)
+
+				}
+
+				if v, ok := rulesMapStrToI["ip_and_http_header_name"]; ok && !isIntfNil(v) && !identifierTypeFound {
+
+					identifierTypeFound = true
+					identifierInt := &ves_io_schema_user_identification.UserIdentificationRule_IpAndHttpHeaderName{}
+
+					rules[i].Identifier = identifierInt
+
+					identifierInt.IpAndHttpHeaderName = v.(string)
+
+				}
+
+				if v, ok := rulesMapStrToI["ip_and_ja4_tls_fingerprint"]; ok && !isIntfNil(v) && !identifierTypeFound {
+
+					identifierTypeFound = true
+
+					if v.(bool) {
+						identifierInt := &ves_io_schema_user_identification.UserIdentificationRule_IpAndJa4TlsFingerprint{}
+						identifierInt.IpAndJa4TlsFingerprint = &ves_io_schema.Empty{}
+						rules[i].Identifier = identifierInt
+					}
+
+				}
+
+				if v, ok := rulesMapStrToI["ip_and_tls_fingerprint"]; ok && !isIntfNil(v) && !identifierTypeFound {
+
+					identifierTypeFound = true
+
+					if v.(bool) {
+						identifierInt := &ves_io_schema_user_identification.UserIdentificationRule_IpAndTlsFingerprint{}
+						identifierInt.IpAndTlsFingerprint = &ves_io_schema.Empty{}
+						rules[i].Identifier = identifierInt
+					}
+
+				}
+
+				if v, ok := rulesMapStrToI["ja4_tls_fingerprint"]; ok && !isIntfNil(v) && !identifierTypeFound {
+
+					identifierTypeFound = true
+
+					if v.(bool) {
+						identifierInt := &ves_io_schema_user_identification.UserIdentificationRule_Ja4TlsFingerprint{}
+						identifierInt.Ja4TlsFingerprint = &ves_io_schema.Empty{}
+						rules[i].Identifier = identifierInt
+					}
+
+				}
+
+				if v, ok := rulesMapStrToI["jwt_claim_name"]; ok && !isIntfNil(v) && !identifierTypeFound {
+
+					identifierTypeFound = true
+					identifierInt := &ves_io_schema_user_identification.UserIdentificationRule_JwtClaimName{}
+
+					rules[i].Identifier = identifierInt
+
+					identifierInt.JwtClaimName = v.(string)
+
+				}
+
+				if v, ok := rulesMapStrToI["none"]; ok && !isIntfNil(v) && !identifierTypeFound {
+
+					identifierTypeFound = true
+
+					if v.(bool) {
+						identifierInt := &ves_io_schema_user_identification.UserIdentificationRule_None{}
+						identifierInt.None = &ves_io_schema.Empty{}
+						rules[i].Identifier = identifierInt
+					}
+
+				}
+
+				if v, ok := rulesMapStrToI["query_param_key"]; ok && !isIntfNil(v) && !identifierTypeFound {
+
+					identifierTypeFound = true
+					identifierInt := &ves_io_schema_user_identification.UserIdentificationRule_QueryParamKey{}
+
+					rules[i].Identifier = identifierInt
+
+					identifierInt.QueryParamKey = v.(string)
+
+				}
+
+				if v, ok := rulesMapStrToI["tls_fingerprint"]; ok && !isIntfNil(v) && !identifierTypeFound {
+
+					identifierTypeFound = true
+
+					if v.(bool) {
+						identifierInt := &ves_io_schema_user_identification.UserIdentificationRule_TlsFingerprint{}
+						identifierInt.TlsFingerprint = &ves_io_schema.Empty{}
+						rules[i].Identifier = identifierInt
+					}
+
 				}
 
 			}
-
-			if v, ok := rulesMapStrToI["client_city"]; ok && !isIntfNil(v) && !identifierTypeFound {
-
-				identifierTypeFound = true
-
-				if v.(bool) {
-					identifierInt := &ves_io_schema_user_identification.UserIdentificationRule_ClientCity{}
-					identifierInt.ClientCity = &ves_io_schema.Empty{}
-					rules[i].Identifier = identifierInt
-				}
-
-			}
-
-			if v, ok := rulesMapStrToI["client_country"]; ok && !isIntfNil(v) && !identifierTypeFound {
-
-				identifierTypeFound = true
-
-				if v.(bool) {
-					identifierInt := &ves_io_schema_user_identification.UserIdentificationRule_ClientCountry{}
-					identifierInt.ClientCountry = &ves_io_schema.Empty{}
-					rules[i].Identifier = identifierInt
-				}
-
-			}
-
-			if v, ok := rulesMapStrToI["client_ip"]; ok && !isIntfNil(v) && !identifierTypeFound {
-
-				identifierTypeFound = true
-
-				if v.(bool) {
-					identifierInt := &ves_io_schema_user_identification.UserIdentificationRule_ClientIp{}
-					identifierInt.ClientIp = &ves_io_schema.Empty{}
-					rules[i].Identifier = identifierInt
-				}
-
-			}
-
-			if v, ok := rulesMapStrToI["client_region"]; ok && !isIntfNil(v) && !identifierTypeFound {
-
-				identifierTypeFound = true
-
-				if v.(bool) {
-					identifierInt := &ves_io_schema_user_identification.UserIdentificationRule_ClientRegion{}
-					identifierInt.ClientRegion = &ves_io_schema.Empty{}
-					rules[i].Identifier = identifierInt
-				}
-
-			}
-
-			if v, ok := rulesMapStrToI["cookie_name"]; ok && !isIntfNil(v) && !identifierTypeFound {
-
-				identifierTypeFound = true
-				identifierInt := &ves_io_schema_user_identification.UserIdentificationRule_CookieName{}
-
-				rules[i].Identifier = identifierInt
-
-				identifierInt.CookieName = v.(string)
-
-			}
-
-			if v, ok := rulesMapStrToI["http_header_name"]; ok && !isIntfNil(v) && !identifierTypeFound {
-
-				identifierTypeFound = true
-				identifierInt := &ves_io_schema_user_identification.UserIdentificationRule_HttpHeaderName{}
-
-				rules[i].Identifier = identifierInt
-
-				identifierInt.HttpHeaderName = v.(string)
-
-			}
-
-			if v, ok := rulesMapStrToI["ip_and_http_header_name"]; ok && !isIntfNil(v) && !identifierTypeFound {
-
-				identifierTypeFound = true
-				identifierInt := &ves_io_schema_user_identification.UserIdentificationRule_IpAndHttpHeaderName{}
-
-				rules[i].Identifier = identifierInt
-
-				identifierInt.IpAndHttpHeaderName = v.(string)
-
-			}
-
-			if v, ok := rulesMapStrToI["ip_and_ja4_tls_fingerprint"]; ok && !isIntfNil(v) && !identifierTypeFound {
-
-				identifierTypeFound = true
-
-				if v.(bool) {
-					identifierInt := &ves_io_schema_user_identification.UserIdentificationRule_IpAndJa4TlsFingerprint{}
-					identifierInt.IpAndJa4TlsFingerprint = &ves_io_schema.Empty{}
-					rules[i].Identifier = identifierInt
-				}
-
-			}
-
-			if v, ok := rulesMapStrToI["ip_and_tls_fingerprint"]; ok && !isIntfNil(v) && !identifierTypeFound {
-
-				identifierTypeFound = true
-
-				if v.(bool) {
-					identifierInt := &ves_io_schema_user_identification.UserIdentificationRule_IpAndTlsFingerprint{}
-					identifierInt.IpAndTlsFingerprint = &ves_io_schema.Empty{}
-					rules[i].Identifier = identifierInt
-				}
-
-			}
-
-			if v, ok := rulesMapStrToI["ja4_tls_fingerprint"]; ok && !isIntfNil(v) && !identifierTypeFound {
-
-				identifierTypeFound = true
-
-				if v.(bool) {
-					identifierInt := &ves_io_schema_user_identification.UserIdentificationRule_Ja4TlsFingerprint{}
-					identifierInt.Ja4TlsFingerprint = &ves_io_schema.Empty{}
-					rules[i].Identifier = identifierInt
-				}
-
-			}
-
-			if v, ok := rulesMapStrToI["jwt_claim_name"]; ok && !isIntfNil(v) && !identifierTypeFound {
-
-				identifierTypeFound = true
-				identifierInt := &ves_io_schema_user_identification.UserIdentificationRule_JwtClaimName{}
-
-				rules[i].Identifier = identifierInt
-
-				identifierInt.JwtClaimName = v.(string)
-
-			}
-
-			if v, ok := rulesMapStrToI["none"]; ok && !isIntfNil(v) && !identifierTypeFound {
-
-				identifierTypeFound = true
-
-				if v.(bool) {
-					identifierInt := &ves_io_schema_user_identification.UserIdentificationRule_None{}
-					identifierInt.None = &ves_io_schema.Empty{}
-					rules[i].Identifier = identifierInt
-				}
-
-			}
-
-			if v, ok := rulesMapStrToI["query_param_key"]; ok && !isIntfNil(v) && !identifierTypeFound {
-
-				identifierTypeFound = true
-				identifierInt := &ves_io_schema_user_identification.UserIdentificationRule_QueryParamKey{}
-
-				rules[i].Identifier = identifierInt
-
-				identifierInt.QueryParamKey = v.(string)
-
-			}
-
-			if v, ok := rulesMapStrToI["tls_fingerprint"]; ok && !isIntfNil(v) && !identifierTypeFound {
-
-				identifierTypeFound = true
-
-				if v.(bool) {
-					identifierInt := &ves_io_schema_user_identification.UserIdentificationRule_TlsFingerprint{}
-					identifierInt.TlsFingerprint = &ves_io_schema.Empty{}
-					rules[i].Identifier = identifierInt
-				}
-
-			}
-
 		}
 
 	}

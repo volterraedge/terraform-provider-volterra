@@ -68,6 +68,12 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetAppVipPoolDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetAppVipPoolDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
 	if fdrInfos, err := m.GetCertDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetCertDRefInfo() FAILED")
 	} else {
@@ -86,7 +92,31 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
+	if fdrInfos, err := m.GetPolicyDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetPolicyDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
 	return drInfos, nil
+
+}
+
+// GetDRefInfo for the field's type
+func (m *CreateSpecType) GetAppVipPoolDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetAppVipPool() == nil {
+		return nil, nil
+	}
+
+	drInfos, err := m.GetAppVipPool().GetDRefInfo()
+	if err != nil {
+		return nil, errors.Wrap(err, "GetAppVipPool().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "app_vip_pool." + dri.DRField
+	}
+	return drInfos, err
 
 }
 
@@ -139,6 +169,24 @@ func (m *CreateSpecType) GetLeasePoolDRefInfo() ([]db.DRefInfo, error) {
 	for i := range drInfos {
 		dri := &drInfos[i]
 		dri.DRField = "lease_pool." + dri.DRField
+	}
+	return drInfos, err
+
+}
+
+// GetDRefInfo for the field's type
+func (m *CreateSpecType) GetPolicyDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetPolicy() == nil {
+		return nil, nil
+	}
+
+	drInfos, err := m.GetPolicy().GetDRefInfo()
+	if err != nil {
+		return nil, errors.Wrap(err, "GetPolicy().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "policy." + dri.DRField
 	}
 	return drInfos, err
 
@@ -213,11 +261,18 @@ func (v *ValidateCreateSpecType) LeasePoolValidationRuleHandler(rules map[string
 	return validatorFn, nil
 }
 
-func (v *ValidateCreateSpecType) ProfileNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+func (v *ValidateCreateSpecType) PolicyValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
-	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for profile_name")
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for policy")
+	}
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		return nil
 	}
 
 	return validatorFn, nil
@@ -241,6 +296,15 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 
 		vOpts := append(opts, db.WithValidateField("access_url"))
 		if err := fv(ctx, m.GetAccessUrl(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["app_vip_pool"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("app_vip_pool"))
+		if err := fv(ctx, m.GetAppVipPool(), vOpts...); err != nil {
 			return err
 		}
 
@@ -273,10 +337,10 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
-	if fv, exists := v.FldValidators["profile_name"]; exists {
+	if fv, exists := v.FldValidators["policy"]; exists {
 
-		vOpts := append(opts, db.WithValidateField("profile_name"))
-		if err := fv(ctx, m.GetProfileName(), vOpts...); err != nil {
+		vOpts := append(opts, db.WithValidateField("policy"))
+		if err := fv(ctx, m.GetPolicy(), vOpts...); err != nil {
 			return err
 		}
 
@@ -343,17 +407,18 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	}
 	v.FldValidators["lease_pool"] = vFn
 
-	vrhProfileName := v.ProfileNameValidationRuleHandler
-	rulesProfileName := map[string]string{
+	vrhPolicy := v.PolicyValidationRuleHandler
+	rulesPolicy := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
-		"ves.io.schema.rules.string.max_len":   "1024",
 	}
-	vFn, err = vrhProfileName(rulesProfileName)
+	vFn, err = vrhPolicy(rulesPolicy)
 	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.profile_name: %s", err)
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.policy: %s", err)
 		panic(errMsg)
 	}
-	v.FldValidators["profile_name"] = vFn
+	v.FldValidators["policy"] = vFn
+
+	v.FldValidators["app_vip_pool"] = DomainViewAppVIPPoolValidator().Validate
 
 	return v
 }()
@@ -364,15 +429,15 @@ func CreateSpecTypeValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
-func (m *DVPerimeterREAdvertisement) ToJSON() (string, error) {
+func (m *DVCloudGatewayAdvertisement) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
 
-func (m *DVPerimeterREAdvertisement) ToYAML() (string, error) {
+func (m *DVCloudGatewayAdvertisement) ToYAML() (string, error) {
 	return codec.ToYAML(m)
 }
 
-func (m *DVPerimeterREAdvertisement) DeepCopy() *DVPerimeterREAdvertisement {
+func (m *DVCloudGatewayAdvertisement) DeepCopy() *DVCloudGatewayAdvertisement {
 	if m == nil {
 		return nil
 	}
@@ -380,7 +445,7 @@ func (m *DVPerimeterREAdvertisement) DeepCopy() *DVPerimeterREAdvertisement {
 	if err != nil {
 		return nil
 	}
-	c := &DVPerimeterREAdvertisement{}
+	c := &DVCloudGatewayAdvertisement{}
 	err = c.Unmarshal(ser)
 	if err != nil {
 		return nil
@@ -388,37 +453,37 @@ func (m *DVPerimeterREAdvertisement) DeepCopy() *DVPerimeterREAdvertisement {
 	return c
 }
 
-func (m *DVPerimeterREAdvertisement) DeepCopyProto() proto.Message {
+func (m *DVCloudGatewayAdvertisement) DeepCopyProto() proto.Message {
 	if m == nil {
 		return nil
 	}
 	return m.DeepCopy()
 }
 
-func (m *DVPerimeterREAdvertisement) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
-	return DVPerimeterREAdvertisementValidator().Validate(ctx, m, opts...)
+func (m *DVCloudGatewayAdvertisement) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return DVCloudGatewayAdvertisementValidator().Validate(ctx, m, opts...)
 }
 
-func (m *DVPerimeterREAdvertisement) GetDRefInfo() ([]db.DRefInfo, error) {
+func (m *DVCloudGatewayAdvertisement) GetDRefInfo() ([]db.DRefInfo, error) {
 	if m == nil {
 		return nil, nil
 	}
 
-	return m.GetPerimeterReChoiceDRefInfo()
+	return m.GetCloudGatewayChoiceDRefInfo()
 
 }
 
 // GetDRefInfo for the field's type
-func (m *DVPerimeterREAdvertisement) GetPerimeterReChoiceDRefInfo() ([]db.DRefInfo, error) {
-	if m.GetPerimeterReChoice() == nil {
+func (m *DVCloudGatewayAdvertisement) GetCloudGatewayChoiceDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetCloudGatewayChoice() == nil {
 		return nil, nil
 	}
-	switch m.GetPerimeterReChoice().(type) {
-	case *DVPerimeterREAdvertisement_AllPerimeter:
+	switch m.GetCloudGatewayChoice().(type) {
+	case *DVCloudGatewayAdvertisement_AllCloud:
 
 		return nil, nil
 
-	case *DVPerimeterREAdvertisement_ReSites:
+	case *DVCloudGatewayAdvertisement_ReSites:
 
 		drInfos, err := m.GetReSites().GetDRefInfo()
 		if err != nil {
@@ -436,41 +501,41 @@ func (m *DVPerimeterREAdvertisement) GetPerimeterReChoiceDRefInfo() ([]db.DRefIn
 
 }
 
-type ValidateDVPerimeterREAdvertisement struct {
+type ValidateDVCloudGatewayAdvertisement struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
-func (v *ValidateDVPerimeterREAdvertisement) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
-	m, ok := pm.(*DVPerimeterREAdvertisement)
+func (v *ValidateDVCloudGatewayAdvertisement) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*DVCloudGatewayAdvertisement)
 	if !ok {
 		switch t := pm.(type) {
 		case nil:
 			return nil
 		default:
-			return fmt.Errorf("Expected type *DVPerimeterREAdvertisement got type %s", t)
+			return fmt.Errorf("Expected type *DVCloudGatewayAdvertisement got type %s", t)
 		}
 	}
 	if m == nil {
 		return nil
 	}
 
-	switch m.GetPerimeterReChoice().(type) {
-	case *DVPerimeterREAdvertisement_AllPerimeter:
-		if fv, exists := v.FldValidators["perimeter_re_choice.all_perimeter"]; exists {
-			val := m.GetPerimeterReChoice().(*DVPerimeterREAdvertisement_AllPerimeter).AllPerimeter
+	switch m.GetCloudGatewayChoice().(type) {
+	case *DVCloudGatewayAdvertisement_AllCloud:
+		if fv, exists := v.FldValidators["cloud_gateway_choice.all_cloud"]; exists {
+			val := m.GetCloudGatewayChoice().(*DVCloudGatewayAdvertisement_AllCloud).AllCloud
 			vOpts := append(opts,
-				db.WithValidateField("perimeter_re_choice"),
-				db.WithValidateField("all_perimeter"),
+				db.WithValidateField("cloud_gateway_choice"),
+				db.WithValidateField("all_cloud"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
 		}
-	case *DVPerimeterREAdvertisement_ReSites:
-		if fv, exists := v.FldValidators["perimeter_re_choice.re_sites"]; exists {
-			val := m.GetPerimeterReChoice().(*DVPerimeterREAdvertisement_ReSites).ReSites
+	case *DVCloudGatewayAdvertisement_ReSites:
+		if fv, exists := v.FldValidators["cloud_gateway_choice.re_sites"]; exists {
+			val := m.GetCloudGatewayChoice().(*DVCloudGatewayAdvertisement_ReSites).ReSites
 			vOpts := append(opts,
-				db.WithValidateField("perimeter_re_choice"),
+				db.WithValidateField("cloud_gateway_choice"),
 				db.WithValidateField("re_sites"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
@@ -484,16 +549,154 @@ func (v *ValidateDVPerimeterREAdvertisement) Validate(ctx context.Context, pm in
 }
 
 // Well-known symbol for default validator implementation
-var DefaultDVPerimeterREAdvertisementValidator = func() *ValidateDVPerimeterREAdvertisement {
-	v := &ValidateDVPerimeterREAdvertisement{FldValidators: map[string]db.ValidatorFunc{}}
+var DefaultDVCloudGatewayAdvertisementValidator = func() *ValidateDVCloudGatewayAdvertisement {
+	v := &ValidateDVCloudGatewayAdvertisement{FldValidators: map[string]db.ValidatorFunc{}}
 
-	v.FldValidators["perimeter_re_choice.re_sites"] = DomainViewPerimeterREValidator().Validate
+	v.FldValidators["cloud_gateway_choice.re_sites"] = DomainViewCloudGatewaysValidator().Validate
 
 	return v
 }()
 
-func DVPerimeterREAdvertisementValidator() db.Validator {
-	return DefaultDVPerimeterREAdvertisementValidator
+func DVCloudGatewayAdvertisementValidator() db.Validator {
+	return DefaultDVCloudGatewayAdvertisementValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *DomainViewAppVIPPool) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *DomainViewAppVIPPool) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *DomainViewAppVIPPool) DeepCopy() *DomainViewAppVIPPool {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &DomainViewAppVIPPool{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *DomainViewAppVIPPool) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *DomainViewAppVIPPool) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return DomainViewAppVIPPoolValidator().Validate(ctx, m, opts...)
+}
+
+func (m *DomainViewAppVIPPool) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetAppVipPoolDRefInfo()
+
+}
+
+func (m *DomainViewAppVIPPool) GetAppVipPoolDRefInfo() ([]db.DRefInfo, error) {
+
+	vref := m.GetAppVipPool()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("uztna_app_vip_pool.Object")
+	dri := db.DRefInfo{
+		RefdType:   "uztna_app_vip_pool.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "app_vip_pool",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+
+}
+
+// GetAppVipPoolDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *DomainViewAppVIPPool) GetAppVipPoolDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "uztna_app_vip_pool.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: uztna_app_vip_pool")
+	}
+
+	vref := m.GetAppVipPool()
+	if vref == nil {
+		return nil, nil
+	}
+	ref := &ves_io_schema.ObjectRefType{
+		Kind:      "uztna_app_vip_pool.Object",
+		Tenant:    vref.Tenant,
+		Namespace: vref.Namespace,
+		Name:      vref.Name,
+	}
+	refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+	if err != nil {
+		return nil, errors.Wrap(err, "Getting referred entry")
+	}
+	if refdEnt != nil {
+		entries = append(entries, refdEnt)
+	}
+
+	return entries, nil
+}
+
+type ValidateDomainViewAppVIPPool struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateDomainViewAppVIPPool) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*DomainViewAppVIPPool)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *DomainViewAppVIPPool got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["app_vip_pool"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("app_vip_pool"))
+		if err := fv(ctx, m.GetAppVipPool(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultDomainViewAppVIPPoolValidator = func() *ValidateDomainViewAppVIPPool {
+	v := &ValidateDomainViewAppVIPPool{FldValidators: map[string]db.ValidatorFunc{}}
+
+	v.FldValidators["app_vip_pool"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
+
+	return v
+}()
+
+func DomainViewAppVIPPoolValidator() db.Validator {
+	return DefaultDomainViewAppVIPPoolValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -636,6 +839,493 @@ func DomainViewCertificateValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *DomainViewCloudGateways) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *DomainViewCloudGateways) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *DomainViewCloudGateways) DeepCopy() *DomainViewCloudGateways {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &DomainViewCloudGateways{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *DomainViewCloudGateways) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *DomainViewCloudGateways) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return DomainViewCloudGatewaysValidator().Validate(ctx, m, opts...)
+}
+
+func (m *DomainViewCloudGateways) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetCloudGatewaysDRefInfo()
+
+}
+
+func (m *DomainViewCloudGateways) GetCloudGatewaysDRefInfo() ([]db.DRefInfo, error) {
+	vrefs := m.GetCloudGateways()
+	if len(vrefs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(vrefs))
+	for i, vref := range vrefs {
+		if vref == nil {
+			return nil, fmt.Errorf("DomainViewCloudGateways.cloud_gateways[%d] has a nil value", i)
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("site.Object")
+		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "site.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "cloud_gateways",
+			Ref:        vdRef,
+		})
+	}
+	return drInfos, nil
+
+}
+
+// GetCloudGatewaysDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *DomainViewCloudGateways) GetCloudGatewaysDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "site.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: site")
+	}
+	for i, vref := range m.GetCloudGateways() {
+		if vref == nil {
+			return nil, fmt.Errorf("DomainViewCloudGateways.cloud_gateways[%d] has a nil value", i)
+		}
+		ref := &ves_io_schema.ObjectRefType{
+			Kind:      "site.Object",
+			Tenant:    vref.Tenant,
+			Namespace: vref.Namespace,
+			Name:      vref.Name,
+		}
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
+	}
+
+	return entries, nil
+}
+
+type ValidateDomainViewCloudGateways struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateDomainViewCloudGateways) CloudGatewaysValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for cloud_gateways")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_views.ObjectRefType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ves_io_schema_views.ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for cloud_gateways")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema_views.ObjectRefType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema_views.ObjectRefType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated cloud_gateways")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items cloud_gateways")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateDomainViewCloudGateways) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*DomainViewCloudGateways)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *DomainViewCloudGateways got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["cloud_gateways"]; exists {
+		vOpts := append(opts, db.WithValidateField("cloud_gateways"))
+		if err := fv(ctx, m.GetCloudGateways(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultDomainViewCloudGatewaysValidator = func() *ValidateDomainViewCloudGateways {
+	v := &ValidateDomainViewCloudGateways{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhCloudGateways := v.CloudGatewaysValidationRuleHandler
+	rulesCloudGateways := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "1",
+	}
+	vFn, err = vrhCloudGateways(rulesCloudGateways)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for DomainViewCloudGateways.cloud_gateways: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["cloud_gateways"] = vFn
+
+	return v
+}()
+
+func DomainViewCloudGatewaysValidator() db.Validator {
+	return DefaultDomainViewCloudGatewaysValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *DomainViewDualStackLeasePool) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *DomainViewDualStackLeasePool) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *DomainViewDualStackLeasePool) DeepCopy() *DomainViewDualStackLeasePool {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &DomainViewDualStackLeasePool{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *DomainViewDualStackLeasePool) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *DomainViewDualStackLeasePool) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return DomainViewDualStackLeasePoolValidator().Validate(ctx, m, opts...)
+}
+
+func (m *DomainViewDualStackLeasePool) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetIpv4LeasepoolDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetIpv4LeasepoolDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetIpv6LeasepoolDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetIpv6LeasepoolDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	return drInfos, nil
+
+}
+
+func (m *DomainViewDualStackLeasePool) GetIpv4LeasepoolDRefInfo() ([]db.DRefInfo, error) {
+
+	vref := m.GetIpv4Leasepool()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("uztna_leasepool.Object")
+	dri := db.DRefInfo{
+		RefdType:   "uztna_leasepool.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "ipv4_leasepool",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+
+}
+
+// GetIpv4LeasepoolDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *DomainViewDualStackLeasePool) GetIpv4LeasepoolDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "uztna_leasepool.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: uztna_leasepool")
+	}
+
+	vref := m.GetIpv4Leasepool()
+	if vref == nil {
+		return nil, nil
+	}
+	ref := &ves_io_schema.ObjectRefType{
+		Kind:      "uztna_leasepool.Object",
+		Tenant:    vref.Tenant,
+		Namespace: vref.Namespace,
+		Name:      vref.Name,
+	}
+	refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+	if err != nil {
+		return nil, errors.Wrap(err, "Getting referred entry")
+	}
+	if refdEnt != nil {
+		entries = append(entries, refdEnt)
+	}
+
+	return entries, nil
+}
+
+func (m *DomainViewDualStackLeasePool) GetIpv6LeasepoolDRefInfo() ([]db.DRefInfo, error) {
+
+	vref := m.GetIpv6Leasepool()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("uztna_leasepool.Object")
+	dri := db.DRefInfo{
+		RefdType:   "uztna_leasepool.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "ipv6_leasepool",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+
+}
+
+// GetIpv6LeasepoolDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *DomainViewDualStackLeasePool) GetIpv6LeasepoolDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "uztna_leasepool.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: uztna_leasepool")
+	}
+
+	vref := m.GetIpv6Leasepool()
+	if vref == nil {
+		return nil, nil
+	}
+	ref := &ves_io_schema.ObjectRefType{
+		Kind:      "uztna_leasepool.Object",
+		Tenant:    vref.Tenant,
+		Namespace: vref.Namespace,
+		Name:      vref.Name,
+	}
+	refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+	if err != nil {
+		return nil, errors.Wrap(err, "Getting referred entry")
+	}
+	if refdEnt != nil {
+		entries = append(entries, refdEnt)
+	}
+
+	return entries, nil
+}
+
+type ValidateDomainViewDualStackLeasePool struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateDomainViewDualStackLeasePool) Ipv4LeasepoolValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for ipv4_leasepool")
+	}
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		if err := ves_io_schema_views.ObjectRefTypeValidator().Validate(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateDomainViewDualStackLeasePool) Ipv6LeasepoolValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for ipv6_leasepool")
+	}
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		if err := ves_io_schema_views.ObjectRefTypeValidator().Validate(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateDomainViewDualStackLeasePool) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*DomainViewDualStackLeasePool)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *DomainViewDualStackLeasePool got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["ipv4_leasepool"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("ipv4_leasepool"))
+		if err := fv(ctx, m.GetIpv4Leasepool(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["ipv6_leasepool"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("ipv6_leasepool"))
+		if err := fv(ctx, m.GetIpv6Leasepool(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultDomainViewDualStackLeasePoolValidator = func() *ValidateDomainViewDualStackLeasePool {
+	v := &ValidateDomainViewDualStackLeasePool{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhIpv4Leasepool := v.Ipv4LeasepoolValidationRuleHandler
+	rulesIpv4Leasepool := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhIpv4Leasepool(rulesIpv4Leasepool)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for DomainViewDualStackLeasePool.ipv4_leasepool: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["ipv4_leasepool"] = vFn
+
+	vrhIpv6Leasepool := v.Ipv6LeasepoolValidationRuleHandler
+	rulesIpv6Leasepool := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhIpv6Leasepool(rulesIpv6Leasepool)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for DomainViewDualStackLeasePool.ipv6_leasepool: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["ipv6_leasepool"] = vFn
+
+	return v
+}()
+
+func DomainViewDualStackLeasePoolValidator() db.Validator {
+	return DefaultDomainViewDualStackLeasePoolValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *DomainViewGateways) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -677,37 +1367,19 @@ func (m *DomainViewGateways) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetBigipCeDRefInfo(); err != nil {
-		return nil, errors.Wrap(err, "GetBigipCeDRefInfo() FAILED")
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
-	}
-
 	if fdrInfos, err := m.GetPerimeterReDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetPerimeterReDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
+	if fdrInfos, err := m.GetUztnaGatewayDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetUztnaGatewayDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
 	return drInfos, nil
-
-}
-
-// GetDRefInfo for the field's type
-func (m *DomainViewGateways) GetBigipCeDRefInfo() ([]db.DRefInfo, error) {
-	if m.GetBigipCe() == nil {
-		return nil, nil
-	}
-
-	drInfos, err := m.GetBigipCe().GetDRefInfo()
-	if err != nil {
-		return nil, errors.Wrap(err, "GetBigipCe().GetDRefInfo() FAILED")
-	}
-	for i := range drInfos {
-		dri := &drInfos[i]
-		dri.DRField = "bigip_ce." + dri.DRField
-	}
-	return drInfos, err
 
 }
 
@@ -729,6 +1401,61 @@ func (m *DomainViewGateways) GetPerimeterReDRefInfo() ([]db.DRefInfo, error) {
 
 }
 
+func (m *DomainViewGateways) GetUztnaGatewayDRefInfo() ([]db.DRefInfo, error) {
+	vrefs := m.GetUztnaGateway()
+	if len(vrefs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(vrefs))
+	for i, vref := range vrefs {
+		if vref == nil {
+			return nil, fmt.Errorf("DomainViewGateways.uztna_gateway[%d] has a nil value", i)
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("uztna_gateway.Object")
+		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "uztna_gateway.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "uztna_gateway",
+			Ref:        vdRef,
+		})
+	}
+	return drInfos, nil
+
+}
+
+// GetUztnaGatewayDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *DomainViewGateways) GetUztnaGatewayDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "uztna_gateway.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: uztna_gateway")
+	}
+	for i, vref := range m.GetUztnaGateway() {
+		if vref == nil {
+			return nil, fmt.Errorf("DomainViewGateways.uztna_gateway[%d] has a nil value", i)
+		}
+		ref := &ves_io_schema.ObjectRefType{
+			Kind:      "uztna_gateway.Object",
+			Tenant:    vref.Tenant,
+			Namespace: vref.Namespace,
+			Name:      vref.Name,
+		}
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
+	}
+
+	return entries, nil
+}
+
 type ValidateDomainViewGateways struct {
 	FldValidators map[string]db.ValidatorFunc
 }
@@ -747,20 +1474,23 @@ func (v *ValidateDomainViewGateways) Validate(ctx context.Context, pm interface{
 		return nil
 	}
 
-	if fv, exists := v.FldValidators["bigip_ce"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("bigip_ce"))
-		if err := fv(ctx, m.GetBigipCe(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
 	if fv, exists := v.FldValidators["perimeter_re"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("perimeter_re"))
 		if err := fv(ctx, m.GetPerimeterRe(), vOpts...); err != nil {
 			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["uztna_gateway"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("uztna_gateway"))
+		for idx, item := range m.GetUztnaGateway() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
 		}
 
 	}
@@ -772,9 +1502,9 @@ func (v *ValidateDomainViewGateways) Validate(ctx context.Context, pm interface{
 var DefaultDomainViewGatewaysValidator = func() *ValidateDomainViewGateways {
 	v := &ValidateDomainViewGateways{FldValidators: map[string]db.ValidatorFunc{}}
 
-	v.FldValidators["perimeter_re"] = DVPerimeterREAdvertisementValidator().Validate
+	v.FldValidators["perimeter_re"] = DVCloudGatewayAdvertisementValidator().Validate
 
-	v.FldValidators["bigip_ce"] = DomainViewSitesValidator().Validate
+	v.FldValidators["uztna_gateway"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	return v
 }()
@@ -825,114 +1555,79 @@ func (m *DomainViewLeasePoolList) GetDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 	}
 
-	return m.GetUztnaLpoolDRefInfo()
+	return m.GetIpaddressTypeDRefInfo()
 
 }
 
-func (m *DomainViewLeasePoolList) GetUztnaLpoolDRefInfo() ([]db.DRefInfo, error) {
-	vrefs := m.GetUztnaLpool()
-	if len(vrefs) == 0 {
+// GetDRefInfo for the field's type
+func (m *DomainViewLeasePoolList) GetIpaddressTypeDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetIpaddressType() == nil {
 		return nil, nil
 	}
-	drInfos := make([]db.DRefInfo, 0, len(vrefs))
-	for i, vref := range vrefs {
+	switch m.GetIpaddressType().(type) {
+	case *DomainViewLeasePoolList_Ipv4Leasepool:
+
+		vref := m.GetIpv4Leasepool()
 		if vref == nil {
-			return nil, fmt.Errorf("DomainViewLeasePoolList.uztna_lpool[%d] has a nil value", i)
+			return nil, nil
 		}
 		vdRef := db.NewDirectRefForView(vref)
 		vdRef.SetKind("uztna_leasepool.Object")
-		// resolve kind to type if needed at DBObject.GetDRefInfo()
-		drInfos = append(drInfos, db.DRefInfo{
+		dri := db.DRefInfo{
 			RefdType:   "uztna_leasepool.Object",
 			RefdTenant: vref.Tenant,
 			RefdNS:     vref.Namespace,
 			RefdName:   vref.Name,
-			DRField:    "uztna_lpool",
+			DRField:    "ipv4_leasepool",
 			Ref:        vdRef,
-		})
-	}
-	return drInfos, nil
+		}
+		return []db.DRefInfo{dri}, nil
 
-}
+	case *DomainViewLeasePoolList_Ipv6Leasepool:
 
-// GetUztnaLpoolDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
-func (m *DomainViewLeasePoolList) GetUztnaLpoolDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
-	var entries []db.Entry
-	refdType, err := d.TypeForEntryKind("", "", "uztna_leasepool.Object")
-	if err != nil {
-		return nil, errors.Wrap(err, "Cannot find type for kind: uztna_leasepool")
-	}
-	for i, vref := range m.GetUztnaLpool() {
+		vref := m.GetIpv6Leasepool()
 		if vref == nil {
-			return nil, fmt.Errorf("DomainViewLeasePoolList.uztna_lpool[%d] has a nil value", i)
+			return nil, nil
 		}
-		ref := &ves_io_schema.ObjectRefType{
-			Kind:      "uztna_leasepool.Object",
-			Tenant:    vref.Tenant,
-			Namespace: vref.Namespace,
-			Name:      vref.Name,
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("uztna_leasepool.Object")
+		dri := db.DRefInfo{
+			RefdType:   "uztna_leasepool.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "ipv6_leasepool",
+			Ref:        vdRef,
 		}
-		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		return []db.DRefInfo{dri}, nil
+
+	case *DomainViewLeasePoolList_Ipv4Ipv6Leasepool:
+
+		drInfos, err := m.GetIpv4Ipv6Leasepool().GetDRefInfo()
 		if err != nil {
-			return nil, errors.Wrap(err, "Getting referred entry")
+			return nil, errors.Wrap(err, "GetIpv4Ipv6Leasepool().GetDRefInfo() FAILED")
 		}
-		if refdEnt != nil {
-			entries = append(entries, refdEnt)
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "ipv4_ipv6_leasepool." + dri.DRField
 		}
+		return drInfos, err
+
+	default:
+		return nil, nil
 	}
 
-	return entries, nil
 }
 
 type ValidateDomainViewLeasePoolList struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
-func (v *ValidateDomainViewLeasePoolList) UztnaLpoolValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	itemRules := db.GetRepMessageItemRules(rules)
-	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+func (v *ValidateDomainViewLeasePoolList) IpaddressTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
-		return nil, errors.Wrap(err, "Message ValidationRuleHandler for uztna_lpool")
+		return nil, errors.Wrap(err, "ValidationRuleHandler for ipaddress_type")
 	}
-	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_views.ObjectRefType, opts ...db.ValidateOpt) error {
-		for i, el := range elems {
-			if err := itemValFn(ctx, el, opts...); err != nil {
-				return errors.Wrap(err, fmt.Sprintf("element %d", i))
-			}
-			if err := ves_io_schema_views.ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
-				return errors.Wrap(err, fmt.Sprintf("element %d", i))
-			}
-		}
-		return nil
-	}
-	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for uztna_lpool")
-	}
-
-	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
-		elems, ok := val.([]*ves_io_schema_views.ObjectRefType)
-		if !ok {
-			return fmt.Errorf("Repeated validation expected []*ves_io_schema_views.ObjectRefType, got %T", val)
-		}
-		l := []string{}
-		for _, elem := range elems {
-			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
-			if err != nil {
-				return errors.Wrapf(err, "Converting %v to JSON", elem)
-			}
-			l = append(l, strVal)
-		}
-		if err := repValFn(ctx, l, opts...); err != nil {
-			return errors.Wrap(err, "repeated uztna_lpool")
-		}
-		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
-			return errors.Wrap(err, "items uztna_lpool")
-		}
-		return nil
-	}
-
 	return validatorFn, nil
 }
 
@@ -950,10 +1645,49 @@ func (v *ValidateDomainViewLeasePoolList) Validate(ctx context.Context, pm inter
 		return nil
 	}
 
-	if fv, exists := v.FldValidators["uztna_lpool"]; exists {
-		vOpts := append(opts, db.WithValidateField("uztna_lpool"))
-		if err := fv(ctx, m.GetUztnaLpool(), vOpts...); err != nil {
+	if fv, exists := v.FldValidators["ipaddress_type"]; exists {
+		val := m.GetIpaddressType()
+		vOpts := append(opts,
+			db.WithValidateField("ipaddress_type"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
 			return err
+		}
+	}
+
+	switch m.GetIpaddressType().(type) {
+	case *DomainViewLeasePoolList_Ipv4Leasepool:
+		if fv, exists := v.FldValidators["ipaddress_type.ipv4_leasepool"]; exists {
+			val := m.GetIpaddressType().(*DomainViewLeasePoolList_Ipv4Leasepool).Ipv4Leasepool
+			vOpts := append(opts,
+				db.WithValidateField("ipaddress_type"),
+				db.WithValidateField("ipv4_leasepool"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *DomainViewLeasePoolList_Ipv6Leasepool:
+		if fv, exists := v.FldValidators["ipaddress_type.ipv6_leasepool"]; exists {
+			val := m.GetIpaddressType().(*DomainViewLeasePoolList_Ipv6Leasepool).Ipv6Leasepool
+			vOpts := append(opts,
+				db.WithValidateField("ipaddress_type"),
+				db.WithValidateField("ipv6_leasepool"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *DomainViewLeasePoolList_Ipv4Ipv6Leasepool:
+		if fv, exists := v.FldValidators["ipaddress_type.ipv4_ipv6_leasepool"]; exists {
+			val := m.GetIpaddressType().(*DomainViewLeasePoolList_Ipv4Ipv6Leasepool).Ipv4Ipv6Leasepool
+			vOpts := append(opts,
+				db.WithValidateField("ipaddress_type"),
+				db.WithValidateField("ipv4_ipv6_leasepool"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
 		}
 
 	}
@@ -973,16 +1707,20 @@ var DefaultDomainViewLeasePoolListValidator = func() *ValidateDomainViewLeasePoo
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
 
-	vrhUztnaLpool := v.UztnaLpoolValidationRuleHandler
-	rulesUztnaLpool := map[string]string{
-		"ves.io.schema.rules.repeated.max_items": "1",
+	vrhIpaddressType := v.IpaddressTypeValidationRuleHandler
+	rulesIpaddressType := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
-	vFn, err = vrhUztnaLpool(rulesUztnaLpool)
+	vFn, err = vrhIpaddressType(rulesIpaddressType)
 	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for DomainViewLeasePoolList.uztna_lpool: %s", err)
+		errMsg := fmt.Sprintf("ValidationRuleHandler for DomainViewLeasePoolList.ipaddress_type: %s", err)
 		panic(errMsg)
 	}
-	v.FldValidators["uztna_lpool"] = vFn
+	v.FldValidators["ipaddress_type"] = vFn
+
+	v.FldValidators["ipaddress_type.ipv4_leasepool"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
+	v.FldValidators["ipaddress_type.ipv6_leasepool"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
+	v.FldValidators["ipaddress_type.ipv4_ipv6_leasepool"] = DomainViewDualStackLeasePoolValidator().Validate
 
 	return v
 }()
@@ -993,15 +1731,15 @@ func DomainViewLeasePoolListValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
-func (m *DomainViewPerimeterRE) ToJSON() (string, error) {
+func (m *DomainViewPolicy) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
 
-func (m *DomainViewPerimeterRE) ToYAML() (string, error) {
+func (m *DomainViewPolicy) ToYAML() (string, error) {
 	return codec.ToYAML(m)
 }
 
-func (m *DomainViewPerimeterRE) DeepCopy() *DomainViewPerimeterRE {
+func (m *DomainViewPolicy) DeepCopy() *DomainViewPolicy {
 	if m == nil {
 		return nil
 	}
@@ -1009,7 +1747,7 @@ func (m *DomainViewPerimeterRE) DeepCopy() *DomainViewPerimeterRE {
 	if err != nil {
 		return nil
 	}
-	c := &DomainViewPerimeterRE{}
+	c := &DomainViewPolicy{}
 	err = c.Unmarshal(ser)
 	if err != nil {
 		return nil
@@ -1017,107 +1755,98 @@ func (m *DomainViewPerimeterRE) DeepCopy() *DomainViewPerimeterRE {
 	return c
 }
 
-func (m *DomainViewPerimeterRE) DeepCopyProto() proto.Message {
+func (m *DomainViewPolicy) DeepCopyProto() proto.Message {
 	if m == nil {
 		return nil
 	}
 	return m.DeepCopy()
 }
 
-func (m *DomainViewPerimeterRE) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
-	return DomainViewPerimeterREValidator().Validate(ctx, m, opts...)
+func (m *DomainViewPolicy) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return DomainViewPolicyValidator().Validate(ctx, m, opts...)
 }
 
-func (m *DomainViewPerimeterRE) GetDRefInfo() ([]db.DRefInfo, error) {
+func (m *DomainViewPolicy) GetDRefInfo() ([]db.DRefInfo, error) {
 	if m == nil {
 		return nil, nil
 	}
 
-	return m.GetPerimeterReSiteDRefInfo()
+	return m.GetPolicyNameDRefInfo()
 
 }
 
-func (m *DomainViewPerimeterRE) GetPerimeterReSiteDRefInfo() ([]db.DRefInfo, error) {
-	vrefs := m.GetPerimeterReSite()
-	if len(vrefs) == 0 {
+func (m *DomainViewPolicy) GetPolicyNameDRefInfo() ([]db.DRefInfo, error) {
+
+	vref := m.GetPolicyName()
+	if vref == nil {
 		return nil, nil
 	}
-	drInfos := make([]db.DRefInfo, 0, len(vrefs))
-	for i, vref := range vrefs {
-		if vref == nil {
-			return nil, fmt.Errorf("DomainViewPerimeterRE.perimeter_re_site[%d] has a nil value", i)
-		}
-		vdRef := db.NewDirectRefForView(vref)
-		vdRef.SetKind("site.Object")
-		// resolve kind to type if needed at DBObject.GetDRefInfo()
-		drInfos = append(drInfos, db.DRefInfo{
-			RefdType:   "site.Object",
-			RefdTenant: vref.Tenant,
-			RefdNS:     vref.Namespace,
-			RefdName:   vref.Name,
-			DRField:    "perimeter_re_site",
-			Ref:        vdRef,
-		})
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("uztna_policy_template.Object")
+	dri := db.DRefInfo{
+		RefdType:   "uztna_policy_template.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "policy_name",
+		Ref:        vdRef,
 	}
-	return drInfos, nil
+	return []db.DRefInfo{dri}, nil
 
 }
 
-// GetPerimeterReSiteDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
-func (m *DomainViewPerimeterRE) GetPerimeterReSiteDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+// GetPolicyNameDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *DomainViewPolicy) GetPolicyNameDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
 	var entries []db.Entry
-	refdType, err := d.TypeForEntryKind("", "", "site.Object")
+	refdType, err := d.TypeForEntryKind("", "", "uztna_policy_template.Object")
 	if err != nil {
-		return nil, errors.Wrap(err, "Cannot find type for kind: site")
+		return nil, errors.Wrap(err, "Cannot find type for kind: uztna_policy_template")
 	}
-	for i, vref := range m.GetPerimeterReSite() {
-		if vref == nil {
-			return nil, fmt.Errorf("DomainViewPerimeterRE.perimeter_re_site[%d] has a nil value", i)
-		}
-		ref := &ves_io_schema.ObjectRefType{
-			Kind:      "site.Object",
-			Tenant:    vref.Tenant,
-			Namespace: vref.Namespace,
-			Name:      vref.Name,
-		}
-		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
-		if err != nil {
-			return nil, errors.Wrap(err, "Getting referred entry")
-		}
-		if refdEnt != nil {
-			entries = append(entries, refdEnt)
-		}
+
+	vref := m.GetPolicyName()
+	if vref == nil {
+		return nil, nil
+	}
+	ref := &ves_io_schema.ObjectRefType{
+		Kind:      "uztna_policy_template.Object",
+		Tenant:    vref.Tenant,
+		Namespace: vref.Namespace,
+		Name:      vref.Name,
+	}
+	refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+	if err != nil {
+		return nil, errors.Wrap(err, "Getting referred entry")
+	}
+	if refdEnt != nil {
+		entries = append(entries, refdEnt)
 	}
 
 	return entries, nil
 }
 
-type ValidateDomainViewPerimeterRE struct {
+type ValidateDomainViewPolicy struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
-func (v *ValidateDomainViewPerimeterRE) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
-	m, ok := pm.(*DomainViewPerimeterRE)
+func (v *ValidateDomainViewPolicy) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*DomainViewPolicy)
 	if !ok {
 		switch t := pm.(type) {
 		case nil:
 			return nil
 		default:
-			return fmt.Errorf("Expected type *DomainViewPerimeterRE got type %s", t)
+			return fmt.Errorf("Expected type *DomainViewPolicy got type %s", t)
 		}
 	}
 	if m == nil {
 		return nil
 	}
 
-	if fv, exists := v.FldValidators["perimeter_re_site"]; exists {
+	if fv, exists := v.FldValidators["policy_name"]; exists {
 
-		vOpts := append(opts, db.WithValidateField("perimeter_re_site"))
-		for idx, item := range m.GetPerimeterReSite() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
-			if err := fv(ctx, item, vOpts...); err != nil {
-				return err
-			}
+		vOpts := append(opts, db.WithValidateField("policy_name"))
+		if err := fv(ctx, m.GetPolicyName(), vOpts...); err != nil {
+			return err
 		}
 
 	}
@@ -1126,16 +1855,16 @@ func (v *ValidateDomainViewPerimeterRE) Validate(ctx context.Context, pm interfa
 }
 
 // Well-known symbol for default validator implementation
-var DefaultDomainViewPerimeterREValidator = func() *ValidateDomainViewPerimeterRE {
-	v := &ValidateDomainViewPerimeterRE{FldValidators: map[string]db.ValidatorFunc{}}
+var DefaultDomainViewPolicyValidator = func() *ValidateDomainViewPolicy {
+	v := &ValidateDomainViewPolicy{FldValidators: map[string]db.ValidatorFunc{}}
 
-	v.FldValidators["perimeter_re_site"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
+	v.FldValidators["policy_name"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	return v
 }()
 
-func DomainViewPerimeterREValidator() db.Validator {
-	return DefaultDomainViewPerimeterREValidator
+func DomainViewPolicyValidator() db.Validator {
+	return DefaultDomainViewPolicyValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -1328,6 +2057,12 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetAppVipPoolDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetAppVipPoolDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
 	if fdrInfos, err := m.GetCertDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetCertDRefInfo() FAILED")
 	} else {
@@ -1346,7 +2081,31 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
+	if fdrInfos, err := m.GetPolicyDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetPolicyDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
 	return drInfos, nil
+
+}
+
+// GetDRefInfo for the field's type
+func (m *GetSpecType) GetAppVipPoolDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetAppVipPool() == nil {
+		return nil, nil
+	}
+
+	drInfos, err := m.GetAppVipPool().GetDRefInfo()
+	if err != nil {
+		return nil, errors.Wrap(err, "GetAppVipPool().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "app_vip_pool." + dri.DRField
+	}
+	return drInfos, err
 
 }
 
@@ -1399,6 +2158,24 @@ func (m *GetSpecType) GetLeasePoolDRefInfo() ([]db.DRefInfo, error) {
 	for i := range drInfos {
 		dri := &drInfos[i]
 		dri.DRField = "lease_pool." + dri.DRField
+	}
+	return drInfos, err
+
+}
+
+// GetDRefInfo for the field's type
+func (m *GetSpecType) GetPolicyDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetPolicy() == nil {
+		return nil, nil
+	}
+
+	drInfos, err := m.GetPolicy().GetDRefInfo()
+	if err != nil {
+		return nil, errors.Wrap(err, "GetPolicy().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "policy." + dri.DRField
 	}
 	return drInfos, err
 
@@ -1473,11 +2250,18 @@ func (v *ValidateGetSpecType) LeasePoolValidationRuleHandler(rules map[string]st
 	return validatorFn, nil
 }
 
-func (v *ValidateGetSpecType) ProfileNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+func (v *ValidateGetSpecType) PolicyValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
-	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for profile_name")
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for policy")
+	}
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		return nil
 	}
 
 	return validatorFn, nil
@@ -1501,6 +2285,15 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 		vOpts := append(opts, db.WithValidateField("access_url"))
 		if err := fv(ctx, m.GetAccessUrl(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["app_vip_pool"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("app_vip_pool"))
+		if err := fv(ctx, m.GetAppVipPool(), vOpts...); err != nil {
 			return err
 		}
 
@@ -1533,10 +2326,10 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
-	if fv, exists := v.FldValidators["profile_name"]; exists {
+	if fv, exists := v.FldValidators["policy"]; exists {
 
-		vOpts := append(opts, db.WithValidateField("profile_name"))
-		if err := fv(ctx, m.GetProfileName(), vOpts...); err != nil {
+		vOpts := append(opts, db.WithValidateField("policy"))
+		if err := fv(ctx, m.GetPolicy(), vOpts...); err != nil {
 			return err
 		}
 
@@ -1603,17 +2396,18 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	}
 	v.FldValidators["lease_pool"] = vFn
 
-	vrhProfileName := v.ProfileNameValidationRuleHandler
-	rulesProfileName := map[string]string{
+	vrhPolicy := v.PolicyValidationRuleHandler
+	rulesPolicy := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
-		"ves.io.schema.rules.string.max_len":   "1024",
 	}
-	vFn, err = vrhProfileName(rulesProfileName)
+	vFn, err = vrhPolicy(rulesPolicy)
 	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.profile_name: %s", err)
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.policy: %s", err)
 		panic(errMsg)
 	}
-	v.FldValidators["profile_name"] = vFn
+	v.FldValidators["policy"] = vFn
+
+	v.FldValidators["app_vip_pool"] = DomainViewAppVIPPoolValidator().Validate
 
 	return v
 }()
@@ -1665,6 +2459,12 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetAppVipPoolDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetAppVipPoolDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
 	if fdrInfos, err := m.GetCertDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetCertDRefInfo() FAILED")
 	} else {
@@ -1683,6 +2483,12 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
+	if fdrInfos, err := m.GetPolicyDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetPolicyDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
 	if fdrInfos, err := m.GetViewInternalDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetViewInternalDRefInfo() FAILED")
 	} else {
@@ -1690,6 +2496,24 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return drInfos, nil
+
+}
+
+// GetDRefInfo for the field's type
+func (m *GlobalSpecType) GetAppVipPoolDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetAppVipPool() == nil {
+		return nil, nil
+	}
+
+	drInfos, err := m.GetAppVipPool().GetDRefInfo()
+	if err != nil {
+		return nil, errors.Wrap(err, "GetAppVipPool().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "app_vip_pool." + dri.DRField
+	}
+	return drInfos, err
 
 }
 
@@ -1742,6 +2566,24 @@ func (m *GlobalSpecType) GetLeasePoolDRefInfo() ([]db.DRefInfo, error) {
 	for i := range drInfos {
 		dri := &drInfos[i]
 		dri.DRField = "lease_pool." + dri.DRField
+	}
+	return drInfos, err
+
+}
+
+// GetDRefInfo for the field's type
+func (m *GlobalSpecType) GetPolicyDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetPolicy() == nil {
+		return nil, nil
+	}
+
+	drInfos, err := m.GetPolicy().GetDRefInfo()
+	if err != nil {
+		return nil, errors.Wrap(err, "GetPolicy().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "policy." + dri.DRField
 	}
 	return drInfos, err
 
@@ -1865,11 +2707,18 @@ func (v *ValidateGlobalSpecType) LeasePoolValidationRuleHandler(rules map[string
 	return validatorFn, nil
 }
 
-func (v *ValidateGlobalSpecType) ProfileNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+func (v *ValidateGlobalSpecType) PolicyValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
-	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for profile_name")
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for policy")
+	}
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		return nil
 	}
 
 	return validatorFn, nil
@@ -1893,6 +2742,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 		vOpts := append(opts, db.WithValidateField("access_url"))
 		if err := fv(ctx, m.GetAccessUrl(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["app_vip_pool"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("app_vip_pool"))
+		if err := fv(ctx, m.GetAppVipPool(), vOpts...); err != nil {
 			return err
 		}
 
@@ -1925,10 +2783,10 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
-	if fv, exists := v.FldValidators["profile_name"]; exists {
+	if fv, exists := v.FldValidators["policy"]; exists {
 
-		vOpts := append(opts, db.WithValidateField("profile_name"))
-		if err := fv(ctx, m.GetProfileName(), vOpts...); err != nil {
+		vOpts := append(opts, db.WithValidateField("policy"))
+		if err := fv(ctx, m.GetPolicy(), vOpts...); err != nil {
 			return err
 		}
 
@@ -2004,19 +2862,20 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	}
 	v.FldValidators["lease_pool"] = vFn
 
-	vrhProfileName := v.ProfileNameValidationRuleHandler
-	rulesProfileName := map[string]string{
+	vrhPolicy := v.PolicyValidationRuleHandler
+	rulesPolicy := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
-		"ves.io.schema.rules.string.max_len":   "1024",
 	}
-	vFn, err = vrhProfileName(rulesProfileName)
+	vFn, err = vrhPolicy(rulesPolicy)
 	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.profile_name: %s", err)
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.policy: %s", err)
 		panic(errMsg)
 	}
-	v.FldValidators["profile_name"] = vFn
+	v.FldValidators["policy"] = vFn
 
 	v.FldValidators["view_internal"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
+
+	v.FldValidators["app_vip_pool"] = DomainViewAppVIPPoolValidator().Validate
 
 	return v
 }()
@@ -2068,6 +2927,12 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetAppVipPoolDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetAppVipPoolDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
 	if fdrInfos, err := m.GetCertDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetCertDRefInfo() FAILED")
 	} else {
@@ -2086,7 +2951,31 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
+	if fdrInfos, err := m.GetPolicyDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetPolicyDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
 	return drInfos, nil
+
+}
+
+// GetDRefInfo for the field's type
+func (m *ReplaceSpecType) GetAppVipPoolDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetAppVipPool() == nil {
+		return nil, nil
+	}
+
+	drInfos, err := m.GetAppVipPool().GetDRefInfo()
+	if err != nil {
+		return nil, errors.Wrap(err, "GetAppVipPool().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "app_vip_pool." + dri.DRField
+	}
+	return drInfos, err
 
 }
 
@@ -2139,6 +3028,24 @@ func (m *ReplaceSpecType) GetLeasePoolDRefInfo() ([]db.DRefInfo, error) {
 	for i := range drInfos {
 		dri := &drInfos[i]
 		dri.DRField = "lease_pool." + dri.DRField
+	}
+	return drInfos, err
+
+}
+
+// GetDRefInfo for the field's type
+func (m *ReplaceSpecType) GetPolicyDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetPolicy() == nil {
+		return nil, nil
+	}
+
+	drInfos, err := m.GetPolicy().GetDRefInfo()
+	if err != nil {
+		return nil, errors.Wrap(err, "GetPolicy().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "policy." + dri.DRField
 	}
 	return drInfos, err
 
@@ -2213,11 +3120,18 @@ func (v *ValidateReplaceSpecType) LeasePoolValidationRuleHandler(rules map[strin
 	return validatorFn, nil
 }
 
-func (v *ValidateReplaceSpecType) ProfileNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+func (v *ValidateReplaceSpecType) PolicyValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
-	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for profile_name")
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for policy")
+	}
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		return nil
 	}
 
 	return validatorFn, nil
@@ -2241,6 +3155,15 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 
 		vOpts := append(opts, db.WithValidateField("access_url"))
 		if err := fv(ctx, m.GetAccessUrl(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["app_vip_pool"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("app_vip_pool"))
+		if err := fv(ctx, m.GetAppVipPool(), vOpts...); err != nil {
 			return err
 		}
 
@@ -2273,10 +3196,10 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 
 	}
 
-	if fv, exists := v.FldValidators["profile_name"]; exists {
+	if fv, exists := v.FldValidators["policy"]; exists {
 
-		vOpts := append(opts, db.WithValidateField("profile_name"))
-		if err := fv(ctx, m.GetProfileName(), vOpts...); err != nil {
+		vOpts := append(opts, db.WithValidateField("policy"))
+		if err := fv(ctx, m.GetPolicy(), vOpts...); err != nil {
 			return err
 		}
 
@@ -2343,17 +3266,18 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	}
 	v.FldValidators["lease_pool"] = vFn
 
-	vrhProfileName := v.ProfileNameValidationRuleHandler
-	rulesProfileName := map[string]string{
+	vrhPolicy := v.PolicyValidationRuleHandler
+	rulesPolicy := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
-		"ves.io.schema.rules.string.max_len":   "1024",
 	}
-	vFn, err = vrhProfileName(rulesProfileName)
+	vFn, err = vrhPolicy(rulesPolicy)
 	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.profile_name: %s", err)
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.policy: %s", err)
 		panic(errMsg)
 	}
-	v.FldValidators["profile_name"] = vFn
+	v.FldValidators["policy"] = vFn
+
+	v.FldValidators["app_vip_pool"] = DomainViewAppVIPPoolValidator().Validate
 
 	return v
 }()
@@ -2367,10 +3291,11 @@ func (m *CreateSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool
 		return
 	}
 	m.AccessUrl = f.GetAccessUrl()
+	m.AppVipPool = f.GetAppVipPool()
 	m.Cert = f.GetCert()
 	m.Gateways = f.GetGateways()
 	m.LeasePool = f.GetLeasePool()
-	m.ProfileName = f.GetProfileName()
+	m.Policy = f.GetPolicy()
 }
 
 func (m *CreateSpecType) FromGlobalSpecType(f *GlobalSpecType) {
@@ -2389,10 +3314,11 @@ func (m *CreateSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) 
 	_ = m1
 
 	f.AccessUrl = m1.AccessUrl
+	f.AppVipPool = m1.AppVipPool
 	f.Cert = m1.Cert
 	f.Gateways = m1.Gateways
 	f.LeasePool = m1.LeasePool
-	f.ProfileName = m1.ProfileName
+	f.Policy = m1.Policy
 }
 
 func (m *CreateSpecType) ToGlobalSpecType(f *GlobalSpecType) {
@@ -2408,10 +3334,11 @@ func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 		return
 	}
 	m.AccessUrl = f.GetAccessUrl()
+	m.AppVipPool = f.GetAppVipPool()
 	m.Cert = f.GetCert()
 	m.Gateways = f.GetGateways()
 	m.LeasePool = f.GetLeasePool()
-	m.ProfileName = f.GetProfileName()
+	m.Policy = f.GetPolicy()
 }
 
 func (m *GetSpecType) FromGlobalSpecType(f *GlobalSpecType) {
@@ -2430,10 +3357,11 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	_ = m1
 
 	f.AccessUrl = m1.AccessUrl
+	f.AppVipPool = m1.AppVipPool
 	f.Cert = m1.Cert
 	f.Gateways = m1.Gateways
 	f.LeasePool = m1.LeasePool
-	f.ProfileName = m1.ProfileName
+	f.Policy = m1.Policy
 }
 
 func (m *GetSpecType) ToGlobalSpecType(f *GlobalSpecType) {
@@ -2449,10 +3377,11 @@ func (m *ReplaceSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy boo
 		return
 	}
 	m.AccessUrl = f.GetAccessUrl()
+	m.AppVipPool = f.GetAppVipPool()
 	m.Cert = f.GetCert()
 	m.Gateways = f.GetGateways()
 	m.LeasePool = f.GetLeasePool()
-	m.ProfileName = f.GetProfileName()
+	m.Policy = f.GetPolicy()
 }
 
 func (m *ReplaceSpecType) FromGlobalSpecType(f *GlobalSpecType) {
@@ -2471,10 +3400,11 @@ func (m *ReplaceSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool)
 	_ = m1
 
 	f.AccessUrl = m1.AccessUrl
+	f.AppVipPool = m1.AppVipPool
 	f.Cert = m1.Cert
 	f.Gateways = m1.Gateways
 	f.LeasePool = m1.LeasePool
-	f.ProfileName = m1.ProfileName
+	f.Policy = m1.Policy
 }
 
 func (m *ReplaceSpecType) ToGlobalSpecType(f *GlobalSpecType) {

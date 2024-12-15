@@ -2722,6 +2722,15 @@ var CustomAPISwaggerJSON string = `{
                     "x-displayname": "List of Sensitive Data",
                     "x-ves-example": "[SENSITIVE_DATA_TYPE_CCN, SENSITIVE_DATA_TYPE_SSN, SENSITIVE_DATA_TYPE_IP]"
                 },
+                "sensitive_data_location": {
+                    "type": "array",
+                    "description": " Sensitive data location for the API Endpoint.\n\nExample: - Request-",
+                    "title": "sensitive data location",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "Sensitive Data Location"
+                },
                 "sensitive_data_types": {
                     "type": "array",
                     "description": " List of Sensitive Data found in the API endpoint\n\nExample: - \"[Social-Security-Number, Credit-Card-Number]\"-",

@@ -1,9 +1,9 @@
 ---
 
 page_title: "Volterra: virtual_host"
-description: "The virtual_host allows CRUD of Virtual Host resource on Volterra SaaS"
 
----
+description: "The virtual_host allows CRUD of Virtual Host resource on Volterra SaaS"
+-------------------------------------------------------------------------------------
 
 Resource volterra_virtual_host
 ==============================
@@ -22,7 +22,11 @@ resource "volterra_virtual_host" "example" {
 
   // One of the arguments from this list "captcha_challenge js_challenge no_challenge" must be set
 
-  no_challenge = true
+  captcha_challenge {
+    cookie_expiry = "1000"
+
+    custom_page = "string:///PHA+IFBsZWFzZSBXYWl0IDwvcD4="
+  }
 }
 
 ```
@@ -67,6 +71,8 @@ Argument Reference
 `js_challenge` - (Optional) Configure Javascript challenge on Virtual Host. See [Challenge Type Js Challenge ](#challenge-type-js-challenge) below for details.
 
 `no_challenge` - (Optional) No challenge is enabled for this virtual host (`Bool`).
+
+`coalescing_options` - (Optional) Options for coalescing of multiple HTTPS Loadbalancers into single one. See [Coalescing Options ](#coalescing-options) below for details.
 
 `compression_params` - (Optional) Only GZIP compression is supported. See [Compression Params ](#compression-params) below for details.
 
@@ -187,6 +193,16 @@ specify the maximum buffer size and buffer interval with this config..
 `max_request_bytes` - (Optional) manager will stop buffering and return a RequestEntityTooLarge (413) response. (`Int`).
 
 `max_request_time` - (Optional) request before returning a RequestTimeout (408) response (`Int`).(Deprecated)
+
+### Coalescing Options
+
+Options for coalescing of multiple HTTPS Loadbalancers into single one.
+
+###### One of the arguments from this list "default_coalescing, strict_coalescing" must be set
+
+`default_coalescing` - (Optional) or Cipher suite configuration (`Bool`).
+
+`strict_coalescing` - (Optional) and/or Cipher suite configuration (`Bool`).
 
 ### Compression Params
 
@@ -408,7 +424,7 @@ Specifies configuration for temporary user blocking resulting from malicious use
 
 waf_type is the App Firewall profile to use..
 
-###### One of the arguments from this list "app_firewall, disable_waf, inherit_waf" can be set
+###### One of the arguments from this list "app_firewall, disable_waf, inherit_waf" must be set
 
 `app_firewall` - (Optional) A direct reference to an Application Firewall configuration object. See [Ref Type App Firewall ](#ref-type-app-firewall) below for details.
 
@@ -525,6 +541,14 @@ certificate..
 ### Client Certificate Verify Choice No Client Certificate
 
 it will be ignored (not used for verification).
+
+### Coalescing Choice Default Coalescing
+
+or Cipher suite configuration.
+
+### Coalescing Choice Strict Coalescing
+
+and/or Cipher suite configuration.
 
 ### Common Params Tls Certificates
 

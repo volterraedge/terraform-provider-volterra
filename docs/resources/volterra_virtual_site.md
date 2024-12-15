@@ -1,9 +1,9 @@
 ---
 
 page_title: "Volterra: virtual_site"
-description: "The virtual_site allows CRUD of Virtual Site resource on Volterra SaaS"
 
----
+description: "The virtual_site allows CRUD of Virtual Site resource on Volterra SaaS"
+-------------------------------------------------------------------------------------
 
 Resource volterra_virtual_site
 ==============================

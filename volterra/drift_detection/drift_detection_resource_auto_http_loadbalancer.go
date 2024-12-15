@@ -528,11 +528,89 @@ func FlattenEnableApiDiscovery(x *ves_io_schema_views_common_waf.ApiDiscoverySet
 	val := make([]interface{}, 0)
 	if x != nil {
 		test := map[string]interface{}{
+			"api_crawler":                         FlattenApiCrawler(x.GetApiCrawler()),
 			"api_discovery_from_code_scan":        FlattenApiDiscoveryFromCodeScan(x.GetApiDiscoveryFromCodeScan()),
+			"custom_api_auth_discovery":           FlattenCustomApiAuthDiscovery(x.GetCustomApiAuthDiscovery()),
+			"default_api_auth_discovery":          isEmpty(x.GetDefaultApiAuthDiscovery()),
 			"discovered_api_settings":             FlattenDiscoveredApiSettings(x.GetDiscoveredApiSettings()),
 			"disable_learn_from_redirect_traffic": isEmpty(x.GetDisableLearnFromRedirectTraffic()),
 			"enable_learn_from_redirect_traffic":  isEmpty(x.GetEnableLearnFromRedirectTraffic()),
 			"sensitive_data_detection_rules":      FlattenSensitiveDataDetectionRules(x.GetSensitiveDataDetectionRules()),
+		}
+		val = append(val, test)
+	}
+	return val
+}
+
+func FlattenCustomApiAuthDiscovery(x *ves_io_schema_views_common_waf.ApiDiscoveryAdvancedSettings) []interface{} {
+	rslt := make([]interface{}, 0)
+	if x != nil {
+		val := map[string]interface{}{
+			"api_discovery_ref": FlattenObjectRefTypeSet(x.GetApiDiscoveryRef()),
+		}
+		rslt = append(rslt, val)
+	}
+	return rslt
+}
+
+func FlattenApiCrawler(x *ves_io_schema_views_common_waf.ApiCrawler) []interface{} {
+	val := make([]interface{}, 0)
+	if x != nil {
+		test := map[string]interface{}{
+			"api_crawler_config":  FlattenApiCrawlerConfig(x.GetApiCrawlerConfig()),
+			"disable_api_crawler": isEmpty(x.GetDisableApiCrawler()),
+		}
+		val = append(val, test)
+	}
+	return val
+}
+
+func FlattenApiCrawlerConfig(x *ves_io_schema_views_common_waf.ApiCrawlerConfiguration) []interface{} {
+	val := make([]interface{}, 0)
+	if x != nil {
+		test := map[string]interface{}{
+			"domains": FlattenDomains(x.GetDomains()),
+		}
+		val = append(val, test)
+	}
+	return val
+}
+
+func FlattenDomains(x []*ves_io_schema_views_common_waf.DomainConfiguration) []interface{} {
+	rslt := make([]interface{}, 0)
+	for _, v := range x {
+		val := map[string]interface{}{
+			"domain":       v.GetDomain(),
+			"simple_login": FlattenSimpleLogin(v.GetSimpleLogin()),
+		}
+		rslt = append(rslt, val)
+	}
+	return rslt
+}
+
+func FlattenSimpleLogin(x *ves_io_schema_views_common_waf.SimpleLogin) []interface{} {
+	val := make([]interface{}, 0)
+	if x != nil {
+		test := map[string]interface{}{
+			"password": FlattenPassword(x.GetPassword()),
+			"user":     x.GetUser(),
+		}
+		val = append(val, test)
+	}
+	return val
+
+}
+
+func FlattenPassword(x *ves_io_schema.SecretType) []interface{} {
+	val := make([]interface{}, 0)
+	if x != nil {
+		test := map[string]interface{}{
+			"blindfold_secret_info_internal": FlattenBlindFoldSecretInfo(x.GetBlindfoldSecretInfoInternal()),
+			"secret_encoding_type":           x.GetSecretEncodingType(),
+			"blindfold_secret_info":          FlattenBlindFoldSecretInfo(x.GetBlindfoldSecretInfo()),
+			"clear_secret_info":              FlattenClearSecretInfo(x.GetClearSecretInfo()),
+			"vault_secret_info":              FlattenVaultSecretInfo(x.GetVaultSecretInfo()),
+			"wingman_secret_info":            FlattenWingmanSecretInfo(x.GetWingmanSecretInfo()),
 		}
 		val = append(val, test)
 	}
@@ -1070,6 +1148,7 @@ func FlattenBlockedClients(x []*ves_io_schema_views_common_waf.SimpleClientSrcRu
 			"as_number":            val.GetAsNumber(),
 			"http_header":          FlattenHTTPHeader(val.GetHttpHeader()),
 			"ip_prefix":            val.GetIpPrefix(),
+			"ipv6_prefix":          val.GetIpv6Prefix(),
 			"user_identifier":      val.GetUserIdentifier(),
 			"expiration_timestamp": FlattenExpirationTimestamp(val.GetExpirationTimestamp()),
 			"metadata":             FlattenMetadata(val.GetMetadata()),
@@ -1182,11 +1261,13 @@ func FlattenProtectedAppEndpoints(x []*ves_io_schema_views_common_security.AppEn
 			"undefined_flow_label": isEmpty(val.GetUndefinedFlowLabel()),
 			"allow_good_bots":      isEmpty(val.GetAllowGoodBots()),
 			"mitigate_good_bots":   isEmpty(val.GetMitigateGoodBots()),
+			"headers":              FlattenHeaders(val.GetHeaders()),
 			"http_methods":         FlattenHttpMethods(val.GetHttpMethods()),
 			"metadata":             FlattenMetadata(val.GetMetadata()),
 			"mitigation":           FlattenMitigation(val.GetMitigation()),
 			"path":                 FlattenPath(val.GetPath()),
 			"protocol":             val.GetProtocol().String(),
+			"query_params":         FlattenQueryParams(val.GetQueryParams()),
 		}
 		rslt = append(rslt, mapValue)
 	}
@@ -2234,6 +2315,7 @@ func FlattenHttps(x *ves_io_schema_views_http_loadbalancer.ProxyTypeHttps) []int
 	if x != nil {
 		test := map[string]interface{}{
 			"add_hsts":                   x.GetAddHsts(),
+			"coalescing_options":         FlattenCoalescingOptions(x.GetCoalescingOptions()),
 			"connection_idle_timeout":    x.GetConnectionIdleTimeout(),
 			"default_loadbalancer":       isEmpty(x.GetDefaultLoadbalancer()),
 			"non_default_loadbalancer":   isEmpty(x.GetNonDefaultLoadbalancer()),
@@ -2254,6 +2336,18 @@ func FlattenHttps(x *ves_io_schema_views_http_loadbalancer.ProxyTypeHttps) []int
 		val = append(val, test)
 	}
 	return val
+}
+
+func FlattenCoalescingOptions(x *ves_io_schema.TLSCoalescingOptions) []interface{} {
+	rslt := make([]interface{}, 0)
+	if x != nil {
+		val := map[string]interface{}{
+			"default_coalescing": isEmpty(x.GetDefaultCoalescing()),
+			"strict_coalescing":  isEmpty(x.GetStrictCoalescing()),
+		}
+		rslt = append(rslt, val)
+	}
+	return rslt
 }
 
 func FlattenTlsParameters(x *ves_io_schema_views.DownstreamTlsParamsType) []interface{} {
@@ -2390,6 +2484,7 @@ func FlattenHttpsAutoCert(x *ves_io_schema_views_http_loadbalancer.ProxyTypeHttp
 	if x != nil {
 		test := map[string]interface{}{
 			"add_hsts":                   x.GetAddHsts(),
+			"coalescing_options":         FlattenCoalescingOptions(x.GetCoalescingOptions()),
 			"connection_idle_timeout":    x.GetConnectionIdleTimeout(),
 			"default_loadbalancer":       isEmpty(x.GetDefaultLoadbalancer()),
 			"non_default_loadbalancer":   isEmpty(x.GetNonDefaultLoadbalancer()),
@@ -2589,6 +2684,7 @@ func FlattenOriginServers(x []*ves_io_schema_views_origin_pool.OriginServerType)
 	for _, val := range x {
 
 		mapValue := map[string]interface{}{
+			"cbip_service":           FlattenCbipService(val.GetCbipService()),
 			"consul_service":         FlattenConsulService(val.GetConsulService()),
 			"custom_endpoint_object": FlattenCustomEndpointObject(val.GetCustomEndpointObject()),
 			"k8s_service":            FlattenK8sService(val.GetK8SService()),
@@ -2601,6 +2697,17 @@ func FlattenOriginServers(x []*ves_io_schema_views_origin_pool.OriginServerType)
 			"labels":                 FlattenEndpointSubsets(val.GetLabels()),
 		}
 		rslt = append(rslt, mapValue)
+	}
+	return rslt
+}
+
+func FlattenCbipService(x *ves_io_schema_views_origin_pool.OriginServerCBIPService) []interface{} {
+	rslt := make([]interface{}, 0)
+	if x != nil {
+		val := map[string]interface{}{
+			"service_name": x.GetServiceName(),
+		}
+		rslt = append(rslt, val)
 	}
 	return rslt
 }
@@ -3178,10 +3285,24 @@ func FlattenSimpleRoute(x *ves_io_schema_views_http_loadbalancer.RouteTypeSimple
 			"incoming_port":        FlattenIncomingPort(x.GetIncomingPort()),
 			"origin_pools":         FlattenDefaultRoutePools(x.GetOriginPools()),
 			"path":                 FlattenPath(x.GetPath()),
+			"query_params":         FlattenSRQueryParams(x.GetQueryParams()),
 		}
 		simpleRouteValue = append(simpleRouteValue, simpleRouteVal)
 	}
 	return simpleRouteValue
+}
+
+func FlattenSRQueryParams(x *ves_io_schema_route.QueryParamsSimpleRoute) []interface{} {
+	rslt := make([]interface{}, 0)
+	if x != nil {
+		val := map[string]interface{}{
+			"remove_all_params": isEmpty(x.GetRemoveAllParams()),
+			"replace_params":    x.GetReplaceParams(),
+			"retain_all_params": isEmpty(x.GetRetainAllParams()),
+		}
+		rslt = append(rslt, val)
+	}
+	return rslt
 }
 
 func FlattenSRAdvancedOptions(x *ves_io_schema_views_http_loadbalancer.RouteSimpleAdvancedOptions) []interface{} {
@@ -3700,6 +3821,58 @@ func FlattenSensitiveDataPolicy(x *ves_io_schema_views_common_security.Sensitive
 	return rslt
 }
 
+func FlattenMalwareProtectionSettings(x *ves_io_schema_views_common_security.MalwareProtectionPolicy) []interface{} {
+	rslt := make([]interface{}, 0)
+	if x != nil {
+		val := map[string]interface{}{
+			"malware_protection_rules": FlattenMalwareProtectionRules(x.GetMalwareProtectionRules()),
+		}
+		rslt = append(rslt, val)
+	}
+	return rslt
+}
+
+func FlattenMalwareProtectionRules(x []*ves_io_schema_views_common_security.MalwareProtectionRule) []interface{} {
+	rslt := make([]interface{}, 0)
+	for _, val := range x {
+		mapValue := map[string]interface{}{
+			"action":       FlattenMPRAction(val.GetAction()),
+			"domain":       FlattenMPRDomain(val.GetDomain()),
+			"http_methods": FlattenMethods(val.GetHttpMethods()),
+			"metadata":     FlattenMetadata(val.GetMetadata()),
+			"path":         FlattenPath(val.GetPath()),
+			"protocol":     val.GetProtocol(),
+		}
+		rslt = append(rslt, mapValue)
+	}
+	return rslt
+}
+
+func FlattenMPRDomain(x *ves_io_schema.DomainMatcherType) []interface{} {
+	rslt := make([]interface{}, 0)
+	if x != nil {
+		val := map[string]interface{}{
+			"any_domain": isEmpty(x.GetAnyDomain()),
+			"domain":     FlattenDomain(x.GetDomain()),
+		}
+		rslt = append(rslt, val)
+	}
+	return rslt
+
+}
+
+func FlattenMPRAction(x *ves_io_schema.Action) []interface{} {
+	actionValue := make([]interface{}, 0)
+	if x != nil {
+		actionVal := map[string]interface{}{
+			"block":  isEmpty(x.GetBlock()),
+			"report": isEmpty(x.GetReport()),
+		}
+		actionValue = append(actionValue, actionVal)
+	}
+	return actionValue
+}
+
 func DriftDetectionSpec(d *schema.ResourceData, resp vesapi.GetObjectResponse) {
 	spec := resp.GetObjSpec().(*ves_io_schema_views_http_loadbalancer.SpecType)
 
@@ -3802,6 +3975,10 @@ func DriftDetectionSpec(d *schema.ResourceData, resp vesapi.GetObjectResponse) {
 	d.Set("enable_malicious_user_detection", isEmpty(spec.GcSpec.GetEnableMaliciousUserDetection()))
 
 	d.Set("malicious_user_mitigation", FlattenObjectRefTypeSet(spec.GcSpec.GetMaliciousUserMitigation()))
+
+	d.Set("disable_malware_protection", isEmpty(spec.GcSpec.GetDisableMalwareProtection()))
+
+	d.Set("malware_protection_settings", FlattenMalwareProtectionSettings(spec.GcSpec.GetMalwareProtectionSettings()))
 
 	d.Set("multi_lb_app", isEmpty(spec.GcSpec.GetMultiLbApp()))
 

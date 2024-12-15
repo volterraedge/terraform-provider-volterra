@@ -292,6 +292,7 @@ func (c *NamespaceCustomAPIRestClient) doRPCAllApplicationInventory(ctx context.
 		hReq = newReq
 		q := hReq.URL.Query()
 		_ = q
+		q.Add("cdn_load_balancer_filter", fmt.Sprintf("%v", req.CdnLoadBalancerFilter))
 		q.Add("http_load_balancer_filter", fmt.Sprintf("%v", req.HttpLoadBalancerFilter))
 		q.Add("tcp_load_balancer_filter", fmt.Sprintf("%v", req.TcpLoadBalancerFilter))
 
@@ -459,6 +460,7 @@ func (c *NamespaceCustomAPIRestClient) doRPCApplicationInventory(ctx context.Con
 		hReq = newReq
 		q := hReq.URL.Query()
 		_ = q
+		q.Add("cdn_load_balancer_filter", fmt.Sprintf("%v", req.CdnLoadBalancerFilter))
 		q.Add("http_load_balancer_filter", fmt.Sprintf("%v", req.HttpLoadBalancerFilter))
 		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
 		q.Add("tcp_load_balancer_filter", fmt.Sprintf("%v", req.TcpLoadBalancerFilter))
@@ -4055,6 +4057,12 @@ var NamespaceCustomAPISwaggerJSON string = `{
             "x-displayname": "All Application related objects inventory request",
             "x-ves-proto-message": "ves.io.schema.namespace.AllApplicationInventoryRequest",
             "properties": {
+                "cdn_load_balancer_filter": {
+                    "description": " Filters for CDN LoadBalancer",
+                    "title": "CDN Loadbalancer Inventory FilterType",
+                    "$ref": "#/definitions/namespaceHTTPLoadbalancerInventoryFilterType",
+                    "x-displayname": "CDN LoadBalancer Inventory Filter Type"
+                },
                 "http_load_balancer_filter": {
                     "description": " Filters for HTTP LoadBalancer",
                     "title": "HTTPLoadbalancerInventoryFilterType",
@@ -4099,6 +4107,15 @@ var NamespaceCustomAPISwaggerJSON string = `{
             "x-displayname": "Application related objects inventory response",
             "x-ves-proto-message": "ves.io.schema.namespace.AllApplicationInventoryWafFilterResponse",
             "properties": {
+                "cdn_loadbalancers": {
+                    "type": "array",
+                    "description": " Application Inventory of configured CDN Loadbalancers with WAF Filters",
+                    "title": "CDN Loadbalancer Inventory with WAF Filters",
+                    "items": {
+                        "$ref": "#/definitions/namespaceHTTPLoadbalancerWafFilterResultType"
+                    },
+                    "x-displayname": "CDN Loadbalancers with WAF Filters"
+                },
                 "http_loadbalancers": {
                     "type": "array",
                     "description": " Application Inventory of configured HTTP Loadbalancers with WAF Filters",
@@ -4117,6 +4134,12 @@ var NamespaceCustomAPISwaggerJSON string = `{
             "x-displayname": "Application related objects inventory request",
             "x-ves-proto-message": "ves.io.schema.namespace.ApplicationInventoryRequest",
             "properties": {
+                "cdn_load_balancer_filter": {
+                    "description": " Filters for CDN LoadBalancer",
+                    "title": "CDN Loadbalancer Inventory Filter Type",
+                    "$ref": "#/definitions/namespaceHTTPLoadbalancerInventoryFilterType",
+                    "x-displayname": "CDN LoadBalancer Inventory Filter Type"
+                },
                 "http_load_balancer_filter": {
                     "description": " Filters for HTTP LoadBalancer",
                     "title": "HTTPLoadbalancerInventoryFilterType",
@@ -4145,6 +4168,12 @@ var NamespaceCustomAPISwaggerJSON string = `{
             "x-displayname": "Application related objects inventory response",
             "x-ves-proto-message": "ves.io.schema.namespace.ApplicationInventoryResponse",
             "properties": {
+                "cdn_loadbalancers": {
+                    "description": " Inventory of configured CDN Loadbalancers",
+                    "title": "CDN Loadbalancer Inventory",
+                    "$ref": "#/definitions/namespaceHTTPLoadbalancerInventoryType",
+                    "x-displayname": "CDN Loadbalancers"
+                },
                 "http_loadbalancers": {
                     "description": " Inventory of configured HTTP Loadbalancers",
                     "title": "HTTP Loadbalancer Inventory",
@@ -4593,6 +4622,15 @@ var NamespaceCustomAPISwaggerJSON string = `{
                     "title": "Bot Protection",
                     "format": "int64",
                     "x-displayname": "Bot Protection"
+                },
+                "cdnlb_results": {
+                    "type": "array",
+                    "description": " List of CDN loadbalancers",
+                    "title": "CDN Loadbalancers",
+                    "items": {
+                        "$ref": "#/definitions/namespaceHTTPLoadbalancerResultType"
+                    },
+                    "x-displayname": "List of CDN Loadbalancers"
                 },
                 "client_side_defense": {
                     "type": "integer",
@@ -5561,6 +5599,12 @@ var NamespaceCustomAPISwaggerJSON string = `{
                     "description": "Exclusive with [ref_value]\n",
                     "title": "str_value",
                     "x-displayname": "String"
+                },
+                "title": {
+                    "type": "string",
+                    "description": " Optional title to be displayed instead of the actual value.\n Used when pure value doesn't contain all the needed information to be displayed,\n or when display titles should be customized.",
+                    "title": "title",
+                    "x-displayname": "Title"
                 },
                 "value": {
                     "type": "string",

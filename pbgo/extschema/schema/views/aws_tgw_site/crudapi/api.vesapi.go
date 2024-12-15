@@ -2861,6 +2861,14 @@ var APISwaggerJSON string = `{
                     "title": "TGW ARN",
                     "x-displayname": "TGW ARN"
                 },
+                "tgw_cidrs": {
+                    "type": "array",
+                    "description": " x-displayName \"TGW CIDRs\"\n TGW CIDRs",
+                    "title": "TGW CIDRs",
+                    "items": {
+                        "type": "string"
+                    }
+                },
                 "tgw_creation_time": {
                     "type": "string",
                     "description": " TGW Creation Time",
@@ -2943,51 +2951,6 @@ var APISwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.repeated.max_items": "32",
                         "ves.io.schema.rules.repeated.unique": "true"
-                    }
-                }
-            }
-        },
-        "aws_tgw_siteExistingTGWType": {
-            "type": "object",
-            "description": "Information needed for existing TGW",
-            "title": "Existing TGW Type",
-            "x-displayname": "Existing TGW Type",
-            "x-ves-proto-message": "ves.io.schema.views.aws_tgw_site.ExistingTGWType",
-            "properties": {
-                "tgw_asn": {
-                    "type": "integer",
-                    "description": " TGW ASN.\n\nExample: - \"64500\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gt: 0\n  ves.io.schema.rules.uint32.lte: 65535\n",
-                    "title": "TGW ASN",
-                    "format": "int64",
-                    "x-displayname": "Enter TGW ASN",
-                    "x-ves-example": "64500",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.uint32.gt": "0",
-                        "ves.io.schema.rules.uint32.lte": "65535"
-                    }
-                },
-                "tgw_id": {
-                    "type": "string",
-                    "description": " Existing TGW ID\n\nExample: - \"tgw-12345678901234567\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 64\n  ves.io.schema.rules.string.pattern: ^(tgw-)([a-z0-9]{8}|[a-z0-9]{17})$\n",
-                    "title": "Existing TGW ID",
-                    "maxLength": 64,
-                    "x-displayname": "Existing TGW ID",
-                    "x-ves-example": "tgw-12345678901234567",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.max_len": "64",
-                        "ves.io.schema.rules.string.pattern": "^(tgw-)([a-z0-9]{8}|[a-z0-9]{17})$"
-                    }
-                },
-                "volterra_site_asn": {
-                    "type": "integer",
-                    "description": " F5XC Site ASN.\n\nExample: - \"64501\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gt: 0\n  ves.io.schema.rules.uint32.lte: 65535\n",
-                    "title": "F5XC Site ASN",
-                    "format": "int64",
-                    "x-displayname": "Enter F5XC Site ASN",
-                    "x-ves-example": "64501",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.uint32.gt": "0",
-                        "ves.io.schema.rules.uint32.lte": "65535"
                     }
                 }
             }
@@ -3141,7 +3104,7 @@ var APISwaggerJSON string = `{
                 "existing_tgw": {
                     "description": "Exclusive with [new_tgw]\n Information about existing TGW",
                     "title": "Existing TGW",
-                    "$ref": "#/definitions/aws_tgw_siteExistingTGWType",
+                    "$ref": "#/definitions/viewsExistingTGWType",
                     "x-displayname": "Existing TGW"
                 },
                 "f5xc_security_group": {
@@ -3166,7 +3129,7 @@ var APISwaggerJSON string = `{
                 "new_tgw": {
                     "description": "Exclusive with [existing_tgw]\n Details needed to create new TGW",
                     "title": "New Transit Gateway",
-                    "$ref": "#/definitions/aws_tgw_siteTGWParamsType",
+                    "$ref": "#/definitions/viewsTGWParamsType",
                     "x-displayname": "New Transit Gateway"
                 },
                 "new_vpc": {
@@ -3315,59 +3278,17 @@ var APISwaggerJSON string = `{
                 }
             }
         },
-        "aws_tgw_siteTGWAssignedASNType": {
-            "type": "object",
-            "description": "Information needed when ASNs are assigned by the user",
-            "title": "TGW Assigned ASN Type",
-            "x-displayname": "TGW Assigned ASN Type",
-            "x-ves-proto-message": "ves.io.schema.views.aws_tgw_site.TGWAssignedASNType",
-            "properties": {
-                "tgw_asn": {
-                    "type": "integer",
-                    "description": " TGW ASN. Allowed range for 16-bit private ASNs include 64512 to 65534.\n\nExample: - \"64512\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gt: 64512\n  ves.io.schema.rules.uint32.lte: 65534\n",
-                    "title": "TGW ASN",
-                    "format": "int64",
-                    "x-displayname": "Enter TGW ASN",
-                    "x-ves-example": "64512",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.uint32.gt": "64512",
-                        "ves.io.schema.rules.uint32.lte": "65534"
-                    }
-                },
-                "volterra_site_asn": {
-                    "type": "integer",
-                    "description": " F5XC Site ASN.\n\nExample: - \"64500\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gt: 0\n  ves.io.schema.rules.uint32.lte: 65535\n",
-                    "title": "F5XC Site ASN",
-                    "format": "int64",
-                    "x-displayname": "Enter F5XC Site ASN",
-                    "x-ves-example": "64500",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.uint32.gt": "0",
-                        "ves.io.schema.rules.uint32.lte": "65535"
-                    }
-                }
-            }
-        },
-        "aws_tgw_siteTGWParamsType": {
-            "type": "object",
-            "title": "TGWParamsType",
-            "x-displayname": "TGWParamsType",
-            "x-ves-oneof-field-asn_choice": "[\"system_generated\",\"user_assigned\"]",
-            "x-ves-proto-message": "ves.io.schema.views.aws_tgw_site.TGWParamsType",
-            "properties": {
-                "system_generated": {
-                    "description": "Exclusive with [user_assigned]\n F5XC will automatically assign a private ASN for TGW and F5XC Site",
-                    "title": "System Generated",
-                    "$ref": "#/definitions/schemaEmpty",
-                    "x-displayname": "Automatic"
-                },
-                "user_assigned": {
-                    "description": "Exclusive with [system_generated]\n User is managing the ASN for TGW and F5XC Site.",
-                    "title": "User Assigned",
-                    "$ref": "#/definitions/aws_tgw_siteTGWAssignedASNType",
-                    "x-displayname": "User will assign ASN for TGW and F5XC Site"
-                }
-            }
+        "aws_tgw_siteTunnelType": {
+            "type": "string",
+            "description": "This defines Tunnel type towards TGW Site\n\nTUNNEL_IPSEC\nTUNNEL_GRE",
+            "title": "Tunnel Type",
+            "enum": [
+                "TUNNEL_IPSEC",
+                "TUNNEL_GRE"
+            ],
+            "default": "TUNNEL_IPSEC",
+            "x-displayname": "Tunnel Type",
+            "x-ves-proto-enum": "ves.io.schema.views.aws_tgw_site.TunnelType"
         },
         "aws_tgw_siteVPCAttachmentListType": {
             "type": "object",
@@ -3566,21 +3487,29 @@ var APISwaggerJSON string = `{
                 },
                 "connect_attachment_status": {
                     "type": "array",
-                    "description": " AWS Connect Attachment Status Typ",
+                    "description": " AWS Connect Attachment Status Type\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1\n",
                     "title": "AWS Connect Attachment Status Type",
+                    "maxItems": 1,
                     "items": {
                         "$ref": "#/definitions/cloud_connectAWSConnectAttachmentStatusType"
                     },
-                    "x-displayname": "AWS Connect Attachment Status Type"
+                    "x-displayname": "AWS Connect Attachment Status",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "1"
+                    }
                 },
                 "tgw_route_table_status": {
                     "type": "array",
-                    "description": " AWS Transit Gateway Route Table Status Type",
+                    "description": " AWS Transit Gateway Route Table Status Type\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 2\n",
                     "title": "AWS Transit Gateway Route Table Status Type",
+                    "maxItems": 2,
                     "items": {
                         "$ref": "#/definitions/cloud_connectAWSTGWRouteTableStatusType"
                     },
-                    "x-displayname": "AWS Transit Gateway Route Table Status Type"
+                    "x-displayname": "AWS Transit Gateway Route Table Status",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "2"
+                    }
                 }
             }
         },
@@ -3595,13 +3524,13 @@ var APISwaggerJSON string = `{
                     "type": "string",
                     "description": " Association route table ID",
                     "title": "Association route table ID",
-                    "x-displayname": "Association route table ID"
+                    "x-displayname": "Associated Transit Gateway route table ID"
                 },
                 "association_state": {
                     "type": "string",
-                    "description": " Association state",
+                    "description": " Transit Gateway route table association state",
                     "title": "Association state",
-                    "x-displayname": "Association state"
+                    "x-displayname": "Transit Gateway route table association state"
                 },
                 "creation_time": {
                     "type": "string",
@@ -3612,9 +3541,9 @@ var APISwaggerJSON string = `{
                 },
                 "deployment_status": {
                     "type": "string",
-                    "description": " Attachment Deployment Status",
-                    "title": "Attachment Deployment Status",
-                    "x-displayname": "Attachment Deployment Status"
+                    "description": " Additional VPC attachment deployment status",
+                    "title": "Additional VPC attachment deployment status",
+                    "x-displayname": "VPC attachment deployment status"
                 },
                 "installed_routes": {
                     "description": " Routes",
@@ -3633,9 +3562,14 @@ var APISwaggerJSON string = `{
                 },
                 "tags": {
                     "type": "object",
-                    "description": " Attachment Tags",
+                    "description": " Attachment Tags\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.max_len: 127\n  ves.io.schema.rules.map.max_pairs: 20\n  ves.io.schema.rules.map.values.string.max_len: 255\n",
                     "title": "Attachment Tags",
-                    "x-displayname": "Attachment Tags"
+                    "x-displayname": "Attachment Tags",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.map.keys.string.max_len": "127",
+                        "ves.io.schema.rules.map.max_pairs": "20",
+                        "ves.io.schema.rules.map.values.string.max_len": "255"
+                    }
                 },
                 "tgw_attachment_id": {
                     "type": "string",
@@ -3696,9 +3630,21 @@ var APISwaggerJSON string = `{
                 },
                 "association_state": {
                     "type": "string",
-                    "description": " Association state",
+                    "description": " Transit Gateway route table association state",
                     "title": "Association state",
-                    "x-displayname": "Association state"
+                    "x-displayname": "Transit Gateway route table association state"
+                },
+                "connect_deployment_state": {
+                    "description": " Connect Attachment Deployment State",
+                    "title": "Connect Attachment Deployment State",
+                    "$ref": "#/definitions/cloud_connectCloudConnectVPCStateType",
+                    "x-displayname": "Connect Attachment Deployment State"
+                },
+                "deployment_status": {
+                    "type": "string",
+                    "description": " Additional information related to the connect attachment deployment.",
+                    "title": "Deployment Status",
+                    "x-displayname": "Deployment Status"
                 },
                 "peers": {
                     "type": "array",
@@ -3715,17 +3661,16 @@ var APISwaggerJSON string = `{
                     "title": "Connect protocol",
                     "x-displayname": "Connect protocol"
                 },
-                "state": {
-                    "type": "string",
-                    "description": " State",
-                    "title": "State",
-                    "x-displayname": "State"
-                },
                 "tags": {
                     "type": "object",
-                    "description": " Attachment Tags",
+                    "description": " Attachment Tags\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.max_len: 127\n  ves.io.schema.rules.map.max_pairs: 20\n  ves.io.schema.rules.map.values.string.max_len: 255\n",
                     "title": "Attachment Tags",
-                    "x-displayname": "Attachment Tags"
+                    "x-displayname": "Attachment Tags",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.map.keys.string.max_len": "127",
+                        "ves.io.schema.rules.map.max_pairs": "20",
+                        "ves.io.schema.rules.map.values.string.max_len": "255"
+                    }
                 },
                 "transit_gateway_asn": {
                     "type": "string",
@@ -3766,17 +3711,17 @@ var APISwaggerJSON string = `{
             "x-displayname": "AWS Connect Peer Status Type",
             "x-ves-proto-message": "ves.io.schema.cloud_connect.AWSConnectPeerStatusType",
             "properties": {
-                "bgp_inside_cidr_block": {
-                    "type": "string",
-                    "description": " BGP Inside CIDR blocks",
-                    "title": "BGP Inside CIDR blocks",
-                    "x-displayname": "BGP Inside CIDR blocks"
-                },
                 "connect_attachment_id": {
                     "type": "string",
                     "description": " Connect attachment ID",
                     "title": "Connect attachment ID",
                     "x-displayname": "Connect attachment ID"
+                },
+                "connect_peer_deployment_state": {
+                    "description": " Connect Peer Attachment Deployment State",
+                    "title": "Connect Peer Attachment Deployment State",
+                    "$ref": "#/definitions/cloud_connectCloudConnectVPCStateType",
+                    "x-displayname": "Connect Peer Attachment Deployment State"
                 },
                 "connect_peer_id": {
                     "type": "string",
@@ -3784,53 +3729,28 @@ var APISwaggerJSON string = `{
                     "title": "Connect Peer ID",
                     "x-displayname": "Connect Peer ID"
                 },
+                "deployment_status": {
+                    "type": "string",
+                    "description": " Additional information related to the connect peer attachment deployment.",
+                    "title": "Deployment Status",
+                    "x-displayname": "Deployment Status"
+                },
                 "name": {
                     "type": "string",
                     "description": " Connect Peer Name",
                     "title": "Connect Peer Name",
                     "x-displayname": "Connect Peer Name"
                 },
-                "peer_asn": {
-                    "type": "string",
-                    "description": " Peer ASN",
-                    "title": "Peer ASN",
-                    "x-displayname": "Peer ASN"
-                },
-                "peer_bgp_address": {
-                    "type": "string",
-                    "description": " Peer BGP address",
-                    "title": "Peer BGP address",
-                    "x-displayname": "Peer BGP address"
-                },
-                "peer_gre_address": {
-                    "type": "string",
-                    "description": " Peer GRE address",
-                    "title": "Peer GRE address",
-                    "x-displayname": "Peer GRE address"
-                },
-                "state": {
-                    "type": "string",
-                    "description": " State",
-                    "title": "State",
-                    "x-displayname": "State"
-                },
-                "transit_gateway_bgp_1_address": {
-                    "type": "string",
-                    "description": " Transit gateway BGP 1 address",
-                    "title": "Transit gateway BGP 1 address",
-                    "x-displayname": "Transit gateway BGP 1 address"
-                },
-                "transit_gateway_bgp_2_address": {
-                    "type": "string",
-                    "description": " Transit gateway BGP 2 address",
-                    "title": "Transit gateway BGP 2 address",
-                    "x-displayname": "Transit gateway BGP 2 address"
-                },
-                "transit_gateway_gre_address": {
-                    "type": "string",
-                    "description": " Transit gateway GRE address",
-                    "title": "Transit gateway GRE address",
-                    "x-displayname": "Transit gateway GRE address"
+                "tags": {
+                    "type": "object",
+                    "description": " Connect Peer Tags\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.max_len: 127\n  ves.io.schema.rules.map.max_pairs: 20\n  ves.io.schema.rules.map.values.string.max_len: 255\n",
+                    "title": "Connect Peer Tags",
+                    "x-displayname": "Connect Peer Tags",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.map.keys.string.max_len": "127",
+                        "ves.io.schema.rules.map.max_pairs": "20",
+                        "ves.io.schema.rules.map.values.string.max_len": "255"
+                    }
                 }
             }
         },
@@ -3915,6 +3835,12 @@ var APISwaggerJSON string = `{
                     "title": "Attachment ID",
                     "x-displayname": "Attachment ID"
                 },
+                "deployment_status": {
+                    "type": "string",
+                    "description": " Additional information related to the TGW routing.",
+                    "title": "Deployment Status",
+                    "x-displayname": "Deployment Status"
+                },
                 "resource_id": {
                     "type": "string",
                     "description": " Resource ID",
@@ -3928,10 +3854,10 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Resource type"
                 },
                 "state": {
-                    "type": "string",
-                    "description": " State",
-                    "title": "State",
-                    "x-displayname": "State"
+                    "description": " Resource State",
+                    "title": "Resource State",
+                    "$ref": "#/definitions/cloud_connectCloudConnectVPCStateType",
+                    "x-displayname": "Resource State"
                 }
             }
         },
@@ -3951,6 +3877,12 @@ var APISwaggerJSON string = `{
                     },
                     "x-displayname": "Associations"
                 },
+                "deployment_status": {
+                    "type": "string",
+                    "description": " Additional information related to the TGW routing.",
+                    "title": "Deployment Status",
+                    "x-displayname": "Deployment Status"
+                },
                 "propagations": {
                     "type": "array",
                     "description": " Propagations",
@@ -3960,17 +3892,22 @@ var APISwaggerJSON string = `{
                     },
                     "x-displayname": "Propagations"
                 },
-                "state": {
-                    "type": "string",
-                    "description": " State",
-                    "title": "State",
-                    "x-displayname": "State"
-                },
                 "tags": {
                     "type": "object",
-                    "description": " Attachment Tags",
+                    "description": " Attachment Tags\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.max_len: 127\n  ves.io.schema.rules.map.max_pairs: 20\n  ves.io.schema.rules.map.values.string.max_len: 255\n",
                     "title": "Attachment Tags",
-                    "x-displayname": "Attachment Tags"
+                    "x-displayname": "Attachment Tags",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.map.keys.string.max_len": "127",
+                        "ves.io.schema.rules.map.max_pairs": "20",
+                        "ves.io.schema.rules.map.values.string.max_len": "255"
+                    }
+                },
+                "tgw_rt_deployment_state": {
+                    "description": " Transit Gateway Route Table deployment State",
+                    "title": "Transit Gateway Route Table deployment State",
+                    "$ref": "#/definitions/cloud_connectCloudConnectVPCStateType",
+                    "x-displayname": "Transit Gateway Route Table deployment State"
                 },
                 "transit_gateway_id": {
                     "type": "string",
@@ -3994,14 +3931,15 @@ var APISwaggerJSON string = `{
         },
         "cloud_connectCloudConnectVPCStateType": {
             "type": "string",
-            "description": "Cloud Connect VPC State Type\n\n - AVAILABLE: Available\n\nCloud Connect vpc attachment is in available state.\n - PENDING: Pending\n\nCloud Connect vpc attachment is in flight.\n - FAILED: Failed\n\nCloud Connect vpc attachment has failed.\n - DELETED: Deleted\n\nCloud Connect vpc attachment has been deleted.\n - DELETING: Deleting\n\nCloud Connect vpc attachment is being deleted.",
+            "description": "Cloud Connect VPC State Type\n\n - AVAILABLE: Available\n\nCloud Connect vpc attachment is in available state.\n - PENDING: Pending\n\nCloud Connect vpc attachment is in flight.\n - FAILED: Failed\n\nCloud Connect vpc attachment has failed.\n - DELETED: Deleted\n\nCloud Connect vpc attachment has been deleted.\n - DELETING: Deleting\n\nCloud Connect vpc attachment is being deleted.\n - INITIATED: Initiated\n\nCloud Connect vpc attachment process has been initiated.",
             "title": "Cloud Connect VPC State",
             "enum": [
                 "AVAILABLE",
                 "PENDING",
                 "FAILED",
                 "DELETED",
-                "DELETING"
+                "DELETING",
+                "INITIATED"
             ],
             "default": "AVAILABLE",
             "x-displayname": "Cloud Connect VPC State",
@@ -5228,6 +5166,12 @@ var APISwaggerJSON string = `{
                     "title": "deletion_timestamp",
                     "format": "date-time",
                     "x-displayname": "Deletion Timestamp"
+                },
+                "direct_ref_hash": {
+                    "type": "string",
+                    "description": " A hash of the UIDs of  direct references on this object. This can be used to determine if \n this object hash has had references become resolved/unresolved",
+                    "title": "direct_ref_hash",
+                    "x-displayname": "Direct Reference Hash"
                 },
                 "finalizers": {
                     "type": "array",
@@ -6487,6 +6431,51 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "viewsExistingTGWType": {
+            "type": "object",
+            "description": "Information needed for existing TGW",
+            "title": "Existing TGW Type",
+            "x-displayname": "Existing TGW Type",
+            "x-ves-proto-message": "ves.io.schema.views.ExistingTGWType",
+            "properties": {
+                "tgw_asn": {
+                    "type": "integer",
+                    "description": " TGW ASN.\n\nExample: - \"64500\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gt: 0\n  ves.io.schema.rules.uint32.lte: 65535\n",
+                    "title": "TGW ASN",
+                    "format": "int64",
+                    "x-displayname": "Enter TGW ASN",
+                    "x-ves-example": "64500",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.gt": "0",
+                        "ves.io.schema.rules.uint32.lte": "65535"
+                    }
+                },
+                "tgw_id": {
+                    "type": "string",
+                    "description": " Existing TGW ID\n\nExample: - \"tgw-12345678901234567\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 64\n  ves.io.schema.rules.string.pattern: ^(tgw-)([a-z0-9]{8}|[a-z0-9]{17})$\n",
+                    "title": "Existing TGW ID",
+                    "maxLength": 64,
+                    "x-displayname": "Existing TGW ID",
+                    "x-ves-example": "tgw-12345678901234567",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "64",
+                        "ves.io.schema.rules.string.pattern": "^(tgw-)([a-z0-9]{8}|[a-z0-9]{17})$"
+                    }
+                },
+                "volterra_site_asn": {
+                    "type": "integer",
+                    "description": " F5XC Site ASN.\n\nExample: - \"64501\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gt: 0\n  ves.io.schema.rules.uint32.lte: 65535\n",
+                    "title": "F5XC Site ASN",
+                    "format": "int64",
+                    "x-displayname": "Enter F5XC Site ASN",
+                    "x-ves-example": "64501",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.gt": "0",
+                        "ves.io.schema.rules.uint32.lte": "65535"
+                    }
+                }
+            }
+        },
         "viewsGlobalConnectorType": {
             "type": "object",
             "description": "Global network reference for direct connection",
@@ -6605,13 +6594,13 @@ var APISwaggerJSON string = `{
                     "description": "Exclusive with [enable_upgrade_drain]\n",
                     "title": "Disable upgrade drain",
                     "$ref": "#/definitions/schemaEmpty",
-                    "x-displayname": "Disable Node by Node Upgrade"
+                    "x-displayname": "Disable"
                 },
                 "enable_upgrade_drain": {
                     "description": "Exclusive with [disable_upgrade_drain]\n",
                     "title": "Enable Node by Node Upgrade",
                     "$ref": "#/definitions/viewsKubernetesUpgradeDrainConfig",
-                    "x-displayname": "Enable Node by Node Upgrade"
+                    "x-displayname": "Enable"
                 }
             }
         },
@@ -6900,6 +6889,60 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "viewsTGWAssignedASNType": {
+            "type": "object",
+            "description": "Information needed when ASNs are assigned by the user",
+            "title": "TGW Assigned ASN Type",
+            "x-displayname": "TGW Assigned ASN Type",
+            "x-ves-proto-message": "ves.io.schema.views.TGWAssignedASNType",
+            "properties": {
+                "tgw_asn": {
+                    "type": "integer",
+                    "description": " TGW ASN. Allowed range for 16-bit private ASNs include 64512 to 65534.\n\nExample: - \"64512\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gt: 64512\n  ves.io.schema.rules.uint32.lte: 65534\n",
+                    "title": "TGW ASN",
+                    "format": "int64",
+                    "x-displayname": "Enter TGW ASN",
+                    "x-ves-example": "64512",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.gt": "64512",
+                        "ves.io.schema.rules.uint32.lte": "65534"
+                    }
+                },
+                "volterra_site_asn": {
+                    "type": "integer",
+                    "description": " F5XC Site ASN.\n\nExample: - \"64500\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gt: 0\n  ves.io.schema.rules.uint32.lte: 65535\n",
+                    "title": "F5XC Site ASN",
+                    "format": "int64",
+                    "x-displayname": "Enter F5XC Site ASN",
+                    "x-ves-example": "64500",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.gt": "0",
+                        "ves.io.schema.rules.uint32.lte": "65535"
+                    }
+                }
+            }
+        },
+        "viewsTGWParamsType": {
+            "type": "object",
+            "title": "TGWParamsType",
+            "x-displayname": "TGWParamsType",
+            "x-ves-oneof-field-asn_choice": "[\"system_generated\",\"user_assigned\"]",
+            "x-ves-proto-message": "ves.io.schema.views.TGWParamsType",
+            "properties": {
+                "system_generated": {
+                    "description": "Exclusive with [user_assigned]\n F5XC will automatically assign a private ASN for TGW and F5XC Site",
+                    "title": "System Generated",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Automatic"
+                },
+                "user_assigned": {
+                    "description": "Exclusive with [system_generated]\n User is managing the ASN for TGW and F5XC Site.",
+                    "title": "User Assigned",
+                    "$ref": "#/definitions/viewsTGWAssignedASNType",
+                    "x-displayname": "User will assign ASN for TGW and F5XC Site"
+                }
+            }
+        },
         "viewsVifRegionConfig": {
             "type": "object",
             "description": "x-example: \"value\"\nAWS Direct Connect Hosted VIF Config Per Region Object",
@@ -7135,6 +7178,12 @@ var APISwaggerJSON string = `{
                     "title": "Site Security",
                     "$ref": "#/definitions/aws_tgw_siteSecurityConfigType",
                     "x-displayname": "Site Security"
+                },
+                "tunnel_type": {
+                    "description": " Tunnel type towards TGW (IPSec/GRE)",
+                    "title": "tunnel_type",
+                    "$ref": "#/definitions/aws_tgw_siteTunnelType",
+                    "x-displayname": "Tunnel Type"
                 },
                 "validation_state": {
                     "description": " Validation State of the Site\n\nExample: - \"Validation State\"-",

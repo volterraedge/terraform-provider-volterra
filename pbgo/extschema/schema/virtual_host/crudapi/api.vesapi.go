@@ -4181,6 +4181,12 @@ var APISwaggerJSON string = `{
                     "format": "date-time",
                     "x-displayname": "Deletion Timestamp"
                 },
+                "direct_ref_hash": {
+                    "type": "string",
+                    "description": " A hash of the UIDs of  direct references on this object. This can be used to determine if \n this object hash has had references become resolved/unresolved",
+                    "title": "direct_ref_hash",
+                    "x-displayname": "Direct Reference Hash"
+                },
                 "finalizers": {
                     "type": "array",
                     "description": " Must be empty before the object is deleted from the registry. Each entry\n is an identifier for the responsible component that will remove the entry\n from the list. If the deletionTimestamp of the object is non-nil, entries\n in this list can only be removed.\n\nExample: - \"value\"-",
@@ -4279,6 +4285,28 @@ var APISwaggerJSON string = `{
                     "title": "vtrp_stale",
                     "format": "boolean",
                     "x-displayname": "VTRP Stale"
+                }
+            }
+        },
+        "schemaTLSCoalescingOptions": {
+            "type": "object",
+            "description": "TLS connection coalescing configuration (not compatible with mTLS)",
+            "title": "TLSCoalescingOptions",
+            "x-displayname": "TLS Coalescing Options",
+            "x-ves-oneof-field-coalescing_choice": "[\"default_coalescing\",\"strict_coalescing\"]",
+            "x-ves-proto-message": "ves.io.schema.TLSCoalescingOptions",
+            "properties": {
+                "default_coalescing": {
+                    "description": "Exclusive with [strict_coalescing]\n HTTPS Loadbalancers are coalesced even when they have different TLS version\n or Cipher suite configuration",
+                    "title": "Default Coalescing",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Default Coalescing"
+                },
+                "strict_coalescing": {
+                    "description": "Exclusive with [default_coalescing]\n HTTPS Loadbalancers are not coalesced when they have different TLS version\n and/or Cipher suite configuration",
+                    "title": "Strict Coalescing",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Strict Coalescing"
                 }
             }
         },
@@ -4882,6 +4910,12 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/virtual_hostCdnServiceType",
                     "x-displayname": "CDN Parameters"
                 },
+                "coalescing_options": {
+                    "description": " Options for coalescing of multiple HTTPS Loadbalancers into single one",
+                    "title": "TLS Coalescing options",
+                    "$ref": "#/definitions/schemaTLSCoalescingOptions",
+                    "x-displayname": "TLS Coalescing Options"
+                },
                 "compression_params": {
                     "description": " Enables loadbalancer to compress dispatched data from an upstream service upon client request.\n Only GZIP compression is supported",
                     "title": "Compression configuration",
@@ -5306,7 +5340,7 @@ var APISwaggerJSON string = `{
                 },
                 "use_threat_mesh": {
                     "type": "boolean",
-                    "description": " Threat Mesh provides F5 Distributed Cloud customers with an additional layer of protection against web application attacks.\n Threat mesh leverages cross-customer correlation i.e correlation of client attacks across different customers\n to identify malicious intent of the client. Whenever a client is flagged due to malicious intent by our WAAP decision engines,\n that client will be added to the ThreatDB and all customers get this intelligence and are protected in real-time.",
+                    "description": " Threat Mesh provides F5 Distributed Cloud customers with an additional layer of protection against web application attacks.\n Threat Mesh leverages cross-customer correlation (i.e. correlation of client attacks across different customers) to identify malicious intent of a client.\n Whenever a client is flagged due to a malicious intent by our WAAP decisions engines, that client will be added to the ThreatDB.\n Enabling -Threat Mesh- means that requests that come to an application from an IP that is in the ThreatDB, will be automatically blocked by the load balancer.",
                     "title": "Use Threat Mesh",
                     "format": "boolean",
                     "x-displayname": "Use Threat Mesh"
@@ -6313,7 +6347,7 @@ var APISwaggerJSON string = `{
         },
         "virtual_hostVirtualHostType": {
             "type": "string",
-            "description": "VirtualHostType tells the type of virtual_host. Functionally, all types are same,\nthis is mainly used for categorizing metrics.\n\n - VIRTUAL_SERVICE: VirtualService\n\nVirtual Host used Virtual Service\n - HTTP_LOAD_BALANCER: HTTP LoadBalancer\n\nVirtual Host used as Load Balancer\n - API_GATEWAY: APIGateway\n\nVirtual Host used API Gateway\n - TCP_LOAD_BALANCER: TCP LoadBalancer\n\nVirtual Host used as Load Balancer\n - PROXY: Proxy\n\nVirtual Host used as Proxy\n - LOCAL_K8S_API_GATEWAY: LOCAL_K8S_API_GATEWAY\n\nInternal use only, used for k8s cluster api gateway on the site.\n - CDN_LOAD_BALANCER: CDN LoadBalancer\n\n Virtual Host used as Load Balancer\n - NGINX_SERVER: NGINX Server\n\nVirtual Host representing an NGINX Server block",
+            "description": "VirtualHostType tells the type of virtual_host. Functionally, all types are same,\nthis is mainly used for categorizing metrics.\n\n - VIRTUAL_SERVICE: VirtualService\n\nVirtual Host used Virtual Service\n - HTTP_LOAD_BALANCER: HTTP LoadBalancer\n\nVirtual Host used as Load Balancer\n - API_GATEWAY: APIGateway\n\nVirtual Host used API Gateway\n - TCP_LOAD_BALANCER: TCP LoadBalancer\n\nVirtual Host used as Load Balancer\n - PROXY: Proxy\n\nVirtual Host used as Proxy\n - LOCAL_K8S_API_GATEWAY: LOCAL_K8S_API_GATEWAY\n\nInternal use only, used for k8s cluster api gateway on the site.\n - CDN_LOAD_BALANCER: CDN LoadBalancer\n\n Virtual Host used as Load Balancer\n - NGINX_SERVER: NGINX Server\n\nVirtual Host representing an NGINX Server block\n - BIGIP_VIRTUAL_SERVER: BIG-IP Virtual Server\n\nVirtual Host representing a BIG-IP Virtual Server",
             "title": "VirtualHostType",
             "enum": [
                 "VIRTUAL_SERVICE",

@@ -29,11 +29,14 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.uztna.views.uztna_domain_view.ReplaceResponse"] = ReplaceResponseValidator()
 
 	vr["ves.io.schema.uztna.views.uztna_domain_view.CreateSpecType"] = CreateSpecTypeValidator()
-	vr["ves.io.schema.uztna.views.uztna_domain_view.DVPerimeterREAdvertisement"] = DVPerimeterREAdvertisementValidator()
+	vr["ves.io.schema.uztna.views.uztna_domain_view.DVCloudGatewayAdvertisement"] = DVCloudGatewayAdvertisementValidator()
+	vr["ves.io.schema.uztna.views.uztna_domain_view.DomainViewAppVIPPool"] = DomainViewAppVIPPoolValidator()
 	vr["ves.io.schema.uztna.views.uztna_domain_view.DomainViewCertificate"] = DomainViewCertificateValidator()
+	vr["ves.io.schema.uztna.views.uztna_domain_view.DomainViewCloudGateways"] = DomainViewCloudGatewaysValidator()
+	vr["ves.io.schema.uztna.views.uztna_domain_view.DomainViewDualStackLeasePool"] = DomainViewDualStackLeasePoolValidator()
 	vr["ves.io.schema.uztna.views.uztna_domain_view.DomainViewGateways"] = DomainViewGatewaysValidator()
 	vr["ves.io.schema.uztna.views.uztna_domain_view.DomainViewLeasePoolList"] = DomainViewLeasePoolListValidator()
-	vr["ves.io.schema.uztna.views.uztna_domain_view.DomainViewPerimeterRE"] = DomainViewPerimeterREValidator()
+	vr["ves.io.schema.uztna.views.uztna_domain_view.DomainViewPolicy"] = DomainViewPolicyValidator()
 	vr["ves.io.schema.uztna.views.uztna_domain_view.DomainViewSites"] = DomainViewSitesValidator()
 	vr["ves.io.schema.uztna.views.uztna_domain_view.GetSpecType"] = GetSpecTypeValidator()
 	vr["ves.io.schema.uztna.views.uztna_domain_view.GlobalSpecType"] = GlobalSpecTypeValidator()
@@ -54,6 +57,14 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 }
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
+
+	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.uztna.views.uztna_domain_view.API.Create"] = []string{
+		"spec.gateways.perimeter_re.re_sites",
+	}
+
+	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.uztna.views.uztna_domain_view.API.Replace"] = []string{
+		"spec.gateways.perimeter_re.re_sites",
+	}
 
 }
 

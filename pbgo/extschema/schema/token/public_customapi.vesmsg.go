@@ -24,6 +24,200 @@ var (
 
 // augmented methods on protoc/std generated struct
 
+func (m *GetCloudInitConfigReq) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *GetCloudInitConfigReq) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *GetCloudInitConfigReq) DeepCopy() *GetCloudInitConfigReq {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &GetCloudInitConfigReq{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *GetCloudInitConfigReq) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *GetCloudInitConfigReq) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return GetCloudInitConfigReqValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateGetCloudInitConfigReq struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateGetCloudInitConfigReq) ProviderValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for provider")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateGetCloudInitConfigReq) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*GetCloudInitConfigReq)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *GetCloudInitConfigReq got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["provider"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("provider"))
+		if err := fv(ctx, m.GetProvider(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["site_name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("site_name"))
+		if err := fv(ctx, m.GetSiteName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultGetCloudInitConfigReqValidator = func() *ValidateGetCloudInitConfigReq {
+	v := &ValidateGetCloudInitConfigReq{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhProvider := v.ProviderValidationRuleHandler
+	rulesProvider := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhProvider(rulesProvider)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GetCloudInitConfigReq.provider: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["provider"] = vFn
+
+	return v
+}()
+
+func GetCloudInitConfigReqValidator() db.Validator {
+	return DefaultGetCloudInitConfigReqValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *GetCloudInitConfigResp) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *GetCloudInitConfigResp) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *GetCloudInitConfigResp) DeepCopy() *GetCloudInitConfigResp {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &GetCloudInitConfigResp{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *GetCloudInitConfigResp) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *GetCloudInitConfigResp) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return GetCloudInitConfigRespValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateGetCloudInitConfigResp struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateGetCloudInitConfigResp) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*GetCloudInitConfigResp)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *GetCloudInitConfigResp got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["cloud_init_config"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("cloud_init_config"))
+		if err := fv(ctx, m.GetCloudInitConfig(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultGetCloudInitConfigRespValidator = func() *ValidateGetCloudInitConfigResp {
+	v := &ValidateGetCloudInitConfigResp{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func GetCloudInitConfigRespValidator() db.Validator {
+	return DefaultGetCloudInitConfigRespValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *ObjectChangeResp) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }

@@ -1,9 +1,9 @@
 ---
 
 page_title: "Volterra: protocol_inspection"
-description: "The protocol_inspection allows CRUD of Protocol Inspection resource on Volterra SaaS"
 
----
+description: "The protocol_inspection allows CRUD of Protocol Inspection resource on Volterra SaaS"
+---------------------------------------------------------------------------------------------------
 
 Resource volterra_protocol_inspection
 =====================================
@@ -33,7 +33,7 @@ resource "volterra_protocol_inspection" "example" {
   enable_disable_signatures {
     // One of the arguments from this list "disable_signature enable_signature" must be set
 
-    disable_signature = true
+    enable_signature = true
   }
 }
 

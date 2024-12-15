@@ -122,6 +122,39 @@ func (v *ValidateAggregationRequest) Validate(ctx context.Context, pm interface{
 				return err
 			}
 		}
+	case *AggregationRequest_MaxAggregation:
+		if fv, exists := v.FldValidators["aggregation_type.max_aggregation"]; exists {
+			val := m.GetAggregationType().(*AggregationRequest_MaxAggregation).MaxAggregation
+			vOpts := append(opts,
+				db.WithValidateField("aggregation_type"),
+				db.WithValidateField("max_aggregation"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *AggregationRequest_MinAggregation:
+		if fv, exists := v.FldValidators["aggregation_type.min_aggregation"]; exists {
+			val := m.GetAggregationType().(*AggregationRequest_MinAggregation).MinAggregation
+			vOpts := append(opts,
+				db.WithValidateField("aggregation_type"),
+				db.WithValidateField("min_aggregation"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *AggregationRequest_AvgAggregation:
+		if fv, exists := v.FldValidators["aggregation_type.avg_aggregation"]; exists {
+			val := m.GetAggregationType().(*AggregationRequest_AvgAggregation).AvgAggregation
+			vOpts := append(opts,
+				db.WithValidateField("aggregation_type"),
+				db.WithValidateField("avg_aggregation"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
@@ -136,12 +169,128 @@ var DefaultAggregationRequestValidator = func() *ValidateAggregationRequest {
 	v.FldValidators["aggregation_type.field_aggregation"] = FieldAggregationValidator().Validate
 	v.FldValidators["aggregation_type.cardinality_aggregation"] = CardinalityAggregationValidator().Validate
 	v.FldValidators["aggregation_type.multi_field_aggregation"] = MultiFieldAggregationValidator().Validate
+	v.FldValidators["aggregation_type.max_aggregation"] = MaxAggregationValidator().Validate
+	v.FldValidators["aggregation_type.min_aggregation"] = MinAggregationValidator().Validate
+	v.FldValidators["aggregation_type.avg_aggregation"] = AvgAggregationValidator().Validate
 
 	return v
 }()
 
 func AggregationRequestValidator() db.Validator {
 	return DefaultAggregationRequestValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *AvgAggregation) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *AvgAggregation) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *AvgAggregation) DeepCopy() *AvgAggregation {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &AvgAggregation{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *AvgAggregation) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *AvgAggregation) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return AvgAggregationValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateAvgAggregation struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateAvgAggregation) FieldValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	var conv db.EnumConvFn
+	conv = func(v interface{}) int32 {
+		i := v.(NumKeyField)
+		return int32(i)
+	}
+	// NumKeyField_name is generated in .pb.go
+	validatorFn, err := db.NewEnumValidationRuleHandler(rules, NumKeyField_name, conv)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for field")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateAvgAggregation) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*AvgAggregation)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *AvgAggregation got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["field"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("field"))
+		if err := fv(ctx, m.GetField(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultAvgAggregationValidator = func() *ValidateAvgAggregation {
+	v := &ValidateAvgAggregation{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhField := v.FieldValidationRuleHandler
+	rulesField := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhField(rulesField)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AvgAggregation.field: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["field"] = vFn
+
+	return v
+}()
+
+func AvgAggregationValidator() db.Validator {
+	return DefaultAvgAggregationValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -567,6 +716,18 @@ func (v *ValidateFieldAggregation) Validate(ctx context.Context, pm interface{},
 
 	}
 
+	if fv, exists := v.FldValidators["sub_aggs"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("sub_aggs"))
+		for key, value := range m.GetSubAggs() {
+			vOpts := append(vOpts, db.WithValidateMapKey(key))
+			if err := fv(ctx, value, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["topk"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("topk"))
@@ -614,11 +775,386 @@ var DefaultFieldAggregationValidator = func() *ValidateFieldAggregation {
 	}
 	v.FldValidators["topk"] = vFn
 
+	v.FldValidators["sub_aggs"] = FieldSubAggregationValidator().Validate
+
 	return v
 }()
 
 func FieldAggregationValidator() db.Validator {
 	return DefaultFieldAggregationValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *FieldSubAggregation) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *FieldSubAggregation) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *FieldSubAggregation) DeepCopy() *FieldSubAggregation {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &FieldSubAggregation{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *FieldSubAggregation) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *FieldSubAggregation) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return FieldSubAggregationValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateFieldSubAggregation struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateFieldSubAggregation) AggregationTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for aggregation_type")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateFieldSubAggregation) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*FieldSubAggregation)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *FieldSubAggregation got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["aggregation_type"]; exists {
+		val := m.GetAggregationType()
+		vOpts := append(opts,
+			db.WithValidateField("aggregation_type"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetAggregationType().(type) {
+	case *FieldSubAggregation_MaxAggregation:
+		if fv, exists := v.FldValidators["aggregation_type.max_aggregation"]; exists {
+			val := m.GetAggregationType().(*FieldSubAggregation_MaxAggregation).MaxAggregation
+			vOpts := append(opts,
+				db.WithValidateField("aggregation_type"),
+				db.WithValidateField("max_aggregation"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *FieldSubAggregation_MinAggregation:
+		if fv, exists := v.FldValidators["aggregation_type.min_aggregation"]; exists {
+			val := m.GetAggregationType().(*FieldSubAggregation_MinAggregation).MinAggregation
+			vOpts := append(opts,
+				db.WithValidateField("aggregation_type"),
+				db.WithValidateField("min_aggregation"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *FieldSubAggregation_AvgAggregation:
+		if fv, exists := v.FldValidators["aggregation_type.avg_aggregation"]; exists {
+			val := m.GetAggregationType().(*FieldSubAggregation_AvgAggregation).AvgAggregation
+			vOpts := append(opts,
+				db.WithValidateField("aggregation_type"),
+				db.WithValidateField("avg_aggregation"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultFieldSubAggregationValidator = func() *ValidateFieldSubAggregation {
+	v := &ValidateFieldSubAggregation{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhAggregationType := v.AggregationTypeValidationRuleHandler
+	rulesAggregationType := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhAggregationType(rulesAggregationType)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for FieldSubAggregation.aggregation_type: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["aggregation_type"] = vFn
+
+	v.FldValidators["aggregation_type.max_aggregation"] = MaxAggregationValidator().Validate
+	v.FldValidators["aggregation_type.min_aggregation"] = MinAggregationValidator().Validate
+	v.FldValidators["aggregation_type.avg_aggregation"] = AvgAggregationValidator().Validate
+
+	return v
+}()
+
+func FieldSubAggregationValidator() db.Validator {
+	return DefaultFieldSubAggregationValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *MaxAggregation) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *MaxAggregation) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *MaxAggregation) DeepCopy() *MaxAggregation {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &MaxAggregation{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *MaxAggregation) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *MaxAggregation) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return MaxAggregationValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateMaxAggregation struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateMaxAggregation) FieldValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	var conv db.EnumConvFn
+	conv = func(v interface{}) int32 {
+		i := v.(NumKeyField)
+		return int32(i)
+	}
+	// NumKeyField_name is generated in .pb.go
+	validatorFn, err := db.NewEnumValidationRuleHandler(rules, NumKeyField_name, conv)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for field")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateMaxAggregation) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*MaxAggregation)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *MaxAggregation got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["field"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("field"))
+		if err := fv(ctx, m.GetField(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultMaxAggregationValidator = func() *ValidateMaxAggregation {
+	v := &ValidateMaxAggregation{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhField := v.FieldValidationRuleHandler
+	rulesField := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhField(rulesField)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for MaxAggregation.field: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["field"] = vFn
+
+	return v
+}()
+
+func MaxAggregationValidator() db.Validator {
+	return DefaultMaxAggregationValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *MinAggregation) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *MinAggregation) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *MinAggregation) DeepCopy() *MinAggregation {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &MinAggregation{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *MinAggregation) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *MinAggregation) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return MinAggregationValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateMinAggregation struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateMinAggregation) FieldValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	var conv db.EnumConvFn
+	conv = func(v interface{}) int32 {
+		i := v.(NumKeyField)
+		return int32(i)
+	}
+	// NumKeyField_name is generated in .pb.go
+	validatorFn, err := db.NewEnumValidationRuleHandler(rules, NumKeyField_name, conv)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for field")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateMinAggregation) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*MinAggregation)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *MinAggregation got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["field"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("field"))
+		if err := fv(ctx, m.GetField(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultMinAggregationValidator = func() *ValidateMinAggregation {
+	v := &ValidateMinAggregation{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhField := v.FieldValidationRuleHandler
+	rulesField := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhField(rulesField)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for MinAggregation.field: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["field"] = vFn
+
+	return v
+}()
+
+func MinAggregationValidator() db.Validator {
+	return DefaultMinAggregationValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -711,6 +1247,18 @@ func (v *ValidateMultiFieldAggregation) Validate(ctx context.Context, pm interfa
 
 	}
 
+	if fv, exists := v.FldValidators["sub_aggs"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("sub_aggs"))
+		for key, value := range m.GetSubAggs() {
+			vOpts := append(vOpts, db.WithValidateMapKey(key))
+			if err := fv(ctx, value, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["topk"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("topk"))
@@ -757,6 +1305,8 @@ var DefaultMultiFieldAggregationValidator = func() *ValidateMultiFieldAggregatio
 		panic(errMsg)
 	}
 	v.FldValidators["topk"] = vFn
+
+	v.FldValidators["sub_aggs"] = FieldSubAggregationValidator().Validate
 
 	return v
 }()

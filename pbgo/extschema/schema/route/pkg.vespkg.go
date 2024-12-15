@@ -38,6 +38,7 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.route.HashPolicyType"] = HashPolicyTypeValidator()
 	vr["ves.io.schema.route.JavaScriptTag"] = JavaScriptTagValidator()
 	vr["ves.io.schema.route.MirrorPolicyType"] = MirrorPolicyTypeValidator()
+	vr["ves.io.schema.route.QueryParamsSimpleRoute"] = QueryParamsSimpleRouteValidator()
 	vr["ves.io.schema.route.ReplaceSpecType"] = ReplaceSpecTypeValidator()
 	vr["ves.io.schema.route.RouteDestination"] = RouteDestinationValidator()
 	vr["ves.io.schema.route.RouteDestinationList"] = RouteDestinationListValidator()

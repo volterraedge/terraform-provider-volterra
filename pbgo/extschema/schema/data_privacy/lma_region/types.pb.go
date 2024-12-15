@@ -9,7 +9,7 @@ import (
 	proto "github.com/gogo/protobuf/proto"
 	_ "github.com/gogo/protobuf/types"
 	golang_proto "github.com/golang/protobuf/proto"
-	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+	schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
 	io "io"
 	math "math"
@@ -53,6 +53,12 @@ type GlobalSpecType struct {
 	// x-required
 	// Elastic Params
 	ElasticParams *ElasticParams `protobuf:"bytes,3,opt,name=elastic_params,json=elasticParams,proto3" json:"elastic_params,omitempty"`
+	// Clickhouse params
+	//
+	// x-displayName: "Clickhouse params"
+	// x-required
+	// Clickhouse Params
+	ClickhouseParams *ClickhouseParams `protobuf:"bytes,4,opt,name=clickhouse_params,json=clickhouseParams,proto3" json:"clickhouse_params,omitempty"`
 }
 
 func (m *GlobalSpecType) Reset()      { *m = GlobalSpecType{} }
@@ -104,14 +110,22 @@ func (m *GlobalSpecType) GetElasticParams() *ElasticParams {
 	return nil
 }
 
+func (m *GlobalSpecType) GetClickhouseParams() *ClickhouseParams {
+	if m != nil {
+		return m.ClickhouseParams
+	}
+	return nil
+}
+
 // Get LMA Region
 //
 // x-displayName: "Get LMA Region"
 // Shape of the lma region specification
 type GetSpecType struct {
-	IsDefault     bool           `protobuf:"varint,1,opt,name=is_default,json=isDefault,proto3" json:"is_default,omitempty"`
-	KafkaParams   *KafkaParams   `protobuf:"bytes,2,opt,name=kafka_params,json=kafkaParams,proto3" json:"kafka_params,omitempty"`
-	ElasticParams *ElasticParams `protobuf:"bytes,3,opt,name=elastic_params,json=elasticParams,proto3" json:"elastic_params,omitempty"`
+	IsDefault        bool              `protobuf:"varint,1,opt,name=is_default,json=isDefault,proto3" json:"is_default,omitempty"`
+	KafkaParams      *KafkaParams      `protobuf:"bytes,2,opt,name=kafka_params,json=kafkaParams,proto3" json:"kafka_params,omitempty"`
+	ElasticParams    *ElasticParams    `protobuf:"bytes,3,opt,name=elastic_params,json=elasticParams,proto3" json:"elastic_params,omitempty"`
+	ClickhouseParams *ClickhouseParams `protobuf:"bytes,4,opt,name=clickhouse_params,json=clickhouseParams,proto3" json:"clickhouse_params,omitempty"`
 }
 
 func (m *GetSpecType) Reset()      { *m = GetSpecType{} }
@@ -159,6 +173,13 @@ func (m *GetSpecType) GetKafkaParams() *KafkaParams {
 func (m *GetSpecType) GetElasticParams() *ElasticParams {
 	if m != nil {
 		return m.ElasticParams
+	}
+	return nil
+}
+
+func (m *GetSpecType) GetClickhouseParams() *ClickhouseParams {
+	if m != nil {
+		return m.ClickhouseParams
 	}
 	return nil
 }
@@ -211,6 +232,10 @@ func (m *KafkaParams) GetBootstrapServers() []string {
 	return nil
 }
 
+// Elastic Params
+//
+// x-displayName: "Elastic Params"
+// Elastic parameters
 type ElasticParams struct {
 	// Elastic Search URLs
 	//
@@ -255,6 +280,93 @@ func (m *ElasticParams) GetUrls() []string {
 	return nil
 }
 
+// Clickhouse Params
+//
+// x-displayName: "Clickhouse Params"
+// Clickhouse parameters
+type ClickhouseParams struct {
+	// Clickhouse Host
+	//
+	// x-displayName: "Clickhouse Host"
+	// x-required
+	// Clickhouse Host
+	Host string `protobuf:"bytes,1,opt,name=host,proto3" json:"host,omitempty"`
+	// Clickhouse Port
+	//
+	// x-displayName: "Clickhouse Port"
+	// x-required
+	// Clickhouse Port
+	Port int32 `protobuf:"varint,2,opt,name=port,proto3" json:"port,omitempty"`
+	// Clickhouse User
+	//
+	// x-displayName: "Clickhouse User"
+	// x-required
+	// Clickhouse User
+	User string `protobuf:"bytes,3,opt,name=user,proto3" json:"user,omitempty"`
+	// Clickhouse Password
+	//
+	// x-displayName: "Clickhouse Password"
+	// x-required
+	// Clickhouse Password
+	Password *schema.SecretType `protobuf:"bytes,4,opt,name=password,proto3" json:"password,omitempty"`
+}
+
+func (m *ClickhouseParams) Reset()      { *m = ClickhouseParams{} }
+func (*ClickhouseParams) ProtoMessage() {}
+func (*ClickhouseParams) Descriptor() ([]byte, []int) {
+	return fileDescriptor_8c3f5102a035d7b1, []int{4}
+}
+func (m *ClickhouseParams) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *ClickhouseParams) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *ClickhouseParams) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ClickhouseParams.Merge(m, src)
+}
+func (m *ClickhouseParams) XXX_Size() int {
+	return m.Size()
+}
+func (m *ClickhouseParams) XXX_DiscardUnknown() {
+	xxx_messageInfo_ClickhouseParams.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ClickhouseParams proto.InternalMessageInfo
+
+func (m *ClickhouseParams) GetHost() string {
+	if m != nil {
+		return m.Host
+	}
+	return ""
+}
+
+func (m *ClickhouseParams) GetPort() int32 {
+	if m != nil {
+		return m.Port
+	}
+	return 0
+}
+
+func (m *ClickhouseParams) GetUser() string {
+	if m != nil {
+		return m.User
+	}
+	return ""
+}
+
+func (m *ClickhouseParams) GetPassword() *schema.SecretType {
+	if m != nil {
+		return m.Password
+	}
+	return nil
+}
+
 func init() {
 	proto.RegisterType((*GlobalSpecType)(nil), "ves.io.schema.data_privacy.lma_region.GlobalSpecType")
 	golang_proto.RegisterType((*GlobalSpecType)(nil), "ves.io.schema.data_privacy.lma_region.GlobalSpecType")
@@ -264,6 +376,8 @@ func init() {
 	golang_proto.RegisterType((*KafkaParams)(nil), "ves.io.schema.data_privacy.lma_region.KafkaParams")
 	proto.RegisterType((*ElasticParams)(nil), "ves.io.schema.data_privacy.lma_region.ElasticParams")
 	golang_proto.RegisterType((*ElasticParams)(nil), "ves.io.schema.data_privacy.lma_region.ElasticParams")
+	proto.RegisterType((*ClickhouseParams)(nil), "ves.io.schema.data_privacy.lma_region.ClickhouseParams")
+	golang_proto.RegisterType((*ClickhouseParams)(nil), "ves.io.schema.data_privacy.lma_region.ClickhouseParams")
 }
 
 func init() {
@@ -274,38 +388,44 @@ func init() {
 }
 
 var fileDescriptor_8c3f5102a035d7b1 = []byte{
-	// 489 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xdc, 0x94, 0x31, 0x6f, 0xd3, 0x40,
-	0x1c, 0xc5, 0x7d, 0x04, 0x10, 0xbd, 0xd0, 0x8a, 0x7a, 0x0a, 0x01, 0xae, 0x51, 0x24, 0xa4, 0x2c,
-	0xb9, 0x13, 0x05, 0x09, 0x89, 0x01, 0xa4, 0x0a, 0xe8, 0xc0, 0x82, 0x52, 0x58, 0xe8, 0x60, 0x9d,
-	0x9d, 0x8b, 0x7b, 0x8a, 0xdd, 0xff, 0xe9, 0xee, 0x6c, 0xc8, 0xc6, 0x47, 0x60, 0x65, 0x63, 0xe4,
-	0x33, 0x30, 0x75, 0x44, 0x4c, 0x19, 0x33, 0x12, 0x7b, 0x81, 0xad, 0x12, 0x5f, 0x00, 0x61, 0xbb,
-	0xc4, 0x2e, 0x08, 0x65, 0x66, 0xbb, 0xff, 0xbd, 0xf7, 0x7b, 0xf7, 0x6c, 0x9f, 0x8c, 0xef, 0xa4,
-	0xc2, 0x50, 0x09, 0xcc, 0x04, 0x47, 0x22, 0xe6, 0x6c, 0xcc, 0x2d, 0xf7, 0x94, 0x96, 0x29, 0x0f,
-	0x66, 0x2c, 0x8a, 0xb9, 0xa7, 0x45, 0x28, 0xe1, 0x98, 0xd9, 0x99, 0x12, 0x86, 0x2a, 0x0d, 0x16,
-	0xdc, 0xdb, 0x25, 0x42, 0x4b, 0x84, 0xd6, 0x11, 0xba, 0x42, 0xba, 0xc3, 0x50, 0xda, 0xa3, 0xc4,
-	0xa7, 0x01, 0xc4, 0x2c, 0x84, 0x10, 0x58, 0x41, 0xfb, 0xc9, 0xa4, 0x98, 0x8a, 0xa1, 0x58, 0x95,
-	0xa9, 0xdd, 0x9d, 0x10, 0x20, 0x8c, 0xc4, 0xca, 0x65, 0x65, 0x2c, 0x8c, 0xe5, 0xb1, 0xaa, 0x0c,
-	0x37, 0x9a, 0x4d, 0x41, 0x59, 0x09, 0xc7, 0x55, 0xa7, 0xee, 0xf5, 0xa6, 0x58, 0xab, 0xdb, 0xbd,
-	0xd9, 0x94, 0x52, 0x1e, 0xc9, 0x31, 0xb7, 0xa2, 0x52, 0x7b, 0xe7, 0x54, 0x29, 0x5e, 0x7b, 0xcd,
-	0xe8, 0x9d, 0x3f, 0x1d, 0xa6, 0x7e, 0x40, 0x3f, 0x47, 0x78, 0x6b, 0x3f, 0x02, 0x9f, 0x47, 0x07,
-	0x4a, 0x04, 0x2f, 0x66, 0x4a, 0xb8, 0xb7, 0x30, 0x96, 0xc6, 0x1b, 0x8b, 0x09, 0x4f, 0x22, 0xdb,
-	0x41, 0x3d, 0x34, 0xb8, 0x32, 0xda, 0x90, 0xe6, 0x71, 0xb9, 0xe1, 0xbe, 0xc4, 0x57, 0xa7, 0x7c,
-	0x32, 0xe5, 0x9e, 0xe2, 0x9a, 0xc7, 0xa6, 0x73, 0xa1, 0x87, 0x06, 0xed, 0xdd, 0x5d, 0xba, 0xd6,
-	0x8b, 0xa5, 0xcf, 0x7e, 0xa1, 0xcf, 0x0b, 0x72, 0xd4, 0x9e, 0xae, 0x06, 0xf7, 0x10, 0x6f, 0x89,
-	0x88, 0x1b, 0x2b, 0x83, 0xb3, 0xe0, 0x56, 0x11, 0x7c, 0x6f, 0xcd, 0xe0, 0x27, 0x25, 0x5c, 0x45,
-	0x6f, 0x8a, 0xfa, 0xd8, 0xff, 0x81, 0x70, 0x7b, 0x5f, 0xd8, 0xff, 0xf8, 0x11, 0x1f, 0x6c, 0x7f,
-	0x79, 0x78, 0xee, 0x43, 0xf6, 0x9f, 0xe2, 0x76, 0xad, 0x8b, 0x7b, 0x1f, 0x6f, 0xfb, 0x00, 0xd6,
-	0x58, 0xcd, 0x95, 0x67, 0x84, 0x4e, 0x85, 0x36, 0x1d, 0xd4, 0x6b, 0x0d, 0x36, 0xf6, 0xf0, 0xa7,
-	0xef, 0x27, 0xad, 0x4b, 0xba, 0xd5, 0xf9, 0xf0, 0x68, 0x74, 0xed, 0xb7, 0xe9, 0xa0, 0xf4, 0xf4,
-	0x19, 0xde, 0x6c, 0x1c, 0xed, 0x12, 0x7c, 0x31, 0xd1, 0xd1, 0xdf, 0xe0, 0x62, 0x7f, 0xef, 0x3d,
-	0x9a, 0x2f, 0x89, 0xb3, 0x58, 0x12, 0xe7, 0x74, 0x49, 0xd0, 0xdb, 0x8c, 0xa0, 0x8f, 0x19, 0x41,
-	0x9f, 0x33, 0x82, 0xe6, 0x19, 0x41, 0x8b, 0x8c, 0xa0, 0xaf, 0x19, 0x41, 0xdf, 0x32, 0xe2, 0x9c,
-	0x66, 0x04, 0xbd, 0xcb, 0x89, 0x73, 0x92, 0x13, 0x34, 0xcf, 0x89, 0xb3, 0xc8, 0x89, 0xf3, 0xea,
-	0x30, 0x04, 0x35, 0x0d, 0x69, 0x0a, 0x91, 0x15, 0x5a, 0x73, 0x9a, 0x18, 0x56, 0x2c, 0x26, 0xa0,
-	0xe3, 0xa1, 0xd2, 0x90, 0xca, 0xb1, 0xd0, 0xc3, 0x33, 0x99, 0x29, 0x3f, 0x04, 0x26, 0xde, 0xd8,
-	0xea, 0x8e, 0xff, 0xfb, 0x67, 0xe0, 0x5f, 0x2e, 0xee, 0xfd, 0xdd, 0x9f, 0x01, 0x00, 0x00, 0xff,
-	0xff, 0x0a, 0xee, 0x1f, 0x4a, 0x3c, 0x04, 0x00, 0x00,
+	// 582 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x54, 0xbd, 0x6f, 0xd3, 0x4e,
+	0x18, 0xf6, 0x35, 0xed, 0x4f, 0xcd, 0xe5, 0xd7, 0xaa, 0xf5, 0x94, 0x06, 0xb8, 0x46, 0x91, 0x90,
+	0xb2, 0xc4, 0x16, 0x05, 0x54, 0x89, 0x01, 0xa4, 0xf2, 0xd1, 0x81, 0x05, 0x39, 0xb0, 0xd0, 0xc1,
+	0x3a, 0xdb, 0x17, 0xe7, 0x14, 0xbb, 0x77, 0xba, 0x3b, 0xbb, 0x64, 0x63, 0x61, 0x67, 0x65, 0x63,
+	0xe4, 0x6f, 0x60, 0xea, 0x08, 0x4c, 0x19, 0xc3, 0x46, 0x9c, 0x05, 0xb6, 0xfe, 0x09, 0x28, 0x67,
+	0xe7, 0x13, 0x84, 0x22, 0xb1, 0xb2, 0xbd, 0x1f, 0xcf, 0xf3, 0xdc, 0xfb, 0x71, 0x7a, 0xe1, 0xad,
+	0x94, 0x48, 0x8b, 0x32, 0x5b, 0xfa, 0x5d, 0x12, 0x63, 0x3b, 0xc0, 0x0a, 0xbb, 0x5c, 0xd0, 0x14,
+	0xfb, 0x7d, 0x3b, 0x8a, 0xb1, 0x2b, 0x48, 0x48, 0xd9, 0xb9, 0xad, 0xfa, 0x9c, 0x48, 0x8b, 0x0b,
+	0xa6, 0x98, 0x79, 0x33, 0xa7, 0x58, 0x39, 0xc5, 0x5a, 0xa4, 0x58, 0x73, 0x4a, 0xad, 0x15, 0x52,
+	0xd5, 0x4d, 0x3c, 0xcb, 0x67, 0xb1, 0x1d, 0xb2, 0x90, 0xd9, 0x9a, 0xed, 0x25, 0x1d, 0xed, 0x69,
+	0x47, 0x5b, 0xb9, 0x6a, 0xed, 0x30, 0x64, 0x2c, 0x8c, 0xc8, 0x1c, 0xa5, 0x68, 0x4c, 0xa4, 0xc2,
+	0x31, 0x2f, 0x00, 0xd7, 0x96, 0x2b, 0x65, 0x5c, 0x51, 0x76, 0x5e, 0xd4, 0x54, 0x3b, 0x58, 0x4e,
+	0x2e, 0x94, 0x5b, 0xbb, 0xbe, 0x9c, 0x4a, 0x71, 0x44, 0x03, 0xac, 0x48, 0x91, 0xad, 0xaf, 0x64,
+	0x29, 0xb9, 0x70, 0x97, 0xa5, 0x0f, 0x7f, 0x45, 0xc8, 0xc5, 0x07, 0x1a, 0x9f, 0x37, 0xe0, 0xee,
+	0x69, 0xc4, 0x3c, 0x1c, 0xb5, 0x39, 0xf1, 0x9f, 0xf7, 0x39, 0x31, 0x6f, 0x40, 0x48, 0xa5, 0x1b,
+	0x90, 0x0e, 0x4e, 0x22, 0x55, 0x05, 0x75, 0xd0, 0xdc, 0x76, 0xca, 0x54, 0x3e, 0xca, 0x03, 0xe6,
+	0x0b, 0xf8, 0x7f, 0x0f, 0x77, 0x7a, 0xd8, 0xe5, 0x58, 0xe0, 0x58, 0x56, 0x37, 0xea, 0xa0, 0x59,
+	0x39, 0x3a, 0xb2, 0xd6, 0x1a, 0xac, 0xf5, 0x74, 0x42, 0x7d, 0xa6, 0x99, 0x4e, 0xa5, 0x37, 0x77,
+	0xcc, 0x33, 0xb8, 0x4b, 0x22, 0x2c, 0x15, 0xf5, 0xa7, 0xc2, 0x25, 0x2d, 0x7c, 0x67, 0x4d, 0xe1,
+	0xc7, 0x39, 0xb9, 0x90, 0xde, 0x21, 0x8b, 0xae, 0x19, 0xc0, 0x7d, 0x3f, 0xa2, 0x7e, 0xaf, 0xcb,
+	0x12, 0x49, 0xa6, 0xfa, 0x9b, 0x5a, 0xff, 0x78, 0x4d, 0xfd, 0x87, 0x33, 0x7e, 0xf1, 0xc4, 0x9e,
+	0xbf, 0x12, 0x69, 0x7c, 0xdd, 0x80, 0x95, 0x53, 0xa2, 0xfe, 0x0d, 0xf2, 0x2f, 0x07, 0x79, 0x6f,
+	0xff, 0xcb, 0xfd, 0x95, 0x4f, 0xd9, 0x78, 0x02, 0x2b, 0x0b, 0x1d, 0x9b, 0xc7, 0x70, 0xdf, 0x63,
+	0x4c, 0x49, 0x25, 0x30, 0x77, 0x25, 0x11, 0x29, 0x11, 0xb2, 0x0a, 0xea, 0xa5, 0x66, 0xf9, 0x04,
+	0x7e, 0xfc, 0x71, 0x59, 0xda, 0x12, 0xa5, 0xea, 0xfb, 0x07, 0xce, 0xde, 0x0c, 0xd4, 0xce, 0x31,
+	0x0d, 0x1b, 0xee, 0x2c, 0x35, 0x68, 0x22, 0xb8, 0x99, 0x88, 0xe8, 0x77, 0x64, 0x1d, 0x6f, 0xbc,
+	0x01, 0x70, 0x6f, 0xb5, 0x64, 0xd3, 0x84, 0x9b, 0x5d, 0x26, 0xf3, 0x9d, 0x96, 0x1d, 0x6d, 0x4f,
+	0x62, 0x9c, 0x09, 0xa5, 0xd7, 0xb8, 0xe5, 0x68, 0x7b, 0x12, 0x4b, 0x24, 0x11, 0x7a, 0x03, 0x65,
+	0x47, 0xdb, 0xe6, 0x5d, 0xb8, 0xcd, 0xb1, 0x94, 0x17, 0x4c, 0x04, 0xc5, 0xe4, 0x0e, 0x56, 0x26,
+	0xd7, 0x26, 0xbe, 0x20, 0x6a, 0xd2, 0xb6, 0x33, 0x83, 0x9e, 0xbc, 0x03, 0x83, 0x11, 0x32, 0x86,
+	0x23, 0x64, 0x5c, 0x8d, 0x10, 0x78, 0x9d, 0x21, 0xf0, 0x21, 0x43, 0xe0, 0x53, 0x86, 0xc0, 0x20,
+	0x43, 0x60, 0x98, 0x21, 0xf0, 0x2d, 0x43, 0xe0, 0x7b, 0x86, 0x8c, 0xab, 0x0c, 0x81, 0xb7, 0x63,
+	0x64, 0x5c, 0x8e, 0x11, 0x18, 0x8c, 0x91, 0x31, 0x1c, 0x23, 0xe3, 0xe5, 0x59, 0xc8, 0x78, 0x2f,
+	0xb4, 0x52, 0x16, 0x29, 0x22, 0x04, 0xb6, 0x12, 0x69, 0x6b, 0xa3, 0xc3, 0x44, 0xdc, 0xe2, 0x82,
+	0xa5, 0x34, 0x20, 0xa2, 0x35, 0x4d, 0xdb, 0xdc, 0x0b, 0x99, 0x4d, 0x5e, 0xa9, 0xe2, 0x6e, 0xfc,
+	0xf9, 0xc0, 0x7a, 0xff, 0xe9, 0x5b, 0x72, 0xfb, 0x67, 0x00, 0x00, 0x00, 0xff, 0xff, 0xe6, 0x08,
+	0x1f, 0xe5, 0x90, 0x05, 0x00, 0x00,
 }
 
 func (this *GlobalSpecType) Equal(that interface{}) bool {
@@ -336,6 +456,9 @@ func (this *GlobalSpecType) Equal(that interface{}) bool {
 	if !this.ElasticParams.Equal(that1.ElasticParams) {
 		return false
 	}
+	if !this.ClickhouseParams.Equal(that1.ClickhouseParams) {
+		return false
+	}
 	return true
 }
 func (this *GetSpecType) Equal(that interface{}) bool {
@@ -364,6 +487,9 @@ func (this *GetSpecType) Equal(that interface{}) bool {
 		return false
 	}
 	if !this.ElasticParams.Equal(that1.ElasticParams) {
+		return false
+	}
+	if !this.ClickhouseParams.Equal(that1.ClickhouseParams) {
 		return false
 	}
 	return true
@@ -426,11 +552,44 @@ func (this *ElasticParams) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *ClickhouseParams) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ClickhouseParams)
+	if !ok {
+		that2, ok := that.(ClickhouseParams)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Host != that1.Host {
+		return false
+	}
+	if this.Port != that1.Port {
+		return false
+	}
+	if this.User != that1.User {
+		return false
+	}
+	if !this.Password.Equal(that1.Password) {
+		return false
+	}
+	return true
+}
 func (this *GlobalSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 7)
+	s := make([]string, 0, 8)
 	s = append(s, "&lma_region.GlobalSpecType{")
 	s = append(s, "IsDefault: "+fmt.Sprintf("%#v", this.IsDefault)+",\n")
 	if this.KafkaParams != nil {
@@ -439,6 +598,9 @@ func (this *GlobalSpecType) GoString() string {
 	if this.ElasticParams != nil {
 		s = append(s, "ElasticParams: "+fmt.Sprintf("%#v", this.ElasticParams)+",\n")
 	}
+	if this.ClickhouseParams != nil {
+		s = append(s, "ClickhouseParams: "+fmt.Sprintf("%#v", this.ClickhouseParams)+",\n")
+	}
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
@@ -446,7 +608,7 @@ func (this *GetSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 7)
+	s := make([]string, 0, 8)
 	s = append(s, "&lma_region.GetSpecType{")
 	s = append(s, "IsDefault: "+fmt.Sprintf("%#v", this.IsDefault)+",\n")
 	if this.KafkaParams != nil {
@@ -454,6 +616,9 @@ func (this *GetSpecType) GoString() string {
 	}
 	if this.ElasticParams != nil {
 		s = append(s, "ElasticParams: "+fmt.Sprintf("%#v", this.ElasticParams)+",\n")
+	}
+	if this.ClickhouseParams != nil {
+		s = append(s, "ClickhouseParams: "+fmt.Sprintf("%#v", this.ClickhouseParams)+",\n")
 	}
 	s = append(s, "}")
 	return strings.Join(s, "")
@@ -475,6 +640,21 @@ func (this *ElasticParams) GoString() string {
 	s := make([]string, 0, 5)
 	s = append(s, "&lma_region.ElasticParams{")
 	s = append(s, "Urls: "+fmt.Sprintf("%#v", this.Urls)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *ClickhouseParams) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 8)
+	s = append(s, "&lma_region.ClickhouseParams{")
+	s = append(s, "Host: "+fmt.Sprintf("%#v", this.Host)+",\n")
+	s = append(s, "Port: "+fmt.Sprintf("%#v", this.Port)+",\n")
+	s = append(s, "User: "+fmt.Sprintf("%#v", this.User)+",\n")
+	if this.Password != nil {
+		s = append(s, "Password: "+fmt.Sprintf("%#v", this.Password)+",\n")
+	}
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
@@ -506,6 +686,18 @@ func (m *GlobalSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if m.ClickhouseParams != nil {
+		{
+			size, err := m.ClickhouseParams.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x22
+	}
 	if m.ElasticParams != nil {
 		{
 			size, err := m.ElasticParams.MarshalToSizedBuffer(dAtA[:i])
@@ -563,6 +755,18 @@ func (m *GetSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if m.ClickhouseParams != nil {
+		{
+			size, err := m.ClickhouseParams.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x22
+	}
 	if m.ElasticParams != nil {
 		{
 			size, err := m.ElasticParams.MarshalToSizedBuffer(dAtA[:i])
@@ -664,6 +868,60 @@ func (m *ElasticParams) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
+func (m *ClickhouseParams) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *ClickhouseParams) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ClickhouseParams) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.Password != nil {
+		{
+			size, err := m.Password.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x22
+	}
+	if len(m.User) > 0 {
+		i -= len(m.User)
+		copy(dAtA[i:], m.User)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.User)))
+		i--
+		dAtA[i] = 0x1a
+	}
+	if m.Port != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.Port))
+		i--
+		dAtA[i] = 0x10
+	}
+	if len(m.Host) > 0 {
+		i -= len(m.Host)
+		copy(dAtA[i:], m.Host)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.Host)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
 func encodeVarintTypes(dAtA []byte, offset int, v uint64) int {
 	offset -= sovTypes(v)
 	base := offset
@@ -692,6 +950,10 @@ func (m *GlobalSpecType) Size() (n int) {
 		l = m.ElasticParams.Size()
 		n += 1 + l + sovTypes(uint64(l))
 	}
+	if m.ClickhouseParams != nil {
+		l = m.ClickhouseParams.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
 	return n
 }
 
@@ -710,6 +972,10 @@ func (m *GetSpecType) Size() (n int) {
 	}
 	if m.ElasticParams != nil {
 		l = m.ElasticParams.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.ClickhouseParams != nil {
+		l = m.ClickhouseParams.Size()
 		n += 1 + l + sovTypes(uint64(l))
 	}
 	return n
@@ -745,6 +1011,30 @@ func (m *ElasticParams) Size() (n int) {
 	return n
 }
 
+func (m *ClickhouseParams) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Host)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.Port != 0 {
+		n += 1 + sovTypes(uint64(m.Port))
+	}
+	l = len(m.User)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.Password != nil {
+		l = m.Password.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+
 func sovTypes(x uint64) (n int) {
 	return (math_bits.Len64(x|1) + 6) / 7
 }
@@ -759,6 +1049,7 @@ func (this *GlobalSpecType) String() string {
 		`IsDefault:` + fmt.Sprintf("%v", this.IsDefault) + `,`,
 		`KafkaParams:` + strings.Replace(this.KafkaParams.String(), "KafkaParams", "KafkaParams", 1) + `,`,
 		`ElasticParams:` + strings.Replace(this.ElasticParams.String(), "ElasticParams", "ElasticParams", 1) + `,`,
+		`ClickhouseParams:` + strings.Replace(this.ClickhouseParams.String(), "ClickhouseParams", "ClickhouseParams", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -771,6 +1062,7 @@ func (this *GetSpecType) String() string {
 		`IsDefault:` + fmt.Sprintf("%v", this.IsDefault) + `,`,
 		`KafkaParams:` + strings.Replace(this.KafkaParams.String(), "KafkaParams", "KafkaParams", 1) + `,`,
 		`ElasticParams:` + strings.Replace(this.ElasticParams.String(), "ElasticParams", "ElasticParams", 1) + `,`,
+		`ClickhouseParams:` + strings.Replace(this.ClickhouseParams.String(), "ClickhouseParams", "ClickhouseParams", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -791,6 +1083,19 @@ func (this *ElasticParams) String() string {
 	}
 	s := strings.Join([]string{`&ElasticParams{`,
 		`Urls:` + fmt.Sprintf("%v", this.Urls) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ClickhouseParams) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ClickhouseParams{`,
+		`Host:` + fmt.Sprintf("%v", this.Host) + `,`,
+		`Port:` + fmt.Sprintf("%v", this.Port) + `,`,
+		`User:` + fmt.Sprintf("%v", this.User) + `,`,
+		`Password:` + strings.Replace(fmt.Sprintf("%v", this.Password), "SecretType", "schema.SecretType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -921,6 +1226,42 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				m.ElasticParams = &ElasticParams{}
 			}
 			if err := m.ElasticParams.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ClickhouseParams", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.ClickhouseParams == nil {
+				m.ClickhouseParams = &ClickhouseParams{}
+			}
+			if err := m.ClickhouseParams.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
@@ -1066,6 +1407,42 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				m.ElasticParams = &ElasticParams{}
 			}
 			if err := m.ElasticParams.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ClickhouseParams", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.ClickhouseParams == nil {
+				m.ClickhouseParams = &ClickhouseParams{}
+			}
+			if err := m.ClickhouseParams.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
@@ -1238,6 +1615,178 @@ func (m *ElasticParams) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			m.Urls = append(m.Urls, string(dAtA[iNdEx:postIndex]))
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *ClickhouseParams) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: ClickhouseParams: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: ClickhouseParams: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Host", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Host = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Port", wireType)
+			}
+			m.Port = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Port |= int32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field User", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.User = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Password", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Password == nil {
+				m.Password = &schema.SecretType{}
+			}
+			if err := m.Password.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex

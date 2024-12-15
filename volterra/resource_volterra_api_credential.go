@@ -10,7 +10,9 @@ import (
 	"log"
 	"net/http"
 	"strings"
+	"time"
 
+	"github.com/gogo/protobuf/types"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	ves_io_schema_api_credential "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/api_credential"
 	"gopkg.volterra.us/stdlib/codec"
@@ -18,9 +20,12 @@ import (
 )
 
 const (
-	apiCredRPCFQN    = "ves.io.schema.api_credential.CustomAPI"
-	apiCredURI       = "/public/namespaces/system/api_credentials"
-	deleteAPICredURI = "/public/namespaces/system/revoke/api_credentials"
+	apiCredRPCFQN      = "ves.io.schema.api_credential.CustomAPI"
+	apiCredURI         = "/public/namespaces/system/api_credentials"
+	getAPICredURI      = "/public/namespaces/system/api_credentials/%s"
+	deleteAPICredURI   = "/public/namespaces/system/revoke/api_credentials"
+	activateAPICredURI = "/public/namespaces/system/activate/api_credentials"
+	renewAPICredURI    = "/public/namespaces/system/renew/api_credentials"
 )
 
 type apiCredentialParams struct {
@@ -66,10 +71,23 @@ func resourceVolterraAPICredential() *schema.Resource {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
+			"expiration_timestamp": {
+				Type:     schema.TypeString,
+				Computed: true,
+			},
 			"expiry_days": {
 				Type:     schema.TypeInt,
 				Default:  10,
 				Optional: true,
+			},
+			"created_at": {
+				Type:     schema.TypeString,
+				Required: true,
+			},
+			"automatic_approval_api_token": {
+				Type:     schema.TypeBool,
+				Optional: true,
+				Default:  false,
 			},
 		},
 	}
@@ -78,6 +96,7 @@ func resourceVolterraAPICredential() *schema.Resource {
 // resourceVolterraAPICredentialCreate approves registration resource
 func resourceVolterraAPICredentialCreate(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*APIClient)
+	var created_at string
 
 	apiCredParams := &apiCredentialParams{}
 	if v, ok := d.GetOk("name"); ok {
@@ -98,6 +117,10 @@ func resourceVolterraAPICredentialCreate(d *schema.ResourceData, meta interface{
 
 	if v, ok := d.GetOk("expiry_days"); ok {
 		apiCredParams.expirydays = uint32(v.(int))
+	}
+
+	if v, ok := d.GetOk("created_at"); ok {
+		created_at = v.(string)
 	}
 
 	apiCredValue, ok := ves_io_schema_api_credential.APICredentialType_value[apiCredParams.apiCredType]
@@ -138,11 +161,27 @@ func resourceVolterraAPICredentialCreate(d *schema.ResourceData, meta interface{
 	rspAPICred := rspProto.(*ves_io_schema_api_credential.CreateResponse)
 	d.SetId(rspAPICred.Name)
 	d.Set("data", rspAPICred.Data)
+	expTime, err := convertTimestampToString(rspAPICred.ExpirationTimestamp)
+	if err != nil {
+		return fmt.Errorf("Error converting expiration_timestamp : %s", err)
+	}
+	d.Set("expiration_timestamp", expTime)
+	d.Set("created_at", created_at)
 	return resourceVolterraAPICredentialRead(d, meta)
+}
+
+func convertTimestampToString(timestamp *types.Timestamp) (string, error) {
+	if timestamp == nil {
+		return "", fmt.Errorf("timestamp is nil")
+	}
+	t := time.Unix(timestamp.Seconds, int64(timestamp.Nanos))
+	utcTime := t.UTC()
+	return utcTime.Format(time.RFC3339), nil
 }
 
 func resourceVolterraAPICredentialRead(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*APIClient)
+
 	apiCredReq := &ves_io_schema_api_credential.GetRequest{
 		Name:      d.Id(),
 		Namespace: svcfw.SystemNSVal,
@@ -152,7 +191,8 @@ func resourceVolterraAPICredentialRead(d *schema.ResourceData, meta interface{})
 	if err != nil {
 		return fmt.Errorf("Error marshalling rpc response to yaml: %s", err)
 	}
-	_, err = client.CustomAPI(context.Background(), http.MethodGet, apiCredURI, fmt.Sprintf("%s.%s", apiCredRPCFQN, "Get"), yamlReq)
+
+	_, err = client.CustomAPI(context.Background(), http.MethodGet, fmt.Sprintf(getAPICredURI, d.Id()), fmt.Sprintf("%s.%s", apiCredRPCFQN, "Get"), yamlReq)
 	if err != nil {
 		if strings.Contains(err.Error(), "status code 404") {
 			log.Printf("[INFO] API Credential %s no longer exists", d.Id())
@@ -161,11 +201,109 @@ func resourceVolterraAPICredentialRead(d *schema.ResourceData, meta interface{})
 		}
 		return fmt.Errorf("Error finding Volterra API Credential resource %q: %s", d.Id(), err)
 	}
+
 	return nil
 }
 
 func resourceVolterraAPICredentialUpdate(d *schema.ResourceData, meta interface{}) error {
 	// cannot update api credential object
+	var created_at string
+	var expirydays uint32
+	var apiCredType string
+	var automatic_approval_api_token bool
+	client := meta.(*APIClient)
+
+	if v, ok := d.GetOk("expiry_days"); ok {
+		expirydays = uint32(v.(int))
+	}
+
+	if v, ok := d.GetOk("api_credential_type"); ok {
+		apiCredType = v.(string)
+	}
+
+	if v, ok := d.GetOk("automatic_approval_api_token"); ok {
+		automatic_approval_api_token = v.(bool)
+	}
+
+	if v, ok := d.GetOk("created_at"); ok {
+		created_at = v.(string)
+	}
+
+	apiCredReq := &ves_io_schema_api_credential.GetRequest{
+		Name:      d.Id(),
+		Namespace: svcfw.SystemNSVal,
+	}
+
+	yamlReq, err := codec.ToYAML(apiCredReq)
+	if err != nil {
+		return fmt.Errorf("Error marshalling rpc response to yaml: %s", err)
+	}
+	rsp, err := client.CustomAPI(context.Background(), http.MethodGet, fmt.Sprintf(getAPICredURI, d.Id()), fmt.Sprintf("%s.%s", apiCredRPCFQN, "Get"), yamlReq)
+	if err != nil {
+		if strings.Contains(err.Error(), "status code 404") {
+			log.Printf("[INFO] API Credential %s no longer exists", d.Id())
+			d.SetId("")
+			return nil
+		}
+		return fmt.Errorf("Error finding Volterra API Credential resource %q: %s", d.Id(), err)
+	}
+
+	isActive := rsp.(*ves_io_schema_api_credential.GetResponse).GetObject().GetSpec().GetGcSpec().GetActive()
+
+	expirationDate, err := convertTimestampToString(rsp.(*ves_io_schema_api_credential.GetResponse).GetObject().GetSpec().GetGcSpec().GetExpirationTimestamp())
+
+	expireDate, err := time.Parse(time.RFC3339, expirationDate)
+	if err != nil {
+		return fmt.Errorf("invalid expiration date format: %s", err)
+	}
+
+	log.Println(time.Now().After(expireDate), apiCredType, automatic_approval_api_token)
+
+	// Check if the certificate is expired
+	if time.Now().After(expireDate) && apiCredType == "API_TOKEN" && automatic_approval_api_token {
+		renReq := &ves_io_schema_api_credential.RenewRequest{
+			Name:           d.Id(),
+			Namespace:      svcfw.SystemNSVal,
+			ExpirationDays: expirydays,
+		}
+
+		yamlRenReq, err := codec.ToYAML(renReq)
+		if err != nil {
+			return fmt.Errorf("Error marshalling rpc response to yaml: %s", err)
+		}
+		if !isActive {
+			_, err = client.CustomAPI(context.Background(), http.MethodPost, activateAPICredURI, fmt.Sprintf("%s.%s", apiCredRPCFQN, "Activate"), yamlReq)
+			if err != nil {
+				return fmt.Errorf("Error activating API Credential: %s", err)
+			}
+
+			_, err = client.CustomAPI(context.Background(), http.MethodPost, renewAPICredURI, fmt.Sprintf("%s.%s", apiCredRPCFQN, "Renew"), yamlRenReq)
+			if err != nil {
+				return fmt.Errorf("Error Renewing API Credential: %s", err)
+			}
+
+		}
+
+	}
+
+	rsp, err = client.CustomAPI(context.Background(), http.MethodGet, fmt.Sprintf(getAPICredURI, d.Id()), fmt.Sprintf("%s.%s", apiCredRPCFQN, "Get"), yamlReq)
+	if err != nil {
+		if strings.Contains(err.Error(), "status code 404") {
+			log.Printf("[INFO] API Credential %s no longer exists", d.Id())
+			d.SetId("")
+			return nil
+		}
+		return fmt.Errorf("Error finding Volterra API Credential resource %q: %s", d.Id(), err)
+	}
+
+	expTime, err := convertTimestampToString(rsp.(*ves_io_schema_api_credential.GetResponse).GetObject().GetSpec().GcSpec.GetExpirationTimestamp())
+	if err != nil {
+		return fmt.Errorf("Error converting expiration_timestamp: %s", err)
+	}
+
+	d.Set("expiration_timestamp", expTime)
+	d.Set("created_at", created_at)
+
 	return resourceVolterraAPICredentialRead(d, meta)
 }
 

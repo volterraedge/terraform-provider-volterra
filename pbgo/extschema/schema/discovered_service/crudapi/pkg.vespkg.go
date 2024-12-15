@@ -29,6 +29,34 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 
+	mdr.RPCDeprecatedRequestFieldsRegistry["ves.io.schema.discovered_service.crudapi.API.Create"] = []string{
+		"spec.gc_spec.virtual_server.protocol",
+	}
+
+	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.discovered_service.crudapi.API.Create"] = []string{
+		"spec.gc_spec.virtual_server.protocol",
+	}
+
+	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.discovered_service.crudapi.API.Get"] = []string{
+		"spec.gc_spec.virtual_server.protocol",
+	}
+
+	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.discovered_service.crudapi.API.List"] = []string{
+		"items.#.spec.gc_spec.virtual_server.protocol",
+	}
+
+	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.discovered_service.crudapi.API.ListStream"] = []string{
+		"items.#.spec.gc_spec.virtual_server.protocol",
+	}
+
+	mdr.RPCDeprecatedRequestFieldsRegistry["ves.io.schema.discovered_service.crudapi.API.Replace"] = []string{
+		"spec.gc_spec.virtual_server.protocol",
+	}
+
+	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.discovered_service.crudapi.API.Replace"] = []string{
+		"spec.gc_spec.virtual_server.protocol",
+	}
+
 }
 
 func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {

@@ -27,8 +27,11 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 
 	vr["ves.io.schema.views.api_definition.APInventoryReq"] = APInventoryReqValidator()
 	vr["ves.io.schema.views.api_definition.APInventoryResp"] = APInventoryRespValidator()
+	vr["ves.io.schema.views.api_definition.GetReferencingAllLoadbalancersResp"] = GetReferencingAllLoadbalancersRespValidator()
 	vr["ves.io.schema.views.api_definition.GetReferencingLoadbalancersReq"] = GetReferencingLoadbalancersReqValidator()
 	vr["ves.io.schema.views.api_definition.GetReferencingLoadbalancersResp"] = GetReferencingLoadbalancersRespValidator()
+	vr["ves.io.schema.views.api_definition.ListAvailableAPIDefinitionsReq"] = ListAvailableAPIDefinitionsReqValidator()
+	vr["ves.io.schema.views.api_definition.ListAvailableAPIDefinitionsResp"] = ListAvailableAPIDefinitionsRespValidator()
 
 	vr["ves.io.schema.views.api_definition.CreateRequest"] = CreateRequestValidator()
 	vr["ves.io.schema.views.api_definition.CreateResponse"] = CreateResponseValidator()

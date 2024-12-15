@@ -1,9 +1,9 @@
 ---
 
 page_title: "Volterra: service_policy_rule"
-description: "The service_policy_rule allows CRUD of Service Policy Rule resource on Volterra SaaS"
 
----
+description: "The service_policy_rule allows CRUD of Service Policy Rule resource on Volterra SaaS"
+---------------------------------------------------------------------------------------------------
 
 Resource volterra_service_policy_rule
 =====================================
@@ -23,12 +23,8 @@ resource "volterra_service_policy_rule" "example" {
 
   // One of the arguments from this list "any_asn asn_list asn_matcher" must be set
 
-  asn_matcher {
-    asn_sets {
-      name      = "test1"
-      namespace = "staging"
-      tenant    = "acmecorp"
-    }
+  asn_list {
+    as_numbers = ["[713, 7932, 847325, 4683, 15269, 1000001]"]
   }
   challenge_action = ["challenge_action"]
 
@@ -46,7 +42,7 @@ resource "volterra_service_policy_rule" "example" {
   waf_action {
     // One of the arguments from this list "app_firewall_detection_control data_guard_control jwt_claims_validation jwt_validation none waf_in_monitoring_mode waf_skip_processing" must be set
 
-    none = true
+    jwt_claims_validation = true
   }
 }
 
@@ -173,9 +169,9 @@ Argument Reference
 
 ###### One of the arguments from this list "ja4_tls_fingerprint, tls_fingerprint_matcher" can be set
 
-`ja4_tls_fingerprint` - (Optional) JA4 TLS fingerprints to be matched. See [Tls Fingerprint Choice Ja4 Tls Fingerprint ](#tls-fingerprint-choice-ja4-tls-fingerprint) below for details.
+`ja4_tls_fingerprint` - (Optional) SSL/TLS clients and potentially has a different structure and length.. See [Tls Fingerprint Choice Ja4 Tls Fingerprint ](#tls-fingerprint-choice-ja4-tls-fingerprint) below for details.
 
-`tls_fingerprint_matcher` - (Optional) JA3 TLS fingerprints to be matched. See [Tls Fingerprint Choice Tls Fingerprint Matcher ](#tls-fingerprint-choice-tls-fingerprint-matcher) below for details.
+`tls_fingerprint_matcher` - (Optional) parameters of the Client Hello packet during the handshake.. See [Tls Fingerprint Choice Tls Fingerprint Matcher ](#tls-fingerprint-choice-tls-fingerprint-matcher) below for details.
 
 `url_matcher` - (Optional) A URL matcher specifies a list of URL items as match criteria. The match is considered successful if the domain and path match any of the URL items.. See [Url Matcher ](#url-matcher) below for details.(Deprecated)
 
@@ -873,13 +869,13 @@ Source traffic is matched against selected segments.
 
 ### Tls Fingerprint Choice Ja4 Tls Fingerprint
 
-JA4 TLS fingerprints to be matched.
+SSL/TLS clients and potentially has a different structure and length..
 
 `exact_values` - (Optional) A list of exact JA4 TLS fingerprint to match the input JA4 TLS fingerprint against (`String`).
 
 ### Tls Fingerprint Choice Tls Fingerprint Matcher
 
-JA3 TLS fingerprints to be matched.
+parameters of the Client Hello packet during the handshake..
 
 `classes` - (Optional) A list of known classes of TLS fingerprints to match the input TLS JA3 fingerprint against. (`List of Strings`).
 

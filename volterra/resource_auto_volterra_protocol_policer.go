@@ -97,14 +97,16 @@ func resourceVolterraProtocolPolicer() *schema.Resource {
 
 						"protocol": {
 
-							Type:     schema.TypeSet,
+							Type:     schema.TypeList,
+							MaxItems: 1,
 							Required: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
 									"dns": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{},
@@ -113,7 +115,8 @@ func resourceVolterraProtocolPolicer() *schema.Resource {
 
 									"icmp": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -133,7 +136,8 @@ func resourceVolterraProtocolPolicer() *schema.Resource {
 
 									"tcp": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -153,7 +157,8 @@ func resourceVolterraProtocolPolicer() *schema.Resource {
 
 									"udp": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{},
@@ -229,123 +234,131 @@ func resourceVolterraProtocolPolicerCreate(d *schema.ResourceData, meta interfac
 		protocolPolicer := make([]*ves_io_schema_protocol_policer.ProtocolPolicerType, len(sl))
 		createSpec.ProtocolPolicer = protocolPolicer
 		for i, set := range sl {
-			protocolPolicer[i] = &ves_io_schema_protocol_policer.ProtocolPolicerType{}
-			protocolPolicerMapStrToI := set.(map[string]interface{})
+			if set != nil {
+				protocolPolicer[i] = &ves_io_schema_protocol_policer.ProtocolPolicerType{}
+				protocolPolicerMapStrToI := set.(map[string]interface{})
 
-			if v, ok := protocolPolicerMapStrToI["policer"]; ok && !isIntfNil(v) {
+				if v, ok := protocolPolicerMapStrToI["policer"]; ok && !isIntfNil(v) {
 
-				sl := v.([]interface{})
-				policerInt := make([]*ves_io_schema.ObjectRefType, len(sl))
-				protocolPolicer[i].Policer = policerInt
-				for i, ps := range sl {
+					sl := v.([]interface{})
+					policerInt := make([]*ves_io_schema.ObjectRefType, len(sl))
+					protocolPolicer[i].Policer = policerInt
+					for i, ps := range sl {
 
-					pMapToStrVal := ps.(map[string]interface{})
-					policerInt[i] = &ves_io_schema.ObjectRefType{}
+						pMapToStrVal := ps.(map[string]interface{})
+						policerInt[i] = &ves_io_schema.ObjectRefType{}
 
-					policerInt[i].Kind = "policer"
+						policerInt[i].Kind = "policer"
 
-					if v, ok := pMapToStrVal["name"]; ok && !isIntfNil(v) {
-						policerInt[i].Name = v.(string)
-					}
-
-					if v, ok := pMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-						policerInt[i].Namespace = v.(string)
-					}
-
-					if v, ok := pMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-						policerInt[i].Tenant = v.(string)
-					}
-
-					if v, ok := pMapToStrVal["uid"]; ok && !isIntfNil(v) {
-						policerInt[i].Uid = v.(string)
-					}
-
-				}
-
-			}
-
-			if v, ok := protocolPolicerMapStrToI["protocol"]; ok && !isIntfNil(v) {
-
-				sl := v.(*schema.Set).List()
-				protocol := &ves_io_schema_protocol_policer.ProtocolType{}
-				protocolPolicer[i].Protocol = protocol
-				for _, set := range sl {
-					protocolMapStrToI := set.(map[string]interface{})
-
-					typeTypeFound := false
-
-					if _, ok := protocolMapStrToI["dns"]; ok && !typeTypeFound {
-
-						typeTypeFound = true
-						typeInt := &ves_io_schema_protocol_policer.ProtocolType_Dns{}
-						typeInt.Dns = &ves_io_schema_protocol_policer.DnsType{}
-						protocol.Type = typeInt
-
-					}
-
-					if v, ok := protocolMapStrToI["icmp"]; ok && !isIntfNil(v) && !typeTypeFound {
-
-						typeTypeFound = true
-						typeInt := &ves_io_schema_protocol_policer.ProtocolType_Icmp{}
-						typeInt.Icmp = &ves_io_schema_protocol_policer.IcmpType{}
-						protocol.Type = typeInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["type"]; ok && !isIntfNil(v) {
-
-								typeList := []ves_io_schema_protocol_policer.IcmpMsgType{}
-								for _, j := range v.([]interface{}) {
-									typeList = append(typeList, ves_io_schema_protocol_policer.IcmpMsgType(ves_io_schema_protocol_policer.IcmpMsgType_value[j.(string)]))
-								}
-								typeInt.Icmp.Type = typeList
-
-							}
-
+						if v, ok := pMapToStrVal["name"]; ok && !isIntfNil(v) {
+							policerInt[i].Name = v.(string)
 						}
 
-					}
-
-					if v, ok := protocolMapStrToI["tcp"]; ok && !isIntfNil(v) && !typeTypeFound {
-
-						typeTypeFound = true
-						typeInt := &ves_io_schema_protocol_policer.ProtocolType_Tcp{}
-						typeInt.Tcp = &ves_io_schema_protocol_policer.TcpType{}
-						protocol.Type = typeInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["flags"]; ok && !isIntfNil(v) {
-
-								flagsList := []ves_io_schema_protocol_policer.TcpFlags{}
-								for _, j := range v.([]interface{}) {
-									flagsList = append(flagsList, ves_io_schema_protocol_policer.TcpFlags(ves_io_schema_protocol_policer.TcpFlags_value[j.(string)]))
-								}
-								typeInt.Tcp.Flags = flagsList
-
-							}
-
+						if v, ok := pMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+							policerInt[i].Namespace = v.(string)
 						}
 
-					}
+						if v, ok := pMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+							policerInt[i].Tenant = v.(string)
+						}
 
-					if _, ok := protocolMapStrToI["udp"]; ok && !typeTypeFound {
-
-						typeTypeFound = true
-						typeInt := &ves_io_schema_protocol_policer.ProtocolType_Udp{}
-						typeInt.Udp = &ves_io_schema_protocol_policer.UdpType{}
-						protocol.Type = typeInt
+						if v, ok := pMapToStrVal["uid"]; ok && !isIntfNil(v) {
+							policerInt[i].Uid = v.(string)
+						}
 
 					}
 
 				}
 
-			}
+				if v, ok := protocolPolicerMapStrToI["protocol"]; ok && !isIntfNil(v) {
 
+					sl := v.([]interface{})
+					protocol := &ves_io_schema_protocol_policer.ProtocolType{}
+					protocolPolicer[i].Protocol = protocol
+					for _, set := range sl {
+						if set != nil {
+							protocolMapStrToI := set.(map[string]interface{})
+
+							typeTypeFound := false
+
+							if _, ok := protocolMapStrToI["dns"]; ok && !typeTypeFound {
+
+								typeTypeFound = true
+								typeInt := &ves_io_schema_protocol_policer.ProtocolType_Dns{}
+								typeInt.Dns = &ves_io_schema_protocol_policer.DnsType{}
+								protocol.Type = typeInt
+
+							}
+
+							if v, ok := protocolMapStrToI["icmp"]; ok && !isIntfNil(v) && !typeTypeFound {
+
+								typeTypeFound = true
+								typeInt := &ves_io_schema_protocol_policer.ProtocolType_Icmp{}
+								typeInt.Icmp = &ves_io_schema_protocol_policer.IcmpType{}
+								protocol.Type = typeInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["type"]; ok && !isIntfNil(v) {
+
+											typeList := []ves_io_schema_protocol_policer.IcmpMsgType{}
+											for _, j := range v.([]interface{}) {
+												typeList = append(typeList, ves_io_schema_protocol_policer.IcmpMsgType(ves_io_schema_protocol_policer.IcmpMsgType_value[j.(string)]))
+											}
+											typeInt.Icmp.Type = typeList
+
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := protocolMapStrToI["tcp"]; ok && !isIntfNil(v) && !typeTypeFound {
+
+								typeTypeFound = true
+								typeInt := &ves_io_schema_protocol_policer.ProtocolType_Tcp{}
+								typeInt.Tcp = &ves_io_schema_protocol_policer.TcpType{}
+								protocol.Type = typeInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["flags"]; ok && !isIntfNil(v) {
+
+											flagsList := []ves_io_schema_protocol_policer.TcpFlags{}
+											for _, j := range v.([]interface{}) {
+												flagsList = append(flagsList, ves_io_schema_protocol_policer.TcpFlags(ves_io_schema_protocol_policer.TcpFlags_value[j.(string)]))
+											}
+											typeInt.Tcp.Flags = flagsList
+
+										}
+
+									}
+								}
+
+							}
+
+							if _, ok := protocolMapStrToI["udp"]; ok && !typeTypeFound {
+
+								typeTypeFound = true
+								typeInt := &ves_io_schema_protocol_policer.ProtocolType_Udp{}
+								typeInt.Udp = &ves_io_schema_protocol_policer.UdpType{}
+								protocol.Type = typeInt
+
+							}
+
+						}
+					}
+
+				}
+
+			}
 		}
 
 	}
@@ -455,123 +468,131 @@ func resourceVolterraProtocolPolicerUpdate(d *schema.ResourceData, meta interfac
 		protocolPolicer := make([]*ves_io_schema_protocol_policer.ProtocolPolicerType, len(sl))
 		updateSpec.ProtocolPolicer = protocolPolicer
 		for i, set := range sl {
-			protocolPolicer[i] = &ves_io_schema_protocol_policer.ProtocolPolicerType{}
-			protocolPolicerMapStrToI := set.(map[string]interface{})
+			if set != nil {
+				protocolPolicer[i] = &ves_io_schema_protocol_policer.ProtocolPolicerType{}
+				protocolPolicerMapStrToI := set.(map[string]interface{})
 
-			if v, ok := protocolPolicerMapStrToI["policer"]; ok && !isIntfNil(v) {
+				if v, ok := protocolPolicerMapStrToI["policer"]; ok && !isIntfNil(v) {
 
-				sl := v.([]interface{})
-				policerInt := make([]*ves_io_schema.ObjectRefType, len(sl))
-				protocolPolicer[i].Policer = policerInt
-				for i, ps := range sl {
+					sl := v.([]interface{})
+					policerInt := make([]*ves_io_schema.ObjectRefType, len(sl))
+					protocolPolicer[i].Policer = policerInt
+					for i, ps := range sl {
 
-					pMapToStrVal := ps.(map[string]interface{})
-					policerInt[i] = &ves_io_schema.ObjectRefType{}
+						pMapToStrVal := ps.(map[string]interface{})
+						policerInt[i] = &ves_io_schema.ObjectRefType{}
 
-					policerInt[i].Kind = "policer"
+						policerInt[i].Kind = "policer"
 
-					if v, ok := pMapToStrVal["name"]; ok && !isIntfNil(v) {
-						policerInt[i].Name = v.(string)
-					}
-
-					if v, ok := pMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-						policerInt[i].Namespace = v.(string)
-					}
-
-					if v, ok := pMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-						policerInt[i].Tenant = v.(string)
-					}
-
-					if v, ok := pMapToStrVal["uid"]; ok && !isIntfNil(v) {
-						policerInt[i].Uid = v.(string)
-					}
-
-				}
-
-			}
-
-			if v, ok := protocolPolicerMapStrToI["protocol"]; ok && !isIntfNil(v) {
-
-				sl := v.(*schema.Set).List()
-				protocol := &ves_io_schema_protocol_policer.ProtocolType{}
-				protocolPolicer[i].Protocol = protocol
-				for _, set := range sl {
-					protocolMapStrToI := set.(map[string]interface{})
-
-					typeTypeFound := false
-
-					if _, ok := protocolMapStrToI["dns"]; ok && !typeTypeFound {
-
-						typeTypeFound = true
-						typeInt := &ves_io_schema_protocol_policer.ProtocolType_Dns{}
-						typeInt.Dns = &ves_io_schema_protocol_policer.DnsType{}
-						protocol.Type = typeInt
-
-					}
-
-					if v, ok := protocolMapStrToI["icmp"]; ok && !isIntfNil(v) && !typeTypeFound {
-
-						typeTypeFound = true
-						typeInt := &ves_io_schema_protocol_policer.ProtocolType_Icmp{}
-						typeInt.Icmp = &ves_io_schema_protocol_policer.IcmpType{}
-						protocol.Type = typeInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["type"]; ok && !isIntfNil(v) {
-
-								typeList := []ves_io_schema_protocol_policer.IcmpMsgType{}
-								for _, j := range v.([]interface{}) {
-									typeList = append(typeList, ves_io_schema_protocol_policer.IcmpMsgType(ves_io_schema_protocol_policer.IcmpMsgType_value[j.(string)]))
-								}
-								typeInt.Icmp.Type = typeList
-
-							}
-
+						if v, ok := pMapToStrVal["name"]; ok && !isIntfNil(v) {
+							policerInt[i].Name = v.(string)
 						}
 
-					}
-
-					if v, ok := protocolMapStrToI["tcp"]; ok && !isIntfNil(v) && !typeTypeFound {
-
-						typeTypeFound = true
-						typeInt := &ves_io_schema_protocol_policer.ProtocolType_Tcp{}
-						typeInt.Tcp = &ves_io_schema_protocol_policer.TcpType{}
-						protocol.Type = typeInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["flags"]; ok && !isIntfNil(v) {
-
-								flagsList := []ves_io_schema_protocol_policer.TcpFlags{}
-								for _, j := range v.([]interface{}) {
-									flagsList = append(flagsList, ves_io_schema_protocol_policer.TcpFlags(ves_io_schema_protocol_policer.TcpFlags_value[j.(string)]))
-								}
-								typeInt.Tcp.Flags = flagsList
-
-							}
-
+						if v, ok := pMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+							policerInt[i].Namespace = v.(string)
 						}
 
-					}
+						if v, ok := pMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+							policerInt[i].Tenant = v.(string)
+						}
 
-					if _, ok := protocolMapStrToI["udp"]; ok && !typeTypeFound {
-
-						typeTypeFound = true
-						typeInt := &ves_io_schema_protocol_policer.ProtocolType_Udp{}
-						typeInt.Udp = &ves_io_schema_protocol_policer.UdpType{}
-						protocol.Type = typeInt
+						if v, ok := pMapToStrVal["uid"]; ok && !isIntfNil(v) {
+							policerInt[i].Uid = v.(string)
+						}
 
 					}
 
 				}
 
-			}
+				if v, ok := protocolPolicerMapStrToI["protocol"]; ok && !isIntfNil(v) {
 
+					sl := v.([]interface{})
+					protocol := &ves_io_schema_protocol_policer.ProtocolType{}
+					protocolPolicer[i].Protocol = protocol
+					for _, set := range sl {
+						if set != nil {
+							protocolMapStrToI := set.(map[string]interface{})
+
+							typeTypeFound := false
+
+							if _, ok := protocolMapStrToI["dns"]; ok && !typeTypeFound {
+
+								typeTypeFound = true
+								typeInt := &ves_io_schema_protocol_policer.ProtocolType_Dns{}
+								typeInt.Dns = &ves_io_schema_protocol_policer.DnsType{}
+								protocol.Type = typeInt
+
+							}
+
+							if v, ok := protocolMapStrToI["icmp"]; ok && !isIntfNil(v) && !typeTypeFound {
+
+								typeTypeFound = true
+								typeInt := &ves_io_schema_protocol_policer.ProtocolType_Icmp{}
+								typeInt.Icmp = &ves_io_schema_protocol_policer.IcmpType{}
+								protocol.Type = typeInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["type"]; ok && !isIntfNil(v) {
+
+											typeList := []ves_io_schema_protocol_policer.IcmpMsgType{}
+											for _, j := range v.([]interface{}) {
+												typeList = append(typeList, ves_io_schema_protocol_policer.IcmpMsgType(ves_io_schema_protocol_policer.IcmpMsgType_value[j.(string)]))
+											}
+											typeInt.Icmp.Type = typeList
+
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := protocolMapStrToI["tcp"]; ok && !isIntfNil(v) && !typeTypeFound {
+
+								typeTypeFound = true
+								typeInt := &ves_io_schema_protocol_policer.ProtocolType_Tcp{}
+								typeInt.Tcp = &ves_io_schema_protocol_policer.TcpType{}
+								protocol.Type = typeInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["flags"]; ok && !isIntfNil(v) {
+
+											flagsList := []ves_io_schema_protocol_policer.TcpFlags{}
+											for _, j := range v.([]interface{}) {
+												flagsList = append(flagsList, ves_io_schema_protocol_policer.TcpFlags(ves_io_schema_protocol_policer.TcpFlags_value[j.(string)]))
+											}
+											typeInt.Tcp.Flags = flagsList
+
+										}
+
+									}
+								}
+
+							}
+
+							if _, ok := protocolMapStrToI["udp"]; ok && !typeTypeFound {
+
+								typeTypeFound = true
+								typeInt := &ves_io_schema_protocol_policer.ProtocolType_Udp{}
+								typeInt.Udp = &ves_io_schema_protocol_policer.UdpType{}
+								protocol.Type = typeInt
+
+							}
+
+						}
+					}
+
+				}
+
+			}
 		}
 
 	}

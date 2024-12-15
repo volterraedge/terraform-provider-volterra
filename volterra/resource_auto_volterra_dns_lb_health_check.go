@@ -62,7 +62,8 @@ func resourceVolterraDnsLbHealthCheck() *schema.Resource {
 
 			"http_health_check": {
 
-				Type:     schema.TypeSet,
+				Type:     schema.TypeList,
+				MaxItems: 1,
 				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
@@ -87,7 +88,8 @@ func resourceVolterraDnsLbHealthCheck() *schema.Resource {
 
 			"https_health_check": {
 
-				Type:     schema.TypeSet,
+				Type:     schema.TypeList,
+				MaxItems: 1,
 				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
@@ -118,7 +120,8 @@ func resourceVolterraDnsLbHealthCheck() *schema.Resource {
 
 			"tcp_health_check": {
 
-				Type:     schema.TypeSet,
+				Type:     schema.TypeList,
+				MaxItems: 1,
 				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
@@ -143,7 +146,8 @@ func resourceVolterraDnsLbHealthCheck() *schema.Resource {
 
 			"tcp_hex_health_check": {
 
-				Type:     schema.TypeSet,
+				Type:     schema.TypeList,
+				MaxItems: 1,
 				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
@@ -168,7 +172,8 @@ func resourceVolterraDnsLbHealthCheck() *schema.Resource {
 
 			"udp_health_check": {
 
-				Type:     schema.TypeSet,
+				Type:     schema.TypeList,
+				MaxItems: 1,
 				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
@@ -258,28 +263,30 @@ func resourceVolterraDnsLbHealthCheckCreate(d *schema.ResourceData, meta interfa
 		healthCheckInt.HttpHealthCheck = &ves_io_schema_dns_lb_health_check.HttpHealthCheck{}
 		createSpec.HealthCheck = healthCheckInt
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
+			if set != nil {
+				cs := set.(map[string]interface{})
 
-			if v, ok := cs["health_check_port"]; ok && !isIntfNil(v) {
+				if v, ok := cs["health_check_port"]; ok && !isIntfNil(v) {
 
-				healthCheckInt.HttpHealthCheck.HealthCheckPort = uint32(v.(int))
+					healthCheckInt.HttpHealthCheck.HealthCheckPort = uint32(v.(int))
+
+				}
+
+				if v, ok := cs["receive"]; ok && !isIntfNil(v) {
+
+					healthCheckInt.HttpHealthCheck.Receive = v.(string)
+
+				}
+
+				if v, ok := cs["send"]; ok && !isIntfNil(v) {
+
+					healthCheckInt.HttpHealthCheck.Send = v.(string)
+
+				}
 
 			}
-
-			if v, ok := cs["receive"]; ok && !isIntfNil(v) {
-
-				healthCheckInt.HttpHealthCheck.Receive = v.(string)
-
-			}
-
-			if v, ok := cs["send"]; ok && !isIntfNil(v) {
-
-				healthCheckInt.HttpHealthCheck.Send = v.(string)
-
-			}
-
 		}
 
 	}
@@ -291,28 +298,30 @@ func resourceVolterraDnsLbHealthCheckCreate(d *schema.ResourceData, meta interfa
 		healthCheckInt.HttpsHealthCheck = &ves_io_schema_dns_lb_health_check.HttpHealthCheck{}
 		createSpec.HealthCheck = healthCheckInt
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
+			if set != nil {
+				cs := set.(map[string]interface{})
 
-			if v, ok := cs["health_check_port"]; ok && !isIntfNil(v) {
+				if v, ok := cs["health_check_port"]; ok && !isIntfNil(v) {
 
-				healthCheckInt.HttpsHealthCheck.HealthCheckPort = uint32(v.(int))
+					healthCheckInt.HttpsHealthCheck.HealthCheckPort = uint32(v.(int))
+
+				}
+
+				if v, ok := cs["receive"]; ok && !isIntfNil(v) {
+
+					healthCheckInt.HttpsHealthCheck.Receive = v.(string)
+
+				}
+
+				if v, ok := cs["send"]; ok && !isIntfNil(v) {
+
+					healthCheckInt.HttpsHealthCheck.Send = v.(string)
+
+				}
 
 			}
-
-			if v, ok := cs["receive"]; ok && !isIntfNil(v) {
-
-				healthCheckInt.HttpsHealthCheck.Receive = v.(string)
-
-			}
-
-			if v, ok := cs["send"]; ok && !isIntfNil(v) {
-
-				healthCheckInt.HttpsHealthCheck.Send = v.(string)
-
-			}
-
 		}
 
 	}
@@ -336,28 +345,30 @@ func resourceVolterraDnsLbHealthCheckCreate(d *schema.ResourceData, meta interfa
 		healthCheckInt.TcpHealthCheck = &ves_io_schema_dns_lb_health_check.TcpHealthCheck{}
 		createSpec.HealthCheck = healthCheckInt
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
+			if set != nil {
+				cs := set.(map[string]interface{})
 
-			if v, ok := cs["health_check_port"]; ok && !isIntfNil(v) {
+				if v, ok := cs["health_check_port"]; ok && !isIntfNil(v) {
 
-				healthCheckInt.TcpHealthCheck.HealthCheckPort = uint32(v.(int))
+					healthCheckInt.TcpHealthCheck.HealthCheckPort = uint32(v.(int))
+
+				}
+
+				if v, ok := cs["receive"]; ok && !isIntfNil(v) {
+
+					healthCheckInt.TcpHealthCheck.Receive = v.(string)
+
+				}
+
+				if v, ok := cs["send"]; ok && !isIntfNil(v) {
+
+					healthCheckInt.TcpHealthCheck.Send = v.(string)
+
+				}
 
 			}
-
-			if v, ok := cs["receive"]; ok && !isIntfNil(v) {
-
-				healthCheckInt.TcpHealthCheck.Receive = v.(string)
-
-			}
-
-			if v, ok := cs["send"]; ok && !isIntfNil(v) {
-
-				healthCheckInt.TcpHealthCheck.Send = v.(string)
-
-			}
-
 		}
 
 	}
@@ -369,28 +380,30 @@ func resourceVolterraDnsLbHealthCheckCreate(d *schema.ResourceData, meta interfa
 		healthCheckInt.TcpHexHealthCheck = &ves_io_schema_dns_lb_health_check.TcpHexHealthCheck{}
 		createSpec.HealthCheck = healthCheckInt
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
+			if set != nil {
+				cs := set.(map[string]interface{})
 
-			if v, ok := cs["health_check_port"]; ok && !isIntfNil(v) {
+				if v, ok := cs["health_check_port"]; ok && !isIntfNil(v) {
 
-				healthCheckInt.TcpHexHealthCheck.HealthCheckPort = uint32(v.(int))
+					healthCheckInt.TcpHexHealthCheck.HealthCheckPort = uint32(v.(int))
+
+				}
+
+				if v, ok := cs["receive"]; ok && !isIntfNil(v) {
+
+					healthCheckInt.TcpHexHealthCheck.Receive = v.(string)
+
+				}
+
+				if v, ok := cs["send"]; ok && !isIntfNil(v) {
+
+					healthCheckInt.TcpHexHealthCheck.Send = v.(string)
+
+				}
 
 			}
-
-			if v, ok := cs["receive"]; ok && !isIntfNil(v) {
-
-				healthCheckInt.TcpHexHealthCheck.Receive = v.(string)
-
-			}
-
-			if v, ok := cs["send"]; ok && !isIntfNil(v) {
-
-				healthCheckInt.TcpHexHealthCheck.Send = v.(string)
-
-			}
-
 		}
 
 	}
@@ -402,28 +415,30 @@ func resourceVolterraDnsLbHealthCheckCreate(d *schema.ResourceData, meta interfa
 		healthCheckInt.UdpHealthCheck = &ves_io_schema_dns_lb_health_check.UdpHealthCheck{}
 		createSpec.HealthCheck = healthCheckInt
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
+			if set != nil {
+				cs := set.(map[string]interface{})
 
-			if v, ok := cs["health_check_port"]; ok && !isIntfNil(v) {
+				if v, ok := cs["health_check_port"]; ok && !isIntfNil(v) {
 
-				healthCheckInt.UdpHealthCheck.HealthCheckPort = uint32(v.(int))
+					healthCheckInt.UdpHealthCheck.HealthCheckPort = uint32(v.(int))
+
+				}
+
+				if v, ok := cs["receive"]; ok && !isIntfNil(v) {
+
+					healthCheckInt.UdpHealthCheck.Receive = v.(string)
+
+				}
+
+				if v, ok := cs["send"]; ok && !isIntfNil(v) {
+
+					healthCheckInt.UdpHealthCheck.Send = v.(string)
+
+				}
 
 			}
-
-			if v, ok := cs["receive"]; ok && !isIntfNil(v) {
-
-				healthCheckInt.UdpHealthCheck.Receive = v.(string)
-
-			}
-
-			if v, ok := cs["send"]; ok && !isIntfNil(v) {
-
-				healthCheckInt.UdpHealthCheck.Send = v.(string)
-
-			}
-
 		}
 
 	}
@@ -536,28 +551,30 @@ func resourceVolterraDnsLbHealthCheckUpdate(d *schema.ResourceData, meta interfa
 		healthCheckInt.HttpHealthCheck = &ves_io_schema_dns_lb_health_check.HttpHealthCheck{}
 		updateSpec.HealthCheck = healthCheckInt
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
+			if set != nil {
+				cs := set.(map[string]interface{})
 
-			if v, ok := cs["health_check_port"]; ok && !isIntfNil(v) {
+				if v, ok := cs["health_check_port"]; ok && !isIntfNil(v) {
 
-				healthCheckInt.HttpHealthCheck.HealthCheckPort = uint32(v.(int))
+					healthCheckInt.HttpHealthCheck.HealthCheckPort = uint32(v.(int))
+
+				}
+
+				if v, ok := cs["receive"]; ok && !isIntfNil(v) {
+
+					healthCheckInt.HttpHealthCheck.Receive = v.(string)
+
+				}
+
+				if v, ok := cs["send"]; ok && !isIntfNil(v) {
+
+					healthCheckInt.HttpHealthCheck.Send = v.(string)
+
+				}
 
 			}
-
-			if v, ok := cs["receive"]; ok && !isIntfNil(v) {
-
-				healthCheckInt.HttpHealthCheck.Receive = v.(string)
-
-			}
-
-			if v, ok := cs["send"]; ok && !isIntfNil(v) {
-
-				healthCheckInt.HttpHealthCheck.Send = v.(string)
-
-			}
-
 		}
 
 	}
@@ -569,28 +586,30 @@ func resourceVolterraDnsLbHealthCheckUpdate(d *schema.ResourceData, meta interfa
 		healthCheckInt.HttpsHealthCheck = &ves_io_schema_dns_lb_health_check.HttpHealthCheck{}
 		updateSpec.HealthCheck = healthCheckInt
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
+			if set != nil {
+				cs := set.(map[string]interface{})
 
-			if v, ok := cs["health_check_port"]; ok && !isIntfNil(v) {
+				if v, ok := cs["health_check_port"]; ok && !isIntfNil(v) {
 
-				healthCheckInt.HttpsHealthCheck.HealthCheckPort = uint32(v.(int))
+					healthCheckInt.HttpsHealthCheck.HealthCheckPort = uint32(v.(int))
+
+				}
+
+				if v, ok := cs["receive"]; ok && !isIntfNil(v) {
+
+					healthCheckInt.HttpsHealthCheck.Receive = v.(string)
+
+				}
+
+				if v, ok := cs["send"]; ok && !isIntfNil(v) {
+
+					healthCheckInt.HttpsHealthCheck.Send = v.(string)
+
+				}
 
 			}
-
-			if v, ok := cs["receive"]; ok && !isIntfNil(v) {
-
-				healthCheckInt.HttpsHealthCheck.Receive = v.(string)
-
-			}
-
-			if v, ok := cs["send"]; ok && !isIntfNil(v) {
-
-				healthCheckInt.HttpsHealthCheck.Send = v.(string)
-
-			}
-
 		}
 
 	}
@@ -614,28 +633,30 @@ func resourceVolterraDnsLbHealthCheckUpdate(d *schema.ResourceData, meta interfa
 		healthCheckInt.TcpHealthCheck = &ves_io_schema_dns_lb_health_check.TcpHealthCheck{}
 		updateSpec.HealthCheck = healthCheckInt
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
+			if set != nil {
+				cs := set.(map[string]interface{})
 
-			if v, ok := cs["health_check_port"]; ok && !isIntfNil(v) {
+				if v, ok := cs["health_check_port"]; ok && !isIntfNil(v) {
 
-				healthCheckInt.TcpHealthCheck.HealthCheckPort = uint32(v.(int))
+					healthCheckInt.TcpHealthCheck.HealthCheckPort = uint32(v.(int))
+
+				}
+
+				if v, ok := cs["receive"]; ok && !isIntfNil(v) {
+
+					healthCheckInt.TcpHealthCheck.Receive = v.(string)
+
+				}
+
+				if v, ok := cs["send"]; ok && !isIntfNil(v) {
+
+					healthCheckInt.TcpHealthCheck.Send = v.(string)
+
+				}
 
 			}
-
-			if v, ok := cs["receive"]; ok && !isIntfNil(v) {
-
-				healthCheckInt.TcpHealthCheck.Receive = v.(string)
-
-			}
-
-			if v, ok := cs["send"]; ok && !isIntfNil(v) {
-
-				healthCheckInt.TcpHealthCheck.Send = v.(string)
-
-			}
-
 		}
 
 	}
@@ -647,28 +668,30 @@ func resourceVolterraDnsLbHealthCheckUpdate(d *schema.ResourceData, meta interfa
 		healthCheckInt.TcpHexHealthCheck = &ves_io_schema_dns_lb_health_check.TcpHexHealthCheck{}
 		updateSpec.HealthCheck = healthCheckInt
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
+			if set != nil {
+				cs := set.(map[string]interface{})
 
-			if v, ok := cs["health_check_port"]; ok && !isIntfNil(v) {
+				if v, ok := cs["health_check_port"]; ok && !isIntfNil(v) {
 
-				healthCheckInt.TcpHexHealthCheck.HealthCheckPort = uint32(v.(int))
+					healthCheckInt.TcpHexHealthCheck.HealthCheckPort = uint32(v.(int))
+
+				}
+
+				if v, ok := cs["receive"]; ok && !isIntfNil(v) {
+
+					healthCheckInt.TcpHexHealthCheck.Receive = v.(string)
+
+				}
+
+				if v, ok := cs["send"]; ok && !isIntfNil(v) {
+
+					healthCheckInt.TcpHexHealthCheck.Send = v.(string)
+
+				}
 
 			}
-
-			if v, ok := cs["receive"]; ok && !isIntfNil(v) {
-
-				healthCheckInt.TcpHexHealthCheck.Receive = v.(string)
-
-			}
-
-			if v, ok := cs["send"]; ok && !isIntfNil(v) {
-
-				healthCheckInt.TcpHexHealthCheck.Send = v.(string)
-
-			}
-
 		}
 
 	}
@@ -680,28 +703,30 @@ func resourceVolterraDnsLbHealthCheckUpdate(d *schema.ResourceData, meta interfa
 		healthCheckInt.UdpHealthCheck = &ves_io_schema_dns_lb_health_check.UdpHealthCheck{}
 		updateSpec.HealthCheck = healthCheckInt
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
+			if set != nil {
+				cs := set.(map[string]interface{})
 
-			if v, ok := cs["health_check_port"]; ok && !isIntfNil(v) {
+				if v, ok := cs["health_check_port"]; ok && !isIntfNil(v) {
 
-				healthCheckInt.UdpHealthCheck.HealthCheckPort = uint32(v.(int))
+					healthCheckInt.UdpHealthCheck.HealthCheckPort = uint32(v.(int))
+
+				}
+
+				if v, ok := cs["receive"]; ok && !isIntfNil(v) {
+
+					healthCheckInt.UdpHealthCheck.Receive = v.(string)
+
+				}
+
+				if v, ok := cs["send"]; ok && !isIntfNil(v) {
+
+					healthCheckInt.UdpHealthCheck.Send = v.(string)
+
+				}
 
 			}
-
-			if v, ok := cs["receive"]; ok && !isIntfNil(v) {
-
-				healthCheckInt.UdpHealthCheck.Receive = v.(string)
-
-			}
-
-			if v, ok := cs["send"]; ok && !isIntfNil(v) {
-
-				healthCheckInt.UdpHealthCheck.Send = v.(string)
-
-			}
-
 		}
 
 	}

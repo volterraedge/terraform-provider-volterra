@@ -1,19 +1,18 @@
 ---
 
-page_title: "Volterra: token"
+page_title: "Volterra: token" 
+
 description: "The token allows CRUD of Token resource on Volterra SaaS"
 
 ---
 
-Resource volterra_token
-=======================
+# Resource volterra_token
 
 The Token allows CRUD of Token resource on Volterra SaaS
 
 ~> **Note:** Please refer to [Token API docs](https://docs.cloud.f5.com/docs/api/token) to learn more
 
-Example Usage
--------------
+## Example Usage
 
 ```hcl
 resource "volterra_token" "example" {
@@ -23,8 +22,7 @@ resource "volterra_token" "example" {
 
 ```
 
-Argument Reference
-------------------
+## Argument Reference
 
 ### Metadata Argument Reference
 
@@ -40,9 +38,12 @@ Argument Reference
 
 `namespace` - (Optional) Must be a DNS_LABEL format. For a namespace object itself, namespace value will be "" (`String`).
 
+`type` - (Optional) Token type has two values, 0 or 1 (0 refers to a NORMAL token and 1 JWT token). For Secure Mesh Site v2 UI, JWT is used, other workflow sticks to normal.Single token can be used to register multiple sites. (`int`)
+
+`site_name` - (Optional) Only used for JWT token, to add cluster_name to JWT token. (`String`)
+
 ### Spec Argument Reference
 
-Attribute Reference
--------------------
+## Attribute Reference
 
--	`id` - This is the id of the configured token.
+- `id` - This is the id of the configured token.

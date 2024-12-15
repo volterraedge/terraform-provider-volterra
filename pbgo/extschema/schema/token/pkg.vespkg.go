@@ -29,6 +29,8 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.token.ReplaceRequest"] = ReplaceRequestValidator()
 	vr["ves.io.schema.token.ReplaceResponse"] = ReplaceResponseValidator()
 
+	vr["ves.io.schema.token.GetCloudInitConfigReq"] = GetCloudInitConfigReqValidator()
+	vr["ves.io.schema.token.GetCloudInitConfigResp"] = GetCloudInitConfigRespValidator()
 	vr["ves.io.schema.token.ObjectChangeResp"] = ObjectChangeRespValidator()
 	vr["ves.io.schema.token.StateReq"] = StateReqValidator()
 

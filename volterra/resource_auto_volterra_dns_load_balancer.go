@@ -64,7 +64,8 @@ func resourceVolterraDnsLoadBalancer() *schema.Resource {
 
 			"fallback_pool": {
 
-				Type:     schema.TypeSet,
+				Type:     schema.TypeList,
+				MaxItems: 1,
 				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
@@ -92,7 +93,8 @@ func resourceVolterraDnsLoadBalancer() *schema.Resource {
 
 			"response_cache": {
 
-				Type:     schema.TypeSet,
+				Type:     schema.TypeList,
+				MaxItems: 1,
 				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
@@ -111,7 +113,8 @@ func resourceVolterraDnsLoadBalancer() *schema.Resource {
 
 						"response_cache_parameters": {
 
-							Type:     schema.TypeSet,
+							Type:     schema.TypeList,
+							MaxItems: 1,
 							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
@@ -139,7 +142,8 @@ func resourceVolterraDnsLoadBalancer() *schema.Resource {
 
 			"rule_list": {
 
-				Type:     schema.TypeSet,
+				Type:     schema.TypeList,
+				MaxItems: 1,
 				Required: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
@@ -160,7 +164,8 @@ func resourceVolterraDnsLoadBalancer() *schema.Resource {
 
 									"pool": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -183,7 +188,8 @@ func resourceVolterraDnsLoadBalancer() *schema.Resource {
 
 									"asn_list": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -203,7 +209,8 @@ func resourceVolterraDnsLoadBalancer() *schema.Resource {
 
 									"asn_matcher": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -241,7 +248,8 @@ func resourceVolterraDnsLoadBalancer() *schema.Resource {
 
 									"geo_location_label_selector": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -261,7 +269,8 @@ func resourceVolterraDnsLoadBalancer() *schema.Resource {
 
 									"geo_location_set": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -284,7 +293,8 @@ func resourceVolterraDnsLoadBalancer() *schema.Resource {
 
 									"ip_prefix_list": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -319,7 +329,8 @@ func resourceVolterraDnsLoadBalancer() *schema.Resource {
 
 									"ip_prefix_set": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -430,21 +441,23 @@ func resourceVolterraDnsLoadBalancerCreate(d *schema.ResourceData, meta interfac
 	//fallback_pool
 	if v, ok := d.GetOk("fallback_pool"); ok && !isIntfNil(v) {
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		fallbackPoolInt := &ves_io_schema_views.ObjectRefType{}
 		createSpec.FallbackPool = fallbackPoolInt
 
 		for _, set := range sl {
-			fpMapToStrVal := set.(map[string]interface{})
-			if val, ok := fpMapToStrVal["name"]; ok && !isIntfNil(v) {
-				fallbackPoolInt.Name = val.(string)
-			}
-			if val, ok := fpMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-				fallbackPoolInt.Namespace = val.(string)
-			}
+			if set != nil {
+				fpMapToStrVal := set.(map[string]interface{})
+				if val, ok := fpMapToStrVal["name"]; ok && !isIntfNil(v) {
+					fallbackPoolInt.Name = val.(string)
+				}
+				if val, ok := fpMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+					fallbackPoolInt.Namespace = val.(string)
+				}
 
-			if val, ok := fpMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-				fallbackPoolInt.Tenant = val.(string)
+				if val, ok := fpMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+					fallbackPoolInt.Tenant = val.(string)
+				}
 			}
 		}
 
@@ -460,71 +473,75 @@ func resourceVolterraDnsLoadBalancerCreate(d *schema.ResourceData, meta interfac
 	//response_cache
 	if v, ok := d.GetOk("response_cache"); ok && !isIntfNil(v) {
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		responseCache := &ves_io_schema_dns_load_balancer.ResponseCache{}
 		createSpec.ResponseCache = responseCache
 		for _, set := range sl {
-			responseCacheMapStrToI := set.(map[string]interface{})
+			if set != nil {
+				responseCacheMapStrToI := set.(map[string]interface{})
 
-			responseCacheParametersChoiceTypeFound := false
+				responseCacheParametersChoiceTypeFound := false
 
-			if v, ok := responseCacheMapStrToI["default_response_cache_parameters"]; ok && !isIntfNil(v) && !responseCacheParametersChoiceTypeFound {
+				if v, ok := responseCacheMapStrToI["default_response_cache_parameters"]; ok && !isIntfNil(v) && !responseCacheParametersChoiceTypeFound {
 
-				responseCacheParametersChoiceTypeFound = true
+					responseCacheParametersChoiceTypeFound = true
 
-				if v.(bool) {
-					responseCacheParametersChoiceInt := &ves_io_schema_dns_load_balancer.ResponseCache_DefaultResponseCacheParameters{}
-					responseCacheParametersChoiceInt.DefaultResponseCacheParameters = &ves_io_schema.Empty{}
+					if v.(bool) {
+						responseCacheParametersChoiceInt := &ves_io_schema_dns_load_balancer.ResponseCache_DefaultResponseCacheParameters{}
+						responseCacheParametersChoiceInt.DefaultResponseCacheParameters = &ves_io_schema.Empty{}
+						responseCache.ResponseCacheParametersChoice = responseCacheParametersChoiceInt
+					}
+
+				}
+
+				if v, ok := responseCacheMapStrToI["disable"]; ok && !isIntfNil(v) && !responseCacheParametersChoiceTypeFound {
+
+					responseCacheParametersChoiceTypeFound = true
+
+					if v.(bool) {
+						responseCacheParametersChoiceInt := &ves_io_schema_dns_load_balancer.ResponseCache_Disable{}
+						responseCacheParametersChoiceInt.Disable = &ves_io_schema.Empty{}
+						responseCache.ResponseCacheParametersChoice = responseCacheParametersChoiceInt
+					}
+
+				}
+
+				if v, ok := responseCacheMapStrToI["response_cache_parameters"]; ok && !isIntfNil(v) && !responseCacheParametersChoiceTypeFound {
+
+					responseCacheParametersChoiceTypeFound = true
+					responseCacheParametersChoiceInt := &ves_io_schema_dns_load_balancer.ResponseCache_ResponseCacheParameters{}
+					responseCacheParametersChoiceInt.ResponseCacheParameters = &ves_io_schema_dns_load_balancer.ResponseCacheParameters{}
 					responseCache.ResponseCacheParametersChoice = responseCacheParametersChoiceInt
-				}
 
-			}
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
 
-			if v, ok := responseCacheMapStrToI["disable"]; ok && !isIntfNil(v) && !responseCacheParametersChoiceTypeFound {
+							if v, ok := cs["cache_cidr_ipv4"]; ok && !isIntfNil(v) {
 
-				responseCacheParametersChoiceTypeFound = true
+								responseCacheParametersChoiceInt.ResponseCacheParameters.CacheCidrIpv4 = uint32(v.(int))
 
-				if v.(bool) {
-					responseCacheParametersChoiceInt := &ves_io_schema_dns_load_balancer.ResponseCache_Disable{}
-					responseCacheParametersChoiceInt.Disable = &ves_io_schema.Empty{}
-					responseCache.ResponseCacheParametersChoice = responseCacheParametersChoiceInt
-				}
+							}
 
-			}
+							if v, ok := cs["cache_cidr_ipv6"]; ok && !isIntfNil(v) {
 
-			if v, ok := responseCacheMapStrToI["response_cache_parameters"]; ok && !isIntfNil(v) && !responseCacheParametersChoiceTypeFound {
+								responseCacheParametersChoiceInt.ResponseCacheParameters.CacheCidrIpv6 = uint32(v.(int))
 
-				responseCacheParametersChoiceTypeFound = true
-				responseCacheParametersChoiceInt := &ves_io_schema_dns_load_balancer.ResponseCache_ResponseCacheParameters{}
-				responseCacheParametersChoiceInt.ResponseCacheParameters = &ves_io_schema_dns_load_balancer.ResponseCacheParameters{}
-				responseCache.ResponseCacheParametersChoice = responseCacheParametersChoiceInt
+							}
 
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
+							if v, ok := cs["cache_ttl"]; ok && !isIntfNil(v) {
 
-					if v, ok := cs["cache_cidr_ipv4"]; ok && !isIntfNil(v) {
+								responseCacheParametersChoiceInt.ResponseCacheParameters.CacheTtl = uint32(v.(int))
 
-						responseCacheParametersChoiceInt.ResponseCacheParameters.CacheCidrIpv4 = uint32(v.(int))
+							}
 
-					}
-
-					if v, ok := cs["cache_cidr_ipv6"]; ok && !isIntfNil(v) {
-
-						responseCacheParametersChoiceInt.ResponseCacheParameters.CacheCidrIpv6 = uint32(v.(int))
-
-					}
-
-					if v, ok := cs["cache_ttl"]; ok && !isIntfNil(v) {
-
-						responseCacheParametersChoiceInt.ResponseCacheParameters.CacheTtl = uint32(v.(int))
-
+						}
 					}
 
 				}
 
 			}
-
 		}
 
 	}
@@ -532,302 +549,320 @@ func resourceVolterraDnsLoadBalancerCreate(d *schema.ResourceData, meta interfac
 	//rule_list
 	if v, ok := d.GetOk("rule_list"); ok && !isIntfNil(v) {
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		ruleList := &ves_io_schema_dns_load_balancer.LoadBalancingRuleList{}
 		createSpec.RuleList = ruleList
 		for _, set := range sl {
-			ruleListMapStrToI := set.(map[string]interface{})
+			if set != nil {
+				ruleListMapStrToI := set.(map[string]interface{})
 
-			if v, ok := ruleListMapStrToI["rules"]; ok && !isIntfNil(v) {
+				if v, ok := ruleListMapStrToI["rules"]; ok && !isIntfNil(v) {
 
-				sl := v.([]interface{})
-				rules := make([]*ves_io_schema_dns_load_balancer.LoadBalancingRule, len(sl))
-				ruleList.Rules = rules
-				for i, set := range sl {
-					rules[i] = &ves_io_schema_dns_load_balancer.LoadBalancingRule{}
-					rulesMapStrToI := set.(map[string]interface{})
+					sl := v.([]interface{})
+					rules := make([]*ves_io_schema_dns_load_balancer.LoadBalancingRule, len(sl))
+					ruleList.Rules = rules
+					for i, set := range sl {
+						if set != nil {
+							rules[i] = &ves_io_schema_dns_load_balancer.LoadBalancingRule{}
+							rulesMapStrToI := set.(map[string]interface{})
 
-					actionChoiceTypeFound := false
+							actionChoiceTypeFound := false
 
-					if v, ok := rulesMapStrToI["nxdomain"]; ok && !isIntfNil(v) && !actionChoiceTypeFound {
+							if v, ok := rulesMapStrToI["nxdomain"]; ok && !isIntfNil(v) && !actionChoiceTypeFound {
 
-						actionChoiceTypeFound = true
+								actionChoiceTypeFound = true
 
-						if v.(bool) {
-							actionChoiceInt := &ves_io_schema_dns_load_balancer.LoadBalancingRule_Nxdomain{}
-							actionChoiceInt.Nxdomain = &ves_io_schema.Empty{}
-							rules[i].ActionChoice = actionChoiceInt
-						}
-
-					}
-
-					if v, ok := rulesMapStrToI["pool"]; ok && !isIntfNil(v) && !actionChoiceTypeFound {
-
-						actionChoiceTypeFound = true
-						actionChoiceInt := &ves_io_schema_dns_load_balancer.LoadBalancingRule_Pool{}
-						actionChoiceInt.Pool = &ves_io_schema_views.ObjectRefType{}
-						rules[i].ActionChoice = actionChoiceInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-								actionChoiceInt.Pool.Name = v.(string)
-
-							}
-
-							if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
-
-								actionChoiceInt.Pool.Namespace = v.(string)
-
-							}
-
-							if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
-
-								actionChoiceInt.Pool.Tenant = v.(string)
-
-							}
-
-						}
-
-					}
-
-					clientChoiceTypeFound := false
-
-					if v, ok := rulesMapStrToI["asn_list"]; ok && !isIntfNil(v) && !clientChoiceTypeFound {
-
-						clientChoiceTypeFound = true
-						clientChoiceInt := &ves_io_schema_dns_load_balancer.LoadBalancingRule_AsnList{}
-						clientChoiceInt.AsnList = &ves_io_schema_policy.AsnMatchList{}
-						rules[i].ClientChoice = clientChoiceInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["as_numbers"]; ok && !isIntfNil(v) {
-
-								ls := make([]uint32, len(v.([]interface{})))
-								for i, v := range v.([]interface{}) {
-									ls[i] = uint32(v.(int))
+								if v.(bool) {
+									actionChoiceInt := &ves_io_schema_dns_load_balancer.LoadBalancingRule_Nxdomain{}
+									actionChoiceInt.Nxdomain = &ves_io_schema.Empty{}
+									rules[i].ActionChoice = actionChoiceInt
 								}
-								clientChoiceInt.AsnList.AsNumbers = ls
 
 							}
 
-						}
+							if v, ok := rulesMapStrToI["pool"]; ok && !isIntfNil(v) && !actionChoiceTypeFound {
 
-					}
-
-					if v, ok := rulesMapStrToI["asn_matcher"]; ok && !isIntfNil(v) && !clientChoiceTypeFound {
-
-						clientChoiceTypeFound = true
-						clientChoiceInt := &ves_io_schema_dns_load_balancer.LoadBalancingRule_AsnMatcher{}
-						clientChoiceInt.AsnMatcher = &ves_io_schema_policy.AsnMatcherType{}
-						rules[i].ClientChoice = clientChoiceInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["asn_sets"]; ok && !isIntfNil(v) {
+								actionChoiceTypeFound = true
+								actionChoiceInt := &ves_io_schema_dns_load_balancer.LoadBalancingRule_Pool{}
+								actionChoiceInt.Pool = &ves_io_schema_views.ObjectRefType{}
+								rules[i].ActionChoice = actionChoiceInt
 
 								sl := v.([]interface{})
-								asnSetsInt := make([]*ves_io_schema.ObjectRefType, len(sl))
-								clientChoiceInt.AsnMatcher.AsnSets = asnSetsInt
-								for i, ps := range sl {
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
 
-									asMapToStrVal := ps.(map[string]interface{})
-									asnSetsInt[i] = &ves_io_schema.ObjectRefType{}
+										if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
-									asnSetsInt[i].Kind = "bgp_asn_set"
+											actionChoiceInt.Pool.Name = v.(string)
 
-									if v, ok := asMapToStrVal["name"]; ok && !isIntfNil(v) {
-										asnSetsInt[i].Name = v.(string)
+										}
+
+										if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+											actionChoiceInt.Pool.Namespace = v.(string)
+
+										}
+
+										if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+											actionChoiceInt.Pool.Tenant = v.(string)
+
+										}
+
 									}
-
-									if v, ok := asMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-										asnSetsInt[i].Namespace = v.(string)
-									}
-
-									if v, ok := asMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-										asnSetsInt[i].Tenant = v.(string)
-									}
-
-									if v, ok := asMapToStrVal["uid"]; ok && !isIntfNil(v) {
-										asnSetsInt[i].Uid = v.(string)
-									}
-
 								}
 
 							}
 
-						}
+							clientChoiceTypeFound := false
 
-					}
+							if v, ok := rulesMapStrToI["asn_list"]; ok && !isIntfNil(v) && !clientChoiceTypeFound {
 
-					if v, ok := rulesMapStrToI["geo_location_label_selector"]; ok && !isIntfNil(v) && !clientChoiceTypeFound {
-
-						clientChoiceTypeFound = true
-						clientChoiceInt := &ves_io_schema_dns_load_balancer.LoadBalancingRule_GeoLocationLabelSelector{}
-						clientChoiceInt.GeoLocationLabelSelector = &ves_io_schema.LabelSelectorType{}
-						rules[i].ClientChoice = clientChoiceInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["expressions"]; ok && !isIntfNil(v) {
-
-								ls := make([]string, len(v.([]interface{})))
-								for i, v := range v.([]interface{}) {
-									ls[i] = v.(string)
-								}
-								clientChoiceInt.GeoLocationLabelSelector.Expressions = ls
-
-							}
-
-						}
-
-					}
-
-					if v, ok := rulesMapStrToI["geo_location_set"]; ok && !isIntfNil(v) && !clientChoiceTypeFound {
-
-						clientChoiceTypeFound = true
-						clientChoiceInt := &ves_io_schema_dns_load_balancer.LoadBalancingRule_GeoLocationSet{}
-						clientChoiceInt.GeoLocationSet = &ves_io_schema_views.ObjectRefType{}
-						rules[i].ClientChoice = clientChoiceInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-								clientChoiceInt.GeoLocationSet.Name = v.(string)
-
-							}
-
-							if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
-
-								clientChoiceInt.GeoLocationSet.Namespace = v.(string)
-
-							}
-
-							if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
-
-								clientChoiceInt.GeoLocationSet.Tenant = v.(string)
-
-							}
-
-						}
-
-					}
-
-					if v, ok := rulesMapStrToI["ip_prefix_list"]; ok && !isIntfNil(v) && !clientChoiceTypeFound {
-
-						clientChoiceTypeFound = true
-						clientChoiceInt := &ves_io_schema_dns_load_balancer.LoadBalancingRule_IpPrefixList{}
-						clientChoiceInt.IpPrefixList = &ves_io_schema_policy.PrefixMatchList{}
-						rules[i].ClientChoice = clientChoiceInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["invert_match"]; ok && !isIntfNil(v) {
-
-								clientChoiceInt.IpPrefixList.InvertMatch = v.(bool)
-
-							}
-
-							if v, ok := cs["ip_prefixes"]; ok && !isIntfNil(v) {
-
-								ls := make([]string, len(v.([]interface{})))
-								for i, v := range v.([]interface{}) {
-									ls[i] = v.(string)
-								}
-								clientChoiceInt.IpPrefixList.IpPrefixes = ls
-
-							}
-
-							if v, ok := cs["ipv6_prefixes"]; ok && !isIntfNil(v) {
-
-								ls := make([]string, len(v.([]interface{})))
-								for i, v := range v.([]interface{}) {
-									ls[i] = v.(string)
-								}
-								clientChoiceInt.IpPrefixList.Ipv6Prefixes = ls
-
-							}
-
-						}
-
-					}
-
-					if v, ok := rulesMapStrToI["ip_prefix_set"]; ok && !isIntfNil(v) && !clientChoiceTypeFound {
-
-						clientChoiceTypeFound = true
-						clientChoiceInt := &ves_io_schema_dns_load_balancer.LoadBalancingRule_IpPrefixSet{}
-						clientChoiceInt.IpPrefixSet = &ves_io_schema_policy.IpMatcherType{}
-						rules[i].ClientChoice = clientChoiceInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["invert_matcher"]; ok && !isIntfNil(v) {
-
-								clientChoiceInt.IpPrefixSet.InvertMatcher = v.(bool)
-
-							}
-
-							if v, ok := cs["prefix_sets"]; ok && !isIntfNil(v) {
+								clientChoiceTypeFound = true
+								clientChoiceInt := &ves_io_schema_dns_load_balancer.LoadBalancingRule_AsnList{}
+								clientChoiceInt.AsnList = &ves_io_schema_policy.AsnMatchList{}
+								rules[i].ClientChoice = clientChoiceInt
 
 								sl := v.([]interface{})
-								prefixSetsInt := make([]*ves_io_schema.ObjectRefType, len(sl))
-								clientChoiceInt.IpPrefixSet.PrefixSets = prefixSetsInt
-								for i, ps := range sl {
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
 
-									psMapToStrVal := ps.(map[string]interface{})
-									prefixSetsInt[i] = &ves_io_schema.ObjectRefType{}
+										if v, ok := cs["as_numbers"]; ok && !isIntfNil(v) {
 
-									prefixSetsInt[i].Kind = "ip_prefix_set"
+											ls := make([]uint32, len(v.([]interface{})))
+											for i, v := range v.([]interface{}) {
+												ls[i] = uint32(v.(int))
+											}
+											clientChoiceInt.AsnList.AsNumbers = ls
 
-									if v, ok := psMapToStrVal["name"]; ok && !isIntfNil(v) {
-										prefixSetsInt[i].Name = v.(string)
+										}
+
 									}
-
-									if v, ok := psMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-										prefixSetsInt[i].Namespace = v.(string)
-									}
-
-									if v, ok := psMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-										prefixSetsInt[i].Tenant = v.(string)
-									}
-
-									if v, ok := psMapToStrVal["uid"]; ok && !isIntfNil(v) {
-										prefixSetsInt[i].Uid = v.(string)
-									}
-
 								}
 
 							}
 
+							if v, ok := rulesMapStrToI["asn_matcher"]; ok && !isIntfNil(v) && !clientChoiceTypeFound {
+
+								clientChoiceTypeFound = true
+								clientChoiceInt := &ves_io_schema_dns_load_balancer.LoadBalancingRule_AsnMatcher{}
+								clientChoiceInt.AsnMatcher = &ves_io_schema_policy.AsnMatcherType{}
+								rules[i].ClientChoice = clientChoiceInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["asn_sets"]; ok && !isIntfNil(v) {
+
+											sl := v.([]interface{})
+											asnSetsInt := make([]*ves_io_schema.ObjectRefType, len(sl))
+											clientChoiceInt.AsnMatcher.AsnSets = asnSetsInt
+											for i, ps := range sl {
+
+												asMapToStrVal := ps.(map[string]interface{})
+												asnSetsInt[i] = &ves_io_schema.ObjectRefType{}
+
+												asnSetsInt[i].Kind = "bgp_asn_set"
+
+												if v, ok := asMapToStrVal["name"]; ok && !isIntfNil(v) {
+													asnSetsInt[i].Name = v.(string)
+												}
+
+												if v, ok := asMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+													asnSetsInt[i].Namespace = v.(string)
+												}
+
+												if v, ok := asMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+													asnSetsInt[i].Tenant = v.(string)
+												}
+
+												if v, ok := asMapToStrVal["uid"]; ok && !isIntfNil(v) {
+													asnSetsInt[i].Uid = v.(string)
+												}
+
+											}
+
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := rulesMapStrToI["geo_location_label_selector"]; ok && !isIntfNil(v) && !clientChoiceTypeFound {
+
+								clientChoiceTypeFound = true
+								clientChoiceInt := &ves_io_schema_dns_load_balancer.LoadBalancingRule_GeoLocationLabelSelector{}
+								clientChoiceInt.GeoLocationLabelSelector = &ves_io_schema.LabelSelectorType{}
+								rules[i].ClientChoice = clientChoiceInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["expressions"]; ok && !isIntfNil(v) {
+
+											ls := make([]string, len(v.([]interface{})))
+											for i, v := range v.([]interface{}) {
+												ls[i] = v.(string)
+											}
+											clientChoiceInt.GeoLocationLabelSelector.Expressions = ls
+
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := rulesMapStrToI["geo_location_set"]; ok && !isIntfNil(v) && !clientChoiceTypeFound {
+
+								clientChoiceTypeFound = true
+								clientChoiceInt := &ves_io_schema_dns_load_balancer.LoadBalancingRule_GeoLocationSet{}
+								clientChoiceInt.GeoLocationSet = &ves_io_schema_views.ObjectRefType{}
+								rules[i].ClientChoice = clientChoiceInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+											clientChoiceInt.GeoLocationSet.Name = v.(string)
+
+										}
+
+										if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+											clientChoiceInt.GeoLocationSet.Namespace = v.(string)
+
+										}
+
+										if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+											clientChoiceInt.GeoLocationSet.Tenant = v.(string)
+
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := rulesMapStrToI["ip_prefix_list"]; ok && !isIntfNil(v) && !clientChoiceTypeFound {
+
+								clientChoiceTypeFound = true
+								clientChoiceInt := &ves_io_schema_dns_load_balancer.LoadBalancingRule_IpPrefixList{}
+								clientChoiceInt.IpPrefixList = &ves_io_schema_policy.PrefixMatchList{}
+								rules[i].ClientChoice = clientChoiceInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["invert_match"]; ok && !isIntfNil(v) {
+
+											clientChoiceInt.IpPrefixList.InvertMatch = v.(bool)
+
+										}
+
+										if v, ok := cs["ip_prefixes"]; ok && !isIntfNil(v) {
+
+											ls := make([]string, len(v.([]interface{})))
+											for i, v := range v.([]interface{}) {
+												ls[i] = v.(string)
+											}
+											clientChoiceInt.IpPrefixList.IpPrefixes = ls
+
+										}
+
+										if v, ok := cs["ipv6_prefixes"]; ok && !isIntfNil(v) {
+
+											ls := make([]string, len(v.([]interface{})))
+											for i, v := range v.([]interface{}) {
+												ls[i] = v.(string)
+											}
+											clientChoiceInt.IpPrefixList.Ipv6Prefixes = ls
+
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := rulesMapStrToI["ip_prefix_set"]; ok && !isIntfNil(v) && !clientChoiceTypeFound {
+
+								clientChoiceTypeFound = true
+								clientChoiceInt := &ves_io_schema_dns_load_balancer.LoadBalancingRule_IpPrefixSet{}
+								clientChoiceInt.IpPrefixSet = &ves_io_schema_policy.IpMatcherType{}
+								rules[i].ClientChoice = clientChoiceInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["invert_matcher"]; ok && !isIntfNil(v) {
+
+											clientChoiceInt.IpPrefixSet.InvertMatcher = v.(bool)
+
+										}
+
+										if v, ok := cs["prefix_sets"]; ok && !isIntfNil(v) {
+
+											sl := v.([]interface{})
+											prefixSetsInt := make([]*ves_io_schema.ObjectRefType, len(sl))
+											clientChoiceInt.IpPrefixSet.PrefixSets = prefixSetsInt
+											for i, ps := range sl {
+
+												psMapToStrVal := ps.(map[string]interface{})
+												prefixSetsInt[i] = &ves_io_schema.ObjectRefType{}
+
+												prefixSetsInt[i].Kind = "ip_prefix_set"
+
+												if v, ok := psMapToStrVal["name"]; ok && !isIntfNil(v) {
+													prefixSetsInt[i].Name = v.(string)
+												}
+
+												if v, ok := psMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+													prefixSetsInt[i].Namespace = v.(string)
+												}
+
+												if v, ok := psMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+													prefixSetsInt[i].Tenant = v.(string)
+												}
+
+												if v, ok := psMapToStrVal["uid"]; ok && !isIntfNil(v) {
+													prefixSetsInt[i].Uid = v.(string)
+												}
+
+											}
+
+										}
+
+									}
+								}
+
+							}
+
+							if w, ok := rulesMapStrToI["score"]; ok && !isIntfNil(w) {
+								rules[i].Score = uint32(w.(int))
+							}
+
 						}
-
-					}
-
-					if w, ok := rulesMapStrToI["score"]; ok && !isIntfNil(w) {
-						rules[i].Score = uint32(w.(int))
 					}
 
 				}
 
 			}
-
 		}
 
 	}
@@ -933,21 +968,23 @@ func resourceVolterraDnsLoadBalancerUpdate(d *schema.ResourceData, meta interfac
 
 	if v, ok := d.GetOk("fallback_pool"); ok && !isIntfNil(v) {
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		fallbackPoolInt := &ves_io_schema_views.ObjectRefType{}
 		updateSpec.FallbackPool = fallbackPoolInt
 
 		for _, set := range sl {
-			fpMapToStrVal := set.(map[string]interface{})
-			if val, ok := fpMapToStrVal["name"]; ok && !isIntfNil(v) {
-				fallbackPoolInt.Name = val.(string)
-			}
-			if val, ok := fpMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-				fallbackPoolInt.Namespace = val.(string)
-			}
+			if set != nil {
+				fpMapToStrVal := set.(map[string]interface{})
+				if val, ok := fpMapToStrVal["name"]; ok && !isIntfNil(v) {
+					fallbackPoolInt.Name = val.(string)
+				}
+				if val, ok := fpMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+					fallbackPoolInt.Namespace = val.(string)
+				}
 
-			if val, ok := fpMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-				fallbackPoolInt.Tenant = val.(string)
+				if val, ok := fpMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+					fallbackPoolInt.Tenant = val.(string)
+				}
 			}
 		}
 
@@ -961,373 +998,395 @@ func resourceVolterraDnsLoadBalancerUpdate(d *schema.ResourceData, meta interfac
 
 	if v, ok := d.GetOk("response_cache"); ok && !isIntfNil(v) {
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		responseCache := &ves_io_schema_dns_load_balancer.ResponseCache{}
 		updateSpec.ResponseCache = responseCache
 		for _, set := range sl {
-			responseCacheMapStrToI := set.(map[string]interface{})
+			if set != nil {
+				responseCacheMapStrToI := set.(map[string]interface{})
 
-			responseCacheParametersChoiceTypeFound := false
+				responseCacheParametersChoiceTypeFound := false
 
-			if v, ok := responseCacheMapStrToI["default_response_cache_parameters"]; ok && !isIntfNil(v) && !responseCacheParametersChoiceTypeFound {
+				if v, ok := responseCacheMapStrToI["default_response_cache_parameters"]; ok && !isIntfNil(v) && !responseCacheParametersChoiceTypeFound {
 
-				responseCacheParametersChoiceTypeFound = true
+					responseCacheParametersChoiceTypeFound = true
 
-				if v.(bool) {
-					responseCacheParametersChoiceInt := &ves_io_schema_dns_load_balancer.ResponseCache_DefaultResponseCacheParameters{}
-					responseCacheParametersChoiceInt.DefaultResponseCacheParameters = &ves_io_schema.Empty{}
+					if v.(bool) {
+						responseCacheParametersChoiceInt := &ves_io_schema_dns_load_balancer.ResponseCache_DefaultResponseCacheParameters{}
+						responseCacheParametersChoiceInt.DefaultResponseCacheParameters = &ves_io_schema.Empty{}
+						responseCache.ResponseCacheParametersChoice = responseCacheParametersChoiceInt
+					}
+
+				}
+
+				if v, ok := responseCacheMapStrToI["disable"]; ok && !isIntfNil(v) && !responseCacheParametersChoiceTypeFound {
+
+					responseCacheParametersChoiceTypeFound = true
+
+					if v.(bool) {
+						responseCacheParametersChoiceInt := &ves_io_schema_dns_load_balancer.ResponseCache_Disable{}
+						responseCacheParametersChoiceInt.Disable = &ves_io_schema.Empty{}
+						responseCache.ResponseCacheParametersChoice = responseCacheParametersChoiceInt
+					}
+
+				}
+
+				if v, ok := responseCacheMapStrToI["response_cache_parameters"]; ok && !isIntfNil(v) && !responseCacheParametersChoiceTypeFound {
+
+					responseCacheParametersChoiceTypeFound = true
+					responseCacheParametersChoiceInt := &ves_io_schema_dns_load_balancer.ResponseCache_ResponseCacheParameters{}
+					responseCacheParametersChoiceInt.ResponseCacheParameters = &ves_io_schema_dns_load_balancer.ResponseCacheParameters{}
 					responseCache.ResponseCacheParametersChoice = responseCacheParametersChoiceInt
-				}
 
-			}
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
 
-			if v, ok := responseCacheMapStrToI["disable"]; ok && !isIntfNil(v) && !responseCacheParametersChoiceTypeFound {
+							if v, ok := cs["cache_cidr_ipv4"]; ok && !isIntfNil(v) {
 
-				responseCacheParametersChoiceTypeFound = true
+								responseCacheParametersChoiceInt.ResponseCacheParameters.CacheCidrIpv4 = uint32(v.(int))
 
-				if v.(bool) {
-					responseCacheParametersChoiceInt := &ves_io_schema_dns_load_balancer.ResponseCache_Disable{}
-					responseCacheParametersChoiceInt.Disable = &ves_io_schema.Empty{}
-					responseCache.ResponseCacheParametersChoice = responseCacheParametersChoiceInt
-				}
+							}
 
-			}
+							if v, ok := cs["cache_cidr_ipv6"]; ok && !isIntfNil(v) {
 
-			if v, ok := responseCacheMapStrToI["response_cache_parameters"]; ok && !isIntfNil(v) && !responseCacheParametersChoiceTypeFound {
+								responseCacheParametersChoiceInt.ResponseCacheParameters.CacheCidrIpv6 = uint32(v.(int))
 
-				responseCacheParametersChoiceTypeFound = true
-				responseCacheParametersChoiceInt := &ves_io_schema_dns_load_balancer.ResponseCache_ResponseCacheParameters{}
-				responseCacheParametersChoiceInt.ResponseCacheParameters = &ves_io_schema_dns_load_balancer.ResponseCacheParameters{}
-				responseCache.ResponseCacheParametersChoice = responseCacheParametersChoiceInt
+							}
 
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
+							if v, ok := cs["cache_ttl"]; ok && !isIntfNil(v) {
 
-					if v, ok := cs["cache_cidr_ipv4"]; ok && !isIntfNil(v) {
+								responseCacheParametersChoiceInt.ResponseCacheParameters.CacheTtl = uint32(v.(int))
 
-						responseCacheParametersChoiceInt.ResponseCacheParameters.CacheCidrIpv4 = uint32(v.(int))
+							}
 
-					}
-
-					if v, ok := cs["cache_cidr_ipv6"]; ok && !isIntfNil(v) {
-
-						responseCacheParametersChoiceInt.ResponseCacheParameters.CacheCidrIpv6 = uint32(v.(int))
-
-					}
-
-					if v, ok := cs["cache_ttl"]; ok && !isIntfNil(v) {
-
-						responseCacheParametersChoiceInt.ResponseCacheParameters.CacheTtl = uint32(v.(int))
-
+						}
 					}
 
 				}
 
 			}
-
 		}
 
 	}
 
 	if v, ok := d.GetOk("rule_list"); ok && !isIntfNil(v) {
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		ruleList := &ves_io_schema_dns_load_balancer.LoadBalancingRuleList{}
 		updateSpec.RuleList = ruleList
 		for _, set := range sl {
-			ruleListMapStrToI := set.(map[string]interface{})
+			if set != nil {
+				ruleListMapStrToI := set.(map[string]interface{})
 
-			if v, ok := ruleListMapStrToI["rules"]; ok && !isIntfNil(v) {
+				if v, ok := ruleListMapStrToI["rules"]; ok && !isIntfNil(v) {
 
-				sl := v.([]interface{})
-				rules := make([]*ves_io_schema_dns_load_balancer.LoadBalancingRule, len(sl))
-				ruleList.Rules = rules
-				for i, set := range sl {
-					rules[i] = &ves_io_schema_dns_load_balancer.LoadBalancingRule{}
-					rulesMapStrToI := set.(map[string]interface{})
+					sl := v.([]interface{})
+					rules := make([]*ves_io_schema_dns_load_balancer.LoadBalancingRule, len(sl))
+					ruleList.Rules = rules
+					for i, set := range sl {
+						if set != nil {
+							rules[i] = &ves_io_schema_dns_load_balancer.LoadBalancingRule{}
+							rulesMapStrToI := set.(map[string]interface{})
 
-					actionChoiceTypeFound := false
+							actionChoiceTypeFound := false
 
-					if v, ok := rulesMapStrToI["nxdomain"]; ok && !isIntfNil(v) && !actionChoiceTypeFound {
+							if v, ok := rulesMapStrToI["nxdomain"]; ok && !isIntfNil(v) && !actionChoiceTypeFound {
 
-						actionChoiceTypeFound = true
+								actionChoiceTypeFound = true
 
-						if v.(bool) {
-							actionChoiceInt := &ves_io_schema_dns_load_balancer.LoadBalancingRule_Nxdomain{}
-							actionChoiceInt.Nxdomain = &ves_io_schema.Empty{}
-							rules[i].ActionChoice = actionChoiceInt
-						}
-
-					}
-
-					if v, ok := rulesMapStrToI["pool"]; ok && !isIntfNil(v) && !actionChoiceTypeFound {
-
-						actionChoiceTypeFound = true
-						actionChoiceInt := &ves_io_schema_dns_load_balancer.LoadBalancingRule_Pool{}
-						actionChoiceInt.Pool = &ves_io_schema_views.ObjectRefType{}
-						rules[i].ActionChoice = actionChoiceInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-								actionChoiceInt.Pool.Name = v.(string)
-
-							}
-
-							if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
-
-								actionChoiceInt.Pool.Namespace = v.(string)
-
-							}
-
-							if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
-
-								actionChoiceInt.Pool.Tenant = v.(string)
-
-							}
-
-						}
-
-					}
-
-					clientChoiceTypeFound := false
-
-					if v, ok := rulesMapStrToI["asn_list"]; ok && !isIntfNil(v) && !clientChoiceTypeFound {
-
-						clientChoiceTypeFound = true
-						clientChoiceInt := &ves_io_schema_dns_load_balancer.LoadBalancingRule_AsnList{}
-						clientChoiceInt.AsnList = &ves_io_schema_policy.AsnMatchList{}
-						rules[i].ClientChoice = clientChoiceInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["as_numbers"]; ok && !isIntfNil(v) {
-
-								ls := make([]uint32, len(v.([]interface{})))
-								for i, v := range v.([]interface{}) {
-									ls[i] = uint32(v.(int))
+								if v.(bool) {
+									actionChoiceInt := &ves_io_schema_dns_load_balancer.LoadBalancingRule_Nxdomain{}
+									actionChoiceInt.Nxdomain = &ves_io_schema.Empty{}
+									rules[i].ActionChoice = actionChoiceInt
 								}
-								clientChoiceInt.AsnList.AsNumbers = ls
 
 							}
 
-						}
+							if v, ok := rulesMapStrToI["pool"]; ok && !isIntfNil(v) && !actionChoiceTypeFound {
 
-					}
-
-					if v, ok := rulesMapStrToI["asn_matcher"]; ok && !isIntfNil(v) && !clientChoiceTypeFound {
-
-						clientChoiceTypeFound = true
-						clientChoiceInt := &ves_io_schema_dns_load_balancer.LoadBalancingRule_AsnMatcher{}
-						clientChoiceInt.AsnMatcher = &ves_io_schema_policy.AsnMatcherType{}
-						rules[i].ClientChoice = clientChoiceInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["asn_sets"]; ok && !isIntfNil(v) {
+								actionChoiceTypeFound = true
+								actionChoiceInt := &ves_io_schema_dns_load_balancer.LoadBalancingRule_Pool{}
+								actionChoiceInt.Pool = &ves_io_schema_views.ObjectRefType{}
+								rules[i].ActionChoice = actionChoiceInt
 
 								sl := v.([]interface{})
-								asnSetsInt := make([]*ves_io_schema.ObjectRefType, len(sl))
-								clientChoiceInt.AsnMatcher.AsnSets = asnSetsInt
-								for i, ps := range sl {
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
 
-									asMapToStrVal := ps.(map[string]interface{})
-									asnSetsInt[i] = &ves_io_schema.ObjectRefType{}
+										if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
-									asnSetsInt[i].Kind = "bgp_asn_set"
+											actionChoiceInt.Pool.Name = v.(string)
 
-									if v, ok := asMapToStrVal["name"]; ok && !isIntfNil(v) {
-										asnSetsInt[i].Name = v.(string)
+										}
+
+										if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+											actionChoiceInt.Pool.Namespace = v.(string)
+
+										}
+
+										if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+											actionChoiceInt.Pool.Tenant = v.(string)
+
+										}
+
 									}
-
-									if v, ok := asMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-										asnSetsInt[i].Namespace = v.(string)
-									}
-
-									if v, ok := asMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-										asnSetsInt[i].Tenant = v.(string)
-									}
-
-									if v, ok := asMapToStrVal["uid"]; ok && !isIntfNil(v) {
-										asnSetsInt[i].Uid = v.(string)
-									}
-
 								}
 
 							}
 
-						}
+							clientChoiceTypeFound := false
 
-					}
+							if v, ok := rulesMapStrToI["asn_list"]; ok && !isIntfNil(v) && !clientChoiceTypeFound {
 
-					if v, ok := rulesMapStrToI["geo_location_label_selector"]; ok && !isIntfNil(v) && !clientChoiceTypeFound {
-
-						clientChoiceTypeFound = true
-						clientChoiceInt := &ves_io_schema_dns_load_balancer.LoadBalancingRule_GeoLocationLabelSelector{}
-						clientChoiceInt.GeoLocationLabelSelector = &ves_io_schema.LabelSelectorType{}
-						rules[i].ClientChoice = clientChoiceInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["expressions"]; ok && !isIntfNil(v) {
-
-								ls := make([]string, len(v.([]interface{})))
-								for i, v := range v.([]interface{}) {
-									ls[i] = v.(string)
-								}
-								clientChoiceInt.GeoLocationLabelSelector.Expressions = ls
-
-							}
-
-						}
-
-					}
-
-					if v, ok := rulesMapStrToI["geo_location_set"]; ok && !isIntfNil(v) && !clientChoiceTypeFound {
-
-						clientChoiceTypeFound = true
-						clientChoiceInt := &ves_io_schema_dns_load_balancer.LoadBalancingRule_GeoLocationSet{}
-						clientChoiceInt.GeoLocationSet = &ves_io_schema_views.ObjectRefType{}
-						rules[i].ClientChoice = clientChoiceInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-								clientChoiceInt.GeoLocationSet.Name = v.(string)
-
-							}
-
-							if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
-
-								clientChoiceInt.GeoLocationSet.Namespace = v.(string)
-
-							}
-
-							if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
-
-								clientChoiceInt.GeoLocationSet.Tenant = v.(string)
-
-							}
-
-						}
-
-					}
-
-					if v, ok := rulesMapStrToI["ip_prefix_list"]; ok && !isIntfNil(v) && !clientChoiceTypeFound {
-
-						clientChoiceTypeFound = true
-						clientChoiceInt := &ves_io_schema_dns_load_balancer.LoadBalancingRule_IpPrefixList{}
-						clientChoiceInt.IpPrefixList = &ves_io_schema_policy.PrefixMatchList{}
-						rules[i].ClientChoice = clientChoiceInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["invert_match"]; ok && !isIntfNil(v) {
-
-								clientChoiceInt.IpPrefixList.InvertMatch = v.(bool)
-
-							}
-
-							if v, ok := cs["ip_prefixes"]; ok && !isIntfNil(v) {
-
-								ls := make([]string, len(v.([]interface{})))
-								for i, v := range v.([]interface{}) {
-									ls[i] = v.(string)
-								}
-								clientChoiceInt.IpPrefixList.IpPrefixes = ls
-
-							}
-
-							if v, ok := cs["ipv6_prefixes"]; ok && !isIntfNil(v) {
-
-								ls := make([]string, len(v.([]interface{})))
-								for i, v := range v.([]interface{}) {
-									ls[i] = v.(string)
-								}
-								clientChoiceInt.IpPrefixList.Ipv6Prefixes = ls
-
-							}
-
-						}
-
-					}
-
-					if v, ok := rulesMapStrToI["ip_prefix_set"]; ok && !isIntfNil(v) && !clientChoiceTypeFound {
-
-						clientChoiceTypeFound = true
-						clientChoiceInt := &ves_io_schema_dns_load_balancer.LoadBalancingRule_IpPrefixSet{}
-						clientChoiceInt.IpPrefixSet = &ves_io_schema_policy.IpMatcherType{}
-						rules[i].ClientChoice = clientChoiceInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["invert_matcher"]; ok && !isIntfNil(v) {
-
-								clientChoiceInt.IpPrefixSet.InvertMatcher = v.(bool)
-
-							}
-
-							if v, ok := cs["prefix_sets"]; ok && !isIntfNil(v) {
+								clientChoiceTypeFound = true
+								clientChoiceInt := &ves_io_schema_dns_load_balancer.LoadBalancingRule_AsnList{}
+								clientChoiceInt.AsnList = &ves_io_schema_policy.AsnMatchList{}
+								rules[i].ClientChoice = clientChoiceInt
 
 								sl := v.([]interface{})
-								prefixSetsInt := make([]*ves_io_schema.ObjectRefType, len(sl))
-								clientChoiceInt.IpPrefixSet.PrefixSets = prefixSetsInt
-								for i, ps := range sl {
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
 
-									psMapToStrVal := ps.(map[string]interface{})
-									prefixSetsInt[i] = &ves_io_schema.ObjectRefType{}
+										if v, ok := cs["as_numbers"]; ok && !isIntfNil(v) {
 
-									prefixSetsInt[i].Kind = "ip_prefix_set"
+											ls := make([]uint32, len(v.([]interface{})))
+											for i, v := range v.([]interface{}) {
+												ls[i] = uint32(v.(int))
+											}
+											clientChoiceInt.AsnList.AsNumbers = ls
 
-									if v, ok := psMapToStrVal["name"]; ok && !isIntfNil(v) {
-										prefixSetsInt[i].Name = v.(string)
+										}
+
 									}
-
-									if v, ok := psMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-										prefixSetsInt[i].Namespace = v.(string)
-									}
-
-									if v, ok := psMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-										prefixSetsInt[i].Tenant = v.(string)
-									}
-
-									if v, ok := psMapToStrVal["uid"]; ok && !isIntfNil(v) {
-										prefixSetsInt[i].Uid = v.(string)
-									}
-
 								}
 
 							}
 
+							if v, ok := rulesMapStrToI["asn_matcher"]; ok && !isIntfNil(v) && !clientChoiceTypeFound {
+
+								clientChoiceTypeFound = true
+								clientChoiceInt := &ves_io_schema_dns_load_balancer.LoadBalancingRule_AsnMatcher{}
+								clientChoiceInt.AsnMatcher = &ves_io_schema_policy.AsnMatcherType{}
+								rules[i].ClientChoice = clientChoiceInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["asn_sets"]; ok && !isIntfNil(v) {
+
+											sl := v.([]interface{})
+											asnSetsInt := make([]*ves_io_schema.ObjectRefType, len(sl))
+											clientChoiceInt.AsnMatcher.AsnSets = asnSetsInt
+											for i, ps := range sl {
+
+												asMapToStrVal := ps.(map[string]interface{})
+												asnSetsInt[i] = &ves_io_schema.ObjectRefType{}
+
+												asnSetsInt[i].Kind = "bgp_asn_set"
+
+												if v, ok := asMapToStrVal["name"]; ok && !isIntfNil(v) {
+													asnSetsInt[i].Name = v.(string)
+												}
+
+												if v, ok := asMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+													asnSetsInt[i].Namespace = v.(string)
+												}
+
+												if v, ok := asMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+													asnSetsInt[i].Tenant = v.(string)
+												}
+
+												if v, ok := asMapToStrVal["uid"]; ok && !isIntfNil(v) {
+													asnSetsInt[i].Uid = v.(string)
+												}
+
+											}
+
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := rulesMapStrToI["geo_location_label_selector"]; ok && !isIntfNil(v) && !clientChoiceTypeFound {
+
+								clientChoiceTypeFound = true
+								clientChoiceInt := &ves_io_schema_dns_load_balancer.LoadBalancingRule_GeoLocationLabelSelector{}
+								clientChoiceInt.GeoLocationLabelSelector = &ves_io_schema.LabelSelectorType{}
+								rules[i].ClientChoice = clientChoiceInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["expressions"]; ok && !isIntfNil(v) {
+
+											ls := make([]string, len(v.([]interface{})))
+											for i, v := range v.([]interface{}) {
+												ls[i] = v.(string)
+											}
+											clientChoiceInt.GeoLocationLabelSelector.Expressions = ls
+
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := rulesMapStrToI["geo_location_set"]; ok && !isIntfNil(v) && !clientChoiceTypeFound {
+
+								clientChoiceTypeFound = true
+								clientChoiceInt := &ves_io_schema_dns_load_balancer.LoadBalancingRule_GeoLocationSet{}
+								clientChoiceInt.GeoLocationSet = &ves_io_schema_views.ObjectRefType{}
+								rules[i].ClientChoice = clientChoiceInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+											clientChoiceInt.GeoLocationSet.Name = v.(string)
+
+										}
+
+										if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+											clientChoiceInt.GeoLocationSet.Namespace = v.(string)
+
+										}
+
+										if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+											clientChoiceInt.GeoLocationSet.Tenant = v.(string)
+
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := rulesMapStrToI["ip_prefix_list"]; ok && !isIntfNil(v) && !clientChoiceTypeFound {
+
+								clientChoiceTypeFound = true
+								clientChoiceInt := &ves_io_schema_dns_load_balancer.LoadBalancingRule_IpPrefixList{}
+								clientChoiceInt.IpPrefixList = &ves_io_schema_policy.PrefixMatchList{}
+								rules[i].ClientChoice = clientChoiceInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["invert_match"]; ok && !isIntfNil(v) {
+
+											clientChoiceInt.IpPrefixList.InvertMatch = v.(bool)
+
+										}
+
+										if v, ok := cs["ip_prefixes"]; ok && !isIntfNil(v) {
+
+											ls := make([]string, len(v.([]interface{})))
+											for i, v := range v.([]interface{}) {
+												ls[i] = v.(string)
+											}
+											clientChoiceInt.IpPrefixList.IpPrefixes = ls
+
+										}
+
+										if v, ok := cs["ipv6_prefixes"]; ok && !isIntfNil(v) {
+
+											ls := make([]string, len(v.([]interface{})))
+											for i, v := range v.([]interface{}) {
+												ls[i] = v.(string)
+											}
+											clientChoiceInt.IpPrefixList.Ipv6Prefixes = ls
+
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := rulesMapStrToI["ip_prefix_set"]; ok && !isIntfNil(v) && !clientChoiceTypeFound {
+
+								clientChoiceTypeFound = true
+								clientChoiceInt := &ves_io_schema_dns_load_balancer.LoadBalancingRule_IpPrefixSet{}
+								clientChoiceInt.IpPrefixSet = &ves_io_schema_policy.IpMatcherType{}
+								rules[i].ClientChoice = clientChoiceInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["invert_matcher"]; ok && !isIntfNil(v) {
+
+											clientChoiceInt.IpPrefixSet.InvertMatcher = v.(bool)
+
+										}
+
+										if v, ok := cs["prefix_sets"]; ok && !isIntfNil(v) {
+
+											sl := v.([]interface{})
+											prefixSetsInt := make([]*ves_io_schema.ObjectRefType, len(sl))
+											clientChoiceInt.IpPrefixSet.PrefixSets = prefixSetsInt
+											for i, ps := range sl {
+
+												psMapToStrVal := ps.(map[string]interface{})
+												prefixSetsInt[i] = &ves_io_schema.ObjectRefType{}
+
+												prefixSetsInt[i].Kind = "ip_prefix_set"
+
+												if v, ok := psMapToStrVal["name"]; ok && !isIntfNil(v) {
+													prefixSetsInt[i].Name = v.(string)
+												}
+
+												if v, ok := psMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+													prefixSetsInt[i].Namespace = v.(string)
+												}
+
+												if v, ok := psMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+													prefixSetsInt[i].Tenant = v.(string)
+												}
+
+												if v, ok := psMapToStrVal["uid"]; ok && !isIntfNil(v) {
+													prefixSetsInt[i].Uid = v.(string)
+												}
+
+											}
+
+										}
+
+									}
+								}
+
+							}
+
+							if w, ok := rulesMapStrToI["score"]; ok && !isIntfNil(w) {
+								rules[i].Score = uint32(w.(int))
+							}
+
 						}
-
-					}
-
-					if w, ok := rulesMapStrToI["score"]; ok && !isIntfNil(w) {
-						rules[i].Score = uint32(w.(int))
 					}
 
 				}
 
 			}
-
 		}
 
 	}

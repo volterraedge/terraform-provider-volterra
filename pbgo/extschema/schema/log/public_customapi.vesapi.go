@@ -5951,6 +5951,64 @@ var CustomAPISwaggerJSON string = `{
         }
     },
     "definitions": {
+        "access_logAvgAggregation": {
+            "type": "object",
+            "description": "x-displayName: \"Avg aggregation\"\nGet the average value of the numeric values extracted from the field in the access log.",
+            "title": "Average aggregation",
+            "properties": {
+                "field": {
+                    "description": "x-displayName: \"Field\"\nx-required\n\nField name for which average value should be computed.",
+                    "title": "field",
+                    "$ref": "#/definitions/access_logNumKeyField"
+                }
+            }
+        },
+        "access_logFieldSubAggregation": {
+            "type": "object",
+            "description": "x-displayName: \"Field SubAggregation\"\nAggregate access logs in each aggregation field bucket based on one of the sub aggregation types",
+            "title": "Field SubAggregation",
+            "properties": {
+                "avg_aggregation": {
+                    "description": "x-displayName: \"Avg Aggregation\"\nGet the average value of the numeric values for field in the access log",
+                    "title": "Average Aggregation",
+                    "$ref": "#/definitions/access_logAvgAggregation"
+                },
+                "max_aggregation": {
+                    "description": "x-displayName: \"Max Aggregation\"\nGet the maximum value among the numeric values for a field in the log",
+                    "title": "Max Aggregation",
+                    "$ref": "#/definitions/access_logMaxAggregation"
+                },
+                "min_aggregation": {
+                    "description": "x-displayName: \"Min Aggregation\"\nGet the minimum value among the numeric values for a field in the log",
+                    "title": "Min Aggregation",
+                    "$ref": "#/definitions/access_logMinAggregation"
+                }
+            }
+        },
+        "access_logMaxAggregation": {
+            "type": "object",
+            "description": "x-displayName: \"Max aggregation\"\nGet the maximum value among the numeric values extracted from the field in the access log.",
+            "title": "Max aggregation",
+            "properties": {
+                "field": {
+                    "description": "x-displayName: \"Field\"\nx-required\n\nField name for which maximum value should be computed.",
+                    "title": "field",
+                    "$ref": "#/definitions/access_logNumKeyField"
+                }
+            }
+        },
+        "access_logMinAggregation": {
+            "type": "object",
+            "description": "x-displayName: \"Min aggregation\"\nGet the minimum value among the numeric values extracted from the field in the access log.",
+            "title": "Min aggregation",
+            "properties": {
+                "field": {
+                    "description": "x-displayName: \"Field\"\nx-required\n\nField name for which minimum value should be computed.",
+                    "title": "field",
+                    "$ref": "#/definitions/access_logNumKeyField"
+                }
+            }
+        },
         "access_logMultiFieldAggregation": {
             "type": "object",
             "description": "x-displayName: \"Multi-Field Aggregation\"\nAggregate security events based on the multiple fields in the security event.",
@@ -5960,6 +6018,11 @@ var CustomAPISwaggerJSON string = `{
                     "description": "x-displayName: \"Field\"\nx-required\n\nMulti-key field by which the access logs should be aggregated.",
                     "title": "field",
                     "$ref": "#/definitions/access_logMultiKeyField"
+                },
+                "sub_aggs": {
+                    "type": "object",
+                    "description": "x-displayName: \"Sub Aggregation\"\nThis option provides sub-aggregation for each multi-field aggregation bucket.",
+                    "title": "sub aggregation"
                 },
                 "topk": {
                     "type": "integer",
@@ -5979,6 +6042,16 @@ var CustomAPISwaggerJSON string = `{
                 "API_ENDPOINT_METHOD_RSP_CODE_CLASS"
             ],
             "default": "VH_NAME_NAMESPACE"
+        },
+        "access_logNumKeyField": {
+            "type": "string",
+            "description": "x-displayName: \"Num-Key Field\"\nAccess log can be aggregated based on these numeric fields.\n\n - DURATION_WITH_DATA_TX_DELAY: x-displayName: \"DURATION WITH DATA TX DELAY\"\n - TIMESTAMP: x-displayName: \"TIMESTAMP\"",
+            "title": "Numeric-Key Field",
+            "enum": [
+                "DURATION_WITH_DATA_TX_DELAY",
+                "TIMESTAMP"
+            ],
+            "default": "DURATION_WITH_DATA_TX_DELAY"
         },
         "logAccessLogAggregationRequest": {
             "type": "object",
@@ -6220,6 +6293,19 @@ var CustomAPISwaggerJSON string = `{
                 }
             }
         },
+        "logAvgAggregationData": {
+            "type": "object",
+            "description": "x-displayName: \"Avg Aggregation Data\"\nAverage Aggregation data",
+            "title": "AvgAggregationData",
+            "properties": {
+                "value": {
+                    "type": "number",
+                    "description": "x-displayName: \"Value\"\nx-example: 985.0\n\nvalue corresponding to the average value of field",
+                    "title": "value",
+                    "format": "double"
+                }
+            }
+        },
         "logCardinalityAggregationData": {
             "type": "object",
             "description": "x-displayName: \"Cardinality Aggregation Data\"\nApproximate count of distinct values of the log field specified in the request.",
@@ -6380,6 +6466,11 @@ var CustomAPISwaggerJSON string = `{
             "description": "x-displayName: \"Field SubAggregation\"\nField subaggregation data",
             "title": "FieldSubAggregationData",
             "properties": {
+                "avg_aggregation": {
+                    "description": "x-displayName: \"Avg Aggregation\"\nAvg Aggregation Data",
+                    "title": "Average Aggregation",
+                    "$ref": "#/definitions/logAvgAggregationData"
+                },
                 "buckets": {
                     "type": "array",
                     "description": "x-displayName: \"Buckets\"\nLists of buckets containing field values and the corresponding log count",
@@ -6392,6 +6483,115 @@ var CustomAPISwaggerJSON string = `{
                     "description": "cardinality aggregation data",
                     "title": "cardinality aggregation\nx-displayName: \"Cardinality Aggregation\"",
                     "$ref": "#/definitions/logCardinalityAggregationData"
+                },
+                "filter_aggregation": {
+                    "description": "x-displayName: \"Filter Aggregation\"\nFilter Aggregation Data",
+                    "title": "Filter Aggregation",
+                    "$ref": "#/definitions/logFilterAggregationData"
+                },
+                "max_aggregation": {
+                    "description": "x-displayName: \"Max Aggregation\"\nMax Aggregation Data",
+                    "title": "Max Aggregation",
+                    "$ref": "#/definitions/logMaxAggregationData"
+                },
+                "min_aggregation": {
+                    "description": "x-displayName: \"Min Aggregation\"\nMin Aggregation Data",
+                    "title": "Min Aggregation",
+                    "$ref": "#/definitions/logMinAggregationData"
+                },
+                "multi_filter_aggregation": {
+                    "description": "x-displayName: \"Multi Filter Aggregation\"\nMulti Filter Aggregation Data",
+                    "title": "Multi Filter Aggregation",
+                    "$ref": "#/definitions/logMultiFilterAggregationData"
+                }
+            }
+        },
+        "logFieldSubFieldAggregationBucket": {
+            "type": "object",
+            "description": "x-displayName: \"Field Sub Field Aggregation Bucket\"\nField sub aggregation bucket containing field values and the number of logs.",
+            "title": "FieldSubFieldAggregationBucket",
+            "properties": {
+                "count": {
+                    "type": "string",
+                    "description": "x-displayName: \"Count\"\nx-example: 45\n\nnumber of logs in this bucket",
+                    "title": "count",
+                    "format": "uint64"
+                },
+                "key": {
+                    "type": "string",
+                    "description": "x-displayName: \"Key\"\nKey contain the name/value pair that identifies the unique key fields\nx-example: \"HIT, MISS, REVALIDATED\"",
+                    "title": "keys"
+                }
+            }
+        },
+        "logFieldSubFieldAggregationData": {
+            "type": "object",
+            "description": "x-displayName: \"Field Sub Field Aggregation Data\"\nField Aggregation data as Field Sub-aggregation",
+            "title": "FieldSubFieldAggregationData",
+            "properties": {
+                "buckets": {
+                    "type": "array",
+                    "description": "x-displayName: \"Buckets\"\nLists of buckets containing field value and the corresponding log count",
+                    "title": "buckets",
+                    "items": {
+                        "$ref": "#/definitions/logFieldSubFieldAggregationBucket"
+                    }
+                }
+            }
+        },
+        "logFilterAggregationData": {
+            "type": "object",
+            "description": "x-displayName: \"Filter Aggregation Data\"\nFilter Aggregation Data",
+            "title": "FilterAggregationData",
+            "properties": {
+                "count": {
+                    "type": "string",
+                    "description": "x-displayName: \"Count\"\nx-example: 45\n\nnumber of logs in this bucket",
+                    "title": "count",
+                    "format": "uint64"
+                },
+                "sub_aggs": {
+                    "type": "object",
+                    "description": "x-displayName: \"Sub Aggregation\"\nSub aggregation data for the filter aggregation",
+                    "title": "sub aggregation"
+                }
+            }
+        },
+        "logFilterSubAggregationData": {
+            "type": "object",
+            "description": "x-displayName: \"FilterSubAggregation\"\nFilter subaggregation data",
+            "title": "FilterSubAggregationData",
+            "properties": {
+                "buckets": {
+                    "type": "array",
+                    "description": "x-displayName: \"Buckets\"\nLists of buckets containing field value and the corresponding log count",
+                    "title": "buckets",
+                    "items": {
+                        "$ref": "#/definitions/logFilterSubFieldAggregationBucket"
+                    }
+                }
+            }
+        },
+        "logFilterSubFieldAggregationBucket": {
+            "type": "object",
+            "description": "x-displayName: \"Filter Sub Field Aggregation Bucket\"\nField sub aggregation bucket containing field values and the number of logs.",
+            "title": "FilterSubFieldAggregationBucket",
+            "properties": {
+                "count": {
+                    "type": "string",
+                    "description": "x-displayName: \"Count\"\nx-example: 45\n\nnumber of logs in this bucket",
+                    "title": "count",
+                    "format": "uint64"
+                },
+                "key": {
+                    "type": "string",
+                    "description": "x-displayName: \"Key\"\nKey contain the name/value pair that identifies the unique key fields\nx-example: \"HIT, MISS, REVALIDATED\"",
+                    "title": "keys"
+                },
+                "sub_aggs": {
+                    "type": "object",
+                    "description": "x-displayName: \"Sub Aggregation\"\nSub aggregation data for the filter aggregation",
+                    "title": "sub aggregation"
                 }
             }
         },
@@ -6788,6 +6988,11 @@ var CustomAPISwaggerJSON string = `{
             "description": "x-displayName: \"Log Aggregation\"\nLog aggregation response data",
             "title": "LogAggregationData",
             "properties": {
+                "avg_aggregation": {
+                    "description": "x-displayName: \"Avg Aggregation\"\nAvg Aggregation Data",
+                    "title": "Average Aggregation",
+                    "$ref": "#/definitions/logAvgAggregationData"
+                },
                 "cardinality_aggregation": {
                     "description": "Cardinality aggregation data",
                     "title": "cardinality aggregation\nx-displayName: \"Cardinality Aggregation\"",
@@ -6803,15 +7008,35 @@ var CustomAPISwaggerJSON string = `{
                     "title": "field aggregation\nx-displayName: \"Field Aggregation\"",
                     "$ref": "#/definitions/logFieldAggregationData"
                 },
+                "filter_aggregation": {
+                    "description": "x-displayName: \"Filter Aggregation\"\nFilter Aggregation Data",
+                    "title": "Filter Aggregation",
+                    "$ref": "#/definitions/logFilterAggregationData"
+                },
+                "max_aggregation": {
+                    "description": "x-displayName: \"Max Aggregation\"\nMax Aggregation Data",
+                    "title": "Max Aggregation",
+                    "$ref": "#/definitions/logMaxAggregationData"
+                },
                 "metrics_aggregation": {
                     "description": "x-displayName: \"Metrics Aggregation\"\nMetrics aggregation data",
                     "title": "metrics Aggregation",
                     "$ref": "#/definitions/logMetricsAggregationData"
                 },
+                "min_aggregation": {
+                    "description": "x-displayName: \"Min Aggregation\"\nMin Aggregation Data",
+                    "title": "Min Aggregation",
+                    "$ref": "#/definitions/logMinAggregationData"
+                },
                 "multi_field_aggregation": {
                     "description": "Multi-Field aggregation data",
                     "title": "multi-field aggregation\nx-displayName: \"Multi-Field Aggregation\"",
                     "$ref": "#/definitions/logMultiFieldAggregationData"
+                },
+                "multi_filter_aggregation": {
+                    "description": "x-displayName: \"Multi Filter Aggregation\"\nMulti Filter Aggregation Data",
+                    "title": "Multi Filter Aggregation",
+                    "$ref": "#/definitions/logMultiFilterAggregationData"
                 }
             }
         },
@@ -6901,6 +7126,19 @@ var CustomAPISwaggerJSON string = `{
                 }
             }
         },
+        "logMaxAggregationData": {
+            "type": "object",
+            "description": "x-displayName: \"Max Aggregation Data\"\nMax Aggregation data",
+            "title": "MaxAggregationData",
+            "properties": {
+                "value": {
+                    "type": "number",
+                    "description": "x-displayName: \"Value\"\nx-example: 985.0\n\nvalue corresponding to the maximum value of field",
+                    "title": "value",
+                    "format": "double"
+                }
+            }
+        },
         "logMetricsAggregationData": {
             "type": "object",
             "description": "x-displayName: \"Metrics Aggregation\"\nMetrics aggregation data",
@@ -6910,6 +7148,19 @@ var CustomAPISwaggerJSON string = `{
                     "description": "percentile aggregation data",
                     "title": "percentile aggregation\nx-displayName: \"Percentile Aggregation\"",
                     "$ref": "#/definitions/logPercentileAggregationData"
+                }
+            }
+        },
+        "logMinAggregationData": {
+            "type": "object",
+            "description": "x-displayName: \"Min Aggregation Data\"\nMin Aggregation data",
+            "title": "MinAggregationData",
+            "properties": {
+                "value": {
+                    "type": "number",
+                    "description": "x-displayName: \"Value\"\nx-example: 985.0\n\nvalue corresponding to the minimum value of field",
+                    "title": "value",
+                    "format": "double"
                 }
             }
         },
@@ -6961,10 +7212,43 @@ var CustomAPISwaggerJSON string = `{
             "description": "x-displayName: \"Multi Field SubAggregation\"\nField subaggregation data",
             "title": "MultiFieldSubAggregationData",
             "properties": {
+                "avg_aggregation": {
+                    "description": "x-displayName: \"Avg Aggregation\"\nAvg Aggregation Data",
+                    "title": "Average Aggregation",
+                    "$ref": "#/definitions/logAvgAggregationData"
+                },
                 "cardinality_aggregation": {
                     "description": "cardinality aggregation data",
                     "title": "cardinality aggregation\nx-displayName: \"Cardinality Aggregation\"",
                     "$ref": "#/definitions/logCardinalityAggregationData"
+                },
+                "max_aggregation": {
+                    "description": "x-displayName: \"Max Aggregation\"\nMax Aggregation Data",
+                    "title": "Max Aggregation",
+                    "$ref": "#/definitions/logMaxAggregationData"
+                },
+                "min_aggregation": {
+                    "description": "x-displayName: \"Min Aggregation\"\nMin Aggregation Data",
+                    "title": "Min Aggregation",
+                    "$ref": "#/definitions/logMinAggregationData"
+                },
+                "top_hits_aggregation": {
+                    "description": "Top Hits Aggregation Data",
+                    "title": "Top Hits Aggregation\nx-displayName: \"Top Hits Aggregation\"",
+                    "$ref": "#/definitions/logTopHitsAggregationData"
+                }
+            }
+        },
+        "logMultiFilterAggregationData": {
+            "type": "object",
+            "description": "x-displayName: \"Multi Filter Aggregation Data\"\nMulti Filter Aggregation data",
+            "title": "MultiFilterAggregationData",
+            "properties": {
+                "count": {
+                    "type": "string",
+                    "description": "x-displayName: \"Count\"\nx-example: 45\n\nnumber of logs in this bucket",
+                    "title": "count",
+                    "format": "uint64"
                 }
             }
         },
@@ -6996,6 +7280,27 @@ var CustomAPISwaggerJSON string = `{
                     "description": "x-displayName: \"Value\"\nx-example: 985.0\n\nvalue corresponding to the key percent",
                     "title": "value",
                     "format": "double"
+                }
+            }
+        },
+        "logTopHitsAggregationData": {
+            "type": "object",
+            "description": "x-displayName: \"TopHits Aggregation Data\"\nTop Hits Aggregation Data.",
+            "title": "TopHitsAggregationData",
+            "properties": {
+                "count": {
+                    "type": "string",
+                    "description": "x-displayName: \"Count\"\nx-example: 100\nCount of top hit values",
+                    "title": "count",
+                    "format": "uint64"
+                },
+                "documents": {
+                    "type": "array",
+                    "description": "x-displayName: \"Documents\"\ndocument values",
+                    "title": "documents",
+                    "items": {
+                        "type": "string"
+                    }
                 }
             }
         },
@@ -7244,6 +7549,11 @@ var CustomAPISwaggerJSON string = `{
             "description": "x-displayName: \"Aggregation Request\"\nAggregation request to provide analytics data over the log response",
             "title": "Aggregation Request",
             "properties": {
+                "avg_aggregation": {
+                    "description": "x-displayName: \"Avg Aggregation\"\nGet the average value of the numeric values for field in the access log",
+                    "title": "Average Aggregation",
+                    "$ref": "#/definitions/access_logAvgAggregation"
+                },
                 "cardinality_aggregation": {
                     "description": "x-displayName: \"Cardinality Aggregation\"\nGet approximate count of distinct values for a field in the log",
                     "title": "Cardinality Aggregation",
@@ -7258,6 +7568,16 @@ var CustomAPISwaggerJSON string = `{
                     "description": "x-displayName: \"Field Aggregation\"\nAggregate based on one of the key fields in the log",
                     "title": "Field Aggregation",
                     "$ref": "#/definitions/logaccess_logFieldAggregation"
+                },
+                "max_aggregation": {
+                    "description": "x-displayName: \"Max Aggregation\"\nGet the maximum value among the numeric values for a field in the log",
+                    "title": "Max Aggregation",
+                    "$ref": "#/definitions/access_logMaxAggregation"
+                },
+                "min_aggregation": {
+                    "description": "x-displayName: \"Min Aggregation\"\nGet the minimum value among the numeric values for a field in the log",
+                    "title": "Min Aggregation",
+                    "$ref": "#/definitions/access_logMinAggregation"
                 },
                 "multi_field_aggregation": {
                     "description": "x-displayName: \"Multi-Field Aggregation\"\nAggregate based on multiple key fields in the access log",
@@ -7321,6 +7641,11 @@ var CustomAPISwaggerJSON string = `{
                     "description": "x-displayName: \"Field\"\nx-required\n\nField name by which the logs should be aggregated.",
                     "title": "field",
                     "$ref": "#/definitions/logaccess_logKeyField"
+                },
+                "sub_aggs": {
+                    "type": "object",
+                    "description": "x-displayName: \"Sub Aggregation\"\nThis option provides sub-aggregation for each field aggregation bucket.",
+                    "title": "sub aggregation"
                 },
                 "topk": {
                     "type": "integer",

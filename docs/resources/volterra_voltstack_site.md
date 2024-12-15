@@ -1,9 +1,9 @@
 ---
 
 page_title: "Volterra: voltstack_site"
-description: "The voltstack_site allows CRUD of Voltstack Site resource on Volterra SaaS"
 
----
+description: "The voltstack_site allows CRUD of Voltstack Site resource on Volterra SaaS"
+-----------------------------------------------------------------------------------------
 
 Resource volterra_voltstack_site
 ================================
@@ -26,7 +26,20 @@ resource "volterra_voltstack_site" "example" {
 
   // One of the arguments from this list "bond_device_list no_bond_devices" must be set
 
-  no_bond_devices = true
+  bond_device_list {
+    bond_devices {
+      devices = ["eth0"]
+
+      // One of the arguments from this list "active_backup lacp" must be set
+
+      lacp {
+        rate = "30"
+      }
+      link_polling_interval = "1000"
+      link_up_delay = "200"
+      name = "bond0"
+    }
+  }
 
   // One of the arguments from this list "disable_gpu enable_gpu enable_vgpu" must be set
 
@@ -38,7 +51,11 @@ resource "volterra_voltstack_site" "example" {
 
   // One of the arguments from this list "log_receiver logs_streaming_disabled" must be set
 
-  logs_streaming_disabled = true
+  log_receiver {
+    name      = "test1"
+    namespace = "staging"
+    tenant    = "acmecorp"
+  }
   master_node_configuration {
     name = "master-0"
 
@@ -47,19 +64,57 @@ resource "volterra_voltstack_site" "example" {
 
   // One of the arguments from this list "custom_network_config default_network_config" must be set
 
-  default_network_config = true
+  custom_network_config {
+    bgp_peer_address = "10.1.1.1"
+
+    bgp_peer_address_v6 = "3c0f:7554:352a:a2dc:333f:67c5:c2b5:7326"
+
+    bgp_router_id = "10.1.1.1"
+
+    // One of the arguments from this list "active_forward_proxy_policies forward_proxy_allow_all no_forward_proxy" must be set
+
+    no_forward_proxy = true
+
+    // One of the arguments from this list "global_network_list no_global_network" must be set
+
+    no_global_network = true
+
+    // One of the arguments from this list "default_interface_config interface_list" must be set
+
+    default_interface_config = true
+
+    // One of the arguments from this list "active_enhanced_firewall_policies active_network_policies no_network_policy" must be set
+
+    active_enhanced_firewall_policies {
+      enhanced_firewall_policies {
+        name      = "test1"
+        namespace = "staging"
+        tenant    = "acmecorp"
+      }
+    }
+    outside_nameserver = "10.1.1.1"
+    outside_nameserver_v6 = "1001::1"
+    outside_vip = "10.1.1.1"
+    outside_vip_v6 = "2001::1"
+
+    // One of the arguments from this list "site_to_site_tunnel_ip sm_connection_public_ip sm_connection_pvt_ip" must be set
+
+    sm_connection_public_ip = true
+
+    // One of the arguments from this list "default_sli_config sli_config" can be set
+
+    default_sli_config = true
+
+    // One of the arguments from this list "default_config slo_config" must be set
+
+    default_config = true
+    tunnel_dead_timeout = "0"
+    vip_vrrp_mode = "vip_vrrp_mode"
+  }
 
   // One of the arguments from this list "default_sriov_interface sriov_interfaces" must be set
 
-  sriov_interfaces {
-    sriov_interface {
-      interface_name = "eth0"
-
-      number_of_vfio_vfs = "2"
-
-      number_of_vfs = "3"
-    }
-  }
+  default_sriov_interface = true
 
   // One of the arguments from this list "custom_storage_config default_storage_config" must be set
 
@@ -210,9 +265,9 @@ Enable Kubernetes Drain during OS or SW upgrade.
 
 ###### One of the arguments from this list "disable_upgrade_drain, enable_upgrade_drain" must be set
 
-`disable_upgrade_drain` - (Optional) x-displayName: "Disable Node by Node Upgrade" (`Bool`).
+`disable_upgrade_drain` - (Optional) x-displayName: "Disable" (`Bool`).
 
-`enable_upgrade_drain` - (Optional) x-displayName: "Enable Node by Node Upgrade". See [Kubernetes Upgrade Drain Enable Choice Enable Upgrade Drain ](#kubernetes-upgrade-drain-enable-choice-enable-upgrade-drain) below for details.
+`enable_upgrade_drain` - (Optional) x-displayName: "Enable". See [Kubernetes Upgrade Drain Enable Choice Enable Upgrade Drain ](#kubernetes-upgrade-drain-enable-choice-enable-upgrade-drain) below for details.
 
 ### Master Node Configuration
 
@@ -1170,6 +1225,8 @@ Loopback device..
 
 Tunnel interface, Ipsec tunnels to other networking devices..
 
+`cloud_connect` - (Optional) The clould connect this network interface is connecting to incase of Cloud Sites. See [ref](#ref) below for details.(Deprecated)
+
 `mtu` - (Optional) When configured, mtu must be between 512 and 16384 (`Int`).
 
 ###### One of the arguments from this list "inside_network, site_local_inside_network, site_local_network" must be set
@@ -1276,11 +1333,11 @@ Blindfold Secret Internal is used for the putting re-encrypted blindfold secret.
 
 ### Kubernetes Upgrade Drain Enable Choice Disable Upgrade Drain
 
-x-displayName: "Disable Node by Node Upgrade".
+x-displayName: "Disable".
 
 ### Kubernetes Upgrade Drain Enable Choice Enable Upgrade Drain
 
-x-displayName: "Enable Node by Node Upgrade".
+x-displayName: "Enable".
 
 ###### One of the arguments from this list "drain_max_unavailable_node_count, drain_max_unavailable_node_percentage" must be set
 

@@ -24,6 +24,84 @@ var (
 
 // augmented methods on protoc/std generated struct
 
+func (m *CellProperties) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *CellProperties) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *CellProperties) DeepCopy() *CellProperties {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &CellProperties{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *CellProperties) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *CellProperties) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return CellPropertiesValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateCellProperties struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateCellProperties) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*CellProperties)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *CellProperties got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["status_style"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("status_style"))
+		if err := fv(ctx, m.GetStatusStyle(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultCellPropertiesValidator = func() *ValidateCellProperties {
+	v := &ValidateCellProperties{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func CellPropertiesValidator() db.Validator {
+	return DefaultCellPropertiesValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *Display) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -270,6 +348,15 @@ func (v *ValidateFieldProperties) Validate(ctx context.Context, pm interface{}, 
 
 		vOpts := append(opts, db.WithValidateField("title"))
 		if err := fv(ctx, m.GetTitle(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["tooltip"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("tooltip"))
+		if err := fv(ctx, m.GetTooltip(), vOpts...); err != nil {
 			return err
 		}
 

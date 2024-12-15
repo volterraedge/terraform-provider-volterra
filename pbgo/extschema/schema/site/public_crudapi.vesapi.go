@@ -851,21 +851,31 @@ func (s *APISrv) Replace(ctx context.Context, req *ReplaceRequest) (*ReplaceResp
 		}
 	}
 	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.sf, "ves.io.schema.site.API.ReplaceRequest", req)
+	var retErr error
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
 		}
+		userMsg := "The 'ves.io.schema.site.API.Replace' operation on 'site'"
+		if retErr == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
 	rsrcReq := &server.ResourceReplaceRequest{RequestMsg: req}
 	rsrcRsp, err := s.opts.RsrcHandler.ReplaceFn(ctx, rsrcReq, s.apiWrapper)
 	if err != nil {
 		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "ReplaceResource"))
+		retErr = err
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 	rsp, err := NewObjectReplaceRsp(rsrcRsp.Entry)
 	if err != nil {
 		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "ReplaceResponse"))
+		retErr = err
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.sf, "ves.io.schema.site.API.ReplaceResponse", rsp)...)
@@ -1251,7 +1261,7 @@ var APISwaggerJSON string = `{
     "swagger": "2.0",
     "info": {
         "title": "Site",
-        "description": "Site represent physical/cloud cluster of volterra processing elements. There are two types of sites currently.\n\n   Regional Edge (RE)\n\n    Regional Edge sites are network edge sites owned and operated by volterra edge cloud. RE can be used to\n    host VIPs, run API gateway or any application at network edge.\n\n   Customer Edge (CE)\n\n    Customer Edge sites are edge sites owned by customer and operated by volterra cloud. CE can be as application gateway\n    to connect applications in multiple clusters or clouds. CE can also run applications at customer premise.\n\nSite configuration contains the information like\n\n    Site locations\n    parameters to override fleet config\n    IP Addresses to be used by automatic vip assignments for default networks\n    etc\n\n Sites are automatically created by registration mechanism. They can be modified to add location or description and they can be deleted.",
+        "description": "Site represent physical/cloud cluster of volterra processing elements. There are two types of sites currently.\n\n   Regional Edge (RE)\n\n    Regional Edge sites are network edge sites owned and operated by volterra edge cloud. RE can be used to\n    host VIPs, run API gateway or any application at network edge.\n\n   Customer Edge (CE)\n\n    Customer Edge sites are edge sites owned by customer and operated by volterra cloud. CE can be as application gateway\n    to connect applications in multiple clusters or clouds. CE can also run applications at customer premise.\n   \n   Nginx One\n     Nginx One sites are sites owned and operated by Nginx One SaaS Console. Nginx One site can be used to configure service\n     discovery which allows customer to bring their NGINX inventory visibility into the core XC workspaces.\n\nSite configuration contains the information like\n\n    Site locations\n    parameters to override fleet config\n    IP Addresses to be used by automatic vip assignments for default networks\n    etc\n\n Sites are automatically created by registration mechanism. They can be modified to add location or description and they can be deleted.",
         "version": "version not set"
     },
     "schemes": [
@@ -1659,6 +1669,73 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "schemaBlindfoldSecretInfoType": {
+            "type": "object",
+            "description": "BlindfoldSecretInfoType specifies information about the Secret managed by F5XC Secret Management",
+            "title": "BlindfoldSecretInfoType",
+            "x-displayname": "Blindfold Secret",
+            "x-ves-displayorder": "3,1,2",
+            "x-ves-proto-message": "ves.io.schema.BlindfoldSecretInfoType",
+            "properties": {
+                "decryption_provider": {
+                    "type": "string",
+                    "description": " Name of the Secret Management Access object that contains information about the backend Secret Management service.\n\nExample: - \"value\"-",
+                    "title": "Decryption Provider",
+                    "x-displayname": "Decryption Provider",
+                    "x-ves-example": "value"
+                },
+                "location": {
+                    "type": "string",
+                    "description": " Location is the uri_ref. It could be in url format for string:///\n Or it could be a path if the store provider is an http/https location\n\nExample: - \"string:///U2VjcmV0SW5mb3JtYXRpb24=\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.uri_ref: true\n",
+                    "title": "Location",
+                    "x-displayname": "Location",
+                    "x-ves-example": "string:///U2VjcmV0SW5mb3JtYXRpb24=",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.uri_ref": "true"
+                    }
+                },
+                "store_provider": {
+                    "type": "string",
+                    "description": " Name of the Secret Management Access object that contains information about the store to get encrypted bytes\n This field needs to be provided only if the url scheme is not string:///\n\nExample: - \"value\"-",
+                    "title": "Store Provider",
+                    "x-displayname": "Store Provider",
+                    "x-ves-example": "value"
+                }
+            }
+        },
+        "schemaClearSecretInfoType": {
+            "type": "object",
+            "description": "ClearSecretInfoType specifies information about the Secret that is not encrypted.",
+            "title": "ClearSecretInfoType",
+            "x-displayname": "In-Clear Secret",
+            "x-ves-displayorder": "2,1",
+            "x-ves-proto-message": "ves.io.schema.ClearSecretInfoType",
+            "properties": {
+                "provider": {
+                    "type": "string",
+                    "description": " Name of the Secret Management Access object that contains information about the store to get encrypted bytes\n This field needs to be provided only if the url scheme is not string:///\n\nExample: - \"box-provider\"-",
+                    "title": "Provider",
+                    "x-displayname": "Provider",
+                    "x-ves-example": "box-provider"
+                },
+                "url": {
+                    "type": "string",
+                    "description": " URL of the secret. Currently supported URL schemes is string:///.\n For string:/// scheme, Secret needs to be encoded Base64 format.\n When asked for this secret, caller will get Secret bytes after Base64 decoding.\n\nExample: - \"string:///U2VjcmV0SW5mb3JtYXRpb24=\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_bytes: 131072\n  ves.io.schema.rules.string.uri_ref: true\n",
+                    "title": "URL",
+                    "maxLength": 131072,
+                    "x-displayname": "URL",
+                    "x-ves-example": "string:///U2VjcmV0SW5mb3JtYXRpb24=",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_bytes": "131072",
+                        "ves.io.schema.rules.string.uri_ref": "true"
+                    }
+                }
+            }
+        },
         "schemaCloudLinkState": {
             "type": "string",
             "description": "State of the CloudLink connections\n\n - UP: Up\n\nCloudLink and their corresponding Direct Connect connections are up and healthy\n - DOWN: Down\n\nCloudLink and their corresponding Direct Connect connections are down\n - DEGRADED: Degraded\n\nSome of Direct Connect connections with the CloudLink are down",
@@ -2048,6 +2125,38 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "schemaSecretEncodingType": {
+            "type": "string",
+            "description": "x-displayName: \"Secret Encoding\"\nSecretEncodingType defines the encoding type of the secret before handled by the Secret Management Service.\n\n - EncodingNone: x-displayName: \"None\"\nNo Encoding\n - EncodingBase64: Base64\n\nx-displayName: \"Base64\"\nBase64 encoding",
+            "title": "SecretEncodingType",
+            "enum": [
+                "EncodingNone",
+                "EncodingBase64"
+            ],
+            "default": "EncodingNone"
+        },
+        "schemaSecretType": {
+            "type": "object",
+            "description": "SecretType is used in an object to indicate a sensitive/confidential field",
+            "title": "SecretType",
+            "x-displayname": "Secret",
+            "x-ves-oneof-field-secret_info_oneof": "[\"blindfold_secret_info\",\"clear_secret_info\"]",
+            "x-ves-proto-message": "ves.io.schema.SecretType",
+            "properties": {
+                "blindfold_secret_info": {
+                    "description": "Exclusive with [clear_secret_info]\n Blindfold Secret is used for the secrets managed by F5XC Secret Management Service",
+                    "title": "Blindfold Secret",
+                    "$ref": "#/definitions/schemaBlindfoldSecretInfoType",
+                    "x-displayname": "Blindfold Secret"
+                },
+                "clear_secret_info": {
+                    "description": "Exclusive with [blindfold_secret_info]\n Clear Secret is used for the secrets that are not encrypted",
+                    "title": "Clear Secret",
+                    "$ref": "#/definitions/schemaClearSecretInfoType",
+                    "x-displayname": "Clear Secret"
+                }
+            }
+        },
         "schemaSiteInfo": {
             "type": "object",
             "description": "Information about a particular site.",
@@ -2340,6 +2449,39 @@ var APISwaggerJSON string = `{
             "x-displayname": "Tunnel Encapsulation Type",
             "x-ves-proto-enum": "ves.io.schema.TunnelEncapsulationType"
         },
+        "schemaVaultSecretInfoType": {
+            "type": "object",
+            "description": "x-displayName: \"Vault Secret\"\nVaultSecretInfoType specifies information about the Secret managed by Hashicorp Vault.",
+            "title": "VaultSecretInfoType",
+            "properties": {
+                "key": {
+                    "type": "string",
+                    "description": "x-displayName: \"Key\"\nx-example: \"key_pem\"\nKey of the individual secret. Vault Secrets are stored as key-value pair.\nIf user is only interested in one value from the map, this field should be set to the corresponding key.\nIf not provided entire secret will be returned.",
+                    "title": "Key"
+                },
+                "location": {
+                    "type": "string",
+                    "description": "x-displayName: \"Location\"\nx-required\nx-example: \"v1/data/vhost_key\"\nPath to secret in Vault.",
+                    "title": "Location"
+                },
+                "provider": {
+                    "type": "string",
+                    "description": "x-displayName: \"Provider\"\nx-required\nx-example: \"vault-vh-provider\"\nName of the Secret Management Access object that contains information about the backend Vault.",
+                    "title": "Provider"
+                },
+                "secret_encoding": {
+                    "description": "x-displayName: \"Secret Encoding\"\nThis field defines the encoding type of the secret BEFORE the secret is put into Hashicorp Vault.",
+                    "title": "secret_encoding",
+                    "$ref": "#/definitions/schemaSecretEncodingType"
+                },
+                "version": {
+                    "type": "integer",
+                    "description": "x-displayName: \"Version\"\nx-example: \"1\"\nVersion of the secret to be fetched. As vault secrets are versioned, user can specify this field to fetch specific version.\nIf not provided latest version will be returned.",
+                    "title": "Version",
+                    "format": "int64"
+                }
+            }
+        },
         "schemaViewRefType": {
             "type": "object",
             "description": "ViewRefType represents a reference to a view",
@@ -2412,6 +2554,18 @@ var APISwaggerJSON string = `{
             "default": "VIRTUAL_NETWORK_SITE_LOCAL",
             "x-displayname": "Virtual Network Type",
             "x-ves-proto-enum": "ves.io.schema.VirtualNetworkType"
+        },
+        "schemaWingmanSecretInfoType": {
+            "type": "object",
+            "description": "x-displayName: \"Wingman Secret\"\nWingmanSecretInfoType specifies the handle to the wingman secret",
+            "title": "WingmanSecretInfoType",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "description": "x-displayName: \"Name\"\nx-required\nx-example: \"ChargeBack-API-Key\"\nName of the secret.",
+                    "title": "Name"
+                }
+            }
         },
         "schemasiteNode": {
             "type": "object",
@@ -3369,6 +3523,11 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.string.max_len": "256"
                     }
                 },
+                "admin_user_credentials": {
+                    "description": " Setup user credentials to manage access to nodes belonging to the site.",
+                    "$ref": "#/definitions/viewsAdminUserCredentialsType",
+                    "x-displayname": "Admin User Credentials"
+                },
                 "bgp_peer_address": {
                     "type": "string",
                     "description": " Optional bgp peer address that can be used as parameter for BGP configuration when BGP is configured\n to fetch BGP peer address from site Object. This can be used to change peer addres per site in fleet.\n\nExample: - \"10.1.1.1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ip: true\n",
@@ -3568,6 +3727,11 @@ var APISwaggerJSON string = `{
                     "description": " Private Connectivity Information like ADN network name and cloud link information",
                     "$ref": "#/definitions/viewsPrivateConnectivityType",
                     "x-displayname": "Private Connectivity Information"
+                },
+                "proactive_monitoring": {
+                    "description": " Proactive Monitoring",
+                    "$ref": "#/definitions/viewsProactiveMonitoringChoice",
+                    "x-displayname": "Proactive Monitoring"
                 },
                 "re_select": {
                     "description": " Selection criteria for Regional Edge connectivity",
@@ -4826,7 +4990,8 @@ var APISwaggerJSON string = `{
             "enum": [
                 "INVALID",
                 "REGIONAL_EDGE",
-                "CUSTOMER_EDGE"
+                "CUSTOMER_EDGE",
+                "NGINX_ONE"
             ],
             "default": "INVALID",
             "x-displayname": "Site Type",
@@ -5759,13 +5924,52 @@ var APISwaggerJSON string = `{
             ],
             "default": "UPGRADE_SUCCESSFUL"
         },
+        "viewsAdminUserCredentialsType": {
+            "type": "object",
+            "description": "Setup user credentials to manage access to nodes belonging to the site.\nWhen configured, 'admin' user will be setup and customers can access these nodes via\neither the node local WebUI or via SSH to access shell/CLI\nEnsure 'Node Local Services' are enabled to allow for required access",
+            "title": "Admin User Credentials",
+            "x-displayname": "Admin User Credentials",
+            "x-ves-proto-message": "ves.io.schema.views.AdminUserCredentialsType",
+            "properties": {
+                "admin_password": {
+                    "description": " Provided password can be used for accessing nodes of the site.\n When provided, customers can either ssh to the nodes of this Customer Edge site or use the node local WebUI by using admin as the user.",
+                    "title": "Admin Password",
+                    "$ref": "#/definitions/schemaSecretType",
+                    "x-displayname": "Admin Password"
+                },
+                "ssh_key": {
+                    "type": "string",
+                    "description": " Provided Public SSH key can be used for accessing nodes of the site.\n When provided, customers can ssh to the nodes of this Customer Edge site using admin as the user.\n\nExample: - \"ssh-rsa AAAAB...\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 8192\n",
+                    "title": "Public SSH key",
+                    "maxLength": 8192,
+                    "x-displayname": "Public SSH key",
+                    "x-ves-example": "ssh-rsa AAAAB...",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "8192"
+                    }
+                }
+            }
+        },
         "viewsAzureVnetType": {
             "type": "object",
             "description": "Resource group and name of existing Azure Vnet",
             "title": "Azure Existing Vnet Type",
             "x-displayname": "Azure Existing Vnet Type",
+            "x-ves-oneof-field-routing_type": "[\"f5_orchestrated_routing\",\"manual_routing\"]",
             "x-ves-proto-message": "ves.io.schema.views.AzureVnetType",
             "properties": {
+                "f5_orchestrated_routing": {
+                    "description": "Exclusive with [manual_routing]\n F5 will orchestrate required routes for SLO Route Table towards Internet and SLI RT towards the CE.",
+                    "title": "F5 Orchestrated Routing",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "F5 Orchestrated Routing"
+                },
+                "manual_routing": {
+                    "description": "Exclusive with [f5_orchestrated_routing]\n  In this mode, F5 will not create nor alter any route tables or routes within the existing VPCs/Vnets providing better integration for existing environments. ",
+                    "title": "Manual Routing",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Manual Routing"
+                },
                 "resource_group": {
                     "type": "string",
                     "description": " Resource group of existing Vnet\n\nExample: - \"MyResourceGroup\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 64\n  ves.io.schema.rules.string.min_len: 1\n",
@@ -5946,6 +6150,28 @@ var APISwaggerJSON string = `{
                     "description": " ADN Network Name for private access connectivity to F5XC ADN.",
                     "title": "Private Network Name",
                     "x-displayname": "Private Network Name"
+                }
+            }
+        },
+        "viewsProactiveMonitoringChoice": {
+            "type": "object",
+            "description": "Enable proactive collection of debuglogs from this Customer Edge site to enable faster troubleshooting and issue resolution.\nWhen enabled, nodes of this Customer Edge site will be able to stream required service debug logs to F5 Distributed Cloud.\nWhen disabled, nodes of this Customer Edge site will not be able to send any debug logs and might cause delays in troubleshooting and issue resolution.\nIt is recommended to have this setting enabled.\nNote: Only the relevant F5 Distributed Cloud software service logs will be transmitted. No customer sensitive data will be transmitted.",
+            "title": "Proactive Monitoring",
+            "x-displayname": "Proactive Monitoring",
+            "x-ves-oneof-field-proactive_monitoring_choice": "[\"proactive_monitoring_disable\",\"proactive_monitoring_enable\"]",
+            "x-ves-proto-message": "ves.io.schema.views.ProactiveMonitoringChoice",
+            "properties": {
+                "proactive_monitoring_disable": {
+                    "description": "Exclusive with [proactive_monitoring_enable]\n Disable Proactive Monitoring",
+                    "title": "disable",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable"
+                },
+                "proactive_monitoring_enable": {
+                    "description": "Exclusive with [proactive_monitoring_disable]\n Enable Proactive Monitoring",
+                    "title": "enable",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Enable"
                 }
             }
         },

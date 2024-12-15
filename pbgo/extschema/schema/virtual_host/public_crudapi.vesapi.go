@@ -1149,16 +1149,25 @@ func (s *APISrv) Create(ctx context.Context, req *CreateRequest) (*CreateRespons
 	}
 	reqMsgFQN := "ves.io.schema.virtual_host.CreateRequest"
 	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.sf, reqMsgFQN, req)
+	var retErr error
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
 		}
+		userMsg := "The 'ves.io.schema.virtual_host.API.Create' operation on 'virtual_host'"
+		if retErr == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
 	obj := NewDBObject(nil)
 	req.ToObject(obj)
 	if conv, exists := s.sf.Config().MsgToObjConverters[reqMsgFQN]; exists {
 		if err := conv(req, obj); err != nil {
+			retErr = err
 			return nil, err
 		}
 	}
@@ -1167,16 +1176,19 @@ func (s *APISrv) Create(ctx context.Context, req *CreateRequest) (*CreateRespons
 	rsrcRsp, err := s.opts.RsrcHandler.CreateFn(ctx, rsrcReq, s.apiWrapper)
 	if err != nil {
 		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "CreateResource"))
+		retErr = err
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 	rsp, err := NewObjectCreateRsp(rsrcRsp.Entry)
 	if err != nil {
 		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "CreateResponse"))
+		retErr = err
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 	rspMsgFQN := "ves.io.schema.virtual_host.CreateResponse"
 	if conv, exists := s.sf.Config().ObjToMsgConverters[rspMsgFQN]; exists {
 		if err := conv(rsrcRsp.Entry, rsp); err != nil {
+			retErr = err
 			return nil, err
 		}
 	}
@@ -1208,21 +1220,31 @@ func (s *APISrv) Replace(ctx context.Context, req *ReplaceRequest) (*ReplaceResp
 		}
 	}
 	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.sf, "ves.io.schema.virtual_host.API.ReplaceRequest", req)
+	var retErr error
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
 		}
+		userMsg := "The 'ves.io.schema.virtual_host.API.Replace' operation on 'virtual_host'"
+		if retErr == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
 	rsrcReq := &server.ResourceReplaceRequest{RequestMsg: req}
 	rsrcRsp, err := s.opts.RsrcHandler.ReplaceFn(ctx, rsrcReq, s.apiWrapper)
 	if err != nil {
 		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "ReplaceResource"))
+		retErr = err
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 	rsp, err := NewObjectReplaceRsp(rsrcRsp.Entry)
 	if err != nil {
 		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "ReplaceResponse"))
+		retErr = err
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.sf, "ves.io.schema.virtual_host.API.ReplaceResponse", rsp)...)
@@ -1341,10 +1363,18 @@ func (s *APISrv) Delete(ctx context.Context, req *DeleteRequest) (*google_protob
 		}
 	}
 	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.sf, "ves.io.schema.virtual_host.API.DeleteRequest", req)
+	var retErr error
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
 		}
+		userMsg := "The 'ves.io.schema.virtual_host.API.Delete' operation on 'virtual_host'"
+		if retErr == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
 	tenant := server.TenantFromContext(ctx)
@@ -1354,6 +1384,7 @@ func (s *APISrv) Delete(ctx context.Context, req *DeleteRequest) (*google_protob
 	_, err := s.opts.RsrcHandler.DeleteFn(ctx, rsrcReq, s.apiWrapper)
 	if err != nil {
 		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "DeleteResource"))
+		retErr = err
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 	return &google_protobuf.Empty{}, nil
@@ -3654,6 +3685,28 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "schemaTLSCoalescingOptions": {
+            "type": "object",
+            "description": "TLS connection coalescing configuration (not compatible with mTLS)",
+            "title": "TLSCoalescingOptions",
+            "x-displayname": "TLS Coalescing Options",
+            "x-ves-oneof-field-coalescing_choice": "[\"default_coalescing\",\"strict_coalescing\"]",
+            "x-ves-proto-message": "ves.io.schema.TLSCoalescingOptions",
+            "properties": {
+                "default_coalescing": {
+                    "description": "Exclusive with [strict_coalescing]\n HTTPS Loadbalancers are coalesced even when they have different TLS version\n or Cipher suite configuration",
+                    "title": "Default Coalescing",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Default Coalescing"
+                },
+                "strict_coalescing": {
+                    "description": "Exclusive with [default_coalescing]\n HTTPS Loadbalancers are not coalesced when they have different TLS version\n and/or Cipher suite configuration",
+                    "title": "Strict Coalescing",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Strict Coalescing"
+                }
+            }
+        },
         "schemaTlsCertificateType": {
             "type": "object",
             "description": "Handle to fetch certificate and key",
@@ -4096,6 +4149,11 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/virtual_hostCaptchaChallengeType",
                     "x-displayname": "Captcha Challenge"
                 },
+                "coalescing_options": {
+                    "description": " Options for coalescing of multiple HTTPS Loadbalancers into single one",
+                    "$ref": "#/definitions/schemaTLSCoalescingOptions",
+                    "x-displayname": "TLS Coalescing Options"
+                },
                 "compression_params": {
                     "description": " Enables loadbalancer to compress dispatched data from an upstream service upon client request.\n Only GZIP compression is supported",
                     "$ref": "#/definitions/virtual_hostCompressionType",
@@ -4443,6 +4501,11 @@ var APISwaggerJSON string = `{
                     "description": " Configure CDN parameters",
                     "$ref": "#/definitions/virtual_hostCdnServiceType",
                     "x-displayname": "CDN Parameters"
+                },
+                "coalescing_options": {
+                    "description": " Options for coalescing of multiple HTTPS Loadbalancers into single one",
+                    "$ref": "#/definitions/schemaTLSCoalescingOptions",
+                    "x-displayname": "TLS Coalescing Options"
                 },
                 "compression_params": {
                     "description": " Enables loadbalancer to compress dispatched data from an upstream service upon client request.\n Only GZIP compression is supported",
@@ -4824,6 +4887,11 @@ var APISwaggerJSON string = `{
                     "description": "Exclusive with [js_challenge no_challenge]\n Configure Captcha challenge on Virtual Host",
                     "$ref": "#/definitions/virtual_hostCaptchaChallengeType",
                     "x-displayname": "Captcha Challenge"
+                },
+                "coalescing_options": {
+                    "description": " Options for coalescing of multiple HTTPS Loadbalancers into single one",
+                    "$ref": "#/definitions/schemaTLSCoalescingOptions",
+                    "x-displayname": "TLS Coalescing Options"
                 },
                 "compression_params": {
                     "description": " Enables loadbalancer to compress dispatched data from an upstream service upon client request.\n Only GZIP compression is supported",
@@ -6172,7 +6240,7 @@ var APISwaggerJSON string = `{
         },
         "virtual_hostVirtualHostType": {
             "type": "string",
-            "description": "VirtualHostType tells the type of virtual_host. Functionally, all types are same,\nthis is mainly used for categorizing metrics.\n\n - VIRTUAL_SERVICE: VirtualService\n\nVirtual Host used Virtual Service\n - HTTP_LOAD_BALANCER: HTTP LoadBalancer\n\nVirtual Host used as Load Balancer\n - API_GATEWAY: APIGateway\n\nVirtual Host used API Gateway\n - TCP_LOAD_BALANCER: TCP LoadBalancer\n\nVirtual Host used as Load Balancer\n - PROXY: Proxy\n\nVirtual Host used as Proxy\n - LOCAL_K8S_API_GATEWAY: LOCAL_K8S_API_GATEWAY\n\nInternal use only, used for k8s cluster api gateway on the site.\n - CDN_LOAD_BALANCER: CDN LoadBalancer\n\n Virtual Host used as Load Balancer\n - NGINX_SERVER: NGINX Server\n\nVirtual Host representing an NGINX Server block",
+            "description": "VirtualHostType tells the type of virtual_host. Functionally, all types are same,\nthis is mainly used for categorizing metrics.\n\n - VIRTUAL_SERVICE: VirtualService\n\nVirtual Host used Virtual Service\n - HTTP_LOAD_BALANCER: HTTP LoadBalancer\n\nVirtual Host used as Load Balancer\n - API_GATEWAY: APIGateway\n\nVirtual Host used API Gateway\n - TCP_LOAD_BALANCER: TCP LoadBalancer\n\nVirtual Host used as Load Balancer\n - PROXY: Proxy\n\nVirtual Host used as Proxy\n - LOCAL_K8S_API_GATEWAY: LOCAL_K8S_API_GATEWAY\n\nInternal use only, used for k8s cluster api gateway on the site.\n - CDN_LOAD_BALANCER: CDN LoadBalancer\n\n Virtual Host used as Load Balancer\n - NGINX_SERVER: NGINX Server\n\nVirtual Host representing an NGINX Server block\n - BIGIP_VIRTUAL_SERVER: BIG-IP Virtual Server\n\nVirtual Host representing a BIG-IP Virtual Server",
             "title": "VirtualHostType",
             "enum": [
                 "VIRTUAL_SERVICE",

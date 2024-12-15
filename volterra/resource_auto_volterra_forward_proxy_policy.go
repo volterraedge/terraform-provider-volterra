@@ -76,7 +76,8 @@ func resourceVolterraForwardProxyPolicy() *schema.Resource {
 
 			"network_connector": {
 
-				Type:     schema.TypeSet,
+				Type:     schema.TypeList,
+				MaxItems: 1,
 				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
@@ -99,7 +100,8 @@ func resourceVolterraForwardProxyPolicy() *schema.Resource {
 
 			"proxy_label_selector": {
 
-				Type:     schema.TypeSet,
+				Type:     schema.TypeList,
+				MaxItems: 1,
 				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
@@ -125,7 +127,8 @@ func resourceVolterraForwardProxyPolicy() *schema.Resource {
 
 			"allow_list": {
 
-				Type:     schema.TypeSet,
+				Type:     schema.TypeList,
+				MaxItems: 1,
 				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
@@ -268,7 +271,8 @@ func resourceVolterraForwardProxyPolicy() *schema.Resource {
 
 			"deny_list": {
 
-				Type:     schema.TypeSet,
+				Type:     schema.TypeList,
+				MaxItems: 1,
 				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
@@ -411,7 +415,8 @@ func resourceVolterraForwardProxyPolicy() *schema.Resource {
 
 			"rule_list": {
 
-				Type:     schema.TypeSet,
+				Type:     schema.TypeList,
+				MaxItems: 1,
 				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
@@ -436,7 +441,8 @@ func resourceVolterraForwardProxyPolicy() *schema.Resource {
 
 									"dst_asn_list": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -456,7 +462,8 @@ func resourceVolterraForwardProxyPolicy() *schema.Resource {
 
 									"dst_asn_set": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -479,7 +486,8 @@ func resourceVolterraForwardProxyPolicy() *schema.Resource {
 
 									"dst_ip_prefix_set": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -502,7 +510,8 @@ func resourceVolterraForwardProxyPolicy() *schema.Resource {
 
 									"dst_label_selector": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -522,7 +531,8 @@ func resourceVolterraForwardProxyPolicy() *schema.Resource {
 
 									"dst_prefix_list": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -552,7 +562,8 @@ func resourceVolterraForwardProxyPolicy() *schema.Resource {
 
 									"http_list": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -614,7 +625,8 @@ func resourceVolterraForwardProxyPolicy() *schema.Resource {
 
 									"tls_list": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -652,7 +664,8 @@ func resourceVolterraForwardProxyPolicy() *schema.Resource {
 
 									"url_category_list": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -678,7 +691,8 @@ func resourceVolterraForwardProxyPolicy() *schema.Resource {
 
 									"port_matcher": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -703,7 +717,8 @@ func resourceVolterraForwardProxyPolicy() *schema.Resource {
 
 									"metadata": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -754,7 +769,8 @@ func resourceVolterraForwardProxyPolicy() *schema.Resource {
 
 									"interface": {
 
-										Type:       schema.TypeSet,
+										Type:       schema.TypeList,
+										MaxItems:   1,
 										Optional:   true,
 										Deprecated: "This field is deprecated and will be removed in future release.",
 										Elem: &schema.Resource{
@@ -781,7 +797,8 @@ func resourceVolterraForwardProxyPolicy() *schema.Resource {
 
 									"ip_prefix_set": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -804,7 +821,8 @@ func resourceVolterraForwardProxyPolicy() *schema.Resource {
 
 									"label_selector": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -831,7 +849,8 @@ func resourceVolterraForwardProxyPolicy() *schema.Resource {
 
 									"prefix_list": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -867,7 +886,8 @@ func resourceVolterraForwardProxyPolicy() *schema.Resource {
 
 			"segment_policy": {
 
-				Type:     schema.TypeSet,
+				Type:     schema.TypeList,
+				MaxItems: 1,
 				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
@@ -880,7 +900,8 @@ func resourceVolterraForwardProxyPolicy() *schema.Resource {
 
 						"dst_segments": {
 
-							Type:     schema.TypeSet,
+							Type:     schema.TypeList,
+							MaxItems: 1,
 							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
@@ -930,7 +951,8 @@ func resourceVolterraForwardProxyPolicy() *schema.Resource {
 
 						"src_segments": {
 
-							Type:     schema.TypeSet,
+							Type:     schema.TypeList,
+							MaxItems: 1,
 							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
@@ -1060,28 +1082,30 @@ func resourceVolterraForwardProxyPolicyCreate(d *schema.ResourceData, meta inter
 		proxyChoiceInt.NetworkConnector = &ves_io_schema_views.ObjectRefType{}
 		createSpec.ProxyChoice = proxyChoiceInt
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
+			if set != nil {
+				cs := set.(map[string]interface{})
 
-			if v, ok := cs["name"]; ok && !isIntfNil(v) {
+				if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
-				proxyChoiceInt.NetworkConnector.Name = v.(string)
+					proxyChoiceInt.NetworkConnector.Name = v.(string)
+
+				}
+
+				if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+					proxyChoiceInt.NetworkConnector.Namespace = v.(string)
+
+				}
+
+				if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+					proxyChoiceInt.NetworkConnector.Tenant = v.(string)
+
+				}
 
 			}
-
-			if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
-
-				proxyChoiceInt.NetworkConnector.Namespace = v.(string)
-
-			}
-
-			if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
-
-				proxyChoiceInt.NetworkConnector.Tenant = v.(string)
-
-			}
-
 		}
 
 	}
@@ -1093,20 +1117,22 @@ func resourceVolterraForwardProxyPolicyCreate(d *schema.ResourceData, meta inter
 		proxyChoiceInt.ProxyLabelSelector = &ves_io_schema.LabelSelectorType{}
 		createSpec.ProxyChoice = proxyChoiceInt
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
+			if set != nil {
+				cs := set.(map[string]interface{})
 
-			if v, ok := cs["expressions"]; ok && !isIntfNil(v) {
+				if v, ok := cs["expressions"]; ok && !isIntfNil(v) {
 
-				ls := make([]string, len(v.([]interface{})))
-				for i, v := range v.([]interface{}) {
-					ls[i] = v.(string)
+					ls := make([]string, len(v.([]interface{})))
+					for i, v := range v.([]interface{}) {
+						ls[i] = v.(string)
+					}
+					proxyChoiceInt.ProxyLabelSelector.Expressions = ls
+
 				}
-				proxyChoiceInt.ProxyLabelSelector.Expressions = ls
 
 			}
-
 		}
 
 	}
@@ -1134,224 +1160,232 @@ func resourceVolterraForwardProxyPolicyCreate(d *schema.ResourceData, meta inter
 		ruleChoiceInt.AllowList = &ves_io_schema_views_forward_proxy_policy.ForwardProxySimpleRuleType{}
 		createSpec.RuleChoice = ruleChoiceInt
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
+			if set != nil {
+				cs := set.(map[string]interface{})
 
-			defaultActionChoiceTypeFound := false
+				defaultActionChoiceTypeFound := false
 
-			if v, ok := cs["default_action_allow"]; ok && !isIntfNil(v) && !defaultActionChoiceTypeFound {
+				if v, ok := cs["default_action_allow"]; ok && !isIntfNil(v) && !defaultActionChoiceTypeFound {
 
-				defaultActionChoiceTypeFound = true
+					defaultActionChoiceTypeFound = true
 
-				if v.(bool) {
-					defaultActionChoiceInt := &ves_io_schema_views_forward_proxy_policy.ForwardProxySimpleRuleType_DefaultActionAllow{}
-					defaultActionChoiceInt.DefaultActionAllow = &ves_io_schema.Empty{}
-					ruleChoiceInt.AllowList.DefaultActionChoice = defaultActionChoiceInt
+					if v.(bool) {
+						defaultActionChoiceInt := &ves_io_schema_views_forward_proxy_policy.ForwardProxySimpleRuleType_DefaultActionAllow{}
+						defaultActionChoiceInt.DefaultActionAllow = &ves_io_schema.Empty{}
+						ruleChoiceInt.AllowList.DefaultActionChoice = defaultActionChoiceInt
+					}
+
 				}
 
-			}
+				if v, ok := cs["default_action_deny"]; ok && !isIntfNil(v) && !defaultActionChoiceTypeFound {
 
-			if v, ok := cs["default_action_deny"]; ok && !isIntfNil(v) && !defaultActionChoiceTypeFound {
+					defaultActionChoiceTypeFound = true
 
-				defaultActionChoiceTypeFound = true
+					if v.(bool) {
+						defaultActionChoiceInt := &ves_io_schema_views_forward_proxy_policy.ForwardProxySimpleRuleType_DefaultActionDeny{}
+						defaultActionChoiceInt.DefaultActionDeny = &ves_io_schema.Empty{}
+						ruleChoiceInt.AllowList.DefaultActionChoice = defaultActionChoiceInt
+					}
 
-				if v.(bool) {
-					defaultActionChoiceInt := &ves_io_schema_views_forward_proxy_policy.ForwardProxySimpleRuleType_DefaultActionDeny{}
-					defaultActionChoiceInt.DefaultActionDeny = &ves_io_schema.Empty{}
-					ruleChoiceInt.AllowList.DefaultActionChoice = defaultActionChoiceInt
 				}
 
-			}
+				if v, ok := cs["default_action_next_policy"]; ok && !isIntfNil(v) && !defaultActionChoiceTypeFound {
 
-			if v, ok := cs["default_action_next_policy"]; ok && !isIntfNil(v) && !defaultActionChoiceTypeFound {
+					defaultActionChoiceTypeFound = true
 
-				defaultActionChoiceTypeFound = true
+					if v.(bool) {
+						defaultActionChoiceInt := &ves_io_schema_views_forward_proxy_policy.ForwardProxySimpleRuleType_DefaultActionNextPolicy{}
+						defaultActionChoiceInt.DefaultActionNextPolicy = &ves_io_schema.Empty{}
+						ruleChoiceInt.AllowList.DefaultActionChoice = defaultActionChoiceInt
+					}
 
-				if v.(bool) {
-					defaultActionChoiceInt := &ves_io_schema_views_forward_proxy_policy.ForwardProxySimpleRuleType_DefaultActionNextPolicy{}
-					defaultActionChoiceInt.DefaultActionNextPolicy = &ves_io_schema.Empty{}
-					ruleChoiceInt.AllowList.DefaultActionChoice = defaultActionChoiceInt
 				}
 
-			}
+				if v, ok := cs["dest_list"]; ok && !isIntfNil(v) {
 
-			if v, ok := cs["dest_list"]; ok && !isIntfNil(v) {
+					sl := v.([]interface{})
+					destList := make([]*ves_io_schema.L4DestType, len(sl))
+					ruleChoiceInt.AllowList.DestList = destList
+					for i, set := range sl {
+						if set != nil {
+							destList[i] = &ves_io_schema.L4DestType{}
+							destListMapStrToI := set.(map[string]interface{})
 
-				sl := v.([]interface{})
-				destList := make([]*ves_io_schema.L4DestType, len(sl))
-				ruleChoiceInt.AllowList.DestList = destList
-				for i, set := range sl {
-					destList[i] = &ves_io_schema.L4DestType{}
-					destListMapStrToI := set.(map[string]interface{})
+							if w, ok := destListMapStrToI["ipv6_prefixes"]; ok && !isIntfNil(w) {
+								ls := make([]string, len(w.([]interface{})))
+								for i, v := range w.([]interface{}) {
+									ls[i] = v.(string)
+								}
+								destList[i].Ipv6Prefixes = ls
+							}
 
-					if w, ok := destListMapStrToI["ipv6_prefixes"]; ok && !isIntfNil(w) {
-						ls := make([]string, len(w.([]interface{})))
-						for i, v := range w.([]interface{}) {
-							ls[i] = v.(string)
+							if w, ok := destListMapStrToI["port_ranges"]; ok && !isIntfNil(w) {
+								destList[i].PortRanges = w.(string)
+							}
+
+							if w, ok := destListMapStrToI["prefixes"]; ok && !isIntfNil(w) {
+								ls := make([]string, len(w.([]interface{})))
+								for i, v := range w.([]interface{}) {
+									ls[i] = v.(string)
+								}
+								destList[i].Prefixes = ls
+							}
+
 						}
-						destList[i].Ipv6Prefixes = ls
 					}
 
-					if w, ok := destListMapStrToI["port_ranges"]; ok && !isIntfNil(w) {
-						destList[i].PortRanges = w.(string)
-					}
+				}
 
-					if w, ok := destListMapStrToI["prefixes"]; ok && !isIntfNil(w) {
-						ls := make([]string, len(w.([]interface{})))
-						for i, v := range w.([]interface{}) {
-							ls[i] = v.(string)
+				if v, ok := cs["http_list"]; ok && !isIntfNil(v) {
+
+					sl := v.([]interface{})
+					httpList := make([]*ves_io_schema_views_forward_proxy_policy.URLType, len(sl))
+					ruleChoiceInt.AllowList.HttpList = httpList
+					for i, set := range sl {
+						if set != nil {
+							httpList[i] = &ves_io_schema_views_forward_proxy_policy.URLType{}
+							httpListMapStrToI := set.(map[string]interface{})
+
+							domainChoiceTypeFound := false
+
+							if v, ok := httpListMapStrToI["exact_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
+
+								domainChoiceTypeFound = true
+								domainChoiceInt := &ves_io_schema_views_forward_proxy_policy.URLType_ExactValue{}
+
+								httpList[i].DomainChoice = domainChoiceInt
+
+								domainChoiceInt.ExactValue = v.(string)
+
+							}
+
+							if v, ok := httpListMapStrToI["regex_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
+
+								domainChoiceTypeFound = true
+								domainChoiceInt := &ves_io_schema_views_forward_proxy_policy.URLType_RegexValue{}
+
+								httpList[i].DomainChoice = domainChoiceInt
+
+								domainChoiceInt.RegexValue = v.(string)
+
+							}
+
+							if v, ok := httpListMapStrToI["suffix_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
+
+								domainChoiceTypeFound = true
+								domainChoiceInt := &ves_io_schema_views_forward_proxy_policy.URLType_SuffixValue{}
+
+								httpList[i].DomainChoice = domainChoiceInt
+
+								domainChoiceInt.SuffixValue = v.(string)
+
+							}
+
+							pathChoiceTypeFound := false
+
+							if v, ok := httpListMapStrToI["any_path"]; ok && !isIntfNil(v) && !pathChoiceTypeFound {
+
+								pathChoiceTypeFound = true
+
+								if v.(bool) {
+									pathChoiceInt := &ves_io_schema_views_forward_proxy_policy.URLType_AnyPath{}
+									pathChoiceInt.AnyPath = &ves_io_schema.Empty{}
+									httpList[i].PathChoice = pathChoiceInt
+								}
+
+							}
+
+							if v, ok := httpListMapStrToI["path_exact_value"]; ok && !isIntfNil(v) && !pathChoiceTypeFound {
+
+								pathChoiceTypeFound = true
+								pathChoiceInt := &ves_io_schema_views_forward_proxy_policy.URLType_PathExactValue{}
+
+								httpList[i].PathChoice = pathChoiceInt
+
+								pathChoiceInt.PathExactValue = v.(string)
+
+							}
+
+							if v, ok := httpListMapStrToI["path_prefix_value"]; ok && !isIntfNil(v) && !pathChoiceTypeFound {
+
+								pathChoiceTypeFound = true
+								pathChoiceInt := &ves_io_schema_views_forward_proxy_policy.URLType_PathPrefixValue{}
+
+								httpList[i].PathChoice = pathChoiceInt
+
+								pathChoiceInt.PathPrefixValue = v.(string)
+
+							}
+
+							if v, ok := httpListMapStrToI["path_regex_value"]; ok && !isIntfNil(v) && !pathChoiceTypeFound {
+
+								pathChoiceTypeFound = true
+								pathChoiceInt := &ves_io_schema_views_forward_proxy_policy.URLType_PathRegexValue{}
+
+								httpList[i].PathChoice = pathChoiceInt
+
+								pathChoiceInt.PathRegexValue = v.(string)
+
+							}
+
 						}
-						destList[i].Prefixes = ls
 					}
 
 				}
 
-			}
+				if v, ok := cs["tls_list"]; ok && !isIntfNil(v) {
 
-			if v, ok := cs["http_list"]; ok && !isIntfNil(v) {
+					sl := v.([]interface{})
+					tlsList := make([]*ves_io_schema.DomainType, len(sl))
+					ruleChoiceInt.AllowList.TlsList = tlsList
+					for i, set := range sl {
+						if set != nil {
+							tlsList[i] = &ves_io_schema.DomainType{}
+							tlsListMapStrToI := set.(map[string]interface{})
 
-				sl := v.([]interface{})
-				httpList := make([]*ves_io_schema_views_forward_proxy_policy.URLType, len(sl))
-				ruleChoiceInt.AllowList.HttpList = httpList
-				for i, set := range sl {
-					httpList[i] = &ves_io_schema_views_forward_proxy_policy.URLType{}
-					httpListMapStrToI := set.(map[string]interface{})
+							domainChoiceTypeFound := false
 
-					domainChoiceTypeFound := false
+							if v, ok := tlsListMapStrToI["exact_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
 
-					if v, ok := httpListMapStrToI["exact_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
+								domainChoiceTypeFound = true
+								domainChoiceInt := &ves_io_schema.DomainType_ExactValue{}
 
-						domainChoiceTypeFound = true
-						domainChoiceInt := &ves_io_schema_views_forward_proxy_policy.URLType_ExactValue{}
+								tlsList[i].DomainChoice = domainChoiceInt
 
-						httpList[i].DomainChoice = domainChoiceInt
+								domainChoiceInt.ExactValue = v.(string)
 
-						domainChoiceInt.ExactValue = v.(string)
+							}
 
-					}
+							if v, ok := tlsListMapStrToI["regex_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
 
-					if v, ok := httpListMapStrToI["regex_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
+								domainChoiceTypeFound = true
+								domainChoiceInt := &ves_io_schema.DomainType_RegexValue{}
 
-						domainChoiceTypeFound = true
-						domainChoiceInt := &ves_io_schema_views_forward_proxy_policy.URLType_RegexValue{}
+								tlsList[i].DomainChoice = domainChoiceInt
 
-						httpList[i].DomainChoice = domainChoiceInt
+								domainChoiceInt.RegexValue = v.(string)
 
-						domainChoiceInt.RegexValue = v.(string)
+							}
 
-					}
+							if v, ok := tlsListMapStrToI["suffix_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
 
-					if v, ok := httpListMapStrToI["suffix_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
+								domainChoiceTypeFound = true
+								domainChoiceInt := &ves_io_schema.DomainType_SuffixValue{}
 
-						domainChoiceTypeFound = true
-						domainChoiceInt := &ves_io_schema_views_forward_proxy_policy.URLType_SuffixValue{}
+								tlsList[i].DomainChoice = domainChoiceInt
 
-						httpList[i].DomainChoice = domainChoiceInt
+								domainChoiceInt.SuffixValue = v.(string)
 
-						domainChoiceInt.SuffixValue = v.(string)
+							}
 
-					}
-
-					pathChoiceTypeFound := false
-
-					if v, ok := httpListMapStrToI["any_path"]; ok && !isIntfNil(v) && !pathChoiceTypeFound {
-
-						pathChoiceTypeFound = true
-
-						if v.(bool) {
-							pathChoiceInt := &ves_io_schema_views_forward_proxy_policy.URLType_AnyPath{}
-							pathChoiceInt.AnyPath = &ves_io_schema.Empty{}
-							httpList[i].PathChoice = pathChoiceInt
 						}
-
-					}
-
-					if v, ok := httpListMapStrToI["path_exact_value"]; ok && !isIntfNil(v) && !pathChoiceTypeFound {
-
-						pathChoiceTypeFound = true
-						pathChoiceInt := &ves_io_schema_views_forward_proxy_policy.URLType_PathExactValue{}
-
-						httpList[i].PathChoice = pathChoiceInt
-
-						pathChoiceInt.PathExactValue = v.(string)
-
-					}
-
-					if v, ok := httpListMapStrToI["path_prefix_value"]; ok && !isIntfNil(v) && !pathChoiceTypeFound {
-
-						pathChoiceTypeFound = true
-						pathChoiceInt := &ves_io_schema_views_forward_proxy_policy.URLType_PathPrefixValue{}
-
-						httpList[i].PathChoice = pathChoiceInt
-
-						pathChoiceInt.PathPrefixValue = v.(string)
-
-					}
-
-					if v, ok := httpListMapStrToI["path_regex_value"]; ok && !isIntfNil(v) && !pathChoiceTypeFound {
-
-						pathChoiceTypeFound = true
-						pathChoiceInt := &ves_io_schema_views_forward_proxy_policy.URLType_PathRegexValue{}
-
-						httpList[i].PathChoice = pathChoiceInt
-
-						pathChoiceInt.PathRegexValue = v.(string)
-
 					}
 
 				}
 
 			}
-
-			if v, ok := cs["tls_list"]; ok && !isIntfNil(v) {
-
-				sl := v.([]interface{})
-				tlsList := make([]*ves_io_schema.DomainType, len(sl))
-				ruleChoiceInt.AllowList.TlsList = tlsList
-				for i, set := range sl {
-					tlsList[i] = &ves_io_schema.DomainType{}
-					tlsListMapStrToI := set.(map[string]interface{})
-
-					domainChoiceTypeFound := false
-
-					if v, ok := tlsListMapStrToI["exact_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
-
-						domainChoiceTypeFound = true
-						domainChoiceInt := &ves_io_schema.DomainType_ExactValue{}
-
-						tlsList[i].DomainChoice = domainChoiceInt
-
-						domainChoiceInt.ExactValue = v.(string)
-
-					}
-
-					if v, ok := tlsListMapStrToI["regex_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
-
-						domainChoiceTypeFound = true
-						domainChoiceInt := &ves_io_schema.DomainType_RegexValue{}
-
-						tlsList[i].DomainChoice = domainChoiceInt
-
-						domainChoiceInt.RegexValue = v.(string)
-
-					}
-
-					if v, ok := tlsListMapStrToI["suffix_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
-
-						domainChoiceTypeFound = true
-						domainChoiceInt := &ves_io_schema.DomainType_SuffixValue{}
-
-						tlsList[i].DomainChoice = domainChoiceInt
-
-						domainChoiceInt.SuffixValue = v.(string)
-
-					}
-
-				}
-
-			}
-
 		}
 
 	}
@@ -1363,224 +1397,232 @@ func resourceVolterraForwardProxyPolicyCreate(d *schema.ResourceData, meta inter
 		ruleChoiceInt.DenyList = &ves_io_schema_views_forward_proxy_policy.ForwardProxySimpleRuleType{}
 		createSpec.RuleChoice = ruleChoiceInt
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
+			if set != nil {
+				cs := set.(map[string]interface{})
 
-			defaultActionChoiceTypeFound := false
+				defaultActionChoiceTypeFound := false
 
-			if v, ok := cs["default_action_allow"]; ok && !isIntfNil(v) && !defaultActionChoiceTypeFound {
+				if v, ok := cs["default_action_allow"]; ok && !isIntfNil(v) && !defaultActionChoiceTypeFound {
 
-				defaultActionChoiceTypeFound = true
+					defaultActionChoiceTypeFound = true
 
-				if v.(bool) {
-					defaultActionChoiceInt := &ves_io_schema_views_forward_proxy_policy.ForwardProxySimpleRuleType_DefaultActionAllow{}
-					defaultActionChoiceInt.DefaultActionAllow = &ves_io_schema.Empty{}
-					ruleChoiceInt.DenyList.DefaultActionChoice = defaultActionChoiceInt
+					if v.(bool) {
+						defaultActionChoiceInt := &ves_io_schema_views_forward_proxy_policy.ForwardProxySimpleRuleType_DefaultActionAllow{}
+						defaultActionChoiceInt.DefaultActionAllow = &ves_io_schema.Empty{}
+						ruleChoiceInt.DenyList.DefaultActionChoice = defaultActionChoiceInt
+					}
+
 				}
 
-			}
+				if v, ok := cs["default_action_deny"]; ok && !isIntfNil(v) && !defaultActionChoiceTypeFound {
 
-			if v, ok := cs["default_action_deny"]; ok && !isIntfNil(v) && !defaultActionChoiceTypeFound {
+					defaultActionChoiceTypeFound = true
 
-				defaultActionChoiceTypeFound = true
+					if v.(bool) {
+						defaultActionChoiceInt := &ves_io_schema_views_forward_proxy_policy.ForwardProxySimpleRuleType_DefaultActionDeny{}
+						defaultActionChoiceInt.DefaultActionDeny = &ves_io_schema.Empty{}
+						ruleChoiceInt.DenyList.DefaultActionChoice = defaultActionChoiceInt
+					}
 
-				if v.(bool) {
-					defaultActionChoiceInt := &ves_io_schema_views_forward_proxy_policy.ForwardProxySimpleRuleType_DefaultActionDeny{}
-					defaultActionChoiceInt.DefaultActionDeny = &ves_io_schema.Empty{}
-					ruleChoiceInt.DenyList.DefaultActionChoice = defaultActionChoiceInt
 				}
 
-			}
+				if v, ok := cs["default_action_next_policy"]; ok && !isIntfNil(v) && !defaultActionChoiceTypeFound {
 
-			if v, ok := cs["default_action_next_policy"]; ok && !isIntfNil(v) && !defaultActionChoiceTypeFound {
+					defaultActionChoiceTypeFound = true
 
-				defaultActionChoiceTypeFound = true
+					if v.(bool) {
+						defaultActionChoiceInt := &ves_io_schema_views_forward_proxy_policy.ForwardProxySimpleRuleType_DefaultActionNextPolicy{}
+						defaultActionChoiceInt.DefaultActionNextPolicy = &ves_io_schema.Empty{}
+						ruleChoiceInt.DenyList.DefaultActionChoice = defaultActionChoiceInt
+					}
 
-				if v.(bool) {
-					defaultActionChoiceInt := &ves_io_schema_views_forward_proxy_policy.ForwardProxySimpleRuleType_DefaultActionNextPolicy{}
-					defaultActionChoiceInt.DefaultActionNextPolicy = &ves_io_schema.Empty{}
-					ruleChoiceInt.DenyList.DefaultActionChoice = defaultActionChoiceInt
 				}
 
-			}
+				if v, ok := cs["dest_list"]; ok && !isIntfNil(v) {
 
-			if v, ok := cs["dest_list"]; ok && !isIntfNil(v) {
+					sl := v.([]interface{})
+					destList := make([]*ves_io_schema.L4DestType, len(sl))
+					ruleChoiceInt.DenyList.DestList = destList
+					for i, set := range sl {
+						if set != nil {
+							destList[i] = &ves_io_schema.L4DestType{}
+							destListMapStrToI := set.(map[string]interface{})
 
-				sl := v.([]interface{})
-				destList := make([]*ves_io_schema.L4DestType, len(sl))
-				ruleChoiceInt.DenyList.DestList = destList
-				for i, set := range sl {
-					destList[i] = &ves_io_schema.L4DestType{}
-					destListMapStrToI := set.(map[string]interface{})
+							if w, ok := destListMapStrToI["ipv6_prefixes"]; ok && !isIntfNil(w) {
+								ls := make([]string, len(w.([]interface{})))
+								for i, v := range w.([]interface{}) {
+									ls[i] = v.(string)
+								}
+								destList[i].Ipv6Prefixes = ls
+							}
 
-					if w, ok := destListMapStrToI["ipv6_prefixes"]; ok && !isIntfNil(w) {
-						ls := make([]string, len(w.([]interface{})))
-						for i, v := range w.([]interface{}) {
-							ls[i] = v.(string)
+							if w, ok := destListMapStrToI["port_ranges"]; ok && !isIntfNil(w) {
+								destList[i].PortRanges = w.(string)
+							}
+
+							if w, ok := destListMapStrToI["prefixes"]; ok && !isIntfNil(w) {
+								ls := make([]string, len(w.([]interface{})))
+								for i, v := range w.([]interface{}) {
+									ls[i] = v.(string)
+								}
+								destList[i].Prefixes = ls
+							}
+
 						}
-						destList[i].Ipv6Prefixes = ls
 					}
 
-					if w, ok := destListMapStrToI["port_ranges"]; ok && !isIntfNil(w) {
-						destList[i].PortRanges = w.(string)
-					}
+				}
 
-					if w, ok := destListMapStrToI["prefixes"]; ok && !isIntfNil(w) {
-						ls := make([]string, len(w.([]interface{})))
-						for i, v := range w.([]interface{}) {
-							ls[i] = v.(string)
+				if v, ok := cs["http_list"]; ok && !isIntfNil(v) {
+
+					sl := v.([]interface{})
+					httpList := make([]*ves_io_schema_views_forward_proxy_policy.URLType, len(sl))
+					ruleChoiceInt.DenyList.HttpList = httpList
+					for i, set := range sl {
+						if set != nil {
+							httpList[i] = &ves_io_schema_views_forward_proxy_policy.URLType{}
+							httpListMapStrToI := set.(map[string]interface{})
+
+							domainChoiceTypeFound := false
+
+							if v, ok := httpListMapStrToI["exact_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
+
+								domainChoiceTypeFound = true
+								domainChoiceInt := &ves_io_schema_views_forward_proxy_policy.URLType_ExactValue{}
+
+								httpList[i].DomainChoice = domainChoiceInt
+
+								domainChoiceInt.ExactValue = v.(string)
+
+							}
+
+							if v, ok := httpListMapStrToI["regex_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
+
+								domainChoiceTypeFound = true
+								domainChoiceInt := &ves_io_schema_views_forward_proxy_policy.URLType_RegexValue{}
+
+								httpList[i].DomainChoice = domainChoiceInt
+
+								domainChoiceInt.RegexValue = v.(string)
+
+							}
+
+							if v, ok := httpListMapStrToI["suffix_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
+
+								domainChoiceTypeFound = true
+								domainChoiceInt := &ves_io_schema_views_forward_proxy_policy.URLType_SuffixValue{}
+
+								httpList[i].DomainChoice = domainChoiceInt
+
+								domainChoiceInt.SuffixValue = v.(string)
+
+							}
+
+							pathChoiceTypeFound := false
+
+							if v, ok := httpListMapStrToI["any_path"]; ok && !isIntfNil(v) && !pathChoiceTypeFound {
+
+								pathChoiceTypeFound = true
+
+								if v.(bool) {
+									pathChoiceInt := &ves_io_schema_views_forward_proxy_policy.URLType_AnyPath{}
+									pathChoiceInt.AnyPath = &ves_io_schema.Empty{}
+									httpList[i].PathChoice = pathChoiceInt
+								}
+
+							}
+
+							if v, ok := httpListMapStrToI["path_exact_value"]; ok && !isIntfNil(v) && !pathChoiceTypeFound {
+
+								pathChoiceTypeFound = true
+								pathChoiceInt := &ves_io_schema_views_forward_proxy_policy.URLType_PathExactValue{}
+
+								httpList[i].PathChoice = pathChoiceInt
+
+								pathChoiceInt.PathExactValue = v.(string)
+
+							}
+
+							if v, ok := httpListMapStrToI["path_prefix_value"]; ok && !isIntfNil(v) && !pathChoiceTypeFound {
+
+								pathChoiceTypeFound = true
+								pathChoiceInt := &ves_io_schema_views_forward_proxy_policy.URLType_PathPrefixValue{}
+
+								httpList[i].PathChoice = pathChoiceInt
+
+								pathChoiceInt.PathPrefixValue = v.(string)
+
+							}
+
+							if v, ok := httpListMapStrToI["path_regex_value"]; ok && !isIntfNil(v) && !pathChoiceTypeFound {
+
+								pathChoiceTypeFound = true
+								pathChoiceInt := &ves_io_schema_views_forward_proxy_policy.URLType_PathRegexValue{}
+
+								httpList[i].PathChoice = pathChoiceInt
+
+								pathChoiceInt.PathRegexValue = v.(string)
+
+							}
+
 						}
-						destList[i].Prefixes = ls
 					}
 
 				}
 
-			}
+				if v, ok := cs["tls_list"]; ok && !isIntfNil(v) {
 
-			if v, ok := cs["http_list"]; ok && !isIntfNil(v) {
+					sl := v.([]interface{})
+					tlsList := make([]*ves_io_schema.DomainType, len(sl))
+					ruleChoiceInt.DenyList.TlsList = tlsList
+					for i, set := range sl {
+						if set != nil {
+							tlsList[i] = &ves_io_schema.DomainType{}
+							tlsListMapStrToI := set.(map[string]interface{})
 
-				sl := v.([]interface{})
-				httpList := make([]*ves_io_schema_views_forward_proxy_policy.URLType, len(sl))
-				ruleChoiceInt.DenyList.HttpList = httpList
-				for i, set := range sl {
-					httpList[i] = &ves_io_schema_views_forward_proxy_policy.URLType{}
-					httpListMapStrToI := set.(map[string]interface{})
+							domainChoiceTypeFound := false
 
-					domainChoiceTypeFound := false
+							if v, ok := tlsListMapStrToI["exact_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
 
-					if v, ok := httpListMapStrToI["exact_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
+								domainChoiceTypeFound = true
+								domainChoiceInt := &ves_io_schema.DomainType_ExactValue{}
 
-						domainChoiceTypeFound = true
-						domainChoiceInt := &ves_io_schema_views_forward_proxy_policy.URLType_ExactValue{}
+								tlsList[i].DomainChoice = domainChoiceInt
 
-						httpList[i].DomainChoice = domainChoiceInt
+								domainChoiceInt.ExactValue = v.(string)
 
-						domainChoiceInt.ExactValue = v.(string)
+							}
 
-					}
+							if v, ok := tlsListMapStrToI["regex_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
 
-					if v, ok := httpListMapStrToI["regex_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
+								domainChoiceTypeFound = true
+								domainChoiceInt := &ves_io_schema.DomainType_RegexValue{}
 
-						domainChoiceTypeFound = true
-						domainChoiceInt := &ves_io_schema_views_forward_proxy_policy.URLType_RegexValue{}
+								tlsList[i].DomainChoice = domainChoiceInt
 
-						httpList[i].DomainChoice = domainChoiceInt
+								domainChoiceInt.RegexValue = v.(string)
 
-						domainChoiceInt.RegexValue = v.(string)
+							}
 
-					}
+							if v, ok := tlsListMapStrToI["suffix_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
 
-					if v, ok := httpListMapStrToI["suffix_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
+								domainChoiceTypeFound = true
+								domainChoiceInt := &ves_io_schema.DomainType_SuffixValue{}
 
-						domainChoiceTypeFound = true
-						domainChoiceInt := &ves_io_schema_views_forward_proxy_policy.URLType_SuffixValue{}
+								tlsList[i].DomainChoice = domainChoiceInt
 
-						httpList[i].DomainChoice = domainChoiceInt
+								domainChoiceInt.SuffixValue = v.(string)
 
-						domainChoiceInt.SuffixValue = v.(string)
+							}
 
-					}
-
-					pathChoiceTypeFound := false
-
-					if v, ok := httpListMapStrToI["any_path"]; ok && !isIntfNil(v) && !pathChoiceTypeFound {
-
-						pathChoiceTypeFound = true
-
-						if v.(bool) {
-							pathChoiceInt := &ves_io_schema_views_forward_proxy_policy.URLType_AnyPath{}
-							pathChoiceInt.AnyPath = &ves_io_schema.Empty{}
-							httpList[i].PathChoice = pathChoiceInt
 						}
-
-					}
-
-					if v, ok := httpListMapStrToI["path_exact_value"]; ok && !isIntfNil(v) && !pathChoiceTypeFound {
-
-						pathChoiceTypeFound = true
-						pathChoiceInt := &ves_io_schema_views_forward_proxy_policy.URLType_PathExactValue{}
-
-						httpList[i].PathChoice = pathChoiceInt
-
-						pathChoiceInt.PathExactValue = v.(string)
-
-					}
-
-					if v, ok := httpListMapStrToI["path_prefix_value"]; ok && !isIntfNil(v) && !pathChoiceTypeFound {
-
-						pathChoiceTypeFound = true
-						pathChoiceInt := &ves_io_schema_views_forward_proxy_policy.URLType_PathPrefixValue{}
-
-						httpList[i].PathChoice = pathChoiceInt
-
-						pathChoiceInt.PathPrefixValue = v.(string)
-
-					}
-
-					if v, ok := httpListMapStrToI["path_regex_value"]; ok && !isIntfNil(v) && !pathChoiceTypeFound {
-
-						pathChoiceTypeFound = true
-						pathChoiceInt := &ves_io_schema_views_forward_proxy_policy.URLType_PathRegexValue{}
-
-						httpList[i].PathChoice = pathChoiceInt
-
-						pathChoiceInt.PathRegexValue = v.(string)
-
 					}
 
 				}
 
 			}
-
-			if v, ok := cs["tls_list"]; ok && !isIntfNil(v) {
-
-				sl := v.([]interface{})
-				tlsList := make([]*ves_io_schema.DomainType, len(sl))
-				ruleChoiceInt.DenyList.TlsList = tlsList
-				for i, set := range sl {
-					tlsList[i] = &ves_io_schema.DomainType{}
-					tlsListMapStrToI := set.(map[string]interface{})
-
-					domainChoiceTypeFound := false
-
-					if v, ok := tlsListMapStrToI["exact_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
-
-						domainChoiceTypeFound = true
-						domainChoiceInt := &ves_io_schema.DomainType_ExactValue{}
-
-						tlsList[i].DomainChoice = domainChoiceInt
-
-						domainChoiceInt.ExactValue = v.(string)
-
-					}
-
-					if v, ok := tlsListMapStrToI["regex_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
-
-						domainChoiceTypeFound = true
-						domainChoiceInt := &ves_io_schema.DomainType_RegexValue{}
-
-						tlsList[i].DomainChoice = domainChoiceInt
-
-						domainChoiceInt.RegexValue = v.(string)
-
-					}
-
-					if v, ok := tlsListMapStrToI["suffix_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
-
-						domainChoiceTypeFound = true
-						domainChoiceInt := &ves_io_schema.DomainType_SuffixValue{}
-
-						tlsList[i].DomainChoice = domainChoiceInt
-
-						domainChoiceInt.SuffixValue = v.(string)
-
-					}
-
-				}
-
-			}
-
 		}
 
 	}
@@ -1592,632 +1634,668 @@ func resourceVolterraForwardProxyPolicyCreate(d *schema.ResourceData, meta inter
 		ruleChoiceInt.RuleList = &ves_io_schema_views_forward_proxy_policy.ForwardProxyRuleListType{}
 		createSpec.RuleChoice = ruleChoiceInt
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
+			if set != nil {
+				cs := set.(map[string]interface{})
 
-			if v, ok := cs["rules"]; ok && !isIntfNil(v) {
+				if v, ok := cs["rules"]; ok && !isIntfNil(v) {
 
-				sl := v.([]interface{})
-				rules := make([]*ves_io_schema_views_forward_proxy_policy.ForwardProxyAdvancedRuleType, len(sl))
-				ruleChoiceInt.RuleList.Rules = rules
-				for i, set := range sl {
-					rules[i] = &ves_io_schema_views_forward_proxy_policy.ForwardProxyAdvancedRuleType{}
-					rulesMapStrToI := set.(map[string]interface{})
+					sl := v.([]interface{})
+					rules := make([]*ves_io_schema_views_forward_proxy_policy.ForwardProxyAdvancedRuleType, len(sl))
+					ruleChoiceInt.RuleList.Rules = rules
+					for i, set := range sl {
+						if set != nil {
+							rules[i] = &ves_io_schema_views_forward_proxy_policy.ForwardProxyAdvancedRuleType{}
+							rulesMapStrToI := set.(map[string]interface{})
 
-					if v, ok := rulesMapStrToI["action"]; ok && !isIntfNil(v) {
+							if v, ok := rulesMapStrToI["action"]; ok && !isIntfNil(v) {
 
-						rules[i].Action = ves_io_schema_policy.RuleAction(ves_io_schema_policy.RuleAction_value[v.(string)])
+								rules[i].Action = ves_io_schema_policy.RuleAction(ves_io_schema_policy.RuleAction_value[v.(string)])
 
-					}
+							}
 
-					destinationChoiceTypeFound := false
+							destinationChoiceTypeFound := false
 
-					if v, ok := rulesMapStrToI["all_destinations"]; ok && !isIntfNil(v) && !destinationChoiceTypeFound {
+							if v, ok := rulesMapStrToI["all_destinations"]; ok && !isIntfNil(v) && !destinationChoiceTypeFound {
 
-						destinationChoiceTypeFound = true
+								destinationChoiceTypeFound = true
 
-						if v.(bool) {
-							destinationChoiceInt := &ves_io_schema_views_forward_proxy_policy.ForwardProxyAdvancedRuleType_AllDestinations{}
-							destinationChoiceInt.AllDestinations = &ves_io_schema.Empty{}
-							rules[i].DestinationChoice = destinationChoiceInt
-						}
-
-					}
-
-					if v, ok := rulesMapStrToI["dst_asn_list"]; ok && !isIntfNil(v) && !destinationChoiceTypeFound {
-
-						destinationChoiceTypeFound = true
-						destinationChoiceInt := &ves_io_schema_views_forward_proxy_policy.ForwardProxyAdvancedRuleType_DstAsnList{}
-						destinationChoiceInt.DstAsnList = &ves_io_schema_policy.AsnMatchList{}
-						rules[i].DestinationChoice = destinationChoiceInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["as_numbers"]; ok && !isIntfNil(v) {
-
-								ls := make([]uint32, len(v.([]interface{})))
-								for i, v := range v.([]interface{}) {
-									ls[i] = uint32(v.(int))
+								if v.(bool) {
+									destinationChoiceInt := &ves_io_schema_views_forward_proxy_policy.ForwardProxyAdvancedRuleType_AllDestinations{}
+									destinationChoiceInt.AllDestinations = &ves_io_schema.Empty{}
+									rules[i].DestinationChoice = destinationChoiceInt
 								}
-								destinationChoiceInt.DstAsnList.AsNumbers = ls
 
 							}
 
-						}
+							if v, ok := rulesMapStrToI["dst_asn_list"]; ok && !isIntfNil(v) && !destinationChoiceTypeFound {
 
-					}
-
-					if v, ok := rulesMapStrToI["dst_asn_set"]; ok && !isIntfNil(v) && !destinationChoiceTypeFound {
-
-						destinationChoiceTypeFound = true
-						destinationChoiceInt := &ves_io_schema_views_forward_proxy_policy.ForwardProxyAdvancedRuleType_DstAsnSet{}
-						destinationChoiceInt.DstAsnSet = &ves_io_schema_views.ObjectRefType{}
-						rules[i].DestinationChoice = destinationChoiceInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-								destinationChoiceInt.DstAsnSet.Name = v.(string)
-
-							}
-
-							if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
-
-								destinationChoiceInt.DstAsnSet.Namespace = v.(string)
-
-							}
-
-							if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
-
-								destinationChoiceInt.DstAsnSet.Tenant = v.(string)
-
-							}
-
-						}
-
-					}
-
-					if v, ok := rulesMapStrToI["dst_ip_prefix_set"]; ok && !isIntfNil(v) && !destinationChoiceTypeFound {
-
-						destinationChoiceTypeFound = true
-						destinationChoiceInt := &ves_io_schema_views_forward_proxy_policy.ForwardProxyAdvancedRuleType_DstIpPrefixSet{}
-						destinationChoiceInt.DstIpPrefixSet = &ves_io_schema_views.ObjectRefType{}
-						rules[i].DestinationChoice = destinationChoiceInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-								destinationChoiceInt.DstIpPrefixSet.Name = v.(string)
-
-							}
-
-							if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
-
-								destinationChoiceInt.DstIpPrefixSet.Namespace = v.(string)
-
-							}
-
-							if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
-
-								destinationChoiceInt.DstIpPrefixSet.Tenant = v.(string)
-
-							}
-
-						}
-
-					}
-
-					if v, ok := rulesMapStrToI["dst_label_selector"]; ok && !isIntfNil(v) && !destinationChoiceTypeFound {
-
-						destinationChoiceTypeFound = true
-						destinationChoiceInt := &ves_io_schema_views_forward_proxy_policy.ForwardProxyAdvancedRuleType_DstLabelSelector{}
-						destinationChoiceInt.DstLabelSelector = &ves_io_schema.LabelSelectorType{}
-						rules[i].DestinationChoice = destinationChoiceInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["expressions"]; ok && !isIntfNil(v) {
-
-								ls := make([]string, len(v.([]interface{})))
-								for i, v := range v.([]interface{}) {
-									ls[i] = v.(string)
-								}
-								destinationChoiceInt.DstLabelSelector.Expressions = ls
-
-							}
-
-						}
-
-					}
-
-					if v, ok := rulesMapStrToI["dst_prefix_list"]; ok && !isIntfNil(v) && !destinationChoiceTypeFound {
-
-						destinationChoiceTypeFound = true
-						destinationChoiceInt := &ves_io_schema_views_forward_proxy_policy.ForwardProxyAdvancedRuleType_DstPrefixList{}
-						destinationChoiceInt.DstPrefixList = &ves_io_schema_views.PrefixStringListType{}
-						rules[i].DestinationChoice = destinationChoiceInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["ipv6_prefixes"]; ok && !isIntfNil(v) {
-
-								ls := make([]string, len(v.([]interface{})))
-								for i, v := range v.([]interface{}) {
-									ls[i] = v.(string)
-								}
-								destinationChoiceInt.DstPrefixList.Ipv6Prefixes = ls
-
-							}
-
-							if v, ok := cs["prefixes"]; ok && !isIntfNil(v) {
-
-								ls := make([]string, len(v.([]interface{})))
-								for i, v := range v.([]interface{}) {
-									ls[i] = v.(string)
-								}
-								destinationChoiceInt.DstPrefixList.Prefixes = ls
-
-							}
-
-						}
-
-					}
-
-					if v, ok := rulesMapStrToI["http_list"]; ok && !isIntfNil(v) && !destinationChoiceTypeFound {
-
-						destinationChoiceTypeFound = true
-						destinationChoiceInt := &ves_io_schema_views_forward_proxy_policy.ForwardProxyAdvancedRuleType_HttpList{}
-						destinationChoiceInt.HttpList = &ves_io_schema_views_forward_proxy_policy.URLListType{}
-						rules[i].DestinationChoice = destinationChoiceInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["http_list"]; ok && !isIntfNil(v) {
+								destinationChoiceTypeFound = true
+								destinationChoiceInt := &ves_io_schema_views_forward_proxy_policy.ForwardProxyAdvancedRuleType_DstAsnList{}
+								destinationChoiceInt.DstAsnList = &ves_io_schema_policy.AsnMatchList{}
+								rules[i].DestinationChoice = destinationChoiceInt
 
 								sl := v.([]interface{})
-								httpList := make([]*ves_io_schema_views_forward_proxy_policy.URLType, len(sl))
-								destinationChoiceInt.HttpList.HttpList = httpList
-								for i, set := range sl {
-									httpList[i] = &ves_io_schema_views_forward_proxy_policy.URLType{}
-									httpListMapStrToI := set.(map[string]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
 
-									domainChoiceTypeFound := false
+										if v, ok := cs["as_numbers"]; ok && !isIntfNil(v) {
 
-									if v, ok := httpListMapStrToI["exact_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
+											ls := make([]uint32, len(v.([]interface{})))
+											for i, v := range v.([]interface{}) {
+												ls[i] = uint32(v.(int))
+											}
+											destinationChoiceInt.DstAsnList.AsNumbers = ls
 
-										domainChoiceTypeFound = true
-										domainChoiceInt := &ves_io_schema_views_forward_proxy_policy.URLType_ExactValue{}
-
-										httpList[i].DomainChoice = domainChoiceInt
-
-										domainChoiceInt.ExactValue = v.(string)
-
-									}
-
-									if v, ok := httpListMapStrToI["regex_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
-
-										domainChoiceTypeFound = true
-										domainChoiceInt := &ves_io_schema_views_forward_proxy_policy.URLType_RegexValue{}
-
-										httpList[i].DomainChoice = domainChoiceInt
-
-										domainChoiceInt.RegexValue = v.(string)
-
-									}
-
-									if v, ok := httpListMapStrToI["suffix_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
-
-										domainChoiceTypeFound = true
-										domainChoiceInt := &ves_io_schema_views_forward_proxy_policy.URLType_SuffixValue{}
-
-										httpList[i].DomainChoice = domainChoiceInt
-
-										domainChoiceInt.SuffixValue = v.(string)
-
-									}
-
-									pathChoiceTypeFound := false
-
-									if v, ok := httpListMapStrToI["any_path"]; ok && !isIntfNil(v) && !pathChoiceTypeFound {
-
-										pathChoiceTypeFound = true
-
-										if v.(bool) {
-											pathChoiceInt := &ves_io_schema_views_forward_proxy_policy.URLType_AnyPath{}
-											pathChoiceInt.AnyPath = &ves_io_schema.Empty{}
-											httpList[i].PathChoice = pathChoiceInt
 										}
 
 									}
-
-									if v, ok := httpListMapStrToI["path_exact_value"]; ok && !isIntfNil(v) && !pathChoiceTypeFound {
-
-										pathChoiceTypeFound = true
-										pathChoiceInt := &ves_io_schema_views_forward_proxy_policy.URLType_PathExactValue{}
-
-										httpList[i].PathChoice = pathChoiceInt
-
-										pathChoiceInt.PathExactValue = v.(string)
-
-									}
-
-									if v, ok := httpListMapStrToI["path_prefix_value"]; ok && !isIntfNil(v) && !pathChoiceTypeFound {
-
-										pathChoiceTypeFound = true
-										pathChoiceInt := &ves_io_schema_views_forward_proxy_policy.URLType_PathPrefixValue{}
-
-										httpList[i].PathChoice = pathChoiceInt
-
-										pathChoiceInt.PathPrefixValue = v.(string)
-
-									}
-
-									if v, ok := httpListMapStrToI["path_regex_value"]; ok && !isIntfNil(v) && !pathChoiceTypeFound {
-
-										pathChoiceTypeFound = true
-										pathChoiceInt := &ves_io_schema_views_forward_proxy_policy.URLType_PathRegexValue{}
-
-										httpList[i].PathChoice = pathChoiceInt
-
-										pathChoiceInt.PathRegexValue = v.(string)
-
-									}
-
 								}
 
 							}
 
-						}
+							if v, ok := rulesMapStrToI["dst_asn_set"]; ok && !isIntfNil(v) && !destinationChoiceTypeFound {
 
-					}
-
-					if v, ok := rulesMapStrToI["tls_list"]; ok && !isIntfNil(v) && !destinationChoiceTypeFound {
-
-						destinationChoiceTypeFound = true
-						destinationChoiceInt := &ves_io_schema_views_forward_proxy_policy.ForwardProxyAdvancedRuleType_TlsList{}
-						destinationChoiceInt.TlsList = &ves_io_schema_views_forward_proxy_policy.DomainListType{}
-						rules[i].DestinationChoice = destinationChoiceInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["tls_list"]; ok && !isIntfNil(v) {
+								destinationChoiceTypeFound = true
+								destinationChoiceInt := &ves_io_schema_views_forward_proxy_policy.ForwardProxyAdvancedRuleType_DstAsnSet{}
+								destinationChoiceInt.DstAsnSet = &ves_io_schema_views.ObjectRefType{}
+								rules[i].DestinationChoice = destinationChoiceInt
 
 								sl := v.([]interface{})
-								tlsList := make([]*ves_io_schema.DomainType, len(sl))
-								destinationChoiceInt.TlsList.TlsList = tlsList
-								for i, set := range sl {
-									tlsList[i] = &ves_io_schema.DomainType{}
-									tlsListMapStrToI := set.(map[string]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
 
-									domainChoiceTypeFound := false
+										if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
-									if v, ok := tlsListMapStrToI["exact_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
+											destinationChoiceInt.DstAsnSet.Name = v.(string)
 
-										domainChoiceTypeFound = true
-										domainChoiceInt := &ves_io_schema.DomainType_ExactValue{}
+										}
 
-										tlsList[i].DomainChoice = domainChoiceInt
+										if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
 
-										domainChoiceInt.ExactValue = v.(string)
+											destinationChoiceInt.DstAsnSet.Namespace = v.(string)
 
-									}
+										}
 
-									if v, ok := tlsListMapStrToI["regex_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
+										if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
 
-										domainChoiceTypeFound = true
-										domainChoiceInt := &ves_io_schema.DomainType_RegexValue{}
+											destinationChoiceInt.DstAsnSet.Tenant = v.(string)
 
-										tlsList[i].DomainChoice = domainChoiceInt
-
-										domainChoiceInt.RegexValue = v.(string)
+										}
 
 									}
+								}
 
-									if v, ok := tlsListMapStrToI["suffix_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
+							}
 
-										domainChoiceTypeFound = true
-										domainChoiceInt := &ves_io_schema.DomainType_SuffixValue{}
+							if v, ok := rulesMapStrToI["dst_ip_prefix_set"]; ok && !isIntfNil(v) && !destinationChoiceTypeFound {
 
-										tlsList[i].DomainChoice = domainChoiceInt
+								destinationChoiceTypeFound = true
+								destinationChoiceInt := &ves_io_schema_views_forward_proxy_policy.ForwardProxyAdvancedRuleType_DstIpPrefixSet{}
+								destinationChoiceInt.DstIpPrefixSet = &ves_io_schema_views.ObjectRefType{}
+								rules[i].DestinationChoice = destinationChoiceInt
 
-										domainChoiceInt.SuffixValue = v.(string)
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+											destinationChoiceInt.DstIpPrefixSet.Name = v.(string)
+
+										}
+
+										if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+											destinationChoiceInt.DstIpPrefixSet.Namespace = v.(string)
+
+										}
+
+										if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+											destinationChoiceInt.DstIpPrefixSet.Tenant = v.(string)
+
+										}
 
 									}
+								}
 
+							}
+
+							if v, ok := rulesMapStrToI["dst_label_selector"]; ok && !isIntfNil(v) && !destinationChoiceTypeFound {
+
+								destinationChoiceTypeFound = true
+								destinationChoiceInt := &ves_io_schema_views_forward_proxy_policy.ForwardProxyAdvancedRuleType_DstLabelSelector{}
+								destinationChoiceInt.DstLabelSelector = &ves_io_schema.LabelSelectorType{}
+								rules[i].DestinationChoice = destinationChoiceInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["expressions"]; ok && !isIntfNil(v) {
+
+											ls := make([]string, len(v.([]interface{})))
+											for i, v := range v.([]interface{}) {
+												ls[i] = v.(string)
+											}
+											destinationChoiceInt.DstLabelSelector.Expressions = ls
+
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := rulesMapStrToI["dst_prefix_list"]; ok && !isIntfNil(v) && !destinationChoiceTypeFound {
+
+								destinationChoiceTypeFound = true
+								destinationChoiceInt := &ves_io_schema_views_forward_proxy_policy.ForwardProxyAdvancedRuleType_DstPrefixList{}
+								destinationChoiceInt.DstPrefixList = &ves_io_schema_views.PrefixStringListType{}
+								rules[i].DestinationChoice = destinationChoiceInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["ipv6_prefixes"]; ok && !isIntfNil(v) {
+
+											ls := make([]string, len(v.([]interface{})))
+											for i, v := range v.([]interface{}) {
+												ls[i] = v.(string)
+											}
+											destinationChoiceInt.DstPrefixList.Ipv6Prefixes = ls
+
+										}
+
+										if v, ok := cs["prefixes"]; ok && !isIntfNil(v) {
+
+											ls := make([]string, len(v.([]interface{})))
+											for i, v := range v.([]interface{}) {
+												ls[i] = v.(string)
+											}
+											destinationChoiceInt.DstPrefixList.Prefixes = ls
+
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := rulesMapStrToI["http_list"]; ok && !isIntfNil(v) && !destinationChoiceTypeFound {
+
+								destinationChoiceTypeFound = true
+								destinationChoiceInt := &ves_io_schema_views_forward_proxy_policy.ForwardProxyAdvancedRuleType_HttpList{}
+								destinationChoiceInt.HttpList = &ves_io_schema_views_forward_proxy_policy.URLListType{}
+								rules[i].DestinationChoice = destinationChoiceInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["http_list"]; ok && !isIntfNil(v) {
+
+											sl := v.([]interface{})
+											httpList := make([]*ves_io_schema_views_forward_proxy_policy.URLType, len(sl))
+											destinationChoiceInt.HttpList.HttpList = httpList
+											for i, set := range sl {
+												if set != nil {
+													httpList[i] = &ves_io_schema_views_forward_proxy_policy.URLType{}
+													httpListMapStrToI := set.(map[string]interface{})
+
+													domainChoiceTypeFound := false
+
+													if v, ok := httpListMapStrToI["exact_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
+
+														domainChoiceTypeFound = true
+														domainChoiceInt := &ves_io_schema_views_forward_proxy_policy.URLType_ExactValue{}
+
+														httpList[i].DomainChoice = domainChoiceInt
+
+														domainChoiceInt.ExactValue = v.(string)
+
+													}
+
+													if v, ok := httpListMapStrToI["regex_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
+
+														domainChoiceTypeFound = true
+														domainChoiceInt := &ves_io_schema_views_forward_proxy_policy.URLType_RegexValue{}
+
+														httpList[i].DomainChoice = domainChoiceInt
+
+														domainChoiceInt.RegexValue = v.(string)
+
+													}
+
+													if v, ok := httpListMapStrToI["suffix_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
+
+														domainChoiceTypeFound = true
+														domainChoiceInt := &ves_io_schema_views_forward_proxy_policy.URLType_SuffixValue{}
+
+														httpList[i].DomainChoice = domainChoiceInt
+
+														domainChoiceInt.SuffixValue = v.(string)
+
+													}
+
+													pathChoiceTypeFound := false
+
+													if v, ok := httpListMapStrToI["any_path"]; ok && !isIntfNil(v) && !pathChoiceTypeFound {
+
+														pathChoiceTypeFound = true
+
+														if v.(bool) {
+															pathChoiceInt := &ves_io_schema_views_forward_proxy_policy.URLType_AnyPath{}
+															pathChoiceInt.AnyPath = &ves_io_schema.Empty{}
+															httpList[i].PathChoice = pathChoiceInt
+														}
+
+													}
+
+													if v, ok := httpListMapStrToI["path_exact_value"]; ok && !isIntfNil(v) && !pathChoiceTypeFound {
+
+														pathChoiceTypeFound = true
+														pathChoiceInt := &ves_io_schema_views_forward_proxy_policy.URLType_PathExactValue{}
+
+														httpList[i].PathChoice = pathChoiceInt
+
+														pathChoiceInt.PathExactValue = v.(string)
+
+													}
+
+													if v, ok := httpListMapStrToI["path_prefix_value"]; ok && !isIntfNil(v) && !pathChoiceTypeFound {
+
+														pathChoiceTypeFound = true
+														pathChoiceInt := &ves_io_schema_views_forward_proxy_policy.URLType_PathPrefixValue{}
+
+														httpList[i].PathChoice = pathChoiceInt
+
+														pathChoiceInt.PathPrefixValue = v.(string)
+
+													}
+
+													if v, ok := httpListMapStrToI["path_regex_value"]; ok && !isIntfNil(v) && !pathChoiceTypeFound {
+
+														pathChoiceTypeFound = true
+														pathChoiceInt := &ves_io_schema_views_forward_proxy_policy.URLType_PathRegexValue{}
+
+														httpList[i].PathChoice = pathChoiceInt
+
+														pathChoiceInt.PathRegexValue = v.(string)
+
+													}
+
+												}
+											}
+
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := rulesMapStrToI["tls_list"]; ok && !isIntfNil(v) && !destinationChoiceTypeFound {
+
+								destinationChoiceTypeFound = true
+								destinationChoiceInt := &ves_io_schema_views_forward_proxy_policy.ForwardProxyAdvancedRuleType_TlsList{}
+								destinationChoiceInt.TlsList = &ves_io_schema_views_forward_proxy_policy.DomainListType{}
+								rules[i].DestinationChoice = destinationChoiceInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["tls_list"]; ok && !isIntfNil(v) {
+
+											sl := v.([]interface{})
+											tlsList := make([]*ves_io_schema.DomainType, len(sl))
+											destinationChoiceInt.TlsList.TlsList = tlsList
+											for i, set := range sl {
+												if set != nil {
+													tlsList[i] = &ves_io_schema.DomainType{}
+													tlsListMapStrToI := set.(map[string]interface{})
+
+													domainChoiceTypeFound := false
+
+													if v, ok := tlsListMapStrToI["exact_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
+
+														domainChoiceTypeFound = true
+														domainChoiceInt := &ves_io_schema.DomainType_ExactValue{}
+
+														tlsList[i].DomainChoice = domainChoiceInt
+
+														domainChoiceInt.ExactValue = v.(string)
+
+													}
+
+													if v, ok := tlsListMapStrToI["regex_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
+
+														domainChoiceTypeFound = true
+														domainChoiceInt := &ves_io_schema.DomainType_RegexValue{}
+
+														tlsList[i].DomainChoice = domainChoiceInt
+
+														domainChoiceInt.RegexValue = v.(string)
+
+													}
+
+													if v, ok := tlsListMapStrToI["suffix_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
+
+														domainChoiceTypeFound = true
+														domainChoiceInt := &ves_io_schema.DomainType_SuffixValue{}
+
+														tlsList[i].DomainChoice = domainChoiceInt
+
+														domainChoiceInt.SuffixValue = v.(string)
+
+													}
+
+												}
+											}
+
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := rulesMapStrToI["url_category_list"]; ok && !isIntfNil(v) && !destinationChoiceTypeFound {
+
+								destinationChoiceTypeFound = true
+								destinationChoiceInt := &ves_io_schema_views_forward_proxy_policy.ForwardProxyAdvancedRuleType_UrlCategoryList{}
+								destinationChoiceInt.UrlCategoryList = &ves_io_schema_views_forward_proxy_policy.URLCategoryListType{}
+								rules[i].DestinationChoice = destinationChoiceInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["url_categories"]; ok && !isIntfNil(v) {
+
+											url_categoriesList := []ves_io_schema_policy.URLCategory{}
+											for _, j := range v.([]interface{}) {
+												url_categoriesList = append(url_categoriesList, ves_io_schema_policy.URLCategory(ves_io_schema_policy.URLCategory_value[j.(string)]))
+											}
+											destinationChoiceInt.UrlCategoryList.UrlCategories = url_categoriesList
+
+										}
+
+									}
+								}
+
+							}
+
+							httpConnectChoiceTypeFound := false
+
+							if v, ok := rulesMapStrToI["no_http_connect_port"]; ok && !isIntfNil(v) && !httpConnectChoiceTypeFound {
+
+								httpConnectChoiceTypeFound = true
+
+								if v.(bool) {
+									httpConnectChoiceInt := &ves_io_schema_views_forward_proxy_policy.ForwardProxyAdvancedRuleType_NoHttpConnectPort{}
+									httpConnectChoiceInt.NoHttpConnectPort = &ves_io_schema.Empty{}
+									rules[i].HttpConnectChoice = httpConnectChoiceInt
+								}
+
+							}
+
+							if v, ok := rulesMapStrToI["port_matcher"]; ok && !isIntfNil(v) && !httpConnectChoiceTypeFound {
+
+								httpConnectChoiceTypeFound = true
+								httpConnectChoiceInt := &ves_io_schema_views_forward_proxy_policy.ForwardProxyAdvancedRuleType_PortMatcher{}
+								httpConnectChoiceInt.PortMatcher = &ves_io_schema_policy.PortMatcherType{}
+								rules[i].HttpConnectChoice = httpConnectChoiceInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["invert_matcher"]; ok && !isIntfNil(v) {
+
+											httpConnectChoiceInt.PortMatcher.InvertMatcher = v.(bool)
+
+										}
+
+										if v, ok := cs["ports"]; ok && !isIntfNil(v) {
+
+											ls := make([]string, len(v.([]interface{})))
+											for i, v := range v.([]interface{}) {
+												ls[i] = v.(string)
+											}
+											httpConnectChoiceInt.PortMatcher.Ports = ls
+
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := rulesMapStrToI["metadata"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								metadata := &ves_io_schema.MessageMetaType{}
+								rules[i].Metadata = metadata
+								for _, set := range sl {
+									if set != nil {
+										metadataMapStrToI := set.(map[string]interface{})
+
+										if w, ok := metadataMapStrToI["description"]; ok && !isIntfNil(w) {
+											metadata.Description = w.(string)
+										}
+
+										if w, ok := metadataMapStrToI["disable"]; ok && !isIntfNil(w) {
+											metadata.Disable = w.(bool)
+										}
+
+										if w, ok := metadataMapStrToI["name"]; ok && !isIntfNil(w) {
+											metadata.Name = w.(string)
+										}
+
+									}
+								}
+
+							}
+
+							if w, ok := rulesMapStrToI["rule_description"]; ok && !isIntfNil(w) {
+								rules[i].RuleDescription = w.(string)
+							}
+
+							if w, ok := rulesMapStrToI["rule_name"]; ok && !isIntfNil(w) {
+								rules[i].RuleName = w.(string)
+							}
+
+							sourceChoiceTypeFound := false
+
+							if v, ok := rulesMapStrToI["all_sources"]; ok && !isIntfNil(v) && !sourceChoiceTypeFound {
+
+								sourceChoiceTypeFound = true
+
+								if v.(bool) {
+									sourceChoiceInt := &ves_io_schema_views_forward_proxy_policy.ForwardProxyAdvancedRuleType_AllSources{}
+									sourceChoiceInt.AllSources = &ves_io_schema.Empty{}
+									rules[i].SourceChoice = sourceChoiceInt
+								}
+
+							}
+
+							if v, ok := rulesMapStrToI["inside_sources"]; ok && !isIntfNil(v) && !sourceChoiceTypeFound {
+
+								sourceChoiceTypeFound = true
+
+								if v.(bool) {
+									sourceChoiceInt := &ves_io_schema_views_forward_proxy_policy.ForwardProxyAdvancedRuleType_InsideSources{}
+									sourceChoiceInt.InsideSources = &ves_io_schema.Empty{}
+									rules[i].SourceChoice = sourceChoiceInt
+								}
+
+							}
+
+							if v, ok := rulesMapStrToI["interface"]; ok && !isIntfNil(v) && !sourceChoiceTypeFound {
+
+								sourceChoiceTypeFound = true
+								sourceChoiceInt := &ves_io_schema_views_forward_proxy_policy.ForwardProxyAdvancedRuleType_Interface{}
+								sourceChoiceInt.Interface = &ves_io_schema_views.ObjectRefType{}
+								rules[i].SourceChoice = sourceChoiceInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+											sourceChoiceInt.Interface.Name = v.(string)
+
+										}
+
+										if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+											sourceChoiceInt.Interface.Namespace = v.(string)
+
+										}
+
+										if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+											sourceChoiceInt.Interface.Tenant = v.(string)
+
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := rulesMapStrToI["ip_prefix_set"]; ok && !isIntfNil(v) && !sourceChoiceTypeFound {
+
+								sourceChoiceTypeFound = true
+								sourceChoiceInt := &ves_io_schema_views_forward_proxy_policy.ForwardProxyAdvancedRuleType_IpPrefixSet{}
+								sourceChoiceInt.IpPrefixSet = &ves_io_schema_views.ObjectRefType{}
+								rules[i].SourceChoice = sourceChoiceInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+											sourceChoiceInt.IpPrefixSet.Name = v.(string)
+
+										}
+
+										if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+											sourceChoiceInt.IpPrefixSet.Namespace = v.(string)
+
+										}
+
+										if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+											sourceChoiceInt.IpPrefixSet.Tenant = v.(string)
+
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := rulesMapStrToI["label_selector"]; ok && !isIntfNil(v) && !sourceChoiceTypeFound {
+
+								sourceChoiceTypeFound = true
+								sourceChoiceInt := &ves_io_schema_views_forward_proxy_policy.ForwardProxyAdvancedRuleType_LabelSelector{}
+								sourceChoiceInt.LabelSelector = &ves_io_schema.LabelSelectorType{}
+								rules[i].SourceChoice = sourceChoiceInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["expressions"]; ok && !isIntfNil(v) {
+
+											ls := make([]string, len(v.([]interface{})))
+											for i, v := range v.([]interface{}) {
+												ls[i] = v.(string)
+											}
+											sourceChoiceInt.LabelSelector.Expressions = ls
+
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := rulesMapStrToI["namespace"]; ok && !isIntfNil(v) && !sourceChoiceTypeFound {
+
+								sourceChoiceTypeFound = true
+								sourceChoiceInt := &ves_io_schema_views_forward_proxy_policy.ForwardProxyAdvancedRuleType_Namespace{}
+
+								rules[i].SourceChoice = sourceChoiceInt
+
+								sourceChoiceInt.Namespace = v.(string)
+
+							}
+
+							if v, ok := rulesMapStrToI["prefix_list"]; ok && !isIntfNil(v) && !sourceChoiceTypeFound {
+
+								sourceChoiceTypeFound = true
+								sourceChoiceInt := &ves_io_schema_views_forward_proxy_policy.ForwardProxyAdvancedRuleType_PrefixList{}
+								sourceChoiceInt.PrefixList = &ves_io_schema_views.PrefixStringListType{}
+								rules[i].SourceChoice = sourceChoiceInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["ipv6_prefixes"]; ok && !isIntfNil(v) {
+
+											ls := make([]string, len(v.([]interface{})))
+											for i, v := range v.([]interface{}) {
+												ls[i] = v.(string)
+											}
+											sourceChoiceInt.PrefixList.Ipv6Prefixes = ls
+
+										}
+
+										if v, ok := cs["prefixes"]; ok && !isIntfNil(v) {
+
+											ls := make([]string, len(v.([]interface{})))
+											for i, v := range v.([]interface{}) {
+												ls[i] = v.(string)
+											}
+											sourceChoiceInt.PrefixList.Prefixes = ls
+
+										}
+
+									}
 								}
 
 							}
 
 						}
-
-					}
-
-					if v, ok := rulesMapStrToI["url_category_list"]; ok && !isIntfNil(v) && !destinationChoiceTypeFound {
-
-						destinationChoiceTypeFound = true
-						destinationChoiceInt := &ves_io_schema_views_forward_proxy_policy.ForwardProxyAdvancedRuleType_UrlCategoryList{}
-						destinationChoiceInt.UrlCategoryList = &ves_io_schema_views_forward_proxy_policy.URLCategoryListType{}
-						rules[i].DestinationChoice = destinationChoiceInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["url_categories"]; ok && !isIntfNil(v) {
-
-								url_categoriesList := []ves_io_schema_policy.URLCategory{}
-								for _, j := range v.([]interface{}) {
-									url_categoriesList = append(url_categoriesList, ves_io_schema_policy.URLCategory(ves_io_schema_policy.URLCategory_value[j.(string)]))
-								}
-								destinationChoiceInt.UrlCategoryList.UrlCategories = url_categoriesList
-
-							}
-
-						}
-
-					}
-
-					httpConnectChoiceTypeFound := false
-
-					if v, ok := rulesMapStrToI["no_http_connect_port"]; ok && !isIntfNil(v) && !httpConnectChoiceTypeFound {
-
-						httpConnectChoiceTypeFound = true
-
-						if v.(bool) {
-							httpConnectChoiceInt := &ves_io_schema_views_forward_proxy_policy.ForwardProxyAdvancedRuleType_NoHttpConnectPort{}
-							httpConnectChoiceInt.NoHttpConnectPort = &ves_io_schema.Empty{}
-							rules[i].HttpConnectChoice = httpConnectChoiceInt
-						}
-
-					}
-
-					if v, ok := rulesMapStrToI["port_matcher"]; ok && !isIntfNil(v) && !httpConnectChoiceTypeFound {
-
-						httpConnectChoiceTypeFound = true
-						httpConnectChoiceInt := &ves_io_schema_views_forward_proxy_policy.ForwardProxyAdvancedRuleType_PortMatcher{}
-						httpConnectChoiceInt.PortMatcher = &ves_io_schema_policy.PortMatcherType{}
-						rules[i].HttpConnectChoice = httpConnectChoiceInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["invert_matcher"]; ok && !isIntfNil(v) {
-
-								httpConnectChoiceInt.PortMatcher.InvertMatcher = v.(bool)
-
-							}
-
-							if v, ok := cs["ports"]; ok && !isIntfNil(v) {
-
-								ls := make([]string, len(v.([]interface{})))
-								for i, v := range v.([]interface{}) {
-									ls[i] = v.(string)
-								}
-								httpConnectChoiceInt.PortMatcher.Ports = ls
-
-							}
-
-						}
-
-					}
-
-					if v, ok := rulesMapStrToI["metadata"]; ok && !isIntfNil(v) {
-
-						sl := v.(*schema.Set).List()
-						metadata := &ves_io_schema.MessageMetaType{}
-						rules[i].Metadata = metadata
-						for _, set := range sl {
-							metadataMapStrToI := set.(map[string]interface{})
-
-							if w, ok := metadataMapStrToI["description"]; ok && !isIntfNil(w) {
-								metadata.Description = w.(string)
-							}
-
-							if w, ok := metadataMapStrToI["disable"]; ok && !isIntfNil(w) {
-								metadata.Disable = w.(bool)
-							}
-
-							if w, ok := metadataMapStrToI["name"]; ok && !isIntfNil(w) {
-								metadata.Name = w.(string)
-							}
-
-						}
-
-					}
-
-					if w, ok := rulesMapStrToI["rule_description"]; ok && !isIntfNil(w) {
-						rules[i].RuleDescription = w.(string)
-					}
-
-					if w, ok := rulesMapStrToI["rule_name"]; ok && !isIntfNil(w) {
-						rules[i].RuleName = w.(string)
-					}
-
-					sourceChoiceTypeFound := false
-
-					if v, ok := rulesMapStrToI["all_sources"]; ok && !isIntfNil(v) && !sourceChoiceTypeFound {
-
-						sourceChoiceTypeFound = true
-
-						if v.(bool) {
-							sourceChoiceInt := &ves_io_schema_views_forward_proxy_policy.ForwardProxyAdvancedRuleType_AllSources{}
-							sourceChoiceInt.AllSources = &ves_io_schema.Empty{}
-							rules[i].SourceChoice = sourceChoiceInt
-						}
-
-					}
-
-					if v, ok := rulesMapStrToI["inside_sources"]; ok && !isIntfNil(v) && !sourceChoiceTypeFound {
-
-						sourceChoiceTypeFound = true
-
-						if v.(bool) {
-							sourceChoiceInt := &ves_io_schema_views_forward_proxy_policy.ForwardProxyAdvancedRuleType_InsideSources{}
-							sourceChoiceInt.InsideSources = &ves_io_schema.Empty{}
-							rules[i].SourceChoice = sourceChoiceInt
-						}
-
-					}
-
-					if v, ok := rulesMapStrToI["interface"]; ok && !isIntfNil(v) && !sourceChoiceTypeFound {
-
-						sourceChoiceTypeFound = true
-						sourceChoiceInt := &ves_io_schema_views_forward_proxy_policy.ForwardProxyAdvancedRuleType_Interface{}
-						sourceChoiceInt.Interface = &ves_io_schema_views.ObjectRefType{}
-						rules[i].SourceChoice = sourceChoiceInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-								sourceChoiceInt.Interface.Name = v.(string)
-
-							}
-
-							if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
-
-								sourceChoiceInt.Interface.Namespace = v.(string)
-
-							}
-
-							if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
-
-								sourceChoiceInt.Interface.Tenant = v.(string)
-
-							}
-
-						}
-
-					}
-
-					if v, ok := rulesMapStrToI["ip_prefix_set"]; ok && !isIntfNil(v) && !sourceChoiceTypeFound {
-
-						sourceChoiceTypeFound = true
-						sourceChoiceInt := &ves_io_schema_views_forward_proxy_policy.ForwardProxyAdvancedRuleType_IpPrefixSet{}
-						sourceChoiceInt.IpPrefixSet = &ves_io_schema_views.ObjectRefType{}
-						rules[i].SourceChoice = sourceChoiceInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-								sourceChoiceInt.IpPrefixSet.Name = v.(string)
-
-							}
-
-							if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
-
-								sourceChoiceInt.IpPrefixSet.Namespace = v.(string)
-
-							}
-
-							if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
-
-								sourceChoiceInt.IpPrefixSet.Tenant = v.(string)
-
-							}
-
-						}
-
-					}
-
-					if v, ok := rulesMapStrToI["label_selector"]; ok && !isIntfNil(v) && !sourceChoiceTypeFound {
-
-						sourceChoiceTypeFound = true
-						sourceChoiceInt := &ves_io_schema_views_forward_proxy_policy.ForwardProxyAdvancedRuleType_LabelSelector{}
-						sourceChoiceInt.LabelSelector = &ves_io_schema.LabelSelectorType{}
-						rules[i].SourceChoice = sourceChoiceInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["expressions"]; ok && !isIntfNil(v) {
-
-								ls := make([]string, len(v.([]interface{})))
-								for i, v := range v.([]interface{}) {
-									ls[i] = v.(string)
-								}
-								sourceChoiceInt.LabelSelector.Expressions = ls
-
-							}
-
-						}
-
-					}
-
-					if v, ok := rulesMapStrToI["namespace"]; ok && !isIntfNil(v) && !sourceChoiceTypeFound {
-
-						sourceChoiceTypeFound = true
-						sourceChoiceInt := &ves_io_schema_views_forward_proxy_policy.ForwardProxyAdvancedRuleType_Namespace{}
-
-						rules[i].SourceChoice = sourceChoiceInt
-
-						sourceChoiceInt.Namespace = v.(string)
-
-					}
-
-					if v, ok := rulesMapStrToI["prefix_list"]; ok && !isIntfNil(v) && !sourceChoiceTypeFound {
-
-						sourceChoiceTypeFound = true
-						sourceChoiceInt := &ves_io_schema_views_forward_proxy_policy.ForwardProxyAdvancedRuleType_PrefixList{}
-						sourceChoiceInt.PrefixList = &ves_io_schema_views.PrefixStringListType{}
-						rules[i].SourceChoice = sourceChoiceInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["ipv6_prefixes"]; ok && !isIntfNil(v) {
-
-								ls := make([]string, len(v.([]interface{})))
-								for i, v := range v.([]interface{}) {
-									ls[i] = v.(string)
-								}
-								sourceChoiceInt.PrefixList.Ipv6Prefixes = ls
-
-							}
-
-							if v, ok := cs["prefixes"]; ok && !isIntfNil(v) {
-
-								ls := make([]string, len(v.([]interface{})))
-								for i, v := range v.([]interface{}) {
-									ls[i] = v.(string)
-								}
-								sourceChoiceInt.PrefixList.Prefixes = ls
-
-							}
-
-						}
-
 					}
 
 				}
 
 			}
-
 		}
 
 	}
@@ -2225,134 +2303,140 @@ func resourceVolterraForwardProxyPolicyCreate(d *schema.ResourceData, meta inter
 	//segment_policy
 	if v, ok := d.GetOk("segment_policy"); ok && !isIntfNil(v) {
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		segmentPolicy := &ves_io_schema_policy.SegmentPolicyType{}
 		createSpec.SegmentPolicy = segmentPolicy
 		for _, set := range sl {
-			segmentPolicyMapStrToI := set.(map[string]interface{})
+			if set != nil {
+				segmentPolicyMapStrToI := set.(map[string]interface{})
 
-			dstSegmentChoiceTypeFound := false
+				dstSegmentChoiceTypeFound := false
 
-			if v, ok := segmentPolicyMapStrToI["dst_any"]; ok && !isIntfNil(v) && !dstSegmentChoiceTypeFound {
+				if v, ok := segmentPolicyMapStrToI["dst_any"]; ok && !isIntfNil(v) && !dstSegmentChoiceTypeFound {
 
-				dstSegmentChoiceTypeFound = true
+					dstSegmentChoiceTypeFound = true
 
-				if v.(bool) {
-					dstSegmentChoiceInt := &ves_io_schema_policy.SegmentPolicyType_DstAny{}
-					dstSegmentChoiceInt.DstAny = &ves_io_schema.Empty{}
-					segmentPolicy.DstSegmentChoice = dstSegmentChoiceInt
-				}
-
-			}
-
-			if v, ok := segmentPolicyMapStrToI["dst_segments"]; ok && !isIntfNil(v) && !dstSegmentChoiceTypeFound {
-
-				dstSegmentChoiceTypeFound = true
-				dstSegmentChoiceInt := &ves_io_schema_policy.SegmentPolicyType_DstSegments{}
-				dstSegmentChoiceInt.DstSegments = &ves_io_schema_views.SegmentRefList{}
-				segmentPolicy.DstSegmentChoice = dstSegmentChoiceInt
-
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
-
-					if v, ok := cs["segments"]; ok && !isIntfNil(v) {
-
-						sl := v.([]interface{})
-						segmentsInt := make([]*ves_io_schema_views.ObjectRefType, len(sl))
-						dstSegmentChoiceInt.DstSegments.Segments = segmentsInt
-						for i, ps := range sl {
-
-							sMapToStrVal := ps.(map[string]interface{})
-							segmentsInt[i] = &ves_io_schema_views.ObjectRefType{}
-
-							if v, ok := sMapToStrVal["name"]; ok && !isIntfNil(v) {
-								segmentsInt[i].Name = v.(string)
-							}
-
-							if v, ok := sMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-								segmentsInt[i].Namespace = v.(string)
-							}
-
-							if v, ok := sMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-								segmentsInt[i].Tenant = v.(string)
-							}
-
-						}
-
+					if v.(bool) {
+						dstSegmentChoiceInt := &ves_io_schema_policy.SegmentPolicyType_DstAny{}
+						dstSegmentChoiceInt.DstAny = &ves_io_schema.Empty{}
+						segmentPolicy.DstSegmentChoice = dstSegmentChoiceInt
 					}
 
 				}
 
-			}
+				if v, ok := segmentPolicyMapStrToI["dst_segments"]; ok && !isIntfNil(v) && !dstSegmentChoiceTypeFound {
 
-			if v, ok := segmentPolicyMapStrToI["intra_segment"]; ok && !isIntfNil(v) && !dstSegmentChoiceTypeFound {
-
-				dstSegmentChoiceTypeFound = true
-
-				if v.(bool) {
-					dstSegmentChoiceInt := &ves_io_schema_policy.SegmentPolicyType_IntraSegment{}
-					dstSegmentChoiceInt.IntraSegment = &ves_io_schema.Empty{}
+					dstSegmentChoiceTypeFound = true
+					dstSegmentChoiceInt := &ves_io_schema_policy.SegmentPolicyType_DstSegments{}
+					dstSegmentChoiceInt.DstSegments = &ves_io_schema_views.SegmentRefList{}
 					segmentPolicy.DstSegmentChoice = dstSegmentChoiceInt
+
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["segments"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								segmentsInt := make([]*ves_io_schema_views.ObjectRefType, len(sl))
+								dstSegmentChoiceInt.DstSegments.Segments = segmentsInt
+								for i, ps := range sl {
+
+									sMapToStrVal := ps.(map[string]interface{})
+									segmentsInt[i] = &ves_io_schema_views.ObjectRefType{}
+
+									if v, ok := sMapToStrVal["name"]; ok && !isIntfNil(v) {
+										segmentsInt[i].Name = v.(string)
+									}
+
+									if v, ok := sMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+										segmentsInt[i].Namespace = v.(string)
+									}
+
+									if v, ok := sMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+										segmentsInt[i].Tenant = v.(string)
+									}
+
+								}
+
+							}
+
+						}
+					}
+
 				}
 
-			}
+				if v, ok := segmentPolicyMapStrToI["intra_segment"]; ok && !isIntfNil(v) && !dstSegmentChoiceTypeFound {
 
-			srcSegmentChoiceTypeFound := false
+					dstSegmentChoiceTypeFound = true
 
-			if v, ok := segmentPolicyMapStrToI["src_any"]; ok && !isIntfNil(v) && !srcSegmentChoiceTypeFound {
+					if v.(bool) {
+						dstSegmentChoiceInt := &ves_io_schema_policy.SegmentPolicyType_IntraSegment{}
+						dstSegmentChoiceInt.IntraSegment = &ves_io_schema.Empty{}
+						segmentPolicy.DstSegmentChoice = dstSegmentChoiceInt
+					}
 
-				srcSegmentChoiceTypeFound = true
+				}
 
-				if v.(bool) {
-					srcSegmentChoiceInt := &ves_io_schema_policy.SegmentPolicyType_SrcAny{}
-					srcSegmentChoiceInt.SrcAny = &ves_io_schema.Empty{}
+				srcSegmentChoiceTypeFound := false
+
+				if v, ok := segmentPolicyMapStrToI["src_any"]; ok && !isIntfNil(v) && !srcSegmentChoiceTypeFound {
+
+					srcSegmentChoiceTypeFound = true
+
+					if v.(bool) {
+						srcSegmentChoiceInt := &ves_io_schema_policy.SegmentPolicyType_SrcAny{}
+						srcSegmentChoiceInt.SrcAny = &ves_io_schema.Empty{}
+						segmentPolicy.SrcSegmentChoice = srcSegmentChoiceInt
+					}
+
+				}
+
+				if v, ok := segmentPolicyMapStrToI["src_segments"]; ok && !isIntfNil(v) && !srcSegmentChoiceTypeFound {
+
+					srcSegmentChoiceTypeFound = true
+					srcSegmentChoiceInt := &ves_io_schema_policy.SegmentPolicyType_SrcSegments{}
+					srcSegmentChoiceInt.SrcSegments = &ves_io_schema_views.SegmentRefList{}
 					segmentPolicy.SrcSegmentChoice = srcSegmentChoiceInt
-				}
 
-			}
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
 
-			if v, ok := segmentPolicyMapStrToI["src_segments"]; ok && !isIntfNil(v) && !srcSegmentChoiceTypeFound {
+							if v, ok := cs["segments"]; ok && !isIntfNil(v) {
 
-				srcSegmentChoiceTypeFound = true
-				srcSegmentChoiceInt := &ves_io_schema_policy.SegmentPolicyType_SrcSegments{}
-				srcSegmentChoiceInt.SrcSegments = &ves_io_schema_views.SegmentRefList{}
-				segmentPolicy.SrcSegmentChoice = srcSegmentChoiceInt
+								sl := v.([]interface{})
+								segmentsInt := make([]*ves_io_schema_views.ObjectRefType, len(sl))
+								srcSegmentChoiceInt.SrcSegments.Segments = segmentsInt
+								for i, ps := range sl {
 
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
+									sMapToStrVal := ps.(map[string]interface{})
+									segmentsInt[i] = &ves_io_schema_views.ObjectRefType{}
 
-					if v, ok := cs["segments"]; ok && !isIntfNil(v) {
+									if v, ok := sMapToStrVal["name"]; ok && !isIntfNil(v) {
+										segmentsInt[i].Name = v.(string)
+									}
 
-						sl := v.([]interface{})
-						segmentsInt := make([]*ves_io_schema_views.ObjectRefType, len(sl))
-						srcSegmentChoiceInt.SrcSegments.Segments = segmentsInt
-						for i, ps := range sl {
+									if v, ok := sMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+										segmentsInt[i].Namespace = v.(string)
+									}
 
-							sMapToStrVal := ps.(map[string]interface{})
-							segmentsInt[i] = &ves_io_schema_views.ObjectRefType{}
+									if v, ok := sMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+										segmentsInt[i].Tenant = v.(string)
+									}
 
-							if v, ok := sMapToStrVal["name"]; ok && !isIntfNil(v) {
-								segmentsInt[i].Name = v.(string)
-							}
+								}
 
-							if v, ok := sMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-								segmentsInt[i].Namespace = v.(string)
-							}
-
-							if v, ok := sMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-								segmentsInt[i].Tenant = v.(string)
 							}
 
 						}
-
 					}
 
 				}
 
 			}
-
 		}
 
 	}
@@ -2489,28 +2573,30 @@ func resourceVolterraForwardProxyPolicyUpdate(d *schema.ResourceData, meta inter
 		proxyChoiceInt.NetworkConnector = &ves_io_schema_views.ObjectRefType{}
 		updateSpec.ProxyChoice = proxyChoiceInt
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
+			if set != nil {
+				cs := set.(map[string]interface{})
 
-			if v, ok := cs["name"]; ok && !isIntfNil(v) {
+				if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
-				proxyChoiceInt.NetworkConnector.Name = v.(string)
+					proxyChoiceInt.NetworkConnector.Name = v.(string)
+
+				}
+
+				if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+					proxyChoiceInt.NetworkConnector.Namespace = v.(string)
+
+				}
+
+				if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+					proxyChoiceInt.NetworkConnector.Tenant = v.(string)
+
+				}
 
 			}
-
-			if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
-
-				proxyChoiceInt.NetworkConnector.Namespace = v.(string)
-
-			}
-
-			if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
-
-				proxyChoiceInt.NetworkConnector.Tenant = v.(string)
-
-			}
-
 		}
 
 	}
@@ -2522,20 +2608,22 @@ func resourceVolterraForwardProxyPolicyUpdate(d *schema.ResourceData, meta inter
 		proxyChoiceInt.ProxyLabelSelector = &ves_io_schema.LabelSelectorType{}
 		updateSpec.ProxyChoice = proxyChoiceInt
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
+			if set != nil {
+				cs := set.(map[string]interface{})
 
-			if v, ok := cs["expressions"]; ok && !isIntfNil(v) {
+				if v, ok := cs["expressions"]; ok && !isIntfNil(v) {
 
-				ls := make([]string, len(v.([]interface{})))
-				for i, v := range v.([]interface{}) {
-					ls[i] = v.(string)
+					ls := make([]string, len(v.([]interface{})))
+					for i, v := range v.([]interface{}) {
+						ls[i] = v.(string)
+					}
+					proxyChoiceInt.ProxyLabelSelector.Expressions = ls
+
 				}
-				proxyChoiceInt.ProxyLabelSelector.Expressions = ls
 
 			}
-
 		}
 
 	}
@@ -2561,224 +2649,232 @@ func resourceVolterraForwardProxyPolicyUpdate(d *schema.ResourceData, meta inter
 		ruleChoiceInt.AllowList = &ves_io_schema_views_forward_proxy_policy.ForwardProxySimpleRuleType{}
 		updateSpec.RuleChoice = ruleChoiceInt
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
+			if set != nil {
+				cs := set.(map[string]interface{})
 
-			defaultActionChoiceTypeFound := false
+				defaultActionChoiceTypeFound := false
 
-			if v, ok := cs["default_action_allow"]; ok && !isIntfNil(v) && !defaultActionChoiceTypeFound {
+				if v, ok := cs["default_action_allow"]; ok && !isIntfNil(v) && !defaultActionChoiceTypeFound {
 
-				defaultActionChoiceTypeFound = true
+					defaultActionChoiceTypeFound = true
 
-				if v.(bool) {
-					defaultActionChoiceInt := &ves_io_schema_views_forward_proxy_policy.ForwardProxySimpleRuleType_DefaultActionAllow{}
-					defaultActionChoiceInt.DefaultActionAllow = &ves_io_schema.Empty{}
-					ruleChoiceInt.AllowList.DefaultActionChoice = defaultActionChoiceInt
+					if v.(bool) {
+						defaultActionChoiceInt := &ves_io_schema_views_forward_proxy_policy.ForwardProxySimpleRuleType_DefaultActionAllow{}
+						defaultActionChoiceInt.DefaultActionAllow = &ves_io_schema.Empty{}
+						ruleChoiceInt.AllowList.DefaultActionChoice = defaultActionChoiceInt
+					}
+
 				}
 
-			}
+				if v, ok := cs["default_action_deny"]; ok && !isIntfNil(v) && !defaultActionChoiceTypeFound {
 
-			if v, ok := cs["default_action_deny"]; ok && !isIntfNil(v) && !defaultActionChoiceTypeFound {
+					defaultActionChoiceTypeFound = true
 
-				defaultActionChoiceTypeFound = true
+					if v.(bool) {
+						defaultActionChoiceInt := &ves_io_schema_views_forward_proxy_policy.ForwardProxySimpleRuleType_DefaultActionDeny{}
+						defaultActionChoiceInt.DefaultActionDeny = &ves_io_schema.Empty{}
+						ruleChoiceInt.AllowList.DefaultActionChoice = defaultActionChoiceInt
+					}
 
-				if v.(bool) {
-					defaultActionChoiceInt := &ves_io_schema_views_forward_proxy_policy.ForwardProxySimpleRuleType_DefaultActionDeny{}
-					defaultActionChoiceInt.DefaultActionDeny = &ves_io_schema.Empty{}
-					ruleChoiceInt.AllowList.DefaultActionChoice = defaultActionChoiceInt
 				}
 
-			}
+				if v, ok := cs["default_action_next_policy"]; ok && !isIntfNil(v) && !defaultActionChoiceTypeFound {
 
-			if v, ok := cs["default_action_next_policy"]; ok && !isIntfNil(v) && !defaultActionChoiceTypeFound {
+					defaultActionChoiceTypeFound = true
 
-				defaultActionChoiceTypeFound = true
+					if v.(bool) {
+						defaultActionChoiceInt := &ves_io_schema_views_forward_proxy_policy.ForwardProxySimpleRuleType_DefaultActionNextPolicy{}
+						defaultActionChoiceInt.DefaultActionNextPolicy = &ves_io_schema.Empty{}
+						ruleChoiceInt.AllowList.DefaultActionChoice = defaultActionChoiceInt
+					}
 
-				if v.(bool) {
-					defaultActionChoiceInt := &ves_io_schema_views_forward_proxy_policy.ForwardProxySimpleRuleType_DefaultActionNextPolicy{}
-					defaultActionChoiceInt.DefaultActionNextPolicy = &ves_io_schema.Empty{}
-					ruleChoiceInt.AllowList.DefaultActionChoice = defaultActionChoiceInt
 				}
 
-			}
+				if v, ok := cs["dest_list"]; ok && !isIntfNil(v) {
 
-			if v, ok := cs["dest_list"]; ok && !isIntfNil(v) {
+					sl := v.([]interface{})
+					destList := make([]*ves_io_schema.L4DestType, len(sl))
+					ruleChoiceInt.AllowList.DestList = destList
+					for i, set := range sl {
+						if set != nil {
+							destList[i] = &ves_io_schema.L4DestType{}
+							destListMapStrToI := set.(map[string]interface{})
 
-				sl := v.([]interface{})
-				destList := make([]*ves_io_schema.L4DestType, len(sl))
-				ruleChoiceInt.AllowList.DestList = destList
-				for i, set := range sl {
-					destList[i] = &ves_io_schema.L4DestType{}
-					destListMapStrToI := set.(map[string]interface{})
+							if w, ok := destListMapStrToI["ipv6_prefixes"]; ok && !isIntfNil(w) {
+								ls := make([]string, len(w.([]interface{})))
+								for i, v := range w.([]interface{}) {
+									ls[i] = v.(string)
+								}
+								destList[i].Ipv6Prefixes = ls
+							}
 
-					if w, ok := destListMapStrToI["ipv6_prefixes"]; ok && !isIntfNil(w) {
-						ls := make([]string, len(w.([]interface{})))
-						for i, v := range w.([]interface{}) {
-							ls[i] = v.(string)
+							if w, ok := destListMapStrToI["port_ranges"]; ok && !isIntfNil(w) {
+								destList[i].PortRanges = w.(string)
+							}
+
+							if w, ok := destListMapStrToI["prefixes"]; ok && !isIntfNil(w) {
+								ls := make([]string, len(w.([]interface{})))
+								for i, v := range w.([]interface{}) {
+									ls[i] = v.(string)
+								}
+								destList[i].Prefixes = ls
+							}
+
 						}
-						destList[i].Ipv6Prefixes = ls
 					}
 
-					if w, ok := destListMapStrToI["port_ranges"]; ok && !isIntfNil(w) {
-						destList[i].PortRanges = w.(string)
-					}
+				}
 
-					if w, ok := destListMapStrToI["prefixes"]; ok && !isIntfNil(w) {
-						ls := make([]string, len(w.([]interface{})))
-						for i, v := range w.([]interface{}) {
-							ls[i] = v.(string)
+				if v, ok := cs["http_list"]; ok && !isIntfNil(v) {
+
+					sl := v.([]interface{})
+					httpList := make([]*ves_io_schema_views_forward_proxy_policy.URLType, len(sl))
+					ruleChoiceInt.AllowList.HttpList = httpList
+					for i, set := range sl {
+						if set != nil {
+							httpList[i] = &ves_io_schema_views_forward_proxy_policy.URLType{}
+							httpListMapStrToI := set.(map[string]interface{})
+
+							domainChoiceTypeFound := false
+
+							if v, ok := httpListMapStrToI["exact_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
+
+								domainChoiceTypeFound = true
+								domainChoiceInt := &ves_io_schema_views_forward_proxy_policy.URLType_ExactValue{}
+
+								httpList[i].DomainChoice = domainChoiceInt
+
+								domainChoiceInt.ExactValue = v.(string)
+
+							}
+
+							if v, ok := httpListMapStrToI["regex_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
+
+								domainChoiceTypeFound = true
+								domainChoiceInt := &ves_io_schema_views_forward_proxy_policy.URLType_RegexValue{}
+
+								httpList[i].DomainChoice = domainChoiceInt
+
+								domainChoiceInt.RegexValue = v.(string)
+
+							}
+
+							if v, ok := httpListMapStrToI["suffix_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
+
+								domainChoiceTypeFound = true
+								domainChoiceInt := &ves_io_schema_views_forward_proxy_policy.URLType_SuffixValue{}
+
+								httpList[i].DomainChoice = domainChoiceInt
+
+								domainChoiceInt.SuffixValue = v.(string)
+
+							}
+
+							pathChoiceTypeFound := false
+
+							if v, ok := httpListMapStrToI["any_path"]; ok && !isIntfNil(v) && !pathChoiceTypeFound {
+
+								pathChoiceTypeFound = true
+
+								if v.(bool) {
+									pathChoiceInt := &ves_io_schema_views_forward_proxy_policy.URLType_AnyPath{}
+									pathChoiceInt.AnyPath = &ves_io_schema.Empty{}
+									httpList[i].PathChoice = pathChoiceInt
+								}
+
+							}
+
+							if v, ok := httpListMapStrToI["path_exact_value"]; ok && !isIntfNil(v) && !pathChoiceTypeFound {
+
+								pathChoiceTypeFound = true
+								pathChoiceInt := &ves_io_schema_views_forward_proxy_policy.URLType_PathExactValue{}
+
+								httpList[i].PathChoice = pathChoiceInt
+
+								pathChoiceInt.PathExactValue = v.(string)
+
+							}
+
+							if v, ok := httpListMapStrToI["path_prefix_value"]; ok && !isIntfNil(v) && !pathChoiceTypeFound {
+
+								pathChoiceTypeFound = true
+								pathChoiceInt := &ves_io_schema_views_forward_proxy_policy.URLType_PathPrefixValue{}
+
+								httpList[i].PathChoice = pathChoiceInt
+
+								pathChoiceInt.PathPrefixValue = v.(string)
+
+							}
+
+							if v, ok := httpListMapStrToI["path_regex_value"]; ok && !isIntfNil(v) && !pathChoiceTypeFound {
+
+								pathChoiceTypeFound = true
+								pathChoiceInt := &ves_io_schema_views_forward_proxy_policy.URLType_PathRegexValue{}
+
+								httpList[i].PathChoice = pathChoiceInt
+
+								pathChoiceInt.PathRegexValue = v.(string)
+
+							}
+
 						}
-						destList[i].Prefixes = ls
 					}
 
 				}
 
-			}
+				if v, ok := cs["tls_list"]; ok && !isIntfNil(v) {
 
-			if v, ok := cs["http_list"]; ok && !isIntfNil(v) {
+					sl := v.([]interface{})
+					tlsList := make([]*ves_io_schema.DomainType, len(sl))
+					ruleChoiceInt.AllowList.TlsList = tlsList
+					for i, set := range sl {
+						if set != nil {
+							tlsList[i] = &ves_io_schema.DomainType{}
+							tlsListMapStrToI := set.(map[string]interface{})
 
-				sl := v.([]interface{})
-				httpList := make([]*ves_io_schema_views_forward_proxy_policy.URLType, len(sl))
-				ruleChoiceInt.AllowList.HttpList = httpList
-				for i, set := range sl {
-					httpList[i] = &ves_io_schema_views_forward_proxy_policy.URLType{}
-					httpListMapStrToI := set.(map[string]interface{})
+							domainChoiceTypeFound := false
 
-					domainChoiceTypeFound := false
+							if v, ok := tlsListMapStrToI["exact_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
 
-					if v, ok := httpListMapStrToI["exact_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
+								domainChoiceTypeFound = true
+								domainChoiceInt := &ves_io_schema.DomainType_ExactValue{}
 
-						domainChoiceTypeFound = true
-						domainChoiceInt := &ves_io_schema_views_forward_proxy_policy.URLType_ExactValue{}
+								tlsList[i].DomainChoice = domainChoiceInt
 
-						httpList[i].DomainChoice = domainChoiceInt
+								domainChoiceInt.ExactValue = v.(string)
 
-						domainChoiceInt.ExactValue = v.(string)
+							}
 
-					}
+							if v, ok := tlsListMapStrToI["regex_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
 
-					if v, ok := httpListMapStrToI["regex_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
+								domainChoiceTypeFound = true
+								domainChoiceInt := &ves_io_schema.DomainType_RegexValue{}
 
-						domainChoiceTypeFound = true
-						domainChoiceInt := &ves_io_schema_views_forward_proxy_policy.URLType_RegexValue{}
+								tlsList[i].DomainChoice = domainChoiceInt
 
-						httpList[i].DomainChoice = domainChoiceInt
+								domainChoiceInt.RegexValue = v.(string)
 
-						domainChoiceInt.RegexValue = v.(string)
+							}
 
-					}
+							if v, ok := tlsListMapStrToI["suffix_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
 
-					if v, ok := httpListMapStrToI["suffix_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
+								domainChoiceTypeFound = true
+								domainChoiceInt := &ves_io_schema.DomainType_SuffixValue{}
 
-						domainChoiceTypeFound = true
-						domainChoiceInt := &ves_io_schema_views_forward_proxy_policy.URLType_SuffixValue{}
+								tlsList[i].DomainChoice = domainChoiceInt
 
-						httpList[i].DomainChoice = domainChoiceInt
+								domainChoiceInt.SuffixValue = v.(string)
 
-						domainChoiceInt.SuffixValue = v.(string)
+							}
 
-					}
-
-					pathChoiceTypeFound := false
-
-					if v, ok := httpListMapStrToI["any_path"]; ok && !isIntfNil(v) && !pathChoiceTypeFound {
-
-						pathChoiceTypeFound = true
-
-						if v.(bool) {
-							pathChoiceInt := &ves_io_schema_views_forward_proxy_policy.URLType_AnyPath{}
-							pathChoiceInt.AnyPath = &ves_io_schema.Empty{}
-							httpList[i].PathChoice = pathChoiceInt
 						}
-
-					}
-
-					if v, ok := httpListMapStrToI["path_exact_value"]; ok && !isIntfNil(v) && !pathChoiceTypeFound {
-
-						pathChoiceTypeFound = true
-						pathChoiceInt := &ves_io_schema_views_forward_proxy_policy.URLType_PathExactValue{}
-
-						httpList[i].PathChoice = pathChoiceInt
-
-						pathChoiceInt.PathExactValue = v.(string)
-
-					}
-
-					if v, ok := httpListMapStrToI["path_prefix_value"]; ok && !isIntfNil(v) && !pathChoiceTypeFound {
-
-						pathChoiceTypeFound = true
-						pathChoiceInt := &ves_io_schema_views_forward_proxy_policy.URLType_PathPrefixValue{}
-
-						httpList[i].PathChoice = pathChoiceInt
-
-						pathChoiceInt.PathPrefixValue = v.(string)
-
-					}
-
-					if v, ok := httpListMapStrToI["path_regex_value"]; ok && !isIntfNil(v) && !pathChoiceTypeFound {
-
-						pathChoiceTypeFound = true
-						pathChoiceInt := &ves_io_schema_views_forward_proxy_policy.URLType_PathRegexValue{}
-
-						httpList[i].PathChoice = pathChoiceInt
-
-						pathChoiceInt.PathRegexValue = v.(string)
-
 					}
 
 				}
 
 			}
-
-			if v, ok := cs["tls_list"]; ok && !isIntfNil(v) {
-
-				sl := v.([]interface{})
-				tlsList := make([]*ves_io_schema.DomainType, len(sl))
-				ruleChoiceInt.AllowList.TlsList = tlsList
-				for i, set := range sl {
-					tlsList[i] = &ves_io_schema.DomainType{}
-					tlsListMapStrToI := set.(map[string]interface{})
-
-					domainChoiceTypeFound := false
-
-					if v, ok := tlsListMapStrToI["exact_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
-
-						domainChoiceTypeFound = true
-						domainChoiceInt := &ves_io_schema.DomainType_ExactValue{}
-
-						tlsList[i].DomainChoice = domainChoiceInt
-
-						domainChoiceInt.ExactValue = v.(string)
-
-					}
-
-					if v, ok := tlsListMapStrToI["regex_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
-
-						domainChoiceTypeFound = true
-						domainChoiceInt := &ves_io_schema.DomainType_RegexValue{}
-
-						tlsList[i].DomainChoice = domainChoiceInt
-
-						domainChoiceInt.RegexValue = v.(string)
-
-					}
-
-					if v, ok := tlsListMapStrToI["suffix_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
-
-						domainChoiceTypeFound = true
-						domainChoiceInt := &ves_io_schema.DomainType_SuffixValue{}
-
-						tlsList[i].DomainChoice = domainChoiceInt
-
-						domainChoiceInt.SuffixValue = v.(string)
-
-					}
-
-				}
-
-			}
-
 		}
 
 	}
@@ -2790,224 +2886,232 @@ func resourceVolterraForwardProxyPolicyUpdate(d *schema.ResourceData, meta inter
 		ruleChoiceInt.DenyList = &ves_io_schema_views_forward_proxy_policy.ForwardProxySimpleRuleType{}
 		updateSpec.RuleChoice = ruleChoiceInt
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
+			if set != nil {
+				cs := set.(map[string]interface{})
 
-			defaultActionChoiceTypeFound := false
+				defaultActionChoiceTypeFound := false
 
-			if v, ok := cs["default_action_allow"]; ok && !isIntfNil(v) && !defaultActionChoiceTypeFound {
+				if v, ok := cs["default_action_allow"]; ok && !isIntfNil(v) && !defaultActionChoiceTypeFound {
 
-				defaultActionChoiceTypeFound = true
+					defaultActionChoiceTypeFound = true
 
-				if v.(bool) {
-					defaultActionChoiceInt := &ves_io_schema_views_forward_proxy_policy.ForwardProxySimpleRuleType_DefaultActionAllow{}
-					defaultActionChoiceInt.DefaultActionAllow = &ves_io_schema.Empty{}
-					ruleChoiceInt.DenyList.DefaultActionChoice = defaultActionChoiceInt
+					if v.(bool) {
+						defaultActionChoiceInt := &ves_io_schema_views_forward_proxy_policy.ForwardProxySimpleRuleType_DefaultActionAllow{}
+						defaultActionChoiceInt.DefaultActionAllow = &ves_io_schema.Empty{}
+						ruleChoiceInt.DenyList.DefaultActionChoice = defaultActionChoiceInt
+					}
+
 				}
 
-			}
+				if v, ok := cs["default_action_deny"]; ok && !isIntfNil(v) && !defaultActionChoiceTypeFound {
 
-			if v, ok := cs["default_action_deny"]; ok && !isIntfNil(v) && !defaultActionChoiceTypeFound {
+					defaultActionChoiceTypeFound = true
 
-				defaultActionChoiceTypeFound = true
+					if v.(bool) {
+						defaultActionChoiceInt := &ves_io_schema_views_forward_proxy_policy.ForwardProxySimpleRuleType_DefaultActionDeny{}
+						defaultActionChoiceInt.DefaultActionDeny = &ves_io_schema.Empty{}
+						ruleChoiceInt.DenyList.DefaultActionChoice = defaultActionChoiceInt
+					}
 
-				if v.(bool) {
-					defaultActionChoiceInt := &ves_io_schema_views_forward_proxy_policy.ForwardProxySimpleRuleType_DefaultActionDeny{}
-					defaultActionChoiceInt.DefaultActionDeny = &ves_io_schema.Empty{}
-					ruleChoiceInt.DenyList.DefaultActionChoice = defaultActionChoiceInt
 				}
 
-			}
+				if v, ok := cs["default_action_next_policy"]; ok && !isIntfNil(v) && !defaultActionChoiceTypeFound {
 
-			if v, ok := cs["default_action_next_policy"]; ok && !isIntfNil(v) && !defaultActionChoiceTypeFound {
+					defaultActionChoiceTypeFound = true
 
-				defaultActionChoiceTypeFound = true
+					if v.(bool) {
+						defaultActionChoiceInt := &ves_io_schema_views_forward_proxy_policy.ForwardProxySimpleRuleType_DefaultActionNextPolicy{}
+						defaultActionChoiceInt.DefaultActionNextPolicy = &ves_io_schema.Empty{}
+						ruleChoiceInt.DenyList.DefaultActionChoice = defaultActionChoiceInt
+					}
 
-				if v.(bool) {
-					defaultActionChoiceInt := &ves_io_schema_views_forward_proxy_policy.ForwardProxySimpleRuleType_DefaultActionNextPolicy{}
-					defaultActionChoiceInt.DefaultActionNextPolicy = &ves_io_schema.Empty{}
-					ruleChoiceInt.DenyList.DefaultActionChoice = defaultActionChoiceInt
 				}
 
-			}
+				if v, ok := cs["dest_list"]; ok && !isIntfNil(v) {
 
-			if v, ok := cs["dest_list"]; ok && !isIntfNil(v) {
+					sl := v.([]interface{})
+					destList := make([]*ves_io_schema.L4DestType, len(sl))
+					ruleChoiceInt.DenyList.DestList = destList
+					for i, set := range sl {
+						if set != nil {
+							destList[i] = &ves_io_schema.L4DestType{}
+							destListMapStrToI := set.(map[string]interface{})
 
-				sl := v.([]interface{})
-				destList := make([]*ves_io_schema.L4DestType, len(sl))
-				ruleChoiceInt.DenyList.DestList = destList
-				for i, set := range sl {
-					destList[i] = &ves_io_schema.L4DestType{}
-					destListMapStrToI := set.(map[string]interface{})
+							if w, ok := destListMapStrToI["ipv6_prefixes"]; ok && !isIntfNil(w) {
+								ls := make([]string, len(w.([]interface{})))
+								for i, v := range w.([]interface{}) {
+									ls[i] = v.(string)
+								}
+								destList[i].Ipv6Prefixes = ls
+							}
 
-					if w, ok := destListMapStrToI["ipv6_prefixes"]; ok && !isIntfNil(w) {
-						ls := make([]string, len(w.([]interface{})))
-						for i, v := range w.([]interface{}) {
-							ls[i] = v.(string)
+							if w, ok := destListMapStrToI["port_ranges"]; ok && !isIntfNil(w) {
+								destList[i].PortRanges = w.(string)
+							}
+
+							if w, ok := destListMapStrToI["prefixes"]; ok && !isIntfNil(w) {
+								ls := make([]string, len(w.([]interface{})))
+								for i, v := range w.([]interface{}) {
+									ls[i] = v.(string)
+								}
+								destList[i].Prefixes = ls
+							}
+
 						}
-						destList[i].Ipv6Prefixes = ls
 					}
 
-					if w, ok := destListMapStrToI["port_ranges"]; ok && !isIntfNil(w) {
-						destList[i].PortRanges = w.(string)
-					}
+				}
 
-					if w, ok := destListMapStrToI["prefixes"]; ok && !isIntfNil(w) {
-						ls := make([]string, len(w.([]interface{})))
-						for i, v := range w.([]interface{}) {
-							ls[i] = v.(string)
+				if v, ok := cs["http_list"]; ok && !isIntfNil(v) {
+
+					sl := v.([]interface{})
+					httpList := make([]*ves_io_schema_views_forward_proxy_policy.URLType, len(sl))
+					ruleChoiceInt.DenyList.HttpList = httpList
+					for i, set := range sl {
+						if set != nil {
+							httpList[i] = &ves_io_schema_views_forward_proxy_policy.URLType{}
+							httpListMapStrToI := set.(map[string]interface{})
+
+							domainChoiceTypeFound := false
+
+							if v, ok := httpListMapStrToI["exact_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
+
+								domainChoiceTypeFound = true
+								domainChoiceInt := &ves_io_schema_views_forward_proxy_policy.URLType_ExactValue{}
+
+								httpList[i].DomainChoice = domainChoiceInt
+
+								domainChoiceInt.ExactValue = v.(string)
+
+							}
+
+							if v, ok := httpListMapStrToI["regex_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
+
+								domainChoiceTypeFound = true
+								domainChoiceInt := &ves_io_schema_views_forward_proxy_policy.URLType_RegexValue{}
+
+								httpList[i].DomainChoice = domainChoiceInt
+
+								domainChoiceInt.RegexValue = v.(string)
+
+							}
+
+							if v, ok := httpListMapStrToI["suffix_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
+
+								domainChoiceTypeFound = true
+								domainChoiceInt := &ves_io_schema_views_forward_proxy_policy.URLType_SuffixValue{}
+
+								httpList[i].DomainChoice = domainChoiceInt
+
+								domainChoiceInt.SuffixValue = v.(string)
+
+							}
+
+							pathChoiceTypeFound := false
+
+							if v, ok := httpListMapStrToI["any_path"]; ok && !isIntfNil(v) && !pathChoiceTypeFound {
+
+								pathChoiceTypeFound = true
+
+								if v.(bool) {
+									pathChoiceInt := &ves_io_schema_views_forward_proxy_policy.URLType_AnyPath{}
+									pathChoiceInt.AnyPath = &ves_io_schema.Empty{}
+									httpList[i].PathChoice = pathChoiceInt
+								}
+
+							}
+
+							if v, ok := httpListMapStrToI["path_exact_value"]; ok && !isIntfNil(v) && !pathChoiceTypeFound {
+
+								pathChoiceTypeFound = true
+								pathChoiceInt := &ves_io_schema_views_forward_proxy_policy.URLType_PathExactValue{}
+
+								httpList[i].PathChoice = pathChoiceInt
+
+								pathChoiceInt.PathExactValue = v.(string)
+
+							}
+
+							if v, ok := httpListMapStrToI["path_prefix_value"]; ok && !isIntfNil(v) && !pathChoiceTypeFound {
+
+								pathChoiceTypeFound = true
+								pathChoiceInt := &ves_io_schema_views_forward_proxy_policy.URLType_PathPrefixValue{}
+
+								httpList[i].PathChoice = pathChoiceInt
+
+								pathChoiceInt.PathPrefixValue = v.(string)
+
+							}
+
+							if v, ok := httpListMapStrToI["path_regex_value"]; ok && !isIntfNil(v) && !pathChoiceTypeFound {
+
+								pathChoiceTypeFound = true
+								pathChoiceInt := &ves_io_schema_views_forward_proxy_policy.URLType_PathRegexValue{}
+
+								httpList[i].PathChoice = pathChoiceInt
+
+								pathChoiceInt.PathRegexValue = v.(string)
+
+							}
+
 						}
-						destList[i].Prefixes = ls
 					}
 
 				}
 
-			}
+				if v, ok := cs["tls_list"]; ok && !isIntfNil(v) {
 
-			if v, ok := cs["http_list"]; ok && !isIntfNil(v) {
+					sl := v.([]interface{})
+					tlsList := make([]*ves_io_schema.DomainType, len(sl))
+					ruleChoiceInt.DenyList.TlsList = tlsList
+					for i, set := range sl {
+						if set != nil {
+							tlsList[i] = &ves_io_schema.DomainType{}
+							tlsListMapStrToI := set.(map[string]interface{})
 
-				sl := v.([]interface{})
-				httpList := make([]*ves_io_schema_views_forward_proxy_policy.URLType, len(sl))
-				ruleChoiceInt.DenyList.HttpList = httpList
-				for i, set := range sl {
-					httpList[i] = &ves_io_schema_views_forward_proxy_policy.URLType{}
-					httpListMapStrToI := set.(map[string]interface{})
+							domainChoiceTypeFound := false
 
-					domainChoiceTypeFound := false
+							if v, ok := tlsListMapStrToI["exact_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
 
-					if v, ok := httpListMapStrToI["exact_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
+								domainChoiceTypeFound = true
+								domainChoiceInt := &ves_io_schema.DomainType_ExactValue{}
 
-						domainChoiceTypeFound = true
-						domainChoiceInt := &ves_io_schema_views_forward_proxy_policy.URLType_ExactValue{}
+								tlsList[i].DomainChoice = domainChoiceInt
 
-						httpList[i].DomainChoice = domainChoiceInt
+								domainChoiceInt.ExactValue = v.(string)
 
-						domainChoiceInt.ExactValue = v.(string)
+							}
 
-					}
+							if v, ok := tlsListMapStrToI["regex_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
 
-					if v, ok := httpListMapStrToI["regex_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
+								domainChoiceTypeFound = true
+								domainChoiceInt := &ves_io_schema.DomainType_RegexValue{}
 
-						domainChoiceTypeFound = true
-						domainChoiceInt := &ves_io_schema_views_forward_proxy_policy.URLType_RegexValue{}
+								tlsList[i].DomainChoice = domainChoiceInt
 
-						httpList[i].DomainChoice = domainChoiceInt
+								domainChoiceInt.RegexValue = v.(string)
 
-						domainChoiceInt.RegexValue = v.(string)
+							}
 
-					}
+							if v, ok := tlsListMapStrToI["suffix_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
 
-					if v, ok := httpListMapStrToI["suffix_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
+								domainChoiceTypeFound = true
+								domainChoiceInt := &ves_io_schema.DomainType_SuffixValue{}
 
-						domainChoiceTypeFound = true
-						domainChoiceInt := &ves_io_schema_views_forward_proxy_policy.URLType_SuffixValue{}
+								tlsList[i].DomainChoice = domainChoiceInt
 
-						httpList[i].DomainChoice = domainChoiceInt
+								domainChoiceInt.SuffixValue = v.(string)
 
-						domainChoiceInt.SuffixValue = v.(string)
+							}
 
-					}
-
-					pathChoiceTypeFound := false
-
-					if v, ok := httpListMapStrToI["any_path"]; ok && !isIntfNil(v) && !pathChoiceTypeFound {
-
-						pathChoiceTypeFound = true
-
-						if v.(bool) {
-							pathChoiceInt := &ves_io_schema_views_forward_proxy_policy.URLType_AnyPath{}
-							pathChoiceInt.AnyPath = &ves_io_schema.Empty{}
-							httpList[i].PathChoice = pathChoiceInt
 						}
-
-					}
-
-					if v, ok := httpListMapStrToI["path_exact_value"]; ok && !isIntfNil(v) && !pathChoiceTypeFound {
-
-						pathChoiceTypeFound = true
-						pathChoiceInt := &ves_io_schema_views_forward_proxy_policy.URLType_PathExactValue{}
-
-						httpList[i].PathChoice = pathChoiceInt
-
-						pathChoiceInt.PathExactValue = v.(string)
-
-					}
-
-					if v, ok := httpListMapStrToI["path_prefix_value"]; ok && !isIntfNil(v) && !pathChoiceTypeFound {
-
-						pathChoiceTypeFound = true
-						pathChoiceInt := &ves_io_schema_views_forward_proxy_policy.URLType_PathPrefixValue{}
-
-						httpList[i].PathChoice = pathChoiceInt
-
-						pathChoiceInt.PathPrefixValue = v.(string)
-
-					}
-
-					if v, ok := httpListMapStrToI["path_regex_value"]; ok && !isIntfNil(v) && !pathChoiceTypeFound {
-
-						pathChoiceTypeFound = true
-						pathChoiceInt := &ves_io_schema_views_forward_proxy_policy.URLType_PathRegexValue{}
-
-						httpList[i].PathChoice = pathChoiceInt
-
-						pathChoiceInt.PathRegexValue = v.(string)
-
 					}
 
 				}
 
 			}
-
-			if v, ok := cs["tls_list"]; ok && !isIntfNil(v) {
-
-				sl := v.([]interface{})
-				tlsList := make([]*ves_io_schema.DomainType, len(sl))
-				ruleChoiceInt.DenyList.TlsList = tlsList
-				for i, set := range sl {
-					tlsList[i] = &ves_io_schema.DomainType{}
-					tlsListMapStrToI := set.(map[string]interface{})
-
-					domainChoiceTypeFound := false
-
-					if v, ok := tlsListMapStrToI["exact_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
-
-						domainChoiceTypeFound = true
-						domainChoiceInt := &ves_io_schema.DomainType_ExactValue{}
-
-						tlsList[i].DomainChoice = domainChoiceInt
-
-						domainChoiceInt.ExactValue = v.(string)
-
-					}
-
-					if v, ok := tlsListMapStrToI["regex_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
-
-						domainChoiceTypeFound = true
-						domainChoiceInt := &ves_io_schema.DomainType_RegexValue{}
-
-						tlsList[i].DomainChoice = domainChoiceInt
-
-						domainChoiceInt.RegexValue = v.(string)
-
-					}
-
-					if v, ok := tlsListMapStrToI["suffix_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
-
-						domainChoiceTypeFound = true
-						domainChoiceInt := &ves_io_schema.DomainType_SuffixValue{}
-
-						tlsList[i].DomainChoice = domainChoiceInt
-
-						domainChoiceInt.SuffixValue = v.(string)
-
-					}
-
-				}
-
-			}
-
 		}
 
 	}
@@ -3019,766 +3123,808 @@ func resourceVolterraForwardProxyPolicyUpdate(d *schema.ResourceData, meta inter
 		ruleChoiceInt.RuleList = &ves_io_schema_views_forward_proxy_policy.ForwardProxyRuleListType{}
 		updateSpec.RuleChoice = ruleChoiceInt
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
+			if set != nil {
+				cs := set.(map[string]interface{})
 
-			if v, ok := cs["rules"]; ok && !isIntfNil(v) {
+				if v, ok := cs["rules"]; ok && !isIntfNil(v) {
 
-				sl := v.([]interface{})
-				rules := make([]*ves_io_schema_views_forward_proxy_policy.ForwardProxyAdvancedRuleType, len(sl))
-				ruleChoiceInt.RuleList.Rules = rules
-				for i, set := range sl {
-					rules[i] = &ves_io_schema_views_forward_proxy_policy.ForwardProxyAdvancedRuleType{}
-					rulesMapStrToI := set.(map[string]interface{})
+					sl := v.([]interface{})
+					rules := make([]*ves_io_schema_views_forward_proxy_policy.ForwardProxyAdvancedRuleType, len(sl))
+					ruleChoiceInt.RuleList.Rules = rules
+					for i, set := range sl {
+						if set != nil {
+							rules[i] = &ves_io_schema_views_forward_proxy_policy.ForwardProxyAdvancedRuleType{}
+							rulesMapStrToI := set.(map[string]interface{})
 
-					if v, ok := rulesMapStrToI["action"]; ok && !isIntfNil(v) {
+							if v, ok := rulesMapStrToI["action"]; ok && !isIntfNil(v) {
 
-						rules[i].Action = ves_io_schema_policy.RuleAction(ves_io_schema_policy.RuleAction_value[v.(string)])
+								rules[i].Action = ves_io_schema_policy.RuleAction(ves_io_schema_policy.RuleAction_value[v.(string)])
 
-					}
+							}
 
-					destinationChoiceTypeFound := false
+							destinationChoiceTypeFound := false
 
-					if v, ok := rulesMapStrToI["all_destinations"]; ok && !isIntfNil(v) && !destinationChoiceTypeFound {
+							if v, ok := rulesMapStrToI["all_destinations"]; ok && !isIntfNil(v) && !destinationChoiceTypeFound {
 
-						destinationChoiceTypeFound = true
+								destinationChoiceTypeFound = true
 
-						if v.(bool) {
-							destinationChoiceInt := &ves_io_schema_views_forward_proxy_policy.ForwardProxyAdvancedRuleType_AllDestinations{}
-							destinationChoiceInt.AllDestinations = &ves_io_schema.Empty{}
-							rules[i].DestinationChoice = destinationChoiceInt
-						}
-
-					}
-
-					if v, ok := rulesMapStrToI["dst_asn_list"]; ok && !isIntfNil(v) && !destinationChoiceTypeFound {
-
-						destinationChoiceTypeFound = true
-						destinationChoiceInt := &ves_io_schema_views_forward_proxy_policy.ForwardProxyAdvancedRuleType_DstAsnList{}
-						destinationChoiceInt.DstAsnList = &ves_io_schema_policy.AsnMatchList{}
-						rules[i].DestinationChoice = destinationChoiceInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["as_numbers"]; ok && !isIntfNil(v) {
-
-								ls := make([]uint32, len(v.([]interface{})))
-								for i, v := range v.([]interface{}) {
-									ls[i] = uint32(v.(int))
+								if v.(bool) {
+									destinationChoiceInt := &ves_io_schema_views_forward_proxy_policy.ForwardProxyAdvancedRuleType_AllDestinations{}
+									destinationChoiceInt.AllDestinations = &ves_io_schema.Empty{}
+									rules[i].DestinationChoice = destinationChoiceInt
 								}
-								destinationChoiceInt.DstAsnList.AsNumbers = ls
 
 							}
 
-						}
+							if v, ok := rulesMapStrToI["dst_asn_list"]; ok && !isIntfNil(v) && !destinationChoiceTypeFound {
 
-					}
-
-					if v, ok := rulesMapStrToI["dst_asn_set"]; ok && !isIntfNil(v) && !destinationChoiceTypeFound {
-
-						destinationChoiceTypeFound = true
-						destinationChoiceInt := &ves_io_schema_views_forward_proxy_policy.ForwardProxyAdvancedRuleType_DstAsnSet{}
-						destinationChoiceInt.DstAsnSet = &ves_io_schema_views.ObjectRefType{}
-						rules[i].DestinationChoice = destinationChoiceInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-								destinationChoiceInt.DstAsnSet.Name = v.(string)
-
-							}
-
-							if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
-
-								destinationChoiceInt.DstAsnSet.Namespace = v.(string)
-
-							}
-
-							if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
-
-								destinationChoiceInt.DstAsnSet.Tenant = v.(string)
-
-							}
-
-						}
-
-					}
-
-					if v, ok := rulesMapStrToI["dst_ip_prefix_set"]; ok && !isIntfNil(v) && !destinationChoiceTypeFound {
-
-						destinationChoiceTypeFound = true
-						destinationChoiceInt := &ves_io_schema_views_forward_proxy_policy.ForwardProxyAdvancedRuleType_DstIpPrefixSet{}
-						destinationChoiceInt.DstIpPrefixSet = &ves_io_schema_views.ObjectRefType{}
-						rules[i].DestinationChoice = destinationChoiceInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-								destinationChoiceInt.DstIpPrefixSet.Name = v.(string)
-
-							}
-
-							if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
-
-								destinationChoiceInt.DstIpPrefixSet.Namespace = v.(string)
-
-							}
-
-							if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
-
-								destinationChoiceInt.DstIpPrefixSet.Tenant = v.(string)
-
-							}
-
-						}
-
-					}
-
-					if v, ok := rulesMapStrToI["dst_label_selector"]; ok && !isIntfNil(v) && !destinationChoiceTypeFound {
-
-						destinationChoiceTypeFound = true
-						destinationChoiceInt := &ves_io_schema_views_forward_proxy_policy.ForwardProxyAdvancedRuleType_DstLabelSelector{}
-						destinationChoiceInt.DstLabelSelector = &ves_io_schema.LabelSelectorType{}
-						rules[i].DestinationChoice = destinationChoiceInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["expressions"]; ok && !isIntfNil(v) {
-
-								ls := make([]string, len(v.([]interface{})))
-								for i, v := range v.([]interface{}) {
-									ls[i] = v.(string)
-								}
-								destinationChoiceInt.DstLabelSelector.Expressions = ls
-
-							}
-
-						}
-
-					}
-
-					if v, ok := rulesMapStrToI["dst_prefix_list"]; ok && !isIntfNil(v) && !destinationChoiceTypeFound {
-
-						destinationChoiceTypeFound = true
-						destinationChoiceInt := &ves_io_schema_views_forward_proxy_policy.ForwardProxyAdvancedRuleType_DstPrefixList{}
-						destinationChoiceInt.DstPrefixList = &ves_io_schema_views.PrefixStringListType{}
-						rules[i].DestinationChoice = destinationChoiceInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["ipv6_prefixes"]; ok && !isIntfNil(v) {
-
-								ls := make([]string, len(v.([]interface{})))
-								for i, v := range v.([]interface{}) {
-									ls[i] = v.(string)
-								}
-								destinationChoiceInt.DstPrefixList.Ipv6Prefixes = ls
-
-							}
-
-							if v, ok := cs["prefixes"]; ok && !isIntfNil(v) {
-
-								ls := make([]string, len(v.([]interface{})))
-								for i, v := range v.([]interface{}) {
-									ls[i] = v.(string)
-								}
-								destinationChoiceInt.DstPrefixList.Prefixes = ls
-
-							}
-
-						}
-
-					}
-
-					if v, ok := rulesMapStrToI["http_list"]; ok && !isIntfNil(v) && !destinationChoiceTypeFound {
-
-						destinationChoiceTypeFound = true
-						destinationChoiceInt := &ves_io_schema_views_forward_proxy_policy.ForwardProxyAdvancedRuleType_HttpList{}
-						destinationChoiceInt.HttpList = &ves_io_schema_views_forward_proxy_policy.URLListType{}
-						rules[i].DestinationChoice = destinationChoiceInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["http_list"]; ok && !isIntfNil(v) {
+								destinationChoiceTypeFound = true
+								destinationChoiceInt := &ves_io_schema_views_forward_proxy_policy.ForwardProxyAdvancedRuleType_DstAsnList{}
+								destinationChoiceInt.DstAsnList = &ves_io_schema_policy.AsnMatchList{}
+								rules[i].DestinationChoice = destinationChoiceInt
 
 								sl := v.([]interface{})
-								httpList := make([]*ves_io_schema_views_forward_proxy_policy.URLType, len(sl))
-								destinationChoiceInt.HttpList.HttpList = httpList
-								for i, set := range sl {
-									httpList[i] = &ves_io_schema_views_forward_proxy_policy.URLType{}
-									httpListMapStrToI := set.(map[string]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
 
-									domainChoiceTypeFound := false
+										if v, ok := cs["as_numbers"]; ok && !isIntfNil(v) {
 
-									if v, ok := httpListMapStrToI["exact_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
+											ls := make([]uint32, len(v.([]interface{})))
+											for i, v := range v.([]interface{}) {
+												ls[i] = uint32(v.(int))
+											}
+											destinationChoiceInt.DstAsnList.AsNumbers = ls
 
-										domainChoiceTypeFound = true
-										domainChoiceInt := &ves_io_schema_views_forward_proxy_policy.URLType_ExactValue{}
-
-										httpList[i].DomainChoice = domainChoiceInt
-
-										domainChoiceInt.ExactValue = v.(string)
-
-									}
-
-									if v, ok := httpListMapStrToI["regex_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
-
-										domainChoiceTypeFound = true
-										domainChoiceInt := &ves_io_schema_views_forward_proxy_policy.URLType_RegexValue{}
-
-										httpList[i].DomainChoice = domainChoiceInt
-
-										domainChoiceInt.RegexValue = v.(string)
-
-									}
-
-									if v, ok := httpListMapStrToI["suffix_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
-
-										domainChoiceTypeFound = true
-										domainChoiceInt := &ves_io_schema_views_forward_proxy_policy.URLType_SuffixValue{}
-
-										httpList[i].DomainChoice = domainChoiceInt
-
-										domainChoiceInt.SuffixValue = v.(string)
-
-									}
-
-									pathChoiceTypeFound := false
-
-									if v, ok := httpListMapStrToI["any_path"]; ok && !isIntfNil(v) && !pathChoiceTypeFound {
-
-										pathChoiceTypeFound = true
-
-										if v.(bool) {
-											pathChoiceInt := &ves_io_schema_views_forward_proxy_policy.URLType_AnyPath{}
-											pathChoiceInt.AnyPath = &ves_io_schema.Empty{}
-											httpList[i].PathChoice = pathChoiceInt
 										}
 
 									}
-
-									if v, ok := httpListMapStrToI["path_exact_value"]; ok && !isIntfNil(v) && !pathChoiceTypeFound {
-
-										pathChoiceTypeFound = true
-										pathChoiceInt := &ves_io_schema_views_forward_proxy_policy.URLType_PathExactValue{}
-
-										httpList[i].PathChoice = pathChoiceInt
-
-										pathChoiceInt.PathExactValue = v.(string)
-
-									}
-
-									if v, ok := httpListMapStrToI["path_prefix_value"]; ok && !isIntfNil(v) && !pathChoiceTypeFound {
-
-										pathChoiceTypeFound = true
-										pathChoiceInt := &ves_io_schema_views_forward_proxy_policy.URLType_PathPrefixValue{}
-
-										httpList[i].PathChoice = pathChoiceInt
-
-										pathChoiceInt.PathPrefixValue = v.(string)
-
-									}
-
-									if v, ok := httpListMapStrToI["path_regex_value"]; ok && !isIntfNil(v) && !pathChoiceTypeFound {
-
-										pathChoiceTypeFound = true
-										pathChoiceInt := &ves_io_schema_views_forward_proxy_policy.URLType_PathRegexValue{}
-
-										httpList[i].PathChoice = pathChoiceInt
-
-										pathChoiceInt.PathRegexValue = v.(string)
-
-									}
-
 								}
 
 							}
 
-						}
+							if v, ok := rulesMapStrToI["dst_asn_set"]; ok && !isIntfNil(v) && !destinationChoiceTypeFound {
 
-					}
-
-					if v, ok := rulesMapStrToI["tls_list"]; ok && !isIntfNil(v) && !destinationChoiceTypeFound {
-
-						destinationChoiceTypeFound = true
-						destinationChoiceInt := &ves_io_schema_views_forward_proxy_policy.ForwardProxyAdvancedRuleType_TlsList{}
-						destinationChoiceInt.TlsList = &ves_io_schema_views_forward_proxy_policy.DomainListType{}
-						rules[i].DestinationChoice = destinationChoiceInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["tls_list"]; ok && !isIntfNil(v) {
+								destinationChoiceTypeFound = true
+								destinationChoiceInt := &ves_io_schema_views_forward_proxy_policy.ForwardProxyAdvancedRuleType_DstAsnSet{}
+								destinationChoiceInt.DstAsnSet = &ves_io_schema_views.ObjectRefType{}
+								rules[i].DestinationChoice = destinationChoiceInt
 
 								sl := v.([]interface{})
-								tlsList := make([]*ves_io_schema.DomainType, len(sl))
-								destinationChoiceInt.TlsList.TlsList = tlsList
-								for i, set := range sl {
-									tlsList[i] = &ves_io_schema.DomainType{}
-									tlsListMapStrToI := set.(map[string]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
 
-									domainChoiceTypeFound := false
+										if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
-									if v, ok := tlsListMapStrToI["exact_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
+											destinationChoiceInt.DstAsnSet.Name = v.(string)
 
-										domainChoiceTypeFound = true
-										domainChoiceInt := &ves_io_schema.DomainType_ExactValue{}
+										}
 
-										tlsList[i].DomainChoice = domainChoiceInt
+										if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
 
-										domainChoiceInt.ExactValue = v.(string)
+											destinationChoiceInt.DstAsnSet.Namespace = v.(string)
 
-									}
+										}
 
-									if v, ok := tlsListMapStrToI["regex_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
+										if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
 
-										domainChoiceTypeFound = true
-										domainChoiceInt := &ves_io_schema.DomainType_RegexValue{}
+											destinationChoiceInt.DstAsnSet.Tenant = v.(string)
 
-										tlsList[i].DomainChoice = domainChoiceInt
-
-										domainChoiceInt.RegexValue = v.(string)
+										}
 
 									}
+								}
 
-									if v, ok := tlsListMapStrToI["suffix_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
+							}
 
-										domainChoiceTypeFound = true
-										domainChoiceInt := &ves_io_schema.DomainType_SuffixValue{}
+							if v, ok := rulesMapStrToI["dst_ip_prefix_set"]; ok && !isIntfNil(v) && !destinationChoiceTypeFound {
 
-										tlsList[i].DomainChoice = domainChoiceInt
+								destinationChoiceTypeFound = true
+								destinationChoiceInt := &ves_io_schema_views_forward_proxy_policy.ForwardProxyAdvancedRuleType_DstIpPrefixSet{}
+								destinationChoiceInt.DstIpPrefixSet = &ves_io_schema_views.ObjectRefType{}
+								rules[i].DestinationChoice = destinationChoiceInt
 
-										domainChoiceInt.SuffixValue = v.(string)
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+											destinationChoiceInt.DstIpPrefixSet.Name = v.(string)
+
+										}
+
+										if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+											destinationChoiceInt.DstIpPrefixSet.Namespace = v.(string)
+
+										}
+
+										if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+											destinationChoiceInt.DstIpPrefixSet.Tenant = v.(string)
+
+										}
 
 									}
+								}
 
+							}
+
+							if v, ok := rulesMapStrToI["dst_label_selector"]; ok && !isIntfNil(v) && !destinationChoiceTypeFound {
+
+								destinationChoiceTypeFound = true
+								destinationChoiceInt := &ves_io_schema_views_forward_proxy_policy.ForwardProxyAdvancedRuleType_DstLabelSelector{}
+								destinationChoiceInt.DstLabelSelector = &ves_io_schema.LabelSelectorType{}
+								rules[i].DestinationChoice = destinationChoiceInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["expressions"]; ok && !isIntfNil(v) {
+
+											ls := make([]string, len(v.([]interface{})))
+											for i, v := range v.([]interface{}) {
+												ls[i] = v.(string)
+											}
+											destinationChoiceInt.DstLabelSelector.Expressions = ls
+
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := rulesMapStrToI["dst_prefix_list"]; ok && !isIntfNil(v) && !destinationChoiceTypeFound {
+
+								destinationChoiceTypeFound = true
+								destinationChoiceInt := &ves_io_schema_views_forward_proxy_policy.ForwardProxyAdvancedRuleType_DstPrefixList{}
+								destinationChoiceInt.DstPrefixList = &ves_io_schema_views.PrefixStringListType{}
+								rules[i].DestinationChoice = destinationChoiceInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["ipv6_prefixes"]; ok && !isIntfNil(v) {
+
+											ls := make([]string, len(v.([]interface{})))
+											for i, v := range v.([]interface{}) {
+												ls[i] = v.(string)
+											}
+											destinationChoiceInt.DstPrefixList.Ipv6Prefixes = ls
+
+										}
+
+										if v, ok := cs["prefixes"]; ok && !isIntfNil(v) {
+
+											ls := make([]string, len(v.([]interface{})))
+											for i, v := range v.([]interface{}) {
+												ls[i] = v.(string)
+											}
+											destinationChoiceInt.DstPrefixList.Prefixes = ls
+
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := rulesMapStrToI["http_list"]; ok && !isIntfNil(v) && !destinationChoiceTypeFound {
+
+								destinationChoiceTypeFound = true
+								destinationChoiceInt := &ves_io_schema_views_forward_proxy_policy.ForwardProxyAdvancedRuleType_HttpList{}
+								destinationChoiceInt.HttpList = &ves_io_schema_views_forward_proxy_policy.URLListType{}
+								rules[i].DestinationChoice = destinationChoiceInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["http_list"]; ok && !isIntfNil(v) {
+
+											sl := v.([]interface{})
+											httpList := make([]*ves_io_schema_views_forward_proxy_policy.URLType, len(sl))
+											destinationChoiceInt.HttpList.HttpList = httpList
+											for i, set := range sl {
+												if set != nil {
+													httpList[i] = &ves_io_schema_views_forward_proxy_policy.URLType{}
+													httpListMapStrToI := set.(map[string]interface{})
+
+													domainChoiceTypeFound := false
+
+													if v, ok := httpListMapStrToI["exact_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
+
+														domainChoiceTypeFound = true
+														domainChoiceInt := &ves_io_schema_views_forward_proxy_policy.URLType_ExactValue{}
+
+														httpList[i].DomainChoice = domainChoiceInt
+
+														domainChoiceInt.ExactValue = v.(string)
+
+													}
+
+													if v, ok := httpListMapStrToI["regex_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
+
+														domainChoiceTypeFound = true
+														domainChoiceInt := &ves_io_schema_views_forward_proxy_policy.URLType_RegexValue{}
+
+														httpList[i].DomainChoice = domainChoiceInt
+
+														domainChoiceInt.RegexValue = v.(string)
+
+													}
+
+													if v, ok := httpListMapStrToI["suffix_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
+
+														domainChoiceTypeFound = true
+														domainChoiceInt := &ves_io_schema_views_forward_proxy_policy.URLType_SuffixValue{}
+
+														httpList[i].DomainChoice = domainChoiceInt
+
+														domainChoiceInt.SuffixValue = v.(string)
+
+													}
+
+													pathChoiceTypeFound := false
+
+													if v, ok := httpListMapStrToI["any_path"]; ok && !isIntfNil(v) && !pathChoiceTypeFound {
+
+														pathChoiceTypeFound = true
+
+														if v.(bool) {
+															pathChoiceInt := &ves_io_schema_views_forward_proxy_policy.URLType_AnyPath{}
+															pathChoiceInt.AnyPath = &ves_io_schema.Empty{}
+															httpList[i].PathChoice = pathChoiceInt
+														}
+
+													}
+
+													if v, ok := httpListMapStrToI["path_exact_value"]; ok && !isIntfNil(v) && !pathChoiceTypeFound {
+
+														pathChoiceTypeFound = true
+														pathChoiceInt := &ves_io_schema_views_forward_proxy_policy.URLType_PathExactValue{}
+
+														httpList[i].PathChoice = pathChoiceInt
+
+														pathChoiceInt.PathExactValue = v.(string)
+
+													}
+
+													if v, ok := httpListMapStrToI["path_prefix_value"]; ok && !isIntfNil(v) && !pathChoiceTypeFound {
+
+														pathChoiceTypeFound = true
+														pathChoiceInt := &ves_io_schema_views_forward_proxy_policy.URLType_PathPrefixValue{}
+
+														httpList[i].PathChoice = pathChoiceInt
+
+														pathChoiceInt.PathPrefixValue = v.(string)
+
+													}
+
+													if v, ok := httpListMapStrToI["path_regex_value"]; ok && !isIntfNil(v) && !pathChoiceTypeFound {
+
+														pathChoiceTypeFound = true
+														pathChoiceInt := &ves_io_schema_views_forward_proxy_policy.URLType_PathRegexValue{}
+
+														httpList[i].PathChoice = pathChoiceInt
+
+														pathChoiceInt.PathRegexValue = v.(string)
+
+													}
+
+												}
+											}
+
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := rulesMapStrToI["tls_list"]; ok && !isIntfNil(v) && !destinationChoiceTypeFound {
+
+								destinationChoiceTypeFound = true
+								destinationChoiceInt := &ves_io_schema_views_forward_proxy_policy.ForwardProxyAdvancedRuleType_TlsList{}
+								destinationChoiceInt.TlsList = &ves_io_schema_views_forward_proxy_policy.DomainListType{}
+								rules[i].DestinationChoice = destinationChoiceInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["tls_list"]; ok && !isIntfNil(v) {
+
+											sl := v.([]interface{})
+											tlsList := make([]*ves_io_schema.DomainType, len(sl))
+											destinationChoiceInt.TlsList.TlsList = tlsList
+											for i, set := range sl {
+												if set != nil {
+													tlsList[i] = &ves_io_schema.DomainType{}
+													tlsListMapStrToI := set.(map[string]interface{})
+
+													domainChoiceTypeFound := false
+
+													if v, ok := tlsListMapStrToI["exact_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
+
+														domainChoiceTypeFound = true
+														domainChoiceInt := &ves_io_schema.DomainType_ExactValue{}
+
+														tlsList[i].DomainChoice = domainChoiceInt
+
+														domainChoiceInt.ExactValue = v.(string)
+
+													}
+
+													if v, ok := tlsListMapStrToI["regex_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
+
+														domainChoiceTypeFound = true
+														domainChoiceInt := &ves_io_schema.DomainType_RegexValue{}
+
+														tlsList[i].DomainChoice = domainChoiceInt
+
+														domainChoiceInt.RegexValue = v.(string)
+
+													}
+
+													if v, ok := tlsListMapStrToI["suffix_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
+
+														domainChoiceTypeFound = true
+														domainChoiceInt := &ves_io_schema.DomainType_SuffixValue{}
+
+														tlsList[i].DomainChoice = domainChoiceInt
+
+														domainChoiceInt.SuffixValue = v.(string)
+
+													}
+
+												}
+											}
+
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := rulesMapStrToI["url_category_list"]; ok && !isIntfNil(v) && !destinationChoiceTypeFound {
+
+								destinationChoiceTypeFound = true
+								destinationChoiceInt := &ves_io_schema_views_forward_proxy_policy.ForwardProxyAdvancedRuleType_UrlCategoryList{}
+								destinationChoiceInt.UrlCategoryList = &ves_io_schema_views_forward_proxy_policy.URLCategoryListType{}
+								rules[i].DestinationChoice = destinationChoiceInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["url_categories"]; ok && !isIntfNil(v) {
+
+											url_categoriesList := []ves_io_schema_policy.URLCategory{}
+											for _, j := range v.([]interface{}) {
+												url_categoriesList = append(url_categoriesList, ves_io_schema_policy.URLCategory(ves_io_schema_policy.URLCategory_value[j.(string)]))
+											}
+											destinationChoiceInt.UrlCategoryList.UrlCategories = url_categoriesList
+
+										}
+
+									}
+								}
+
+							}
+
+							httpConnectChoiceTypeFound := false
+
+							if v, ok := rulesMapStrToI["no_http_connect_port"]; ok && !isIntfNil(v) && !httpConnectChoiceTypeFound {
+
+								httpConnectChoiceTypeFound = true
+
+								if v.(bool) {
+									httpConnectChoiceInt := &ves_io_schema_views_forward_proxy_policy.ForwardProxyAdvancedRuleType_NoHttpConnectPort{}
+									httpConnectChoiceInt.NoHttpConnectPort = &ves_io_schema.Empty{}
+									rules[i].HttpConnectChoice = httpConnectChoiceInt
+								}
+
+							}
+
+							if v, ok := rulesMapStrToI["port_matcher"]; ok && !isIntfNil(v) && !httpConnectChoiceTypeFound {
+
+								httpConnectChoiceTypeFound = true
+								httpConnectChoiceInt := &ves_io_schema_views_forward_proxy_policy.ForwardProxyAdvancedRuleType_PortMatcher{}
+								httpConnectChoiceInt.PortMatcher = &ves_io_schema_policy.PortMatcherType{}
+								rules[i].HttpConnectChoice = httpConnectChoiceInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["invert_matcher"]; ok && !isIntfNil(v) {
+
+											httpConnectChoiceInt.PortMatcher.InvertMatcher = v.(bool)
+
+										}
+
+										if v, ok := cs["ports"]; ok && !isIntfNil(v) {
+
+											ls := make([]string, len(v.([]interface{})))
+											for i, v := range v.([]interface{}) {
+												ls[i] = v.(string)
+											}
+											httpConnectChoiceInt.PortMatcher.Ports = ls
+
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := rulesMapStrToI["metadata"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								metadata := &ves_io_schema.MessageMetaType{}
+								rules[i].Metadata = metadata
+								for _, set := range sl {
+									if set != nil {
+										metadataMapStrToI := set.(map[string]interface{})
+
+										if w, ok := metadataMapStrToI["description"]; ok && !isIntfNil(w) {
+											metadata.Description = w.(string)
+										}
+
+										if w, ok := metadataMapStrToI["disable"]; ok && !isIntfNil(w) {
+											metadata.Disable = w.(bool)
+										}
+
+										if w, ok := metadataMapStrToI["name"]; ok && !isIntfNil(w) {
+											metadata.Name = w.(string)
+										}
+
+									}
+								}
+
+							}
+
+							if w, ok := rulesMapStrToI["rule_description"]; ok && !isIntfNil(w) {
+								rules[i].RuleDescription = w.(string)
+							}
+
+							if w, ok := rulesMapStrToI["rule_name"]; ok && !isIntfNil(w) {
+								rules[i].RuleName = w.(string)
+							}
+
+							sourceChoiceTypeFound := false
+
+							if v, ok := rulesMapStrToI["all_sources"]; ok && !isIntfNil(v) && !sourceChoiceTypeFound {
+
+								sourceChoiceTypeFound = true
+
+								if v.(bool) {
+									sourceChoiceInt := &ves_io_schema_views_forward_proxy_policy.ForwardProxyAdvancedRuleType_AllSources{}
+									sourceChoiceInt.AllSources = &ves_io_schema.Empty{}
+									rules[i].SourceChoice = sourceChoiceInt
+								}
+
+							}
+
+							if v, ok := rulesMapStrToI["inside_sources"]; ok && !isIntfNil(v) && !sourceChoiceTypeFound {
+
+								sourceChoiceTypeFound = true
+
+								if v.(bool) {
+									sourceChoiceInt := &ves_io_schema_views_forward_proxy_policy.ForwardProxyAdvancedRuleType_InsideSources{}
+									sourceChoiceInt.InsideSources = &ves_io_schema.Empty{}
+									rules[i].SourceChoice = sourceChoiceInt
+								}
+
+							}
+
+							if v, ok := rulesMapStrToI["interface"]; ok && !isIntfNil(v) && !sourceChoiceTypeFound {
+
+								sourceChoiceTypeFound = true
+								sourceChoiceInt := &ves_io_schema_views_forward_proxy_policy.ForwardProxyAdvancedRuleType_Interface{}
+								sourceChoiceInt.Interface = &ves_io_schema_views.ObjectRefType{}
+								rules[i].SourceChoice = sourceChoiceInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+											sourceChoiceInt.Interface.Name = v.(string)
+
+										}
+
+										if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+											sourceChoiceInt.Interface.Namespace = v.(string)
+
+										}
+
+										if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+											sourceChoiceInt.Interface.Tenant = v.(string)
+
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := rulesMapStrToI["ip_prefix_set"]; ok && !isIntfNil(v) && !sourceChoiceTypeFound {
+
+								sourceChoiceTypeFound = true
+								sourceChoiceInt := &ves_io_schema_views_forward_proxy_policy.ForwardProxyAdvancedRuleType_IpPrefixSet{}
+								sourceChoiceInt.IpPrefixSet = &ves_io_schema_views.ObjectRefType{}
+								rules[i].SourceChoice = sourceChoiceInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+											sourceChoiceInt.IpPrefixSet.Name = v.(string)
+
+										}
+
+										if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+											sourceChoiceInt.IpPrefixSet.Namespace = v.(string)
+
+										}
+
+										if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+											sourceChoiceInt.IpPrefixSet.Tenant = v.(string)
+
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := rulesMapStrToI["label_selector"]; ok && !isIntfNil(v) && !sourceChoiceTypeFound {
+
+								sourceChoiceTypeFound = true
+								sourceChoiceInt := &ves_io_schema_views_forward_proxy_policy.ForwardProxyAdvancedRuleType_LabelSelector{}
+								sourceChoiceInt.LabelSelector = &ves_io_schema.LabelSelectorType{}
+								rules[i].SourceChoice = sourceChoiceInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["expressions"]; ok && !isIntfNil(v) {
+
+											ls := make([]string, len(v.([]interface{})))
+											for i, v := range v.([]interface{}) {
+												ls[i] = v.(string)
+											}
+											sourceChoiceInt.LabelSelector.Expressions = ls
+
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := rulesMapStrToI["namespace"]; ok && !isIntfNil(v) && !sourceChoiceTypeFound {
+
+								sourceChoiceTypeFound = true
+								sourceChoiceInt := &ves_io_schema_views_forward_proxy_policy.ForwardProxyAdvancedRuleType_Namespace{}
+
+								rules[i].SourceChoice = sourceChoiceInt
+
+								sourceChoiceInt.Namespace = v.(string)
+
+							}
+
+							if v, ok := rulesMapStrToI["prefix_list"]; ok && !isIntfNil(v) && !sourceChoiceTypeFound {
+
+								sourceChoiceTypeFound = true
+								sourceChoiceInt := &ves_io_schema_views_forward_proxy_policy.ForwardProxyAdvancedRuleType_PrefixList{}
+								sourceChoiceInt.PrefixList = &ves_io_schema_views.PrefixStringListType{}
+								rules[i].SourceChoice = sourceChoiceInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["ipv6_prefixes"]; ok && !isIntfNil(v) {
+
+											ls := make([]string, len(v.([]interface{})))
+											for i, v := range v.([]interface{}) {
+												ls[i] = v.(string)
+											}
+											sourceChoiceInt.PrefixList.Ipv6Prefixes = ls
+
+										}
+
+										if v, ok := cs["prefixes"]; ok && !isIntfNil(v) {
+
+											ls := make([]string, len(v.([]interface{})))
+											for i, v := range v.([]interface{}) {
+												ls[i] = v.(string)
+											}
+											sourceChoiceInt.PrefixList.Prefixes = ls
+
+										}
+
+									}
 								}
 
 							}
 
 						}
-
-					}
-
-					if v, ok := rulesMapStrToI["url_category_list"]; ok && !isIntfNil(v) && !destinationChoiceTypeFound {
-
-						destinationChoiceTypeFound = true
-						destinationChoiceInt := &ves_io_schema_views_forward_proxy_policy.ForwardProxyAdvancedRuleType_UrlCategoryList{}
-						destinationChoiceInt.UrlCategoryList = &ves_io_schema_views_forward_proxy_policy.URLCategoryListType{}
-						rules[i].DestinationChoice = destinationChoiceInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["url_categories"]; ok && !isIntfNil(v) {
-
-								url_categoriesList := []ves_io_schema_policy.URLCategory{}
-								for _, j := range v.([]interface{}) {
-									url_categoriesList = append(url_categoriesList, ves_io_schema_policy.URLCategory(ves_io_schema_policy.URLCategory_value[j.(string)]))
-								}
-								destinationChoiceInt.UrlCategoryList.UrlCategories = url_categoriesList
-
-							}
-
-						}
-
-					}
-
-					httpConnectChoiceTypeFound := false
-
-					if v, ok := rulesMapStrToI["no_http_connect_port"]; ok && !isIntfNil(v) && !httpConnectChoiceTypeFound {
-
-						httpConnectChoiceTypeFound = true
-
-						if v.(bool) {
-							httpConnectChoiceInt := &ves_io_schema_views_forward_proxy_policy.ForwardProxyAdvancedRuleType_NoHttpConnectPort{}
-							httpConnectChoiceInt.NoHttpConnectPort = &ves_io_schema.Empty{}
-							rules[i].HttpConnectChoice = httpConnectChoiceInt
-						}
-
-					}
-
-					if v, ok := rulesMapStrToI["port_matcher"]; ok && !isIntfNil(v) && !httpConnectChoiceTypeFound {
-
-						httpConnectChoiceTypeFound = true
-						httpConnectChoiceInt := &ves_io_schema_views_forward_proxy_policy.ForwardProxyAdvancedRuleType_PortMatcher{}
-						httpConnectChoiceInt.PortMatcher = &ves_io_schema_policy.PortMatcherType{}
-						rules[i].HttpConnectChoice = httpConnectChoiceInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["invert_matcher"]; ok && !isIntfNil(v) {
-
-								httpConnectChoiceInt.PortMatcher.InvertMatcher = v.(bool)
-
-							}
-
-							if v, ok := cs["ports"]; ok && !isIntfNil(v) {
-
-								ls := make([]string, len(v.([]interface{})))
-								for i, v := range v.([]interface{}) {
-									ls[i] = v.(string)
-								}
-								httpConnectChoiceInt.PortMatcher.Ports = ls
-
-							}
-
-						}
-
-					}
-
-					if v, ok := rulesMapStrToI["metadata"]; ok && !isIntfNil(v) {
-
-						sl := v.(*schema.Set).List()
-						metadata := &ves_io_schema.MessageMetaType{}
-						rules[i].Metadata = metadata
-						for _, set := range sl {
-							metadataMapStrToI := set.(map[string]interface{})
-
-							if w, ok := metadataMapStrToI["description"]; ok && !isIntfNil(w) {
-								metadata.Description = w.(string)
-							}
-
-							if w, ok := metadataMapStrToI["disable"]; ok && !isIntfNil(w) {
-								metadata.Disable = w.(bool)
-							}
-
-							if w, ok := metadataMapStrToI["name"]; ok && !isIntfNil(w) {
-								metadata.Name = w.(string)
-							}
-
-						}
-
-					}
-
-					if w, ok := rulesMapStrToI["rule_description"]; ok && !isIntfNil(w) {
-						rules[i].RuleDescription = w.(string)
-					}
-
-					if w, ok := rulesMapStrToI["rule_name"]; ok && !isIntfNil(w) {
-						rules[i].RuleName = w.(string)
-					}
-
-					sourceChoiceTypeFound := false
-
-					if v, ok := rulesMapStrToI["all_sources"]; ok && !isIntfNil(v) && !sourceChoiceTypeFound {
-
-						sourceChoiceTypeFound = true
-
-						if v.(bool) {
-							sourceChoiceInt := &ves_io_schema_views_forward_proxy_policy.ForwardProxyAdvancedRuleType_AllSources{}
-							sourceChoiceInt.AllSources = &ves_io_schema.Empty{}
-							rules[i].SourceChoice = sourceChoiceInt
-						}
-
-					}
-
-					if v, ok := rulesMapStrToI["inside_sources"]; ok && !isIntfNil(v) && !sourceChoiceTypeFound {
-
-						sourceChoiceTypeFound = true
-
-						if v.(bool) {
-							sourceChoiceInt := &ves_io_schema_views_forward_proxy_policy.ForwardProxyAdvancedRuleType_InsideSources{}
-							sourceChoiceInt.InsideSources = &ves_io_schema.Empty{}
-							rules[i].SourceChoice = sourceChoiceInt
-						}
-
-					}
-
-					if v, ok := rulesMapStrToI["interface"]; ok && !isIntfNil(v) && !sourceChoiceTypeFound {
-
-						sourceChoiceTypeFound = true
-						sourceChoiceInt := &ves_io_schema_views_forward_proxy_policy.ForwardProxyAdvancedRuleType_Interface{}
-						sourceChoiceInt.Interface = &ves_io_schema_views.ObjectRefType{}
-						rules[i].SourceChoice = sourceChoiceInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-								sourceChoiceInt.Interface.Name = v.(string)
-
-							}
-
-							if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
-
-								sourceChoiceInt.Interface.Namespace = v.(string)
-
-							}
-
-							if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
-
-								sourceChoiceInt.Interface.Tenant = v.(string)
-
-							}
-
-						}
-
-					}
-
-					if v, ok := rulesMapStrToI["ip_prefix_set"]; ok && !isIntfNil(v) && !sourceChoiceTypeFound {
-
-						sourceChoiceTypeFound = true
-						sourceChoiceInt := &ves_io_schema_views_forward_proxy_policy.ForwardProxyAdvancedRuleType_IpPrefixSet{}
-						sourceChoiceInt.IpPrefixSet = &ves_io_schema_views.ObjectRefType{}
-						rules[i].SourceChoice = sourceChoiceInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-								sourceChoiceInt.IpPrefixSet.Name = v.(string)
-
-							}
-
-							if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
-
-								sourceChoiceInt.IpPrefixSet.Namespace = v.(string)
-
-							}
-
-							if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
-
-								sourceChoiceInt.IpPrefixSet.Tenant = v.(string)
-
-							}
-
-						}
-
-					}
-
-					if v, ok := rulesMapStrToI["label_selector"]; ok && !isIntfNil(v) && !sourceChoiceTypeFound {
-
-						sourceChoiceTypeFound = true
-						sourceChoiceInt := &ves_io_schema_views_forward_proxy_policy.ForwardProxyAdvancedRuleType_LabelSelector{}
-						sourceChoiceInt.LabelSelector = &ves_io_schema.LabelSelectorType{}
-						rules[i].SourceChoice = sourceChoiceInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["expressions"]; ok && !isIntfNil(v) {
-
-								ls := make([]string, len(v.([]interface{})))
-								for i, v := range v.([]interface{}) {
-									ls[i] = v.(string)
-								}
-								sourceChoiceInt.LabelSelector.Expressions = ls
-
-							}
-
-						}
-
-					}
-
-					if v, ok := rulesMapStrToI["namespace"]; ok && !isIntfNil(v) && !sourceChoiceTypeFound {
-
-						sourceChoiceTypeFound = true
-						sourceChoiceInt := &ves_io_schema_views_forward_proxy_policy.ForwardProxyAdvancedRuleType_Namespace{}
-
-						rules[i].SourceChoice = sourceChoiceInt
-
-						sourceChoiceInt.Namespace = v.(string)
-
-					}
-
-					if v, ok := rulesMapStrToI["prefix_list"]; ok && !isIntfNil(v) && !sourceChoiceTypeFound {
-
-						sourceChoiceTypeFound = true
-						sourceChoiceInt := &ves_io_schema_views_forward_proxy_policy.ForwardProxyAdvancedRuleType_PrefixList{}
-						sourceChoiceInt.PrefixList = &ves_io_schema_views.PrefixStringListType{}
-						rules[i].SourceChoice = sourceChoiceInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["ipv6_prefixes"]; ok && !isIntfNil(v) {
-
-								ls := make([]string, len(v.([]interface{})))
-								for i, v := range v.([]interface{}) {
-									ls[i] = v.(string)
-								}
-								sourceChoiceInt.PrefixList.Ipv6Prefixes = ls
-
-							}
-
-							if v, ok := cs["prefixes"]; ok && !isIntfNil(v) {
-
-								ls := make([]string, len(v.([]interface{})))
-								for i, v := range v.([]interface{}) {
-									ls[i] = v.(string)
-								}
-								sourceChoiceInt.PrefixList.Prefixes = ls
-
-							}
-
-						}
-
 					}
 
 				}
 
 			}
-
 		}
 
 	}
 
 	if v, ok := d.GetOk("segment_policy"); ok && !isIntfNil(v) {
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		segmentPolicy := &ves_io_schema_policy.SegmentPolicyType{}
 		updateSpec.SegmentPolicy = segmentPolicy
 		for _, set := range sl {
-			segmentPolicyMapStrToI := set.(map[string]interface{})
+			if set != nil {
+				segmentPolicyMapStrToI := set.(map[string]interface{})
 
-			dstSegmentChoiceTypeFound := false
+				dstSegmentChoiceTypeFound := false
 
-			if v, ok := segmentPolicyMapStrToI["dst_any"]; ok && !isIntfNil(v) && !dstSegmentChoiceTypeFound {
+				if v, ok := segmentPolicyMapStrToI["dst_any"]; ok && !isIntfNil(v) && !dstSegmentChoiceTypeFound {
 
-				dstSegmentChoiceTypeFound = true
+					dstSegmentChoiceTypeFound = true
 
-				if v.(bool) {
-					dstSegmentChoiceInt := &ves_io_schema_policy.SegmentPolicyType_DstAny{}
-					dstSegmentChoiceInt.DstAny = &ves_io_schema.Empty{}
-					segmentPolicy.DstSegmentChoice = dstSegmentChoiceInt
-				}
-
-			}
-
-			if v, ok := segmentPolicyMapStrToI["dst_segments"]; ok && !isIntfNil(v) && !dstSegmentChoiceTypeFound {
-
-				dstSegmentChoiceTypeFound = true
-				dstSegmentChoiceInt := &ves_io_schema_policy.SegmentPolicyType_DstSegments{}
-				dstSegmentChoiceInt.DstSegments = &ves_io_schema_views.SegmentRefList{}
-				segmentPolicy.DstSegmentChoice = dstSegmentChoiceInt
-
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
-
-					if v, ok := cs["segments"]; ok && !isIntfNil(v) {
-
-						sl := v.([]interface{})
-						segmentsInt := make([]*ves_io_schema_views.ObjectRefType, len(sl))
-						dstSegmentChoiceInt.DstSegments.Segments = segmentsInt
-						for i, ps := range sl {
-
-							sMapToStrVal := ps.(map[string]interface{})
-							segmentsInt[i] = &ves_io_schema_views.ObjectRefType{}
-
-							if v, ok := sMapToStrVal["name"]; ok && !isIntfNil(v) {
-								segmentsInt[i].Name = v.(string)
-							}
-
-							if v, ok := sMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-								segmentsInt[i].Namespace = v.(string)
-							}
-
-							if v, ok := sMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-								segmentsInt[i].Tenant = v.(string)
-							}
-
-						}
-
+					if v.(bool) {
+						dstSegmentChoiceInt := &ves_io_schema_policy.SegmentPolicyType_DstAny{}
+						dstSegmentChoiceInt.DstAny = &ves_io_schema.Empty{}
+						segmentPolicy.DstSegmentChoice = dstSegmentChoiceInt
 					}
 
 				}
 
-			}
+				if v, ok := segmentPolicyMapStrToI["dst_segments"]; ok && !isIntfNil(v) && !dstSegmentChoiceTypeFound {
 
-			if v, ok := segmentPolicyMapStrToI["intra_segment"]; ok && !isIntfNil(v) && !dstSegmentChoiceTypeFound {
-
-				dstSegmentChoiceTypeFound = true
-
-				if v.(bool) {
-					dstSegmentChoiceInt := &ves_io_schema_policy.SegmentPolicyType_IntraSegment{}
-					dstSegmentChoiceInt.IntraSegment = &ves_io_schema.Empty{}
+					dstSegmentChoiceTypeFound = true
+					dstSegmentChoiceInt := &ves_io_schema_policy.SegmentPolicyType_DstSegments{}
+					dstSegmentChoiceInt.DstSegments = &ves_io_schema_views.SegmentRefList{}
 					segmentPolicy.DstSegmentChoice = dstSegmentChoiceInt
+
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["segments"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								segmentsInt := make([]*ves_io_schema_views.ObjectRefType, len(sl))
+								dstSegmentChoiceInt.DstSegments.Segments = segmentsInt
+								for i, ps := range sl {
+
+									sMapToStrVal := ps.(map[string]interface{})
+									segmentsInt[i] = &ves_io_schema_views.ObjectRefType{}
+
+									if v, ok := sMapToStrVal["name"]; ok && !isIntfNil(v) {
+										segmentsInt[i].Name = v.(string)
+									}
+
+									if v, ok := sMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+										segmentsInt[i].Namespace = v.(string)
+									}
+
+									if v, ok := sMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+										segmentsInt[i].Tenant = v.(string)
+									}
+
+								}
+
+							}
+
+						}
+					}
+
 				}
 
-			}
+				if v, ok := segmentPolicyMapStrToI["intra_segment"]; ok && !isIntfNil(v) && !dstSegmentChoiceTypeFound {
 
-			srcSegmentChoiceTypeFound := false
+					dstSegmentChoiceTypeFound = true
 
-			if v, ok := segmentPolicyMapStrToI["src_any"]; ok && !isIntfNil(v) && !srcSegmentChoiceTypeFound {
+					if v.(bool) {
+						dstSegmentChoiceInt := &ves_io_schema_policy.SegmentPolicyType_IntraSegment{}
+						dstSegmentChoiceInt.IntraSegment = &ves_io_schema.Empty{}
+						segmentPolicy.DstSegmentChoice = dstSegmentChoiceInt
+					}
 
-				srcSegmentChoiceTypeFound = true
+				}
 
-				if v.(bool) {
-					srcSegmentChoiceInt := &ves_io_schema_policy.SegmentPolicyType_SrcAny{}
-					srcSegmentChoiceInt.SrcAny = &ves_io_schema.Empty{}
+				srcSegmentChoiceTypeFound := false
+
+				if v, ok := segmentPolicyMapStrToI["src_any"]; ok && !isIntfNil(v) && !srcSegmentChoiceTypeFound {
+
+					srcSegmentChoiceTypeFound = true
+
+					if v.(bool) {
+						srcSegmentChoiceInt := &ves_io_schema_policy.SegmentPolicyType_SrcAny{}
+						srcSegmentChoiceInt.SrcAny = &ves_io_schema.Empty{}
+						segmentPolicy.SrcSegmentChoice = srcSegmentChoiceInt
+					}
+
+				}
+
+				if v, ok := segmentPolicyMapStrToI["src_segments"]; ok && !isIntfNil(v) && !srcSegmentChoiceTypeFound {
+
+					srcSegmentChoiceTypeFound = true
+					srcSegmentChoiceInt := &ves_io_schema_policy.SegmentPolicyType_SrcSegments{}
+					srcSegmentChoiceInt.SrcSegments = &ves_io_schema_views.SegmentRefList{}
 					segmentPolicy.SrcSegmentChoice = srcSegmentChoiceInt
-				}
 
-			}
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
 
-			if v, ok := segmentPolicyMapStrToI["src_segments"]; ok && !isIntfNil(v) && !srcSegmentChoiceTypeFound {
+							if v, ok := cs["segments"]; ok && !isIntfNil(v) {
 
-				srcSegmentChoiceTypeFound = true
-				srcSegmentChoiceInt := &ves_io_schema_policy.SegmentPolicyType_SrcSegments{}
-				srcSegmentChoiceInt.SrcSegments = &ves_io_schema_views.SegmentRefList{}
-				segmentPolicy.SrcSegmentChoice = srcSegmentChoiceInt
+								sl := v.([]interface{})
+								segmentsInt := make([]*ves_io_schema_views.ObjectRefType, len(sl))
+								srcSegmentChoiceInt.SrcSegments.Segments = segmentsInt
+								for i, ps := range sl {
 
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
+									sMapToStrVal := ps.(map[string]interface{})
+									segmentsInt[i] = &ves_io_schema_views.ObjectRefType{}
 
-					if v, ok := cs["segments"]; ok && !isIntfNil(v) {
+									if v, ok := sMapToStrVal["name"]; ok && !isIntfNil(v) {
+										segmentsInt[i].Name = v.(string)
+									}
 
-						sl := v.([]interface{})
-						segmentsInt := make([]*ves_io_schema_views.ObjectRefType, len(sl))
-						srcSegmentChoiceInt.SrcSegments.Segments = segmentsInt
-						for i, ps := range sl {
+									if v, ok := sMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+										segmentsInt[i].Namespace = v.(string)
+									}
 
-							sMapToStrVal := ps.(map[string]interface{})
-							segmentsInt[i] = &ves_io_schema_views.ObjectRefType{}
+									if v, ok := sMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+										segmentsInt[i].Tenant = v.(string)
+									}
 
-							if v, ok := sMapToStrVal["name"]; ok && !isIntfNil(v) {
-								segmentsInt[i].Name = v.(string)
-							}
+								}
 
-							if v, ok := sMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-								segmentsInt[i].Namespace = v.(string)
-							}
-
-							if v, ok := sMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-								segmentsInt[i].Tenant = v.(string)
 							}
 
 						}
-
 					}
 
 				}
 
 			}
-
 		}
 
 	}

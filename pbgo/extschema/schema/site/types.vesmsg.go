@@ -1635,6 +1635,16 @@ func (m *CreateSpecType) ToYAML() (string, error) {
 	return codec.ToYAML(m)
 }
 
+// Redact squashes sensitive info in m (in-place)
+func (m *CreateSpecType) Redact(ctx context.Context) error {
+	// clear fields with confidential option set (at message or field level)
+	if m == nil {
+		return nil
+	}
+
+	return nil
+}
+
 func (m *CreateSpecType) DeepCopy() *CreateSpecType {
 	if m == nil {
 		return nil
@@ -3572,6 +3582,20 @@ func (m *GetSpecType) ToYAML() (string, error) {
 	return codec.ToYAML(m)
 }
 
+// Redact squashes sensitive info in m (in-place)
+func (m *GetSpecType) Redact(ctx context.Context) error {
+	// clear fields with confidential option set (at message or field level)
+	if m == nil {
+		return nil
+	}
+
+	if err := m.GetAdminUserCredentials().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting GetSpecType.admin_user_credentials")
+	}
+
+	return nil
+}
+
 func (m *GetSpecType) DeepCopy() *GetSpecType {
 	if m == nil {
 		return nil
@@ -4170,6 +4194,15 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
+	if fv, exists := v.FldValidators["admin_user_credentials"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("admin_user_credentials"))
+		if err := fv(ctx, m.GetAdminUserCredentials(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["bgp_peer_address"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("bgp_peer_address"))
@@ -4390,6 +4423,15 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 		vOpts := append(opts, db.WithValidateField("private_connectivity"))
 		if err := fv(ctx, m.GetPrivateConnectivity(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["proactive_monitoring"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("proactive_monitoring"))
+		if err := fv(ctx, m.GetProactiveMonitoring(), vOpts...); err != nil {
 			return err
 		}
 
@@ -4813,6 +4855,8 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 
 	v.FldValidators["re_select"] = ves_io_schema_views.RegionalEdgeSelectionValidator().Validate
 
+	v.FldValidators["admin_user_credentials"] = ves_io_schema_views.AdminUserCredentialsTypeValidator().Validate
+
 	return v
 }()
 
@@ -5047,6 +5091,20 @@ func (m *GlobalSpecType) ToJSON() (string, error) {
 
 func (m *GlobalSpecType) ToYAML() (string, error) {
 	return codec.ToYAML(m)
+}
+
+// Redact squashes sensitive info in m (in-place)
+func (m *GlobalSpecType) Redact(ctx context.Context) error {
+	// clear fields with confidential option set (at message or field level)
+	if m == nil {
+		return nil
+	}
+
+	if err := m.GetAdminUserCredentials().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting GlobalSpecType.admin_user_credentials")
+	}
+
+	return nil
 }
 
 func (m *GlobalSpecType) DeepCopy() *GlobalSpecType {
@@ -5876,6 +5934,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["admin_user_credentials"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("admin_user_credentials"))
+		if err := fv(ctx, m.GetAdminUserCredentials(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["ares_list"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("ares_list"))
@@ -6278,6 +6345,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 		vOpts := append(opts, db.WithValidateField("private_ip"))
 		if err := fv(ctx, m.GetPrivateIp(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["proactive_monitoring"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("proactive_monitoring"))
+		if err := fv(ctx, m.GetProactiveMonitoring(), vOpts...); err != nil {
 			return err
 		}
 
@@ -6880,6 +6956,8 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v.FldValidators["kubernetes_upgrade_drain"] = ves_io_schema_views.KubernetesUpgradeDrainValidator().Validate
 
 	v.FldValidators["re_select"] = ves_io_schema_views.RegionalEdgeSelectionValidator().Validate
+
+	v.FldValidators["admin_user_credentials"] = ves_io_schema_views.AdminUserCredentialsTypeValidator().Validate
 
 	return v
 }()
@@ -9406,6 +9484,16 @@ func (m *ReplaceSpecType) ToJSON() (string, error) {
 
 func (m *ReplaceSpecType) ToYAML() (string, error) {
 	return codec.ToYAML(m)
+}
+
+// Redact squashes sensitive info in m (in-place)
+func (m *ReplaceSpecType) Redact(ctx context.Context) error {
+	// clear fields with confidential option set (at message or field level)
+	if m == nil {
+		return nil
+	}
+
+	return nil
 }
 
 func (m *ReplaceSpecType) DeepCopy() *ReplaceSpecType {
@@ -12034,6 +12122,7 @@ func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 		return
 	}
 	m.Address = f.GetAddress()
+	m.AdminUserCredentials = f.GetAdminUserCredentials()
 	m.BgpPeerAddress = f.GetBgpPeerAddress()
 	m.BgpPeerAddressV6 = f.GetBgpPeerAddressV6()
 	m.BgpRouterId = f.GetBgpRouterId()
@@ -12059,6 +12148,7 @@ func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	m.OutsideVip = f.GetOutsideVip()
 	m.OutsideVipV6 = f.GetOutsideVipV6()
 	m.PrivateConnectivity = f.GetPrivateConnectivity()
+	m.ProactiveMonitoring = f.GetProactiveMonitoring()
 	m.ReSelect = f.GetReSelect()
 	m.Region = f.GetRegion()
 	m.SiteState = f.GetSiteState()
@@ -12093,6 +12183,7 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	_ = m1
 
 	f.Address = m1.Address
+	f.AdminUserCredentials = m1.AdminUserCredentials
 	f.BgpPeerAddress = m1.BgpPeerAddress
 	f.BgpPeerAddressV6 = m1.BgpPeerAddressV6
 	f.BgpRouterId = m1.BgpRouterId
@@ -12118,6 +12209,7 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	f.OutsideVip = m1.OutsideVip
 	f.OutsideVipV6 = m1.OutsideVipV6
 	f.PrivateConnectivity = m1.PrivateConnectivity
+	f.ProactiveMonitoring = m1.ProactiveMonitoring
 	f.ReSelect = m1.ReSelect
 	f.Region = m1.Region
 	f.SiteState = m1.SiteState

@@ -1,9 +1,9 @@
 ---
 
 page_title: "Volterra: app_setting"
-description: "The app_setting allows CRUD of App Setting resource on Volterra SaaS"
 
----
+description: "The app_setting allows CRUD of App Setting resource on Volterra SaaS"
+-----------------------------------------------------------------------------------
 
 Resource volterra_app_setting
 =============================
@@ -75,11 +75,13 @@ resource "volterra_app_setting" "example" {
 
         // One of the arguments from this list "exclude_ip_reputation include_ip_reputation" must be set
 
-        exclude_ip_reputation = true
+        include_ip_reputation = true
 
         // One of the arguments from this list "exclude_non_existent_url_activity include_non_existent_url_activity_automatic include_non_existent_url_activity_custom" can be set
 
-        exclude_non_existent_url_activity = true
+        include_non_existent_url_activity_custom {
+          nonexistent_requests_threshold = "50"
+        }
 
         // One of the arguments from this list "exclude_rate_limit include_rate_limit" must be set
 

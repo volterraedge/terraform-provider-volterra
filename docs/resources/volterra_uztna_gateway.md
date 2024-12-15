@@ -1,9 +1,9 @@
 ---
 
 page_title: "Volterra: uztna_gateway"
-description: "The uztna_gateway allows CRUD of Uztna Gateway resource on Volterra SaaS"
 
----
+description: "The uztna_gateway allows CRUD of Uztna Gateway resource on Volterra SaaS"
+---------------------------------------------------------------------------------------
 
 Resource volterra_uztna_gateway
 ===============================

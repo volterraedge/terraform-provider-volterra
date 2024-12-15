@@ -1162,7 +1162,7 @@ var CustomAPISwaggerJSON string = `{
         "/public/namespaces/{namespace}/http_loadbalancers/{name}/api_definitions/assign": {
             "post": {
                 "summary": "Assign API Definition",
-                "description": "Set a reference to the API Definition, with an option to create an empty one if not exists.",
+                "description": "Set a reference to the API Definition, with an option to create an empty one if not exists.\nDEPRECATED. instead use virtual host public custom api - AssignAPIDefinition",
                 "operationId": "ves.io.schema.views.http_loadbalancer.CustomAPI.AssignAPIDefinition",
                 "responses": {
                     "200": {
@@ -1253,6 +1253,7 @@ var CustomAPISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-views-http_loadbalancer-customapi-assignapidefinition"
                 },
+                "x-ves-deprecated": "instead use virtual host public custom api - AssignAPIDefinition",
                 "x-ves-proto-rpc": "ves.io.schema.views.http_loadbalancer.CustomAPI.AssignAPIDefinition"
             },
             "x-displayname": "HTTP Load Balancer Custom API",
@@ -1262,7 +1263,7 @@ var CustomAPISwaggerJSON string = `{
         "/public/namespaces/{namespace}/http_loadbalancers/{name}/api_definitions/available": {
             "get": {
                 "summary": "List Available API Definitions",
-                "description": "List API definitions suitable for API Inventory management\nAPI Definitions which are associated at most with one app type.",
+                "description": "List API definitions suitable for API Inventory management\nAPI Definitions which are associated at most with one app type.\nDEPRECATED: instead use ListAvailableAPIDefinitions in ves.io.schema.views.api_definition.PublicConfigCustomAPI",
                 "operationId": "ves.io.schema.views.http_loadbalancer.CustomAPI.ListAvailableAPIDefinitions",
                 "responses": {
                     "200": {
@@ -1345,6 +1346,7 @@ var CustomAPISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-views-http_loadbalancer-customapi-listavailableapidefinitions"
                 },
+                "x-ves-deprecated": "instead use public crud api definition - GET List",
                 "x-ves-proto-rpc": "ves.io.schema.views.http_loadbalancer.CustomAPI.ListAvailableAPIDefinitions"
             },
             "x-displayname": "HTTP Load Balancer Custom API",
@@ -2309,15 +2311,15 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "ip_prefixes": {
                     "type": "array",
-                    "description": " IP Address prefix in string format. String must contain both prefix and prefix-length\n\nExample: - \"[192.168.1.0/24, 192.168.2.0/24]\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.ipv4_prefix: true\n  ves.io.schema.rules.repeated.max_items: 1024\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " IP Address prefix in string format. String must contain both prefix and prefix-length.\n Accepts both IPv4 and IPv6 prefixes.\n\nExample: - \"[192.168.1.0/24, 192.168.2.0/24, 4c6f:5ce7:df51:97f2:1619:ffff:b9f3:da35/126]\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.ip_prefix: true\n  ves.io.schema.rules.repeated.max_items: 1024\n  ves.io.schema.rules.repeated.unique: true\n",
                     "maxItems": 1024,
                     "items": {
                         "type": "string"
                     },
                     "x-displayname": "IP Prefixes",
-                    "x-ves-example": "[192.168.1.0/24, 192.168.2.0/24]",
+                    "x-ves-example": "[192.168.1.0/24, 192.168.2.0/24, 4c6f:5ce7:df51:97f2:1619:ffff:b9f3:da35/126]",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.items.string.ipv4_prefix": "true",
+                        "ves.io.schema.rules.repeated.items.string.ip_prefix": "true",
                         "ves.io.schema.rules.repeated.max_items": "1024",
                         "ves.io.schema.rules.repeated.unique": "true"
                     }

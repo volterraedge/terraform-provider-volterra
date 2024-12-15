@@ -1,9 +1,9 @@
 ---
 
 page_title: "Volterra: fast_acl"
-description: "The fast_acl allows CRUD of Fast Acl resource on Volterra SaaS"
 
----
+description: "The fast_acl allows CRUD of Fast Acl resource on Volterra SaaS"
+-----------------------------------------------------------------------------
 
 Resource volterra_fast_acl
 ==========================
@@ -48,12 +48,10 @@ resource "volterra_fast_acl" "example" {
 
       // One of the arguments from this list "ip_prefix_set prefix" must be set
 
-      ip_prefix_set {
-        ref {
-          name      = "test1"
-          namespace = "staging"
-          tenant    = "acmecorp"
-        }
+      prefix {
+        ipv6_prefix = ["[2001:db8::1::/112, 2001::db8::2::/112]"]
+
+        prefix = ["[192.168.1.0/24, 192.168.2.0/24]\""]
       }
     }
 

@@ -62,7 +62,8 @@ func resourceVolterraK8SPodSecurityPolicy() *schema.Resource {
 
 			"psp_spec": {
 
-				Type:     schema.TypeSet,
+				Type:     schema.TypeList,
+				MaxItems: 1,
 				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
@@ -74,7 +75,8 @@ func resourceVolterraK8SPodSecurityPolicy() *schema.Resource {
 
 						"allowed_capabilities": {
 
-							Type:     schema.TypeSet,
+							Type:     schema.TypeList,
+							MaxItems: 1,
 							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
@@ -165,7 +167,8 @@ func resourceVolterraK8SPodSecurityPolicy() *schema.Resource {
 
 						"default_capabilities": {
 
-							Type:     schema.TypeSet,
+							Type:     schema.TypeList,
+							MaxItems: 1,
 							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
@@ -191,7 +194,8 @@ func resourceVolterraK8SPodSecurityPolicy() *schema.Resource {
 
 						"drop_capabilities": {
 
-							Type:     schema.TypeSet,
+							Type:     schema.TypeList,
+							MaxItems: 1,
 							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
@@ -227,7 +231,8 @@ func resourceVolterraK8SPodSecurityPolicy() *schema.Resource {
 
 						"fs_group_strategy_options": {
 
-							Type:     schema.TypeSet,
+							Type:     schema.TypeList,
+							MaxItems: 1,
 							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
@@ -274,7 +279,8 @@ func resourceVolterraK8SPodSecurityPolicy() *schema.Resource {
 
 						"run_as_group": {
 
-							Type:     schema.TypeSet,
+							Type:     schema.TypeList,
+							MaxItems: 1,
 							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
@@ -345,7 +351,8 @@ func resourceVolterraK8SPodSecurityPolicy() *schema.Resource {
 
 						"runtime_class": {
 
-							Type:       schema.TypeSet,
+							Type:       schema.TypeList,
+							MaxItems:   1,
 							Optional:   true,
 							Deprecated: "This field is deprecated and will be removed in future release.",
 							Elem: &schema.Resource{
@@ -379,7 +386,8 @@ func resourceVolterraK8SPodSecurityPolicy() *schema.Resource {
 
 						"se_linux_options": {
 
-							Type:       schema.TypeSet,
+							Type:       schema.TypeList,
+							MaxItems:   1,
 							Optional:   true,
 							Deprecated: "This field is deprecated and will be removed in future release.",
 							Elem: &schema.Resource{
@@ -426,7 +434,8 @@ func resourceVolterraK8SPodSecurityPolicy() *schema.Resource {
 
 						"supplemental_groups": {
 
-							Type:     schema.TypeSet,
+							Type:     schema.TypeList,
+							MaxItems: 1,
 							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
@@ -467,7 +476,8 @@ func resourceVolterraK8SPodSecurityPolicy() *schema.Resource {
 
 						"run_as_user": {
 
-							Type:     schema.TypeSet,
+							Type:     schema.TypeList,
+							MaxItems: 1,
 							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
@@ -586,584 +596,614 @@ func resourceVolterraK8SPodSecurityPolicyCreate(d *schema.ResourceData, meta int
 		configMethodChoiceInt.PspSpec = &ves_io_schema_k8s_pod_security_policy.PodSecurityPolicySpecType{}
 		createSpec.ConfigMethodChoice = configMethodChoiceInt
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
+			if set != nil {
+				cs := set.(map[string]interface{})
 
-			if v, ok := cs["allow_privilege_escalation"]; ok && !isIntfNil(v) {
+				if v, ok := cs["allow_privilege_escalation"]; ok && !isIntfNil(v) {
 
-				configMethodChoiceInt.PspSpec.AllowPrivilegeEscalation = v.(bool)
-
-			}
-
-			allowedCapabilitiesChoiceTypeFound := false
-
-			if v, ok := cs["allowed_capabilities"]; ok && !isIntfNil(v) && !allowedCapabilitiesChoiceTypeFound {
-
-				allowedCapabilitiesChoiceTypeFound = true
-				allowedCapabilitiesChoiceInt := &ves_io_schema_k8s_pod_security_policy.PodSecurityPolicySpecType_AllowedCapabilities{}
-				allowedCapabilitiesChoiceInt.AllowedCapabilities = &ves_io_schema_k8s_pod_security_policy.CapabilityListType{}
-				configMethodChoiceInt.PspSpec.AllowedCapabilitiesChoice = allowedCapabilitiesChoiceInt
-
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
-
-					if v, ok := cs["capabilities"]; ok && !isIntfNil(v) {
-
-						ls := make([]string, len(v.([]interface{})))
-						for i, v := range v.([]interface{}) {
-							ls[i] = v.(string)
-						}
-						allowedCapabilitiesChoiceInt.AllowedCapabilities.Capabilities = ls
-
-					}
+					configMethodChoiceInt.PspSpec.AllowPrivilegeEscalation = v.(bool)
 
 				}
 
-			}
+				allowedCapabilitiesChoiceTypeFound := false
 
-			if v, ok := cs["no_allowed_capabilities"]; ok && !isIntfNil(v) && !allowedCapabilitiesChoiceTypeFound {
+				if v, ok := cs["allowed_capabilities"]; ok && !isIntfNil(v) && !allowedCapabilitiesChoiceTypeFound {
 
-				allowedCapabilitiesChoiceTypeFound = true
-
-				if v.(bool) {
-					allowedCapabilitiesChoiceInt := &ves_io_schema_k8s_pod_security_policy.PodSecurityPolicySpecType_NoAllowedCapabilities{}
-					allowedCapabilitiesChoiceInt.NoAllowedCapabilities = &ves_io_schema.Empty{}
+					allowedCapabilitiesChoiceTypeFound = true
+					allowedCapabilitiesChoiceInt := &ves_io_schema_k8s_pod_security_policy.PodSecurityPolicySpecType_AllowedCapabilities{}
+					allowedCapabilitiesChoiceInt.AllowedCapabilities = &ves_io_schema_k8s_pod_security_policy.CapabilityListType{}
 					configMethodChoiceInt.PspSpec.AllowedCapabilitiesChoice = allowedCapabilitiesChoiceInt
-				}
 
-			}
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
 
-			if v, ok := cs["allowed_csi_drivers"]; ok && !isIntfNil(v) {
+							if v, ok := cs["capabilities"]; ok && !isIntfNil(v) {
 
-				ls := make([]string, len(v.([]interface{})))
-				for i, v := range v.([]interface{}) {
-					ls[i] = v.(string)
-				}
-				configMethodChoiceInt.PspSpec.AllowedCsiDrivers = ls
+								ls := make([]string, len(v.([]interface{})))
+								for i, v := range v.([]interface{}) {
+									ls[i] = v.(string)
+								}
+								allowedCapabilitiesChoiceInt.AllowedCapabilities.Capabilities = ls
 
-			}
+							}
 
-			if v, ok := cs["allowed_flex_volumes"]; ok && !isIntfNil(v) {
-
-				ls := make([]string, len(v.([]interface{})))
-				for i, v := range v.([]interface{}) {
-					ls[i] = v.(string)
-				}
-				configMethodChoiceInt.PspSpec.AllowedFlexVolumes = ls
-
-			}
-
-			if v, ok := cs["allowed_host_paths"]; ok && !isIntfNil(v) {
-
-				sl := v.([]interface{})
-				allowedHostPaths := make([]*ves_io_schema_k8s_pod_security_policy.HostPathType, len(sl))
-				configMethodChoiceInt.PspSpec.AllowedHostPaths = allowedHostPaths
-				for i, set := range sl {
-					allowedHostPaths[i] = &ves_io_schema_k8s_pod_security_policy.HostPathType{}
-					allowedHostPathsMapStrToI := set.(map[string]interface{})
-
-					if w, ok := allowedHostPathsMapStrToI["path_prefix"]; ok && !isIntfNil(w) {
-						allowedHostPaths[i].PathPrefix = w.(string)
-					}
-
-					if w, ok := allowedHostPathsMapStrToI["read_only"]; ok && !isIntfNil(w) {
-						allowedHostPaths[i].ReadOnly = w.(bool)
-					}
-
-				}
-
-			}
-
-			if v, ok := cs["allowed_proc_mounts"]; ok && !isIntfNil(v) {
-
-				ls := make([]string, len(v.([]interface{})))
-				for i, v := range v.([]interface{}) {
-					ls[i] = v.(string)
-				}
-				configMethodChoiceInt.PspSpec.AllowedProcMounts = ls
-
-			}
-
-			if v, ok := cs["allowed_unsafe_sysctls"]; ok && !isIntfNil(v) {
-
-				ls := make([]string, len(v.([]interface{})))
-				for i, v := range v.([]interface{}) {
-					ls[i] = v.(string)
-				}
-				configMethodChoiceInt.PspSpec.AllowedUnsafeSysctls = ls
-
-			}
-
-			if v, ok := cs["default_allow_privilege_escalation"]; ok && !isIntfNil(v) {
-
-				configMethodChoiceInt.PspSpec.DefaultAllowPrivilegeEscalation = v.(bool)
-
-			}
-
-			defaultCapabilitiesChoiceTypeFound := false
-
-			if v, ok := cs["default_capabilities"]; ok && !isIntfNil(v) && !defaultCapabilitiesChoiceTypeFound {
-
-				defaultCapabilitiesChoiceTypeFound = true
-				defaultCapabilitiesChoiceInt := &ves_io_schema_k8s_pod_security_policy.PodSecurityPolicySpecType_DefaultCapabilities{}
-				defaultCapabilitiesChoiceInt.DefaultCapabilities = &ves_io_schema_k8s_pod_security_policy.CapabilityListType{}
-				configMethodChoiceInt.PspSpec.DefaultCapabilitiesChoice = defaultCapabilitiesChoiceInt
-
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
-
-					if v, ok := cs["capabilities"]; ok && !isIntfNil(v) {
-
-						ls := make([]string, len(v.([]interface{})))
-						for i, v := range v.([]interface{}) {
-							ls[i] = v.(string)
 						}
-						defaultCapabilitiesChoiceInt.DefaultCapabilities.Capabilities = ls
-
 					}
 
 				}
 
-			}
+				if v, ok := cs["no_allowed_capabilities"]; ok && !isIntfNil(v) && !allowedCapabilitiesChoiceTypeFound {
 
-			if v, ok := cs["no_default_capabilities"]; ok && !isIntfNil(v) && !defaultCapabilitiesChoiceTypeFound {
+					allowedCapabilitiesChoiceTypeFound = true
 
-				defaultCapabilitiesChoiceTypeFound = true
+					if v.(bool) {
+						allowedCapabilitiesChoiceInt := &ves_io_schema_k8s_pod_security_policy.PodSecurityPolicySpecType_NoAllowedCapabilities{}
+						allowedCapabilitiesChoiceInt.NoAllowedCapabilities = &ves_io_schema.Empty{}
+						configMethodChoiceInt.PspSpec.AllowedCapabilitiesChoice = allowedCapabilitiesChoiceInt
+					}
 
-				if v.(bool) {
-					defaultCapabilitiesChoiceInt := &ves_io_schema_k8s_pod_security_policy.PodSecurityPolicySpecType_NoDefaultCapabilities{}
-					defaultCapabilitiesChoiceInt.NoDefaultCapabilities = &ves_io_schema.Empty{}
+				}
+
+				if v, ok := cs["allowed_csi_drivers"]; ok && !isIntfNil(v) {
+
+					ls := make([]string, len(v.([]interface{})))
+					for i, v := range v.([]interface{}) {
+						ls[i] = v.(string)
+					}
+					configMethodChoiceInt.PspSpec.AllowedCsiDrivers = ls
+
+				}
+
+				if v, ok := cs["allowed_flex_volumes"]; ok && !isIntfNil(v) {
+
+					ls := make([]string, len(v.([]interface{})))
+					for i, v := range v.([]interface{}) {
+						ls[i] = v.(string)
+					}
+					configMethodChoiceInt.PspSpec.AllowedFlexVolumes = ls
+
+				}
+
+				if v, ok := cs["allowed_host_paths"]; ok && !isIntfNil(v) {
+
+					sl := v.([]interface{})
+					allowedHostPaths := make([]*ves_io_schema_k8s_pod_security_policy.HostPathType, len(sl))
+					configMethodChoiceInt.PspSpec.AllowedHostPaths = allowedHostPaths
+					for i, set := range sl {
+						if set != nil {
+							allowedHostPaths[i] = &ves_io_schema_k8s_pod_security_policy.HostPathType{}
+							allowedHostPathsMapStrToI := set.(map[string]interface{})
+
+							if w, ok := allowedHostPathsMapStrToI["path_prefix"]; ok && !isIntfNil(w) {
+								allowedHostPaths[i].PathPrefix = w.(string)
+							}
+
+							if w, ok := allowedHostPathsMapStrToI["read_only"]; ok && !isIntfNil(w) {
+								allowedHostPaths[i].ReadOnly = w.(bool)
+							}
+
+						}
+					}
+
+				}
+
+				if v, ok := cs["allowed_proc_mounts"]; ok && !isIntfNil(v) {
+
+					ls := make([]string, len(v.([]interface{})))
+					for i, v := range v.([]interface{}) {
+						ls[i] = v.(string)
+					}
+					configMethodChoiceInt.PspSpec.AllowedProcMounts = ls
+
+				}
+
+				if v, ok := cs["allowed_unsafe_sysctls"]; ok && !isIntfNil(v) {
+
+					ls := make([]string, len(v.([]interface{})))
+					for i, v := range v.([]interface{}) {
+						ls[i] = v.(string)
+					}
+					configMethodChoiceInt.PspSpec.AllowedUnsafeSysctls = ls
+
+				}
+
+				if v, ok := cs["default_allow_privilege_escalation"]; ok && !isIntfNil(v) {
+
+					configMethodChoiceInt.PspSpec.DefaultAllowPrivilegeEscalation = v.(bool)
+
+				}
+
+				defaultCapabilitiesChoiceTypeFound := false
+
+				if v, ok := cs["default_capabilities"]; ok && !isIntfNil(v) && !defaultCapabilitiesChoiceTypeFound {
+
+					defaultCapabilitiesChoiceTypeFound = true
+					defaultCapabilitiesChoiceInt := &ves_io_schema_k8s_pod_security_policy.PodSecurityPolicySpecType_DefaultCapabilities{}
+					defaultCapabilitiesChoiceInt.DefaultCapabilities = &ves_io_schema_k8s_pod_security_policy.CapabilityListType{}
 					configMethodChoiceInt.PspSpec.DefaultCapabilitiesChoice = defaultCapabilitiesChoiceInt
-				}
 
-			}
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
 
-			dropCapabilitiesChoiceTypeFound := false
+							if v, ok := cs["capabilities"]; ok && !isIntfNil(v) {
 
-			if v, ok := cs["drop_capabilities"]; ok && !isIntfNil(v) && !dropCapabilitiesChoiceTypeFound {
+								ls := make([]string, len(v.([]interface{})))
+								for i, v := range v.([]interface{}) {
+									ls[i] = v.(string)
+								}
+								defaultCapabilitiesChoiceInt.DefaultCapabilities.Capabilities = ls
 
-				dropCapabilitiesChoiceTypeFound = true
-				dropCapabilitiesChoiceInt := &ves_io_schema_k8s_pod_security_policy.PodSecurityPolicySpecType_DropCapabilities{}
-				dropCapabilitiesChoiceInt.DropCapabilities = &ves_io_schema_k8s_pod_security_policy.CapabilityListType{}
-				configMethodChoiceInt.PspSpec.DropCapabilitiesChoice = dropCapabilitiesChoiceInt
+							}
 
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
-
-					if v, ok := cs["capabilities"]; ok && !isIntfNil(v) {
-
-						ls := make([]string, len(v.([]interface{})))
-						for i, v := range v.([]interface{}) {
-							ls[i] = v.(string)
 						}
-						dropCapabilitiesChoiceInt.DropCapabilities.Capabilities = ls
-
 					}
 
 				}
 
-			}
+				if v, ok := cs["no_default_capabilities"]; ok && !isIntfNil(v) && !defaultCapabilitiesChoiceTypeFound {
 
-			if v, ok := cs["no_drop_capabilities"]; ok && !isIntfNil(v) && !dropCapabilitiesChoiceTypeFound {
+					defaultCapabilitiesChoiceTypeFound = true
 
-				dropCapabilitiesChoiceTypeFound = true
+					if v.(bool) {
+						defaultCapabilitiesChoiceInt := &ves_io_schema_k8s_pod_security_policy.PodSecurityPolicySpecType_NoDefaultCapabilities{}
+						defaultCapabilitiesChoiceInt.NoDefaultCapabilities = &ves_io_schema.Empty{}
+						configMethodChoiceInt.PspSpec.DefaultCapabilitiesChoice = defaultCapabilitiesChoiceInt
+					}
 
-				if v.(bool) {
-					dropCapabilitiesChoiceInt := &ves_io_schema_k8s_pod_security_policy.PodSecurityPolicySpecType_NoDropCapabilities{}
-					dropCapabilitiesChoiceInt.NoDropCapabilities = &ves_io_schema.Empty{}
+				}
+
+				dropCapabilitiesChoiceTypeFound := false
+
+				if v, ok := cs["drop_capabilities"]; ok && !isIntfNil(v) && !dropCapabilitiesChoiceTypeFound {
+
+					dropCapabilitiesChoiceTypeFound = true
+					dropCapabilitiesChoiceInt := &ves_io_schema_k8s_pod_security_policy.PodSecurityPolicySpecType_DropCapabilities{}
+					dropCapabilitiesChoiceInt.DropCapabilities = &ves_io_schema_k8s_pod_security_policy.CapabilityListType{}
 					configMethodChoiceInt.PspSpec.DropCapabilitiesChoice = dropCapabilitiesChoiceInt
-				}
 
-			}
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
 
-			if v, ok := cs["forbidden_sysctls"]; ok && !isIntfNil(v) {
+							if v, ok := cs["capabilities"]; ok && !isIntfNil(v) {
 
-				ls := make([]string, len(v.([]interface{})))
-				for i, v := range v.([]interface{}) {
-					ls[i] = v.(string)
-				}
-				configMethodChoiceInt.PspSpec.ForbiddenSysctls = ls
+								ls := make([]string, len(v.([]interface{})))
+								for i, v := range v.([]interface{}) {
+									ls[i] = v.(string)
+								}
+								dropCapabilitiesChoiceInt.DropCapabilities.Capabilities = ls
 
-			}
-
-			fsGroupChoiceTypeFound := false
-
-			if v, ok := cs["fs_group_strategy_options"]; ok && !isIntfNil(v) && !fsGroupChoiceTypeFound {
-
-				fsGroupChoiceTypeFound = true
-				fsGroupChoiceInt := &ves_io_schema_k8s_pod_security_policy.PodSecurityPolicySpecType_FsGroupStrategyOptions{}
-				fsGroupChoiceInt.FsGroupStrategyOptions = &ves_io_schema_k8s_pod_security_policy.IDStrategyOptionsType{}
-				configMethodChoiceInt.PspSpec.FsGroupChoice = fsGroupChoiceInt
-
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
-
-					if v, ok := cs["id_ranges"]; ok && !isIntfNil(v) {
-
-						sl := v.([]interface{})
-						idRanges := make([]*ves_io_schema_k8s_pod_security_policy.IDRangeType, len(sl))
-						fsGroupChoiceInt.FsGroupStrategyOptions.IdRanges = idRanges
-						for i, set := range sl {
-							idRanges[i] = &ves_io_schema_k8s_pod_security_policy.IDRangeType{}
-							idRangesMapStrToI := set.(map[string]interface{})
-
-							if w, ok := idRangesMapStrToI["max_id"]; ok && !isIntfNil(w) {
-								idRanges[i].MaxId = uint32(w.(int))
-							}
-
-							if w, ok := idRangesMapStrToI["min_id"]; ok && !isIntfNil(w) {
-								idRanges[i].MinId = uint32(w.(int))
 							}
 
 						}
-
-					}
-
-					if v, ok := cs["rule"]; ok && !isIntfNil(v) {
-
-						fsGroupChoiceInt.FsGroupStrategyOptions.Rule = v.(string)
-
 					}
 
 				}
 
-			}
+				if v, ok := cs["no_drop_capabilities"]; ok && !isIntfNil(v) && !dropCapabilitiesChoiceTypeFound {
 
-			if v, ok := cs["no_fs_groups"]; ok && !isIntfNil(v) && !fsGroupChoiceTypeFound {
+					dropCapabilitiesChoiceTypeFound = true
 
-				fsGroupChoiceTypeFound = true
+					if v.(bool) {
+						dropCapabilitiesChoiceInt := &ves_io_schema_k8s_pod_security_policy.PodSecurityPolicySpecType_NoDropCapabilities{}
+						dropCapabilitiesChoiceInt.NoDropCapabilities = &ves_io_schema.Empty{}
+						configMethodChoiceInt.PspSpec.DropCapabilitiesChoice = dropCapabilitiesChoiceInt
+					}
 
-				if v.(bool) {
-					fsGroupChoiceInt := &ves_io_schema_k8s_pod_security_policy.PodSecurityPolicySpecType_NoFsGroups{}
-					fsGroupChoiceInt.NoFsGroups = &ves_io_schema.Empty{}
+				}
+
+				if v, ok := cs["forbidden_sysctls"]; ok && !isIntfNil(v) {
+
+					ls := make([]string, len(v.([]interface{})))
+					for i, v := range v.([]interface{}) {
+						ls[i] = v.(string)
+					}
+					configMethodChoiceInt.PspSpec.ForbiddenSysctls = ls
+
+				}
+
+				fsGroupChoiceTypeFound := false
+
+				if v, ok := cs["fs_group_strategy_options"]; ok && !isIntfNil(v) && !fsGroupChoiceTypeFound {
+
+					fsGroupChoiceTypeFound = true
+					fsGroupChoiceInt := &ves_io_schema_k8s_pod_security_policy.PodSecurityPolicySpecType_FsGroupStrategyOptions{}
+					fsGroupChoiceInt.FsGroupStrategyOptions = &ves_io_schema_k8s_pod_security_policy.IDStrategyOptionsType{}
 					configMethodChoiceInt.PspSpec.FsGroupChoice = fsGroupChoiceInt
+
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["id_ranges"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								idRanges := make([]*ves_io_schema_k8s_pod_security_policy.IDRangeType, len(sl))
+								fsGroupChoiceInt.FsGroupStrategyOptions.IdRanges = idRanges
+								for i, set := range sl {
+									if set != nil {
+										idRanges[i] = &ves_io_schema_k8s_pod_security_policy.IDRangeType{}
+										idRangesMapStrToI := set.(map[string]interface{})
+
+										if w, ok := idRangesMapStrToI["max_id"]; ok && !isIntfNil(w) {
+											idRanges[i].MaxId = uint32(w.(int))
+										}
+
+										if w, ok := idRangesMapStrToI["min_id"]; ok && !isIntfNil(w) {
+											idRanges[i].MinId = uint32(w.(int))
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := cs["rule"]; ok && !isIntfNil(v) {
+
+								fsGroupChoiceInt.FsGroupStrategyOptions.Rule = v.(string)
+
+							}
+
+						}
+					}
+
 				}
 
-			}
+				if v, ok := cs["no_fs_groups"]; ok && !isIntfNil(v) && !fsGroupChoiceTypeFound {
 
-			groupChoiceTypeFound := false
+					fsGroupChoiceTypeFound = true
 
-			if v, ok := cs["no_run_as_group"]; ok && !isIntfNil(v) && !groupChoiceTypeFound {
+					if v.(bool) {
+						fsGroupChoiceInt := &ves_io_schema_k8s_pod_security_policy.PodSecurityPolicySpecType_NoFsGroups{}
+						fsGroupChoiceInt.NoFsGroups = &ves_io_schema.Empty{}
+						configMethodChoiceInt.PspSpec.FsGroupChoice = fsGroupChoiceInt
+					}
 
-				groupChoiceTypeFound = true
+				}
 
-				if v.(bool) {
-					groupChoiceInt := &ves_io_schema_k8s_pod_security_policy.PodSecurityPolicySpecType_NoRunAsGroup{}
-					groupChoiceInt.NoRunAsGroup = &ves_io_schema.Empty{}
+				groupChoiceTypeFound := false
+
+				if v, ok := cs["no_run_as_group"]; ok && !isIntfNil(v) && !groupChoiceTypeFound {
+
+					groupChoiceTypeFound = true
+
+					if v.(bool) {
+						groupChoiceInt := &ves_io_schema_k8s_pod_security_policy.PodSecurityPolicySpecType_NoRunAsGroup{}
+						groupChoiceInt.NoRunAsGroup = &ves_io_schema.Empty{}
+						configMethodChoiceInt.PspSpec.GroupChoice = groupChoiceInt
+					}
+
+				}
+
+				if v, ok := cs["run_as_group"]; ok && !isIntfNil(v) && !groupChoiceTypeFound {
+
+					groupChoiceTypeFound = true
+					groupChoiceInt := &ves_io_schema_k8s_pod_security_policy.PodSecurityPolicySpecType_RunAsGroup{}
+					groupChoiceInt.RunAsGroup = &ves_io_schema_k8s_pod_security_policy.IDStrategyOptionsType{}
 					configMethodChoiceInt.PspSpec.GroupChoice = groupChoiceInt
-				}
 
-			}
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
 
-			if v, ok := cs["run_as_group"]; ok && !isIntfNil(v) && !groupChoiceTypeFound {
+							if v, ok := cs["id_ranges"]; ok && !isIntfNil(v) {
 
-				groupChoiceTypeFound = true
-				groupChoiceInt := &ves_io_schema_k8s_pod_security_policy.PodSecurityPolicySpecType_RunAsGroup{}
-				groupChoiceInt.RunAsGroup = &ves_io_schema_k8s_pod_security_policy.IDStrategyOptionsType{}
-				configMethodChoiceInt.PspSpec.GroupChoice = groupChoiceInt
+								sl := v.([]interface{})
+								idRanges := make([]*ves_io_schema_k8s_pod_security_policy.IDRangeType, len(sl))
+								groupChoiceInt.RunAsGroup.IdRanges = idRanges
+								for i, set := range sl {
+									if set != nil {
+										idRanges[i] = &ves_io_schema_k8s_pod_security_policy.IDRangeType{}
+										idRangesMapStrToI := set.(map[string]interface{})
 
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
+										if w, ok := idRangesMapStrToI["max_id"]; ok && !isIntfNil(w) {
+											idRanges[i].MaxId = uint32(w.(int))
+										}
 
-					if v, ok := cs["id_ranges"]; ok && !isIntfNil(v) {
+										if w, ok := idRangesMapStrToI["min_id"]; ok && !isIntfNil(w) {
+											idRanges[i].MinId = uint32(w.(int))
+										}
 
-						sl := v.([]interface{})
-						idRanges := make([]*ves_io_schema_k8s_pod_security_policy.IDRangeType, len(sl))
-						groupChoiceInt.RunAsGroup.IdRanges = idRanges
-						for i, set := range sl {
-							idRanges[i] = &ves_io_schema_k8s_pod_security_policy.IDRangeType{}
-							idRangesMapStrToI := set.(map[string]interface{})
+									}
+								}
 
-							if w, ok := idRangesMapStrToI["max_id"]; ok && !isIntfNil(w) {
-								idRanges[i].MaxId = uint32(w.(int))
 							}
 
-							if w, ok := idRangesMapStrToI["min_id"]; ok && !isIntfNil(w) {
-								idRanges[i].MinId = uint32(w.(int))
+							if v, ok := cs["rule"]; ok && !isIntfNil(v) {
+
+								groupChoiceInt.RunAsGroup.Rule = v.(string)
+
 							}
 
 						}
-
-					}
-
-					if v, ok := cs["rule"]; ok && !isIntfNil(v) {
-
-						groupChoiceInt.RunAsGroup.Rule = v.(string)
-
 					}
 
 				}
 
-			}
+				if v, ok := cs["host_ipc"]; ok && !isIntfNil(v) {
 
-			if v, ok := cs["host_ipc"]; ok && !isIntfNil(v) {
+					configMethodChoiceInt.PspSpec.HostIpc = v.(bool)
 
-				configMethodChoiceInt.PspSpec.HostIpc = v.(bool)
+				}
 
-			}
+				if v, ok := cs["host_network"]; ok && !isIntfNil(v) {
 
-			if v, ok := cs["host_network"]; ok && !isIntfNil(v) {
+					configMethodChoiceInt.PspSpec.HostNetwork = v.(bool)
 
-				configMethodChoiceInt.PspSpec.HostNetwork = v.(bool)
+				}
 
-			}
+				if v, ok := cs["host_pid"]; ok && !isIntfNil(v) {
 
-			if v, ok := cs["host_pid"]; ok && !isIntfNil(v) {
+					configMethodChoiceInt.PspSpec.HostPid = v.(bool)
 
-				configMethodChoiceInt.PspSpec.HostPid = v.(bool)
+				}
 
-			}
+				if v, ok := cs["host_port_ranges"]; ok && !isIntfNil(v) {
 
-			if v, ok := cs["host_port_ranges"]; ok && !isIntfNil(v) {
+					configMethodChoiceInt.PspSpec.HostPortRanges = v.(string)
 
-				configMethodChoiceInt.PspSpec.HostPortRanges = v.(string)
+				}
 
-			}
+				if v, ok := cs["privileged"]; ok && !isIntfNil(v) {
 
-			if v, ok := cs["privileged"]; ok && !isIntfNil(v) {
+					configMethodChoiceInt.PspSpec.Privileged = v.(bool)
 
-				configMethodChoiceInt.PspSpec.Privileged = v.(bool)
+				}
 
-			}
+				if v, ok := cs["read_only_root_filesystem"]; ok && !isIntfNil(v) {
 
-			if v, ok := cs["read_only_root_filesystem"]; ok && !isIntfNil(v) {
+					configMethodChoiceInt.PspSpec.ReadOnlyRootFilesystem = v.(bool)
 
-				configMethodChoiceInt.PspSpec.ReadOnlyRootFilesystem = v.(bool)
+				}
 
-			}
+				runtimeClassChoiceTypeFound := false
 
-			runtimeClassChoiceTypeFound := false
+				if v, ok := cs["no_runtime_class"]; ok && !isIntfNil(v) && !runtimeClassChoiceTypeFound {
 
-			if v, ok := cs["no_runtime_class"]; ok && !isIntfNil(v) && !runtimeClassChoiceTypeFound {
+					runtimeClassChoiceTypeFound = true
 
-				runtimeClassChoiceTypeFound = true
+					if v.(bool) {
+						runtimeClassChoiceInt := &ves_io_schema_k8s_pod_security_policy.PodSecurityPolicySpecType_NoRuntimeClass{}
+						runtimeClassChoiceInt.NoRuntimeClass = &ves_io_schema.Empty{}
+						configMethodChoiceInt.PspSpec.RuntimeClassChoice = runtimeClassChoiceInt
+					}
 
-				if v.(bool) {
-					runtimeClassChoiceInt := &ves_io_schema_k8s_pod_security_policy.PodSecurityPolicySpecType_NoRuntimeClass{}
-					runtimeClassChoiceInt.NoRuntimeClass = &ves_io_schema.Empty{}
+				}
+
+				if v, ok := cs["runtime_class"]; ok && !isIntfNil(v) && !runtimeClassChoiceTypeFound {
+
+					runtimeClassChoiceTypeFound = true
+					runtimeClassChoiceInt := &ves_io_schema_k8s_pod_security_policy.PodSecurityPolicySpecType_RuntimeClass{}
+					runtimeClassChoiceInt.RuntimeClass = &ves_io_schema_k8s_pod_security_policy.RuntimeClassStrategyOptions{}
 					configMethodChoiceInt.PspSpec.RuntimeClassChoice = runtimeClassChoiceInt
-				}
 
-			}
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
 
-			if v, ok := cs["runtime_class"]; ok && !isIntfNil(v) && !runtimeClassChoiceTypeFound {
+							if v, ok := cs["allowed_runtime_class_names"]; ok && !isIntfNil(v) {
 
-				runtimeClassChoiceTypeFound = true
-				runtimeClassChoiceInt := &ves_io_schema_k8s_pod_security_policy.PodSecurityPolicySpecType_RuntimeClass{}
-				runtimeClassChoiceInt.RuntimeClass = &ves_io_schema_k8s_pod_security_policy.RuntimeClassStrategyOptions{}
-				configMethodChoiceInt.PspSpec.RuntimeClassChoice = runtimeClassChoiceInt
+								ls := make([]string, len(v.([]interface{})))
+								for i, v := range v.([]interface{}) {
+									ls[i] = v.(string)
+								}
+								runtimeClassChoiceInt.RuntimeClass.AllowedRuntimeClassNames = ls
 
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
+							}
 
-					if v, ok := cs["allowed_runtime_class_names"]; ok && !isIntfNil(v) {
+							if v, ok := cs["default_runtime_class_name"]; ok && !isIntfNil(v) {
 
-						ls := make([]string, len(v.([]interface{})))
-						for i, v := range v.([]interface{}) {
-							ls[i] = v.(string)
+								runtimeClassChoiceInt.RuntimeClass.DefaultRuntimeClassName = v.(string)
+
+							}
+
 						}
-						runtimeClassChoiceInt.RuntimeClass.AllowedRuntimeClassNames = ls
-
-					}
-
-					if v, ok := cs["default_runtime_class_name"]; ok && !isIntfNil(v) {
-
-						runtimeClassChoiceInt.RuntimeClass.DefaultRuntimeClassName = v.(string)
-
 					}
 
 				}
 
-			}
+				seLinuxChoiceTypeFound := false
 
-			seLinuxChoiceTypeFound := false
+				if v, ok := cs["no_se_linux_options"]; ok && !isIntfNil(v) && !seLinuxChoiceTypeFound {
 
-			if v, ok := cs["no_se_linux_options"]; ok && !isIntfNil(v) && !seLinuxChoiceTypeFound {
+					seLinuxChoiceTypeFound = true
 
-				seLinuxChoiceTypeFound = true
+					if v.(bool) {
+						seLinuxChoiceInt := &ves_io_schema_k8s_pod_security_policy.PodSecurityPolicySpecType_NoSeLinuxOptions{}
+						seLinuxChoiceInt.NoSeLinuxOptions = &ves_io_schema.Empty{}
+						configMethodChoiceInt.PspSpec.SeLinuxChoice = seLinuxChoiceInt
+					}
 
-				if v.(bool) {
-					seLinuxChoiceInt := &ves_io_schema_k8s_pod_security_policy.PodSecurityPolicySpecType_NoSeLinuxOptions{}
-					seLinuxChoiceInt.NoSeLinuxOptions = &ves_io_schema.Empty{}
+				}
+
+				if v, ok := cs["se_linux_options"]; ok && !isIntfNil(v) && !seLinuxChoiceTypeFound {
+
+					seLinuxChoiceTypeFound = true
+					seLinuxChoiceInt := &ves_io_schema_k8s_pod_security_policy.PodSecurityPolicySpecType_SeLinuxOptions{}
+					seLinuxChoiceInt.SeLinuxOptions = &ves_io_schema_k8s_pod_security_policy.SELinuxStrategyOptions{}
 					configMethodChoiceInt.PspSpec.SeLinuxChoice = seLinuxChoiceInt
-				}
 
-			}
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
 
-			if v, ok := cs["se_linux_options"]; ok && !isIntfNil(v) && !seLinuxChoiceTypeFound {
+							if v, ok := cs["level"]; ok && !isIntfNil(v) {
 
-				seLinuxChoiceTypeFound = true
-				seLinuxChoiceInt := &ves_io_schema_k8s_pod_security_policy.PodSecurityPolicySpecType_SeLinuxOptions{}
-				seLinuxChoiceInt.SeLinuxOptions = &ves_io_schema_k8s_pod_security_policy.SELinuxStrategyOptions{}
-				configMethodChoiceInt.PspSpec.SeLinuxChoice = seLinuxChoiceInt
+								seLinuxChoiceInt.SeLinuxOptions.Level = v.(string)
 
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
+							}
 
-					if v, ok := cs["level"]; ok && !isIntfNil(v) {
+							if v, ok := cs["role"]; ok && !isIntfNil(v) {
 
-						seLinuxChoiceInt.SeLinuxOptions.Level = v.(string)
+								seLinuxChoiceInt.SeLinuxOptions.Role = v.(string)
 
-					}
+							}
 
-					if v, ok := cs["role"]; ok && !isIntfNil(v) {
+							if v, ok := cs["rule"]; ok && !isIntfNil(v) {
 
-						seLinuxChoiceInt.SeLinuxOptions.Role = v.(string)
+								seLinuxChoiceInt.SeLinuxOptions.Rule = v.(string)
 
-					}
+							}
 
-					if v, ok := cs["rule"]; ok && !isIntfNil(v) {
+							if v, ok := cs["type"]; ok && !isIntfNil(v) {
 
-						seLinuxChoiceInt.SeLinuxOptions.Rule = v.(string)
+								seLinuxChoiceInt.SeLinuxOptions.Type = v.(string)
 
-					}
+							}
 
-					if v, ok := cs["type"]; ok && !isIntfNil(v) {
+							if v, ok := cs["user"]; ok && !isIntfNil(v) {
 
-						seLinuxChoiceInt.SeLinuxOptions.Type = v.(string)
+								seLinuxChoiceInt.SeLinuxOptions.User = v.(string)
 
-					}
+							}
 
-					if v, ok := cs["user"]; ok && !isIntfNil(v) {
-
-						seLinuxChoiceInt.SeLinuxOptions.User = v.(string)
-
+						}
 					}
 
 				}
 
-			}
+				supplementalGroupChoiceTypeFound := false
 
-			supplementalGroupChoiceTypeFound := false
+				if v, ok := cs["no_supplemental_groups"]; ok && !isIntfNil(v) && !supplementalGroupChoiceTypeFound {
 
-			if v, ok := cs["no_supplemental_groups"]; ok && !isIntfNil(v) && !supplementalGroupChoiceTypeFound {
+					supplementalGroupChoiceTypeFound = true
 
-				supplementalGroupChoiceTypeFound = true
+					if v.(bool) {
+						supplementalGroupChoiceInt := &ves_io_schema_k8s_pod_security_policy.PodSecurityPolicySpecType_NoSupplementalGroups{}
+						supplementalGroupChoiceInt.NoSupplementalGroups = &ves_io_schema.Empty{}
+						configMethodChoiceInt.PspSpec.SupplementalGroupChoice = supplementalGroupChoiceInt
+					}
 
-				if v.(bool) {
-					supplementalGroupChoiceInt := &ves_io_schema_k8s_pod_security_policy.PodSecurityPolicySpecType_NoSupplementalGroups{}
-					supplementalGroupChoiceInt.NoSupplementalGroups = &ves_io_schema.Empty{}
+				}
+
+				if v, ok := cs["supplemental_groups"]; ok && !isIntfNil(v) && !supplementalGroupChoiceTypeFound {
+
+					supplementalGroupChoiceTypeFound = true
+					supplementalGroupChoiceInt := &ves_io_schema_k8s_pod_security_policy.PodSecurityPolicySpecType_SupplementalGroups{}
+					supplementalGroupChoiceInt.SupplementalGroups = &ves_io_schema_k8s_pod_security_policy.IDStrategyOptionsType{}
 					configMethodChoiceInt.PspSpec.SupplementalGroupChoice = supplementalGroupChoiceInt
-				}
 
-			}
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
 
-			if v, ok := cs["supplemental_groups"]; ok && !isIntfNil(v) && !supplementalGroupChoiceTypeFound {
+							if v, ok := cs["id_ranges"]; ok && !isIntfNil(v) {
 
-				supplementalGroupChoiceTypeFound = true
-				supplementalGroupChoiceInt := &ves_io_schema_k8s_pod_security_policy.PodSecurityPolicySpecType_SupplementalGroups{}
-				supplementalGroupChoiceInt.SupplementalGroups = &ves_io_schema_k8s_pod_security_policy.IDStrategyOptionsType{}
-				configMethodChoiceInt.PspSpec.SupplementalGroupChoice = supplementalGroupChoiceInt
+								sl := v.([]interface{})
+								idRanges := make([]*ves_io_schema_k8s_pod_security_policy.IDRangeType, len(sl))
+								supplementalGroupChoiceInt.SupplementalGroups.IdRanges = idRanges
+								for i, set := range sl {
+									if set != nil {
+										idRanges[i] = &ves_io_schema_k8s_pod_security_policy.IDRangeType{}
+										idRangesMapStrToI := set.(map[string]interface{})
 
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
+										if w, ok := idRangesMapStrToI["max_id"]; ok && !isIntfNil(w) {
+											idRanges[i].MaxId = uint32(w.(int))
+										}
 
-					if v, ok := cs["id_ranges"]; ok && !isIntfNil(v) {
+										if w, ok := idRangesMapStrToI["min_id"]; ok && !isIntfNil(w) {
+											idRanges[i].MinId = uint32(w.(int))
+										}
 
-						sl := v.([]interface{})
-						idRanges := make([]*ves_io_schema_k8s_pod_security_policy.IDRangeType, len(sl))
-						supplementalGroupChoiceInt.SupplementalGroups.IdRanges = idRanges
-						for i, set := range sl {
-							idRanges[i] = &ves_io_schema_k8s_pod_security_policy.IDRangeType{}
-							idRangesMapStrToI := set.(map[string]interface{})
+									}
+								}
 
-							if w, ok := idRangesMapStrToI["max_id"]; ok && !isIntfNil(w) {
-								idRanges[i].MaxId = uint32(w.(int))
 							}
 
-							if w, ok := idRangesMapStrToI["min_id"]; ok && !isIntfNil(w) {
-								idRanges[i].MinId = uint32(w.(int))
+							if v, ok := cs["rule"]; ok && !isIntfNil(v) {
+
+								supplementalGroupChoiceInt.SupplementalGroups.Rule = v.(string)
+
 							}
 
 						}
-
-					}
-
-					if v, ok := cs["rule"]; ok && !isIntfNil(v) {
-
-						supplementalGroupChoiceInt.SupplementalGroups.Rule = v.(string)
-
 					}
 
 				}
 
-			}
+				userChoiceTypeFound := false
 
-			userChoiceTypeFound := false
+				if v, ok := cs["no_run_as_user"]; ok && !isIntfNil(v) && !userChoiceTypeFound {
 
-			if v, ok := cs["no_run_as_user"]; ok && !isIntfNil(v) && !userChoiceTypeFound {
+					userChoiceTypeFound = true
 
-				userChoiceTypeFound = true
+					if v.(bool) {
+						userChoiceInt := &ves_io_schema_k8s_pod_security_policy.PodSecurityPolicySpecType_NoRunAsUser{}
+						userChoiceInt.NoRunAsUser = &ves_io_schema.Empty{}
+						configMethodChoiceInt.PspSpec.UserChoice = userChoiceInt
+					}
 
-				if v.(bool) {
-					userChoiceInt := &ves_io_schema_k8s_pod_security_policy.PodSecurityPolicySpecType_NoRunAsUser{}
-					userChoiceInt.NoRunAsUser = &ves_io_schema.Empty{}
+				}
+
+				if v, ok := cs["run_as_user"]; ok && !isIntfNil(v) && !userChoiceTypeFound {
+
+					userChoiceTypeFound = true
+					userChoiceInt := &ves_io_schema_k8s_pod_security_policy.PodSecurityPolicySpecType_RunAsUser{}
+					userChoiceInt.RunAsUser = &ves_io_schema_k8s_pod_security_policy.IDStrategyOptionsType{}
 					configMethodChoiceInt.PspSpec.UserChoice = userChoiceInt
-				}
 
-			}
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
 
-			if v, ok := cs["run_as_user"]; ok && !isIntfNil(v) && !userChoiceTypeFound {
+							if v, ok := cs["id_ranges"]; ok && !isIntfNil(v) {
 
-				userChoiceTypeFound = true
-				userChoiceInt := &ves_io_schema_k8s_pod_security_policy.PodSecurityPolicySpecType_RunAsUser{}
-				userChoiceInt.RunAsUser = &ves_io_schema_k8s_pod_security_policy.IDStrategyOptionsType{}
-				configMethodChoiceInt.PspSpec.UserChoice = userChoiceInt
+								sl := v.([]interface{})
+								idRanges := make([]*ves_io_schema_k8s_pod_security_policy.IDRangeType, len(sl))
+								userChoiceInt.RunAsUser.IdRanges = idRanges
+								for i, set := range sl {
+									if set != nil {
+										idRanges[i] = &ves_io_schema_k8s_pod_security_policy.IDRangeType{}
+										idRangesMapStrToI := set.(map[string]interface{})
 
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
+										if w, ok := idRangesMapStrToI["max_id"]; ok && !isIntfNil(w) {
+											idRanges[i].MaxId = uint32(w.(int))
+										}
 
-					if v, ok := cs["id_ranges"]; ok && !isIntfNil(v) {
+										if w, ok := idRangesMapStrToI["min_id"]; ok && !isIntfNil(w) {
+											idRanges[i].MinId = uint32(w.(int))
+										}
 
-						sl := v.([]interface{})
-						idRanges := make([]*ves_io_schema_k8s_pod_security_policy.IDRangeType, len(sl))
-						userChoiceInt.RunAsUser.IdRanges = idRanges
-						for i, set := range sl {
-							idRanges[i] = &ves_io_schema_k8s_pod_security_policy.IDRangeType{}
-							idRangesMapStrToI := set.(map[string]interface{})
+									}
+								}
 
-							if w, ok := idRangesMapStrToI["max_id"]; ok && !isIntfNil(w) {
-								idRanges[i].MaxId = uint32(w.(int))
 							}
 
-							if w, ok := idRangesMapStrToI["min_id"]; ok && !isIntfNil(w) {
-								idRanges[i].MinId = uint32(w.(int))
+							if v, ok := cs["rule"]; ok && !isIntfNil(v) {
+
+								userChoiceInt.RunAsUser.Rule = v.(string)
+
 							}
 
 						}
-
-					}
-
-					if v, ok := cs["rule"]; ok && !isIntfNil(v) {
-
-						userChoiceInt.RunAsUser.Rule = v.(string)
-
 					}
 
 				}
 
-			}
+				if v, ok := cs["volumes"]; ok && !isIntfNil(v) {
 
-			if v, ok := cs["volumes"]; ok && !isIntfNil(v) {
+					ls := make([]string, len(v.([]interface{})))
+					for i, v := range v.([]interface{}) {
+						ls[i] = v.(string)
+					}
+					configMethodChoiceInt.PspSpec.Volumes = ls
 
-				ls := make([]string, len(v.([]interface{})))
-				for i, v := range v.([]interface{}) {
-					ls[i] = v.(string)
 				}
-				configMethodChoiceInt.PspSpec.Volumes = ls
 
 			}
-
 		}
 
 	}
@@ -1287,584 +1327,614 @@ func resourceVolterraK8SPodSecurityPolicyUpdate(d *schema.ResourceData, meta int
 		configMethodChoiceInt.PspSpec = &ves_io_schema_k8s_pod_security_policy.PodSecurityPolicySpecType{}
 		updateSpec.ConfigMethodChoice = configMethodChoiceInt
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
+			if set != nil {
+				cs := set.(map[string]interface{})
 
-			if v, ok := cs["allow_privilege_escalation"]; ok && !isIntfNil(v) {
+				if v, ok := cs["allow_privilege_escalation"]; ok && !isIntfNil(v) {
 
-				configMethodChoiceInt.PspSpec.AllowPrivilegeEscalation = v.(bool)
-
-			}
-
-			allowedCapabilitiesChoiceTypeFound := false
-
-			if v, ok := cs["allowed_capabilities"]; ok && !isIntfNil(v) && !allowedCapabilitiesChoiceTypeFound {
-
-				allowedCapabilitiesChoiceTypeFound = true
-				allowedCapabilitiesChoiceInt := &ves_io_schema_k8s_pod_security_policy.PodSecurityPolicySpecType_AllowedCapabilities{}
-				allowedCapabilitiesChoiceInt.AllowedCapabilities = &ves_io_schema_k8s_pod_security_policy.CapabilityListType{}
-				configMethodChoiceInt.PspSpec.AllowedCapabilitiesChoice = allowedCapabilitiesChoiceInt
-
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
-
-					if v, ok := cs["capabilities"]; ok && !isIntfNil(v) {
-
-						ls := make([]string, len(v.([]interface{})))
-						for i, v := range v.([]interface{}) {
-							ls[i] = v.(string)
-						}
-						allowedCapabilitiesChoiceInt.AllowedCapabilities.Capabilities = ls
-
-					}
+					configMethodChoiceInt.PspSpec.AllowPrivilegeEscalation = v.(bool)
 
 				}
 
-			}
+				allowedCapabilitiesChoiceTypeFound := false
 
-			if v, ok := cs["no_allowed_capabilities"]; ok && !isIntfNil(v) && !allowedCapabilitiesChoiceTypeFound {
+				if v, ok := cs["allowed_capabilities"]; ok && !isIntfNil(v) && !allowedCapabilitiesChoiceTypeFound {
 
-				allowedCapabilitiesChoiceTypeFound = true
-
-				if v.(bool) {
-					allowedCapabilitiesChoiceInt := &ves_io_schema_k8s_pod_security_policy.PodSecurityPolicySpecType_NoAllowedCapabilities{}
-					allowedCapabilitiesChoiceInt.NoAllowedCapabilities = &ves_io_schema.Empty{}
+					allowedCapabilitiesChoiceTypeFound = true
+					allowedCapabilitiesChoiceInt := &ves_io_schema_k8s_pod_security_policy.PodSecurityPolicySpecType_AllowedCapabilities{}
+					allowedCapabilitiesChoiceInt.AllowedCapabilities = &ves_io_schema_k8s_pod_security_policy.CapabilityListType{}
 					configMethodChoiceInt.PspSpec.AllowedCapabilitiesChoice = allowedCapabilitiesChoiceInt
-				}
 
-			}
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
 
-			if v, ok := cs["allowed_csi_drivers"]; ok && !isIntfNil(v) {
+							if v, ok := cs["capabilities"]; ok && !isIntfNil(v) {
 
-				ls := make([]string, len(v.([]interface{})))
-				for i, v := range v.([]interface{}) {
-					ls[i] = v.(string)
-				}
-				configMethodChoiceInt.PspSpec.AllowedCsiDrivers = ls
+								ls := make([]string, len(v.([]interface{})))
+								for i, v := range v.([]interface{}) {
+									ls[i] = v.(string)
+								}
+								allowedCapabilitiesChoiceInt.AllowedCapabilities.Capabilities = ls
 
-			}
+							}
 
-			if v, ok := cs["allowed_flex_volumes"]; ok && !isIntfNil(v) {
-
-				ls := make([]string, len(v.([]interface{})))
-				for i, v := range v.([]interface{}) {
-					ls[i] = v.(string)
-				}
-				configMethodChoiceInt.PspSpec.AllowedFlexVolumes = ls
-
-			}
-
-			if v, ok := cs["allowed_host_paths"]; ok && !isIntfNil(v) {
-
-				sl := v.([]interface{})
-				allowedHostPaths := make([]*ves_io_schema_k8s_pod_security_policy.HostPathType, len(sl))
-				configMethodChoiceInt.PspSpec.AllowedHostPaths = allowedHostPaths
-				for i, set := range sl {
-					allowedHostPaths[i] = &ves_io_schema_k8s_pod_security_policy.HostPathType{}
-					allowedHostPathsMapStrToI := set.(map[string]interface{})
-
-					if w, ok := allowedHostPathsMapStrToI["path_prefix"]; ok && !isIntfNil(w) {
-						allowedHostPaths[i].PathPrefix = w.(string)
-					}
-
-					if w, ok := allowedHostPathsMapStrToI["read_only"]; ok && !isIntfNil(w) {
-						allowedHostPaths[i].ReadOnly = w.(bool)
-					}
-
-				}
-
-			}
-
-			if v, ok := cs["allowed_proc_mounts"]; ok && !isIntfNil(v) {
-
-				ls := make([]string, len(v.([]interface{})))
-				for i, v := range v.([]interface{}) {
-					ls[i] = v.(string)
-				}
-				configMethodChoiceInt.PspSpec.AllowedProcMounts = ls
-
-			}
-
-			if v, ok := cs["allowed_unsafe_sysctls"]; ok && !isIntfNil(v) {
-
-				ls := make([]string, len(v.([]interface{})))
-				for i, v := range v.([]interface{}) {
-					ls[i] = v.(string)
-				}
-				configMethodChoiceInt.PspSpec.AllowedUnsafeSysctls = ls
-
-			}
-
-			if v, ok := cs["default_allow_privilege_escalation"]; ok && !isIntfNil(v) {
-
-				configMethodChoiceInt.PspSpec.DefaultAllowPrivilegeEscalation = v.(bool)
-
-			}
-
-			defaultCapabilitiesChoiceTypeFound := false
-
-			if v, ok := cs["default_capabilities"]; ok && !isIntfNil(v) && !defaultCapabilitiesChoiceTypeFound {
-
-				defaultCapabilitiesChoiceTypeFound = true
-				defaultCapabilitiesChoiceInt := &ves_io_schema_k8s_pod_security_policy.PodSecurityPolicySpecType_DefaultCapabilities{}
-				defaultCapabilitiesChoiceInt.DefaultCapabilities = &ves_io_schema_k8s_pod_security_policy.CapabilityListType{}
-				configMethodChoiceInt.PspSpec.DefaultCapabilitiesChoice = defaultCapabilitiesChoiceInt
-
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
-
-					if v, ok := cs["capabilities"]; ok && !isIntfNil(v) {
-
-						ls := make([]string, len(v.([]interface{})))
-						for i, v := range v.([]interface{}) {
-							ls[i] = v.(string)
 						}
-						defaultCapabilitiesChoiceInt.DefaultCapabilities.Capabilities = ls
-
 					}
 
 				}
 
-			}
+				if v, ok := cs["no_allowed_capabilities"]; ok && !isIntfNil(v) && !allowedCapabilitiesChoiceTypeFound {
 
-			if v, ok := cs["no_default_capabilities"]; ok && !isIntfNil(v) && !defaultCapabilitiesChoiceTypeFound {
+					allowedCapabilitiesChoiceTypeFound = true
 
-				defaultCapabilitiesChoiceTypeFound = true
+					if v.(bool) {
+						allowedCapabilitiesChoiceInt := &ves_io_schema_k8s_pod_security_policy.PodSecurityPolicySpecType_NoAllowedCapabilities{}
+						allowedCapabilitiesChoiceInt.NoAllowedCapabilities = &ves_io_schema.Empty{}
+						configMethodChoiceInt.PspSpec.AllowedCapabilitiesChoice = allowedCapabilitiesChoiceInt
+					}
 
-				if v.(bool) {
-					defaultCapabilitiesChoiceInt := &ves_io_schema_k8s_pod_security_policy.PodSecurityPolicySpecType_NoDefaultCapabilities{}
-					defaultCapabilitiesChoiceInt.NoDefaultCapabilities = &ves_io_schema.Empty{}
+				}
+
+				if v, ok := cs["allowed_csi_drivers"]; ok && !isIntfNil(v) {
+
+					ls := make([]string, len(v.([]interface{})))
+					for i, v := range v.([]interface{}) {
+						ls[i] = v.(string)
+					}
+					configMethodChoiceInt.PspSpec.AllowedCsiDrivers = ls
+
+				}
+
+				if v, ok := cs["allowed_flex_volumes"]; ok && !isIntfNil(v) {
+
+					ls := make([]string, len(v.([]interface{})))
+					for i, v := range v.([]interface{}) {
+						ls[i] = v.(string)
+					}
+					configMethodChoiceInt.PspSpec.AllowedFlexVolumes = ls
+
+				}
+
+				if v, ok := cs["allowed_host_paths"]; ok && !isIntfNil(v) {
+
+					sl := v.([]interface{})
+					allowedHostPaths := make([]*ves_io_schema_k8s_pod_security_policy.HostPathType, len(sl))
+					configMethodChoiceInt.PspSpec.AllowedHostPaths = allowedHostPaths
+					for i, set := range sl {
+						if set != nil {
+							allowedHostPaths[i] = &ves_io_schema_k8s_pod_security_policy.HostPathType{}
+							allowedHostPathsMapStrToI := set.(map[string]interface{})
+
+							if w, ok := allowedHostPathsMapStrToI["path_prefix"]; ok && !isIntfNil(w) {
+								allowedHostPaths[i].PathPrefix = w.(string)
+							}
+
+							if w, ok := allowedHostPathsMapStrToI["read_only"]; ok && !isIntfNil(w) {
+								allowedHostPaths[i].ReadOnly = w.(bool)
+							}
+
+						}
+					}
+
+				}
+
+				if v, ok := cs["allowed_proc_mounts"]; ok && !isIntfNil(v) {
+
+					ls := make([]string, len(v.([]interface{})))
+					for i, v := range v.([]interface{}) {
+						ls[i] = v.(string)
+					}
+					configMethodChoiceInt.PspSpec.AllowedProcMounts = ls
+
+				}
+
+				if v, ok := cs["allowed_unsafe_sysctls"]; ok && !isIntfNil(v) {
+
+					ls := make([]string, len(v.([]interface{})))
+					for i, v := range v.([]interface{}) {
+						ls[i] = v.(string)
+					}
+					configMethodChoiceInt.PspSpec.AllowedUnsafeSysctls = ls
+
+				}
+
+				if v, ok := cs["default_allow_privilege_escalation"]; ok && !isIntfNil(v) {
+
+					configMethodChoiceInt.PspSpec.DefaultAllowPrivilegeEscalation = v.(bool)
+
+				}
+
+				defaultCapabilitiesChoiceTypeFound := false
+
+				if v, ok := cs["default_capabilities"]; ok && !isIntfNil(v) && !defaultCapabilitiesChoiceTypeFound {
+
+					defaultCapabilitiesChoiceTypeFound = true
+					defaultCapabilitiesChoiceInt := &ves_io_schema_k8s_pod_security_policy.PodSecurityPolicySpecType_DefaultCapabilities{}
+					defaultCapabilitiesChoiceInt.DefaultCapabilities = &ves_io_schema_k8s_pod_security_policy.CapabilityListType{}
 					configMethodChoiceInt.PspSpec.DefaultCapabilitiesChoice = defaultCapabilitiesChoiceInt
-				}
 
-			}
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
 
-			dropCapabilitiesChoiceTypeFound := false
+							if v, ok := cs["capabilities"]; ok && !isIntfNil(v) {
 
-			if v, ok := cs["drop_capabilities"]; ok && !isIntfNil(v) && !dropCapabilitiesChoiceTypeFound {
+								ls := make([]string, len(v.([]interface{})))
+								for i, v := range v.([]interface{}) {
+									ls[i] = v.(string)
+								}
+								defaultCapabilitiesChoiceInt.DefaultCapabilities.Capabilities = ls
 
-				dropCapabilitiesChoiceTypeFound = true
-				dropCapabilitiesChoiceInt := &ves_io_schema_k8s_pod_security_policy.PodSecurityPolicySpecType_DropCapabilities{}
-				dropCapabilitiesChoiceInt.DropCapabilities = &ves_io_schema_k8s_pod_security_policy.CapabilityListType{}
-				configMethodChoiceInt.PspSpec.DropCapabilitiesChoice = dropCapabilitiesChoiceInt
+							}
 
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
-
-					if v, ok := cs["capabilities"]; ok && !isIntfNil(v) {
-
-						ls := make([]string, len(v.([]interface{})))
-						for i, v := range v.([]interface{}) {
-							ls[i] = v.(string)
 						}
-						dropCapabilitiesChoiceInt.DropCapabilities.Capabilities = ls
-
 					}
 
 				}
 
-			}
+				if v, ok := cs["no_default_capabilities"]; ok && !isIntfNil(v) && !defaultCapabilitiesChoiceTypeFound {
 
-			if v, ok := cs["no_drop_capabilities"]; ok && !isIntfNil(v) && !dropCapabilitiesChoiceTypeFound {
+					defaultCapabilitiesChoiceTypeFound = true
 
-				dropCapabilitiesChoiceTypeFound = true
+					if v.(bool) {
+						defaultCapabilitiesChoiceInt := &ves_io_schema_k8s_pod_security_policy.PodSecurityPolicySpecType_NoDefaultCapabilities{}
+						defaultCapabilitiesChoiceInt.NoDefaultCapabilities = &ves_io_schema.Empty{}
+						configMethodChoiceInt.PspSpec.DefaultCapabilitiesChoice = defaultCapabilitiesChoiceInt
+					}
 
-				if v.(bool) {
-					dropCapabilitiesChoiceInt := &ves_io_schema_k8s_pod_security_policy.PodSecurityPolicySpecType_NoDropCapabilities{}
-					dropCapabilitiesChoiceInt.NoDropCapabilities = &ves_io_schema.Empty{}
+				}
+
+				dropCapabilitiesChoiceTypeFound := false
+
+				if v, ok := cs["drop_capabilities"]; ok && !isIntfNil(v) && !dropCapabilitiesChoiceTypeFound {
+
+					dropCapabilitiesChoiceTypeFound = true
+					dropCapabilitiesChoiceInt := &ves_io_schema_k8s_pod_security_policy.PodSecurityPolicySpecType_DropCapabilities{}
+					dropCapabilitiesChoiceInt.DropCapabilities = &ves_io_schema_k8s_pod_security_policy.CapabilityListType{}
 					configMethodChoiceInt.PspSpec.DropCapabilitiesChoice = dropCapabilitiesChoiceInt
-				}
 
-			}
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
 
-			if v, ok := cs["forbidden_sysctls"]; ok && !isIntfNil(v) {
+							if v, ok := cs["capabilities"]; ok && !isIntfNil(v) {
 
-				ls := make([]string, len(v.([]interface{})))
-				for i, v := range v.([]interface{}) {
-					ls[i] = v.(string)
-				}
-				configMethodChoiceInt.PspSpec.ForbiddenSysctls = ls
+								ls := make([]string, len(v.([]interface{})))
+								for i, v := range v.([]interface{}) {
+									ls[i] = v.(string)
+								}
+								dropCapabilitiesChoiceInt.DropCapabilities.Capabilities = ls
 
-			}
-
-			fsGroupChoiceTypeFound := false
-
-			if v, ok := cs["fs_group_strategy_options"]; ok && !isIntfNil(v) && !fsGroupChoiceTypeFound {
-
-				fsGroupChoiceTypeFound = true
-				fsGroupChoiceInt := &ves_io_schema_k8s_pod_security_policy.PodSecurityPolicySpecType_FsGroupStrategyOptions{}
-				fsGroupChoiceInt.FsGroupStrategyOptions = &ves_io_schema_k8s_pod_security_policy.IDStrategyOptionsType{}
-				configMethodChoiceInt.PspSpec.FsGroupChoice = fsGroupChoiceInt
-
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
-
-					if v, ok := cs["id_ranges"]; ok && !isIntfNil(v) {
-
-						sl := v.([]interface{})
-						idRanges := make([]*ves_io_schema_k8s_pod_security_policy.IDRangeType, len(sl))
-						fsGroupChoiceInt.FsGroupStrategyOptions.IdRanges = idRanges
-						for i, set := range sl {
-							idRanges[i] = &ves_io_schema_k8s_pod_security_policy.IDRangeType{}
-							idRangesMapStrToI := set.(map[string]interface{})
-
-							if w, ok := idRangesMapStrToI["max_id"]; ok && !isIntfNil(w) {
-								idRanges[i].MaxId = uint32(w.(int))
-							}
-
-							if w, ok := idRangesMapStrToI["min_id"]; ok && !isIntfNil(w) {
-								idRanges[i].MinId = uint32(w.(int))
 							}
 
 						}
-
-					}
-
-					if v, ok := cs["rule"]; ok && !isIntfNil(v) {
-
-						fsGroupChoiceInt.FsGroupStrategyOptions.Rule = v.(string)
-
 					}
 
 				}
 
-			}
+				if v, ok := cs["no_drop_capabilities"]; ok && !isIntfNil(v) && !dropCapabilitiesChoiceTypeFound {
 
-			if v, ok := cs["no_fs_groups"]; ok && !isIntfNil(v) && !fsGroupChoiceTypeFound {
+					dropCapabilitiesChoiceTypeFound = true
 
-				fsGroupChoiceTypeFound = true
+					if v.(bool) {
+						dropCapabilitiesChoiceInt := &ves_io_schema_k8s_pod_security_policy.PodSecurityPolicySpecType_NoDropCapabilities{}
+						dropCapabilitiesChoiceInt.NoDropCapabilities = &ves_io_schema.Empty{}
+						configMethodChoiceInt.PspSpec.DropCapabilitiesChoice = dropCapabilitiesChoiceInt
+					}
 
-				if v.(bool) {
-					fsGroupChoiceInt := &ves_io_schema_k8s_pod_security_policy.PodSecurityPolicySpecType_NoFsGroups{}
-					fsGroupChoiceInt.NoFsGroups = &ves_io_schema.Empty{}
+				}
+
+				if v, ok := cs["forbidden_sysctls"]; ok && !isIntfNil(v) {
+
+					ls := make([]string, len(v.([]interface{})))
+					for i, v := range v.([]interface{}) {
+						ls[i] = v.(string)
+					}
+					configMethodChoiceInt.PspSpec.ForbiddenSysctls = ls
+
+				}
+
+				fsGroupChoiceTypeFound := false
+
+				if v, ok := cs["fs_group_strategy_options"]; ok && !isIntfNil(v) && !fsGroupChoiceTypeFound {
+
+					fsGroupChoiceTypeFound = true
+					fsGroupChoiceInt := &ves_io_schema_k8s_pod_security_policy.PodSecurityPolicySpecType_FsGroupStrategyOptions{}
+					fsGroupChoiceInt.FsGroupStrategyOptions = &ves_io_schema_k8s_pod_security_policy.IDStrategyOptionsType{}
 					configMethodChoiceInt.PspSpec.FsGroupChoice = fsGroupChoiceInt
+
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["id_ranges"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								idRanges := make([]*ves_io_schema_k8s_pod_security_policy.IDRangeType, len(sl))
+								fsGroupChoiceInt.FsGroupStrategyOptions.IdRanges = idRanges
+								for i, set := range sl {
+									if set != nil {
+										idRanges[i] = &ves_io_schema_k8s_pod_security_policy.IDRangeType{}
+										idRangesMapStrToI := set.(map[string]interface{})
+
+										if w, ok := idRangesMapStrToI["max_id"]; ok && !isIntfNil(w) {
+											idRanges[i].MaxId = uint32(w.(int))
+										}
+
+										if w, ok := idRangesMapStrToI["min_id"]; ok && !isIntfNil(w) {
+											idRanges[i].MinId = uint32(w.(int))
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := cs["rule"]; ok && !isIntfNil(v) {
+
+								fsGroupChoiceInt.FsGroupStrategyOptions.Rule = v.(string)
+
+							}
+
+						}
+					}
+
 				}
 
-			}
+				if v, ok := cs["no_fs_groups"]; ok && !isIntfNil(v) && !fsGroupChoiceTypeFound {
 
-			groupChoiceTypeFound := false
+					fsGroupChoiceTypeFound = true
 
-			if v, ok := cs["no_run_as_group"]; ok && !isIntfNil(v) && !groupChoiceTypeFound {
+					if v.(bool) {
+						fsGroupChoiceInt := &ves_io_schema_k8s_pod_security_policy.PodSecurityPolicySpecType_NoFsGroups{}
+						fsGroupChoiceInt.NoFsGroups = &ves_io_schema.Empty{}
+						configMethodChoiceInt.PspSpec.FsGroupChoice = fsGroupChoiceInt
+					}
 
-				groupChoiceTypeFound = true
+				}
 
-				if v.(bool) {
-					groupChoiceInt := &ves_io_schema_k8s_pod_security_policy.PodSecurityPolicySpecType_NoRunAsGroup{}
-					groupChoiceInt.NoRunAsGroup = &ves_io_schema.Empty{}
+				groupChoiceTypeFound := false
+
+				if v, ok := cs["no_run_as_group"]; ok && !isIntfNil(v) && !groupChoiceTypeFound {
+
+					groupChoiceTypeFound = true
+
+					if v.(bool) {
+						groupChoiceInt := &ves_io_schema_k8s_pod_security_policy.PodSecurityPolicySpecType_NoRunAsGroup{}
+						groupChoiceInt.NoRunAsGroup = &ves_io_schema.Empty{}
+						configMethodChoiceInt.PspSpec.GroupChoice = groupChoiceInt
+					}
+
+				}
+
+				if v, ok := cs["run_as_group"]; ok && !isIntfNil(v) && !groupChoiceTypeFound {
+
+					groupChoiceTypeFound = true
+					groupChoiceInt := &ves_io_schema_k8s_pod_security_policy.PodSecurityPolicySpecType_RunAsGroup{}
+					groupChoiceInt.RunAsGroup = &ves_io_schema_k8s_pod_security_policy.IDStrategyOptionsType{}
 					configMethodChoiceInt.PspSpec.GroupChoice = groupChoiceInt
-				}
 
-			}
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
 
-			if v, ok := cs["run_as_group"]; ok && !isIntfNil(v) && !groupChoiceTypeFound {
+							if v, ok := cs["id_ranges"]; ok && !isIntfNil(v) {
 
-				groupChoiceTypeFound = true
-				groupChoiceInt := &ves_io_schema_k8s_pod_security_policy.PodSecurityPolicySpecType_RunAsGroup{}
-				groupChoiceInt.RunAsGroup = &ves_io_schema_k8s_pod_security_policy.IDStrategyOptionsType{}
-				configMethodChoiceInt.PspSpec.GroupChoice = groupChoiceInt
+								sl := v.([]interface{})
+								idRanges := make([]*ves_io_schema_k8s_pod_security_policy.IDRangeType, len(sl))
+								groupChoiceInt.RunAsGroup.IdRanges = idRanges
+								for i, set := range sl {
+									if set != nil {
+										idRanges[i] = &ves_io_schema_k8s_pod_security_policy.IDRangeType{}
+										idRangesMapStrToI := set.(map[string]interface{})
 
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
+										if w, ok := idRangesMapStrToI["max_id"]; ok && !isIntfNil(w) {
+											idRanges[i].MaxId = uint32(w.(int))
+										}
 
-					if v, ok := cs["id_ranges"]; ok && !isIntfNil(v) {
+										if w, ok := idRangesMapStrToI["min_id"]; ok && !isIntfNil(w) {
+											idRanges[i].MinId = uint32(w.(int))
+										}
 
-						sl := v.([]interface{})
-						idRanges := make([]*ves_io_schema_k8s_pod_security_policy.IDRangeType, len(sl))
-						groupChoiceInt.RunAsGroup.IdRanges = idRanges
-						for i, set := range sl {
-							idRanges[i] = &ves_io_schema_k8s_pod_security_policy.IDRangeType{}
-							idRangesMapStrToI := set.(map[string]interface{})
+									}
+								}
 
-							if w, ok := idRangesMapStrToI["max_id"]; ok && !isIntfNil(w) {
-								idRanges[i].MaxId = uint32(w.(int))
 							}
 
-							if w, ok := idRangesMapStrToI["min_id"]; ok && !isIntfNil(w) {
-								idRanges[i].MinId = uint32(w.(int))
+							if v, ok := cs["rule"]; ok && !isIntfNil(v) {
+
+								groupChoiceInt.RunAsGroup.Rule = v.(string)
+
 							}
 
 						}
-
-					}
-
-					if v, ok := cs["rule"]; ok && !isIntfNil(v) {
-
-						groupChoiceInt.RunAsGroup.Rule = v.(string)
-
 					}
 
 				}
 
-			}
+				if v, ok := cs["host_ipc"]; ok && !isIntfNil(v) {
 
-			if v, ok := cs["host_ipc"]; ok && !isIntfNil(v) {
+					configMethodChoiceInt.PspSpec.HostIpc = v.(bool)
 
-				configMethodChoiceInt.PspSpec.HostIpc = v.(bool)
+				}
 
-			}
+				if v, ok := cs["host_network"]; ok && !isIntfNil(v) {
 
-			if v, ok := cs["host_network"]; ok && !isIntfNil(v) {
+					configMethodChoiceInt.PspSpec.HostNetwork = v.(bool)
 
-				configMethodChoiceInt.PspSpec.HostNetwork = v.(bool)
+				}
 
-			}
+				if v, ok := cs["host_pid"]; ok && !isIntfNil(v) {
 
-			if v, ok := cs["host_pid"]; ok && !isIntfNil(v) {
+					configMethodChoiceInt.PspSpec.HostPid = v.(bool)
 
-				configMethodChoiceInt.PspSpec.HostPid = v.(bool)
+				}
 
-			}
+				if v, ok := cs["host_port_ranges"]; ok && !isIntfNil(v) {
 
-			if v, ok := cs["host_port_ranges"]; ok && !isIntfNil(v) {
+					configMethodChoiceInt.PspSpec.HostPortRanges = v.(string)
 
-				configMethodChoiceInt.PspSpec.HostPortRanges = v.(string)
+				}
 
-			}
+				if v, ok := cs["privileged"]; ok && !isIntfNil(v) {
 
-			if v, ok := cs["privileged"]; ok && !isIntfNil(v) {
+					configMethodChoiceInt.PspSpec.Privileged = v.(bool)
 
-				configMethodChoiceInt.PspSpec.Privileged = v.(bool)
+				}
 
-			}
+				if v, ok := cs["read_only_root_filesystem"]; ok && !isIntfNil(v) {
 
-			if v, ok := cs["read_only_root_filesystem"]; ok && !isIntfNil(v) {
+					configMethodChoiceInt.PspSpec.ReadOnlyRootFilesystem = v.(bool)
 
-				configMethodChoiceInt.PspSpec.ReadOnlyRootFilesystem = v.(bool)
+				}
 
-			}
+				runtimeClassChoiceTypeFound := false
 
-			runtimeClassChoiceTypeFound := false
+				if v, ok := cs["no_runtime_class"]; ok && !isIntfNil(v) && !runtimeClassChoiceTypeFound {
 
-			if v, ok := cs["no_runtime_class"]; ok && !isIntfNil(v) && !runtimeClassChoiceTypeFound {
+					runtimeClassChoiceTypeFound = true
 
-				runtimeClassChoiceTypeFound = true
+					if v.(bool) {
+						runtimeClassChoiceInt := &ves_io_schema_k8s_pod_security_policy.PodSecurityPolicySpecType_NoRuntimeClass{}
+						runtimeClassChoiceInt.NoRuntimeClass = &ves_io_schema.Empty{}
+						configMethodChoiceInt.PspSpec.RuntimeClassChoice = runtimeClassChoiceInt
+					}
 
-				if v.(bool) {
-					runtimeClassChoiceInt := &ves_io_schema_k8s_pod_security_policy.PodSecurityPolicySpecType_NoRuntimeClass{}
-					runtimeClassChoiceInt.NoRuntimeClass = &ves_io_schema.Empty{}
+				}
+
+				if v, ok := cs["runtime_class"]; ok && !isIntfNil(v) && !runtimeClassChoiceTypeFound {
+
+					runtimeClassChoiceTypeFound = true
+					runtimeClassChoiceInt := &ves_io_schema_k8s_pod_security_policy.PodSecurityPolicySpecType_RuntimeClass{}
+					runtimeClassChoiceInt.RuntimeClass = &ves_io_schema_k8s_pod_security_policy.RuntimeClassStrategyOptions{}
 					configMethodChoiceInt.PspSpec.RuntimeClassChoice = runtimeClassChoiceInt
-				}
 
-			}
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
 
-			if v, ok := cs["runtime_class"]; ok && !isIntfNil(v) && !runtimeClassChoiceTypeFound {
+							if v, ok := cs["allowed_runtime_class_names"]; ok && !isIntfNil(v) {
 
-				runtimeClassChoiceTypeFound = true
-				runtimeClassChoiceInt := &ves_io_schema_k8s_pod_security_policy.PodSecurityPolicySpecType_RuntimeClass{}
-				runtimeClassChoiceInt.RuntimeClass = &ves_io_schema_k8s_pod_security_policy.RuntimeClassStrategyOptions{}
-				configMethodChoiceInt.PspSpec.RuntimeClassChoice = runtimeClassChoiceInt
+								ls := make([]string, len(v.([]interface{})))
+								for i, v := range v.([]interface{}) {
+									ls[i] = v.(string)
+								}
+								runtimeClassChoiceInt.RuntimeClass.AllowedRuntimeClassNames = ls
 
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
+							}
 
-					if v, ok := cs["allowed_runtime_class_names"]; ok && !isIntfNil(v) {
+							if v, ok := cs["default_runtime_class_name"]; ok && !isIntfNil(v) {
 
-						ls := make([]string, len(v.([]interface{})))
-						for i, v := range v.([]interface{}) {
-							ls[i] = v.(string)
+								runtimeClassChoiceInt.RuntimeClass.DefaultRuntimeClassName = v.(string)
+
+							}
+
 						}
-						runtimeClassChoiceInt.RuntimeClass.AllowedRuntimeClassNames = ls
-
-					}
-
-					if v, ok := cs["default_runtime_class_name"]; ok && !isIntfNil(v) {
-
-						runtimeClassChoiceInt.RuntimeClass.DefaultRuntimeClassName = v.(string)
-
 					}
 
 				}
 
-			}
+				seLinuxChoiceTypeFound := false
 
-			seLinuxChoiceTypeFound := false
+				if v, ok := cs["no_se_linux_options"]; ok && !isIntfNil(v) && !seLinuxChoiceTypeFound {
 
-			if v, ok := cs["no_se_linux_options"]; ok && !isIntfNil(v) && !seLinuxChoiceTypeFound {
+					seLinuxChoiceTypeFound = true
 
-				seLinuxChoiceTypeFound = true
+					if v.(bool) {
+						seLinuxChoiceInt := &ves_io_schema_k8s_pod_security_policy.PodSecurityPolicySpecType_NoSeLinuxOptions{}
+						seLinuxChoiceInt.NoSeLinuxOptions = &ves_io_schema.Empty{}
+						configMethodChoiceInt.PspSpec.SeLinuxChoice = seLinuxChoiceInt
+					}
 
-				if v.(bool) {
-					seLinuxChoiceInt := &ves_io_schema_k8s_pod_security_policy.PodSecurityPolicySpecType_NoSeLinuxOptions{}
-					seLinuxChoiceInt.NoSeLinuxOptions = &ves_io_schema.Empty{}
+				}
+
+				if v, ok := cs["se_linux_options"]; ok && !isIntfNil(v) && !seLinuxChoiceTypeFound {
+
+					seLinuxChoiceTypeFound = true
+					seLinuxChoiceInt := &ves_io_schema_k8s_pod_security_policy.PodSecurityPolicySpecType_SeLinuxOptions{}
+					seLinuxChoiceInt.SeLinuxOptions = &ves_io_schema_k8s_pod_security_policy.SELinuxStrategyOptions{}
 					configMethodChoiceInt.PspSpec.SeLinuxChoice = seLinuxChoiceInt
-				}
 
-			}
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
 
-			if v, ok := cs["se_linux_options"]; ok && !isIntfNil(v) && !seLinuxChoiceTypeFound {
+							if v, ok := cs["level"]; ok && !isIntfNil(v) {
 
-				seLinuxChoiceTypeFound = true
-				seLinuxChoiceInt := &ves_io_schema_k8s_pod_security_policy.PodSecurityPolicySpecType_SeLinuxOptions{}
-				seLinuxChoiceInt.SeLinuxOptions = &ves_io_schema_k8s_pod_security_policy.SELinuxStrategyOptions{}
-				configMethodChoiceInt.PspSpec.SeLinuxChoice = seLinuxChoiceInt
+								seLinuxChoiceInt.SeLinuxOptions.Level = v.(string)
 
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
+							}
 
-					if v, ok := cs["level"]; ok && !isIntfNil(v) {
+							if v, ok := cs["role"]; ok && !isIntfNil(v) {
 
-						seLinuxChoiceInt.SeLinuxOptions.Level = v.(string)
+								seLinuxChoiceInt.SeLinuxOptions.Role = v.(string)
 
-					}
+							}
 
-					if v, ok := cs["role"]; ok && !isIntfNil(v) {
+							if v, ok := cs["rule"]; ok && !isIntfNil(v) {
 
-						seLinuxChoiceInt.SeLinuxOptions.Role = v.(string)
+								seLinuxChoiceInt.SeLinuxOptions.Rule = v.(string)
 
-					}
+							}
 
-					if v, ok := cs["rule"]; ok && !isIntfNil(v) {
+							if v, ok := cs["type"]; ok && !isIntfNil(v) {
 
-						seLinuxChoiceInt.SeLinuxOptions.Rule = v.(string)
+								seLinuxChoiceInt.SeLinuxOptions.Type = v.(string)
 
-					}
+							}
 
-					if v, ok := cs["type"]; ok && !isIntfNil(v) {
+							if v, ok := cs["user"]; ok && !isIntfNil(v) {
 
-						seLinuxChoiceInt.SeLinuxOptions.Type = v.(string)
+								seLinuxChoiceInt.SeLinuxOptions.User = v.(string)
 
-					}
+							}
 
-					if v, ok := cs["user"]; ok && !isIntfNil(v) {
-
-						seLinuxChoiceInt.SeLinuxOptions.User = v.(string)
-
+						}
 					}
 
 				}
 
-			}
+				supplementalGroupChoiceTypeFound := false
 
-			supplementalGroupChoiceTypeFound := false
+				if v, ok := cs["no_supplemental_groups"]; ok && !isIntfNil(v) && !supplementalGroupChoiceTypeFound {
 
-			if v, ok := cs["no_supplemental_groups"]; ok && !isIntfNil(v) && !supplementalGroupChoiceTypeFound {
+					supplementalGroupChoiceTypeFound = true
 
-				supplementalGroupChoiceTypeFound = true
+					if v.(bool) {
+						supplementalGroupChoiceInt := &ves_io_schema_k8s_pod_security_policy.PodSecurityPolicySpecType_NoSupplementalGroups{}
+						supplementalGroupChoiceInt.NoSupplementalGroups = &ves_io_schema.Empty{}
+						configMethodChoiceInt.PspSpec.SupplementalGroupChoice = supplementalGroupChoiceInt
+					}
 
-				if v.(bool) {
-					supplementalGroupChoiceInt := &ves_io_schema_k8s_pod_security_policy.PodSecurityPolicySpecType_NoSupplementalGroups{}
-					supplementalGroupChoiceInt.NoSupplementalGroups = &ves_io_schema.Empty{}
+				}
+
+				if v, ok := cs["supplemental_groups"]; ok && !isIntfNil(v) && !supplementalGroupChoiceTypeFound {
+
+					supplementalGroupChoiceTypeFound = true
+					supplementalGroupChoiceInt := &ves_io_schema_k8s_pod_security_policy.PodSecurityPolicySpecType_SupplementalGroups{}
+					supplementalGroupChoiceInt.SupplementalGroups = &ves_io_schema_k8s_pod_security_policy.IDStrategyOptionsType{}
 					configMethodChoiceInt.PspSpec.SupplementalGroupChoice = supplementalGroupChoiceInt
-				}
 
-			}
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
 
-			if v, ok := cs["supplemental_groups"]; ok && !isIntfNil(v) && !supplementalGroupChoiceTypeFound {
+							if v, ok := cs["id_ranges"]; ok && !isIntfNil(v) {
 
-				supplementalGroupChoiceTypeFound = true
-				supplementalGroupChoiceInt := &ves_io_schema_k8s_pod_security_policy.PodSecurityPolicySpecType_SupplementalGroups{}
-				supplementalGroupChoiceInt.SupplementalGroups = &ves_io_schema_k8s_pod_security_policy.IDStrategyOptionsType{}
-				configMethodChoiceInt.PspSpec.SupplementalGroupChoice = supplementalGroupChoiceInt
+								sl := v.([]interface{})
+								idRanges := make([]*ves_io_schema_k8s_pod_security_policy.IDRangeType, len(sl))
+								supplementalGroupChoiceInt.SupplementalGroups.IdRanges = idRanges
+								for i, set := range sl {
+									if set != nil {
+										idRanges[i] = &ves_io_schema_k8s_pod_security_policy.IDRangeType{}
+										idRangesMapStrToI := set.(map[string]interface{})
 
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
+										if w, ok := idRangesMapStrToI["max_id"]; ok && !isIntfNil(w) {
+											idRanges[i].MaxId = uint32(w.(int))
+										}
 
-					if v, ok := cs["id_ranges"]; ok && !isIntfNil(v) {
+										if w, ok := idRangesMapStrToI["min_id"]; ok && !isIntfNil(w) {
+											idRanges[i].MinId = uint32(w.(int))
+										}
 
-						sl := v.([]interface{})
-						idRanges := make([]*ves_io_schema_k8s_pod_security_policy.IDRangeType, len(sl))
-						supplementalGroupChoiceInt.SupplementalGroups.IdRanges = idRanges
-						for i, set := range sl {
-							idRanges[i] = &ves_io_schema_k8s_pod_security_policy.IDRangeType{}
-							idRangesMapStrToI := set.(map[string]interface{})
+									}
+								}
 
-							if w, ok := idRangesMapStrToI["max_id"]; ok && !isIntfNil(w) {
-								idRanges[i].MaxId = uint32(w.(int))
 							}
 
-							if w, ok := idRangesMapStrToI["min_id"]; ok && !isIntfNil(w) {
-								idRanges[i].MinId = uint32(w.(int))
+							if v, ok := cs["rule"]; ok && !isIntfNil(v) {
+
+								supplementalGroupChoiceInt.SupplementalGroups.Rule = v.(string)
+
 							}
 
 						}
-
-					}
-
-					if v, ok := cs["rule"]; ok && !isIntfNil(v) {
-
-						supplementalGroupChoiceInt.SupplementalGroups.Rule = v.(string)
-
 					}
 
 				}
 
-			}
+				userChoiceTypeFound := false
 
-			userChoiceTypeFound := false
+				if v, ok := cs["no_run_as_user"]; ok && !isIntfNil(v) && !userChoiceTypeFound {
 
-			if v, ok := cs["no_run_as_user"]; ok && !isIntfNil(v) && !userChoiceTypeFound {
+					userChoiceTypeFound = true
 
-				userChoiceTypeFound = true
+					if v.(bool) {
+						userChoiceInt := &ves_io_schema_k8s_pod_security_policy.PodSecurityPolicySpecType_NoRunAsUser{}
+						userChoiceInt.NoRunAsUser = &ves_io_schema.Empty{}
+						configMethodChoiceInt.PspSpec.UserChoice = userChoiceInt
+					}
 
-				if v.(bool) {
-					userChoiceInt := &ves_io_schema_k8s_pod_security_policy.PodSecurityPolicySpecType_NoRunAsUser{}
-					userChoiceInt.NoRunAsUser = &ves_io_schema.Empty{}
+				}
+
+				if v, ok := cs["run_as_user"]; ok && !isIntfNil(v) && !userChoiceTypeFound {
+
+					userChoiceTypeFound = true
+					userChoiceInt := &ves_io_schema_k8s_pod_security_policy.PodSecurityPolicySpecType_RunAsUser{}
+					userChoiceInt.RunAsUser = &ves_io_schema_k8s_pod_security_policy.IDStrategyOptionsType{}
 					configMethodChoiceInt.PspSpec.UserChoice = userChoiceInt
-				}
 
-			}
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
 
-			if v, ok := cs["run_as_user"]; ok && !isIntfNil(v) && !userChoiceTypeFound {
+							if v, ok := cs["id_ranges"]; ok && !isIntfNil(v) {
 
-				userChoiceTypeFound = true
-				userChoiceInt := &ves_io_schema_k8s_pod_security_policy.PodSecurityPolicySpecType_RunAsUser{}
-				userChoiceInt.RunAsUser = &ves_io_schema_k8s_pod_security_policy.IDStrategyOptionsType{}
-				configMethodChoiceInt.PspSpec.UserChoice = userChoiceInt
+								sl := v.([]interface{})
+								idRanges := make([]*ves_io_schema_k8s_pod_security_policy.IDRangeType, len(sl))
+								userChoiceInt.RunAsUser.IdRanges = idRanges
+								for i, set := range sl {
+									if set != nil {
+										idRanges[i] = &ves_io_schema_k8s_pod_security_policy.IDRangeType{}
+										idRangesMapStrToI := set.(map[string]interface{})
 
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
+										if w, ok := idRangesMapStrToI["max_id"]; ok && !isIntfNil(w) {
+											idRanges[i].MaxId = uint32(w.(int))
+										}
 
-					if v, ok := cs["id_ranges"]; ok && !isIntfNil(v) {
+										if w, ok := idRangesMapStrToI["min_id"]; ok && !isIntfNil(w) {
+											idRanges[i].MinId = uint32(w.(int))
+										}
 
-						sl := v.([]interface{})
-						idRanges := make([]*ves_io_schema_k8s_pod_security_policy.IDRangeType, len(sl))
-						userChoiceInt.RunAsUser.IdRanges = idRanges
-						for i, set := range sl {
-							idRanges[i] = &ves_io_schema_k8s_pod_security_policy.IDRangeType{}
-							idRangesMapStrToI := set.(map[string]interface{})
+									}
+								}
 
-							if w, ok := idRangesMapStrToI["max_id"]; ok && !isIntfNil(w) {
-								idRanges[i].MaxId = uint32(w.(int))
 							}
 
-							if w, ok := idRangesMapStrToI["min_id"]; ok && !isIntfNil(w) {
-								idRanges[i].MinId = uint32(w.(int))
+							if v, ok := cs["rule"]; ok && !isIntfNil(v) {
+
+								userChoiceInt.RunAsUser.Rule = v.(string)
+
 							}
 
 						}
-
-					}
-
-					if v, ok := cs["rule"]; ok && !isIntfNil(v) {
-
-						userChoiceInt.RunAsUser.Rule = v.(string)
-
 					}
 
 				}
 
-			}
+				if v, ok := cs["volumes"]; ok && !isIntfNil(v) {
 
-			if v, ok := cs["volumes"]; ok && !isIntfNil(v) {
+					ls := make([]string, len(v.([]interface{})))
+					for i, v := range v.([]interface{}) {
+						ls[i] = v.(string)
+					}
+					configMethodChoiceInt.PspSpec.Volumes = ls
 
-				ls := make([]string, len(v.([]interface{})))
-				for i, v := range v.([]interface{}) {
-					ls[i] = v.(string)
 				}
-				configMethodChoiceInt.PspSpec.Volumes = ls
 
 			}
-
 		}
 
 	}

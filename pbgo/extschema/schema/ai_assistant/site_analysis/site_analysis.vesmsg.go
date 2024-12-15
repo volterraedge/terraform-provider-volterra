@@ -15,6 +15,7 @@ import (
 	"gopkg.volterra.us/stdlib/errors"
 
 	ves_io_schema_ai_assistant_common "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/ai_assistant/common"
+	ves_io_schema_ai_assistant_widget "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/ai_assistant/widget"
 )
 
 var (
@@ -23,93 +24,6 @@ var (
 	_ = errors.Wrap
 	_ = strings.Split
 )
-
-// augmented methods on protoc/std generated struct
-
-func (m *AnalysisAndAction) ToJSON() (string, error) {
-	return codec.ToJSON(m)
-}
-
-func (m *AnalysisAndAction) ToYAML() (string, error) {
-	return codec.ToYAML(m)
-}
-
-func (m *AnalysisAndAction) DeepCopy() *AnalysisAndAction {
-	if m == nil {
-		return nil
-	}
-	ser, err := m.Marshal()
-	if err != nil {
-		return nil
-	}
-	c := &AnalysisAndAction{}
-	err = c.Unmarshal(ser)
-	if err != nil {
-		return nil
-	}
-	return c
-}
-
-func (m *AnalysisAndAction) DeepCopyProto() proto.Message {
-	if m == nil {
-		return nil
-	}
-	return m.DeepCopy()
-}
-
-func (m *AnalysisAndAction) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
-	return AnalysisAndActionValidator().Validate(ctx, m, opts...)
-}
-
-type ValidateAnalysisAndAction struct {
-	FldValidators map[string]db.ValidatorFunc
-}
-
-func (v *ValidateAnalysisAndAction) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
-	m, ok := pm.(*AnalysisAndAction)
-	if !ok {
-		switch t := pm.(type) {
-		case nil:
-			return nil
-		default:
-			return fmt.Errorf("Expected type *AnalysisAndAction got type %s", t)
-		}
-	}
-	if m == nil {
-		return nil
-	}
-
-	if fv, exists := v.FldValidators["action"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("action"))
-		if err := fv(ctx, m.GetAction(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
-	if fv, exists := v.FldValidators["analysis"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("analysis"))
-		if err := fv(ctx, m.GetAnalysis(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
-	return nil
-}
-
-// Well-known symbol for default validator implementation
-var DefaultAnalysisAndActionValidator = func() *ValidateAnalysisAndAction {
-	v := &ValidateAnalysisAndAction{FldValidators: map[string]db.ValidatorFunc{}}
-
-	return v
-}()
-
-func AnalysisAndActionValidator() db.Validator {
-	return DefaultAnalysisAndActionValidator
-}
 
 // augmented methods on protoc/std generated struct
 
@@ -152,6 +66,102 @@ type ValidateSiteAnalysisResponse struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateSiteAnalysisResponse) InternalLinksValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for internal_links")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_ai_assistant_common.Link, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ves_io_schema_ai_assistant_common.LinkValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for internal_links")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema_ai_assistant_common.Link)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema_ai_assistant_common.Link, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated internal_links")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items internal_links")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateSiteAnalysisResponse) ExternalLinksValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for external_links")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_ai_assistant_common.Link, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ves_io_schema_ai_assistant_common.LinkValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for external_links")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema_ai_assistant_common.Link)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema_ai_assistant_common.Link, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated external_links")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items external_links")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateSiteAnalysisResponse) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*SiteAnalysisResponse)
 	if !ok {
@@ -166,31 +176,17 @@ func (v *ValidateSiteAnalysisResponse) Validate(ctx context.Context, pm interfac
 		return nil
 	}
 
-	if fv, exists := v.FldValidators["analysis_and_actions"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("analysis_and_actions"))
-		for idx, item := range m.GetAnalysisAndActions() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
-			if err := fv(ctx, item, vOpts...); err != nil {
-				return err
-			}
-		}
-
-	}
-
-	if fv, exists := v.FldValidators["external_link"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("external_link"))
-		if err := fv(ctx, m.GetExternalLink(), vOpts...); err != nil {
+	if fv, exists := v.FldValidators["external_links"]; exists {
+		vOpts := append(opts, db.WithValidateField("external_links"))
+		if err := fv(ctx, m.GetExternalLinks(), vOpts...); err != nil {
 			return err
 		}
 
 	}
 
-	if fv, exists := v.FldValidators["internal_link"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("internal_link"))
-		if err := fv(ctx, m.GetInternalLink(), vOpts...); err != nil {
+	if fv, exists := v.FldValidators["internal_links"]; exists {
+		vOpts := append(opts, db.WithValidateField("internal_links"))
+		if err := fv(ctx, m.GetInternalLinks(), vOpts...); err != nil {
 			return err
 		}
 
@@ -205,6 +201,15 @@ func (v *ValidateSiteAnalysisResponse) Validate(ctx context.Context, pm interfac
 
 	}
 
+	if fv, exists := v.FldValidators["table_view"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("table_view"))
+		if err := fv(ctx, m.GetTableView(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	return nil
 }
 
@@ -212,9 +217,39 @@ func (v *ValidateSiteAnalysisResponse) Validate(ctx context.Context, pm interfac
 var DefaultSiteAnalysisResponseValidator = func() *ValidateSiteAnalysisResponse {
 	v := &ValidateSiteAnalysisResponse{FldValidators: map[string]db.ValidatorFunc{}}
 
-	v.FldValidators["external_link"] = ves_io_schema_ai_assistant_common.LinkValidator().Validate
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
 
-	v.FldValidators["internal_link"] = ves_io_schema_ai_assistant_common.LinkValidator().Validate
+	vrhInternalLinks := v.InternalLinksValidationRuleHandler
+	rulesInternalLinks := map[string]string{
+		"ves.io.schema.rules.repeated.unique": "true",
+		"ves.io.schema.rules.string.max_len":  "6",
+	}
+	vFn, err = vrhInternalLinks(rulesInternalLinks)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for SiteAnalysisResponse.internal_links: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["internal_links"] = vFn
+
+	vrhExternalLinks := v.ExternalLinksValidationRuleHandler
+	rulesExternalLinks := map[string]string{
+		"ves.io.schema.rules.repeated.unique": "true",
+		"ves.io.schema.rules.string.max_len":  "6",
+	}
+	vFn, err = vrhExternalLinks(rulesExternalLinks)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for SiteAnalysisResponse.external_links: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["external_links"] = vFn
+
+	v.FldValidators["table_view"] = ves_io_schema_ai_assistant_widget.WidgetViewValidator().Validate
 
 	return v
 }()

@@ -1,9 +1,9 @@
 ---
 
 page_title: "Volterra: k8s_pod_security_admission"
-description: "The k8s_pod_security_admission allows CRUD of K8s Pod Security Admission resource on Volterra SaaS"
 
----
+description: "The k8s_pod_security_admission allows CRUD of K8s Pod Security Admission resource on Volterra SaaS"
+-----------------------------------------------------------------------------------------------------------------
 
 Resource volterra_k8s_pod_security_admission
 ============================================

@@ -1,9 +1,9 @@
 ---
 
 page_title: "Volterra: cloud_credentials"
-description: "The cloud_credentials allows CRUD of Cloud Credentials resource on Volterra SaaS"
 
----
+description: "The cloud_credentials allows CRUD of Cloud Credentials resource on Volterra SaaS"
+-----------------------------------------------------------------------------------------------
 
 Resource volterra_cloud_credentials
 ===================================
@@ -22,19 +22,32 @@ resource "volterra_cloud_credentials" "example" {
 
   // One of the arguments from this list "aws_assume_role aws_secret_key azure_client_secret azure_pfx_certificate gcp_cred_file" must be set
 
-  gcp_cred_file {
-    credential_file {
+  aws_secret_key {
+    access_key = "value"
 
-      secret_encoding_type = "secret_encoding_type"
-
-      // One of the arguments from this list "blindfold_secret_info clear_secret_info vault_secret_info wingman_secret_info" must be set
-
-      blindfold_secret_info {
+    secret_key {
+      blindfold_secret_info_internal {
         decryption_provider = "value"
 
         location = "string:///U2VjcmV0SW5mb3JtYXRpb24="
 
         store_provider = "value"
+      }
+
+      secret_encoding_type = "secret_encoding_type"
+
+      // One of the arguments from this list "blindfold_secret_info clear_secret_info vault_secret_info wingman_secret_info" must be set
+
+      vault_secret_info {
+        key = "key_pem"
+
+        location = "v1/data/vhost_key"
+
+        provider = "vault-vh-provider"
+
+        secret_encoding = "secret_encoding"
+
+        version = "1"
       }
     }
   }

@@ -2714,7 +2714,8 @@ var CustomDataAPISwaggerJSON string = `{
             "enum": [
                 "INVALID",
                 "REGIONAL_EDGE",
-                "CUSTOMER_EDGE"
+                "CUSTOMER_EDGE",
+                "NGINX_ONE"
             ],
             "default": "INVALID",
             "x-displayname": "Site Type",
@@ -4627,14 +4628,19 @@ var CustomDataAPISwaggerJSON string = `{
         },
         "topologyProviderType": {
             "type": "string",
-            "description": "provider type\n\nProviderType unspecified\nAWS backend\nGCP backend\nAzure backend\nF5XC backend",
+            "description": "provider type\n\nProviderType unspecified\nAWS backend\nGCP backend\nAzure backend\nF5XC backend\nVMware backend\nKVM backend\nOCI backend\nBaremetal backend\nF5 rSeries backend",
             "title": "ProviderType",
             "enum": [
                 "PROVIDER_TYPE_UNSPECIFIED",
                 "PROVIDER_TYPE_AWS",
                 "PROVIDER_TYPE_GCP",
                 "PROVIDER_TYPE_AZURE",
-                "PROVIDER_TYPE_VOLTERRA"
+                "PROVIDER_TYPE_VOLTERRA",
+                "PROVIDER_TYPE_VMWARE",
+                "PROVIDER_TYPE_KVM",
+                "PROVIDER_TYPE_OCI",
+                "PROVIDER_TYPE_BAREMETAL",
+                "PROVIDER_TYPE_F5RSERIES"
             ],
             "default": "PROVIDER_TYPE_UNSPECIFIED",
             "x-displayname": "Provider Type",

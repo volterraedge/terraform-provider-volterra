@@ -62,7 +62,8 @@ func resourceVolterraCrl() *schema.Resource {
 
 			"http_access": {
 
-				Type:     schema.TypeSet,
+				Type:     schema.TypeList,
+				MaxItems: 1,
 				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
@@ -168,16 +169,18 @@ func resourceVolterraCrlCreate(d *schema.ResourceData, meta interface{}) error {
 		accessInfoChoiceInt.HttpAccess = &ves_io_schema_crl.HTTPAccessInfo{}
 		createSpec.AccessInfoChoice = accessInfoChoiceInt
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
+			if set != nil {
+				cs := set.(map[string]interface{})
 
-			if v, ok := cs["path"]; ok && !isIntfNil(v) {
+				if v, ok := cs["path"]; ok && !isIntfNil(v) {
 
-				accessInfoChoiceInt.HttpAccess.Path = v.(string)
+					accessInfoChoiceInt.HttpAccess.Path = v.(string)
+
+				}
 
 			}
-
 		}
 
 	}
@@ -330,16 +333,18 @@ func resourceVolterraCrlUpdate(d *schema.ResourceData, meta interface{}) error {
 		accessInfoChoiceInt.HttpAccess = &ves_io_schema_crl.HTTPAccessInfo{}
 		updateSpec.AccessInfoChoice = accessInfoChoiceInt
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
+			if set != nil {
+				cs := set.(map[string]interface{})
 
-			if v, ok := cs["path"]; ok && !isIntfNil(v) {
+				if v, ok := cs["path"]; ok && !isIntfNil(v) {
 
-				accessInfoChoiceInt.HttpAccess.Path = v.(string)
+					accessInfoChoiceInt.HttpAccess.Path = v.(string)
+
+				}
 
 			}
-
 		}
 
 	}

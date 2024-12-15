@@ -1,9 +1,9 @@
 ---
 
 page_title: "Volterra: filter_set"
-description: "The filter_set allows CRUD of Filter Set resource on Volterra SaaS"
 
----
+description: "The filter_set allows CRUD of Filter Set resource on Volterra SaaS"
+---------------------------------------------------------------------------------
 
 Resource volterra_filter_set
 ============================
@@ -26,8 +26,8 @@ resource "volterra_filter_set" "example" {
 
     // One of the arguments from this list "date_field filter_expression_field label_selector_field string_field" must be set
 
-    filter_expression_field {
-      expression = "region in (us-west1, us-west2),tier in (staging)"
+    string_field {
+      field_values = ["field_values"]
     }
   }
 }

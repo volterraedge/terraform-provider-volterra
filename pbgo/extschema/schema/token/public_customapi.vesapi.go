@@ -34,6 +34,15 @@ type CustomAPIGrpcClient struct {
 	rpcFns map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error)
 }
 
+func (c *CustomAPIGrpcClient) doRPCGetCloudInitConfig(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
+	req := &GetCloudInitConfigReq{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.token.GetCloudInitConfigReq", yamlReq)
+	}
+	rsp, err := c.grpcClient.GetCloudInitConfig(ctx, req, opts...)
+	return rsp, err
+}
+
 func (c *CustomAPIGrpcClient) doRPCTokenState(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &StateReq{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -73,6 +82,8 @@ func NewCustomAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 		grpcClient: NewCustomAPIClient(cc),
 	}
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
+	rpcFns["GetCloudInitConfig"] = ccl.doRPCGetCloudInitConfig
+
 	rpcFns["TokenState"] = ccl.doRPCTokenState
 
 	ccl.rpcFns = rpcFns
@@ -86,6 +97,90 @@ type CustomAPIRestClient struct {
 	client  http.Client
 	// map of rpc name to its invocation
 	rpcFns map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error)
+}
+
+func (c *CustomAPIRestClient) doRPCGetCloudInitConfig(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
+	if callOpts.URI == "" {
+		return nil, fmt.Errorf("Error, URI should be specified, got empty")
+	}
+	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
+
+	yamlReq := callOpts.YAMLReq
+	req := &GetCloudInitConfigReq{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.token.GetCloudInitConfigReq: %s", yamlReq, err)
+	}
+
+	var hReq *http.Request
+	hm := strings.ToLower(callOpts.HTTPMethod)
+	switch hm {
+	case "post", "put":
+		jsn, err := codec.ToJSON(req, codec.ToWithUseProtoFieldName())
+		if err != nil {
+			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
+		}
+		var op string
+		if hm == "post" {
+			op = http.MethodPost
+		} else {
+			op = http.MethodPut
+		}
+		newReq, err := http.NewRequest(op, url, bytes.NewBuffer([]byte(jsn)))
+		if err != nil {
+			return nil, errors.Wrapf(err, "Creating new HTTP %s request for custom API", op)
+		}
+		hReq = newReq
+	case "get":
+		newReq, err := http.NewRequest(http.MethodGet, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP GET request for custom API")
+		}
+		hReq = newReq
+		q := hReq.URL.Query()
+		_ = q
+		q.Add("provider", fmt.Sprintf("%v", req.Provider))
+		q.Add("site_name", fmt.Sprintf("%v", req.SiteName))
+
+		hReq.URL.RawQuery += q.Encode()
+	case "delete":
+		newReq, err := http.NewRequest(http.MethodDelete, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP DELETE request for custom API")
+		}
+		hReq = newReq
+	default:
+		return nil, fmt.Errorf("Error, invalid/empty HTTPMethod(%s) specified, should be POST|DELETE|GET", callOpts.HTTPMethod)
+	}
+	hReq = hReq.WithContext(ctx)
+	hReq.Header.Set("Content-Type", "application/json")
+	client.AddHdrsToReq(callOpts.Headers, hReq)
+
+	rsp, err := c.client.Do(hReq)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient")
+	}
+	defer rsp.Body.Close()
+
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
+		body, err := io.ReadAll(rsp.Body)
+		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
+	}
+
+	body, err := io.ReadAll(rsp.Body)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient read body")
+	}
+	pbRsp := &GetCloudInitConfigResp{}
+	if err := codec.FromJSON(string(body), pbRsp); err != nil {
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.token.GetCloudInitConfigResp", body)
+
+	}
+	if callOpts.OutCallResponse != nil {
+		callOpts.OutCallResponse.ProtoMsg = pbRsp
+		callOpts.OutCallResponse.JSON = string(body)
+	}
+	return pbRsp, nil
 }
 
 func (c *CustomAPIRestClient) doRPCTokenState(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
@@ -197,6 +292,8 @@ func NewCustomAPIRestClient(baseURL string, hc http.Client) server.CustomClient 
 	}
 
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
+	rpcFns["GetCloudInitConfig"] = ccl.doRPCGetCloudInitConfig
+
 	rpcFns["TokenState"] = ccl.doRPCTokenState
 
 	ccl.rpcFns = rpcFns
@@ -211,6 +308,10 @@ type customAPIInprocClient struct {
 	CustomAPIServer
 }
 
+func (c *customAPIInprocClient) GetCloudInitConfig(ctx context.Context, in *GetCloudInitConfigReq, opts ...grpc.CallOption) (*GetCloudInitConfigResp, error) {
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.token.CustomAPI.GetCloudInitConfig")
+	return c.CustomAPIServer.GetCloudInitConfig(ctx, in)
+}
 func (c *customAPIInprocClient) TokenState(ctx context.Context, in *StateReq, opts ...grpc.CallOption) (*ObjectChangeResp, error) {
 	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.token.CustomAPI.TokenState")
 	return c.CustomAPIServer.TokenState(ctx, in)
@@ -237,6 +338,55 @@ type customAPISrv struct {
 	svc svcfw.Service
 }
 
+func (s *customAPISrv) GetCloudInitConfig(ctx context.Context, in *GetCloudInitConfigReq) (*GetCloudInitConfigResp, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.token.CustomAPI")
+	cah, ok := ah.(CustomAPIServer)
+	if !ok {
+		return nil, fmt.Errorf("ah %v is not of type *CustomAPIServer", ah)
+	}
+
+	var (
+		rsp *GetCloudInitConfigResp
+		err error
+	)
+
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.token.GetCloudInitConfigReq", in)
+	defer func() {
+		if len(bodyFields) > 0 {
+			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
+		}
+		userMsg := "The 'CustomAPI.GetCloudInitConfig' operation on 'token'"
+		if err == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
+	}()
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.token.CustomAPI.GetCloudInitConfig"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
+	rsp, err = cah.GetCloudInitConfig(ctx, in)
+	if err != nil {
+		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
+	}
+
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.token.GetCloudInitConfigResp", rsp)...)
+
+	return rsp, nil
+}
 func (s *customAPISrv) TokenState(ctx context.Context, in *StateReq) (*ObjectChangeResp, error) {
 	ah := s.svc.GetAPIHandler("ves.io.schema.token.CustomAPI")
 	cah, ok := ah.(CustomAPIServer)
@@ -310,6 +460,98 @@ var CustomAPISwaggerJSON string = `{
     ],
     "tags": [],
     "paths": {
+        "/public/namespaces/system/get-cloud-init-config": {
+            "get": {
+                "summary": "Get Cloud Init Config",
+                "description": "Returns cloud-init counfig for kvm provider with jwt token",
+                "operationId": "ves.io.schema.token.CustomAPI.GetCloudInitConfig",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/tokenGetCloudInitConfigResp"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "provider",
+                        "description": "x-required\nx-example: \"kvm\"\nprovider for that cloud-init config",
+                        "in": "query",
+                        "required": false,
+                        "type": "string",
+                        "x-displayname": "Provider"
+                    },
+                    {
+                        "name": "site_name",
+                        "description": "site name for this cloud-init config",
+                        "in": "query",
+                        "required": false,
+                        "type": "string",
+                        "x-displayname": "Site Name"
+                    }
+                ],
+                "tags": [
+                    "CustomAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-token-customapi-getcloudinitconfig"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.token.CustomAPI.GetCloudInitConfig"
+            },
+            "x-displayname": "Token",
+            "x-ves-proto-service": "ves.io.schema.token.CustomAPI",
+            "x-ves-proto-service-type": "CUSTOM_PUBLIC"
+        },
         "/public/namespaces/{namespace}/tokens/{name}/state": {
             "post": {
                 "summary": "Set Token State",
@@ -641,6 +883,12 @@ var CustomAPISwaggerJSON string = `{
                     "format": "date-time",
                     "x-displayname": "Deletion Timestamp"
                 },
+                "direct_ref_hash": {
+                    "type": "string",
+                    "description": " A hash of the UIDs of  direct references on this object. This can be used to determine if \n this object hash has had references become resolved/unresolved",
+                    "title": "direct_ref_hash",
+                    "x-displayname": "Direct Reference Hash"
+                },
                 "finalizers": {
                     "type": "array",
                     "description": " Must be empty before the object is deleted from the registry. Each entry\n is an identifier for the responsible component that will remove the entry\n from the list. If the deletionTimestamp of the object is non-nil, entries\n in this list can only be removed.\n\nExample: - \"value\"-",
@@ -788,6 +1036,21 @@ var CustomAPISwaggerJSON string = `{
                 "JWT"
             ],
             "default": "NORMAL"
+        },
+        "tokenGetCloudInitConfigResp": {
+            "type": "object",
+            "description": "Response to cloud-init config",
+            "title": "Get cloud-init config response",
+            "x-displayname": "Get cloud-init config Response",
+            "x-ves-proto-message": "ves.io.schema.token.GetCloudInitConfigResp",
+            "properties": {
+                "cloud_init_config": {
+                    "type": "string",
+                    "description": " cloud-init config",
+                    "title": "cloud-init config",
+                    "x-displayname": "cloud-init config"
+                }
+            }
         },
         "tokenGlobalSpecType": {
             "type": "object",

@@ -1,9 +1,9 @@
 ---
 
 page_title: "Volterra: user_identification"
-description: "The user_identification allows CRUD of User Identification resource on Volterra SaaS"
 
----
+description: "The user_identification allows CRUD of User Identification resource on Volterra SaaS"
+---------------------------------------------------------------------------------------------------
 
 Resource volterra_user_identification
 =====================================
@@ -23,7 +23,7 @@ resource "volterra_user_identification" "example" {
   rules {
     // One of the arguments from this list "client_asn client_city client_country client_ip client_region cookie_name http_header_name ip_and_http_header_name ip_and_ja4_tls_fingerprint ip_and_tls_fingerprint ja4_tls_fingerprint jwt_claim_name none query_param_key tls_fingerprint" must be set
 
-    http_header_name = "http_header_name"
+    client_ip = true
   }
 }
 

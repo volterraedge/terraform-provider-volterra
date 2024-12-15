@@ -1,9 +1,9 @@
 ---
 
 page_title: "Volterra: network_firewall"
-description: "The network_firewall allows CRUD of Network Firewall resource on Volterra SaaS"
 
----
+description: "The network_firewall allows CRUD of Network Firewall resource on Volterra SaaS"
+---------------------------------------------------------------------------------------------
 
 Resource volterra_network_firewall
 ==================================
@@ -26,17 +26,17 @@ resource "volterra_network_firewall" "example" {
 
   // One of the arguments from this list "active_forward_proxy_policies disable_forward_proxy_policy forward_proxy_policy_set" must be set
 
-  disable_forward_proxy_policy = true
-
-  // One of the arguments from this list "active_enhanced_firewall_policies active_network_policies disable_network_policy network_policy_set" must be set
-
-  active_enhanced_firewall_policies {
-    enhanced_firewall_policies {
+  active_forward_proxy_policies {
+    forward_proxy_policies {
       name      = "test1"
       namespace = "staging"
       tenant    = "acmecorp"
     }
   }
+
+  // One of the arguments from this list "active_enhanced_firewall_policies active_network_policies disable_network_policy network_policy_set" must be set
+
+  disable_network_policy = true
 }
 
 ```

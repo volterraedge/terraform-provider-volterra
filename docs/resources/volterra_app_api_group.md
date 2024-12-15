@@ -1,9 +1,9 @@
 ---
 
 page_title: "Volterra: app_api_group"
-description: "The app_api_group allows CRUD of App Api Group resource on Volterra SaaS"
 
----
+description: "The app_api_group allows CRUD of App Api Group resource on Volterra SaaS"
+---------------------------------------------------------------------------------------
 
 Resource volterra_app_api_group
 ===============================

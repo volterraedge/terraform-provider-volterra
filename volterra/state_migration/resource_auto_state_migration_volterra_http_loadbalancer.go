@@ -55,7 +55,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 			"advertise_custom": {
 
-				Type:     schema.TypeSet,
+				Type:     schema.TypeList,
+				MaxItems: 1,
 				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
@@ -69,14 +70,16 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 									"advertise_on_public": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
 												"public_ip": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Required: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -107,14 +110,16 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 									"cloud_edge_segment": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
 												"cloud_edge": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Required: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -152,7 +157,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 												"segment": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Required: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -183,7 +189,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 									"segment": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -200,7 +207,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 												"segment": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Required: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -231,7 +239,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 									"site": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -253,7 +262,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 												"site": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Required: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -284,7 +294,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 									"site_segment": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -301,7 +312,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 												"segment": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Required: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -329,7 +341,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 												"site": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Required: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -360,7 +373,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 									"virtual_network": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -391,7 +405,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 												"virtual_network": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Required: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -422,7 +437,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 									"virtual_site": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -434,7 +450,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 												"virtual_site": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Required: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -465,7 +482,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 									"virtual_site_segment": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -482,7 +500,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 												"segment": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Required: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -510,7 +529,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 												"virtual_site": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Required: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -541,7 +561,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 									"virtual_site_with_vip": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -563,7 +584,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 												"virtual_site": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Required: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -594,14 +616,16 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 									"vk8s_service": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
 												"site": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Optional: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -629,7 +653,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 												"virtual_site": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Optional: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -684,14 +709,16 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 			"advertise_on_public": {
 
-				Type:     schema.TypeSet,
+				Type:     schema.TypeList,
+				MaxItems: 1,
 				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 
 						"public_ip": {
 
-							Type:     schema.TypeSet,
+							Type:     schema.TypeList,
+							MaxItems: 1,
 							Required: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
@@ -734,7 +761,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 			"api_definition": {
 
-				Type:       schema.TypeSet,
+				Type:       schema.TypeList,
+				MaxItems:   1,
 				Optional:   true,
 				Deprecated: "This field is deprecated and will be removed in future release.",
 				Elem: &schema.Resource{
@@ -761,7 +789,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 			"api_definitions": {
 
-				Type:       schema.TypeSet,
+				Type:       schema.TypeList,
+				MaxItems:   1,
 				Optional:   true,
 				Deprecated: "This field is deprecated and will be removed in future release.",
 				Elem: &schema.Resource{
@@ -799,14 +828,16 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 			"api_specification": {
 
-				Type:     schema.TypeSet,
+				Type:     schema.TypeList,
+				MaxItems: 1,
 				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 
 						"api_definition": {
 
-							Type:     schema.TypeSet,
+							Type:     schema.TypeList,
+							MaxItems: 1,
 							Required: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
@@ -829,14 +860,16 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 						"validation_all_spec_endpoints": {
 
-							Type:     schema.TypeSet,
+							Type:     schema.TypeList,
+							MaxItems: 1,
 							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
 									"fall_through_mode": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -849,7 +882,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 												"fall_through_mode_custom": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Optional: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -881,7 +915,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 																		"api_endpoint": {
 
-																			Type:     schema.TypeSet,
+																			Type:     schema.TypeList,
+																			MaxItems: 1,
 																			Optional: true,
 																			Elem: &schema.Resource{
 																				Schema: map[string]*schema.Schema{
@@ -918,7 +953,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 																		"metadata": {
 
-																			Type:     schema.TypeSet,
+																			Type:     schema.TypeList,
+																			MaxItems: 1,
 																			Required: true,
 																			Elem: &schema.Resource{
 																				Schema: map[string]*schema.Schema{
@@ -967,7 +1003,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 									"settings": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -1000,14 +1037,16 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 												"property_validation_settings_custom": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Optional: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
 															"headers": {
 
-																Type:       schema.TypeSet,
+																Type:       schema.TypeList,
+																MaxItems:   1,
 																Optional:   true,
 																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
@@ -1032,7 +1071,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 															"query_parameters": {
 
-																Type:     schema.TypeSet,
+																Type:     schema.TypeList,
+																MaxItems: 1,
 																Optional: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
@@ -1066,14 +1106,16 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 									"validation_mode": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
 												"response_validation_mode_active": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Optional: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -1117,7 +1159,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 												"validation_mode_active": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Optional: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -1155,14 +1198,16 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 						"validation_custom_list": {
 
-							Type:     schema.TypeSet,
+							Type:     schema.TypeList,
+							MaxItems: 1,
 							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
 									"fall_through_mode": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -1175,7 +1220,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 												"fall_through_mode_custom": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Optional: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -1207,7 +1253,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 																		"api_endpoint": {
 
-																			Type:     schema.TypeSet,
+																			Type:     schema.TypeList,
+																			MaxItems: 1,
 																			Optional: true,
 																			Elem: &schema.Resource{
 																				Schema: map[string]*schema.Schema{
@@ -1244,7 +1291,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 																		"metadata": {
 
-																			Type:     schema.TypeSet,
+																			Type:     schema.TypeList,
+																			MaxItems: 1,
 																			Required: true,
 																			Elem: &schema.Resource{
 																				Schema: map[string]*schema.Schema{
@@ -1286,7 +1334,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 												"api_endpoint": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Optional: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -1335,7 +1384,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 												"metadata": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Required: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -1361,14 +1411,16 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 												"validation_mode": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Required: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
 															"response_validation_mode_active": {
 
-																Type:     schema.TypeSet,
+																Type:     schema.TypeList,
+																MaxItems: 1,
 																Optional: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
@@ -1412,7 +1464,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 															"validation_mode_active": {
 
-																Type:     schema.TypeSet,
+																Type:     schema.TypeList,
+																MaxItems: 1,
 																Optional: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
@@ -1464,7 +1517,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 									"settings": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -1497,14 +1551,16 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 												"property_validation_settings_custom": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Optional: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
 															"headers": {
 
-																Type:       schema.TypeSet,
+																Type:       schema.TypeList,
+																MaxItems:   1,
 																Optional:   true,
 																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
@@ -1529,7 +1585,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 															"query_parameters": {
 
-																Type:     schema.TypeSet,
+																Type:     schema.TypeList,
+																MaxItems: 1,
 																Optional: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
@@ -1587,14 +1644,229 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 			"enable_api_discovery": {
 
-				Type:     schema.TypeSet,
+				Type:     schema.TypeList,
+				MaxItems: 1,
 				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 
+						"api_crawler": {
+
+							Type:     schema.TypeList,
+							MaxItems: 1,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"api_crawler_config": {
+
+										Type:     schema.TypeList,
+										MaxItems: 1,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"domains": {
+
+													Type:     schema.TypeList,
+													Required: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"domain": {
+																Type:     schema.TypeString,
+																Required: true,
+															},
+
+															"simple_login": {
+
+																Type:     schema.TypeList,
+																MaxItems: 1,
+																Required: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"password": {
+
+																			Type:     schema.TypeList,
+																			MaxItems: 1,
+																			Required: true,
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"blindfold_secret_info_internal": {
+
+																						Type:       schema.TypeList,
+																						MaxItems:   1,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																						Elem: &schema.Resource{
+																							Schema: map[string]*schema.Schema{
+
+																								"decryption_provider": {
+																									Type:       schema.TypeString,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+
+																								"location": {
+																									Type:       schema.TypeString,
+																									Required:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+
+																								"store_provider": {
+																									Type:       schema.TypeString,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+																							},
+																						},
+																					},
+
+																					"secret_encoding_type": {
+																						Type:       schema.TypeString,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+
+																					"blindfold_secret_info": {
+
+																						Type:     schema.TypeList,
+																						MaxItems: 1,
+																						Optional: true,
+																						Elem: &schema.Resource{
+																							Schema: map[string]*schema.Schema{
+
+																								"decryption_provider": {
+																									Type:     schema.TypeString,
+																									Optional: true,
+																								},
+
+																								"location": {
+																									Type:     schema.TypeString,
+																									Required: true,
+																								},
+
+																								"store_provider": {
+																									Type:     schema.TypeString,
+																									Optional: true,
+																								},
+																							},
+																						},
+																					},
+
+																					"clear_secret_info": {
+
+																						Type:     schema.TypeList,
+																						MaxItems: 1,
+																						Optional: true,
+																						Elem: &schema.Resource{
+																							Schema: map[string]*schema.Schema{
+
+																								"provider": {
+																									Type:     schema.TypeString,
+																									Optional: true,
+																								},
+
+																								"url": {
+																									Type:     schema.TypeString,
+																									Required: true,
+																								},
+																							},
+																						},
+																					},
+
+																					"vault_secret_info": {
+
+																						Type:       schema.TypeList,
+																						MaxItems:   1,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																						Elem: &schema.Resource{
+																							Schema: map[string]*schema.Schema{
+
+																								"key": {
+																									Type:       schema.TypeString,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+
+																								"location": {
+																									Type:       schema.TypeString,
+																									Required:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+
+																								"provider": {
+																									Type:       schema.TypeString,
+																									Required:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+
+																								"secret_encoding": {
+																									Type:       schema.TypeString,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+
+																								"version": {
+																									Type:       schema.TypeInt,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+																							},
+																						},
+																					},
+
+																					"wingman_secret_info": {
+
+																						Type:       schema.TypeList,
+																						MaxItems:   1,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																						Elem: &schema.Resource{
+																							Schema: map[string]*schema.Schema{
+
+																								"name": {
+																									Type:       schema.TypeString,
+																									Required:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+																							},
+																						},
+																					},
+																				},
+																			},
+																		},
+
+																		"user": {
+																			Type:     schema.TypeString,
+																			Required: true,
+																		},
+																	},
+																},
+															},
+														},
+													},
+												},
+											},
+										},
+									},
+
+									"disable_api_crawler": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+								},
+							},
+						},
+
 						"api_discovery_from_code_scan": {
 
-							Type:     schema.TypeSet,
+							Type:     schema.TypeList,
+							MaxItems: 1,
 							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
@@ -1614,7 +1886,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 												"selected_repos": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Optional: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -1634,7 +1907,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 												"code_base_integration": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Required: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -1661,9 +1935,57 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 							},
 						},
 
+						"custom_api_auth_discovery": {
+
+							Type:       schema.TypeList,
+							MaxItems:   1,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"api_discovery_ref": {
+
+										Type:       schema.TypeList,
+										MaxItems:   1,
+										Required:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"name": {
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+												"namespace": {
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+												"tenant": {
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+
+						"default_api_auth_discovery": {
+
+							Type:       schema.TypeBool,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
+						},
+
 						"discovered_api_settings": {
 
-							Type:     schema.TypeSet,
+							Type:     schema.TypeList,
+							MaxItems: 1,
 							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
@@ -1690,7 +2012,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 						"sensitive_data_detection_rules": {
 
-							Type:       schema.TypeSet,
+							Type:       schema.TypeList,
+							MaxItems:   1,
 							Optional:   true,
 							Deprecated: "This field is deprecated and will be removed in future release.",
 							Elem: &schema.Resource{
@@ -1706,7 +2029,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 												"metadata": {
 
-													Type:       schema.TypeSet,
+													Type:       schema.TypeList,
+													MaxItems:   1,
 													Required:   true,
 													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
@@ -1735,7 +2059,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 												"sensitive_data_detection_config": {
 
-													Type:       schema.TypeSet,
+													Type:       schema.TypeList,
+													MaxItems:   1,
 													Required:   true,
 													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
@@ -1757,7 +2082,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 															"key_pattern": {
 
-																Type:       schema.TypeSet,
+																Type:       schema.TypeList,
+																MaxItems:   1,
 																Optional:   true,
 																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
@@ -1782,7 +2108,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 															"key_value_pattern": {
 
-																Type:       schema.TypeSet,
+																Type:       schema.TypeList,
+																MaxItems:   1,
 																Optional:   true,
 																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
@@ -1790,7 +2117,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 																		"key_pattern": {
 
-																			Type:       schema.TypeSet,
+																			Type:       schema.TypeList,
+																			MaxItems:   1,
 																			Required:   true,
 																			Deprecated: "This field is deprecated and will be removed in future release.",
 																			Elem: &schema.Resource{
@@ -1815,7 +2143,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 																		"value_pattern": {
 
-																			Type:       schema.TypeSet,
+																			Type:       schema.TypeList,
+																			MaxItems:   1,
 																			Required:   true,
 																			Deprecated: "This field is deprecated and will be removed in future release.",
 																			Elem: &schema.Resource{
@@ -1843,7 +2172,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 															"value_pattern": {
 
-																Type:       schema.TypeSet,
+																Type:       schema.TypeList,
+																MaxItems:   1,
 																Optional:   true,
 																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
@@ -1889,7 +2219,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 															"custom_sections": {
 
-																Type:       schema.TypeSet,
+																Type:       schema.TypeList,
+																MaxItems:   1,
 																Optional:   true,
 																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
@@ -1918,7 +2249,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 															"api_endpoint_target": {
 
-																Type:       schema.TypeSet,
+																Type:       schema.TypeList,
+																MaxItems:   1,
 																Optional:   true,
 																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
@@ -1963,7 +2295,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 												"sensitive_data_type": {
 
-													Type:       schema.TypeSet,
+													Type:       schema.TypeList,
+													MaxItems:   1,
 													Required:   true,
 													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
@@ -2006,7 +2339,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 			"api_protection_rules": {
 
-				Type:     schema.TypeSet,
+				Type:     schema.TypeList,
+				MaxItems: 1,
 				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
@@ -2020,7 +2354,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 									"action": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -2042,7 +2377,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 									"api_endpoint_method": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -2072,7 +2408,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 									"client_matcher": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -2085,7 +2422,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 												"client_selector": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Optional: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -2105,7 +2443,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 												"ip_threat_category_list": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Optional: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -2131,7 +2470,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 												"asn_list": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Optional: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -2151,7 +2491,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 												"asn_matcher": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Optional: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -2189,7 +2530,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 												"ip_matcher": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Optional: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -2232,7 +2574,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 												"ip_prefix_list": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Optional: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -2267,7 +2610,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 												"tls_fingerprint_matcher": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Optional: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -2322,7 +2666,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 									"metadata": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -2348,7 +2693,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 									"request_matcher": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -2379,7 +2725,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 															"item": {
 
-																Type:     schema.TypeSet,
+																Type:     schema.TypeList,
+																MaxItems: 1,
 																Optional: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
@@ -2458,7 +2805,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 															"item": {
 
-																Type:     schema.TypeSet,
+																Type:     schema.TypeList,
+																MaxItems: 1,
 																Optional: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
@@ -2537,7 +2885,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 															"item": {
 
-																Type:     schema.TypeSet,
+																Type:     schema.TypeList,
+																MaxItems: 1,
 																Optional: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
@@ -2614,7 +2963,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 															"item": {
 
-																Type:     schema.TypeSet,
+																Type:     schema.TypeList,
+																MaxItems: 1,
 																Optional: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
@@ -2677,7 +3027,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 									"action": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -2709,7 +3060,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 									"client_matcher": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -2722,7 +3074,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 												"client_selector": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Optional: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -2742,7 +3095,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 												"ip_threat_category_list": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Optional: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -2768,7 +3122,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 												"asn_list": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Optional: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -2788,7 +3143,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 												"asn_matcher": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Optional: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -2826,7 +3182,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 												"ip_matcher": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Optional: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -2869,7 +3226,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 												"ip_prefix_list": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Optional: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -2904,7 +3262,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 												"tls_fingerprint_matcher": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Optional: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -2959,7 +3318,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 									"metadata": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -2985,7 +3345,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 									"request_matcher": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -3016,7 +3377,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 															"item": {
 
-																Type:     schema.TypeSet,
+																Type:     schema.TypeList,
+																MaxItems: 1,
 																Optional: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
@@ -3095,7 +3457,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 															"item": {
 
-																Type:     schema.TypeSet,
+																Type:     schema.TypeList,
+																MaxItems: 1,
 																Optional: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
@@ -3174,7 +3537,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 															"item": {
 
-																Type:     schema.TypeSet,
+																Type:     schema.TypeList,
+																MaxItems: 1,
 																Optional: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
@@ -3251,7 +3615,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 															"item": {
 
-																Type:     schema.TypeSet,
+																Type:     schema.TypeList,
+																MaxItems: 1,
 																Optional: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
@@ -3310,7 +3675,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 			"api_rate_limit_legacy": {
 
-				Type:       schema.TypeSet,
+				Type:       schema.TypeList,
+				MaxItems:   1,
 				Optional:   true,
 				Deprecated: "This field is deprecated and will be removed in future release.",
 				Elem: &schema.Resource{
@@ -3326,7 +3692,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 									"api_endpoint_method": {
 
-										Type:       schema.TypeSet,
+										Type:       schema.TypeList,
+										MaxItems:   1,
 										Optional:   true,
 										Deprecated: "This field is deprecated and will be removed in future release.",
 										Elem: &schema.Resource{
@@ -3366,7 +3733,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 									"client_matcher": {
 
-										Type:       schema.TypeSet,
+										Type:       schema.TypeList,
+										MaxItems:   1,
 										Optional:   true,
 										Deprecated: "This field is deprecated and will be removed in future release.",
 										Elem: &schema.Resource{
@@ -3381,7 +3749,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 												"client_selector": {
 
-													Type:       schema.TypeSet,
+													Type:       schema.TypeList,
+													MaxItems:   1,
 													Optional:   true,
 													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
@@ -3403,7 +3772,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 												"ip_threat_category_list": {
 
-													Type:       schema.TypeSet,
+													Type:       schema.TypeList,
+													MaxItems:   1,
 													Optional:   true,
 													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
@@ -3432,7 +3802,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 												"asn_list": {
 
-													Type:       schema.TypeSet,
+													Type:       schema.TypeList,
+													MaxItems:   1,
 													Optional:   true,
 													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
@@ -3454,7 +3825,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 												"asn_matcher": {
 
-													Type:       schema.TypeSet,
+													Type:       schema.TypeList,
+													MaxItems:   1,
 													Optional:   true,
 													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
@@ -3498,7 +3870,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 												"ip_matcher": {
 
-													Type:       schema.TypeSet,
+													Type:       schema.TypeList,
+													MaxItems:   1,
 													Optional:   true,
 													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
@@ -3548,7 +3921,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 												"ip_prefix_list": {
 
-													Type:       schema.TypeSet,
+													Type:       schema.TypeList,
+													MaxItems:   1,
 													Optional:   true,
 													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
@@ -3587,7 +3961,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 												"tls_fingerprint_matcher": {
 
-													Type:       schema.TypeSet,
+													Type:       schema.TypeList,
+													MaxItems:   1,
 													Optional:   true,
 													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
@@ -3648,7 +4023,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 									"inline_rate_limiter": {
 
-										Type:       schema.TypeSet,
+										Type:       schema.TypeList,
+										MaxItems:   1,
 										Optional:   true,
 										Deprecated: "This field is deprecated and will be removed in future release.",
 										Elem: &schema.Resource{
@@ -3656,7 +4032,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 												"ref_user_id": {
 
-													Type:       schema.TypeSet,
+													Type:       schema.TypeList,
+													MaxItems:   1,
 													Optional:   true,
 													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
@@ -3705,7 +4082,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 									"ref_rate_limiter": {
 
-										Type:       schema.TypeSet,
+										Type:       schema.TypeList,
+										MaxItems:   1,
 										Optional:   true,
 										Deprecated: "This field is deprecated and will be removed in future release.",
 										Elem: &schema.Resource{
@@ -3732,7 +4110,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 									"request_matcher": {
 
-										Type:       schema.TypeSet,
+										Type:       schema.TypeList,
+										MaxItems:   1,
 										Optional:   true,
 										Deprecated: "This field is deprecated and will be removed in future release.",
 										Elem: &schema.Resource{
@@ -3768,7 +4147,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 															"item": {
 
-																Type:       schema.TypeSet,
+																Type:       schema.TypeList,
+																MaxItems:   1,
 																Optional:   true,
 																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
@@ -3856,7 +4236,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 															"item": {
 
-																Type:       schema.TypeSet,
+																Type:       schema.TypeList,
+																MaxItems:   1,
 																Optional:   true,
 																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
@@ -3944,7 +4325,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 															"item": {
 
-																Type:       schema.TypeSet,
+																Type:       schema.TypeList,
+																MaxItems:   1,
 																Optional:   true,
 																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
@@ -4031,7 +4413,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 															"item": {
 
-																Type:       schema.TypeSet,
+																Type:       schema.TypeList,
+																MaxItems:   1,
 																Optional:   true,
 																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
@@ -4091,7 +4474,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 						"bypass_rate_limiting_rules": {
 
-							Type:       schema.TypeSet,
+							Type:       schema.TypeList,
+							MaxItems:   1,
 							Optional:   true,
 							Deprecated: "This field is deprecated and will be removed in future release.",
 							Elem: &schema.Resource{
@@ -4107,7 +4491,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 												"client_matcher": {
 
-													Type:       schema.TypeSet,
+													Type:       schema.TypeList,
+													MaxItems:   1,
 													Optional:   true,
 													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
@@ -4122,7 +4507,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 															"client_selector": {
 
-																Type:       schema.TypeSet,
+																Type:       schema.TypeList,
+																MaxItems:   1,
 																Optional:   true,
 																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
@@ -4144,7 +4530,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 															"ip_threat_category_list": {
 
-																Type:       schema.TypeSet,
+																Type:       schema.TypeList,
+																MaxItems:   1,
 																Optional:   true,
 																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
@@ -4173,7 +4560,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 															"asn_list": {
 
-																Type:       schema.TypeSet,
+																Type:       schema.TypeList,
+																MaxItems:   1,
 																Optional:   true,
 																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
@@ -4195,7 +4583,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 															"asn_matcher": {
 
-																Type:       schema.TypeSet,
+																Type:       schema.TypeList,
+																MaxItems:   1,
 																Optional:   true,
 																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
@@ -4239,7 +4628,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 															"ip_matcher": {
 
-																Type:       schema.TypeSet,
+																Type:       schema.TypeList,
+																MaxItems:   1,
 																Optional:   true,
 																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
@@ -4289,7 +4679,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 															"ip_prefix_list": {
 
-																Type:       schema.TypeSet,
+																Type:       schema.TypeList,
+																MaxItems:   1,
 																Optional:   true,
 																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
@@ -4328,7 +4719,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 															"tls_fingerprint_matcher": {
 
-																Type:       schema.TypeSet,
+																Type:       schema.TypeList,
+																MaxItems:   1,
 																Optional:   true,
 																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
@@ -4382,7 +4774,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 												"api_endpoint": {
 
-													Type:       schema.TypeSet,
+													Type:       schema.TypeList,
+													MaxItems:   1,
 													Required:   true,
 													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
@@ -4410,7 +4803,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 												"api_groups": {
 
-													Type:       schema.TypeSet,
+													Type:       schema.TypeList,
+													MaxItems:   1,
 													Optional:   true,
 													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
@@ -4453,7 +4847,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 												"request_matcher": {
 
-													Type:       schema.TypeSet,
+													Type:       schema.TypeList,
+													MaxItems:   1,
 													Optional:   true,
 													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
@@ -4489,7 +4884,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 																		"item": {
 
-																			Type:       schema.TypeSet,
+																			Type:       schema.TypeList,
+																			MaxItems:   1,
 																			Optional:   true,
 																			Deprecated: "This field is deprecated and will be removed in future release.",
 																			Elem: &schema.Resource{
@@ -4577,7 +4973,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 																		"item": {
 
-																			Type:       schema.TypeSet,
+																			Type:       schema.TypeList,
+																			MaxItems:   1,
 																			Optional:   true,
 																			Deprecated: "This field is deprecated and will be removed in future release.",
 																			Elem: &schema.Resource{
@@ -4665,7 +5062,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 																		"item": {
 
-																			Type:       schema.TypeSet,
+																			Type:       schema.TypeList,
+																			MaxItems:   1,
 																			Optional:   true,
 																			Deprecated: "This field is deprecated and will be removed in future release.",
 																			Elem: &schema.Resource{
@@ -4752,7 +5150,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 																		"item": {
 
-																			Type:       schema.TypeSet,
+																			Type:       schema.TypeList,
+																			MaxItems:   1,
 																			Optional:   true,
 																			Deprecated: "This field is deprecated and will be removed in future release.",
 																			Elem: &schema.Resource{
@@ -4815,7 +5214,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 						"custom_ip_allowed_list": {
 
-							Type:       schema.TypeSet,
+							Type:       schema.TypeList,
+							MaxItems:   1,
 							Optional:   true,
 							Deprecated: "This field is deprecated and will be removed in future release.",
 							Elem: &schema.Resource{
@@ -4853,7 +5253,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 						"ip_allowed_list": {
 
-							Type:       schema.TypeSet,
+							Type:       schema.TypeList,
+							MaxItems:   1,
 							Optional:   true,
 							Deprecated: "This field is deprecated and will be removed in future release.",
 							Elem: &schema.Resource{
@@ -4913,7 +5314,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 									"client_matcher": {
 
-										Type:       schema.TypeSet,
+										Type:       schema.TypeList,
+										MaxItems:   1,
 										Optional:   true,
 										Deprecated: "This field is deprecated and will be removed in future release.",
 										Elem: &schema.Resource{
@@ -4928,7 +5330,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 												"client_selector": {
 
-													Type:       schema.TypeSet,
+													Type:       schema.TypeList,
+													MaxItems:   1,
 													Optional:   true,
 													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
@@ -4950,7 +5353,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 												"ip_threat_category_list": {
 
-													Type:       schema.TypeSet,
+													Type:       schema.TypeList,
+													MaxItems:   1,
 													Optional:   true,
 													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
@@ -4979,7 +5383,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 												"asn_list": {
 
-													Type:       schema.TypeSet,
+													Type:       schema.TypeList,
+													MaxItems:   1,
 													Optional:   true,
 													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
@@ -5001,7 +5406,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 												"asn_matcher": {
 
-													Type:       schema.TypeSet,
+													Type:       schema.TypeList,
+													MaxItems:   1,
 													Optional:   true,
 													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
@@ -5045,7 +5451,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 												"ip_matcher": {
 
-													Type:       schema.TypeSet,
+													Type:       schema.TypeList,
+													MaxItems:   1,
 													Optional:   true,
 													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
@@ -5095,7 +5502,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 												"ip_prefix_list": {
 
-													Type:       schema.TypeSet,
+													Type:       schema.TypeList,
+													MaxItems:   1,
 													Optional:   true,
 													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
@@ -5134,7 +5542,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 												"tls_fingerprint_matcher": {
 
-													Type:       schema.TypeSet,
+													Type:       schema.TypeList,
+													MaxItems:   1,
 													Optional:   true,
 													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
@@ -5195,7 +5604,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 									"inline_rate_limiter": {
 
-										Type:       schema.TypeSet,
+										Type:       schema.TypeList,
+										MaxItems:   1,
 										Optional:   true,
 										Deprecated: "This field is deprecated and will be removed in future release.",
 										Elem: &schema.Resource{
@@ -5203,7 +5613,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 												"ref_user_id": {
 
-													Type:       schema.TypeSet,
+													Type:       schema.TypeList,
+													MaxItems:   1,
 													Optional:   true,
 													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
@@ -5252,7 +5663,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 									"ref_rate_limiter": {
 
-										Type:       schema.TypeSet,
+										Type:       schema.TypeList,
+										MaxItems:   1,
 										Optional:   true,
 										Deprecated: "This field is deprecated and will be removed in future release.",
 										Elem: &schema.Resource{
@@ -5279,7 +5691,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 									"request_matcher": {
 
-										Type:       schema.TypeSet,
+										Type:       schema.TypeList,
+										MaxItems:   1,
 										Optional:   true,
 										Deprecated: "This field is deprecated and will be removed in future release.",
 										Elem: &schema.Resource{
@@ -5315,7 +5728,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 															"item": {
 
-																Type:       schema.TypeSet,
+																Type:       schema.TypeList,
+																MaxItems:   1,
 																Optional:   true,
 																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
@@ -5403,7 +5817,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 															"item": {
 
-																Type:       schema.TypeSet,
+																Type:       schema.TypeList,
+																MaxItems:   1,
 																Optional:   true,
 																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
@@ -5491,7 +5906,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 															"item": {
 
-																Type:       schema.TypeSet,
+																Type:       schema.TypeList,
+																MaxItems:   1,
 																Optional:   true,
 																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
@@ -5578,7 +5994,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 															"item": {
 
-																Type:       schema.TypeSet,
+																Type:       schema.TypeList,
+																MaxItems:   1,
 																Optional:   true,
 																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
@@ -5685,7 +6102,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 						"http_header": {
 
-							Type:     schema.TypeSet,
+							Type:     schema.TypeList,
+							MaxItems: 1,
 							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
@@ -5737,6 +6155,12 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 							Optional: true,
 						},
 
+						"ipv6_prefix": {
+
+							Type:     schema.TypeString,
+							Optional: true,
+						},
+
 						"user_identifier": {
 
 							Type:     schema.TypeString,
@@ -5750,7 +6174,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 						"metadata": {
 
-							Type:     schema.TypeSet,
+							Type:     schema.TypeList,
+							MaxItems: 1,
 							Required: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
@@ -5779,7 +6204,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 			"bot_defense": {
 
-				Type:     schema.TypeSet,
+				Type:     schema.TypeList,
+				MaxItems: 1,
 				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
@@ -5800,7 +6226,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 						"policy": {
 
-							Type:     schema.TypeSet,
+							Type:     schema.TypeList,
+							MaxItems: 1,
 							Required: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
@@ -5813,7 +6240,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 									"js_insert_all_pages": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -5828,7 +6256,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 									"js_insert_all_pages_except": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -5848,7 +6277,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 															"domain": {
 
-																Type:     schema.TypeSet,
+																Type:     schema.TypeList,
+																MaxItems: 1,
 																Optional: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
@@ -5876,7 +6306,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 															"metadata": {
 
-																Type:     schema.TypeSet,
+																Type:     schema.TypeList,
+																MaxItems: 1,
 																Required: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
@@ -5902,7 +6333,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 															"path": {
 
-																Type:     schema.TypeSet,
+																Type:     schema.TypeList,
+																MaxItems: 1,
 																Required: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
@@ -5941,7 +6373,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 									"js_insertion_rules": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -5961,7 +6394,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 															"domain": {
 
-																Type:     schema.TypeSet,
+																Type:     schema.TypeList,
+																MaxItems: 1,
 																Optional: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
@@ -5989,7 +6423,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 															"metadata": {
 
-																Type:     schema.TypeSet,
+																Type:     schema.TypeList,
+																MaxItems: 1,
 																Required: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
@@ -6015,7 +6450,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 															"path": {
 
-																Type:     schema.TypeSet,
+																Type:     schema.TypeList,
+																MaxItems: 1,
 																Required: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
@@ -6059,7 +6495,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 															"domain": {
 
-																Type:     schema.TypeSet,
+																Type:     schema.TypeList,
+																MaxItems: 1,
 																Optional: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
@@ -6092,7 +6529,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 															"metadata": {
 
-																Type:     schema.TypeSet,
+																Type:     schema.TypeList,
+																MaxItems: 1,
 																Required: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
@@ -6118,7 +6556,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 															"path": {
 
-																Type:     schema.TypeSet,
+																Type:     schema.TypeList,
+																MaxItems: 1,
 																Required: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
@@ -6168,14 +6607,16 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 									"mobile_sdk_config": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
 												"mobile_identifier": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Optional: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -6201,7 +6642,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 																		"item": {
 
-																			Type:     schema.TypeSet,
+																			Type:     schema.TypeList,
+																			MaxItems: 1,
 																			Optional: true,
 																			Elem: &schema.Resource{
 																				Schema: map[string]*schema.Schema{
@@ -6280,14 +6722,16 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 												"web_mobile": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Optional: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
 															"header": {
 
-																Type:       schema.TypeSet,
+																Type:       schema.TypeList,
+																MaxItems:   1,
 																Optional:   true,
 																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
@@ -6309,7 +6753,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 																		"item": {
 
-																			Type:       schema.TypeSet,
+																			Type:       schema.TypeList,
+																			MaxItems:   1,
 																			Optional:   true,
 																			Deprecated: "This field is deprecated and will be removed in future release.",
 																			Elem: &schema.Resource{
@@ -6384,7 +6829,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 																		"item": {
 
-																			Type:       schema.TypeSet,
+																			Type:       schema.TypeList,
+																			MaxItems:   1,
 																			Optional:   true,
 																			Deprecated: "This field is deprecated and will be removed in future release.",
 																			Elem: &schema.Resource{
@@ -6451,7 +6897,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 												"domain": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Optional: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -6479,14 +6926,16 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 												"flow_label": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Optional: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
 															"account_management": {
 
-																Type:     schema.TypeSet,
+																Type:     schema.TypeList,
+																MaxItems: 1,
 																Optional: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
@@ -6508,14 +6957,16 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 															"authentication": {
 
-																Type:     schema.TypeSet,
+																Type:     schema.TypeList,
+																MaxItems: 1,
 																Optional: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
 																		"login": {
 
-																			Type:     schema.TypeSet,
+																			Type:     schema.TypeList,
+																			MaxItems: 1,
 																			Optional: true,
 																			Elem: &schema.Resource{
 																				Schema: map[string]*schema.Schema{
@@ -6528,7 +6979,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 																					"transaction_result": {
 
-																						Type:     schema.TypeSet,
+																						Type:     schema.TypeList,
+																						MaxItems: 1,
 																						Optional: true,
 																						Elem: &schema.Resource{
 																							Schema: map[string]*schema.Schema{
@@ -6628,7 +7080,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 															"financial_services": {
 
-																Type:     schema.TypeSet,
+																Type:     schema.TypeList,
+																MaxItems: 1,
 																Optional: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
@@ -6650,7 +7103,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 															"flight": {
 
-																Type:     schema.TypeSet,
+																Type:     schema.TypeList,
+																MaxItems: 1,
 																Optional: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
@@ -6666,7 +7120,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 															"profile_management": {
 
-																Type:     schema.TypeSet,
+																Type:     schema.TypeList,
+																MaxItems: 1,
 																Optional: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
@@ -6694,7 +7149,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 															"search": {
 
-																Type:     schema.TypeSet,
+																Type:     schema.TypeList,
+																MaxItems: 1,
 																Optional: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
@@ -6728,7 +7184,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 															"shopping_gift_cards": {
 
-																Type:     schema.TypeSet,
+																Type:     schema.TypeList,
+																MaxItems: 1,
 																Optional: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
@@ -6829,6 +7286,86 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 													Optional: true,
 												},
 
+												"headers": {
+
+													Type:     schema.TypeList,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"invert_matcher": {
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"check_not_present": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"check_present": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"item": {
+
+																Type:     schema.TypeList,
+																MaxItems: 1,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"exact_values": {
+
+																			Type: schema.TypeList,
+
+																			Optional: true,
+																			Elem: &schema.Schema{
+																				Type: schema.TypeString,
+																			},
+																		},
+
+																		"regex_values": {
+
+																			Type: schema.TypeList,
+
+																			Optional: true,
+																			Elem: &schema.Schema{
+																				Type: schema.TypeString,
+																			},
+																		},
+
+																		"transformers": {
+
+																			Type: schema.TypeList,
+
+																			Optional: true,
+																			Elem: &schema.Schema{
+																				Type: schema.TypeString,
+																			},
+																		},
+																	},
+																},
+															},
+
+															"presence": {
+
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
+															"name": {
+																Type:     schema.TypeString,
+																Required: true,
+															},
+														},
+													},
+												},
+
 												"http_methods": {
 
 													Type: schema.TypeList,
@@ -6841,7 +7378,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 												"metadata": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Required: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -6867,14 +7405,16 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 												"mitigation": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Required: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
 															"block": {
 
-																Type:     schema.TypeSet,
+																Type:     schema.TypeList,
+																MaxItems: 1,
 																Optional: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
@@ -6900,14 +7440,16 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 															"flag": {
 
-																Type:     schema.TypeSet,
+																Type:     schema.TypeList,
+																MaxItems: 1,
 																Optional: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
 																		"append_headers": {
 
-																			Type:     schema.TypeSet,
+																			Type:     schema.TypeList,
+																			MaxItems: 1,
 																			Optional: true,
 																			Elem: &schema.Resource{
 																				Schema: map[string]*schema.Schema{
@@ -6943,7 +7485,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 															"redirect": {
 
-																Type:     schema.TypeSet,
+																Type:     schema.TypeList,
+																MaxItems: 1,
 																Optional: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
@@ -6961,7 +7504,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 												"path": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Required: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -6991,6 +7535,86 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 													Type:     schema.TypeString,
 													Optional: true,
 												},
+
+												"query_params": {
+
+													Type:     schema.TypeList,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"invert_matcher": {
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"key": {
+																Type:     schema.TypeString,
+																Required: true,
+															},
+
+															"check_not_present": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"check_present": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"item": {
+
+																Type:     schema.TypeList,
+																MaxItems: 1,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"exact_values": {
+
+																			Type: schema.TypeList,
+
+																			Optional: true,
+																			Elem: &schema.Schema{
+																				Type: schema.TypeString,
+																			},
+																		},
+
+																		"regex_values": {
+
+																			Type: schema.TypeList,
+
+																			Optional: true,
+																			Elem: &schema.Schema{
+																				Type: schema.TypeString,
+																			},
+																		},
+
+																		"transformers": {
+
+																			Type: schema.TypeList,
+
+																			Optional: true,
+																			Elem: &schema.Schema{
+																				Type: schema.TypeString,
+																			},
+																		},
+																	},
+																},
+															},
+
+															"presence": {
+
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+														},
+													},
+												},
 											},
 										},
 									},
@@ -7013,7 +7637,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 			"bot_defense_advanced": {
 
-				Type:       schema.TypeSet,
+				Type:       schema.TypeList,
+				MaxItems:   1,
 				Optional:   true,
 				Deprecated: "This field is deprecated and will be removed in future release.",
 				Elem: &schema.Resource{
@@ -7021,7 +7646,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 						"mobile": {
 
-							Type:       schema.TypeSet,
+							Type:       schema.TypeList,
+							MaxItems:   1,
 							Optional:   true,
 							Deprecated: "This field is deprecated and will be removed in future release.",
 							Elem: &schema.Resource{
@@ -7048,7 +7674,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 						"policy": {
 
-							Type:       schema.TypeSet,
+							Type:       schema.TypeList,
+							MaxItems:   1,
 							Required:   true,
 							Deprecated: "This field is deprecated and will be removed in future release.",
 							Elem: &schema.Resource{
@@ -7069,7 +7696,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 									"mobile_sdk_config": {
 
-										Type:       schema.TypeSet,
+										Type:       schema.TypeList,
+										MaxItems:   1,
 										Optional:   true,
 										Deprecated: "This field is deprecated and will be removed in future release.",
 										Elem: &schema.Resource{
@@ -7077,7 +7705,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 												"mobile_identifier": {
 
-													Type:       schema.TypeSet,
+													Type:       schema.TypeList,
+													MaxItems:   1,
 													Optional:   true,
 													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
@@ -7107,7 +7736,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 																		"item": {
 
-																			Type:       schema.TypeSet,
+																			Type:       schema.TypeList,
+																			MaxItems:   1,
 																			Optional:   true,
 																			Deprecated: "This field is deprecated and will be removed in future release.",
 																			Elem: &schema.Resource{
@@ -7188,7 +7818,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 												"web_mobile_client": {
 
-													Type:       schema.TypeSet,
+													Type:       schema.TypeList,
+													MaxItems:   1,
 													Optional:   true,
 													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
@@ -7196,7 +7827,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 															"header": {
 
-																Type:       schema.TypeSet,
+																Type:       schema.TypeList,
+																MaxItems:   1,
 																Optional:   true,
 																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
@@ -7218,7 +7850,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 																		"item": {
 
-																			Type:       schema.TypeSet,
+																			Type:       schema.TypeList,
+																			MaxItems:   1,
 																			Optional:   true,
 																			Deprecated: "This field is deprecated and will be removed in future release.",
 																			Elem: &schema.Resource{
@@ -7293,7 +7926,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 																		"item": {
 
-																			Type:       schema.TypeSet,
+																			Type:       schema.TypeList,
+																			MaxItems:   1,
 																			Optional:   true,
 																			Deprecated: "This field is deprecated and will be removed in future release.",
 																			Elem: &schema.Resource{
@@ -7362,7 +7996,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 												"domain": {
 
-													Type:       schema.TypeSet,
+													Type:       schema.TypeList,
+													MaxItems:   1,
 													Optional:   true,
 													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
@@ -7394,7 +8029,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 												"flow_label": {
 
-													Type:       schema.TypeSet,
+													Type:       schema.TypeList,
+													MaxItems:   1,
 													Optional:   true,
 													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
@@ -7402,7 +8038,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 															"account_management": {
 
-																Type:       schema.TypeSet,
+																Type:       schema.TypeList,
+																MaxItems:   1,
 																Optional:   true,
 																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
@@ -7427,7 +8064,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 															"authentication": {
 
-																Type:       schema.TypeSet,
+																Type:       schema.TypeList,
+																MaxItems:   1,
 																Optional:   true,
 																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
@@ -7435,7 +8073,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 																		"login": {
 
-																			Type:       schema.TypeSet,
+																			Type:       schema.TypeList,
+																			MaxItems:   1,
 																			Optional:   true,
 																			Deprecated: "This field is deprecated and will be removed in future release.",
 																			Elem: &schema.Resource{
@@ -7450,7 +8089,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 																					"transaction_result": {
 
-																						Type:       schema.TypeSet,
+																						Type:       schema.TypeList,
+																						MaxItems:   1,
 																						Optional:   true,
 																						Deprecated: "This field is deprecated and will be removed in future release.",
 																						Elem: &schema.Resource{
@@ -7563,7 +8203,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 															"financial_services": {
 
-																Type:       schema.TypeSet,
+																Type:       schema.TypeList,
+																MaxItems:   1,
 																Optional:   true,
 																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
@@ -7588,7 +8229,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 															"flight": {
 
-																Type:       schema.TypeSet,
+																Type:       schema.TypeList,
+																MaxItems:   1,
 																Optional:   true,
 																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
@@ -7606,7 +8248,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 															"profile_management": {
 
-																Type:       schema.TypeSet,
+																Type:       schema.TypeList,
+																MaxItems:   1,
 																Optional:   true,
 																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
@@ -7638,7 +8281,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 															"search": {
 
-																Type:       schema.TypeSet,
+																Type:       schema.TypeList,
+																MaxItems:   1,
 																Optional:   true,
 																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
@@ -7677,7 +8321,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 															"shopping_gift_cards": {
 
-																Type:       schema.TypeSet,
+																Type:       schema.TypeList,
+																MaxItems:   1,
 																Optional:   true,
 																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
@@ -7793,7 +8438,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 												"metadata": {
 
-													Type:       schema.TypeSet,
+													Type:       schema.TypeList,
+													MaxItems:   1,
 													Required:   true,
 													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
@@ -7822,7 +8468,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 												"path": {
 
-													Type:       schema.TypeSet,
+													Type:       schema.TypeList,
+													MaxItems:   1,
 													Required:   true,
 													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
@@ -7929,7 +8576,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 						"web": {
 
-							Type:       schema.TypeSet,
+							Type:       schema.TypeList,
+							MaxItems:   1,
 							Optional:   true,
 							Deprecated: "This field is deprecated and will be removed in future release.",
 							Elem: &schema.Resource{
@@ -7965,7 +8613,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 			"captcha_challenge": {
 
-				Type:     schema.TypeSet,
+				Type:     schema.TypeList,
+				MaxItems: 1,
 				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
@@ -7985,14 +8634,16 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 			"enable_challenge": {
 
-				Type:     schema.TypeSet,
+				Type:     schema.TypeList,
+				MaxItems: 1,
 				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 
 						"captcha_challenge_parameters": {
 
-							Type:     schema.TypeSet,
+							Type:     schema.TypeList,
+							MaxItems: 1,
 							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
@@ -8024,7 +8675,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 						"js_challenge_parameters": {
 
-							Type:     schema.TypeSet,
+							Type:     schema.TypeList,
+							MaxItems: 1,
 							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
@@ -8055,7 +8707,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 						"malicious_user_mitigation": {
 
-							Type:     schema.TypeSet,
+							Type:     schema.TypeList,
+							MaxItems: 1,
 							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
@@ -8081,7 +8734,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 			"js_challenge": {
 
-				Type:     schema.TypeSet,
+				Type:     schema.TypeList,
+				MaxItems: 1,
 				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
@@ -8112,14 +8766,16 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 			"policy_based_challenge": {
 
-				Type:     schema.TypeSet,
+				Type:     schema.TypeList,
+				MaxItems: 1,
 				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 
 						"captcha_challenge_parameters": {
 
-							Type:     schema.TypeSet,
+							Type:     schema.TypeList,
+							MaxItems: 1,
 							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
@@ -8169,7 +8825,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 						"js_challenge_parameters": {
 
-							Type:     schema.TypeSet,
+							Type:     schema.TypeList,
+							MaxItems: 1,
 							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
@@ -8200,7 +8857,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 						"malicious_user_mitigation": {
 
-							Type:     schema.TypeSet,
+							Type:     schema.TypeList,
+							MaxItems: 1,
 							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
@@ -8223,7 +8881,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 						"rule_list": {
 
-							Type:     schema.TypeSet,
+							Type:     schema.TypeList,
+							MaxItems: 1,
 							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
@@ -8237,7 +8896,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 												"metadata": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Required: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -8263,7 +8923,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 												"spec": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Required: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -8294,7 +8955,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 																		"item": {
 
-																			Type:     schema.TypeSet,
+																			Type:     schema.TypeList,
+																			MaxItems: 1,
 																			Optional: true,
 																			Elem: &schema.Resource{
 																				Schema: map[string]*schema.Schema{
@@ -8355,7 +9017,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 															"asn_list": {
 
-																Type:     schema.TypeSet,
+																Type:     schema.TypeList,
+																MaxItems: 1,
 																Optional: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
@@ -8375,7 +9038,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 															"asn_matcher": {
 
-																Type:     schema.TypeSet,
+																Type:     schema.TypeList,
+																MaxItems: 1,
 																Optional: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
@@ -8413,7 +9077,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 															"body_matcher": {
 
-																Type:     schema.TypeSet,
+																Type:     schema.TypeList,
+																MaxItems: 1,
 																Optional: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
@@ -8484,7 +9149,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 															"client_name_matcher": {
 
-																Type:       schema.TypeSet,
+																Type:       schema.TypeList,
+																MaxItems:   1,
 																Optional:   true,
 																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
@@ -8528,7 +9194,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 															"client_selector": {
 
-																Type:     schema.TypeSet,
+																Type:     schema.TypeList,
+																MaxItems: 1,
 																Optional: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
@@ -8572,7 +9239,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 																		"item": {
 
-																			Type:     schema.TypeSet,
+																			Type:     schema.TypeList,
+																			MaxItems: 1,
 																			Optional: true,
 																			Elem: &schema.Resource{
 																				Schema: map[string]*schema.Schema{
@@ -8627,7 +9295,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 															"domain_matcher": {
 
-																Type:     schema.TypeSet,
+																Type:     schema.TypeList,
+																MaxItems: 1,
 																Optional: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
@@ -8686,7 +9355,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 																		"item": {
 
-																			Type:     schema.TypeSet,
+																			Type:     schema.TypeList,
+																			MaxItems: 1,
 																			Optional: true,
 																			Elem: &schema.Resource{
 																				Schema: map[string]*schema.Schema{
@@ -8741,7 +9411,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 															"http_method": {
 
-																Type:     schema.TypeSet,
+																Type:     schema.TypeList,
+																MaxItems: 1,
 																Optional: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
@@ -8772,7 +9443,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 															"ip_matcher": {
 
-																Type:     schema.TypeSet,
+																Type:     schema.TypeList,
+																MaxItems: 1,
 																Optional: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
@@ -8815,7 +9487,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 															"ip_prefix_list": {
 
-																Type:     schema.TypeSet,
+																Type:     schema.TypeList,
+																MaxItems: 1,
 																Optional: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
@@ -8850,7 +9523,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 															"path": {
 
-																Type:     schema.TypeSet,
+																Type:     schema.TypeList,
+																MaxItems: 1,
 																Optional: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
@@ -8944,7 +9618,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 																		"item": {
 
-																			Type:     schema.TypeSet,
+																			Type:     schema.TypeList,
+																			MaxItems: 1,
 																			Optional: true,
 																			Elem: &schema.Resource{
 																				Schema: map[string]*schema.Schema{
@@ -8994,7 +9669,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 															"ja4_tls_fingerprint": {
 
-																Type:       schema.TypeSet,
+																Type:       schema.TypeList,
+																MaxItems:   1,
 																Optional:   true,
 																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
@@ -9016,7 +9692,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 															"tls_fingerprint_matcher": {
 
-																Type:     schema.TypeSet,
+																Type:     schema.TypeList,
+																MaxItems: 1,
 																Optional: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
@@ -9072,7 +9749,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 						"temporary_user_blocking": {
 
-							Type:       schema.TypeSet,
+							Type:       schema.TypeList,
+							MaxItems:   1,
 							Optional:   true,
 							Deprecated: "This field is deprecated and will be removed in future release.",
 							Elem: &schema.Resource{
@@ -9092,14 +9770,16 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 			"client_side_defense": {
 
-				Type:     schema.TypeSet,
+				Type:     schema.TypeList,
+				MaxItems: 1,
 				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 
 						"policy": {
 
-							Type:     schema.TypeSet,
+							Type:     schema.TypeList,
+							MaxItems: 1,
 							Required: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
@@ -9118,7 +9798,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 									"js_insert_all_pages_except": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -9138,7 +9819,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 															"domain": {
 
-																Type:     schema.TypeSet,
+																Type:     schema.TypeList,
+																MaxItems: 1,
 																Optional: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
@@ -9166,7 +9848,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 															"metadata": {
 
-																Type:     schema.TypeSet,
+																Type:     schema.TypeList,
+																MaxItems: 1,
 																Required: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
@@ -9192,7 +9875,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 															"path": {
 
-																Type:     schema.TypeSet,
+																Type:     schema.TypeList,
+																MaxItems: 1,
 																Required: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
@@ -9226,7 +9910,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 									"js_insertion_rules": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -9246,7 +9931,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 															"domain": {
 
-																Type:     schema.TypeSet,
+																Type:     schema.TypeList,
+																MaxItems: 1,
 																Optional: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
@@ -9274,7 +9960,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 															"metadata": {
 
-																Type:     schema.TypeSet,
+																Type:     schema.TypeList,
+																MaxItems: 1,
 																Required: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
@@ -9300,7 +9987,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 															"path": {
 
-																Type:     schema.TypeSet,
+																Type:     schema.TypeList,
+																MaxItems: 1,
 																Required: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
@@ -9344,7 +10032,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 															"domain": {
 
-																Type:     schema.TypeSet,
+																Type:     schema.TypeList,
+																MaxItems: 1,
 																Optional: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
@@ -9372,7 +10061,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 															"metadata": {
 
-																Type:     schema.TypeSet,
+																Type:     schema.TypeList,
+																MaxItems: 1,
 																Required: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
@@ -9398,7 +10088,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 															"path": {
 
-																Type:     schema.TypeSet,
+																Type:     schema.TypeList,
+																MaxItems: 1,
 																Required: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
@@ -9444,7 +10135,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 			"cors_policy": {
 
-				Type:     schema.TypeSet,
+				Type:     schema.TypeList,
+				MaxItems: 1,
 				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
@@ -9510,7 +10202,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 			"csrf_policy": {
 
-				Type:     schema.TypeSet,
+				Type:     schema.TypeList,
+				MaxItems: 1,
 				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
@@ -9523,7 +10216,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 						"custom_domain_list": {
 
-							Type:     schema.TypeSet,
+							Type:     schema.TypeList,
+							MaxItems: 1,
 							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
@@ -9589,7 +10283,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 						"metadata": {
 
-							Type:     schema.TypeSet,
+							Type:     schema.TypeList,
+							MaxItems: 1,
 							Required: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
@@ -9615,7 +10310,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 						"path": {
 
-							Type:     schema.TypeSet,
+							Type:     schema.TypeList,
+							MaxItems: 1,
 							Required: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
@@ -9658,7 +10354,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 						"metadata": {
 
-							Type:     schema.TypeSet,
+							Type:     schema.TypeList,
+							MaxItems: 1,
 							Required: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
@@ -9690,14 +10387,16 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 						"ddos_client_source": {
 
-							Type:     schema.TypeSet,
+							Type:     schema.TypeList,
+							MaxItems: 1,
 							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
 									"asn_list": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -9727,7 +10426,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 									"tls_fingerprint_matcher": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -9770,7 +10470,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 						"ip_prefix_list": {
 
-							Type:     schema.TypeSet,
+							Type:     schema.TypeList,
+							MaxItems: 1,
 							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
@@ -9820,7 +10521,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 						"cluster": {
 
-							Type:     schema.TypeSet,
+							Type:     schema.TypeList,
+							MaxItems: 1,
 							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
@@ -9848,7 +10550,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 						"pool": {
 
-							Type:     schema.TypeSet,
+							Type:     schema.TypeList,
+							MaxItems: 1,
 							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
@@ -9929,7 +10632,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 						"graphql_settings": {
 
-							Type:     schema.TypeSet,
+							Type:     schema.TypeList,
+							MaxItems: 1,
 							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
@@ -9978,7 +10682,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 						"metadata": {
 
-							Type:     schema.TypeSet,
+							Type:     schema.TypeList,
+							MaxItems: 1,
 							Required: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
@@ -10019,7 +10724,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 			"cookie_stickiness": {
 
-				Type:     schema.TypeSet,
+				Type:     schema.TypeList,
+				MaxItems: 1,
 				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
@@ -10104,7 +10810,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 			"ring_hash": {
 
-				Type:     schema.TypeSet,
+				Type:     schema.TypeList,
+				MaxItems: 1,
 				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
@@ -10118,7 +10825,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 									"cookie": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -10232,7 +10940,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 			"enable_ip_reputation": {
 
-				Type:     schema.TypeSet,
+				Type:     schema.TypeList,
+				MaxItems: 1,
 				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
@@ -10252,14 +10961,16 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 			"jwt_validation": {
 
-				Type:     schema.TypeSet,
+				Type:     schema.TypeList,
+				MaxItems: 1,
 				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 
 						"action": {
 
-							Type:     schema.TypeSet,
+							Type:     schema.TypeList,
+							MaxItems: 1,
 							Required: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
@@ -10295,7 +11006,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 						"jwks_config": {
 
-							Type:     schema.TypeSet,
+							Type:     schema.TypeList,
+							MaxItems: 1,
 							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
@@ -10310,7 +11022,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 						"mandatory_claims": {
 
-							Type:     schema.TypeSet,
+							Type:     schema.TypeList,
+							MaxItems: 1,
 							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
@@ -10330,14 +11043,16 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 						"reserved_claims": {
 
-							Type:     schema.TypeSet,
+							Type:     schema.TypeList,
+							MaxItems: 1,
 							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
 									"audience": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -10390,7 +11105,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 						"target": {
 
-							Type:     schema.TypeSet,
+							Type:     schema.TypeList,
+							MaxItems: 1,
 							Required: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
@@ -10403,7 +11119,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 									"api_groups": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -10423,7 +11140,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 									"base_paths": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -10446,7 +11164,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 						"token_location": {
 
-							Type:     schema.TypeSet,
+							Type:     schema.TypeList,
+							MaxItems: 1,
 							Required: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
@@ -10498,7 +11217,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 			"l7_ddos_action_js_challenge": {
 
-				Type:     schema.TypeSet,
+				Type:     schema.TypeList,
+				MaxItems: 1,
 				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
@@ -10530,7 +11250,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 			"http": {
 
-				Type:     schema.TypeSet,
+				Type:     schema.TypeList,
+				MaxItems: 1,
 				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
@@ -10557,7 +11278,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 			"https": {
 
-				Type:     schema.TypeSet,
+				Type:     schema.TypeList,
+				MaxItems: 1,
 				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
@@ -10565,6 +11287,29 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 						"add_hsts": {
 							Type:     schema.TypeBool,
 							Optional: true,
+						},
+
+						"coalescing_options": {
+
+							Type:     schema.TypeList,
+							MaxItems: 1,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"default_coalescing": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"strict_coalescing": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+								},
+							},
 						},
 
 						"connection_idle_timeout": {
@@ -10586,7 +11331,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 						"header_transformation_type": {
 
-							Type:       schema.TypeSet,
+							Type:       schema.TypeList,
+							MaxItems:   1,
 							Optional:   true,
 							Deprecated: "This field is deprecated and will be removed in future release.",
 							Elem: &schema.Resource{
@@ -10625,21 +11371,24 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 						"http_protocol_options": {
 
-							Type:     schema.TypeSet,
+							Type:     schema.TypeList,
+							MaxItems: 1,
 							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
 									"http_protocol_enable_v1_only": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
 												"header_transformation": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Optional: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -10744,7 +11493,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 						"tls_cert_params": {
 
-							Type:     schema.TypeSet,
+							Type:     schema.TypeList,
+							MaxItems: 1,
 							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
@@ -10785,7 +11535,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 									"use_mtls": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -10797,7 +11548,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 												"crl": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Optional: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -10831,7 +11583,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 												"trusted_ca": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Optional: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -10871,7 +11624,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 												"xfcc_options": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Optional: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -10894,14 +11648,16 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 									"tls_config": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
 												"custom_security": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Optional: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -10955,7 +11711,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 						"tls_parameters": {
 
-							Type:     schema.TypeSet,
+							Type:     schema.TypeList,
+							MaxItems: 1,
 							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
@@ -10968,7 +11725,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 									"use_mtls": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -10980,7 +11738,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 												"crl": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Optional: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -11014,7 +11773,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 												"trusted_ca": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Optional: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -11054,7 +11814,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 												"xfcc_options": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Optional: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -11094,7 +11855,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 												"custom_hash_algorithms": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Optional: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -11114,7 +11876,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 												"disable_ocsp_stapling": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Optional: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{},
@@ -11123,7 +11886,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 												"use_system_defaults": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Optional: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{},
@@ -11132,14 +11896,16 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 												"private_key": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Required: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
 															"blindfold_secret_info_internal": {
 
-																Type:       schema.TypeSet,
+																Type:       schema.TypeList,
+																MaxItems:   1,
 																Optional:   true,
 																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
@@ -11174,7 +11940,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 															"blindfold_secret_info": {
 
-																Type:     schema.TypeSet,
+																Type:     schema.TypeList,
+																MaxItems: 1,
 																Optional: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
@@ -11199,7 +11966,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 															"clear_secret_info": {
 
-																Type:     schema.TypeSet,
+																Type:     schema.TypeList,
+																MaxItems: 1,
 																Optional: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
@@ -11219,7 +11987,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 															"vault_secret_info": {
 
-																Type:       schema.TypeSet,
+																Type:       schema.TypeList,
+																MaxItems:   1,
 																Optional:   true,
 																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
@@ -11260,7 +12029,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 															"wingman_secret_info": {
 
-																Type:       schema.TypeSet,
+																Type:       schema.TypeList,
+																MaxItems:   1,
 																Optional:   true,
 																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
@@ -11283,14 +12053,16 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 									"tls_config": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
 												"custom_security": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Optional: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -11347,7 +12119,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 			"https_auto_cert": {
 
-				Type:     schema.TypeSet,
+				Type:     schema.TypeList,
+				MaxItems: 1,
 				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
@@ -11355,6 +12128,29 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 						"add_hsts": {
 							Type:     schema.TypeBool,
 							Optional: true,
+						},
+
+						"coalescing_options": {
+
+							Type:     schema.TypeList,
+							MaxItems: 1,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"default_coalescing": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"strict_coalescing": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+								},
+							},
 						},
 
 						"connection_idle_timeout": {
@@ -11376,7 +12172,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 						"header_transformation_type": {
 
-							Type:       schema.TypeSet,
+							Type:       schema.TypeList,
+							MaxItems:   1,
 							Optional:   true,
 							Deprecated: "This field is deprecated and will be removed in future release.",
 							Elem: &schema.Resource{
@@ -11415,21 +12212,24 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 						"http_protocol_options": {
 
-							Type:     schema.TypeSet,
+							Type:     schema.TypeList,
+							MaxItems: 1,
 							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
 									"http_protocol_enable_v1_only": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
 												"header_transformation": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Optional: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -11492,7 +12292,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 						"use_mtls": {
 
-							Type:     schema.TypeSet,
+							Type:     schema.TypeList,
+							MaxItems: 1,
 							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
@@ -11504,7 +12305,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 									"crl": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -11538,7 +12340,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 									"trusted_ca": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -11578,7 +12381,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 									"xfcc_options": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -11649,14 +12453,16 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 						"tls_config": {
 
-							Type:     schema.TypeSet,
+							Type:     schema.TypeList,
+							MaxItems: 1,
 							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
 									"custom_security": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -11722,7 +12528,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 			"malicious_user_mitigation": {
 
-				Type:       schema.TypeSet,
+				Type:       schema.TypeList,
+				MaxItems:   1,
 				Optional:   true,
 				Deprecated: "This field is deprecated and will be removed in future release.",
 				Elem: &schema.Resource{
@@ -11747,6 +12554,198 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 				},
 			},
 
+			"disable_malware_protection": {
+
+				Type:       schema.TypeBool,
+				Optional:   true,
+				Deprecated: "This field is deprecated and will be removed in future release.",
+			},
+
+			"malware_protection_settings": {
+
+				Type:       schema.TypeList,
+				MaxItems:   1,
+				Optional:   true,
+				Deprecated: "This field is deprecated and will be removed in future release.",
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+
+						"malware_protection_rules": {
+
+							Type:       schema.TypeList,
+							Required:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"action": {
+
+										Type:       schema.TypeList,
+										MaxItems:   1,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"block": {
+
+													Type:       schema.TypeBool,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+
+												"report": {
+
+													Type:       schema.TypeBool,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+											},
+										},
+									},
+
+									"domain": {
+
+										Type:       schema.TypeList,
+										MaxItems:   1,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"any_domain": {
+
+													Type:       schema.TypeList,
+													MaxItems:   1,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{},
+													},
+												},
+
+												"domain": {
+
+													Type:       schema.TypeList,
+													MaxItems:   1,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"exact_value": {
+
+																Type:       schema.TypeString,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
+															"regex_value": {
+
+																Type:       schema.TypeString,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
+															"suffix_value": {
+
+																Type:       schema.TypeString,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+														},
+													},
+												},
+											},
+										},
+									},
+
+									"http_methods": {
+
+										Type: schema.TypeList,
+
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+										Elem: &schema.Schema{
+											Type: schema.TypeString,
+										},
+									},
+
+									"metadata": {
+
+										Type:       schema.TypeList,
+										MaxItems:   1,
+										Required:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"description": {
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+
+												"disable": {
+													Type:       schema.TypeBool,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+
+												"name": {
+													Type:       schema.TypeString,
+													Required:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+											},
+										},
+									},
+
+									"path": {
+
+										Type:       schema.TypeList,
+										MaxItems:   1,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"path": {
+
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+
+												"prefix": {
+
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+
+												"regex": {
+
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+											},
+										},
+									},
+
+									"protocol": {
+										Type:       schema.TypeString,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+
 			"multi_lb_app": {
 
 				Type:       schema.TypeBool,
@@ -11756,7 +12755,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 			"single_lb_app": {
 
-				Type:       schema.TypeSet,
+				Type:       schema.TypeList,
+				MaxItems:   1,
 				Optional:   true,
 				Deprecated: "This field is deprecated and will be removed in future release.",
 				Elem: &schema.Resource{
@@ -11771,15 +12771,245 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 						"enable_discovery": {
 
-							Type:       schema.TypeSet,
+							Type:       schema.TypeList,
+							MaxItems:   1,
 							Optional:   true,
 							Deprecated: "This field is deprecated and will be removed in future release.",
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
+									"api_crawler": {
+
+										Type:       schema.TypeList,
+										MaxItems:   1,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"api_crawler_config": {
+
+													Type:       schema.TypeList,
+													MaxItems:   1,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"domains": {
+
+																Type:       schema.TypeList,
+																Required:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"domain": {
+																			Type:       schema.TypeString,
+																			Required:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+
+																		"simple_login": {
+
+																			Type:       schema.TypeList,
+																			MaxItems:   1,
+																			Required:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"password": {
+
+																						Type:       schema.TypeList,
+																						MaxItems:   1,
+																						Required:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																						Elem: &schema.Resource{
+																							Schema: map[string]*schema.Schema{
+
+																								"blindfold_secret_info_internal": {
+
+																									Type:       schema.TypeList,
+																									MaxItems:   1,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																									Elem: &schema.Resource{
+																										Schema: map[string]*schema.Schema{
+
+																											"decryption_provider": {
+																												Type:       schema.TypeString,
+																												Optional:   true,
+																												Deprecated: "This field is deprecated and will be removed in future release.",
+																											},
+
+																											"location": {
+																												Type:       schema.TypeString,
+																												Required:   true,
+																												Deprecated: "This field is deprecated and will be removed in future release.",
+																											},
+
+																											"store_provider": {
+																												Type:       schema.TypeString,
+																												Optional:   true,
+																												Deprecated: "This field is deprecated and will be removed in future release.",
+																											},
+																										},
+																									},
+																								},
+
+																								"secret_encoding_type": {
+																									Type:       schema.TypeString,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+
+																								"blindfold_secret_info": {
+
+																									Type:       schema.TypeList,
+																									MaxItems:   1,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																									Elem: &schema.Resource{
+																										Schema: map[string]*schema.Schema{
+
+																											"decryption_provider": {
+																												Type:       schema.TypeString,
+																												Optional:   true,
+																												Deprecated: "This field is deprecated and will be removed in future release.",
+																											},
+
+																											"location": {
+																												Type:       schema.TypeString,
+																												Required:   true,
+																												Deprecated: "This field is deprecated and will be removed in future release.",
+																											},
+
+																											"store_provider": {
+																												Type:       schema.TypeString,
+																												Optional:   true,
+																												Deprecated: "This field is deprecated and will be removed in future release.",
+																											},
+																										},
+																									},
+																								},
+
+																								"clear_secret_info": {
+
+																									Type:       schema.TypeList,
+																									MaxItems:   1,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																									Elem: &schema.Resource{
+																										Schema: map[string]*schema.Schema{
+
+																											"provider": {
+																												Type:       schema.TypeString,
+																												Optional:   true,
+																												Deprecated: "This field is deprecated and will be removed in future release.",
+																											},
+
+																											"url": {
+																												Type:       schema.TypeString,
+																												Required:   true,
+																												Deprecated: "This field is deprecated and will be removed in future release.",
+																											},
+																										},
+																									},
+																								},
+
+																								"vault_secret_info": {
+
+																									Type:       schema.TypeList,
+																									MaxItems:   1,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																									Elem: &schema.Resource{
+																										Schema: map[string]*schema.Schema{
+
+																											"key": {
+																												Type:       schema.TypeString,
+																												Optional:   true,
+																												Deprecated: "This field is deprecated and will be removed in future release.",
+																											},
+
+																											"location": {
+																												Type:       schema.TypeString,
+																												Required:   true,
+																												Deprecated: "This field is deprecated and will be removed in future release.",
+																											},
+
+																											"provider": {
+																												Type:       schema.TypeString,
+																												Required:   true,
+																												Deprecated: "This field is deprecated and will be removed in future release.",
+																											},
+
+																											"secret_encoding": {
+																												Type:       schema.TypeString,
+																												Optional:   true,
+																												Deprecated: "This field is deprecated and will be removed in future release.",
+																											},
+
+																											"version": {
+																												Type:       schema.TypeInt,
+																												Optional:   true,
+																												Deprecated: "This field is deprecated and will be removed in future release.",
+																											},
+																										},
+																									},
+																								},
+
+																								"wingman_secret_info": {
+
+																									Type:       schema.TypeList,
+																									MaxItems:   1,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																									Elem: &schema.Resource{
+																										Schema: map[string]*schema.Schema{
+
+																											"name": {
+																												Type:       schema.TypeString,
+																												Required:   true,
+																												Deprecated: "This field is deprecated and will be removed in future release.",
+																											},
+																										},
+																									},
+																								},
+																							},
+																						},
+																					},
+
+																					"user": {
+																						Type:       schema.TypeString,
+																						Required:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+																				},
+																			},
+																		},
+																	},
+																},
+															},
+														},
+													},
+												},
+
+												"disable_api_crawler": {
+
+													Type:       schema.TypeBool,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+											},
+										},
+									},
+
 									"api_discovery_from_code_scan": {
 
-										Type:       schema.TypeSet,
+										Type:       schema.TypeList,
+										MaxItems:   1,
 										Optional:   true,
 										Deprecated: "This field is deprecated and will be removed in future release.",
 										Elem: &schema.Resource{
@@ -11802,7 +13032,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 															"selected_repos": {
 
-																Type:       schema.TypeSet,
+																Type:       schema.TypeList,
+																MaxItems:   1,
 																Optional:   true,
 																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
@@ -11824,7 +13055,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 															"code_base_integration": {
 
-																Type:       schema.TypeSet,
+																Type:       schema.TypeList,
+																MaxItems:   1,
 																Required:   true,
 																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
@@ -11855,9 +13087,57 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 										},
 									},
 
+									"custom_api_auth_discovery": {
+
+										Type:       schema.TypeList,
+										MaxItems:   1,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"api_discovery_ref": {
+
+													Type:       schema.TypeList,
+													MaxItems:   1,
+													Required:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"name": {
+																Type:       schema.TypeString,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+															"namespace": {
+																Type:       schema.TypeString,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+															"tenant": {
+																Type:       schema.TypeString,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+														},
+													},
+												},
+											},
+										},
+									},
+
+									"default_api_auth_discovery": {
+
+										Type:       schema.TypeBool,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+									},
+
 									"discovered_api_settings": {
 
-										Type:       schema.TypeSet,
+										Type:       schema.TypeList,
+										MaxItems:   1,
 										Optional:   true,
 										Deprecated: "This field is deprecated and will be removed in future release.",
 										Elem: &schema.Resource{
@@ -11888,7 +13168,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 									"sensitive_data_detection_rules": {
 
-										Type:       schema.TypeSet,
+										Type:       schema.TypeList,
+										MaxItems:   1,
 										Optional:   true,
 										Deprecated: "This field is deprecated and will be removed in future release.",
 										Elem: &schema.Resource{
@@ -11904,7 +13185,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 															"metadata": {
 
-																Type:       schema.TypeSet,
+																Type:       schema.TypeList,
+																MaxItems:   1,
 																Required:   true,
 																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
@@ -11933,7 +13215,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 															"sensitive_data_detection_config": {
 
-																Type:       schema.TypeSet,
+																Type:       schema.TypeList,
+																MaxItems:   1,
 																Required:   true,
 																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
@@ -11955,7 +13238,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 																		"key_pattern": {
 
-																			Type:       schema.TypeSet,
+																			Type:       schema.TypeList,
+																			MaxItems:   1,
 																			Optional:   true,
 																			Deprecated: "This field is deprecated and will be removed in future release.",
 																			Elem: &schema.Resource{
@@ -11980,7 +13264,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 																		"key_value_pattern": {
 
-																			Type:       schema.TypeSet,
+																			Type:       schema.TypeList,
+																			MaxItems:   1,
 																			Optional:   true,
 																			Deprecated: "This field is deprecated and will be removed in future release.",
 																			Elem: &schema.Resource{
@@ -11988,7 +13273,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 																					"key_pattern": {
 
-																						Type:       schema.TypeSet,
+																						Type:       schema.TypeList,
+																						MaxItems:   1,
 																						Required:   true,
 																						Deprecated: "This field is deprecated and will be removed in future release.",
 																						Elem: &schema.Resource{
@@ -12013,7 +13299,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 																					"value_pattern": {
 
-																						Type:       schema.TypeSet,
+																						Type:       schema.TypeList,
+																						MaxItems:   1,
 																						Required:   true,
 																						Deprecated: "This field is deprecated and will be removed in future release.",
 																						Elem: &schema.Resource{
@@ -12041,7 +13328,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 																		"value_pattern": {
 
-																			Type:       schema.TypeSet,
+																			Type:       schema.TypeList,
+																			MaxItems:   1,
 																			Optional:   true,
 																			Deprecated: "This field is deprecated and will be removed in future release.",
 																			Elem: &schema.Resource{
@@ -12087,7 +13375,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 																		"custom_sections": {
 
-																			Type:       schema.TypeSet,
+																			Type:       schema.TypeList,
+																			MaxItems:   1,
 																			Optional:   true,
 																			Deprecated: "This field is deprecated and will be removed in future release.",
 																			Elem: &schema.Resource{
@@ -12116,7 +13405,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 																		"api_endpoint_target": {
 
-																			Type:       schema.TypeSet,
+																			Type:       schema.TypeList,
+																			MaxItems:   1,
 																			Optional:   true,
 																			Deprecated: "This field is deprecated and will be removed in future release.",
 																			Elem: &schema.Resource{
@@ -12161,7 +13451,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 															"sensitive_data_type": {
 
-																Type:       schema.TypeSet,
+																Type:       schema.TypeList,
+																MaxItems:   1,
 																Required:   true,
 																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
@@ -12221,14 +13512,16 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 			"more_option": {
 
-				Type:     schema.TypeSet,
+				Type:     schema.TypeList,
+				MaxItems: 1,
 				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 
 						"buffer_policy": {
 
-							Type:     schema.TypeSet,
+							Type:     schema.TypeList,
+							MaxItems: 1,
 							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
@@ -12254,7 +13547,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 						"compression_params": {
 
-							Type:     schema.TypeSet,
+							Type:     schema.TypeList,
+							MaxItems: 1,
 							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
@@ -12405,7 +13699,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 						"javascript_info": {
 
-							Type:       schema.TypeSet,
+							Type:       schema.TypeList,
+							MaxItems:   1,
 							Optional:   true,
 							Deprecated: "This field is deprecated and will be removed in future release.",
 							Elem: &schema.Resource{
@@ -12497,14 +13792,16 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 									"secret_value": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
 												"blindfold_secret_info_internal": {
 
-													Type:       schema.TypeSet,
+													Type:       schema.TypeList,
+													MaxItems:   1,
 													Optional:   true,
 													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
@@ -12539,7 +13836,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 												"blindfold_secret_info": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Optional: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -12564,7 +13862,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 												"clear_secret_info": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Optional: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -12584,7 +13883,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 												"vault_secret_info": {
 
-													Type:       schema.TypeSet,
+													Type:       schema.TypeList,
+													MaxItems:   1,
 													Optional:   true,
 													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
@@ -12625,7 +13925,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 												"wingman_secret_info": {
 
-													Type:       schema.TypeSet,
+													Type:       schema.TypeList,
+													MaxItems:   1,
 													Optional:   true,
 													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
@@ -12681,14 +13982,16 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 									"secret_value": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
 												"blindfold_secret_info_internal": {
 
-													Type:       schema.TypeSet,
+													Type:       schema.TypeList,
+													MaxItems:   1,
 													Optional:   true,
 													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
@@ -12723,7 +14026,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 												"blindfold_secret_info": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Optional: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -12748,7 +14052,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 												"clear_secret_info": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Optional: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -12768,7 +14073,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 												"vault_secret_info": {
 
-													Type:       schema.TypeSet,
+													Type:       schema.TypeList,
+													MaxItems:   1,
 													Optional:   true,
 													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
@@ -12809,7 +14115,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 												"wingman_secret_info": {
 
-													Type:       schema.TypeSet,
+													Type:       schema.TypeList,
+													MaxItems:   1,
 													Optional:   true,
 													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
@@ -12848,7 +14155,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 						"additional_domains": {
 
-							Type:       schema.TypeSet,
+							Type:       schema.TypeList,
+							MaxItems:   1,
 							Optional:   true,
 							Deprecated: "This field is deprecated and will be removed in future release.",
 							Elem: &schema.Resource{
@@ -12880,7 +14188,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 			"default_pool": {
 
-				Type:       schema.TypeSet,
+				Type:       schema.TypeList,
+				MaxItems:   1,
 				Optional:   true,
 				Deprecated: "This field is deprecated and will be removed in future release.",
 				Elem: &schema.Resource{
@@ -12888,7 +14197,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 						"advanced_options": {
 
-							Type:       schema.TypeSet,
+							Type:       schema.TypeList,
+							MaxItems:   1,
 							Optional:   true,
 							Deprecated: "This field is deprecated and will be removed in future release.",
 							Elem: &schema.Resource{
@@ -12896,7 +14206,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 									"circuit_breaker": {
 
-										Type:       schema.TypeSet,
+										Type:       schema.TypeList,
+										MaxItems:   1,
 										Optional:   true,
 										Deprecated: "This field is deprecated and will be removed in future release.",
 										Elem: &schema.Resource{
@@ -12957,7 +14268,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 									"header_transformation_type": {
 
-										Type:       schema.TypeSet,
+										Type:       schema.TypeList,
+										MaxItems:   1,
 										Optional:   true,
 										Deprecated: "This field is deprecated and will be removed in future release.",
 										Elem: &schema.Resource{
@@ -13009,7 +14321,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 									"http1_config": {
 
-										Type:       schema.TypeSet,
+										Type:       schema.TypeList,
+										MaxItems:   1,
 										Optional:   true,
 										Deprecated: "This field is deprecated and will be removed in future release.",
 										Elem: &schema.Resource{
@@ -13017,7 +14330,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 												"header_transformation": {
 
-													Type:       schema.TypeSet,
+													Type:       schema.TypeList,
+													MaxItems:   1,
 													Optional:   true,
 													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
@@ -13059,7 +14373,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 									"http2_options": {
 
-										Type:       schema.TypeSet,
+										Type:       schema.TypeList,
+										MaxItems:   1,
 										Optional:   true,
 										Deprecated: "This field is deprecated and will be removed in future release.",
 										Elem: &schema.Resource{
@@ -13097,7 +14412,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 									"outlier_detection": {
 
-										Type:       schema.TypeSet,
+										Type:       schema.TypeList,
+										MaxItems:   1,
 										Optional:   true,
 										Deprecated: "This field is deprecated and will be removed in future release.",
 										Elem: &schema.Resource{
@@ -13180,7 +14496,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 									"enable_subsets": {
 
-										Type:       schema.TypeSet,
+										Type:       schema.TypeList,
+										MaxItems:   1,
 										Optional:   true,
 										Deprecated: "This field is deprecated and will be removed in future release.",
 										Elem: &schema.Resource{
@@ -13217,7 +14534,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 												"default_subset": {
 
-													Type:       schema.TypeSet,
+													Type:       schema.TypeList,
+													MaxItems:   1,
 													Optional:   true,
 													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
@@ -13306,9 +14624,28 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
+									"cbip_service": {
+
+										Type:       schema.TypeList,
+										MaxItems:   1,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"service_name": {
+													Type:       schema.TypeString,
+													Required:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+											},
+										},
+									},
+
 									"consul_service": {
 
-										Type:       schema.TypeSet,
+										Type:       schema.TypeList,
+										MaxItems:   1,
 										Optional:   true,
 										Deprecated: "This field is deprecated and will be removed in future release.",
 										Elem: &schema.Resource{
@@ -13336,7 +14673,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 												"site_locator": {
 
-													Type:       schema.TypeSet,
+													Type:       schema.TypeList,
+													MaxItems:   1,
 													Required:   true,
 													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
@@ -13344,7 +14682,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 															"site": {
 
-																Type:       schema.TypeSet,
+																Type:       schema.TypeList,
+																MaxItems:   1,
 																Optional:   true,
 																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
@@ -13377,7 +14716,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 															"virtual_site": {
 
-																Type:       schema.TypeSet,
+																Type:       schema.TypeList,
+																MaxItems:   1,
 																Optional:   true,
 																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
@@ -13416,7 +14756,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 									"custom_endpoint_object": {
 
-										Type:       schema.TypeSet,
+										Type:       schema.TypeList,
+										MaxItems:   1,
 										Optional:   true,
 										Deprecated: "This field is deprecated and will be removed in future release.",
 										Elem: &schema.Resource{
@@ -13424,7 +14765,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 												"endpoint": {
 
-													Type:       schema.TypeSet,
+													Type:       schema.TypeList,
+													MaxItems:   1,
 													Required:   true,
 													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
@@ -13454,7 +14796,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 									"k8s_service": {
 
-										Type:       schema.TypeSet,
+										Type:       schema.TypeList,
+										MaxItems:   1,
 										Optional:   true,
 										Deprecated: "This field is deprecated and will be removed in future release.",
 										Elem: &schema.Resource{
@@ -13490,7 +14833,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 												"service_selector": {
 
-													Type:       schema.TypeSet,
+													Type:       schema.TypeList,
+													MaxItems:   1,
 													Optional:   true,
 													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
@@ -13512,7 +14856,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 												"site_locator": {
 
-													Type:       schema.TypeSet,
+													Type:       schema.TypeList,
+													MaxItems:   1,
 													Required:   true,
 													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
@@ -13520,7 +14865,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 															"site": {
 
-																Type:       schema.TypeSet,
+																Type:       schema.TypeList,
+																MaxItems:   1,
 																Optional:   true,
 																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
@@ -13553,7 +14899,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 															"virtual_site": {
 
-																Type:       schema.TypeSet,
+																Type:       schema.TypeList,
+																MaxItems:   1,
 																Optional:   true,
 																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
@@ -13592,7 +14939,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 									"private_ip": {
 
-										Type:       schema.TypeSet,
+										Type:       schema.TypeList,
+										MaxItems:   1,
 										Optional:   true,
 										Deprecated: "This field is deprecated and will be removed in future release.",
 										Elem: &schema.Resource{
@@ -13614,7 +14962,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 												"segment": {
 
-													Type:       schema.TypeSet,
+													Type:       schema.TypeList,
+													MaxItems:   1,
 													Optional:   true,
 													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
@@ -13655,7 +15004,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 												"site_locator": {
 
-													Type:       schema.TypeSet,
+													Type:       schema.TypeList,
+													MaxItems:   1,
 													Required:   true,
 													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
@@ -13663,7 +15013,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 															"site": {
 
-																Type:       schema.TypeSet,
+																Type:       schema.TypeList,
+																MaxItems:   1,
 																Optional:   true,
 																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
@@ -13696,7 +15047,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 															"virtual_site": {
 
-																Type:       schema.TypeSet,
+																Type:       schema.TypeList,
+																MaxItems:   1,
 																Optional:   true,
 																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
@@ -13735,7 +15087,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 									"private_name": {
 
-										Type:       schema.TypeSet,
+										Type:       schema.TypeList,
+										MaxItems:   1,
 										Optional:   true,
 										Deprecated: "This field is deprecated and will be removed in future release.",
 										Elem: &schema.Resource{
@@ -13763,7 +15116,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 												"segment": {
 
-													Type:       schema.TypeSet,
+													Type:       schema.TypeList,
+													MaxItems:   1,
 													Optional:   true,
 													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
@@ -13796,7 +15150,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 												"site_locator": {
 
-													Type:       schema.TypeSet,
+													Type:       schema.TypeList,
+													MaxItems:   1,
 													Required:   true,
 													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
@@ -13804,7 +15159,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 															"site": {
 
-																Type:       schema.TypeSet,
+																Type:       schema.TypeList,
+																MaxItems:   1,
 																Optional:   true,
 																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
@@ -13837,7 +15193,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 															"virtual_site": {
 
-																Type:       schema.TypeSet,
+																Type:       schema.TypeList,
+																MaxItems:   1,
 																Optional:   true,
 																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
@@ -13876,7 +15233,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 									"public_ip": {
 
-										Type:       schema.TypeSet,
+										Type:       schema.TypeList,
+										MaxItems:   1,
 										Optional:   true,
 										Deprecated: "This field is deprecated and will be removed in future release.",
 										Elem: &schema.Resource{
@@ -13901,7 +15259,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 									"public_name": {
 
-										Type:       schema.TypeSet,
+										Type:       schema.TypeList,
+										MaxItems:   1,
 										Optional:   true,
 										Deprecated: "This field is deprecated and will be removed in future release.",
 										Elem: &schema.Resource{
@@ -13924,7 +15283,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 									"vn_private_ip": {
 
-										Type:       schema.TypeSet,
+										Type:       schema.TypeList,
+										MaxItems:   1,
 										Optional:   true,
 										Deprecated: "This field is deprecated and will be removed in future release.",
 										Elem: &schema.Resource{
@@ -13932,7 +15292,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 												"virtual_network": {
 
-													Type:       schema.TypeSet,
+													Type:       schema.TypeList,
+													MaxItems:   1,
 													Required:   true,
 													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
@@ -13976,7 +15337,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 									"vn_private_name": {
 
-										Type:       schema.TypeSet,
+										Type:       schema.TypeList,
+										MaxItems:   1,
 										Optional:   true,
 										Deprecated: "This field is deprecated and will be removed in future release.",
 										Elem: &schema.Resource{
@@ -13990,7 +15352,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 												"private_network": {
 
-													Type:       schema.TypeSet,
+													Type:       schema.TypeList,
+													MaxItems:   1,
 													Required:   true,
 													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
@@ -14057,7 +15420,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 						"use_tls": {
 
-							Type:       schema.TypeSet,
+							Type:       schema.TypeList,
+							MaxItems:   1,
 							Optional:   true,
 							Deprecated: "This field is deprecated and will be removed in future release.",
 							Elem: &schema.Resource{
@@ -14093,7 +15457,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 									"use_mtls": {
 
-										Type:       schema.TypeSet,
+										Type:       schema.TypeList,
+										MaxItems:   1,
 										Optional:   true,
 										Deprecated: "This field is deprecated and will be removed in future release.",
 										Elem: &schema.Resource{
@@ -14121,7 +15486,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 															"custom_hash_algorithms": {
 
-																Type:       schema.TypeSet,
+																Type:       schema.TypeList,
+																MaxItems:   1,
 																Optional:   true,
 																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
@@ -14143,7 +15509,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 															"disable_ocsp_stapling": {
 
-																Type:       schema.TypeSet,
+																Type:       schema.TypeList,
+																MaxItems:   1,
 																Optional:   true,
 																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
@@ -14153,7 +15520,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 															"use_system_defaults": {
 
-																Type:       schema.TypeSet,
+																Type:       schema.TypeList,
+																MaxItems:   1,
 																Optional:   true,
 																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
@@ -14163,7 +15531,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 															"private_key": {
 
-																Type:       schema.TypeSet,
+																Type:       schema.TypeList,
+																MaxItems:   1,
 																Required:   true,
 																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
@@ -14171,7 +15540,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 																		"blindfold_secret_info_internal": {
 
-																			Type:       schema.TypeSet,
+																			Type:       schema.TypeList,
+																			MaxItems:   1,
 																			Optional:   true,
 																			Deprecated: "This field is deprecated and will be removed in future release.",
 																			Elem: &schema.Resource{
@@ -14206,7 +15576,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 																		"blindfold_secret_info": {
 
-																			Type:       schema.TypeSet,
+																			Type:       schema.TypeList,
+																			MaxItems:   1,
 																			Optional:   true,
 																			Deprecated: "This field is deprecated and will be removed in future release.",
 																			Elem: &schema.Resource{
@@ -14235,7 +15606,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 																		"clear_secret_info": {
 
-																			Type:       schema.TypeSet,
+																			Type:       schema.TypeList,
+																			MaxItems:   1,
 																			Optional:   true,
 																			Deprecated: "This field is deprecated and will be removed in future release.",
 																			Elem: &schema.Resource{
@@ -14258,7 +15630,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 																		"vault_secret_info": {
 
-																			Type:       schema.TypeSet,
+																			Type:       schema.TypeList,
+																			MaxItems:   1,
 																			Optional:   true,
 																			Deprecated: "This field is deprecated and will be removed in future release.",
 																			Elem: &schema.Resource{
@@ -14299,7 +15672,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 																		"wingman_secret_info": {
 
-																			Type:       schema.TypeSet,
+																			Type:       schema.TypeList,
+																			MaxItems:   1,
 																			Optional:   true,
 																			Deprecated: "This field is deprecated and will be removed in future release.",
 																			Elem: &schema.Resource{
@@ -14325,7 +15699,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 									"use_mtls_obj": {
 
-										Type:       schema.TypeSet,
+										Type:       schema.TypeList,
+										MaxItems:   1,
 										Optional:   true,
 										Deprecated: "This field is deprecated and will be removed in future release.",
 										Elem: &schema.Resource{
@@ -14359,7 +15734,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 									"use_server_verification": {
 
-										Type:       schema.TypeSet,
+										Type:       schema.TypeList,
+										MaxItems:   1,
 										Optional:   true,
 										Deprecated: "This field is deprecated and will be removed in future release.",
 										Elem: &schema.Resource{
@@ -14367,7 +15743,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 												"trusted_ca": {
 
-													Type:       schema.TypeSet,
+													Type:       schema.TypeList,
+													MaxItems:   1,
 													Optional:   true,
 													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
@@ -14432,7 +15809,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 									"tls_config": {
 
-										Type:       schema.TypeSet,
+										Type:       schema.TypeList,
+										MaxItems:   1,
 										Required:   true,
 										Deprecated: "This field is deprecated and will be removed in future release.",
 										Elem: &schema.Resource{
@@ -14440,7 +15818,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 												"custom_security": {
 
-													Type:       schema.TypeSet,
+													Type:       schema.TypeList,
+													MaxItems:   1,
 													Optional:   true,
 													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
@@ -14501,7 +15880,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 						"view_internal": {
 
-							Type:       schema.TypeSet,
+							Type:       schema.TypeList,
+							MaxItems:   1,
 							Optional:   true,
 							Deprecated: "This field is deprecated and will be removed in future release.",
 							Elem: &schema.Resource{
@@ -14531,7 +15911,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 			"default_pool_list": {
 
-				Type:       schema.TypeSet,
+				Type:       schema.TypeList,
+				MaxItems:   1,
 				Optional:   true,
 				Deprecated: "This field is deprecated and will be removed in future release.",
 				Elem: &schema.Resource{
@@ -14553,7 +15934,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 									"cluster": {
 
-										Type:       schema.TypeSet,
+										Type:       schema.TypeList,
+										MaxItems:   1,
 										Optional:   true,
 										Deprecated: "This field is deprecated and will be removed in future release.",
 										Elem: &schema.Resource{
@@ -14586,7 +15968,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 									"pool": {
 
-										Type:       schema.TypeSet,
+										Type:       schema.TypeList,
+										MaxItems:   1,
 										Optional:   true,
 										Deprecated: "This field is deprecated and will be removed in future release.",
 										Elem: &schema.Resource{
@@ -14637,7 +16020,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 			"origin_server_subset_rule_list": {
 
-				Type:     schema.TypeSet,
+				Type:     schema.TypeList,
+				MaxItems: 1,
 				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
@@ -14657,7 +16041,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 									"asn_list": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -14677,7 +16062,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 									"asn_matcher": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -14715,7 +16101,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 									"body_matcher": {
 
-										Type:       schema.TypeSet,
+										Type:       schema.TypeList,
+										MaxItems:   1,
 										Optional:   true,
 										Deprecated: "This field is deprecated and will be removed in future release.",
 										Elem: &schema.Resource{
@@ -14775,7 +16162,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 									"ip_matcher": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -14818,7 +16206,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 									"ip_prefix_list": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -14853,7 +16242,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 									"metadata": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -14894,7 +16284,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 									"client_selector": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -15015,7 +16406,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 			"api_rate_limit": {
 
-				Type:     schema.TypeSet,
+				Type:     schema.TypeList,
+				MaxItems: 1,
 				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
@@ -15029,7 +16421,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 									"api_endpoint_method": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -15065,7 +16458,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 									"client_matcher": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -15078,7 +16472,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 												"client_selector": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Optional: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -15098,7 +16493,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 												"ip_threat_category_list": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Optional: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -15124,7 +16520,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 												"asn_list": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Optional: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -15144,7 +16541,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 												"asn_matcher": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Optional: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -15182,7 +16580,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 												"ip_matcher": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Optional: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -15225,7 +16624,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 												"ip_prefix_list": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Optional: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -15260,7 +16660,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 												"tls_fingerprint_matcher": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Optional: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -15315,14 +16716,16 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 									"inline_rate_limiter": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
 												"ref_user_id": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Optional: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -15364,7 +16767,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 									"ref_rate_limiter": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -15387,7 +16791,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 									"request_matcher": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -15418,7 +16823,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 															"item": {
 
-																Type:     schema.TypeSet,
+																Type:     schema.TypeList,
+																MaxItems: 1,
 																Optional: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
@@ -15497,7 +16903,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 															"item": {
 
-																Type:     schema.TypeSet,
+																Type:     schema.TypeList,
+																MaxItems: 1,
 																Optional: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
@@ -15576,7 +16983,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 															"item": {
 
-																Type:     schema.TypeSet,
+																Type:     schema.TypeList,
+																MaxItems: 1,
 																Optional: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
@@ -15653,7 +17061,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 															"item": {
 
-																Type:     schema.TypeSet,
+																Type:     schema.TypeList,
+																MaxItems: 1,
 																Optional: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
@@ -15709,7 +17118,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 						"bypass_rate_limiting_rules": {
 
-							Type:     schema.TypeSet,
+							Type:     schema.TypeList,
+							MaxItems: 1,
 							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
@@ -15723,7 +17133,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 												"client_matcher": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Optional: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -15736,7 +17147,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 															"client_selector": {
 
-																Type:     schema.TypeSet,
+																Type:     schema.TypeList,
+																MaxItems: 1,
 																Optional: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
@@ -15756,7 +17168,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 															"ip_threat_category_list": {
 
-																Type:     schema.TypeSet,
+																Type:     schema.TypeList,
+																MaxItems: 1,
 																Optional: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
@@ -15782,7 +17195,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 															"asn_list": {
 
-																Type:     schema.TypeSet,
+																Type:     schema.TypeList,
+																MaxItems: 1,
 																Optional: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
@@ -15802,7 +17216,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 															"asn_matcher": {
 
-																Type:     schema.TypeSet,
+																Type:     schema.TypeList,
+																MaxItems: 1,
 																Optional: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
@@ -15840,7 +17255,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 															"ip_matcher": {
 
-																Type:     schema.TypeSet,
+																Type:     schema.TypeList,
+																MaxItems: 1,
 																Optional: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
@@ -15883,7 +17299,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 															"ip_prefix_list": {
 
-																Type:     schema.TypeSet,
+																Type:     schema.TypeList,
+																MaxItems: 1,
 																Optional: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
@@ -15918,7 +17335,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 															"tls_fingerprint_matcher": {
 
-																Type:     schema.TypeSet,
+																Type:     schema.TypeList,
+																MaxItems: 1,
 																Optional: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
@@ -15967,7 +17385,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 												"api_endpoint": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Required: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -15992,7 +17411,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 												"api_groups": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Optional: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -16030,7 +17450,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 												"request_matcher": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Optional: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -16061,7 +17482,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 																		"item": {
 
-																			Type:     schema.TypeSet,
+																			Type:     schema.TypeList,
+																			MaxItems: 1,
 																			Optional: true,
 																			Elem: &schema.Resource{
 																				Schema: map[string]*schema.Schema{
@@ -16140,7 +17562,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 																		"item": {
 
-																			Type:     schema.TypeSet,
+																			Type:     schema.TypeList,
+																			MaxItems: 1,
 																			Optional: true,
 																			Elem: &schema.Resource{
 																				Schema: map[string]*schema.Schema{
@@ -16219,7 +17642,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 																		"item": {
 
-																			Type:     schema.TypeSet,
+																			Type:     schema.TypeList,
+																			MaxItems: 1,
 																			Optional: true,
 																			Elem: &schema.Resource{
 																				Schema: map[string]*schema.Schema{
@@ -16296,7 +17720,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 																		"item": {
 
-																			Type:     schema.TypeSet,
+																			Type:     schema.TypeList,
+																			MaxItems: 1,
 																			Optional: true,
 																			Elem: &schema.Resource{
 																				Schema: map[string]*schema.Schema{
@@ -16355,7 +17780,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 						"custom_ip_allowed_list": {
 
-							Type:     schema.TypeSet,
+							Type:     schema.TypeList,
+							MaxItems: 1,
 							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
@@ -16388,7 +17814,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 						"ip_allowed_list": {
 
-							Type:     schema.TypeSet,
+							Type:     schema.TypeList,
+							MaxItems: 1,
 							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
@@ -16441,7 +17868,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 									"client_matcher": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -16454,7 +17882,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 												"client_selector": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Optional: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -16474,7 +17903,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 												"ip_threat_category_list": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Optional: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -16500,7 +17930,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 												"asn_list": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Optional: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -16520,7 +17951,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 												"asn_matcher": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Optional: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -16558,7 +17990,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 												"ip_matcher": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Optional: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -16601,7 +18034,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 												"ip_prefix_list": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Optional: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -16636,7 +18070,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 												"tls_fingerprint_matcher": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Optional: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -16691,14 +18126,16 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 									"inline_rate_limiter": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
 												"ref_user_id": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Optional: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -16740,7 +18177,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 									"ref_rate_limiter": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -16763,7 +18201,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 									"request_matcher": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -16794,7 +18233,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 															"item": {
 
-																Type:     schema.TypeSet,
+																Type:     schema.TypeList,
+																MaxItems: 1,
 																Optional: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
@@ -16873,7 +18313,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 															"item": {
 
-																Type:     schema.TypeSet,
+																Type:     schema.TypeList,
+																MaxItems: 1,
 																Optional: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
@@ -16952,7 +18393,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 															"item": {
 
-																Type:     schema.TypeSet,
+																Type:     schema.TypeList,
+																MaxItems: 1,
 																Optional: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
@@ -17029,7 +18471,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 															"item": {
 
-																Type:     schema.TypeSet,
+																Type:     schema.TypeList,
+																MaxItems: 1,
 																Optional: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
@@ -17094,14 +18537,16 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 			"rate_limit": {
 
-				Type:     schema.TypeSet,
+				Type:     schema.TypeList,
+				MaxItems: 1,
 				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 
 						"custom_ip_allowed_list": {
 
-							Type:     schema.TypeSet,
+							Type:     schema.TypeList,
+							MaxItems: 1,
 							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
@@ -17134,7 +18579,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 						"ip_allowed_list": {
 
-							Type:     schema.TypeSet,
+							Type:     schema.TypeList,
+							MaxItems: 1,
 							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
@@ -17176,7 +18622,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 						"policies": {
 
-							Type:     schema.TypeSet,
+							Type:     schema.TypeList,
+							MaxItems: 1,
 							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
@@ -17209,7 +18656,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 						"rate_limiter": {
 
-							Type:     schema.TypeSet,
+							Type:     schema.TypeList,
+							MaxItems: 1,
 							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
@@ -17244,14 +18692,16 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 						"custom_route_object": {
 
-							Type:     schema.TypeSet,
+							Type:     schema.TypeList,
+							MaxItems: 1,
 							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
 									"route_ref": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -17277,7 +18727,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 						"direct_response_route": {
 
-							Type:     schema.TypeSet,
+							Type:     schema.TypeList,
+							MaxItems: 1,
 							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
@@ -17327,7 +18778,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 									"incoming_port": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -17355,7 +18807,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 									"path": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -17383,7 +18836,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 									"route_direct_response": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -17406,7 +18860,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 						"redirect_route": {
 
-							Type:     schema.TypeSet,
+							Type:     schema.TypeList,
+							MaxItems: 1,
 							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
@@ -17456,7 +18911,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 									"incoming_port": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -17484,7 +18940,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 									"path": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -17512,7 +18969,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 									"route_redirect": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -17560,7 +19018,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 												"strip_query_params": {
 
-													Type:       schema.TypeSet,
+													Type:       schema.TypeList,
+													MaxItems:   1,
 													Optional:   true,
 													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
@@ -17605,21 +19064,24 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 						"simple_route": {
 
-							Type:     schema.TypeSet,
+							Type:     schema.TypeList,
+							MaxItems: 1,
 							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
 									"advanced_options": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
 												"bot_defense_javascript_injection": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Optional: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -17675,7 +19137,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 												"buffer_policy": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Optional: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -17719,7 +19182,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 												"cors_policy": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Optional: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -17785,7 +19249,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 												"csrf_policy": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Optional: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -17798,7 +19263,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 															"custom_domain_list": {
 
-																Type:     schema.TypeSet,
+																Type:     schema.TypeList,
+																MaxItems: 1,
 																Optional: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
@@ -17843,7 +19309,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 												"specific_hash_policy": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Optional: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -17857,7 +19324,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 																		"cookie": {
 
-																			Type:     schema.TypeSet,
+																			Type:     schema.TypeList,
+																			MaxItems: 1,
 																			Optional: true,
 																			Elem: &schema.Resource{
 																				Schema: map[string]*schema.Schema{
@@ -17959,14 +19427,16 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 												"mirror_policy": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Optional: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
 															"origin_pool": {
 
-																Type:     schema.TypeSet,
+																Type:     schema.TypeList,
+																MaxItems: 1,
 																Required: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
@@ -17989,7 +19459,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 															"percent": {
 
-																Type:     schema.TypeSet,
+																Type:     schema.TypeList,
+																MaxItems: 1,
 																Required: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
@@ -18034,14 +19505,16 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 															"secret_value": {
 
-																Type:     schema.TypeSet,
+																Type:     schema.TypeList,
+																MaxItems: 1,
 																Optional: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
 																		"blindfold_secret_info_internal": {
 
-																			Type:       schema.TypeSet,
+																			Type:       schema.TypeList,
+																			MaxItems:   1,
 																			Optional:   true,
 																			Deprecated: "This field is deprecated and will be removed in future release.",
 																			Elem: &schema.Resource{
@@ -18076,7 +19549,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 																		"blindfold_secret_info": {
 
-																			Type:     schema.TypeSet,
+																			Type:     schema.TypeList,
+																			MaxItems: 1,
 																			Optional: true,
 																			Elem: &schema.Resource{
 																				Schema: map[string]*schema.Schema{
@@ -18101,7 +19575,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 																		"clear_secret_info": {
 
-																			Type:     schema.TypeSet,
+																			Type:     schema.TypeList,
+																			MaxItems: 1,
 																			Optional: true,
 																			Elem: &schema.Resource{
 																				Schema: map[string]*schema.Schema{
@@ -18121,7 +19596,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 																		"vault_secret_info": {
 
-																			Type:       schema.TypeSet,
+																			Type:       schema.TypeList,
+																			MaxItems:   1,
 																			Optional:   true,
 																			Deprecated: "This field is deprecated and will be removed in future release.",
 																			Elem: &schema.Resource{
@@ -18162,7 +19638,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 																		"wingman_secret_info": {
 
-																			Type:       schema.TypeSet,
+																			Type:       schema.TypeList,
+																			MaxItems:   1,
 																			Optional:   true,
 																			Deprecated: "This field is deprecated and will be removed in future release.",
 																			Elem: &schema.Resource{
@@ -18218,14 +19695,16 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 															"secret_value": {
 
-																Type:     schema.TypeSet,
+																Type:     schema.TypeList,
+																MaxItems: 1,
 																Optional: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
 																		"blindfold_secret_info_internal": {
 
-																			Type:       schema.TypeSet,
+																			Type:       schema.TypeList,
+																			MaxItems:   1,
 																			Optional:   true,
 																			Deprecated: "This field is deprecated and will be removed in future release.",
 																			Elem: &schema.Resource{
@@ -18260,7 +19739,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 																		"blindfold_secret_info": {
 
-																			Type:     schema.TypeSet,
+																			Type:     schema.TypeList,
+																			MaxItems: 1,
 																			Optional: true,
 																			Elem: &schema.Resource{
 																				Schema: map[string]*schema.Schema{
@@ -18285,7 +19765,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 																		"clear_secret_info": {
 
-																			Type:     schema.TypeSet,
+																			Type:     schema.TypeList,
+																			MaxItems: 1,
 																			Optional: true,
 																			Elem: &schema.Resource{
 																				Schema: map[string]*schema.Schema{
@@ -18305,7 +19786,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 																		"vault_secret_info": {
 
-																			Type:       schema.TypeSet,
+																			Type:       schema.TypeList,
+																			MaxItems:   1,
 																			Optional:   true,
 																			Deprecated: "This field is deprecated and will be removed in future release.",
 																			Elem: &schema.Resource{
@@ -18346,7 +19828,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 																		"wingman_secret_info": {
 
-																			Type:       schema.TypeSet,
+																			Type:       schema.TypeList,
+																			MaxItems:   1,
 																			Optional:   true,
 																			Deprecated: "This field is deprecated and will be removed in future release.",
 																			Elem: &schema.Resource{
@@ -18397,14 +19880,16 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 												"retry_policy": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Optional: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
 															"back_off": {
 
-																Type:     schema.TypeSet,
+																Type:     schema.TypeList,
+																MaxItems: 1,
 																Optional: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
@@ -18475,7 +19960,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 												"regex_rewrite": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Optional: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -18512,7 +19998,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 												"app_firewall": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Optional: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -18553,7 +20040,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 												"web_socket_config": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Optional: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -18632,7 +20120,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 									"incoming_port": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -18672,7 +20161,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 												"cluster": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Optional: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -18700,7 +20190,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 												"pool": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Optional: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -18741,7 +20232,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 									"path": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -18766,6 +20258,35 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 											},
 										},
 									},
+
+									"query_params": {
+
+										Type:     schema.TypeList,
+										MaxItems: 1,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"remove_all_params": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
+												"replace_params": {
+
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+
+												"retain_all_params": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+											},
+										},
+									},
 								},
 							},
 						},
@@ -18775,25 +20296,24 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 			"sensitive_data_disclosure_rules": {
 
-				Type:       schema.TypeSet,
-				Optional:   true,
-				Deprecated: "This field is deprecated and will be removed in future release.",
+				Type:     schema.TypeList,
+				MaxItems: 1,
+				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 
 						"sensitive_data_types_in_response": {
 
-							Type:       schema.TypeList,
-							Optional:   true,
-							Deprecated: "This field is deprecated and will be removed in future release.",
+							Type:     schema.TypeList,
+							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
 									"body": {
 
-										Type:       schema.TypeSet,
-										Optional:   true,
-										Deprecated: "This field is deprecated and will be removed in future release.",
+										Type:     schema.TypeList,
+										MaxItems: 1,
+										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
@@ -18801,8 +20321,7 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 													Type: schema.TypeList,
 
-													Required:   true,
-													Deprecated: "This field is deprecated and will be removed in future release.",
+													Required: true,
 													Elem: &schema.Schema{
 														Type: schema.TypeString,
 													},
@@ -18827,9 +20346,9 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 									"api_endpoint": {
 
-										Type:       schema.TypeSet,
-										Optional:   true,
-										Deprecated: "This field is deprecated and will be removed in future release.",
+										Type:     schema.TypeList,
+										MaxItems: 1,
+										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
@@ -18837,17 +20356,15 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 													Type: schema.TypeList,
 
-													Optional:   true,
-													Deprecated: "This field is deprecated and will be removed in future release.",
+													Optional: true,
 													Elem: &schema.Schema{
 														Type: schema.TypeString,
 													},
 												},
 
 												"path": {
-													Type:       schema.TypeString,
-													Required:   true,
-													Deprecated: "This field is deprecated and will be removed in future release.",
+													Type:     schema.TypeString,
+													Required: true,
 												},
 											},
 										},
@@ -18881,14 +20398,16 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 			"sensitive_data_policy": {
 
-				Type:     schema.TypeSet,
+				Type:     schema.TypeList,
+				MaxItems: 1,
 				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 
 						"sensitive_data_policy_ref": {
 
-							Type:     schema.TypeSet,
+							Type:     schema.TypeList,
+							MaxItems: 1,
 							Required: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
@@ -18914,7 +20433,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 			"active_service_policies": {
 
-				Type:     schema.TypeSet,
+				Type:     schema.TypeList,
+				MaxItems: 1,
 				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
@@ -18959,7 +20479,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 			"slow_ddos_mitigation": {
 
-				Type:     schema.TypeSet,
+				Type:     schema.TypeList,
+				MaxItems: 1,
 				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
@@ -19010,7 +20531,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 			"enable_trust_client_ip_headers": {
 
-				Type:     schema.TypeSet,
+				Type:     schema.TypeList,
+				MaxItems: 1,
 				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
@@ -19074,7 +20596,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 						"http_header": {
 
-							Type:     schema.TypeSet,
+							Type:     schema.TypeList,
+							MaxItems: 1,
 							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
@@ -19126,6 +20649,12 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 							Optional: true,
 						},
 
+						"ipv6_prefix": {
+
+							Type:     schema.TypeString,
+							Optional: true,
+						},
+
 						"user_identifier": {
 
 							Type:     schema.TypeString,
@@ -19139,7 +20668,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 						"metadata": {
 
-							Type:     schema.TypeSet,
+							Type:     schema.TypeList,
+							MaxItems: 1,
 							Required: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
@@ -19174,7 +20704,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 			"user_identification": {
 
-				Type:     schema.TypeSet,
+				Type:     schema.TypeList,
+				MaxItems: 1,
 				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
@@ -19197,7 +20728,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 			"app_firewall": {
 
-				Type:     schema.TypeSet,
+				Type:     schema.TypeList,
+				MaxItems: 1,
 				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
@@ -19256,7 +20788,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 						"metadata": {
 
-							Type:     schema.TypeSet,
+							Type:     schema.TypeList,
+							MaxItems: 1,
 							Required: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
@@ -19310,7 +20843,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 						"app_firewall_detection_control": {
 
-							Type:     schema.TypeSet,
+							Type:     schema.TypeList,
+							MaxItems: 1,
 							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{

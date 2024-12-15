@@ -66,16 +66,53 @@ func resourceVolterraUztnaDomainView() *schema.Resource {
 				Required: true,
 			},
 
+			"app_vip_pool": {
+
+				Type:     schema.TypeList,
+				MaxItems: 1,
+				Optional: true,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+
+						"app_vip_pool": {
+
+							Type:     schema.TypeList,
+							MaxItems: 1,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"name": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+									"namespace": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+									"tenant": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+
 			"cert": {
 
-				Type:     schema.TypeSet,
+				Type:     schema.TypeList,
+				MaxItems: 1,
 				Required: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 
 						"certificate": {
 
-							Type:     schema.TypeSet,
+							Type:     schema.TypeList,
+							MaxItems: 1,
 							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
@@ -101,52 +138,21 @@ func resourceVolterraUztnaDomainView() *schema.Resource {
 
 			"gateways": {
 
-				Type:     schema.TypeSet,
+				Type:     schema.TypeList,
+				MaxItems: 1,
 				Required: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 
-						"bigip_ce": {
-
-							Type:     schema.TypeSet,
-							Optional: true,
-							Elem: &schema.Resource{
-								Schema: map[string]*schema.Schema{
-
-									"uztna_gateway": {
-
-										Type:     schema.TypeList,
-										Optional: true,
-										Elem: &schema.Resource{
-											Schema: map[string]*schema.Schema{
-
-												"name": {
-													Type:     schema.TypeString,
-													Optional: true,
-												},
-												"namespace": {
-													Type:     schema.TypeString,
-													Optional: true,
-												},
-												"tenant": {
-													Type:     schema.TypeString,
-													Optional: true,
-												},
-											},
-										},
-									},
-								},
-							},
-						},
-
 						"perimeter_re": {
 
-							Type:     schema.TypeSet,
+							Type:     schema.TypeList,
+							MaxItems: 1,
 							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
-									"all_perimeter": {
+									"all_cloud": {
 
 										Type:     schema.TypeBool,
 										Optional: true,
@@ -154,29 +160,35 @@ func resourceVolterraUztnaDomainView() *schema.Resource {
 
 									"re_sites": {
 
-										Type:     schema.TypeSet,
-										Optional: true,
+										Type:       schema.TypeList,
+										MaxItems:   1,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
-												"perimeter_re_site": {
+												"cloud_gateways": {
 
-													Type:     schema.TypeList,
-													Optional: true,
+													Type:       schema.TypeList,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
 															"name": {
-																Type:     schema.TypeString,
-																Optional: true,
+																Type:       schema.TypeString,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 															"namespace": {
-																Type:     schema.TypeString,
-																Optional: true,
+																Type:       schema.TypeString,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 															"tenant": {
-																Type:     schema.TypeString,
-																Optional: true,
+																Type:       schema.TypeString,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 														},
 													},
@@ -187,18 +199,8 @@ func resourceVolterraUztnaDomainView() *schema.Resource {
 								},
 							},
 						},
-					},
-				},
-			},
 
-			"lease_pool": {
-
-				Type:     schema.TypeSet,
-				Required: true,
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-
-						"uztna_lpool": {
+						"uztna_gateway": {
 
 							Type:     schema.TypeList,
 							Optional: true,
@@ -224,9 +226,170 @@ func resourceVolterraUztnaDomainView() *schema.Resource {
 				},
 			},
 
-			"profile_name": {
-				Type:     schema.TypeString,
+			"lease_pool": {
+
+				Type:     schema.TypeList,
+				MaxItems: 1,
 				Required: true,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+
+						"ipv4_ipv6_leasepool": {
+
+							Type:       schema.TypeList,
+							MaxItems:   1,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"ipv4_leasepool": {
+
+										Type:       schema.TypeList,
+										MaxItems:   1,
+										Required:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"name": {
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+												"namespace": {
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+												"tenant": {
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+											},
+										},
+									},
+
+									"ipv6_leasepool": {
+
+										Type:       schema.TypeList,
+										MaxItems:   1,
+										Required:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"name": {
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+												"namespace": {
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+												"tenant": {
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+
+						"ipv4_leasepool": {
+
+							Type:     schema.TypeList,
+							MaxItems: 1,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"name": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+									"namespace": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+									"tenant": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+								},
+							},
+						},
+
+						"ipv6_leasepool": {
+
+							Type:       schema.TypeList,
+							MaxItems:   1,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"name": {
+										Type:       schema.TypeString,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+									},
+									"namespace": {
+										Type:       schema.TypeString,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+									},
+									"tenant": {
+										Type:       schema.TypeString,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+
+			"policy": {
+
+				Type:     schema.TypeList,
+				MaxItems: 1,
+				Required: true,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+
+						"policy_name": {
+
+							Type:     schema.TypeList,
+							MaxItems: 1,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"name": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+									"namespace": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+									"tenant": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+								},
+							},
+						},
+					},
+				},
 			},
 		},
 	}
@@ -293,37 +456,80 @@ func resourceVolterraUztnaDomainViewCreate(d *schema.ResourceData, meta interfac
 
 	}
 
-	//cert
-	if v, ok := d.GetOk("cert"); ok && !isIntfNil(v) {
+	//app_vip_pool
+	if v, ok := d.GetOk("app_vip_pool"); ok && !isIntfNil(v) {
 
-		sl := v.(*schema.Set).List()
-		cert := &ves_io_schema_uztna_views_uztna_domain_view.DomainViewCertificate{}
-		createSpec.Cert = cert
+		sl := v.([]interface{})
+		appVipPool := &ves_io_schema_uztna_views_uztna_domain_view.DomainViewAppVIPPool{}
+		createSpec.AppVipPool = appVipPool
 		for _, set := range sl {
-			certMapStrToI := set.(map[string]interface{})
+			if set != nil {
+				appVipPoolMapStrToI := set.(map[string]interface{})
 
-			if v, ok := certMapStrToI["certificate"]; ok && !isIntfNil(v) {
+				if v, ok := appVipPoolMapStrToI["app_vip_pool"]; ok && !isIntfNil(v) {
 
-				sl := v.(*schema.Set).List()
-				certificateInt := &ves_io_schema_views.ObjectRefType{}
-				cert.Certificate = certificateInt
+					sl := v.([]interface{})
+					appVipPoolInt := &ves_io_schema_views.ObjectRefType{}
+					appVipPool.AppVipPool = appVipPoolInt
 
-				for _, set := range sl {
-					cMapToStrVal := set.(map[string]interface{})
-					if val, ok := cMapToStrVal["name"]; ok && !isIntfNil(v) {
-						certificateInt.Name = val.(string)
+					for _, set := range sl {
+						if set != nil {
+							avpMapToStrVal := set.(map[string]interface{})
+							if val, ok := avpMapToStrVal["name"]; ok && !isIntfNil(v) {
+								appVipPoolInt.Name = val.(string)
+							}
+							if val, ok := avpMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+								appVipPoolInt.Namespace = val.(string)
+							}
+
+							if val, ok := avpMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+								appVipPoolInt.Tenant = val.(string)
+							}
+						}
 					}
-					if val, ok := cMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-						certificateInt.Namespace = val.(string)
-					}
 
-					if val, ok := cMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-						certificateInt.Tenant = val.(string)
-					}
 				}
 
 			}
+		}
 
+	}
+
+	//cert
+	if v, ok := d.GetOk("cert"); ok && !isIntfNil(v) {
+
+		sl := v.([]interface{})
+		cert := &ves_io_schema_uztna_views_uztna_domain_view.DomainViewCertificate{}
+		createSpec.Cert = cert
+		for _, set := range sl {
+			if set != nil {
+				certMapStrToI := set.(map[string]interface{})
+
+				if v, ok := certMapStrToI["certificate"]; ok && !isIntfNil(v) {
+
+					sl := v.([]interface{})
+					certificateInt := &ves_io_schema_views.ObjectRefType{}
+					cert.Certificate = certificateInt
+
+					for _, set := range sl {
+						if set != nil {
+							cMapToStrVal := set.(map[string]interface{})
+							if val, ok := cMapToStrVal["name"]; ok && !isIntfNil(v) {
+								certificateInt.Name = val.(string)
+							}
+							if val, ok := cMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+								certificateInt.Namespace = val.(string)
+							}
+
+							if val, ok := cMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+								certificateInt.Tenant = val.(string)
+							}
+						}
+					}
+
+				}
+
+			}
 		}
 
 	}
@@ -331,117 +537,111 @@ func resourceVolterraUztnaDomainViewCreate(d *schema.ResourceData, meta interfac
 	//gateways
 	if v, ok := d.GetOk("gateways"); ok && !isIntfNil(v) {
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		gateways := &ves_io_schema_uztna_views_uztna_domain_view.DomainViewGateways{}
 		createSpec.Gateways = gateways
 		for _, set := range sl {
-			gatewaysMapStrToI := set.(map[string]interface{})
+			if set != nil {
+				gatewaysMapStrToI := set.(map[string]interface{})
 
-			if v, ok := gatewaysMapStrToI["bigip_ce"]; ok && !isIntfNil(v) {
+				if v, ok := gatewaysMapStrToI["perimeter_re"]; ok && !isIntfNil(v) {
 
-				sl := v.(*schema.Set).List()
-				bigipCe := &ves_io_schema_uztna_views_uztna_domain_view.DomainViewSites{}
-				gateways.BigipCe = bigipCe
-				for _, set := range sl {
-					bigipCeMapStrToI := set.(map[string]interface{})
+					sl := v.([]interface{})
+					perimeterRe := &ves_io_schema_uztna_views_uztna_domain_view.DVCloudGatewayAdvertisement{}
+					gateways.PerimeterRe = perimeterRe
+					for _, set := range sl {
+						if set != nil {
+							perimeterReMapStrToI := set.(map[string]interface{})
 
-					if v, ok := bigipCeMapStrToI["uztna_gateway"]; ok && !isIntfNil(v) {
+							cloudGatewayChoiceTypeFound := false
 
-						sl := v.([]interface{})
-						uztnaGatewayInt := make([]*ves_io_schema_views.ObjectRefType, len(sl))
-						bigipCe.UztnaGateway = uztnaGatewayInt
-						for i, ps := range sl {
+							if v, ok := perimeterReMapStrToI["all_cloud"]; ok && !isIntfNil(v) && !cloudGatewayChoiceTypeFound {
 
-							ugMapToStrVal := ps.(map[string]interface{})
-							uztnaGatewayInt[i] = &ves_io_schema_views.ObjectRefType{}
+								cloudGatewayChoiceTypeFound = true
 
-							if v, ok := ugMapToStrVal["name"]; ok && !isIntfNil(v) {
-								uztnaGatewayInt[i].Name = v.(string)
+								if v.(bool) {
+									cloudGatewayChoiceInt := &ves_io_schema_uztna_views_uztna_domain_view.DVCloudGatewayAdvertisement_AllCloud{}
+									cloudGatewayChoiceInt.AllCloud = &ves_io_schema.Empty{}
+									perimeterRe.CloudGatewayChoice = cloudGatewayChoiceInt
+								}
+
 							}
 
-							if v, ok := ugMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-								uztnaGatewayInt[i].Namespace = v.(string)
-							}
+							if v, ok := perimeterReMapStrToI["re_sites"]; ok && !isIntfNil(v) && !cloudGatewayChoiceTypeFound {
 
-							if v, ok := ugMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-								uztnaGatewayInt[i].Tenant = v.(string)
-							}
-
-						}
-
-					}
-
-				}
-
-			}
-
-			if v, ok := gatewaysMapStrToI["perimeter_re"]; ok && !isIntfNil(v) {
-
-				sl := v.(*schema.Set).List()
-				perimeterRe := &ves_io_schema_uztna_views_uztna_domain_view.DVPerimeterREAdvertisement{}
-				gateways.PerimeterRe = perimeterRe
-				for _, set := range sl {
-					perimeterReMapStrToI := set.(map[string]interface{})
-
-					perimeterReChoiceTypeFound := false
-
-					if v, ok := perimeterReMapStrToI["all_perimeter"]; ok && !isIntfNil(v) && !perimeterReChoiceTypeFound {
-
-						perimeterReChoiceTypeFound = true
-
-						if v.(bool) {
-							perimeterReChoiceInt := &ves_io_schema_uztna_views_uztna_domain_view.DVPerimeterREAdvertisement_AllPerimeter{}
-							perimeterReChoiceInt.AllPerimeter = &ves_io_schema.Empty{}
-							perimeterRe.PerimeterReChoice = perimeterReChoiceInt
-						}
-
-					}
-
-					if v, ok := perimeterReMapStrToI["re_sites"]; ok && !isIntfNil(v) && !perimeterReChoiceTypeFound {
-
-						perimeterReChoiceTypeFound = true
-						perimeterReChoiceInt := &ves_io_schema_uztna_views_uztna_domain_view.DVPerimeterREAdvertisement_ReSites{}
-						perimeterReChoiceInt.ReSites = &ves_io_schema_uztna_views_uztna_domain_view.DomainViewPerimeterRE{}
-						perimeterRe.PerimeterReChoice = perimeterReChoiceInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["perimeter_re_site"]; ok && !isIntfNil(v) {
+								cloudGatewayChoiceTypeFound = true
+								cloudGatewayChoiceInt := &ves_io_schema_uztna_views_uztna_domain_view.DVCloudGatewayAdvertisement_ReSites{}
+								cloudGatewayChoiceInt.ReSites = &ves_io_schema_uztna_views_uztna_domain_view.DomainViewCloudGateways{}
+								perimeterRe.CloudGatewayChoice = cloudGatewayChoiceInt
 
 								sl := v.([]interface{})
-								perimeterReSiteInt := make([]*ves_io_schema_views.ObjectRefType, len(sl))
-								perimeterReChoiceInt.ReSites.PerimeterReSite = perimeterReSiteInt
-								for i, ps := range sl {
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
 
-									prsMapToStrVal := ps.(map[string]interface{})
-									perimeterReSiteInt[i] = &ves_io_schema_views.ObjectRefType{}
+										if v, ok := cs["cloud_gateways"]; ok && !isIntfNil(v) {
 
-									if v, ok := prsMapToStrVal["name"]; ok && !isIntfNil(v) {
-										perimeterReSiteInt[i].Name = v.(string)
+											sl := v.([]interface{})
+											cloudGatewaysInt := make([]*ves_io_schema_views.ObjectRefType, len(sl))
+											cloudGatewayChoiceInt.ReSites.CloudGateways = cloudGatewaysInt
+											for i, ps := range sl {
+
+												cgMapToStrVal := ps.(map[string]interface{})
+												cloudGatewaysInt[i] = &ves_io_schema_views.ObjectRefType{}
+
+												if v, ok := cgMapToStrVal["name"]; ok && !isIntfNil(v) {
+													cloudGatewaysInt[i].Name = v.(string)
+												}
+
+												if v, ok := cgMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+													cloudGatewaysInt[i].Namespace = v.(string)
+												}
+
+												if v, ok := cgMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+													cloudGatewaysInt[i].Tenant = v.(string)
+												}
+
+											}
+
+										}
+
 									}
-
-									if v, ok := prsMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-										perimeterReSiteInt[i].Namespace = v.(string)
-									}
-
-									if v, ok := prsMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-										perimeterReSiteInt[i].Tenant = v.(string)
-									}
-
 								}
 
 							}
 
 						}
+					}
+
+				}
+
+				if v, ok := gatewaysMapStrToI["uztna_gateway"]; ok && !isIntfNil(v) {
+
+					sl := v.([]interface{})
+					uztnaGatewayInt := make([]*ves_io_schema_views.ObjectRefType, len(sl))
+					gateways.UztnaGateway = uztnaGatewayInt
+					for i, ps := range sl {
+
+						ugMapToStrVal := ps.(map[string]interface{})
+						uztnaGatewayInt[i] = &ves_io_schema_views.ObjectRefType{}
+
+						if v, ok := ugMapToStrVal["name"]; ok && !isIntfNil(v) {
+							uztnaGatewayInt[i].Name = v.(string)
+						}
+
+						if v, ok := ugMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+							uztnaGatewayInt[i].Namespace = v.(string)
+						}
+
+						if v, ok := ugMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+							uztnaGatewayInt[i].Tenant = v.(string)
+						}
 
 					}
 
 				}
 
 			}
-
 		}
 
 	}
@@ -449,47 +649,191 @@ func resourceVolterraUztnaDomainViewCreate(d *schema.ResourceData, meta interfac
 	//lease_pool
 	if v, ok := d.GetOk("lease_pool"); ok && !isIntfNil(v) {
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		leasePool := &ves_io_schema_uztna_views_uztna_domain_view.DomainViewLeasePoolList{}
 		createSpec.LeasePool = leasePool
 		for _, set := range sl {
-			leasePoolMapStrToI := set.(map[string]interface{})
+			if set != nil {
+				leasePoolMapStrToI := set.(map[string]interface{})
 
-			if v, ok := leasePoolMapStrToI["uztna_lpool"]; ok && !isIntfNil(v) {
+				ipaddressTypeTypeFound := false
 
-				sl := v.([]interface{})
-				uztnaLpoolInt := make([]*ves_io_schema_views.ObjectRefType, len(sl))
-				leasePool.UztnaLpool = uztnaLpoolInt
-				for i, ps := range sl {
+				if v, ok := leasePoolMapStrToI["ipv4_ipv6_leasepool"]; ok && !isIntfNil(v) && !ipaddressTypeTypeFound {
 
-					ulMapToStrVal := ps.(map[string]interface{})
-					uztnaLpoolInt[i] = &ves_io_schema_views.ObjectRefType{}
+					ipaddressTypeTypeFound = true
+					ipaddressTypeInt := &ves_io_schema_uztna_views_uztna_domain_view.DomainViewLeasePoolList_Ipv4Ipv6Leasepool{}
+					ipaddressTypeInt.Ipv4Ipv6Leasepool = &ves_io_schema_uztna_views_uztna_domain_view.DomainViewDualStackLeasePool{}
+					leasePool.IpaddressType = ipaddressTypeInt
 
-					if v, ok := ulMapToStrVal["name"]; ok && !isIntfNil(v) {
-						uztnaLpoolInt[i].Name = v.(string)
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["ipv4_leasepool"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								ipv4LeasepoolInt := &ves_io_schema_views.ObjectRefType{}
+								ipaddressTypeInt.Ipv4Ipv6Leasepool.Ipv4Leasepool = ipv4LeasepoolInt
+
+								for _, set := range sl {
+									if set != nil {
+										ilMapToStrVal := set.(map[string]interface{})
+										if val, ok := ilMapToStrVal["name"]; ok && !isIntfNil(v) {
+											ipv4LeasepoolInt.Name = val.(string)
+										}
+										if val, ok := ilMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+											ipv4LeasepoolInt.Namespace = val.(string)
+										}
+
+										if val, ok := ilMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+											ipv4LeasepoolInt.Tenant = val.(string)
+										}
+									}
+								}
+
+							}
+
+							if v, ok := cs["ipv6_leasepool"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								ipv6LeasepoolInt := &ves_io_schema_views.ObjectRefType{}
+								ipaddressTypeInt.Ipv4Ipv6Leasepool.Ipv6Leasepool = ipv6LeasepoolInt
+
+								for _, set := range sl {
+									if set != nil {
+										ilMapToStrVal := set.(map[string]interface{})
+										if val, ok := ilMapToStrVal["name"]; ok && !isIntfNil(v) {
+											ipv6LeasepoolInt.Name = val.(string)
+										}
+										if val, ok := ilMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+											ipv6LeasepoolInt.Namespace = val.(string)
+										}
+
+										if val, ok := ilMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+											ipv6LeasepoolInt.Tenant = val.(string)
+										}
+									}
+								}
+
+							}
+
+						}
 					}
 
-					if v, ok := ulMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-						uztnaLpoolInt[i].Namespace = v.(string)
+				}
+
+				if v, ok := leasePoolMapStrToI["ipv4_leasepool"]; ok && !isIntfNil(v) && !ipaddressTypeTypeFound {
+
+					ipaddressTypeTypeFound = true
+					ipaddressTypeInt := &ves_io_schema_uztna_views_uztna_domain_view.DomainViewLeasePoolList_Ipv4Leasepool{}
+					ipaddressTypeInt.Ipv4Leasepool = &ves_io_schema_views.ObjectRefType{}
+					leasePool.IpaddressType = ipaddressTypeInt
+
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+								ipaddressTypeInt.Ipv4Leasepool.Name = v.(string)
+
+							}
+
+							if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+								ipaddressTypeInt.Ipv4Leasepool.Namespace = v.(string)
+
+							}
+
+							if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+								ipaddressTypeInt.Ipv4Leasepool.Tenant = v.(string)
+
+							}
+
+						}
 					}
 
-					if v, ok := ulMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-						uztnaLpoolInt[i].Tenant = v.(string)
+				}
+
+				if v, ok := leasePoolMapStrToI["ipv6_leasepool"]; ok && !isIntfNil(v) && !ipaddressTypeTypeFound {
+
+					ipaddressTypeTypeFound = true
+					ipaddressTypeInt := &ves_io_schema_uztna_views_uztna_domain_view.DomainViewLeasePoolList_Ipv6Leasepool{}
+					ipaddressTypeInt.Ipv6Leasepool = &ves_io_schema_views.ObjectRefType{}
+					leasePool.IpaddressType = ipaddressTypeInt
+
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+								ipaddressTypeInt.Ipv6Leasepool.Name = v.(string)
+
+							}
+
+							if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+								ipaddressTypeInt.Ipv6Leasepool.Namespace = v.(string)
+
+							}
+
+							if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+								ipaddressTypeInt.Ipv6Leasepool.Tenant = v.(string)
+
+							}
+
+						}
 					}
 
 				}
 
 			}
-
 		}
 
 	}
 
-	//profile_name
-	if v, ok := d.GetOk("profile_name"); ok && !isIntfNil(v) {
+	//policy
+	if v, ok := d.GetOk("policy"); ok && !isIntfNil(v) {
 
-		createSpec.ProfileName =
-			v.(string)
+		sl := v.([]interface{})
+		policy := &ves_io_schema_uztna_views_uztna_domain_view.DomainViewPolicy{}
+		createSpec.Policy = policy
+		for _, set := range sl {
+			if set != nil {
+				policyMapStrToI := set.(map[string]interface{})
+
+				if v, ok := policyMapStrToI["policy_name"]; ok && !isIntfNil(v) {
+
+					sl := v.([]interface{})
+					policyNameInt := &ves_io_schema_views.ObjectRefType{}
+					policy.PolicyName = policyNameInt
+
+					for _, set := range sl {
+						if set != nil {
+							pnMapToStrVal := set.(map[string]interface{})
+							if val, ok := pnMapToStrVal["name"]; ok && !isIntfNil(v) {
+								policyNameInt.Name = val.(string)
+							}
+							if val, ok := pnMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+								policyNameInt.Namespace = val.(string)
+							}
+
+							if val, ok := pnMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+								policyNameInt.Tenant = val.(string)
+							}
+						}
+					}
+
+				}
+
+			}
+		}
 
 	}
 
@@ -599,199 +943,379 @@ func resourceVolterraUztnaDomainViewUpdate(d *schema.ResourceData, meta interfac
 
 	}
 
-	if v, ok := d.GetOk("cert"); ok && !isIntfNil(v) {
+	if v, ok := d.GetOk("app_vip_pool"); ok && !isIntfNil(v) {
 
-		sl := v.(*schema.Set).List()
-		cert := &ves_io_schema_uztna_views_uztna_domain_view.DomainViewCertificate{}
-		updateSpec.Cert = cert
+		sl := v.([]interface{})
+		appVipPool := &ves_io_schema_uztna_views_uztna_domain_view.DomainViewAppVIPPool{}
+		updateSpec.AppVipPool = appVipPool
 		for _, set := range sl {
-			certMapStrToI := set.(map[string]interface{})
+			if set != nil {
+				appVipPoolMapStrToI := set.(map[string]interface{})
 
-			if v, ok := certMapStrToI["certificate"]; ok && !isIntfNil(v) {
+				if v, ok := appVipPoolMapStrToI["app_vip_pool"]; ok && !isIntfNil(v) {
 
-				sl := v.(*schema.Set).List()
-				certificateInt := &ves_io_schema_views.ObjectRefType{}
-				cert.Certificate = certificateInt
+					sl := v.([]interface{})
+					appVipPoolInt := &ves_io_schema_views.ObjectRefType{}
+					appVipPool.AppVipPool = appVipPoolInt
 
-				for _, set := range sl {
-					cMapToStrVal := set.(map[string]interface{})
-					if val, ok := cMapToStrVal["name"]; ok && !isIntfNil(v) {
-						certificateInt.Name = val.(string)
+					for _, set := range sl {
+						if set != nil {
+							avpMapToStrVal := set.(map[string]interface{})
+							if val, ok := avpMapToStrVal["name"]; ok && !isIntfNil(v) {
+								appVipPoolInt.Name = val.(string)
+							}
+							if val, ok := avpMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+								appVipPoolInt.Namespace = val.(string)
+							}
+
+							if val, ok := avpMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+								appVipPoolInt.Tenant = val.(string)
+							}
+						}
 					}
-					if val, ok := cMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-						certificateInt.Namespace = val.(string)
-					}
 
-					if val, ok := cMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-						certificateInt.Tenant = val.(string)
-					}
 				}
 
 			}
+		}
 
+	}
+
+	if v, ok := d.GetOk("cert"); ok && !isIntfNil(v) {
+
+		sl := v.([]interface{})
+		cert := &ves_io_schema_uztna_views_uztna_domain_view.DomainViewCertificate{}
+		updateSpec.Cert = cert
+		for _, set := range sl {
+			if set != nil {
+				certMapStrToI := set.(map[string]interface{})
+
+				if v, ok := certMapStrToI["certificate"]; ok && !isIntfNil(v) {
+
+					sl := v.([]interface{})
+					certificateInt := &ves_io_schema_views.ObjectRefType{}
+					cert.Certificate = certificateInt
+
+					for _, set := range sl {
+						if set != nil {
+							cMapToStrVal := set.(map[string]interface{})
+							if val, ok := cMapToStrVal["name"]; ok && !isIntfNil(v) {
+								certificateInt.Name = val.(string)
+							}
+							if val, ok := cMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+								certificateInt.Namespace = val.(string)
+							}
+
+							if val, ok := cMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+								certificateInt.Tenant = val.(string)
+							}
+						}
+					}
+
+				}
+
+			}
 		}
 
 	}
 
 	if v, ok := d.GetOk("gateways"); ok && !isIntfNil(v) {
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		gateways := &ves_io_schema_uztna_views_uztna_domain_view.DomainViewGateways{}
 		updateSpec.Gateways = gateways
 		for _, set := range sl {
-			gatewaysMapStrToI := set.(map[string]interface{})
+			if set != nil {
+				gatewaysMapStrToI := set.(map[string]interface{})
 
-			if v, ok := gatewaysMapStrToI["bigip_ce"]; ok && !isIntfNil(v) {
+				if v, ok := gatewaysMapStrToI["perimeter_re"]; ok && !isIntfNil(v) {
 
-				sl := v.(*schema.Set).List()
-				bigipCe := &ves_io_schema_uztna_views_uztna_domain_view.DomainViewSites{}
-				gateways.BigipCe = bigipCe
-				for _, set := range sl {
-					bigipCeMapStrToI := set.(map[string]interface{})
+					sl := v.([]interface{})
+					perimeterRe := &ves_io_schema_uztna_views_uztna_domain_view.DVCloudGatewayAdvertisement{}
+					gateways.PerimeterRe = perimeterRe
+					for _, set := range sl {
+						if set != nil {
+							perimeterReMapStrToI := set.(map[string]interface{})
 
-					if v, ok := bigipCeMapStrToI["uztna_gateway"]; ok && !isIntfNil(v) {
+							cloudGatewayChoiceTypeFound := false
 
-						sl := v.([]interface{})
-						uztnaGatewayInt := make([]*ves_io_schema_views.ObjectRefType, len(sl))
-						bigipCe.UztnaGateway = uztnaGatewayInt
-						for i, ps := range sl {
+							if v, ok := perimeterReMapStrToI["all_cloud"]; ok && !isIntfNil(v) && !cloudGatewayChoiceTypeFound {
 
-							ugMapToStrVal := ps.(map[string]interface{})
-							uztnaGatewayInt[i] = &ves_io_schema_views.ObjectRefType{}
+								cloudGatewayChoiceTypeFound = true
 
-							if v, ok := ugMapToStrVal["name"]; ok && !isIntfNil(v) {
-								uztnaGatewayInt[i].Name = v.(string)
+								if v.(bool) {
+									cloudGatewayChoiceInt := &ves_io_schema_uztna_views_uztna_domain_view.DVCloudGatewayAdvertisement_AllCloud{}
+									cloudGatewayChoiceInt.AllCloud = &ves_io_schema.Empty{}
+									perimeterRe.CloudGatewayChoice = cloudGatewayChoiceInt
+								}
+
 							}
 
-							if v, ok := ugMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-								uztnaGatewayInt[i].Namespace = v.(string)
-							}
+							if v, ok := perimeterReMapStrToI["re_sites"]; ok && !isIntfNil(v) && !cloudGatewayChoiceTypeFound {
 
-							if v, ok := ugMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-								uztnaGatewayInt[i].Tenant = v.(string)
-							}
-
-						}
-
-					}
-
-				}
-
-			}
-
-			if v, ok := gatewaysMapStrToI["perimeter_re"]; ok && !isIntfNil(v) {
-
-				sl := v.(*schema.Set).List()
-				perimeterRe := &ves_io_schema_uztna_views_uztna_domain_view.DVPerimeterREAdvertisement{}
-				gateways.PerimeterRe = perimeterRe
-				for _, set := range sl {
-					perimeterReMapStrToI := set.(map[string]interface{})
-
-					perimeterReChoiceTypeFound := false
-
-					if v, ok := perimeterReMapStrToI["all_perimeter"]; ok && !isIntfNil(v) && !perimeterReChoiceTypeFound {
-
-						perimeterReChoiceTypeFound = true
-
-						if v.(bool) {
-							perimeterReChoiceInt := &ves_io_schema_uztna_views_uztna_domain_view.DVPerimeterREAdvertisement_AllPerimeter{}
-							perimeterReChoiceInt.AllPerimeter = &ves_io_schema.Empty{}
-							perimeterRe.PerimeterReChoice = perimeterReChoiceInt
-						}
-
-					}
-
-					if v, ok := perimeterReMapStrToI["re_sites"]; ok && !isIntfNil(v) && !perimeterReChoiceTypeFound {
-
-						perimeterReChoiceTypeFound = true
-						perimeterReChoiceInt := &ves_io_schema_uztna_views_uztna_domain_view.DVPerimeterREAdvertisement_ReSites{}
-						perimeterReChoiceInt.ReSites = &ves_io_schema_uztna_views_uztna_domain_view.DomainViewPerimeterRE{}
-						perimeterRe.PerimeterReChoice = perimeterReChoiceInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["perimeter_re_site"]; ok && !isIntfNil(v) {
+								cloudGatewayChoiceTypeFound = true
+								cloudGatewayChoiceInt := &ves_io_schema_uztna_views_uztna_domain_view.DVCloudGatewayAdvertisement_ReSites{}
+								cloudGatewayChoiceInt.ReSites = &ves_io_schema_uztna_views_uztna_domain_view.DomainViewCloudGateways{}
+								perimeterRe.CloudGatewayChoice = cloudGatewayChoiceInt
 
 								sl := v.([]interface{})
-								perimeterReSiteInt := make([]*ves_io_schema_views.ObjectRefType, len(sl))
-								perimeterReChoiceInt.ReSites.PerimeterReSite = perimeterReSiteInt
-								for i, ps := range sl {
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
 
-									prsMapToStrVal := ps.(map[string]interface{})
-									perimeterReSiteInt[i] = &ves_io_schema_views.ObjectRefType{}
+										if v, ok := cs["cloud_gateways"]; ok && !isIntfNil(v) {
 
-									if v, ok := prsMapToStrVal["name"]; ok && !isIntfNil(v) {
-										perimeterReSiteInt[i].Name = v.(string)
+											sl := v.([]interface{})
+											cloudGatewaysInt := make([]*ves_io_schema_views.ObjectRefType, len(sl))
+											cloudGatewayChoiceInt.ReSites.CloudGateways = cloudGatewaysInt
+											for i, ps := range sl {
+
+												cgMapToStrVal := ps.(map[string]interface{})
+												cloudGatewaysInt[i] = &ves_io_schema_views.ObjectRefType{}
+
+												if v, ok := cgMapToStrVal["name"]; ok && !isIntfNil(v) {
+													cloudGatewaysInt[i].Name = v.(string)
+												}
+
+												if v, ok := cgMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+													cloudGatewaysInt[i].Namespace = v.(string)
+												}
+
+												if v, ok := cgMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+													cloudGatewaysInt[i].Tenant = v.(string)
+												}
+
+											}
+
+										}
+
 									}
-
-									if v, ok := prsMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-										perimeterReSiteInt[i].Namespace = v.(string)
-									}
-
-									if v, ok := prsMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-										perimeterReSiteInt[i].Tenant = v.(string)
-									}
-
 								}
 
 							}
 
 						}
+					}
+
+				}
+
+				if v, ok := gatewaysMapStrToI["uztna_gateway"]; ok && !isIntfNil(v) {
+
+					sl := v.([]interface{})
+					uztnaGatewayInt := make([]*ves_io_schema_views.ObjectRefType, len(sl))
+					gateways.UztnaGateway = uztnaGatewayInt
+					for i, ps := range sl {
+
+						ugMapToStrVal := ps.(map[string]interface{})
+						uztnaGatewayInt[i] = &ves_io_schema_views.ObjectRefType{}
+
+						if v, ok := ugMapToStrVal["name"]; ok && !isIntfNil(v) {
+							uztnaGatewayInt[i].Name = v.(string)
+						}
+
+						if v, ok := ugMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+							uztnaGatewayInt[i].Namespace = v.(string)
+						}
+
+						if v, ok := ugMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+							uztnaGatewayInt[i].Tenant = v.(string)
+						}
 
 					}
 
 				}
 
 			}
-
 		}
 
 	}
 
 	if v, ok := d.GetOk("lease_pool"); ok && !isIntfNil(v) {
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		leasePool := &ves_io_schema_uztna_views_uztna_domain_view.DomainViewLeasePoolList{}
 		updateSpec.LeasePool = leasePool
 		for _, set := range sl {
-			leasePoolMapStrToI := set.(map[string]interface{})
+			if set != nil {
+				leasePoolMapStrToI := set.(map[string]interface{})
 
-			if v, ok := leasePoolMapStrToI["uztna_lpool"]; ok && !isIntfNil(v) {
+				ipaddressTypeTypeFound := false
 
-				sl := v.([]interface{})
-				uztnaLpoolInt := make([]*ves_io_schema_views.ObjectRefType, len(sl))
-				leasePool.UztnaLpool = uztnaLpoolInt
-				for i, ps := range sl {
+				if v, ok := leasePoolMapStrToI["ipv4_ipv6_leasepool"]; ok && !isIntfNil(v) && !ipaddressTypeTypeFound {
 
-					ulMapToStrVal := ps.(map[string]interface{})
-					uztnaLpoolInt[i] = &ves_io_schema_views.ObjectRefType{}
+					ipaddressTypeTypeFound = true
+					ipaddressTypeInt := &ves_io_schema_uztna_views_uztna_domain_view.DomainViewLeasePoolList_Ipv4Ipv6Leasepool{}
+					ipaddressTypeInt.Ipv4Ipv6Leasepool = &ves_io_schema_uztna_views_uztna_domain_view.DomainViewDualStackLeasePool{}
+					leasePool.IpaddressType = ipaddressTypeInt
 
-					if v, ok := ulMapToStrVal["name"]; ok && !isIntfNil(v) {
-						uztnaLpoolInt[i].Name = v.(string)
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["ipv4_leasepool"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								ipv4LeasepoolInt := &ves_io_schema_views.ObjectRefType{}
+								ipaddressTypeInt.Ipv4Ipv6Leasepool.Ipv4Leasepool = ipv4LeasepoolInt
+
+								for _, set := range sl {
+									if set != nil {
+										ilMapToStrVal := set.(map[string]interface{})
+										if val, ok := ilMapToStrVal["name"]; ok && !isIntfNil(v) {
+											ipv4LeasepoolInt.Name = val.(string)
+										}
+										if val, ok := ilMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+											ipv4LeasepoolInt.Namespace = val.(string)
+										}
+
+										if val, ok := ilMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+											ipv4LeasepoolInt.Tenant = val.(string)
+										}
+									}
+								}
+
+							}
+
+							if v, ok := cs["ipv6_leasepool"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								ipv6LeasepoolInt := &ves_io_schema_views.ObjectRefType{}
+								ipaddressTypeInt.Ipv4Ipv6Leasepool.Ipv6Leasepool = ipv6LeasepoolInt
+
+								for _, set := range sl {
+									if set != nil {
+										ilMapToStrVal := set.(map[string]interface{})
+										if val, ok := ilMapToStrVal["name"]; ok && !isIntfNil(v) {
+											ipv6LeasepoolInt.Name = val.(string)
+										}
+										if val, ok := ilMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+											ipv6LeasepoolInt.Namespace = val.(string)
+										}
+
+										if val, ok := ilMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+											ipv6LeasepoolInt.Tenant = val.(string)
+										}
+									}
+								}
+
+							}
+
+						}
 					}
 
-					if v, ok := ulMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-						uztnaLpoolInt[i].Namespace = v.(string)
+				}
+
+				if v, ok := leasePoolMapStrToI["ipv4_leasepool"]; ok && !isIntfNil(v) && !ipaddressTypeTypeFound {
+
+					ipaddressTypeTypeFound = true
+					ipaddressTypeInt := &ves_io_schema_uztna_views_uztna_domain_view.DomainViewLeasePoolList_Ipv4Leasepool{}
+					ipaddressTypeInt.Ipv4Leasepool = &ves_io_schema_views.ObjectRefType{}
+					leasePool.IpaddressType = ipaddressTypeInt
+
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+								ipaddressTypeInt.Ipv4Leasepool.Name = v.(string)
+
+							}
+
+							if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+								ipaddressTypeInt.Ipv4Leasepool.Namespace = v.(string)
+
+							}
+
+							if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+								ipaddressTypeInt.Ipv4Leasepool.Tenant = v.(string)
+
+							}
+
+						}
 					}
 
-					if v, ok := ulMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-						uztnaLpoolInt[i].Tenant = v.(string)
+				}
+
+				if v, ok := leasePoolMapStrToI["ipv6_leasepool"]; ok && !isIntfNil(v) && !ipaddressTypeTypeFound {
+
+					ipaddressTypeTypeFound = true
+					ipaddressTypeInt := &ves_io_schema_uztna_views_uztna_domain_view.DomainViewLeasePoolList_Ipv6Leasepool{}
+					ipaddressTypeInt.Ipv6Leasepool = &ves_io_schema_views.ObjectRefType{}
+					leasePool.IpaddressType = ipaddressTypeInt
+
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+								ipaddressTypeInt.Ipv6Leasepool.Name = v.(string)
+
+							}
+
+							if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+								ipaddressTypeInt.Ipv6Leasepool.Namespace = v.(string)
+
+							}
+
+							if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+								ipaddressTypeInt.Ipv6Leasepool.Tenant = v.(string)
+
+							}
+
+						}
 					}
 
 				}
 
 			}
-
 		}
 
 	}
 
-	if v, ok := d.GetOk("profile_name"); ok && !isIntfNil(v) {
+	if v, ok := d.GetOk("policy"); ok && !isIntfNil(v) {
 
-		updateSpec.ProfileName =
-			v.(string)
+		sl := v.([]interface{})
+		policy := &ves_io_schema_uztna_views_uztna_domain_view.DomainViewPolicy{}
+		updateSpec.Policy = policy
+		for _, set := range sl {
+			if set != nil {
+				policyMapStrToI := set.(map[string]interface{})
+
+				if v, ok := policyMapStrToI["policy_name"]; ok && !isIntfNil(v) {
+
+					sl := v.([]interface{})
+					policyNameInt := &ves_io_schema_views.ObjectRefType{}
+					policy.PolicyName = policyNameInt
+
+					for _, set := range sl {
+						if set != nil {
+							pnMapToStrVal := set.(map[string]interface{})
+							if val, ok := pnMapToStrVal["name"]; ok && !isIntfNil(v) {
+								policyNameInt.Name = val.(string)
+							}
+							if val, ok := pnMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+								policyNameInt.Namespace = val.(string)
+							}
+
+							if val, ok := pnMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+								policyNameInt.Tenant = val.(string)
+							}
+						}
+					}
+
+				}
+
+			}
+		}
 
 	}
 

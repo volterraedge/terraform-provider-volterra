@@ -62,67 +62,81 @@ func resourceVolterraUztnaPolicyTemplate() *schema.Resource {
 
 			"continuous_flow": {
 
-				Type:     schema.TypeSet,
-				Required: true,
+				Type:       schema.TypeList,
+				MaxItems:   1,
+				Optional:   true,
+				Deprecated: "This field is deprecated and will be removed in future release.",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 
 						"deny_all": {
 
-							Type:     schema.TypeBool,
-							Optional: true,
+							Type:       schema.TypeBool,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 						},
 
 						"simple": {
 
-							Type:     schema.TypeSet,
-							Optional: true,
+							Type:       schema.TypeList,
+							MaxItems:   1,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
 									"flows": {
 
-										Type:     schema.TypeList,
-										Required: true,
+										Type:       schema.TypeList,
+										Required:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
 												"allow_all": {
 
-													Type:     schema.TypeBool,
-													Optional: true,
+													Type:       schema.TypeBool,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 
 												"geolocation_match": {
 
-													Type:     schema.TypeSet,
-													Required: true,
+													Type:       schema.TypeList,
+													MaxItems:   1,
+													Required:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
 															"geomatch": {
 
-																Type:     schema.TypeList,
-																Required: true,
+																Type:       schema.TypeList,
+																Required:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
 																		"kind": {
-																			Type:     schema.TypeString,
-																			Computed: true,
+																			Type:       schema.TypeString,
+																			Computed:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"name": {
-																			Type:     schema.TypeString,
-																			Optional: true,
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 																		"namespace": {
-																			Type:     schema.TypeString,
-																			Optional: true,
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 																		"tenant": {
-																			Type:     schema.TypeString,
-																			Optional: true,
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 																	},
 																},
@@ -133,34 +147,41 @@ func resourceVolterraUztnaPolicyTemplate() *schema.Resource {
 
 												"saml_federation": {
 
-													Type:     schema.TypeSet,
-													Required: true,
+													Type:       schema.TypeList,
+													MaxItems:   1,
+													Required:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
 															"saml": {
 
-																Type:     schema.TypeList,
-																Required: true,
+																Type:       schema.TypeList,
+																Required:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
 																		"kind": {
-																			Type:     schema.TypeString,
-																			Computed: true,
+																			Type:       schema.TypeString,
+																			Computed:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"name": {
-																			Type:     schema.TypeString,
-																			Optional: true,
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 																		"namespace": {
-																			Type:     schema.TypeString,
-																			Optional: true,
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 																		"tenant": {
-																			Type:     schema.TypeString,
-																			Optional: true,
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 																	},
 																},
@@ -180,20 +201,23 @@ func resourceVolterraUztnaPolicyTemplate() *schema.Resource {
 
 			"on_start_flow": {
 
-				Type:     schema.TypeSet,
+				Type:     schema.TypeList,
+				MaxItems: 1,
 				Required: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 
 						"deny_all": {
 
-							Type:     schema.TypeBool,
-							Optional: true,
+							Type:       schema.TypeBool,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 						},
 
 						"simple": {
 
-							Type:     schema.TypeSet,
+							Type:     schema.TypeList,
+							MaxItems: 1,
 							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
@@ -207,13 +231,15 @@ func resourceVolterraUztnaPolicyTemplate() *schema.Resource {
 
 												"allow_all": {
 
-													Type:     schema.TypeBool,
-													Optional: true,
+													Type:       schema.TypeBool,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 
 												"geolocation_match": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Required: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -251,7 +277,8 @@ func resourceVolterraUztnaPolicyTemplate() *schema.Resource {
 
 												"saml_federation": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Required: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -355,162 +382,172 @@ func resourceVolterraUztnaPolicyTemplateCreate(d *schema.ResourceData, meta inte
 	//continuous_flow
 	if v, ok := d.GetOk("continuous_flow"); ok && !isIntfNil(v) {
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		continuousFlow := &ves_io_schema_uztna_uztna_policy_template.TemplateType{}
 		createSpec.ContinuousFlow = continuousFlow
 		for _, set := range sl {
-			continuousFlowMapStrToI := set.(map[string]interface{})
+			if set != nil {
+				continuousFlowMapStrToI := set.(map[string]interface{})
 
-			templateTypeTypeFound := false
+				templateTypeTypeFound := false
 
-			if v, ok := continuousFlowMapStrToI["deny_all"]; ok && !isIntfNil(v) && !templateTypeTypeFound {
+				if v, ok := continuousFlowMapStrToI["deny_all"]; ok && !isIntfNil(v) && !templateTypeTypeFound {
 
-				templateTypeTypeFound = true
+					templateTypeTypeFound = true
 
-				if v.(bool) {
-					templateTypeInt := &ves_io_schema_uztna_uztna_policy_template.TemplateType_DenyAll{}
-					templateTypeInt.DenyAll = &ves_io_schema.Empty{}
-					continuousFlow.TemplateType = templateTypeInt
+					if v.(bool) {
+						templateTypeInt := &ves_io_schema_uztna_uztna_policy_template.TemplateType_DenyAll{}
+						templateTypeInt.DenyAll = &ves_io_schema.Empty{}
+						continuousFlow.TemplateType = templateTypeInt
+					}
+
 				}
 
-			}
+				if v, ok := continuousFlowMapStrToI["simple"]; ok && !isIntfNil(v) && !templateTypeTypeFound {
 
-			if v, ok := continuousFlowMapStrToI["simple"]; ok && !isIntfNil(v) && !templateTypeTypeFound {
+					templateTypeTypeFound = true
+					templateTypeInt := &ves_io_schema_uztna_uztna_policy_template.TemplateType_Simple{}
+					templateTypeInt.Simple = &ves_io_schema_uztna_uztna_policy_template.SimpleTemplate{}
+					continuousFlow.TemplateType = templateTypeInt
 
-				templateTypeTypeFound = true
-				templateTypeInt := &ves_io_schema_uztna_uztna_policy_template.TemplateType_Simple{}
-				templateTypeInt.Simple = &ves_io_schema_uztna_uztna_policy_template.SimpleTemplate{}
-				continuousFlow.TemplateType = templateTypeInt
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
 
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
+							if v, ok := cs["flows"]; ok && !isIntfNil(v) {
 
-					if v, ok := cs["flows"]; ok && !isIntfNil(v) {
+								sl := v.([]interface{})
+								flows := make([]*ves_io_schema_uztna_uztna_policy_template.Flows, len(sl))
+								templateTypeInt.Simple.Flows = flows
+								for i, set := range sl {
+									if set != nil {
+										flows[i] = &ves_io_schema_uztna_uztna_policy_template.Flows{}
+										flowsMapStrToI := set.(map[string]interface{})
 
-						sl := v.([]interface{})
-						flows := make([]*ves_io_schema_uztna_uztna_policy_template.Flows, len(sl))
-						templateTypeInt.Simple.Flows = flows
-						for i, set := range sl {
-							flows[i] = &ves_io_schema_uztna_uztna_policy_template.Flows{}
-							flowsMapStrToI := set.(map[string]interface{})
+										flowTypeTypeFound := false
 
-							flowTypeTypeFound := false
+										if v, ok := flowsMapStrToI["allow_all"]; ok && !isIntfNil(v) && !flowTypeTypeFound {
 
-							if v, ok := flowsMapStrToI["allow_all"]; ok && !isIntfNil(v) && !flowTypeTypeFound {
+											flowTypeTypeFound = true
 
-								flowTypeTypeFound = true
-
-								if v.(bool) {
-									flowTypeInt := &ves_io_schema_uztna_uztna_policy_template.Flows_AllowAll{}
-									flowTypeInt.AllowAll = &ves_io_schema.Empty{}
-									flows[i].FlowType = flowTypeInt
-								}
-
-							}
-
-							if v, ok := flowsMapStrToI["geolocation_match"]; ok && !isIntfNil(v) && !flowTypeTypeFound {
-
-								flowTypeTypeFound = true
-								flowTypeInt := &ves_io_schema_uztna_uztna_policy_template.Flows_GeolocationMatch{}
-								flowTypeInt.GeolocationMatch = &ves_io_schema_uztna_uztna_policy_template.GeoLocationMatch{}
-								flows[i].FlowType = flowTypeInt
-
-								sl := v.(*schema.Set).List()
-								for _, set := range sl {
-									cs := set.(map[string]interface{})
-
-									if v, ok := cs["geomatch"]; ok && !isIntfNil(v) {
-
-										sl := v.([]interface{})
-										geomatchInt := make([]*ves_io_schema.ObjectRefType, len(sl))
-										flowTypeInt.GeolocationMatch.Geomatch = geomatchInt
-										for i, ps := range sl {
-
-											gMapToStrVal := ps.(map[string]interface{})
-											geomatchInt[i] = &ves_io_schema.ObjectRefType{}
-
-											geomatchInt[i].Kind = "uztna_flow"
-
-											if v, ok := gMapToStrVal["name"]; ok && !isIntfNil(v) {
-												geomatchInt[i].Name = v.(string)
+											if v.(bool) {
+												flowTypeInt := &ves_io_schema_uztna_uztna_policy_template.Flows_AllowAll{}
+												flowTypeInt.AllowAll = &ves_io_schema.Empty{}
+												flows[i].FlowType = flowTypeInt
 											}
 
-											if v, ok := gMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-												geomatchInt[i].Namespace = v.(string)
+										}
+
+										if v, ok := flowsMapStrToI["geolocation_match"]; ok && !isIntfNil(v) && !flowTypeTypeFound {
+
+											flowTypeTypeFound = true
+											flowTypeInt := &ves_io_schema_uztna_uztna_policy_template.Flows_GeolocationMatch{}
+											flowTypeInt.GeolocationMatch = &ves_io_schema_uztna_uztna_policy_template.GeoLocationMatch{}
+											flows[i].FlowType = flowTypeInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["geomatch"]; ok && !isIntfNil(v) {
+
+														sl := v.([]interface{})
+														geomatchInt := make([]*ves_io_schema.ObjectRefType, len(sl))
+														flowTypeInt.GeolocationMatch.Geomatch = geomatchInt
+														for i, ps := range sl {
+
+															gMapToStrVal := ps.(map[string]interface{})
+															geomatchInt[i] = &ves_io_schema.ObjectRefType{}
+
+															geomatchInt[i].Kind = "uztna_flow"
+
+															if v, ok := gMapToStrVal["name"]; ok && !isIntfNil(v) {
+																geomatchInt[i].Name = v.(string)
+															}
+
+															if v, ok := gMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+																geomatchInt[i].Namespace = v.(string)
+															}
+
+															if v, ok := gMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+																geomatchInt[i].Tenant = v.(string)
+															}
+
+															if v, ok := gMapToStrVal["uid"]; ok && !isIntfNil(v) {
+																geomatchInt[i].Uid = v.(string)
+															}
+
+														}
+
+													}
+
+												}
 											}
 
-											if v, ok := gMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-												geomatchInt[i].Tenant = v.(string)
-											}
+										}
 
-											if v, ok := gMapToStrVal["uid"]; ok && !isIntfNil(v) {
-												geomatchInt[i].Uid = v.(string)
+										if v, ok := flowsMapStrToI["saml_federation"]; ok && !isIntfNil(v) && !flowTypeTypeFound {
+
+											flowTypeTypeFound = true
+											flowTypeInt := &ves_io_schema_uztna_uztna_policy_template.Flows_SamlFederation{}
+											flowTypeInt.SamlFederation = &ves_io_schema_uztna_uztna_policy_template.SAMLFederation{}
+											flows[i].FlowType = flowTypeInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["saml"]; ok && !isIntfNil(v) {
+
+														sl := v.([]interface{})
+														samlInt := make([]*ves_io_schema.ObjectRefType, len(sl))
+														flowTypeInt.SamlFederation.Saml = samlInt
+														for i, ps := range sl {
+
+															sMapToStrVal := ps.(map[string]interface{})
+															samlInt[i] = &ves_io_schema.ObjectRefType{}
+
+															samlInt[i].Kind = "uztna_flow"
+
+															if v, ok := sMapToStrVal["name"]; ok && !isIntfNil(v) {
+																samlInt[i].Name = v.(string)
+															}
+
+															if v, ok := sMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+																samlInt[i].Namespace = v.(string)
+															}
+
+															if v, ok := sMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+																samlInt[i].Tenant = v.(string)
+															}
+
+															if v, ok := sMapToStrVal["uid"]; ok && !isIntfNil(v) {
+																samlInt[i].Uid = v.(string)
+															}
+
+														}
+
+													}
+
+												}
 											}
 
 										}
 
 									}
-
-								}
-
-							}
-
-							if v, ok := flowsMapStrToI["saml_federation"]; ok && !isIntfNil(v) && !flowTypeTypeFound {
-
-								flowTypeTypeFound = true
-								flowTypeInt := &ves_io_schema_uztna_uztna_policy_template.Flows_SamlFederation{}
-								flowTypeInt.SamlFederation = &ves_io_schema_uztna_uztna_policy_template.SAMLFederation{}
-								flows[i].FlowType = flowTypeInt
-
-								sl := v.(*schema.Set).List()
-								for _, set := range sl {
-									cs := set.(map[string]interface{})
-
-									if v, ok := cs["saml"]; ok && !isIntfNil(v) {
-
-										sl := v.([]interface{})
-										samlInt := make([]*ves_io_schema.ObjectRefType, len(sl))
-										flowTypeInt.SamlFederation.Saml = samlInt
-										for i, ps := range sl {
-
-											sMapToStrVal := ps.(map[string]interface{})
-											samlInt[i] = &ves_io_schema.ObjectRefType{}
-
-											samlInt[i].Kind = "uztna_flow"
-
-											if v, ok := sMapToStrVal["name"]; ok && !isIntfNil(v) {
-												samlInt[i].Name = v.(string)
-											}
-
-											if v, ok := sMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-												samlInt[i].Namespace = v.(string)
-											}
-
-											if v, ok := sMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-												samlInt[i].Tenant = v.(string)
-											}
-
-											if v, ok := sMapToStrVal["uid"]; ok && !isIntfNil(v) {
-												samlInt[i].Uid = v.(string)
-											}
-
-										}
-
-									}
-
 								}
 
 							}
 
 						}
-
 					}
 
 				}
 
 			}
-
 		}
 
 	}
@@ -518,162 +555,172 @@ func resourceVolterraUztnaPolicyTemplateCreate(d *schema.ResourceData, meta inte
 	//on_start_flow
 	if v, ok := d.GetOk("on_start_flow"); ok && !isIntfNil(v) {
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		onStartFlow := &ves_io_schema_uztna_uztna_policy_template.TemplateType{}
 		createSpec.OnStartFlow = onStartFlow
 		for _, set := range sl {
-			onStartFlowMapStrToI := set.(map[string]interface{})
+			if set != nil {
+				onStartFlowMapStrToI := set.(map[string]interface{})
 
-			templateTypeTypeFound := false
+				templateTypeTypeFound := false
 
-			if v, ok := onStartFlowMapStrToI["deny_all"]; ok && !isIntfNil(v) && !templateTypeTypeFound {
+				if v, ok := onStartFlowMapStrToI["deny_all"]; ok && !isIntfNil(v) && !templateTypeTypeFound {
 
-				templateTypeTypeFound = true
+					templateTypeTypeFound = true
 
-				if v.(bool) {
-					templateTypeInt := &ves_io_schema_uztna_uztna_policy_template.TemplateType_DenyAll{}
-					templateTypeInt.DenyAll = &ves_io_schema.Empty{}
-					onStartFlow.TemplateType = templateTypeInt
+					if v.(bool) {
+						templateTypeInt := &ves_io_schema_uztna_uztna_policy_template.TemplateType_DenyAll{}
+						templateTypeInt.DenyAll = &ves_io_schema.Empty{}
+						onStartFlow.TemplateType = templateTypeInt
+					}
+
 				}
 
-			}
+				if v, ok := onStartFlowMapStrToI["simple"]; ok && !isIntfNil(v) && !templateTypeTypeFound {
 
-			if v, ok := onStartFlowMapStrToI["simple"]; ok && !isIntfNil(v) && !templateTypeTypeFound {
+					templateTypeTypeFound = true
+					templateTypeInt := &ves_io_schema_uztna_uztna_policy_template.TemplateType_Simple{}
+					templateTypeInt.Simple = &ves_io_schema_uztna_uztna_policy_template.SimpleTemplate{}
+					onStartFlow.TemplateType = templateTypeInt
 
-				templateTypeTypeFound = true
-				templateTypeInt := &ves_io_schema_uztna_uztna_policy_template.TemplateType_Simple{}
-				templateTypeInt.Simple = &ves_io_schema_uztna_uztna_policy_template.SimpleTemplate{}
-				onStartFlow.TemplateType = templateTypeInt
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
 
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
+							if v, ok := cs["flows"]; ok && !isIntfNil(v) {
 
-					if v, ok := cs["flows"]; ok && !isIntfNil(v) {
+								sl := v.([]interface{})
+								flows := make([]*ves_io_schema_uztna_uztna_policy_template.Flows, len(sl))
+								templateTypeInt.Simple.Flows = flows
+								for i, set := range sl {
+									if set != nil {
+										flows[i] = &ves_io_schema_uztna_uztna_policy_template.Flows{}
+										flowsMapStrToI := set.(map[string]interface{})
 
-						sl := v.([]interface{})
-						flows := make([]*ves_io_schema_uztna_uztna_policy_template.Flows, len(sl))
-						templateTypeInt.Simple.Flows = flows
-						for i, set := range sl {
-							flows[i] = &ves_io_schema_uztna_uztna_policy_template.Flows{}
-							flowsMapStrToI := set.(map[string]interface{})
+										flowTypeTypeFound := false
 
-							flowTypeTypeFound := false
+										if v, ok := flowsMapStrToI["allow_all"]; ok && !isIntfNil(v) && !flowTypeTypeFound {
 
-							if v, ok := flowsMapStrToI["allow_all"]; ok && !isIntfNil(v) && !flowTypeTypeFound {
+											flowTypeTypeFound = true
 
-								flowTypeTypeFound = true
-
-								if v.(bool) {
-									flowTypeInt := &ves_io_schema_uztna_uztna_policy_template.Flows_AllowAll{}
-									flowTypeInt.AllowAll = &ves_io_schema.Empty{}
-									flows[i].FlowType = flowTypeInt
-								}
-
-							}
-
-							if v, ok := flowsMapStrToI["geolocation_match"]; ok && !isIntfNil(v) && !flowTypeTypeFound {
-
-								flowTypeTypeFound = true
-								flowTypeInt := &ves_io_schema_uztna_uztna_policy_template.Flows_GeolocationMatch{}
-								flowTypeInt.GeolocationMatch = &ves_io_schema_uztna_uztna_policy_template.GeoLocationMatch{}
-								flows[i].FlowType = flowTypeInt
-
-								sl := v.(*schema.Set).List()
-								for _, set := range sl {
-									cs := set.(map[string]interface{})
-
-									if v, ok := cs["geomatch"]; ok && !isIntfNil(v) {
-
-										sl := v.([]interface{})
-										geomatchInt := make([]*ves_io_schema.ObjectRefType, len(sl))
-										flowTypeInt.GeolocationMatch.Geomatch = geomatchInt
-										for i, ps := range sl {
-
-											gMapToStrVal := ps.(map[string]interface{})
-											geomatchInt[i] = &ves_io_schema.ObjectRefType{}
-
-											geomatchInt[i].Kind = "uztna_flow"
-
-											if v, ok := gMapToStrVal["name"]; ok && !isIntfNil(v) {
-												geomatchInt[i].Name = v.(string)
+											if v.(bool) {
+												flowTypeInt := &ves_io_schema_uztna_uztna_policy_template.Flows_AllowAll{}
+												flowTypeInt.AllowAll = &ves_io_schema.Empty{}
+												flows[i].FlowType = flowTypeInt
 											}
 
-											if v, ok := gMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-												geomatchInt[i].Namespace = v.(string)
+										}
+
+										if v, ok := flowsMapStrToI["geolocation_match"]; ok && !isIntfNil(v) && !flowTypeTypeFound {
+
+											flowTypeTypeFound = true
+											flowTypeInt := &ves_io_schema_uztna_uztna_policy_template.Flows_GeolocationMatch{}
+											flowTypeInt.GeolocationMatch = &ves_io_schema_uztna_uztna_policy_template.GeoLocationMatch{}
+											flows[i].FlowType = flowTypeInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["geomatch"]; ok && !isIntfNil(v) {
+
+														sl := v.([]interface{})
+														geomatchInt := make([]*ves_io_schema.ObjectRefType, len(sl))
+														flowTypeInt.GeolocationMatch.Geomatch = geomatchInt
+														for i, ps := range sl {
+
+															gMapToStrVal := ps.(map[string]interface{})
+															geomatchInt[i] = &ves_io_schema.ObjectRefType{}
+
+															geomatchInt[i].Kind = "uztna_flow"
+
+															if v, ok := gMapToStrVal["name"]; ok && !isIntfNil(v) {
+																geomatchInt[i].Name = v.(string)
+															}
+
+															if v, ok := gMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+																geomatchInt[i].Namespace = v.(string)
+															}
+
+															if v, ok := gMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+																geomatchInt[i].Tenant = v.(string)
+															}
+
+															if v, ok := gMapToStrVal["uid"]; ok && !isIntfNil(v) {
+																geomatchInt[i].Uid = v.(string)
+															}
+
+														}
+
+													}
+
+												}
 											}
 
-											if v, ok := gMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-												geomatchInt[i].Tenant = v.(string)
-											}
+										}
 
-											if v, ok := gMapToStrVal["uid"]; ok && !isIntfNil(v) {
-												geomatchInt[i].Uid = v.(string)
+										if v, ok := flowsMapStrToI["saml_federation"]; ok && !isIntfNil(v) && !flowTypeTypeFound {
+
+											flowTypeTypeFound = true
+											flowTypeInt := &ves_io_schema_uztna_uztna_policy_template.Flows_SamlFederation{}
+											flowTypeInt.SamlFederation = &ves_io_schema_uztna_uztna_policy_template.SAMLFederation{}
+											flows[i].FlowType = flowTypeInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["saml"]; ok && !isIntfNil(v) {
+
+														sl := v.([]interface{})
+														samlInt := make([]*ves_io_schema.ObjectRefType, len(sl))
+														flowTypeInt.SamlFederation.Saml = samlInt
+														for i, ps := range sl {
+
+															sMapToStrVal := ps.(map[string]interface{})
+															samlInt[i] = &ves_io_schema.ObjectRefType{}
+
+															samlInt[i].Kind = "uztna_flow"
+
+															if v, ok := sMapToStrVal["name"]; ok && !isIntfNil(v) {
+																samlInt[i].Name = v.(string)
+															}
+
+															if v, ok := sMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+																samlInt[i].Namespace = v.(string)
+															}
+
+															if v, ok := sMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+																samlInt[i].Tenant = v.(string)
+															}
+
+															if v, ok := sMapToStrVal["uid"]; ok && !isIntfNil(v) {
+																samlInt[i].Uid = v.(string)
+															}
+
+														}
+
+													}
+
+												}
 											}
 
 										}
 
 									}
-
-								}
-
-							}
-
-							if v, ok := flowsMapStrToI["saml_federation"]; ok && !isIntfNil(v) && !flowTypeTypeFound {
-
-								flowTypeTypeFound = true
-								flowTypeInt := &ves_io_schema_uztna_uztna_policy_template.Flows_SamlFederation{}
-								flowTypeInt.SamlFederation = &ves_io_schema_uztna_uztna_policy_template.SAMLFederation{}
-								flows[i].FlowType = flowTypeInt
-
-								sl := v.(*schema.Set).List()
-								for _, set := range sl {
-									cs := set.(map[string]interface{})
-
-									if v, ok := cs["saml"]; ok && !isIntfNil(v) {
-
-										sl := v.([]interface{})
-										samlInt := make([]*ves_io_schema.ObjectRefType, len(sl))
-										flowTypeInt.SamlFederation.Saml = samlInt
-										for i, ps := range sl {
-
-											sMapToStrVal := ps.(map[string]interface{})
-											samlInt[i] = &ves_io_schema.ObjectRefType{}
-
-											samlInt[i].Kind = "uztna_flow"
-
-											if v, ok := sMapToStrVal["name"]; ok && !isIntfNil(v) {
-												samlInt[i].Name = v.(string)
-											}
-
-											if v, ok := sMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-												samlInt[i].Namespace = v.(string)
-											}
-
-											if v, ok := sMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-												samlInt[i].Tenant = v.(string)
-											}
-
-											if v, ok := sMapToStrVal["uid"]; ok && !isIntfNil(v) {
-												samlInt[i].Uid = v.(string)
-											}
-
-										}
-
-									}
-
 								}
 
 							}
 
 						}
-
 					}
 
 				}
 
 			}
-
 		}
 
 	}
@@ -779,324 +826,344 @@ func resourceVolterraUztnaPolicyTemplateUpdate(d *schema.ResourceData, meta inte
 
 	if v, ok := d.GetOk("continuous_flow"); ok && !isIntfNil(v) {
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		continuousFlow := &ves_io_schema_uztna_uztna_policy_template.TemplateType{}
 		updateSpec.ContinuousFlow = continuousFlow
 		for _, set := range sl {
-			continuousFlowMapStrToI := set.(map[string]interface{})
+			if set != nil {
+				continuousFlowMapStrToI := set.(map[string]interface{})
 
-			templateTypeTypeFound := false
+				templateTypeTypeFound := false
 
-			if v, ok := continuousFlowMapStrToI["deny_all"]; ok && !isIntfNil(v) && !templateTypeTypeFound {
+				if v, ok := continuousFlowMapStrToI["deny_all"]; ok && !isIntfNil(v) && !templateTypeTypeFound {
 
-				templateTypeTypeFound = true
+					templateTypeTypeFound = true
 
-				if v.(bool) {
-					templateTypeInt := &ves_io_schema_uztna_uztna_policy_template.TemplateType_DenyAll{}
-					templateTypeInt.DenyAll = &ves_io_schema.Empty{}
-					continuousFlow.TemplateType = templateTypeInt
+					if v.(bool) {
+						templateTypeInt := &ves_io_schema_uztna_uztna_policy_template.TemplateType_DenyAll{}
+						templateTypeInt.DenyAll = &ves_io_schema.Empty{}
+						continuousFlow.TemplateType = templateTypeInt
+					}
+
 				}
 
-			}
+				if v, ok := continuousFlowMapStrToI["simple"]; ok && !isIntfNil(v) && !templateTypeTypeFound {
 
-			if v, ok := continuousFlowMapStrToI["simple"]; ok && !isIntfNil(v) && !templateTypeTypeFound {
+					templateTypeTypeFound = true
+					templateTypeInt := &ves_io_schema_uztna_uztna_policy_template.TemplateType_Simple{}
+					templateTypeInt.Simple = &ves_io_schema_uztna_uztna_policy_template.SimpleTemplate{}
+					continuousFlow.TemplateType = templateTypeInt
 
-				templateTypeTypeFound = true
-				templateTypeInt := &ves_io_schema_uztna_uztna_policy_template.TemplateType_Simple{}
-				templateTypeInt.Simple = &ves_io_schema_uztna_uztna_policy_template.SimpleTemplate{}
-				continuousFlow.TemplateType = templateTypeInt
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
 
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
+							if v, ok := cs["flows"]; ok && !isIntfNil(v) {
 
-					if v, ok := cs["flows"]; ok && !isIntfNil(v) {
+								sl := v.([]interface{})
+								flows := make([]*ves_io_schema_uztna_uztna_policy_template.Flows, len(sl))
+								templateTypeInt.Simple.Flows = flows
+								for i, set := range sl {
+									if set != nil {
+										flows[i] = &ves_io_schema_uztna_uztna_policy_template.Flows{}
+										flowsMapStrToI := set.(map[string]interface{})
 
-						sl := v.([]interface{})
-						flows := make([]*ves_io_schema_uztna_uztna_policy_template.Flows, len(sl))
-						templateTypeInt.Simple.Flows = flows
-						for i, set := range sl {
-							flows[i] = &ves_io_schema_uztna_uztna_policy_template.Flows{}
-							flowsMapStrToI := set.(map[string]interface{})
+										flowTypeTypeFound := false
 
-							flowTypeTypeFound := false
+										if v, ok := flowsMapStrToI["allow_all"]; ok && !isIntfNil(v) && !flowTypeTypeFound {
 
-							if v, ok := flowsMapStrToI["allow_all"]; ok && !isIntfNil(v) && !flowTypeTypeFound {
+											flowTypeTypeFound = true
 
-								flowTypeTypeFound = true
-
-								if v.(bool) {
-									flowTypeInt := &ves_io_schema_uztna_uztna_policy_template.Flows_AllowAll{}
-									flowTypeInt.AllowAll = &ves_io_schema.Empty{}
-									flows[i].FlowType = flowTypeInt
-								}
-
-							}
-
-							if v, ok := flowsMapStrToI["geolocation_match"]; ok && !isIntfNil(v) && !flowTypeTypeFound {
-
-								flowTypeTypeFound = true
-								flowTypeInt := &ves_io_schema_uztna_uztna_policy_template.Flows_GeolocationMatch{}
-								flowTypeInt.GeolocationMatch = &ves_io_schema_uztna_uztna_policy_template.GeoLocationMatch{}
-								flows[i].FlowType = flowTypeInt
-
-								sl := v.(*schema.Set).List()
-								for _, set := range sl {
-									cs := set.(map[string]interface{})
-
-									if v, ok := cs["geomatch"]; ok && !isIntfNil(v) {
-
-										sl := v.([]interface{})
-										geomatchInt := make([]*ves_io_schema.ObjectRefType, len(sl))
-										flowTypeInt.GeolocationMatch.Geomatch = geomatchInt
-										for i, ps := range sl {
-
-											gMapToStrVal := ps.(map[string]interface{})
-											geomatchInt[i] = &ves_io_schema.ObjectRefType{}
-
-											geomatchInt[i].Kind = "uztna_flow"
-
-											if v, ok := gMapToStrVal["name"]; ok && !isIntfNil(v) {
-												geomatchInt[i].Name = v.(string)
+											if v.(bool) {
+												flowTypeInt := &ves_io_schema_uztna_uztna_policy_template.Flows_AllowAll{}
+												flowTypeInt.AllowAll = &ves_io_schema.Empty{}
+												flows[i].FlowType = flowTypeInt
 											}
 
-											if v, ok := gMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-												geomatchInt[i].Namespace = v.(string)
+										}
+
+										if v, ok := flowsMapStrToI["geolocation_match"]; ok && !isIntfNil(v) && !flowTypeTypeFound {
+
+											flowTypeTypeFound = true
+											flowTypeInt := &ves_io_schema_uztna_uztna_policy_template.Flows_GeolocationMatch{}
+											flowTypeInt.GeolocationMatch = &ves_io_schema_uztna_uztna_policy_template.GeoLocationMatch{}
+											flows[i].FlowType = flowTypeInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["geomatch"]; ok && !isIntfNil(v) {
+
+														sl := v.([]interface{})
+														geomatchInt := make([]*ves_io_schema.ObjectRefType, len(sl))
+														flowTypeInt.GeolocationMatch.Geomatch = geomatchInt
+														for i, ps := range sl {
+
+															gMapToStrVal := ps.(map[string]interface{})
+															geomatchInt[i] = &ves_io_schema.ObjectRefType{}
+
+															geomatchInt[i].Kind = "uztna_flow"
+
+															if v, ok := gMapToStrVal["name"]; ok && !isIntfNil(v) {
+																geomatchInt[i].Name = v.(string)
+															}
+
+															if v, ok := gMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+																geomatchInt[i].Namespace = v.(string)
+															}
+
+															if v, ok := gMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+																geomatchInt[i].Tenant = v.(string)
+															}
+
+															if v, ok := gMapToStrVal["uid"]; ok && !isIntfNil(v) {
+																geomatchInt[i].Uid = v.(string)
+															}
+
+														}
+
+													}
+
+												}
 											}
 
-											if v, ok := gMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-												geomatchInt[i].Tenant = v.(string)
-											}
+										}
 
-											if v, ok := gMapToStrVal["uid"]; ok && !isIntfNil(v) {
-												geomatchInt[i].Uid = v.(string)
+										if v, ok := flowsMapStrToI["saml_federation"]; ok && !isIntfNil(v) && !flowTypeTypeFound {
+
+											flowTypeTypeFound = true
+											flowTypeInt := &ves_io_schema_uztna_uztna_policy_template.Flows_SamlFederation{}
+											flowTypeInt.SamlFederation = &ves_io_schema_uztna_uztna_policy_template.SAMLFederation{}
+											flows[i].FlowType = flowTypeInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["saml"]; ok && !isIntfNil(v) {
+
+														sl := v.([]interface{})
+														samlInt := make([]*ves_io_schema.ObjectRefType, len(sl))
+														flowTypeInt.SamlFederation.Saml = samlInt
+														for i, ps := range sl {
+
+															sMapToStrVal := ps.(map[string]interface{})
+															samlInt[i] = &ves_io_schema.ObjectRefType{}
+
+															samlInt[i].Kind = "uztna_flow"
+
+															if v, ok := sMapToStrVal["name"]; ok && !isIntfNil(v) {
+																samlInt[i].Name = v.(string)
+															}
+
+															if v, ok := sMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+																samlInt[i].Namespace = v.(string)
+															}
+
+															if v, ok := sMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+																samlInt[i].Tenant = v.(string)
+															}
+
+															if v, ok := sMapToStrVal["uid"]; ok && !isIntfNil(v) {
+																samlInt[i].Uid = v.(string)
+															}
+
+														}
+
+													}
+
+												}
 											}
 
 										}
 
 									}
-
-								}
-
-							}
-
-							if v, ok := flowsMapStrToI["saml_federation"]; ok && !isIntfNil(v) && !flowTypeTypeFound {
-
-								flowTypeTypeFound = true
-								flowTypeInt := &ves_io_schema_uztna_uztna_policy_template.Flows_SamlFederation{}
-								flowTypeInt.SamlFederation = &ves_io_schema_uztna_uztna_policy_template.SAMLFederation{}
-								flows[i].FlowType = flowTypeInt
-
-								sl := v.(*schema.Set).List()
-								for _, set := range sl {
-									cs := set.(map[string]interface{})
-
-									if v, ok := cs["saml"]; ok && !isIntfNil(v) {
-
-										sl := v.([]interface{})
-										samlInt := make([]*ves_io_schema.ObjectRefType, len(sl))
-										flowTypeInt.SamlFederation.Saml = samlInt
-										for i, ps := range sl {
-
-											sMapToStrVal := ps.(map[string]interface{})
-											samlInt[i] = &ves_io_schema.ObjectRefType{}
-
-											samlInt[i].Kind = "uztna_flow"
-
-											if v, ok := sMapToStrVal["name"]; ok && !isIntfNil(v) {
-												samlInt[i].Name = v.(string)
-											}
-
-											if v, ok := sMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-												samlInt[i].Namespace = v.(string)
-											}
-
-											if v, ok := sMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-												samlInt[i].Tenant = v.(string)
-											}
-
-											if v, ok := sMapToStrVal["uid"]; ok && !isIntfNil(v) {
-												samlInt[i].Uid = v.(string)
-											}
-
-										}
-
-									}
-
 								}
 
 							}
 
 						}
-
 					}
 
 				}
 
 			}
-
 		}
 
 	}
 
 	if v, ok := d.GetOk("on_start_flow"); ok && !isIntfNil(v) {
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		onStartFlow := &ves_io_schema_uztna_uztna_policy_template.TemplateType{}
 		updateSpec.OnStartFlow = onStartFlow
 		for _, set := range sl {
-			onStartFlowMapStrToI := set.(map[string]interface{})
+			if set != nil {
+				onStartFlowMapStrToI := set.(map[string]interface{})
 
-			templateTypeTypeFound := false
+				templateTypeTypeFound := false
 
-			if v, ok := onStartFlowMapStrToI["deny_all"]; ok && !isIntfNil(v) && !templateTypeTypeFound {
+				if v, ok := onStartFlowMapStrToI["deny_all"]; ok && !isIntfNil(v) && !templateTypeTypeFound {
 
-				templateTypeTypeFound = true
+					templateTypeTypeFound = true
 
-				if v.(bool) {
-					templateTypeInt := &ves_io_schema_uztna_uztna_policy_template.TemplateType_DenyAll{}
-					templateTypeInt.DenyAll = &ves_io_schema.Empty{}
-					onStartFlow.TemplateType = templateTypeInt
+					if v.(bool) {
+						templateTypeInt := &ves_io_schema_uztna_uztna_policy_template.TemplateType_DenyAll{}
+						templateTypeInt.DenyAll = &ves_io_schema.Empty{}
+						onStartFlow.TemplateType = templateTypeInt
+					}
+
 				}
 
-			}
+				if v, ok := onStartFlowMapStrToI["simple"]; ok && !isIntfNil(v) && !templateTypeTypeFound {
 
-			if v, ok := onStartFlowMapStrToI["simple"]; ok && !isIntfNil(v) && !templateTypeTypeFound {
+					templateTypeTypeFound = true
+					templateTypeInt := &ves_io_schema_uztna_uztna_policy_template.TemplateType_Simple{}
+					templateTypeInt.Simple = &ves_io_schema_uztna_uztna_policy_template.SimpleTemplate{}
+					onStartFlow.TemplateType = templateTypeInt
 
-				templateTypeTypeFound = true
-				templateTypeInt := &ves_io_schema_uztna_uztna_policy_template.TemplateType_Simple{}
-				templateTypeInt.Simple = &ves_io_schema_uztna_uztna_policy_template.SimpleTemplate{}
-				onStartFlow.TemplateType = templateTypeInt
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
 
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
+							if v, ok := cs["flows"]; ok && !isIntfNil(v) {
 
-					if v, ok := cs["flows"]; ok && !isIntfNil(v) {
+								sl := v.([]interface{})
+								flows := make([]*ves_io_schema_uztna_uztna_policy_template.Flows, len(sl))
+								templateTypeInt.Simple.Flows = flows
+								for i, set := range sl {
+									if set != nil {
+										flows[i] = &ves_io_schema_uztna_uztna_policy_template.Flows{}
+										flowsMapStrToI := set.(map[string]interface{})
 
-						sl := v.([]interface{})
-						flows := make([]*ves_io_schema_uztna_uztna_policy_template.Flows, len(sl))
-						templateTypeInt.Simple.Flows = flows
-						for i, set := range sl {
-							flows[i] = &ves_io_schema_uztna_uztna_policy_template.Flows{}
-							flowsMapStrToI := set.(map[string]interface{})
+										flowTypeTypeFound := false
 
-							flowTypeTypeFound := false
+										if v, ok := flowsMapStrToI["allow_all"]; ok && !isIntfNil(v) && !flowTypeTypeFound {
 
-							if v, ok := flowsMapStrToI["allow_all"]; ok && !isIntfNil(v) && !flowTypeTypeFound {
+											flowTypeTypeFound = true
 
-								flowTypeTypeFound = true
-
-								if v.(bool) {
-									flowTypeInt := &ves_io_schema_uztna_uztna_policy_template.Flows_AllowAll{}
-									flowTypeInt.AllowAll = &ves_io_schema.Empty{}
-									flows[i].FlowType = flowTypeInt
-								}
-
-							}
-
-							if v, ok := flowsMapStrToI["geolocation_match"]; ok && !isIntfNil(v) && !flowTypeTypeFound {
-
-								flowTypeTypeFound = true
-								flowTypeInt := &ves_io_schema_uztna_uztna_policy_template.Flows_GeolocationMatch{}
-								flowTypeInt.GeolocationMatch = &ves_io_schema_uztna_uztna_policy_template.GeoLocationMatch{}
-								flows[i].FlowType = flowTypeInt
-
-								sl := v.(*schema.Set).List()
-								for _, set := range sl {
-									cs := set.(map[string]interface{})
-
-									if v, ok := cs["geomatch"]; ok && !isIntfNil(v) {
-
-										sl := v.([]interface{})
-										geomatchInt := make([]*ves_io_schema.ObjectRefType, len(sl))
-										flowTypeInt.GeolocationMatch.Geomatch = geomatchInt
-										for i, ps := range sl {
-
-											gMapToStrVal := ps.(map[string]interface{})
-											geomatchInt[i] = &ves_io_schema.ObjectRefType{}
-
-											geomatchInt[i].Kind = "uztna_flow"
-
-											if v, ok := gMapToStrVal["name"]; ok && !isIntfNil(v) {
-												geomatchInt[i].Name = v.(string)
+											if v.(bool) {
+												flowTypeInt := &ves_io_schema_uztna_uztna_policy_template.Flows_AllowAll{}
+												flowTypeInt.AllowAll = &ves_io_schema.Empty{}
+												flows[i].FlowType = flowTypeInt
 											}
 
-											if v, ok := gMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-												geomatchInt[i].Namespace = v.(string)
+										}
+
+										if v, ok := flowsMapStrToI["geolocation_match"]; ok && !isIntfNil(v) && !flowTypeTypeFound {
+
+											flowTypeTypeFound = true
+											flowTypeInt := &ves_io_schema_uztna_uztna_policy_template.Flows_GeolocationMatch{}
+											flowTypeInt.GeolocationMatch = &ves_io_schema_uztna_uztna_policy_template.GeoLocationMatch{}
+											flows[i].FlowType = flowTypeInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["geomatch"]; ok && !isIntfNil(v) {
+
+														sl := v.([]interface{})
+														geomatchInt := make([]*ves_io_schema.ObjectRefType, len(sl))
+														flowTypeInt.GeolocationMatch.Geomatch = geomatchInt
+														for i, ps := range sl {
+
+															gMapToStrVal := ps.(map[string]interface{})
+															geomatchInt[i] = &ves_io_schema.ObjectRefType{}
+
+															geomatchInt[i].Kind = "uztna_flow"
+
+															if v, ok := gMapToStrVal["name"]; ok && !isIntfNil(v) {
+																geomatchInt[i].Name = v.(string)
+															}
+
+															if v, ok := gMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+																geomatchInt[i].Namespace = v.(string)
+															}
+
+															if v, ok := gMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+																geomatchInt[i].Tenant = v.(string)
+															}
+
+															if v, ok := gMapToStrVal["uid"]; ok && !isIntfNil(v) {
+																geomatchInt[i].Uid = v.(string)
+															}
+
+														}
+
+													}
+
+												}
 											}
 
-											if v, ok := gMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-												geomatchInt[i].Tenant = v.(string)
-											}
+										}
 
-											if v, ok := gMapToStrVal["uid"]; ok && !isIntfNil(v) {
-												geomatchInt[i].Uid = v.(string)
+										if v, ok := flowsMapStrToI["saml_federation"]; ok && !isIntfNil(v) && !flowTypeTypeFound {
+
+											flowTypeTypeFound = true
+											flowTypeInt := &ves_io_schema_uztna_uztna_policy_template.Flows_SamlFederation{}
+											flowTypeInt.SamlFederation = &ves_io_schema_uztna_uztna_policy_template.SAMLFederation{}
+											flows[i].FlowType = flowTypeInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["saml"]; ok && !isIntfNil(v) {
+
+														sl := v.([]interface{})
+														samlInt := make([]*ves_io_schema.ObjectRefType, len(sl))
+														flowTypeInt.SamlFederation.Saml = samlInt
+														for i, ps := range sl {
+
+															sMapToStrVal := ps.(map[string]interface{})
+															samlInt[i] = &ves_io_schema.ObjectRefType{}
+
+															samlInt[i].Kind = "uztna_flow"
+
+															if v, ok := sMapToStrVal["name"]; ok && !isIntfNil(v) {
+																samlInt[i].Name = v.(string)
+															}
+
+															if v, ok := sMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+																samlInt[i].Namespace = v.(string)
+															}
+
+															if v, ok := sMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+																samlInt[i].Tenant = v.(string)
+															}
+
+															if v, ok := sMapToStrVal["uid"]; ok && !isIntfNil(v) {
+																samlInt[i].Uid = v.(string)
+															}
+
+														}
+
+													}
+
+												}
 											}
 
 										}
 
 									}
-
-								}
-
-							}
-
-							if v, ok := flowsMapStrToI["saml_federation"]; ok && !isIntfNil(v) && !flowTypeTypeFound {
-
-								flowTypeTypeFound = true
-								flowTypeInt := &ves_io_schema_uztna_uztna_policy_template.Flows_SamlFederation{}
-								flowTypeInt.SamlFederation = &ves_io_schema_uztna_uztna_policy_template.SAMLFederation{}
-								flows[i].FlowType = flowTypeInt
-
-								sl := v.(*schema.Set).List()
-								for _, set := range sl {
-									cs := set.(map[string]interface{})
-
-									if v, ok := cs["saml"]; ok && !isIntfNil(v) {
-
-										sl := v.([]interface{})
-										samlInt := make([]*ves_io_schema.ObjectRefType, len(sl))
-										flowTypeInt.SamlFederation.Saml = samlInt
-										for i, ps := range sl {
-
-											sMapToStrVal := ps.(map[string]interface{})
-											samlInt[i] = &ves_io_schema.ObjectRefType{}
-
-											samlInt[i].Kind = "uztna_flow"
-
-											if v, ok := sMapToStrVal["name"]; ok && !isIntfNil(v) {
-												samlInt[i].Name = v.(string)
-											}
-
-											if v, ok := sMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-												samlInt[i].Namespace = v.(string)
-											}
-
-											if v, ok := sMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-												samlInt[i].Tenant = v.(string)
-											}
-
-											if v, ok := sMapToStrVal["uid"]; ok && !isIntfNil(v) {
-												samlInt[i].Uid = v.(string)
-											}
-
-										}
-
-									}
-
 								}
 
 							}
 
 						}
-
 					}
 
 				}
 
 			}
-
 		}
 
 	}

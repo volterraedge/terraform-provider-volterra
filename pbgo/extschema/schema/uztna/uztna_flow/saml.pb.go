@@ -679,36 +679,36 @@ func (m *ApplicationTagging) GetSamlAppTag() string {
 	return ""
 }
 
-// Provider Metadata
+// Signing Algoritm
 //
-// x-displayName: "Provider Metadata"
-type ProviderMetadata struct {
-	// Service  Provider Metadata
+// x-displayName: "Signing Algorithm"
+// x-example: sha1/sha256/sha384/sha512
+type SignAlgorithm struct {
+	// Supported Sign Algo
 	//
-	// x-displayName: "Service Provider Metadata"
-	// Service Provider Metadata is an XML file containing information needed to establish
-	// a secure connection between Distributed Cloud and an Identity Provider for single sign-on (SSO).
-	// Once downloaded, securely send this file to your identity provider so they can complete the federation.
-	ServiceProviderMetadata string `protobuf:"bytes,1,opt,name=service_provider_metadata,json=serviceProviderMetadata,proto3" json:"service_provider_metadata,omitempty"`
-	// Identity Provider Metadata
+	// x-displayName: "Signing Algoritm"
+	// x-required
+	// Supported Signing Algorithm List
 	//
-	// x-displayName: "Identity Provider Metadata"
-	// Identity Provider Metadata is an XML file containing information about your identity provider (IdP),
-	// including security certificates and endpoints used for single sign-on (SSO).
-	IdpProviderMetadata string `protobuf:"bytes,2,opt,name=idp_provider_metadata,json=idpProviderMetadata,proto3" json:"idp_provider_metadata,omitempty"`
+	// Types that are valid to be assigned to SignAlgo:
+	//	*SignAlgorithm_RsaSha1
+	//	*SignAlgorithm_RsaSha256
+	//	*SignAlgorithm_RsaSha384
+	//	*SignAlgorithm_RsaSha512
+	SignAlgo isSignAlgorithm_SignAlgo `protobuf_oneof:"sign_algo"`
 }
 
-func (m *ProviderMetadata) Reset()      { *m = ProviderMetadata{} }
-func (*ProviderMetadata) ProtoMessage() {}
-func (*ProviderMetadata) Descriptor() ([]byte, []int) {
+func (m *SignAlgorithm) Reset()      { *m = SignAlgorithm{} }
+func (*SignAlgorithm) ProtoMessage() {}
+func (*SignAlgorithm) Descriptor() ([]byte, []int) {
 	return fileDescriptor_d2b77cd57ae9845f, []int{8}
 }
-func (m *ProviderMetadata) XXX_Unmarshal(b []byte) error {
+func (m *SignAlgorithm) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *ProviderMetadata) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *SignAlgorithm) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_ProviderMetadata.Marshal(b, m, deterministic)
+		return xxx_messageInfo_SignAlgorithm.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -718,30 +718,346 @@ func (m *ProviderMetadata) XXX_Marshal(b []byte, deterministic bool) ([]byte, er
 		return b[:n], nil
 	}
 }
-func (m *ProviderMetadata) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ProviderMetadata.Merge(m, src)
+func (m *SignAlgorithm) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_SignAlgorithm.Merge(m, src)
 }
-func (m *ProviderMetadata) XXX_Size() int {
+func (m *SignAlgorithm) XXX_Size() int {
 	return m.Size()
 }
-func (m *ProviderMetadata) XXX_DiscardUnknown() {
-	xxx_messageInfo_ProviderMetadata.DiscardUnknown(m)
+func (m *SignAlgorithm) XXX_DiscardUnknown() {
+	xxx_messageInfo_SignAlgorithm.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_ProviderMetadata proto.InternalMessageInfo
+var xxx_messageInfo_SignAlgorithm proto.InternalMessageInfo
 
-func (m *ProviderMetadata) GetServiceProviderMetadata() string {
+type isSignAlgorithm_SignAlgo interface {
+	isSignAlgorithm_SignAlgo()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+
+type SignAlgorithm_RsaSha1 struct {
+	RsaSha1 *schema.Empty `protobuf:"bytes,5,opt,name=rsa_sha1,json=rsaSha1,proto3,oneof" json:"rsa_sha1,omitempty"`
+}
+type SignAlgorithm_RsaSha256 struct {
+	RsaSha256 *schema.Empty `protobuf:"bytes,6,opt,name=rsa_sha256,json=rsaSha256,proto3,oneof" json:"rsa_sha256,omitempty"`
+}
+type SignAlgorithm_RsaSha384 struct {
+	RsaSha384 *schema.Empty `protobuf:"bytes,7,opt,name=rsa_sha384,json=rsaSha384,proto3,oneof" json:"rsa_sha384,omitempty"`
+}
+type SignAlgorithm_RsaSha512 struct {
+	RsaSha512 *schema.Empty `protobuf:"bytes,8,opt,name=rsa_sha512,json=rsaSha512,proto3,oneof" json:"rsa_sha512,omitempty"`
+}
+
+func (*SignAlgorithm_RsaSha1) isSignAlgorithm_SignAlgo()   {}
+func (*SignAlgorithm_RsaSha256) isSignAlgorithm_SignAlgo() {}
+func (*SignAlgorithm_RsaSha384) isSignAlgorithm_SignAlgo() {}
+func (*SignAlgorithm_RsaSha512) isSignAlgorithm_SignAlgo() {}
+
+func (m *SignAlgorithm) GetSignAlgo() isSignAlgorithm_SignAlgo {
 	if m != nil {
-		return m.ServiceProviderMetadata
+		return m.SignAlgo
+	}
+	return nil
+}
+
+func (m *SignAlgorithm) GetRsaSha1() *schema.Empty {
+	if x, ok := m.GetSignAlgo().(*SignAlgorithm_RsaSha1); ok {
+		return x.RsaSha1
+	}
+	return nil
+}
+
+func (m *SignAlgorithm) GetRsaSha256() *schema.Empty {
+	if x, ok := m.GetSignAlgo().(*SignAlgorithm_RsaSha256); ok {
+		return x.RsaSha256
+	}
+	return nil
+}
+
+func (m *SignAlgorithm) GetRsaSha384() *schema.Empty {
+	if x, ok := m.GetSignAlgo().(*SignAlgorithm_RsaSha384); ok {
+		return x.RsaSha384
+	}
+	return nil
+}
+
+func (m *SignAlgorithm) GetRsaSha512() *schema.Empty {
+	if x, ok := m.GetSignAlgo().(*SignAlgorithm_RsaSha512); ok {
+		return x.RsaSha512
+	}
+	return nil
+}
+
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*SignAlgorithm) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
+		(*SignAlgorithm_RsaSha1)(nil),
+		(*SignAlgorithm_RsaSha256)(nil),
+		(*SignAlgorithm_RsaSha384)(nil),
+		(*SignAlgorithm_RsaSha512)(nil),
+	}
+}
+
+// IDP Secuirty Properties
+//
+// x-displayName: "Secuirty Properties"
+//
+// Identity Provider's Securuty Property
+type IdpSecurityProperty struct {
+	// Authentication Request Must be Signed
+	//
+	// x-displayName: "WantAuthRequestSigned"
+	// x-required
+	// Option either Authentication request sent as signed or not.
+	//
+	// Types that are valid to be assigned to AuthRequestSigned:
+	//	*IdpSecurityProperty_No
+	//	*IdpSecurityProperty_Yes
+	AuthRequestSigned isIdpSecurityProperty_AuthRequestSigned `protobuf_oneof:"auth_request_signed"`
+}
+
+func (m *IdpSecurityProperty) Reset()      { *m = IdpSecurityProperty{} }
+func (*IdpSecurityProperty) ProtoMessage() {}
+func (*IdpSecurityProperty) Descriptor() ([]byte, []int) {
+	return fileDescriptor_d2b77cd57ae9845f, []int{9}
+}
+func (m *IdpSecurityProperty) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *IdpSecurityProperty) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_IdpSecurityProperty.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *IdpSecurityProperty) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_IdpSecurityProperty.Merge(m, src)
+}
+func (m *IdpSecurityProperty) XXX_Size() int {
+	return m.Size()
+}
+func (m *IdpSecurityProperty) XXX_DiscardUnknown() {
+	xxx_messageInfo_IdpSecurityProperty.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_IdpSecurityProperty proto.InternalMessageInfo
+
+type isIdpSecurityProperty_AuthRequestSigned interface {
+	isIdpSecurityProperty_AuthRequestSigned()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+
+type IdpSecurityProperty_No struct {
+	No *schema.Empty `protobuf:"bytes,2,opt,name=no,proto3,oneof" json:"no,omitempty"`
+}
+type IdpSecurityProperty_Yes struct {
+	Yes *SignAlgorithm `protobuf:"bytes,3,opt,name=yes,proto3,oneof" json:"yes,omitempty"`
+}
+
+func (*IdpSecurityProperty_No) isIdpSecurityProperty_AuthRequestSigned()  {}
+func (*IdpSecurityProperty_Yes) isIdpSecurityProperty_AuthRequestSigned() {}
+
+func (m *IdpSecurityProperty) GetAuthRequestSigned() isIdpSecurityProperty_AuthRequestSigned {
+	if m != nil {
+		return m.AuthRequestSigned
+	}
+	return nil
+}
+
+func (m *IdpSecurityProperty) GetNo() *schema.Empty {
+	if x, ok := m.GetAuthRequestSigned().(*IdpSecurityProperty_No); ok {
+		return x.No
+	}
+	return nil
+}
+
+func (m *IdpSecurityProperty) GetYes() *SignAlgorithm {
+	if x, ok := m.GetAuthRequestSigned().(*IdpSecurityProperty_Yes); ok {
+		return x.Yes
+	}
+	return nil
+}
+
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*IdpSecurityProperty) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
+		(*IdpSecurityProperty_No)(nil),
+		(*IdpSecurityProperty_Yes)(nil),
+	}
+}
+
+// Identity Provider Metadata
+//
+// x-displayName: "Identity Provider Metadata"
+// Identity Provider Metadata is an XML file containing information about your identity provider (IdP),
+// including security certificates and endpoints used for single sign-on (SSO).
+type IdentityProvider struct {
+	// Name
+	//
+	// x-displayName: "Name"
+	// x-example: "idp-abc34ef"
+	// Filled by the internal service which is used to refer the Identity provide
+	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	// Issuer Identity URL
+	//
+	// x-displayName: "Issuer Identity URL"
+	// x-required
+	// x-example: "https://issuerentity.com"
+	//  URI that is assigned to the entity,
+	// and it is used to identify the entity in SAML messages
+	Issuer string `protobuf:"bytes,2,opt,name=issuer,proto3" json:"issuer,omitempty"`
+	// SSO Service URL
+	//
+	// x-displayName: "SSO Service URL"
+	// x-required
+	// x-example: "https://issuersignon.com"
+	//  URL required for SSO authentication
+	SsoUrl string `protobuf:"bytes,3,opt,name=sso_url,json=ssoUrl,proto3" json:"sso_url,omitempty"`
+	// SSO Service Binding
+	//
+	// x-displayName: "SSO Service Binding"
+	// x-required
+	// Request type of SSO service binding
+	//
+	// Types that are valid to be assigned to SsoServiceBinding:
+	//	*IdentityProvider_Post
+	//	*IdentityProvider_Redirect
+	SsoServiceBinding isIdentityProvider_SsoServiceBinding `protobuf_oneof:"sso_service_binding"`
+	// Identity Provider's Assertion Verification Certificate
+	//
+	// x-displayName: "Identity Provider's Assertion Verification Certificate"
+	//
+	// Used for identity provider's assertion verification
+	IdpAssertVerificationCert *Certificate `protobuf:"bytes,7,opt,name=idp_assert_verification_cert,json=idpAssertVerificationCert,proto3" json:"idp_assert_verification_cert,omitempty"`
+	// IDP Security Properties
+	//
+	// x-displayName: "Security Properties"
+	// x-required
+	// Identity Provider's Security Property
+	IdpSecurityProperty *IdpSecurityProperty `protobuf:"bytes,8,opt,name=idp_security_property,json=idpSecurityProperty,proto3" json:"idp_security_property,omitempty"`
+}
+
+func (m *IdentityProvider) Reset()      { *m = IdentityProvider{} }
+func (*IdentityProvider) ProtoMessage() {}
+func (*IdentityProvider) Descriptor() ([]byte, []int) {
+	return fileDescriptor_d2b77cd57ae9845f, []int{10}
+}
+func (m *IdentityProvider) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *IdentityProvider) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_IdentityProvider.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *IdentityProvider) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_IdentityProvider.Merge(m, src)
+}
+func (m *IdentityProvider) XXX_Size() int {
+	return m.Size()
+}
+func (m *IdentityProvider) XXX_DiscardUnknown() {
+	xxx_messageInfo_IdentityProvider.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_IdentityProvider proto.InternalMessageInfo
+
+type isIdentityProvider_SsoServiceBinding interface {
+	isIdentityProvider_SsoServiceBinding()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+
+type IdentityProvider_Post struct {
+	Post *schema.Empty `protobuf:"bytes,5,opt,name=post,proto3,oneof" json:"post,omitempty"`
+}
+type IdentityProvider_Redirect struct {
+	Redirect *schema.Empty `protobuf:"bytes,6,opt,name=redirect,proto3,oneof" json:"redirect,omitempty"`
+}
+
+func (*IdentityProvider_Post) isIdentityProvider_SsoServiceBinding()     {}
+func (*IdentityProvider_Redirect) isIdentityProvider_SsoServiceBinding() {}
+
+func (m *IdentityProvider) GetSsoServiceBinding() isIdentityProvider_SsoServiceBinding {
+	if m != nil {
+		return m.SsoServiceBinding
+	}
+	return nil
+}
+
+func (m *IdentityProvider) GetName() string {
+	if m != nil {
+		return m.Name
 	}
 	return ""
 }
 
-func (m *ProviderMetadata) GetIdpProviderMetadata() string {
+func (m *IdentityProvider) GetIssuer() string {
 	if m != nil {
-		return m.IdpProviderMetadata
+		return m.Issuer
 	}
 	return ""
+}
+
+func (m *IdentityProvider) GetSsoUrl() string {
+	if m != nil {
+		return m.SsoUrl
+	}
+	return ""
+}
+
+func (m *IdentityProvider) GetPost() *schema.Empty {
+	if x, ok := m.GetSsoServiceBinding().(*IdentityProvider_Post); ok {
+		return x.Post
+	}
+	return nil
+}
+
+func (m *IdentityProvider) GetRedirect() *schema.Empty {
+	if x, ok := m.GetSsoServiceBinding().(*IdentityProvider_Redirect); ok {
+		return x.Redirect
+	}
+	return nil
+}
+
+func (m *IdentityProvider) GetIdpAssertVerificationCert() *Certificate {
+	if m != nil {
+		return m.IdpAssertVerificationCert
+	}
+	return nil
+}
+
+func (m *IdentityProvider) GetIdpSecurityProperty() *IdpSecurityProperty {
+	if m != nil {
+		return m.IdpSecurityProperty
+	}
+	return nil
+}
+
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*IdentityProvider) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
+		(*IdentityProvider_Post)(nil),
+		(*IdentityProvider_Redirect)(nil),
+	}
 }
 
 // SAML Message
@@ -756,24 +1072,25 @@ type SAMLMessage struct {
 	// x-required
 	// Service Provider Properties
 	ServiceProviderProperties *ServiceProviderProperties `protobuf:"bytes,1,opt,name=service_provider_properties,json=serviceProviderProperties,proto3" json:"service_provider_properties,omitempty"`
-	// Provider Properties
-	//
-	// x-displayName: "Provider Metadata "
-	// x-required
-	// Provide metadata is xml kind of input for Service provider metadata and IDP .
-	ProviderMetadata *ProviderMetadata `protobuf:"bytes,2,opt,name=provider_metadata,json=providerMetadata,proto3" json:"provider_metadata,omitempty"`
 	// Application Tagging
 	//
 	// x-displayName: "Application Tagging "
 	// x-required
 	// Application Tagging
 	ApplicationTag *ApplicationTagging `protobuf:"bytes,3,opt,name=application_tag,json=applicationTag,proto3" json:"application_tag,omitempty"`
+	// Identity Provider
+	//
+	// x-displayName: "Identity Provider"
+	// x-required
+	// Identity Provider containing information about your identity provider (IdP),
+	// including security certificates and endpoints used for single sign-on (SSO).
+	Idp *IdentityProvider `protobuf:"bytes,4,opt,name=idp,proto3" json:"idp,omitempty"`
 }
 
 func (m *SAMLMessage) Reset()      { *m = SAMLMessage{} }
 func (*SAMLMessage) ProtoMessage() {}
 func (*SAMLMessage) Descriptor() ([]byte, []int) {
-	return fileDescriptor_d2b77cd57ae9845f, []int{9}
+	return fileDescriptor_d2b77cd57ae9845f, []int{11}
 }
 func (m *SAMLMessage) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -809,16 +1126,16 @@ func (m *SAMLMessage) GetServiceProviderProperties() *ServiceProviderProperties 
 	return nil
 }
 
-func (m *SAMLMessage) GetProviderMetadata() *ProviderMetadata {
+func (m *SAMLMessage) GetApplicationTag() *ApplicationTagging {
 	if m != nil {
-		return m.ProviderMetadata
+		return m.ApplicationTag
 	}
 	return nil
 }
 
-func (m *SAMLMessage) GetApplicationTag() *ApplicationTagging {
+func (m *SAMLMessage) GetIdp() *IdentityProvider {
 	if m != nil {
-		return m.ApplicationTag
+		return m.Idp
 	}
 	return nil
 }
@@ -833,7 +1150,9 @@ func init() {
 	proto.RegisterType((*WantEncryptedRequest)(nil), "ves.io.schema.uztna.uztna_flow.WantEncryptedRequest")
 	proto.RegisterType((*ServiceProviderProperties)(nil), "ves.io.schema.uztna.uztna_flow.ServiceProviderProperties")
 	proto.RegisterType((*ApplicationTagging)(nil), "ves.io.schema.uztna.uztna_flow.ApplicationTagging")
-	proto.RegisterType((*ProviderMetadata)(nil), "ves.io.schema.uztna.uztna_flow.ProviderMetadata")
+	proto.RegisterType((*SignAlgorithm)(nil), "ves.io.schema.uztna.uztna_flow.SignAlgorithm")
+	proto.RegisterType((*IdpSecurityProperty)(nil), "ves.io.schema.uztna.uztna_flow.IdpSecurityProperty")
+	proto.RegisterType((*IdentityProvider)(nil), "ves.io.schema.uztna.uztna_flow.IdentityProvider")
 	proto.RegisterType((*SAMLMessage)(nil), "ves.io.schema.uztna.uztna_flow.SAMLMessage")
 }
 
@@ -842,79 +1161,98 @@ func init() {
 }
 
 var fileDescriptor_d2b77cd57ae9845f = []byte{
-	// 1138 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x9c, 0x56, 0xcf, 0x6f, 0x1b, 0x45,
-	0x14, 0xf6, 0xc4, 0x6e, 0x71, 0xde, 0x5a, 0xc1, 0xac, 0x93, 0xd6, 0x6e, 0xab, 0xad, 0x31, 0x42,
-	0x2a, 0x4d, 0x6a, 0xb7, 0x4e, 0x15, 0xa9, 0xa8, 0x02, 0xc5, 0x21, 0x28, 0x8d, 0x9a, 0x34, 0x5a,
-	0x3b, 0x42, 0x02, 0x55, 0xab, 0x89, 0x3d, 0x5e, 0x0f, 0xd8, 0x33, 0x9b, 0xd9, 0xd9, 0xa4, 0xae,
-	0x00, 0xf5, 0xcc, 0xa9, 0x67, 0x2e, 0x5c, 0x11, 0x7f, 0x02, 0xbe, 0xf4, 0xc0, 0x01, 0x10, 0x12,
-	0x39, 0x56, 0x9c, 0x88, 0x73, 0x81, 0x5b, 0x8f, 0x1c, 0xd1, 0xac, 0xd7, 0x8e, 0xd7, 0x3f, 0x30,
-	0x70, 0xb1, 0xbc, 0xf3, 0xde, 0xfb, 0xde, 0xf7, 0xbd, 0x1f, 0xbb, 0x03, 0xef, 0x1c, 0x11, 0x37,
-	0x4f, 0x79, 0xc1, 0xad, 0x36, 0x48, 0x0b, 0x17, 0xbc, 0xa7, 0x92, 0x05, 0xbf, 0x56, 0xbd, 0xc9,
-	0x8f, 0x0b, 0x2e, 0x6e, 0x35, 0xf3, 0x8e, 0xe0, 0x92, 0xeb, 0x46, 0xcf, 0x35, 0xdf, 0x73, 0xcd,
-	0xfb, 0x4e, 0xf9, 0x73, 0xd7, 0x2b, 0xcb, 0x61, 0x28, 0xec, 0x50, 0xcb, 0x16, 0xdc, 0x73, 0x2c,
-	0xd2, 0x24, 0x2d, 0xc2, 0x64, 0x41, 0xb6, 0x1d, 0xe2, 0xf6, 0xc0, 0xae, 0x5c, 0x0e, 0x3b, 0x33,
-	0x22, 0x03, 0xc3, 0xd5, 0xb0, 0x81, 0x3b, 0x92, 0x72, 0xd6, 0x8f, 0xca, 0x84, 0x8d, 0xc3, 0x80,
-	0xd7, 0xc2, 0xa6, 0x23, 0xdc, 0xa4, 0x35, 0x2c, 0x49, 0x60, 0xcd, 0x8e, 0x58, 0x29, 0x39, 0xb6,
-	0xc2, 0xd0, 0xd7, 0xc7, 0x3d, 0xdc, 0xe1, 0x04, 0xb9, 0xc7, 0xa0, 0x6d, 0x10, 0x21, 0x69, 0x9d,
-	0x56, 0xb1, 0x24, 0xfa, 0x2e, 0x68, 0xd5, 0xf3, 0xc7, 0xf4, 0x5c, 0x36, 0x7a, 0x43, 0x2b, 0x5e,
-	0xcb, 0x87, 0x6b, 0xf4, 0xe8, 0xe0, 0x53, 0x52, 0x95, 0x26, 0xa9, 0x57, 0xda, 0x0e, 0x29, 0x2d,
-	0x7c, 0xf7, 0xc5, 0x70, 0x8c, 0x39, 0xfc, 0x90, 0xfb, 0x1c, 0x52, 0xfb, 0x8c, 0xd6, 0xb9, 0x68,
-	0x99, 0xc4, 0xe5, 0x9e, 0xa8, 0x92, 0x5d, 0xdc, 0x22, 0xfa, 0x2a, 0x44, 0x3d, 0xc1, 0xd2, 0x28,
-	0x8b, 0x6e, 0xcc, 0x97, 0xde, 0xfc, 0xab, 0x83, 0xe6, 0xbe, 0xff, 0xf3, 0x45, 0xf4, 0x82, 0x88,
-	0xa6, 0x9f, 0x21, 0xf5, 0x2f, 0x26, 0xe6, 0x92, 0x28, 0x38, 0x7a, 0x8e, 0x90, 0xa9, 0xbc, 0xf5,
-	0xdb, 0x30, 0xdf, 0xe0, 0xae, 0xb4, 0x18, 0x6e, 0x29, 0x66, 0x2a, 0x34, 0x15, 0x38, 0x37, 0xd0,
-	0x20, 0x3e, 0x6e, 0xc6, 0x95, 0x97, 0x4a, 0x93, 0x5b, 0x83, 0x4b, 0x23, 0xd9, 0x1f, 0xf2, 0x2a,
-	0x96, 0x5c, 0xe8, 0xd7, 0x14, 0x81, 0x66, 0x40, 0x00, 0x86, 0x82, 0xd5, 0x71, 0xee, 0x9b, 0x28,
-	0x68, 0xeb, 0x5e, 0x8d, 0x12, 0x56, 0x25, 0xfb, 0x82, 0xea, 0x02, 0xd2, 0x5e, 0x0f, 0xc7, 0x12,
-	0x01, 0x90, 0xd5, 0xec, 0x21, 0xf9, 0x10, 0x5a, 0x71, 0x2d, 0xff, 0xcf, 0x63, 0x94, 0x9f, 0xcc,
-	0x63, 0x2b, 0x62, 0x5e, 0xf2, 0x26, 0x33, 0xa4, 0xb0, 0x34, 0x96, 0x73, 0xa0, 0x5c, 0x2b, 0xae,
-	0xfe, 0xc7, 0x84, 0xaa, 0x1e, 0x5b, 0x11, 0x33, 0xe5, 0x8d, 0x1f, 0xbf, 0xfb, 0xe5, 0xcf, 0x1d,
-	0xf4, 0x14, 0x9e, 0x40, 0xa2, 0xaf, 0x39, 0xbb, 0x6f, 0x3e, 0xb8, 0xd9, 0x80, 0x3a, 0xdc, 0x9d,
-	0x2e, 0xbc, 0x98, 0x0e, 0x32, 0x64, 0xfb, 0x58, 0xd9, 0x80, 0x3a, 0xe4, 0xa7, 0x50, 0x2f, 0x2e,
-	0x8d, 0x85, 0xa8, 0xfc, 0xa5, 0x65, 0x48, 0xe1, 0x20, 0xb3, 0xe5, 0x09, 0x6a, 0x55, 0x1b, 0x9c,
-	0x56, 0x89, 0xbe, 0xf8, 0xa2, 0x83, 0xd0, 0x49, 0x07, 0xc5, 0xba, 0x1d, 0x14, 0xbb, 0xb3, 0x92,
-	0x2d, 0xaa, 0x39, 0xd9, 0x8e, 0xc5, 0x63, 0xc9, 0x0b, 0xb9, 0x5f, 0x10, 0x64, 0xca, 0xd4, 0x66,
-	0xeb, 0x9e, 0x6c, 0x10, 0x26, 0xd5, 0xb0, 0x51, 0xce, 0x4c, 0x72, 0xe8, 0x11, 0x57, 0xea, 0x6b,
-	0xa0, 0x31, 0x6e, 0x61, 0x4f, 0x36, 0x2c, 0x41, 0x0e, 0x83, 0x8a, 0x2d, 0x8e, 0x54, 0x6c, 0xb3,
-	0xe5, 0xc8, 0xf6, 0x56, 0xc4, 0x9c, 0x67, 0x5c, 0xa1, 0x98, 0xe4, 0x50, 0xdf, 0x86, 0x79, 0x97,
-	0xda, 0xcc, 0x8f, 0x4c, 0x47, 0xfd, 0xa8, 0xe5, 0x59, 0x75, 0x1e, 0xda, 0x9e, 0xad, 0x88, 0x19,
-	0x77, 0x03, 0x52, 0xa5, 0xb7, 0x61, 0x69, 0x80, 0x65, 0xa9, 0x8d, 0xeb, 0xcb, 0x4a, 0x9c, 0x74,
-	0x10, 0x52, 0x92, 0x8a, 0x2b, 0xd9, 0xd5, 0xed, 0x58, 0x1c, 0x25, 0xe7, 0x72, 0xbf, 0x22, 0x58,
-	0xfc, 0x08, 0x33, 0xb9, 0xc9, 0xaa, 0xa2, 0xed, 0x48, 0x52, 0xeb, 0x2b, 0xb9, 0x0f, 0x0b, 0x8c,
-	0x5b, 0xa4, 0x77, 0xfc, 0x2f, 0xc4, 0x24, 0x18, 0x0f, 0x30, 0x94, 0x9e, 0x5d, 0xd0, 0x86, 0x43,
-	0xff, 0x97, 0x22, 0x20, 0x03, 0xbc, 0xd2, 0x5b, 0x70, 0xe9, 0x18, 0x33, 0xd9, 0xe7, 0x43, 0x6a,
-	0x0a, 0xd6, 0xe7, 0x39, 0x1f, 0x88, 0x42, 0xc5, 0x40, 0xd1, 0x4f, 0x31, 0xc8, 0x94, 0x89, 0x38,
-	0xa2, 0x55, 0xb2, 0x27, 0xf8, 0x11, 0xad, 0x11, 0xb1, 0x27, 0xb8, 0xa3, 0xa0, 0x89, 0xab, 0xef,
-	0x42, 0x62, 0xb8, 0xe3, 0xc1, 0x12, 0xcd, 0x64, 0x36, 0xb4, 0x93, 0xa6, 0x86, 0x87, 0x16, 0x74,
-	0x19, 0x34, 0x41, 0x9a, 0xb8, 0x6d, 0xb9, 0xb2, 0xf7, 0xda, 0x1a, 0x5d, 0x6b, 0xf0, 0xcd, 0x65,
-	0x65, 0xd5, 0xcb, 0x10, 0x53, 0xfd, 0xf0, 0xcb, 0xb1, 0x50, 0x7c, 0x7f, 0x66, 0x52, 0xd7, 0x55,
-	0xac, 0x39, 0xdb, 0xe0, 0xcc, 0xf5, 0x5a, 0x44, 0x04, 0xb2, 0x4a, 0x94, 0xd5, 0x28, 0xb3, 0x4d,
-	0x1f, 0x4c, 0x6f, 0xc3, 0xd5, 0x41, 0xbb, 0xcf, 0x07, 0xb2, 0x5f, 0x9f, 0x74, 0xcc, 0x17, 0x78,
-	0x6f, 0x56, 0xae, 0xa9, 0x23, 0x6d, 0x66, 0xdc, 0xa9, 0xd3, 0xce, 0x20, 0x3d, 0xd2, 0x15, 0xdc,
-	0xa7, 0x9c, 0xbe, 0xe0, 0xe7, 0xbd, 0x3b, 0x2b, 0xef, 0xa4, 0xd9, 0x33, 0xfd, 0x5e, 0x0f, 0x4e,
-	0x07, 0x65, 0xd0, 0xef, 0xc0, 0x62, 0x9d, 0xab, 0x9d, 0x0e, 0x6b, 0x4d, 0x5f, 0xcc, 0xa2, 0x1b,
-	0x71, 0x33, 0xe5, 0xdb, 0xc2, 0x4c, 0xf5, 0xfb, 0xb0, 0xe4, 0x53, 0x54, 0x22, 0x42, 0xfc, 0x5e,
-	0x53, 0x31, 0xa5, 0xf8, 0x6f, 0x1d, 0x14, 0x93, 0xc2, 0x23, 0x66, 0x4a, 0xb9, 0x95, 0x7d, 0xaf,
-	0x41, 0xc2, 0x5c, 0x09, 0xf4, 0x75, 0xc7, 0x69, 0x06, 0x60, 0x15, 0x6c, 0xdb, 0x94, 0xd9, 0xfa,
-	0x0a, 0x24, 0xd4, 0x67, 0xdc, 0xc2, 0x8e, 0x63, 0x49, 0x6c, 0x4f, 0x78, 0x97, 0x83, 0xb2, 0xaf,
-	0x3b, 0x4e, 0x05, 0xdb, 0xb9, 0xaf, 0x11, 0x24, 0xfb, 0x83, 0xb8, 0x43, 0x24, 0xae, 0x61, 0x89,
-	0xf5, 0x0f, 0x21, 0xe3, 0xf6, 0x9a, 0x69, 0x39, 0x81, 0xcd, 0x6a, 0x05, 0xc6, 0x09, 0x78, 0x97,
-	0xdd, 0xf0, 0x40, 0x0f, 0x70, 0xde, 0x83, 0x25, 0x5a, 0x73, 0x26, 0x60, 0x8c, 0x0f, 0x62, 0x8a,
-	0xd6, 0x9c, 0xd1, 0xf8, 0xdc, 0x0f, 0x73, 0xa0, 0x95, 0xd7, 0x77, 0x1e, 0xee, 0x10, 0xd7, 0xc5,
-	0x76, 0x6f, 0x98, 0x46, 0x79, 0x39, 0x83, 0xed, 0x09, 0xb6, 0x65, 0xf6, 0x30, 0x4d, 0x5b, 0x3f,
-	0x33, 0xe3, 0x4e, 0xdd, 0xcc, 0xc7, 0xf0, 0xc6, 0x64, 0x19, 0x5a, 0xf1, 0xf6, 0xac, 0x84, 0xa3,
-	0xba, 0xcc, 0xa4, 0x33, 0x5a, 0xa9, 0x4f, 0xe0, 0x75, 0x7c, 0xde, 0x4a, 0xbf, 0x6f, 0xbd, 0xb7,
-	0x52, 0x71, 0xe6, 0x1a, 0x8e, 0x4d, 0x80, 0xb9, 0x80, 0x43, 0x67, 0x37, 0xef, 0xc1, 0xf5, 0x19,
-	0xcb, 0xaa, 0xc7, 0x21, 0xb6, 0xf7, 0xa8, 0x5c, 0x49, 0x46, 0xf4, 0x04, 0xc4, 0xcd, 0xcd, 0x0f,
-	0x1e, 0x98, 0x9b, 0x1b, 0x95, 0x24, 0x2a, 0x7d, 0x85, 0x4e, 0x4e, 0x8d, 0xc8, 0xcb, 0x53, 0x23,
-	0xf2, 0xea, 0xd4, 0x40, 0xcf, 0xba, 0x06, 0xfa, 0xb6, 0x6b, 0xa0, 0x1f, 0xbb, 0x06, 0x3a, 0xe9,
-	0x1a, 0xe8, 0xf7, 0xae, 0x81, 0xfe, 0xe8, 0x1a, 0x91, 0x57, 0x5d, 0x03, 0x3d, 0x3f, 0x33, 0x22,
-	0x27, 0x67, 0x46, 0xe4, 0xe5, 0x99, 0x11, 0xf9, 0xb8, 0x62, 0x73, 0xe7, 0x33, 0x3b, 0x7f, 0xc4,
-	0x9b, 0x92, 0x08, 0x81, 0xf3, 0x9e, 0x5b, 0xf0, 0xff, 0xa8, 0x8f, 0xdc, 0xad, 0xbe, 0xf8, 0x5b,
-	0x7d, 0x73, 0xc1, 0x39, 0xb0, 0x79, 0x81, 0x3c, 0x91, 0xc1, 0x6d, 0x6c, 0xca, 0xed, 0xf4, 0xe0,
-	0xa2, 0x7f, 0x35, 0x5b, 0xfd, 0x3b, 0x00, 0x00, 0xff, 0xff, 0xdb, 0xa3, 0xbd, 0x21, 0xc6, 0x0a,
-	0x00, 0x00,
+	// 1453 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x9c, 0x57, 0xbd, 0x6f, 0x1b, 0x47,
+	0x16, 0xe7, 0x90, 0x94, 0xb4, 0x7a, 0xd4, 0xc9, 0xbc, 0xa1, 0xe4, 0xa3, 0x6c, 0x81, 0xe6, 0xf1,
+	0x70, 0x86, 0x4e, 0xa2, 0x29, 0x6b, 0xf5, 0x71, 0xf6, 0xc1, 0xc0, 0x41, 0xf4, 0x09, 0x90, 0x04,
+	0x5b, 0x36, 0x96, 0xd2, 0x1d, 0x70, 0x41, 0xb0, 0x58, 0x91, 0xa3, 0xe5, 0x24, 0xe4, 0xce, 0x7a,
+	0x66, 0x57, 0x36, 0x8d, 0x38, 0x70, 0x19, 0xa4, 0x89, 0xff, 0x83, 0xb4, 0x41, 0x8a, 0xa4, 0x0f,
+	0x1b, 0x95, 0x49, 0x10, 0x20, 0x2a, 0x8d, 0x54, 0x31, 0x5d, 0xc4, 0xe9, 0x5c, 0xa6, 0x0c, 0x66,
+	0x77, 0x96, 0x22, 0x25, 0xd1, 0xb4, 0xd3, 0x10, 0xcb, 0x79, 0xdf, 0x6f, 0x7e, 0xef, 0x37, 0x33,
+	0xf0, 0x8f, 0x43, 0x22, 0x4a, 0x94, 0x2d, 0x8a, 0x6a, 0x9d, 0x34, 0xad, 0x45, 0xff, 0xb1, 0xe7,
+	0xa8, 0x5f, 0xf3, 0xa0, 0xc1, 0x1e, 0x2e, 0x0a, 0xab, 0xd9, 0x28, 0xb9, 0x9c, 0x79, 0x0c, 0xe7,
+	0x42, 0xd5, 0x52, 0xa8, 0x5a, 0x0a, 0x94, 0x4a, 0x27, 0xaa, 0x97, 0x16, 0xfa, 0x5d, 0x59, 0x2e,
+	0x35, 0x6d, 0xce, 0x7c, 0xd7, 0x24, 0x0d, 0xd2, 0x24, 0x8e, 0xb7, 0xe8, 0xb5, 0x5c, 0x22, 0x42,
+	0x67, 0x97, 0xfe, 0xd2, 0xaf, 0xec, 0x10, 0x4f, 0x09, 0x2e, 0xf7, 0x0b, 0x98, 0xeb, 0x51, 0xe6,
+	0x44, 0x56, 0x33, 0xfd, 0xc2, 0x5e, 0x87, 0xb3, 0xfd, 0xa2, 0x43, 0xab, 0x41, 0x6b, 0x96, 0x47,
+	0x94, 0x34, 0x7f, 0x4a, 0x4a, 0xc9, 0x43, 0xb3, 0xdf, 0xf5, 0x95, 0xb3, 0x1a, 0xa2, 0x37, 0x40,
+	0xe1, 0x7d, 0x48, 0xdd, 0x26, 0xdc, 0xa3, 0x07, 0xb4, 0x6a, 0x79, 0x04, 0xef, 0x40, 0xaa, 0x7a,
+	0xf2, 0x37, 0x1b, 0xcf, 0x27, 0xe6, 0x52, 0xfa, 0x6c, 0xa9, 0xbf, 0x47, 0xf7, 0xf6, 0x3f, 0x20,
+	0x55, 0xcf, 0x20, 0x07, 0xbb, 0x2d, 0x97, 0x94, 0x27, 0xbf, 0x7c, 0xd2, 0x6b, 0x63, 0xf4, 0xfe,
+	0x29, 0x7c, 0x04, 0x99, 0x3d, 0x87, 0x1e, 0x30, 0xde, 0x34, 0x88, 0x60, 0x3e, 0xaf, 0x92, 0x1d,
+	0xab, 0x49, 0xf0, 0x32, 0x24, 0x7c, 0xee, 0x64, 0x51, 0x1e, 0xcd, 0x8d, 0x97, 0xff, 0xfa, 0x5b,
+	0x1b, 0xc5, 0xbf, 0xf9, 0xf5, 0x28, 0x31, 0xc2, 0x13, 0xd9, 0xa7, 0x48, 0x7e, 0x25, 0x79, 0x3c,
+	0x8d, 0xd4, 0xd2, 0x33, 0x84, 0x0c, 0xa9, 0x8d, 0xaf, 0xc3, 0x78, 0x9d, 0x09, 0xcf, 0x74, 0xac,
+	0xa6, 0xcc, 0x4c, 0x9a, 0x66, 0x94, 0x72, 0x1d, 0x75, 0xed, 0x35, 0x43, 0x93, 0x5a, 0x32, 0x4c,
+	0x61, 0x0d, 0x2e, 0x9e, 0x8a, 0x7e, 0x87, 0x55, 0x2d, 0x8f, 0x71, 0x3c, 0x2b, 0x13, 0x68, 0xa8,
+	0x04, 0xa0, 0xc7, 0x58, 0x2e, 0x17, 0x3e, 0x4f, 0x40, 0x6a, 0xdd, 0xaf, 0x51, 0xe2, 0x54, 0xc9,
+	0x1e, 0xa7, 0x98, 0x43, 0xd6, 0x0f, 0xfd, 0x98, 0x5c, 0x39, 0x32, 0x1b, 0xa1, 0xa7, 0xc0, 0x45,
+	0x4a, 0x5f, 0x2b, 0xbd, 0x19, 0x46, 0xa5, 0xf3, 0xf3, 0xd8, 0x8c, 0x19, 0x17, 0xfd, 0xf3, 0x33,
+	0xa4, 0x30, 0x7d, 0x26, 0x66, 0xb7, 0xf2, 0x94, 0xbe, 0xfc, 0x8e, 0x01, 0x65, 0x3f, 0x36, 0x63,
+	0x46, 0xc6, 0x3f, 0xbb, 0xfc, 0xaf, 0x8f, 0xbf, 0x6f, 0xa3, 0xc7, 0xf0, 0x08, 0x26, 0xa2, 0x9a,
+	0xf3, 0x7b, 0xc6, 0xd6, 0x7c, 0x1d, 0x0e, 0x60, 0x65, 0x70, 0xe1, 0x7a, 0x56, 0x45, 0xc8, 0x47,
+	0xbe, 0xf2, 0x2a, 0x75, 0x28, 0x0d, 0x48, 0x5d, 0x9f, 0x3e, 0x63, 0x22, 0xe3, 0x97, 0x17, 0x20,
+	0x63, 0xa9, 0xc8, 0xa6, 0xcf, 0xa9, 0x59, 0xad, 0x33, 0x5a, 0x25, 0x78, 0xea, 0xa8, 0x8d, 0xd0,
+	0x71, 0x1b, 0x25, 0x3b, 0x6d, 0x94, 0x5c, 0x2a, 0xe6, 0x75, 0x89, 0x93, 0xed, 0xa4, 0x96, 0x4c,
+	0x8f, 0x14, 0x7e, 0x40, 0x30, 0x53, 0xa1, 0xb6, 0xb3, 0xee, 0x7b, 0x75, 0xe2, 0x78, 0x12, 0x6c,
+	0x94, 0x39, 0x06, 0x79, 0xe0, 0x13, 0xe1, 0xe1, 0x35, 0x48, 0x39, 0xcc, 0xb4, 0x7c, 0xaf, 0x6e,
+	0x72, 0xf2, 0x40, 0x75, 0x6c, 0xea, 0x54, 0xc7, 0x36, 0x9a, 0xae, 0xd7, 0xda, 0x8c, 0x19, 0xe3,
+	0x0e, 0x93, 0x5e, 0x0c, 0xf2, 0x00, 0x6f, 0xc3, 0xb8, 0xa0, 0xb6, 0x13, 0x58, 0x66, 0x13, 0x81,
+	0xd5, 0xc2, 0xb0, 0x3e, 0xf7, 0x4c, 0xcf, 0x66, 0xcc, 0xd0, 0x84, 0x4a, 0xaa, 0xfc, 0x77, 0x98,
+	0xee, 0xfa, 0x32, 0xe5, 0xc4, 0x45, 0x65, 0x4d, 0x1c, 0xb7, 0x11, 0x92, 0x25, 0xe9, 0xc5, 0xfc,
+	0xf2, 0x76, 0x52, 0x43, 0xe9, 0x78, 0xe1, 0x47, 0x04, 0x53, 0xff, 0xb3, 0x1c, 0x6f, 0xc3, 0xa9,
+	0xf2, 0x96, 0xeb, 0x91, 0x5a, 0x54, 0xc9, 0x2d, 0x98, 0x74, 0x98, 0x49, 0xc2, 0xe5, 0xb7, 0x28,
+	0x66, 0xc2, 0x61, 0xca, 0x87, 0xac, 0x67, 0x07, 0x52, 0xbd, 0xa6, 0x7f, 0xa8, 0x22, 0x20, 0x5d,
+	0x7f, 0xe5, 0xbf, 0xc1, 0xc5, 0x87, 0x96, 0xe3, 0x45, 0xf9, 0x90, 0x9a, 0x74, 0x1b, 0xe4, 0x39,
+	0xae, 0x8a, 0x42, 0xba, 0xaa, 0xe8, 0xbb, 0x24, 0xcc, 0x54, 0x08, 0x3f, 0xa4, 0x55, 0x72, 0x9f,
+	0xb3, 0x43, 0x5a, 0x23, 0xfc, 0x3e, 0x67, 0xae, 0x74, 0x4d, 0x04, 0xde, 0x81, 0x89, 0xde, 0x1d,
+	0x57, 0x43, 0x34, 0x34, 0xb3, 0x9e, 0x99, 0x34, 0x52, 0x56, 0xcf, 0x80, 0x2e, 0x40, 0x8a, 0x93,
+	0x86, 0xd5, 0x32, 0x85, 0x17, 0xd2, 0xd6, 0xe9, 0xb1, 0x86, 0x40, 0x5c, 0x91, 0x52, 0x5c, 0x81,
+	0xa4, 0xdc, 0x8f, 0xa0, 0x1d, 0x93, 0xfa, 0xbf, 0x87, 0x06, 0x15, 0x42, 0x66, 0xcd, 0x9c, 0xdb,
+	0xcc, 0x11, 0x7e, 0x93, 0x70, 0x55, 0x56, 0x99, 0x3a, 0x35, 0xea, 0xd8, 0x46, 0xe0, 0x0c, 0xb7,
+	0xe0, 0x72, 0x77, 0xbb, 0x4f, 0x00, 0x19, 0xf5, 0x27, 0x9b, 0x0c, 0x0a, 0xbc, 0x39, 0x2c, 0xd6,
+	0x40, 0x48, 0x1b, 0x33, 0x62, 0x20, 0xda, 0x1d, 0xc8, 0x9e, 0xda, 0x15, 0x2b, 0x4a, 0x39, 0x3b,
+	0x12, 0xc4, 0x5d, 0x19, 0x16, 0xf7, 0x3c, 0xec, 0x19, 0xc1, 0x5e, 0x77, 0x57, 0xbb, 0x6d, 0xc0,
+	0x4b, 0x30, 0x75, 0xc0, 0xe4, 0x4c, 0xf7, 0xd7, 0x9a, 0x1d, 0xcd, 0xa3, 0x39, 0xcd, 0xc8, 0x04,
+	0xb2, 0xfe, 0x4c, 0xf1, 0x2d, 0x98, 0x0e, 0x52, 0x94, 0x45, 0xf4, 0xe5, 0x37, 0x26, 0x6d, 0xca,
+	0xda, 0x4f, 0x6d, 0x94, 0xf4, 0xb8, 0x4f, 0x8c, 0x8c, 0x54, 0xab, 0x04, 0x5a, 0xdd, 0x80, 0x85,
+	0x32, 0xe0, 0x75, 0xd7, 0x6d, 0x28, 0x67, 0xbb, 0x96, 0x6d, 0x53, 0xc7, 0xc6, 0x45, 0x98, 0x90,
+	0xc7, 0xb8, 0x69, 0xb9, 0xae, 0xe9, 0x59, 0xf6, 0x39, 0x5c, 0x0e, 0x52, 0xbe, 0xee, 0xba, 0xbb,
+	0x96, 0x5d, 0xf8, 0x2c, 0x0e, 0x7f, 0x0a, 0xba, 0xdb, 0xb0, 0x19, 0xa7, 0x5e, 0xbd, 0x89, 0x97,
+	0x40, 0xe3, 0xc2, 0x32, 0x45, 0xdd, 0x5a, 0x52, 0x6d, 0x1a, 0x34, 0x54, 0x63, 0x5c, 0x58, 0x95,
+	0xba, 0xb5, 0x84, 0x57, 0x01, 0x94, 0x89, 0xbe, 0xba, 0x16, 0xd4, 0xfb, 0x06, 0x5a, 0x09, 0x8d,
+	0xf4, 0xd5, 0xb5, 0x1e, 0xb3, 0xe5, 0x1b, 0x2b, 0x41, 0xc9, 0x43, 0xcd, 0x96, 0x6f, 0xac, 0xf4,
+	0x98, 0xad, 0x2e, 0xe9, 0x59, 0xed, 0x6d, 0xcc, 0x56, 0x97, 0xf4, 0x72, 0x3e, 0x22, 0xb1, 0x86,
+	0xcd, 0x70, 0xe6, 0xa8, 0x8d, 0x46, 0x15, 0x87, 0x8e, 0xad, 0x16, 0xd7, 0x8a, 0xff, 0x2c, 0xde,
+	0x50, 0x14, 0xfa, 0x15, 0x82, 0xcc, 0x56, 0xcd, 0xad, 0x90, 0xaa, 0xcf, 0xa9, 0xd7, 0x52, 0xd3,
+	0xd9, 0xc2, 0x57, 0x21, 0xee, 0xb0, 0x21, 0x34, 0x13, 0x77, 0x18, 0x5e, 0x87, 0x44, 0x8b, 0x08,
+	0x45, 0x2a, 0xd7, 0xde, 0x0a, 0xd9, 0x51, 0xef, 0x37, 0x63, 0x86, 0xb4, 0x2d, 0x5f, 0x95, 0xc4,
+	0x1f, 0x92, 0xb4, 0x44, 0x9c, 0x82, 0x07, 0xbe, 0x70, 0xd4, 0x46, 0x71, 0x45, 0x28, 0x89, 0xe5,
+	0x62, 0x44, 0x29, 0xbf, 0x24, 0x20, 0xbd, 0x55, 0x93, 0xa8, 0x0a, 0xb2, 0x0d, 0x38, 0x05, 0x5f,
+	0x86, 0x64, 0x70, 0x2a, 0x86, 0xbb, 0x3f, 0xf6, 0xfc, 0x09, 0x7a, 0xd5, 0x46, 0xc8, 0x08, 0x16,
+	0x71, 0x11, 0x46, 0xa9, 0x10, 0x3e, 0xe1, 0x8a, 0x11, 0xa6, 0xba, 0xe0, 0x48, 0xab, 0xaf, 0x4f,
+	0x10, 0x32, 0x94, 0x0e, 0x9e, 0x87, 0x31, 0x21, 0x98, 0x29, 0xef, 0x05, 0x89, 0x40, 0xfd, 0xcf,
+	0xd1, 0xc5, 0x44, 0xe3, 0xa3, 0x73, 0x4f, 0x35, 0x79, 0x11, 0x19, 0x15, 0x82, 0xed, 0xf1, 0x06,
+	0x9e, 0x87, 0xa4, 0xcb, 0x84, 0x37, 0x04, 0x38, 0x81, 0x0e, 0xd6, 0x41, 0xe3, 0xa4, 0x46, 0x39,
+	0xa9, 0x7a, 0x43, 0x30, 0xd3, 0xd5, 0xc3, 0x0d, 0x98, 0xa5, 0x35, 0x57, 0x0d, 0x8a, 0x79, 0x48,
+	0x78, 0x48, 0xc8, 0x92, 0x52, 0xe4, 0xf5, 0x4a, 0x81, 0xe8, 0x5d, 0xa8, 0xdc, 0x98, 0xa1, 0x35,
+	0x37, 0x9c, 0xa9, 0xff, 0xf6, 0xb8, 0x93, 0x1a, 0xd8, 0x86, 0x69, 0x19, 0x4d, 0x28, 0x28, 0x98,
+	0xae, 0xc2, 0x82, 0x02, 0xdd, 0xd0, 0xbb, 0xc6, 0x39, 0x30, 0x32, 0x32, 0xf4, 0xec, 0x62, 0xf9,
+	0x0a, 0x64, 0x64, 0x8b, 0x45, 0xc8, 0xa0, 0xe6, 0x7e, 0x48, 0xa1, 0x58, 0x3b, 0x6a, 0xa3, 0x11,
+	0x89, 0x52, 0x05, 0xcd, 0xaf, 0xe3, 0x90, 0xaa, 0xac, 0xdf, 0xbd, 0x73, 0x97, 0x08, 0x61, 0xd9,
+	0x21, 0xb9, 0x2a, 0x13, 0x57, 0x6d, 0x7c, 0x94, 0x23, 0x25, 0x42, 0x9d, 0x1e, 0xc3, 0xc9, 0x75,
+	0xd0, 0x71, 0x64, 0xcc, 0x88, 0x81, 0x27, 0xd5, 0x7b, 0x70, 0xc1, 0x3a, 0xe1, 0x9e, 0x80, 0x68,
+	0x42, 0xc4, 0xeb, 0x43, 0xcf, 0x8d, 0x33, 0x94, 0x65, 0x4c, 0x5a, 0x7d, 0x6b, 0xb8, 0x0c, 0x09,
+	0x5a, 0x73, 0xd5, 0xe1, 0x70, 0x7d, 0x78, 0x97, 0xfb, 0xb1, 0x6f, 0x48, 0xe3, 0xed, 0xa4, 0x16,
+	0x4f, 0x27, 0xe6, 0x6f, 0xc2, 0x95, 0x21, 0xe7, 0x14, 0xd6, 0x20, 0x79, 0xff, 0x5e, 0x65, 0x37,
+	0x1d, 0xc3, 0x13, 0xa0, 0x19, 0x1b, 0xff, 0xd9, 0x32, 0x36, 0x6e, 0xef, 0xa6, 0x51, 0xf9, 0x53,
+	0x74, 0xfc, 0x22, 0x17, 0x7b, 0xfe, 0x22, 0x17, 0x7b, 0xfd, 0x22, 0x87, 0x9e, 0x76, 0x72, 0xe8,
+	0x8b, 0x4e, 0x0e, 0x7d, 0xdb, 0xc9, 0xa1, 0xe3, 0x4e, 0x0e, 0xfd, 0xdc, 0xc9, 0xa1, 0x57, 0x9d,
+	0x5c, 0xec, 0x75, 0x27, 0x87, 0x9e, 0xbd, 0xcc, 0xc5, 0x8e, 0x5f, 0xe6, 0x62, 0xcf, 0x5f, 0xe6,
+	0x62, 0xff, 0xdf, 0xb5, 0x99, 0xfb, 0xa1, 0x5d, 0x3a, 0x64, 0x0d, 0x8f, 0x70, 0x6e, 0x95, 0x7c,
+	0xb1, 0x18, 0x7c, 0xc8, 0xfb, 0xdd, 0xb5, 0x68, 0x97, 0xae, 0x45, 0xe2, 0x45, 0x77, 0xdf, 0x66,
+	0x8b, 0xe4, 0x91, 0xa7, 0x1e, 0x22, 0x03, 0x1e, 0x66, 0xfb, 0xa3, 0xc1, 0xab, 0x64, 0xf9, 0xf7,
+	0x00, 0x00, 0x00, 0xff, 0xff, 0xc0, 0xc3, 0xd0, 0xa5, 0xc1, 0x0d, 0x00, 0x00,
 }
 
 func (x AssertionConsumerServiceBinding) String() string {
@@ -1304,14 +1642,14 @@ func (this *ApplicationTagging) Equal(that interface{}) bool {
 	}
 	return true
 }
-func (this *ProviderMetadata) Equal(that interface{}) bool {
+func (this *SignAlgorithm) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
 	}
 
-	that1, ok := that.(*ProviderMetadata)
+	that1, ok := that.(*SignAlgorithm)
 	if !ok {
-		that2, ok := that.(ProviderMetadata)
+		that2, ok := that.(SignAlgorithm)
 		if ok {
 			that1 = &that2
 		} else {
@@ -1323,10 +1661,280 @@ func (this *ProviderMetadata) Equal(that interface{}) bool {
 	} else if this == nil {
 		return false
 	}
-	if this.ServiceProviderMetadata != that1.ServiceProviderMetadata {
+	if that1.SignAlgo == nil {
+		if this.SignAlgo != nil {
+			return false
+		}
+	} else if this.SignAlgo == nil {
+		return false
+	} else if !this.SignAlgo.Equal(that1.SignAlgo) {
 		return false
 	}
-	if this.IdpProviderMetadata != that1.IdpProviderMetadata {
+	return true
+}
+func (this *SignAlgorithm_RsaSha1) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*SignAlgorithm_RsaSha1)
+	if !ok {
+		that2, ok := that.(SignAlgorithm_RsaSha1)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.RsaSha1.Equal(that1.RsaSha1) {
+		return false
+	}
+	return true
+}
+func (this *SignAlgorithm_RsaSha256) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*SignAlgorithm_RsaSha256)
+	if !ok {
+		that2, ok := that.(SignAlgorithm_RsaSha256)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.RsaSha256.Equal(that1.RsaSha256) {
+		return false
+	}
+	return true
+}
+func (this *SignAlgorithm_RsaSha384) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*SignAlgorithm_RsaSha384)
+	if !ok {
+		that2, ok := that.(SignAlgorithm_RsaSha384)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.RsaSha384.Equal(that1.RsaSha384) {
+		return false
+	}
+	return true
+}
+func (this *SignAlgorithm_RsaSha512) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*SignAlgorithm_RsaSha512)
+	if !ok {
+		that2, ok := that.(SignAlgorithm_RsaSha512)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.RsaSha512.Equal(that1.RsaSha512) {
+		return false
+	}
+	return true
+}
+func (this *IdpSecurityProperty) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*IdpSecurityProperty)
+	if !ok {
+		that2, ok := that.(IdpSecurityProperty)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if that1.AuthRequestSigned == nil {
+		if this.AuthRequestSigned != nil {
+			return false
+		}
+	} else if this.AuthRequestSigned == nil {
+		return false
+	} else if !this.AuthRequestSigned.Equal(that1.AuthRequestSigned) {
+		return false
+	}
+	return true
+}
+func (this *IdpSecurityProperty_No) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*IdpSecurityProperty_No)
+	if !ok {
+		that2, ok := that.(IdpSecurityProperty_No)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.No.Equal(that1.No) {
+		return false
+	}
+	return true
+}
+func (this *IdpSecurityProperty_Yes) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*IdpSecurityProperty_Yes)
+	if !ok {
+		that2, ok := that.(IdpSecurityProperty_Yes)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.Yes.Equal(that1.Yes) {
+		return false
+	}
+	return true
+}
+func (this *IdentityProvider) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*IdentityProvider)
+	if !ok {
+		that2, ok := that.(IdentityProvider)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Name != that1.Name {
+		return false
+	}
+	if this.Issuer != that1.Issuer {
+		return false
+	}
+	if this.SsoUrl != that1.SsoUrl {
+		return false
+	}
+	if that1.SsoServiceBinding == nil {
+		if this.SsoServiceBinding != nil {
+			return false
+		}
+	} else if this.SsoServiceBinding == nil {
+		return false
+	} else if !this.SsoServiceBinding.Equal(that1.SsoServiceBinding) {
+		return false
+	}
+	if !this.IdpAssertVerificationCert.Equal(that1.IdpAssertVerificationCert) {
+		return false
+	}
+	if !this.IdpSecurityProperty.Equal(that1.IdpSecurityProperty) {
+		return false
+	}
+	return true
+}
+func (this *IdentityProvider_Post) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*IdentityProvider_Post)
+	if !ok {
+		that2, ok := that.(IdentityProvider_Post)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.Post.Equal(that1.Post) {
+		return false
+	}
+	return true
+}
+func (this *IdentityProvider_Redirect) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*IdentityProvider_Redirect)
+	if !ok {
+		that2, ok := that.(IdentityProvider_Redirect)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.Redirect.Equal(that1.Redirect) {
 		return false
 	}
 	return true
@@ -1353,10 +1961,10 @@ func (this *SAMLMessage) Equal(that interface{}) bool {
 	if !this.ServiceProviderProperties.Equal(that1.ServiceProviderProperties) {
 		return false
 	}
-	if !this.ProviderMetadata.Equal(that1.ProviderMetadata) {
+	if !this.ApplicationTag.Equal(that1.ApplicationTag) {
 		return false
 	}
-	if !this.ApplicationTag.Equal(that1.ApplicationTag) {
+	if !this.Idp.Equal(that1.Idp) {
 		return false
 	}
 	return true
@@ -1510,16 +2118,114 @@ func (this *ApplicationTagging) GoString() string {
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
-func (this *ProviderMetadata) GoString() string {
+func (this *SignAlgorithm) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 8)
+	s = append(s, "&uztna_flow.SignAlgorithm{")
+	if this.SignAlgo != nil {
+		s = append(s, "SignAlgo: "+fmt.Sprintf("%#v", this.SignAlgo)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *SignAlgorithm_RsaSha1) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&uztna_flow.SignAlgorithm_RsaSha1{` +
+		`RsaSha1:` + fmt.Sprintf("%#v", this.RsaSha1) + `}`}, ", ")
+	return s
+}
+func (this *SignAlgorithm_RsaSha256) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&uztna_flow.SignAlgorithm_RsaSha256{` +
+		`RsaSha256:` + fmt.Sprintf("%#v", this.RsaSha256) + `}`}, ", ")
+	return s
+}
+func (this *SignAlgorithm_RsaSha384) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&uztna_flow.SignAlgorithm_RsaSha384{` +
+		`RsaSha384:` + fmt.Sprintf("%#v", this.RsaSha384) + `}`}, ", ")
+	return s
+}
+func (this *SignAlgorithm_RsaSha512) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&uztna_flow.SignAlgorithm_RsaSha512{` +
+		`RsaSha512:` + fmt.Sprintf("%#v", this.RsaSha512) + `}`}, ", ")
+	return s
+}
+func (this *IdpSecurityProperty) GoString() string {
 	if this == nil {
 		return "nil"
 	}
 	s := make([]string, 0, 6)
-	s = append(s, "&uztna_flow.ProviderMetadata{")
-	s = append(s, "ServiceProviderMetadata: "+fmt.Sprintf("%#v", this.ServiceProviderMetadata)+",\n")
-	s = append(s, "IdpProviderMetadata: "+fmt.Sprintf("%#v", this.IdpProviderMetadata)+",\n")
+	s = append(s, "&uztna_flow.IdpSecurityProperty{")
+	if this.AuthRequestSigned != nil {
+		s = append(s, "AuthRequestSigned: "+fmt.Sprintf("%#v", this.AuthRequestSigned)+",\n")
+	}
 	s = append(s, "}")
 	return strings.Join(s, "")
+}
+func (this *IdpSecurityProperty_No) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&uztna_flow.IdpSecurityProperty_No{` +
+		`No:` + fmt.Sprintf("%#v", this.No) + `}`}, ", ")
+	return s
+}
+func (this *IdpSecurityProperty_Yes) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&uztna_flow.IdpSecurityProperty_Yes{` +
+		`Yes:` + fmt.Sprintf("%#v", this.Yes) + `}`}, ", ")
+	return s
+}
+func (this *IdentityProvider) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 11)
+	s = append(s, "&uztna_flow.IdentityProvider{")
+	s = append(s, "Name: "+fmt.Sprintf("%#v", this.Name)+",\n")
+	s = append(s, "Issuer: "+fmt.Sprintf("%#v", this.Issuer)+",\n")
+	s = append(s, "SsoUrl: "+fmt.Sprintf("%#v", this.SsoUrl)+",\n")
+	if this.SsoServiceBinding != nil {
+		s = append(s, "SsoServiceBinding: "+fmt.Sprintf("%#v", this.SsoServiceBinding)+",\n")
+	}
+	if this.IdpAssertVerificationCert != nil {
+		s = append(s, "IdpAssertVerificationCert: "+fmt.Sprintf("%#v", this.IdpAssertVerificationCert)+",\n")
+	}
+	if this.IdpSecurityProperty != nil {
+		s = append(s, "IdpSecurityProperty: "+fmt.Sprintf("%#v", this.IdpSecurityProperty)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *IdentityProvider_Post) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&uztna_flow.IdentityProvider_Post{` +
+		`Post:` + fmt.Sprintf("%#v", this.Post) + `}`}, ", ")
+	return s
+}
+func (this *IdentityProvider_Redirect) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&uztna_flow.IdentityProvider_Redirect{` +
+		`Redirect:` + fmt.Sprintf("%#v", this.Redirect) + `}`}, ", ")
+	return s
 }
 func (this *SAMLMessage) GoString() string {
 	if this == nil {
@@ -1530,11 +2236,11 @@ func (this *SAMLMessage) GoString() string {
 	if this.ServiceProviderProperties != nil {
 		s = append(s, "ServiceProviderProperties: "+fmt.Sprintf("%#v", this.ServiceProviderProperties)+",\n")
 	}
-	if this.ProviderMetadata != nil {
-		s = append(s, "ProviderMetadata: "+fmt.Sprintf("%#v", this.ProviderMetadata)+",\n")
-	}
 	if this.ApplicationTag != nil {
 		s = append(s, "ApplicationTag: "+fmt.Sprintf("%#v", this.ApplicationTag)+",\n")
+	}
+	if this.Idp != nil {
+		s = append(s, "Idp: "+fmt.Sprintf("%#v", this.Idp)+",\n")
 	}
 	s = append(s, "}")
 	return strings.Join(s, "")
@@ -1994,7 +2700,7 @@ func (m *ApplicationTagging) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
-func (m *ProviderMetadata) Marshal() (dAtA []byte, err error) {
+func (m *SignAlgorithm) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -2004,33 +2710,305 @@ func (m *ProviderMetadata) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *ProviderMetadata) MarshalTo(dAtA []byte) (int, error) {
+func (m *SignAlgorithm) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *ProviderMetadata) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *SignAlgorithm) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if len(m.IdpProviderMetadata) > 0 {
-		i -= len(m.IdpProviderMetadata)
-		copy(dAtA[i:], m.IdpProviderMetadata)
-		i = encodeVarintSaml(dAtA, i, uint64(len(m.IdpProviderMetadata)))
+	if m.SignAlgo != nil {
+		{
+			size := m.SignAlgo.Size()
+			i -= size
+			if _, err := m.SignAlgo.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *SignAlgorithm_RsaSha1) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *SignAlgorithm_RsaSha1) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.RsaSha1 != nil {
+		{
+			size, err := m.RsaSha1.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintSaml(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x2a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *SignAlgorithm_RsaSha256) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *SignAlgorithm_RsaSha256) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.RsaSha256 != nil {
+		{
+			size, err := m.RsaSha256.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintSaml(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x32
+	}
+	return len(dAtA) - i, nil
+}
+func (m *SignAlgorithm_RsaSha384) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *SignAlgorithm_RsaSha384) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.RsaSha384 != nil {
+		{
+			size, err := m.RsaSha384.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintSaml(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x3a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *SignAlgorithm_RsaSha512) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *SignAlgorithm_RsaSha512) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.RsaSha512 != nil {
+		{
+			size, err := m.RsaSha512.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintSaml(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x42
+	}
+	return len(dAtA) - i, nil
+}
+func (m *IdpSecurityProperty) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *IdpSecurityProperty) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *IdpSecurityProperty) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.AuthRequestSigned != nil {
+		{
+			size := m.AuthRequestSigned.Size()
+			i -= size
+			if _, err := m.AuthRequestSigned.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *IdpSecurityProperty_No) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *IdpSecurityProperty_No) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.No != nil {
+		{
+			size, err := m.No.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintSaml(dAtA, i, uint64(size))
+		}
 		i--
 		dAtA[i] = 0x12
 	}
-	if len(m.ServiceProviderMetadata) > 0 {
-		i -= len(m.ServiceProviderMetadata)
-		copy(dAtA[i:], m.ServiceProviderMetadata)
-		i = encodeVarintSaml(dAtA, i, uint64(len(m.ServiceProviderMetadata)))
+	return len(dAtA) - i, nil
+}
+func (m *IdpSecurityProperty_Yes) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *IdpSecurityProperty_Yes) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.Yes != nil {
+		{
+			size, err := m.Yes.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintSaml(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *IdentityProvider) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *IdentityProvider) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *IdentityProvider) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.IdpSecurityProperty != nil {
+		{
+			size, err := m.IdpSecurityProperty.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintSaml(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x42
+	}
+	if m.IdpAssertVerificationCert != nil {
+		{
+			size, err := m.IdpAssertVerificationCert.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintSaml(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x3a
+	}
+	if m.SsoServiceBinding != nil {
+		{
+			size := m.SsoServiceBinding.Size()
+			i -= size
+			if _, err := m.SsoServiceBinding.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if len(m.SsoUrl) > 0 {
+		i -= len(m.SsoUrl)
+		copy(dAtA[i:], m.SsoUrl)
+		i = encodeVarintSaml(dAtA, i, uint64(len(m.SsoUrl)))
+		i--
+		dAtA[i] = 0x1a
+	}
+	if len(m.Issuer) > 0 {
+		i -= len(m.Issuer)
+		copy(dAtA[i:], m.Issuer)
+		i = encodeVarintSaml(dAtA, i, uint64(len(m.Issuer)))
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.Name) > 0 {
+		i -= len(m.Name)
+		copy(dAtA[i:], m.Name)
+		i = encodeVarintSaml(dAtA, i, uint64(len(m.Name)))
 		i--
 		dAtA[i] = 0xa
 	}
 	return len(dAtA) - i, nil
 }
 
+func (m *IdentityProvider_Post) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *IdentityProvider_Post) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.Post != nil {
+		{
+			size, err := m.Post.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintSaml(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x2a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *IdentityProvider_Redirect) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *IdentityProvider_Redirect) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.Redirect != nil {
+		{
+			size, err := m.Redirect.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintSaml(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x32
+	}
+	return len(dAtA) - i, nil
+}
 func (m *SAMLMessage) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -2051,6 +3029,18 @@ func (m *SAMLMessage) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if m.Idp != nil {
+		{
+			size, err := m.Idp.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintSaml(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x22
+	}
 	if m.ApplicationTag != nil {
 		{
 			size, err := m.ApplicationTag.MarshalToSizedBuffer(dAtA[:i])
@@ -2062,18 +3052,6 @@ func (m *SAMLMessage) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		}
 		i--
 		dAtA[i] = 0x1a
-	}
-	if m.ProviderMetadata != nil {
-		{
-			size, err := m.ProviderMetadata.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintSaml(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x12
 	}
 	if m.ServiceProviderProperties != nil {
 		{
@@ -2301,23 +3279,158 @@ func (m *ApplicationTagging) Size() (n int) {
 	return n
 }
 
-func (m *ProviderMetadata) Size() (n int) {
+func (m *SignAlgorithm) Size() (n int) {
 	if m == nil {
 		return 0
 	}
 	var l int
 	_ = l
-	l = len(m.ServiceProviderMetadata)
+	if m.SignAlgo != nil {
+		n += m.SignAlgo.Size()
+	}
+	return n
+}
+
+func (m *SignAlgorithm_RsaSha1) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.RsaSha1 != nil {
+		l = m.RsaSha1.Size()
+		n += 1 + l + sovSaml(uint64(l))
+	}
+	return n
+}
+func (m *SignAlgorithm_RsaSha256) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.RsaSha256 != nil {
+		l = m.RsaSha256.Size()
+		n += 1 + l + sovSaml(uint64(l))
+	}
+	return n
+}
+func (m *SignAlgorithm_RsaSha384) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.RsaSha384 != nil {
+		l = m.RsaSha384.Size()
+		n += 1 + l + sovSaml(uint64(l))
+	}
+	return n
+}
+func (m *SignAlgorithm_RsaSha512) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.RsaSha512 != nil {
+		l = m.RsaSha512.Size()
+		n += 1 + l + sovSaml(uint64(l))
+	}
+	return n
+}
+func (m *IdpSecurityProperty) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.AuthRequestSigned != nil {
+		n += m.AuthRequestSigned.Size()
+	}
+	return n
+}
+
+func (m *IdpSecurityProperty_No) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.No != nil {
+		l = m.No.Size()
+		n += 1 + l + sovSaml(uint64(l))
+	}
+	return n
+}
+func (m *IdpSecurityProperty_Yes) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Yes != nil {
+		l = m.Yes.Size()
+		n += 1 + l + sovSaml(uint64(l))
+	}
+	return n
+}
+func (m *IdentityProvider) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Name)
 	if l > 0 {
 		n += 1 + l + sovSaml(uint64(l))
 	}
-	l = len(m.IdpProviderMetadata)
+	l = len(m.Issuer)
 	if l > 0 {
+		n += 1 + l + sovSaml(uint64(l))
+	}
+	l = len(m.SsoUrl)
+	if l > 0 {
+		n += 1 + l + sovSaml(uint64(l))
+	}
+	if m.SsoServiceBinding != nil {
+		n += m.SsoServiceBinding.Size()
+	}
+	if m.IdpAssertVerificationCert != nil {
+		l = m.IdpAssertVerificationCert.Size()
+		n += 1 + l + sovSaml(uint64(l))
+	}
+	if m.IdpSecurityProperty != nil {
+		l = m.IdpSecurityProperty.Size()
 		n += 1 + l + sovSaml(uint64(l))
 	}
 	return n
 }
 
+func (m *IdentityProvider_Post) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Post != nil {
+		l = m.Post.Size()
+		n += 1 + l + sovSaml(uint64(l))
+	}
+	return n
+}
+func (m *IdentityProvider_Redirect) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Redirect != nil {
+		l = m.Redirect.Size()
+		n += 1 + l + sovSaml(uint64(l))
+	}
+	return n
+}
 func (m *SAMLMessage) Size() (n int) {
 	if m == nil {
 		return 0
@@ -2328,12 +3441,12 @@ func (m *SAMLMessage) Size() (n int) {
 		l = m.ServiceProviderProperties.Size()
 		n += 1 + l + sovSaml(uint64(l))
 	}
-	if m.ProviderMetadata != nil {
-		l = m.ProviderMetadata.Size()
-		n += 1 + l + sovSaml(uint64(l))
-	}
 	if m.ApplicationTag != nil {
 		l = m.ApplicationTag.Size()
+		n += 1 + l + sovSaml(uint64(l))
+	}
+	if m.Idp != nil {
+		l = m.Idp.Size()
 		n += 1 + l + sovSaml(uint64(l))
 	}
 	return n
@@ -2497,13 +3610,117 @@ func (this *ApplicationTagging) String() string {
 	}, "")
 	return s
 }
-func (this *ProviderMetadata) String() string {
+func (this *SignAlgorithm) String() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&ProviderMetadata{`,
-		`ServiceProviderMetadata:` + fmt.Sprintf("%v", this.ServiceProviderMetadata) + `,`,
-		`IdpProviderMetadata:` + fmt.Sprintf("%v", this.IdpProviderMetadata) + `,`,
+	s := strings.Join([]string{`&SignAlgorithm{`,
+		`SignAlgo:` + fmt.Sprintf("%v", this.SignAlgo) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *SignAlgorithm_RsaSha1) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&SignAlgorithm_RsaSha1{`,
+		`RsaSha1:` + strings.Replace(fmt.Sprintf("%v", this.RsaSha1), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *SignAlgorithm_RsaSha256) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&SignAlgorithm_RsaSha256{`,
+		`RsaSha256:` + strings.Replace(fmt.Sprintf("%v", this.RsaSha256), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *SignAlgorithm_RsaSha384) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&SignAlgorithm_RsaSha384{`,
+		`RsaSha384:` + strings.Replace(fmt.Sprintf("%v", this.RsaSha384), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *SignAlgorithm_RsaSha512) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&SignAlgorithm_RsaSha512{`,
+		`RsaSha512:` + strings.Replace(fmt.Sprintf("%v", this.RsaSha512), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *IdpSecurityProperty) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&IdpSecurityProperty{`,
+		`AuthRequestSigned:` + fmt.Sprintf("%v", this.AuthRequestSigned) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *IdpSecurityProperty_No) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&IdpSecurityProperty_No{`,
+		`No:` + strings.Replace(fmt.Sprintf("%v", this.No), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *IdpSecurityProperty_Yes) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&IdpSecurityProperty_Yes{`,
+		`Yes:` + strings.Replace(fmt.Sprintf("%v", this.Yes), "SignAlgorithm", "SignAlgorithm", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *IdentityProvider) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&IdentityProvider{`,
+		`Name:` + fmt.Sprintf("%v", this.Name) + `,`,
+		`Issuer:` + fmt.Sprintf("%v", this.Issuer) + `,`,
+		`SsoUrl:` + fmt.Sprintf("%v", this.SsoUrl) + `,`,
+		`SsoServiceBinding:` + fmt.Sprintf("%v", this.SsoServiceBinding) + `,`,
+		`IdpAssertVerificationCert:` + strings.Replace(this.IdpAssertVerificationCert.String(), "Certificate", "Certificate", 1) + `,`,
+		`IdpSecurityProperty:` + strings.Replace(this.IdpSecurityProperty.String(), "IdpSecurityProperty", "IdpSecurityProperty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *IdentityProvider_Post) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&IdentityProvider_Post{`,
+		`Post:` + strings.Replace(fmt.Sprintf("%v", this.Post), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *IdentityProvider_Redirect) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&IdentityProvider_Redirect{`,
+		`Redirect:` + strings.Replace(fmt.Sprintf("%v", this.Redirect), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2514,8 +3731,8 @@ func (this *SAMLMessage) String() string {
 	}
 	s := strings.Join([]string{`&SAMLMessage{`,
 		`ServiceProviderProperties:` + strings.Replace(this.ServiceProviderProperties.String(), "ServiceProviderProperties", "ServiceProviderProperties", 1) + `,`,
-		`ProviderMetadata:` + strings.Replace(this.ProviderMetadata.String(), "ProviderMetadata", "ProviderMetadata", 1) + `,`,
 		`ApplicationTag:` + strings.Replace(this.ApplicationTag.String(), "ApplicationTagging", "ApplicationTagging", 1) + `,`,
+		`Idp:` + strings.Replace(this.Idp.String(), "IdentityProvider", "IdentityProvider", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -3523,7 +4740,7 @@ func (m *ApplicationTagging) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *ProviderMetadata) Unmarshal(dAtA []byte) error {
+func (m *SignAlgorithm) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -3546,15 +4763,331 @@ func (m *ProviderMetadata) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: ProviderMetadata: wiretype end group for non-group")
+			return fmt.Errorf("proto: SignAlgorithm: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: ProviderMetadata: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: SignAlgorithm: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field RsaSha1", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowSaml
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthSaml
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthSaml
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.SignAlgo = &SignAlgorithm_RsaSha1{v}
+			iNdEx = postIndex
+		case 6:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field RsaSha256", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowSaml
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthSaml
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthSaml
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.SignAlgo = &SignAlgorithm_RsaSha256{v}
+			iNdEx = postIndex
+		case 7:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field RsaSha384", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowSaml
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthSaml
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthSaml
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.SignAlgo = &SignAlgorithm_RsaSha384{v}
+			iNdEx = postIndex
+		case 8:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field RsaSha512", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowSaml
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthSaml
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthSaml
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.SignAlgo = &SignAlgorithm_RsaSha512{v}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipSaml(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthSaml
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthSaml
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *IdpSecurityProperty) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowSaml
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: IdpSecurityProperty: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: IdpSecurityProperty: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field No", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowSaml
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthSaml
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthSaml
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.AuthRequestSigned = &IdpSecurityProperty_No{v}
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Yes", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowSaml
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthSaml
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthSaml
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &SignAlgorithm{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.AuthRequestSigned = &IdpSecurityProperty_Yes{v}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipSaml(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthSaml
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthSaml
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *IdentityProvider) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowSaml
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: IdentityProvider: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: IdentityProvider: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ServiceProviderMetadata", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field Name", wireType)
 			}
 			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
@@ -3582,11 +5115,11 @@ func (m *ProviderMetadata) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.ServiceProviderMetadata = string(dAtA[iNdEx:postIndex])
+			m.Name = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		case 2:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field IdpProviderMetadata", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field Issuer", wireType)
 			}
 			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
@@ -3614,7 +5147,181 @@ func (m *ProviderMetadata) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.IdpProviderMetadata = string(dAtA[iNdEx:postIndex])
+			m.Issuer = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field SsoUrl", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowSaml
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthSaml
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthSaml
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.SsoUrl = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Post", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowSaml
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthSaml
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthSaml
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.SsoServiceBinding = &IdentityProvider_Post{v}
+			iNdEx = postIndex
+		case 6:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Redirect", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowSaml
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthSaml
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthSaml
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.SsoServiceBinding = &IdentityProvider_Redirect{v}
+			iNdEx = postIndex
+		case 7:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field IdpAssertVerificationCert", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowSaml
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthSaml
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthSaml
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.IdpAssertVerificationCert == nil {
+				m.IdpAssertVerificationCert = &Certificate{}
+			}
+			if err := m.IdpAssertVerificationCert.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 8:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field IdpSecurityProperty", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowSaml
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthSaml
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthSaml
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.IdpSecurityProperty == nil {
+				m.IdpSecurityProperty = &IdpSecurityProperty{}
+			}
+			if err := m.IdpSecurityProperty.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
@@ -3705,42 +5412,6 @@ func (m *SAMLMessage) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ProviderMetadata", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowSaml
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthSaml
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthSaml
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.ProviderMetadata == nil {
-				m.ProviderMetadata = &ProviderMetadata{}
-			}
-			if err := m.ProviderMetadata.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
 		case 3:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field ApplicationTag", wireType)
@@ -3774,6 +5445,42 @@ func (m *SAMLMessage) Unmarshal(dAtA []byte) error {
 				m.ApplicationTag = &ApplicationTagging{}
 			}
 			if err := m.ApplicationTag.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Idp", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowSaml
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthSaml
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthSaml
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Idp == nil {
+				m.Idp = &IdentityProvider{}
+			}
+			if err := m.Idp.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex

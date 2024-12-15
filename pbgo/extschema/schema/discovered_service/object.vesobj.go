@@ -19,6 +19,7 @@ import (
 	"gopkg.volterra.us/stdlib/store"
 
 	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+	ves_io_schema_views "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
 
 	"github.com/google/uuid"
 	"gopkg.volterra.us/stdlib/db/sro"
@@ -484,6 +485,30 @@ func (o *DBObject) SetObjSystemMetadata(in sro.SystemMetadata) error {
 	return nil
 }
 
+func (e *DBObject) SetDirectRefHash(s string) {
+	m := e.GetSystemMetadata()
+	if m == nil {
+		m = &ves_io_schema.SystemObjectMetaType{}
+	}
+	m.DirectRefHash = s
+}
+
+func (e *DBObject) GetDirectRefHash() string {
+	m := e.GetSystemMetadata()
+	if m == nil {
+		return ""
+	}
+	return m.DirectRefHash
+}
+
+func (e *DBObject) GetModificationTimestamp() *google_protobuf.Timestamp {
+	m := e.GetSystemMetadata()
+	if m == nil {
+		return nil
+	}
+	return m.ModificationTimestamp
+}
+
 func (o *DBObject) GetObjSpec() sro.Spec {
 	if o.GetSpec() == nil {
 		return nil
@@ -727,6 +752,15 @@ func (o *DBObject) GetVtrpStale() bool {
 // SetVtrpStale sets vtrpStale on the object
 func (o *DBObject) SetVtrpStale(isStale bool) {
 	o.GetSystemMetadata().SetVtrpStale(isStale)
+}
+
+// SetViewInternalRef sets ref from view object(e.g. http_loadbalancer.Object) to view_internal.Object
+func (o *DBObject) SetViewInternalRef(viewIntName string) {
+	o.Spec.GcSpec.ViewInternal = &ves_io_schema_views.ObjectRefType{
+		Tenant:    o.GetObjTenant(),
+		Namespace: o.GetObjNamespace(),
+		Name:      viewIntName,
+	}
 }
 
 type ValidateObject struct {

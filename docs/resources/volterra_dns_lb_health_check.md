@@ -1,9 +1,9 @@
 ---
 
 page_title: "Volterra: dns_lb_health_check"
-description: "The dns_lb_health_check allows CRUD of Dns Lb Health Check resource on Volterra SaaS"
 
----
+description: "The dns_lb_health_check allows CRUD of Dns Lb Health Check resource on Volterra SaaS"
+---------------------------------------------------------------------------------------------------
 
 Resource volterra_dns_lb_health_check
 =====================================
@@ -22,12 +22,12 @@ resource "volterra_dns_lb_health_check" "example" {
 
   // One of the arguments from this list "http_health_check https_health_check icmp_health_check tcp_health_check tcp_hex_health_check udp_health_check" must be set
 
-  tcp_hex_health_check {
+  https_health_check {
     health_check_port = "80"
 
-    receive = "00000034"
+    receive = "HTTP/1"
 
-    send = "000000FF"
+    send = "HEAD / HTTP/1.0"
   }
 }
 

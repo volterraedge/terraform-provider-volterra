@@ -1275,18 +1275,18 @@ var APISwaggerJSON string = `{
         },
         "nginx_instanceDataplaneIdentifier": {
             "type": "object",
-            "x-ves-oneof-field-dataplane_id": "[\"cluster_object_id\",\"instance_object_id\"]",
+            "x-ves-oneof-field-dataplane_id": "[\"csg_object_id\",\"instance_object_id\"]",
             "x-ves-proto-message": "ves.io.schema.nginx.one.nginx_instance.DataplaneIdentifier",
             "properties": {
-                "cluster_object_id": {
+                "csg_object_id": {
                     "type": "string",
-                    "description": "Exclusive with [instance_object_id]\n The unique identifier for NGINX instance cluster in N1 backend",
-                    "title": "clusterObjectID",
-                    "x-displayname": "ClusterObjectID"
+                    "description": "Exclusive with [instance_object_id]\n The unique identifier for NGINX instance config sync group in N1 backend",
+                    "title": "csgObjectID",
+                    "x-displayname": "Config Sync Group ObjectID"
                 },
                 "instance_object_id": {
                     "type": "string",
-                    "description": "Exclusive with [cluster_object_id]\n The unique identifier for NGINX instance in N1 backend.",
+                    "description": "Exclusive with [csg_object_id]\n The unique identifier for NGINX instance in N1 backend.",
                     "title": "instanceObjectID",
                     "x-displayname": "InstanceObjectID"
                 }
@@ -1371,7 +1371,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "APIDiscoverySpec"
                 },
                 "dataplane_id": {
-                    "description": " Dataplane identifier - individual instance or cluster",
+                    "description": " Dataplane identifier - individual instance or config sync group",
                     "$ref": "#/definitions/nginx_instanceDataplaneIdentifier",
                     "x-displayname": "DataplaneIdentifier"
                 },

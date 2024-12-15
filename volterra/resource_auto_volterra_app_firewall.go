@@ -68,7 +68,8 @@ func resourceVolterraAppFirewall() *schema.Resource {
 
 			"allowed_response_codes": {
 
-				Type:     schema.TypeSet,
+				Type:     schema.TypeList,
+				MaxItems: 1,
 				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
@@ -88,7 +89,8 @@ func resourceVolterraAppFirewall() *schema.Resource {
 
 			"custom_anonymization": {
 
-				Type:     schema.TypeSet,
+				Type:     schema.TypeList,
+				MaxItems: 1,
 				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
@@ -102,7 +104,8 @@ func resourceVolterraAppFirewall() *schema.Resource {
 
 									"cookie": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -117,7 +120,8 @@ func resourceVolterraAppFirewall() *schema.Resource {
 
 									"http_header": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -132,7 +136,8 @@ func resourceVolterraAppFirewall() *schema.Resource {
 
 									"query_parameter": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -165,7 +170,8 @@ func resourceVolterraAppFirewall() *schema.Resource {
 
 			"blocking_page": {
 
-				Type:     schema.TypeSet,
+				Type:     schema.TypeList,
+				MaxItems: 1,
 				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
@@ -191,24 +197,29 @@ func resourceVolterraAppFirewall() *schema.Resource {
 
 			"bot_protection_setting": {
 
-				Type:     schema.TypeSet,
-				Optional: true,
+				Type:       schema.TypeList,
+				MaxItems:   1,
+				Optional:   true,
+				Deprecated: "This field is deprecated and will be removed in future release.",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 
 						"good_bot_action": {
-							Type:     schema.TypeString,
-							Optional: true,
+							Type:       schema.TypeString,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 						},
 
 						"malicious_bot_action": {
-							Type:     schema.TypeString,
-							Optional: true,
+							Type:       schema.TypeString,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 						},
 
 						"suspicious_bot_action": {
-							Type:     schema.TypeString,
-							Optional: true,
+							Type:       schema.TypeString,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 						},
 					},
 				},
@@ -216,34 +227,32 @@ func resourceVolterraAppFirewall() *schema.Resource {
 
 			"default_bot_setting": {
 
-				Type:     schema.TypeBool,
-				Optional: true,
+				Type:       schema.TypeBool,
+				Optional:   true,
+				Deprecated: "This field is deprecated and will be removed in future release.",
 			},
 
 			"ai_risk_based_blocking": {
 
-				Type:       schema.TypeSet,
-				Optional:   true,
-				Deprecated: "This field is deprecated and will be removed in future release.",
+				Type:     schema.TypeList,
+				MaxItems: 1,
+				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 
 						"high_risk_action": {
-							Type:       schema.TypeString,
-							Required:   true,
-							Deprecated: "This field is deprecated and will be removed in future release.",
+							Type:     schema.TypeString,
+							Required: true,
 						},
 
 						"low_risk_action": {
-							Type:       schema.TypeString,
-							Required:   true,
-							Deprecated: "This field is deprecated and will be removed in future release.",
+							Type:     schema.TypeString,
+							Required: true,
 						},
 
 						"medium_risk_action": {
-							Type:       schema.TypeString,
-							Required:   true,
-							Deprecated: "This field is deprecated and will be removed in future release.",
+							Type:     schema.TypeString,
+							Required: true,
 						},
 					},
 				},
@@ -257,10 +266,43 @@ func resourceVolterraAppFirewall() *schema.Resource {
 
 			"detection_settings": {
 
-				Type:     schema.TypeSet,
+				Type:     schema.TypeList,
+				MaxItems: 1,
 				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
+
+						"bot_protection_setting": {
+
+							Type:     schema.TypeList,
+							MaxItems: 1,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"good_bot_action": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+
+									"malicious_bot_action": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+
+									"suspicious_bot_action": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+								},
+							},
+						},
+
+						"default_bot_setting": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
 
 						"disable_suppression": {
 
@@ -276,14 +318,16 @@ func resourceVolterraAppFirewall() *schema.Resource {
 
 						"signature_selection_setting": {
 
-							Type:     schema.TypeSet,
+							Type:     schema.TypeList,
+							MaxItems: 1,
 							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
 									"attack_type_settings": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -336,7 +380,8 @@ func resourceVolterraAppFirewall() *schema.Resource {
 
 						"stage_new_and_updated_signatures": {
 
-							Type:     schema.TypeSet,
+							Type:     schema.TypeList,
+							MaxItems: 1,
 							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
@@ -351,7 +396,8 @@ func resourceVolterraAppFirewall() *schema.Resource {
 
 						"stage_new_signatures": {
 
-							Type:     schema.TypeSet,
+							Type:     schema.TypeList,
+							MaxItems: 1,
 							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
@@ -384,7 +430,8 @@ func resourceVolterraAppFirewall() *schema.Resource {
 
 						"violation_settings": {
 
-							Type:     schema.TypeSet,
+							Type:     schema.TypeList,
+							MaxItems: 1,
 							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
@@ -503,20 +550,22 @@ func resourceVolterraAppFirewallCreate(d *schema.ResourceData, meta interface{})
 		allowedResponseCodesChoiceInt.AllowedResponseCodes = &ves_io_schema_app_firewall.AllowedResponseCodes{}
 		createSpec.AllowedResponseCodesChoice = allowedResponseCodesChoiceInt
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
+			if set != nil {
+				cs := set.(map[string]interface{})
 
-			if v, ok := cs["response_code"]; ok && !isIntfNil(v) {
+				if v, ok := cs["response_code"]; ok && !isIntfNil(v) {
 
-				ls := make([]uint32, len(v.([]interface{})))
-				for i, v := range v.([]interface{}) {
-					ls[i] = uint32(v.(int))
+					ls := make([]uint32, len(v.([]interface{})))
+					for i, v := range v.([]interface{}) {
+						ls[i] = uint32(v.(int))
+					}
+					allowedResponseCodesChoiceInt.AllowedResponseCodes.ResponseCode = ls
+
 				}
-				allowedResponseCodesChoiceInt.AllowedResponseCodes.ResponseCode = ls
 
 			}
-
 		}
 
 	}
@@ -532,88 +581,98 @@ func resourceVolterraAppFirewallCreate(d *schema.ResourceData, meta interface{})
 		anonymizationSettingInt.CustomAnonymization = &ves_io_schema_app_firewall.AnonymizationSetting{}
 		createSpec.AnonymizationSetting = anonymizationSettingInt
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
+			if set != nil {
+				cs := set.(map[string]interface{})
 
-			if v, ok := cs["anonymization_config"]; ok && !isIntfNil(v) {
+				if v, ok := cs["anonymization_config"]; ok && !isIntfNil(v) {
 
-				sl := v.([]interface{})
-				anonymizationConfig := make([]*ves_io_schema_app_firewall.AnonymizationConfiguration, len(sl))
-				anonymizationSettingInt.CustomAnonymization.AnonymizationConfig = anonymizationConfig
-				for i, set := range sl {
-					anonymizationConfig[i] = &ves_io_schema_app_firewall.AnonymizationConfiguration{}
-					anonymizationConfigMapStrToI := set.(map[string]interface{})
+					sl := v.([]interface{})
+					anonymizationConfig := make([]*ves_io_schema_app_firewall.AnonymizationConfiguration, len(sl))
+					anonymizationSettingInt.CustomAnonymization.AnonymizationConfig = anonymizationConfig
+					for i, set := range sl {
+						if set != nil {
+							anonymizationConfig[i] = &ves_io_schema_app_firewall.AnonymizationConfiguration{}
+							anonymizationConfigMapStrToI := set.(map[string]interface{})
 
-					anonymizationChoiceTypeFound := false
+							anonymizationChoiceTypeFound := false
 
-					if v, ok := anonymizationConfigMapStrToI["cookie"]; ok && !isIntfNil(v) && !anonymizationChoiceTypeFound {
+							if v, ok := anonymizationConfigMapStrToI["cookie"]; ok && !isIntfNil(v) && !anonymizationChoiceTypeFound {
 
-						anonymizationChoiceTypeFound = true
-						anonymizationChoiceInt := &ves_io_schema_app_firewall.AnonymizationConfiguration_Cookie{}
-						anonymizationChoiceInt.Cookie = &ves_io_schema_app_firewall.AnonymizeHttpCookie{}
-						anonymizationConfig[i].AnonymizationChoice = anonymizationChoiceInt
+								anonymizationChoiceTypeFound = true
+								anonymizationChoiceInt := &ves_io_schema_app_firewall.AnonymizationConfiguration_Cookie{}
+								anonymizationChoiceInt.Cookie = &ves_io_schema_app_firewall.AnonymizeHttpCookie{}
+								anonymizationConfig[i].AnonymizationChoice = anonymizationChoiceInt
 
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
 
-							if v, ok := cs["cookie_name"]; ok && !isIntfNil(v) {
+										if v, ok := cs["cookie_name"]; ok && !isIntfNil(v) {
 
-								anonymizationChoiceInt.Cookie.CookieName = v.(string)
+											anonymizationChoiceInt.Cookie.CookieName = v.(string)
+
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := anonymizationConfigMapStrToI["http_header"]; ok && !isIntfNil(v) && !anonymizationChoiceTypeFound {
+
+								anonymizationChoiceTypeFound = true
+								anonymizationChoiceInt := &ves_io_schema_app_firewall.AnonymizationConfiguration_HttpHeader{}
+								anonymizationChoiceInt.HttpHeader = &ves_io_schema_app_firewall.AnonymizeHttpHeader{}
+								anonymizationConfig[i].AnonymizationChoice = anonymizationChoiceInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["header_name"]; ok && !isIntfNil(v) {
+
+											anonymizationChoiceInt.HttpHeader.HeaderName = v.(string)
+
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := anonymizationConfigMapStrToI["query_parameter"]; ok && !isIntfNil(v) && !anonymizationChoiceTypeFound {
+
+								anonymizationChoiceTypeFound = true
+								anonymizationChoiceInt := &ves_io_schema_app_firewall.AnonymizationConfiguration_QueryParameter{}
+								anonymizationChoiceInt.QueryParameter = &ves_io_schema_app_firewall.AnonymizeHttpQueryParameter{}
+								anonymizationConfig[i].AnonymizationChoice = anonymizationChoiceInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["query_param_name"]; ok && !isIntfNil(v) {
+
+											anonymizationChoiceInt.QueryParameter.QueryParamName = v.(string)
+
+										}
+
+									}
+								}
 
 							}
 
 						}
-
-					}
-
-					if v, ok := anonymizationConfigMapStrToI["http_header"]; ok && !isIntfNil(v) && !anonymizationChoiceTypeFound {
-
-						anonymizationChoiceTypeFound = true
-						anonymizationChoiceInt := &ves_io_schema_app_firewall.AnonymizationConfiguration_HttpHeader{}
-						anonymizationChoiceInt.HttpHeader = &ves_io_schema_app_firewall.AnonymizeHttpHeader{}
-						anonymizationConfig[i].AnonymizationChoice = anonymizationChoiceInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["header_name"]; ok && !isIntfNil(v) {
-
-								anonymizationChoiceInt.HttpHeader.HeaderName = v.(string)
-
-							}
-
-						}
-
-					}
-
-					if v, ok := anonymizationConfigMapStrToI["query_parameter"]; ok && !isIntfNil(v) && !anonymizationChoiceTypeFound {
-
-						anonymizationChoiceTypeFound = true
-						anonymizationChoiceInt := &ves_io_schema_app_firewall.AnonymizationConfiguration_QueryParameter{}
-						anonymizationChoiceInt.QueryParameter = &ves_io_schema_app_firewall.AnonymizeHttpQueryParameter{}
-						anonymizationConfig[i].AnonymizationChoice = anonymizationChoiceInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["query_param_name"]; ok && !isIntfNil(v) {
-
-								anonymizationChoiceInt.QueryParameter.QueryParamName = v.(string)
-
-							}
-
-						}
-
 					}
 
 				}
 
 			}
-
 		}
 
 	}
@@ -653,22 +712,24 @@ func resourceVolterraAppFirewallCreate(d *schema.ResourceData, meta interface{})
 		blockingPageChoiceInt.BlockingPage = &ves_io_schema_app_firewall.CustomBlockingPage{}
 		createSpec.BlockingPageChoice = blockingPageChoiceInt
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
+			if set != nil {
+				cs := set.(map[string]interface{})
 
-			if v, ok := cs["blocking_page"]; ok && !isIntfNil(v) {
+				if v, ok := cs["blocking_page"]; ok && !isIntfNil(v) {
 
-				blockingPageChoiceInt.BlockingPage.BlockingPage = v.(string)
+					blockingPageChoiceInt.BlockingPage.BlockingPage = v.(string)
+
+				}
+
+				if v, ok := cs["response_code"]; ok && !isIntfNil(v) {
+
+					blockingPageChoiceInt.BlockingPage.ResponseCode = ves_io_schema.HttpStatusCode(ves_io_schema.HttpStatusCode_value[v.(string)])
+
+				}
 
 			}
-
-			if v, ok := cs["response_code"]; ok && !isIntfNil(v) {
-
-				blockingPageChoiceInt.BlockingPage.ResponseCode = ves_io_schema.HttpStatusCode(ves_io_schema.HttpStatusCode_value[v.(string)])
-
-			}
-
 		}
 
 	}
@@ -696,28 +757,30 @@ func resourceVolterraAppFirewallCreate(d *schema.ResourceData, meta interface{})
 		botProtectionChoiceInt.BotProtectionSetting = &ves_io_schema_app_firewall.BotProtectionSetting{}
 		createSpec.BotProtectionChoice = botProtectionChoiceInt
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
+			if set != nil {
+				cs := set.(map[string]interface{})
 
-			if v, ok := cs["good_bot_action"]; ok && !isIntfNil(v) {
+				if v, ok := cs["good_bot_action"]; ok && !isIntfNil(v) {
 
-				botProtectionChoiceInt.BotProtectionSetting.GoodBotAction = ves_io_schema_app_firewall.BotAction(ves_io_schema_app_firewall.BotAction_value[v.(string)])
+					botProtectionChoiceInt.BotProtectionSetting.GoodBotAction = ves_io_schema_app_firewall.BotAction(ves_io_schema_app_firewall.BotAction_value[v.(string)])
+
+				}
+
+				if v, ok := cs["malicious_bot_action"]; ok && !isIntfNil(v) {
+
+					botProtectionChoiceInt.BotProtectionSetting.MaliciousBotAction = ves_io_schema_app_firewall.BotAction(ves_io_schema_app_firewall.BotAction_value[v.(string)])
+
+				}
+
+				if v, ok := cs["suspicious_bot_action"]; ok && !isIntfNil(v) {
+
+					botProtectionChoiceInt.BotProtectionSetting.SuspiciousBotAction = ves_io_schema_app_firewall.BotAction(ves_io_schema_app_firewall.BotAction_value[v.(string)])
+
+				}
 
 			}
-
-			if v, ok := cs["malicious_bot_action"]; ok && !isIntfNil(v) {
-
-				botProtectionChoiceInt.BotProtectionSetting.MaliciousBotAction = ves_io_schema_app_firewall.BotAction(ves_io_schema_app_firewall.BotAction_value[v.(string)])
-
-			}
-
-			if v, ok := cs["suspicious_bot_action"]; ok && !isIntfNil(v) {
-
-				botProtectionChoiceInt.BotProtectionSetting.SuspiciousBotAction = ves_io_schema_app_firewall.BotAction(ves_io_schema_app_firewall.BotAction_value[v.(string)])
-
-			}
-
 		}
 
 	}
@@ -745,28 +808,30 @@ func resourceVolterraAppFirewallCreate(d *schema.ResourceData, meta interface{})
 		detectionSettingChoiceInt.AiRiskBasedBlocking = &ves_io_schema_app_firewall.AiRiskBasedBlocking{}
 		createSpec.DetectionSettingChoice = detectionSettingChoiceInt
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
+			if set != nil {
+				cs := set.(map[string]interface{})
 
-			if v, ok := cs["high_risk_action"]; ok && !isIntfNil(v) {
+				if v, ok := cs["high_risk_action"]; ok && !isIntfNil(v) {
 
-				detectionSettingChoiceInt.AiRiskBasedBlocking.HighRiskAction = ves_io_schema_app_firewall.RiskBasedBlockingAction(ves_io_schema_app_firewall.RiskBasedBlockingAction_value[v.(string)])
+					detectionSettingChoiceInt.AiRiskBasedBlocking.HighRiskAction = ves_io_schema_app_firewall.RiskBasedBlockingAction(ves_io_schema_app_firewall.RiskBasedBlockingAction_value[v.(string)])
+
+				}
+
+				if v, ok := cs["low_risk_action"]; ok && !isIntfNil(v) {
+
+					detectionSettingChoiceInt.AiRiskBasedBlocking.LowRiskAction = ves_io_schema_app_firewall.RiskBasedBlockingAction(ves_io_schema_app_firewall.RiskBasedBlockingAction_value[v.(string)])
+
+				}
+
+				if v, ok := cs["medium_risk_action"]; ok && !isIntfNil(v) {
+
+					detectionSettingChoiceInt.AiRiskBasedBlocking.MediumRiskAction = ves_io_schema_app_firewall.RiskBasedBlockingAction(ves_io_schema_app_firewall.RiskBasedBlockingAction_value[v.(string)])
+
+				}
 
 			}
-
-			if v, ok := cs["low_risk_action"]; ok && !isIntfNil(v) {
-
-				detectionSettingChoiceInt.AiRiskBasedBlocking.LowRiskAction = ves_io_schema_app_firewall.RiskBasedBlockingAction(ves_io_schema_app_firewall.RiskBasedBlockingAction_value[v.(string)])
-
-			}
-
-			if v, ok := cs["medium_risk_action"]; ok && !isIntfNil(v) {
-
-				detectionSettingChoiceInt.AiRiskBasedBlocking.MediumRiskAction = ves_io_schema_app_firewall.RiskBasedBlockingAction(ves_io_schema_app_firewall.RiskBasedBlockingAction_value[v.(string)])
-
-			}
-
 		}
 
 	}
@@ -790,246 +855,307 @@ func resourceVolterraAppFirewallCreate(d *schema.ResourceData, meta interface{})
 		detectionSettingChoiceInt.DetectionSettings = &ves_io_schema_app_firewall.DetectionSetting{}
 		createSpec.DetectionSettingChoice = detectionSettingChoiceInt
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
+			if set != nil {
+				cs := set.(map[string]interface{})
 
-			falsePositiveSuppressionTypeFound := false
+				botProtectionChoiceTypeFound := false
 
-			if v, ok := cs["disable_suppression"]; ok && !isIntfNil(v) && !falsePositiveSuppressionTypeFound {
+				if v, ok := cs["bot_protection_setting"]; ok && !isIntfNil(v) && !botProtectionChoiceTypeFound {
 
-				falsePositiveSuppressionTypeFound = true
+					botProtectionChoiceTypeFound = true
+					botProtectionChoiceInt := &ves_io_schema_app_firewall.DetectionSetting_BotProtectionSetting{}
+					botProtectionChoiceInt.BotProtectionSetting = &ves_io_schema_app_firewall.BotProtectionSetting{}
+					detectionSettingChoiceInt.DetectionSettings.BotProtectionChoice = botProtectionChoiceInt
 
-				if v.(bool) {
-					falsePositiveSuppressionInt := &ves_io_schema_app_firewall.DetectionSetting_DisableSuppression{}
-					falsePositiveSuppressionInt.DisableSuppression = &ves_io_schema.Empty{}
-					detectionSettingChoiceInt.DetectionSettings.FalsePositiveSuppression = falsePositiveSuppressionInt
-				}
-
-			}
-
-			if v, ok := cs["enable_suppression"]; ok && !isIntfNil(v) && !falsePositiveSuppressionTypeFound {
-
-				falsePositiveSuppressionTypeFound = true
-
-				if v.(bool) {
-					falsePositiveSuppressionInt := &ves_io_schema_app_firewall.DetectionSetting_EnableSuppression{}
-					falsePositiveSuppressionInt.EnableSuppression = &ves_io_schema.Empty{}
-					detectionSettingChoiceInt.DetectionSettings.FalsePositiveSuppression = falsePositiveSuppressionInt
-				}
-
-			}
-
-			if v, ok := cs["signature_selection_setting"]; ok && !isIntfNil(v) {
-
-				sl := v.(*schema.Set).List()
-				signatureSelectionSetting := &ves_io_schema_app_firewall.SignatureSelectionSetting{}
-				detectionSettingChoiceInt.DetectionSettings.SignatureSelectionSetting = signatureSelectionSetting
-				for _, set := range sl {
-					signatureSelectionSettingMapStrToI := set.(map[string]interface{})
-
-					attackTypeSettingTypeFound := false
-
-					if v, ok := signatureSelectionSettingMapStrToI["attack_type_settings"]; ok && !isIntfNil(v) && !attackTypeSettingTypeFound {
-
-						attackTypeSettingTypeFound = true
-						attackTypeSettingInt := &ves_io_schema_app_firewall.SignatureSelectionSetting_AttackTypeSettings{}
-						attackTypeSettingInt.AttackTypeSettings = &ves_io_schema_app_firewall.AttackTypeSettings{}
-						signatureSelectionSetting.AttackTypeSetting = attackTypeSettingInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
 							cs := set.(map[string]interface{})
 
-							if v, ok := cs["disabled_attack_types"]; ok && !isIntfNil(v) {
+							if v, ok := cs["good_bot_action"]; ok && !isIntfNil(v) {
 
-								disabled_attack_typesList := []ves_io_schema_app_firewall.AttackType{}
-								for _, j := range v.([]interface{}) {
-									disabled_attack_typesList = append(disabled_attack_typesList, ves_io_schema_app_firewall.AttackType(ves_io_schema_app_firewall.AttackType_value[j.(string)]))
-								}
-								attackTypeSettingInt.AttackTypeSettings.DisabledAttackTypes = disabled_attack_typesList
+								botProtectionChoiceInt.BotProtectionSetting.GoodBotAction = ves_io_schema_app_firewall.BotAction(ves_io_schema_app_firewall.BotAction_value[v.(string)])
+
+							}
+
+							if v, ok := cs["malicious_bot_action"]; ok && !isIntfNil(v) {
+
+								botProtectionChoiceInt.BotProtectionSetting.MaliciousBotAction = ves_io_schema_app_firewall.BotAction(ves_io_schema_app_firewall.BotAction_value[v.(string)])
+
+							}
+
+							if v, ok := cs["suspicious_bot_action"]; ok && !isIntfNil(v) {
+
+								botProtectionChoiceInt.BotProtectionSetting.SuspiciousBotAction = ves_io_schema_app_firewall.BotAction(ves_io_schema_app_firewall.BotAction_value[v.(string)])
 
 							}
 
 						}
-
-					}
-
-					if v, ok := signatureSelectionSettingMapStrToI["default_attack_type_settings"]; ok && !isIntfNil(v) && !attackTypeSettingTypeFound {
-
-						attackTypeSettingTypeFound = true
-
-						if v.(bool) {
-							attackTypeSettingInt := &ves_io_schema_app_firewall.SignatureSelectionSetting_DefaultAttackTypeSettings{}
-							attackTypeSettingInt.DefaultAttackTypeSettings = &ves_io_schema.Empty{}
-							signatureSelectionSetting.AttackTypeSetting = attackTypeSettingInt
-						}
-
-					}
-
-					signatureSelectionByAccuracyTypeFound := false
-
-					if v, ok := signatureSelectionSettingMapStrToI["high_medium_accuracy_signatures"]; ok && !isIntfNil(v) && !signatureSelectionByAccuracyTypeFound {
-
-						signatureSelectionByAccuracyTypeFound = true
-
-						if v.(bool) {
-							signatureSelectionByAccuracyInt := &ves_io_schema_app_firewall.SignatureSelectionSetting_HighMediumAccuracySignatures{}
-							signatureSelectionByAccuracyInt.HighMediumAccuracySignatures = &ves_io_schema.Empty{}
-							signatureSelectionSetting.SignatureSelectionByAccuracy = signatureSelectionByAccuracyInt
-						}
-
-					}
-
-					if v, ok := signatureSelectionSettingMapStrToI["high_medium_low_accuracy_signatures"]; ok && !isIntfNil(v) && !signatureSelectionByAccuracyTypeFound {
-
-						signatureSelectionByAccuracyTypeFound = true
-
-						if v.(bool) {
-							signatureSelectionByAccuracyInt := &ves_io_schema_app_firewall.SignatureSelectionSetting_HighMediumLowAccuracySignatures{}
-							signatureSelectionByAccuracyInt.HighMediumLowAccuracySignatures = &ves_io_schema.Empty{}
-							signatureSelectionSetting.SignatureSelectionByAccuracy = signatureSelectionByAccuracyInt
-						}
-
-					}
-
-					if v, ok := signatureSelectionSettingMapStrToI["only_high_accuracy_signatures"]; ok && !isIntfNil(v) && !signatureSelectionByAccuracyTypeFound {
-
-						signatureSelectionByAccuracyTypeFound = true
-
-						if v.(bool) {
-							signatureSelectionByAccuracyInt := &ves_io_schema_app_firewall.SignatureSelectionSetting_OnlyHighAccuracySignatures{}
-							signatureSelectionByAccuracyInt.OnlyHighAccuracySignatures = &ves_io_schema.Empty{}
-							signatureSelectionSetting.SignatureSelectionByAccuracy = signatureSelectionByAccuracyInt
-						}
-
 					}
 
 				}
 
-			}
+				if v, ok := cs["default_bot_setting"]; ok && !isIntfNil(v) && !botProtectionChoiceTypeFound {
 
-			signaturesStagingSettingsTypeFound := false
+					botProtectionChoiceTypeFound = true
 
-			if v, ok := cs["disable_staging"]; ok && !isIntfNil(v) && !signaturesStagingSettingsTypeFound {
+					if v.(bool) {
+						botProtectionChoiceInt := &ves_io_schema_app_firewall.DetectionSetting_DefaultBotSetting{}
+						botProtectionChoiceInt.DefaultBotSetting = &ves_io_schema.Empty{}
+						detectionSettingChoiceInt.DetectionSettings.BotProtectionChoice = botProtectionChoiceInt
+					}
 
-				signaturesStagingSettingsTypeFound = true
+				}
 
-				if v.(bool) {
-					signaturesStagingSettingsInt := &ves_io_schema_app_firewall.DetectionSetting_DisableStaging{}
-					signaturesStagingSettingsInt.DisableStaging = &ves_io_schema.Empty{}
+				falsePositiveSuppressionTypeFound := false
+
+				if v, ok := cs["disable_suppression"]; ok && !isIntfNil(v) && !falsePositiveSuppressionTypeFound {
+
+					falsePositiveSuppressionTypeFound = true
+
+					if v.(bool) {
+						falsePositiveSuppressionInt := &ves_io_schema_app_firewall.DetectionSetting_DisableSuppression{}
+						falsePositiveSuppressionInt.DisableSuppression = &ves_io_schema.Empty{}
+						detectionSettingChoiceInt.DetectionSettings.FalsePositiveSuppression = falsePositiveSuppressionInt
+					}
+
+				}
+
+				if v, ok := cs["enable_suppression"]; ok && !isIntfNil(v) && !falsePositiveSuppressionTypeFound {
+
+					falsePositiveSuppressionTypeFound = true
+
+					if v.(bool) {
+						falsePositiveSuppressionInt := &ves_io_schema_app_firewall.DetectionSetting_EnableSuppression{}
+						falsePositiveSuppressionInt.EnableSuppression = &ves_io_schema.Empty{}
+						detectionSettingChoiceInt.DetectionSettings.FalsePositiveSuppression = falsePositiveSuppressionInt
+					}
+
+				}
+
+				if v, ok := cs["signature_selection_setting"]; ok && !isIntfNil(v) {
+
+					sl := v.([]interface{})
+					signatureSelectionSetting := &ves_io_schema_app_firewall.SignatureSelectionSetting{}
+					detectionSettingChoiceInt.DetectionSettings.SignatureSelectionSetting = signatureSelectionSetting
+					for _, set := range sl {
+						if set != nil {
+							signatureSelectionSettingMapStrToI := set.(map[string]interface{})
+
+							attackTypeSettingTypeFound := false
+
+							if v, ok := signatureSelectionSettingMapStrToI["attack_type_settings"]; ok && !isIntfNil(v) && !attackTypeSettingTypeFound {
+
+								attackTypeSettingTypeFound = true
+								attackTypeSettingInt := &ves_io_schema_app_firewall.SignatureSelectionSetting_AttackTypeSettings{}
+								attackTypeSettingInt.AttackTypeSettings = &ves_io_schema_app_firewall.AttackTypeSettings{}
+								signatureSelectionSetting.AttackTypeSetting = attackTypeSettingInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["disabled_attack_types"]; ok && !isIntfNil(v) {
+
+											disabled_attack_typesList := []ves_io_schema_app_firewall.AttackType{}
+											for _, j := range v.([]interface{}) {
+												disabled_attack_typesList = append(disabled_attack_typesList, ves_io_schema_app_firewall.AttackType(ves_io_schema_app_firewall.AttackType_value[j.(string)]))
+											}
+											attackTypeSettingInt.AttackTypeSettings.DisabledAttackTypes = disabled_attack_typesList
+
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := signatureSelectionSettingMapStrToI["default_attack_type_settings"]; ok && !isIntfNil(v) && !attackTypeSettingTypeFound {
+
+								attackTypeSettingTypeFound = true
+
+								if v.(bool) {
+									attackTypeSettingInt := &ves_io_schema_app_firewall.SignatureSelectionSetting_DefaultAttackTypeSettings{}
+									attackTypeSettingInt.DefaultAttackTypeSettings = &ves_io_schema.Empty{}
+									signatureSelectionSetting.AttackTypeSetting = attackTypeSettingInt
+								}
+
+							}
+
+							signatureSelectionByAccuracyTypeFound := false
+
+							if v, ok := signatureSelectionSettingMapStrToI["high_medium_accuracy_signatures"]; ok && !isIntfNil(v) && !signatureSelectionByAccuracyTypeFound {
+
+								signatureSelectionByAccuracyTypeFound = true
+
+								if v.(bool) {
+									signatureSelectionByAccuracyInt := &ves_io_schema_app_firewall.SignatureSelectionSetting_HighMediumAccuracySignatures{}
+									signatureSelectionByAccuracyInt.HighMediumAccuracySignatures = &ves_io_schema.Empty{}
+									signatureSelectionSetting.SignatureSelectionByAccuracy = signatureSelectionByAccuracyInt
+								}
+
+							}
+
+							if v, ok := signatureSelectionSettingMapStrToI["high_medium_low_accuracy_signatures"]; ok && !isIntfNil(v) && !signatureSelectionByAccuracyTypeFound {
+
+								signatureSelectionByAccuracyTypeFound = true
+
+								if v.(bool) {
+									signatureSelectionByAccuracyInt := &ves_io_schema_app_firewall.SignatureSelectionSetting_HighMediumLowAccuracySignatures{}
+									signatureSelectionByAccuracyInt.HighMediumLowAccuracySignatures = &ves_io_schema.Empty{}
+									signatureSelectionSetting.SignatureSelectionByAccuracy = signatureSelectionByAccuracyInt
+								}
+
+							}
+
+							if v, ok := signatureSelectionSettingMapStrToI["only_high_accuracy_signatures"]; ok && !isIntfNil(v) && !signatureSelectionByAccuracyTypeFound {
+
+								signatureSelectionByAccuracyTypeFound = true
+
+								if v.(bool) {
+									signatureSelectionByAccuracyInt := &ves_io_schema_app_firewall.SignatureSelectionSetting_OnlyHighAccuracySignatures{}
+									signatureSelectionByAccuracyInt.OnlyHighAccuracySignatures = &ves_io_schema.Empty{}
+									signatureSelectionSetting.SignatureSelectionByAccuracy = signatureSelectionByAccuracyInt
+								}
+
+							}
+
+						}
+					}
+
+				}
+
+				signaturesStagingSettingsTypeFound := false
+
+				if v, ok := cs["disable_staging"]; ok && !isIntfNil(v) && !signaturesStagingSettingsTypeFound {
+
+					signaturesStagingSettingsTypeFound = true
+
+					if v.(bool) {
+						signaturesStagingSettingsInt := &ves_io_schema_app_firewall.DetectionSetting_DisableStaging{}
+						signaturesStagingSettingsInt.DisableStaging = &ves_io_schema.Empty{}
+						detectionSettingChoiceInt.DetectionSettings.SignaturesStagingSettings = signaturesStagingSettingsInt
+					}
+
+				}
+
+				if v, ok := cs["stage_new_and_updated_signatures"]; ok && !isIntfNil(v) && !signaturesStagingSettingsTypeFound {
+
+					signaturesStagingSettingsTypeFound = true
+					signaturesStagingSettingsInt := &ves_io_schema_app_firewall.DetectionSetting_StageNewAndUpdatedSignatures{}
+					signaturesStagingSettingsInt.StageNewAndUpdatedSignatures = &ves_io_schema_app_firewall.SignaturesStagingSettings{}
 					detectionSettingChoiceInt.DetectionSettings.SignaturesStagingSettings = signaturesStagingSettingsInt
-				}
 
-			}
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
 
-			if v, ok := cs["stage_new_and_updated_signatures"]; ok && !isIntfNil(v) && !signaturesStagingSettingsTypeFound {
+							if v, ok := cs["staging_period"]; ok && !isIntfNil(v) {
 
-				signaturesStagingSettingsTypeFound = true
-				signaturesStagingSettingsInt := &ves_io_schema_app_firewall.DetectionSetting_StageNewAndUpdatedSignatures{}
-				signaturesStagingSettingsInt.StageNewAndUpdatedSignatures = &ves_io_schema_app_firewall.SignaturesStagingSettings{}
-				detectionSettingChoiceInt.DetectionSettings.SignaturesStagingSettings = signaturesStagingSettingsInt
+								signaturesStagingSettingsInt.StageNewAndUpdatedSignatures.StagingPeriod = uint32(v.(int))
 
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
+							}
 
-					if v, ok := cs["staging_period"]; ok && !isIntfNil(v) {
-
-						signaturesStagingSettingsInt.StageNewAndUpdatedSignatures.StagingPeriod = uint32(v.(int))
-
-					}
-
-				}
-
-			}
-
-			if v, ok := cs["stage_new_signatures"]; ok && !isIntfNil(v) && !signaturesStagingSettingsTypeFound {
-
-				signaturesStagingSettingsTypeFound = true
-				signaturesStagingSettingsInt := &ves_io_schema_app_firewall.DetectionSetting_StageNewSignatures{}
-				signaturesStagingSettingsInt.StageNewSignatures = &ves_io_schema_app_firewall.SignaturesStagingSettings{}
-				detectionSettingChoiceInt.DetectionSettings.SignaturesStagingSettings = signaturesStagingSettingsInt
-
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
-
-					if v, ok := cs["staging_period"]; ok && !isIntfNil(v) {
-
-						signaturesStagingSettingsInt.StageNewSignatures.StagingPeriod = uint32(v.(int))
-
-					}
-
-				}
-
-			}
-
-			threatCampaignChoiceTypeFound := false
-
-			if v, ok := cs["disable_threat_campaigns"]; ok && !isIntfNil(v) && !threatCampaignChoiceTypeFound {
-
-				threatCampaignChoiceTypeFound = true
-
-				if v.(bool) {
-					threatCampaignChoiceInt := &ves_io_schema_app_firewall.DetectionSetting_DisableThreatCampaigns{}
-					threatCampaignChoiceInt.DisableThreatCampaigns = &ves_io_schema.Empty{}
-					detectionSettingChoiceInt.DetectionSettings.ThreatCampaignChoice = threatCampaignChoiceInt
-				}
-
-			}
-
-			if v, ok := cs["enable_threat_campaigns"]; ok && !isIntfNil(v) && !threatCampaignChoiceTypeFound {
-
-				threatCampaignChoiceTypeFound = true
-
-				if v.(bool) {
-					threatCampaignChoiceInt := &ves_io_schema_app_firewall.DetectionSetting_EnableThreatCampaigns{}
-					threatCampaignChoiceInt.EnableThreatCampaigns = &ves_io_schema.Empty{}
-					detectionSettingChoiceInt.DetectionSettings.ThreatCampaignChoice = threatCampaignChoiceInt
-				}
-
-			}
-
-			violationDetectionSettingTypeFound := false
-
-			if v, ok := cs["default_violation_settings"]; ok && !isIntfNil(v) && !violationDetectionSettingTypeFound {
-
-				violationDetectionSettingTypeFound = true
-
-				if v.(bool) {
-					violationDetectionSettingInt := &ves_io_schema_app_firewall.DetectionSetting_DefaultViolationSettings{}
-					violationDetectionSettingInt.DefaultViolationSettings = &ves_io_schema.Empty{}
-					detectionSettingChoiceInt.DetectionSettings.ViolationDetectionSetting = violationDetectionSettingInt
-				}
-
-			}
-
-			if v, ok := cs["violation_settings"]; ok && !isIntfNil(v) && !violationDetectionSettingTypeFound {
-
-				violationDetectionSettingTypeFound = true
-				violationDetectionSettingInt := &ves_io_schema_app_firewall.DetectionSetting_ViolationSettings{}
-				violationDetectionSettingInt.ViolationSettings = &ves_io_schema_app_firewall.ViolationSettings{}
-				detectionSettingChoiceInt.DetectionSettings.ViolationDetectionSetting = violationDetectionSettingInt
-
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
-
-					if v, ok := cs["disabled_violation_types"]; ok && !isIntfNil(v) {
-
-						disabled_violation_typesList := []ves_io_schema_app_firewall.AppFirewallViolationType{}
-						for _, j := range v.([]interface{}) {
-							disabled_violation_typesList = append(disabled_violation_typesList, ves_io_schema_app_firewall.AppFirewallViolationType(ves_io_schema_app_firewall.AppFirewallViolationType_value[j.(string)]))
 						}
-						violationDetectionSettingInt.ViolationSettings.DisabledViolationTypes = disabled_violation_typesList
+					}
 
+				}
+
+				if v, ok := cs["stage_new_signatures"]; ok && !isIntfNil(v) && !signaturesStagingSettingsTypeFound {
+
+					signaturesStagingSettingsTypeFound = true
+					signaturesStagingSettingsInt := &ves_io_schema_app_firewall.DetectionSetting_StageNewSignatures{}
+					signaturesStagingSettingsInt.StageNewSignatures = &ves_io_schema_app_firewall.SignaturesStagingSettings{}
+					detectionSettingChoiceInt.DetectionSettings.SignaturesStagingSettings = signaturesStagingSettingsInt
+
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["staging_period"]; ok && !isIntfNil(v) {
+
+								signaturesStagingSettingsInt.StageNewSignatures.StagingPeriod = uint32(v.(int))
+
+							}
+
+						}
+					}
+
+				}
+
+				threatCampaignChoiceTypeFound := false
+
+				if v, ok := cs["disable_threat_campaigns"]; ok && !isIntfNil(v) && !threatCampaignChoiceTypeFound {
+
+					threatCampaignChoiceTypeFound = true
+
+					if v.(bool) {
+						threatCampaignChoiceInt := &ves_io_schema_app_firewall.DetectionSetting_DisableThreatCampaigns{}
+						threatCampaignChoiceInt.DisableThreatCampaigns = &ves_io_schema.Empty{}
+						detectionSettingChoiceInt.DetectionSettings.ThreatCampaignChoice = threatCampaignChoiceInt
+					}
+
+				}
+
+				if v, ok := cs["enable_threat_campaigns"]; ok && !isIntfNil(v) && !threatCampaignChoiceTypeFound {
+
+					threatCampaignChoiceTypeFound = true
+
+					if v.(bool) {
+						threatCampaignChoiceInt := &ves_io_schema_app_firewall.DetectionSetting_EnableThreatCampaigns{}
+						threatCampaignChoiceInt.EnableThreatCampaigns = &ves_io_schema.Empty{}
+						detectionSettingChoiceInt.DetectionSettings.ThreatCampaignChoice = threatCampaignChoiceInt
+					}
+
+				}
+
+				violationDetectionSettingTypeFound := false
+
+				if v, ok := cs["default_violation_settings"]; ok && !isIntfNil(v) && !violationDetectionSettingTypeFound {
+
+					violationDetectionSettingTypeFound = true
+
+					if v.(bool) {
+						violationDetectionSettingInt := &ves_io_schema_app_firewall.DetectionSetting_DefaultViolationSettings{}
+						violationDetectionSettingInt.DefaultViolationSettings = &ves_io_schema.Empty{}
+						detectionSettingChoiceInt.DetectionSettings.ViolationDetectionSetting = violationDetectionSettingInt
+					}
+
+				}
+
+				if v, ok := cs["violation_settings"]; ok && !isIntfNil(v) && !violationDetectionSettingTypeFound {
+
+					violationDetectionSettingTypeFound = true
+					violationDetectionSettingInt := &ves_io_schema_app_firewall.DetectionSetting_ViolationSettings{}
+					violationDetectionSettingInt.ViolationSettings = &ves_io_schema_app_firewall.ViolationSettings{}
+					detectionSettingChoiceInt.DetectionSettings.ViolationDetectionSetting = violationDetectionSettingInt
+
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["disabled_violation_types"]; ok && !isIntfNil(v) {
+
+								disabled_violation_typesList := []ves_io_schema_app_firewall.AppFirewallViolationType{}
+								for _, j := range v.([]interface{}) {
+									disabled_violation_typesList = append(disabled_violation_typesList, ves_io_schema_app_firewall.AppFirewallViolationType(ves_io_schema_app_firewall.AppFirewallViolationType_value[j.(string)]))
+								}
+								violationDetectionSettingInt.ViolationSettings.DisabledViolationTypes = disabled_violation_typesList
+
+							}
+
+						}
 					}
 
 				}
 
 			}
-
 		}
 
 	}
@@ -1194,20 +1320,22 @@ func resourceVolterraAppFirewallUpdate(d *schema.ResourceData, meta interface{})
 		allowedResponseCodesChoiceInt.AllowedResponseCodes = &ves_io_schema_app_firewall.AllowedResponseCodes{}
 		updateSpec.AllowedResponseCodesChoice = allowedResponseCodesChoiceInt
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
+			if set != nil {
+				cs := set.(map[string]interface{})
 
-			if v, ok := cs["response_code"]; ok && !isIntfNil(v) {
+				if v, ok := cs["response_code"]; ok && !isIntfNil(v) {
 
-				ls := make([]uint32, len(v.([]interface{})))
-				for i, v := range v.([]interface{}) {
-					ls[i] = uint32(v.(int))
+					ls := make([]uint32, len(v.([]interface{})))
+					for i, v := range v.([]interface{}) {
+						ls[i] = uint32(v.(int))
+					}
+					allowedResponseCodesChoiceInt.AllowedResponseCodes.ResponseCode = ls
+
 				}
-				allowedResponseCodesChoiceInt.AllowedResponseCodes.ResponseCode = ls
 
 			}
-
 		}
 
 	}
@@ -1221,88 +1349,98 @@ func resourceVolterraAppFirewallUpdate(d *schema.ResourceData, meta interface{})
 		anonymizationSettingInt.CustomAnonymization = &ves_io_schema_app_firewall.AnonymizationSetting{}
 		updateSpec.AnonymizationSetting = anonymizationSettingInt
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
+			if set != nil {
+				cs := set.(map[string]interface{})
 
-			if v, ok := cs["anonymization_config"]; ok && !isIntfNil(v) {
+				if v, ok := cs["anonymization_config"]; ok && !isIntfNil(v) {
 
-				sl := v.([]interface{})
-				anonymizationConfig := make([]*ves_io_schema_app_firewall.AnonymizationConfiguration, len(sl))
-				anonymizationSettingInt.CustomAnonymization.AnonymizationConfig = anonymizationConfig
-				for i, set := range sl {
-					anonymizationConfig[i] = &ves_io_schema_app_firewall.AnonymizationConfiguration{}
-					anonymizationConfigMapStrToI := set.(map[string]interface{})
+					sl := v.([]interface{})
+					anonymizationConfig := make([]*ves_io_schema_app_firewall.AnonymizationConfiguration, len(sl))
+					anonymizationSettingInt.CustomAnonymization.AnonymizationConfig = anonymizationConfig
+					for i, set := range sl {
+						if set != nil {
+							anonymizationConfig[i] = &ves_io_schema_app_firewall.AnonymizationConfiguration{}
+							anonymizationConfigMapStrToI := set.(map[string]interface{})
 
-					anonymizationChoiceTypeFound := false
+							anonymizationChoiceTypeFound := false
 
-					if v, ok := anonymizationConfigMapStrToI["cookie"]; ok && !isIntfNil(v) && !anonymizationChoiceTypeFound {
+							if v, ok := anonymizationConfigMapStrToI["cookie"]; ok && !isIntfNil(v) && !anonymizationChoiceTypeFound {
 
-						anonymizationChoiceTypeFound = true
-						anonymizationChoiceInt := &ves_io_schema_app_firewall.AnonymizationConfiguration_Cookie{}
-						anonymizationChoiceInt.Cookie = &ves_io_schema_app_firewall.AnonymizeHttpCookie{}
-						anonymizationConfig[i].AnonymizationChoice = anonymizationChoiceInt
+								anonymizationChoiceTypeFound = true
+								anonymizationChoiceInt := &ves_io_schema_app_firewall.AnonymizationConfiguration_Cookie{}
+								anonymizationChoiceInt.Cookie = &ves_io_schema_app_firewall.AnonymizeHttpCookie{}
+								anonymizationConfig[i].AnonymizationChoice = anonymizationChoiceInt
 
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
 
-							if v, ok := cs["cookie_name"]; ok && !isIntfNil(v) {
+										if v, ok := cs["cookie_name"]; ok && !isIntfNil(v) {
 
-								anonymizationChoiceInt.Cookie.CookieName = v.(string)
+											anonymizationChoiceInt.Cookie.CookieName = v.(string)
+
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := anonymizationConfigMapStrToI["http_header"]; ok && !isIntfNil(v) && !anonymizationChoiceTypeFound {
+
+								anonymizationChoiceTypeFound = true
+								anonymizationChoiceInt := &ves_io_schema_app_firewall.AnonymizationConfiguration_HttpHeader{}
+								anonymizationChoiceInt.HttpHeader = &ves_io_schema_app_firewall.AnonymizeHttpHeader{}
+								anonymizationConfig[i].AnonymizationChoice = anonymizationChoiceInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["header_name"]; ok && !isIntfNil(v) {
+
+											anonymizationChoiceInt.HttpHeader.HeaderName = v.(string)
+
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := anonymizationConfigMapStrToI["query_parameter"]; ok && !isIntfNil(v) && !anonymizationChoiceTypeFound {
+
+								anonymizationChoiceTypeFound = true
+								anonymizationChoiceInt := &ves_io_schema_app_firewall.AnonymizationConfiguration_QueryParameter{}
+								anonymizationChoiceInt.QueryParameter = &ves_io_schema_app_firewall.AnonymizeHttpQueryParameter{}
+								anonymizationConfig[i].AnonymizationChoice = anonymizationChoiceInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["query_param_name"]; ok && !isIntfNil(v) {
+
+											anonymizationChoiceInt.QueryParameter.QueryParamName = v.(string)
+
+										}
+
+									}
+								}
 
 							}
 
 						}
-
-					}
-
-					if v, ok := anonymizationConfigMapStrToI["http_header"]; ok && !isIntfNil(v) && !anonymizationChoiceTypeFound {
-
-						anonymizationChoiceTypeFound = true
-						anonymizationChoiceInt := &ves_io_schema_app_firewall.AnonymizationConfiguration_HttpHeader{}
-						anonymizationChoiceInt.HttpHeader = &ves_io_schema_app_firewall.AnonymizeHttpHeader{}
-						anonymizationConfig[i].AnonymizationChoice = anonymizationChoiceInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["header_name"]; ok && !isIntfNil(v) {
-
-								anonymizationChoiceInt.HttpHeader.HeaderName = v.(string)
-
-							}
-
-						}
-
-					}
-
-					if v, ok := anonymizationConfigMapStrToI["query_parameter"]; ok && !isIntfNil(v) && !anonymizationChoiceTypeFound {
-
-						anonymizationChoiceTypeFound = true
-						anonymizationChoiceInt := &ves_io_schema_app_firewall.AnonymizationConfiguration_QueryParameter{}
-						anonymizationChoiceInt.QueryParameter = &ves_io_schema_app_firewall.AnonymizeHttpQueryParameter{}
-						anonymizationConfig[i].AnonymizationChoice = anonymizationChoiceInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["query_param_name"]; ok && !isIntfNil(v) {
-
-								anonymizationChoiceInt.QueryParameter.QueryParamName = v.(string)
-
-							}
-
-						}
-
 					}
 
 				}
 
 			}
-
 		}
 
 	}
@@ -1340,22 +1478,24 @@ func resourceVolterraAppFirewallUpdate(d *schema.ResourceData, meta interface{})
 		blockingPageChoiceInt.BlockingPage = &ves_io_schema_app_firewall.CustomBlockingPage{}
 		updateSpec.BlockingPageChoice = blockingPageChoiceInt
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
+			if set != nil {
+				cs := set.(map[string]interface{})
 
-			if v, ok := cs["blocking_page"]; ok && !isIntfNil(v) {
+				if v, ok := cs["blocking_page"]; ok && !isIntfNil(v) {
 
-				blockingPageChoiceInt.BlockingPage.BlockingPage = v.(string)
+					blockingPageChoiceInt.BlockingPage.BlockingPage = v.(string)
+
+				}
+
+				if v, ok := cs["response_code"]; ok && !isIntfNil(v) {
+
+					blockingPageChoiceInt.BlockingPage.ResponseCode = ves_io_schema.HttpStatusCode(ves_io_schema.HttpStatusCode_value[v.(string)])
+
+				}
 
 			}
-
-			if v, ok := cs["response_code"]; ok && !isIntfNil(v) {
-
-				blockingPageChoiceInt.BlockingPage.ResponseCode = ves_io_schema.HttpStatusCode(ves_io_schema.HttpStatusCode_value[v.(string)])
-
-			}
-
 		}
 
 	}
@@ -1381,28 +1521,30 @@ func resourceVolterraAppFirewallUpdate(d *schema.ResourceData, meta interface{})
 		botProtectionChoiceInt.BotProtectionSetting = &ves_io_schema_app_firewall.BotProtectionSetting{}
 		updateSpec.BotProtectionChoice = botProtectionChoiceInt
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
+			if set != nil {
+				cs := set.(map[string]interface{})
 
-			if v, ok := cs["good_bot_action"]; ok && !isIntfNil(v) {
+				if v, ok := cs["good_bot_action"]; ok && !isIntfNil(v) {
 
-				botProtectionChoiceInt.BotProtectionSetting.GoodBotAction = ves_io_schema_app_firewall.BotAction(ves_io_schema_app_firewall.BotAction_value[v.(string)])
+					botProtectionChoiceInt.BotProtectionSetting.GoodBotAction = ves_io_schema_app_firewall.BotAction(ves_io_schema_app_firewall.BotAction_value[v.(string)])
+
+				}
+
+				if v, ok := cs["malicious_bot_action"]; ok && !isIntfNil(v) {
+
+					botProtectionChoiceInt.BotProtectionSetting.MaliciousBotAction = ves_io_schema_app_firewall.BotAction(ves_io_schema_app_firewall.BotAction_value[v.(string)])
+
+				}
+
+				if v, ok := cs["suspicious_bot_action"]; ok && !isIntfNil(v) {
+
+					botProtectionChoiceInt.BotProtectionSetting.SuspiciousBotAction = ves_io_schema_app_firewall.BotAction(ves_io_schema_app_firewall.BotAction_value[v.(string)])
+
+				}
 
 			}
-
-			if v, ok := cs["malicious_bot_action"]; ok && !isIntfNil(v) {
-
-				botProtectionChoiceInt.BotProtectionSetting.MaliciousBotAction = ves_io_schema_app_firewall.BotAction(ves_io_schema_app_firewall.BotAction_value[v.(string)])
-
-			}
-
-			if v, ok := cs["suspicious_bot_action"]; ok && !isIntfNil(v) {
-
-				botProtectionChoiceInt.BotProtectionSetting.SuspiciousBotAction = ves_io_schema_app_firewall.BotAction(ves_io_schema_app_firewall.BotAction_value[v.(string)])
-
-			}
-
 		}
 
 	}
@@ -1428,28 +1570,30 @@ func resourceVolterraAppFirewallUpdate(d *schema.ResourceData, meta interface{})
 		detectionSettingChoiceInt.AiRiskBasedBlocking = &ves_io_schema_app_firewall.AiRiskBasedBlocking{}
 		updateSpec.DetectionSettingChoice = detectionSettingChoiceInt
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
+			if set != nil {
+				cs := set.(map[string]interface{})
 
-			if v, ok := cs["high_risk_action"]; ok && !isIntfNil(v) {
+				if v, ok := cs["high_risk_action"]; ok && !isIntfNil(v) {
 
-				detectionSettingChoiceInt.AiRiskBasedBlocking.HighRiskAction = ves_io_schema_app_firewall.RiskBasedBlockingAction(ves_io_schema_app_firewall.RiskBasedBlockingAction_value[v.(string)])
+					detectionSettingChoiceInt.AiRiskBasedBlocking.HighRiskAction = ves_io_schema_app_firewall.RiskBasedBlockingAction(ves_io_schema_app_firewall.RiskBasedBlockingAction_value[v.(string)])
+
+				}
+
+				if v, ok := cs["low_risk_action"]; ok && !isIntfNil(v) {
+
+					detectionSettingChoiceInt.AiRiskBasedBlocking.LowRiskAction = ves_io_schema_app_firewall.RiskBasedBlockingAction(ves_io_schema_app_firewall.RiskBasedBlockingAction_value[v.(string)])
+
+				}
+
+				if v, ok := cs["medium_risk_action"]; ok && !isIntfNil(v) {
+
+					detectionSettingChoiceInt.AiRiskBasedBlocking.MediumRiskAction = ves_io_schema_app_firewall.RiskBasedBlockingAction(ves_io_schema_app_firewall.RiskBasedBlockingAction_value[v.(string)])
+
+				}
 
 			}
-
-			if v, ok := cs["low_risk_action"]; ok && !isIntfNil(v) {
-
-				detectionSettingChoiceInt.AiRiskBasedBlocking.LowRiskAction = ves_io_schema_app_firewall.RiskBasedBlockingAction(ves_io_schema_app_firewall.RiskBasedBlockingAction_value[v.(string)])
-
-			}
-
-			if v, ok := cs["medium_risk_action"]; ok && !isIntfNil(v) {
-
-				detectionSettingChoiceInt.AiRiskBasedBlocking.MediumRiskAction = ves_io_schema_app_firewall.RiskBasedBlockingAction(ves_io_schema_app_firewall.RiskBasedBlockingAction_value[v.(string)])
-
-			}
-
 		}
 
 	}
@@ -1473,246 +1617,307 @@ func resourceVolterraAppFirewallUpdate(d *schema.ResourceData, meta interface{})
 		detectionSettingChoiceInt.DetectionSettings = &ves_io_schema_app_firewall.DetectionSetting{}
 		updateSpec.DetectionSettingChoice = detectionSettingChoiceInt
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
+			if set != nil {
+				cs := set.(map[string]interface{})
 
-			falsePositiveSuppressionTypeFound := false
+				botProtectionChoiceTypeFound := false
 
-			if v, ok := cs["disable_suppression"]; ok && !isIntfNil(v) && !falsePositiveSuppressionTypeFound {
+				if v, ok := cs["bot_protection_setting"]; ok && !isIntfNil(v) && !botProtectionChoiceTypeFound {
 
-				falsePositiveSuppressionTypeFound = true
+					botProtectionChoiceTypeFound = true
+					botProtectionChoiceInt := &ves_io_schema_app_firewall.DetectionSetting_BotProtectionSetting{}
+					botProtectionChoiceInt.BotProtectionSetting = &ves_io_schema_app_firewall.BotProtectionSetting{}
+					detectionSettingChoiceInt.DetectionSettings.BotProtectionChoice = botProtectionChoiceInt
 
-				if v.(bool) {
-					falsePositiveSuppressionInt := &ves_io_schema_app_firewall.DetectionSetting_DisableSuppression{}
-					falsePositiveSuppressionInt.DisableSuppression = &ves_io_schema.Empty{}
-					detectionSettingChoiceInt.DetectionSettings.FalsePositiveSuppression = falsePositiveSuppressionInt
-				}
-
-			}
-
-			if v, ok := cs["enable_suppression"]; ok && !isIntfNil(v) && !falsePositiveSuppressionTypeFound {
-
-				falsePositiveSuppressionTypeFound = true
-
-				if v.(bool) {
-					falsePositiveSuppressionInt := &ves_io_schema_app_firewall.DetectionSetting_EnableSuppression{}
-					falsePositiveSuppressionInt.EnableSuppression = &ves_io_schema.Empty{}
-					detectionSettingChoiceInt.DetectionSettings.FalsePositiveSuppression = falsePositiveSuppressionInt
-				}
-
-			}
-
-			if v, ok := cs["signature_selection_setting"]; ok && !isIntfNil(v) {
-
-				sl := v.(*schema.Set).List()
-				signatureSelectionSetting := &ves_io_schema_app_firewall.SignatureSelectionSetting{}
-				detectionSettingChoiceInt.DetectionSettings.SignatureSelectionSetting = signatureSelectionSetting
-				for _, set := range sl {
-					signatureSelectionSettingMapStrToI := set.(map[string]interface{})
-
-					attackTypeSettingTypeFound := false
-
-					if v, ok := signatureSelectionSettingMapStrToI["attack_type_settings"]; ok && !isIntfNil(v) && !attackTypeSettingTypeFound {
-
-						attackTypeSettingTypeFound = true
-						attackTypeSettingInt := &ves_io_schema_app_firewall.SignatureSelectionSetting_AttackTypeSettings{}
-						attackTypeSettingInt.AttackTypeSettings = &ves_io_schema_app_firewall.AttackTypeSettings{}
-						signatureSelectionSetting.AttackTypeSetting = attackTypeSettingInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
 							cs := set.(map[string]interface{})
 
-							if v, ok := cs["disabled_attack_types"]; ok && !isIntfNil(v) {
+							if v, ok := cs["good_bot_action"]; ok && !isIntfNil(v) {
 
-								disabled_attack_typesList := []ves_io_schema_app_firewall.AttackType{}
-								for _, j := range v.([]interface{}) {
-									disabled_attack_typesList = append(disabled_attack_typesList, ves_io_schema_app_firewall.AttackType(ves_io_schema_app_firewall.AttackType_value[j.(string)]))
-								}
-								attackTypeSettingInt.AttackTypeSettings.DisabledAttackTypes = disabled_attack_typesList
+								botProtectionChoiceInt.BotProtectionSetting.GoodBotAction = ves_io_schema_app_firewall.BotAction(ves_io_schema_app_firewall.BotAction_value[v.(string)])
+
+							}
+
+							if v, ok := cs["malicious_bot_action"]; ok && !isIntfNil(v) {
+
+								botProtectionChoiceInt.BotProtectionSetting.MaliciousBotAction = ves_io_schema_app_firewall.BotAction(ves_io_schema_app_firewall.BotAction_value[v.(string)])
+
+							}
+
+							if v, ok := cs["suspicious_bot_action"]; ok && !isIntfNil(v) {
+
+								botProtectionChoiceInt.BotProtectionSetting.SuspiciousBotAction = ves_io_schema_app_firewall.BotAction(ves_io_schema_app_firewall.BotAction_value[v.(string)])
 
 							}
 
 						}
-
-					}
-
-					if v, ok := signatureSelectionSettingMapStrToI["default_attack_type_settings"]; ok && !isIntfNil(v) && !attackTypeSettingTypeFound {
-
-						attackTypeSettingTypeFound = true
-
-						if v.(bool) {
-							attackTypeSettingInt := &ves_io_schema_app_firewall.SignatureSelectionSetting_DefaultAttackTypeSettings{}
-							attackTypeSettingInt.DefaultAttackTypeSettings = &ves_io_schema.Empty{}
-							signatureSelectionSetting.AttackTypeSetting = attackTypeSettingInt
-						}
-
-					}
-
-					signatureSelectionByAccuracyTypeFound := false
-
-					if v, ok := signatureSelectionSettingMapStrToI["high_medium_accuracy_signatures"]; ok && !isIntfNil(v) && !signatureSelectionByAccuracyTypeFound {
-
-						signatureSelectionByAccuracyTypeFound = true
-
-						if v.(bool) {
-							signatureSelectionByAccuracyInt := &ves_io_schema_app_firewall.SignatureSelectionSetting_HighMediumAccuracySignatures{}
-							signatureSelectionByAccuracyInt.HighMediumAccuracySignatures = &ves_io_schema.Empty{}
-							signatureSelectionSetting.SignatureSelectionByAccuracy = signatureSelectionByAccuracyInt
-						}
-
-					}
-
-					if v, ok := signatureSelectionSettingMapStrToI["high_medium_low_accuracy_signatures"]; ok && !isIntfNil(v) && !signatureSelectionByAccuracyTypeFound {
-
-						signatureSelectionByAccuracyTypeFound = true
-
-						if v.(bool) {
-							signatureSelectionByAccuracyInt := &ves_io_schema_app_firewall.SignatureSelectionSetting_HighMediumLowAccuracySignatures{}
-							signatureSelectionByAccuracyInt.HighMediumLowAccuracySignatures = &ves_io_schema.Empty{}
-							signatureSelectionSetting.SignatureSelectionByAccuracy = signatureSelectionByAccuracyInt
-						}
-
-					}
-
-					if v, ok := signatureSelectionSettingMapStrToI["only_high_accuracy_signatures"]; ok && !isIntfNil(v) && !signatureSelectionByAccuracyTypeFound {
-
-						signatureSelectionByAccuracyTypeFound = true
-
-						if v.(bool) {
-							signatureSelectionByAccuracyInt := &ves_io_schema_app_firewall.SignatureSelectionSetting_OnlyHighAccuracySignatures{}
-							signatureSelectionByAccuracyInt.OnlyHighAccuracySignatures = &ves_io_schema.Empty{}
-							signatureSelectionSetting.SignatureSelectionByAccuracy = signatureSelectionByAccuracyInt
-						}
-
 					}
 
 				}
 
-			}
+				if v, ok := cs["default_bot_setting"]; ok && !isIntfNil(v) && !botProtectionChoiceTypeFound {
 
-			signaturesStagingSettingsTypeFound := false
+					botProtectionChoiceTypeFound = true
 
-			if v, ok := cs["disable_staging"]; ok && !isIntfNil(v) && !signaturesStagingSettingsTypeFound {
+					if v.(bool) {
+						botProtectionChoiceInt := &ves_io_schema_app_firewall.DetectionSetting_DefaultBotSetting{}
+						botProtectionChoiceInt.DefaultBotSetting = &ves_io_schema.Empty{}
+						detectionSettingChoiceInt.DetectionSettings.BotProtectionChoice = botProtectionChoiceInt
+					}
 
-				signaturesStagingSettingsTypeFound = true
+				}
 
-				if v.(bool) {
-					signaturesStagingSettingsInt := &ves_io_schema_app_firewall.DetectionSetting_DisableStaging{}
-					signaturesStagingSettingsInt.DisableStaging = &ves_io_schema.Empty{}
+				falsePositiveSuppressionTypeFound := false
+
+				if v, ok := cs["disable_suppression"]; ok && !isIntfNil(v) && !falsePositiveSuppressionTypeFound {
+
+					falsePositiveSuppressionTypeFound = true
+
+					if v.(bool) {
+						falsePositiveSuppressionInt := &ves_io_schema_app_firewall.DetectionSetting_DisableSuppression{}
+						falsePositiveSuppressionInt.DisableSuppression = &ves_io_schema.Empty{}
+						detectionSettingChoiceInt.DetectionSettings.FalsePositiveSuppression = falsePositiveSuppressionInt
+					}
+
+				}
+
+				if v, ok := cs["enable_suppression"]; ok && !isIntfNil(v) && !falsePositiveSuppressionTypeFound {
+
+					falsePositiveSuppressionTypeFound = true
+
+					if v.(bool) {
+						falsePositiveSuppressionInt := &ves_io_schema_app_firewall.DetectionSetting_EnableSuppression{}
+						falsePositiveSuppressionInt.EnableSuppression = &ves_io_schema.Empty{}
+						detectionSettingChoiceInt.DetectionSettings.FalsePositiveSuppression = falsePositiveSuppressionInt
+					}
+
+				}
+
+				if v, ok := cs["signature_selection_setting"]; ok && !isIntfNil(v) {
+
+					sl := v.([]interface{})
+					signatureSelectionSetting := &ves_io_schema_app_firewall.SignatureSelectionSetting{}
+					detectionSettingChoiceInt.DetectionSettings.SignatureSelectionSetting = signatureSelectionSetting
+					for _, set := range sl {
+						if set != nil {
+							signatureSelectionSettingMapStrToI := set.(map[string]interface{})
+
+							attackTypeSettingTypeFound := false
+
+							if v, ok := signatureSelectionSettingMapStrToI["attack_type_settings"]; ok && !isIntfNil(v) && !attackTypeSettingTypeFound {
+
+								attackTypeSettingTypeFound = true
+								attackTypeSettingInt := &ves_io_schema_app_firewall.SignatureSelectionSetting_AttackTypeSettings{}
+								attackTypeSettingInt.AttackTypeSettings = &ves_io_schema_app_firewall.AttackTypeSettings{}
+								signatureSelectionSetting.AttackTypeSetting = attackTypeSettingInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["disabled_attack_types"]; ok && !isIntfNil(v) {
+
+											disabled_attack_typesList := []ves_io_schema_app_firewall.AttackType{}
+											for _, j := range v.([]interface{}) {
+												disabled_attack_typesList = append(disabled_attack_typesList, ves_io_schema_app_firewall.AttackType(ves_io_schema_app_firewall.AttackType_value[j.(string)]))
+											}
+											attackTypeSettingInt.AttackTypeSettings.DisabledAttackTypes = disabled_attack_typesList
+
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := signatureSelectionSettingMapStrToI["default_attack_type_settings"]; ok && !isIntfNil(v) && !attackTypeSettingTypeFound {
+
+								attackTypeSettingTypeFound = true
+
+								if v.(bool) {
+									attackTypeSettingInt := &ves_io_schema_app_firewall.SignatureSelectionSetting_DefaultAttackTypeSettings{}
+									attackTypeSettingInt.DefaultAttackTypeSettings = &ves_io_schema.Empty{}
+									signatureSelectionSetting.AttackTypeSetting = attackTypeSettingInt
+								}
+
+							}
+
+							signatureSelectionByAccuracyTypeFound := false
+
+							if v, ok := signatureSelectionSettingMapStrToI["high_medium_accuracy_signatures"]; ok && !isIntfNil(v) && !signatureSelectionByAccuracyTypeFound {
+
+								signatureSelectionByAccuracyTypeFound = true
+
+								if v.(bool) {
+									signatureSelectionByAccuracyInt := &ves_io_schema_app_firewall.SignatureSelectionSetting_HighMediumAccuracySignatures{}
+									signatureSelectionByAccuracyInt.HighMediumAccuracySignatures = &ves_io_schema.Empty{}
+									signatureSelectionSetting.SignatureSelectionByAccuracy = signatureSelectionByAccuracyInt
+								}
+
+							}
+
+							if v, ok := signatureSelectionSettingMapStrToI["high_medium_low_accuracy_signatures"]; ok && !isIntfNil(v) && !signatureSelectionByAccuracyTypeFound {
+
+								signatureSelectionByAccuracyTypeFound = true
+
+								if v.(bool) {
+									signatureSelectionByAccuracyInt := &ves_io_schema_app_firewall.SignatureSelectionSetting_HighMediumLowAccuracySignatures{}
+									signatureSelectionByAccuracyInt.HighMediumLowAccuracySignatures = &ves_io_schema.Empty{}
+									signatureSelectionSetting.SignatureSelectionByAccuracy = signatureSelectionByAccuracyInt
+								}
+
+							}
+
+							if v, ok := signatureSelectionSettingMapStrToI["only_high_accuracy_signatures"]; ok && !isIntfNil(v) && !signatureSelectionByAccuracyTypeFound {
+
+								signatureSelectionByAccuracyTypeFound = true
+
+								if v.(bool) {
+									signatureSelectionByAccuracyInt := &ves_io_schema_app_firewall.SignatureSelectionSetting_OnlyHighAccuracySignatures{}
+									signatureSelectionByAccuracyInt.OnlyHighAccuracySignatures = &ves_io_schema.Empty{}
+									signatureSelectionSetting.SignatureSelectionByAccuracy = signatureSelectionByAccuracyInt
+								}
+
+							}
+
+						}
+					}
+
+				}
+
+				signaturesStagingSettingsTypeFound := false
+
+				if v, ok := cs["disable_staging"]; ok && !isIntfNil(v) && !signaturesStagingSettingsTypeFound {
+
+					signaturesStagingSettingsTypeFound = true
+
+					if v.(bool) {
+						signaturesStagingSettingsInt := &ves_io_schema_app_firewall.DetectionSetting_DisableStaging{}
+						signaturesStagingSettingsInt.DisableStaging = &ves_io_schema.Empty{}
+						detectionSettingChoiceInt.DetectionSettings.SignaturesStagingSettings = signaturesStagingSettingsInt
+					}
+
+				}
+
+				if v, ok := cs["stage_new_and_updated_signatures"]; ok && !isIntfNil(v) && !signaturesStagingSettingsTypeFound {
+
+					signaturesStagingSettingsTypeFound = true
+					signaturesStagingSettingsInt := &ves_io_schema_app_firewall.DetectionSetting_StageNewAndUpdatedSignatures{}
+					signaturesStagingSettingsInt.StageNewAndUpdatedSignatures = &ves_io_schema_app_firewall.SignaturesStagingSettings{}
 					detectionSettingChoiceInt.DetectionSettings.SignaturesStagingSettings = signaturesStagingSettingsInt
-				}
 
-			}
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
 
-			if v, ok := cs["stage_new_and_updated_signatures"]; ok && !isIntfNil(v) && !signaturesStagingSettingsTypeFound {
+							if v, ok := cs["staging_period"]; ok && !isIntfNil(v) {
 
-				signaturesStagingSettingsTypeFound = true
-				signaturesStagingSettingsInt := &ves_io_schema_app_firewall.DetectionSetting_StageNewAndUpdatedSignatures{}
-				signaturesStagingSettingsInt.StageNewAndUpdatedSignatures = &ves_io_schema_app_firewall.SignaturesStagingSettings{}
-				detectionSettingChoiceInt.DetectionSettings.SignaturesStagingSettings = signaturesStagingSettingsInt
+								signaturesStagingSettingsInt.StageNewAndUpdatedSignatures.StagingPeriod = uint32(v.(int))
 
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
+							}
 
-					if v, ok := cs["staging_period"]; ok && !isIntfNil(v) {
-
-						signaturesStagingSettingsInt.StageNewAndUpdatedSignatures.StagingPeriod = uint32(v.(int))
-
-					}
-
-				}
-
-			}
-
-			if v, ok := cs["stage_new_signatures"]; ok && !isIntfNil(v) && !signaturesStagingSettingsTypeFound {
-
-				signaturesStagingSettingsTypeFound = true
-				signaturesStagingSettingsInt := &ves_io_schema_app_firewall.DetectionSetting_StageNewSignatures{}
-				signaturesStagingSettingsInt.StageNewSignatures = &ves_io_schema_app_firewall.SignaturesStagingSettings{}
-				detectionSettingChoiceInt.DetectionSettings.SignaturesStagingSettings = signaturesStagingSettingsInt
-
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
-
-					if v, ok := cs["staging_period"]; ok && !isIntfNil(v) {
-
-						signaturesStagingSettingsInt.StageNewSignatures.StagingPeriod = uint32(v.(int))
-
-					}
-
-				}
-
-			}
-
-			threatCampaignChoiceTypeFound := false
-
-			if v, ok := cs["disable_threat_campaigns"]; ok && !isIntfNil(v) && !threatCampaignChoiceTypeFound {
-
-				threatCampaignChoiceTypeFound = true
-
-				if v.(bool) {
-					threatCampaignChoiceInt := &ves_io_schema_app_firewall.DetectionSetting_DisableThreatCampaigns{}
-					threatCampaignChoiceInt.DisableThreatCampaigns = &ves_io_schema.Empty{}
-					detectionSettingChoiceInt.DetectionSettings.ThreatCampaignChoice = threatCampaignChoiceInt
-				}
-
-			}
-
-			if v, ok := cs["enable_threat_campaigns"]; ok && !isIntfNil(v) && !threatCampaignChoiceTypeFound {
-
-				threatCampaignChoiceTypeFound = true
-
-				if v.(bool) {
-					threatCampaignChoiceInt := &ves_io_schema_app_firewall.DetectionSetting_EnableThreatCampaigns{}
-					threatCampaignChoiceInt.EnableThreatCampaigns = &ves_io_schema.Empty{}
-					detectionSettingChoiceInt.DetectionSettings.ThreatCampaignChoice = threatCampaignChoiceInt
-				}
-
-			}
-
-			violationDetectionSettingTypeFound := false
-
-			if v, ok := cs["default_violation_settings"]; ok && !isIntfNil(v) && !violationDetectionSettingTypeFound {
-
-				violationDetectionSettingTypeFound = true
-
-				if v.(bool) {
-					violationDetectionSettingInt := &ves_io_schema_app_firewall.DetectionSetting_DefaultViolationSettings{}
-					violationDetectionSettingInt.DefaultViolationSettings = &ves_io_schema.Empty{}
-					detectionSettingChoiceInt.DetectionSettings.ViolationDetectionSetting = violationDetectionSettingInt
-				}
-
-			}
-
-			if v, ok := cs["violation_settings"]; ok && !isIntfNil(v) && !violationDetectionSettingTypeFound {
-
-				violationDetectionSettingTypeFound = true
-				violationDetectionSettingInt := &ves_io_schema_app_firewall.DetectionSetting_ViolationSettings{}
-				violationDetectionSettingInt.ViolationSettings = &ves_io_schema_app_firewall.ViolationSettings{}
-				detectionSettingChoiceInt.DetectionSettings.ViolationDetectionSetting = violationDetectionSettingInt
-
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
-
-					if v, ok := cs["disabled_violation_types"]; ok && !isIntfNil(v) {
-
-						disabled_violation_typesList := []ves_io_schema_app_firewall.AppFirewallViolationType{}
-						for _, j := range v.([]interface{}) {
-							disabled_violation_typesList = append(disabled_violation_typesList, ves_io_schema_app_firewall.AppFirewallViolationType(ves_io_schema_app_firewall.AppFirewallViolationType_value[j.(string)]))
 						}
-						violationDetectionSettingInt.ViolationSettings.DisabledViolationTypes = disabled_violation_typesList
+					}
 
+				}
+
+				if v, ok := cs["stage_new_signatures"]; ok && !isIntfNil(v) && !signaturesStagingSettingsTypeFound {
+
+					signaturesStagingSettingsTypeFound = true
+					signaturesStagingSettingsInt := &ves_io_schema_app_firewall.DetectionSetting_StageNewSignatures{}
+					signaturesStagingSettingsInt.StageNewSignatures = &ves_io_schema_app_firewall.SignaturesStagingSettings{}
+					detectionSettingChoiceInt.DetectionSettings.SignaturesStagingSettings = signaturesStagingSettingsInt
+
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["staging_period"]; ok && !isIntfNil(v) {
+
+								signaturesStagingSettingsInt.StageNewSignatures.StagingPeriod = uint32(v.(int))
+
+							}
+
+						}
+					}
+
+				}
+
+				threatCampaignChoiceTypeFound := false
+
+				if v, ok := cs["disable_threat_campaigns"]; ok && !isIntfNil(v) && !threatCampaignChoiceTypeFound {
+
+					threatCampaignChoiceTypeFound = true
+
+					if v.(bool) {
+						threatCampaignChoiceInt := &ves_io_schema_app_firewall.DetectionSetting_DisableThreatCampaigns{}
+						threatCampaignChoiceInt.DisableThreatCampaigns = &ves_io_schema.Empty{}
+						detectionSettingChoiceInt.DetectionSettings.ThreatCampaignChoice = threatCampaignChoiceInt
+					}
+
+				}
+
+				if v, ok := cs["enable_threat_campaigns"]; ok && !isIntfNil(v) && !threatCampaignChoiceTypeFound {
+
+					threatCampaignChoiceTypeFound = true
+
+					if v.(bool) {
+						threatCampaignChoiceInt := &ves_io_schema_app_firewall.DetectionSetting_EnableThreatCampaigns{}
+						threatCampaignChoiceInt.EnableThreatCampaigns = &ves_io_schema.Empty{}
+						detectionSettingChoiceInt.DetectionSettings.ThreatCampaignChoice = threatCampaignChoiceInt
+					}
+
+				}
+
+				violationDetectionSettingTypeFound := false
+
+				if v, ok := cs["default_violation_settings"]; ok && !isIntfNil(v) && !violationDetectionSettingTypeFound {
+
+					violationDetectionSettingTypeFound = true
+
+					if v.(bool) {
+						violationDetectionSettingInt := &ves_io_schema_app_firewall.DetectionSetting_DefaultViolationSettings{}
+						violationDetectionSettingInt.DefaultViolationSettings = &ves_io_schema.Empty{}
+						detectionSettingChoiceInt.DetectionSettings.ViolationDetectionSetting = violationDetectionSettingInt
+					}
+
+				}
+
+				if v, ok := cs["violation_settings"]; ok && !isIntfNil(v) && !violationDetectionSettingTypeFound {
+
+					violationDetectionSettingTypeFound = true
+					violationDetectionSettingInt := &ves_io_schema_app_firewall.DetectionSetting_ViolationSettings{}
+					violationDetectionSettingInt.ViolationSettings = &ves_io_schema_app_firewall.ViolationSettings{}
+					detectionSettingChoiceInt.DetectionSettings.ViolationDetectionSetting = violationDetectionSettingInt
+
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["disabled_violation_types"]; ok && !isIntfNil(v) {
+
+								disabled_violation_typesList := []ves_io_schema_app_firewall.AppFirewallViolationType{}
+								for _, j := range v.([]interface{}) {
+									disabled_violation_typesList = append(disabled_violation_typesList, ves_io_schema_app_firewall.AppFirewallViolationType(ves_io_schema_app_firewall.AppFirewallViolationType_value[j.(string)]))
+								}
+								violationDetectionSettingInt.ViolationSettings.DisabledViolationTypes = disabled_violation_typesList
+
+							}
+
+						}
 					}
 
 				}
 
 			}
-
 		}
 
 	}

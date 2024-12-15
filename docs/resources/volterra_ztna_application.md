@@ -1,9 +1,9 @@
 ---
 
 page_title: "Volterra: ztna_application"
-description: "The ztna_application allows CRUD of Ztna Application resource on Volterra SaaS"
 
----
+description: "The ztna_application allows CRUD of Ztna Application resource on Volterra SaaS"
+---------------------------------------------------------------------------------------------
 
 Resource volterra_ztna_application
 ==================================

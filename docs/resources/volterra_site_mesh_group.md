@@ -1,9 +1,9 @@
 ---
 
 page_title: "Volterra: site_mesh_group"
-description: "The site_mesh_group allows CRUD of Site Mesh Group resource on Volterra SaaS"
 
----
+description: "The site_mesh_group allows CRUD of Site Mesh Group resource on Volterra SaaS"
+-------------------------------------------------------------------------------------------
 
 Resource volterra_site_mesh_group
 =================================

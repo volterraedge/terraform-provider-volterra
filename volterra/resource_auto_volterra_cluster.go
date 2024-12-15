@@ -62,7 +62,8 @@ func resourceVolterraCluster() *schema.Resource {
 
 			"circuit_breaker": {
 
-				Type:     schema.TypeSet,
+				Type:     schema.TypeList,
+				MaxItems: 1,
 				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
@@ -165,7 +166,8 @@ func resourceVolterraCluster() *schema.Resource {
 
 			"header_transformation_type": {
 
-				Type:       schema.TypeSet,
+				Type:       schema.TypeList,
+				MaxItems:   1,
 				Optional:   true,
 				Deprecated: "This field is deprecated and will be removed in future release.",
 				Elem: &schema.Resource{
@@ -243,14 +245,16 @@ func resourceVolterraCluster() *schema.Resource {
 
 			"http1_config": {
 
-				Type:     schema.TypeSet,
+				Type:     schema.TypeList,
+				MaxItems: 1,
 				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 
 						"header_transformation": {
 
-							Type:     schema.TypeSet,
+							Type:     schema.TypeList,
+							MaxItems: 1,
 							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
@@ -287,7 +291,8 @@ func resourceVolterraCluster() *schema.Resource {
 
 			"http2_options": {
 
-				Type:     schema.TypeSet,
+				Type:     schema.TypeList,
+				MaxItems: 1,
 				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
@@ -307,7 +312,8 @@ func resourceVolterraCluster() *schema.Resource {
 
 			"outlier_detection": {
 
-				Type:     schema.TypeSet,
+				Type:     schema.TypeList,
+				MaxItems: 1,
 				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
@@ -372,7 +378,8 @@ func resourceVolterraCluster() *schema.Resource {
 
 			"tls_parameters": {
 
-				Type:     schema.TypeSet,
+				Type:     schema.TypeList,
+				MaxItems: 1,
 				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
@@ -397,7 +404,8 @@ func resourceVolterraCluster() *schema.Resource {
 
 						"disable_sni": {
 
-							Type:     schema.TypeSet,
+							Type:     schema.TypeList,
+							MaxItems: 1,
 							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{},
@@ -412,7 +420,8 @@ func resourceVolterraCluster() *schema.Resource {
 
 						"use_host_header_as_sni": {
 
-							Type:     schema.TypeSet,
+							Type:     schema.TypeList,
+							MaxItems: 1,
 							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{},
@@ -421,7 +430,8 @@ func resourceVolterraCluster() *schema.Resource {
 
 						"cert_params": {
 
-							Type:     schema.TypeSet,
+							Type:     schema.TypeList,
+							MaxItems: 1,
 							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
@@ -476,7 +486,8 @@ func resourceVolterraCluster() *schema.Resource {
 
 									"validation_params": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -488,7 +499,8 @@ func resourceVolterraCluster() *schema.Resource {
 
 												"trusted_ca": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Optional: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -554,7 +566,8 @@ func resourceVolterraCluster() *schema.Resource {
 
 						"common_params": {
 
-							Type:     schema.TypeSet,
+							Type:     schema.TypeList,
+							MaxItems: 1,
 							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
@@ -598,7 +611,8 @@ func resourceVolterraCluster() *schema.Resource {
 
 												"custom_hash_algorithms": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Optional: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -618,7 +632,8 @@ func resourceVolterraCluster() *schema.Resource {
 
 												"disable_ocsp_stapling": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Optional: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{},
@@ -627,7 +642,8 @@ func resourceVolterraCluster() *schema.Resource {
 
 												"use_system_defaults": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Optional: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{},
@@ -636,14 +652,16 @@ func resourceVolterraCluster() *schema.Resource {
 
 												"private_key": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Required: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
 															"blindfold_secret_info_internal": {
 
-																Type:       schema.TypeSet,
+																Type:       schema.TypeList,
+																MaxItems:   1,
 																Optional:   true,
 																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
@@ -678,7 +696,8 @@ func resourceVolterraCluster() *schema.Resource {
 
 															"blindfold_secret_info": {
 
-																Type:     schema.TypeSet,
+																Type:     schema.TypeList,
+																MaxItems: 1,
 																Optional: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
@@ -703,7 +722,8 @@ func resourceVolterraCluster() *schema.Resource {
 
 															"clear_secret_info": {
 
-																Type:     schema.TypeSet,
+																Type:     schema.TypeList,
+																MaxItems: 1,
 																Optional: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
@@ -723,7 +743,8 @@ func resourceVolterraCluster() *schema.Resource {
 
 															"vault_secret_info": {
 
-																Type:       schema.TypeSet,
+																Type:       schema.TypeList,
+																MaxItems:   1,
 																Optional:   true,
 																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
@@ -764,7 +785,8 @@ func resourceVolterraCluster() *schema.Resource {
 
 															"wingman_secret_info": {
 
-																Type:       schema.TypeSet,
+																Type:       schema.TypeList,
+																MaxItems:   1,
 																Optional:   true,
 																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
@@ -793,7 +815,8 @@ func resourceVolterraCluster() *schema.Resource {
 
 									"validation_params": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -805,7 +828,8 @@ func resourceVolterraCluster() *schema.Resource {
 
 												"trusted_ca": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Optional: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -931,34 +955,36 @@ func resourceVolterraClusterCreate(d *schema.ResourceData, meta interface{}) err
 	//circuit_breaker
 	if v, ok := d.GetOk("circuit_breaker"); ok && !isIntfNil(v) {
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		circuitBreaker := &ves_io_schema_cluster.CircuitBreaker{}
 		createSpec.CircuitBreaker = circuitBreaker
 		for _, set := range sl {
-			circuitBreakerMapStrToI := set.(map[string]interface{})
+			if set != nil {
+				circuitBreakerMapStrToI := set.(map[string]interface{})
 
-			if w, ok := circuitBreakerMapStrToI["connection_limit"]; ok && !isIntfNil(w) {
-				circuitBreaker.ConnectionLimit = uint32(w.(int))
+				if w, ok := circuitBreakerMapStrToI["connection_limit"]; ok && !isIntfNil(w) {
+					circuitBreaker.ConnectionLimit = uint32(w.(int))
+				}
+
+				if w, ok := circuitBreakerMapStrToI["max_requests"]; ok && !isIntfNil(w) {
+					circuitBreaker.MaxRequests = uint32(w.(int))
+				}
+
+				if w, ok := circuitBreakerMapStrToI["pending_requests"]; ok && !isIntfNil(w) {
+					circuitBreaker.PendingRequests = uint32(w.(int))
+				}
+
+				if v, ok := circuitBreakerMapStrToI["priority"]; ok && !isIntfNil(v) {
+
+					circuitBreaker.Priority = ves_io_schema.RoutingPriority(ves_io_schema.RoutingPriority_value[v.(string)])
+
+				}
+
+				if w, ok := circuitBreakerMapStrToI["retries"]; ok && !isIntfNil(w) {
+					circuitBreaker.Retries = uint32(w.(int))
+				}
+
 			}
-
-			if w, ok := circuitBreakerMapStrToI["max_requests"]; ok && !isIntfNil(w) {
-				circuitBreaker.MaxRequests = uint32(w.(int))
-			}
-
-			if w, ok := circuitBreakerMapStrToI["pending_requests"]; ok && !isIntfNil(w) {
-				circuitBreaker.PendingRequests = uint32(w.(int))
-			}
-
-			if v, ok := circuitBreakerMapStrToI["priority"]; ok && !isIntfNil(v) {
-
-				circuitBreaker.Priority = ves_io_schema.RoutingPriority(ves_io_schema.RoutingPriority_value[v.(string)])
-
-			}
-
-			if w, ok := circuitBreakerMapStrToI["retries"]; ok && !isIntfNil(w) {
-				circuitBreaker.Retries = uint32(w.(int))
-			}
-
 		}
 
 	}
@@ -995,17 +1021,19 @@ func resourceVolterraClusterCreate(d *schema.ResourceData, meta interface{}) err
 		endpointSubsets := make([]*ves_io_schema_cluster.EndpointSubsetSelectorType, len(sl))
 		createSpec.EndpointSubsets = endpointSubsets
 		for i, set := range sl {
-			endpointSubsets[i] = &ves_io_schema_cluster.EndpointSubsetSelectorType{}
-			endpointSubsetsMapStrToI := set.(map[string]interface{})
+			if set != nil {
+				endpointSubsets[i] = &ves_io_schema_cluster.EndpointSubsetSelectorType{}
+				endpointSubsetsMapStrToI := set.(map[string]interface{})
 
-			if w, ok := endpointSubsetsMapStrToI["keys"]; ok && !isIntfNil(w) {
-				ls := make([]string, len(w.([]interface{})))
-				for i, v := range w.([]interface{}) {
-					ls[i] = v.(string)
+				if w, ok := endpointSubsetsMapStrToI["keys"]; ok && !isIntfNil(w) {
+					ls := make([]string, len(w.([]interface{})))
+					for i, v := range w.([]interface{}) {
+						ls[i] = v.(string)
+					}
+					endpointSubsets[i].Keys = ls
 				}
-				endpointSubsets[i].Keys = ls
-			}
 
+			}
 		}
 
 	}
@@ -1053,62 +1081,64 @@ func resourceVolterraClusterCreate(d *schema.ResourceData, meta interface{}) err
 	//header_transformation_type
 	if v, ok := d.GetOk("header_transformation_type"); ok && !isIntfNil(v) {
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		headerTransformationType := &ves_io_schema.HeaderTransformationType{}
 		createSpec.HeaderTransformationType = headerTransformationType
 		for _, set := range sl {
-			headerTransformationTypeMapStrToI := set.(map[string]interface{})
+			if set != nil {
+				headerTransformationTypeMapStrToI := set.(map[string]interface{})
 
-			headerTransformationChoiceTypeFound := false
+				headerTransformationChoiceTypeFound := false
 
-			if v, ok := headerTransformationTypeMapStrToI["default_header_transformation"]; ok && !isIntfNil(v) && !headerTransformationChoiceTypeFound {
+				if v, ok := headerTransformationTypeMapStrToI["default_header_transformation"]; ok && !isIntfNil(v) && !headerTransformationChoiceTypeFound {
 
-				headerTransformationChoiceTypeFound = true
+					headerTransformationChoiceTypeFound = true
 
-				if v.(bool) {
-					headerTransformationChoiceInt := &ves_io_schema.HeaderTransformationType_DefaultHeaderTransformation{}
-					headerTransformationChoiceInt.DefaultHeaderTransformation = &ves_io_schema.Empty{}
-					headerTransformationType.HeaderTransformationChoice = headerTransformationChoiceInt
+					if v.(bool) {
+						headerTransformationChoiceInt := &ves_io_schema.HeaderTransformationType_DefaultHeaderTransformation{}
+						headerTransformationChoiceInt.DefaultHeaderTransformation = &ves_io_schema.Empty{}
+						headerTransformationType.HeaderTransformationChoice = headerTransformationChoiceInt
+					}
+
+				}
+
+				if v, ok := headerTransformationTypeMapStrToI["legacy_header_transformation"]; ok && !isIntfNil(v) && !headerTransformationChoiceTypeFound {
+
+					headerTransformationChoiceTypeFound = true
+
+					if v.(bool) {
+						headerTransformationChoiceInt := &ves_io_schema.HeaderTransformationType_LegacyHeaderTransformation{}
+						headerTransformationChoiceInt.LegacyHeaderTransformation = &ves_io_schema.Empty{}
+						headerTransformationType.HeaderTransformationChoice = headerTransformationChoiceInt
+					}
+
+				}
+
+				if v, ok := headerTransformationTypeMapStrToI["preserve_case_header_transformation"]; ok && !isIntfNil(v) && !headerTransformationChoiceTypeFound {
+
+					headerTransformationChoiceTypeFound = true
+
+					if v.(bool) {
+						headerTransformationChoiceInt := &ves_io_schema.HeaderTransformationType_PreserveCaseHeaderTransformation{}
+						headerTransformationChoiceInt.PreserveCaseHeaderTransformation = &ves_io_schema.Empty{}
+						headerTransformationType.HeaderTransformationChoice = headerTransformationChoiceInt
+					}
+
+				}
+
+				if v, ok := headerTransformationTypeMapStrToI["proper_case_header_transformation"]; ok && !isIntfNil(v) && !headerTransformationChoiceTypeFound {
+
+					headerTransformationChoiceTypeFound = true
+
+					if v.(bool) {
+						headerTransformationChoiceInt := &ves_io_schema.HeaderTransformationType_ProperCaseHeaderTransformation{}
+						headerTransformationChoiceInt.ProperCaseHeaderTransformation = &ves_io_schema.Empty{}
+						headerTransformationType.HeaderTransformationChoice = headerTransformationChoiceInt
+					}
+
 				}
 
 			}
-
-			if v, ok := headerTransformationTypeMapStrToI["legacy_header_transformation"]; ok && !isIntfNil(v) && !headerTransformationChoiceTypeFound {
-
-				headerTransformationChoiceTypeFound = true
-
-				if v.(bool) {
-					headerTransformationChoiceInt := &ves_io_schema.HeaderTransformationType_LegacyHeaderTransformation{}
-					headerTransformationChoiceInt.LegacyHeaderTransformation = &ves_io_schema.Empty{}
-					headerTransformationType.HeaderTransformationChoice = headerTransformationChoiceInt
-				}
-
-			}
-
-			if v, ok := headerTransformationTypeMapStrToI["preserve_case_header_transformation"]; ok && !isIntfNil(v) && !headerTransformationChoiceTypeFound {
-
-				headerTransformationChoiceTypeFound = true
-
-				if v.(bool) {
-					headerTransformationChoiceInt := &ves_io_schema.HeaderTransformationType_PreserveCaseHeaderTransformation{}
-					headerTransformationChoiceInt.PreserveCaseHeaderTransformation = &ves_io_schema.Empty{}
-					headerTransformationType.HeaderTransformationChoice = headerTransformationChoiceInt
-				}
-
-			}
-
-			if v, ok := headerTransformationTypeMapStrToI["proper_case_header_transformation"]; ok && !isIntfNil(v) && !headerTransformationChoiceTypeFound {
-
-				headerTransformationChoiceTypeFound = true
-
-				if v.(bool) {
-					headerTransformationChoiceInt := &ves_io_schema.HeaderTransformationType_ProperCaseHeaderTransformation{}
-					headerTransformationChoiceInt.ProperCaseHeaderTransformation = &ves_io_schema.Empty{}
-					headerTransformationType.HeaderTransformationChoice = headerTransformationChoiceInt
-				}
-
-			}
-
 		}
 
 	}
@@ -1177,72 +1207,76 @@ func resourceVolterraClusterCreate(d *schema.ResourceData, meta interface{}) err
 		httpProtocolTypeInt.Http1Config = &ves_io_schema_cluster.Http1ProtocolOptions{}
 		createSpec.HttpProtocolType = httpProtocolTypeInt
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
+			if set != nil {
+				cs := set.(map[string]interface{})
 
-			if v, ok := cs["header_transformation"]; ok && !isIntfNil(v) {
+				if v, ok := cs["header_transformation"]; ok && !isIntfNil(v) {
 
-				sl := v.(*schema.Set).List()
-				headerTransformation := &ves_io_schema.HeaderTransformationType{}
-				httpProtocolTypeInt.Http1Config.HeaderTransformation = headerTransformation
-				for _, set := range sl {
-					headerTransformationMapStrToI := set.(map[string]interface{})
+					sl := v.([]interface{})
+					headerTransformation := &ves_io_schema.HeaderTransformationType{}
+					httpProtocolTypeInt.Http1Config.HeaderTransformation = headerTransformation
+					for _, set := range sl {
+						if set != nil {
+							headerTransformationMapStrToI := set.(map[string]interface{})
 
-					headerTransformationChoiceTypeFound := false
+							headerTransformationChoiceTypeFound := false
 
-					if v, ok := headerTransformationMapStrToI["default_header_transformation"]; ok && !isIntfNil(v) && !headerTransformationChoiceTypeFound {
+							if v, ok := headerTransformationMapStrToI["default_header_transformation"]; ok && !isIntfNil(v) && !headerTransformationChoiceTypeFound {
 
-						headerTransformationChoiceTypeFound = true
+								headerTransformationChoiceTypeFound = true
 
-						if v.(bool) {
-							headerTransformationChoiceInt := &ves_io_schema.HeaderTransformationType_DefaultHeaderTransformation{}
-							headerTransformationChoiceInt.DefaultHeaderTransformation = &ves_io_schema.Empty{}
-							headerTransformation.HeaderTransformationChoice = headerTransformationChoiceInt
+								if v.(bool) {
+									headerTransformationChoiceInt := &ves_io_schema.HeaderTransformationType_DefaultHeaderTransformation{}
+									headerTransformationChoiceInt.DefaultHeaderTransformation = &ves_io_schema.Empty{}
+									headerTransformation.HeaderTransformationChoice = headerTransformationChoiceInt
+								}
+
+							}
+
+							if v, ok := headerTransformationMapStrToI["legacy_header_transformation"]; ok && !isIntfNil(v) && !headerTransformationChoiceTypeFound {
+
+								headerTransformationChoiceTypeFound = true
+
+								if v.(bool) {
+									headerTransformationChoiceInt := &ves_io_schema.HeaderTransformationType_LegacyHeaderTransformation{}
+									headerTransformationChoiceInt.LegacyHeaderTransformation = &ves_io_schema.Empty{}
+									headerTransformation.HeaderTransformationChoice = headerTransformationChoiceInt
+								}
+
+							}
+
+							if v, ok := headerTransformationMapStrToI["preserve_case_header_transformation"]; ok && !isIntfNil(v) && !headerTransformationChoiceTypeFound {
+
+								headerTransformationChoiceTypeFound = true
+
+								if v.(bool) {
+									headerTransformationChoiceInt := &ves_io_schema.HeaderTransformationType_PreserveCaseHeaderTransformation{}
+									headerTransformationChoiceInt.PreserveCaseHeaderTransformation = &ves_io_schema.Empty{}
+									headerTransformation.HeaderTransformationChoice = headerTransformationChoiceInt
+								}
+
+							}
+
+							if v, ok := headerTransformationMapStrToI["proper_case_header_transformation"]; ok && !isIntfNil(v) && !headerTransformationChoiceTypeFound {
+
+								headerTransformationChoiceTypeFound = true
+
+								if v.(bool) {
+									headerTransformationChoiceInt := &ves_io_schema.HeaderTransformationType_ProperCaseHeaderTransformation{}
+									headerTransformationChoiceInt.ProperCaseHeaderTransformation = &ves_io_schema.Empty{}
+									headerTransformation.HeaderTransformationChoice = headerTransformationChoiceInt
+								}
+
+							}
+
 						}
-
-					}
-
-					if v, ok := headerTransformationMapStrToI["legacy_header_transformation"]; ok && !isIntfNil(v) && !headerTransformationChoiceTypeFound {
-
-						headerTransformationChoiceTypeFound = true
-
-						if v.(bool) {
-							headerTransformationChoiceInt := &ves_io_schema.HeaderTransformationType_LegacyHeaderTransformation{}
-							headerTransformationChoiceInt.LegacyHeaderTransformation = &ves_io_schema.Empty{}
-							headerTransformation.HeaderTransformationChoice = headerTransformationChoiceInt
-						}
-
-					}
-
-					if v, ok := headerTransformationMapStrToI["preserve_case_header_transformation"]; ok && !isIntfNil(v) && !headerTransformationChoiceTypeFound {
-
-						headerTransformationChoiceTypeFound = true
-
-						if v.(bool) {
-							headerTransformationChoiceInt := &ves_io_schema.HeaderTransformationType_PreserveCaseHeaderTransformation{}
-							headerTransformationChoiceInt.PreserveCaseHeaderTransformation = &ves_io_schema.Empty{}
-							headerTransformation.HeaderTransformationChoice = headerTransformationChoiceInt
-						}
-
-					}
-
-					if v, ok := headerTransformationMapStrToI["proper_case_header_transformation"]; ok && !isIntfNil(v) && !headerTransformationChoiceTypeFound {
-
-						headerTransformationChoiceTypeFound = true
-
-						if v.(bool) {
-							headerTransformationChoiceInt := &ves_io_schema.HeaderTransformationType_ProperCaseHeaderTransformation{}
-							headerTransformationChoiceInt.ProperCaseHeaderTransformation = &ves_io_schema.Empty{}
-							headerTransformation.HeaderTransformationChoice = headerTransformationChoiceInt
-						}
-
 					}
 
 				}
 
 			}
-
 		}
 
 	}
@@ -1254,16 +1288,18 @@ func resourceVolterraClusterCreate(d *schema.ResourceData, meta interface{}) err
 		httpProtocolTypeInt.Http2Options = &ves_io_schema_cluster.Http2ProtocolOptions{}
 		createSpec.HttpProtocolType = httpProtocolTypeInt
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
+			if set != nil {
+				cs := set.(map[string]interface{})
 
-			if v, ok := cs["enabled"]; ok && !isIntfNil(v) {
+				if v, ok := cs["enabled"]; ok && !isIntfNil(v) {
 
-				httpProtocolTypeInt.Http2Options.Enabled = v.(bool)
+					httpProtocolTypeInt.Http2Options.Enabled = v.(bool)
+
+				}
 
 			}
-
 		}
 
 	}
@@ -1278,32 +1314,34 @@ func resourceVolterraClusterCreate(d *schema.ResourceData, meta interface{}) err
 	//outlier_detection
 	if v, ok := d.GetOk("outlier_detection"); ok && !isIntfNil(v) {
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		outlierDetection := &ves_io_schema_cluster.OutlierDetectionType{}
 		createSpec.OutlierDetection = outlierDetection
 		for _, set := range sl {
-			outlierDetectionMapStrToI := set.(map[string]interface{})
+			if set != nil {
+				outlierDetectionMapStrToI := set.(map[string]interface{})
 
-			if w, ok := outlierDetectionMapStrToI["base_ejection_time"]; ok && !isIntfNil(w) {
-				outlierDetection.BaseEjectionTime = uint32(w.(int))
+				if w, ok := outlierDetectionMapStrToI["base_ejection_time"]; ok && !isIntfNil(w) {
+					outlierDetection.BaseEjectionTime = uint32(w.(int))
+				}
+
+				if w, ok := outlierDetectionMapStrToI["consecutive_5xx"]; ok && !isIntfNil(w) {
+					outlierDetection.Consecutive_5Xx = uint32(w.(int))
+				}
+
+				if w, ok := outlierDetectionMapStrToI["consecutive_gateway_failure"]; ok && !isIntfNil(w) {
+					outlierDetection.ConsecutiveGatewayFailure = uint32(w.(int))
+				}
+
+				if w, ok := outlierDetectionMapStrToI["interval"]; ok && !isIntfNil(w) {
+					outlierDetection.Interval = uint32(w.(int))
+				}
+
+				if w, ok := outlierDetectionMapStrToI["max_ejection_percent"]; ok && !isIntfNil(w) {
+					outlierDetection.MaxEjectionPercent = uint32(w.(int))
+				}
+
 			}
-
-			if w, ok := outlierDetectionMapStrToI["consecutive_5xx"]; ok && !isIntfNil(w) {
-				outlierDetection.Consecutive_5Xx = uint32(w.(int))
-			}
-
-			if w, ok := outlierDetectionMapStrToI["consecutive_gateway_failure"]; ok && !isIntfNil(w) {
-				outlierDetection.ConsecutiveGatewayFailure = uint32(w.(int))
-			}
-
-			if w, ok := outlierDetectionMapStrToI["interval"]; ok && !isIntfNil(w) {
-				outlierDetection.Interval = uint32(w.(int))
-			}
-
-			if w, ok := outlierDetectionMapStrToI["max_ejection_percent"]; ok && !isIntfNil(w) {
-				outlierDetection.MaxEjectionPercent = uint32(w.(int))
-			}
-
 		}
 
 	}
@@ -1378,606 +1416,636 @@ func resourceVolterraClusterCreate(d *schema.ResourceData, meta interface{}) err
 	//tls_parameters
 	if v, ok := d.GetOk("tls_parameters"); ok && !isIntfNil(v) {
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		tlsParameters := &ves_io_schema.UpstreamTlsParamsType{}
 		createSpec.TlsParameters = tlsParameters
 		for _, set := range sl {
-			tlsParametersMapStrToI := set.(map[string]interface{})
+			if set != nil {
+				tlsParametersMapStrToI := set.(map[string]interface{})
 
-			maxSessionKeysTypeTypeFound := false
+				maxSessionKeysTypeTypeFound := false
 
-			if v, ok := tlsParametersMapStrToI["default_session_key_caching"]; ok && !isIntfNil(v) && !maxSessionKeysTypeTypeFound {
+				if v, ok := tlsParametersMapStrToI["default_session_key_caching"]; ok && !isIntfNil(v) && !maxSessionKeysTypeTypeFound {
 
-				maxSessionKeysTypeTypeFound = true
+					maxSessionKeysTypeTypeFound = true
 
-				if v.(bool) {
-					maxSessionKeysTypeInt := &ves_io_schema.UpstreamTlsParamsType_DefaultSessionKeyCaching{}
-					maxSessionKeysTypeInt.DefaultSessionKeyCaching = &ves_io_schema.Empty{}
-					tlsParameters.MaxSessionKeysType = maxSessionKeysTypeInt
+					if v.(bool) {
+						maxSessionKeysTypeInt := &ves_io_schema.UpstreamTlsParamsType_DefaultSessionKeyCaching{}
+						maxSessionKeysTypeInt.DefaultSessionKeyCaching = &ves_io_schema.Empty{}
+						tlsParameters.MaxSessionKeysType = maxSessionKeysTypeInt
+					}
+
 				}
 
-			}
+				if v, ok := tlsParametersMapStrToI["disable_session_key_caching"]; ok && !isIntfNil(v) && !maxSessionKeysTypeTypeFound {
 
-			if v, ok := tlsParametersMapStrToI["disable_session_key_caching"]; ok && !isIntfNil(v) && !maxSessionKeysTypeTypeFound {
+					maxSessionKeysTypeTypeFound = true
 
-				maxSessionKeysTypeTypeFound = true
+					if v.(bool) {
+						maxSessionKeysTypeInt := &ves_io_schema.UpstreamTlsParamsType_DisableSessionKeyCaching{}
+						maxSessionKeysTypeInt.DisableSessionKeyCaching = &ves_io_schema.Empty{}
+						tlsParameters.MaxSessionKeysType = maxSessionKeysTypeInt
+					}
 
-				if v.(bool) {
-					maxSessionKeysTypeInt := &ves_io_schema.UpstreamTlsParamsType_DisableSessionKeyCaching{}
-					maxSessionKeysTypeInt.DisableSessionKeyCaching = &ves_io_schema.Empty{}
-					tlsParameters.MaxSessionKeysType = maxSessionKeysTypeInt
 				}
 
-			}
+				if v, ok := tlsParametersMapStrToI["max_session_keys"]; ok && !isIntfNil(v) && !maxSessionKeysTypeTypeFound {
 
-			if v, ok := tlsParametersMapStrToI["max_session_keys"]; ok && !isIntfNil(v) && !maxSessionKeysTypeTypeFound {
+					maxSessionKeysTypeTypeFound = true
+					maxSessionKeysTypeInt := &ves_io_schema.UpstreamTlsParamsType_MaxSessionKeys{}
 
-				maxSessionKeysTypeTypeFound = true
-				maxSessionKeysTypeInt := &ves_io_schema.UpstreamTlsParamsType_MaxSessionKeys{}
+					tlsParameters.MaxSessionKeysType = maxSessionKeysTypeInt
 
-				tlsParameters.MaxSessionKeysType = maxSessionKeysTypeInt
+					maxSessionKeysTypeInt.MaxSessionKeys = uint32(v.(int))
 
-				maxSessionKeysTypeInt.MaxSessionKeys = uint32(v.(int))
+				}
 
-			}
+				sniChoiceTypeFound := false
 
-			sniChoiceTypeFound := false
+				if _, ok := tlsParametersMapStrToI["disable_sni"]; ok && !sniChoiceTypeFound {
 
-			if _, ok := tlsParametersMapStrToI["disable_sni"]; ok && !sniChoiceTypeFound {
+					sniChoiceTypeFound = true
+					sniChoiceInt := &ves_io_schema.UpstreamTlsParamsType_DisableSni{}
+					sniChoiceInt.DisableSni = &ves_io_schema.Empty{}
+					tlsParameters.SniChoice = sniChoiceInt
 
-				sniChoiceTypeFound = true
-				sniChoiceInt := &ves_io_schema.UpstreamTlsParamsType_DisableSni{}
-				sniChoiceInt.DisableSni = &ves_io_schema.Empty{}
-				tlsParameters.SniChoice = sniChoiceInt
+				}
 
-			}
+				if v, ok := tlsParametersMapStrToI["sni"]; ok && !isIntfNil(v) && !sniChoiceTypeFound {
 
-			if v, ok := tlsParametersMapStrToI["sni"]; ok && !isIntfNil(v) && !sniChoiceTypeFound {
+					sniChoiceTypeFound = true
+					sniChoiceInt := &ves_io_schema.UpstreamTlsParamsType_Sni{}
 
-				sniChoiceTypeFound = true
-				sniChoiceInt := &ves_io_schema.UpstreamTlsParamsType_Sni{}
+					tlsParameters.SniChoice = sniChoiceInt
 
-				tlsParameters.SniChoice = sniChoiceInt
+					sniChoiceInt.Sni = v.(string)
 
-				sniChoiceInt.Sni = v.(string)
+				}
 
-			}
+				if _, ok := tlsParametersMapStrToI["use_host_header_as_sni"]; ok && !sniChoiceTypeFound {
 
-			if _, ok := tlsParametersMapStrToI["use_host_header_as_sni"]; ok && !sniChoiceTypeFound {
+					sniChoiceTypeFound = true
+					sniChoiceInt := &ves_io_schema.UpstreamTlsParamsType_UseHostHeaderAsSni{}
+					sniChoiceInt.UseHostHeaderAsSni = &ves_io_schema.Empty{}
+					tlsParameters.SniChoice = sniChoiceInt
 
-				sniChoiceTypeFound = true
-				sniChoiceInt := &ves_io_schema.UpstreamTlsParamsType_UseHostHeaderAsSni{}
-				sniChoiceInt.UseHostHeaderAsSni = &ves_io_schema.Empty{}
-				tlsParameters.SniChoice = sniChoiceInt
+				}
 
-			}
+				tlsParamsChoiceTypeFound := false
 
-			tlsParamsChoiceTypeFound := false
+				if v, ok := tlsParametersMapStrToI["cert_params"]; ok && !isIntfNil(v) && !tlsParamsChoiceTypeFound {
 
-			if v, ok := tlsParametersMapStrToI["cert_params"]; ok && !isIntfNil(v) && !tlsParamsChoiceTypeFound {
+					tlsParamsChoiceTypeFound = true
+					tlsParamsChoiceInt := &ves_io_schema.UpstreamTlsParamsType_CertParams{}
+					tlsParamsChoiceInt.CertParams = &ves_io_schema.UpstreamCertificateParamsType{}
+					tlsParameters.TlsParamsChoice = tlsParamsChoiceInt
 
-				tlsParamsChoiceTypeFound = true
-				tlsParamsChoiceInt := &ves_io_schema.UpstreamTlsParamsType_CertParams{}
-				tlsParamsChoiceInt.CertParams = &ves_io_schema.UpstreamCertificateParamsType{}
-				tlsParameters.TlsParamsChoice = tlsParamsChoiceInt
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
 
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
+							if v, ok := cs["certificates"]; ok && !isIntfNil(v) {
 
-					if v, ok := cs["certificates"]; ok && !isIntfNil(v) {
+								sl := v.([]interface{})
+								certificatesInt := make([]*ves_io_schema.ObjectRefType, len(sl))
+								tlsParamsChoiceInt.CertParams.Certificates = certificatesInt
+								for i, ps := range sl {
 
-						sl := v.([]interface{})
-						certificatesInt := make([]*ves_io_schema.ObjectRefType, len(sl))
-						tlsParamsChoiceInt.CertParams.Certificates = certificatesInt
-						for i, ps := range sl {
+									cMapToStrVal := ps.(map[string]interface{})
+									certificatesInt[i] = &ves_io_schema.ObjectRefType{}
 
-							cMapToStrVal := ps.(map[string]interface{})
-							certificatesInt[i] = &ves_io_schema.ObjectRefType{}
+									certificatesInt[i].Kind = "certificate"
 
-							certificatesInt[i].Kind = "certificate"
+									if v, ok := cMapToStrVal["name"]; ok && !isIntfNil(v) {
+										certificatesInt[i].Name = v.(string)
+									}
 
-							if v, ok := cMapToStrVal["name"]; ok && !isIntfNil(v) {
-								certificatesInt[i].Name = v.(string)
-							}
+									if v, ok := cMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+										certificatesInt[i].Namespace = v.(string)
+									}
 
-							if v, ok := cMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-								certificatesInt[i].Namespace = v.(string)
-							}
+									if v, ok := cMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+										certificatesInt[i].Tenant = v.(string)
+									}
 
-							if v, ok := cMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-								certificatesInt[i].Tenant = v.(string)
-							}
-
-							if v, ok := cMapToStrVal["uid"]; ok && !isIntfNil(v) {
-								certificatesInt[i].Uid = v.(string)
-							}
-
-						}
-
-					}
-
-					if v, ok := cs["cipher_suites"]; ok && !isIntfNil(v) {
-
-						ls := make([]string, len(v.([]interface{})))
-						for i, v := range v.([]interface{}) {
-							ls[i] = v.(string)
-						}
-						tlsParamsChoiceInt.CertParams.CipherSuites = ls
-
-					}
-
-					if v, ok := cs["maximum_protocol_version"]; ok && !isIntfNil(v) {
-
-						tlsParamsChoiceInt.CertParams.MaximumProtocolVersion = ves_io_schema.TlsProtocol(ves_io_schema.TlsProtocol_value[v.(string)])
-
-					}
-
-					if v, ok := cs["minimum_protocol_version"]; ok && !isIntfNil(v) {
-
-						tlsParamsChoiceInt.CertParams.MinimumProtocolVersion = ves_io_schema.TlsProtocol(ves_io_schema.TlsProtocol_value[v.(string)])
-
-					}
-
-					if v, ok := cs["validation_params"]; ok && !isIntfNil(v) {
-
-						sl := v.(*schema.Set).List()
-						validationParams := &ves_io_schema.TlsValidationParamsType{}
-						tlsParamsChoiceInt.CertParams.ValidationParams = validationParams
-						for _, set := range sl {
-							validationParamsMapStrToI := set.(map[string]interface{})
-
-							if w, ok := validationParamsMapStrToI["skip_hostname_verification"]; ok && !isIntfNil(w) {
-								validationParams.SkipHostnameVerification = w.(bool)
-							}
-
-							trustedCaChoiceTypeFound := false
-
-							if v, ok := validationParamsMapStrToI["trusted_ca"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
-
-								trustedCaChoiceTypeFound = true
-								trustedCaChoiceInt := &ves_io_schema.TlsValidationParamsType_TrustedCa{}
-								trustedCaChoiceInt.TrustedCa = &ves_io_schema.TrustedCAList{}
-								validationParams.TrustedCaChoice = trustedCaChoiceInt
-
-								sl := v.(*schema.Set).List()
-								for _, set := range sl {
-									cs := set.(map[string]interface{})
-
-									if v, ok := cs["trusted_ca_list"]; ok && !isIntfNil(v) {
-
-										sl := v.([]interface{})
-										trustedCaListInt := make([]*ves_io_schema.ObjectRefType, len(sl))
-										trustedCaChoiceInt.TrustedCa.TrustedCaList = trustedCaListInt
-										for i, ps := range sl {
-
-											tclMapToStrVal := ps.(map[string]interface{})
-											trustedCaListInt[i] = &ves_io_schema.ObjectRefType{}
-
-											trustedCaListInt[i].Kind = "trusted_ca_list"
-
-											if v, ok := tclMapToStrVal["name"]; ok && !isIntfNil(v) {
-												trustedCaListInt[i].Name = v.(string)
-											}
-
-											if v, ok := tclMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-												trustedCaListInt[i].Namespace = v.(string)
-											}
-
-											if v, ok := tclMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-												trustedCaListInt[i].Tenant = v.(string)
-											}
-
-											if v, ok := tclMapToStrVal["uid"]; ok && !isIntfNil(v) {
-												trustedCaListInt[i].Uid = v.(string)
-											}
-
-										}
-
+									if v, ok := cMapToStrVal["uid"]; ok && !isIntfNil(v) {
+										certificatesInt[i].Uid = v.(string)
 									}
 
 								}
 
 							}
 
-							if v, ok := validationParamsMapStrToI["trusted_ca_url"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
+							if v, ok := cs["cipher_suites"]; ok && !isIntfNil(v) {
 
-								trustedCaChoiceTypeFound = true
-								trustedCaChoiceInt := &ves_io_schema.TlsValidationParamsType_TrustedCaUrl{}
-
-								validationParams.TrustedCaChoice = trustedCaChoiceInt
-
-								trustedCaChoiceInt.TrustedCaUrl = v.(string)
-
-							}
-
-							if w, ok := validationParamsMapStrToI["use_volterra_trusted_ca_url"]; ok && !isIntfNil(w) {
-								validationParams.UseVolterraTrustedCaUrl = w.(bool)
-							}
-
-							if w, ok := validationParamsMapStrToI["verify_subject_alt_names"]; ok && !isIntfNil(w) {
-								ls := make([]string, len(w.([]interface{})))
-								for i, v := range w.([]interface{}) {
+								ls := make([]string, len(v.([]interface{})))
+								for i, v := range v.([]interface{}) {
 									ls[i] = v.(string)
 								}
-								validationParams.VerifySubjectAltNames = ls
+								tlsParamsChoiceInt.CertParams.CipherSuites = ls
+
+							}
+
+							if v, ok := cs["maximum_protocol_version"]; ok && !isIntfNil(v) {
+
+								tlsParamsChoiceInt.CertParams.MaximumProtocolVersion = ves_io_schema.TlsProtocol(ves_io_schema.TlsProtocol_value[v.(string)])
+
+							}
+
+							if v, ok := cs["minimum_protocol_version"]; ok && !isIntfNil(v) {
+
+								tlsParamsChoiceInt.CertParams.MinimumProtocolVersion = ves_io_schema.TlsProtocol(ves_io_schema.TlsProtocol_value[v.(string)])
+
+							}
+
+							if v, ok := cs["validation_params"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								validationParams := &ves_io_schema.TlsValidationParamsType{}
+								tlsParamsChoiceInt.CertParams.ValidationParams = validationParams
+								for _, set := range sl {
+									if set != nil {
+										validationParamsMapStrToI := set.(map[string]interface{})
+
+										if w, ok := validationParamsMapStrToI["skip_hostname_verification"]; ok && !isIntfNil(w) {
+											validationParams.SkipHostnameVerification = w.(bool)
+										}
+
+										trustedCaChoiceTypeFound := false
+
+										if v, ok := validationParamsMapStrToI["trusted_ca"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
+
+											trustedCaChoiceTypeFound = true
+											trustedCaChoiceInt := &ves_io_schema.TlsValidationParamsType_TrustedCa{}
+											trustedCaChoiceInt.TrustedCa = &ves_io_schema.TrustedCAList{}
+											validationParams.TrustedCaChoice = trustedCaChoiceInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["trusted_ca_list"]; ok && !isIntfNil(v) {
+
+														sl := v.([]interface{})
+														trustedCaListInt := make([]*ves_io_schema.ObjectRefType, len(sl))
+														trustedCaChoiceInt.TrustedCa.TrustedCaList = trustedCaListInt
+														for i, ps := range sl {
+
+															tclMapToStrVal := ps.(map[string]interface{})
+															trustedCaListInt[i] = &ves_io_schema.ObjectRefType{}
+
+															trustedCaListInt[i].Kind = "trusted_ca_list"
+
+															if v, ok := tclMapToStrVal["name"]; ok && !isIntfNil(v) {
+																trustedCaListInt[i].Name = v.(string)
+															}
+
+															if v, ok := tclMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+																trustedCaListInt[i].Namespace = v.(string)
+															}
+
+															if v, ok := tclMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+																trustedCaListInt[i].Tenant = v.(string)
+															}
+
+															if v, ok := tclMapToStrVal["uid"]; ok && !isIntfNil(v) {
+																trustedCaListInt[i].Uid = v.(string)
+															}
+
+														}
+
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := validationParamsMapStrToI["trusted_ca_url"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
+
+											trustedCaChoiceTypeFound = true
+											trustedCaChoiceInt := &ves_io_schema.TlsValidationParamsType_TrustedCaUrl{}
+
+											validationParams.TrustedCaChoice = trustedCaChoiceInt
+
+											trustedCaChoiceInt.TrustedCaUrl = v.(string)
+
+										}
+
+										if w, ok := validationParamsMapStrToI["use_volterra_trusted_ca_url"]; ok && !isIntfNil(w) {
+											validationParams.UseVolterraTrustedCaUrl = w.(bool)
+										}
+
+										if w, ok := validationParamsMapStrToI["verify_subject_alt_names"]; ok && !isIntfNil(w) {
+											ls := make([]string, len(w.([]interface{})))
+											for i, v := range w.([]interface{}) {
+												ls[i] = v.(string)
+											}
+											validationParams.VerifySubjectAltNames = ls
+										}
+
+									}
+								}
+
 							}
 
 						}
-
 					}
 
 				}
 
-			}
+				if v, ok := tlsParametersMapStrToI["common_params"]; ok && !isIntfNil(v) && !tlsParamsChoiceTypeFound {
 
-			if v, ok := tlsParametersMapStrToI["common_params"]; ok && !isIntfNil(v) && !tlsParamsChoiceTypeFound {
+					tlsParamsChoiceTypeFound = true
+					tlsParamsChoiceInt := &ves_io_schema.UpstreamTlsParamsType_CommonParams{}
+					tlsParamsChoiceInt.CommonParams = &ves_io_schema.TlsParamsType{}
+					tlsParameters.TlsParamsChoice = tlsParamsChoiceInt
 
-				tlsParamsChoiceTypeFound = true
-				tlsParamsChoiceInt := &ves_io_schema.UpstreamTlsParamsType_CommonParams{}
-				tlsParamsChoiceInt.CommonParams = &ves_io_schema.TlsParamsType{}
-				tlsParameters.TlsParamsChoice = tlsParamsChoiceInt
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
 
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
+							if v, ok := cs["cipher_suites"]; ok && !isIntfNil(v) {
 
-					if v, ok := cs["cipher_suites"]; ok && !isIntfNil(v) {
-
-						ls := make([]string, len(v.([]interface{})))
-						for i, v := range v.([]interface{}) {
-							ls[i] = v.(string)
-						}
-						tlsParamsChoiceInt.CommonParams.CipherSuites = ls
-
-					}
-
-					if v, ok := cs["maximum_protocol_version"]; ok && !isIntfNil(v) {
-
-						tlsParamsChoiceInt.CommonParams.MaximumProtocolVersion = ves_io_schema.TlsProtocol(ves_io_schema.TlsProtocol_value[v.(string)])
-
-					}
-
-					if v, ok := cs["minimum_protocol_version"]; ok && !isIntfNil(v) {
-
-						tlsParamsChoiceInt.CommonParams.MinimumProtocolVersion = ves_io_schema.TlsProtocol(ves_io_schema.TlsProtocol_value[v.(string)])
-
-					}
-
-					if v, ok := cs["tls_certificates"]; ok && !isIntfNil(v) {
-
-						sl := v.([]interface{})
-						tlsCertificates := make([]*ves_io_schema.TlsCertificateType, len(sl))
-						tlsParamsChoiceInt.CommonParams.TlsCertificates = tlsCertificates
-						for i, set := range sl {
-							tlsCertificates[i] = &ves_io_schema.TlsCertificateType{}
-							tlsCertificatesMapStrToI := set.(map[string]interface{})
-
-							if w, ok := tlsCertificatesMapStrToI["certificate_url"]; ok && !isIntfNil(w) {
-								tlsCertificates[i].CertificateUrl = w.(string)
-							}
-
-							if w, ok := tlsCertificatesMapStrToI["description"]; ok && !isIntfNil(w) {
-								tlsCertificates[i].Description = w.(string)
-							}
-
-							ocspStaplingChoiceTypeFound := false
-
-							if v, ok := tlsCertificatesMapStrToI["custom_hash_algorithms"]; ok && !isIntfNil(v) && !ocspStaplingChoiceTypeFound {
-
-								ocspStaplingChoiceTypeFound = true
-								ocspStaplingChoiceInt := &ves_io_schema.TlsCertificateType_CustomHashAlgorithms{}
-								ocspStaplingChoiceInt.CustomHashAlgorithms = &ves_io_schema.HashAlgorithms{}
-								tlsCertificates[i].OcspStaplingChoice = ocspStaplingChoiceInt
-
-								sl := v.(*schema.Set).List()
-								for _, set := range sl {
-									cs := set.(map[string]interface{})
-
-									if v, ok := cs["hash_algorithms"]; ok && !isIntfNil(v) {
-
-										hash_algorithmsList := []ves_io_schema.HashAlgorithm{}
-										for _, j := range v.([]interface{}) {
-											hash_algorithmsList = append(hash_algorithmsList, ves_io_schema.HashAlgorithm(ves_io_schema.HashAlgorithm_value[j.(string)]))
-										}
-										ocspStaplingChoiceInt.CustomHashAlgorithms.HashAlgorithms = hash_algorithmsList
-
-									}
-
-								}
-
-							}
-
-							if _, ok := tlsCertificatesMapStrToI["disable_ocsp_stapling"]; ok && !ocspStaplingChoiceTypeFound {
-
-								ocspStaplingChoiceTypeFound = true
-								ocspStaplingChoiceInt := &ves_io_schema.TlsCertificateType_DisableOcspStapling{}
-								ocspStaplingChoiceInt.DisableOcspStapling = &ves_io_schema.Empty{}
-								tlsCertificates[i].OcspStaplingChoice = ocspStaplingChoiceInt
-
-							}
-
-							if _, ok := tlsCertificatesMapStrToI["use_system_defaults"]; ok && !ocspStaplingChoiceTypeFound {
-
-								ocspStaplingChoiceTypeFound = true
-								ocspStaplingChoiceInt := &ves_io_schema.TlsCertificateType_UseSystemDefaults{}
-								ocspStaplingChoiceInt.UseSystemDefaults = &ves_io_schema.Empty{}
-								tlsCertificates[i].OcspStaplingChoice = ocspStaplingChoiceInt
-
-							}
-
-							if v, ok := tlsCertificatesMapStrToI["private_key"]; ok && !isIntfNil(v) {
-
-								sl := v.(*schema.Set).List()
-								privateKey := &ves_io_schema.SecretType{}
-								tlsCertificates[i].PrivateKey = privateKey
-								for _, set := range sl {
-									privateKeyMapStrToI := set.(map[string]interface{})
-
-									if v, ok := privateKeyMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
-
-										sl := v.(*schema.Set).List()
-										blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
-										privateKey.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
-										for _, set := range sl {
-											blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
-
-											if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
-												blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
-											}
-
-											if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
-												blindfoldSecretInfoInternal.Location = w.(string)
-											}
-
-											if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
-												blindfoldSecretInfoInternal.StoreProvider = w.(string)
-											}
-
-										}
-
-									}
-
-									if v, ok := privateKeyMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
-
-										privateKey.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
-
-									}
-
-									secretInfoOneofTypeFound := false
-
-									if v, ok := privateKeyMapStrToI["blindfold_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
-
-										secretInfoOneofTypeFound = true
-										secretInfoOneofInt := &ves_io_schema.SecretType_BlindfoldSecretInfo{}
-										secretInfoOneofInt.BlindfoldSecretInfo = &ves_io_schema.BlindfoldSecretInfoType{}
-										privateKey.SecretInfoOneof = secretInfoOneofInt
-
-										sl := v.(*schema.Set).List()
-										for _, set := range sl {
-											cs := set.(map[string]interface{})
-
-											if v, ok := cs["decryption_provider"]; ok && !isIntfNil(v) {
-
-												secretInfoOneofInt.BlindfoldSecretInfo.DecryptionProvider = v.(string)
-
-											}
-
-											if v, ok := cs["location"]; ok && !isIntfNil(v) {
-
-												secretInfoOneofInt.BlindfoldSecretInfo.Location = v.(string)
-
-											}
-
-											if v, ok := cs["store_provider"]; ok && !isIntfNil(v) {
-
-												secretInfoOneofInt.BlindfoldSecretInfo.StoreProvider = v.(string)
-
-											}
-
-										}
-
-									}
-
-									if v, ok := privateKeyMapStrToI["clear_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
-
-										secretInfoOneofTypeFound = true
-										secretInfoOneofInt := &ves_io_schema.SecretType_ClearSecretInfo{}
-										secretInfoOneofInt.ClearSecretInfo = &ves_io_schema.ClearSecretInfoType{}
-										privateKey.SecretInfoOneof = secretInfoOneofInt
-
-										sl := v.(*schema.Set).List()
-										for _, set := range sl {
-											cs := set.(map[string]interface{})
-
-											if v, ok := cs["provider"]; ok && !isIntfNil(v) {
-
-												secretInfoOneofInt.ClearSecretInfo.Provider = v.(string)
-
-											}
-
-											if v, ok := cs["url"]; ok && !isIntfNil(v) {
-
-												secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
-
-											}
-
-										}
-
-									}
-
-									if v, ok := privateKeyMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
-
-										secretInfoOneofTypeFound = true
-										secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
-										secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
-										privateKey.SecretInfoOneof = secretInfoOneofInt
-
-										sl := v.(*schema.Set).List()
-										for _, set := range sl {
-											cs := set.(map[string]interface{})
-
-											if v, ok := cs["key"]; ok && !isIntfNil(v) {
-
-												secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
-
-											}
-
-											if v, ok := cs["location"]; ok && !isIntfNil(v) {
-
-												secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
-
-											}
-
-											if v, ok := cs["provider"]; ok && !isIntfNil(v) {
-
-												secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
-
-											}
-
-											if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
-
-												secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
-
-											}
-
-											if v, ok := cs["version"]; ok && !isIntfNil(v) {
-
-												secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
-
-											}
-
-										}
-
-									}
-
-									if v, ok := privateKeyMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
-
-										secretInfoOneofTypeFound = true
-										secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
-										secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
-										privateKey.SecretInfoOneof = secretInfoOneofInt
-
-										sl := v.(*schema.Set).List()
-										for _, set := range sl {
-											cs := set.(map[string]interface{})
-
-											if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-												secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
-
-											}
-
-										}
-
-									}
-
-								}
-
-							}
-
-						}
-
-					}
-
-					if v, ok := cs["trusted_ca_url"]; ok && !isIntfNil(v) {
-
-						tlsParamsChoiceInt.CommonParams.TrustedCaUrl = v.(string)
-
-					}
-
-					if v, ok := cs["validation_params"]; ok && !isIntfNil(v) {
-
-						sl := v.(*schema.Set).List()
-						validationParams := &ves_io_schema.TlsValidationParamsType{}
-						tlsParamsChoiceInt.CommonParams.ValidationParams = validationParams
-						for _, set := range sl {
-							validationParamsMapStrToI := set.(map[string]interface{})
-
-							if w, ok := validationParamsMapStrToI["skip_hostname_verification"]; ok && !isIntfNil(w) {
-								validationParams.SkipHostnameVerification = w.(bool)
-							}
-
-							trustedCaChoiceTypeFound := false
-
-							if v, ok := validationParamsMapStrToI["trusted_ca"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
-
-								trustedCaChoiceTypeFound = true
-								trustedCaChoiceInt := &ves_io_schema.TlsValidationParamsType_TrustedCa{}
-								trustedCaChoiceInt.TrustedCa = &ves_io_schema.TrustedCAList{}
-								validationParams.TrustedCaChoice = trustedCaChoiceInt
-
-								sl := v.(*schema.Set).List()
-								for _, set := range sl {
-									cs := set.(map[string]interface{})
-
-									if v, ok := cs["trusted_ca_list"]; ok && !isIntfNil(v) {
-
-										sl := v.([]interface{})
-										trustedCaListInt := make([]*ves_io_schema.ObjectRefType, len(sl))
-										trustedCaChoiceInt.TrustedCa.TrustedCaList = trustedCaListInt
-										for i, ps := range sl {
-
-											tclMapToStrVal := ps.(map[string]interface{})
-											trustedCaListInt[i] = &ves_io_schema.ObjectRefType{}
-
-											trustedCaListInt[i].Kind = "trusted_ca_list"
-
-											if v, ok := tclMapToStrVal["name"]; ok && !isIntfNil(v) {
-												trustedCaListInt[i].Name = v.(string)
-											}
-
-											if v, ok := tclMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-												trustedCaListInt[i].Namespace = v.(string)
-											}
-
-											if v, ok := tclMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-												trustedCaListInt[i].Tenant = v.(string)
-											}
-
-											if v, ok := tclMapToStrVal["uid"]; ok && !isIntfNil(v) {
-												trustedCaListInt[i].Uid = v.(string)
-											}
-
-										}
-
-									}
-
-								}
-
-							}
-
-							if v, ok := validationParamsMapStrToI["trusted_ca_url"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
-
-								trustedCaChoiceTypeFound = true
-								trustedCaChoiceInt := &ves_io_schema.TlsValidationParamsType_TrustedCaUrl{}
-
-								validationParams.TrustedCaChoice = trustedCaChoiceInt
-
-								trustedCaChoiceInt.TrustedCaUrl = v.(string)
-
-							}
-
-							if w, ok := validationParamsMapStrToI["use_volterra_trusted_ca_url"]; ok && !isIntfNil(w) {
-								validationParams.UseVolterraTrustedCaUrl = w.(bool)
-							}
-
-							if w, ok := validationParamsMapStrToI["verify_subject_alt_names"]; ok && !isIntfNil(w) {
-								ls := make([]string, len(w.([]interface{})))
-								for i, v := range w.([]interface{}) {
+								ls := make([]string, len(v.([]interface{})))
+								for i, v := range v.([]interface{}) {
 									ls[i] = v.(string)
 								}
-								validationParams.VerifySubjectAltNames = ls
+								tlsParamsChoiceInt.CommonParams.CipherSuites = ls
+
+							}
+
+							if v, ok := cs["maximum_protocol_version"]; ok && !isIntfNil(v) {
+
+								tlsParamsChoiceInt.CommonParams.MaximumProtocolVersion = ves_io_schema.TlsProtocol(ves_io_schema.TlsProtocol_value[v.(string)])
+
+							}
+
+							if v, ok := cs["minimum_protocol_version"]; ok && !isIntfNil(v) {
+
+								tlsParamsChoiceInt.CommonParams.MinimumProtocolVersion = ves_io_schema.TlsProtocol(ves_io_schema.TlsProtocol_value[v.(string)])
+
+							}
+
+							if v, ok := cs["tls_certificates"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								tlsCertificates := make([]*ves_io_schema.TlsCertificateType, len(sl))
+								tlsParamsChoiceInt.CommonParams.TlsCertificates = tlsCertificates
+								for i, set := range sl {
+									if set != nil {
+										tlsCertificates[i] = &ves_io_schema.TlsCertificateType{}
+										tlsCertificatesMapStrToI := set.(map[string]interface{})
+
+										if w, ok := tlsCertificatesMapStrToI["certificate_url"]; ok && !isIntfNil(w) {
+											tlsCertificates[i].CertificateUrl = w.(string)
+										}
+
+										if w, ok := tlsCertificatesMapStrToI["description"]; ok && !isIntfNil(w) {
+											tlsCertificates[i].Description = w.(string)
+										}
+
+										ocspStaplingChoiceTypeFound := false
+
+										if v, ok := tlsCertificatesMapStrToI["custom_hash_algorithms"]; ok && !isIntfNil(v) && !ocspStaplingChoiceTypeFound {
+
+											ocspStaplingChoiceTypeFound = true
+											ocspStaplingChoiceInt := &ves_io_schema.TlsCertificateType_CustomHashAlgorithms{}
+											ocspStaplingChoiceInt.CustomHashAlgorithms = &ves_io_schema.HashAlgorithms{}
+											tlsCertificates[i].OcspStaplingChoice = ocspStaplingChoiceInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["hash_algorithms"]; ok && !isIntfNil(v) {
+
+														hash_algorithmsList := []ves_io_schema.HashAlgorithm{}
+														for _, j := range v.([]interface{}) {
+															hash_algorithmsList = append(hash_algorithmsList, ves_io_schema.HashAlgorithm(ves_io_schema.HashAlgorithm_value[j.(string)]))
+														}
+														ocspStaplingChoiceInt.CustomHashAlgorithms.HashAlgorithms = hash_algorithmsList
+
+													}
+
+												}
+											}
+
+										}
+
+										if _, ok := tlsCertificatesMapStrToI["disable_ocsp_stapling"]; ok && !ocspStaplingChoiceTypeFound {
+
+											ocspStaplingChoiceTypeFound = true
+											ocspStaplingChoiceInt := &ves_io_schema.TlsCertificateType_DisableOcspStapling{}
+											ocspStaplingChoiceInt.DisableOcspStapling = &ves_io_schema.Empty{}
+											tlsCertificates[i].OcspStaplingChoice = ocspStaplingChoiceInt
+
+										}
+
+										if _, ok := tlsCertificatesMapStrToI["use_system_defaults"]; ok && !ocspStaplingChoiceTypeFound {
+
+											ocspStaplingChoiceTypeFound = true
+											ocspStaplingChoiceInt := &ves_io_schema.TlsCertificateType_UseSystemDefaults{}
+											ocspStaplingChoiceInt.UseSystemDefaults = &ves_io_schema.Empty{}
+											tlsCertificates[i].OcspStaplingChoice = ocspStaplingChoiceInt
+
+										}
+
+										if v, ok := tlsCertificatesMapStrToI["private_key"]; ok && !isIntfNil(v) {
+
+											sl := v.([]interface{})
+											privateKey := &ves_io_schema.SecretType{}
+											tlsCertificates[i].PrivateKey = privateKey
+											for _, set := range sl {
+												if set != nil {
+													privateKeyMapStrToI := set.(map[string]interface{})
+
+													if v, ok := privateKeyMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
+
+														sl := v.([]interface{})
+														blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
+														privateKey.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
+														for _, set := range sl {
+															if set != nil {
+																blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
+
+																if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
+																	blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
+																}
+
+																if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
+																	blindfoldSecretInfoInternal.Location = w.(string)
+																}
+
+																if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
+																	blindfoldSecretInfoInternal.StoreProvider = w.(string)
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := privateKeyMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
+
+														privateKey.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+													}
+
+													secretInfoOneofTypeFound := false
+
+													if v, ok := privateKeyMapStrToI["blindfold_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+														secretInfoOneofTypeFound = true
+														secretInfoOneofInt := &ves_io_schema.SecretType_BlindfoldSecretInfo{}
+														secretInfoOneofInt.BlindfoldSecretInfo = &ves_io_schema.BlindfoldSecretInfoType{}
+														privateKey.SecretInfoOneof = secretInfoOneofInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["decryption_provider"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.BlindfoldSecretInfo.DecryptionProvider = v.(string)
+
+																}
+
+																if v, ok := cs["location"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.BlindfoldSecretInfo.Location = v.(string)
+
+																}
+
+																if v, ok := cs["store_provider"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.BlindfoldSecretInfo.StoreProvider = v.(string)
+
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := privateKeyMapStrToI["clear_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+														secretInfoOneofTypeFound = true
+														secretInfoOneofInt := &ves_io_schema.SecretType_ClearSecretInfo{}
+														secretInfoOneofInt.ClearSecretInfo = &ves_io_schema.ClearSecretInfoType{}
+														privateKey.SecretInfoOneof = secretInfoOneofInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.ClearSecretInfo.Provider = v.(string)
+
+																}
+
+																if v, ok := cs["url"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := privateKeyMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+														secretInfoOneofTypeFound = true
+														secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
+														secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
+														privateKey.SecretInfoOneof = secretInfoOneofInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["key"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
+																}
+
+																if v, ok := cs["location"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
+																}
+
+																if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
+																}
+
+																if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+																}
+
+																if v, ok := cs["version"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := privateKeyMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+														secretInfoOneofTypeFound = true
+														secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
+														secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
+														privateKey.SecretInfoOneof = secretInfoOneofInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
+
+																}
+
+															}
+														}
+
+													}
+
+												}
+											}
+
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := cs["trusted_ca_url"]; ok && !isIntfNil(v) {
+
+								tlsParamsChoiceInt.CommonParams.TrustedCaUrl = v.(string)
+
+							}
+
+							if v, ok := cs["validation_params"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								validationParams := &ves_io_schema.TlsValidationParamsType{}
+								tlsParamsChoiceInt.CommonParams.ValidationParams = validationParams
+								for _, set := range sl {
+									if set != nil {
+										validationParamsMapStrToI := set.(map[string]interface{})
+
+										if w, ok := validationParamsMapStrToI["skip_hostname_verification"]; ok && !isIntfNil(w) {
+											validationParams.SkipHostnameVerification = w.(bool)
+										}
+
+										trustedCaChoiceTypeFound := false
+
+										if v, ok := validationParamsMapStrToI["trusted_ca"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
+
+											trustedCaChoiceTypeFound = true
+											trustedCaChoiceInt := &ves_io_schema.TlsValidationParamsType_TrustedCa{}
+											trustedCaChoiceInt.TrustedCa = &ves_io_schema.TrustedCAList{}
+											validationParams.TrustedCaChoice = trustedCaChoiceInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["trusted_ca_list"]; ok && !isIntfNil(v) {
+
+														sl := v.([]interface{})
+														trustedCaListInt := make([]*ves_io_schema.ObjectRefType, len(sl))
+														trustedCaChoiceInt.TrustedCa.TrustedCaList = trustedCaListInt
+														for i, ps := range sl {
+
+															tclMapToStrVal := ps.(map[string]interface{})
+															trustedCaListInt[i] = &ves_io_schema.ObjectRefType{}
+
+															trustedCaListInt[i].Kind = "trusted_ca_list"
+
+															if v, ok := tclMapToStrVal["name"]; ok && !isIntfNil(v) {
+																trustedCaListInt[i].Name = v.(string)
+															}
+
+															if v, ok := tclMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+																trustedCaListInt[i].Namespace = v.(string)
+															}
+
+															if v, ok := tclMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+																trustedCaListInt[i].Tenant = v.(string)
+															}
+
+															if v, ok := tclMapToStrVal["uid"]; ok && !isIntfNil(v) {
+																trustedCaListInt[i].Uid = v.(string)
+															}
+
+														}
+
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := validationParamsMapStrToI["trusted_ca_url"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
+
+											trustedCaChoiceTypeFound = true
+											trustedCaChoiceInt := &ves_io_schema.TlsValidationParamsType_TrustedCaUrl{}
+
+											validationParams.TrustedCaChoice = trustedCaChoiceInt
+
+											trustedCaChoiceInt.TrustedCaUrl = v.(string)
+
+										}
+
+										if w, ok := validationParamsMapStrToI["use_volterra_trusted_ca_url"]; ok && !isIntfNil(w) {
+											validationParams.UseVolterraTrustedCaUrl = w.(bool)
+										}
+
+										if w, ok := validationParamsMapStrToI["verify_subject_alt_names"]; ok && !isIntfNil(w) {
+											ls := make([]string, len(w.([]interface{})))
+											for i, v := range w.([]interface{}) {
+												ls[i] = v.(string)
+											}
+											validationParams.VerifySubjectAltNames = ls
+										}
+
+									}
+								}
+
 							}
 
 						}
-
 					}
 
 				}
 
 			}
-
 		}
 
 	}
@@ -2083,34 +2151,36 @@ func resourceVolterraClusterUpdate(d *schema.ResourceData, meta interface{}) err
 
 	if v, ok := d.GetOk("circuit_breaker"); ok && !isIntfNil(v) {
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		circuitBreaker := &ves_io_schema_cluster.CircuitBreaker{}
 		updateSpec.CircuitBreaker = circuitBreaker
 		for _, set := range sl {
-			circuitBreakerMapStrToI := set.(map[string]interface{})
+			if set != nil {
+				circuitBreakerMapStrToI := set.(map[string]interface{})
 
-			if w, ok := circuitBreakerMapStrToI["connection_limit"]; ok && !isIntfNil(w) {
-				circuitBreaker.ConnectionLimit = uint32(w.(int))
+				if w, ok := circuitBreakerMapStrToI["connection_limit"]; ok && !isIntfNil(w) {
+					circuitBreaker.ConnectionLimit = uint32(w.(int))
+				}
+
+				if w, ok := circuitBreakerMapStrToI["max_requests"]; ok && !isIntfNil(w) {
+					circuitBreaker.MaxRequests = uint32(w.(int))
+				}
+
+				if w, ok := circuitBreakerMapStrToI["pending_requests"]; ok && !isIntfNil(w) {
+					circuitBreaker.PendingRequests = uint32(w.(int))
+				}
+
+				if v, ok := circuitBreakerMapStrToI["priority"]; ok && !isIntfNil(v) {
+
+					circuitBreaker.Priority = ves_io_schema.RoutingPriority(ves_io_schema.RoutingPriority_value[v.(string)])
+
+				}
+
+				if w, ok := circuitBreakerMapStrToI["retries"]; ok && !isIntfNil(w) {
+					circuitBreaker.Retries = uint32(w.(int))
+				}
+
 			}
-
-			if w, ok := circuitBreakerMapStrToI["max_requests"]; ok && !isIntfNil(w) {
-				circuitBreaker.MaxRequests = uint32(w.(int))
-			}
-
-			if w, ok := circuitBreakerMapStrToI["pending_requests"]; ok && !isIntfNil(w) {
-				circuitBreaker.PendingRequests = uint32(w.(int))
-			}
-
-			if v, ok := circuitBreakerMapStrToI["priority"]; ok && !isIntfNil(v) {
-
-				circuitBreaker.Priority = ves_io_schema.RoutingPriority(ves_io_schema.RoutingPriority_value[v.(string)])
-
-			}
-
-			if w, ok := circuitBreakerMapStrToI["retries"]; ok && !isIntfNil(w) {
-				circuitBreaker.Retries = uint32(w.(int))
-			}
-
 		}
 
 	}
@@ -2143,17 +2213,19 @@ func resourceVolterraClusterUpdate(d *schema.ResourceData, meta interface{}) err
 		endpointSubsets := make([]*ves_io_schema_cluster.EndpointSubsetSelectorType, len(sl))
 		updateSpec.EndpointSubsets = endpointSubsets
 		for i, set := range sl {
-			endpointSubsets[i] = &ves_io_schema_cluster.EndpointSubsetSelectorType{}
-			endpointSubsetsMapStrToI := set.(map[string]interface{})
+			if set != nil {
+				endpointSubsets[i] = &ves_io_schema_cluster.EndpointSubsetSelectorType{}
+				endpointSubsetsMapStrToI := set.(map[string]interface{})
 
-			if w, ok := endpointSubsetsMapStrToI["keys"]; ok && !isIntfNil(w) {
-				ls := make([]string, len(w.([]interface{})))
-				for i, v := range w.([]interface{}) {
-					ls[i] = v.(string)
+				if w, ok := endpointSubsetsMapStrToI["keys"]; ok && !isIntfNil(w) {
+					ls := make([]string, len(w.([]interface{})))
+					for i, v := range w.([]interface{}) {
+						ls[i] = v.(string)
+					}
+					endpointSubsets[i].Keys = ls
 				}
-				endpointSubsets[i].Keys = ls
-			}
 
+			}
 		}
 
 	}
@@ -2198,62 +2270,64 @@ func resourceVolterraClusterUpdate(d *schema.ResourceData, meta interface{}) err
 
 	if v, ok := d.GetOk("header_transformation_type"); ok && !isIntfNil(v) {
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		headerTransformationType := &ves_io_schema.HeaderTransformationType{}
 		updateSpec.HeaderTransformationType = headerTransformationType
 		for _, set := range sl {
-			headerTransformationTypeMapStrToI := set.(map[string]interface{})
+			if set != nil {
+				headerTransformationTypeMapStrToI := set.(map[string]interface{})
 
-			headerTransformationChoiceTypeFound := false
+				headerTransformationChoiceTypeFound := false
 
-			if v, ok := headerTransformationTypeMapStrToI["default_header_transformation"]; ok && !isIntfNil(v) && !headerTransformationChoiceTypeFound {
+				if v, ok := headerTransformationTypeMapStrToI["default_header_transformation"]; ok && !isIntfNil(v) && !headerTransformationChoiceTypeFound {
 
-				headerTransformationChoiceTypeFound = true
+					headerTransformationChoiceTypeFound = true
 
-				if v.(bool) {
-					headerTransformationChoiceInt := &ves_io_schema.HeaderTransformationType_DefaultHeaderTransformation{}
-					headerTransformationChoiceInt.DefaultHeaderTransformation = &ves_io_schema.Empty{}
-					headerTransformationType.HeaderTransformationChoice = headerTransformationChoiceInt
+					if v.(bool) {
+						headerTransformationChoiceInt := &ves_io_schema.HeaderTransformationType_DefaultHeaderTransformation{}
+						headerTransformationChoiceInt.DefaultHeaderTransformation = &ves_io_schema.Empty{}
+						headerTransformationType.HeaderTransformationChoice = headerTransformationChoiceInt
+					}
+
+				}
+
+				if v, ok := headerTransformationTypeMapStrToI["legacy_header_transformation"]; ok && !isIntfNil(v) && !headerTransformationChoiceTypeFound {
+
+					headerTransformationChoiceTypeFound = true
+
+					if v.(bool) {
+						headerTransformationChoiceInt := &ves_io_schema.HeaderTransformationType_LegacyHeaderTransformation{}
+						headerTransformationChoiceInt.LegacyHeaderTransformation = &ves_io_schema.Empty{}
+						headerTransformationType.HeaderTransformationChoice = headerTransformationChoiceInt
+					}
+
+				}
+
+				if v, ok := headerTransformationTypeMapStrToI["preserve_case_header_transformation"]; ok && !isIntfNil(v) && !headerTransformationChoiceTypeFound {
+
+					headerTransformationChoiceTypeFound = true
+
+					if v.(bool) {
+						headerTransformationChoiceInt := &ves_io_schema.HeaderTransformationType_PreserveCaseHeaderTransformation{}
+						headerTransformationChoiceInt.PreserveCaseHeaderTransformation = &ves_io_schema.Empty{}
+						headerTransformationType.HeaderTransformationChoice = headerTransformationChoiceInt
+					}
+
+				}
+
+				if v, ok := headerTransformationTypeMapStrToI["proper_case_header_transformation"]; ok && !isIntfNil(v) && !headerTransformationChoiceTypeFound {
+
+					headerTransformationChoiceTypeFound = true
+
+					if v.(bool) {
+						headerTransformationChoiceInt := &ves_io_schema.HeaderTransformationType_ProperCaseHeaderTransformation{}
+						headerTransformationChoiceInt.ProperCaseHeaderTransformation = &ves_io_schema.Empty{}
+						headerTransformationType.HeaderTransformationChoice = headerTransformationChoiceInt
+					}
+
 				}
 
 			}
-
-			if v, ok := headerTransformationTypeMapStrToI["legacy_header_transformation"]; ok && !isIntfNil(v) && !headerTransformationChoiceTypeFound {
-
-				headerTransformationChoiceTypeFound = true
-
-				if v.(bool) {
-					headerTransformationChoiceInt := &ves_io_schema.HeaderTransformationType_LegacyHeaderTransformation{}
-					headerTransformationChoiceInt.LegacyHeaderTransformation = &ves_io_schema.Empty{}
-					headerTransformationType.HeaderTransformationChoice = headerTransformationChoiceInt
-				}
-
-			}
-
-			if v, ok := headerTransformationTypeMapStrToI["preserve_case_header_transformation"]; ok && !isIntfNil(v) && !headerTransformationChoiceTypeFound {
-
-				headerTransformationChoiceTypeFound = true
-
-				if v.(bool) {
-					headerTransformationChoiceInt := &ves_io_schema.HeaderTransformationType_PreserveCaseHeaderTransformation{}
-					headerTransformationChoiceInt.PreserveCaseHeaderTransformation = &ves_io_schema.Empty{}
-					headerTransformationType.HeaderTransformationChoice = headerTransformationChoiceInt
-				}
-
-			}
-
-			if v, ok := headerTransformationTypeMapStrToI["proper_case_header_transformation"]; ok && !isIntfNil(v) && !headerTransformationChoiceTypeFound {
-
-				headerTransformationChoiceTypeFound = true
-
-				if v.(bool) {
-					headerTransformationChoiceInt := &ves_io_schema.HeaderTransformationType_ProperCaseHeaderTransformation{}
-					headerTransformationChoiceInt.ProperCaseHeaderTransformation = &ves_io_schema.Empty{}
-					headerTransformationType.HeaderTransformationChoice = headerTransformationChoiceInt
-				}
-
-			}
-
 		}
 
 	}
@@ -2318,72 +2392,76 @@ func resourceVolterraClusterUpdate(d *schema.ResourceData, meta interface{}) err
 		httpProtocolTypeInt.Http1Config = &ves_io_schema_cluster.Http1ProtocolOptions{}
 		updateSpec.HttpProtocolType = httpProtocolTypeInt
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
+			if set != nil {
+				cs := set.(map[string]interface{})
 
-			if v, ok := cs["header_transformation"]; ok && !isIntfNil(v) {
+				if v, ok := cs["header_transformation"]; ok && !isIntfNil(v) {
 
-				sl := v.(*schema.Set).List()
-				headerTransformation := &ves_io_schema.HeaderTransformationType{}
-				httpProtocolTypeInt.Http1Config.HeaderTransformation = headerTransformation
-				for _, set := range sl {
-					headerTransformationMapStrToI := set.(map[string]interface{})
+					sl := v.([]interface{})
+					headerTransformation := &ves_io_schema.HeaderTransformationType{}
+					httpProtocolTypeInt.Http1Config.HeaderTransformation = headerTransformation
+					for _, set := range sl {
+						if set != nil {
+							headerTransformationMapStrToI := set.(map[string]interface{})
 
-					headerTransformationChoiceTypeFound := false
+							headerTransformationChoiceTypeFound := false
 
-					if v, ok := headerTransformationMapStrToI["default_header_transformation"]; ok && !isIntfNil(v) && !headerTransformationChoiceTypeFound {
+							if v, ok := headerTransformationMapStrToI["default_header_transformation"]; ok && !isIntfNil(v) && !headerTransformationChoiceTypeFound {
 
-						headerTransformationChoiceTypeFound = true
+								headerTransformationChoiceTypeFound = true
 
-						if v.(bool) {
-							headerTransformationChoiceInt := &ves_io_schema.HeaderTransformationType_DefaultHeaderTransformation{}
-							headerTransformationChoiceInt.DefaultHeaderTransformation = &ves_io_schema.Empty{}
-							headerTransformation.HeaderTransformationChoice = headerTransformationChoiceInt
+								if v.(bool) {
+									headerTransformationChoiceInt := &ves_io_schema.HeaderTransformationType_DefaultHeaderTransformation{}
+									headerTransformationChoiceInt.DefaultHeaderTransformation = &ves_io_schema.Empty{}
+									headerTransformation.HeaderTransformationChoice = headerTransformationChoiceInt
+								}
+
+							}
+
+							if v, ok := headerTransformationMapStrToI["legacy_header_transformation"]; ok && !isIntfNil(v) && !headerTransformationChoiceTypeFound {
+
+								headerTransformationChoiceTypeFound = true
+
+								if v.(bool) {
+									headerTransformationChoiceInt := &ves_io_schema.HeaderTransformationType_LegacyHeaderTransformation{}
+									headerTransformationChoiceInt.LegacyHeaderTransformation = &ves_io_schema.Empty{}
+									headerTransformation.HeaderTransformationChoice = headerTransformationChoiceInt
+								}
+
+							}
+
+							if v, ok := headerTransformationMapStrToI["preserve_case_header_transformation"]; ok && !isIntfNil(v) && !headerTransformationChoiceTypeFound {
+
+								headerTransformationChoiceTypeFound = true
+
+								if v.(bool) {
+									headerTransformationChoiceInt := &ves_io_schema.HeaderTransformationType_PreserveCaseHeaderTransformation{}
+									headerTransformationChoiceInt.PreserveCaseHeaderTransformation = &ves_io_schema.Empty{}
+									headerTransformation.HeaderTransformationChoice = headerTransformationChoiceInt
+								}
+
+							}
+
+							if v, ok := headerTransformationMapStrToI["proper_case_header_transformation"]; ok && !isIntfNil(v) && !headerTransformationChoiceTypeFound {
+
+								headerTransformationChoiceTypeFound = true
+
+								if v.(bool) {
+									headerTransformationChoiceInt := &ves_io_schema.HeaderTransformationType_ProperCaseHeaderTransformation{}
+									headerTransformationChoiceInt.ProperCaseHeaderTransformation = &ves_io_schema.Empty{}
+									headerTransformation.HeaderTransformationChoice = headerTransformationChoiceInt
+								}
+
+							}
+
 						}
-
-					}
-
-					if v, ok := headerTransformationMapStrToI["legacy_header_transformation"]; ok && !isIntfNil(v) && !headerTransformationChoiceTypeFound {
-
-						headerTransformationChoiceTypeFound = true
-
-						if v.(bool) {
-							headerTransformationChoiceInt := &ves_io_schema.HeaderTransformationType_LegacyHeaderTransformation{}
-							headerTransformationChoiceInt.LegacyHeaderTransformation = &ves_io_schema.Empty{}
-							headerTransformation.HeaderTransformationChoice = headerTransformationChoiceInt
-						}
-
-					}
-
-					if v, ok := headerTransformationMapStrToI["preserve_case_header_transformation"]; ok && !isIntfNil(v) && !headerTransformationChoiceTypeFound {
-
-						headerTransformationChoiceTypeFound = true
-
-						if v.(bool) {
-							headerTransformationChoiceInt := &ves_io_schema.HeaderTransformationType_PreserveCaseHeaderTransformation{}
-							headerTransformationChoiceInt.PreserveCaseHeaderTransformation = &ves_io_schema.Empty{}
-							headerTransformation.HeaderTransformationChoice = headerTransformationChoiceInt
-						}
-
-					}
-
-					if v, ok := headerTransformationMapStrToI["proper_case_header_transformation"]; ok && !isIntfNil(v) && !headerTransformationChoiceTypeFound {
-
-						headerTransformationChoiceTypeFound = true
-
-						if v.(bool) {
-							headerTransformationChoiceInt := &ves_io_schema.HeaderTransformationType_ProperCaseHeaderTransformation{}
-							headerTransformationChoiceInt.ProperCaseHeaderTransformation = &ves_io_schema.Empty{}
-							headerTransformation.HeaderTransformationChoice = headerTransformationChoiceInt
-						}
-
 					}
 
 				}
 
 			}
-
 		}
 
 	}
@@ -2395,16 +2473,18 @@ func resourceVolterraClusterUpdate(d *schema.ResourceData, meta interface{}) err
 		httpProtocolTypeInt.Http2Options = &ves_io_schema_cluster.Http2ProtocolOptions{}
 		updateSpec.HttpProtocolType = httpProtocolTypeInt
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
+			if set != nil {
+				cs := set.(map[string]interface{})
 
-			if v, ok := cs["enabled"]; ok && !isIntfNil(v) {
+				if v, ok := cs["enabled"]; ok && !isIntfNil(v) {
 
-				httpProtocolTypeInt.Http2Options.Enabled = v.(bool)
+					httpProtocolTypeInt.Http2Options.Enabled = v.(bool)
+
+				}
 
 			}
-
 		}
 
 	}
@@ -2417,32 +2497,34 @@ func resourceVolterraClusterUpdate(d *schema.ResourceData, meta interface{}) err
 
 	if v, ok := d.GetOk("outlier_detection"); ok && !isIntfNil(v) {
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		outlierDetection := &ves_io_schema_cluster.OutlierDetectionType{}
 		updateSpec.OutlierDetection = outlierDetection
 		for _, set := range sl {
-			outlierDetectionMapStrToI := set.(map[string]interface{})
+			if set != nil {
+				outlierDetectionMapStrToI := set.(map[string]interface{})
 
-			if w, ok := outlierDetectionMapStrToI["base_ejection_time"]; ok && !isIntfNil(w) {
-				outlierDetection.BaseEjectionTime = uint32(w.(int))
+				if w, ok := outlierDetectionMapStrToI["base_ejection_time"]; ok && !isIntfNil(w) {
+					outlierDetection.BaseEjectionTime = uint32(w.(int))
+				}
+
+				if w, ok := outlierDetectionMapStrToI["consecutive_5xx"]; ok && !isIntfNil(w) {
+					outlierDetection.Consecutive_5Xx = uint32(w.(int))
+				}
+
+				if w, ok := outlierDetectionMapStrToI["consecutive_gateway_failure"]; ok && !isIntfNil(w) {
+					outlierDetection.ConsecutiveGatewayFailure = uint32(w.(int))
+				}
+
+				if w, ok := outlierDetectionMapStrToI["interval"]; ok && !isIntfNil(w) {
+					outlierDetection.Interval = uint32(w.(int))
+				}
+
+				if w, ok := outlierDetectionMapStrToI["max_ejection_percent"]; ok && !isIntfNil(w) {
+					outlierDetection.MaxEjectionPercent = uint32(w.(int))
+				}
+
 			}
-
-			if w, ok := outlierDetectionMapStrToI["consecutive_5xx"]; ok && !isIntfNil(w) {
-				outlierDetection.Consecutive_5Xx = uint32(w.(int))
-			}
-
-			if w, ok := outlierDetectionMapStrToI["consecutive_gateway_failure"]; ok && !isIntfNil(w) {
-				outlierDetection.ConsecutiveGatewayFailure = uint32(w.(int))
-			}
-
-			if w, ok := outlierDetectionMapStrToI["interval"]; ok && !isIntfNil(w) {
-				outlierDetection.Interval = uint32(w.(int))
-			}
-
-			if w, ok := outlierDetectionMapStrToI["max_ejection_percent"]; ok && !isIntfNil(w) {
-				outlierDetection.MaxEjectionPercent = uint32(w.(int))
-			}
-
 		}
 
 	}
@@ -2512,606 +2594,636 @@ func resourceVolterraClusterUpdate(d *schema.ResourceData, meta interface{}) err
 
 	if v, ok := d.GetOk("tls_parameters"); ok && !isIntfNil(v) {
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		tlsParameters := &ves_io_schema.UpstreamTlsParamsType{}
 		updateSpec.TlsParameters = tlsParameters
 		for _, set := range sl {
-			tlsParametersMapStrToI := set.(map[string]interface{})
+			if set != nil {
+				tlsParametersMapStrToI := set.(map[string]interface{})
 
-			maxSessionKeysTypeTypeFound := false
+				maxSessionKeysTypeTypeFound := false
 
-			if v, ok := tlsParametersMapStrToI["default_session_key_caching"]; ok && !isIntfNil(v) && !maxSessionKeysTypeTypeFound {
+				if v, ok := tlsParametersMapStrToI["default_session_key_caching"]; ok && !isIntfNil(v) && !maxSessionKeysTypeTypeFound {
 
-				maxSessionKeysTypeTypeFound = true
+					maxSessionKeysTypeTypeFound = true
 
-				if v.(bool) {
-					maxSessionKeysTypeInt := &ves_io_schema.UpstreamTlsParamsType_DefaultSessionKeyCaching{}
-					maxSessionKeysTypeInt.DefaultSessionKeyCaching = &ves_io_schema.Empty{}
-					tlsParameters.MaxSessionKeysType = maxSessionKeysTypeInt
+					if v.(bool) {
+						maxSessionKeysTypeInt := &ves_io_schema.UpstreamTlsParamsType_DefaultSessionKeyCaching{}
+						maxSessionKeysTypeInt.DefaultSessionKeyCaching = &ves_io_schema.Empty{}
+						tlsParameters.MaxSessionKeysType = maxSessionKeysTypeInt
+					}
+
 				}
 
-			}
+				if v, ok := tlsParametersMapStrToI["disable_session_key_caching"]; ok && !isIntfNil(v) && !maxSessionKeysTypeTypeFound {
 
-			if v, ok := tlsParametersMapStrToI["disable_session_key_caching"]; ok && !isIntfNil(v) && !maxSessionKeysTypeTypeFound {
+					maxSessionKeysTypeTypeFound = true
 
-				maxSessionKeysTypeTypeFound = true
+					if v.(bool) {
+						maxSessionKeysTypeInt := &ves_io_schema.UpstreamTlsParamsType_DisableSessionKeyCaching{}
+						maxSessionKeysTypeInt.DisableSessionKeyCaching = &ves_io_schema.Empty{}
+						tlsParameters.MaxSessionKeysType = maxSessionKeysTypeInt
+					}
 
-				if v.(bool) {
-					maxSessionKeysTypeInt := &ves_io_schema.UpstreamTlsParamsType_DisableSessionKeyCaching{}
-					maxSessionKeysTypeInt.DisableSessionKeyCaching = &ves_io_schema.Empty{}
-					tlsParameters.MaxSessionKeysType = maxSessionKeysTypeInt
 				}
 
-			}
+				if v, ok := tlsParametersMapStrToI["max_session_keys"]; ok && !isIntfNil(v) && !maxSessionKeysTypeTypeFound {
 
-			if v, ok := tlsParametersMapStrToI["max_session_keys"]; ok && !isIntfNil(v) && !maxSessionKeysTypeTypeFound {
+					maxSessionKeysTypeTypeFound = true
+					maxSessionKeysTypeInt := &ves_io_schema.UpstreamTlsParamsType_MaxSessionKeys{}
 
-				maxSessionKeysTypeTypeFound = true
-				maxSessionKeysTypeInt := &ves_io_schema.UpstreamTlsParamsType_MaxSessionKeys{}
+					tlsParameters.MaxSessionKeysType = maxSessionKeysTypeInt
 
-				tlsParameters.MaxSessionKeysType = maxSessionKeysTypeInt
+					maxSessionKeysTypeInt.MaxSessionKeys = uint32(v.(int))
 
-				maxSessionKeysTypeInt.MaxSessionKeys = uint32(v.(int))
+				}
 
-			}
+				sniChoiceTypeFound := false
 
-			sniChoiceTypeFound := false
+				if _, ok := tlsParametersMapStrToI["disable_sni"]; ok && !sniChoiceTypeFound {
 
-			if _, ok := tlsParametersMapStrToI["disable_sni"]; ok && !sniChoiceTypeFound {
+					sniChoiceTypeFound = true
+					sniChoiceInt := &ves_io_schema.UpstreamTlsParamsType_DisableSni{}
+					sniChoiceInt.DisableSni = &ves_io_schema.Empty{}
+					tlsParameters.SniChoice = sniChoiceInt
 
-				sniChoiceTypeFound = true
-				sniChoiceInt := &ves_io_schema.UpstreamTlsParamsType_DisableSni{}
-				sniChoiceInt.DisableSni = &ves_io_schema.Empty{}
-				tlsParameters.SniChoice = sniChoiceInt
+				}
 
-			}
+				if v, ok := tlsParametersMapStrToI["sni"]; ok && !isIntfNil(v) && !sniChoiceTypeFound {
 
-			if v, ok := tlsParametersMapStrToI["sni"]; ok && !isIntfNil(v) && !sniChoiceTypeFound {
+					sniChoiceTypeFound = true
+					sniChoiceInt := &ves_io_schema.UpstreamTlsParamsType_Sni{}
 
-				sniChoiceTypeFound = true
-				sniChoiceInt := &ves_io_schema.UpstreamTlsParamsType_Sni{}
+					tlsParameters.SniChoice = sniChoiceInt
 
-				tlsParameters.SniChoice = sniChoiceInt
+					sniChoiceInt.Sni = v.(string)
 
-				sniChoiceInt.Sni = v.(string)
+				}
 
-			}
+				if _, ok := tlsParametersMapStrToI["use_host_header_as_sni"]; ok && !sniChoiceTypeFound {
 
-			if _, ok := tlsParametersMapStrToI["use_host_header_as_sni"]; ok && !sniChoiceTypeFound {
+					sniChoiceTypeFound = true
+					sniChoiceInt := &ves_io_schema.UpstreamTlsParamsType_UseHostHeaderAsSni{}
+					sniChoiceInt.UseHostHeaderAsSni = &ves_io_schema.Empty{}
+					tlsParameters.SniChoice = sniChoiceInt
 
-				sniChoiceTypeFound = true
-				sniChoiceInt := &ves_io_schema.UpstreamTlsParamsType_UseHostHeaderAsSni{}
-				sniChoiceInt.UseHostHeaderAsSni = &ves_io_schema.Empty{}
-				tlsParameters.SniChoice = sniChoiceInt
+				}
 
-			}
+				tlsParamsChoiceTypeFound := false
 
-			tlsParamsChoiceTypeFound := false
+				if v, ok := tlsParametersMapStrToI["cert_params"]; ok && !isIntfNil(v) && !tlsParamsChoiceTypeFound {
 
-			if v, ok := tlsParametersMapStrToI["cert_params"]; ok && !isIntfNil(v) && !tlsParamsChoiceTypeFound {
+					tlsParamsChoiceTypeFound = true
+					tlsParamsChoiceInt := &ves_io_schema.UpstreamTlsParamsType_CertParams{}
+					tlsParamsChoiceInt.CertParams = &ves_io_schema.UpstreamCertificateParamsType{}
+					tlsParameters.TlsParamsChoice = tlsParamsChoiceInt
 
-				tlsParamsChoiceTypeFound = true
-				tlsParamsChoiceInt := &ves_io_schema.UpstreamTlsParamsType_CertParams{}
-				tlsParamsChoiceInt.CertParams = &ves_io_schema.UpstreamCertificateParamsType{}
-				tlsParameters.TlsParamsChoice = tlsParamsChoiceInt
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
 
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
+							if v, ok := cs["certificates"]; ok && !isIntfNil(v) {
 
-					if v, ok := cs["certificates"]; ok && !isIntfNil(v) {
+								sl := v.([]interface{})
+								certificatesInt := make([]*ves_io_schema.ObjectRefType, len(sl))
+								tlsParamsChoiceInt.CertParams.Certificates = certificatesInt
+								for i, ps := range sl {
 
-						sl := v.([]interface{})
-						certificatesInt := make([]*ves_io_schema.ObjectRefType, len(sl))
-						tlsParamsChoiceInt.CertParams.Certificates = certificatesInt
-						for i, ps := range sl {
+									cMapToStrVal := ps.(map[string]interface{})
+									certificatesInt[i] = &ves_io_schema.ObjectRefType{}
 
-							cMapToStrVal := ps.(map[string]interface{})
-							certificatesInt[i] = &ves_io_schema.ObjectRefType{}
+									certificatesInt[i].Kind = "certificate"
 
-							certificatesInt[i].Kind = "certificate"
+									if v, ok := cMapToStrVal["name"]; ok && !isIntfNil(v) {
+										certificatesInt[i].Name = v.(string)
+									}
 
-							if v, ok := cMapToStrVal["name"]; ok && !isIntfNil(v) {
-								certificatesInt[i].Name = v.(string)
-							}
+									if v, ok := cMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+										certificatesInt[i].Namespace = v.(string)
+									}
 
-							if v, ok := cMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-								certificatesInt[i].Namespace = v.(string)
-							}
+									if v, ok := cMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+										certificatesInt[i].Tenant = v.(string)
+									}
 
-							if v, ok := cMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-								certificatesInt[i].Tenant = v.(string)
-							}
-
-							if v, ok := cMapToStrVal["uid"]; ok && !isIntfNil(v) {
-								certificatesInt[i].Uid = v.(string)
-							}
-
-						}
-
-					}
-
-					if v, ok := cs["cipher_suites"]; ok && !isIntfNil(v) {
-
-						ls := make([]string, len(v.([]interface{})))
-						for i, v := range v.([]interface{}) {
-							ls[i] = v.(string)
-						}
-						tlsParamsChoiceInt.CertParams.CipherSuites = ls
-
-					}
-
-					if v, ok := cs["maximum_protocol_version"]; ok && !isIntfNil(v) {
-
-						tlsParamsChoiceInt.CertParams.MaximumProtocolVersion = ves_io_schema.TlsProtocol(ves_io_schema.TlsProtocol_value[v.(string)])
-
-					}
-
-					if v, ok := cs["minimum_protocol_version"]; ok && !isIntfNil(v) {
-
-						tlsParamsChoiceInt.CertParams.MinimumProtocolVersion = ves_io_schema.TlsProtocol(ves_io_schema.TlsProtocol_value[v.(string)])
-
-					}
-
-					if v, ok := cs["validation_params"]; ok && !isIntfNil(v) {
-
-						sl := v.(*schema.Set).List()
-						validationParams := &ves_io_schema.TlsValidationParamsType{}
-						tlsParamsChoiceInt.CertParams.ValidationParams = validationParams
-						for _, set := range sl {
-							validationParamsMapStrToI := set.(map[string]interface{})
-
-							if w, ok := validationParamsMapStrToI["skip_hostname_verification"]; ok && !isIntfNil(w) {
-								validationParams.SkipHostnameVerification = w.(bool)
-							}
-
-							trustedCaChoiceTypeFound := false
-
-							if v, ok := validationParamsMapStrToI["trusted_ca"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
-
-								trustedCaChoiceTypeFound = true
-								trustedCaChoiceInt := &ves_io_schema.TlsValidationParamsType_TrustedCa{}
-								trustedCaChoiceInt.TrustedCa = &ves_io_schema.TrustedCAList{}
-								validationParams.TrustedCaChoice = trustedCaChoiceInt
-
-								sl := v.(*schema.Set).List()
-								for _, set := range sl {
-									cs := set.(map[string]interface{})
-
-									if v, ok := cs["trusted_ca_list"]; ok && !isIntfNil(v) {
-
-										sl := v.([]interface{})
-										trustedCaListInt := make([]*ves_io_schema.ObjectRefType, len(sl))
-										trustedCaChoiceInt.TrustedCa.TrustedCaList = trustedCaListInt
-										for i, ps := range sl {
-
-											tclMapToStrVal := ps.(map[string]interface{})
-											trustedCaListInt[i] = &ves_io_schema.ObjectRefType{}
-
-											trustedCaListInt[i].Kind = "trusted_ca_list"
-
-											if v, ok := tclMapToStrVal["name"]; ok && !isIntfNil(v) {
-												trustedCaListInt[i].Name = v.(string)
-											}
-
-											if v, ok := tclMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-												trustedCaListInt[i].Namespace = v.(string)
-											}
-
-											if v, ok := tclMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-												trustedCaListInt[i].Tenant = v.(string)
-											}
-
-											if v, ok := tclMapToStrVal["uid"]; ok && !isIntfNil(v) {
-												trustedCaListInt[i].Uid = v.(string)
-											}
-
-										}
-
+									if v, ok := cMapToStrVal["uid"]; ok && !isIntfNil(v) {
+										certificatesInt[i].Uid = v.(string)
 									}
 
 								}
 
 							}
 
-							if v, ok := validationParamsMapStrToI["trusted_ca_url"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
+							if v, ok := cs["cipher_suites"]; ok && !isIntfNil(v) {
 
-								trustedCaChoiceTypeFound = true
-								trustedCaChoiceInt := &ves_io_schema.TlsValidationParamsType_TrustedCaUrl{}
-
-								validationParams.TrustedCaChoice = trustedCaChoiceInt
-
-								trustedCaChoiceInt.TrustedCaUrl = v.(string)
-
-							}
-
-							if w, ok := validationParamsMapStrToI["use_volterra_trusted_ca_url"]; ok && !isIntfNil(w) {
-								validationParams.UseVolterraTrustedCaUrl = w.(bool)
-							}
-
-							if w, ok := validationParamsMapStrToI["verify_subject_alt_names"]; ok && !isIntfNil(w) {
-								ls := make([]string, len(w.([]interface{})))
-								for i, v := range w.([]interface{}) {
+								ls := make([]string, len(v.([]interface{})))
+								for i, v := range v.([]interface{}) {
 									ls[i] = v.(string)
 								}
-								validationParams.VerifySubjectAltNames = ls
+								tlsParamsChoiceInt.CertParams.CipherSuites = ls
+
+							}
+
+							if v, ok := cs["maximum_protocol_version"]; ok && !isIntfNil(v) {
+
+								tlsParamsChoiceInt.CertParams.MaximumProtocolVersion = ves_io_schema.TlsProtocol(ves_io_schema.TlsProtocol_value[v.(string)])
+
+							}
+
+							if v, ok := cs["minimum_protocol_version"]; ok && !isIntfNil(v) {
+
+								tlsParamsChoiceInt.CertParams.MinimumProtocolVersion = ves_io_schema.TlsProtocol(ves_io_schema.TlsProtocol_value[v.(string)])
+
+							}
+
+							if v, ok := cs["validation_params"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								validationParams := &ves_io_schema.TlsValidationParamsType{}
+								tlsParamsChoiceInt.CertParams.ValidationParams = validationParams
+								for _, set := range sl {
+									if set != nil {
+										validationParamsMapStrToI := set.(map[string]interface{})
+
+										if w, ok := validationParamsMapStrToI["skip_hostname_verification"]; ok && !isIntfNil(w) {
+											validationParams.SkipHostnameVerification = w.(bool)
+										}
+
+										trustedCaChoiceTypeFound := false
+
+										if v, ok := validationParamsMapStrToI["trusted_ca"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
+
+											trustedCaChoiceTypeFound = true
+											trustedCaChoiceInt := &ves_io_schema.TlsValidationParamsType_TrustedCa{}
+											trustedCaChoiceInt.TrustedCa = &ves_io_schema.TrustedCAList{}
+											validationParams.TrustedCaChoice = trustedCaChoiceInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["trusted_ca_list"]; ok && !isIntfNil(v) {
+
+														sl := v.([]interface{})
+														trustedCaListInt := make([]*ves_io_schema.ObjectRefType, len(sl))
+														trustedCaChoiceInt.TrustedCa.TrustedCaList = trustedCaListInt
+														for i, ps := range sl {
+
+															tclMapToStrVal := ps.(map[string]interface{})
+															trustedCaListInt[i] = &ves_io_schema.ObjectRefType{}
+
+															trustedCaListInt[i].Kind = "trusted_ca_list"
+
+															if v, ok := tclMapToStrVal["name"]; ok && !isIntfNil(v) {
+																trustedCaListInt[i].Name = v.(string)
+															}
+
+															if v, ok := tclMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+																trustedCaListInt[i].Namespace = v.(string)
+															}
+
+															if v, ok := tclMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+																trustedCaListInt[i].Tenant = v.(string)
+															}
+
+															if v, ok := tclMapToStrVal["uid"]; ok && !isIntfNil(v) {
+																trustedCaListInt[i].Uid = v.(string)
+															}
+
+														}
+
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := validationParamsMapStrToI["trusted_ca_url"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
+
+											trustedCaChoiceTypeFound = true
+											trustedCaChoiceInt := &ves_io_schema.TlsValidationParamsType_TrustedCaUrl{}
+
+											validationParams.TrustedCaChoice = trustedCaChoiceInt
+
+											trustedCaChoiceInt.TrustedCaUrl = v.(string)
+
+										}
+
+										if w, ok := validationParamsMapStrToI["use_volterra_trusted_ca_url"]; ok && !isIntfNil(w) {
+											validationParams.UseVolterraTrustedCaUrl = w.(bool)
+										}
+
+										if w, ok := validationParamsMapStrToI["verify_subject_alt_names"]; ok && !isIntfNil(w) {
+											ls := make([]string, len(w.([]interface{})))
+											for i, v := range w.([]interface{}) {
+												ls[i] = v.(string)
+											}
+											validationParams.VerifySubjectAltNames = ls
+										}
+
+									}
+								}
+
 							}
 
 						}
-
 					}
 
 				}
 
-			}
+				if v, ok := tlsParametersMapStrToI["common_params"]; ok && !isIntfNil(v) && !tlsParamsChoiceTypeFound {
 
-			if v, ok := tlsParametersMapStrToI["common_params"]; ok && !isIntfNil(v) && !tlsParamsChoiceTypeFound {
+					tlsParamsChoiceTypeFound = true
+					tlsParamsChoiceInt := &ves_io_schema.UpstreamTlsParamsType_CommonParams{}
+					tlsParamsChoiceInt.CommonParams = &ves_io_schema.TlsParamsType{}
+					tlsParameters.TlsParamsChoice = tlsParamsChoiceInt
 
-				tlsParamsChoiceTypeFound = true
-				tlsParamsChoiceInt := &ves_io_schema.UpstreamTlsParamsType_CommonParams{}
-				tlsParamsChoiceInt.CommonParams = &ves_io_schema.TlsParamsType{}
-				tlsParameters.TlsParamsChoice = tlsParamsChoiceInt
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
 
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
+							if v, ok := cs["cipher_suites"]; ok && !isIntfNil(v) {
 
-					if v, ok := cs["cipher_suites"]; ok && !isIntfNil(v) {
-
-						ls := make([]string, len(v.([]interface{})))
-						for i, v := range v.([]interface{}) {
-							ls[i] = v.(string)
-						}
-						tlsParamsChoiceInt.CommonParams.CipherSuites = ls
-
-					}
-
-					if v, ok := cs["maximum_protocol_version"]; ok && !isIntfNil(v) {
-
-						tlsParamsChoiceInt.CommonParams.MaximumProtocolVersion = ves_io_schema.TlsProtocol(ves_io_schema.TlsProtocol_value[v.(string)])
-
-					}
-
-					if v, ok := cs["minimum_protocol_version"]; ok && !isIntfNil(v) {
-
-						tlsParamsChoiceInt.CommonParams.MinimumProtocolVersion = ves_io_schema.TlsProtocol(ves_io_schema.TlsProtocol_value[v.(string)])
-
-					}
-
-					if v, ok := cs["tls_certificates"]; ok && !isIntfNil(v) {
-
-						sl := v.([]interface{})
-						tlsCertificates := make([]*ves_io_schema.TlsCertificateType, len(sl))
-						tlsParamsChoiceInt.CommonParams.TlsCertificates = tlsCertificates
-						for i, set := range sl {
-							tlsCertificates[i] = &ves_io_schema.TlsCertificateType{}
-							tlsCertificatesMapStrToI := set.(map[string]interface{})
-
-							if w, ok := tlsCertificatesMapStrToI["certificate_url"]; ok && !isIntfNil(w) {
-								tlsCertificates[i].CertificateUrl = w.(string)
-							}
-
-							if w, ok := tlsCertificatesMapStrToI["description"]; ok && !isIntfNil(w) {
-								tlsCertificates[i].Description = w.(string)
-							}
-
-							ocspStaplingChoiceTypeFound := false
-
-							if v, ok := tlsCertificatesMapStrToI["custom_hash_algorithms"]; ok && !isIntfNil(v) && !ocspStaplingChoiceTypeFound {
-
-								ocspStaplingChoiceTypeFound = true
-								ocspStaplingChoiceInt := &ves_io_schema.TlsCertificateType_CustomHashAlgorithms{}
-								ocspStaplingChoiceInt.CustomHashAlgorithms = &ves_io_schema.HashAlgorithms{}
-								tlsCertificates[i].OcspStaplingChoice = ocspStaplingChoiceInt
-
-								sl := v.(*schema.Set).List()
-								for _, set := range sl {
-									cs := set.(map[string]interface{})
-
-									if v, ok := cs["hash_algorithms"]; ok && !isIntfNil(v) {
-
-										hash_algorithmsList := []ves_io_schema.HashAlgorithm{}
-										for _, j := range v.([]interface{}) {
-											hash_algorithmsList = append(hash_algorithmsList, ves_io_schema.HashAlgorithm(ves_io_schema.HashAlgorithm_value[j.(string)]))
-										}
-										ocspStaplingChoiceInt.CustomHashAlgorithms.HashAlgorithms = hash_algorithmsList
-
-									}
-
-								}
-
-							}
-
-							if _, ok := tlsCertificatesMapStrToI["disable_ocsp_stapling"]; ok && !ocspStaplingChoiceTypeFound {
-
-								ocspStaplingChoiceTypeFound = true
-								ocspStaplingChoiceInt := &ves_io_schema.TlsCertificateType_DisableOcspStapling{}
-								ocspStaplingChoiceInt.DisableOcspStapling = &ves_io_schema.Empty{}
-								tlsCertificates[i].OcspStaplingChoice = ocspStaplingChoiceInt
-
-							}
-
-							if _, ok := tlsCertificatesMapStrToI["use_system_defaults"]; ok && !ocspStaplingChoiceTypeFound {
-
-								ocspStaplingChoiceTypeFound = true
-								ocspStaplingChoiceInt := &ves_io_schema.TlsCertificateType_UseSystemDefaults{}
-								ocspStaplingChoiceInt.UseSystemDefaults = &ves_io_schema.Empty{}
-								tlsCertificates[i].OcspStaplingChoice = ocspStaplingChoiceInt
-
-							}
-
-							if v, ok := tlsCertificatesMapStrToI["private_key"]; ok && !isIntfNil(v) {
-
-								sl := v.(*schema.Set).List()
-								privateKey := &ves_io_schema.SecretType{}
-								tlsCertificates[i].PrivateKey = privateKey
-								for _, set := range sl {
-									privateKeyMapStrToI := set.(map[string]interface{})
-
-									if v, ok := privateKeyMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
-
-										sl := v.(*schema.Set).List()
-										blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
-										privateKey.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
-										for _, set := range sl {
-											blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
-
-											if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
-												blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
-											}
-
-											if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
-												blindfoldSecretInfoInternal.Location = w.(string)
-											}
-
-											if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
-												blindfoldSecretInfoInternal.StoreProvider = w.(string)
-											}
-
-										}
-
-									}
-
-									if v, ok := privateKeyMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
-
-										privateKey.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
-
-									}
-
-									secretInfoOneofTypeFound := false
-
-									if v, ok := privateKeyMapStrToI["blindfold_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
-
-										secretInfoOneofTypeFound = true
-										secretInfoOneofInt := &ves_io_schema.SecretType_BlindfoldSecretInfo{}
-										secretInfoOneofInt.BlindfoldSecretInfo = &ves_io_schema.BlindfoldSecretInfoType{}
-										privateKey.SecretInfoOneof = secretInfoOneofInt
-
-										sl := v.(*schema.Set).List()
-										for _, set := range sl {
-											cs := set.(map[string]interface{})
-
-											if v, ok := cs["decryption_provider"]; ok && !isIntfNil(v) {
-
-												secretInfoOneofInt.BlindfoldSecretInfo.DecryptionProvider = v.(string)
-
-											}
-
-											if v, ok := cs["location"]; ok && !isIntfNil(v) {
-
-												secretInfoOneofInt.BlindfoldSecretInfo.Location = v.(string)
-
-											}
-
-											if v, ok := cs["store_provider"]; ok && !isIntfNil(v) {
-
-												secretInfoOneofInt.BlindfoldSecretInfo.StoreProvider = v.(string)
-
-											}
-
-										}
-
-									}
-
-									if v, ok := privateKeyMapStrToI["clear_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
-
-										secretInfoOneofTypeFound = true
-										secretInfoOneofInt := &ves_io_schema.SecretType_ClearSecretInfo{}
-										secretInfoOneofInt.ClearSecretInfo = &ves_io_schema.ClearSecretInfoType{}
-										privateKey.SecretInfoOneof = secretInfoOneofInt
-
-										sl := v.(*schema.Set).List()
-										for _, set := range sl {
-											cs := set.(map[string]interface{})
-
-											if v, ok := cs["provider"]; ok && !isIntfNil(v) {
-
-												secretInfoOneofInt.ClearSecretInfo.Provider = v.(string)
-
-											}
-
-											if v, ok := cs["url"]; ok && !isIntfNil(v) {
-
-												secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
-
-											}
-
-										}
-
-									}
-
-									if v, ok := privateKeyMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
-
-										secretInfoOneofTypeFound = true
-										secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
-										secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
-										privateKey.SecretInfoOneof = secretInfoOneofInt
-
-										sl := v.(*schema.Set).List()
-										for _, set := range sl {
-											cs := set.(map[string]interface{})
-
-											if v, ok := cs["key"]; ok && !isIntfNil(v) {
-
-												secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
-
-											}
-
-											if v, ok := cs["location"]; ok && !isIntfNil(v) {
-
-												secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
-
-											}
-
-											if v, ok := cs["provider"]; ok && !isIntfNil(v) {
-
-												secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
-
-											}
-
-											if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
-
-												secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
-
-											}
-
-											if v, ok := cs["version"]; ok && !isIntfNil(v) {
-
-												secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
-
-											}
-
-										}
-
-									}
-
-									if v, ok := privateKeyMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
-
-										secretInfoOneofTypeFound = true
-										secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
-										secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
-										privateKey.SecretInfoOneof = secretInfoOneofInt
-
-										sl := v.(*schema.Set).List()
-										for _, set := range sl {
-											cs := set.(map[string]interface{})
-
-											if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-												secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
-
-											}
-
-										}
-
-									}
-
-								}
-
-							}
-
-						}
-
-					}
-
-					if v, ok := cs["trusted_ca_url"]; ok && !isIntfNil(v) {
-
-						tlsParamsChoiceInt.CommonParams.TrustedCaUrl = v.(string)
-
-					}
-
-					if v, ok := cs["validation_params"]; ok && !isIntfNil(v) {
-
-						sl := v.(*schema.Set).List()
-						validationParams := &ves_io_schema.TlsValidationParamsType{}
-						tlsParamsChoiceInt.CommonParams.ValidationParams = validationParams
-						for _, set := range sl {
-							validationParamsMapStrToI := set.(map[string]interface{})
-
-							if w, ok := validationParamsMapStrToI["skip_hostname_verification"]; ok && !isIntfNil(w) {
-								validationParams.SkipHostnameVerification = w.(bool)
-							}
-
-							trustedCaChoiceTypeFound := false
-
-							if v, ok := validationParamsMapStrToI["trusted_ca"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
-
-								trustedCaChoiceTypeFound = true
-								trustedCaChoiceInt := &ves_io_schema.TlsValidationParamsType_TrustedCa{}
-								trustedCaChoiceInt.TrustedCa = &ves_io_schema.TrustedCAList{}
-								validationParams.TrustedCaChoice = trustedCaChoiceInt
-
-								sl := v.(*schema.Set).List()
-								for _, set := range sl {
-									cs := set.(map[string]interface{})
-
-									if v, ok := cs["trusted_ca_list"]; ok && !isIntfNil(v) {
-
-										sl := v.([]interface{})
-										trustedCaListInt := make([]*ves_io_schema.ObjectRefType, len(sl))
-										trustedCaChoiceInt.TrustedCa.TrustedCaList = trustedCaListInt
-										for i, ps := range sl {
-
-											tclMapToStrVal := ps.(map[string]interface{})
-											trustedCaListInt[i] = &ves_io_schema.ObjectRefType{}
-
-											trustedCaListInt[i].Kind = "trusted_ca_list"
-
-											if v, ok := tclMapToStrVal["name"]; ok && !isIntfNil(v) {
-												trustedCaListInt[i].Name = v.(string)
-											}
-
-											if v, ok := tclMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-												trustedCaListInt[i].Namespace = v.(string)
-											}
-
-											if v, ok := tclMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-												trustedCaListInt[i].Tenant = v.(string)
-											}
-
-											if v, ok := tclMapToStrVal["uid"]; ok && !isIntfNil(v) {
-												trustedCaListInt[i].Uid = v.(string)
-											}
-
-										}
-
-									}
-
-								}
-
-							}
-
-							if v, ok := validationParamsMapStrToI["trusted_ca_url"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
-
-								trustedCaChoiceTypeFound = true
-								trustedCaChoiceInt := &ves_io_schema.TlsValidationParamsType_TrustedCaUrl{}
-
-								validationParams.TrustedCaChoice = trustedCaChoiceInt
-
-								trustedCaChoiceInt.TrustedCaUrl = v.(string)
-
-							}
-
-							if w, ok := validationParamsMapStrToI["use_volterra_trusted_ca_url"]; ok && !isIntfNil(w) {
-								validationParams.UseVolterraTrustedCaUrl = w.(bool)
-							}
-
-							if w, ok := validationParamsMapStrToI["verify_subject_alt_names"]; ok && !isIntfNil(w) {
-								ls := make([]string, len(w.([]interface{})))
-								for i, v := range w.([]interface{}) {
+								ls := make([]string, len(v.([]interface{})))
+								for i, v := range v.([]interface{}) {
 									ls[i] = v.(string)
 								}
-								validationParams.VerifySubjectAltNames = ls
+								tlsParamsChoiceInt.CommonParams.CipherSuites = ls
+
+							}
+
+							if v, ok := cs["maximum_protocol_version"]; ok && !isIntfNil(v) {
+
+								tlsParamsChoiceInt.CommonParams.MaximumProtocolVersion = ves_io_schema.TlsProtocol(ves_io_schema.TlsProtocol_value[v.(string)])
+
+							}
+
+							if v, ok := cs["minimum_protocol_version"]; ok && !isIntfNil(v) {
+
+								tlsParamsChoiceInt.CommonParams.MinimumProtocolVersion = ves_io_schema.TlsProtocol(ves_io_schema.TlsProtocol_value[v.(string)])
+
+							}
+
+							if v, ok := cs["tls_certificates"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								tlsCertificates := make([]*ves_io_schema.TlsCertificateType, len(sl))
+								tlsParamsChoiceInt.CommonParams.TlsCertificates = tlsCertificates
+								for i, set := range sl {
+									if set != nil {
+										tlsCertificates[i] = &ves_io_schema.TlsCertificateType{}
+										tlsCertificatesMapStrToI := set.(map[string]interface{})
+
+										if w, ok := tlsCertificatesMapStrToI["certificate_url"]; ok && !isIntfNil(w) {
+											tlsCertificates[i].CertificateUrl = w.(string)
+										}
+
+										if w, ok := tlsCertificatesMapStrToI["description"]; ok && !isIntfNil(w) {
+											tlsCertificates[i].Description = w.(string)
+										}
+
+										ocspStaplingChoiceTypeFound := false
+
+										if v, ok := tlsCertificatesMapStrToI["custom_hash_algorithms"]; ok && !isIntfNil(v) && !ocspStaplingChoiceTypeFound {
+
+											ocspStaplingChoiceTypeFound = true
+											ocspStaplingChoiceInt := &ves_io_schema.TlsCertificateType_CustomHashAlgorithms{}
+											ocspStaplingChoiceInt.CustomHashAlgorithms = &ves_io_schema.HashAlgorithms{}
+											tlsCertificates[i].OcspStaplingChoice = ocspStaplingChoiceInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["hash_algorithms"]; ok && !isIntfNil(v) {
+
+														hash_algorithmsList := []ves_io_schema.HashAlgorithm{}
+														for _, j := range v.([]interface{}) {
+															hash_algorithmsList = append(hash_algorithmsList, ves_io_schema.HashAlgorithm(ves_io_schema.HashAlgorithm_value[j.(string)]))
+														}
+														ocspStaplingChoiceInt.CustomHashAlgorithms.HashAlgorithms = hash_algorithmsList
+
+													}
+
+												}
+											}
+
+										}
+
+										if _, ok := tlsCertificatesMapStrToI["disable_ocsp_stapling"]; ok && !ocspStaplingChoiceTypeFound {
+
+											ocspStaplingChoiceTypeFound = true
+											ocspStaplingChoiceInt := &ves_io_schema.TlsCertificateType_DisableOcspStapling{}
+											ocspStaplingChoiceInt.DisableOcspStapling = &ves_io_schema.Empty{}
+											tlsCertificates[i].OcspStaplingChoice = ocspStaplingChoiceInt
+
+										}
+
+										if _, ok := tlsCertificatesMapStrToI["use_system_defaults"]; ok && !ocspStaplingChoiceTypeFound {
+
+											ocspStaplingChoiceTypeFound = true
+											ocspStaplingChoiceInt := &ves_io_schema.TlsCertificateType_UseSystemDefaults{}
+											ocspStaplingChoiceInt.UseSystemDefaults = &ves_io_schema.Empty{}
+											tlsCertificates[i].OcspStaplingChoice = ocspStaplingChoiceInt
+
+										}
+
+										if v, ok := tlsCertificatesMapStrToI["private_key"]; ok && !isIntfNil(v) {
+
+											sl := v.([]interface{})
+											privateKey := &ves_io_schema.SecretType{}
+											tlsCertificates[i].PrivateKey = privateKey
+											for _, set := range sl {
+												if set != nil {
+													privateKeyMapStrToI := set.(map[string]interface{})
+
+													if v, ok := privateKeyMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
+
+														sl := v.([]interface{})
+														blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
+														privateKey.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
+														for _, set := range sl {
+															if set != nil {
+																blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
+
+																if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
+																	blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
+																}
+
+																if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
+																	blindfoldSecretInfoInternal.Location = w.(string)
+																}
+
+																if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
+																	blindfoldSecretInfoInternal.StoreProvider = w.(string)
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := privateKeyMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
+
+														privateKey.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+													}
+
+													secretInfoOneofTypeFound := false
+
+													if v, ok := privateKeyMapStrToI["blindfold_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+														secretInfoOneofTypeFound = true
+														secretInfoOneofInt := &ves_io_schema.SecretType_BlindfoldSecretInfo{}
+														secretInfoOneofInt.BlindfoldSecretInfo = &ves_io_schema.BlindfoldSecretInfoType{}
+														privateKey.SecretInfoOneof = secretInfoOneofInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["decryption_provider"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.BlindfoldSecretInfo.DecryptionProvider = v.(string)
+
+																}
+
+																if v, ok := cs["location"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.BlindfoldSecretInfo.Location = v.(string)
+
+																}
+
+																if v, ok := cs["store_provider"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.BlindfoldSecretInfo.StoreProvider = v.(string)
+
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := privateKeyMapStrToI["clear_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+														secretInfoOneofTypeFound = true
+														secretInfoOneofInt := &ves_io_schema.SecretType_ClearSecretInfo{}
+														secretInfoOneofInt.ClearSecretInfo = &ves_io_schema.ClearSecretInfoType{}
+														privateKey.SecretInfoOneof = secretInfoOneofInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.ClearSecretInfo.Provider = v.(string)
+
+																}
+
+																if v, ok := cs["url"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := privateKeyMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+														secretInfoOneofTypeFound = true
+														secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
+														secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
+														privateKey.SecretInfoOneof = secretInfoOneofInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["key"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
+																}
+
+																if v, ok := cs["location"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
+																}
+
+																if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
+																}
+
+																if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+																}
+
+																if v, ok := cs["version"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := privateKeyMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+														secretInfoOneofTypeFound = true
+														secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
+														secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
+														privateKey.SecretInfoOneof = secretInfoOneofInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
+
+																}
+
+															}
+														}
+
+													}
+
+												}
+											}
+
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := cs["trusted_ca_url"]; ok && !isIntfNil(v) {
+
+								tlsParamsChoiceInt.CommonParams.TrustedCaUrl = v.(string)
+
+							}
+
+							if v, ok := cs["validation_params"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								validationParams := &ves_io_schema.TlsValidationParamsType{}
+								tlsParamsChoiceInt.CommonParams.ValidationParams = validationParams
+								for _, set := range sl {
+									if set != nil {
+										validationParamsMapStrToI := set.(map[string]interface{})
+
+										if w, ok := validationParamsMapStrToI["skip_hostname_verification"]; ok && !isIntfNil(w) {
+											validationParams.SkipHostnameVerification = w.(bool)
+										}
+
+										trustedCaChoiceTypeFound := false
+
+										if v, ok := validationParamsMapStrToI["trusted_ca"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
+
+											trustedCaChoiceTypeFound = true
+											trustedCaChoiceInt := &ves_io_schema.TlsValidationParamsType_TrustedCa{}
+											trustedCaChoiceInt.TrustedCa = &ves_io_schema.TrustedCAList{}
+											validationParams.TrustedCaChoice = trustedCaChoiceInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["trusted_ca_list"]; ok && !isIntfNil(v) {
+
+														sl := v.([]interface{})
+														trustedCaListInt := make([]*ves_io_schema.ObjectRefType, len(sl))
+														trustedCaChoiceInt.TrustedCa.TrustedCaList = trustedCaListInt
+														for i, ps := range sl {
+
+															tclMapToStrVal := ps.(map[string]interface{})
+															trustedCaListInt[i] = &ves_io_schema.ObjectRefType{}
+
+															trustedCaListInt[i].Kind = "trusted_ca_list"
+
+															if v, ok := tclMapToStrVal["name"]; ok && !isIntfNil(v) {
+																trustedCaListInt[i].Name = v.(string)
+															}
+
+															if v, ok := tclMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+																trustedCaListInt[i].Namespace = v.(string)
+															}
+
+															if v, ok := tclMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+																trustedCaListInt[i].Tenant = v.(string)
+															}
+
+															if v, ok := tclMapToStrVal["uid"]; ok && !isIntfNil(v) {
+																trustedCaListInt[i].Uid = v.(string)
+															}
+
+														}
+
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := validationParamsMapStrToI["trusted_ca_url"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
+
+											trustedCaChoiceTypeFound = true
+											trustedCaChoiceInt := &ves_io_schema.TlsValidationParamsType_TrustedCaUrl{}
+
+											validationParams.TrustedCaChoice = trustedCaChoiceInt
+
+											trustedCaChoiceInt.TrustedCaUrl = v.(string)
+
+										}
+
+										if w, ok := validationParamsMapStrToI["use_volterra_trusted_ca_url"]; ok && !isIntfNil(w) {
+											validationParams.UseVolterraTrustedCaUrl = w.(bool)
+										}
+
+										if w, ok := validationParamsMapStrToI["verify_subject_alt_names"]; ok && !isIntfNil(w) {
+											ls := make([]string, len(w.([]interface{})))
+											for i, v := range w.([]interface{}) {
+												ls[i] = v.(string)
+											}
+											validationParams.VerifySubjectAltNames = ls
+										}
+
+									}
+								}
+
 							}
 
 						}
-
 					}
 
 				}
 
 			}
-
 		}
 
 	}

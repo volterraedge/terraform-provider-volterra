@@ -158,6 +158,138 @@ func AcceleratedNetworkingTypeValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *AdminUserCredentialsType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *AdminUserCredentialsType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+// Redact squashes sensitive info in m (in-place)
+func (m *AdminUserCredentialsType) Redact(ctx context.Context) error {
+	// clear fields with confidential option set (at message or field level)
+	if m == nil {
+		return nil
+	}
+
+	if err := m.GetAdminPassword().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting AdminUserCredentialsType.admin_password")
+	}
+
+	return nil
+}
+
+func (m *AdminUserCredentialsType) DeepCopy() *AdminUserCredentialsType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &AdminUserCredentialsType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *AdminUserCredentialsType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *AdminUserCredentialsType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return AdminUserCredentialsTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateAdminUserCredentialsType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateAdminUserCredentialsType) SshKeyValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for ssh_key")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateAdminUserCredentialsType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*AdminUserCredentialsType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *AdminUserCredentialsType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["admin_password"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("admin_password"))
+		if err := fv(ctx, m.GetAdminPassword(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["ssh_key"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("ssh_key"))
+		if err := fv(ctx, m.GetSshKey(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultAdminUserCredentialsTypeValidator = func() *ValidateAdminUserCredentialsType {
+	v := &ValidateAdminUserCredentialsType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhSshKey := v.SshKeyValidationRuleHandler
+	rulesSshKey := map[string]string{
+		"ves.io.schema.rules.string.max_len": "8192",
+	}
+	vFn, err = vrhSshKey(rulesSshKey)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AdminUserCredentialsType.ssh_key: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["ssh_key"] = vFn
+
+	v.FldValidators["admin_password"] = ves_io_schema.SecretTypeValidator().Validate
+
+	return v
+}()
+
+func AdminUserCredentialsTypeValidator() db.Validator {
+	return DefaultAdminUserCredentialsTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *AdvertiseCustom) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -2295,6 +2427,176 @@ func DownstreamTlsValidationContextValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *ExistingTGWType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *ExistingTGWType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *ExistingTGWType) DeepCopy() *ExistingTGWType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &ExistingTGWType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *ExistingTGWType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *ExistingTGWType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return ExistingTGWTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateExistingTGWType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateExistingTGWType) TgwIdValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for tgw_id")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateExistingTGWType) TgwAsnValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for tgw_asn")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateExistingTGWType) VolterraSiteAsnValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for volterra_site_asn")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateExistingTGWType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*ExistingTGWType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *ExistingTGWType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["tgw_asn"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("tgw_asn"))
+		if err := fv(ctx, m.GetTgwAsn(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["tgw_id"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("tgw_id"))
+		if err := fv(ctx, m.GetTgwId(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["volterra_site_asn"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("volterra_site_asn"))
+		if err := fv(ctx, m.GetVolterraSiteAsn(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultExistingTGWTypeValidator = func() *ValidateExistingTGWType {
+	v := &ValidateExistingTGWType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhTgwId := v.TgwIdValidationRuleHandler
+	rulesTgwId := map[string]string{
+		"ves.io.schema.rules.string.max_len": "64",
+		"ves.io.schema.rules.string.pattern": "^(tgw-)([a-z0-9]{8}|[a-z0-9]{17})$",
+	}
+	vFn, err = vrhTgwId(rulesTgwId)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ExistingTGWType.tgw_id: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["tgw_id"] = vFn
+
+	vrhTgwAsn := v.TgwAsnValidationRuleHandler
+	rulesTgwAsn := map[string]string{
+		"ves.io.schema.rules.uint32.gt":  "0",
+		"ves.io.schema.rules.uint32.lte": "65535",
+	}
+	vFn, err = vrhTgwAsn(rulesTgwAsn)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ExistingTGWType.tgw_asn: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["tgw_asn"] = vFn
+
+	vrhVolterraSiteAsn := v.VolterraSiteAsnValidationRuleHandler
+	rulesVolterraSiteAsn := map[string]string{
+		"ves.io.schema.rules.uint32.gt":  "0",
+		"ves.io.schema.rules.uint32.lte": "65535",
+	}
+	vFn, err = vrhVolterraSiteAsn(rulesVolterraSiteAsn)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ExistingTGWType.volterra_site_asn: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["volterra_site_asn"] = vFn
+
+	return v
+}()
+
+func ExistingTGWTypeValidator() db.Validator {
+	return DefaultExistingTGWTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *GlobalConnectorType) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -3733,6 +4035,194 @@ func MasterNodeValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *NetworkSelectType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *NetworkSelectType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *NetworkSelectType) DeepCopy() *NetworkSelectType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &NetworkSelectType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *NetworkSelectType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *NetworkSelectType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return NetworkSelectTypeValidator().Validate(ctx, m, opts...)
+}
+
+func (m *NetworkSelectType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetNetworkChoiceDRefInfo()
+
+}
+
+func (m *NetworkSelectType) GetNetworkChoiceDRefInfo() ([]db.DRefInfo, error) {
+	switch m.GetNetworkChoice().(type) {
+	case *NetworkSelectType_SiteLocalNetwork:
+
+		return nil, nil
+
+	case *NetworkSelectType_SiteLocalInsideNetwork:
+
+		return nil, nil
+
+	case *NetworkSelectType_SegmentNetwork:
+
+		vref := m.GetSegmentNetwork()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("segment.Object")
+		dri := db.DRefInfo{
+			RefdType:   "segment.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "segment_network",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+
+	default:
+		return nil, nil
+	}
+}
+
+// GetNetworkChoiceDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *NetworkSelectType) GetNetworkChoiceDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+
+	switch m.GetNetworkChoice().(type) {
+	case *NetworkSelectType_SiteLocalNetwork:
+
+	case *NetworkSelectType_SiteLocalInsideNetwork:
+
+	case *NetworkSelectType_SegmentNetwork:
+		refdType, err := d.TypeForEntryKind("", "", "segment.Object")
+		if err != nil {
+			return nil, errors.Wrap(err, "Cannot find type for kind: segment")
+		}
+
+		vref := m.GetSegmentNetwork()
+		if vref == nil {
+			return nil, nil
+		}
+		ref := &ves_io_schema.ObjectRefType{
+			Kind:      "segment.Object",
+			Tenant:    vref.Tenant,
+			Namespace: vref.Namespace,
+			Name:      vref.Name,
+		}
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
+
+	}
+
+	return entries, nil
+}
+
+type ValidateNetworkSelectType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateNetworkSelectType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*NetworkSelectType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *NetworkSelectType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	switch m.GetNetworkChoice().(type) {
+	case *NetworkSelectType_SiteLocalNetwork:
+		if fv, exists := v.FldValidators["network_choice.site_local_network"]; exists {
+			val := m.GetNetworkChoice().(*NetworkSelectType_SiteLocalNetwork).SiteLocalNetwork
+			vOpts := append(opts,
+				db.WithValidateField("network_choice"),
+				db.WithValidateField("site_local_network"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *NetworkSelectType_SiteLocalInsideNetwork:
+		if fv, exists := v.FldValidators["network_choice.site_local_inside_network"]; exists {
+			val := m.GetNetworkChoice().(*NetworkSelectType_SiteLocalInsideNetwork).SiteLocalInsideNetwork
+			vOpts := append(opts,
+				db.WithValidateField("network_choice"),
+				db.WithValidateField("site_local_inside_network"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *NetworkSelectType_SegmentNetwork:
+		if fv, exists := v.FldValidators["network_choice.segment_network"]; exists {
+			val := m.GetNetworkChoice().(*NetworkSelectType_SegmentNetwork).SegmentNetwork
+			vOpts := append(opts,
+				db.WithValidateField("network_choice"),
+				db.WithValidateField("segment_network"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultNetworkSelectTypeValidator = func() *ValidateNetworkSelectType {
+	v := &ValidateNetworkSelectType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	v.FldValidators["network_choice.segment_network"] = ObjectRefTypeValidator().Validate
+
+	return v
+}()
+
+func NetworkSelectTypeValidator() db.Validator {
+	return DefaultNetworkSelectTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *ObjectRefType) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -4930,6 +5420,101 @@ func PrefixStringListTypeValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *ProactiveMonitoringChoice) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *ProactiveMonitoringChoice) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *ProactiveMonitoringChoice) DeepCopy() *ProactiveMonitoringChoice {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &ProactiveMonitoringChoice{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *ProactiveMonitoringChoice) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *ProactiveMonitoringChoice) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return ProactiveMonitoringChoiceValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateProactiveMonitoringChoice struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateProactiveMonitoringChoice) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*ProactiveMonitoringChoice)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *ProactiveMonitoringChoice got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	switch m.GetProactiveMonitoringChoice().(type) {
+	case *ProactiveMonitoringChoice_ProactiveMonitoringEnable:
+		if fv, exists := v.FldValidators["proactive_monitoring_choice.proactive_monitoring_enable"]; exists {
+			val := m.GetProactiveMonitoringChoice().(*ProactiveMonitoringChoice_ProactiveMonitoringEnable).ProactiveMonitoringEnable
+			vOpts := append(opts,
+				db.WithValidateField("proactive_monitoring_choice"),
+				db.WithValidateField("proactive_monitoring_enable"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ProactiveMonitoringChoice_ProactiveMonitoringDisable:
+		if fv, exists := v.FldValidators["proactive_monitoring_choice.proactive_monitoring_disable"]; exists {
+			val := m.GetProactiveMonitoringChoice().(*ProactiveMonitoringChoice_ProactiveMonitoringDisable).ProactiveMonitoringDisable
+			vOpts := append(opts,
+				db.WithValidateField("proactive_monitoring_choice"),
+				db.WithValidateField("proactive_monitoring_disable"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultProactiveMonitoringChoiceValidator = func() *ValidateProactiveMonitoringChoice {
+	v := &ValidateProactiveMonitoringChoice{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func ProactiveMonitoringChoiceValidator() db.Validator {
+	return DefaultProactiveMonitoringChoiceValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *RegionalEdgeSelection) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -6111,6 +6696,279 @@ var DefaultSpecificREValidator = func() *ValidateSpecificRE {
 
 func SpecificREValidator() db.Validator {
 	return DefaultSpecificREValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *TGWAssignedASNType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *TGWAssignedASNType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *TGWAssignedASNType) DeepCopy() *TGWAssignedASNType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &TGWAssignedASNType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *TGWAssignedASNType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *TGWAssignedASNType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return TGWAssignedASNTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateTGWAssignedASNType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateTGWAssignedASNType) TgwAsnValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for tgw_asn")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateTGWAssignedASNType) VolterraSiteAsnValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for volterra_site_asn")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateTGWAssignedASNType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*TGWAssignedASNType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *TGWAssignedASNType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["tgw_asn"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("tgw_asn"))
+		if err := fv(ctx, m.GetTgwAsn(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["volterra_site_asn"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("volterra_site_asn"))
+		if err := fv(ctx, m.GetVolterraSiteAsn(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultTGWAssignedASNTypeValidator = func() *ValidateTGWAssignedASNType {
+	v := &ValidateTGWAssignedASNType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhTgwAsn := v.TgwAsnValidationRuleHandler
+	rulesTgwAsn := map[string]string{
+		"ves.io.schema.rules.uint32.gt":  "64512",
+		"ves.io.schema.rules.uint32.lte": "65534",
+	}
+	vFn, err = vrhTgwAsn(rulesTgwAsn)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for TGWAssignedASNType.tgw_asn: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["tgw_asn"] = vFn
+
+	vrhVolterraSiteAsn := v.VolterraSiteAsnValidationRuleHandler
+	rulesVolterraSiteAsn := map[string]string{
+		"ves.io.schema.rules.uint32.gt":  "0",
+		"ves.io.schema.rules.uint32.lte": "65535",
+	}
+	vFn, err = vrhVolterraSiteAsn(rulesVolterraSiteAsn)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for TGWAssignedASNType.volterra_site_asn: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["volterra_site_asn"] = vFn
+
+	return v
+}()
+
+func TGWAssignedASNTypeValidator() db.Validator {
+	return DefaultTGWAssignedASNTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *TGWParamsType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *TGWParamsType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *TGWParamsType) DeepCopy() *TGWParamsType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &TGWParamsType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *TGWParamsType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *TGWParamsType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return TGWParamsTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateTGWParamsType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateTGWParamsType) AsnChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for asn_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateTGWParamsType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*TGWParamsType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *TGWParamsType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["asn_choice"]; exists {
+		val := m.GetAsnChoice()
+		vOpts := append(opts,
+			db.WithValidateField("asn_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetAsnChoice().(type) {
+	case *TGWParamsType_SystemGenerated:
+		if fv, exists := v.FldValidators["asn_choice.system_generated"]; exists {
+			val := m.GetAsnChoice().(*TGWParamsType_SystemGenerated).SystemGenerated
+			vOpts := append(opts,
+				db.WithValidateField("asn_choice"),
+				db.WithValidateField("system_generated"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *TGWParamsType_UserAssigned:
+		if fv, exists := v.FldValidators["asn_choice.user_assigned"]; exists {
+			val := m.GetAsnChoice().(*TGWParamsType_UserAssigned).UserAssigned
+			vOpts := append(opts,
+				db.WithValidateField("asn_choice"),
+				db.WithValidateField("user_assigned"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultTGWParamsTypeValidator = func() *ValidateTGWParamsType {
+	v := &ValidateTGWParamsType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhAsnChoice := v.AsnChoiceValidationRuleHandler
+	rulesAsnChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhAsnChoice(rulesAsnChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for TGWParamsType.asn_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["asn_choice"] = vFn
+
+	v.FldValidators["asn_choice.user_assigned"] = TGWAssignedASNTypeValidator().Validate
+
+	return v
+}()
+
+func TGWParamsTypeValidator() db.Validator {
+	return DefaultTGWParamsTypeValidator
 }
 
 // augmented methods on protoc/std generated struct

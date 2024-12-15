@@ -1,9 +1,9 @@
 ---
 
 page_title: "Volterra: k8s_cluster_role"
-description: "The k8s_cluster_role allows CRUD of K8s Cluster Role resource on Volterra SaaS"
 
----
+description: "The k8s_cluster_role allows CRUD of K8s Cluster Role resource on Volterra SaaS"
+---------------------------------------------------------------------------------------------
 
 Resource volterra_k8s_cluster_role
 ==================================

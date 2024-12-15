@@ -142,6 +142,15 @@ func (c *CustomAPIGrpcClient) doRPCRenewServiceCredentials(ctx context.Context, 
 	return rsp, err
 }
 
+func (c *CustomAPIGrpcClient) doRPCReplaceServiceCredentials(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
+	req := &ReplaceServiceCredentialsRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.api_credential.ReplaceServiceCredentialsRequest", yamlReq)
+	}
+	rsp, err := c.grpcClient.ReplaceServiceCredentials(ctx, req, opts...)
+	return rsp, err
+}
+
 func (c *CustomAPIGrpcClient) doRPCRevoke(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &GetRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -222,6 +231,8 @@ func NewCustomAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 	rpcFns["Renew"] = ccl.doRPCRenew
 
 	rpcFns["RenewServiceCredentials"] = ccl.doRPCRenewServiceCredentials
+
+	rpcFns["ReplaceServiceCredentials"] = ccl.doRPCReplaceServiceCredentials
 
 	rpcFns["Revoke"] = ccl.doRPCRevoke
 
@@ -1263,6 +1274,94 @@ func (c *CustomAPIRestClient) doRPCRenewServiceCredentials(ctx context.Context, 
 	return pbRsp, nil
 }
 
+func (c *CustomAPIRestClient) doRPCReplaceServiceCredentials(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
+	if callOpts.URI == "" {
+		return nil, fmt.Errorf("Error, URI should be specified, got empty")
+	}
+	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
+
+	yamlReq := callOpts.YAMLReq
+	req := &ReplaceServiceCredentialsRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.api_credential.ReplaceServiceCredentialsRequest: %s", yamlReq, err)
+	}
+
+	var hReq *http.Request
+	hm := strings.ToLower(callOpts.HTTPMethod)
+	switch hm {
+	case "post", "put":
+		jsn, err := codec.ToJSON(req, codec.ToWithUseProtoFieldName())
+		if err != nil {
+			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
+		}
+		var op string
+		if hm == "post" {
+			op = http.MethodPost
+		} else {
+			op = http.MethodPut
+		}
+		newReq, err := http.NewRequest(op, url, bytes.NewBuffer([]byte(jsn)))
+		if err != nil {
+			return nil, errors.Wrapf(err, "Creating new HTTP %s request for custom API", op)
+		}
+		hReq = newReq
+	case "get":
+		newReq, err := http.NewRequest(http.MethodGet, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP GET request for custom API")
+		}
+		hReq = newReq
+		q := hReq.URL.Query()
+		_ = q
+		q.Add("name", fmt.Sprintf("%v", req.Name))
+		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
+		q.Add("namespace_access", fmt.Sprintf("%v", req.NamespaceAccess))
+		for _, item := range req.UserGroupNames {
+			q.Add("user_group_names", fmt.Sprintf("%v", item))
+		}
+
+		hReq.URL.RawQuery += q.Encode()
+	case "delete":
+		newReq, err := http.NewRequest(http.MethodDelete, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP DELETE request for custom API")
+		}
+		hReq = newReq
+	default:
+		return nil, fmt.Errorf("Error, invalid/empty HTTPMethod(%s) specified, should be POST|DELETE|GET", callOpts.HTTPMethod)
+	}
+	hReq = hReq.WithContext(ctx)
+	hReq.Header.Set("Content-Type", "application/json")
+	client.AddHdrsToReq(callOpts.Headers, hReq)
+
+	rsp, err := c.client.Do(hReq)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient")
+	}
+	defer rsp.Body.Close()
+
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
+		body, err := io.ReadAll(rsp.Body)
+		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
+	}
+
+	body, err := io.ReadAll(rsp.Body)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient read body")
+	}
+	pbRsp := &ReplaceServiceCredentialsResponse{}
+	if err := codec.FromJSON(string(body), pbRsp); err != nil {
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.api_credential.ReplaceServiceCredentialsResponse", body)
+
+	}
+	if callOpts.OutCallResponse != nil {
+		callOpts.OutCallResponse.ProtoMsg = pbRsp
+		callOpts.OutCallResponse.JSON = string(body)
+	}
+	return pbRsp, nil
+}
+
 func (c *CustomAPIRestClient) doRPCRevoke(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -1562,6 +1661,8 @@ func NewCustomAPIRestClient(baseURL string, hc http.Client) server.CustomClient 
 
 	rpcFns["RenewServiceCredentials"] = ccl.doRPCRenewServiceCredentials
 
+	rpcFns["ReplaceServiceCredentials"] = ccl.doRPCReplaceServiceCredentials
+
 	rpcFns["Revoke"] = ccl.doRPCRevoke
 
 	rpcFns["RevokeScimToken"] = ccl.doRPCRevokeScimToken
@@ -1627,6 +1728,10 @@ func (c *customAPIInprocClient) Renew(ctx context.Context, in *RenewRequest, opt
 func (c *customAPIInprocClient) RenewServiceCredentials(ctx context.Context, in *RenewRequest, opts ...grpc.CallOption) (*StatusResponse, error) {
 	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.api_credential.CustomAPI.RenewServiceCredentials")
 	return c.CustomAPIServer.RenewServiceCredentials(ctx, in)
+}
+func (c *customAPIInprocClient) ReplaceServiceCredentials(ctx context.Context, in *ReplaceServiceCredentialsRequest, opts ...grpc.CallOption) (*ReplaceServiceCredentialsResponse, error) {
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.api_credential.CustomAPI.ReplaceServiceCredentials")
+	return c.CustomAPIServer.ReplaceServiceCredentials(ctx, in)
 }
 func (c *customAPIInprocClient) Revoke(ctx context.Context, in *GetRequest, opts ...grpc.CallOption) (*StatusResponse, error) {
 	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.api_credential.CustomAPI.Revoke")
@@ -2247,6 +2352,55 @@ func (s *customAPISrv) RenewServiceCredentials(ctx context.Context, in *RenewReq
 	}
 
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.api_credential.StatusResponse", rsp)...)
+
+	return rsp, nil
+}
+func (s *customAPISrv) ReplaceServiceCredentials(ctx context.Context, in *ReplaceServiceCredentialsRequest) (*ReplaceServiceCredentialsResponse, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.api_credential.CustomAPI")
+	cah, ok := ah.(CustomAPIServer)
+	if !ok {
+		return nil, fmt.Errorf("ah %v is not of type *CustomAPIServer", ah)
+	}
+
+	var (
+		rsp *ReplaceServiceCredentialsResponse
+		err error
+	)
+
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.api_credential.ReplaceServiceCredentialsRequest", in)
+	defer func() {
+		if len(bodyFields) > 0 {
+			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
+		}
+		userMsg := "The 'CustomAPI.ReplaceServiceCredentials' operation on 'api_credential'"
+		if err == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
+	}()
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.api_credential.CustomAPI.ReplaceServiceCredentials"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
+	rsp, err = cah.ReplaceServiceCredentials(ctx, in)
+	if err != nil {
+		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
+	}
+
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.api_credential.ReplaceServiceCredentialsResponse", rsp)...)
 
 	return rsp, nil
 }
@@ -3758,6 +3912,101 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "x-ves-proto-rpc": "ves.io.schema.api_credential.CustomAPI.GetServiceCredentials"
             },
+            "put": {
+                "summary": "Replace service credentials",
+                "description": "request to replace user_groups and roles in service credentials.\nNote - for updating expiry use RenewServiceCredentials and to active/inactive service credential use ActivateServiceCredentials API",
+                "operationId": "ves.io.schema.api_credential.CustomAPI.ReplaceServiceCredentials",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/api_credentialReplaceServiceCredentialsResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "namespace",
+                        "description": "namespace\n\nx-example: \"system\"\nNamespace of the service credential user.\nValue of namespace is always \"system\".",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "x-displayname": "Namespace"
+                    },
+                    {
+                        "name": "name",
+                        "description": "Service Credential name\n\nx-required\nx-example: \"api-cred-73c7cbd9-1342-4ce0-97a5-6c515c0b147a\"\nName of service credential object.",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "x-displayname": "Name"
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/api_credentialReplaceServiceCredentialsRequest"
+                        }
+                    }
+                ],
+                "tags": [
+                    "CustomAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-api_credential-customapi-replaceservicecredentials"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.api_credential.CustomAPI.ReplaceServiceCredentials"
+            },
             "x-displayname": "API Credential",
             "x-ves-proto-service": "ves.io.schema.api_credential.CustomAPI",
             "x-ves-proto-service-type": "CUSTOM_PUBLIC"
@@ -4416,6 +4665,80 @@ var CustomAPISwaggerJSON string = `{
                 }
             }
         },
+        "api_credentialReplaceServiceCredentialsRequest": {
+            "type": "object",
+            "description": "request format for replacing service credentials.",
+            "title": "Replace Service Credentials Request",
+            "x-displayname": "Replace Service Credentials Request",
+            "x-ves-proto-message": "ves.io.schema.api_credential.ReplaceServiceCredentialsRequest",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "description": " Name of service credential object.\n\nExample: - \"api-cred-73c7cbd9-1342-4ce0-97a5-6c515c0b147a\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Service Credential name",
+                    "x-displayname": "Name",
+                    "x-ves-example": "api-cred-73c7cbd9-1342-4ce0-97a5-6c515c0b147a",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "namespace": {
+                    "type": "string",
+                    "description": " Namespace of the service credential user.\n Value of namespace is always \"system\".\n\nExample: - \"system\"-",
+                    "title": "namespace",
+                    "x-displayname": "Namespace",
+                    "x-ves-example": "system"
+                },
+                "namespace_access": {
+                    "description": " List of directly attached roles that the service user has for each namespace.",
+                    "title": "Namespace Access",
+                    "$ref": "#/definitions/schemaNamespaceAccessType",
+                    "x-displayname": "namespace access"
+                },
+                "user_group_names": {
+                    "type": "array",
+                    "description": " list of user_groups to be replaced for this service credentials.\n\nExample: - \"[\"dev-group-1\"]\"-",
+                    "title": "User Groups Names",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "Groups",
+                    "x-ves-example": "[\"dev-group-1\"]"
+                }
+            }
+        },
+        "api_credentialReplaceServiceCredentialsResponse": {
+            "type": "object",
+            "description": "response format for the credential's replace request.",
+            "title": "Replace service credentials response",
+            "x-displayname": "Replace service credentials response",
+            "x-ves-proto-message": "ves.io.schema.api_credential.ReplaceServiceCredentialsResponse",
+            "properties": {
+                "active": {
+                    "type": "boolean",
+                    "description": " Specifies if service credential is active or not\n\nExample: - \"true\"-",
+                    "title": "Active",
+                    "format": "boolean",
+                    "x-displayname": "Active",
+                    "x-ves-example": "true"
+                },
+                "expiration_timestamp": {
+                    "type": "string",
+                    "description": " Specifies the expiration timestamp",
+                    "title": "Expiry",
+                    "format": "date-time",
+                    "x-displayname": "Expiry"
+                },
+                "name": {
+                    "type": "string",
+                    "description": " Name of API credential record.\n\nExample: - \"svc-cred-app1\"-",
+                    "title": "Name",
+                    "x-displayname": "Name",
+                    "x-ves-example": "svc-cred-app1"
+                }
+            }
+        },
         "api_credentialScimTokenRequest": {
             "type": "object",
             "description": "ScimTokenRequest is used for fetching or revoking scim token",
@@ -4826,6 +5149,12 @@ var CustomAPISwaggerJSON string = `{
                     "title": "deletion_timestamp",
                     "format": "date-time",
                     "x-displayname": "Deletion Timestamp"
+                },
+                "direct_ref_hash": {
+                    "type": "string",
+                    "description": " A hash of the UIDs of  direct references on this object. This can be used to determine if \n this object hash has had references become resolved/unresolved",
+                    "title": "direct_ref_hash",
+                    "x-displayname": "Direct Reference Hash"
                 },
                 "finalizers": {
                     "type": "array",

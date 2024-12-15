@@ -1,9 +1,9 @@
 ---
 
 page_title: "Volterra: cdn_loadbalancer"
-description: "The cdn_loadbalancer allows CRUD of Cdn Loadbalancer resource on Volterra SaaS"
 
----
+description: "The cdn_loadbalancer allows CRUD of Cdn Loadbalancer resource on Volterra SaaS"
+---------------------------------------------------------------------------------------------
 
 Resource volterra_cdn_loadbalancer
 ==================================
@@ -26,12 +26,20 @@ resource "volterra_cdn_loadbalancer" "example" {
 
   // One of the arguments from this list "api_discovery_on_cache_miss disable_api_discovery enable_api_discovery" must be set
 
-  enable_api_discovery {
+  api_discovery_on_cache_miss {
+    api_crawler {
+      // One of the arguments from this list "api_crawler_config disable_api_crawler" must be set
+
+      disable_api_crawler = true
+    }
+
     api_discovery_from_code_scan {
       code_base_integrations {
         // One of the arguments from this list "all_repos selected_repos" must be set
 
-        all_repos = true
+        selected_repos {
+          api_code_repo = ["api_code_repo"]
+        }
 
         code_base_integration {
           name      = "test1"
@@ -41,6 +49,15 @@ resource "volterra_cdn_loadbalancer" "example" {
       }
     }
 
+    // One of the arguments from this list "custom_api_auth_discovery default_api_auth_discovery" must be set
+
+    custom_api_auth_discovery {
+      api_discovery_ref {
+        name      = "test1"
+        namespace = "staging"
+        tenant    = "acmecorp"
+      }
+    }
     discovered_api_settings {}
 
     // One of the arguments from this list "disable_learn_from_redirect_traffic enable_learn_from_redirect_traffic" must be set
@@ -55,7 +72,13 @@ resource "volterra_cdn_loadbalancer" "example" {
 
   // One of the arguments from this list "captcha_challenge challenge_on_cache_miss enable_challenge js_challenge no_challenge policy_based_challenge" must be set
 
-  no_challenge = true
+  js_challenge {
+    cookie_expiry = "1000"
+
+    custom_page = "string:///PHA+IFBsZWFzZSBXYWl0IDwvcD4="
+
+    js_script_delay = "1000"
+  }
 
   // One of the arguments from this list "client_side_defense disable_client_side_defense" must be set
 
@@ -64,7 +87,7 @@ resource "volterra_cdn_loadbalancer" "example" {
 
   // One of the arguments from this list "l7_ddos_action_block l7_ddos_action_default l7_ddos_action_js_challenge l7_ddos_action_none" must be set
 
-  l7_ddos_action_block = true
+  l7_ddos_action_default = true
 
   // One of the arguments from this list "http https https_auto_cert" must be set
 
@@ -78,7 +101,7 @@ resource "volterra_cdn_loadbalancer" "example" {
 
   // One of the arguments from this list "disable_malicious_user_detection enable_malicious_user_detection malicious_user_detection_on_cache_miss" must be set
 
-  malicious_user_detection_on_cache_miss = true
+  disable_malicious_user_detection = true
   origin_pool {
     follow_origin_redirect = true
 
@@ -93,10 +116,10 @@ resource "volterra_cdn_loadbalancer" "example" {
     origin_servers {
       // One of the arguments from this list "public_ip public_name" must be set
 
-      public_name {
-        dns_name = "value"
+      public_ip {
+        // One of the arguments from this list "ip ipv6" must be set
 
-        refresh_interval = "20"
+        ipv6 = "2001::1"
       }
 
       port = "80"
@@ -123,7 +146,7 @@ resource "volterra_cdn_loadbalancer" "example" {
 
   // One of the arguments from this list "active_service_policies no_service_policies service_policies_from_namespace" must be set
 
-  service_policies_from_namespace = true
+  no_service_policies = true
 
   // One of the arguments from this list "slow_ddos_mitigation system_default_timeouts" must be set
 
@@ -137,10 +160,9 @@ resource "volterra_cdn_loadbalancer" "example" {
 
   user_id_client_ip = true
 
-  // One of the arguments from this list "app_firewall disable_waf" must be set
-  
-  disable_waf = true
+  // One of the arguments from this list "app_firewall app_firewall_on_cache_miss disable_waf" must be set
 
+  disable_waf = true
 }
 
 ```
@@ -348,13 +370,15 @@ Define rules to block IP Prefixes or AS numbers..
 
 `actions` - (Optional) Actions that should be taken when client identifier matches the rule (`List of Strings`).
 
-###### One of the arguments from this list "as_number, http_header, ip_prefix, user_identifier" must be set
+###### One of the arguments from this list "as_number, http_header, ip_prefix, ipv6_prefix, user_identifier" must be set
 
 `as_number` - (Optional) RFC 6793 defined 4-byte AS number (`Int`).
 
 `http_header` - (Optional) Request header name and value pairs. See [Client Source Choice Http Header ](#client-source-choice-http-header) below for details.
 
 `ip_prefix` - (Optional) IPv4 prefix string. (`String`).
+
+`ipv6_prefix` - (Optional) IPv6 prefix string. (`String`).
 
 `user_identifier` - (Optional) Identify user based on user identifier. User identifier value needs to be copied from security event. (`String`).
 
@@ -448,7 +472,7 @@ Define manual mitigation rules to block L7 DDoS attacks..
 
 `ddos_client_source` - (Optional) Combination of Region, ASN and TLS Fingerprints. See [Mitigation Choice Ddos Client Source ](#mitigation-choice-ddos-client-source) below for details.
 
-`ip_prefix_list` - (Optional) IPv4 prefix string.. See [Mitigation Choice Ip Prefix List ](#mitigation-choice-ip-prefix-list) below for details.
+`ip_prefix_list` - (Optional) IP prefix string.. See [Mitigation Choice Ip Prefix List ](#mitigation-choice-ip-prefix-list) below for details.
 
 ### Default Cache Action
 
@@ -612,13 +636,15 @@ Define rules to skip processing of one or more features such as WAF, Bot Defense
 
 `actions` - (Optional) Actions that should be taken when client identifier matches the rule (`List of Strings`).
 
-###### One of the arguments from this list "as_number, http_header, ip_prefix, user_identifier" must be set
+###### One of the arguments from this list "as_number, http_header, ip_prefix, ipv6_prefix, user_identifier" must be set
 
 `as_number` - (Optional) RFC 6793 defined 4-byte AS number (`Int`).
 
 `http_header` - (Optional) Request header name and value pairs. See [Client Source Choice Http Header ](#client-source-choice-http-header) below for details.
 
 `ip_prefix` - (Optional) IPv4 prefix string. (`String`).
+
+`ipv6_prefix` - (Optional) IPv6 prefix string. (`String`).
 
 `user_identifier` - (Optional) Identify user based on user identifier. User identifier value needs to be copied from security event. (`String`).
 
@@ -774,6 +800,24 @@ Add one or more domains to source origin (allow) list..
 
 Allow all source origin domains..
 
+### Api Crawler Api Crawler Config
+
+Select to activate the API Crawling.
+
+`domains` - (Required) Enter domains and their credentials to allow authenticated API crawling. You can only include domains you own that are associated with this Load Balancer.. See [Api Crawler Config Domains ](#api-crawler-config-domains) below for details.
+
+### Api Crawler Disable Api Crawler
+
+Select to turn off the API Crawling. No API Crawling actions will be performed..
+
+### Api Crawler Config Domains
+
+Enter domains and their credentials to allow authenticated API crawling. You can only include domains you own that are associated with this Load Balancer..
+
+`domain` - (Required) Select the domain to execute API Crawling with given credentials. (`String`).
+
+`simple_login` - (Required) Enter the username and password to assign credentials for the selected domain to crawl. See [Domains Simple Login ](#domains-simple-login) below for details.
+
 ### Api Definition Choice Api Specification
 
 Specify API definition and OpenAPI Validation.
@@ -810,7 +854,15 @@ API Definition is not currently used for this load balancer.
 
 Enable api discovery only on cache miss in this distribution.
 
+`api_crawler` - (Optional) Configure Discovered API Settings.. See [Api Discovery On Cache Miss Api Crawler ](#api-discovery-on-cache-miss-api-crawler) below for details.
+
 `api_discovery_from_code_scan` - (Optional) Select API code repositories to the load balancer to use them as a source for API endpoint discovery.. See [Api Discovery On Cache Miss Api Discovery From Code Scan ](#api-discovery-on-cache-miss-api-discovery-from-code-scan) below for details.
+
+###### One of the arguments from this list "custom_api_auth_discovery, default_api_auth_discovery" must be set
+
+`custom_api_auth_discovery` - (Optional) Apply custom API discovery settings. See [Api Discovery Settings Choice Custom Api Auth Discovery ](#api-discovery-settings-choice-custom-api-auth-discovery) below for details.(Deprecated)
+
+`default_api_auth_discovery` - (Optional) Apply system default API discovery settings (`Bool`).(Deprecated)
 
 `discovered_api_settings` - (Optional) Configure Discovered API Settings.. See [Api Discovery On Cache Miss Discovered Api Settings ](#api-discovery-on-cache-miss-discovered-api-settings) below for details.
 
@@ -830,7 +882,15 @@ Disable api discovery for this distribution.
 
 Enable api discovery for all requests in this distribution.
 
+`api_crawler` - (Optional) Configure Discovered API Settings.. See [Enable Api Discovery Api Crawler ](#enable-api-discovery-api-crawler) below for details.
+
 `api_discovery_from_code_scan` - (Optional) Select API code repositories to the load balancer to use them as a source for API endpoint discovery.. See [Enable Api Discovery Api Discovery From Code Scan ](#enable-api-discovery-api-discovery-from-code-scan) below for details.
+
+###### One of the arguments from this list "custom_api_auth_discovery, default_api_auth_discovery" must be set
+
+`custom_api_auth_discovery` - (Optional) Apply custom API discovery settings. See [Api Discovery Settings Choice Custom Api Auth Discovery ](#api-discovery-settings-choice-custom-api-auth-discovery) below for details.(Deprecated)
+
+`default_api_auth_discovery` - (Optional) Apply system default API discovery settings (`Bool`).(Deprecated)
 
 `discovered_api_settings` - (Optional) Configure Discovered API Settings.. See [Enable Api Discovery Discovered Api Settings ](#enable-api-discovery-discovered-api-settings) below for details.
 
@@ -854,6 +914,16 @@ x-required.
 
 `code_base_integration` - (Required) Select the code base integration for use in code-based API discovery. See [ref](#ref) below for details.
 
+### Api Discovery On Cache Miss Api Crawler
+
+Configure Discovered API Settings..
+
+###### One of the arguments from this list "api_crawler_config, disable_api_crawler" must be set
+
+`api_crawler_config` - (Optional) Select to activate the API Crawling. See [Api Crawler Api Crawler Config ](#api-crawler-api-crawler-config) below for details.
+
+`disable_api_crawler` - (Optional) Select to turn off the API Crawling. No API Crawling actions will be performed. (`Bool`).
+
 ### Api Discovery On Cache Miss Api Discovery From Code Scan
 
 Select API code repositories to the load balancer to use them as a source for API endpoint discovery..
@@ -867,6 +937,16 @@ Configure Discovered API Settings..
 ### Api Discovery On Cache Miss Sensitive Data Detection Rules
 
 Manage rules to detect sensitive data in requests and/or response sections..
+
+### Api Discovery Settings Choice Custom Api Auth Discovery
+
+Apply custom API discovery settings.
+
+`api_discovery_ref` - (Required) API Discovery Settings Object. See [ref](#ref) below for details.
+
+### Api Discovery Settings Choice Default Api Auth Discovery
+
+Apply system default API discovery settings.
 
 ### Api Endpoint Rules Action
 
@@ -1786,13 +1866,15 @@ Define rules to block IP Prefixes or AS numbers..
 
 `actions` - (Optional) Actions that should be taken when client identifier matches the rule (`List of Strings`).
 
-###### One of the arguments from this list "as_number, http_header, ip_prefix, user_identifier" must be set
+###### One of the arguments from this list "as_number, http_header, ip_prefix, ipv6_prefix, user_identifier" must be set
 
 `as_number` - (Optional) RFC 6793 defined 4-byte AS number (`Int`).
 
 `http_header` - (Optional) Request header name and value pairs. See [Client Source Choice Http Header ](#client-source-choice-http-header) below for details.
 
 `ip_prefix` - (Optional) IPv4 prefix string. (`String`).
+
+`ipv6_prefix` - (Optional) IPv6 prefix string. (`String`).
 
 `user_identifier` - (Optional) Identify user based on user identifier. User identifier value needs to be copied from security event. (`String`).
 
@@ -1836,13 +1918,15 @@ Define rules to skip processing of one or more features such as WAF, Bot Defense
 
 `actions` - (Optional) Actions that should be taken when client identifier matches the rule (`List of Strings`).
 
-###### One of the arguments from this list "as_number, http_header, ip_prefix, user_identifier" must be set
+###### One of the arguments from this list "as_number, http_header, ip_prefix, ipv6_prefix, user_identifier" must be set
 
 `as_number` - (Optional) RFC 6793 defined 4-byte AS number (`Int`).
 
 `http_header` - (Optional) Request header name and value pairs. See [Client Source Choice Http Header ](#client-source-choice-http-header) below for details.
 
 `ip_prefix` - (Optional) IPv4 prefix string. (`String`).
+
+`ipv6_prefix` - (Optional) IPv6 prefix string. (`String`).
 
 `user_identifier` - (Optional) Identify user based on user identifier. User identifier value needs to be copied from security event. (`String`).
 
@@ -1992,6 +2076,14 @@ Domain matcher..
 
 `suffix_value` - (Optional) Suffix of domain name e.g "xyz.com" will match "*.xyz.com" and "xyz.com" (`String`).
 
+### Domains Simple Login
+
+Enter the username and password to assign credentials for the selected domain to crawl.
+
+`password` - (Required) x-required. See [Simple Login Password ](#simple-login-password) below for details.
+
+`user` - (Required) x-required (`String`).
+
 ### Eligible For Cache Hostname Uri
 
 .
@@ -2051,6 +2143,16 @@ Domain matcher..
 `cache_ttl` - (Required) Format: [0-9][smhd], where s - seconds, m - minutes, h - hours, d - days (`String`).
 
 `ignore_response_cookie` - (Optional) By default, response will not be cached if set-cookie header is present. This option will override the behavior and cache response even with set-cookie header present. (`Bool`).
+
+### Enable Api Discovery Api Crawler
+
+Configure Discovered API Settings..
+
+###### One of the arguments from this list "api_crawler_config, disable_api_crawler" must be set
+
+`api_crawler_config` - (Optional) Select to activate the API Crawling. See [Api Crawler Api Crawler Config ](#api-crawler-api-crawler-config) below for details.
+
+`disable_api_crawler` - (Optional) Select to turn off the API Crawling. No API Crawling actions will be performed. (`Bool`).
 
 ### Enable Api Discovery Api Discovery From Code Scan
 
@@ -2974,7 +3076,7 @@ Combination of Region, ASN and TLS Fingerprints.
 
 ### Mitigation Choice Ip Prefix List
 
-IPv4 prefix string..
+IP prefix string..
 
 `invert_match` - (Optional) Invert the match result. (`Bool`).
 
@@ -3226,6 +3328,16 @@ Apply the request/response action (block or report) when the body length is too 
 
 Skip body validation when the body length is too long to verify (default 64Kb).
 
+### Password Blindfold Secret Info Internal
+
+Blindfold Secret Internal is used for the putting re-encrypted blindfold secret.
+
+`decryption_provider` - (Optional) Name of the Secret Management Access object that contains information about the backend Secret Management service. (`String`).
+
+`location` - (Required) Or it could be a path if the store provider is an http/https location (`String`).
+
+`store_provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
+
 ### Path Choice Any Path
 
 Match all paths.
@@ -3284,6 +3396,8 @@ List of protected application endpoints (max 128 items)..
 
 `mitigate_good_bots` - (Optional) System flags Good Bot Traffic, but mitigation is handled in the same manner as malicious automated traffic defined above (`Bool`).
 
+`headers` - (Optional) Note that all specified header predicates must evaluate to true.. See [Protected App Endpoints Headers ](#protected-app-endpoints-headers) below for details.
+
 `http_methods` - (Required) List of HTTP methods. (`List of Strings`).
 
 `metadata` - (Required) Common attributes for the rule including name and description.. See [Protected App Endpoints Metadata ](#protected-app-endpoints-metadata) below for details.
@@ -3293,6 +3407,8 @@ List of protected application endpoints (max 128 items)..
 `path` - (Required) Matching URI path of the route.. See [Protected App Endpoints Path ](#protected-app-endpoints-path) below for details.
 
 `protocol` - (Optional) Protocol. (`String`).
+
+`query_params` - (Optional) Note that all specified query parameter predicates must evaluate to true.. See [Protected App Endpoints Query Params ](#protected-app-endpoints-query-params) below for details.
 
 ### Policy Protected App Endpoints
 
@@ -3386,6 +3502,24 @@ Custom settings for query parameters validation.
 
 `disallow_additional_parameters` - (Optional) Disallow extra query parameters (on top of what specified in the OAS documentation) (`Bool`).
 
+### Protected App Endpoints Headers
+
+Note that all specified header predicates must evaluate to true..
+
+`invert_matcher` - (Optional) Invert the match result. (`Bool`).
+
+###### One of the arguments from this list "check_not_present, check_present, item, presence" must be set
+
+`check_not_present` - (Optional) Check that the header is not present. (`Bool`).
+
+`check_present` - (Optional) Check that the header is present. (`Bool`).
+
+`item` - (Optional) Criteria for matching the values for the header. The match is successful if any of the values in the input satisfies the criteria in the matcher.. See [Match Item ](#match-item) below for details.
+
+`presence` - (Optional) Check if the header is present or absent. (`Bool`).(Deprecated)
+
+`name` - (Required) A case-insensitive HTTP header name. (`String`).
+
 ### Protected App Endpoints Metadata
 
 Common attributes for the rule including name and description..
@@ -3435,6 +3569,24 @@ Enter a regular expression or exact value to match your query parameters of inte
 `exact_value` - (Optional) Exact query value to match (`String`).
 
 `regex_value` - (Optional) Regular expression of query match (e.g. the value .* will match on all query) (`String`).
+
+### Protected App Endpoints Query Params
+
+Note that all specified query parameter predicates must evaluate to true..
+
+`invert_matcher` - (Optional) Invert the match result. (`Bool`).
+
+`key` - (Required) A case-sensitive HTTP query parameter name. (`String`).
+
+###### One of the arguments from this list "check_not_present, check_present, item, presence" must be set
+
+`check_not_present` - (Optional) Check that the query parameter is not present. (`Bool`).
+
+`check_present` - (Optional) Check that the query parameter is present. (`Bool`).
+
+`item` - (Optional) criteria in the matcher.. See [Match Item ](#match-item) below for details.
+
+`presence` - (Optional) Check if the query parameter is present or absent. (`Bool`).(Deprecated)
 
 ### Protected App Endpoints Request Body
 
@@ -3530,7 +3682,7 @@ Specify rate values for the rule..
 
 ###### One of the arguments from this list "ref_user_id, use_http_lb_user_id" must be set
 
-`ref_user_id` - (Optional) The rules in the user_identification object are evaluated to determine the user identifier to be rate limited.. See [ref](#ref) below for details.
+`ref_user_id` - (Optional) If traffic cannot be identified by the rules in the user_identification object, by default it will be identified by the HTTP-LB User Identifier.. See [ref](#ref) below for details.
 
 `use_http_lb_user_id` - (Optional) Defined in HTTP-LB Security Configuration -> User Identifier. (`Bool`).
 
@@ -4067,6 +4219,24 @@ Do not apply any service policies i.e. bypass the namespace service policy set.
 ### Service Policy Choice Service Policies From Namespace
 
 Apply the active service policies configured as part of the namespace service policy set.
+
+### Simple Login Password
+
+x-required.
+
+`blindfold_secret_info_internal` - (Optional) Blindfold Secret Internal is used for the putting re-encrypted blindfold secret. See [Password Blindfold Secret Info Internal ](#password-blindfold-secret-info-internal) below for details.(Deprecated)
+
+`secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).(Deprecated)
+
+###### One of the arguments from this list "blindfold_secret_info, clear_secret_info, vault_secret_info, wingman_secret_info" must be set
+
+`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
+
+`clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Secret Info Oneof Clear Secret Info ](#secret-info-oneof-clear-secret-info) below for details.
+
+`vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Secret Info Oneof Vault Secret Info ](#secret-info-oneof-vault-secret-info) below for details.(Deprecated)
+
+`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in F5XC Security Sidecar. See [Secret Info Oneof Wingman Secret Info ](#secret-info-oneof-wingman-secret-info) below for details.(Deprecated)
 
 ### Slow Ddos Mitigation Choice Slow Ddos Mitigation
 

@@ -2741,7 +2741,7 @@ var APISwaggerJSON string = `{
             "x-displayname": "Interface",
             "x-ves-oneof-field-address_choice": "[\"dhcp_client\",\"dhcp_server\",\"no_ipv4_address\",\"static_ip\"]",
             "x-ves-oneof-field-interface_choice": "[\"bond_interface\",\"ethernet_interface\",\"vlan_interface\"]",
-            "x-ves-oneof-field-ipv6_address_choice": "[\"no_ipv6_address\",\"static_ipv6_address\"]",
+            "x-ves-oneof-field-ipv6_address_choice": "[\"ipv6_auto_config\",\"no_ipv6_address\",\"static_ipv6_address\"]",
             "x-ves-oneof-field-monitoring_choice": "[\"monitor\",\"monitor_disabled\"]",
             "x-ves-oneof-field-site_to_site_connectivity_interface_choice": "[\"site_to_site_connectivity_interface_disabled\",\"site_to_site_connectivity_interface_enabled\"]",
             "x-ves-proto-message": "ves.io.schema.views.common_node.Interface",
@@ -2782,7 +2782,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Ethernet Interface"
                 },
                 "ipv6_auto_config": {
-                    "description": " Interface IPv6 address will be configured via Auto Configuration.",
+                    "description": "Exclusive with [no_ipv6_address static_ipv6_address]\n Interface IPv6 address will be configured via Auto Configuration.",
                     "title": "IPV6 Auto configuration",
                     "$ref": "#/definitions/network_interfaceIPV6AutoConfigType",
                     "x-displayname": "IPv6 via AutoConfiguration"
@@ -2838,7 +2838,7 @@ var APISwaggerJSON string = `{
                 "network_option": {
                     "description": " Select virtual network (VRF) for this interface.\n There are 2 kinds of VRFs, local VRFs which are local to the site and global VRFs which extend into multiple sites.\n A site can have 2 Local VRFs, Site Local Outside (SLO), which is required for every site and Site Local Inside (SLI) which is optional.\n Global VRFs are configured via Networking \u003e Segments. A site can have multple Network Segments (global VRFs).\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Select VRF",
-                    "$ref": "#/definitions/common_nodeNetworkSelectType",
+                    "$ref": "#/definitions/viewscommon_nodeNetworkSelectType",
                     "x-displayname": "Select VRF",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
@@ -2852,7 +2852,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Disabled"
                 },
                 "no_ipv6_address": {
-                    "description": "Exclusive with [static_ipv6_address]\n Interface does not have an IPv6 Address.",
+                    "description": "Exclusive with [ipv6_auto_config static_ipv6_address]\n Interface does not have an IPv6 Address.",
                     "title": "no_ipv6_address",
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "Disabled"
@@ -2888,7 +2888,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Static IP"
                 },
                 "static_ipv6_address": {
-                    "description": "Exclusive with [no_ipv6_address]\n Interface IPv6 address is configured statically.",
+                    "description": "Exclusive with [ipv6_auto_config no_ipv6_address]\n Interface IPv6 address is configured statically.",
                     "title": "Static IP",
                     "$ref": "#/definitions/network_interfaceStaticIPParametersType",
                     "x-displayname": "Static IPv6"
@@ -2898,34 +2898,6 @@ var APISwaggerJSON string = `{
                     "title": "VLAN Interface",
                     "$ref": "#/definitions/common_nodeVlanInterfaceType",
                     "x-displayname": "VLAN Interface"
-                }
-            }
-        },
-        "common_nodeNetworkSelectType": {
-            "type": "object",
-            "description": "x-required\nSelect virtual network (VRF) for this interface.\nThere are 2 kinds of VRFs, local VRFs which are local to the site and global VRFs which extend into multiple sites.\nA site can have 2 Local VRFs, Site Local Outside (SLO), which is required for every site and Site Local Inside (SLI) which is optional.\nGlobal VRFs are configured via Networking \u003e Segments. A site can have multple Network Segments (global VRFs).",
-            "title": "NetworkSelectType",
-            "x-displayname": "Network Select",
-            "x-ves-oneof-field-network_choice": "[\"segment_network\",\"site_local_inside_network\",\"site_local_network\"]",
-            "x-ves-proto-message": "ves.io.schema.views.common_node.NetworkSelectType",
-            "properties": {
-                "segment_network": {
-                    "description": "Exclusive with [site_local_inside_network site_local_network]\n",
-                    "title": "Segment",
-                    "$ref": "#/definitions/schemaviewsObjectRefType",
-                    "x-displayname": "Segment (Global VRF)"
-                },
-                "site_local_inside_network": {
-                    "description": "Exclusive with [segment_network site_local_network]\n",
-                    "title": "Site Local Network Inside",
-                    "$ref": "#/definitions/schemaEmpty",
-                    "x-displayname": "Site Local Inside (Local VRF)"
-                },
-                "site_local_network": {
-                    "description": "Exclusive with [segment_network site_local_inside_network]\n",
-                    "title": "Site Local Network",
-                    "$ref": "#/definitions/schemaEmpty",
-                    "x-displayname": "Site Local Outside (Local VRF)"
                 }
             }
         },
@@ -4254,6 +4226,12 @@ var APISwaggerJSON string = `{
                     "format": "date-time",
                     "x-displayname": "Deletion Timestamp"
                 },
+                "direct_ref_hash": {
+                    "type": "string",
+                    "description": " A hash of the UIDs of  direct references on this object. This can be used to determine if \n this object hash has had references become resolved/unresolved",
+                    "title": "direct_ref_hash",
+                    "x-displayname": "Direct Reference Hash"
+                },
                 "finalizers": {
                     "type": "array",
                     "description": " Must be empty before the object is deleted from the registry. Each entry\n is an identifier for the responsible component that will remove the entry\n from the list. If the deletionTimestamp of the object is non-nil, entries\n in this list can only be removed.\n\nExample: - \"value\"-",
@@ -4554,6 +4532,34 @@ var APISwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.string.mac": "true"
                     }
+                }
+            }
+        },
+        "viewscommon_nodeNetworkSelectType": {
+            "type": "object",
+            "description": "x-required\nSelect virtual network (VRF) for this interface.\nThere are 2 kinds of VRFs, local VRFs which are local to the site and global VRFs which extend into multiple sites.\nA site can have 2 Local VRFs, Site Local Outside (SLO), which is required for every site and Site Local Inside (SLI) which is optional.\nGlobal VRFs are configured via Networking \u003e Segments. A site can have multple Network Segments (global VRFs).",
+            "title": "NetworkSelectType",
+            "x-displayname": "Network Select",
+            "x-ves-oneof-field-network_choice": "[\"segment_network\",\"site_local_inside_network\",\"site_local_network\"]",
+            "x-ves-proto-message": "ves.io.schema.views.common_node.NetworkSelectType",
+            "properties": {
+                "segment_network": {
+                    "description": "Exclusive with [site_local_inside_network site_local_network]\n",
+                    "title": "Segment",
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "Segment (Global VRF)"
+                },
+                "site_local_inside_network": {
+                    "description": "Exclusive with [segment_network site_local_network]\n",
+                    "title": "Site Local Network Inside",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Site Local Inside (Local VRF)"
+                },
+                "site_local_network": {
+                    "description": "Exclusive with [segment_network site_local_inside_network]\n",
+                    "title": "Site Local Network",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Site Local Outside (Local VRF)"
                 }
             }
         },

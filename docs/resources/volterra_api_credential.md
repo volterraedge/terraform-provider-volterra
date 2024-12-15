@@ -1,6 +1,7 @@
 ---
 
-page_title: "Volterra: volterra_api_credential"
+page_title: "Volterra: volterra_api_credential" 
+
 description: "The volterra_api_credential allows creation of api_credential object on Volterra SaaS"
 
 ---
@@ -25,6 +26,7 @@ Example Usage
 
 ```hcl
 resource "volterra_api_credential" "example" {
+  created_at = timestamp()
   name      = "api-cred-example"
   api_credential_type = "KUBE_CONFIG"
   virtual_k8s_namespace = "ns1"
@@ -40,6 +42,8 @@ Argument Reference
 
 `name` - (Required) The value of name has to follow DNS-1035 format. (`String`).
 
+`created_at` - (Required) This field has been introduced to deal with renewing an expired credential. Valid values are `timestamp()` or a UTC timestamp string in RFC 3339 format. (`String`).
+
 `api_credential_type` - (Required) Types of API credential given. Valid values are `API_CERTIFICATE`, `KUBE_CONFIG`, `API_TOKEN` (`String`).
 
 `virtual_k8s_namespace` - (Optional) Namespace of virtual_k8s cluster. Applicable when `api_credential_type` is `KUBE_CONFIG` (`String`).
@@ -49,6 +53,8 @@ Argument Reference
 `api_credential_password` - (Optional) Password is used for generating an API certificate P12 bundle user can use to protect access to it. this password will not be saved/persisted anywhere in the system. Applicable when `api_credential_type` is `API_CERTIFICATE`. Users have to use this password when they use the certificate, e.g. in curl or while adding to key chain (`String`).
 
 `expiry_days` - (Optional) Number of days after which the certificate will be expired (`Int`).
+
+`automatic_approval_api_token` - (Optional) A value of true will renew an expired user's credential. Renewal is only supported for the credential type API_TOKEN.(`Bool`\)
 
 Attribute Reference
 -------------------

@@ -167,11 +167,131 @@ func (m *StateReq) GetState() State {
 	return UNKNOWN
 }
 
+// Get cloud-init config request
+//
+// x-displayName: "Get cloud-init config rRequest"
+// Request to get cloud-init config
+type GetCloudInitConfigReq struct {
+	// Provider
+	//
+	// x-displayName: "Provider"
+	// x-required
+	// x-example: "kvm"
+	// provider for that cloud-init config
+	Provider string `protobuf:"bytes,1,opt,name=provider,proto3" json:"provider,omitempty"`
+	// site name
+	//
+	// x-displayName: "Site Name"
+	// site name for this cloud-init config
+	SiteName string `protobuf:"bytes,2,opt,name=site_name,json=siteName,proto3" json:"site_name,omitempty"`
+}
+
+func (m *GetCloudInitConfigReq) Reset()      { *m = GetCloudInitConfigReq{} }
+func (*GetCloudInitConfigReq) ProtoMessage() {}
+func (*GetCloudInitConfigReq) Descriptor() ([]byte, []int) {
+	return fileDescriptor_1daf03efacb073ee, []int{2}
+}
+func (m *GetCloudInitConfigReq) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *GetCloudInitConfigReq) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_GetCloudInitConfigReq.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *GetCloudInitConfigReq) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetCloudInitConfigReq.Merge(m, src)
+}
+func (m *GetCloudInitConfigReq) XXX_Size() int {
+	return m.Size()
+}
+func (m *GetCloudInitConfigReq) XXX_DiscardUnknown() {
+	xxx_messageInfo_GetCloudInitConfigReq.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_GetCloudInitConfigReq proto.InternalMessageInfo
+
+func (m *GetCloudInitConfigReq) GetProvider() string {
+	if m != nil {
+		return m.Provider
+	}
+	return ""
+}
+
+func (m *GetCloudInitConfigReq) GetSiteName() string {
+	if m != nil {
+		return m.SiteName
+	}
+	return ""
+}
+
+// Get cloud-init config response
+//
+// x-displayName: "Get cloud-init config Response"
+// Response to cloud-init config
+type GetCloudInitConfigResp struct {
+	// cloud-init config
+	//
+	// x-displayName: "cloud-init config"
+	// cloud-init config
+	CloudInitConfig string `protobuf:"bytes,1,opt,name=cloud_init_config,json=cloudInitConfig,proto3" json:"cloud_init_config,omitempty"`
+}
+
+func (m *GetCloudInitConfigResp) Reset()      { *m = GetCloudInitConfigResp{} }
+func (*GetCloudInitConfigResp) ProtoMessage() {}
+func (*GetCloudInitConfigResp) Descriptor() ([]byte, []int) {
+	return fileDescriptor_1daf03efacb073ee, []int{3}
+}
+func (m *GetCloudInitConfigResp) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *GetCloudInitConfigResp) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_GetCloudInitConfigResp.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *GetCloudInitConfigResp) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetCloudInitConfigResp.Merge(m, src)
+}
+func (m *GetCloudInitConfigResp) XXX_Size() int {
+	return m.Size()
+}
+func (m *GetCloudInitConfigResp) XXX_DiscardUnknown() {
+	xxx_messageInfo_GetCloudInitConfigResp.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_GetCloudInitConfigResp proto.InternalMessageInfo
+
+func (m *GetCloudInitConfigResp) GetCloudInitConfig() string {
+	if m != nil {
+		return m.CloudInitConfig
+	}
+	return ""
+}
+
 func init() {
 	proto.RegisterType((*ObjectChangeResp)(nil), "ves.io.schema.token.ObjectChangeResp")
 	golang_proto.RegisterType((*ObjectChangeResp)(nil), "ves.io.schema.token.ObjectChangeResp")
 	proto.RegisterType((*StateReq)(nil), "ves.io.schema.token.StateReq")
 	golang_proto.RegisterType((*StateReq)(nil), "ves.io.schema.token.StateReq")
+	proto.RegisterType((*GetCloudInitConfigReq)(nil), "ves.io.schema.token.GetCloudInitConfigReq")
+	golang_proto.RegisterType((*GetCloudInitConfigReq)(nil), "ves.io.schema.token.GetCloudInitConfigReq")
+	proto.RegisterType((*GetCloudInitConfigResp)(nil), "ves.io.schema.token.GetCloudInitConfigResp")
+	golang_proto.RegisterType((*GetCloudInitConfigResp)(nil), "ves.io.schema.token.GetCloudInitConfigResp")
 }
 
 func init() {
@@ -182,41 +302,49 @@ func init() {
 }
 
 var fileDescriptor_1daf03efacb073ee = []byte{
-	// 535 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x7c, 0x92, 0xbf, 0x8b, 0x13, 0x41,
-	0x14, 0xc7, 0x77, 0x12, 0x15, 0x6f, 0x05, 0x91, 0xb5, 0x09, 0x7b, 0xe7, 0x18, 0x02, 0x42, 0x38,
-	0xdc, 0x1d, 0x89, 0x88, 0x60, 0xa5, 0x77, 0x20, 0x5c, 0xa5, 0x44, 0x2b, 0x1b, 0x9d, 0xdd, 0xbc,
-	0x6c, 0xe6, 0x2e, 0x3b, 0x33, 0x37, 0x33, 0xbb, 0x9e, 0x48, 0x40, 0xce, 0x7f, 0x40, 0xf0, 0x2f,
-	0xb0, 0xb3, 0xf2, 0x1f, 0xb8, 0x26, 0x9d, 0x56, 0x12, 0xb4, 0xb9, 0xd2, 0x6c, 0x2c, 0x2c, 0xaf,
-	0xb2, 0x96, 0xcc, 0xee, 0xfd, 0x08, 0xc4, 0xeb, 0xde, 0x9b, 0xf7, 0x79, 0xdf, 0x99, 0x79, 0xef,
-	0xeb, 0xae, 0xe7, 0xa0, 0x43, 0x26, 0x88, 0x8e, 0x07, 0x90, 0x52, 0x62, 0xc4, 0x0e, 0x70, 0x22,
-	0xb3, 0x68, 0xc8, 0xe2, 0x97, 0x71, 0xa6, 0x8d, 0x48, 0xa9, 0x64, 0xa1, 0x54, 0xc2, 0x08, 0xef,
-	0x7a, 0xc9, 0x86, 0x25, 0x1b, 0x5a, 0xd6, 0x0f, 0x12, 0x66, 0x06, 0x59, 0x14, 0xc6, 0x22, 0x25,
-	0x89, 0x48, 0x04, 0xb1, 0x6c, 0x94, 0xf5, 0x6d, 0x66, 0x13, 0x1b, 0x95, 0x1a, 0xfe, 0x5a, 0x22,
-	0x44, 0x32, 0x04, 0x42, 0x25, 0x23, 0x94, 0x73, 0x61, 0xa8, 0x61, 0x82, 0xeb, 0xaa, 0xba, 0xba,
-	0xf8, 0x1a, 0x21, 0xcf, 0x16, 0x9b, 0xcb, 0x9e, 0x2a, 0xa2, 0x6d, 0x88, 0x4d, 0x45, 0xdc, 0x5c,
-	0x46, 0x98, 0x37, 0x12, 0x8e, 0x25, 0x5a, 0x8b, 0x40, 0x0e, 0x1a, 0x78, 0xbe, 0x78, 0x4d, 0xeb,
-	0xb1, 0x7b, 0xed, 0x89, 0x15, 0xdd, 0x1c, 0x50, 0x9e, 0x40, 0x17, 0xb4, 0xf4, 0x3a, 0x6e, 0x5d,
-	0x44, 0xdb, 0x0d, 0xd4, 0x44, 0xed, 0x2b, 0x9d, 0xd5, 0x70, 0xc9, 0x1c, 0xc2, 0xb2, 0x67, 0xa3,
-	0x3e, 0x1e, 0xa1, 0xee, 0x1c, 0x6e, 0x71, 0xf7, 0xf2, 0x33, 0x43, 0x0d, 0x74, 0x61, 0xd7, 0x5b,
-	0x73, 0x57, 0x38, 0x4d, 0x41, 0x4b, 0x1a, 0x83, 0x55, 0x59, 0xe9, 0x9e, 0x1e, 0x78, 0x9e, 0x7b,
-	0x61, 0x9e, 0x34, 0x6a, 0xb6, 0x60, 0x63, 0xef, 0x8e, 0x7b, 0x51, 0xcf, 0xbb, 0x1b, 0xf5, 0x26,
-	0x6a, 0x5f, 0xed, 0xf8, 0x4b, 0xef, 0x2c, 0xf5, 0x4b, 0xb0, 0xf3, 0xa5, 0xe6, 0xae, 0x6c, 0xda,
-	0x8d, 0x3d, 0x7a, 0xba, 0xe5, 0xfd, 0x45, 0xae, 0xfb, 0x7c, 0x0e, 0x59, 0xc6, 0xbb, 0x71, 0x4e,
-	0x3f, 0xec, 0xfa, 0xb7, 0xce, 0xf9, 0xd2, 0xe9, 0x18, 0x5a, 0x9f, 0x50, 0xf1, 0xb5, 0xf1, 0xaa,
-	0x7f, 0x6f, 0x2f, 0x0e, 0x34, 0x33, 0x10, 0xa4, 0x94, 0xd3, 0x04, 0x52, 0xe0, 0x26, 0x88, 0xa8,
-	0x66, 0x71, 0x90, 0x69, 0x50, 0xb7, 0x9b, 0x4b, 0x01, 0x6d, 0x28, 0xef, 0x51, 0xd5, 0xab, 0x98,
-	0x1c, 0x74, 0xc0, 0x44, 0xc0, 0x78, 0x5f, 0x51, 0x6d, 0x54, 0x16, 0x9b, 0x4c, 0x41, 0xf0, 0x5a,
-	0x31, 0x03, 0xfb, 0x3f, 0x7f, 0x7f, 0xac, 0xdd, 0x6f, 0x75, 0x2a, 0x1b, 0x92, 0x93, 0x41, 0x69,
-	0xf2, 0xf6, 0x24, 0x1e, 0x95, 0xdb, 0xad, 0x8e, 0x46, 0xc4, 0xce, 0xe0, 0x01, 0x5a, 0xf7, 0xdb,
-	0xe3, 0x03, 0x54, 0xff, 0x71, 0x80, 0xfc, 0xff, 0xff, 0x68, 0xff, 0x7b, 0xa3, 0xf6, 0x10, 0x6d,
-	0xbc, 0x47, 0x93, 0x29, 0x76, 0x0e, 0xa7, 0xd8, 0x39, 0x9a, 0x62, 0xf4, 0xae, 0xc0, 0xe8, 0x73,
-	0x81, 0xd1, 0xb7, 0x02, 0xa3, 0x49, 0x81, 0xd1, 0xaf, 0x02, 0xa3, 0x3f, 0x05, 0x76, 0x8e, 0x0a,
-	0x8c, 0x3e, 0xcc, 0xb0, 0x33, 0x9e, 0x61, 0x34, 0x99, 0x61, 0xe7, 0x70, 0x86, 0x9d, 0x17, 0x5b,
-	0x89, 0x90, 0x3b, 0x49, 0x98, 0x8b, 0xa1, 0x01, 0xa5, 0x68, 0x98, 0x69, 0x62, 0x83, 0xbe, 0x50,
-	0x69, 0x20, 0x95, 0xc8, 0x59, 0x0f, 0x54, 0x70, 0x5c, 0x26, 0x32, 0x4a, 0x04, 0x81, 0x3d, 0x53,
-	0xd9, 0xee, 0xac, 0x3d, 0xa3, 0x4b, 0xd6, 0x75, 0x77, 0xff, 0x05, 0x00, 0x00, 0xff, 0xff, 0xd6,
-	0x8f, 0xdb, 0x29, 0x89, 0x03, 0x00, 0x00,
+	// 666 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x8c, 0x54, 0xcd, 0x6a, 0x14, 0x4b,
+	0x14, 0x9e, 0x9a, 0xb9, 0xf7, 0x92, 0xa9, 0x0b, 0xf7, 0x6a, 0x8b, 0x32, 0x74, 0x62, 0x1b, 0x1a,
+	0x84, 0x30, 0xa6, 0xbb, 0x74, 0x44, 0x04, 0x37, 0xc6, 0x8c, 0x28, 0xd9, 0x68, 0x18, 0x5d, 0xb9,
+	0x19, 0x6a, 0x7a, 0xce, 0x74, 0x2a, 0x99, 0xae, 0xea, 0x54, 0x55, 0x8f, 0x09, 0x12, 0x0c, 0xf1,
+	0x05, 0x04, 0x5f, 0xc2, 0x47, 0x10, 0xb2, 0xc9, 0xce, 0xac, 0x24, 0x28, 0x42, 0x96, 0xa6, 0xc7,
+	0x85, 0x2b, 0xc9, 0x13, 0x88, 0x74, 0xf5, 0xe4, 0x67, 0xb0, 0x0d, 0xee, 0xce, 0xcf, 0xd7, 0xe7,
+	0x9c, 0xef, 0x7c, 0xa7, 0x1a, 0xd7, 0x07, 0xa0, 0x7c, 0x26, 0x88, 0x0a, 0x96, 0x20, 0xa2, 0x44,
+	0x8b, 0x15, 0xe0, 0x24, 0x4e, 0x3a, 0x7d, 0x16, 0xb4, 0x83, 0x44, 0x69, 0x11, 0xd1, 0x98, 0xf9,
+	0xb1, 0x14, 0x5a, 0x58, 0x17, 0x72, 0xac, 0x9f, 0x63, 0x7d, 0x83, 0xb5, 0xbd, 0x90, 0xe9, 0xa5,
+	0xa4, 0xe3, 0x07, 0x22, 0x22, 0xa1, 0x08, 0x05, 0x31, 0xd8, 0x4e, 0xd2, 0x33, 0x9e, 0x71, 0x8c,
+	0x95, 0xd7, 0xb0, 0xa7, 0x42, 0x21, 0xc2, 0x3e, 0x10, 0x1a, 0x33, 0x42, 0x39, 0x17, 0x9a, 0x6a,
+	0x26, 0xb8, 0x1a, 0x65, 0x27, 0xc7, 0xa7, 0x11, 0xf1, 0xe9, 0xe4, 0x74, 0xd1, 0xa8, 0xa2, 0xb3,
+	0x0c, 0x81, 0x1e, 0x21, 0xae, 0x14, 0x21, 0xf4, 0x7a, 0x0c, 0x47, 0x25, 0xdc, 0x71, 0xc0, 0x00,
+	0x14, 0xf0, 0xc1, 0x78, 0x1b, 0xf7, 0x01, 0x3e, 0xf7, 0xd8, 0x14, 0x6d, 0x2e, 0x51, 0x1e, 0x42,
+	0x0b, 0x54, 0x6c, 0x35, 0x70, 0x45, 0x74, 0x96, 0x6b, 0x68, 0x1a, 0xcd, 0xfc, 0xdb, 0x98, 0xf4,
+	0x0b, 0xf6, 0xe0, 0xe7, 0xdf, 0xcc, 0x57, 0x76, 0x36, 0x50, 0x2b, 0x03, 0xbb, 0x1c, 0x4f, 0x3c,
+	0xd1, 0x54, 0x43, 0x0b, 0x56, 0xad, 0x29, 0x5c, 0xe5, 0x34, 0x02, 0x15, 0xd3, 0x00, 0x4c, 0x95,
+	0x6a, 0xeb, 0x24, 0x60, 0x59, 0xf8, 0xaf, 0xcc, 0xa9, 0x95, 0x4d, 0xc2, 0xd8, 0xd6, 0x75, 0xfc,
+	0xb7, 0xca, 0xbe, 0xae, 0x55, 0xa6, 0xd1, 0xcc, 0x7f, 0x0d, 0xbb, 0xb0, 0x67, 0x5e, 0x3f, 0x07,
+	0xba, 0x8b, 0xf8, 0xe2, 0x43, 0xd0, 0xcd, 0xbe, 0x48, 0xba, 0x0b, 0x9c, 0xe9, 0xa6, 0xe0, 0x3d,
+	0x16, 0x66, 0xcd, 0x6d, 0x3c, 0x11, 0x4b, 0x31, 0x60, 0x5d, 0x90, 0xa3, 0xde, 0xc7, 0xbe, 0x35,
+	0x89, 0xab, 0x8a, 0x69, 0x68, 0x9f, 0xea, 0x3f, 0x91, 0x05, 0x1e, 0xd1, 0x08, 0xdc, 0xfb, 0xf8,
+	0x52, 0x51, 0x45, 0x15, 0x5b, 0x75, 0x7c, 0x3e, 0xc8, 0xc2, 0x6d, 0xc6, 0x99, 0x6e, 0x07, 0x26,
+	0x31, 0xaa, 0xfd, 0x7f, 0x30, 0x8e, 0x6f, 0xfc, 0xa8, 0xe0, 0x6a, 0xd3, 0x5c, 0xd2, 0xbd, 0xc5,
+	0x05, 0xeb, 0x33, 0xc2, 0xf8, 0x69, 0x36, 0xbc, 0x99, 0xdd, 0xba, 0x7c, 0x06, 0x2f, 0x58, 0xb5,
+	0xaf, 0x9e, 0xb1, 0xea, 0x13, 0x79, 0xdc, 0x4d, 0x94, 0xbe, 0xaf, 0xdd, 0xed, 0xdd, 0x5a, 0x0b,
+	0xbc, 0x6c, 0x78, 0x2f, 0xa2, 0x9c, 0x86, 0x10, 0x01, 0xd7, 0x9e, 0xd2, 0x94, 0x77, 0xa9, 0xec,
+	0x7a, 0x89, 0x02, 0x39, 0x9b, 0x9d, 0x90, 0xc7, 0x84, 0xc7, 0x78, 0x4f, 0x52, 0xa5, 0x65, 0x12,
+	0xe8, 0x44, 0x82, 0xf7, 0x5c, 0x32, 0x0d, 0x5b, 0x9f, 0xbe, 0xbe, 0x29, 0xdf, 0x76, 0x1b, 0xa3,
+	0xeb, 0x27, 0xc7, 0xfa, 0x28, 0xf2, 0xe2, 0xd8, 0xde, 0xc8, 0x8f, 0x6a, 0x14, 0xda, 0x20, 0x66,
+	0xf5, 0x77, 0x50, 0xdd, 0xfa, 0x8e, 0xb0, 0xf5, 0xeb, 0xb2, 0xac, 0x7a, 0x21, 0x81, 0x42, 0x9d,
+	0xec, 0x6b, 0x7f, 0x8c, 0x55, 0xb1, 0xfb, 0x72, 0xf7, 0x5d, 0x39, 0x63, 0x3d, 0x77, 0x36, 0xeb,
+	0x48, 0x70, 0xa6, 0x85, 0x9c, 0x2d, 0xe6, 0x2d, 0x81, 0x76, 0x0d, 0xed, 0x1b, 0x16, 0x29, 0xa0,
+	0xad, 0xd6, 0x95, 0x86, 0x88, 0x84, 0xa0, 0x3d, 0x23, 0xaa, 0x97, 0xa9, 0xed, 0xe5, 0x6a, 0xdb,
+	0x33, 0x3b, 0xdb, 0xa8, 0xf2, 0x71, 0x1b, 0xd9, 0xbf, 0x57, 0x68, 0xeb, 0x43, 0xad, 0x3c, 0x87,
+	0xe6, 0x5f, 0xa1, 0xbd, 0x03, 0xa7, 0xb4, 0x7f, 0xe0, 0x94, 0x0e, 0x0f, 0x1c, 0xb4, 0x99, 0x3a,
+	0xe8, 0x6d, 0xea, 0xa0, 0xdd, 0xd4, 0x41, 0x7b, 0xa9, 0x83, 0xbe, 0xa4, 0x0e, 0xfa, 0x96, 0x3a,
+	0xa5, 0xc3, 0xd4, 0x41, 0xaf, 0x87, 0x4e, 0x69, 0x67, 0xe8, 0xa0, 0xbd, 0xa1, 0x53, 0xda, 0x1f,
+	0x3a, 0xa5, 0x67, 0x0b, 0xa1, 0x88, 0x57, 0x42, 0x7f, 0x20, 0xfa, 0x1a, 0xa4, 0xa4, 0x7e, 0xa2,
+	0x88, 0x31, 0x7a, 0x42, 0x46, 0xde, 0xd1, 0x11, 0x7b, 0x47, 0x69, 0x12, 0x77, 0x42, 0x41, 0x60,
+	0x4d, 0x8f, 0x9e, 0xf7, 0xe9, 0xdf, 0x40, 0xe7, 0x1f, 0xf3, 0xba, 0x6f, 0xfe, 0x0c, 0x00, 0x00,
+	0xff, 0xff, 0x23, 0x2c, 0xc7, 0x9e, 0xf1, 0x04, 0x00, 0x00,
 }
 
 func (this *ObjectChangeResp) Equal(that interface{}) bool {
@@ -273,6 +401,57 @@ func (this *StateReq) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *GetCloudInitConfigReq) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GetCloudInitConfigReq)
+	if !ok {
+		that2, ok := that.(GetCloudInitConfigReq)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Provider != that1.Provider {
+		return false
+	}
+	if this.SiteName != that1.SiteName {
+		return false
+	}
+	return true
+}
+func (this *GetCloudInitConfigResp) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GetCloudInitConfigResp)
+	if !ok {
+		that2, ok := that.(GetCloudInitConfigResp)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.CloudInitConfig != that1.CloudInitConfig {
+		return false
+	}
+	return true
+}
 func (this *ObjectChangeResp) GoString() string {
 	if this == nil {
 		return "nil"
@@ -294,6 +473,27 @@ func (this *StateReq) GoString() string {
 	s = append(s, "Namespace: "+fmt.Sprintf("%#v", this.Namespace)+",\n")
 	s = append(s, "Name: "+fmt.Sprintf("%#v", this.Name)+",\n")
 	s = append(s, "State: "+fmt.Sprintf("%#v", this.State)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *GetCloudInitConfigReq) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 6)
+	s = append(s, "&token.GetCloudInitConfigReq{")
+	s = append(s, "Provider: "+fmt.Sprintf("%#v", this.Provider)+",\n")
+	s = append(s, "SiteName: "+fmt.Sprintf("%#v", this.SiteName)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *GetCloudInitConfigResp) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 5)
+	s = append(s, "&token.GetCloudInitConfigResp{")
+	s = append(s, "CloudInitConfig: "+fmt.Sprintf("%#v", this.CloudInitConfig)+",\n")
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
@@ -323,6 +523,11 @@ type CustomAPIClient interface {
 	// x-displayName: "Set Token State"
 	// TokenState changes token status, it can be used to disable token.
 	TokenState(ctx context.Context, in *StateReq, opts ...grpc.CallOption) (*ObjectChangeResp, error)
+	// GetCloudInitConfig
+	//
+	// x-displayName: "Get Cloud Init Config"
+	// Returns cloud-init counfig for kvm provider with jwt token
+	GetCloudInitConfig(ctx context.Context, in *GetCloudInitConfigReq, opts ...grpc.CallOption) (*GetCloudInitConfigResp, error)
 }
 
 type customAPIClient struct {
@@ -342,6 +547,15 @@ func (c *customAPIClient) TokenState(ctx context.Context, in *StateReq, opts ...
 	return out, nil
 }
 
+func (c *customAPIClient) GetCloudInitConfig(ctx context.Context, in *GetCloudInitConfigReq, opts ...grpc.CallOption) (*GetCloudInitConfigResp, error) {
+	out := new(GetCloudInitConfigResp)
+	err := c.cc.Invoke(ctx, "/ves.io.schema.token.CustomAPI/GetCloudInitConfig", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // CustomAPIServer is the server API for CustomAPI service.
 type CustomAPIServer interface {
 	// Token states
@@ -349,6 +563,11 @@ type CustomAPIServer interface {
 	// x-displayName: "Set Token State"
 	// TokenState changes token status, it can be used to disable token.
 	TokenState(context.Context, *StateReq) (*ObjectChangeResp, error)
+	// GetCloudInitConfig
+	//
+	// x-displayName: "Get Cloud Init Config"
+	// Returns cloud-init counfig for kvm provider with jwt token
+	GetCloudInitConfig(context.Context, *GetCloudInitConfigReq) (*GetCloudInitConfigResp, error)
 }
 
 // UnimplementedCustomAPIServer can be embedded to have forward compatible implementations.
@@ -357,6 +576,9 @@ type UnimplementedCustomAPIServer struct {
 
 func (*UnimplementedCustomAPIServer) TokenState(ctx context.Context, req *StateReq) (*ObjectChangeResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method TokenState not implemented")
+}
+func (*UnimplementedCustomAPIServer) GetCloudInitConfig(ctx context.Context, req *GetCloudInitConfigReq) (*GetCloudInitConfigResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetCloudInitConfig not implemented")
 }
 
 func RegisterCustomAPIServer(s *grpc.Server, srv CustomAPIServer) {
@@ -381,6 +603,24 @@ func _CustomAPI_TokenState_Handler(srv interface{}, ctx context.Context, dec fun
 	return interceptor(ctx, in, info, handler)
 }
 
+func _CustomAPI_GetCloudInitConfig_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetCloudInitConfigReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CustomAPIServer).GetCloudInitConfig(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/ves.io.schema.token.CustomAPI/GetCloudInitConfig",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CustomAPIServer).GetCloudInitConfig(ctx, req.(*GetCloudInitConfigReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 var _CustomAPI_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "ves.io.schema.token.CustomAPI",
 	HandlerType: (*CustomAPIServer)(nil),
@@ -388,6 +628,10 @@ var _CustomAPI_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "TokenState",
 			Handler:    _CustomAPI_TokenState_Handler,
+		},
+		{
+			MethodName: "GetCloudInitConfig",
+			Handler:    _CustomAPI_GetCloudInitConfig_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
@@ -471,6 +715,73 @@ func (m *StateReq) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
+func (m *GetCloudInitConfigReq) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *GetCloudInitConfigReq) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetCloudInitConfigReq) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.SiteName) > 0 {
+		i -= len(m.SiteName)
+		copy(dAtA[i:], m.SiteName)
+		i = encodeVarintPublicCustomapi(dAtA, i, uint64(len(m.SiteName)))
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.Provider) > 0 {
+		i -= len(m.Provider)
+		copy(dAtA[i:], m.Provider)
+		i = encodeVarintPublicCustomapi(dAtA, i, uint64(len(m.Provider)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *GetCloudInitConfigResp) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *GetCloudInitConfigResp) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetCloudInitConfigResp) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.CloudInitConfig) > 0 {
+		i -= len(m.CloudInitConfig)
+		copy(dAtA[i:], m.CloudInitConfig)
+		i = encodeVarintPublicCustomapi(dAtA, i, uint64(len(m.CloudInitConfig)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
 func encodeVarintPublicCustomapi(dAtA []byte, offset int, v uint64) int {
 	offset -= sovPublicCustomapi(v)
 	base := offset
@@ -515,6 +826,36 @@ func (m *StateReq) Size() (n int) {
 	return n
 }
 
+func (m *GetCloudInitConfigReq) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Provider)
+	if l > 0 {
+		n += 1 + l + sovPublicCustomapi(uint64(l))
+	}
+	l = len(m.SiteName)
+	if l > 0 {
+		n += 1 + l + sovPublicCustomapi(uint64(l))
+	}
+	return n
+}
+
+func (m *GetCloudInitConfigResp) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.CloudInitConfig)
+	if l > 0 {
+		n += 1 + l + sovPublicCustomapi(uint64(l))
+	}
+	return n
+}
+
 func sovPublicCustomapi(x uint64) (n int) {
 	return (math_bits.Len64(x|1) + 6) / 7
 }
@@ -539,6 +880,27 @@ func (this *StateReq) String() string {
 		`Namespace:` + fmt.Sprintf("%v", this.Namespace) + `,`,
 		`Name:` + fmt.Sprintf("%v", this.Name) + `,`,
 		`State:` + fmt.Sprintf("%v", this.State) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GetCloudInitConfigReq) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GetCloudInitConfigReq{`,
+		`Provider:` + fmt.Sprintf("%v", this.Provider) + `,`,
+		`SiteName:` + fmt.Sprintf("%v", this.SiteName) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GetCloudInitConfigResp) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GetCloudInitConfigResp{`,
+		`CloudInitConfig:` + fmt.Sprintf("%v", this.CloudInitConfig) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -752,6 +1114,208 @@ func (m *StateReq) Unmarshal(dAtA []byte) error {
 					break
 				}
 			}
+		default:
+			iNdEx = preIndex
+			skippy, err := skipPublicCustomapi(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *GetCloudInitConfigReq) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowPublicCustomapi
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: GetCloudInitConfigReq: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: GetCloudInitConfigReq: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Provider", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Provider = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field SiteName", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.SiteName = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipPublicCustomapi(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *GetCloudInitConfigResp) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowPublicCustomapi
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: GetCloudInitConfigResp: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: GetCloudInitConfigResp: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field CloudInitConfig", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.CloudInitConfig = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipPublicCustomapi(dAtA[iNdEx:])

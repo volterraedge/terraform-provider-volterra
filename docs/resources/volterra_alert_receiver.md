@@ -1,9 +1,9 @@
 ---
 
 page_title: "Volterra: alert_receiver"
-description: "The alert_receiver allows CRUD of Alert Receiver resource on Volterra SaaS"
 
----
+description: "The alert_receiver allows CRUD of Alert Receiver resource on Volterra SaaS"
+-----------------------------------------------------------------------------------------
 
 Resource volterra_alert_receiver
 ================================
@@ -38,12 +38,8 @@ resource "volterra_alert_receiver" "example" {
 
       // One of the arguments from this list "blindfold_secret_info clear_secret_info vault_secret_info wingman_secret_info" must be set
 
-      blindfold_secret_info {
-        decryption_provider = "value"
-
-        location = "string:///U2VjcmV0SW5mb3JtYXRpb24="
-
-        store_provider = "value"
+      wingman_secret_info {
+        name = "ChargeBack-API-Key"
       }
     }
   }

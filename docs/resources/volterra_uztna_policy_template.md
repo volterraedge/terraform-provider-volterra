@@ -1,9 +1,9 @@
 ---
 
 page_title: "Volterra: uztna_policy_template"
-description: "The uztna_policy_template allows CRUD of Uztna Policy Template resource on Volterra SaaS"
 
----
+description: "The uztna_policy_template allows CRUD of Uztna Policy Template resource on Volterra SaaS"
+-------------------------------------------------------------------------------------------------------
 
 Resource volterra_uztna_policy_template
 =======================================
@@ -19,12 +19,6 @@ Example Usage
 resource "volterra_uztna_policy_template" "example" {
   name      = "acmecorp-web"
   namespace = "staging"
-
-  continuous_flow {
-    // One of the arguments from this list "deny_all simple" must be set
-
-    deny_all = true
-  }
 
   on_start_flow {
     // One of the arguments from this list "deny_all simple" must be set
@@ -54,7 +48,7 @@ Argument Reference
 
 ### Spec Argument Reference
 
-`continuous_flow` - (Required) and continuously validates the relevant flows assigned in on start. See [Continuous Flow ](#continuous-flow) below for details.
+`continuous_flow` - (Optional) and continuously validates the relevant flows assigned in on start. See [Continuous Flow ](#continuous-flow) below for details.(Deprecated)
 
 `on_start_flow` - (Required) throughout the entirety of the session. See [On Start Flow ](#on-start-flow) below for details.
 
@@ -64,7 +58,7 @@ and continuously validates the relevant flows assigned in on start.
 
 ###### One of the arguments from this list "deny_all, simple" must be set
 
-`deny_all` - (Optional) Deny All will deny all the requests (`Bool`).
+`deny_all` - (Optional) Deny All will deny all the requests (`Bool`).(Deprecated)
 
 `simple` - (Optional) This template . See [Template Type Simple ](#template-type-simple) below for details.
 
@@ -74,7 +68,7 @@ throughout the entirety of the session.
 
 ###### One of the arguments from this list "deny_all, simple" must be set
 
-`deny_all` - (Optional) Deny All will deny all the requests (`Bool`).
+`deny_all` - (Optional) Deny All will deny all the requests (`Bool`).(Deprecated)
 
 `simple` - (Optional) This template . See [Template Type Simple ](#template-type-simple) below for details.
 
@@ -110,7 +104,7 @@ Or you can also Empty Flow.
 
 ###### One of the arguments from this list "allow_all, geolocation_match, saml_federation" can be set
 
-`allow_all` - (Optional) Allow All (`Bool`).
+`allow_all` - (Optional) Allow All (`Bool`).(Deprecated)
 
 `geolocation_match` - (Required) flows of type Geolocation Match. See [Flow Type Geolocation Match ](#flow-type-geolocation-match) below for details.
 

@@ -1,9 +1,9 @@
 ---
 
 page_title: "Volterra: k8s_pod_security_policy"
-description: "The k8s_pod_security_policy allows CRUD of K8s Pod Security Policy resource on Volterra SaaS"
 
----
+description: "The k8s_pod_security_policy allows CRUD of K8s Pod Security Policy resource on Volterra SaaS"
+-----------------------------------------------------------------------------------------------------------
 
 Resource volterra_k8s_pod_security_policy
 =========================================

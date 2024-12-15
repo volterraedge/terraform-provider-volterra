@@ -716,50 +716,6 @@ func (v *ValidateAPIGroupChoice) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-	case *APIGroupChoice_VoltconsoleSyntheticMonitorRead:
-		if fv, exists := v.FldValidators["choice.voltconsole_synthetic_monitor_read"]; exists {
-			val := m.GetChoice().(*APIGroupChoice_VoltconsoleSyntheticMonitorRead).VoltconsoleSyntheticMonitorRead
-			vOpts := append(opts,
-				db.WithValidateField("choice"),
-				db.WithValidateField("voltconsole_synthetic_monitor_read"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *APIGroupChoice_VoltconsoleSyntheticMonitorWrite:
-		if fv, exists := v.FldValidators["choice.voltconsole_synthetic_monitor_write"]; exists {
-			val := m.GetChoice().(*APIGroupChoice_VoltconsoleSyntheticMonitorWrite).VoltconsoleSyntheticMonitorWrite
-			vOpts := append(opts,
-				db.WithValidateField("choice"),
-				db.WithValidateField("voltconsole_synthetic_monitor_write"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *APIGroupChoice_VoltconsoleSyntheticMonitorAdmin:
-		if fv, exists := v.FldValidators["choice.voltconsole_synthetic_monitor_admin"]; exists {
-			val := m.GetChoice().(*APIGroupChoice_VoltconsoleSyntheticMonitorAdmin).VoltconsoleSyntheticMonitorAdmin
-			vOpts := append(opts,
-				db.WithValidateField("choice"),
-				db.WithValidateField("voltconsole_synthetic_monitor_admin"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *APIGroupChoice_VoltconsoleSyntheticMonitorSubscriptionMgmt:
-		if fv, exists := v.FldValidators["choice.voltconsole_synthetic_monitor_subscription_mgmt"]; exists {
-			val := m.GetChoice().(*APIGroupChoice_VoltconsoleSyntheticMonitorSubscriptionMgmt).VoltconsoleSyntheticMonitorSubscriptionMgmt
-			vOpts := append(opts,
-				db.WithValidateField("choice"),
-				db.WithValidateField("voltconsole_synthetic_monitor_subscription_mgmt"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
 	case *APIGroupChoice_VoltconsoleNginxMgmtSuiteRead:
 		if fv, exists := v.FldValidators["choice.voltconsole_nginx_mgmt_suite_read"]; exists {
 			val := m.GetChoice().(*APIGroupChoice_VoltconsoleNginxMgmtSuiteRead).VoltconsoleNginxMgmtSuiteRead
@@ -810,50 +766,6 @@ func (v *ValidateAPIGroupChoice) Validate(ctx context.Context, pm interface{}, o
 			vOpts := append(opts,
 				db.WithValidateField("choice"),
 				db.WithValidateField("voltconsole_nginx_mgmt_suite_application"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *APIGroupChoice_VoltconsoleCdnRead:
-		if fv, exists := v.FldValidators["choice.voltconsole_cdn_read"]; exists {
-			val := m.GetChoice().(*APIGroupChoice_VoltconsoleCdnRead).VoltconsoleCdnRead
-			vOpts := append(opts,
-				db.WithValidateField("choice"),
-				db.WithValidateField("voltconsole_cdn_read"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *APIGroupChoice_VoltconsoleCdnWrite:
-		if fv, exists := v.FldValidators["choice.voltconsole_cdn_write"]; exists {
-			val := m.GetChoice().(*APIGroupChoice_VoltconsoleCdnWrite).VoltconsoleCdnWrite
-			vOpts := append(opts,
-				db.WithValidateField("choice"),
-				db.WithValidateField("voltconsole_cdn_write"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *APIGroupChoice_VoltconsoleCdnAdmin:
-		if fv, exists := v.FldValidators["choice.voltconsole_cdn_admin"]; exists {
-			val := m.GetChoice().(*APIGroupChoice_VoltconsoleCdnAdmin).VoltconsoleCdnAdmin
-			vOpts := append(opts,
-				db.WithValidateField("choice"),
-				db.WithValidateField("voltconsole_cdn_admin"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *APIGroupChoice_VoltconsoleCdnSubscriptionMgmt:
-		if fv, exists := v.FldValidators["choice.voltconsole_cdn_subscription_mgmt"]; exists {
-			val := m.GetChoice().(*APIGroupChoice_VoltconsoleCdnSubscriptionMgmt).VoltconsoleCdnSubscriptionMgmt
-			vOpts := append(opts,
-				db.WithValidateField("choice"),
-				db.WithValidateField("voltconsole_cdn_subscription_mgmt"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
@@ -931,17 +843,6 @@ func (v *ValidateAPIGroupChoice) Validate(ctx context.Context, pm interface{}, o
 			vOpts := append(opts,
 				db.WithValidateField("choice"),
 				db.WithValidateField("f5xc_billing"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *APIGroupChoice_F5XcAuditLogsAlerts:
-		if fv, exists := v.FldValidators["choice.f5xc_audit_logs_alerts"]; exists {
-			val := m.GetChoice().(*APIGroupChoice_F5XcAuditLogsAlerts).F5XcAuditLogsAlerts
-			vOpts := append(opts,
-				db.WithValidateField("choice"),
-				db.WithValidateField("f5xc_audit_logs_alerts"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
@@ -1530,72 +1431,6 @@ func (v *ValidateAPIGroupChoice) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-	case *APIGroupChoice_F5XcCdnBasicMonitor:
-		if fv, exists := v.FldValidators["choice.f5xc_cdn_basic_monitor"]; exists {
-			val := m.GetChoice().(*APIGroupChoice_F5XcCdnBasicMonitor).F5XcCdnBasicMonitor
-			vOpts := append(opts,
-				db.WithValidateField("choice"),
-				db.WithValidateField("f5xc_cdn_basic_monitor"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *APIGroupChoice_F5XcCdnBasicUser:
-		if fv, exists := v.FldValidators["choice.f5xc_cdn_basic_user"]; exists {
-			val := m.GetChoice().(*APIGroupChoice_F5XcCdnBasicUser).F5XcCdnBasicUser
-			vOpts := append(opts,
-				db.WithValidateField("choice"),
-				db.WithValidateField("f5xc_cdn_basic_user"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *APIGroupChoice_F5XcCdnBasicAdmin:
-		if fv, exists := v.FldValidators["choice.f5xc_cdn_basic_admin"]; exists {
-			val := m.GetChoice().(*APIGroupChoice_F5XcCdnBasicAdmin).F5XcCdnBasicAdmin
-			vOpts := append(opts,
-				db.WithValidateField("choice"),
-				db.WithValidateField("f5xc_cdn_basic_admin"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *APIGroupChoice_F5XcWaapBasicMonitor:
-		if fv, exists := v.FldValidators["choice.f5xc_waap_basic_monitor"]; exists {
-			val := m.GetChoice().(*APIGroupChoice_F5XcWaapBasicMonitor).F5XcWaapBasicMonitor
-			vOpts := append(opts,
-				db.WithValidateField("choice"),
-				db.WithValidateField("f5xc_waap_basic_monitor"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *APIGroupChoice_F5XcWaapBasicUser:
-		if fv, exists := v.FldValidators["choice.f5xc_waap_basic_user"]; exists {
-			val := m.GetChoice().(*APIGroupChoice_F5XcWaapBasicUser).F5XcWaapBasicUser
-			vOpts := append(opts,
-				db.WithValidateField("choice"),
-				db.WithValidateField("f5xc_waap_basic_user"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *APIGroupChoice_F5XcWaapBasicAdmin:
-		if fv, exists := v.FldValidators["choice.f5xc_waap_basic_admin"]; exists {
-			val := m.GetChoice().(*APIGroupChoice_F5XcWaapBasicAdmin).F5XcWaapBasicAdmin
-			vOpts := append(opts,
-				db.WithValidateField("choice"),
-				db.WithValidateField("f5xc_waap_basic_admin"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
 	case *APIGroupChoice_F5XcWaapAdvancedMonitor:
 		if fv, exists := v.FldValidators["choice.f5xc_waap_advanced_monitor"]; exists {
 			val := m.GetChoice().(*APIGroupChoice_F5XcWaapAdvancedMonitor).F5XcWaapAdvancedMonitor
@@ -1624,39 +1459,6 @@ func (v *ValidateAPIGroupChoice) Validate(ctx context.Context, pm interface{}, o
 			vOpts := append(opts,
 				db.WithValidateField("choice"),
 				db.WithValidateField("f5xc_waap_advanced_admin"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *APIGroupChoice_F5XcSiteManagementBasicMonitor:
-		if fv, exists := v.FldValidators["choice.f5xc_site_management_basic_monitor"]; exists {
-			val := m.GetChoice().(*APIGroupChoice_F5XcSiteManagementBasicMonitor).F5XcSiteManagementBasicMonitor
-			vOpts := append(opts,
-				db.WithValidateField("choice"),
-				db.WithValidateField("f5xc_site_management_basic_monitor"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *APIGroupChoice_F5XcSiteManagementBasicUser:
-		if fv, exists := v.FldValidators["choice.f5xc_site_management_basic_user"]; exists {
-			val := m.GetChoice().(*APIGroupChoice_F5XcSiteManagementBasicUser).F5XcSiteManagementBasicUser
-			vOpts := append(opts,
-				db.WithValidateField("choice"),
-				db.WithValidateField("f5xc_site_management_basic_user"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *APIGroupChoice_F5XcSiteManagementBasicAdmin:
-		if fv, exists := v.FldValidators["choice.f5xc_site_management_basic_admin"]; exists {
-			val := m.GetChoice().(*APIGroupChoice_F5XcSiteManagementBasicAdmin).F5XcSiteManagementBasicAdmin
-			vOpts := append(opts,
-				db.WithValidateField("choice"),
-				db.WithValidateField("f5xc_site_management_basic_admin"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
@@ -1695,39 +1497,6 @@ func (v *ValidateAPIGroupChoice) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-	case *APIGroupChoice_F5XcSyntheticMonitoringBasicMonitor:
-		if fv, exists := v.FldValidators["choice.f5xc_synthetic_monitoring_basic_monitor"]; exists {
-			val := m.GetChoice().(*APIGroupChoice_F5XcSyntheticMonitoringBasicMonitor).F5XcSyntheticMonitoringBasicMonitor
-			vOpts := append(opts,
-				db.WithValidateField("choice"),
-				db.WithValidateField("f5xc_synthetic_monitoring_basic_monitor"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *APIGroupChoice_F5XcSyntheticMonitoringBasicUser:
-		if fv, exists := v.FldValidators["choice.f5xc_synthetic_monitoring_basic_user"]; exists {
-			val := m.GetChoice().(*APIGroupChoice_F5XcSyntheticMonitoringBasicUser).F5XcSyntheticMonitoringBasicUser
-			vOpts := append(opts,
-				db.WithValidateField("choice"),
-				db.WithValidateField("f5xc_synthetic_monitoring_basic_user"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *APIGroupChoice_F5XcSyntheticMonitoringBasicAdmin:
-		if fv, exists := v.FldValidators["choice.f5xc_synthetic_monitoring_basic_admin"]; exists {
-			val := m.GetChoice().(*APIGroupChoice_F5XcSyntheticMonitoringBasicAdmin).F5XcSyntheticMonitoringBasicAdmin
-			vOpts := append(opts,
-				db.WithValidateField("choice"),
-				db.WithValidateField("f5xc_synthetic_monitoring_basic_admin"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
 	case *APIGroupChoice_F5XcChildManagementSupportAdmin:
 		if fv, exists := v.FldValidators["choice.f5xc_child_management_support_admin"]; exists {
 			val := m.GetChoice().(*APIGroupChoice_F5XcChildManagementSupportAdmin).F5XcChildManagementSupportAdmin
@@ -1761,39 +1530,6 @@ func (v *ValidateAPIGroupChoice) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-	case *APIGroupChoice_F5XcSecuremeshBasicMonitor:
-		if fv, exists := v.FldValidators["choice.f5xc_securemesh_basic_monitor"]; exists {
-			val := m.GetChoice().(*APIGroupChoice_F5XcSecuremeshBasicMonitor).F5XcSecuremeshBasicMonitor
-			vOpts := append(opts,
-				db.WithValidateField("choice"),
-				db.WithValidateField("f5xc_securemesh_basic_monitor"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *APIGroupChoice_F5XcSecuremeshBasicUser:
-		if fv, exists := v.FldValidators["choice.f5xc_securemesh_basic_user"]; exists {
-			val := m.GetChoice().(*APIGroupChoice_F5XcSecuremeshBasicUser).F5XcSecuremeshBasicUser
-			vOpts := append(opts,
-				db.WithValidateField("choice"),
-				db.WithValidateField("f5xc_securemesh_basic_user"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *APIGroupChoice_F5XcSecuremeshBasicAdmin:
-		if fv, exists := v.FldValidators["choice.f5xc_securemesh_basic_admin"]; exists {
-			val := m.GetChoice().(*APIGroupChoice_F5XcSecuremeshBasicAdmin).F5XcSecuremeshBasicAdmin
-			vOpts := append(opts,
-				db.WithValidateField("choice"),
-				db.WithValidateField("f5xc_securemesh_basic_admin"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
 	case *APIGroupChoice_F5XcSecuremeshAdvancedMonitor:
 		if fv, exists := v.FldValidators["choice.f5xc_securemesh_advanced_monitor"]; exists {
 			val := m.GetChoice().(*APIGroupChoice_F5XcSecuremeshAdvancedMonitor).F5XcSecuremeshAdvancedMonitor
@@ -1822,39 +1558,6 @@ func (v *ValidateAPIGroupChoice) Validate(ctx context.Context, pm interface{}, o
 			vOpts := append(opts,
 				db.WithValidateField("choice"),
 				db.WithValidateField("f5xc_securemesh_advanced_admin"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *APIGroupChoice_F5XcAppstackBasicMonitor:
-		if fv, exists := v.FldValidators["choice.f5xc_appstack_basic_monitor"]; exists {
-			val := m.GetChoice().(*APIGroupChoice_F5XcAppstackBasicMonitor).F5XcAppstackBasicMonitor
-			vOpts := append(opts,
-				db.WithValidateField("choice"),
-				db.WithValidateField("f5xc_appstack_basic_monitor"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *APIGroupChoice_F5XcAppstackBasicUser:
-		if fv, exists := v.FldValidators["choice.f5xc_appstack_basic_user"]; exists {
-			val := m.GetChoice().(*APIGroupChoice_F5XcAppstackBasicUser).F5XcAppstackBasicUser
-			vOpts := append(opts,
-				db.WithValidateField("choice"),
-				db.WithValidateField("f5xc_appstack_basic_user"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *APIGroupChoice_F5XcAppstackBasicAdmin:
-		if fv, exists := v.FldValidators["choice.f5xc_appstack_basic_admin"]; exists {
-			val := m.GetChoice().(*APIGroupChoice_F5XcAppstackBasicAdmin).F5XcAppstackBasicAdmin
-			vOpts := append(opts,
-				db.WithValidateField("choice"),
-				db.WithValidateField("f5xc_appstack_basic_admin"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err

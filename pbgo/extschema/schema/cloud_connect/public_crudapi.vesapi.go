@@ -1149,16 +1149,25 @@ func (s *APISrv) Create(ctx context.Context, req *CreateRequest) (*CreateRespons
 	}
 	reqMsgFQN := "ves.io.schema.cloud_connect.CreateRequest"
 	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.sf, reqMsgFQN, req)
+	var retErr error
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
 		}
+		userMsg := "The 'ves.io.schema.cloud_connect.API.Create' operation on 'cloud_connect'"
+		if retErr == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
 	obj := NewDBObject(nil)
 	req.ToObject(obj)
 	if conv, exists := s.sf.Config().MsgToObjConverters[reqMsgFQN]; exists {
 		if err := conv(req, obj); err != nil {
+			retErr = err
 			return nil, err
 		}
 	}
@@ -1167,16 +1176,19 @@ func (s *APISrv) Create(ctx context.Context, req *CreateRequest) (*CreateRespons
 	rsrcRsp, err := s.opts.RsrcHandler.CreateFn(ctx, rsrcReq, s.apiWrapper)
 	if err != nil {
 		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "CreateResource"))
+		retErr = err
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 	rsp, err := NewObjectCreateRsp(rsrcRsp.Entry)
 	if err != nil {
 		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "CreateResponse"))
+		retErr = err
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 	rspMsgFQN := "ves.io.schema.cloud_connect.CreateResponse"
 	if conv, exists := s.sf.Config().ObjToMsgConverters[rspMsgFQN]; exists {
 		if err := conv(rsrcRsp.Entry, rsp); err != nil {
+			retErr = err
 			return nil, err
 		}
 	}
@@ -1208,21 +1220,31 @@ func (s *APISrv) Replace(ctx context.Context, req *ReplaceRequest) (*ReplaceResp
 		}
 	}
 	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.sf, "ves.io.schema.cloud_connect.API.ReplaceRequest", req)
+	var retErr error
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
 		}
+		userMsg := "The 'ves.io.schema.cloud_connect.API.Replace' operation on 'cloud_connect'"
+		if retErr == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
 	rsrcReq := &server.ResourceReplaceRequest{RequestMsg: req}
 	rsrcRsp, err := s.opts.RsrcHandler.ReplaceFn(ctx, rsrcReq, s.apiWrapper)
 	if err != nil {
 		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "ReplaceResource"))
+		retErr = err
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 	rsp, err := NewObjectReplaceRsp(rsrcRsp.Entry)
 	if err != nil {
 		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "ReplaceResponse"))
+		retErr = err
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.sf, "ves.io.schema.cloud_connect.API.ReplaceResponse", rsp)...)
@@ -1341,10 +1363,18 @@ func (s *APISrv) Delete(ctx context.Context, req *DeleteRequest) (*google_protob
 		}
 	}
 	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.sf, "ves.io.schema.cloud_connect.API.DeleteRequest", req)
+	var retErr error
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
 		}
+		userMsg := "The 'ves.io.schema.cloud_connect.API.Delete' operation on 'cloud_connect'"
+		if retErr == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
 	tenant := server.TenantFromContext(ctx)
@@ -1354,6 +1384,7 @@ func (s *APISrv) Delete(ctx context.Context, req *DeleteRequest) (*google_protob
 	_, err := s.opts.RsrcHandler.DeleteFn(ctx, rsrcReq, s.apiWrapper)
 	if err != nil {
 		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "DeleteResource"))
+		retErr = err
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 	return &google_protobuf.Empty{}, nil
@@ -2211,21 +2242,29 @@ var APISwaggerJSON string = `{
                 },
                 "connect_attachment_status": {
                     "type": "array",
-                    "description": " AWS Connect Attachment Status Typ",
+                    "description": " AWS Connect Attachment Status Type\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1\n",
                     "title": "AWS Connect Attachment Status Type",
+                    "maxItems": 1,
                     "items": {
                         "$ref": "#/definitions/cloud_connectAWSConnectAttachmentStatusType"
                     },
-                    "x-displayname": "AWS Connect Attachment Status Type"
+                    "x-displayname": "AWS Connect Attachment Status",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "1"
+                    }
                 },
                 "tgw_route_table_status": {
                     "type": "array",
-                    "description": " AWS Transit Gateway Route Table Status Type",
+                    "description": " AWS Transit Gateway Route Table Status Type\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 2\n",
                     "title": "AWS Transit Gateway Route Table Status Type",
+                    "maxItems": 2,
                     "items": {
                         "$ref": "#/definitions/cloud_connectAWSTGWRouteTableStatusType"
                     },
-                    "x-displayname": "AWS Transit Gateway Route Table Status Type"
+                    "x-displayname": "AWS Transit Gateway Route Table Status",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "2"
+                    }
                 }
             }
         },
@@ -2240,13 +2279,13 @@ var APISwaggerJSON string = `{
                     "type": "string",
                     "description": " Association route table ID",
                     "title": "Association route table ID",
-                    "x-displayname": "Association route table ID"
+                    "x-displayname": "Associated Transit Gateway route table ID"
                 },
                 "association_state": {
                     "type": "string",
-                    "description": " Association state",
+                    "description": " Transit Gateway route table association state",
                     "title": "Association state",
-                    "x-displayname": "Association state"
+                    "x-displayname": "Transit Gateway route table association state"
                 },
                 "creation_time": {
                     "type": "string",
@@ -2257,9 +2296,9 @@ var APISwaggerJSON string = `{
                 },
                 "deployment_status": {
                     "type": "string",
-                    "description": " Attachment Deployment Status",
-                    "title": "Attachment Deployment Status",
-                    "x-displayname": "Attachment Deployment Status"
+                    "description": " Additional VPC attachment deployment status",
+                    "title": "Additional VPC attachment deployment status",
+                    "x-displayname": "VPC attachment deployment status"
                 },
                 "installed_routes": {
                     "description": " Routes",
@@ -2278,9 +2317,14 @@ var APISwaggerJSON string = `{
                 },
                 "tags": {
                     "type": "object",
-                    "description": " Attachment Tags",
+                    "description": " Attachment Tags\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.max_len: 127\n  ves.io.schema.rules.map.max_pairs: 20\n  ves.io.schema.rules.map.values.string.max_len: 255\n",
                     "title": "Attachment Tags",
-                    "x-displayname": "Attachment Tags"
+                    "x-displayname": "Attachment Tags",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.map.keys.string.max_len": "127",
+                        "ves.io.schema.rules.map.max_pairs": "20",
+                        "ves.io.schema.rules.map.values.string.max_len": "255"
+                    }
                 },
                 "tgw_attachment_id": {
                     "type": "string",
@@ -2326,6 +2370,54 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "cloud_connectAWSCloudTransitGatewayType": {
+            "type": "object",
+            "description": "Cloud Transit Gateway Type",
+            "title": "Cloud Transit Gateway Type",
+            "x-displayname": "Cloud Transit Gateway Type",
+            "x-ves-proto-message": "ves.io.schema.cloud_connect.AWSCloudTransitGatewayType",
+            "properties": {
+                "cloud_transit_gateway": {
+                    "description": " Cloud Transit Gateway Reference\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Cloud Transit Gateway",
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "Cloud Transit Gateway",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "cred": {
+                    "description": " Reference to cloud credential to deploy resources\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Cloud Credential",
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "Credential Reference",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "peers": {
+                    "type": "array",
+                    "description": " Peers",
+                    "title": "Peers",
+                    "items": {
+                        "$ref": "#/definitions/cloud_connectPeerType"
+                    },
+                    "x-displayname": "Peers"
+                },
+                "vpc_attachments": {
+                    "description": " Spoke VPCs to be attached to the Cloud Transit Gateway \n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Spoke VPCs",
+                    "$ref": "#/definitions/cloud_connectAWSVPCAttachmentListType",
+                    "x-displayname": "Spoke VPCs",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                }
+            }
+        },
         "cloud_connectAWSConnectAttachmentStatusType": {
             "type": "object",
             "description": "AWS Connect Attachment Status Type",
@@ -2341,9 +2433,21 @@ var APISwaggerJSON string = `{
                 },
                 "association_state": {
                     "type": "string",
-                    "description": " Association state",
+                    "description": " Transit Gateway route table association state",
                     "title": "Association state",
-                    "x-displayname": "Association state"
+                    "x-displayname": "Transit Gateway route table association state"
+                },
+                "connect_deployment_state": {
+                    "description": " Connect Attachment Deployment State",
+                    "title": "Connect Attachment Deployment State",
+                    "$ref": "#/definitions/cloud_connectCloudConnectVPCStateType",
+                    "x-displayname": "Connect Attachment Deployment State"
+                },
+                "deployment_status": {
+                    "type": "string",
+                    "description": " Additional information related to the connect attachment deployment.",
+                    "title": "Deployment Status",
+                    "x-displayname": "Deployment Status"
                 },
                 "peers": {
                     "type": "array",
@@ -2360,17 +2464,16 @@ var APISwaggerJSON string = `{
                     "title": "Connect protocol",
                     "x-displayname": "Connect protocol"
                 },
-                "state": {
-                    "type": "string",
-                    "description": " State",
-                    "title": "State",
-                    "x-displayname": "State"
-                },
                 "tags": {
                     "type": "object",
-                    "description": " Attachment Tags",
+                    "description": " Attachment Tags\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.max_len: 127\n  ves.io.schema.rules.map.max_pairs: 20\n  ves.io.schema.rules.map.values.string.max_len: 255\n",
                     "title": "Attachment Tags",
-                    "x-displayname": "Attachment Tags"
+                    "x-displayname": "Attachment Tags",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.map.keys.string.max_len": "127",
+                        "ves.io.schema.rules.map.max_pairs": "20",
+                        "ves.io.schema.rules.map.values.string.max_len": "255"
+                    }
                 },
                 "transit_gateway_asn": {
                     "type": "string",
@@ -2411,17 +2514,17 @@ var APISwaggerJSON string = `{
             "x-displayname": "AWS Connect Peer Status Type",
             "x-ves-proto-message": "ves.io.schema.cloud_connect.AWSConnectPeerStatusType",
             "properties": {
-                "bgp_inside_cidr_block": {
-                    "type": "string",
-                    "description": " BGP Inside CIDR blocks",
-                    "title": "BGP Inside CIDR blocks",
-                    "x-displayname": "BGP Inside CIDR blocks"
-                },
                 "connect_attachment_id": {
                     "type": "string",
                     "description": " Connect attachment ID",
                     "title": "Connect attachment ID",
                     "x-displayname": "Connect attachment ID"
+                },
+                "connect_peer_deployment_state": {
+                    "description": " Connect Peer Attachment Deployment State",
+                    "title": "Connect Peer Attachment Deployment State",
+                    "$ref": "#/definitions/cloud_connectCloudConnectVPCStateType",
+                    "x-displayname": "Connect Peer Attachment Deployment State"
                 },
                 "connect_peer_id": {
                     "type": "string",
@@ -2429,53 +2532,28 @@ var APISwaggerJSON string = `{
                     "title": "Connect Peer ID",
                     "x-displayname": "Connect Peer ID"
                 },
+                "deployment_status": {
+                    "type": "string",
+                    "description": " Additional information related to the connect peer attachment deployment.",
+                    "title": "Deployment Status",
+                    "x-displayname": "Deployment Status"
+                },
                 "name": {
                     "type": "string",
                     "description": " Connect Peer Name",
                     "title": "Connect Peer Name",
                     "x-displayname": "Connect Peer Name"
                 },
-                "peer_asn": {
-                    "type": "string",
-                    "description": " Peer ASN",
-                    "title": "Peer ASN",
-                    "x-displayname": "Peer ASN"
-                },
-                "peer_bgp_address": {
-                    "type": "string",
-                    "description": " Peer BGP address",
-                    "title": "Peer BGP address",
-                    "x-displayname": "Peer BGP address"
-                },
-                "peer_gre_address": {
-                    "type": "string",
-                    "description": " Peer GRE address",
-                    "title": "Peer GRE address",
-                    "x-displayname": "Peer GRE address"
-                },
-                "state": {
-                    "type": "string",
-                    "description": " State",
-                    "title": "State",
-                    "x-displayname": "State"
-                },
-                "transit_gateway_bgp_1_address": {
-                    "type": "string",
-                    "description": " Transit gateway BGP 1 address",
-                    "title": "Transit gateway BGP 1 address",
-                    "x-displayname": "Transit gateway BGP 1 address"
-                },
-                "transit_gateway_bgp_2_address": {
-                    "type": "string",
-                    "description": " Transit gateway BGP 2 address",
-                    "title": "Transit gateway BGP 2 address",
-                    "x-displayname": "Transit gateway BGP 2 address"
-                },
-                "transit_gateway_gre_address": {
-                    "type": "string",
-                    "description": " Transit gateway GRE address",
-                    "title": "Transit gateway GRE address",
-                    "x-displayname": "Transit gateway GRE address"
+                "tags": {
+                    "type": "object",
+                    "description": " Connect Peer Tags\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.max_len: 127\n  ves.io.schema.rules.map.max_pairs: 20\n  ves.io.schema.rules.map.values.string.max_len: 255\n",
+                    "title": "Connect Peer Tags",
+                    "x-displayname": "Connect Peer Tags",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.map.keys.string.max_len": "127",
+                        "ves.io.schema.rules.map.max_pairs": "20",
+                        "ves.io.schema.rules.map.values.string.max_len": "255"
+                    }
                 }
             }
         },
@@ -2625,6 +2703,12 @@ var APISwaggerJSON string = `{
                     "title": "Attachment ID",
                     "x-displayname": "Attachment ID"
                 },
+                "deployment_status": {
+                    "type": "string",
+                    "description": " Additional information related to the TGW routing.",
+                    "title": "Deployment Status",
+                    "x-displayname": "Deployment Status"
+                },
                 "resource_id": {
                     "type": "string",
                     "description": " Resource ID",
@@ -2638,10 +2722,10 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Resource type"
                 },
                 "state": {
-                    "type": "string",
-                    "description": " State",
-                    "title": "State",
-                    "x-displayname": "State"
+                    "description": " Resource State",
+                    "title": "Resource State",
+                    "$ref": "#/definitions/cloud_connectCloudConnectVPCStateType",
+                    "x-displayname": "Resource State"
                 }
             }
         },
@@ -2661,6 +2745,12 @@ var APISwaggerJSON string = `{
                     },
                     "x-displayname": "Associations"
                 },
+                "deployment_status": {
+                    "type": "string",
+                    "description": " Additional information related to the TGW routing.",
+                    "title": "Deployment Status",
+                    "x-displayname": "Deployment Status"
+                },
                 "propagations": {
                     "type": "array",
                     "description": " Propagations",
@@ -2670,17 +2760,22 @@ var APISwaggerJSON string = `{
                     },
                     "x-displayname": "Propagations"
                 },
-                "state": {
-                    "type": "string",
-                    "description": " State",
-                    "title": "State",
-                    "x-displayname": "State"
-                },
                 "tags": {
                     "type": "object",
-                    "description": " Attachment Tags",
+                    "description": " Attachment Tags\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.max_len: 127\n  ves.io.schema.rules.map.max_pairs: 20\n  ves.io.schema.rules.map.values.string.max_len: 255\n",
                     "title": "Attachment Tags",
-                    "x-displayname": "Attachment Tags"
+                    "x-displayname": "Attachment Tags",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.map.keys.string.max_len": "127",
+                        "ves.io.schema.rules.map.max_pairs": "20",
+                        "ves.io.schema.rules.map.values.string.max_len": "255"
+                    }
+                },
+                "tgw_rt_deployment_state": {
+                    "description": " Transit Gateway Route Table deployment State",
+                    "title": "Transit Gateway Route Table deployment State",
+                    "$ref": "#/definitions/cloud_connectCloudConnectVPCStateType",
+                    "x-displayname": "Transit Gateway Route Table deployment State"
                 },
                 "transit_gateway_id": {
                     "type": "string",
@@ -2719,11 +2814,20 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.message.required": "true"
                     }
                 },
+                "peers": {
+                    "type": "array",
+                    "description": " Peers",
+                    "title": "Peers",
+                    "items": {
+                        "$ref": "#/definitions/cloud_connectPeerType"
+                    },
+                    "x-displayname": "Peers"
+                },
                 "site": {
-                    "description": " AWS TGW Site Reference\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
-                    "title": "AWS TGW Site Reference",
+                    "description": " Site Reference\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Site Reference",
                     "$ref": "#/definitions/schemaviewsObjectRefType",
-                    "x-displayname": "AWS TGW Site Reference",
+                    "x-displayname": "Site Reference",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true"
@@ -2904,9 +3008,14 @@ var APISwaggerJSON string = `{
                 },
                 "tags": {
                     "type": "object",
-                    "description": " Attachment Tags",
+                    "description": " Attachment Tags\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.max_len: 127\n  ves.io.schema.rules.map.max_pairs: 20\n  ves.io.schema.rules.map.values.string.max_len: 255\n",
                     "title": "Attachment Tags",
-                    "x-displayname": "Attachment Tags"
+                    "x-displayname": "Attachment Tags",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.map.keys.string.max_len": "127",
+                        "ves.io.schema.rules.map.max_pairs": "20",
+                        "ves.io.schema.rules.map.values.string.max_len": "255"
+                    }
                 },
                 "vnet_attachment_id": {
                     "type": "string",
@@ -3076,7 +3185,7 @@ var APISwaggerJSON string = `{
                 },
                 "vnet_id": {
                     "type": "string",
-                    "description": " Enter the vnet ID of the VNET to be attached in format /\u003cresource-group-name\u003e/\u003cvnet-name\u003e\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 256\n  ves.io.schema.rules.string.pattern: ^\\\\/[-\\\\w\\\\._\\\\(\\\\)]+\\\\/[a-zA-Z][a-zA-Z0-9-]{0,78}[a-zA-Z0-9]$\n",
+                    "description": " Enter the vnet ID of the VNET to be attached in format /\u003cresource-group-name\u003e/\u003cvnet-name\u003e\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 256\n  ves.io.schema.rules.string.pattern: ^\\\\/[-\\\\w\\\\._\\\\(\\\\)]+\\\\/[a-zA-Z0-9][a-zA-Z0-9-_.]{0,78}[a-zA-Z0-9_]$\n",
                     "title": "VNET ID",
                     "maxLength": 256,
                     "x-displayname": "VNET ID",
@@ -3084,7 +3193,7 @@ var APISwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.string.max_len": "256",
-                        "ves.io.schema.rules.string.pattern": "^\\\\/[-\\\\w\\\\._\\\\(\\\\)]+\\\\/[a-zA-Z][a-zA-Z0-9-]{0,78}[a-zA-Z0-9]$"
+                        "ves.io.schema.rules.string.pattern": "^\\\\/[-\\\\w\\\\._\\\\(\\\\)]+\\\\/[a-zA-Z0-9][a-zA-Z0-9-_.]{0,78}[a-zA-Z0-9_]$"
                     }
                 }
             }
@@ -3098,9 +3207,9 @@ var APISwaggerJSON string = `{
             "properties": {
                 "site": {
                     "description": " Online Azure VNET Sites with Hub Configured\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
-                    "title": "Azure VNET Site Reference",
+                    "title": "Site Reference",
                     "$ref": "#/definitions/schemaviewsObjectRefType",
-                    "x-displayname": "Azure VNET Site Reference",
+                    "x-displayname": "Site Reference",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true"
@@ -3135,6 +3244,48 @@ var APISwaggerJSON string = `{
                     "x-displayname": "VNET List",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.repeated.max_items": "128"
+                    }
+                }
+            }
+        },
+        "cloud_connectCIDRConflictListType": {
+            "type": "object",
+            "description": "x-displayName: \"List Of Sites And Cloud Connects\"\nlist of sites and cloud connect objects with overlapping cidr in the same network segment",
+            "title": "Site And Cloud Connect Objects With Overlapping CIDR",
+            "properties": {
+                "cloud_connect_name": {
+                    "type": "string",
+                    "description": "x-displayName: \"Cloud Connect\"\nname of the cloud connect with overlapping cidr from network segment",
+                    "title": "cloud_connect_name"
+                },
+                "overlapping_cidr": {
+                    "type": "string",
+                    "description": "x-displayName: \"Overlapping CIDR\"\noverlapping cidr from cloud connect",
+                    "title": "overlapping_cidr"
+                },
+                "site_name": {
+                    "type": "string",
+                    "description": "x-displayName: \"Site\"\nname of the site with overlapping cidr from network segment",
+                    "title": "site_name"
+                }
+            }
+        },
+        "cloud_connectCIDRConflictStatusType": {
+            "type": "object",
+            "description": "x-displayName: \"Overlapping CIDR\"\nConflicting CIDR across sites in the same network segment",
+            "title": "Conflicting CIDR status across sites",
+            "properties": {
+                "cidr": {
+                    "type": "string",
+                    "description": "x-displayName: \"CIDR\"\noverlapping cidr from the same network segment configured in different cloud connect objects across sites",
+                    "title": "cidr"
+                },
+                "conflict_list": {
+                    "type": "array",
+                    "description": "x-displayName: \"Site And Cloud Connect With Overlapping CIDR\"\nlist of sites and cloud connect objects with overlapping cidr in the same network segment",
+                    "title": "Conflicting Site And Cloud Connect Object List",
+                    "items": {
+                        "$ref": "#/definitions/cloud_connectCIDRConflictListType"
                     }
                 }
             }
@@ -3176,14 +3327,15 @@ var APISwaggerJSON string = `{
         },
         "cloud_connectCloudConnectVPCStateType": {
             "type": "string",
-            "description": "Cloud Connect VPC State Type\n\n - AVAILABLE: Available\n\nCloud Connect vpc attachment is in available state.\n - PENDING: Pending\n\nCloud Connect vpc attachment is in flight.\n - FAILED: Failed\n\nCloud Connect vpc attachment has failed.\n - DELETED: Deleted\n\nCloud Connect vpc attachment has been deleted.\n - DELETING: Deleting\n\nCloud Connect vpc attachment is being deleted.",
+            "description": "Cloud Connect VPC State Type\n\n - AVAILABLE: Available\n\nCloud Connect vpc attachment is in available state.\n - PENDING: Pending\n\nCloud Connect vpc attachment is in flight.\n - FAILED: Failed\n\nCloud Connect vpc attachment has failed.\n - DELETED: Deleted\n\nCloud Connect vpc attachment has been deleted.\n - DELETING: Deleting\n\nCloud Connect vpc attachment is being deleted.\n - INITIATED: Initiated\n\nCloud Connect vpc attachment process has been initiated.",
             "title": "Cloud Connect VPC State",
             "enum": [
                 "AVAILABLE",
                 "PENDING",
                 "FAILED",
                 "DELETED",
-                "DELETING"
+                "DELETING",
+                "INITIATED"
             ],
             "default": "AVAILABLE",
             "x-displayname": "Cloud Connect VPC State",
@@ -3200,6 +3352,76 @@ var APISwaggerJSON string = `{
                     "title": "CloudLink",
                     "items": {
                         "$ref": "#/definitions/schemaviewsObjectRefType"
+                    }
+                }
+            }
+        },
+        "cloud_connectCreateAWSCloudTransitGatewayType": {
+            "type": "object",
+            "description": "AWS Cloud Transit Gateway Type",
+            "title": "Create AWS Cloud Transit Gateway Type",
+            "x-displayname": "AWS Cloud Transit Gateway Type",
+            "x-ves-proto-message": "ves.io.schema.cloud_connect.CreateAWSCloudTransitGatewayType",
+            "properties": {
+                "cloud_transit_gateway": {
+                    "description": " Cloud Transit Gateway Reference\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "cred": {
+                    "description": " Reference to cloud credential to deploy resources\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Cloud Credential",
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "Credential Reference",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "vpc_attachments": {
+                    "description": " Spoke VPCs to be attached to the Cloud Transit Gateway \n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Spoke VPCs",
+                    "$ref": "#/definitions/cloud_connectAWSVPCAttachmentListType",
+                    "x-displayname": "Spoke VPCs",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                }
+            }
+        },
+        "cloud_connectCreateAWSTGWSiteType": {
+            "type": "object",
+            "description": "Cloud Connect AWS TGW Site Type",
+            "title": "Replace Cloud Connect AWS TGW Site Type",
+            "x-displayname": "AWS TGW Site Type",
+            "x-ves-proto-message": "ves.io.schema.cloud_connect.CreateAWSTGWSiteType",
+            "properties": {
+                "cred": {
+                    "description": " Reference to cloud credential to deploy resources\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Cloud Credential",
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "Credential Reference",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "site": {
+                    "description": " Site Reference\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "vpc_attachments": {
+                    "description": " Spoke VPCs to be attached to the AWS TGW Site\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Spoke VPCs",
+                    "$ref": "#/definitions/cloud_connectAWSVPCAttachmentListType",
+                    "x-displayname": "Spoke VPCs",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
                     }
                 }
             }
@@ -3515,29 +3737,49 @@ var APISwaggerJSON string = `{
         },
         "cloud_connectPeerType": {
             "type": "object",
-            "description": "x-displayName: \"Cloud Links\"\nList of Cloud Link references to be attached",
-            "title": "Cloud Links",
+            "description": "List of peer node and GRE tunnel configuration.",
+            "title": "Peer",
+            "x-displayname": "Peer Nodes",
+            "x-ves-proto-message": "ves.io.schema.cloud_connect.PeerType",
             "properties": {
                 "inside_gre_subnet": {
                     "type": "string",
-                    "description": "x-displayName: \"Inside GRE Subnet\"",
-                    "title": "Inside GRE Subnet"
+                    "title": "Inside GRE Subnet",
+                    "x-displayname": "Inside GRE Subnet"
                 },
                 "node": {
-                    "description": "x-displayName: \"Node\"",
                     "title": "Node",
-                    "$ref": "#/definitions/cloud_re_regionNodeType"
+                    "$ref": "#/definitions/cloud_re_regionNodeType",
+                    "x-displayname": "Node"
                 },
                 "peer_asn": {
                     "type": "string",
-                    "description": "x-displayName: \"Peer ASN\"",
                     "title": "Peer ASN",
-                    "format": "int64"
+                    "format": "int64",
+                    "x-displayname": "Peer ASN"
                 },
                 "tgw_address": {
                     "type": "string",
-                    "description": "x-displayName: \"TGW Address\"",
-                    "title": "TGW Address"
+                    "title": "TGW Address",
+                    "x-displayname": "TGW Address"
+                }
+            }
+        },
+        "cloud_connectReplaceAWSCloudTransitGatewayType": {
+            "type": "object",
+            "description": "Cloud Transit Gateway Type",
+            "title": "Replace Cloud Transit Gateway Type",
+            "x-displayname": " Cloud Transit Gateway Type",
+            "x-ves-proto-message": "ves.io.schema.cloud_connect.ReplaceAWSCloudTransitGatewayType",
+            "properties": {
+                "vpc_attachments": {
+                    "description": " Spoke VPCs to be attached to the Cloud Transit Gateway \n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Spoke VPCs",
+                    "$ref": "#/definitions/cloud_connectAWSVPCAttachmentListType",
+                    "x-displayname": "Spoke VPCs",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 }
             }
         },
@@ -3700,23 +3942,28 @@ var APISwaggerJSON string = `{
         },
         "cloud_re_regionNodeType": {
             "type": "object",
-            "description": "x-displayName: \"Node\"\nNode",
+            "description": "Node",
             "title": "Node",
+            "x-displayname": "Node",
+            "x-ves-proto-message": "ves.io.schema.cloud_re_region.NodeType",
             "properties": {
                 "address": {
-                    "description": "x-displayName: \"Address\"\nIP Address",
+                    "description": " IP Address",
                     "title": "Address",
-                    "$ref": "#/definitions/schemaIpAddressType"
+                    "$ref": "#/definitions/schemaIpAddressType",
+                    "x-displayname": "Address"
                 },
                 "name": {
                     "type": "string",
-                    "description": "x-displayName: \"Name\"\nName",
-                    "title": "Name"
+                    "description": " Name",
+                    "title": "Name",
+                    "x-displayname": "Name"
                 },
                 "site": {
-                    "description": "x-displayName: \"Site\"\nSite",
+                    "description": " Site",
                     "title": "Site Reference",
-                    "$ref": "#/definitions/schemaviewsObjectRefType"
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "Site"
                 }
             }
         },
@@ -3929,42 +4176,62 @@ var APISwaggerJSON string = `{
         },
         "schemaIpAddressType": {
             "type": "object",
-            "description": "x-displayName: \"IP Address\"\nIP Address used to specify an IPv4 or IPv6 address",
+            "description": "IP Address used to specify an IPv4 or IPv6 address",
             "title": "IP Address",
+            "x-displayname": "IP Address",
+            "x-ves-displayorder": "3",
+            "x-ves-oneof-field-ver": "[\"ipv4\",\"ipv6\"]",
+            "x-ves-proto-message": "ves.io.schema.IpAddressType",
             "properties": {
                 "ipv4": {
-                    "description": "x-displayName: \"IPv4 Address\"\nIPv4 Address",
+                    "description": "Exclusive with [ipv6]\n IPv4 Address",
                     "title": "IPv4 Address",
-                    "$ref": "#/definitions/schemaIpv4AddressType"
+                    "$ref": "#/definitions/schemaIpv4AddressType",
+                    "x-displayname": "IPv4 Address"
                 },
                 "ipv6": {
-                    "description": "x-displayName: \"IPv6 Address\"\nIPv6 Address",
+                    "description": "Exclusive with [ipv4]\n IPv6 Address",
                     "title": "IPv6 ADDRESS",
-                    "$ref": "#/definitions/schemaIpv6AddressType"
+                    "$ref": "#/definitions/schemaIpv6AddressType",
+                    "x-displayname": "IPv6 Address"
                 }
             }
         },
         "schemaIpv4AddressType": {
             "type": "object",
-            "description": "x-displayName: \"IPv4 Address\"\nIPv4 Address in dot-decimal notation",
+            "description": "IPv4 Address in dot-decimal notation",
             "title": "IPv4 Address",
+            "x-displayname": "IPv4 Address",
+            "x-ves-proto-message": "ves.io.schema.Ipv4AddressType",
             "properties": {
                 "addr": {
                     "type": "string",
-                    "description": "x-displayName: \"IPv4 Address\"\nx-example: \"192.168.1.1\"\nIPv4 Address in string form with dot-decimal notation",
-                    "title": "IPv4 Address"
+                    "description": " IPv4 Address in string form with dot-decimal notation\n\nExample: - \"192.168.1.1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv4: true\n",
+                    "title": "IPv4 Address",
+                    "x-displayname": "IPv4 Address",
+                    "x-ves-example": "192.168.1.1",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.ipv4": "true"
+                    }
                 }
             }
         },
         "schemaIpv6AddressType": {
             "type": "object",
-            "description": "x-displayName: \"IPv6 Address\"\nIPv6 Address specified as hexadecimal numbers separated by ':'",
+            "description": "IPv6 Address specified as hexadecimal numbers separated by ':'",
             "title": "IPv6 Address",
+            "x-displayname": "IPv6 Address",
+            "x-ves-proto-message": "ves.io.schema.Ipv6AddressType",
             "properties": {
                 "addr": {
                     "type": "string",
-                    "description": "x-displayName: \"IPv6 Address\"\nx-example: \"2001:db8:0:0:0:0:2:1\"\nIPv6 Address in form of string. IPv6 address must be specified as hexadecimal numbers separated by ':'\nThe address can be compacted by suppressing zeros\ne.g. '2001:db8:0:0:0:0:2:1' becomes '2001:db8::2:1' or '2001:db8:0:0:0:2:0:0' becomes '2001:db8::2::'",
-                    "title": "IPv6 Address"
+                    "description": " IPv6 Address in form of string. IPv6 address must be specified as hexadecimal numbers separated by ':'\n The address can be compacted by suppressing zeros\n e.g. '2001:db8:0:0:0:0:2:1' becomes '2001:db8::2:1' or '2001:db8:0:0:0:2:0:0' becomes '2001:db8::2::'\n\nExample: - \"2001:db8:0:0:0:0:2:1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6: true\n",
+                    "title": "IPv6 Address",
+                    "x-displayname": "IPv6 Address",
+                    "x-ves-example": "2001:db8:0:0:0:0:2:1",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.ipv6": "true"
+                    }
                 }
             }
         },
@@ -4406,15 +4673,19 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-cloud": "[\"aws_tgw_site\",\"azure_vnet_site\"]",
             "x-ves-proto-message": "ves.io.schema.cloud_connect.CreateSpecType",
             "properties": {
+                "aws_cloud_transit_gateway": {
+                    "$ref": "#/definitions/cloud_connectCreateAWSCloudTransitGatewayType",
+                    "x-displayname": "Cloud Transit Gateway"
+                },
                 "aws_tgw_site": {
                     "description": "Exclusive with [azure_vnet_site]\n",
-                    "$ref": "#/definitions/cloud_connectAWSTGWSiteType",
-                    "x-displayname": "AWS TGW Site"
+                    "$ref": "#/definitions/cloud_connectCreateAWSTGWSiteType",
+                    "x-displayname": "AWS"
                 },
                 "azure_vnet_site": {
                     "description": "Exclusive with [aws_tgw_site]\n",
                     "$ref": "#/definitions/cloud_connectAzureVNETSiteType",
-                    "x-displayname": "Azure VNET  Site"
+                    "x-displayname": "Azure"
                 },
                 "segment": {
                     "description": "\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
@@ -4435,15 +4706,19 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-cloud": "[\"aws_tgw_site\",\"azure_vnet_site\"]",
             "x-ves-proto-message": "ves.io.schema.cloud_connect.GetSpecType",
             "properties": {
+                "aws_cloud_transit_gateway": {
+                    "$ref": "#/definitions/cloud_connectAWSCloudTransitGatewayType",
+                    "x-displayname": "Cloud Transit Gateway"
+                },
                 "aws_tgw_site": {
                     "description": "Exclusive with [azure_vnet_site]\n",
                     "$ref": "#/definitions/cloud_connectAWSTGWSiteType",
-                    "x-displayname": "AWS TGW Site"
+                    "x-displayname": "AWS"
                 },
                 "azure_vnet_site": {
                     "description": "Exclusive with [aws_tgw_site]\n",
                     "$ref": "#/definitions/cloud_connectAzureVNETSiteType",
-                    "x-displayname": "Azure VNET  Site"
+                    "x-displayname": "Azure"
                 },
                 "segment": {
                     "description": "\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
@@ -4469,23 +4744,33 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-cloud": "[\"aws_tgw_site\",\"azure_vnet_site\"]",
             "x-ves-proto-message": "ves.io.schema.cloud_connect.ReplaceSpecType",
             "properties": {
+                "aws_cloud_transit_gateway": {
+                    "$ref": "#/definitions/cloud_connectReplaceAWSCloudTransitGatewayType",
+                    "x-displayname": "Cloud Transit Gateway"
+                },
                 "aws_tgw_site": {
                     "description": "Exclusive with [azure_vnet_site]\n",
                     "$ref": "#/definitions/cloud_connectReplaceAWSTGWSiteType",
-                    "x-displayname": "AWS TGW Site"
+                    "x-displayname": "AWS"
                 },
                 "azure_vnet_site": {
                     "description": "Exclusive with [aws_tgw_site]\n",
                     "$ref": "#/definitions/cloud_connectReplaceAzureVNETSiteType",
-                    "x-displayname": "Azure VNET  Site"
-                },
-                "segment": {
-                    "description": "\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
-                    "$ref": "#/definitions/schemaviewsObjectRefType",
-                    "x-displayname": "Segment",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
+                    "x-displayname": "Azure"
+                }
+            }
+        },
+        "schemacloud_connectVerStatusType": {
+            "type": "object",
+            "description": "x-displayName: \"VER Status\"\nCloud Connect status reported by each VER instance on a node",
+            "title": "Ver Status",
+            "properties": {
+                "cidr_status": {
+                    "type": "array",
+                    "description": "x-displayName: \"CIDR Status\"\noverlapping cidr from the same network segment configured in different cloud connect objects across sites",
+                    "title": "cidr_status",
+                    "items": {
+                        "$ref": "#/definitions/cloud_connectCIDRConflictStatusType"
                     }
                 }
             }

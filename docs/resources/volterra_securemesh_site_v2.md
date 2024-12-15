@@ -1,9 +1,9 @@
 ---
 
 page_title: "Volterra: securemesh_site_v2"
-description: "The securemesh_site_v2 allows CRUD of Securemesh Site V2 resource on Volterra SaaS"
 
----
+description: "The securemesh_site_v2 allows CRUD of Securemesh Site V2 resource on Volterra SaaS"
+-------------------------------------------------------------------------------------------------
 
 Resource volterra_securemesh_site_v2
 ====================================
@@ -28,9 +28,9 @@ resource "volterra_securemesh_site_v2" "example" {
 
   logs_streaming_disabled = true
 
-  // One of the arguments from this list "aws azure baremetal gcp kvm oci rseries vmware" must be set
+  // One of the arguments from this list "aws azure baremetal gcp kvm nutanix oci openstack rseries vmware" must be set
 
-  azure {
+  nutanix {
     // One of the arguments from this list "not_managed" can be set
 
     not_managed {
@@ -40,29 +40,16 @@ resource "volterra_securemesh_site_v2" "example" {
         interface_list {
           // One of the arguments from this list "dhcp_client dhcp_server no_ipv4_address static_ip" must be set
 
-          static_ip {
-            default_gw = "192.168.20.1"
-
-            dns_server = "192.168.20.1"
-
-            ip_address = "192.168.20.1/24"
-          }
+          dhcp_client = true
 
           description = "value"
 
           // One of the arguments from this list "bond_interface ethernet_interface vlan_interface" must be set
 
-          bond_interface {
-            devices = ["eth0"]
+          ethernet_interface {
+            device = "ver1"
 
-            // One of the arguments from this list "active_backup lacp" must be set
-
-            lacp {
-              rate = "30"
-            }
-            link_polling_interval = "1000"
-            link_up_delay = "200"
-            name = "bond0"
+            mac = "01:10:20:0a:bb:1c"
           }
 
           // One of the arguments from this list "ipv6_auto_config no_ipv6_address static_ipv6_address" can be set
@@ -88,7 +75,7 @@ resource "volterra_securemesh_site_v2" "example" {
 
           // One of the arguments from this list "site_to_site_connectivity_interface_disabled site_to_site_connectivity_interface_enabled" can be set
 
-          site_to_site_connectivity_interface_disabled = true
+          site_to_site_connectivity_interface_enabled = true
         }
 
         public_ip = "1.1.1.1"
@@ -120,11 +107,21 @@ Argument Reference
 
 ### Spec Argument Reference
 
+`admin_user_credentials` - (Optional) either the node local WebUI or via SSH to access shell/CLI. See [Admin User Credentials ](#admin-user-credentials) below for details.
+
 ###### One of the arguments from this list "block_all_services, blocked_services" must be set
 
 `block_all_services` - (Optional) Enable WebUI, SSH and DNS on all nodes in this site. (`Bool`).
 
-`blocked_services` - (Optional) It is recommended to disable node local services after the nodes register or after configuration/deugging is complete.. See [Blocked Services Choice Blocked Services ](#blocked-services-choice-blocked-services) below for details.
+`blocked_services` - (Optional) Disable node local services on all nodes in this site.. See [Blocked Services Choice Blocked Services ](#blocked-services-choice-blocked-services) below for details.
+
+`dns_ntp_config` - (Optional) Specify DNS and NTP servers that will be used by the nodes in this Customer Edge site.. See [Dns Ntp Config ](#dns-ntp-config) below for details.
+
+###### One of the arguments from this list "custom_proxy, f5_proxy" can be set
+
+`custom_proxy` - (Optional) Use the customer provided internal Enterprise Proxy. See [Enterprise Proxy Choice Custom Proxy ](#enterprise-proxy-choice-custom-proxy) below for details.
+
+`f5_proxy` - (Optional) Use the F5 Enterprise Proxy hosted on the F5 Global Network (`Bool`).
 
 ###### One of the arguments from this list "active_forward_proxy_policies, no_forward_proxy" can be set
 
@@ -140,7 +137,7 @@ Argument Reference
 
 `log_receiver` - (Optional) Select log receiver for logs streaming. See [ref](#ref) below for details.
 
-`logs_streaming_disabled` - (Optional) x-displayName: "Disable Logs Streaming" (`Bool`).
+`logs_streaming_disabled` - (Optional) x-displayName: "Disable" (`Bool`).
 
 ###### One of the arguments from this list "active_enhanced_firewall_policies, no_network_policy" can be set
 
@@ -158,21 +155,27 @@ Argument Reference
 
 `performance_enhancement_mode` - (Optional) Optimize the site for L3 or L7 traffic processing. By default, the site is optimized for L7 traffic processing.. See [Performance Enhancement Mode ](#performance-enhancement-mode) below for details.
 
-###### One of the arguments from this list "aws, azure, baremetal, gcp, kvm, oci, rseries, vmware" must be set
+`proactive_monitoring` - (Optional) Note: Only the relevant F5 Distributed Cloud software service logs will be transmitted. No customer sensitive data will be transmitted.. See [Proactive Monitoring ](#proactive-monitoring) below for details.
+
+###### One of the arguments from this list "aws, azure, baremetal, gcp, kvm, nutanix, oci, openstack, rseries, vmware" must be set
 
 `aws` - (Optional) x-displayName: "AWS". See [Provider Choice Aws ](#provider-choice-aws) below for details.
 
 `azure` - (Optional) x-displayName: "Azure". See [Provider Choice Azure ](#provider-choice-azure) below for details.
 
-`baremetal` - (Optional) x-displayName: "Baremetal". See [Provider Choice Baremetal ](#provider-choice-baremetal) below for details.
+`baremetal` - (Optional) x-displayName: "Baremetal". See [Provider Choice Baremetal ](#provider-choice-baremetal) below for details.(Deprecated)
 
-`gcp` - (Optional) x-displayName: "GCP". See [Provider Choice Gcp ](#provider-choice-gcp) below for details.
+`gcp` - (Optional) x-displayName: "GCP (EA)". See [Provider Choice Gcp ](#provider-choice-gcp) below for details.
 
-`kvm` - (Optional) x-displayName: "KVM". See [Provider Choice Kvm ](#provider-choice-kvm) below for details.
+`kvm` - (Optional) x-displayName: "KVM (EA)". See [Provider Choice Kvm ](#provider-choice-kvm) below for details.
 
-`oci` - (Optional) x-displayName: "OCI". See [Provider Choice Oci ](#provider-choice-oci) below for details.
+`nutanix` - (Optional) x-displayName: "Nutanix (EA)". See [Provider Choice Nutanix ](#provider-choice-nutanix) below for details.
 
-`rseries` - (Optional) x-displayName: "F5 rSeries". See [Provider Choice Rseries ](#provider-choice-rseries) below for details.
+`oci` - (Optional) x-displayName: "OCI (EA)". See [Provider Choice Oci ](#provider-choice-oci) below for details.
+
+`openstack` - (Optional) x-displayName: "Openstack (EA)". See [Provider Choice Openstack ](#provider-choice-openstack) below for details.
+
+`rseries` - (Optional) x-displayName: "F5 rSeries (EA)". See [Provider Choice Rseries ](#provider-choice-rseries) below for details.
 
 `vmware` - (Optional) x-displayName: "VMWare". See [Provider Choice Vmware ](#provider-choice-vmware) below for details.
 
@@ -199,6 +202,30 @@ Argument Reference
 `tunnel_type` - (Optional) Select the type of tunnel to be used for traffic between the site and REs. By default, IPsec will be preferred with SSL as backup. (`String`).
 
 `upgrade_settings` - (Optional) Specify how a site will be upgraded.. See [Upgrade Settings ](#upgrade-settings) below for details.
+
+### Admin User Credentials
+
+either the node local WebUI or via SSH to access shell/CLI.
+
+`admin_password` - (Optional) When provided, customers can either ssh to the nodes of this Customer Edge site or use the node local WebUI by using admin as the user.. See [Admin User Credentials Admin Password ](#admin-user-credentials-admin-password) below for details.
+
+`ssh_key` - (Optional) When provided, customers can ssh to the nodes of this Customer Edge site using admin as the user. (`String`).
+
+### Dns Ntp Config
+
+Specify DNS and NTP servers that will be used by the nodes in this Customer Edge site..
+
+###### One of the arguments from this list "custom_dns, f5_dns_default" can be set
+
+`custom_dns` - (Optional) User specified DNS Servers. See [Dns Server Choice Custom Dns ](#dns-server-choice-custom-dns) below for details.
+
+`f5_dns_default` - (Optional) F5 defaults will use 8.8.8.8, 8.8.4.4 (`Bool`).
+
+###### One of the arguments from this list "custom_ntp, f5_ntp_default" can be set
+
+`custom_ntp` - (Optional) User specified NTP Servers. See [Ntp Server Choice Custom Ntp ](#ntp-server-choice-custom-ntp) below for details.
+
+`f5_ntp_default` - (Optional) F5 default will use time.google.com during registration (`Bool`).
 
 ### Load Balancing
 
@@ -241,6 +268,16 @@ Optimize the site for L3 or L7 traffic processing. By default, the site is optim
 `perf_mode_l3_enhanced` - (Optional) Site optimized for L3 traffic processing. See [Perf Mode Choice Perf Mode L3 Enhanced ](#perf-mode-choice-perf-mode-l3-enhanced) below for details.
 
 `perf_mode_l7_enhanced` - (Optional) Site optimized for L7 traffic processing (`Bool`).
+
+### Proactive Monitoring
+
+Note: Only the relevant F5 Distributed Cloud software service logs will be transmitted. No customer sensitive data will be transmitted..
+
+###### One of the arguments from this list "proactive_monitoring_disable, proactive_monitoring_enable" can be set
+
+`proactive_monitoring_disable` - (Optional) Disable Proactive Monitoring (`Bool`).
+
+`proactive_monitoring_enable` - (Optional) Enable Proactive Monitoring (`Bool`).
 
 ### Re Select
 
@@ -320,6 +357,34 @@ Interface IP address is configured statically..
 
 `ip_address` - (Required) IP address of the interface and prefix length (`String`).
 
+### Admin Password Blindfold Secret Info Internal
+
+Blindfold Secret Internal is used for the putting re-encrypted blindfold secret.
+
+`decryption_provider` - (Optional) Name of the Secret Management Access object that contains information about the backend Secret Management service. (`String`).
+
+`location` - (Required) Or it could be a path if the store provider is an http/https location (`String`).
+
+`store_provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
+
+### Admin User Credentials Admin Password
+
+When provided, customers can either ssh to the nodes of this Customer Edge site or use the node local WebUI by using admin as the user..
+
+`blindfold_secret_info_internal` - (Optional) Blindfold Secret Internal is used for the putting re-encrypted blindfold secret. See [Admin Password Blindfold Secret Info Internal ](#admin-password-blindfold-secret-info-internal) below for details.(Deprecated)
+
+`secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).(Deprecated)
+
+###### One of the arguments from this list "blindfold_secret_info, clear_secret_info, vault_secret_info, wingman_secret_info" must be set
+
+`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
+
+`clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Secret Info Oneof Clear Secret Info ](#secret-info-oneof-clear-secret-info) below for details.
+
+`vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Secret Info Oneof Vault Secret Info ](#secret-info-oneof-vault-secret-info) below for details.(Deprecated)
+
+`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in F5XC Security Sidecar. See [Secret Info Oneof Wingman Secret Info ](#secret-info-oneof-wingman-secret-info) below for details.(Deprecated)
+
 ### Autoconfig Choice Host
 
 auto configuration routers. This is similar to a DHCP Client..
@@ -352,7 +417,7 @@ x-displayName: "Disable Node Local Services".
 
 ### Blocked Services Choice Blocked Services
 
-It is recommended to disable node local services after the nodes register or after configuration/deugging is complete..
+Disable node local services on all nodes in this site..
 
 `blocked_sevice` - (Optional) x-displayName: "Disable Node Local Services". See [Blocked Services Blocked Sevice ](#blocked-services-blocked-sevice) below for details.
 
@@ -368,6 +433,20 @@ x-displayName: "SSH".
 
 x-displayName: "Web UI".
 
+### Choice Subnet Param
+
+Parameters for creating new subnet.
+
+`ipv4` - (Required) IPv4 subnet prefix for this subnet (`String`).
+
+`ipv6` - (Optional) IPv6 subnet prefix for this subnet (`String`).
+
+###### One of the arguments from this list "autogenerate, name" can be set
+
+`autogenerate` - (Optional) Autogenerate Subnet Name (`Bool`).
+
+`name` - (Optional) Specify the Subnet Name (`String`).
+
 ### Cluster Static Ip Interface Ip Map
 
 Map of Node to Static ip configuration value, Key:Node, Value:IP Address.
@@ -377,6 +456,24 @@ Map of Node to Static ip configuration value, Key:Node, Value:IP Address.
 `dns_server` - (Optional) IP address of the DNS server (`String`).(Deprecated)
 
 `ip_address` - (Required) IP address of the interface and prefix length (`String`).
+
+### Custom Proxy Password
+
+Note: To protect the password, it is recommended to blindfold it..
+
+`blindfold_secret_info_internal` - (Optional) Blindfold Secret Internal is used for the putting re-encrypted blindfold secret. See [Password Blindfold Secret Info Internal ](#password-blindfold-secret-info-internal) below for details.(Deprecated)
+
+`secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).(Deprecated)
+
+###### One of the arguments from this list "blindfold_secret_info, clear_secret_info, vault_secret_info, wingman_secret_info" must be set
+
+`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
+
+`clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Secret Info Oneof Clear Secret Info ](#secret-info-oneof-clear-secret-info) below for details.
+
+`vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Secret Info Oneof Vault Secret Info ](#secret-info-oneof-vault-secret-info) below for details.(Deprecated)
+
+`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in F5XC Security Sidecar. See [Secret Info Oneof Wingman Secret Info ](#secret-info-oneof-wingman-secret-info) below for details.(Deprecated)
 
 ### Dhcp Networks Pools
 
@@ -448,6 +545,54 @@ Choose the address from the network prefix range as dns server.
 
 DNS server address is same as default gateway address.
 
+### Dns Server Choice Custom Dns
+
+User specified DNS Servers.
+
+`dns_servers` - (Optional) DNS Servers (`String`).
+
+### Dns Server Choice F5 Dns Default
+
+F5 defaults will use 8.8.8.8, 8.8.4.4.
+
+### Egress Gateway Choice Egress Gateway Default
+
+With this option, egress site traffic will be routed through an Internet Gateway..
+
+### Egress Gateway Choice Egress Nat Gw
+
+With this option, egress site traffic will be routed through an Network Address Translation(NAT) Gateway..
+
+###### One of the arguments from this list "nat_gw_id" must be set
+
+`nat_gw_id` - (Optional) x-displayName: "Existing NAT Gateway ID" (`String`).
+
+### Egress Gateway Choice Egress Virtual Private Gateway
+
+With this option, egress site traffic will be routed through an Virtual Private Gateway..
+
+###### One of the arguments from this list "vgw_id" must be set
+
+`vgw_id` - (Optional) x-displayName: "Existing Virtual Private Gateway ID" (`String`).
+
+### Enterprise Proxy Choice Custom Proxy
+
+Use the customer provided internal Enterprise Proxy.
+
+`password` - (Optional) Note: To protect the password, it is recommended to blindfold it.. See [Custom Proxy Password ](#custom-proxy-password) below for details.
+
+`proxy_ip_address` - (Required) Specify the IPv4 Address of the internal Enterprise Proxy (`String`).
+
+`proxy_port` - (Required) Specify the Port of the internal Enterprise Proxy (`Int`).
+
+###### One of the arguments from this list "disable_re_tunnel, enable_re_tunnel" can be set
+
+`disable_re_tunnel` - (Optional) Do not use the internal Enterprise Proxy for RE Tunnels (`Bool`).
+
+`enable_re_tunnel` - (Optional) Use the internal Enterprise Proxy for RE Tunnels (`Bool`).
+
+`username` - (Optional) If the internal Enterprise Proxy is using basic authentication, specify the username. This is an optional field. (`String`).
+
 ### Forward Proxy Choice Active Forward Proxy Policies
 
 Enable Forward Proxy for this site. Traffic will be processed in the order that Forward Proxy Policies are added..
@@ -508,6 +653,16 @@ Global VRFs are configured via Networking > Segments. A site can have multple Ne
 
 `site_local_network` - (Optional) x-displayName: "Site Local Outside (Local VRF)" (`Bool`).
 
+### Interface List Subnet
+
+Select Existing Subnet or Create New.
+
+###### One of the arguments from this list "existing_subnet_id, subnet_param" must be set
+
+`existing_subnet_id` - (Optional) Information about existing subnet ID (`String`).
+
+`subnet_param` - (Optional) Parameters for creating new subnet. See [Choice Subnet Param ](#choice-subnet-param) below for details.
+
 ### Interfaces Addressing Choice Automatic From End
 
 Assign automatically from end of the first network in the DHCP Network list.
@@ -556,11 +711,11 @@ Interface IPv6 address is configured statically..
 
 ### Kubernetes Upgrade Drain Enable Choice Disable Upgrade Drain
 
-x-displayName: "Disable Node by Node Upgrade".
+x-displayName: "Disable".
 
 ### Kubernetes Upgrade Drain Enable Choice Enable Upgrade Drain
 
-x-displayName: "Enable Node by Node Upgrade".
+x-displayName: "Enable".
 
 ###### One of the arguments from this list "drain_max_unavailable_node_count, drain_max_unavailable_node_percentage" must be set
 
@@ -594,6 +749,12 @@ First usable address from the network prefix is chosen as dns server.
 
 Last usable address from the network prefix is chosen as dns server.
 
+### Managed Node List
+
+This section will show nodes associated with this site..
+
+`node_list` - (Optional) This section will show nodes associated with this site.. See [Node List Node List ](#node-list-node-list) below for details.
+
 ### Monitoring Choice Monitor
 
 x-displayName: "Enabled".
@@ -602,6 +763,10 @@ x-displayName: "Enabled".
 
 x-displayName: "Disabled".
 
+### Name Choice Autogenerate
+
+Autogenerate Subnet Name.
+
 ### Network Choice Site Local Inside Network
 
 x-displayName: "Site Local Inside (Local VRF)".
@@ -609,6 +774,14 @@ x-displayName: "Site Local Inside (Local VRF)".
 ### Network Choice Site Local Network
 
 x-displayName: "Site Local Outside (Local VRF)".
+
+### Network Options Inside
+
+CloudLink will be associated, and routes will be propagated with the Site Local Inside Network of this Site.
+
+### Network Options Outside
+
+CloudLink will be associated, and routes will be propagated with the Site Local Outside Network of this Site.
 
 ### Network Policy Choice Active Enhanced Firewall Policies
 
@@ -648,13 +821,37 @@ Traffic matching the ip prefixes is sent to the default gateway.
 
 ### Node List Interface List
 
+Interfaces belonging to this node.
+
+###### One of the arguments from this list "monitor, monitor_disabled" can be set
+
+`monitor` - (Optional) x-displayName: "Enabled". See [Monitoring Choice Monitor ](#monitoring-choice-monitor) below for details.
+
+`monitor_disabled` - (Optional) x-displayName: "Disabled" (`Bool`).
+
+`mtu` - (Optional) When configured, mtu must be between 512 and 16384 (`Int`).
+
+`network_option` - (Required) Global VRFs are configured via Networking > Segments. A site can have multple Network Segments (global VRFs).. See [Interface List Network Option ](#interface-list-network-option) below for details.
+
+`priority` - (Optional) Greater the value, higher the priority (`Int`).
+
+###### One of the arguments from this list "site_to_site_connectivity_interface_disabled, site_to_site_connectivity_interface_enabled" can be set
+
+`site_to_site_connectivity_interface_disabled` - (Optional) Do not use this interface for site to site connectivity. (`Bool`).
+
+`site_to_site_connectivity_interface_enabled` - (Optional) Use this this interface for site to site connectivity. (`Bool`).
+
+`subnet` - (Optional) Select Existing Subnet or Create New. See [Interface List Subnet ](#interface-list-subnet) below for details.
+
+### Node List Interface List
+
 Manage interfaces belonging to this node.
 
 ###### One of the arguments from this list "dhcp_client, dhcp_server, no_ipv4_address, static_ip" must be set
 
 `dhcp_client` - (Optional) Interface gets it's IP address from an external DHCP server. (`Bool`).
 
-`dhcp_server` - (Optional) DHCP Server is configured for this interface, Interface IP is derived from DHCP server configuration.. See [Address Choice Dhcp Server ](#address-choice-dhcp-server) below for details.
+`dhcp_server` - (Optional) DHCP Server is configured for this interface, Interface IP is derived from DHCP server configuration.. See [Address Choice Dhcp Server ](#address-choice-dhcp-server) below for details.(Deprecated)
 
 `no_ipv4_address` - (Optional) Interface does not have an IPv4 Address. (`Bool`).
 
@@ -704,6 +901,18 @@ Manage interfaces belonging to this node.
 
 `site_to_site_connectivity_interface_enabled` - (Optional) Use this this interface for site to site connectivity. (`Bool`).
 
+### Node List Node List
+
+This section will show nodes associated with this site..
+
+`aws_az_name` - (Required) AWS availability zone, must be consistent with the selected AWS region. (`String`).
+
+`hostname` - (Optional) Hostname for this Node (`String`).
+
+`interface_list` - (Required) Interfaces belonging to this node. See [Node List Interface List ](#node-list-interface-list) below for details.
+
+`type` - (Optional) Type for this Node, can be Control or Worker (`String`).
+
 ### Not Managed Node List
 
 Once a node is created and registers with the site, it will be shown in this section..
@@ -715,6 +924,16 @@ Once a node is created and registers with the site, it will be shown in this sec
 `public_ip` - (Optional) Public IP for this Node (`String`).
 
 `type` - (Optional) Type for this Node, can be Control or Worker (`String`).
+
+### Ntp Server Choice Custom Ntp
+
+User specified NTP Servers.
+
+`ntp_servers` - (Optional) NTP Servers (`String`).
+
+### Ntp Server Choice F5 Ntp Default
+
+F5 default will use time.google.com during registration.
 
 ### Offline Survivability Mode Choice Enable Offline Survivability Mode
 
@@ -728,11 +947,65 @@ x-displayName: "Disabled".
 
 Will assign latest available OS version.
 
+### Orchestration Choice Managed
+
+F5 Distributed Cloud will automate provisioning (ex: node bringup) for this site..
+
+`aws_cred` - (Required) Reference to AWS cloud credential object used to deploy cloud resources. See [ref](#ref) below for details.
+
+`aws_region` - (Required) AWS Region of your services vpc, where F5XC site will be deployed. (`String`).
+
+`disk_size` - (Optional) Node disk size for all node in the F5XC site. Unit is GiB (`Int`).
+
+###### One of the arguments from this list "egress_gateway_default, egress_nat_gw, egress_virtual_private_gateway" can be set
+
+`egress_gateway_default` - (Optional) With this option, egress site traffic will be routed through an Internet Gateway. (`Bool`).
+
+`egress_nat_gw` - (Optional) With this option, egress site traffic will be routed through an Network Address Translation(NAT) Gateway.. See [Egress Gateway Choice Egress Nat Gw ](#egress-gateway-choice-egress-nat-gw) below for details.
+
+`egress_virtual_private_gateway` - (Optional) With this option, egress site traffic will be routed through an Virtual Private Gateway.. See [Egress Gateway Choice Egress Virtual Private Gateway ](#egress-gateway-choice-egress-virtual-private-gateway) below for details.
+
+`instance_type` - (Required) Instance size based on the performance. (`String`).
+
+`node_list` - (Optional) This section will show nodes associated with this site.. See [Managed Node List ](#managed-node-list) below for details.
+
+###### One of the arguments from this list "private_connectivity, private_connectivity_disabled" can be set
+
+`private_connectivity` - (Optional) Enable Private Connectivity to Site via CloudLink. See [Private Connectivity Choice Private Connectivity ](#private-connectivity-choice-private-connectivity) below for details.
+
+`private_connectivity_disabled` - (Optional) Disable Private Connectivity to Site (`Bool`).
+
+###### One of the arguments from this list "custom_security_group, f5xc_security_group" can be set
+
+`custom_security_group` - (Optional) With this option, ingress and egress traffic will be controlled via security group ids.. See [Security Group Choice Custom Security Group ](#security-group-choice-custom-security-group) below for details.
+
+`f5xc_security_group` - (Optional) With this option, ingress and egress traffic will be controlled via f5xc created security group. (`Bool`).
+
+###### One of the arguments from this list "new_vpc, vpc_id" must be set
+
+`new_vpc` - (Optional) Details needed to create new VPC. See [Service Vpc Choice New Vpc ](#service-vpc-choice-new-vpc) below for details.
+
+`vpc_id` - (Optional) Existing VPC ID (`String`).
+
+`ssh_key` - (Required) Public SSH key for accessing nodes of the site. (`String`).(Deprecated)
+
+`tags` - (Optional) It helps to manage, identify, organize, search for, and filter resources in AWS console. (`String`).
+
 ### Orchestration Choice Not Managed
 
 or by using automation tools such as Terraform..
 
 `node_list` - (Optional) Once a node is created and registers with the site, it will be shown in this section.. See [Not Managed Node List ](#not-managed-node-list) below for details.
+
+### Password Blindfold Secret Info Internal
+
+Blindfold Secret Internal is used for the putting re-encrypted blindfold secret.
+
+`decryption_provider` - (Optional) Name of the Secret Management Access object that contains information about the backend Secret Management service. (`String`).
+
+`location` - (Required) Or it could be a path if the store provider is an http/https location (`String`).
+
+`store_provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
 
 ### Perf Mode Choice Jumbo
 
@@ -756,11 +1029,37 @@ Site optimized for L3 traffic processing.
 
 Site optimized for L7 traffic processing.
 
+### Private Connectivity Choice Private Connectivity
+
+Enable Private Connectivity to Site via CloudLink.
+
+`cloud_link` - (Required) Reference to Cloud Link. See [ref](#ref) below for details.
+
+###### One of the arguments from this list "inside, outside" can be set
+
+`inside` - (Optional) CloudLink will be associated, and routes will be propagated with the Site Local Inside Network of this Site (`Bool`).
+
+`outside` - (Optional) CloudLink will be associated, and routes will be propagated with the Site Local Outside Network of this Site (`Bool`).
+
+### Private Connectivity Choice Private Connectivity Disabled
+
+Disable Private Connectivity to Site.
+
+### Proactive Monitoring Choice Proactive Monitoring Disable
+
+Disable Proactive Monitoring.
+
+### Proactive Monitoring Choice Proactive Monitoring Enable
+
+Enable Proactive Monitoring.
+
 ### Provider Choice Aws
 
 x-displayName: "AWS".
 
-###### One of the arguments from this list "not_managed" can be set
+###### One of the arguments from this list "managed, not_managed" can be set
+
+`managed` - (Optional) F5 Distributed Cloud will automate provisioning (ex: node bringup) for this site.. See [Orchestration Choice Managed ](#orchestration-choice-managed) below for details.
 
 `not_managed` - (Optional) or by using automation tools such as Terraform.. See [Orchestration Choice Not Managed ](#orchestration-choice-not-managed) below for details.
 
@@ -782,7 +1081,7 @@ x-displayName: "Baremetal".
 
 ### Provider Choice Gcp
 
-x-displayName: "GCP".
+x-displayName: "GCP (EA)".
 
 ###### One of the arguments from this list "not_managed" can be set
 
@@ -790,7 +1089,15 @@ x-displayName: "GCP".
 
 ### Provider Choice Kvm
 
-x-displayName: "KVM".
+x-displayName: "KVM (EA)".
+
+###### One of the arguments from this list "not_managed" can be set
+
+`not_managed` - (Optional) or by using automation tools such as Terraform.. See [Orchestration Choice Not Managed ](#orchestration-choice-not-managed) below for details.
+
+### Provider Choice Nutanix
+
+x-displayName: "Nutanix (EA)".
 
 ###### One of the arguments from this list "not_managed" can be set
 
@@ -798,7 +1105,15 @@ x-displayName: "KVM".
 
 ### Provider Choice Oci
 
-x-displayName: "OCI".
+x-displayName: "OCI (EA)".
+
+###### One of the arguments from this list "not_managed" can be set
+
+`not_managed` - (Optional) or by using automation tools such as Terraform.. See [Orchestration Choice Not Managed ](#orchestration-choice-not-managed) below for details.
+
+### Provider Choice Openstack
+
+x-displayName: "Openstack (EA)".
 
 ###### One of the arguments from this list "not_managed" can be set
 
@@ -806,7 +1121,7 @@ x-displayName: "OCI".
 
 ### Provider Choice Rseries
 
-x-displayName: "F5 rSeries".
+x-displayName: "F5 rSeries (EA)".
 
 ###### One of the arguments from this list "not_managed" can be set
 
@@ -867,6 +1182,70 @@ Use a Site Mesh Group to connect to other sites..
 `sm_connection_public_ip` - (Optional) tunnels to other sites which are part of the site mesh group. (`Bool`).
 
 `sm_connection_pvt_ip` - (Optional) If multiple interfaces on a control node belong to the Site Local Outside (SLO) Local VRF, the interface which has 'Use for Site to Site Connectivity' set will be used. (`Bool`).
+
+### Secret Info Oneof Blindfold Secret Info
+
+Blindfold Secret is used for the secrets managed by F5XC Secret Management Service.
+
+`decryption_provider` - (Optional) Name of the Secret Management Access object that contains information about the backend Secret Management service. (`String`).
+
+`location` - (Required) Or it could be a path if the store provider is an http/https location (`String`).
+
+`store_provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
+
+### Secret Info Oneof Clear Secret Info
+
+Clear Secret is used for the secrets that are not encrypted.
+
+`provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
+
+`url` - (Required) When asked for this secret, caller will get Secret bytes after Base64 decoding. (`String`).
+
+### Secret Info Oneof Vault Secret Info
+
+Vault Secret is used for the secrets managed by Hashicorp Vault.
+
+`key` - (Optional) If not provided entire secret will be returned. (`String`).
+
+`location` - (Required) Path to secret in Vault. (`String`).
+
+`provider` - (Required) Name of the Secret Management Access object that contains information about the backend Vault. (`String`).
+
+`secret_encoding` - (Optional) This field defines the encoding type of the secret BEFORE the secret is put into Hashicorp Vault. (`String`).
+
+`version` - (Optional) If not provided latest version will be returned. (`Int`).
+
+### Secret Info Oneof Wingman Secret Info
+
+Secret is given as bootstrap secret in F5XC Security Sidecar.
+
+`name` - (Required) Name of the secret. (`String`).
+
+### Security Group Choice Custom Security Group
+
+With this option, ingress and egress traffic will be controlled via security group ids..
+
+`inside_security_group_id` - (Optional) Security Group ID to be attached to SLI(Site Local Inside) Interface (`String`).
+
+`outside_security_group_id` - (Optional) Security Group ID to be attached to SLO(Site Local Outside) Interface (`String`).
+
+### Security Group Choice F5xc Security Group
+
+With this option, ingress and egress traffic will be controlled via f5xc created security group..
+
+### Service Vpc Choice New Vpc
+
+Details needed to create new VPC.
+
+`allocate_ipv6` - (Optional) Allocate IPv6 CIDR block from AWS (`Bool`).(Deprecated)
+
+###### One of the arguments from this list "autogenerate, name_tag" must be set
+
+`autogenerate` - (Optional) Autogenerate the VPC Name (`Bool`).
+
+`name_tag` - (Optional) Specify the VPC Name (`String`).
+
+`primary_ipv4` - (Required) The Primary IPv4 block cannot be modified. All subnets prefixes in this VPC must be part of this CIDR block. (`String`).
 
 ### Site Mesh Group Choice No Site Mesh Group
 
@@ -1040,9 +1419,17 @@ Specify how worker nodes within a site will be upgraded..
 
 ###### One of the arguments from this list "disable_upgrade_drain, enable_upgrade_drain" must be set
 
-`disable_upgrade_drain` - (Optional) x-displayName: "Disable Node by Node Upgrade" (`Bool`).
+`disable_upgrade_drain` - (Optional) x-displayName: "Disable" (`Bool`).
 
-`enable_upgrade_drain` - (Optional) x-displayName: "Enable Node by Node Upgrade". See [Kubernetes Upgrade Drain Enable Choice Enable Upgrade Drain ](#kubernetes-upgrade-drain-enable-choice-enable-upgrade-drain) below for details.
+`enable_upgrade_drain` - (Optional) x-displayName: "Enable". See [Kubernetes Upgrade Drain Enable Choice Enable Upgrade Drain ](#kubernetes-upgrade-drain-enable-choice-enable-upgrade-drain) below for details.
+
+### Use For Re Tunnel Choice Disable Re Tunnel
+
+Do not use the internal Enterprise Proxy for RE Tunnels.
+
+### Use For Re Tunnel Choice Enable Re Tunnel
+
+Use the internal Enterprise Proxy for RE Tunnels.
 
 ### Vega Upgrade Mode Toggle Choice Disable Vega Upgrade Mode
 

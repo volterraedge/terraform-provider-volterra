@@ -28,15 +28,19 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.uztna.uztna_domain.ReplaceRequest"] = ReplaceRequestValidator()
 	vr["ves.io.schema.uztna.uztna_domain.ReplaceResponse"] = ReplaceResponseValidator()
 
+	vr["ves.io.schema.uztna.uztna_domain.AppVIPPool"] = AppVIPPoolValidator()
 	vr["ves.io.schema.uztna.uztna_domain.Certificate"] = CertificateValidator()
+	vr["ves.io.schema.uztna.uztna_domain.CloudGatewayAdvertisement"] = CloudGatewayAdvertisementValidator()
+	vr["ves.io.schema.uztna.uztna_domain.CloudGateways"] = CloudGatewaysValidator()
 	vr["ves.io.schema.uztna.uztna_domain.CreateSpecType"] = CreateSpecTypeValidator()
-	vr["ves.io.schema.uztna.uztna_domain.DomainPerimeterRE"] = DomainPerimeterREValidator()
-	vr["ves.io.schema.uztna.uztna_domain.DomainSites"] = DomainSitesValidator()
+	vr["ves.io.schema.uztna.uztna_domain.DualStackLeasePool"] = DualStackLeasePoolValidator()
 	vr["ves.io.schema.uztna.uztna_domain.Gateways"] = GatewaysValidator()
 	vr["ves.io.schema.uztna.uztna_domain.GetSpecType"] = GetSpecTypeValidator()
 	vr["ves.io.schema.uztna.uztna_domain.GlobalSpecType"] = GlobalSpecTypeValidator()
+	vr["ves.io.schema.uztna.uztna_domain.IPv4Leasepool"] = IPv4LeasepoolValidator()
+	vr["ves.io.schema.uztna.uztna_domain.IPv6Leasepool"] = IPv6LeasepoolValidator()
 	vr["ves.io.schema.uztna.uztna_domain.LeasePoolList"] = LeasePoolListValidator()
-	vr["ves.io.schema.uztna.uztna_domain.PerimeterREAdvertisement"] = PerimeterREAdvertisementValidator()
+	vr["ves.io.schema.uztna.uztna_domain.Policy"] = PolicyValidator()
 	vr["ves.io.schema.uztna.uztna_domain.ReplaceSpecType"] = ReplaceSpecTypeValidator()
 
 }
@@ -57,10 +61,12 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.uztna.uztna_domain.API.Create"] = []string{
 		"spec.cdn_ce_vh_api_gw.#",
+		"spec.vip_dns_proxy",
 	}
 
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.uztna.uztna_domain.API.Replace"] = []string{
 		"spec.cdn_ce_vh_api_gw.#",
+		"spec.vip_dns_proxy",
 	}
 
 }

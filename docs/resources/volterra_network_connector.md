@@ -1,9 +1,9 @@
 ---
 
 page_title: "Volterra: network_connector"
-description: "The network_connector allows CRUD of Network Connector resource on Volterra SaaS"
 
----
+description: "The network_connector allows CRUD of Network Connector resource on Volterra SaaS"
+-----------------------------------------------------------------------------------------------
 
 Resource volterra_network_connector
 ===================================
@@ -22,29 +22,17 @@ resource "volterra_network_connector" "example" {
 
   // One of the arguments from this list "sli_to_global_dr sli_to_global_snat sli_to_slo_dr sli_to_slo_snat slo_to_global_dr slo_to_global_snat" must be set
 
-  sli_to_slo_snat {
-    // One of the arguments from this list "interface_ip snat_pool snat_pool_allocator" must be set
-
-    interface_ip = true
-
-    // One of the arguments from this list "default_gw_snat dynamic_routing" must be set
-
-    default_gw_snat = true
+  slo_to_global_dr {
+    global_vn {
+      name      = "test1"
+      namespace = "staging"
+      tenant    = "acmecorp"
+    }
   }
 
   // One of the arguments from this list "disable_forward_proxy enable_forward_proxy" must be set
 
-  enable_forward_proxy {
-    connection_timeout = "4000"
-
-    max_connect_attempts = "3"
-
-    // One of the arguments from this list "no_interception tls_intercept" can be set
-
-    no_interception = true
-    white_listed_ports = ["[22, 9400]"]
-    white_listed_prefixes = ["['10.2.1.0/24', '192.168.8.0/29', '10.7.64.160/27']"]
-  }
+  disable_forward_proxy = true
 }
 
 ```

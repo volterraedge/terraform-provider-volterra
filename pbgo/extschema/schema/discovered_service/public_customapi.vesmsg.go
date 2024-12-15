@@ -713,15 +713,15 @@ func CreateTCPLoadBalancerResponseValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
-func (m *DisableWAAPRequest) ToJSON() (string, error) {
+func (m *DisableVisibilityRequest) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
 
-func (m *DisableWAAPRequest) ToYAML() (string, error) {
+func (m *DisableVisibilityRequest) ToYAML() (string, error) {
 	return codec.ToYAML(m)
 }
 
-func (m *DisableWAAPRequest) DeepCopy() *DisableWAAPRequest {
+func (m *DisableVisibilityRequest) DeepCopy() *DisableVisibilityRequest {
 	if m == nil {
 		return nil
 	}
@@ -729,7 +729,7 @@ func (m *DisableWAAPRequest) DeepCopy() *DisableWAAPRequest {
 	if err != nil {
 		return nil
 	}
-	c := &DisableWAAPRequest{}
+	c := &DisableVisibilityRequest{}
 	err = c.Unmarshal(ser)
 	if err != nil {
 		return nil
@@ -737,22 +737,22 @@ func (m *DisableWAAPRequest) DeepCopy() *DisableWAAPRequest {
 	return c
 }
 
-func (m *DisableWAAPRequest) DeepCopyProto() proto.Message {
+func (m *DisableVisibilityRequest) DeepCopyProto() proto.Message {
 	if m == nil {
 		return nil
 	}
 	return m.DeepCopy()
 }
 
-func (m *DisableWAAPRequest) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
-	return DisableWAAPRequestValidator().Validate(ctx, m, opts...)
+func (m *DisableVisibilityRequest) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return DisableVisibilityRequestValidator().Validate(ctx, m, opts...)
 }
 
-type ValidateDisableWAAPRequest struct {
+type ValidateDisableVisibilityRequest struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
-func (v *ValidateDisableWAAPRequest) NamespaceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+func (v *ValidateDisableVisibilityRequest) NamespaceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
@@ -762,7 +762,7 @@ func (v *ValidateDisableWAAPRequest) NamespaceValidationRuleHandler(rules map[st
 	return validatorFn, nil
 }
 
-func (v *ValidateDisableWAAPRequest) NameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+func (v *ValidateDisableVisibilityRequest) NameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
@@ -772,14 +772,14 @@ func (v *ValidateDisableWAAPRequest) NameValidationRuleHandler(rules map[string]
 	return validatorFn, nil
 }
 
-func (v *ValidateDisableWAAPRequest) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
-	m, ok := pm.(*DisableWAAPRequest)
+func (v *ValidateDisableVisibilityRequest) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*DisableVisibilityRequest)
 	if !ok {
 		switch t := pm.(type) {
 		case nil:
 			return nil
 		default:
-			return fmt.Errorf("Expected type *DisableWAAPRequest got type %s", t)
+			return fmt.Errorf("Expected type *DisableVisibilityRequest got type %s", t)
 		}
 	}
 	if m == nil {
@@ -808,8 +808,8 @@ func (v *ValidateDisableWAAPRequest) Validate(ctx context.Context, pm interface{
 }
 
 // Well-known symbol for default validator implementation
-var DefaultDisableWAAPRequestValidator = func() *ValidateDisableWAAPRequest {
-	v := &ValidateDisableWAAPRequest{FldValidators: map[string]db.ValidatorFunc{}}
+var DefaultDisableVisibilityRequestValidator = func() *ValidateDisableVisibilityRequest {
+	v := &ValidateDisableVisibilityRequest{FldValidators: map[string]db.ValidatorFunc{}}
 
 	var (
 		err error
@@ -825,7 +825,7 @@ var DefaultDisableWAAPRequestValidator = func() *ValidateDisableWAAPRequest {
 	}
 	vFn, err = vrhNamespace(rulesNamespace)
 	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for DisableWAAPRequest.namespace: %s", err)
+		errMsg := fmt.Sprintf("ValidationRuleHandler for DisableVisibilityRequest.namespace: %s", err)
 		panic(errMsg)
 	}
 	v.FldValidators["namespace"] = vFn
@@ -836,7 +836,7 @@ var DefaultDisableWAAPRequestValidator = func() *ValidateDisableWAAPRequest {
 	}
 	vFn, err = vrhName(rulesName)
 	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for DisableWAAPRequest.name: %s", err)
+		errMsg := fmt.Sprintf("ValidationRuleHandler for DisableVisibilityRequest.name: %s", err)
 		panic(errMsg)
 	}
 	v.FldValidators["name"] = vFn
@@ -844,21 +844,21 @@ var DefaultDisableWAAPRequestValidator = func() *ValidateDisableWAAPRequest {
 	return v
 }()
 
-func DisableWAAPRequestValidator() db.Validator {
-	return DefaultDisableWAAPRequestValidator
+func DisableVisibilityRequestValidator() db.Validator {
+	return DefaultDisableVisibilityRequestValidator
 }
 
 // augmented methods on protoc/std generated struct
 
-func (m *DisableWAAPResponse) ToJSON() (string, error) {
+func (m *DisableVisibilityResponse) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
 
-func (m *DisableWAAPResponse) ToYAML() (string, error) {
+func (m *DisableVisibilityResponse) ToYAML() (string, error) {
 	return codec.ToYAML(m)
 }
 
-func (m *DisableWAAPResponse) DeepCopy() *DisableWAAPResponse {
+func (m *DisableVisibilityResponse) DeepCopy() *DisableVisibilityResponse {
 	if m == nil {
 		return nil
 	}
@@ -866,7 +866,7 @@ func (m *DisableWAAPResponse) DeepCopy() *DisableWAAPResponse {
 	if err != nil {
 		return nil
 	}
-	c := &DisableWAAPResponse{}
+	c := &DisableVisibilityResponse{}
 	err = c.Unmarshal(ser)
 	if err != nil {
 		return nil
@@ -874,29 +874,29 @@ func (m *DisableWAAPResponse) DeepCopy() *DisableWAAPResponse {
 	return c
 }
 
-func (m *DisableWAAPResponse) DeepCopyProto() proto.Message {
+func (m *DisableVisibilityResponse) DeepCopyProto() proto.Message {
 	if m == nil {
 		return nil
 	}
 	return m.DeepCopy()
 }
 
-func (m *DisableWAAPResponse) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
-	return DisableWAAPResponseValidator().Validate(ctx, m, opts...)
+func (m *DisableVisibilityResponse) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return DisableVisibilityResponseValidator().Validate(ctx, m, opts...)
 }
 
-type ValidateDisableWAAPResponse struct {
+type ValidateDisableVisibilityResponse struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
-func (v *ValidateDisableWAAPResponse) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
-	m, ok := pm.(*DisableWAAPResponse)
+func (v *ValidateDisableVisibilityResponse) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*DisableVisibilityResponse)
 	if !ok {
 		switch t := pm.(type) {
 		case nil:
 			return nil
 		default:
-			return fmt.Errorf("Expected type *DisableWAAPResponse got type %s", t)
+			return fmt.Errorf("Expected type *DisableVisibilityResponse got type %s", t)
 		}
 	}
 	if m == nil {
@@ -907,27 +907,27 @@ func (v *ValidateDisableWAAPResponse) Validate(ctx context.Context, pm interface
 }
 
 // Well-known symbol for default validator implementation
-var DefaultDisableWAAPResponseValidator = func() *ValidateDisableWAAPResponse {
-	v := &ValidateDisableWAAPResponse{FldValidators: map[string]db.ValidatorFunc{}}
+var DefaultDisableVisibilityResponseValidator = func() *ValidateDisableVisibilityResponse {
+	v := &ValidateDisableVisibilityResponse{FldValidators: map[string]db.ValidatorFunc{}}
 
 	return v
 }()
 
-func DisableWAAPResponseValidator() db.Validator {
-	return DefaultDisableWAAPResponseValidator
+func DisableVisibilityResponseValidator() db.Validator {
+	return DefaultDisableVisibilityResponseValidator
 }
 
 // augmented methods on protoc/std generated struct
 
-func (m *EnableWAAPRequest) ToJSON() (string, error) {
+func (m *EnableVisibilityRequest) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
 
-func (m *EnableWAAPRequest) ToYAML() (string, error) {
+func (m *EnableVisibilityRequest) ToYAML() (string, error) {
 	return codec.ToYAML(m)
 }
 
-func (m *EnableWAAPRequest) DeepCopy() *EnableWAAPRequest {
+func (m *EnableVisibilityRequest) DeepCopy() *EnableVisibilityRequest {
 	if m == nil {
 		return nil
 	}
@@ -935,7 +935,7 @@ func (m *EnableWAAPRequest) DeepCopy() *EnableWAAPRequest {
 	if err != nil {
 		return nil
 	}
-	c := &EnableWAAPRequest{}
+	c := &EnableVisibilityRequest{}
 	err = c.Unmarshal(ser)
 	if err != nil {
 		return nil
@@ -943,22 +943,22 @@ func (m *EnableWAAPRequest) DeepCopy() *EnableWAAPRequest {
 	return c
 }
 
-func (m *EnableWAAPRequest) DeepCopyProto() proto.Message {
+func (m *EnableVisibilityRequest) DeepCopyProto() proto.Message {
 	if m == nil {
 		return nil
 	}
 	return m.DeepCopy()
 }
 
-func (m *EnableWAAPRequest) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
-	return EnableWAAPRequestValidator().Validate(ctx, m, opts...)
+func (m *EnableVisibilityRequest) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return EnableVisibilityRequestValidator().Validate(ctx, m, opts...)
 }
 
-type ValidateEnableWAAPRequest struct {
+type ValidateEnableVisibilityRequest struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
-func (v *ValidateEnableWAAPRequest) NamespaceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+func (v *ValidateEnableVisibilityRequest) NamespaceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
@@ -968,7 +968,7 @@ func (v *ValidateEnableWAAPRequest) NamespaceValidationRuleHandler(rules map[str
 	return validatorFn, nil
 }
 
-func (v *ValidateEnableWAAPRequest) NameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+func (v *ValidateEnableVisibilityRequest) NameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
@@ -978,14 +978,14 @@ func (v *ValidateEnableWAAPRequest) NameValidationRuleHandler(rules map[string]s
 	return validatorFn, nil
 }
 
-func (v *ValidateEnableWAAPRequest) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
-	m, ok := pm.(*EnableWAAPRequest)
+func (v *ValidateEnableVisibilityRequest) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*EnableVisibilityRequest)
 	if !ok {
 		switch t := pm.(type) {
 		case nil:
 			return nil
 		default:
-			return fmt.Errorf("Expected type *EnableWAAPRequest got type %s", t)
+			return fmt.Errorf("Expected type *EnableVisibilityRequest got type %s", t)
 		}
 	}
 	if m == nil {
@@ -1014,8 +1014,8 @@ func (v *ValidateEnableWAAPRequest) Validate(ctx context.Context, pm interface{}
 }
 
 // Well-known symbol for default validator implementation
-var DefaultEnableWAAPRequestValidator = func() *ValidateEnableWAAPRequest {
-	v := &ValidateEnableWAAPRequest{FldValidators: map[string]db.ValidatorFunc{}}
+var DefaultEnableVisibilityRequestValidator = func() *ValidateEnableVisibilityRequest {
+	v := &ValidateEnableVisibilityRequest{FldValidators: map[string]db.ValidatorFunc{}}
 
 	var (
 		err error
@@ -1031,7 +1031,7 @@ var DefaultEnableWAAPRequestValidator = func() *ValidateEnableWAAPRequest {
 	}
 	vFn, err = vrhNamespace(rulesNamespace)
 	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for EnableWAAPRequest.namespace: %s", err)
+		errMsg := fmt.Sprintf("ValidationRuleHandler for EnableVisibilityRequest.namespace: %s", err)
 		panic(errMsg)
 	}
 	v.FldValidators["namespace"] = vFn
@@ -1042,7 +1042,7 @@ var DefaultEnableWAAPRequestValidator = func() *ValidateEnableWAAPRequest {
 	}
 	vFn, err = vrhName(rulesName)
 	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for EnableWAAPRequest.name: %s", err)
+		errMsg := fmt.Sprintf("ValidationRuleHandler for EnableVisibilityRequest.name: %s", err)
 		panic(errMsg)
 	}
 	v.FldValidators["name"] = vFn
@@ -1050,21 +1050,21 @@ var DefaultEnableWAAPRequestValidator = func() *ValidateEnableWAAPRequest {
 	return v
 }()
 
-func EnableWAAPRequestValidator() db.Validator {
-	return DefaultEnableWAAPRequestValidator
+func EnableVisibilityRequestValidator() db.Validator {
+	return DefaultEnableVisibilityRequestValidator
 }
 
 // augmented methods on protoc/std generated struct
 
-func (m *EnableWAAPResponse) ToJSON() (string, error) {
+func (m *EnableVisibilityResponse) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
 
-func (m *EnableWAAPResponse) ToYAML() (string, error) {
+func (m *EnableVisibilityResponse) ToYAML() (string, error) {
 	return codec.ToYAML(m)
 }
 
-func (m *EnableWAAPResponse) DeepCopy() *EnableWAAPResponse {
+func (m *EnableVisibilityResponse) DeepCopy() *EnableVisibilityResponse {
 	if m == nil {
 		return nil
 	}
@@ -1072,7 +1072,7 @@ func (m *EnableWAAPResponse) DeepCopy() *EnableWAAPResponse {
 	if err != nil {
 		return nil
 	}
-	c := &EnableWAAPResponse{}
+	c := &EnableVisibilityResponse{}
 	err = c.Unmarshal(ser)
 	if err != nil {
 		return nil
@@ -1080,18 +1080,18 @@ func (m *EnableWAAPResponse) DeepCopy() *EnableWAAPResponse {
 	return c
 }
 
-func (m *EnableWAAPResponse) DeepCopyProto() proto.Message {
+func (m *EnableVisibilityResponse) DeepCopyProto() proto.Message {
 	if m == nil {
 		return nil
 	}
 	return m.DeepCopy()
 }
 
-func (m *EnableWAAPResponse) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
-	return EnableWAAPResponseValidator().Validate(ctx, m, opts...)
+func (m *EnableVisibilityResponse) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return EnableVisibilityResponseValidator().Validate(ctx, m, opts...)
 }
 
-func (m *EnableWAAPResponse) GetDRefInfo() ([]db.DRefInfo, error) {
+func (m *EnableVisibilityResponse) GetDRefInfo() ([]db.DRefInfo, error) {
 	if m == nil {
 		return nil, nil
 	}
@@ -1100,7 +1100,7 @@ func (m *EnableWAAPResponse) GetDRefInfo() ([]db.DRefInfo, error) {
 
 }
 
-func (m *EnableWAAPResponse) GetVirtualHostRefDRefInfo() ([]db.DRefInfo, error) {
+func (m *EnableVisibilityResponse) GetVirtualHostRefDRefInfo() ([]db.DRefInfo, error) {
 
 	vref := m.GetVirtualHostRef()
 	if vref == nil {
@@ -1121,7 +1121,7 @@ func (m *EnableWAAPResponse) GetVirtualHostRefDRefInfo() ([]db.DRefInfo, error) 
 }
 
 // GetVirtualHostRefDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
-func (m *EnableWAAPResponse) GetVirtualHostRefDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+func (m *EnableVisibilityResponse) GetVirtualHostRefDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
 	var entries []db.Entry
 	refdType, err := d.TypeForEntryKind("", "", "virtual_host.Object")
 	if err != nil {
@@ -1149,18 +1149,18 @@ func (m *EnableWAAPResponse) GetVirtualHostRefDBEntries(ctx context.Context, d d
 	return entries, nil
 }
 
-type ValidateEnableWAAPResponse struct {
+type ValidateEnableVisibilityResponse struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
-func (v *ValidateEnableWAAPResponse) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
-	m, ok := pm.(*EnableWAAPResponse)
+func (v *ValidateEnableVisibilityResponse) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*EnableVisibilityResponse)
 	if !ok {
 		switch t := pm.(type) {
 		case nil:
 			return nil
 		default:
-			return fmt.Errorf("Expected type *EnableWAAPResponse got type %s", t)
+			return fmt.Errorf("Expected type *EnableVisibilityResponse got type %s", t)
 		}
 	}
 	if m == nil {
@@ -1180,16 +1180,16 @@ func (v *ValidateEnableWAAPResponse) Validate(ctx context.Context, pm interface{
 }
 
 // Well-known symbol for default validator implementation
-var DefaultEnableWAAPResponseValidator = func() *ValidateEnableWAAPResponse {
-	v := &ValidateEnableWAAPResponse{FldValidators: map[string]db.ValidatorFunc{}}
+var DefaultEnableVisibilityResponseValidator = func() *ValidateEnableVisibilityResponse {
+	v := &ValidateEnableVisibilityResponse{FldValidators: map[string]db.ValidatorFunc{}}
 
 	v.FldValidators["virtual_host_ref"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	return v
 }()
 
-func EnableWAAPResponseValidator() db.Validator {
-	return DefaultEnableWAAPResponseValidator
+func EnableVisibilityResponseValidator() db.Validator {
+	return DefaultEnableVisibilityResponseValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -1241,6 +1241,12 @@ func (m *HTTPLBRequest) GetDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
+	if fdrInfos, err := m.GetLoadbalancerTypeDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetLoadbalancerTypeDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
 	if fdrInfos, err := m.GetServerValidationChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetServerValidationChoiceDRefInfo() FAILED")
 	} else {
@@ -1270,6 +1276,46 @@ func (m *HTTPLBRequest) GetAdvertiseChoiceDRefInfo() ([]db.DRefInfo, error) {
 		for i := range drInfos {
 			dri := &drInfos[i]
 			dri.DRField = "advertise_custom." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
+	}
+
+}
+
+// GetDRefInfo for the field's type
+func (m *HTTPLBRequest) GetLoadbalancerTypeDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetLoadbalancerType() == nil {
+		return nil, nil
+	}
+	switch m.GetLoadbalancerType().(type) {
+	case *HTTPLBRequest_HttpsAutoCert:
+
+		return nil, nil
+
+	case *HTTPLBRequest_Https:
+
+		drInfos, err := m.GetHttps().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetHttps().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "https." + dri.DRField
+		}
+		return drInfos, err
+
+	case *HTTPLBRequest_Http:
+
+		drInfos, err := m.GetHttp().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetHttp().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "http." + dri.DRField
 		}
 		return drInfos, err
 
@@ -1352,6 +1398,14 @@ func (v *ValidateHTTPLBRequest) AdvertiseChoiceValidationRuleHandler(rules map[s
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for advertise_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateHTTPLBRequest) LoadbalancerTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for loadbalancer_type")
 	}
 	return validatorFn, nil
 }
@@ -1443,6 +1497,53 @@ func (v *ValidateHTTPLBRequest) Validate(ctx context.Context, pm interface{}, op
 
 	}
 
+	if fv, exists := v.FldValidators["loadbalancer_type"]; exists {
+		val := m.GetLoadbalancerType()
+		vOpts := append(opts,
+			db.WithValidateField("loadbalancer_type"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetLoadbalancerType().(type) {
+	case *HTTPLBRequest_HttpsAutoCert:
+		if fv, exists := v.FldValidators["loadbalancer_type.https_auto_cert"]; exists {
+			val := m.GetLoadbalancerType().(*HTTPLBRequest_HttpsAutoCert).HttpsAutoCert
+			vOpts := append(opts,
+				db.WithValidateField("loadbalancer_type"),
+				db.WithValidateField("https_auto_cert"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *HTTPLBRequest_Https:
+		if fv, exists := v.FldValidators["loadbalancer_type.https"]; exists {
+			val := m.GetLoadbalancerType().(*HTTPLBRequest_Https).Https
+			vOpts := append(opts,
+				db.WithValidateField("loadbalancer_type"),
+				db.WithValidateField("https"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *HTTPLBRequest_Http:
+		if fv, exists := v.FldValidators["loadbalancer_type.http"]; exists {
+			val := m.GetLoadbalancerType().(*HTTPLBRequest_Http).Http
+			vOpts := append(opts,
+				db.WithValidateField("loadbalancer_type"),
+				db.WithValidateField("http"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["name"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("name"))
@@ -1514,6 +1615,17 @@ var DefaultHTTPLBRequestValidator = func() *ValidateHTTPLBRequest {
 	}
 	v.FldValidators["advertise_choice"] = vFn
 
+	vrhLoadbalancerType := v.LoadbalancerTypeValidationRuleHandler
+	rulesLoadbalancerType := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhLoadbalancerType(rulesLoadbalancerType)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for HTTPLBRequest.loadbalancer_type: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["loadbalancer_type"] = vFn
+
 	vrhServerValidationChoice := v.ServerValidationChoiceValidationRuleHandler
 	rulesServerValidationChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1549,6 +1661,9 @@ var DefaultHTTPLBRequestValidator = func() *ValidateHTTPLBRequest {
 	v.FldValidators["domain"] = vFn
 
 	v.FldValidators["advertise_choice.advertise_custom"] = ves_io_schema_views.AdvertiseCustomValidator().Validate
+
+	v.FldValidators["loadbalancer_type.https"] = ProxyTypeHttpsValidator().Validate
+	v.FldValidators["loadbalancer_type.http"] = ProxyTypeHttpValidator().Validate
 
 	v.FldValidators["server_validation_choice.trusted_ca"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
@@ -1610,11 +1725,21 @@ func (v *ValidateListServicesRequest) NamespaceValidationRuleHandler(rules map[s
 	return validatorFn, nil
 }
 
-func (v *ValidateListServicesRequest) DiscoveredServiceTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+func (v *ValidateListServicesRequest) ServiceTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for discovered_service_type")
+		return nil, errors.Wrap(err, "ValidationRuleHandler for service_type")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateListServicesRequest) DiscoveryNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for discovery_name")
 	}
 
 	return validatorFn, nil
@@ -1634,10 +1759,10 @@ func (v *ValidateListServicesRequest) Validate(ctx context.Context, pm interface
 		return nil
 	}
 
-	if fv, exists := v.FldValidators["discovered_service_type"]; exists {
+	if fv, exists := v.FldValidators["discovery_name"]; exists {
 
-		vOpts := append(opts, db.WithValidateField("discovered_service_type"))
-		if err := fv(ctx, m.GetDiscoveredServiceType(), vOpts...); err != nil {
+		vOpts := append(opts, db.WithValidateField("discovery_name"))
+		if err := fv(ctx, m.GetDiscoveryName(), vOpts...); err != nil {
 			return err
 		}
 
@@ -1647,6 +1772,15 @@ func (v *ValidateListServicesRequest) Validate(ctx context.Context, pm interface
 
 		vOpts := append(opts, db.WithValidateField("namespace"))
 		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["service_type"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("service_type"))
+		if err := fv(ctx, m.GetServiceType(), vOpts...); err != nil {
 			return err
 		}
 
@@ -1678,17 +1812,28 @@ var DefaultListServicesRequestValidator = func() *ValidateListServicesRequest {
 	}
 	v.FldValidators["namespace"] = vFn
 
-	vrhDiscoveredServiceType := v.DiscoveredServiceTypeValidationRuleHandler
-	rulesDiscoveredServiceType := map[string]string{
+	vrhServiceType := v.ServiceTypeValidationRuleHandler
+	rulesServiceType := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
 		"ves.io.schema.rules.string.in":        "[\"bigip_virtual_server\"]",
 	}
-	vFn, err = vrhDiscoveredServiceType(rulesDiscoveredServiceType)
+	vFn, err = vrhServiceType(rulesServiceType)
 	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for ListServicesRequest.discovered_service_type: %s", err)
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ListServicesRequest.service_type: %s", err)
 		panic(errMsg)
 	}
-	v.FldValidators["discovered_service_type"] = vFn
+	v.FldValidators["service_type"] = vFn
+
+	vrhDiscoveryName := v.DiscoveryNameValidationRuleHandler
+	rulesDiscoveryName := map[string]string{
+		"ves.io.schema.rules.string.ves_object_name": "true",
+	}
+	vFn, err = vrhDiscoveryName(rulesDiscoveryName)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ListServicesRequest.discovery_name: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["discovery_name"] = vFn
 
 	return v
 }()
@@ -2049,6 +2194,522 @@ var DefaultListServicesResponseItemValidator = func() *ValidateListServicesRespo
 
 func ListServicesResponseItemValidator() db.Validator {
 	return DefaultListServicesResponseItemValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *ProxyTypeHttp) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *ProxyTypeHttp) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *ProxyTypeHttp) DeepCopy() *ProxyTypeHttp {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &ProxyTypeHttp{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *ProxyTypeHttp) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *ProxyTypeHttp) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return ProxyTypeHttpValidator().Validate(ctx, m, opts...)
+}
+
+func (m *ProxyTypeHttp) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetAdvertiseChoiceDRefInfo()
+
+}
+
+// GetDRefInfo for the field's type
+func (m *ProxyTypeHttp) GetAdvertiseChoiceDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetAdvertiseChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetAdvertiseChoice().(type) {
+	case *ProxyTypeHttp_AdvertiseOnPublicDefaultVip:
+
+		return nil, nil
+
+	case *ProxyTypeHttp_Site:
+
+		drInfos, err := m.GetSite().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetSite().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "site." + dri.DRField
+		}
+		return drInfos, err
+
+	case *ProxyTypeHttp_VirtualSite:
+
+		drInfos, err := m.GetVirtualSite().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetVirtualSite().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "virtual_site." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
+	}
+
+}
+
+type ValidateProxyTypeHttp struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateProxyTypeHttp) AdvertiseChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for advertise_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateProxyTypeHttp) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*ProxyTypeHttp)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *ProxyTypeHttp got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["advertise_choice"]; exists {
+		val := m.GetAdvertiseChoice()
+		vOpts := append(opts,
+			db.WithValidateField("advertise_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetAdvertiseChoice().(type) {
+	case *ProxyTypeHttp_AdvertiseOnPublicDefaultVip:
+		if fv, exists := v.FldValidators["advertise_choice.advertise_on_public_default_vip"]; exists {
+			val := m.GetAdvertiseChoice().(*ProxyTypeHttp_AdvertiseOnPublicDefaultVip).AdvertiseOnPublicDefaultVip
+			vOpts := append(opts,
+				db.WithValidateField("advertise_choice"),
+				db.WithValidateField("advertise_on_public_default_vip"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ProxyTypeHttp_Site:
+		if fv, exists := v.FldValidators["advertise_choice.site"]; exists {
+			val := m.GetAdvertiseChoice().(*ProxyTypeHttp_Site).Site
+			vOpts := append(opts,
+				db.WithValidateField("advertise_choice"),
+				db.WithValidateField("site"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ProxyTypeHttp_VirtualSite:
+		if fv, exists := v.FldValidators["advertise_choice.virtual_site"]; exists {
+			val := m.GetAdvertiseChoice().(*ProxyTypeHttp_VirtualSite).VirtualSite
+			vOpts := append(opts,
+				db.WithValidateField("advertise_choice"),
+				db.WithValidateField("virtual_site"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultProxyTypeHttpValidator = func() *ValidateProxyTypeHttp {
+	v := &ValidateProxyTypeHttp{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhAdvertiseChoice := v.AdvertiseChoiceValidationRuleHandler
+	rulesAdvertiseChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhAdvertiseChoice(rulesAdvertiseChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ProxyTypeHttp.advertise_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["advertise_choice"] = vFn
+
+	v.FldValidators["advertise_choice.site"] = WhereSiteValidator().Validate
+	v.FldValidators["advertise_choice.virtual_site"] = WhereVirtualSiteValidator().Validate
+
+	return v
+}()
+
+func ProxyTypeHttpValidator() db.Validator {
+	return DefaultProxyTypeHttpValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *ProxyTypeHttps) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *ProxyTypeHttps) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *ProxyTypeHttps) DeepCopy() *ProxyTypeHttps {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &ProxyTypeHttps{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *ProxyTypeHttps) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *ProxyTypeHttps) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return ProxyTypeHttpsValidator().Validate(ctx, m, opts...)
+}
+
+func (m *ProxyTypeHttps) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetAdvertiseChoiceDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetAdvertiseChoiceDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetCertificatesDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetCertificatesDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	return drInfos, nil
+
+}
+
+// GetDRefInfo for the field's type
+func (m *ProxyTypeHttps) GetAdvertiseChoiceDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetAdvertiseChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetAdvertiseChoice().(type) {
+	case *ProxyTypeHttps_AdvertiseOnPublicDefaultVip:
+
+		return nil, nil
+
+	case *ProxyTypeHttps_Site:
+
+		drInfos, err := m.GetSite().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetSite().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "site." + dri.DRField
+		}
+		return drInfos, err
+
+	case *ProxyTypeHttps_VirtualSite:
+
+		drInfos, err := m.GetVirtualSite().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetVirtualSite().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "virtual_site." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
+	}
+
+}
+
+func (m *ProxyTypeHttps) GetCertificatesDRefInfo() ([]db.DRefInfo, error) {
+	refs := m.GetCertificates()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("ProxyTypeHttps.certificates[%d] has a nil value", i)
+		}
+		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "certificate.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "certificates",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+
+}
+
+// GetCertificatesDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *ProxyTypeHttps) GetCertificatesDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "certificate.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: certificate")
+	}
+	for _, ref := range m.GetCertificates() {
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
+	}
+
+	return entries, nil
+}
+
+type ValidateProxyTypeHttps struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateProxyTypeHttps) AdvertiseChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for advertise_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateProxyTypeHttps) CertificatesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for certificates")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.ObjectRefType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ves_io_schema.ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for certificates")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema.ObjectRefType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema.ObjectRefType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated certificates")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items certificates")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateProxyTypeHttps) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*ProxyTypeHttps)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *ProxyTypeHttps got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["advertise_choice"]; exists {
+		val := m.GetAdvertiseChoice()
+		vOpts := append(opts,
+			db.WithValidateField("advertise_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetAdvertiseChoice().(type) {
+	case *ProxyTypeHttps_AdvertiseOnPublicDefaultVip:
+		if fv, exists := v.FldValidators["advertise_choice.advertise_on_public_default_vip"]; exists {
+			val := m.GetAdvertiseChoice().(*ProxyTypeHttps_AdvertiseOnPublicDefaultVip).AdvertiseOnPublicDefaultVip
+			vOpts := append(opts,
+				db.WithValidateField("advertise_choice"),
+				db.WithValidateField("advertise_on_public_default_vip"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ProxyTypeHttps_Site:
+		if fv, exists := v.FldValidators["advertise_choice.site"]; exists {
+			val := m.GetAdvertiseChoice().(*ProxyTypeHttps_Site).Site
+			vOpts := append(opts,
+				db.WithValidateField("advertise_choice"),
+				db.WithValidateField("site"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ProxyTypeHttps_VirtualSite:
+		if fv, exists := v.FldValidators["advertise_choice.virtual_site"]; exists {
+			val := m.GetAdvertiseChoice().(*ProxyTypeHttps_VirtualSite).VirtualSite
+			vOpts := append(opts,
+				db.WithValidateField("advertise_choice"),
+				db.WithValidateField("virtual_site"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["certificates"]; exists {
+		vOpts := append(opts, db.WithValidateField("certificates"))
+		if err := fv(ctx, m.GetCertificates(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultProxyTypeHttpsValidator = func() *ValidateProxyTypeHttps {
+	v := &ValidateProxyTypeHttps{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhAdvertiseChoice := v.AdvertiseChoiceValidationRuleHandler
+	rulesAdvertiseChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhAdvertiseChoice(rulesAdvertiseChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ProxyTypeHttps.advertise_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["advertise_choice"] = vFn
+
+	vrhCertificates := v.CertificatesValidationRuleHandler
+	rulesCertificates := map[string]string{
+		"ves.io.schema.rules.message.required":   "true",
+		"ves.io.schema.rules.repeated.max_items": "1",
+	}
+	vFn, err = vrhCertificates(rulesCertificates)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ProxyTypeHttps.certificates: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["certificates"] = vFn
+
+	v.FldValidators["advertise_choice.site"] = WhereSiteValidator().Validate
+	v.FldValidators["advertise_choice.virtual_site"] = WhereVirtualSiteValidator().Validate
+
+	return v
+}()
+
+func ProxyTypeHttpsValidator() db.Validator {
+	return DefaultProxyTypeHttpsValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -2431,4 +3092,402 @@ var DefaultTCPLBRequestValidator = func() *ValidateTCPLBRequest {
 
 func TCPLBRequestValidator() db.Validator {
 	return DefaultTCPLBRequestValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *WhereSite) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *WhereSite) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *WhereSite) DeepCopy() *WhereSite {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &WhereSite{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *WhereSite) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *WhereSite) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return WhereSiteValidator().Validate(ctx, m, opts...)
+}
+
+func (m *WhereSite) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetSiteDRefInfo()
+
+}
+
+func (m *WhereSite) GetSiteDRefInfo() ([]db.DRefInfo, error) {
+	refs := m.GetSite()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("WhereSite.site[%d] has a nil value", i)
+		}
+		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "site.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "site",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+
+}
+
+// GetSiteDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *WhereSite) GetSiteDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "site.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: site")
+	}
+	for _, ref := range m.GetSite() {
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
+	}
+
+	return entries, nil
+}
+
+type ValidateWhereSite struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateWhereSite) SiteValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for site")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.ObjectRefType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ves_io_schema.ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for site")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema.ObjectRefType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema.ObjectRefType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated site")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items site")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateWhereSite) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*WhereSite)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *WhereSite got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["site"]; exists {
+		vOpts := append(opts, db.WithValidateField("site"))
+		if err := fv(ctx, m.GetSite(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultWhereSiteValidator = func() *ValidateWhereSite {
+	v := &ValidateWhereSite{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhSite := v.SiteValidationRuleHandler
+	rulesSite := map[string]string{
+		"ves.io.schema.rules.message.required":   "true",
+		"ves.io.schema.rules.repeated.max_items": "1",
+	}
+	vFn, err = vrhSite(rulesSite)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for WhereSite.site: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["site"] = vFn
+
+	return v
+}()
+
+func WhereSiteValidator() db.Validator {
+	return DefaultWhereSiteValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *WhereVirtualSite) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *WhereVirtualSite) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *WhereVirtualSite) DeepCopy() *WhereVirtualSite {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &WhereVirtualSite{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *WhereVirtualSite) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *WhereVirtualSite) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return WhereVirtualSiteValidator().Validate(ctx, m, opts...)
+}
+
+func (m *WhereVirtualSite) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetVirtualSiteDRefInfo()
+
+}
+
+func (m *WhereVirtualSite) GetVirtualSiteDRefInfo() ([]db.DRefInfo, error) {
+	refs := m.GetVirtualSite()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("WhereVirtualSite.virtual_site[%d] has a nil value", i)
+		}
+		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "virtual_site.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "virtual_site",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+
+}
+
+// GetVirtualSiteDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *WhereVirtualSite) GetVirtualSiteDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "virtual_site.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: virtual_site")
+	}
+	for _, ref := range m.GetVirtualSite() {
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
+	}
+
+	return entries, nil
+}
+
+type ValidateWhereVirtualSite struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateWhereVirtualSite) VirtualSiteValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for virtual_site")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.ObjectRefType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ves_io_schema.ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for virtual_site")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema.ObjectRefType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema.ObjectRefType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated virtual_site")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items virtual_site")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateWhereVirtualSite) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*WhereVirtualSite)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *WhereVirtualSite got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["virtual_site"]; exists {
+		vOpts := append(opts, db.WithValidateField("virtual_site"))
+		if err := fv(ctx, m.GetVirtualSite(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultWhereVirtualSiteValidator = func() *ValidateWhereVirtualSite {
+	v := &ValidateWhereVirtualSite{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhVirtualSite := v.VirtualSiteValidationRuleHandler
+	rulesVirtualSite := map[string]string{
+		"ves.io.schema.rules.message.required":   "true",
+		"ves.io.schema.rules.repeated.max_items": "1",
+	}
+	vFn, err = vrhVirtualSite(rulesVirtualSite)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for WhereVirtualSite.virtual_site: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["virtual_site"] = vFn
+
+	return v
+}()
+
+func WhereVirtualSiteValidator() db.Validator {
+	return DefaultWhereVirtualSiteValidator
 }

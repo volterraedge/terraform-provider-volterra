@@ -1,9 +1,9 @@
 ---
 
 page_title: "Volterra: malicious_user_mitigation"
-description: "The malicious_user_mitigation allows CRUD of Malicious User Mitigation resource on Volterra SaaS"
 
----
+description: "The malicious_user_mitigation allows CRUD of Malicious User Mitigation resource on Volterra SaaS"
+---------------------------------------------------------------------------------------------------------------
 
 Resource volterra_malicious_user_mitigation
 ===========================================

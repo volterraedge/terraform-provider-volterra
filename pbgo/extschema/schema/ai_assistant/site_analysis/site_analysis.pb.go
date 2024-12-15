@@ -14,6 +14,7 @@ import (
 	proto "github.com/gogo/protobuf/proto"
 	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 	common "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/ai_assistant/common"
+	widget "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/ai_assistant/widget"
 	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/policy"
 	io "io"
 	math "math"
@@ -33,69 +34,6 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
-// Analysis and Action
-//
-// x-displayName: "Analysis and Action"
-// Analysis and Action
-type AnalysisAndAction struct {
-	// analysis
-	//
-	// x-displayName: "Analysis"
-	// x-example: "siteA is in provisioning state due to connectivity issues"
-	Analysis string `protobuf:"bytes,1,opt,name=analysis,proto3" json:"analysis,omitempty"`
-	// action
-	//
-	// x-displayName: "Action"
-	// x-example: "Retry provisioning the site"
-	Action string `protobuf:"bytes,2,opt,name=action,proto3" json:"action,omitempty"`
-}
-
-func (m *AnalysisAndAction) Reset()      { *m = AnalysisAndAction{} }
-func (*AnalysisAndAction) ProtoMessage() {}
-func (*AnalysisAndAction) Descriptor() ([]byte, []int) {
-	return fileDescriptor_15ed2a11dbdd73e8, []int{0}
-}
-func (m *AnalysisAndAction) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *AnalysisAndAction) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_AnalysisAndAction.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
-}
-func (m *AnalysisAndAction) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_AnalysisAndAction.Merge(m, src)
-}
-func (m *AnalysisAndAction) XXX_Size() int {
-	return m.Size()
-}
-func (m *AnalysisAndAction) XXX_DiscardUnknown() {
-	xxx_messageInfo_AnalysisAndAction.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_AnalysisAndAction proto.InternalMessageInfo
-
-func (m *AnalysisAndAction) GetAnalysis() string {
-	if m != nil {
-		return m.Analysis
-	}
-	return ""
-}
-
-func (m *AnalysisAndAction) GetAction() string {
-	if m != nil {
-		return m.Action
-	}
-	return ""
-}
-
 // Site Analysis Response
 //
 // x-displayName: "Site Analysis Response"
@@ -106,28 +44,27 @@ type SiteAnalysisResponse struct {
 	// x-displayName: "Summary"
 	// x-example: "This site analysis response provides status of sites."
 	Summary string `protobuf:"bytes,1,opt,name=summary,proto3" json:"summary,omitempty"`
-	// analysis and action list
+	// Table View
 	//
-	// x-example: "The site failed because it was stuck in provisioning state. Retry provisioning the site"
-	// x-displayName: "Analysis and Action list"
-	// Site Status Analysis and Actions list
-	AnalysisAndActions []*AnalysisAndAction `protobuf:"bytes,2,rep,name=analysis_and_actions,json=analysisAndActions,proto3" json:"analysis_and_actions,omitempty"`
-	// external doc link
+	// x-displayName: "Table View "
+	// Site Analysis response in table format.
+	TableView *widget.WidgetView `protobuf:"bytes,5,opt,name=table_view,json=tableView,proto3" json:"table_view,omitempty"`
+	// internal links
 	//
-	// x-displayName: "External Link"
-	// External doc link, that will be presented to the user
-	ExternalLink *common.Link `protobuf:"bytes,3,opt,name=external_link,json=externalLink,proto3" json:"external_link,omitempty"`
-	// internal link
+	// x-displayName: "Internal Links"
+	// Internal Link like dashboard links, that will be presented to the user
+	InternalLinks []*common.Link `protobuf:"bytes,6,rep,name=internal_links,json=internalLinks,proto3" json:"internal_links,omitempty"`
+	// external links
 	//
-	// x-displayName: "Internal Link"
-	// Internal Link like dashboard link, that will be presented to the user
-	InternalLink *common.Link `protobuf:"bytes,4,opt,name=internal_link,json=internalLink,proto3" json:"internal_link,omitempty"`
+	// x-displayName: "External Links"
+	// External doc links, that will be presented to the user
+	ExternalLinks []*common.Link `protobuf:"bytes,7,rep,name=external_links,json=externalLinks,proto3" json:"external_links,omitempty"`
 }
 
 func (m *SiteAnalysisResponse) Reset()      { *m = SiteAnalysisResponse{} }
 func (*SiteAnalysisResponse) ProtoMessage() {}
 func (*SiteAnalysisResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_15ed2a11dbdd73e8, []int{1}
+	return fileDescriptor_15ed2a11dbdd73e8, []int{0}
 }
 func (m *SiteAnalysisResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -163,29 +100,28 @@ func (m *SiteAnalysisResponse) GetSummary() string {
 	return ""
 }
 
-func (m *SiteAnalysisResponse) GetAnalysisAndActions() []*AnalysisAndAction {
+func (m *SiteAnalysisResponse) GetTableView() *widget.WidgetView {
 	if m != nil {
-		return m.AnalysisAndActions
+		return m.TableView
 	}
 	return nil
 }
 
-func (m *SiteAnalysisResponse) GetExternalLink() *common.Link {
+func (m *SiteAnalysisResponse) GetInternalLinks() []*common.Link {
 	if m != nil {
-		return m.ExternalLink
+		return m.InternalLinks
 	}
 	return nil
 }
 
-func (m *SiteAnalysisResponse) GetInternalLink() *common.Link {
+func (m *SiteAnalysisResponse) GetExternalLinks() []*common.Link {
 	if m != nil {
-		return m.InternalLink
+		return m.ExternalLinks
 	}
 	return nil
 }
 
 func init() {
-	proto.RegisterType((*AnalysisAndAction)(nil), "ves.io.schema.ai_assistant.site_analysis.AnalysisAndAction")
 	proto.RegisterType((*SiteAnalysisResponse)(nil), "ves.io.schema.ai_assistant.site_analysis.SiteAnalysisResponse")
 }
 
@@ -194,65 +130,38 @@ func init() {
 }
 
 var fileDescriptor_15ed2a11dbdd73e8 = []byte{
-	// 453 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x94, 0x93, 0xb1, 0x8e, 0xd3, 0x30,
-	0x18, 0xc7, 0xe3, 0x36, 0x1c, 0x25, 0x07, 0xd2, 0x11, 0x9d, 0x50, 0x54, 0x90, 0x55, 0xdd, 0x42,
-	0x07, 0x6a, 0x4b, 0xc7, 0x08, 0x4b, 0x19, 0x4f, 0x37, 0xf5, 0x36, 0x06, 0x22, 0x37, 0xf5, 0xe5,
-	0xac, 0x26, 0xfe, 0x22, 0xdb, 0x0d, 0xd7, 0x8d, 0x47, 0x60, 0xe0, 0x21, 0x78, 0x07, 0x5e, 0x80,
-	0xb1, 0xe3, 0x8d, 0x34, 0x5d, 0x18, 0xef, 0x11, 0x50, 0x9c, 0x18, 0x5d, 0x00, 0x15, 0xd8, 0xfc,
-	0xcf, 0xf7, 0xff, 0xff, 0x3e, 0x7f, 0xfa, 0x9c, 0xe0, 0x75, 0xc9, 0x35, 0x11, 0x40, 0x75, 0x72,
-	0xc5, 0x73, 0x46, 0x99, 0x88, 0x99, 0xd6, 0x42, 0x1b, 0x26, 0x0d, 0xd5, 0xc2, 0xf0, 0x98, 0x49,
-	0x96, 0xad, 0xb5, 0xd0, 0x5d, 0x45, 0x0a, 0x05, 0x06, 0xc2, 0x71, 0x93, 0x26, 0x4d, 0x9a, 0xdc,
-	0x4d, 0x93, 0x8e, 0x7f, 0x38, 0x49, 0x85, 0xb9, 0x5a, 0xcd, 0x49, 0x02, 0x39, 0x4d, 0x21, 0x05,
-	0x6a, 0x01, 0xf3, 0xd5, 0xa5, 0x55, 0x56, 0xd8, 0x53, 0x03, 0x1e, 0xbe, 0xd8, 0x73, 0xad, 0x04,
-	0xf2, 0x1c, 0x24, 0xcd, 0x84, 0x5c, 0xb6, 0xee, 0xa7, 0x5d, 0x37, 0x14, 0x46, 0x80, 0x6c, 0xef,
-	0x38, 0x1c, 0x75, 0x8b, 0x05, 0x64, 0x22, 0x59, 0x53, 0xb3, 0x2e, 0xb8, 0x73, 0x3c, 0xeb, 0x3a,
-	0x4a, 0x96, 0x89, 0x05, 0x33, 0xfc, 0xcf, 0xf9, 0x52, 0xf0, 0xf7, 0x71, 0xa7, 0xc3, 0xc9, 0x45,
-	0xf0, 0x78, 0xda, 0xce, 0x39, 0x95, 0x8b, 0x69, 0x52, 0xd7, 0xc2, 0x61, 0x30, 0x70, 0xc3, 0x47,
-	0x68, 0x84, 0xc6, 0x0f, 0x66, 0x3f, 0x75, 0xf8, 0x24, 0x38, 0x60, 0xd6, 0x15, 0xf5, 0x6c, 0xa5,
-	0x55, 0x67, 0xfe, 0xa0, 0x7f, 0xe4, 0x9f, 0xf9, 0x03, 0xff, 0xe8, 0xde, 0xc9, 0x97, 0x5e, 0x70,
-	0x7c, 0x21, 0x0c, 0x77, 0xe4, 0x19, 0xd7, 0x05, 0x48, 0xcd, 0xc3, 0x28, 0xb8, 0xaf, 0x57, 0x79,
-	0xce, 0xd4, 0xba, 0xe5, 0x3a, 0x19, 0xe6, 0xc1, 0xb1, 0x6b, 0x11, 0x33, 0xb9, 0x88, 0x1b, 0xaa,
-	0x8e, 0x7a, 0xa3, 0xfe, 0xf8, 0xf0, 0xf4, 0x15, 0xf9, 0xd7, 0x65, 0x91, 0xdf, 0xa6, 0x99, 0x85,
-	0xec, 0xd7, 0x4f, 0x3a, 0x3c, 0x0f, 0x1e, 0xf1, 0x6b, 0xc3, 0x95, 0x64, 0x59, 0x5c, 0x2f, 0x23,
-	0xea, 0x8f, 0xd0, 0xf8, 0xf0, 0xf4, 0xf9, 0xbe, 0x3e, 0xcd, 0xee, 0xc8, 0xb9, 0x90, 0xcb, 0xd9,
-	0x43, 0x97, 0xae, 0x55, 0x4d, 0x13, 0xf2, 0x2e, 0xcd, 0xff, 0x4f, 0x9a, 0x4b, 0xd7, 0xea, 0xcd,
-	0x27, 0xb4, 0xd9, 0x62, 0xef, 0x66, 0x8b, 0xbd, 0xdb, 0x2d, 0x46, 0x1f, 0x2a, 0x8c, 0x3e, 0x57,
-	0x18, 0x7d, 0xad, 0x30, 0xda, 0x54, 0x18, 0x7d, 0xab, 0x30, 0xfa, 0x5e, 0x61, 0xef, 0xb6, 0xc2,
-	0xe8, 0xe3, 0x0e, 0x7b, 0x9b, 0x1d, 0xf6, 0x6e, 0x76, 0xd8, 0x7b, 0xfb, 0x2e, 0x85, 0x62, 0x99,
-	0x92, 0x12, 0x32, 0xc3, 0x95, 0x62, 0x64, 0xa5, 0xa9, 0x3d, 0x5c, 0x82, 0xca, 0x27, 0x85, 0x82,
-	0x52, 0x2c, 0xb8, 0x9a, 0xb8, 0x32, 0x2d, 0xe6, 0x29, 0x50, 0x7e, 0x6d, 0xda, 0xa7, 0xf1, 0xd7,
-	0x7f, 0x68, 0x7e, 0x60, 0x1f, 0xcc, 0xcb, 0x1f, 0x01, 0x00, 0x00, 0xff, 0xff, 0x0b, 0xea, 0xba,
-	0x17, 0x76, 0x03, 0x00, 0x00,
+	// 461 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xac, 0x93, 0x31, 0x8f, 0xd3, 0x30,
+	0x14, 0xc7, 0xe3, 0x36, 0xed, 0xf5, 0x72, 0x02, 0x55, 0x85, 0x21, 0x2a, 0xc8, 0xaa, 0x58, 0xe8,
+	0x40, 0x6d, 0xe9, 0x58, 0x59, 0xb8, 0xb1, 0xba, 0xa9, 0x48, 0x20, 0x31, 0x10, 0x39, 0xa9, 0x2f,
+	0x67, 0x35, 0xf1, 0x8b, 0x6c, 0x37, 0xbd, 0x6e, 0x7c, 0x04, 0x84, 0xf8, 0x10, 0x7c, 0x06, 0x26,
+	0x46, 0xc6, 0x8e, 0x27, 0x26, 0x9a, 0x2e, 0xb0, 0xdd, 0x47, 0x40, 0x71, 0x13, 0x89, 0x48, 0x28,
+	0x2c, 0x4c, 0x7e, 0x4f, 0xfe, 0xbd, 0xff, 0x3f, 0xfe, 0x3f, 0xc5, 0x7b, 0x91, 0x73, 0x4d, 0x04,
+	0x50, 0x1d, 0x5d, 0xf3, 0x94, 0x51, 0x26, 0x02, 0xa6, 0xb5, 0xd0, 0x86, 0x49, 0x43, 0xb5, 0x30,
+	0x3c, 0x60, 0x92, 0x25, 0x5b, 0x2d, 0x74, 0xb3, 0x23, 0x99, 0x02, 0x03, 0xa3, 0xe9, 0x71, 0x9a,
+	0x1c, 0xa7, 0xc9, 0x9f, 0xd3, 0xa4, 0xc1, 0x8f, 0x67, 0xb1, 0x30, 0xd7, 0xeb, 0x90, 0x44, 0x90,
+	0xd2, 0x18, 0x62, 0xa0, 0x56, 0x20, 0x5c, 0x5f, 0xd9, 0xce, 0x36, 0xb6, 0x3a, 0x0a, 0x8f, 0x9f,
+	0xb5, 0x7c, 0x56, 0x04, 0x69, 0x0a, 0x92, 0x26, 0x42, 0xae, 0x2a, 0x9a, 0xb4, 0xd0, 0x1b, 0xb1,
+	0x8c, 0x79, 0x7d, 0x54, 0xfc, 0xa3, 0x26, 0x0f, 0x99, 0x11, 0x20, 0xab, 0x37, 0x8d, 0x27, 0xcd,
+	0xcb, 0x0c, 0x12, 0x11, 0x6d, 0xa9, 0xd9, 0x66, 0xbc, 0x26, 0x1e, 0x37, 0x89, 0x9c, 0x25, 0x62,
+	0xc9, 0x0c, 0xff, 0xfb, 0x7c, 0x2e, 0xf8, 0x26, 0x68, 0x38, 0x3c, 0xf9, 0xde, 0xf1, 0x1e, 0xbe,
+	0x12, 0x86, 0xbf, 0xac, 0xc2, 0x59, 0x70, 0x9d, 0x81, 0xd4, 0x7c, 0xe4, 0x7b, 0x27, 0x7a, 0x9d,
+	0xa6, 0x4c, 0x6d, 0x7d, 0x34, 0x41, 0xd3, 0xd3, 0x45, 0xdd, 0x8e, 0x2e, 0x3d, 0xcf, 0xb0, 0x30,
+	0xe1, 0x41, 0x29, 0xe7, 0xf7, 0x26, 0x68, 0x7a, 0x76, 0x3e, 0x23, 0x2d, 0xe9, 0x57, 0xef, 0x7d,
+	0x63, 0x8f, 0xd7, 0x82, 0x6f, 0x16, 0xa7, 0x56, 0xa0, 0x2c, 0x47, 0x91, 0x77, 0x5f, 0x48, 0xc3,
+	0x95, 0x64, 0x49, 0x50, 0xc6, 0xa8, 0xfd, 0xfe, 0xa4, 0x3b, 0x3d, 0x3b, 0x7f, 0xda, 0xa6, 0x78,
+	0x8c, 0x9d, 0x5c, 0x0a, 0xb9, 0xba, 0x78, 0xf0, 0xe5, 0xd7, 0xd7, 0x6e, 0xef, 0x23, 0xea, 0xf8,
+	0xa8, 0xac, 0x5c, 0xd5, 0xf1, 0xfb, 0x8b, 0x7b, 0xb5, 0x66, 0x89, 0xe8, 0xd2, 0x84, 0xdf, 0x34,
+	0x4c, 0x4e, 0xfe, 0x87, 0x49, 0xad, 0x69, 0x4d, 0xe6, 0xee, 0xa0, 0x33, 0xec, 0xce, 0xdd, 0x41,
+	0x77, 0xe8, 0xce, 0xdd, 0x81, 0x3b, 0xec, 0x5d, 0x7c, 0x42, 0xbb, 0x3d, 0x76, 0x6e, 0xf7, 0xd8,
+	0xb9, 0xdb, 0x63, 0xf4, 0xbe, 0xc0, 0xe8, 0x73, 0x81, 0xd1, 0xb7, 0x02, 0xa3, 0x5d, 0x81, 0xd1,
+	0x8f, 0x02, 0xa3, 0x9f, 0x05, 0x76, 0xee, 0x0a, 0x8c, 0x3e, 0x1c, 0xb0, 0xb3, 0x3b, 0x60, 0xe7,
+	0xf6, 0x80, 0x9d, 0xb7, 0xef, 0x62, 0xc8, 0x56, 0x31, 0xc9, 0x21, 0x31, 0x5c, 0x29, 0x46, 0xd6,
+	0x9a, 0xda, 0xe2, 0x0a, 0x54, 0x3a, 0xcb, 0x14, 0xe4, 0x62, 0xc9, 0xd5, 0xac, 0xbe, 0xa6, 0x59,
+	0x18, 0x03, 0xe5, 0x37, 0xa6, 0x5a, 0xf2, 0x3f, 0xff, 0x9e, 0xb0, 0x6f, 0x57, 0xff, 0xfc, 0x77,
+	0x00, 0x00, 0x00, 0xff, 0xff, 0x0e, 0x2e, 0x33, 0x11, 0x70, 0x03, 0x00, 0x00,
 }
 
-func (this *AnalysisAndAction) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*AnalysisAndAction)
-	if !ok {
-		that2, ok := that.(AnalysisAndAction)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if this.Analysis != that1.Analysis {
-		return false
-	}
-	if this.Action != that1.Action {
-		return false
-	}
-	return true
-}
 func (this *SiteAnalysisResponse) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -275,32 +184,26 @@ func (this *SiteAnalysisResponse) Equal(that interface{}) bool {
 	if this.Summary != that1.Summary {
 		return false
 	}
-	if len(this.AnalysisAndActions) != len(that1.AnalysisAndActions) {
+	if !this.TableView.Equal(that1.TableView) {
 		return false
 	}
-	for i := range this.AnalysisAndActions {
-		if !this.AnalysisAndActions[i].Equal(that1.AnalysisAndActions[i]) {
+	if len(this.InternalLinks) != len(that1.InternalLinks) {
+		return false
+	}
+	for i := range this.InternalLinks {
+		if !this.InternalLinks[i].Equal(that1.InternalLinks[i]) {
 			return false
 		}
 	}
-	if !this.ExternalLink.Equal(that1.ExternalLink) {
+	if len(this.ExternalLinks) != len(that1.ExternalLinks) {
 		return false
 	}
-	if !this.InternalLink.Equal(that1.InternalLink) {
-		return false
+	for i := range this.ExternalLinks {
+		if !this.ExternalLinks[i].Equal(that1.ExternalLinks[i]) {
+			return false
+		}
 	}
 	return true
-}
-func (this *AnalysisAndAction) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := make([]string, 0, 6)
-	s = append(s, "&site_analysis.AnalysisAndAction{")
-	s = append(s, "Analysis: "+fmt.Sprintf("%#v", this.Analysis)+",\n")
-	s = append(s, "Action: "+fmt.Sprintf("%#v", this.Action)+",\n")
-	s = append(s, "}")
-	return strings.Join(s, "")
 }
 func (this *SiteAnalysisResponse) GoString() string {
 	if this == nil {
@@ -309,14 +212,14 @@ func (this *SiteAnalysisResponse) GoString() string {
 	s := make([]string, 0, 8)
 	s = append(s, "&site_analysis.SiteAnalysisResponse{")
 	s = append(s, "Summary: "+fmt.Sprintf("%#v", this.Summary)+",\n")
-	if this.AnalysisAndActions != nil {
-		s = append(s, "AnalysisAndActions: "+fmt.Sprintf("%#v", this.AnalysisAndActions)+",\n")
+	if this.TableView != nil {
+		s = append(s, "TableView: "+fmt.Sprintf("%#v", this.TableView)+",\n")
 	}
-	if this.ExternalLink != nil {
-		s = append(s, "ExternalLink: "+fmt.Sprintf("%#v", this.ExternalLink)+",\n")
+	if this.InternalLinks != nil {
+		s = append(s, "InternalLinks: "+fmt.Sprintf("%#v", this.InternalLinks)+",\n")
 	}
-	if this.InternalLink != nil {
-		s = append(s, "InternalLink: "+fmt.Sprintf("%#v", this.InternalLink)+",\n")
+	if this.ExternalLinks != nil {
+		s = append(s, "ExternalLinks: "+fmt.Sprintf("%#v", this.ExternalLinks)+",\n")
 	}
 	s = append(s, "}")
 	return strings.Join(s, "")
@@ -329,43 +232,6 @@ func valueToGoStringSiteAnalysis(v interface{}, typ string) string {
 	pv := reflect.Indirect(rv).Interface()
 	return fmt.Sprintf("func(v %v) *%v { return &v } ( %#v )", typ, typ, pv)
 }
-func (m *AnalysisAndAction) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *AnalysisAndAction) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *AnalysisAndAction) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.Action) > 0 {
-		i -= len(m.Action)
-		copy(dAtA[i:], m.Action)
-		i = encodeVarintSiteAnalysis(dAtA, i, uint64(len(m.Action)))
-		i--
-		dAtA[i] = 0x12
-	}
-	if len(m.Analysis) > 0 {
-		i -= len(m.Analysis)
-		copy(dAtA[i:], m.Analysis)
-		i = encodeVarintSiteAnalysis(dAtA, i, uint64(len(m.Analysis)))
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
-}
-
 func (m *SiteAnalysisResponse) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -386,34 +252,10 @@ func (m *SiteAnalysisResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
-	if m.InternalLink != nil {
-		{
-			size, err := m.InternalLink.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintSiteAnalysis(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x22
-	}
-	if m.ExternalLink != nil {
-		{
-			size, err := m.ExternalLink.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintSiteAnalysis(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x1a
-	}
-	if len(m.AnalysisAndActions) > 0 {
-		for iNdEx := len(m.AnalysisAndActions) - 1; iNdEx >= 0; iNdEx-- {
+	if len(m.ExternalLinks) > 0 {
+		for iNdEx := len(m.ExternalLinks) - 1; iNdEx >= 0; iNdEx-- {
 			{
-				size, err := m.AnalysisAndActions[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				size, err := m.ExternalLinks[iNdEx].MarshalToSizedBuffer(dAtA[:i])
 				if err != nil {
 					return 0, err
 				}
@@ -421,8 +263,34 @@ func (m *SiteAnalysisResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 				i = encodeVarintSiteAnalysis(dAtA, i, uint64(size))
 			}
 			i--
-			dAtA[i] = 0x12
+			dAtA[i] = 0x3a
 		}
+	}
+	if len(m.InternalLinks) > 0 {
+		for iNdEx := len(m.InternalLinks) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.InternalLinks[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintSiteAnalysis(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x32
+		}
+	}
+	if m.TableView != nil {
+		{
+			size, err := m.TableView.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintSiteAnalysis(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x2a
 	}
 	if len(m.Summary) > 0 {
 		i -= len(m.Summary)
@@ -445,23 +313,6 @@ func encodeVarintSiteAnalysis(dAtA []byte, offset int, v uint64) int {
 	dAtA[offset] = uint8(v)
 	return base
 }
-func (m *AnalysisAndAction) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = len(m.Analysis)
-	if l > 0 {
-		n += 1 + l + sovSiteAnalysis(uint64(l))
-	}
-	l = len(m.Action)
-	if l > 0 {
-		n += 1 + l + sovSiteAnalysis(uint64(l))
-	}
-	return n
-}
-
 func (m *SiteAnalysisResponse) Size() (n int) {
 	if m == nil {
 		return 0
@@ -472,19 +323,21 @@ func (m *SiteAnalysisResponse) Size() (n int) {
 	if l > 0 {
 		n += 1 + l + sovSiteAnalysis(uint64(l))
 	}
-	if len(m.AnalysisAndActions) > 0 {
-		for _, e := range m.AnalysisAndActions {
+	if m.TableView != nil {
+		l = m.TableView.Size()
+		n += 1 + l + sovSiteAnalysis(uint64(l))
+	}
+	if len(m.InternalLinks) > 0 {
+		for _, e := range m.InternalLinks {
 			l = e.Size()
 			n += 1 + l + sovSiteAnalysis(uint64(l))
 		}
 	}
-	if m.ExternalLink != nil {
-		l = m.ExternalLink.Size()
-		n += 1 + l + sovSiteAnalysis(uint64(l))
-	}
-	if m.InternalLink != nil {
-		l = m.InternalLink.Size()
-		n += 1 + l + sovSiteAnalysis(uint64(l))
+	if len(m.ExternalLinks) > 0 {
+		for _, e := range m.ExternalLinks {
+			l = e.Size()
+			n += 1 + l + sovSiteAnalysis(uint64(l))
+		}
 	}
 	return n
 }
@@ -495,31 +348,25 @@ func sovSiteAnalysis(x uint64) (n int) {
 func sozSiteAnalysis(x uint64) (n int) {
 	return sovSiteAnalysis(uint64((x << 1) ^ uint64((int64(x) >> 63))))
 }
-func (this *AnalysisAndAction) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&AnalysisAndAction{`,
-		`Analysis:` + fmt.Sprintf("%v", this.Analysis) + `,`,
-		`Action:` + fmt.Sprintf("%v", this.Action) + `,`,
-		`}`,
-	}, "")
-	return s
-}
 func (this *SiteAnalysisResponse) String() string {
 	if this == nil {
 		return "nil"
 	}
-	repeatedStringForAnalysisAndActions := "[]*AnalysisAndAction{"
-	for _, f := range this.AnalysisAndActions {
-		repeatedStringForAnalysisAndActions += strings.Replace(f.String(), "AnalysisAndAction", "AnalysisAndAction", 1) + ","
+	repeatedStringForInternalLinks := "[]*Link{"
+	for _, f := range this.InternalLinks {
+		repeatedStringForInternalLinks += strings.Replace(fmt.Sprintf("%v", f), "Link", "common.Link", 1) + ","
 	}
-	repeatedStringForAnalysisAndActions += "}"
+	repeatedStringForInternalLinks += "}"
+	repeatedStringForExternalLinks := "[]*Link{"
+	for _, f := range this.ExternalLinks {
+		repeatedStringForExternalLinks += strings.Replace(fmt.Sprintf("%v", f), "Link", "common.Link", 1) + ","
+	}
+	repeatedStringForExternalLinks += "}"
 	s := strings.Join([]string{`&SiteAnalysisResponse{`,
 		`Summary:` + fmt.Sprintf("%v", this.Summary) + `,`,
-		`AnalysisAndActions:` + repeatedStringForAnalysisAndActions + `,`,
-		`ExternalLink:` + strings.Replace(fmt.Sprintf("%v", this.ExternalLink), "Link", "common.Link", 1) + `,`,
-		`InternalLink:` + strings.Replace(fmt.Sprintf("%v", this.InternalLink), "Link", "common.Link", 1) + `,`,
+		`TableView:` + strings.Replace(fmt.Sprintf("%v", this.TableView), "WidgetView", "widget.WidgetView", 1) + `,`,
+		`InternalLinks:` + repeatedStringForInternalLinks + `,`,
+		`ExternalLinks:` + repeatedStringForExternalLinks + `,`,
 		`}`,
 	}, "")
 	return s
@@ -531,123 +378,6 @@ func valueToStringSiteAnalysis(v interface{}) string {
 	}
 	pv := reflect.Indirect(rv).Interface()
 	return fmt.Sprintf("*%v", pv)
-}
-func (m *AnalysisAndAction) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowSiteAnalysis
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: AnalysisAndAction: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: AnalysisAndAction: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Analysis", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowSiteAnalysis
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthSiteAnalysis
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthSiteAnalysis
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Analysis = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Action", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowSiteAnalysis
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthSiteAnalysis
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthSiteAnalysis
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Action = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipSiteAnalysis(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthSiteAnalysis
-			}
-			if (iNdEx + skippy) < 0 {
-				return ErrInvalidLengthSiteAnalysis
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
 }
 func (m *SiteAnalysisResponse) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
@@ -710,9 +440,9 @@ func (m *SiteAnalysisResponse) Unmarshal(dAtA []byte) error {
 			}
 			m.Summary = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
-		case 2:
+		case 5:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field AnalysisAndActions", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field TableView", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -739,14 +469,16 @@ func (m *SiteAnalysisResponse) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.AnalysisAndActions = append(m.AnalysisAndActions, &AnalysisAndAction{})
-			if err := m.AnalysisAndActions[len(m.AnalysisAndActions)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+			if m.TableView == nil {
+				m.TableView = &widget.WidgetView{}
+			}
+			if err := m.TableView.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
-		case 3:
+		case 6:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ExternalLink", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field InternalLinks", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -773,16 +505,14 @@ func (m *SiteAnalysisResponse) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			if m.ExternalLink == nil {
-				m.ExternalLink = &common.Link{}
-			}
-			if err := m.ExternalLink.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+			m.InternalLinks = append(m.InternalLinks, &common.Link{})
+			if err := m.InternalLinks[len(m.InternalLinks)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
-		case 4:
+		case 7:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field InternalLink", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field ExternalLinks", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -809,10 +539,8 @@ func (m *SiteAnalysisResponse) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			if m.InternalLink == nil {
-				m.InternalLink = &common.Link{}
-			}
-			if err := m.InternalLink.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+			m.ExternalLinks = append(m.ExternalLinks, &common.Link{})
+			if err := m.ExternalLinks[len(m.ExternalLinks)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex

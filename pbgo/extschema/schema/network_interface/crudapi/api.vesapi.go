@@ -4272,6 +4272,14 @@ var APISwaggerJSON string = `{
             "description": "x-displayName: \"Tunnel Interface\"\nTunnel Interface Configuration",
             "title": "Tunnel Interface",
             "properties": {
+                "cloud_connect": {
+                    "type": "array",
+                    "description": "x-displayName: \"Cloud Connect\"\nThe clould connect this network interface is connecting to incase of Cloud Sites",
+                    "title": "CloudConnect",
+                    "items": {
+                        "$ref": "#/definitions/ioschemaObjectRefType"
+                    }
+                },
                 "cluster": {
                     "description": "x-displayName: \"Cluster, All Nodes of the Site\"\nConfiguration will apply to given device on all nodes of the site",
                     "title": "Node Independent",
@@ -4789,6 +4797,12 @@ var APISwaggerJSON string = `{
                     "title": "deletion_timestamp",
                     "format": "date-time",
                     "x-displayname": "Deletion Timestamp"
+                },
+                "direct_ref_hash": {
+                    "type": "string",
+                    "description": " A hash of the UIDs of  direct references on this object. This can be used to determine if \n this object hash has had references become resolved/unresolved",
+                    "title": "direct_ref_hash",
+                    "x-displayname": "Direct Reference Hash"
                 },
                 "finalizers": {
                     "type": "array",

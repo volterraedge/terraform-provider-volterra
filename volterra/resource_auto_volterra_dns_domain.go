@@ -73,7 +73,8 @@ func resourceVolterraDnsDomain() *schema.Resource {
 
 			"route53": {
 
-				Type:       schema.TypeSet,
+				Type:       schema.TypeList,
+				MaxItems:   1,
 				Optional:   true,
 				Deprecated: "This field is deprecated and will be removed in future release.",
 				Elem: &schema.Resource{
@@ -81,7 +82,8 @@ func resourceVolterraDnsDomain() *schema.Resource {
 
 						"creds": {
 
-							Type:       schema.TypeSet,
+							Type:       schema.TypeList,
+							MaxItems:   1,
 							Optional:   true,
 							Deprecated: "This field is deprecated and will be removed in future release.",
 							Elem: &schema.Resource{
@@ -196,32 +198,36 @@ func resourceVolterraDnsDomainCreate(d *schema.ResourceData, meta interface{}) e
 		domainChoiceInt.Route53 = &ves_io_schema_dns_domain.AWSRoute53Type{}
 		createSpec.DomainChoice = domainChoiceInt
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
+			if set != nil {
+				cs := set.(map[string]interface{})
 
-			if v, ok := cs["creds"]; ok && !isIntfNil(v) {
+				if v, ok := cs["creds"]; ok && !isIntfNil(v) {
 
-				sl := v.(*schema.Set).List()
-				credsInt := &ves_io_schema_views.ObjectRefType{}
-				domainChoiceInt.Route53.Creds = credsInt
+					sl := v.([]interface{})
+					credsInt := &ves_io_schema_views.ObjectRefType{}
+					domainChoiceInt.Route53.Creds = credsInt
 
-				for _, set := range sl {
-					cMapToStrVal := set.(map[string]interface{})
-					if val, ok := cMapToStrVal["name"]; ok && !isIntfNil(v) {
-						credsInt.Name = val.(string)
+					for _, set := range sl {
+						if set != nil {
+							cMapToStrVal := set.(map[string]interface{})
+							if val, ok := cMapToStrVal["name"]; ok && !isIntfNil(v) {
+								credsInt.Name = val.(string)
+							}
+							if val, ok := cMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+								credsInt.Namespace = val.(string)
+							}
+
+							if val, ok := cMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+								credsInt.Tenant = val.(string)
+							}
+						}
 					}
-					if val, ok := cMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-						credsInt.Namespace = val.(string)
-					}
 
-					if val, ok := cMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-						credsInt.Tenant = val.(string)
-					}
 				}
 
 			}
-
 		}
 
 	}
@@ -367,32 +373,36 @@ func resourceVolterraDnsDomainUpdate(d *schema.ResourceData, meta interface{}) e
 		domainChoiceInt.Route53 = &ves_io_schema_dns_domain.AWSRoute53Type{}
 		updateSpec.DomainChoice = domainChoiceInt
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
+			if set != nil {
+				cs := set.(map[string]interface{})
 
-			if v, ok := cs["creds"]; ok && !isIntfNil(v) {
+				if v, ok := cs["creds"]; ok && !isIntfNil(v) {
 
-				sl := v.(*schema.Set).List()
-				credsInt := &ves_io_schema_views.ObjectRefType{}
-				domainChoiceInt.Route53.Creds = credsInt
+					sl := v.([]interface{})
+					credsInt := &ves_io_schema_views.ObjectRefType{}
+					domainChoiceInt.Route53.Creds = credsInt
 
-				for _, set := range sl {
-					cMapToStrVal := set.(map[string]interface{})
-					if val, ok := cMapToStrVal["name"]; ok && !isIntfNil(v) {
-						credsInt.Name = val.(string)
+					for _, set := range sl {
+						if set != nil {
+							cMapToStrVal := set.(map[string]interface{})
+							if val, ok := cMapToStrVal["name"]; ok && !isIntfNil(v) {
+								credsInt.Name = val.(string)
+							}
+							if val, ok := cMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+								credsInt.Namespace = val.(string)
+							}
+
+							if val, ok := cMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+								credsInt.Tenant = val.(string)
+							}
+						}
 					}
-					if val, ok := cMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-						credsInt.Namespace = val.(string)
-					}
 
-					if val, ok := cMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-						credsInt.Tenant = val.(string)
-					}
 				}
 
 			}
-
 		}
 
 	}

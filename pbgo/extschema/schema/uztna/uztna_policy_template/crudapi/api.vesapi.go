@@ -1614,7 +1614,6 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-uztna-uztna_policy_template-crudapi-api-get"
                 },
-                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.uztna.uztna_policy_template.crudapi.API.Get"
             },
             "delete": {
@@ -1690,7 +1689,6 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-uztna-uztna_policy_template-crudapi-api-delete"
                 },
-                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.uztna.uztna_policy_template.crudapi.API.Delete"
             },
             "put": {
@@ -1774,7 +1772,6 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-uztna-uztna_policy_template-crudapi-api-replace"
                 },
-                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.uztna.uztna_policy_template.crudapi.API.Replace"
             },
             "x-displayname": "",
@@ -1922,7 +1919,6 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-uztna-uztna_policy_template-crudapi-api-list"
                 },
-                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.uztna.uztna_policy_template.crudapi.API.List"
             },
             "post": {
@@ -2000,7 +1996,6 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-uztna-uztna_policy_template-crudapi-api-create"
                 },
-                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.uztna.uztna_policy_template.crudapi.API.Create"
             },
             "x-displayname": "",
@@ -2148,7 +2143,6 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-uztna-uztna_policy_template-crudapi-api-liststream"
                 },
-                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.uztna.uztna_policy_template.crudapi.API.ListStream"
             },
             "x-displayname": "",
@@ -2256,7 +2250,6 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-uztna-uztna_policy_template-crudapi-api-get"
                 },
-                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.uztna.uztna_policy_template.crudapi.API.Get"
             },
             "x-displayname": "",
@@ -2404,7 +2397,6 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-uztna-uztna_policy_template-crudapi-api-list"
                 },
-                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.uztna.uztna_policy_template.crudapi.API.List"
             },
             "x-displayname": "",
@@ -2487,7 +2479,6 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-uztna-uztna_policy_template-crudapi-api-delete"
                 },
-                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.uztna.uztna_policy_template.crudapi.API.Delete"
             },
             "put": {
@@ -2571,7 +2562,6 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-uztna-uztna_policy_template-crudapi-api-replace"
                 },
-                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.uztna.uztna_policy_template.crudapi.API.Replace"
             },
             "x-displayname": "",
@@ -2656,7 +2646,6 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-uztna-uztna_policy_template-crudapi-api-create"
                 },
-                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.uztna.uztna_policy_template.crudapi.API.Create"
             },
             "x-displayname": "",
@@ -2987,10 +2976,8 @@ var APISwaggerJSON string = `{
         },
         "schemaEmpty": {
             "type": "object",
-            "description": "This can be used for messages where no values are needed",
-            "title": "Empty",
-            "x-displayname": "Empty",
-            "x-ves-proto-message": "ves.io.schema.Empty"
+            "description": "x-displayName: \"Empty\"\nThis can be used for messages where no values are needed",
+            "title": "Empty"
         },
         "schemaInitializerType": {
             "type": "object",
@@ -3258,6 +3245,12 @@ var APISwaggerJSON string = `{
                     "format": "date-time",
                     "x-displayname": "Deletion Timestamp"
                 },
+                "direct_ref_hash": {
+                    "type": "string",
+                    "description": " A hash of the UIDs of  direct references on this object. This can be used to determine if \n this object hash has had references become resolved/unresolved",
+                    "title": "direct_ref_hash",
+                    "x-displayname": "Direct Reference Hash"
+                },
                 "finalizers": {
                     "type": "array",
                     "description": " Must be empty before the object is deleted from the registry. Each entry\n is an identifier for the responsible component that will remove the entry\n from the list. If the deletionTimestamp of the object is non-nil, entries\n in this list can only be removed.\n\nExample: - \"value\"-",
@@ -3401,17 +3394,11 @@ var APISwaggerJSON string = `{
             "description": "\nSelect from SAML or ip geolocation or empty",
             "title": "Flows",
             "x-displayname": "Flows",
-            "x-ves-oneof-field-flow_type": "[\"allow_all\",\"geolocation_match\",\"saml_federation\"]",
+            "x-ves-oneof-field-flow_type": "[\"geolocation_match\",\"saml_federation\"]",
             "x-ves-proto-message": "ves.io.schema.uztna.uztna_policy_template.Flows",
             "properties": {
-                "allow_all": {
-                    "description": "Exclusive with [geolocation_match saml_federation]\n Allow All",
-                    "title": "Allow All",
-                    "$ref": "#/definitions/schemaEmpty",
-                    "x-displayname": "Allow All"
-                },
                 "geolocation_match": {
-                    "description": "Exclusive with [allow_all saml_federation]\n This option will allow to create or select\n flows of type Geolocation Match\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": "Exclusive with [saml_federation]\n This option will allow to create or select\n flows of type Geolocation Match\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Geolocation Match",
                     "$ref": "#/definitions/uztna_policy_templateGeoLocationMatch",
                     "x-displayname": "Geolocation Match",
@@ -3421,7 +3408,7 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "saml_federation": {
-                    "description": "Exclusive with [allow_all geolocation_match]\n This option will allow to create or select\n flows of type SAML Federation\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": "Exclusive with [geolocation_match]\n This option will allow to create or select\n flows of type SAML Federation\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "SAML Federation",
                     "$ref": "#/definitions/uztna_policy_templateSAMLFederation",
                     "x-displayname": "SAML Federation",
@@ -3559,17 +3546,11 @@ var APISwaggerJSON string = `{
             "description": "Select Template type",
             "title": "TemplateType",
             "x-displayname": "Template",
-            "x-ves-oneof-field-template_type": "[\"deny_all\",\"simple\"]",
+            "x-ves-oneof-field-template_type": "[\"simple\"]",
             "x-ves-proto-message": "ves.io.schema.uztna.uztna_policy_template.TemplateType",
             "properties": {
-                "deny_all": {
-                    "description": "Exclusive with [simple]\n\n Deny All will deny all the requests",
-                    "title": "Deny All",
-                    "$ref": "#/definitions/schemaEmpty",
-                    "x-displayname": "Deny All"
-                },
                 "simple": {
-                    "description": "Exclusive with [deny_all]\n\n This template ",
+                    "description": "Exclusive with []\n\n This template ",
                     "title": "Simple",
                     "$ref": "#/definitions/uztna_policy_templateSimpleTemplate",
                     "x-displayname": "Simple"
@@ -3595,16 +3576,6 @@ var APISwaggerJSON string = `{
             "x-displayname": "Global Specification",
             "x-ves-proto-message": "ves.io.schema.uztna.uztna_policy_template.GlobalSpecType",
             "properties": {
-                "continuous_flow": {
-                    "description": " Continuous Flows provide a constant check of policy compliance \n and continuously validates the relevant flows assigned in on start\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
-                    "title": "Continuous Flows",
-                    "$ref": "#/definitions/uztna_policy_templateTemplateType",
-                    "x-displayname": "Continuous Flows",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
-                },
                 "on_start_flow": {
                     "description": " On Start Flows are evaluated continuously, in order, \n throughout the entirety of the session\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "On Start Flows",

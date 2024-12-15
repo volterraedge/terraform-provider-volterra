@@ -964,7 +964,7 @@ var ApiepLBCustomAPISwaggerJSON string = `{
         "/public/namespaces/{namespace}/http_loadbalancers/{name}/api_inventory/api_endpoints/get_schema_updates": {
             "post": {
                 "summary": "Get API Endpoints Schema Updates",
-                "description": "Get list of schema pairs, current and updated, for each endpoint in the request\nor all pending changes if empty list is provided.\nNOTE: any API endpoint defined in user swagger files should be ignored",
+                "description": "Get list of schema pairs, current and updated, for each endpoint in the request\nor all pending changes if empty list is provided.\nNOTE: any API endpoint defined in user swagger files should be ignored\nDEPRECATED. USE virtual host custom api GetAPIEndpointsSchemaUpdates",
                 "operationId": "ves.io.schema.views.http_loadbalancer.ApiepLBCustomAPI.GetAPIEndpointsSchemaUpdates",
                 "responses": {
                     "200": {
@@ -1055,6 +1055,7 @@ var ApiepLBCustomAPISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-views-http_loadbalancer-apieplbcustomapi-getapiendpointsschemaupdates"
                 },
+                "x-ves-deprecated": "USE virtual host custom api GetAPIEndpointsSchemaUpdates",
                 "x-ves-proto-rpc": "ves.io.schema.views.http_loadbalancer.ApiepLBCustomAPI.GetAPIEndpointsSchemaUpdates"
             },
             "x-displayname": "HTTP Load Balancer Custom API",
@@ -1064,7 +1065,7 @@ var ApiepLBCustomAPISwaggerJSON string = `{
         "/public/namespaces/{namespace}/http_loadbalancers/{name}/api_inventory/api_endpoints/update_schemas": {
             "post": {
                 "summary": "Update API Endpoints Schemas",
-                "description": "Update the payload schema for the specified endpoints or all pending changes if empty list is provided.\nNOTE: only API endpoints returned by a call to -GetAPIEndpointsSchemaStates- can be updated.",
+                "description": "Update the payload schema for the specified endpoints or all pending changes if empty list is provided.\nNOTE: only API endpoints returned by a call to -GetAPIEndpointsSchemaStates- can be updated.\nDEPRECATED. USE virtual host custom api UpdateAPIEndpointsSchemas",
                 "operationId": "ves.io.schema.views.http_loadbalancer.ApiepLBCustomAPI.UpdateAPIEndpointsSchemas",
                 "responses": {
                     "200": {
@@ -1155,6 +1156,7 @@ var ApiepLBCustomAPISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-views-http_loadbalancer-apieplbcustomapi-updateapiendpointsschemas"
                 },
+                "x-ves-deprecated": "USE virtual host custom api UpdateAPIEndpointsSchemas",
                 "x-ves-proto-rpc": "ves.io.schema.views.http_loadbalancer.ApiepLBCustomAPI.UpdateAPIEndpointsSchemas"
             },
             "x-displayname": "HTTP Load Balancer Custom API",

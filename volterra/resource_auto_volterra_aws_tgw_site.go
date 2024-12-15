@@ -66,21 +66,24 @@ func resourceVolterraAwsTgwSite() *schema.Resource {
 
 			"aws_parameters": {
 
-				Type:     schema.TypeSet,
+				Type:     schema.TypeList,
+				MaxItems: 1,
 				Required: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 
 						"admin_password": {
 
-							Type:     schema.TypeSet,
+							Type:     schema.TypeList,
+							MaxItems: 1,
 							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
 									"blindfold_secret_info_internal": {
 
-										Type:       schema.TypeSet,
+										Type:       schema.TypeList,
+										MaxItems:   1,
 										Optional:   true,
 										Deprecated: "This field is deprecated and will be removed in future release.",
 										Elem: &schema.Resource{
@@ -115,7 +118,8 @@ func resourceVolterraAwsTgwSite() *schema.Resource {
 
 									"blindfold_secret_info": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -140,7 +144,8 @@ func resourceVolterraAwsTgwSite() *schema.Resource {
 
 									"clear_secret_info": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -160,7 +165,8 @@ func resourceVolterraAwsTgwSite() *schema.Resource {
 
 									"vault_secret_info": {
 
-										Type:       schema.TypeSet,
+										Type:       schema.TypeList,
+										MaxItems:   1,
 										Optional:   true,
 										Deprecated: "This field is deprecated and will be removed in future release.",
 										Elem: &schema.Resource{
@@ -201,7 +207,8 @@ func resourceVolterraAwsTgwSite() *schema.Resource {
 
 									"wingman_secret_info": {
 
-										Type:       schema.TypeSet,
+										Type:       schema.TypeList,
+										MaxItems:   1,
 										Optional:   true,
 										Deprecated: "This field is deprecated and will be removed in future release.",
 										Elem: &schema.Resource{
@@ -244,7 +251,8 @@ func resourceVolterraAwsTgwSite() *schema.Resource {
 
 									"inside_subnet": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -257,7 +265,8 @@ func resourceVolterraAwsTgwSite() *schema.Resource {
 
 												"subnet_param": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Optional: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -292,7 +301,8 @@ func resourceVolterraAwsTgwSite() *schema.Resource {
 
 									"outside_subnet": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -305,7 +315,8 @@ func resourceVolterraAwsTgwSite() *schema.Resource {
 
 												"subnet_param": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Optional: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -328,7 +339,8 @@ func resourceVolterraAwsTgwSite() *schema.Resource {
 
 									"workload_subnet": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -341,7 +353,8 @@ func resourceVolterraAwsTgwSite() *schema.Resource {
 
 												"subnet_param": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Optional: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -374,7 +387,8 @@ func resourceVolterraAwsTgwSite() *schema.Resource {
 
 						"aws_cred": {
 
-							Type:     schema.TypeSet,
+							Type:     schema.TypeList,
+							MaxItems: 1,
 							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
@@ -419,7 +433,8 @@ func resourceVolterraAwsTgwSite() *schema.Resource {
 
 						"custom_security_group": {
 
-							Type:     schema.TypeSet,
+							Type:     schema.TypeList,
+							MaxItems: 1,
 							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
@@ -445,7 +460,8 @@ func resourceVolterraAwsTgwSite() *schema.Resource {
 
 						"new_vpc": {
 
-							Type:     schema.TypeSet,
+							Type:     schema.TypeList,
+							MaxItems: 1,
 							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
@@ -489,7 +505,8 @@ func resourceVolterraAwsTgwSite() *schema.Resource {
 
 						"existing_tgw": {
 
-							Type:     schema.TypeSet,
+							Type:     schema.TypeList,
+							MaxItems: 1,
 							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
@@ -514,7 +531,8 @@ func resourceVolterraAwsTgwSite() *schema.Resource {
 
 						"new_tgw": {
 
-							Type:     schema.TypeSet,
+							Type:     schema.TypeList,
+							MaxItems: 1,
 							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
@@ -527,7 +545,8 @@ func resourceVolterraAwsTgwSite() *schema.Resource {
 
 									"user_assigned": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -556,7 +575,8 @@ func resourceVolterraAwsTgwSite() *schema.Resource {
 
 						"tgw_cidr": {
 
-							Type:     schema.TypeSet,
+							Type:     schema.TypeList,
+							MaxItems: 1,
 							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
@@ -603,7 +623,8 @@ func resourceVolterraAwsTgwSite() *schema.Resource {
 
 			"blocked_services": {
 
-				Type:     schema.TypeSet,
+				Type:     schema.TypeList,
+				MaxItems: 1,
 				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
@@ -652,7 +673,8 @@ func resourceVolterraAwsTgwSite() *schema.Resource {
 
 			"coordinates": {
 
-				Type:     schema.TypeSet,
+				Type:     schema.TypeList,
+				MaxItems: 1,
 				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
@@ -672,7 +694,8 @@ func resourceVolterraAwsTgwSite() *schema.Resource {
 
 			"custom_dns": {
 
-				Type:     schema.TypeSet,
+				Type:     schema.TypeList,
+				MaxItems: 1,
 				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
@@ -708,7 +731,8 @@ func resourceVolterraAwsTgwSite() *schema.Resource {
 
 			"direct_connect_enabled": {
 
-				Type:     schema.TypeSet,
+				Type:     schema.TypeList,
+				MaxItems: 1,
 				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
@@ -747,14 +771,16 @@ func resourceVolterraAwsTgwSite() *schema.Resource {
 
 						"hosted_vifs": {
 
-							Type:     schema.TypeSet,
+							Type:     schema.TypeList,
+							MaxItems: 1,
 							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
 									"site_registration_over_direct_connect": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -832,14 +858,16 @@ func resourceVolterraAwsTgwSite() *schema.Resource {
 
 			"private_connectivity": {
 
-				Type:     schema.TypeSet,
+				Type:     schema.TypeList,
+				MaxItems: 1,
 				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 
 						"cloud_link": {
 
-							Type:     schema.TypeSet,
+							Type:     schema.TypeList,
+							MaxItems: 1,
 							Required: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
@@ -882,7 +910,8 @@ func resourceVolterraAwsTgwSite() *schema.Resource {
 
 			"kubernetes_upgrade_drain": {
 
-				Type:     schema.TypeSet,
+				Type:     schema.TypeList,
+				MaxItems: 1,
 				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
@@ -895,7 +924,8 @@ func resourceVolterraAwsTgwSite() *schema.Resource {
 
 						"enable_upgrade_drain": {
 
-							Type:     schema.TypeSet,
+							Type:     schema.TypeList,
+							MaxItems: 1,
 							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
@@ -940,7 +970,8 @@ func resourceVolterraAwsTgwSite() *schema.Resource {
 
 			"log_receiver": {
 
-				Type:     schema.TypeSet,
+				Type:     schema.TypeList,
+				MaxItems: 1,
 				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
@@ -969,7 +1000,8 @@ func resourceVolterraAwsTgwSite() *schema.Resource {
 
 			"offline_survivability_mode": {
 
-				Type:     schema.TypeSet,
+				Type:     schema.TypeList,
+				MaxItems: 1,
 				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
@@ -991,7 +1023,8 @@ func resourceVolterraAwsTgwSite() *schema.Resource {
 
 			"os": {
 
-				Type:     schema.TypeSet,
+				Type:     schema.TypeList,
+				MaxItems: 1,
 				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
@@ -1013,14 +1046,16 @@ func resourceVolterraAwsTgwSite() *schema.Resource {
 
 			"performance_enhancement_mode": {
 
-				Type:     schema.TypeSet,
+				Type:     schema.TypeList,
+				MaxItems: 1,
 				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 
 						"perf_mode_l3_enhanced": {
 
-							Type:     schema.TypeSet,
+							Type:     schema.TypeList,
+							MaxItems: 1,
 							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
@@ -1051,7 +1086,8 @@ func resourceVolterraAwsTgwSite() *schema.Resource {
 
 			"sw": {
 
-				Type:     schema.TypeSet,
+				Type:     schema.TypeList,
+				MaxItems: 1,
 				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
@@ -1078,14 +1114,16 @@ func resourceVolterraAwsTgwSite() *schema.Resource {
 
 			"tgw_security": {
 
-				Type:     schema.TypeSet,
+				Type:     schema.TypeList,
+				MaxItems: 1,
 				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 
 						"active_east_west_service_policies": {
 
-							Type:     schema.TypeSet,
+							Type:     schema.TypeList,
+							MaxItems: 1,
 							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
@@ -1130,7 +1168,8 @@ func resourceVolterraAwsTgwSite() *schema.Resource {
 
 						"active_forward_proxy_policies": {
 
-							Type:     schema.TypeSet,
+							Type:     schema.TypeList,
+							MaxItems: 1,
 							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
@@ -1175,7 +1214,8 @@ func resourceVolterraAwsTgwSite() *schema.Resource {
 
 						"active_enhanced_firewall_policies": {
 
-							Type:     schema.TypeSet,
+							Type:     schema.TypeList,
+							MaxItems: 1,
 							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
@@ -1208,7 +1248,8 @@ func resourceVolterraAwsTgwSite() *schema.Resource {
 
 						"active_network_policies": {
 
-							Type:     schema.TypeSet,
+							Type:     schema.TypeList,
+							MaxItems: 1,
 							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
@@ -1250,21 +1291,24 @@ func resourceVolterraAwsTgwSite() *schema.Resource {
 
 			"vn_config": {
 
-				Type:     schema.TypeSet,
+				Type:     schema.TypeList,
+				MaxItems: 1,
 				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 
 						"allowed_vip_port": {
 
-							Type:     schema.TypeSet,
+							Type:     schema.TypeList,
+							MaxItems: 1,
 							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
 									"custom_ports": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -1306,14 +1350,16 @@ func resourceVolterraAwsTgwSite() *schema.Resource {
 
 						"allowed_vip_port_sli": {
 
-							Type:     schema.TypeSet,
+							Type:     schema.TypeList,
+							MaxItems: 1,
 							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
 									"custom_ports": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -1355,7 +1401,8 @@ func resourceVolterraAwsTgwSite() *schema.Resource {
 
 						"dc_cluster_group_inside_vn": {
 
-							Type:     schema.TypeSet,
+							Type:     schema.TypeList,
+							MaxItems: 1,
 							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
@@ -1378,7 +1425,8 @@ func resourceVolterraAwsTgwSite() *schema.Resource {
 
 						"dc_cluster_group_outside_vn": {
 
-							Type:     schema.TypeSet,
+							Type:     schema.TypeList,
+							MaxItems: 1,
 							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
@@ -1407,7 +1455,8 @@ func resourceVolterraAwsTgwSite() *schema.Resource {
 
 						"global_network_list": {
 
-							Type:     schema.TypeSet,
+							Type:     schema.TypeList,
+							MaxItems: 1,
 							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
@@ -1421,14 +1470,16 @@ func resourceVolterraAwsTgwSite() *schema.Resource {
 
 												"sli_to_global_dr": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Optional: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
 															"global_vn": {
 
-																Type:     schema.TypeSet,
+																Type:     schema.TypeList,
+																MaxItems: 1,
 																Required: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
@@ -1459,14 +1510,16 @@ func resourceVolterraAwsTgwSite() *schema.Resource {
 
 												"slo_to_global_dr": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Optional: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
 															"global_vn": {
 
-																Type:     schema.TypeSet,
+																Type:     schema.TypeList,
+																MaxItems: 1,
 																Required: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
@@ -1504,7 +1557,8 @@ func resourceVolterraAwsTgwSite() *schema.Resource {
 
 												"enable_forward_proxy": {
 
-													Type:       schema.TypeSet,
+													Type:       schema.TypeList,
+													MaxItems:   1,
 													Optional:   true,
 													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
@@ -1531,7 +1585,8 @@ func resourceVolterraAwsTgwSite() *schema.Resource {
 
 															"tls_intercept": {
 
-																Type:       schema.TypeSet,
+																Type:       schema.TypeList,
+																MaxItems:   1,
 																Optional:   true,
 																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
@@ -1546,7 +1601,8 @@ func resourceVolterraAwsTgwSite() *schema.Resource {
 
 																		"policy": {
 
-																			Type:       schema.TypeSet,
+																			Type:       schema.TypeList,
+																			MaxItems:   1,
 																			Optional:   true,
 																			Deprecated: "This field is deprecated and will be removed in future release.",
 																			Elem: &schema.Resource{
@@ -1562,7 +1618,8 @@ func resourceVolterraAwsTgwSite() *schema.Resource {
 
 																								"domain_match": {
 
-																									Type:       schema.TypeSet,
+																									Type:       schema.TypeList,
+																									MaxItems:   1,
 																									Required:   true,
 																									Deprecated: "This field is deprecated and will be removed in future release.",
 																									Elem: &schema.Resource{
@@ -1614,7 +1671,8 @@ func resourceVolterraAwsTgwSite() *schema.Resource {
 
 																		"custom_certificate": {
 
-																			Type:       schema.TypeSet,
+																			Type:       schema.TypeList,
+																			MaxItems:   1,
 																			Optional:   true,
 																			Deprecated: "This field is deprecated and will be removed in future release.",
 																			Elem: &schema.Resource{
@@ -1634,7 +1692,8 @@ func resourceVolterraAwsTgwSite() *schema.Resource {
 
 																					"custom_hash_algorithms": {
 
-																						Type:       schema.TypeSet,
+																						Type:       schema.TypeList,
+																						MaxItems:   1,
 																						Optional:   true,
 																						Deprecated: "This field is deprecated and will be removed in future release.",
 																						Elem: &schema.Resource{
@@ -1656,7 +1715,8 @@ func resourceVolterraAwsTgwSite() *schema.Resource {
 
 																					"disable_ocsp_stapling": {
 
-																						Type:       schema.TypeSet,
+																						Type:       schema.TypeList,
+																						MaxItems:   1,
 																						Optional:   true,
 																						Deprecated: "This field is deprecated and will be removed in future release.",
 																						Elem: &schema.Resource{
@@ -1666,7 +1726,8 @@ func resourceVolterraAwsTgwSite() *schema.Resource {
 
 																					"use_system_defaults": {
 
-																						Type:       schema.TypeSet,
+																						Type:       schema.TypeList,
+																						MaxItems:   1,
 																						Optional:   true,
 																						Deprecated: "This field is deprecated and will be removed in future release.",
 																						Elem: &schema.Resource{
@@ -1676,7 +1737,8 @@ func resourceVolterraAwsTgwSite() *schema.Resource {
 
 																					"private_key": {
 
-																						Type:       schema.TypeSet,
+																						Type:       schema.TypeList,
+																						MaxItems:   1,
 																						Required:   true,
 																						Deprecated: "This field is deprecated and will be removed in future release.",
 																						Elem: &schema.Resource{
@@ -1684,7 +1746,8 @@ func resourceVolterraAwsTgwSite() *schema.Resource {
 
 																								"blindfold_secret_info_internal": {
 
-																									Type:       schema.TypeSet,
+																									Type:       schema.TypeList,
+																									MaxItems:   1,
 																									Optional:   true,
 																									Deprecated: "This field is deprecated and will be removed in future release.",
 																									Elem: &schema.Resource{
@@ -1719,7 +1782,8 @@ func resourceVolterraAwsTgwSite() *schema.Resource {
 
 																								"blindfold_secret_info": {
 
-																									Type:       schema.TypeSet,
+																									Type:       schema.TypeList,
+																									MaxItems:   1,
 																									Optional:   true,
 																									Deprecated: "This field is deprecated and will be removed in future release.",
 																									Elem: &schema.Resource{
@@ -1748,7 +1812,8 @@ func resourceVolterraAwsTgwSite() *schema.Resource {
 
 																								"clear_secret_info": {
 
-																									Type:       schema.TypeSet,
+																									Type:       schema.TypeList,
+																									MaxItems:   1,
 																									Optional:   true,
 																									Deprecated: "This field is deprecated and will be removed in future release.",
 																									Elem: &schema.Resource{
@@ -1771,7 +1836,8 @@ func resourceVolterraAwsTgwSite() *schema.Resource {
 
 																								"vault_secret_info": {
 
-																									Type:       schema.TypeSet,
+																									Type:       schema.TypeList,
+																									MaxItems:   1,
 																									Optional:   true,
 																									Deprecated: "This field is deprecated and will be removed in future release.",
 																									Elem: &schema.Resource{
@@ -1812,7 +1878,8 @@ func resourceVolterraAwsTgwSite() *schema.Resource {
 
 																								"wingman_secret_info": {
 
-																									Type:       schema.TypeSet,
+																									Type:       schema.TypeList,
+																									MaxItems:   1,
 																									Optional:   true,
 																									Deprecated: "This field is deprecated and will be removed in future release.",
 																									Elem: &schema.Resource{
@@ -1896,7 +1963,8 @@ func resourceVolterraAwsTgwSite() *schema.Resource {
 
 						"inside_static_routes": {
 
-							Type:     schema.TypeSet,
+							Type:     schema.TypeList,
+							MaxItems: 1,
 							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
@@ -1910,7 +1978,8 @@ func resourceVolterraAwsTgwSite() *schema.Resource {
 
 												"custom_static_route": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Optional: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -1932,7 +2001,8 @@ func resourceVolterraAwsTgwSite() *schema.Resource {
 
 															"nexthop": {
 
-																Type:     schema.TypeSet,
+																Type:     schema.TypeList,
+																MaxItems: 1,
 																Optional: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
@@ -1967,14 +2037,16 @@ func resourceVolterraAwsTgwSite() *schema.Resource {
 
 																		"nexthop_address": {
 
-																			Type:     schema.TypeSet,
+																			Type:     schema.TypeList,
+																			MaxItems: 1,
 																			Optional: true,
 																			Elem: &schema.Resource{
 																				Schema: map[string]*schema.Schema{
 
 																					"ipv4": {
 
-																						Type:     schema.TypeSet,
+																						Type:     schema.TypeList,
+																						MaxItems: 1,
 																						Optional: true,
 																						Elem: &schema.Resource{
 																							Schema: map[string]*schema.Schema{
@@ -1989,7 +2061,8 @@ func resourceVolterraAwsTgwSite() *schema.Resource {
 
 																					"ipv6": {
 
-																						Type:     schema.TypeSet,
+																						Type:     schema.TypeList,
+																						MaxItems: 1,
 																						Optional: true,
 																						Elem: &schema.Resource{
 																							Schema: map[string]*schema.Schema{
@@ -2022,7 +2095,8 @@ func resourceVolterraAwsTgwSite() *schema.Resource {
 
 																		"ipv4": {
 
-																			Type:     schema.TypeSet,
+																			Type:     schema.TypeList,
+																			MaxItems: 1,
 																			Optional: true,
 																			Elem: &schema.Resource{
 																				Schema: map[string]*schema.Schema{
@@ -2042,7 +2116,8 @@ func resourceVolterraAwsTgwSite() *schema.Resource {
 
 																		"ipv6": {
 
-																			Type:     schema.TypeSet,
+																			Type:     schema.TypeList,
+																			MaxItems: 1,
 																			Optional: true,
 																			Elem: &schema.Resource{
 																				Schema: map[string]*schema.Schema{
@@ -2092,7 +2167,8 @@ func resourceVolterraAwsTgwSite() *schema.Resource {
 
 						"outside_static_routes": {
 
-							Type:     schema.TypeSet,
+							Type:     schema.TypeList,
+							MaxItems: 1,
 							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
@@ -2106,7 +2182,8 @@ func resourceVolterraAwsTgwSite() *schema.Resource {
 
 												"custom_static_route": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Optional: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -2128,7 +2205,8 @@ func resourceVolterraAwsTgwSite() *schema.Resource {
 
 															"nexthop": {
 
-																Type:     schema.TypeSet,
+																Type:     schema.TypeList,
+																MaxItems: 1,
 																Optional: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
@@ -2163,14 +2241,16 @@ func resourceVolterraAwsTgwSite() *schema.Resource {
 
 																		"nexthop_address": {
 
-																			Type:     schema.TypeSet,
+																			Type:     schema.TypeList,
+																			MaxItems: 1,
 																			Optional: true,
 																			Elem: &schema.Resource{
 																				Schema: map[string]*schema.Schema{
 
 																					"ipv4": {
 
-																						Type:     schema.TypeSet,
+																						Type:     schema.TypeList,
+																						MaxItems: 1,
 																						Optional: true,
 																						Elem: &schema.Resource{
 																							Schema: map[string]*schema.Schema{
@@ -2185,7 +2265,8 @@ func resourceVolterraAwsTgwSite() *schema.Resource {
 
 																					"ipv6": {
 
-																						Type:     schema.TypeSet,
+																						Type:     schema.TypeList,
+																						MaxItems: 1,
 																						Optional: true,
 																						Elem: &schema.Resource{
 																							Schema: map[string]*schema.Schema{
@@ -2218,7 +2299,8 @@ func resourceVolterraAwsTgwSite() *schema.Resource {
 
 																		"ipv4": {
 
-																			Type:     schema.TypeSet,
+																			Type:     schema.TypeList,
+																			MaxItems: 1,
 																			Optional: true,
 																			Elem: &schema.Resource{
 																				Schema: map[string]*schema.Schema{
@@ -2238,7 +2320,8 @@ func resourceVolterraAwsTgwSite() *schema.Resource {
 
 																		"ipv6": {
 
-																			Type:     schema.TypeSet,
+																			Type:     schema.TypeList,
+																			MaxItems: 1,
 																			Optional: true,
 																			Elem: &schema.Resource{
 																				Schema: map[string]*schema.Schema{
@@ -2291,7 +2374,8 @@ func resourceVolterraAwsTgwSite() *schema.Resource {
 
 			"vpc_attachments": {
 
-				Type:     schema.TypeSet,
+				Type:     schema.TypeList,
+				MaxItems: 1,
 				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
@@ -2378,743 +2462,785 @@ func resourceVolterraAwsTgwSiteCreate(d *schema.ResourceData, meta interface{}) 
 	//aws_parameters
 	if v, ok := d.GetOk("aws_parameters"); ok && !isIntfNil(v) {
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		awsParameters := &ves_io_schema_views_aws_tgw_site.ServicesVPCType{}
 		createSpec.AwsParameters = awsParameters
 		for _, set := range sl {
-			awsParametersMapStrToI := set.(map[string]interface{})
+			if set != nil {
+				awsParametersMapStrToI := set.(map[string]interface{})
 
-			if v, ok := awsParametersMapStrToI["admin_password"]; ok && !isIntfNil(v) {
+				if v, ok := awsParametersMapStrToI["admin_password"]; ok && !isIntfNil(v) {
 
-				sl := v.(*schema.Set).List()
-				adminPassword := &ves_io_schema.SecretType{}
-				awsParameters.AdminPassword = adminPassword
-				for _, set := range sl {
-					adminPasswordMapStrToI := set.(map[string]interface{})
+					sl := v.([]interface{})
+					adminPassword := &ves_io_schema.SecretType{}
+					awsParameters.AdminPassword = adminPassword
+					for _, set := range sl {
+						if set != nil {
+							adminPasswordMapStrToI := set.(map[string]interface{})
 
-					if v, ok := adminPasswordMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
+							if v, ok := adminPasswordMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
 
-						sl := v.(*schema.Set).List()
-						blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
-						adminPassword.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
-						for _, set := range sl {
-							blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
+								sl := v.([]interface{})
+								blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
+								adminPassword.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
+								for _, set := range sl {
+									if set != nil {
+										blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
 
-							if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
-								blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
+										if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
+											blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
+										}
+
+										if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
+											blindfoldSecretInfoInternal.Location = w.(string)
+										}
+
+										if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
+											blindfoldSecretInfoInternal.StoreProvider = w.(string)
+										}
+
+									}
+								}
+
 							}
 
-							if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
-								blindfoldSecretInfoInternal.Location = w.(string)
+							if v, ok := adminPasswordMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
+
+								adminPassword.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
 							}
 
-							if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
-								blindfoldSecretInfoInternal.StoreProvider = w.(string)
+							secretInfoOneofTypeFound := false
+
+							if v, ok := adminPasswordMapStrToI["blindfold_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+								secretInfoOneofTypeFound = true
+								secretInfoOneofInt := &ves_io_schema.SecretType_BlindfoldSecretInfo{}
+								secretInfoOneofInt.BlindfoldSecretInfo = &ves_io_schema.BlindfoldSecretInfoType{}
+								adminPassword.SecretInfoOneof = secretInfoOneofInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["decryption_provider"]; ok && !isIntfNil(v) {
+
+											secretInfoOneofInt.BlindfoldSecretInfo.DecryptionProvider = v.(string)
+
+										}
+
+										if v, ok := cs["location"]; ok && !isIntfNil(v) {
+
+											secretInfoOneofInt.BlindfoldSecretInfo.Location = v.(string)
+
+										}
+
+										if v, ok := cs["store_provider"]; ok && !isIntfNil(v) {
+
+											secretInfoOneofInt.BlindfoldSecretInfo.StoreProvider = v.(string)
+
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := adminPasswordMapStrToI["clear_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+								secretInfoOneofTypeFound = true
+								secretInfoOneofInt := &ves_io_schema.SecretType_ClearSecretInfo{}
+								secretInfoOneofInt.ClearSecretInfo = &ves_io_schema.ClearSecretInfoType{}
+								adminPassword.SecretInfoOneof = secretInfoOneofInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+
+											secretInfoOneofInt.ClearSecretInfo.Provider = v.(string)
+
+										}
+
+										if v, ok := cs["url"]; ok && !isIntfNil(v) {
+
+											secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := adminPasswordMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+								secretInfoOneofTypeFound = true
+								secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
+								secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
+								adminPassword.SecretInfoOneof = secretInfoOneofInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["key"]; ok && !isIntfNil(v) {
+
+											secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
+										}
+
+										if v, ok := cs["location"]; ok && !isIntfNil(v) {
+
+											secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
+										}
+
+										if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+
+											secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
+										}
+
+										if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
+
+											secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+										}
+
+										if v, ok := cs["version"]; ok && !isIntfNil(v) {
+
+											secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := adminPasswordMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+								secretInfoOneofTypeFound = true
+								secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
+								secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
+								adminPassword.SecretInfoOneof = secretInfoOneofInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+											secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
+
+										}
+
+									}
+								}
+
 							}
 
 						}
-
 					}
 
-					if v, ok := adminPasswordMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
+				}
 
-						adminPassword.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+				if w, ok := awsParametersMapStrToI["aws_certified_hw"]; ok && !isIntfNil(w) {
+					awsParameters.AwsCertifiedHw = w.(string)
+				}
 
-					}
+				if w, ok := awsParametersMapStrToI["aws_region"]; ok && !isIntfNil(w) {
+					awsParameters.AwsRegion = w.(string)
+				}
 
-					secretInfoOneofTypeFound := false
+				if v, ok := awsParametersMapStrToI["az_nodes"]; ok && !isIntfNil(v) {
 
-					if v, ok := adminPasswordMapStrToI["blindfold_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+					sl := v.([]interface{})
+					azNodes := make([]*ves_io_schema_views.AWSVPCTwoInterfaceNodeType, len(sl))
+					awsParameters.AzNodes = azNodes
+					for i, set := range sl {
+						if set != nil {
+							azNodes[i] = &ves_io_schema_views.AWSVPCTwoInterfaceNodeType{}
+							azNodesMapStrToI := set.(map[string]interface{})
 
-						secretInfoOneofTypeFound = true
-						secretInfoOneofInt := &ves_io_schema.SecretType_BlindfoldSecretInfo{}
-						secretInfoOneofInt.BlindfoldSecretInfo = &ves_io_schema.BlindfoldSecretInfoType{}
-						adminPassword.SecretInfoOneof = secretInfoOneofInt
+							if w, ok := azNodesMapStrToI["aws_az_name"]; ok && !isIntfNil(w) {
+								azNodes[i].AwsAzName = w.(string)
+							}
 
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
+							choiceTypeFound := false
 
-							if v, ok := cs["decryption_provider"]; ok && !isIntfNil(v) {
+							if v, ok := azNodesMapStrToI["inside_subnet"]; ok && !isIntfNil(v) && !choiceTypeFound {
 
-								secretInfoOneofInt.BlindfoldSecretInfo.DecryptionProvider = v.(string)
+								choiceTypeFound = true
+								choiceInt := &ves_io_schema_views.AWSVPCTwoInterfaceNodeType_InsideSubnet{}
+								choiceInt.InsideSubnet = &ves_io_schema_views.CloudSubnetType{}
+								azNodes[i].Choice = choiceInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										choiceTypeFound := false
+
+										if v, ok := cs["existing_subnet_id"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+											choiceTypeFound = true
+											choiceIntNew := &ves_io_schema_views.CloudSubnetType_ExistingSubnetId{}
+
+											choiceInt.InsideSubnet.Choice = choiceIntNew
+
+											choiceIntNew.ExistingSubnetId = v.(string)
+
+										}
+
+										if v, ok := cs["subnet_param"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+											choiceTypeFound = true
+											choiceIntNew := &ves_io_schema_views.CloudSubnetType_SubnetParam{}
+											choiceIntNew.SubnetParam = &ves_io_schema_views.CloudSubnetParamType{}
+											choiceInt.InsideSubnet.Choice = choiceIntNew
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["ipv4"]; ok && !isIntfNil(v) {
+
+														choiceIntNew.SubnetParam.Ipv4 = v.(string)
+
+													}
+
+													if v, ok := cs["ipv6"]; ok && !isIntfNil(v) {
+
+														choiceIntNew.SubnetParam.Ipv6 = v.(string)
+
+													}
+
+												}
+											}
+
+										}
+
+									}
+								}
 
 							}
 
-							if v, ok := cs["location"]; ok && !isIntfNil(v) {
+							if v, ok := azNodesMapStrToI["reserved_inside_subnet"]; ok && !isIntfNil(v) && !choiceTypeFound {
 
-								secretInfoOneofInt.BlindfoldSecretInfo.Location = v.(string)
+								choiceTypeFound = true
+
+								if v.(bool) {
+									choiceInt := &ves_io_schema_views.AWSVPCTwoInterfaceNodeType_ReservedInsideSubnet{}
+									choiceInt.ReservedInsideSubnet = &ves_io_schema.Empty{}
+									azNodes[i].Choice = choiceInt
+								}
 
 							}
 
-							if v, ok := cs["store_provider"]; ok && !isIntfNil(v) {
+							if w, ok := azNodesMapStrToI["disk_size"]; ok && !isIntfNil(w) {
+								azNodes[i].DiskSize = uint32(w.(int))
+							}
 
-								secretInfoOneofInt.BlindfoldSecretInfo.StoreProvider = v.(string)
+							if v, ok := azNodesMapStrToI["outside_subnet"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								outsideSubnet := &ves_io_schema_views.CloudSubnetType{}
+								azNodes[i].OutsideSubnet = outsideSubnet
+								for _, set := range sl {
+									if set != nil {
+										outsideSubnetMapStrToI := set.(map[string]interface{})
+
+										choiceTypeFound := false
+
+										if v, ok := outsideSubnetMapStrToI["existing_subnet_id"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+											choiceTypeFound = true
+											choiceInt := &ves_io_schema_views.CloudSubnetType_ExistingSubnetId{}
+
+											outsideSubnet.Choice = choiceInt
+
+											choiceInt.ExistingSubnetId = v.(string)
+
+										}
+
+										if v, ok := outsideSubnetMapStrToI["subnet_param"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+											choiceTypeFound = true
+											choiceInt := &ves_io_schema_views.CloudSubnetType_SubnetParam{}
+											choiceInt.SubnetParam = &ves_io_schema_views.CloudSubnetParamType{}
+											outsideSubnet.Choice = choiceInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["ipv4"]; ok && !isIntfNil(v) {
+
+														choiceInt.SubnetParam.Ipv4 = v.(string)
+
+													}
+
+													if v, ok := cs["ipv6"]; ok && !isIntfNil(v) {
+
+														choiceInt.SubnetParam.Ipv6 = v.(string)
+
+													}
+
+												}
+											}
+
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := azNodesMapStrToI["workload_subnet"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								workloadSubnet := &ves_io_schema_views.CloudSubnetType{}
+								azNodes[i].WorkloadSubnet = workloadSubnet
+								for _, set := range sl {
+									if set != nil {
+										workloadSubnetMapStrToI := set.(map[string]interface{})
+
+										choiceTypeFound := false
+
+										if v, ok := workloadSubnetMapStrToI["existing_subnet_id"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+											choiceTypeFound = true
+											choiceInt := &ves_io_schema_views.CloudSubnetType_ExistingSubnetId{}
+
+											workloadSubnet.Choice = choiceInt
+
+											choiceInt.ExistingSubnetId = v.(string)
+
+										}
+
+										if v, ok := workloadSubnetMapStrToI["subnet_param"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+											choiceTypeFound = true
+											choiceInt := &ves_io_schema_views.CloudSubnetType_SubnetParam{}
+											choiceInt.SubnetParam = &ves_io_schema_views.CloudSubnetParamType{}
+											workloadSubnet.Choice = choiceInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["ipv4"]; ok && !isIntfNil(v) {
+
+														choiceInt.SubnetParam.Ipv4 = v.(string)
+
+													}
+
+													if v, ok := cs["ipv6"]; ok && !isIntfNil(v) {
+
+														choiceInt.SubnetParam.Ipv6 = v.(string)
+
+													}
+
+												}
+											}
+
+										}
+
+									}
+								}
 
 							}
 
 						}
-
 					}
 
-					if v, ok := adminPasswordMapStrToI["clear_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+				}
 
-						secretInfoOneofTypeFound = true
-						secretInfoOneofInt := &ves_io_schema.SecretType_ClearSecretInfo{}
-						secretInfoOneofInt.ClearSecretInfo = &ves_io_schema.ClearSecretInfoType{}
-						adminPassword.SecretInfoOneof = secretInfoOneofInt
+				deploymentTypeFound := false
 
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
+				if v, ok := awsParametersMapStrToI["assisted"]; ok && !isIntfNil(v) && !deploymentTypeFound {
 
-							if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+					deploymentTypeFound = true
 
-								secretInfoOneofInt.ClearSecretInfo.Provider = v.(string)
-
-							}
-
-							if v, ok := cs["url"]; ok && !isIntfNil(v) {
-
-								secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
-
-							}
-
-						}
-
+					if v.(bool) {
+						deploymentInt := &ves_io_schema_views_aws_tgw_site.ServicesVPCType_Assisted{}
+						deploymentInt.Assisted = &ves_io_schema.Empty{}
+						awsParameters.Deployment = deploymentInt
 					}
 
-					if v, ok := adminPasswordMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+				}
 
-						secretInfoOneofTypeFound = true
-						secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
-						secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
-						adminPassword.SecretInfoOneof = secretInfoOneofInt
+				if v, ok := awsParametersMapStrToI["aws_cred"]; ok && !isIntfNil(v) && !deploymentTypeFound {
 
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
+					deploymentTypeFound = true
+					deploymentInt := &ves_io_schema_views_aws_tgw_site.ServicesVPCType_AwsCred{}
+					deploymentInt.AwsCred = &ves_io_schema_views.ObjectRefType{}
+					awsParameters.Deployment = deploymentInt
 
-							if v, ok := cs["key"]; ok && !isIntfNil(v) {
-
-								secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
-
-							}
-
-							if v, ok := cs["location"]; ok && !isIntfNil(v) {
-
-								secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
-
-							}
-
-							if v, ok := cs["provider"]; ok && !isIntfNil(v) {
-
-								secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
-
-							}
-
-							if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
-
-								secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
-
-							}
-
-							if v, ok := cs["version"]; ok && !isIntfNil(v) {
-
-								secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
-
-							}
-
-						}
-
-					}
-
-					if v, ok := adminPasswordMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
-
-						secretInfoOneofTypeFound = true
-						secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
-						secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
-						adminPassword.SecretInfoOneof = secretInfoOneofInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
 							cs := set.(map[string]interface{})
 
 							if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
-								secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
+								deploymentInt.AwsCred.Name = v.(string)
+
+							}
+
+							if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+								deploymentInt.AwsCred.Namespace = v.(string)
+
+							}
+
+							if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+								deploymentInt.AwsCred.Tenant = v.(string)
 
 							}
 
 						}
-
 					}
 
 				}
 
-			}
+				if w, ok := awsParametersMapStrToI["disk_size"]; ok && !isIntfNil(w) {
+					awsParameters.DiskSize = uint32(w.(int))
+				}
 
-			if w, ok := awsParametersMapStrToI["aws_certified_hw"]; ok && !isIntfNil(w) {
-				awsParameters.AwsCertifiedHw = w.(string)
-			}
+				if w, ok := awsParametersMapStrToI["instance_type"]; ok && !isIntfNil(w) {
+					awsParameters.InstanceType = w.(string)
+				}
 
-			if w, ok := awsParametersMapStrToI["aws_region"]; ok && !isIntfNil(w) {
-				awsParameters.AwsRegion = w.(string)
-			}
+				internetVipChoiceTypeFound := false
 
-			if v, ok := awsParametersMapStrToI["az_nodes"]; ok && !isIntfNil(v) {
+				if v, ok := awsParametersMapStrToI["disable_internet_vip"]; ok && !isIntfNil(v) && !internetVipChoiceTypeFound {
 
-				sl := v.([]interface{})
-				azNodes := make([]*ves_io_schema_views.AWSVPCTwoInterfaceNodeType, len(sl))
-				awsParameters.AzNodes = azNodes
-				for i, set := range sl {
-					azNodes[i] = &ves_io_schema_views.AWSVPCTwoInterfaceNodeType{}
-					azNodesMapStrToI := set.(map[string]interface{})
+					internetVipChoiceTypeFound = true
 
-					if w, ok := azNodesMapStrToI["aws_az_name"]; ok && !isIntfNil(w) {
-						azNodes[i].AwsAzName = w.(string)
+					if v.(bool) {
+						internetVipChoiceInt := &ves_io_schema_views_aws_tgw_site.ServicesVPCType_DisableInternetVip{}
+						internetVipChoiceInt.DisableInternetVip = &ves_io_schema.Empty{}
+						awsParameters.InternetVipChoice = internetVipChoiceInt
 					}
 
-					choiceTypeFound := false
+				}
 
-					if v, ok := azNodesMapStrToI["inside_subnet"]; ok && !isIntfNil(v) && !choiceTypeFound {
+				if v, ok := awsParametersMapStrToI["enable_internet_vip"]; ok && !isIntfNil(v) && !internetVipChoiceTypeFound {
 
-						choiceTypeFound = true
-						choiceInt := &ves_io_schema_views.AWSVPCTwoInterfaceNodeType_InsideSubnet{}
-						choiceInt.InsideSubnet = &ves_io_schema_views.CloudSubnetType{}
-						azNodes[i].Choice = choiceInt
+					internetVipChoiceTypeFound = true
 
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
+					if v.(bool) {
+						internetVipChoiceInt := &ves_io_schema_views_aws_tgw_site.ServicesVPCType_EnableInternetVip{}
+						internetVipChoiceInt.EnableInternetVip = &ves_io_schema.Empty{}
+						awsParameters.InternetVipChoice = internetVipChoiceInt
+					}
+
+				}
+
+				securityGroupChoiceTypeFound := false
+
+				if v, ok := awsParametersMapStrToI["custom_security_group"]; ok && !isIntfNil(v) && !securityGroupChoiceTypeFound {
+
+					securityGroupChoiceTypeFound = true
+					securityGroupChoiceInt := &ves_io_schema_views_aws_tgw_site.ServicesVPCType_CustomSecurityGroup{}
+					securityGroupChoiceInt.CustomSecurityGroup = &ves_io_schema_views.SecurityGroupType{}
+					awsParameters.SecurityGroupChoice = securityGroupChoiceInt
+
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
 							cs := set.(map[string]interface{})
 
-							choiceTypeFound := false
+							if v, ok := cs["inside_security_group_id"]; ok && !isIntfNil(v) {
 
-							if v, ok := cs["existing_subnet_id"]; ok && !isIntfNil(v) && !choiceTypeFound {
-
-								choiceTypeFound = true
-								choiceIntNew := &ves_io_schema_views.CloudSubnetType_ExistingSubnetId{}
-
-								choiceInt.InsideSubnet.Choice = choiceIntNew
-
-								choiceIntNew.ExistingSubnetId = v.(string)
+								securityGroupChoiceInt.CustomSecurityGroup.InsideSecurityGroupId = v.(string)
 
 							}
 
-							if v, ok := cs["subnet_param"]; ok && !isIntfNil(v) && !choiceTypeFound {
+							if v, ok := cs["outside_security_group_id"]; ok && !isIntfNil(v) {
 
-								choiceTypeFound = true
-								choiceIntNew := &ves_io_schema_views.CloudSubnetType_SubnetParam{}
-								choiceIntNew.SubnetParam = &ves_io_schema_views.CloudSubnetParamType{}
-								choiceInt.InsideSubnet.Choice = choiceIntNew
+								securityGroupChoiceInt.CustomSecurityGroup.OutsideSecurityGroupId = v.(string)
 
-								sl := v.(*schema.Set).List()
-								for _, set := range sl {
-									cs := set.(map[string]interface{})
+							}
 
-									if v, ok := cs["ipv4"]; ok && !isIntfNil(v) {
+						}
+					}
 
-										choiceIntNew.SubnetParam.Ipv4 = v.(string)
+				}
 
-									}
+				if v, ok := awsParametersMapStrToI["f5xc_security_group"]; ok && !isIntfNil(v) && !securityGroupChoiceTypeFound {
 
-									if v, ok := cs["ipv6"]; ok && !isIntfNil(v) {
+					securityGroupChoiceTypeFound = true
 
-										choiceIntNew.SubnetParam.Ipv6 = v.(string)
+					if v.(bool) {
+						securityGroupChoiceInt := &ves_io_schema_views_aws_tgw_site.ServicesVPCType_F5XcSecurityGroup{}
+						securityGroupChoiceInt.F5XcSecurityGroup = &ves_io_schema.Empty{}
+						awsParameters.SecurityGroupChoice = securityGroupChoiceInt
+					}
 
-									}
+				}
 
+				serviceVpcChoiceTypeFound := false
+
+				if v, ok := awsParametersMapStrToI["new_vpc"]; ok && !isIntfNil(v) && !serviceVpcChoiceTypeFound {
+
+					serviceVpcChoiceTypeFound = true
+					serviceVpcChoiceInt := &ves_io_schema_views_aws_tgw_site.ServicesVPCType_NewVpc{}
+					serviceVpcChoiceInt.NewVpc = &ves_io_schema_views.AWSVPCParamsType{}
+					awsParameters.ServiceVpcChoice = serviceVpcChoiceInt
+
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["allocate_ipv6"]; ok && !isIntfNil(v) {
+
+								serviceVpcChoiceInt.NewVpc.AllocateIpv6 = v.(bool)
+
+							}
+
+							nameChoiceTypeFound := false
+
+							if v, ok := cs["autogenerate"]; ok && !isIntfNil(v) && !nameChoiceTypeFound {
+
+								nameChoiceTypeFound = true
+
+								if v.(bool) {
+									nameChoiceInt := &ves_io_schema_views.AWSVPCParamsType_Autogenerate{}
+									nameChoiceInt.Autogenerate = &ves_io_schema.Empty{}
+									serviceVpcChoiceInt.NewVpc.NameChoice = nameChoiceInt
 								}
 
 							}
 
-						}
+							if v, ok := cs["name_tag"]; ok && !isIntfNil(v) && !nameChoiceTypeFound {
 
-					}
+								nameChoiceTypeFound = true
+								nameChoiceInt := &ves_io_schema_views.AWSVPCParamsType_NameTag{}
 
-					if v, ok := azNodesMapStrToI["reserved_inside_subnet"]; ok && !isIntfNil(v) && !choiceTypeFound {
+								serviceVpcChoiceInt.NewVpc.NameChoice = nameChoiceInt
 
-						choiceTypeFound = true
-
-						if v.(bool) {
-							choiceInt := &ves_io_schema_views.AWSVPCTwoInterfaceNodeType_ReservedInsideSubnet{}
-							choiceInt.ReservedInsideSubnet = &ves_io_schema.Empty{}
-							azNodes[i].Choice = choiceInt
-						}
-
-					}
-
-					if w, ok := azNodesMapStrToI["disk_size"]; ok && !isIntfNil(w) {
-						azNodes[i].DiskSize = uint32(w.(int))
-					}
-
-					if v, ok := azNodesMapStrToI["outside_subnet"]; ok && !isIntfNil(v) {
-
-						sl := v.(*schema.Set).List()
-						outsideSubnet := &ves_io_schema_views.CloudSubnetType{}
-						azNodes[i].OutsideSubnet = outsideSubnet
-						for _, set := range sl {
-							outsideSubnetMapStrToI := set.(map[string]interface{})
-
-							choiceTypeFound := false
-
-							if v, ok := outsideSubnetMapStrToI["existing_subnet_id"]; ok && !isIntfNil(v) && !choiceTypeFound {
-
-								choiceTypeFound = true
-								choiceInt := &ves_io_schema_views.CloudSubnetType_ExistingSubnetId{}
-
-								outsideSubnet.Choice = choiceInt
-
-								choiceInt.ExistingSubnetId = v.(string)
+								nameChoiceInt.NameTag = v.(string)
 
 							}
 
-							if v, ok := outsideSubnetMapStrToI["subnet_param"]; ok && !isIntfNil(v) && !choiceTypeFound {
+							if v, ok := cs["primary_ipv4"]; ok && !isIntfNil(v) {
 
-								choiceTypeFound = true
-								choiceInt := &ves_io_schema_views.CloudSubnetType_SubnetParam{}
-								choiceInt.SubnetParam = &ves_io_schema_views.CloudSubnetParamType{}
-								outsideSubnet.Choice = choiceInt
-
-								sl := v.(*schema.Set).List()
-								for _, set := range sl {
-									cs := set.(map[string]interface{})
-
-									if v, ok := cs["ipv4"]; ok && !isIntfNil(v) {
-
-										choiceInt.SubnetParam.Ipv4 = v.(string)
-
-									}
-
-									if v, ok := cs["ipv6"]; ok && !isIntfNil(v) {
-
-										choiceInt.SubnetParam.Ipv6 = v.(string)
-
-									}
-
-								}
+								serviceVpcChoiceInt.NewVpc.PrimaryIpv4 = v.(string)
 
 							}
 
 						}
-
-					}
-
-					if v, ok := azNodesMapStrToI["workload_subnet"]; ok && !isIntfNil(v) {
-
-						sl := v.(*schema.Set).List()
-						workloadSubnet := &ves_io_schema_views.CloudSubnetType{}
-						azNodes[i].WorkloadSubnet = workloadSubnet
-						for _, set := range sl {
-							workloadSubnetMapStrToI := set.(map[string]interface{})
-
-							choiceTypeFound := false
-
-							if v, ok := workloadSubnetMapStrToI["existing_subnet_id"]; ok && !isIntfNil(v) && !choiceTypeFound {
-
-								choiceTypeFound = true
-								choiceInt := &ves_io_schema_views.CloudSubnetType_ExistingSubnetId{}
-
-								workloadSubnet.Choice = choiceInt
-
-								choiceInt.ExistingSubnetId = v.(string)
-
-							}
-
-							if v, ok := workloadSubnetMapStrToI["subnet_param"]; ok && !isIntfNil(v) && !choiceTypeFound {
-
-								choiceTypeFound = true
-								choiceInt := &ves_io_schema_views.CloudSubnetType_SubnetParam{}
-								choiceInt.SubnetParam = &ves_io_schema_views.CloudSubnetParamType{}
-								workloadSubnet.Choice = choiceInt
-
-								sl := v.(*schema.Set).List()
-								for _, set := range sl {
-									cs := set.(map[string]interface{})
-
-									if v, ok := cs["ipv4"]; ok && !isIntfNil(v) {
-
-										choiceInt.SubnetParam.Ipv4 = v.(string)
-
-									}
-
-									if v, ok := cs["ipv6"]; ok && !isIntfNil(v) {
-
-										choiceInt.SubnetParam.Ipv6 = v.(string)
-
-									}
-
-								}
-
-							}
-
-						}
-
 					}
 
 				}
 
-			}
+				if v, ok := awsParametersMapStrToI["vpc_id"]; ok && !isIntfNil(v) && !serviceVpcChoiceTypeFound {
 
-			deploymentTypeFound := false
+					serviceVpcChoiceTypeFound = true
+					serviceVpcChoiceInt := &ves_io_schema_views_aws_tgw_site.ServicesVPCType_VpcId{}
 
-			if v, ok := awsParametersMapStrToI["assisted"]; ok && !isIntfNil(v) && !deploymentTypeFound {
+					awsParameters.ServiceVpcChoice = serviceVpcChoiceInt
 
-				deploymentTypeFound = true
-
-				if v.(bool) {
-					deploymentInt := &ves_io_schema_views_aws_tgw_site.ServicesVPCType_Assisted{}
-					deploymentInt.Assisted = &ves_io_schema.Empty{}
-					awsParameters.Deployment = deploymentInt
-				}
-
-			}
-
-			if v, ok := awsParametersMapStrToI["aws_cred"]; ok && !isIntfNil(v) && !deploymentTypeFound {
-
-				deploymentTypeFound = true
-				deploymentInt := &ves_io_schema_views_aws_tgw_site.ServicesVPCType_AwsCred{}
-				deploymentInt.AwsCred = &ves_io_schema_views.ObjectRefType{}
-				awsParameters.Deployment = deploymentInt
-
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
-
-					if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-						deploymentInt.AwsCred.Name = v.(string)
-
-					}
-
-					if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
-
-						deploymentInt.AwsCred.Namespace = v.(string)
-
-					}
-
-					if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
-
-						deploymentInt.AwsCred.Tenant = v.(string)
-
-					}
+					serviceVpcChoiceInt.VpcId = v.(string)
 
 				}
 
-			}
-
-			if w, ok := awsParametersMapStrToI["disk_size"]; ok && !isIntfNil(w) {
-				awsParameters.DiskSize = uint32(w.(int))
-			}
-
-			if w, ok := awsParametersMapStrToI["instance_type"]; ok && !isIntfNil(w) {
-				awsParameters.InstanceType = w.(string)
-			}
-
-			internetVipChoiceTypeFound := false
-
-			if v, ok := awsParametersMapStrToI["disable_internet_vip"]; ok && !isIntfNil(v) && !internetVipChoiceTypeFound {
-
-				internetVipChoiceTypeFound = true
-
-				if v.(bool) {
-					internetVipChoiceInt := &ves_io_schema_views_aws_tgw_site.ServicesVPCType_DisableInternetVip{}
-					internetVipChoiceInt.DisableInternetVip = &ves_io_schema.Empty{}
-					awsParameters.InternetVipChoice = internetVipChoiceInt
+				if w, ok := awsParametersMapStrToI["ssh_key"]; ok && !isIntfNil(w) {
+					awsParameters.SshKey = w.(string)
 				}
 
-			}
+				tgwChoiceTypeFound := false
 
-			if v, ok := awsParametersMapStrToI["enable_internet_vip"]; ok && !isIntfNil(v) && !internetVipChoiceTypeFound {
+				if v, ok := awsParametersMapStrToI["existing_tgw"]; ok && !isIntfNil(v) && !tgwChoiceTypeFound {
 
-				internetVipChoiceTypeFound = true
+					tgwChoiceTypeFound = true
+					tgwChoiceInt := &ves_io_schema_views_aws_tgw_site.ServicesVPCType_ExistingTgw{}
+					tgwChoiceInt.ExistingTgw = &ves_io_schema_views.ExistingTGWType{}
+					awsParameters.TgwChoice = tgwChoiceInt
 
-				if v.(bool) {
-					internetVipChoiceInt := &ves_io_schema_views_aws_tgw_site.ServicesVPCType_EnableInternetVip{}
-					internetVipChoiceInt.EnableInternetVip = &ves_io_schema.Empty{}
-					awsParameters.InternetVipChoice = internetVipChoiceInt
-				}
-
-			}
-
-			securityGroupChoiceTypeFound := false
-
-			if v, ok := awsParametersMapStrToI["custom_security_group"]; ok && !isIntfNil(v) && !securityGroupChoiceTypeFound {
-
-				securityGroupChoiceTypeFound = true
-				securityGroupChoiceInt := &ves_io_schema_views_aws_tgw_site.ServicesVPCType_CustomSecurityGroup{}
-				securityGroupChoiceInt.CustomSecurityGroup = &ves_io_schema_views.SecurityGroupType{}
-				awsParameters.SecurityGroupChoice = securityGroupChoiceInt
-
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
-
-					if v, ok := cs["inside_security_group_id"]; ok && !isIntfNil(v) {
-
-						securityGroupChoiceInt.CustomSecurityGroup.InsideSecurityGroupId = v.(string)
-
-					}
-
-					if v, ok := cs["outside_security_group_id"]; ok && !isIntfNil(v) {
-
-						securityGroupChoiceInt.CustomSecurityGroup.OutsideSecurityGroupId = v.(string)
-
-					}
-
-				}
-
-			}
-
-			if v, ok := awsParametersMapStrToI["f5xc_security_group"]; ok && !isIntfNil(v) && !securityGroupChoiceTypeFound {
-
-				securityGroupChoiceTypeFound = true
-
-				if v.(bool) {
-					securityGroupChoiceInt := &ves_io_schema_views_aws_tgw_site.ServicesVPCType_F5XcSecurityGroup{}
-					securityGroupChoiceInt.F5XcSecurityGroup = &ves_io_schema.Empty{}
-					awsParameters.SecurityGroupChoice = securityGroupChoiceInt
-				}
-
-			}
-
-			serviceVpcChoiceTypeFound := false
-
-			if v, ok := awsParametersMapStrToI["new_vpc"]; ok && !isIntfNil(v) && !serviceVpcChoiceTypeFound {
-
-				serviceVpcChoiceTypeFound = true
-				serviceVpcChoiceInt := &ves_io_schema_views_aws_tgw_site.ServicesVPCType_NewVpc{}
-				serviceVpcChoiceInt.NewVpc = &ves_io_schema_views.AWSVPCParamsType{}
-				awsParameters.ServiceVpcChoice = serviceVpcChoiceInt
-
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
-
-					if v, ok := cs["allocate_ipv6"]; ok && !isIntfNil(v) {
-
-						serviceVpcChoiceInt.NewVpc.AllocateIpv6 = v.(bool)
-
-					}
-
-					nameChoiceTypeFound := false
-
-					if v, ok := cs["autogenerate"]; ok && !isIntfNil(v) && !nameChoiceTypeFound {
-
-						nameChoiceTypeFound = true
-
-						if v.(bool) {
-							nameChoiceInt := &ves_io_schema_views.AWSVPCParamsType_Autogenerate{}
-							nameChoiceInt.Autogenerate = &ves_io_schema.Empty{}
-							serviceVpcChoiceInt.NewVpc.NameChoice = nameChoiceInt
-						}
-
-					}
-
-					if v, ok := cs["name_tag"]; ok && !isIntfNil(v) && !nameChoiceTypeFound {
-
-						nameChoiceTypeFound = true
-						nameChoiceInt := &ves_io_schema_views.AWSVPCParamsType_NameTag{}
-
-						serviceVpcChoiceInt.NewVpc.NameChoice = nameChoiceInt
-
-						nameChoiceInt.NameTag = v.(string)
-
-					}
-
-					if v, ok := cs["primary_ipv4"]; ok && !isIntfNil(v) {
-
-						serviceVpcChoiceInt.NewVpc.PrimaryIpv4 = v.(string)
-
-					}
-
-				}
-
-			}
-
-			if v, ok := awsParametersMapStrToI["vpc_id"]; ok && !isIntfNil(v) && !serviceVpcChoiceTypeFound {
-
-				serviceVpcChoiceTypeFound = true
-				serviceVpcChoiceInt := &ves_io_schema_views_aws_tgw_site.ServicesVPCType_VpcId{}
-
-				awsParameters.ServiceVpcChoice = serviceVpcChoiceInt
-
-				serviceVpcChoiceInt.VpcId = v.(string)
-
-			}
-
-			if w, ok := awsParametersMapStrToI["ssh_key"]; ok && !isIntfNil(w) {
-				awsParameters.SshKey = w.(string)
-			}
-
-			tgwChoiceTypeFound := false
-
-			if v, ok := awsParametersMapStrToI["existing_tgw"]; ok && !isIntfNil(v) && !tgwChoiceTypeFound {
-
-				tgwChoiceTypeFound = true
-				tgwChoiceInt := &ves_io_schema_views_aws_tgw_site.ServicesVPCType_ExistingTgw{}
-				tgwChoiceInt.ExistingTgw = &ves_io_schema_views_aws_tgw_site.ExistingTGWType{}
-				awsParameters.TgwChoice = tgwChoiceInt
-
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
-
-					if v, ok := cs["tgw_asn"]; ok && !isIntfNil(v) {
-
-						tgwChoiceInt.ExistingTgw.TgwAsn = uint32(v.(int))
-
-					}
-
-					if v, ok := cs["tgw_id"]; ok && !isIntfNil(v) {
-
-						tgwChoiceInt.ExistingTgw.TgwId = v.(string)
-
-					}
-
-					if v, ok := cs["volterra_site_asn"]; ok && !isIntfNil(v) {
-
-						tgwChoiceInt.ExistingTgw.VolterraSiteAsn = uint32(v.(int))
-
-					}
-
-				}
-
-			}
-
-			if v, ok := awsParametersMapStrToI["new_tgw"]; ok && !isIntfNil(v) && !tgwChoiceTypeFound {
-
-				tgwChoiceTypeFound = true
-				tgwChoiceInt := &ves_io_schema_views_aws_tgw_site.ServicesVPCType_NewTgw{}
-				tgwChoiceInt.NewTgw = &ves_io_schema_views_aws_tgw_site.TGWParamsType{}
-				awsParameters.TgwChoice = tgwChoiceInt
-
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
-
-					asnChoiceTypeFound := false
-
-					if v, ok := cs["system_generated"]; ok && !isIntfNil(v) && !asnChoiceTypeFound {
-
-						asnChoiceTypeFound = true
-
-						if v.(bool) {
-							asnChoiceInt := &ves_io_schema_views_aws_tgw_site.TGWParamsType_SystemGenerated{}
-							asnChoiceInt.SystemGenerated = &ves_io_schema.Empty{}
-							tgwChoiceInt.NewTgw.AsnChoice = asnChoiceInt
-						}
-
-					}
-
-					if v, ok := cs["user_assigned"]; ok && !isIntfNil(v) && !asnChoiceTypeFound {
-
-						asnChoiceTypeFound = true
-						asnChoiceInt := &ves_io_schema_views_aws_tgw_site.TGWParamsType_UserAssigned{}
-						asnChoiceInt.UserAssigned = &ves_io_schema_views_aws_tgw_site.TGWAssignedASNType{}
-						tgwChoiceInt.NewTgw.AsnChoice = asnChoiceInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
 							cs := set.(map[string]interface{})
 
 							if v, ok := cs["tgw_asn"]; ok && !isIntfNil(v) {
 
-								asnChoiceInt.UserAssigned.TgwAsn = uint32(v.(int))
+								tgwChoiceInt.ExistingTgw.TgwAsn = uint32(v.(int))
+
+							}
+
+							if v, ok := cs["tgw_id"]; ok && !isIntfNil(v) {
+
+								tgwChoiceInt.ExistingTgw.TgwId = v.(string)
 
 							}
 
 							if v, ok := cs["volterra_site_asn"]; ok && !isIntfNil(v) {
 
-								asnChoiceInt.UserAssigned.VolterraSiteAsn = uint32(v.(int))
+								tgwChoiceInt.ExistingTgw.VolterraSiteAsn = uint32(v.(int))
 
 							}
 
 						}
-
 					}
 
 				}
 
-			}
+				if v, ok := awsParametersMapStrToI["new_tgw"]; ok && !isIntfNil(v) && !tgwChoiceTypeFound {
 
-			tgwCidrChoiceTypeFound := false
+					tgwChoiceTypeFound = true
+					tgwChoiceInt := &ves_io_schema_views_aws_tgw_site.ServicesVPCType_NewTgw{}
+					tgwChoiceInt.NewTgw = &ves_io_schema_views.TGWParamsType{}
+					awsParameters.TgwChoice = tgwChoiceInt
 
-			if v, ok := awsParametersMapStrToI["reserved_tgw_cidr"]; ok && !isIntfNil(v) && !tgwCidrChoiceTypeFound {
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
 
-				tgwCidrChoiceTypeFound = true
+							asnChoiceTypeFound := false
 
-				if v.(bool) {
-					tgwCidrChoiceInt := &ves_io_schema_views_aws_tgw_site.ServicesVPCType_ReservedTgwCidr{}
-					tgwCidrChoiceInt.ReservedTgwCidr = &ves_io_schema.Empty{}
+							if v, ok := cs["system_generated"]; ok && !isIntfNil(v) && !asnChoiceTypeFound {
+
+								asnChoiceTypeFound = true
+
+								if v.(bool) {
+									asnChoiceInt := &ves_io_schema_views.TGWParamsType_SystemGenerated{}
+									asnChoiceInt.SystemGenerated = &ves_io_schema.Empty{}
+									tgwChoiceInt.NewTgw.AsnChoice = asnChoiceInt
+								}
+
+							}
+
+							if v, ok := cs["user_assigned"]; ok && !isIntfNil(v) && !asnChoiceTypeFound {
+
+								asnChoiceTypeFound = true
+								asnChoiceInt := &ves_io_schema_views.TGWParamsType_UserAssigned{}
+								asnChoiceInt.UserAssigned = &ves_io_schema_views.TGWAssignedASNType{}
+								tgwChoiceInt.NewTgw.AsnChoice = asnChoiceInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["tgw_asn"]; ok && !isIntfNil(v) {
+
+											asnChoiceInt.UserAssigned.TgwAsn = uint32(v.(int))
+
+										}
+
+										if v, ok := cs["volterra_site_asn"]; ok && !isIntfNil(v) {
+
+											asnChoiceInt.UserAssigned.VolterraSiteAsn = uint32(v.(int))
+
+										}
+
+									}
+								}
+
+							}
+
+						}
+					}
+
+				}
+
+				tgwCidrChoiceTypeFound := false
+
+				if v, ok := awsParametersMapStrToI["reserved_tgw_cidr"]; ok && !isIntfNil(v) && !tgwCidrChoiceTypeFound {
+
+					tgwCidrChoiceTypeFound = true
+
+					if v.(bool) {
+						tgwCidrChoiceInt := &ves_io_schema_views_aws_tgw_site.ServicesVPCType_ReservedTgwCidr{}
+						tgwCidrChoiceInt.ReservedTgwCidr = &ves_io_schema.Empty{}
+						awsParameters.TgwCidrChoice = tgwCidrChoiceInt
+					}
+
+				}
+
+				if v, ok := awsParametersMapStrToI["tgw_cidr"]; ok && !isIntfNil(v) && !tgwCidrChoiceTypeFound {
+
+					tgwCidrChoiceTypeFound = true
+					tgwCidrChoiceInt := &ves_io_schema_views_aws_tgw_site.ServicesVPCType_TgwCidr{}
+					tgwCidrChoiceInt.TgwCidr = &ves_io_schema_views.CloudSubnetParamType{}
 					awsParameters.TgwCidrChoice = tgwCidrChoiceInt
-				}
 
-			}
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
 
-			if v, ok := awsParametersMapStrToI["tgw_cidr"]; ok && !isIntfNil(v) && !tgwCidrChoiceTypeFound {
+							if v, ok := cs["ipv4"]; ok && !isIntfNil(v) {
 
-				tgwCidrChoiceTypeFound = true
-				tgwCidrChoiceInt := &ves_io_schema_views_aws_tgw_site.ServicesVPCType_TgwCidr{}
-				tgwCidrChoiceInt.TgwCidr = &ves_io_schema_views.CloudSubnetParamType{}
-				awsParameters.TgwCidrChoice = tgwCidrChoiceInt
+								tgwCidrChoiceInt.TgwCidr.Ipv4 = v.(string)
 
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
+							}
 
-					if v, ok := cs["ipv4"]; ok && !isIntfNil(v) {
+							if v, ok := cs["ipv6"]; ok && !isIntfNil(v) {
 
-						tgwCidrChoiceInt.TgwCidr.Ipv4 = v.(string)
+								tgwCidrChoiceInt.TgwCidr.Ipv6 = v.(string)
 
-					}
+							}
 
-					if v, ok := cs["ipv6"]; ok && !isIntfNil(v) {
-
-						tgwCidrChoiceInt.TgwCidr.Ipv6 = v.(string)
-
+						}
 					}
 
 				}
 
-			}
+				workerNodesTypeFound := false
 
-			workerNodesTypeFound := false
+				if v, ok := awsParametersMapStrToI["no_worker_nodes"]; ok && !isIntfNil(v) && !workerNodesTypeFound {
 
-			if v, ok := awsParametersMapStrToI["no_worker_nodes"]; ok && !isIntfNil(v) && !workerNodesTypeFound {
+					workerNodesTypeFound = true
 
-				workerNodesTypeFound = true
+					if v.(bool) {
+						workerNodesInt := &ves_io_schema_views_aws_tgw_site.ServicesVPCType_NoWorkerNodes{}
+						workerNodesInt.NoWorkerNodes = &ves_io_schema.Empty{}
+						awsParameters.WorkerNodes = workerNodesInt
+					}
 
-				if v.(bool) {
-					workerNodesInt := &ves_io_schema_views_aws_tgw_site.ServicesVPCType_NoWorkerNodes{}
-					workerNodesInt.NoWorkerNodes = &ves_io_schema.Empty{}
+				}
+
+				if v, ok := awsParametersMapStrToI["nodes_per_az"]; ok && !isIntfNil(v) && !workerNodesTypeFound {
+
+					workerNodesTypeFound = true
+					workerNodesInt := &ves_io_schema_views_aws_tgw_site.ServicesVPCType_NodesPerAz{}
+
 					awsParameters.WorkerNodes = workerNodesInt
+
+					workerNodesInt.NodesPerAz = uint32(v.(int))
+
+				}
+
+				if v, ok := awsParametersMapStrToI["total_nodes"]; ok && !isIntfNil(v) && !workerNodesTypeFound {
+
+					workerNodesTypeFound = true
+					workerNodesInt := &ves_io_schema_views_aws_tgw_site.ServicesVPCType_TotalNodes{}
+
+					awsParameters.WorkerNodes = workerNodesInt
+
+					workerNodesInt.TotalNodes = uint32(v.(int))
+
 				}
 
 			}
-
-			if v, ok := awsParametersMapStrToI["nodes_per_az"]; ok && !isIntfNil(v) && !workerNodesTypeFound {
-
-				workerNodesTypeFound = true
-				workerNodesInt := &ves_io_schema_views_aws_tgw_site.ServicesVPCType_NodesPerAz{}
-
-				awsParameters.WorkerNodes = workerNodesInt
-
-				workerNodesInt.NodesPerAz = uint32(v.(int))
-
-			}
-
-			if v, ok := awsParametersMapStrToI["total_nodes"]; ok && !isIntfNil(v) && !workerNodesTypeFound {
-
-				workerNodesTypeFound = true
-				workerNodesInt := &ves_io_schema_views_aws_tgw_site.ServicesVPCType_TotalNodes{}
-
-				awsParameters.WorkerNodes = workerNodesInt
-
-				workerNodesInt.TotalNodes = uint32(v.(int))
-
-			}
-
 		}
 
 	}
@@ -3142,67 +3268,71 @@ func resourceVolterraAwsTgwSiteCreate(d *schema.ResourceData, meta interface{}) 
 		blockedServicesChoiceInt.BlockedServices = &ves_io_schema_fleet.BlockedServicesListType{}
 		createSpec.BlockedServicesChoice = blockedServicesChoiceInt
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
+			if set != nil {
+				cs := set.(map[string]interface{})
 
-			if v, ok := cs["blocked_sevice"]; ok && !isIntfNil(v) {
+				if v, ok := cs["blocked_sevice"]; ok && !isIntfNil(v) {
 
-				sl := v.([]interface{})
-				blockedSevice := make([]*ves_io_schema_fleet.BlockedServices, len(sl))
-				blockedServicesChoiceInt.BlockedServices.BlockedSevice = blockedSevice
-				for i, set := range sl {
-					blockedSevice[i] = &ves_io_schema_fleet.BlockedServices{}
-					blockedSeviceMapStrToI := set.(map[string]interface{})
+					sl := v.([]interface{})
+					blockedSevice := make([]*ves_io_schema_fleet.BlockedServices, len(sl))
+					blockedServicesChoiceInt.BlockedServices.BlockedSevice = blockedSevice
+					for i, set := range sl {
+						if set != nil {
+							blockedSevice[i] = &ves_io_schema_fleet.BlockedServices{}
+							blockedSeviceMapStrToI := set.(map[string]interface{})
 
-					blockedServicesValueTypeChoiceTypeFound := false
+							blockedServicesValueTypeChoiceTypeFound := false
 
-					if v, ok := blockedSeviceMapStrToI["dns"]; ok && !isIntfNil(v) && !blockedServicesValueTypeChoiceTypeFound {
+							if v, ok := blockedSeviceMapStrToI["dns"]; ok && !isIntfNil(v) && !blockedServicesValueTypeChoiceTypeFound {
 
-						blockedServicesValueTypeChoiceTypeFound = true
+								blockedServicesValueTypeChoiceTypeFound = true
 
-						if v.(bool) {
-							blockedServicesValueTypeChoiceInt := &ves_io_schema_fleet.BlockedServices_Dns{}
-							blockedServicesValueTypeChoiceInt.Dns = &ves_io_schema.Empty{}
-							blockedSevice[i].BlockedServicesValueTypeChoice = blockedServicesValueTypeChoiceInt
+								if v.(bool) {
+									blockedServicesValueTypeChoiceInt := &ves_io_schema_fleet.BlockedServices_Dns{}
+									blockedServicesValueTypeChoiceInt.Dns = &ves_io_schema.Empty{}
+									blockedSevice[i].BlockedServicesValueTypeChoice = blockedServicesValueTypeChoiceInt
+								}
+
+							}
+
+							if v, ok := blockedSeviceMapStrToI["ssh"]; ok && !isIntfNil(v) && !blockedServicesValueTypeChoiceTypeFound {
+
+								blockedServicesValueTypeChoiceTypeFound = true
+
+								if v.(bool) {
+									blockedServicesValueTypeChoiceInt := &ves_io_schema_fleet.BlockedServices_Ssh{}
+									blockedServicesValueTypeChoiceInt.Ssh = &ves_io_schema.Empty{}
+									blockedSevice[i].BlockedServicesValueTypeChoice = blockedServicesValueTypeChoiceInt
+								}
+
+							}
+
+							if v, ok := blockedSeviceMapStrToI["web_user_interface"]; ok && !isIntfNil(v) && !blockedServicesValueTypeChoiceTypeFound {
+
+								blockedServicesValueTypeChoiceTypeFound = true
+
+								if v.(bool) {
+									blockedServicesValueTypeChoiceInt := &ves_io_schema_fleet.BlockedServices_WebUserInterface{}
+									blockedServicesValueTypeChoiceInt.WebUserInterface = &ves_io_schema.Empty{}
+									blockedSevice[i].BlockedServicesValueTypeChoice = blockedServicesValueTypeChoiceInt
+								}
+
+							}
+
+							if v, ok := blockedSeviceMapStrToI["network_type"]; ok && !isIntfNil(v) {
+
+								blockedSevice[i].NetworkType = ves_io_schema.VirtualNetworkType(ves_io_schema.VirtualNetworkType_value[v.(string)])
+
+							}
+
 						}
-
-					}
-
-					if v, ok := blockedSeviceMapStrToI["ssh"]; ok && !isIntfNil(v) && !blockedServicesValueTypeChoiceTypeFound {
-
-						blockedServicesValueTypeChoiceTypeFound = true
-
-						if v.(bool) {
-							blockedServicesValueTypeChoiceInt := &ves_io_schema_fleet.BlockedServices_Ssh{}
-							blockedServicesValueTypeChoiceInt.Ssh = &ves_io_schema.Empty{}
-							blockedSevice[i].BlockedServicesValueTypeChoice = blockedServicesValueTypeChoiceInt
-						}
-
-					}
-
-					if v, ok := blockedSeviceMapStrToI["web_user_interface"]; ok && !isIntfNil(v) && !blockedServicesValueTypeChoiceTypeFound {
-
-						blockedServicesValueTypeChoiceTypeFound = true
-
-						if v.(bool) {
-							blockedServicesValueTypeChoiceInt := &ves_io_schema_fleet.BlockedServices_WebUserInterface{}
-							blockedServicesValueTypeChoiceInt.WebUserInterface = &ves_io_schema.Empty{}
-							blockedSevice[i].BlockedServicesValueTypeChoice = blockedServicesValueTypeChoiceInt
-						}
-
-					}
-
-					if v, ok := blockedSeviceMapStrToI["network_type"]; ok && !isIntfNil(v) {
-
-						blockedSevice[i].NetworkType = ves_io_schema.VirtualNetworkType(ves_io_schema.VirtualNetworkType_value[v.(string)])
-
 					}
 
 				}
 
 			}
-
 		}
 
 	}
@@ -3222,20 +3352,22 @@ func resourceVolterraAwsTgwSiteCreate(d *schema.ResourceData, meta interface{}) 
 	//coordinates
 	if v, ok := d.GetOk("coordinates"); ok && !isIntfNil(v) {
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		coordinates := &ves_io_schema_site.Coordinates{}
 		createSpec.Coordinates = coordinates
 		for _, set := range sl {
-			coordinatesMapStrToI := set.(map[string]interface{})
+			if set != nil {
+				coordinatesMapStrToI := set.(map[string]interface{})
 
-			if w, ok := coordinatesMapStrToI["latitude"]; ok && !isIntfNil(w) {
-				coordinates.Latitude = float32(w.(float64))
+				if w, ok := coordinatesMapStrToI["latitude"]; ok && !isIntfNil(w) {
+					coordinates.Latitude = float32(w.(float64))
+				}
+
+				if w, ok := coordinatesMapStrToI["longitude"]; ok && !isIntfNil(w) {
+					coordinates.Longitude = float32(w.(float64))
+				}
+
 			}
-
-			if w, ok := coordinatesMapStrToI["longitude"]; ok && !isIntfNil(w) {
-				coordinates.Longitude = float32(w.(float64))
-			}
-
 		}
 
 	}
@@ -3243,28 +3375,30 @@ func resourceVolterraAwsTgwSiteCreate(d *schema.ResourceData, meta interface{}) 
 	//custom_dns
 	if v, ok := d.GetOk("custom_dns"); ok && !isIntfNil(v) {
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		customDns := &ves_io_schema_views.CustomDNS{}
 		createSpec.CustomDns = customDns
 		for _, set := range sl {
-			customDnsMapStrToI := set.(map[string]interface{})
+			if set != nil {
+				customDnsMapStrToI := set.(map[string]interface{})
 
-			if w, ok := customDnsMapStrToI["inside_nameserver"]; ok && !isIntfNil(w) {
-				customDns.InsideNameserver = w.(string)
+				if w, ok := customDnsMapStrToI["inside_nameserver"]; ok && !isIntfNil(w) {
+					customDns.InsideNameserver = w.(string)
+				}
+
+				if w, ok := customDnsMapStrToI["inside_nameserver_v6"]; ok && !isIntfNil(w) {
+					customDns.InsideNameserverV6 = w.(string)
+				}
+
+				if w, ok := customDnsMapStrToI["outside_nameserver"]; ok && !isIntfNil(w) {
+					customDns.OutsideNameserver = w.(string)
+				}
+
+				if w, ok := customDnsMapStrToI["outside_nameserver_v6"]; ok && !isIntfNil(w) {
+					customDns.OutsideNameserverV6 = w.(string)
+				}
+
 			}
-
-			if w, ok := customDnsMapStrToI["inside_nameserver_v6"]; ok && !isIntfNil(w) {
-				customDns.InsideNameserverV6 = w.(string)
-			}
-
-			if w, ok := customDnsMapStrToI["outside_nameserver"]; ok && !isIntfNil(w) {
-				customDns.OutsideNameserver = w.(string)
-			}
-
-			if w, ok := customDnsMapStrToI["outside_nameserver_v6"]; ok && !isIntfNil(w) {
-				customDns.OutsideNameserverV6 = w.(string)
-			}
-
 		}
 
 	}
@@ -3292,163 +3426,171 @@ func resourceVolterraAwsTgwSiteCreate(d *schema.ResourceData, meta interface{}) 
 		directConnectChoiceInt.DirectConnectEnabled = &ves_io_schema_views.DirectConnectConfigType{}
 		createSpec.DirectConnectChoice = directConnectChoiceInt
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
+			if set != nil {
+				cs := set.(map[string]interface{})
 
-			asnChoiceTypeFound := false
+				asnChoiceTypeFound := false
 
-			if v, ok := cs["auto_asn"]; ok && !isIntfNil(v) && !asnChoiceTypeFound {
+				if v, ok := cs["auto_asn"]; ok && !isIntfNil(v) && !asnChoiceTypeFound {
 
-				asnChoiceTypeFound = true
+					asnChoiceTypeFound = true
 
-				if v.(bool) {
-					asnChoiceInt := &ves_io_schema_views.DirectConnectConfigType_AutoAsn{}
-					asnChoiceInt.AutoAsn = &ves_io_schema.Empty{}
-					directConnectChoiceInt.DirectConnectEnabled.AsnChoice = asnChoiceInt
+					if v.(bool) {
+						asnChoiceInt := &ves_io_schema_views.DirectConnectConfigType_AutoAsn{}
+						asnChoiceInt.AutoAsn = &ves_io_schema.Empty{}
+						directConnectChoiceInt.DirectConnectEnabled.AsnChoice = asnChoiceInt
+					}
+
 				}
 
-			}
+				if v, ok := cs["custom_asn"]; ok && !isIntfNil(v) && !asnChoiceTypeFound {
 
-			if v, ok := cs["custom_asn"]; ok && !isIntfNil(v) && !asnChoiceTypeFound {
+					asnChoiceTypeFound = true
+					asnChoiceInt := &ves_io_schema_views.DirectConnectConfigType_CustomAsn{}
 
-				asnChoiceTypeFound = true
-				asnChoiceInt := &ves_io_schema_views.DirectConnectConfigType_CustomAsn{}
+					directConnectChoiceInt.DirectConnectEnabled.AsnChoice = asnChoiceInt
 
-				directConnectChoiceInt.DirectConnectEnabled.AsnChoice = asnChoiceInt
+					asnChoiceInt.CustomAsn = uint32(v.(int))
 
-				asnChoiceInt.CustomAsn = uint32(v.(int))
+				}
 
-			}
+				vifChoiceTypeFound := false
 
-			vifChoiceTypeFound := false
+				if v, ok := cs["hosted_vifs"]; ok && !isIntfNil(v) && !vifChoiceTypeFound {
 
-			if v, ok := cs["hosted_vifs"]; ok && !isIntfNil(v) && !vifChoiceTypeFound {
+					vifChoiceTypeFound = true
+					vifChoiceInt := &ves_io_schema_views.DirectConnectConfigType_HostedVifs{}
+					vifChoiceInt.HostedVifs = &ves_io_schema_views.HostedVIFConfigType{}
+					directConnectChoiceInt.DirectConnectEnabled.VifChoice = vifChoiceInt
 
-				vifChoiceTypeFound = true
-				vifChoiceInt := &ves_io_schema_views.DirectConnectConfigType_HostedVifs{}
-				vifChoiceInt.HostedVifs = &ves_io_schema_views.HostedVIFConfigType{}
-				directConnectChoiceInt.DirectConnectEnabled.VifChoice = vifChoiceInt
-
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
-
-					connectivityOptionsTypeFound := false
-
-					if v, ok := cs["site_registration_over_direct_connect"]; ok && !isIntfNil(v) && !connectivityOptionsTypeFound {
-
-						connectivityOptionsTypeFound = true
-						connectivityOptionsInt := &ves_io_schema_views.HostedVIFConfigType_SiteRegistrationOverDirectConnect{}
-						connectivityOptionsInt.SiteRegistrationOverDirectConnect = &ves_io_schema_views.CloudLinkADNType{}
-						vifChoiceInt.HostedVifs.ConnectivityOptions = connectivityOptionsInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
 							cs := set.(map[string]interface{})
 
-							if v, ok := cs["cloudlink_network_name"]; ok && !isIntfNil(v) {
+							connectivityOptionsTypeFound := false
 
-								connectivityOptionsInt.SiteRegistrationOverDirectConnect.CloudlinkNetworkName = v.(string)
+							if v, ok := cs["site_registration_over_direct_connect"]; ok && !isIntfNil(v) && !connectivityOptionsTypeFound {
 
-							}
+								connectivityOptionsTypeFound = true
+								connectivityOptionsInt := &ves_io_schema_views.HostedVIFConfigType_SiteRegistrationOverDirectConnect{}
+								connectivityOptionsInt.SiteRegistrationOverDirectConnect = &ves_io_schema_views.CloudLinkADNType{}
+								vifChoiceInt.HostedVifs.ConnectivityOptions = connectivityOptionsInt
 
-						}
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
 
-					}
+										if v, ok := cs["cloudlink_network_name"]; ok && !isIntfNil(v) {
 
-					if v, ok := cs["site_registration_over_internet"]; ok && !isIntfNil(v) && !connectivityOptionsTypeFound {
+											connectivityOptionsInt.SiteRegistrationOverDirectConnect.CloudlinkNetworkName = v.(string)
 
-						connectivityOptionsTypeFound = true
+										}
 
-						if v.(bool) {
-							connectivityOptionsInt := &ves_io_schema_views.HostedVIFConfigType_SiteRegistrationOverInternet{}
-							connectivityOptionsInt.SiteRegistrationOverInternet = &ves_io_schema.Empty{}
-							vifChoiceInt.HostedVifs.ConnectivityOptions = connectivityOptionsInt
-						}
-
-					}
-
-					if v, ok := cs["vif_list"]; ok && !isIntfNil(v) {
-
-						sl := v.([]interface{})
-						vifList := make([]*ves_io_schema_views.VifRegionConfig, len(sl))
-						vifChoiceInt.HostedVifs.VifList = vifList
-						for i, set := range sl {
-							vifList[i] = &ves_io_schema_views.VifRegionConfig{}
-							vifListMapStrToI := set.(map[string]interface{})
-
-							if w, ok := vifListMapStrToI["vif_id"]; ok && !isIntfNil(w) {
-								vifList[i].VifId = w.(string)
-							}
-
-							vifRegionChoiceTypeFound := false
-
-							if v, ok := vifListMapStrToI["other_region"]; ok && !isIntfNil(v) && !vifRegionChoiceTypeFound {
-
-								vifRegionChoiceTypeFound = true
-								vifRegionChoiceInt := &ves_io_schema_views.VifRegionConfig_OtherRegion{}
-
-								vifList[i].VifRegionChoice = vifRegionChoiceInt
-
-								vifRegionChoiceInt.OtherRegion = v.(string)
-
-							}
-
-							if v, ok := vifListMapStrToI["same_as_site_region"]; ok && !isIntfNil(v) && !vifRegionChoiceTypeFound {
-
-								vifRegionChoiceTypeFound = true
-
-								if v.(bool) {
-									vifRegionChoiceInt := &ves_io_schema_views.VifRegionConfig_SameAsSiteRegion{}
-									vifRegionChoiceInt.SameAsSiteRegion = &ves_io_schema.Empty{}
-									vifList[i].VifRegionChoice = vifRegionChoiceInt
+									}
 								}
 
 							}
 
-						}
+							if v, ok := cs["site_registration_over_internet"]; ok && !isIntfNil(v) && !connectivityOptionsTypeFound {
 
+								connectivityOptionsTypeFound = true
+
+								if v.(bool) {
+									connectivityOptionsInt := &ves_io_schema_views.HostedVIFConfigType_SiteRegistrationOverInternet{}
+									connectivityOptionsInt.SiteRegistrationOverInternet = &ves_io_schema.Empty{}
+									vifChoiceInt.HostedVifs.ConnectivityOptions = connectivityOptionsInt
+								}
+
+							}
+
+							if v, ok := cs["vif_list"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								vifList := make([]*ves_io_schema_views.VifRegionConfig, len(sl))
+								vifChoiceInt.HostedVifs.VifList = vifList
+								for i, set := range sl {
+									if set != nil {
+										vifList[i] = &ves_io_schema_views.VifRegionConfig{}
+										vifListMapStrToI := set.(map[string]interface{})
+
+										if w, ok := vifListMapStrToI["vif_id"]; ok && !isIntfNil(w) {
+											vifList[i].VifId = w.(string)
+										}
+
+										vifRegionChoiceTypeFound := false
+
+										if v, ok := vifListMapStrToI["other_region"]; ok && !isIntfNil(v) && !vifRegionChoiceTypeFound {
+
+											vifRegionChoiceTypeFound = true
+											vifRegionChoiceInt := &ves_io_schema_views.VifRegionConfig_OtherRegion{}
+
+											vifList[i].VifRegionChoice = vifRegionChoiceInt
+
+											vifRegionChoiceInt.OtherRegion = v.(string)
+
+										}
+
+										if v, ok := vifListMapStrToI["same_as_site_region"]; ok && !isIntfNil(v) && !vifRegionChoiceTypeFound {
+
+											vifRegionChoiceTypeFound = true
+
+											if v.(bool) {
+												vifRegionChoiceInt := &ves_io_schema_views.VifRegionConfig_SameAsSiteRegion{}
+												vifRegionChoiceInt.SameAsSiteRegion = &ves_io_schema.Empty{}
+												vifList[i].VifRegionChoice = vifRegionChoiceInt
+											}
+
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := cs["vifs"]; ok && !isIntfNil(v) {
+
+								ls := make([]string, len(v.([]interface{})))
+								for i, v := range v.([]interface{}) {
+									ls[i] = v.(string)
+								}
+								vifChoiceInt.HostedVifs.Vifs = ls
+
+							}
+
+						}
 					}
 
-					if v, ok := cs["vifs"]; ok && !isIntfNil(v) {
+				}
 
-						ls := make([]string, len(v.([]interface{})))
-						for i, v := range v.([]interface{}) {
-							ls[i] = v.(string)
-						}
-						vifChoiceInt.HostedVifs.Vifs = ls
+				if v, ok := cs["manual_gw"]; ok && !isIntfNil(v) && !vifChoiceTypeFound {
 
+					vifChoiceTypeFound = true
+
+					if v.(bool) {
+						vifChoiceInt := &ves_io_schema_views.DirectConnectConfigType_ManualGw{}
+						vifChoiceInt.ManualGw = &ves_io_schema.Empty{}
+						directConnectChoiceInt.DirectConnectEnabled.VifChoice = vifChoiceInt
+					}
+
+				}
+
+				if v, ok := cs["standard_vifs"]; ok && !isIntfNil(v) && !vifChoiceTypeFound {
+
+					vifChoiceTypeFound = true
+
+					if v.(bool) {
+						vifChoiceInt := &ves_io_schema_views.DirectConnectConfigType_StandardVifs{}
+						vifChoiceInt.StandardVifs = &ves_io_schema.Empty{}
+						directConnectChoiceInt.DirectConnectEnabled.VifChoice = vifChoiceInt
 					}
 
 				}
 
 			}
-
-			if v, ok := cs["manual_gw"]; ok && !isIntfNil(v) && !vifChoiceTypeFound {
-
-				vifChoiceTypeFound = true
-
-				if v.(bool) {
-					vifChoiceInt := &ves_io_schema_views.DirectConnectConfigType_ManualGw{}
-					vifChoiceInt.ManualGw = &ves_io_schema.Empty{}
-					directConnectChoiceInt.DirectConnectEnabled.VifChoice = vifChoiceInt
-				}
-
-			}
-
-			if v, ok := cs["standard_vifs"]; ok && !isIntfNil(v) && !vifChoiceTypeFound {
-
-				vifChoiceTypeFound = true
-
-				if v.(bool) {
-					vifChoiceInt := &ves_io_schema_views.DirectConnectConfigType_StandardVifs{}
-					vifChoiceInt.StandardVifs = &ves_io_schema.Empty{}
-					directConnectChoiceInt.DirectConnectEnabled.VifChoice = vifChoiceInt
-				}
-
-			}
-
 		}
 
 	}
@@ -3460,60 +3602,64 @@ func resourceVolterraAwsTgwSiteCreate(d *schema.ResourceData, meta interface{}) 
 		directConnectChoiceInt.PrivateConnectivity = &ves_io_schema_views.PrivateConnectConfigType{}
 		createSpec.DirectConnectChoice = directConnectChoiceInt
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
+			if set != nil {
+				cs := set.(map[string]interface{})
 
-			if v, ok := cs["cloud_link"]; ok && !isIntfNil(v) {
+				if v, ok := cs["cloud_link"]; ok && !isIntfNil(v) {
 
-				sl := v.(*schema.Set).List()
-				cloudLink := &ves_io_schema_views.ObjectRefType{}
-				directConnectChoiceInt.PrivateConnectivity.CloudLink = cloudLink
-				for _, set := range sl {
-					cloudLinkMapStrToI := set.(map[string]interface{})
+					sl := v.([]interface{})
+					cloudLink := &ves_io_schema_views.ObjectRefType{}
+					directConnectChoiceInt.PrivateConnectivity.CloudLink = cloudLink
+					for _, set := range sl {
+						if set != nil {
+							cloudLinkMapStrToI := set.(map[string]interface{})
 
-					if w, ok := cloudLinkMapStrToI["name"]; ok && !isIntfNil(w) {
-						cloudLink.Name = w.(string)
+							if w, ok := cloudLinkMapStrToI["name"]; ok && !isIntfNil(w) {
+								cloudLink.Name = w.(string)
+							}
+
+							if w, ok := cloudLinkMapStrToI["namespace"]; ok && !isIntfNil(w) {
+								cloudLink.Namespace = w.(string)
+							}
+
+							if w, ok := cloudLinkMapStrToI["tenant"]; ok && !isIntfNil(w) {
+								cloudLink.Tenant = w.(string)
+							}
+
+						}
 					}
 
-					if w, ok := cloudLinkMapStrToI["namespace"]; ok && !isIntfNil(w) {
-						cloudLink.Namespace = w.(string)
+				}
+
+				networkOptionsTypeFound := false
+
+				if v, ok := cs["inside"]; ok && !isIntfNil(v) && !networkOptionsTypeFound {
+
+					networkOptionsTypeFound = true
+
+					if v.(bool) {
+						networkOptionsInt := &ves_io_schema_views.PrivateConnectConfigType_Inside{}
+						networkOptionsInt.Inside = &ves_io_schema.Empty{}
+						directConnectChoiceInt.PrivateConnectivity.NetworkOptions = networkOptionsInt
 					}
 
-					if w, ok := cloudLinkMapStrToI["tenant"]; ok && !isIntfNil(w) {
-						cloudLink.Tenant = w.(string)
+				}
+
+				if v, ok := cs["outside"]; ok && !isIntfNil(v) && !networkOptionsTypeFound {
+
+					networkOptionsTypeFound = true
+
+					if v.(bool) {
+						networkOptionsInt := &ves_io_schema_views.PrivateConnectConfigType_Outside{}
+						networkOptionsInt.Outside = &ves_io_schema.Empty{}
+						directConnectChoiceInt.PrivateConnectivity.NetworkOptions = networkOptionsInt
 					}
 
 				}
 
 			}
-
-			networkOptionsTypeFound := false
-
-			if v, ok := cs["inside"]; ok && !isIntfNil(v) && !networkOptionsTypeFound {
-
-				networkOptionsTypeFound = true
-
-				if v.(bool) {
-					networkOptionsInt := &ves_io_schema_views.PrivateConnectConfigType_Inside{}
-					networkOptionsInt.Inside = &ves_io_schema.Empty{}
-					directConnectChoiceInt.PrivateConnectivity.NetworkOptions = networkOptionsInt
-				}
-
-			}
-
-			if v, ok := cs["outside"]; ok && !isIntfNil(v) && !networkOptionsTypeFound {
-
-				networkOptionsTypeFound = true
-
-				if v.(bool) {
-					networkOptionsInt := &ves_io_schema_views.PrivateConnectConfigType_Outside{}
-					networkOptionsInt.Outside = &ves_io_schema.Empty{}
-					directConnectChoiceInt.PrivateConnectivity.NetworkOptions = networkOptionsInt
-				}
-
-			}
-
 		}
 
 	}
@@ -3521,97 +3667,101 @@ func resourceVolterraAwsTgwSiteCreate(d *schema.ResourceData, meta interface{}) 
 	//kubernetes_upgrade_drain
 	if v, ok := d.GetOk("kubernetes_upgrade_drain"); ok && !isIntfNil(v) {
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		kubernetesUpgradeDrain := &ves_io_schema_views.KubernetesUpgradeDrain{}
 		createSpec.KubernetesUpgradeDrain = kubernetesUpgradeDrain
 		for _, set := range sl {
-			kubernetesUpgradeDrainMapStrToI := set.(map[string]interface{})
+			if set != nil {
+				kubernetesUpgradeDrainMapStrToI := set.(map[string]interface{})
 
-			kubernetesUpgradeDrainEnableChoiceTypeFound := false
+				kubernetesUpgradeDrainEnableChoiceTypeFound := false
 
-			if v, ok := kubernetesUpgradeDrainMapStrToI["disable_upgrade_drain"]; ok && !isIntfNil(v) && !kubernetesUpgradeDrainEnableChoiceTypeFound {
+				if v, ok := kubernetesUpgradeDrainMapStrToI["disable_upgrade_drain"]; ok && !isIntfNil(v) && !kubernetesUpgradeDrainEnableChoiceTypeFound {
 
-				kubernetesUpgradeDrainEnableChoiceTypeFound = true
+					kubernetesUpgradeDrainEnableChoiceTypeFound = true
 
-				if v.(bool) {
-					kubernetesUpgradeDrainEnableChoiceInt := &ves_io_schema_views.KubernetesUpgradeDrain_DisableUpgradeDrain{}
-					kubernetesUpgradeDrainEnableChoiceInt.DisableUpgradeDrain = &ves_io_schema.Empty{}
+					if v.(bool) {
+						kubernetesUpgradeDrainEnableChoiceInt := &ves_io_schema_views.KubernetesUpgradeDrain_DisableUpgradeDrain{}
+						kubernetesUpgradeDrainEnableChoiceInt.DisableUpgradeDrain = &ves_io_schema.Empty{}
+						kubernetesUpgradeDrain.KubernetesUpgradeDrainEnableChoice = kubernetesUpgradeDrainEnableChoiceInt
+					}
+
+				}
+
+				if v, ok := kubernetesUpgradeDrainMapStrToI["enable_upgrade_drain"]; ok && !isIntfNil(v) && !kubernetesUpgradeDrainEnableChoiceTypeFound {
+
+					kubernetesUpgradeDrainEnableChoiceTypeFound = true
+					kubernetesUpgradeDrainEnableChoiceInt := &ves_io_schema_views.KubernetesUpgradeDrain_EnableUpgradeDrain{}
+					kubernetesUpgradeDrainEnableChoiceInt.EnableUpgradeDrain = &ves_io_schema_views.KubernetesUpgradeDrainConfig{}
 					kubernetesUpgradeDrain.KubernetesUpgradeDrainEnableChoice = kubernetesUpgradeDrainEnableChoiceInt
-				}
 
-			}
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
 
-			if v, ok := kubernetesUpgradeDrainMapStrToI["enable_upgrade_drain"]; ok && !isIntfNil(v) && !kubernetesUpgradeDrainEnableChoiceTypeFound {
+							drainMaxUnavailableChoiceTypeFound := false
 
-				kubernetesUpgradeDrainEnableChoiceTypeFound = true
-				kubernetesUpgradeDrainEnableChoiceInt := &ves_io_schema_views.KubernetesUpgradeDrain_EnableUpgradeDrain{}
-				kubernetesUpgradeDrainEnableChoiceInt.EnableUpgradeDrain = &ves_io_schema_views.KubernetesUpgradeDrainConfig{}
-				kubernetesUpgradeDrain.KubernetesUpgradeDrainEnableChoice = kubernetesUpgradeDrainEnableChoiceInt
+							if v, ok := cs["drain_max_unavailable_node_count"]; ok && !isIntfNil(v) && !drainMaxUnavailableChoiceTypeFound {
 
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
+								drainMaxUnavailableChoiceTypeFound = true
+								drainMaxUnavailableChoiceInt := &ves_io_schema_views.KubernetesUpgradeDrainConfig_DrainMaxUnavailableNodeCount{}
 
-					drainMaxUnavailableChoiceTypeFound := false
+								kubernetesUpgradeDrainEnableChoiceInt.EnableUpgradeDrain.DrainMaxUnavailableChoice = drainMaxUnavailableChoiceInt
 
-					if v, ok := cs["drain_max_unavailable_node_count"]; ok && !isIntfNil(v) && !drainMaxUnavailableChoiceTypeFound {
+								drainMaxUnavailableChoiceInt.DrainMaxUnavailableNodeCount = uint32(v.(int))
 
-						drainMaxUnavailableChoiceTypeFound = true
-						drainMaxUnavailableChoiceInt := &ves_io_schema_views.KubernetesUpgradeDrainConfig_DrainMaxUnavailableNodeCount{}
+							}
 
-						kubernetesUpgradeDrainEnableChoiceInt.EnableUpgradeDrain.DrainMaxUnavailableChoice = drainMaxUnavailableChoiceInt
+							if v, ok := cs["drain_max_unavailable_node_percentage"]; ok && !isIntfNil(v) && !drainMaxUnavailableChoiceTypeFound {
 
-						drainMaxUnavailableChoiceInt.DrainMaxUnavailableNodeCount = uint32(v.(int))
+								drainMaxUnavailableChoiceTypeFound = true
+								drainMaxUnavailableChoiceInt := &ves_io_schema_views.KubernetesUpgradeDrainConfig_DrainMaxUnavailableNodePercentage{}
 
-					}
+								kubernetesUpgradeDrainEnableChoiceInt.EnableUpgradeDrain.DrainMaxUnavailableChoice = drainMaxUnavailableChoiceInt
 
-					if v, ok := cs["drain_max_unavailable_node_percentage"]; ok && !isIntfNil(v) && !drainMaxUnavailableChoiceTypeFound {
+								drainMaxUnavailableChoiceInt.DrainMaxUnavailableNodePercentage = uint32(v.(int))
 
-						drainMaxUnavailableChoiceTypeFound = true
-						drainMaxUnavailableChoiceInt := &ves_io_schema_views.KubernetesUpgradeDrainConfig_DrainMaxUnavailableNodePercentage{}
+							}
 
-						kubernetesUpgradeDrainEnableChoiceInt.EnableUpgradeDrain.DrainMaxUnavailableChoice = drainMaxUnavailableChoiceInt
+							if v, ok := cs["drain_node_timeout"]; ok && !isIntfNil(v) {
 
-						drainMaxUnavailableChoiceInt.DrainMaxUnavailableNodePercentage = uint32(v.(int))
+								kubernetesUpgradeDrainEnableChoiceInt.EnableUpgradeDrain.DrainNodeTimeout = uint32(v.(int))
 
-					}
+							}
 
-					if v, ok := cs["drain_node_timeout"]; ok && !isIntfNil(v) {
+							vegaUpgradeModeToggleChoiceTypeFound := false
 
-						kubernetesUpgradeDrainEnableChoiceInt.EnableUpgradeDrain.DrainNodeTimeout = uint32(v.(int))
+							if v, ok := cs["disable_vega_upgrade_mode"]; ok && !isIntfNil(v) && !vegaUpgradeModeToggleChoiceTypeFound {
 
-					}
+								vegaUpgradeModeToggleChoiceTypeFound = true
 
-					vegaUpgradeModeToggleChoiceTypeFound := false
+								if v.(bool) {
+									vegaUpgradeModeToggleChoiceInt := &ves_io_schema_views.KubernetesUpgradeDrainConfig_DisableVegaUpgradeMode{}
+									vegaUpgradeModeToggleChoiceInt.DisableVegaUpgradeMode = &ves_io_schema.Empty{}
+									kubernetesUpgradeDrainEnableChoiceInt.EnableUpgradeDrain.VegaUpgradeModeToggleChoice = vegaUpgradeModeToggleChoiceInt
+								}
 
-					if v, ok := cs["disable_vega_upgrade_mode"]; ok && !isIntfNil(v) && !vegaUpgradeModeToggleChoiceTypeFound {
+							}
 
-						vegaUpgradeModeToggleChoiceTypeFound = true
+							if v, ok := cs["enable_vega_upgrade_mode"]; ok && !isIntfNil(v) && !vegaUpgradeModeToggleChoiceTypeFound {
 
-						if v.(bool) {
-							vegaUpgradeModeToggleChoiceInt := &ves_io_schema_views.KubernetesUpgradeDrainConfig_DisableVegaUpgradeMode{}
-							vegaUpgradeModeToggleChoiceInt.DisableVegaUpgradeMode = &ves_io_schema.Empty{}
-							kubernetesUpgradeDrainEnableChoiceInt.EnableUpgradeDrain.VegaUpgradeModeToggleChoice = vegaUpgradeModeToggleChoiceInt
+								vegaUpgradeModeToggleChoiceTypeFound = true
+
+								if v.(bool) {
+									vegaUpgradeModeToggleChoiceInt := &ves_io_schema_views.KubernetesUpgradeDrainConfig_EnableVegaUpgradeMode{}
+									vegaUpgradeModeToggleChoiceInt.EnableVegaUpgradeMode = &ves_io_schema.Empty{}
+									kubernetesUpgradeDrainEnableChoiceInt.EnableUpgradeDrain.VegaUpgradeModeToggleChoice = vegaUpgradeModeToggleChoiceInt
+								}
+
+							}
+
 						}
-
-					}
-
-					if v, ok := cs["enable_vega_upgrade_mode"]; ok && !isIntfNil(v) && !vegaUpgradeModeToggleChoiceTypeFound {
-
-						vegaUpgradeModeToggleChoiceTypeFound = true
-
-						if v.(bool) {
-							vegaUpgradeModeToggleChoiceInt := &ves_io_schema_views.KubernetesUpgradeDrainConfig_EnableVegaUpgradeMode{}
-							vegaUpgradeModeToggleChoiceInt.EnableVegaUpgradeMode = &ves_io_schema.Empty{}
-							kubernetesUpgradeDrainEnableChoiceInt.EnableUpgradeDrain.VegaUpgradeModeToggleChoice = vegaUpgradeModeToggleChoiceInt
-						}
-
 					}
 
 				}
 
 			}
-
 		}
 
 	}
@@ -3627,28 +3777,30 @@ func resourceVolterraAwsTgwSiteCreate(d *schema.ResourceData, meta interface{}) 
 		logsReceiverChoiceInt.LogReceiver = &ves_io_schema_views.ObjectRefType{}
 		createSpec.LogsReceiverChoice = logsReceiverChoiceInt
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
+			if set != nil {
+				cs := set.(map[string]interface{})
 
-			if v, ok := cs["name"]; ok && !isIntfNil(v) {
+				if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
-				logsReceiverChoiceInt.LogReceiver.Name = v.(string)
+					logsReceiverChoiceInt.LogReceiver.Name = v.(string)
+
+				}
+
+				if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+					logsReceiverChoiceInt.LogReceiver.Namespace = v.(string)
+
+				}
+
+				if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+					logsReceiverChoiceInt.LogReceiver.Tenant = v.(string)
+
+				}
 
 			}
-
-			if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
-
-				logsReceiverChoiceInt.LogReceiver.Namespace = v.(string)
-
-			}
-
-			if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
-
-				logsReceiverChoiceInt.LogReceiver.Tenant = v.(string)
-
-			}
-
 		}
 
 	}
@@ -3668,38 +3820,40 @@ func resourceVolterraAwsTgwSiteCreate(d *schema.ResourceData, meta interface{}) 
 	//offline_survivability_mode
 	if v, ok := d.GetOk("offline_survivability_mode"); ok && !isIntfNil(v) {
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		offlineSurvivabilityMode := &ves_io_schema_views.OfflineSurvivabilityModeType{}
 		createSpec.OfflineSurvivabilityMode = offlineSurvivabilityMode
 		for _, set := range sl {
-			offlineSurvivabilityModeMapStrToI := set.(map[string]interface{})
+			if set != nil {
+				offlineSurvivabilityModeMapStrToI := set.(map[string]interface{})
 
-			offlineSurvivabilityModeChoiceTypeFound := false
+				offlineSurvivabilityModeChoiceTypeFound := false
 
-			if v, ok := offlineSurvivabilityModeMapStrToI["enable_offline_survivability_mode"]; ok && !isIntfNil(v) && !offlineSurvivabilityModeChoiceTypeFound {
+				if v, ok := offlineSurvivabilityModeMapStrToI["enable_offline_survivability_mode"]; ok && !isIntfNil(v) && !offlineSurvivabilityModeChoiceTypeFound {
 
-				offlineSurvivabilityModeChoiceTypeFound = true
+					offlineSurvivabilityModeChoiceTypeFound = true
 
-				if v.(bool) {
-					offlineSurvivabilityModeChoiceInt := &ves_io_schema_views.OfflineSurvivabilityModeType_EnableOfflineSurvivabilityMode{}
-					offlineSurvivabilityModeChoiceInt.EnableOfflineSurvivabilityMode = &ves_io_schema.Empty{}
-					offlineSurvivabilityMode.OfflineSurvivabilityModeChoice = offlineSurvivabilityModeChoiceInt
+					if v.(bool) {
+						offlineSurvivabilityModeChoiceInt := &ves_io_schema_views.OfflineSurvivabilityModeType_EnableOfflineSurvivabilityMode{}
+						offlineSurvivabilityModeChoiceInt.EnableOfflineSurvivabilityMode = &ves_io_schema.Empty{}
+						offlineSurvivabilityMode.OfflineSurvivabilityModeChoice = offlineSurvivabilityModeChoiceInt
+					}
+
+				}
+
+				if v, ok := offlineSurvivabilityModeMapStrToI["no_offline_survivability_mode"]; ok && !isIntfNil(v) && !offlineSurvivabilityModeChoiceTypeFound {
+
+					offlineSurvivabilityModeChoiceTypeFound = true
+
+					if v.(bool) {
+						offlineSurvivabilityModeChoiceInt := &ves_io_schema_views.OfflineSurvivabilityModeType_NoOfflineSurvivabilityMode{}
+						offlineSurvivabilityModeChoiceInt.NoOfflineSurvivabilityMode = &ves_io_schema.Empty{}
+						offlineSurvivabilityMode.OfflineSurvivabilityModeChoice = offlineSurvivabilityModeChoiceInt
+					}
+
 				}
 
 			}
-
-			if v, ok := offlineSurvivabilityModeMapStrToI["no_offline_survivability_mode"]; ok && !isIntfNil(v) && !offlineSurvivabilityModeChoiceTypeFound {
-
-				offlineSurvivabilityModeChoiceTypeFound = true
-
-				if v.(bool) {
-					offlineSurvivabilityModeChoiceInt := &ves_io_schema_views.OfflineSurvivabilityModeType_NoOfflineSurvivabilityMode{}
-					offlineSurvivabilityModeChoiceInt.NoOfflineSurvivabilityMode = &ves_io_schema.Empty{}
-					offlineSurvivabilityMode.OfflineSurvivabilityModeChoice = offlineSurvivabilityModeChoiceInt
-				}
-
-			}
-
 		}
 
 	}
@@ -3707,37 +3861,39 @@ func resourceVolterraAwsTgwSiteCreate(d *schema.ResourceData, meta interface{}) 
 	//os
 	if v, ok := d.GetOk("os"); ok && !isIntfNil(v) {
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		os := &ves_io_schema_views.OperatingSystemType{}
 		createSpec.Os = os
 		for _, set := range sl {
-			osMapStrToI := set.(map[string]interface{})
+			if set != nil {
+				osMapStrToI := set.(map[string]interface{})
 
-			operatingSystemVersionChoiceTypeFound := false
+				operatingSystemVersionChoiceTypeFound := false
 
-			if v, ok := osMapStrToI["default_os_version"]; ok && !isIntfNil(v) && !operatingSystemVersionChoiceTypeFound {
+				if v, ok := osMapStrToI["default_os_version"]; ok && !isIntfNil(v) && !operatingSystemVersionChoiceTypeFound {
 
-				operatingSystemVersionChoiceTypeFound = true
+					operatingSystemVersionChoiceTypeFound = true
 
-				if v.(bool) {
-					operatingSystemVersionChoiceInt := &ves_io_schema_views.OperatingSystemType_DefaultOsVersion{}
-					operatingSystemVersionChoiceInt.DefaultOsVersion = &ves_io_schema.Empty{}
+					if v.(bool) {
+						operatingSystemVersionChoiceInt := &ves_io_schema_views.OperatingSystemType_DefaultOsVersion{}
+						operatingSystemVersionChoiceInt.DefaultOsVersion = &ves_io_schema.Empty{}
+						os.OperatingSystemVersionChoice = operatingSystemVersionChoiceInt
+					}
+
+				}
+
+				if v, ok := osMapStrToI["operating_system_version"]; ok && !isIntfNil(v) && !operatingSystemVersionChoiceTypeFound {
+
+					operatingSystemVersionChoiceTypeFound = true
+					operatingSystemVersionChoiceInt := &ves_io_schema_views.OperatingSystemType_OperatingSystemVersion{}
+
 					os.OperatingSystemVersionChoice = operatingSystemVersionChoiceInt
+
+					operatingSystemVersionChoiceInt.OperatingSystemVersion = v.(string)
+
 				}
 
 			}
-
-			if v, ok := osMapStrToI["operating_system_version"]; ok && !isIntfNil(v) && !operatingSystemVersionChoiceTypeFound {
-
-				operatingSystemVersionChoiceTypeFound = true
-				operatingSystemVersionChoiceInt := &ves_io_schema_views.OperatingSystemType_OperatingSystemVersion{}
-
-				os.OperatingSystemVersionChoice = operatingSystemVersionChoiceInt
-
-				operatingSystemVersionChoiceInt.OperatingSystemVersion = v.(string)
-
-			}
-
 		}
 
 	}
@@ -3745,67 +3901,71 @@ func resourceVolterraAwsTgwSiteCreate(d *schema.ResourceData, meta interface{}) 
 	//performance_enhancement_mode
 	if v, ok := d.GetOk("performance_enhancement_mode"); ok && !isIntfNil(v) {
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		performanceEnhancementMode := &ves_io_schema_views.PerformanceEnhancementModeType{}
 		createSpec.PerformanceEnhancementMode = performanceEnhancementMode
 		for _, set := range sl {
-			performanceEnhancementModeMapStrToI := set.(map[string]interface{})
+			if set != nil {
+				performanceEnhancementModeMapStrToI := set.(map[string]interface{})
 
-			perfModeChoiceTypeFound := false
+				perfModeChoiceTypeFound := false
 
-			if v, ok := performanceEnhancementModeMapStrToI["perf_mode_l3_enhanced"]; ok && !isIntfNil(v) && !perfModeChoiceTypeFound {
+				if v, ok := performanceEnhancementModeMapStrToI["perf_mode_l3_enhanced"]; ok && !isIntfNil(v) && !perfModeChoiceTypeFound {
 
-				perfModeChoiceTypeFound = true
-				perfModeChoiceInt := &ves_io_schema_views.PerformanceEnhancementModeType_PerfModeL3Enhanced{}
-				perfModeChoiceInt.PerfModeL3Enhanced = &ves_io_schema_views.L3PerformanceEnhancementType{}
-				performanceEnhancementMode.PerfModeChoice = perfModeChoiceInt
-
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
-
-					perfModeChoiceTypeFound := false
-
-					if v, ok := cs["jumbo"]; ok && !isIntfNil(v) && !perfModeChoiceTypeFound {
-
-						perfModeChoiceTypeFound = true
-
-						if v.(bool) {
-							perfModeChoiceIntNew := &ves_io_schema_views.L3PerformanceEnhancementType_Jumbo{}
-							perfModeChoiceIntNew.Jumbo = &ves_io_schema.Empty{}
-							perfModeChoiceInt.PerfModeL3Enhanced.PerfModeChoice = perfModeChoiceIntNew
-						}
-
-					}
-
-					if v, ok := cs["no_jumbo"]; ok && !isIntfNil(v) && !perfModeChoiceTypeFound {
-
-						perfModeChoiceTypeFound = true
-
-						if v.(bool) {
-							perfModeChoiceIntNew := &ves_io_schema_views.L3PerformanceEnhancementType_NoJumbo{}
-							perfModeChoiceIntNew.NoJumbo = &ves_io_schema.Empty{}
-							perfModeChoiceInt.PerfModeL3Enhanced.PerfModeChoice = perfModeChoiceIntNew
-						}
-
-					}
-
-				}
-
-			}
-
-			if v, ok := performanceEnhancementModeMapStrToI["perf_mode_l7_enhanced"]; ok && !isIntfNil(v) && !perfModeChoiceTypeFound {
-
-				perfModeChoiceTypeFound = true
-
-				if v.(bool) {
-					perfModeChoiceInt := &ves_io_schema_views.PerformanceEnhancementModeType_PerfModeL7Enhanced{}
-					perfModeChoiceInt.PerfModeL7Enhanced = &ves_io_schema.Empty{}
+					perfModeChoiceTypeFound = true
+					perfModeChoiceInt := &ves_io_schema_views.PerformanceEnhancementModeType_PerfModeL3Enhanced{}
+					perfModeChoiceInt.PerfModeL3Enhanced = &ves_io_schema_views.L3PerformanceEnhancementType{}
 					performanceEnhancementMode.PerfModeChoice = perfModeChoiceInt
+
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
+
+							perfModeChoiceTypeFound := false
+
+							if v, ok := cs["jumbo"]; ok && !isIntfNil(v) && !perfModeChoiceTypeFound {
+
+								perfModeChoiceTypeFound = true
+
+								if v.(bool) {
+									perfModeChoiceIntNew := &ves_io_schema_views.L3PerformanceEnhancementType_Jumbo{}
+									perfModeChoiceIntNew.Jumbo = &ves_io_schema.Empty{}
+									perfModeChoiceInt.PerfModeL3Enhanced.PerfModeChoice = perfModeChoiceIntNew
+								}
+
+							}
+
+							if v, ok := cs["no_jumbo"]; ok && !isIntfNil(v) && !perfModeChoiceTypeFound {
+
+								perfModeChoiceTypeFound = true
+
+								if v.(bool) {
+									perfModeChoiceIntNew := &ves_io_schema_views.L3PerformanceEnhancementType_NoJumbo{}
+									perfModeChoiceIntNew.NoJumbo = &ves_io_schema.Empty{}
+									perfModeChoiceInt.PerfModeL3Enhanced.PerfModeChoice = perfModeChoiceIntNew
+								}
+
+							}
+
+						}
+					}
+
+				}
+
+				if v, ok := performanceEnhancementModeMapStrToI["perf_mode_l7_enhanced"]; ok && !isIntfNil(v) && !perfModeChoiceTypeFound {
+
+					perfModeChoiceTypeFound = true
+
+					if v.(bool) {
+						perfModeChoiceInt := &ves_io_schema_views.PerformanceEnhancementModeType_PerfModeL7Enhanced{}
+						perfModeChoiceInt.PerfModeL7Enhanced = &ves_io_schema.Empty{}
+						performanceEnhancementMode.PerfModeChoice = perfModeChoiceInt
+					}
+
 				}
 
 			}
-
 		}
 
 	}
@@ -3813,37 +3973,39 @@ func resourceVolterraAwsTgwSiteCreate(d *schema.ResourceData, meta interface{}) 
 	//sw
 	if v, ok := d.GetOk("sw"); ok && !isIntfNil(v) {
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		sw := &ves_io_schema_views.VolterraSoftwareType{}
 		createSpec.Sw = sw
 		for _, set := range sl {
-			swMapStrToI := set.(map[string]interface{})
+			if set != nil {
+				swMapStrToI := set.(map[string]interface{})
 
-			volterraSwVersionChoiceTypeFound := false
+				volterraSwVersionChoiceTypeFound := false
 
-			if v, ok := swMapStrToI["default_sw_version"]; ok && !isIntfNil(v) && !volterraSwVersionChoiceTypeFound {
+				if v, ok := swMapStrToI["default_sw_version"]; ok && !isIntfNil(v) && !volterraSwVersionChoiceTypeFound {
 
-				volterraSwVersionChoiceTypeFound = true
+					volterraSwVersionChoiceTypeFound = true
 
-				if v.(bool) {
-					volterraSwVersionChoiceInt := &ves_io_schema_views.VolterraSoftwareType_DefaultSwVersion{}
-					volterraSwVersionChoiceInt.DefaultSwVersion = &ves_io_schema.Empty{}
+					if v.(bool) {
+						volterraSwVersionChoiceInt := &ves_io_schema_views.VolterraSoftwareType_DefaultSwVersion{}
+						volterraSwVersionChoiceInt.DefaultSwVersion = &ves_io_schema.Empty{}
+						sw.VolterraSwVersionChoice = volterraSwVersionChoiceInt
+					}
+
+				}
+
+				if v, ok := swMapStrToI["volterra_software_version"]; ok && !isIntfNil(v) && !volterraSwVersionChoiceTypeFound {
+
+					volterraSwVersionChoiceTypeFound = true
+					volterraSwVersionChoiceInt := &ves_io_schema_views.VolterraSoftwareType_VolterraSoftwareVersion{}
+
 					sw.VolterraSwVersionChoice = volterraSwVersionChoiceInt
+
+					volterraSwVersionChoiceInt.VolterraSoftwareVersion = v.(string)
+
 				}
 
 			}
-
-			if v, ok := swMapStrToI["volterra_software_version"]; ok && !isIntfNil(v) && !volterraSwVersionChoiceTypeFound {
-
-				volterraSwVersionChoiceTypeFound = true
-				volterraSwVersionChoiceInt := &ves_io_schema_views.VolterraSoftwareType_VolterraSoftwareVersion{}
-
-				sw.VolterraSwVersionChoice = volterraSwVersionChoiceInt
-
-				volterraSwVersionChoiceInt.VolterraSoftwareVersion = v.(string)
-
-			}
-
 		}
 
 	}
@@ -3861,242 +4023,252 @@ func resourceVolterraAwsTgwSiteCreate(d *schema.ResourceData, meta interface{}) 
 	//tgw_security
 	if v, ok := d.GetOk("tgw_security"); ok && !isIntfNil(v) {
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		tgwSecurity := &ves_io_schema_views_aws_tgw_site.SecurityConfigType{}
 		createSpec.TgwSecurity = tgwSecurity
 		for _, set := range sl {
-			tgwSecurityMapStrToI := set.(map[string]interface{})
+			if set != nil {
+				tgwSecurityMapStrToI := set.(map[string]interface{})
 
-			eastWestServicePolicyChoiceTypeFound := false
+				eastWestServicePolicyChoiceTypeFound := false
 
-			if v, ok := tgwSecurityMapStrToI["active_east_west_service_policies"]; ok && !isIntfNil(v) && !eastWestServicePolicyChoiceTypeFound {
+				if v, ok := tgwSecurityMapStrToI["active_east_west_service_policies"]; ok && !isIntfNil(v) && !eastWestServicePolicyChoiceTypeFound {
 
-				eastWestServicePolicyChoiceTypeFound = true
-				eastWestServicePolicyChoiceInt := &ves_io_schema_views_aws_tgw_site.SecurityConfigType_ActiveEastWestServicePolicies{}
-				eastWestServicePolicyChoiceInt.ActiveEastWestServicePolicies = &ves_io_schema_views_aws_tgw_site.ActiveServicePoliciesType{}
-				tgwSecurity.EastWestServicePolicyChoice = eastWestServicePolicyChoiceInt
-
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
-
-					if v, ok := cs["service_policies"]; ok && !isIntfNil(v) {
-
-						sl := v.([]interface{})
-						servicePoliciesInt := make([]*ves_io_schema_views.ObjectRefType, len(sl))
-						eastWestServicePolicyChoiceInt.ActiveEastWestServicePolicies.ServicePolicies = servicePoliciesInt
-						for i, ps := range sl {
-
-							spMapToStrVal := ps.(map[string]interface{})
-							servicePoliciesInt[i] = &ves_io_schema_views.ObjectRefType{}
-
-							if v, ok := spMapToStrVal["name"]; ok && !isIntfNil(v) {
-								servicePoliciesInt[i].Name = v.(string)
-							}
-
-							if v, ok := spMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-								servicePoliciesInt[i].Namespace = v.(string)
-							}
-
-							if v, ok := spMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-								servicePoliciesInt[i].Tenant = v.(string)
-							}
-
-						}
-
-					}
-
-				}
-
-			}
-
-			if v, ok := tgwSecurityMapStrToI["east_west_service_policy_allow_all"]; ok && !isIntfNil(v) && !eastWestServicePolicyChoiceTypeFound {
-
-				eastWestServicePolicyChoiceTypeFound = true
-
-				if v.(bool) {
-					eastWestServicePolicyChoiceInt := &ves_io_schema_views_aws_tgw_site.SecurityConfigType_EastWestServicePolicyAllowAll{}
-					eastWestServicePolicyChoiceInt.EastWestServicePolicyAllowAll = &ves_io_schema.Empty{}
+					eastWestServicePolicyChoiceTypeFound = true
+					eastWestServicePolicyChoiceInt := &ves_io_schema_views_aws_tgw_site.SecurityConfigType_ActiveEastWestServicePolicies{}
+					eastWestServicePolicyChoiceInt.ActiveEastWestServicePolicies = &ves_io_schema_views_aws_tgw_site.ActiveServicePoliciesType{}
 					tgwSecurity.EastWestServicePolicyChoice = eastWestServicePolicyChoiceInt
-				}
 
-			}
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
 
-			if v, ok := tgwSecurityMapStrToI["no_east_west_policy"]; ok && !isIntfNil(v) && !eastWestServicePolicyChoiceTypeFound {
+							if v, ok := cs["service_policies"]; ok && !isIntfNil(v) {
 
-				eastWestServicePolicyChoiceTypeFound = true
+								sl := v.([]interface{})
+								servicePoliciesInt := make([]*ves_io_schema_views.ObjectRefType, len(sl))
+								eastWestServicePolicyChoiceInt.ActiveEastWestServicePolicies.ServicePolicies = servicePoliciesInt
+								for i, ps := range sl {
 
-				if v.(bool) {
-					eastWestServicePolicyChoiceInt := &ves_io_schema_views_aws_tgw_site.SecurityConfigType_NoEastWestPolicy{}
-					eastWestServicePolicyChoiceInt.NoEastWestPolicy = &ves_io_schema.Empty{}
-					tgwSecurity.EastWestServicePolicyChoice = eastWestServicePolicyChoiceInt
-				}
+									spMapToStrVal := ps.(map[string]interface{})
+									servicePoliciesInt[i] = &ves_io_schema_views.ObjectRefType{}
 
-			}
+									if v, ok := spMapToStrVal["name"]; ok && !isIntfNil(v) {
+										servicePoliciesInt[i].Name = v.(string)
+									}
 
-			forwardProxyChoiceTypeFound := false
+									if v, ok := spMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+										servicePoliciesInt[i].Namespace = v.(string)
+									}
 
-			if v, ok := tgwSecurityMapStrToI["active_forward_proxy_policies"]; ok && !isIntfNil(v) && !forwardProxyChoiceTypeFound {
+									if v, ok := spMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+										servicePoliciesInt[i].Tenant = v.(string)
+									}
 
-				forwardProxyChoiceTypeFound = true
-				forwardProxyChoiceInt := &ves_io_schema_views_aws_tgw_site.SecurityConfigType_ActiveForwardProxyPolicies{}
-				forwardProxyChoiceInt.ActiveForwardProxyPolicies = &ves_io_schema_network_firewall.ActiveForwardProxyPoliciesType{}
-				tgwSecurity.ForwardProxyChoice = forwardProxyChoiceInt
+								}
 
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
-
-					if v, ok := cs["forward_proxy_policies"]; ok && !isIntfNil(v) {
-
-						sl := v.([]interface{})
-						forwardProxyPoliciesInt := make([]*ves_io_schema_views.ObjectRefType, len(sl))
-						forwardProxyChoiceInt.ActiveForwardProxyPolicies.ForwardProxyPolicies = forwardProxyPoliciesInt
-						for i, ps := range sl {
-
-							fppMapToStrVal := ps.(map[string]interface{})
-							forwardProxyPoliciesInt[i] = &ves_io_schema_views.ObjectRefType{}
-
-							if v, ok := fppMapToStrVal["name"]; ok && !isIntfNil(v) {
-								forwardProxyPoliciesInt[i].Name = v.(string)
-							}
-
-							if v, ok := fppMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-								forwardProxyPoliciesInt[i].Namespace = v.(string)
-							}
-
-							if v, ok := fppMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-								forwardProxyPoliciesInt[i].Tenant = v.(string)
 							}
 
 						}
-
 					}
 
 				}
 
-			}
+				if v, ok := tgwSecurityMapStrToI["east_west_service_policy_allow_all"]; ok && !isIntfNil(v) && !eastWestServicePolicyChoiceTypeFound {
 
-			if v, ok := tgwSecurityMapStrToI["forward_proxy_allow_all"]; ok && !isIntfNil(v) && !forwardProxyChoiceTypeFound {
+					eastWestServicePolicyChoiceTypeFound = true
 
-				forwardProxyChoiceTypeFound = true
+					if v.(bool) {
+						eastWestServicePolicyChoiceInt := &ves_io_schema_views_aws_tgw_site.SecurityConfigType_EastWestServicePolicyAllowAll{}
+						eastWestServicePolicyChoiceInt.EastWestServicePolicyAllowAll = &ves_io_schema.Empty{}
+						tgwSecurity.EastWestServicePolicyChoice = eastWestServicePolicyChoiceInt
+					}
 
-				if v.(bool) {
-					forwardProxyChoiceInt := &ves_io_schema_views_aws_tgw_site.SecurityConfigType_ForwardProxyAllowAll{}
-					forwardProxyChoiceInt.ForwardProxyAllowAll = &ves_io_schema.Empty{}
+				}
+
+				if v, ok := tgwSecurityMapStrToI["no_east_west_policy"]; ok && !isIntfNil(v) && !eastWestServicePolicyChoiceTypeFound {
+
+					eastWestServicePolicyChoiceTypeFound = true
+
+					if v.(bool) {
+						eastWestServicePolicyChoiceInt := &ves_io_schema_views_aws_tgw_site.SecurityConfigType_NoEastWestPolicy{}
+						eastWestServicePolicyChoiceInt.NoEastWestPolicy = &ves_io_schema.Empty{}
+						tgwSecurity.EastWestServicePolicyChoice = eastWestServicePolicyChoiceInt
+					}
+
+				}
+
+				forwardProxyChoiceTypeFound := false
+
+				if v, ok := tgwSecurityMapStrToI["active_forward_proxy_policies"]; ok && !isIntfNil(v) && !forwardProxyChoiceTypeFound {
+
+					forwardProxyChoiceTypeFound = true
+					forwardProxyChoiceInt := &ves_io_schema_views_aws_tgw_site.SecurityConfigType_ActiveForwardProxyPolicies{}
+					forwardProxyChoiceInt.ActiveForwardProxyPolicies = &ves_io_schema_network_firewall.ActiveForwardProxyPoliciesType{}
 					tgwSecurity.ForwardProxyChoice = forwardProxyChoiceInt
-				}
 
-			}
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
 
-			if v, ok := tgwSecurityMapStrToI["no_forward_proxy"]; ok && !isIntfNil(v) && !forwardProxyChoiceTypeFound {
+							if v, ok := cs["forward_proxy_policies"]; ok && !isIntfNil(v) {
 
-				forwardProxyChoiceTypeFound = true
+								sl := v.([]interface{})
+								forwardProxyPoliciesInt := make([]*ves_io_schema_views.ObjectRefType, len(sl))
+								forwardProxyChoiceInt.ActiveForwardProxyPolicies.ForwardProxyPolicies = forwardProxyPoliciesInt
+								for i, ps := range sl {
 
-				if v.(bool) {
-					forwardProxyChoiceInt := &ves_io_schema_views_aws_tgw_site.SecurityConfigType_NoForwardProxy{}
-					forwardProxyChoiceInt.NoForwardProxy = &ves_io_schema.Empty{}
-					tgwSecurity.ForwardProxyChoice = forwardProxyChoiceInt
-				}
+									fppMapToStrVal := ps.(map[string]interface{})
+									forwardProxyPoliciesInt[i] = &ves_io_schema_views.ObjectRefType{}
 
-			}
+									if v, ok := fppMapToStrVal["name"]; ok && !isIntfNil(v) {
+										forwardProxyPoliciesInt[i].Name = v.(string)
+									}
 
-			networkPolicyChoiceTypeFound := false
+									if v, ok := fppMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+										forwardProxyPoliciesInt[i].Namespace = v.(string)
+									}
 
-			if v, ok := tgwSecurityMapStrToI["active_enhanced_firewall_policies"]; ok && !isIntfNil(v) && !networkPolicyChoiceTypeFound {
+									if v, ok := fppMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+										forwardProxyPoliciesInt[i].Tenant = v.(string)
+									}
 
-				networkPolicyChoiceTypeFound = true
-				networkPolicyChoiceInt := &ves_io_schema_views_aws_tgw_site.SecurityConfigType_ActiveEnhancedFirewallPolicies{}
-				networkPolicyChoiceInt.ActiveEnhancedFirewallPolicies = &ves_io_schema_network_firewall.ActiveEnhancedFirewallPoliciesType{}
-				tgwSecurity.NetworkPolicyChoice = networkPolicyChoiceInt
+								}
 
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
-
-					if v, ok := cs["enhanced_firewall_policies"]; ok && !isIntfNil(v) {
-
-						sl := v.([]interface{})
-						enhancedFirewallPoliciesInt := make([]*ves_io_schema_views.ObjectRefType, len(sl))
-						networkPolicyChoiceInt.ActiveEnhancedFirewallPolicies.EnhancedFirewallPolicies = enhancedFirewallPoliciesInt
-						for i, ps := range sl {
-
-							efpMapToStrVal := ps.(map[string]interface{})
-							enhancedFirewallPoliciesInt[i] = &ves_io_schema_views.ObjectRefType{}
-
-							if v, ok := efpMapToStrVal["name"]; ok && !isIntfNil(v) {
-								enhancedFirewallPoliciesInt[i].Name = v.(string)
-							}
-
-							if v, ok := efpMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-								enhancedFirewallPoliciesInt[i].Namespace = v.(string)
-							}
-
-							if v, ok := efpMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-								enhancedFirewallPoliciesInt[i].Tenant = v.(string)
 							}
 
 						}
-
 					}
 
 				}
 
-			}
+				if v, ok := tgwSecurityMapStrToI["forward_proxy_allow_all"]; ok && !isIntfNil(v) && !forwardProxyChoiceTypeFound {
 
-			if v, ok := tgwSecurityMapStrToI["active_network_policies"]; ok && !isIntfNil(v) && !networkPolicyChoiceTypeFound {
+					forwardProxyChoiceTypeFound = true
 
-				networkPolicyChoiceTypeFound = true
-				networkPolicyChoiceInt := &ves_io_schema_views_aws_tgw_site.SecurityConfigType_ActiveNetworkPolicies{}
-				networkPolicyChoiceInt.ActiveNetworkPolicies = &ves_io_schema_network_firewall.ActiveNetworkPoliciesType{}
-				tgwSecurity.NetworkPolicyChoice = networkPolicyChoiceInt
-
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
-
-					if v, ok := cs["network_policies"]; ok && !isIntfNil(v) {
-
-						sl := v.([]interface{})
-						networkPoliciesInt := make([]*ves_io_schema_views.ObjectRefType, len(sl))
-						networkPolicyChoiceInt.ActiveNetworkPolicies.NetworkPolicies = networkPoliciesInt
-						for i, ps := range sl {
-
-							npMapToStrVal := ps.(map[string]interface{})
-							networkPoliciesInt[i] = &ves_io_schema_views.ObjectRefType{}
-
-							if v, ok := npMapToStrVal["name"]; ok && !isIntfNil(v) {
-								networkPoliciesInt[i].Name = v.(string)
-							}
-
-							if v, ok := npMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-								networkPoliciesInt[i].Namespace = v.(string)
-							}
-
-							if v, ok := npMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-								networkPoliciesInt[i].Tenant = v.(string)
-							}
-
-						}
-
+					if v.(bool) {
+						forwardProxyChoiceInt := &ves_io_schema_views_aws_tgw_site.SecurityConfigType_ForwardProxyAllowAll{}
+						forwardProxyChoiceInt.ForwardProxyAllowAll = &ves_io_schema.Empty{}
+						tgwSecurity.ForwardProxyChoice = forwardProxyChoiceInt
 					}
 
 				}
 
-			}
+				if v, ok := tgwSecurityMapStrToI["no_forward_proxy"]; ok && !isIntfNil(v) && !forwardProxyChoiceTypeFound {
 
-			if v, ok := tgwSecurityMapStrToI["no_network_policy"]; ok && !isIntfNil(v) && !networkPolicyChoiceTypeFound {
+					forwardProxyChoiceTypeFound = true
 
-				networkPolicyChoiceTypeFound = true
+					if v.(bool) {
+						forwardProxyChoiceInt := &ves_io_schema_views_aws_tgw_site.SecurityConfigType_NoForwardProxy{}
+						forwardProxyChoiceInt.NoForwardProxy = &ves_io_schema.Empty{}
+						tgwSecurity.ForwardProxyChoice = forwardProxyChoiceInt
+					}
 
-				if v.(bool) {
-					networkPolicyChoiceInt := &ves_io_schema_views_aws_tgw_site.SecurityConfigType_NoNetworkPolicy{}
-					networkPolicyChoiceInt.NoNetworkPolicy = &ves_io_schema.Empty{}
+				}
+
+				networkPolicyChoiceTypeFound := false
+
+				if v, ok := tgwSecurityMapStrToI["active_enhanced_firewall_policies"]; ok && !isIntfNil(v) && !networkPolicyChoiceTypeFound {
+
+					networkPolicyChoiceTypeFound = true
+					networkPolicyChoiceInt := &ves_io_schema_views_aws_tgw_site.SecurityConfigType_ActiveEnhancedFirewallPolicies{}
+					networkPolicyChoiceInt.ActiveEnhancedFirewallPolicies = &ves_io_schema_network_firewall.ActiveEnhancedFirewallPoliciesType{}
 					tgwSecurity.NetworkPolicyChoice = networkPolicyChoiceInt
+
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["enhanced_firewall_policies"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								enhancedFirewallPoliciesInt := make([]*ves_io_schema_views.ObjectRefType, len(sl))
+								networkPolicyChoiceInt.ActiveEnhancedFirewallPolicies.EnhancedFirewallPolicies = enhancedFirewallPoliciesInt
+								for i, ps := range sl {
+
+									efpMapToStrVal := ps.(map[string]interface{})
+									enhancedFirewallPoliciesInt[i] = &ves_io_schema_views.ObjectRefType{}
+
+									if v, ok := efpMapToStrVal["name"]; ok && !isIntfNil(v) {
+										enhancedFirewallPoliciesInt[i].Name = v.(string)
+									}
+
+									if v, ok := efpMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+										enhancedFirewallPoliciesInt[i].Namespace = v.(string)
+									}
+
+									if v, ok := efpMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+										enhancedFirewallPoliciesInt[i].Tenant = v.(string)
+									}
+
+								}
+
+							}
+
+						}
+					}
+
+				}
+
+				if v, ok := tgwSecurityMapStrToI["active_network_policies"]; ok && !isIntfNil(v) && !networkPolicyChoiceTypeFound {
+
+					networkPolicyChoiceTypeFound = true
+					networkPolicyChoiceInt := &ves_io_schema_views_aws_tgw_site.SecurityConfigType_ActiveNetworkPolicies{}
+					networkPolicyChoiceInt.ActiveNetworkPolicies = &ves_io_schema_network_firewall.ActiveNetworkPoliciesType{}
+					tgwSecurity.NetworkPolicyChoice = networkPolicyChoiceInt
+
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["network_policies"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								networkPoliciesInt := make([]*ves_io_schema_views.ObjectRefType, len(sl))
+								networkPolicyChoiceInt.ActiveNetworkPolicies.NetworkPolicies = networkPoliciesInt
+								for i, ps := range sl {
+
+									npMapToStrVal := ps.(map[string]interface{})
+									networkPoliciesInt[i] = &ves_io_schema_views.ObjectRefType{}
+
+									if v, ok := npMapToStrVal["name"]; ok && !isIntfNil(v) {
+										networkPoliciesInt[i].Name = v.(string)
+									}
+
+									if v, ok := npMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+										networkPoliciesInt[i].Namespace = v.(string)
+									}
+
+									if v, ok := npMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+										networkPoliciesInt[i].Tenant = v.(string)
+									}
+
+								}
+
+							}
+
+						}
+					}
+
+				}
+
+				if v, ok := tgwSecurityMapStrToI["no_network_policy"]; ok && !isIntfNil(v) && !networkPolicyChoiceTypeFound {
+
+					networkPolicyChoiceTypeFound = true
+
+					if v.(bool) {
+						networkPolicyChoiceInt := &ves_io_schema_views_aws_tgw_site.SecurityConfigType_NoNetworkPolicy{}
+						networkPolicyChoiceInt.NoNetworkPolicy = &ves_io_schema.Empty{}
+						tgwSecurity.NetworkPolicyChoice = networkPolicyChoiceInt
+					}
+
 				}
 
 			}
-
 		}
 
 	}
@@ -4104,1420 +4276,1512 @@ func resourceVolterraAwsTgwSiteCreate(d *schema.ResourceData, meta interface{}) 
 	//vn_config
 	if v, ok := d.GetOk("vn_config"); ok && !isIntfNil(v) {
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		vnConfig := &ves_io_schema_views_aws_tgw_site.VnConfiguration{}
 		createSpec.VnConfig = vnConfig
 		for _, set := range sl {
-			vnConfigMapStrToI := set.(map[string]interface{})
+			if set != nil {
+				vnConfigMapStrToI := set.(map[string]interface{})
 
-			if v, ok := vnConfigMapStrToI["allowed_vip_port"]; ok && !isIntfNil(v) {
+				if v, ok := vnConfigMapStrToI["allowed_vip_port"]; ok && !isIntfNil(v) {
 
-				sl := v.(*schema.Set).List()
-				allowedVipPort := &ves_io_schema_views.AllowedVIPPorts{}
-				vnConfig.AllowedVipPort = allowedVipPort
-				for _, set := range sl {
-					allowedVipPortMapStrToI := set.(map[string]interface{})
+					sl := v.([]interface{})
+					allowedVipPort := &ves_io_schema_views.AllowedVIPPorts{}
+					vnConfig.AllowedVipPort = allowedVipPort
+					for _, set := range sl {
+						if set != nil {
+							allowedVipPortMapStrToI := set.(map[string]interface{})
 
-					portChoiceTypeFound := false
+							portChoiceTypeFound := false
 
-					if v, ok := allowedVipPortMapStrToI["custom_ports"]; ok && !isIntfNil(v) && !portChoiceTypeFound {
+							if v, ok := allowedVipPortMapStrToI["custom_ports"]; ok && !isIntfNil(v) && !portChoiceTypeFound {
 
-						portChoiceTypeFound = true
-						portChoiceInt := &ves_io_schema_views.AllowedVIPPorts_CustomPorts{}
-						portChoiceInt.CustomPorts = &ves_io_schema_views.CustomPorts{}
-						allowedVipPort.PortChoice = portChoiceInt
+								portChoiceTypeFound = true
+								portChoiceInt := &ves_io_schema_views.AllowedVIPPorts_CustomPorts{}
+								portChoiceInt.CustomPorts = &ves_io_schema_views.CustomPorts{}
+								allowedVipPort.PortChoice = portChoiceInt
 
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["port_ranges"]; ok && !isIntfNil(v) {
-
-								portChoiceInt.CustomPorts.PortRanges = v.(string)
-
-							}
-
-						}
-
-					}
-
-					if v, ok := allowedVipPortMapStrToI["disable_allowed_vip_port"]; ok && !isIntfNil(v) && !portChoiceTypeFound {
-
-						portChoiceTypeFound = true
-
-						if v.(bool) {
-							portChoiceInt := &ves_io_schema_views.AllowedVIPPorts_DisableAllowedVipPort{}
-							portChoiceInt.DisableAllowedVipPort = &ves_io_schema.Empty{}
-							allowedVipPort.PortChoice = portChoiceInt
-						}
-
-					}
-
-					if v, ok := allowedVipPortMapStrToI["use_http_https_port"]; ok && !isIntfNil(v) && !portChoiceTypeFound {
-
-						portChoiceTypeFound = true
-
-						if v.(bool) {
-							portChoiceInt := &ves_io_schema_views.AllowedVIPPorts_UseHttpHttpsPort{}
-							portChoiceInt.UseHttpHttpsPort = &ves_io_schema.Empty{}
-							allowedVipPort.PortChoice = portChoiceInt
-						}
-
-					}
-
-					if v, ok := allowedVipPortMapStrToI["use_http_port"]; ok && !isIntfNil(v) && !portChoiceTypeFound {
-
-						portChoiceTypeFound = true
-
-						if v.(bool) {
-							portChoiceInt := &ves_io_schema_views.AllowedVIPPorts_UseHttpPort{}
-							portChoiceInt.UseHttpPort = &ves_io_schema.Empty{}
-							allowedVipPort.PortChoice = portChoiceInt
-						}
-
-					}
-
-					if v, ok := allowedVipPortMapStrToI["use_https_port"]; ok && !isIntfNil(v) && !portChoiceTypeFound {
-
-						portChoiceTypeFound = true
-
-						if v.(bool) {
-							portChoiceInt := &ves_io_schema_views.AllowedVIPPorts_UseHttpsPort{}
-							portChoiceInt.UseHttpsPort = &ves_io_schema.Empty{}
-							allowedVipPort.PortChoice = portChoiceInt
-						}
-
-					}
-
-				}
-
-			}
-
-			if v, ok := vnConfigMapStrToI["allowed_vip_port_sli"]; ok && !isIntfNil(v) {
-
-				sl := v.(*schema.Set).List()
-				allowedVipPortSli := &ves_io_schema_views.AllowedVIPPorts{}
-				vnConfig.AllowedVipPortSli = allowedVipPortSli
-				for _, set := range sl {
-					allowedVipPortSliMapStrToI := set.(map[string]interface{})
-
-					portChoiceTypeFound := false
-
-					if v, ok := allowedVipPortSliMapStrToI["custom_ports"]; ok && !isIntfNil(v) && !portChoiceTypeFound {
-
-						portChoiceTypeFound = true
-						portChoiceInt := &ves_io_schema_views.AllowedVIPPorts_CustomPorts{}
-						portChoiceInt.CustomPorts = &ves_io_schema_views.CustomPorts{}
-						allowedVipPortSli.PortChoice = portChoiceInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["port_ranges"]; ok && !isIntfNil(v) {
-
-								portChoiceInt.CustomPorts.PortRanges = v.(string)
-
-							}
-
-						}
-
-					}
-
-					if v, ok := allowedVipPortSliMapStrToI["disable_allowed_vip_port"]; ok && !isIntfNil(v) && !portChoiceTypeFound {
-
-						portChoiceTypeFound = true
-
-						if v.(bool) {
-							portChoiceInt := &ves_io_schema_views.AllowedVIPPorts_DisableAllowedVipPort{}
-							portChoiceInt.DisableAllowedVipPort = &ves_io_schema.Empty{}
-							allowedVipPortSli.PortChoice = portChoiceInt
-						}
-
-					}
-
-					if v, ok := allowedVipPortSliMapStrToI["use_http_https_port"]; ok && !isIntfNil(v) && !portChoiceTypeFound {
-
-						portChoiceTypeFound = true
-
-						if v.(bool) {
-							portChoiceInt := &ves_io_schema_views.AllowedVIPPorts_UseHttpHttpsPort{}
-							portChoiceInt.UseHttpHttpsPort = &ves_io_schema.Empty{}
-							allowedVipPortSli.PortChoice = portChoiceInt
-						}
-
-					}
-
-					if v, ok := allowedVipPortSliMapStrToI["use_http_port"]; ok && !isIntfNil(v) && !portChoiceTypeFound {
-
-						portChoiceTypeFound = true
-
-						if v.(bool) {
-							portChoiceInt := &ves_io_schema_views.AllowedVIPPorts_UseHttpPort{}
-							portChoiceInt.UseHttpPort = &ves_io_schema.Empty{}
-							allowedVipPortSli.PortChoice = portChoiceInt
-						}
-
-					}
-
-					if v, ok := allowedVipPortSliMapStrToI["use_https_port"]; ok && !isIntfNil(v) && !portChoiceTypeFound {
-
-						portChoiceTypeFound = true
-
-						if v.(bool) {
-							portChoiceInt := &ves_io_schema_views.AllowedVIPPorts_UseHttpsPort{}
-							portChoiceInt.UseHttpsPort = &ves_io_schema.Empty{}
-							allowedVipPortSli.PortChoice = portChoiceInt
-						}
-
-					}
-
-				}
-
-			}
-
-			dcClusterGroupChoiceTypeFound := false
-
-			if v, ok := vnConfigMapStrToI["dc_cluster_group_inside_vn"]; ok && !isIntfNil(v) && !dcClusterGroupChoiceTypeFound {
-
-				dcClusterGroupChoiceTypeFound = true
-				dcClusterGroupChoiceInt := &ves_io_schema_views_aws_tgw_site.VnConfiguration_DcClusterGroupInsideVn{}
-				dcClusterGroupChoiceInt.DcClusterGroupInsideVn = &ves_io_schema_views.ObjectRefType{}
-				vnConfig.DcClusterGroupChoice = dcClusterGroupChoiceInt
-
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
-
-					if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-						dcClusterGroupChoiceInt.DcClusterGroupInsideVn.Name = v.(string)
-
-					}
-
-					if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
-
-						dcClusterGroupChoiceInt.DcClusterGroupInsideVn.Namespace = v.(string)
-
-					}
-
-					if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
-
-						dcClusterGroupChoiceInt.DcClusterGroupInsideVn.Tenant = v.(string)
-
-					}
-
-				}
-
-			}
-
-			if v, ok := vnConfigMapStrToI["dc_cluster_group_outside_vn"]; ok && !isIntfNil(v) && !dcClusterGroupChoiceTypeFound {
-
-				dcClusterGroupChoiceTypeFound = true
-				dcClusterGroupChoiceInt := &ves_io_schema_views_aws_tgw_site.VnConfiguration_DcClusterGroupOutsideVn{}
-				dcClusterGroupChoiceInt.DcClusterGroupOutsideVn = &ves_io_schema_views.ObjectRefType{}
-				vnConfig.DcClusterGroupChoice = dcClusterGroupChoiceInt
-
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
-
-					if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-						dcClusterGroupChoiceInt.DcClusterGroupOutsideVn.Name = v.(string)
-
-					}
-
-					if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
-
-						dcClusterGroupChoiceInt.DcClusterGroupOutsideVn.Namespace = v.(string)
-
-					}
-
-					if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
-
-						dcClusterGroupChoiceInt.DcClusterGroupOutsideVn.Tenant = v.(string)
-
-					}
-
-				}
-
-			}
-
-			if v, ok := vnConfigMapStrToI["no_dc_cluster_group"]; ok && !isIntfNil(v) && !dcClusterGroupChoiceTypeFound {
-
-				dcClusterGroupChoiceTypeFound = true
-
-				if v.(bool) {
-					dcClusterGroupChoiceInt := &ves_io_schema_views_aws_tgw_site.VnConfiguration_NoDcClusterGroup{}
-					dcClusterGroupChoiceInt.NoDcClusterGroup = &ves_io_schema.Empty{}
-					vnConfig.DcClusterGroupChoice = dcClusterGroupChoiceInt
-				}
-
-			}
-
-			globalNetworkChoiceTypeFound := false
-
-			if v, ok := vnConfigMapStrToI["global_network_list"]; ok && !isIntfNil(v) && !globalNetworkChoiceTypeFound {
-
-				globalNetworkChoiceTypeFound = true
-				globalNetworkChoiceInt := &ves_io_schema_views_aws_tgw_site.VnConfiguration_GlobalNetworkList{}
-				globalNetworkChoiceInt.GlobalNetworkList = &ves_io_schema_views.GlobalNetworkConnectionListType{}
-				vnConfig.GlobalNetworkChoice = globalNetworkChoiceInt
-
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
-
-					if v, ok := cs["global_network_connections"]; ok && !isIntfNil(v) {
-
-						sl := v.([]interface{})
-						globalNetworkConnections := make([]*ves_io_schema_views.GlobalNetworkConnectionType, len(sl))
-						globalNetworkChoiceInt.GlobalNetworkList.GlobalNetworkConnections = globalNetworkConnections
-						for i, set := range sl {
-							globalNetworkConnections[i] = &ves_io_schema_views.GlobalNetworkConnectionType{}
-							globalNetworkConnectionsMapStrToI := set.(map[string]interface{})
-
-							connectionChoiceTypeFound := false
-
-							if v, ok := globalNetworkConnectionsMapStrToI["sli_to_global_dr"]; ok && !isIntfNil(v) && !connectionChoiceTypeFound {
-
-								connectionChoiceTypeFound = true
-								connectionChoiceInt := &ves_io_schema_views.GlobalNetworkConnectionType_SliToGlobalDr{}
-								connectionChoiceInt.SliToGlobalDr = &ves_io_schema_views.GlobalConnectorType{}
-								globalNetworkConnections[i].ConnectionChoice = connectionChoiceInt
-
-								sl := v.(*schema.Set).List()
+								sl := v.([]interface{})
 								for _, set := range sl {
-									cs := set.(map[string]interface{})
+									if set != nil {
+										cs := set.(map[string]interface{})
 
-									if v, ok := cs["global_vn"]; ok && !isIntfNil(v) {
+										if v, ok := cs["port_ranges"]; ok && !isIntfNil(v) {
 
-										sl := v.(*schema.Set).List()
-										globalVn := &ves_io_schema_views.ObjectRefType{}
-										connectionChoiceInt.SliToGlobalDr.GlobalVn = globalVn
-										for _, set := range sl {
-											globalVnMapStrToI := set.(map[string]interface{})
-
-											if w, ok := globalVnMapStrToI["name"]; ok && !isIntfNil(w) {
-												globalVn.Name = w.(string)
-											}
-
-											if w, ok := globalVnMapStrToI["namespace"]; ok && !isIntfNil(w) {
-												globalVn.Namespace = w.(string)
-											}
-
-											if w, ok := globalVnMapStrToI["tenant"]; ok && !isIntfNil(w) {
-												globalVn.Tenant = w.(string)
-											}
+											portChoiceInt.CustomPorts.PortRanges = v.(string)
 
 										}
 
 									}
-
 								}
 
 							}
 
-							if v, ok := globalNetworkConnectionsMapStrToI["slo_to_global_dr"]; ok && !isIntfNil(v) && !connectionChoiceTypeFound {
+							if v, ok := allowedVipPortMapStrToI["disable_allowed_vip_port"]; ok && !isIntfNil(v) && !portChoiceTypeFound {
 
-								connectionChoiceTypeFound = true
-								connectionChoiceInt := &ves_io_schema_views.GlobalNetworkConnectionType_SloToGlobalDr{}
-								connectionChoiceInt.SloToGlobalDr = &ves_io_schema_views.GlobalConnectorType{}
-								globalNetworkConnections[i].ConnectionChoice = connectionChoiceInt
-
-								sl := v.(*schema.Set).List()
-								for _, set := range sl {
-									cs := set.(map[string]interface{})
-
-									if v, ok := cs["global_vn"]; ok && !isIntfNil(v) {
-
-										sl := v.(*schema.Set).List()
-										globalVn := &ves_io_schema_views.ObjectRefType{}
-										connectionChoiceInt.SloToGlobalDr.GlobalVn = globalVn
-										for _, set := range sl {
-											globalVnMapStrToI := set.(map[string]interface{})
-
-											if w, ok := globalVnMapStrToI["name"]; ok && !isIntfNil(w) {
-												globalVn.Name = w.(string)
-											}
-
-											if w, ok := globalVnMapStrToI["namespace"]; ok && !isIntfNil(w) {
-												globalVn.Namespace = w.(string)
-											}
-
-											if w, ok := globalVnMapStrToI["tenant"]; ok && !isIntfNil(w) {
-												globalVn.Tenant = w.(string)
-											}
-
-										}
-
-									}
-
-								}
-
-							}
-
-							forwardProxyChoiceTypeFound := false
-
-							if v, ok := globalNetworkConnectionsMapStrToI["disable_forward_proxy"]; ok && !isIntfNil(v) && !forwardProxyChoiceTypeFound {
-
-								forwardProxyChoiceTypeFound = true
+								portChoiceTypeFound = true
 
 								if v.(bool) {
-									forwardProxyChoiceInt := &ves_io_schema_views.GlobalNetworkConnectionType_DisableForwardProxy{}
-									forwardProxyChoiceInt.DisableForwardProxy = &ves_io_schema.Empty{}
-									globalNetworkConnections[i].ForwardProxyChoice = forwardProxyChoiceInt
+									portChoiceInt := &ves_io_schema_views.AllowedVIPPorts_DisableAllowedVipPort{}
+									portChoiceInt.DisableAllowedVipPort = &ves_io_schema.Empty{}
+									allowedVipPort.PortChoice = portChoiceInt
 								}
 
 							}
 
-							if v, ok := globalNetworkConnectionsMapStrToI["enable_forward_proxy"]; ok && !isIntfNil(v) && !forwardProxyChoiceTypeFound {
+							if v, ok := allowedVipPortMapStrToI["use_http_https_port"]; ok && !isIntfNil(v) && !portChoiceTypeFound {
 
-								forwardProxyChoiceTypeFound = true
-								forwardProxyChoiceInt := &ves_io_schema_views.GlobalNetworkConnectionType_EnableForwardProxy{}
-								forwardProxyChoiceInt.EnableForwardProxy = &ves_io_schema.ForwardProxyConfigType{}
-								globalNetworkConnections[i].ForwardProxyChoice = forwardProxyChoiceInt
+								portChoiceTypeFound = true
 
-								sl := v.(*schema.Set).List()
+								if v.(bool) {
+									portChoiceInt := &ves_io_schema_views.AllowedVIPPorts_UseHttpHttpsPort{}
+									portChoiceInt.UseHttpHttpsPort = &ves_io_schema.Empty{}
+									allowedVipPort.PortChoice = portChoiceInt
+								}
+
+							}
+
+							if v, ok := allowedVipPortMapStrToI["use_http_port"]; ok && !isIntfNil(v) && !portChoiceTypeFound {
+
+								portChoiceTypeFound = true
+
+								if v.(bool) {
+									portChoiceInt := &ves_io_schema_views.AllowedVIPPorts_UseHttpPort{}
+									portChoiceInt.UseHttpPort = &ves_io_schema.Empty{}
+									allowedVipPort.PortChoice = portChoiceInt
+								}
+
+							}
+
+							if v, ok := allowedVipPortMapStrToI["use_https_port"]; ok && !isIntfNil(v) && !portChoiceTypeFound {
+
+								portChoiceTypeFound = true
+
+								if v.(bool) {
+									portChoiceInt := &ves_io_schema_views.AllowedVIPPorts_UseHttpsPort{}
+									portChoiceInt.UseHttpsPort = &ves_io_schema.Empty{}
+									allowedVipPort.PortChoice = portChoiceInt
+								}
+
+							}
+
+						}
+					}
+
+				}
+
+				if v, ok := vnConfigMapStrToI["allowed_vip_port_sli"]; ok && !isIntfNil(v) {
+
+					sl := v.([]interface{})
+					allowedVipPortSli := &ves_io_schema_views.AllowedVIPPorts{}
+					vnConfig.AllowedVipPortSli = allowedVipPortSli
+					for _, set := range sl {
+						if set != nil {
+							allowedVipPortSliMapStrToI := set.(map[string]interface{})
+
+							portChoiceTypeFound := false
+
+							if v, ok := allowedVipPortSliMapStrToI["custom_ports"]; ok && !isIntfNil(v) && !portChoiceTypeFound {
+
+								portChoiceTypeFound = true
+								portChoiceInt := &ves_io_schema_views.AllowedVIPPorts_CustomPorts{}
+								portChoiceInt.CustomPorts = &ves_io_schema_views.CustomPorts{}
+								allowedVipPortSli.PortChoice = portChoiceInt
+
+								sl := v.([]interface{})
 								for _, set := range sl {
-									cs := set.(map[string]interface{})
+									if set != nil {
+										cs := set.(map[string]interface{})
 
-									if v, ok := cs["connection_timeout"]; ok && !isIntfNil(v) {
+										if v, ok := cs["port_ranges"]; ok && !isIntfNil(v) {
 
-										forwardProxyChoiceInt.EnableForwardProxy.ConnectionTimeout = uint32(v.(int))
+											portChoiceInt.CustomPorts.PortRanges = v.(string)
 
-									}
-
-									if v, ok := cs["max_connect_attempts"]; ok && !isIntfNil(v) {
-
-										forwardProxyChoiceInt.EnableForwardProxy.MaxConnectAttempts = uint32(v.(int))
-
-									}
-
-									tlsInterceptionChoiceTypeFound := false
-
-									if v, ok := cs["no_interception"]; ok && !isIntfNil(v) && !tlsInterceptionChoiceTypeFound {
-
-										tlsInterceptionChoiceTypeFound = true
-
-										if v.(bool) {
-											tlsInterceptionChoiceInt := &ves_io_schema.ForwardProxyConfigType_NoInterception{}
-											tlsInterceptionChoiceInt.NoInterception = &ves_io_schema.Empty{}
-											forwardProxyChoiceInt.EnableForwardProxy.TlsInterceptionChoice = tlsInterceptionChoiceInt
 										}
 
 									}
+								}
 
-									if v, ok := cs["tls_intercept"]; ok && !isIntfNil(v) && !tlsInterceptionChoiceTypeFound {
+							}
 
-										tlsInterceptionChoiceTypeFound = true
-										tlsInterceptionChoiceInt := &ves_io_schema.ForwardProxyConfigType_TlsIntercept{}
-										tlsInterceptionChoiceInt.TlsIntercept = &ves_io_schema.TlsInterceptionType{}
-										forwardProxyChoiceInt.EnableForwardProxy.TlsInterceptionChoice = tlsInterceptionChoiceInt
+							if v, ok := allowedVipPortSliMapStrToI["disable_allowed_vip_port"]; ok && !isIntfNil(v) && !portChoiceTypeFound {
 
-										sl := v.(*schema.Set).List()
-										for _, set := range sl {
-											cs := set.(map[string]interface{})
+								portChoiceTypeFound = true
 
-											interceptionPolicyChoiceTypeFound := false
+								if v.(bool) {
+									portChoiceInt := &ves_io_schema_views.AllowedVIPPorts_DisableAllowedVipPort{}
+									portChoiceInt.DisableAllowedVipPort = &ves_io_schema.Empty{}
+									allowedVipPortSli.PortChoice = portChoiceInt
+								}
 
-											if v, ok := cs["enable_for_all_domains"]; ok && !isIntfNil(v) && !interceptionPolicyChoiceTypeFound {
+							}
 
-												interceptionPolicyChoiceTypeFound = true
+							if v, ok := allowedVipPortSliMapStrToI["use_http_https_port"]; ok && !isIntfNil(v) && !portChoiceTypeFound {
 
-												if v.(bool) {
-													interceptionPolicyChoiceInt := &ves_io_schema.TlsInterceptionType_EnableForAllDomains{}
-													interceptionPolicyChoiceInt.EnableForAllDomains = &ves_io_schema.Empty{}
-													tlsInterceptionChoiceInt.TlsIntercept.InterceptionPolicyChoice = interceptionPolicyChoiceInt
-												}
+								portChoiceTypeFound = true
 
-											}
+								if v.(bool) {
+									portChoiceInt := &ves_io_schema_views.AllowedVIPPorts_UseHttpHttpsPort{}
+									portChoiceInt.UseHttpHttpsPort = &ves_io_schema.Empty{}
+									allowedVipPortSli.PortChoice = portChoiceInt
+								}
 
-											if v, ok := cs["policy"]; ok && !isIntfNil(v) && !interceptionPolicyChoiceTypeFound {
+							}
 
-												interceptionPolicyChoiceTypeFound = true
-												interceptionPolicyChoiceInt := &ves_io_schema.TlsInterceptionType_Policy{}
-												interceptionPolicyChoiceInt.Policy = &ves_io_schema.TlsInterceptionPolicy{}
-												tlsInterceptionChoiceInt.TlsIntercept.InterceptionPolicyChoice = interceptionPolicyChoiceInt
+							if v, ok := allowedVipPortSliMapStrToI["use_http_port"]; ok && !isIntfNil(v) && !portChoiceTypeFound {
 
-												sl := v.(*schema.Set).List()
-												for _, set := range sl {
+								portChoiceTypeFound = true
+
+								if v.(bool) {
+									portChoiceInt := &ves_io_schema_views.AllowedVIPPorts_UseHttpPort{}
+									portChoiceInt.UseHttpPort = &ves_io_schema.Empty{}
+									allowedVipPortSli.PortChoice = portChoiceInt
+								}
+
+							}
+
+							if v, ok := allowedVipPortSliMapStrToI["use_https_port"]; ok && !isIntfNil(v) && !portChoiceTypeFound {
+
+								portChoiceTypeFound = true
+
+								if v.(bool) {
+									portChoiceInt := &ves_io_schema_views.AllowedVIPPorts_UseHttpsPort{}
+									portChoiceInt.UseHttpsPort = &ves_io_schema.Empty{}
+									allowedVipPortSli.PortChoice = portChoiceInt
+								}
+
+							}
+
+						}
+					}
+
+				}
+
+				dcClusterGroupChoiceTypeFound := false
+
+				if v, ok := vnConfigMapStrToI["dc_cluster_group_inside_vn"]; ok && !isIntfNil(v) && !dcClusterGroupChoiceTypeFound {
+
+					dcClusterGroupChoiceTypeFound = true
+					dcClusterGroupChoiceInt := &ves_io_schema_views_aws_tgw_site.VnConfiguration_DcClusterGroupInsideVn{}
+					dcClusterGroupChoiceInt.DcClusterGroupInsideVn = &ves_io_schema_views.ObjectRefType{}
+					vnConfig.DcClusterGroupChoice = dcClusterGroupChoiceInt
+
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+								dcClusterGroupChoiceInt.DcClusterGroupInsideVn.Name = v.(string)
+
+							}
+
+							if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+								dcClusterGroupChoiceInt.DcClusterGroupInsideVn.Namespace = v.(string)
+
+							}
+
+							if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+								dcClusterGroupChoiceInt.DcClusterGroupInsideVn.Tenant = v.(string)
+
+							}
+
+						}
+					}
+
+				}
+
+				if v, ok := vnConfigMapStrToI["dc_cluster_group_outside_vn"]; ok && !isIntfNil(v) && !dcClusterGroupChoiceTypeFound {
+
+					dcClusterGroupChoiceTypeFound = true
+					dcClusterGroupChoiceInt := &ves_io_schema_views_aws_tgw_site.VnConfiguration_DcClusterGroupOutsideVn{}
+					dcClusterGroupChoiceInt.DcClusterGroupOutsideVn = &ves_io_schema_views.ObjectRefType{}
+					vnConfig.DcClusterGroupChoice = dcClusterGroupChoiceInt
+
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+								dcClusterGroupChoiceInt.DcClusterGroupOutsideVn.Name = v.(string)
+
+							}
+
+							if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+								dcClusterGroupChoiceInt.DcClusterGroupOutsideVn.Namespace = v.(string)
+
+							}
+
+							if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+								dcClusterGroupChoiceInt.DcClusterGroupOutsideVn.Tenant = v.(string)
+
+							}
+
+						}
+					}
+
+				}
+
+				if v, ok := vnConfigMapStrToI["no_dc_cluster_group"]; ok && !isIntfNil(v) && !dcClusterGroupChoiceTypeFound {
+
+					dcClusterGroupChoiceTypeFound = true
+
+					if v.(bool) {
+						dcClusterGroupChoiceInt := &ves_io_schema_views_aws_tgw_site.VnConfiguration_NoDcClusterGroup{}
+						dcClusterGroupChoiceInt.NoDcClusterGroup = &ves_io_schema.Empty{}
+						vnConfig.DcClusterGroupChoice = dcClusterGroupChoiceInt
+					}
+
+				}
+
+				globalNetworkChoiceTypeFound := false
+
+				if v, ok := vnConfigMapStrToI["global_network_list"]; ok && !isIntfNil(v) && !globalNetworkChoiceTypeFound {
+
+					globalNetworkChoiceTypeFound = true
+					globalNetworkChoiceInt := &ves_io_schema_views_aws_tgw_site.VnConfiguration_GlobalNetworkList{}
+					globalNetworkChoiceInt.GlobalNetworkList = &ves_io_schema_views.GlobalNetworkConnectionListType{}
+					vnConfig.GlobalNetworkChoice = globalNetworkChoiceInt
+
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["global_network_connections"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								globalNetworkConnections := make([]*ves_io_schema_views.GlobalNetworkConnectionType, len(sl))
+								globalNetworkChoiceInt.GlobalNetworkList.GlobalNetworkConnections = globalNetworkConnections
+								for i, set := range sl {
+									if set != nil {
+										globalNetworkConnections[i] = &ves_io_schema_views.GlobalNetworkConnectionType{}
+										globalNetworkConnectionsMapStrToI := set.(map[string]interface{})
+
+										connectionChoiceTypeFound := false
+
+										if v, ok := globalNetworkConnectionsMapStrToI["sli_to_global_dr"]; ok && !isIntfNil(v) && !connectionChoiceTypeFound {
+
+											connectionChoiceTypeFound = true
+											connectionChoiceInt := &ves_io_schema_views.GlobalNetworkConnectionType_SliToGlobalDr{}
+											connectionChoiceInt.SliToGlobalDr = &ves_io_schema_views.GlobalConnectorType{}
+											globalNetworkConnections[i].ConnectionChoice = connectionChoiceInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
 													cs := set.(map[string]interface{})
 
-													if v, ok := cs["interception_rules"]; ok && !isIntfNil(v) {
+													if v, ok := cs["global_vn"]; ok && !isIntfNil(v) {
 
 														sl := v.([]interface{})
-														interceptionRules := make([]*ves_io_schema.TlsInterceptionRule, len(sl))
-														interceptionPolicyChoiceInt.Policy.InterceptionRules = interceptionRules
-														for i, set := range sl {
-															interceptionRules[i] = &ves_io_schema.TlsInterceptionRule{}
-															interceptionRulesMapStrToI := set.(map[string]interface{})
+														globalVn := &ves_io_schema_views.ObjectRefType{}
+														connectionChoiceInt.SliToGlobalDr.GlobalVn = globalVn
+														for _, set := range sl {
+															if set != nil {
+																globalVnMapStrToI := set.(map[string]interface{})
 
-															if v, ok := interceptionRulesMapStrToI["domain_match"]; ok && !isIntfNil(v) {
+																if w, ok := globalVnMapStrToI["name"]; ok && !isIntfNil(w) {
+																	globalVn.Name = w.(string)
+																}
 
-																sl := v.(*schema.Set).List()
-																domainMatch := &ves_io_schema.DomainType{}
-																interceptionRules[i].DomainMatch = domainMatch
-																for _, set := range sl {
-																	domainMatchMapStrToI := set.(map[string]interface{})
+																if w, ok := globalVnMapStrToI["namespace"]; ok && !isIntfNil(w) {
+																	globalVn.Namespace = w.(string)
+																}
 
-																	domainChoiceTypeFound := false
-
-																	if v, ok := domainMatchMapStrToI["exact_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
-
-																		domainChoiceTypeFound = true
-																		domainChoiceInt := &ves_io_schema.DomainType_ExactValue{}
-
-																		domainMatch.DomainChoice = domainChoiceInt
-
-																		domainChoiceInt.ExactValue = v.(string)
-
-																	}
-
-																	if v, ok := domainMatchMapStrToI["regex_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
-
-																		domainChoiceTypeFound = true
-																		domainChoiceInt := &ves_io_schema.DomainType_RegexValue{}
-
-																		domainMatch.DomainChoice = domainChoiceInt
-
-																		domainChoiceInt.RegexValue = v.(string)
-
-																	}
-
-																	if v, ok := domainMatchMapStrToI["suffix_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
-
-																		domainChoiceTypeFound = true
-																		domainChoiceInt := &ves_io_schema.DomainType_SuffixValue{}
-
-																		domainMatch.DomainChoice = domainChoiceInt
-
-																		domainChoiceInt.SuffixValue = v.(string)
-
-																	}
-
+																if w, ok := globalVnMapStrToI["tenant"]; ok && !isIntfNil(w) {
+																	globalVn.Tenant = w.(string)
 																}
 
 															}
-
-															enableDisableChoiceTypeFound := false
-
-															if v, ok := interceptionRulesMapStrToI["disable_interception"]; ok && !isIntfNil(v) && !enableDisableChoiceTypeFound {
-
-																enableDisableChoiceTypeFound = true
-
-																if v.(bool) {
-																	enableDisableChoiceInt := &ves_io_schema.TlsInterceptionRule_DisableInterception{}
-																	enableDisableChoiceInt.DisableInterception = &ves_io_schema.Empty{}
-																	interceptionRules[i].EnableDisableChoice = enableDisableChoiceInt
-																}
-
-															}
-
-															if v, ok := interceptionRulesMapStrToI["enable_interception"]; ok && !isIntfNil(v) && !enableDisableChoiceTypeFound {
-
-																enableDisableChoiceTypeFound = true
-
-																if v.(bool) {
-																	enableDisableChoiceInt := &ves_io_schema.TlsInterceptionRule_EnableInterception{}
-																	enableDisableChoiceInt.EnableInterception = &ves_io_schema.Empty{}
-																	interceptionRules[i].EnableDisableChoice = enableDisableChoiceInt
-																}
-
-															}
-
 														}
 
 													}
 
 												}
-
 											}
 
-											signingCertChoiceTypeFound := false
+										}
 
-											if v, ok := cs["custom_certificate"]; ok && !isIntfNil(v) && !signingCertChoiceTypeFound {
+										if v, ok := globalNetworkConnectionsMapStrToI["slo_to_global_dr"]; ok && !isIntfNil(v) && !connectionChoiceTypeFound {
 
-												signingCertChoiceTypeFound = true
-												signingCertChoiceInt := &ves_io_schema.TlsInterceptionType_CustomCertificate{}
-												signingCertChoiceInt.CustomCertificate = &ves_io_schema.TlsCertificateType{}
-												tlsInterceptionChoiceInt.TlsIntercept.SigningCertChoice = signingCertChoiceInt
+											connectionChoiceTypeFound = true
+											connectionChoiceInt := &ves_io_schema_views.GlobalNetworkConnectionType_SloToGlobalDr{}
+											connectionChoiceInt.SloToGlobalDr = &ves_io_schema_views.GlobalConnectorType{}
+											globalNetworkConnections[i].ConnectionChoice = connectionChoiceInt
 
-												sl := v.(*schema.Set).List()
-												for _, set := range sl {
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
 													cs := set.(map[string]interface{})
 
-													if v, ok := cs["certificate_url"]; ok && !isIntfNil(v) {
+													if v, ok := cs["global_vn"]; ok && !isIntfNil(v) {
 
-														signingCertChoiceInt.CustomCertificate.CertificateUrl = v.(string)
-
-													}
-
-													if v, ok := cs["description"]; ok && !isIntfNil(v) {
-
-														signingCertChoiceInt.CustomCertificate.Description = v.(string)
-
-													}
-
-													ocspStaplingChoiceTypeFound := false
-
-													if v, ok := cs["custom_hash_algorithms"]; ok && !isIntfNil(v) && !ocspStaplingChoiceTypeFound {
-
-														ocspStaplingChoiceTypeFound = true
-														ocspStaplingChoiceInt := &ves_io_schema.TlsCertificateType_CustomHashAlgorithms{}
-														ocspStaplingChoiceInt.CustomHashAlgorithms = &ves_io_schema.HashAlgorithms{}
-														signingCertChoiceInt.CustomCertificate.OcspStaplingChoice = ocspStaplingChoiceInt
-
-														sl := v.(*schema.Set).List()
+														sl := v.([]interface{})
+														globalVn := &ves_io_schema_views.ObjectRefType{}
+														connectionChoiceInt.SloToGlobalDr.GlobalVn = globalVn
 														for _, set := range sl {
-															cs := set.(map[string]interface{})
+															if set != nil {
+																globalVnMapStrToI := set.(map[string]interface{})
 
-															if v, ok := cs["hash_algorithms"]; ok && !isIntfNil(v) {
-
-																hash_algorithmsList := []ves_io_schema.HashAlgorithm{}
-																for _, j := range v.([]interface{}) {
-																	hash_algorithmsList = append(hash_algorithmsList, ves_io_schema.HashAlgorithm(ves_io_schema.HashAlgorithm_value[j.(string)]))
+																if w, ok := globalVnMapStrToI["name"]; ok && !isIntfNil(w) {
+																	globalVn.Name = w.(string)
 																}
-																ocspStaplingChoiceInt.CustomHashAlgorithms.HashAlgorithms = hash_algorithmsList
 
-															}
+																if w, ok := globalVnMapStrToI["namespace"]; ok && !isIntfNil(w) {
+																	globalVn.Namespace = w.(string)
+																}
 
-														}
-
-													}
-
-													if _, ok := cs["disable_ocsp_stapling"]; ok && !ocspStaplingChoiceTypeFound {
-
-														ocspStaplingChoiceTypeFound = true
-														ocspStaplingChoiceInt := &ves_io_schema.TlsCertificateType_DisableOcspStapling{}
-														ocspStaplingChoiceInt.DisableOcspStapling = &ves_io_schema.Empty{}
-														signingCertChoiceInt.CustomCertificate.OcspStaplingChoice = ocspStaplingChoiceInt
-
-													}
-
-													if _, ok := cs["use_system_defaults"]; ok && !ocspStaplingChoiceTypeFound {
-
-														ocspStaplingChoiceTypeFound = true
-														ocspStaplingChoiceInt := &ves_io_schema.TlsCertificateType_UseSystemDefaults{}
-														ocspStaplingChoiceInt.UseSystemDefaults = &ves_io_schema.Empty{}
-														signingCertChoiceInt.CustomCertificate.OcspStaplingChoice = ocspStaplingChoiceInt
-
-													}
-
-													if v, ok := cs["private_key"]; ok && !isIntfNil(v) {
-
-														sl := v.(*schema.Set).List()
-														privateKey := &ves_io_schema.SecretType{}
-														signingCertChoiceInt.CustomCertificate.PrivateKey = privateKey
-														for _, set := range sl {
-															privateKeyMapStrToI := set.(map[string]interface{})
-
-															if v, ok := privateKeyMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
-
-																sl := v.(*schema.Set).List()
-																blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
-																privateKey.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
-																for _, set := range sl {
-																	blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
-
-																	if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
-																		blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
-																	}
-
-																	if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
-																		blindfoldSecretInfoInternal.Location = w.(string)
-																	}
-
-																	if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
-																		blindfoldSecretInfoInternal.StoreProvider = w.(string)
-																	}
-
+																if w, ok := globalVnMapStrToI["tenant"]; ok && !isIntfNil(w) {
+																	globalVn.Tenant = w.(string)
 																}
 
 															}
-
-															if v, ok := privateKeyMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
-
-																privateKey.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
-
-															}
-
-															secretInfoOneofTypeFound := false
-
-															if v, ok := privateKeyMapStrToI["blindfold_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
-
-																secretInfoOneofTypeFound = true
-																secretInfoOneofInt := &ves_io_schema.SecretType_BlindfoldSecretInfo{}
-																secretInfoOneofInt.BlindfoldSecretInfo = &ves_io_schema.BlindfoldSecretInfoType{}
-																privateKey.SecretInfoOneof = secretInfoOneofInt
-
-																sl := v.(*schema.Set).List()
-																for _, set := range sl {
-																	cs := set.(map[string]interface{})
-
-																	if v, ok := cs["decryption_provider"]; ok && !isIntfNil(v) {
-
-																		secretInfoOneofInt.BlindfoldSecretInfo.DecryptionProvider = v.(string)
-
-																	}
-
-																	if v, ok := cs["location"]; ok && !isIntfNil(v) {
-
-																		secretInfoOneofInt.BlindfoldSecretInfo.Location = v.(string)
-
-																	}
-
-																	if v, ok := cs["store_provider"]; ok && !isIntfNil(v) {
-
-																		secretInfoOneofInt.BlindfoldSecretInfo.StoreProvider = v.(string)
-
-																	}
-
-																}
-
-															}
-
-															if v, ok := privateKeyMapStrToI["clear_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
-
-																secretInfoOneofTypeFound = true
-																secretInfoOneofInt := &ves_io_schema.SecretType_ClearSecretInfo{}
-																secretInfoOneofInt.ClearSecretInfo = &ves_io_schema.ClearSecretInfoType{}
-																privateKey.SecretInfoOneof = secretInfoOneofInt
-
-																sl := v.(*schema.Set).List()
-																for _, set := range sl {
-																	cs := set.(map[string]interface{})
-
-																	if v, ok := cs["provider"]; ok && !isIntfNil(v) {
-
-																		secretInfoOneofInt.ClearSecretInfo.Provider = v.(string)
-
-																	}
-
-																	if v, ok := cs["url"]; ok && !isIntfNil(v) {
-
-																		secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
-
-																	}
-
-																}
-
-															}
-
-															if v, ok := privateKeyMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
-
-																secretInfoOneofTypeFound = true
-																secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
-																secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
-																privateKey.SecretInfoOneof = secretInfoOneofInt
-
-																sl := v.(*schema.Set).List()
-																for _, set := range sl {
-																	cs := set.(map[string]interface{})
-
-																	if v, ok := cs["key"]; ok && !isIntfNil(v) {
-
-																		secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
-
-																	}
-
-																	if v, ok := cs["location"]; ok && !isIntfNil(v) {
-
-																		secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
-
-																	}
-
-																	if v, ok := cs["provider"]; ok && !isIntfNil(v) {
-
-																		secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
-
-																	}
-
-																	if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
-
-																		secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
-
-																	}
-
-																	if v, ok := cs["version"]; ok && !isIntfNil(v) {
-
-																		secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
-
-																	}
-
-																}
-
-															}
-
-															if v, ok := privateKeyMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
-
-																secretInfoOneofTypeFound = true
-																secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
-																secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
-																privateKey.SecretInfoOneof = secretInfoOneofInt
-
-																sl := v.(*schema.Set).List()
-																for _, set := range sl {
-																	cs := set.(map[string]interface{})
-
-																	if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-																		secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
-
-																	}
-
-																}
-
-															}
-
 														}
 
 													}
 
 												}
-
 											}
 
-											if v, ok := cs["volterra_certificate"]; ok && !isIntfNil(v) && !signingCertChoiceTypeFound {
+										}
 
-												signingCertChoiceTypeFound = true
+										forwardProxyChoiceTypeFound := false
 
-												if v.(bool) {
-													signingCertChoiceInt := &ves_io_schema.TlsInterceptionType_VolterraCertificate{}
-													signingCertChoiceInt.VolterraCertificate = &ves_io_schema.Empty{}
-													tlsInterceptionChoiceInt.TlsIntercept.SigningCertChoice = signingCertChoiceInt
+										if v, ok := globalNetworkConnectionsMapStrToI["disable_forward_proxy"]; ok && !isIntfNil(v) && !forwardProxyChoiceTypeFound {
+
+											forwardProxyChoiceTypeFound = true
+
+											if v.(bool) {
+												forwardProxyChoiceInt := &ves_io_schema_views.GlobalNetworkConnectionType_DisableForwardProxy{}
+												forwardProxyChoiceInt.DisableForwardProxy = &ves_io_schema.Empty{}
+												globalNetworkConnections[i].ForwardProxyChoice = forwardProxyChoiceInt
+											}
+
+										}
+
+										if v, ok := globalNetworkConnectionsMapStrToI["enable_forward_proxy"]; ok && !isIntfNil(v) && !forwardProxyChoiceTypeFound {
+
+											forwardProxyChoiceTypeFound = true
+											forwardProxyChoiceInt := &ves_io_schema_views.GlobalNetworkConnectionType_EnableForwardProxy{}
+											forwardProxyChoiceInt.EnableForwardProxy = &ves_io_schema.ForwardProxyConfigType{}
+											globalNetworkConnections[i].ForwardProxyChoice = forwardProxyChoiceInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["connection_timeout"]; ok && !isIntfNil(v) {
+
+														forwardProxyChoiceInt.EnableForwardProxy.ConnectionTimeout = uint32(v.(int))
+
+													}
+
+													if v, ok := cs["max_connect_attempts"]; ok && !isIntfNil(v) {
+
+														forwardProxyChoiceInt.EnableForwardProxy.MaxConnectAttempts = uint32(v.(int))
+
+													}
+
+													tlsInterceptionChoiceTypeFound := false
+
+													if v, ok := cs["no_interception"]; ok && !isIntfNil(v) && !tlsInterceptionChoiceTypeFound {
+
+														tlsInterceptionChoiceTypeFound = true
+
+														if v.(bool) {
+															tlsInterceptionChoiceInt := &ves_io_schema.ForwardProxyConfigType_NoInterception{}
+															tlsInterceptionChoiceInt.NoInterception = &ves_io_schema.Empty{}
+															forwardProxyChoiceInt.EnableForwardProxy.TlsInterceptionChoice = tlsInterceptionChoiceInt
+														}
+
+													}
+
+													if v, ok := cs["tls_intercept"]; ok && !isIntfNil(v) && !tlsInterceptionChoiceTypeFound {
+
+														tlsInterceptionChoiceTypeFound = true
+														tlsInterceptionChoiceInt := &ves_io_schema.ForwardProxyConfigType_TlsIntercept{}
+														tlsInterceptionChoiceInt.TlsIntercept = &ves_io_schema.TlsInterceptionType{}
+														forwardProxyChoiceInt.EnableForwardProxy.TlsInterceptionChoice = tlsInterceptionChoiceInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																interceptionPolicyChoiceTypeFound := false
+
+																if v, ok := cs["enable_for_all_domains"]; ok && !isIntfNil(v) && !interceptionPolicyChoiceTypeFound {
+
+																	interceptionPolicyChoiceTypeFound = true
+
+																	if v.(bool) {
+																		interceptionPolicyChoiceInt := &ves_io_schema.TlsInterceptionType_EnableForAllDomains{}
+																		interceptionPolicyChoiceInt.EnableForAllDomains = &ves_io_schema.Empty{}
+																		tlsInterceptionChoiceInt.TlsIntercept.InterceptionPolicyChoice = interceptionPolicyChoiceInt
+																	}
+
+																}
+
+																if v, ok := cs["policy"]; ok && !isIntfNil(v) && !interceptionPolicyChoiceTypeFound {
+
+																	interceptionPolicyChoiceTypeFound = true
+																	interceptionPolicyChoiceInt := &ves_io_schema.TlsInterceptionType_Policy{}
+																	interceptionPolicyChoiceInt.Policy = &ves_io_schema.TlsInterceptionPolicy{}
+																	tlsInterceptionChoiceInt.TlsIntercept.InterceptionPolicyChoice = interceptionPolicyChoiceInt
+
+																	sl := v.([]interface{})
+																	for _, set := range sl {
+																		if set != nil {
+																			cs := set.(map[string]interface{})
+
+																			if v, ok := cs["interception_rules"]; ok && !isIntfNil(v) {
+
+																				sl := v.([]interface{})
+																				interceptionRules := make([]*ves_io_schema.TlsInterceptionRule, len(sl))
+																				interceptionPolicyChoiceInt.Policy.InterceptionRules = interceptionRules
+																				for i, set := range sl {
+																					if set != nil {
+																						interceptionRules[i] = &ves_io_schema.TlsInterceptionRule{}
+																						interceptionRulesMapStrToI := set.(map[string]interface{})
+
+																						if v, ok := interceptionRulesMapStrToI["domain_match"]; ok && !isIntfNil(v) {
+
+																							sl := v.([]interface{})
+																							domainMatch := &ves_io_schema.DomainType{}
+																							interceptionRules[i].DomainMatch = domainMatch
+																							for _, set := range sl {
+																								if set != nil {
+																									domainMatchMapStrToI := set.(map[string]interface{})
+
+																									domainChoiceTypeFound := false
+
+																									if v, ok := domainMatchMapStrToI["exact_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
+
+																										domainChoiceTypeFound = true
+																										domainChoiceInt := &ves_io_schema.DomainType_ExactValue{}
+
+																										domainMatch.DomainChoice = domainChoiceInt
+
+																										domainChoiceInt.ExactValue = v.(string)
+
+																									}
+
+																									if v, ok := domainMatchMapStrToI["regex_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
+
+																										domainChoiceTypeFound = true
+																										domainChoiceInt := &ves_io_schema.DomainType_RegexValue{}
+
+																										domainMatch.DomainChoice = domainChoiceInt
+
+																										domainChoiceInt.RegexValue = v.(string)
+
+																									}
+
+																									if v, ok := domainMatchMapStrToI["suffix_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
+
+																										domainChoiceTypeFound = true
+																										domainChoiceInt := &ves_io_schema.DomainType_SuffixValue{}
+
+																										domainMatch.DomainChoice = domainChoiceInt
+
+																										domainChoiceInt.SuffixValue = v.(string)
+
+																									}
+
+																								}
+																							}
+
+																						}
+
+																						enableDisableChoiceTypeFound := false
+
+																						if v, ok := interceptionRulesMapStrToI["disable_interception"]; ok && !isIntfNil(v) && !enableDisableChoiceTypeFound {
+
+																							enableDisableChoiceTypeFound = true
+
+																							if v.(bool) {
+																								enableDisableChoiceInt := &ves_io_schema.TlsInterceptionRule_DisableInterception{}
+																								enableDisableChoiceInt.DisableInterception = &ves_io_schema.Empty{}
+																								interceptionRules[i].EnableDisableChoice = enableDisableChoiceInt
+																							}
+
+																						}
+
+																						if v, ok := interceptionRulesMapStrToI["enable_interception"]; ok && !isIntfNil(v) && !enableDisableChoiceTypeFound {
+
+																							enableDisableChoiceTypeFound = true
+
+																							if v.(bool) {
+																								enableDisableChoiceInt := &ves_io_schema.TlsInterceptionRule_EnableInterception{}
+																								enableDisableChoiceInt.EnableInterception = &ves_io_schema.Empty{}
+																								interceptionRules[i].EnableDisableChoice = enableDisableChoiceInt
+																							}
+
+																						}
+
+																					}
+																				}
+
+																			}
+
+																		}
+																	}
+
+																}
+
+																signingCertChoiceTypeFound := false
+
+																if v, ok := cs["custom_certificate"]; ok && !isIntfNil(v) && !signingCertChoiceTypeFound {
+
+																	signingCertChoiceTypeFound = true
+																	signingCertChoiceInt := &ves_io_schema.TlsInterceptionType_CustomCertificate{}
+																	signingCertChoiceInt.CustomCertificate = &ves_io_schema.TlsCertificateType{}
+																	tlsInterceptionChoiceInt.TlsIntercept.SigningCertChoice = signingCertChoiceInt
+
+																	sl := v.([]interface{})
+																	for _, set := range sl {
+																		if set != nil {
+																			cs := set.(map[string]interface{})
+
+																			if v, ok := cs["certificate_url"]; ok && !isIntfNil(v) {
+
+																				signingCertChoiceInt.CustomCertificate.CertificateUrl = v.(string)
+
+																			}
+
+																			if v, ok := cs["description"]; ok && !isIntfNil(v) {
+
+																				signingCertChoiceInt.CustomCertificate.Description = v.(string)
+
+																			}
+
+																			ocspStaplingChoiceTypeFound := false
+
+																			if v, ok := cs["custom_hash_algorithms"]; ok && !isIntfNil(v) && !ocspStaplingChoiceTypeFound {
+
+																				ocspStaplingChoiceTypeFound = true
+																				ocspStaplingChoiceInt := &ves_io_schema.TlsCertificateType_CustomHashAlgorithms{}
+																				ocspStaplingChoiceInt.CustomHashAlgorithms = &ves_io_schema.HashAlgorithms{}
+																				signingCertChoiceInt.CustomCertificate.OcspStaplingChoice = ocspStaplingChoiceInt
+
+																				sl := v.([]interface{})
+																				for _, set := range sl {
+																					if set != nil {
+																						cs := set.(map[string]interface{})
+
+																						if v, ok := cs["hash_algorithms"]; ok && !isIntfNil(v) {
+
+																							hash_algorithmsList := []ves_io_schema.HashAlgorithm{}
+																							for _, j := range v.([]interface{}) {
+																								hash_algorithmsList = append(hash_algorithmsList, ves_io_schema.HashAlgorithm(ves_io_schema.HashAlgorithm_value[j.(string)]))
+																							}
+																							ocspStaplingChoiceInt.CustomHashAlgorithms.HashAlgorithms = hash_algorithmsList
+
+																						}
+
+																					}
+																				}
+
+																			}
+
+																			if _, ok := cs["disable_ocsp_stapling"]; ok && !ocspStaplingChoiceTypeFound {
+
+																				ocspStaplingChoiceTypeFound = true
+																				ocspStaplingChoiceInt := &ves_io_schema.TlsCertificateType_DisableOcspStapling{}
+																				ocspStaplingChoiceInt.DisableOcspStapling = &ves_io_schema.Empty{}
+																				signingCertChoiceInt.CustomCertificate.OcspStaplingChoice = ocspStaplingChoiceInt
+
+																			}
+
+																			if _, ok := cs["use_system_defaults"]; ok && !ocspStaplingChoiceTypeFound {
+
+																				ocspStaplingChoiceTypeFound = true
+																				ocspStaplingChoiceInt := &ves_io_schema.TlsCertificateType_UseSystemDefaults{}
+																				ocspStaplingChoiceInt.UseSystemDefaults = &ves_io_schema.Empty{}
+																				signingCertChoiceInt.CustomCertificate.OcspStaplingChoice = ocspStaplingChoiceInt
+
+																			}
+
+																			if v, ok := cs["private_key"]; ok && !isIntfNil(v) {
+
+																				sl := v.([]interface{})
+																				privateKey := &ves_io_schema.SecretType{}
+																				signingCertChoiceInt.CustomCertificate.PrivateKey = privateKey
+																				for _, set := range sl {
+																					if set != nil {
+																						privateKeyMapStrToI := set.(map[string]interface{})
+
+																						if v, ok := privateKeyMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
+
+																							sl := v.([]interface{})
+																							blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
+																							privateKey.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
+																							for _, set := range sl {
+																								if set != nil {
+																									blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
+
+																									if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
+																										blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
+																									}
+
+																									if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
+																										blindfoldSecretInfoInternal.Location = w.(string)
+																									}
+
+																									if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
+																										blindfoldSecretInfoInternal.StoreProvider = w.(string)
+																									}
+
+																								}
+																							}
+
+																						}
+
+																						if v, ok := privateKeyMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
+
+																							privateKey.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+																						}
+
+																						secretInfoOneofTypeFound := false
+
+																						if v, ok := privateKeyMapStrToI["blindfold_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																							secretInfoOneofTypeFound = true
+																							secretInfoOneofInt := &ves_io_schema.SecretType_BlindfoldSecretInfo{}
+																							secretInfoOneofInt.BlindfoldSecretInfo = &ves_io_schema.BlindfoldSecretInfoType{}
+																							privateKey.SecretInfoOneof = secretInfoOneofInt
+
+																							sl := v.([]interface{})
+																							for _, set := range sl {
+																								if set != nil {
+																									cs := set.(map[string]interface{})
+
+																									if v, ok := cs["decryption_provider"]; ok && !isIntfNil(v) {
+
+																										secretInfoOneofInt.BlindfoldSecretInfo.DecryptionProvider = v.(string)
+
+																									}
+
+																									if v, ok := cs["location"]; ok && !isIntfNil(v) {
+
+																										secretInfoOneofInt.BlindfoldSecretInfo.Location = v.(string)
+
+																									}
+
+																									if v, ok := cs["store_provider"]; ok && !isIntfNil(v) {
+
+																										secretInfoOneofInt.BlindfoldSecretInfo.StoreProvider = v.(string)
+
+																									}
+
+																								}
+																							}
+
+																						}
+
+																						if v, ok := privateKeyMapStrToI["clear_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																							secretInfoOneofTypeFound = true
+																							secretInfoOneofInt := &ves_io_schema.SecretType_ClearSecretInfo{}
+																							secretInfoOneofInt.ClearSecretInfo = &ves_io_schema.ClearSecretInfoType{}
+																							privateKey.SecretInfoOneof = secretInfoOneofInt
+
+																							sl := v.([]interface{})
+																							for _, set := range sl {
+																								if set != nil {
+																									cs := set.(map[string]interface{})
+
+																									if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+
+																										secretInfoOneofInt.ClearSecretInfo.Provider = v.(string)
+
+																									}
+
+																									if v, ok := cs["url"]; ok && !isIntfNil(v) {
+
+																										secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+
+																									}
+
+																								}
+																							}
+
+																						}
+
+																						if v, ok := privateKeyMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																							secretInfoOneofTypeFound = true
+																							secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
+																							secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
+																							privateKey.SecretInfoOneof = secretInfoOneofInt
+
+																							sl := v.([]interface{})
+																							for _, set := range sl {
+																								if set != nil {
+																									cs := set.(map[string]interface{})
+
+																									if v, ok := cs["key"]; ok && !isIntfNil(v) {
+
+																										secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
+																									}
+
+																									if v, ok := cs["location"]; ok && !isIntfNil(v) {
+
+																										secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
+																									}
+
+																									if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+
+																										secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
+																									}
+
+																									if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
+
+																										secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+																									}
+
+																									if v, ok := cs["version"]; ok && !isIntfNil(v) {
+
+																										secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
+																									}
+
+																								}
+																							}
+
+																						}
+
+																						if v, ok := privateKeyMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																							secretInfoOneofTypeFound = true
+																							secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
+																							secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
+																							privateKey.SecretInfoOneof = secretInfoOneofInt
+
+																							sl := v.([]interface{})
+																							for _, set := range sl {
+																								if set != nil {
+																									cs := set.(map[string]interface{})
+
+																									if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+																										secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
+
+																									}
+
+																								}
+																							}
+
+																						}
+
+																					}
+																				}
+
+																			}
+
+																		}
+																	}
+
+																}
+
+																if v, ok := cs["volterra_certificate"]; ok && !isIntfNil(v) && !signingCertChoiceTypeFound {
+
+																	signingCertChoiceTypeFound = true
+
+																	if v.(bool) {
+																		signingCertChoiceInt := &ves_io_schema.TlsInterceptionType_VolterraCertificate{}
+																		signingCertChoiceInt.VolterraCertificate = &ves_io_schema.Empty{}
+																		tlsInterceptionChoiceInt.TlsIntercept.SigningCertChoice = signingCertChoiceInt
+																	}
+
+																}
+
+																trustedCaChoiceTypeFound := false
+
+																if v, ok := cs["trusted_ca_url"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
+
+																	trustedCaChoiceTypeFound = true
+																	trustedCaChoiceInt := &ves_io_schema.TlsInterceptionType_TrustedCaUrl{}
+
+																	tlsInterceptionChoiceInt.TlsIntercept.TrustedCaChoice = trustedCaChoiceInt
+
+																	trustedCaChoiceInt.TrustedCaUrl = v.(string)
+
+																}
+
+																if v, ok := cs["volterra_trusted_ca"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
+
+																	trustedCaChoiceTypeFound = true
+
+																	if v.(bool) {
+																		trustedCaChoiceInt := &ves_io_schema.TlsInterceptionType_VolterraTrustedCa{}
+																		trustedCaChoiceInt.VolterraTrustedCa = &ves_io_schema.Empty{}
+																		tlsInterceptionChoiceInt.TlsIntercept.TrustedCaChoice = trustedCaChoiceInt
+																	}
+
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := cs["white_listed_ports"]; ok && !isIntfNil(v) {
+
+														ls := make([]uint32, len(v.([]interface{})))
+														for i, v := range v.([]interface{}) {
+															ls[i] = uint32(v.(int))
+														}
+														forwardProxyChoiceInt.EnableForwardProxy.WhiteListedPorts = ls
+
+													}
+
+													if v, ok := cs["white_listed_prefixes"]; ok && !isIntfNil(v) {
+
+														ls := make([]string, len(v.([]interface{})))
+														for i, v := range v.([]interface{}) {
+															ls[i] = v.(string)
+														}
+														forwardProxyChoiceInt.EnableForwardProxy.WhiteListedPrefixes = ls
+
+													}
+
 												}
-
-											}
-
-											trustedCaChoiceTypeFound := false
-
-											if v, ok := cs["trusted_ca_url"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
-
-												trustedCaChoiceTypeFound = true
-												trustedCaChoiceInt := &ves_io_schema.TlsInterceptionType_TrustedCaUrl{}
-
-												tlsInterceptionChoiceInt.TlsIntercept.TrustedCaChoice = trustedCaChoiceInt
-
-												trustedCaChoiceInt.TrustedCaUrl = v.(string)
-
-											}
-
-											if v, ok := cs["volterra_trusted_ca"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
-
-												trustedCaChoiceTypeFound = true
-
-												if v.(bool) {
-													trustedCaChoiceInt := &ves_io_schema.TlsInterceptionType_VolterraTrustedCa{}
-													trustedCaChoiceInt.VolterraTrustedCa = &ves_io_schema.Empty{}
-													tlsInterceptionChoiceInt.TlsIntercept.TrustedCaChoice = trustedCaChoiceInt
-												}
-
 											}
 
 										}
 
 									}
-
-									if v, ok := cs["white_listed_ports"]; ok && !isIntfNil(v) {
-
-										ls := make([]uint32, len(v.([]interface{})))
-										for i, v := range v.([]interface{}) {
-											ls[i] = uint32(v.(int))
-										}
-										forwardProxyChoiceInt.EnableForwardProxy.WhiteListedPorts = ls
-
-									}
-
-									if v, ok := cs["white_listed_prefixes"]; ok && !isIntfNil(v) {
-
-										ls := make([]string, len(v.([]interface{})))
-										for i, v := range v.([]interface{}) {
-											ls[i] = v.(string)
-										}
-										forwardProxyChoiceInt.EnableForwardProxy.WhiteListedPrefixes = ls
-
-									}
-
 								}
 
 							}
 
 						}
-
 					}
 
 				}
 
-			}
+				if v, ok := vnConfigMapStrToI["no_global_network"]; ok && !isIntfNil(v) && !globalNetworkChoiceTypeFound {
 
-			if v, ok := vnConfigMapStrToI["no_global_network"]; ok && !isIntfNil(v) && !globalNetworkChoiceTypeFound {
+					globalNetworkChoiceTypeFound = true
 
-				globalNetworkChoiceTypeFound = true
-
-				if v.(bool) {
-					globalNetworkChoiceInt := &ves_io_schema_views_aws_tgw_site.VnConfiguration_NoGlobalNetwork{}
-					globalNetworkChoiceInt.NoGlobalNetwork = &ves_io_schema.Empty{}
-					vnConfig.GlobalNetworkChoice = globalNetworkChoiceInt
-				}
-
-			}
-
-			insideStaticRouteChoiceTypeFound := false
-
-			if v, ok := vnConfigMapStrToI["inside_static_routes"]; ok && !isIntfNil(v) && !insideStaticRouteChoiceTypeFound {
-
-				insideStaticRouteChoiceTypeFound = true
-				insideStaticRouteChoiceInt := &ves_io_schema_views_aws_tgw_site.VnConfiguration_InsideStaticRoutes{}
-				insideStaticRouteChoiceInt.InsideStaticRoutes = &ves_io_schema_views.SiteStaticRoutesListType{}
-				vnConfig.InsideStaticRouteChoice = insideStaticRouteChoiceInt
-
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
-
-					if v, ok := cs["static_route_list"]; ok && !isIntfNil(v) {
-
-						sl := v.([]interface{})
-						staticRouteList := make([]*ves_io_schema_views.SiteStaticRoutesType, len(sl))
-						insideStaticRouteChoiceInt.InsideStaticRoutes.StaticRouteList = staticRouteList
-						for i, set := range sl {
-							staticRouteList[i] = &ves_io_schema_views.SiteStaticRoutesType{}
-							staticRouteListMapStrToI := set.(map[string]interface{})
-
-							configModeChoiceTypeFound := false
-
-							if v, ok := staticRouteListMapStrToI["custom_static_route"]; ok && !isIntfNil(v) && !configModeChoiceTypeFound {
-
-								configModeChoiceTypeFound = true
-								configModeChoiceInt := &ves_io_schema_views.SiteStaticRoutesType_CustomStaticRoute{}
-								configModeChoiceInt.CustomStaticRoute = &ves_io_schema.StaticRouteType{}
-								staticRouteList[i].ConfigModeChoice = configModeChoiceInt
-
-								sl := v.(*schema.Set).List()
-								for _, set := range sl {
-									cs := set.(map[string]interface{})
-
-									if v, ok := cs["attrs"]; ok && !isIntfNil(v) {
-
-										attrsList := []ves_io_schema.RouteAttrType{}
-										for _, j := range v.([]interface{}) {
-											attrsList = append(attrsList, ves_io_schema.RouteAttrType(ves_io_schema.RouteAttrType_value[j.(string)]))
-										}
-										configModeChoiceInt.CustomStaticRoute.Attrs = attrsList
-
-									}
-
-									if v, ok := cs["labels"]; ok && !isIntfNil(v) {
-
-										ms := map[string]string{}
-										for k, v := range v.(map[string]interface{}) {
-											ms[k] = v.(string)
-										}
-										configModeChoiceInt.CustomStaticRoute.Labels = ms
-									}
-
-									if v, ok := cs["nexthop"]; ok && !isIntfNil(v) {
-
-										sl := v.(*schema.Set).List()
-										nexthop := &ves_io_schema.NextHopType{}
-										configModeChoiceInt.CustomStaticRoute.Nexthop = nexthop
-										for _, set := range sl {
-											nexthopMapStrToI := set.(map[string]interface{})
-
-											if v, ok := nexthopMapStrToI["interface"]; ok && !isIntfNil(v) {
-
-												sl := v.([]interface{})
-												intfInt := make([]*ves_io_schema.ObjectRefType, len(sl))
-												nexthop.Interface = intfInt
-												for i, ps := range sl {
-
-													iMapToStrVal := ps.(map[string]interface{})
-													intfInt[i] = &ves_io_schema.ObjectRefType{}
-
-													intfInt[i].Kind = "network_interface"
-
-													if v, ok := iMapToStrVal["name"]; ok && !isIntfNil(v) {
-														intfInt[i].Name = v.(string)
-													}
-
-													if v, ok := iMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-														intfInt[i].Namespace = v.(string)
-													}
-
-													if v, ok := iMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-														intfInt[i].Tenant = v.(string)
-													}
-
-													if v, ok := iMapToStrVal["uid"]; ok && !isIntfNil(v) {
-														intfInt[i].Uid = v.(string)
-													}
-
-												}
-
-											}
-
-											if v, ok := nexthopMapStrToI["nexthop_address"]; ok && !isIntfNil(v) {
-
-												sl := v.(*schema.Set).List()
-												nexthopAddress := &ves_io_schema.IpAddressType{}
-												nexthop.NexthopAddress = nexthopAddress
-												for _, set := range sl {
-													nexthopAddressMapStrToI := set.(map[string]interface{})
-
-													verTypeFound := false
-
-													if v, ok := nexthopAddressMapStrToI["ipv4"]; ok && !isIntfNil(v) && !verTypeFound {
-
-														verTypeFound = true
-														verInt := &ves_io_schema.IpAddressType_Ipv4{}
-														verInt.Ipv4 = &ves_io_schema.Ipv4AddressType{}
-														nexthopAddress.Ver = verInt
-
-														sl := v.(*schema.Set).List()
-														for _, set := range sl {
-															cs := set.(map[string]interface{})
-
-															if v, ok := cs["addr"]; ok && !isIntfNil(v) {
-
-																verInt.Ipv4.Addr = v.(string)
-
-															}
-
-														}
-
-													}
-
-													if v, ok := nexthopAddressMapStrToI["ipv6"]; ok && !isIntfNil(v) && !verTypeFound {
-
-														verTypeFound = true
-														verInt := &ves_io_schema.IpAddressType_Ipv6{}
-														verInt.Ipv6 = &ves_io_schema.Ipv6AddressType{}
-														nexthopAddress.Ver = verInt
-
-														sl := v.(*schema.Set).List()
-														for _, set := range sl {
-															cs := set.(map[string]interface{})
-
-															if v, ok := cs["addr"]; ok && !isIntfNil(v) {
-
-																verInt.Ipv6.Addr = v.(string)
-
-															}
-
-														}
-
-													}
-
-												}
-
-											}
-
-											if v, ok := nexthopMapStrToI["type"]; ok && !isIntfNil(v) {
-
-												nexthop.Type = ves_io_schema.NextHopTypes(ves_io_schema.NextHopTypes_value[v.(string)])
-
-											}
-
-										}
-
-									}
-
-									if v, ok := cs["subnets"]; ok && !isIntfNil(v) {
-
-										sl := v.([]interface{})
-										subnets := make([]*ves_io_schema.IpSubnetType, len(sl))
-										configModeChoiceInt.CustomStaticRoute.Subnets = subnets
-										for i, set := range sl {
-											subnets[i] = &ves_io_schema.IpSubnetType{}
-											subnetsMapStrToI := set.(map[string]interface{})
-
-											verTypeFound := false
-
-											if v, ok := subnetsMapStrToI["ipv4"]; ok && !isIntfNil(v) && !verTypeFound {
-
-												verTypeFound = true
-												verInt := &ves_io_schema.IpSubnetType_Ipv4{}
-												verInt.Ipv4 = &ves_io_schema.Ipv4SubnetType{}
-												subnets[i].Ver = verInt
-
-												sl := v.(*schema.Set).List()
-												for _, set := range sl {
-													cs := set.(map[string]interface{})
-
-													if v, ok := cs["plen"]; ok && !isIntfNil(v) {
-
-														verInt.Ipv4.Plen = uint32(v.(int))
-
-													}
-
-													if v, ok := cs["prefix"]; ok && !isIntfNil(v) {
-
-														verInt.Ipv4.Prefix = v.(string)
-
-													}
-
-												}
-
-											}
-
-											if v, ok := subnetsMapStrToI["ipv6"]; ok && !isIntfNil(v) && !verTypeFound {
-
-												verTypeFound = true
-												verInt := &ves_io_schema.IpSubnetType_Ipv6{}
-												verInt.Ipv6 = &ves_io_schema.Ipv6SubnetType{}
-												subnets[i].Ver = verInt
-
-												sl := v.(*schema.Set).List()
-												for _, set := range sl {
-													cs := set.(map[string]interface{})
-
-													if v, ok := cs["plen"]; ok && !isIntfNil(v) {
-
-														verInt.Ipv6.Plen = uint32(v.(int))
-
-													}
-
-													if v, ok := cs["prefix"]; ok && !isIntfNil(v) {
-
-														verInt.Ipv6.Prefix = v.(string)
-
-													}
-
-												}
-
-											}
-
-										}
-
-									}
-
-								}
-
-							}
-
-							if v, ok := staticRouteListMapStrToI["simple_static_route"]; ok && !isIntfNil(v) && !configModeChoiceTypeFound {
-
-								configModeChoiceTypeFound = true
-								configModeChoiceInt := &ves_io_schema_views.SiteStaticRoutesType_SimpleStaticRoute{}
-
-								staticRouteList[i].ConfigModeChoice = configModeChoiceInt
-
-								configModeChoiceInt.SimpleStaticRoute = v.(string)
-
-							}
-
-						}
-
+					if v.(bool) {
+						globalNetworkChoiceInt := &ves_io_schema_views_aws_tgw_site.VnConfiguration_NoGlobalNetwork{}
+						globalNetworkChoiceInt.NoGlobalNetwork = &ves_io_schema.Empty{}
+						vnConfig.GlobalNetworkChoice = globalNetworkChoiceInt
 					}
 
 				}
 
-			}
+				insideStaticRouteChoiceTypeFound := false
 
-			if v, ok := vnConfigMapStrToI["no_inside_static_routes"]; ok && !isIntfNil(v) && !insideStaticRouteChoiceTypeFound {
+				if v, ok := vnConfigMapStrToI["inside_static_routes"]; ok && !isIntfNil(v) && !insideStaticRouteChoiceTypeFound {
 
-				insideStaticRouteChoiceTypeFound = true
-
-				if v.(bool) {
-					insideStaticRouteChoiceInt := &ves_io_schema_views_aws_tgw_site.VnConfiguration_NoInsideStaticRoutes{}
-					insideStaticRouteChoiceInt.NoInsideStaticRoutes = &ves_io_schema.Empty{}
+					insideStaticRouteChoiceTypeFound = true
+					insideStaticRouteChoiceInt := &ves_io_schema_views_aws_tgw_site.VnConfiguration_InsideStaticRoutes{}
+					insideStaticRouteChoiceInt.InsideStaticRoutes = &ves_io_schema_views.SiteStaticRoutesListType{}
 					vnConfig.InsideStaticRouteChoice = insideStaticRouteChoiceInt
-				}
 
-			}
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
 
-			outsideStaticRouteChoiceTypeFound := false
+							if v, ok := cs["static_route_list"]; ok && !isIntfNil(v) {
 
-			if v, ok := vnConfigMapStrToI["no_outside_static_routes"]; ok && !isIntfNil(v) && !outsideStaticRouteChoiceTypeFound {
+								sl := v.([]interface{})
+								staticRouteList := make([]*ves_io_schema_views.SiteStaticRoutesType, len(sl))
+								insideStaticRouteChoiceInt.InsideStaticRoutes.StaticRouteList = staticRouteList
+								for i, set := range sl {
+									if set != nil {
+										staticRouteList[i] = &ves_io_schema_views.SiteStaticRoutesType{}
+										staticRouteListMapStrToI := set.(map[string]interface{})
 
-				outsideStaticRouteChoiceTypeFound = true
+										configModeChoiceTypeFound := false
 
-				if v.(bool) {
-					outsideStaticRouteChoiceInt := &ves_io_schema_views_aws_tgw_site.VnConfiguration_NoOutsideStaticRoutes{}
-					outsideStaticRouteChoiceInt.NoOutsideStaticRoutes = &ves_io_schema.Empty{}
-					vnConfig.OutsideStaticRouteChoice = outsideStaticRouteChoiceInt
-				}
+										if v, ok := staticRouteListMapStrToI["custom_static_route"]; ok && !isIntfNil(v) && !configModeChoiceTypeFound {
 
-			}
+											configModeChoiceTypeFound = true
+											configModeChoiceInt := &ves_io_schema_views.SiteStaticRoutesType_CustomStaticRoute{}
+											configModeChoiceInt.CustomStaticRoute = &ves_io_schema.StaticRouteType{}
+											staticRouteList[i].ConfigModeChoice = configModeChoiceInt
 
-			if v, ok := vnConfigMapStrToI["outside_static_routes"]; ok && !isIntfNil(v) && !outsideStaticRouteChoiceTypeFound {
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
 
-				outsideStaticRouteChoiceTypeFound = true
-				outsideStaticRouteChoiceInt := &ves_io_schema_views_aws_tgw_site.VnConfiguration_OutsideStaticRoutes{}
-				outsideStaticRouteChoiceInt.OutsideStaticRoutes = &ves_io_schema_views.SiteStaticRoutesListType{}
-				vnConfig.OutsideStaticRouteChoice = outsideStaticRouteChoiceInt
+													if v, ok := cs["attrs"]; ok && !isIntfNil(v) {
 
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
+														attrsList := []ves_io_schema.RouteAttrType{}
+														for _, j := range v.([]interface{}) {
+															attrsList = append(attrsList, ves_io_schema.RouteAttrType(ves_io_schema.RouteAttrType_value[j.(string)]))
+														}
+														configModeChoiceInt.CustomStaticRoute.Attrs = attrsList
 
-					if v, ok := cs["static_route_list"]; ok && !isIntfNil(v) {
-
-						sl := v.([]interface{})
-						staticRouteList := make([]*ves_io_schema_views.SiteStaticRoutesType, len(sl))
-						outsideStaticRouteChoiceInt.OutsideStaticRoutes.StaticRouteList = staticRouteList
-						for i, set := range sl {
-							staticRouteList[i] = &ves_io_schema_views.SiteStaticRoutesType{}
-							staticRouteListMapStrToI := set.(map[string]interface{})
-
-							configModeChoiceTypeFound := false
-
-							if v, ok := staticRouteListMapStrToI["custom_static_route"]; ok && !isIntfNil(v) && !configModeChoiceTypeFound {
-
-								configModeChoiceTypeFound = true
-								configModeChoiceInt := &ves_io_schema_views.SiteStaticRoutesType_CustomStaticRoute{}
-								configModeChoiceInt.CustomStaticRoute = &ves_io_schema.StaticRouteType{}
-								staticRouteList[i].ConfigModeChoice = configModeChoiceInt
-
-								sl := v.(*schema.Set).List()
-								for _, set := range sl {
-									cs := set.(map[string]interface{})
-
-									if v, ok := cs["attrs"]; ok && !isIntfNil(v) {
-
-										attrsList := []ves_io_schema.RouteAttrType{}
-										for _, j := range v.([]interface{}) {
-											attrsList = append(attrsList, ves_io_schema.RouteAttrType(ves_io_schema.RouteAttrType_value[j.(string)]))
-										}
-										configModeChoiceInt.CustomStaticRoute.Attrs = attrsList
-
-									}
-
-									if v, ok := cs["labels"]; ok && !isIntfNil(v) {
-
-										ms := map[string]string{}
-										for k, v := range v.(map[string]interface{}) {
-											ms[k] = v.(string)
-										}
-										configModeChoiceInt.CustomStaticRoute.Labels = ms
-									}
-
-									if v, ok := cs["nexthop"]; ok && !isIntfNil(v) {
-
-										sl := v.(*schema.Set).List()
-										nexthop := &ves_io_schema.NextHopType{}
-										configModeChoiceInt.CustomStaticRoute.Nexthop = nexthop
-										for _, set := range sl {
-											nexthopMapStrToI := set.(map[string]interface{})
-
-											if v, ok := nexthopMapStrToI["interface"]; ok && !isIntfNil(v) {
-
-												sl := v.([]interface{})
-												intfInt := make([]*ves_io_schema.ObjectRefType, len(sl))
-												nexthop.Interface = intfInt
-												for i, ps := range sl {
-
-													iMapToStrVal := ps.(map[string]interface{})
-													intfInt[i] = &ves_io_schema.ObjectRefType{}
-
-													intfInt[i].Kind = "network_interface"
-
-													if v, ok := iMapToStrVal["name"]; ok && !isIntfNil(v) {
-														intfInt[i].Name = v.(string)
 													}
 
-													if v, ok := iMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-														intfInt[i].Namespace = v.(string)
+													if v, ok := cs["labels"]; ok && !isIntfNil(v) {
+
+														ms := map[string]string{}
+														for k, v := range v.(map[string]interface{}) {
+															ms[k] = v.(string)
+														}
+														configModeChoiceInt.CustomStaticRoute.Labels = ms
 													}
 
-													if v, ok := iMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-														intfInt[i].Tenant = v.(string)
-													}
+													if v, ok := cs["nexthop"]; ok && !isIntfNil(v) {
 
-													if v, ok := iMapToStrVal["uid"]; ok && !isIntfNil(v) {
-														intfInt[i].Uid = v.(string)
-													}
-
-												}
-
-											}
-
-											if v, ok := nexthopMapStrToI["nexthop_address"]; ok && !isIntfNil(v) {
-
-												sl := v.(*schema.Set).List()
-												nexthopAddress := &ves_io_schema.IpAddressType{}
-												nexthop.NexthopAddress = nexthopAddress
-												for _, set := range sl {
-													nexthopAddressMapStrToI := set.(map[string]interface{})
-
-													verTypeFound := false
-
-													if v, ok := nexthopAddressMapStrToI["ipv4"]; ok && !isIntfNil(v) && !verTypeFound {
-
-														verTypeFound = true
-														verInt := &ves_io_schema.IpAddressType_Ipv4{}
-														verInt.Ipv4 = &ves_io_schema.Ipv4AddressType{}
-														nexthopAddress.Ver = verInt
-
-														sl := v.(*schema.Set).List()
+														sl := v.([]interface{})
+														nexthop := &ves_io_schema.NextHopType{}
+														configModeChoiceInt.CustomStaticRoute.Nexthop = nexthop
 														for _, set := range sl {
-															cs := set.(map[string]interface{})
+															if set != nil {
+																nexthopMapStrToI := set.(map[string]interface{})
 
-															if v, ok := cs["addr"]; ok && !isIntfNil(v) {
+																if v, ok := nexthopMapStrToI["interface"]; ok && !isIntfNil(v) {
 
-																verInt.Ipv4.Addr = v.(string)
+																	sl := v.([]interface{})
+																	intfInt := make([]*ves_io_schema.ObjectRefType, len(sl))
+																	nexthop.Interface = intfInt
+																	for i, ps := range sl {
+
+																		iMapToStrVal := ps.(map[string]interface{})
+																		intfInt[i] = &ves_io_schema.ObjectRefType{}
+
+																		intfInt[i].Kind = "network_interface"
+
+																		if v, ok := iMapToStrVal["name"]; ok && !isIntfNil(v) {
+																			intfInt[i].Name = v.(string)
+																		}
+
+																		if v, ok := iMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+																			intfInt[i].Namespace = v.(string)
+																		}
+
+																		if v, ok := iMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+																			intfInt[i].Tenant = v.(string)
+																		}
+
+																		if v, ok := iMapToStrVal["uid"]; ok && !isIntfNil(v) {
+																			intfInt[i].Uid = v.(string)
+																		}
+
+																	}
+
+																}
+
+																if v, ok := nexthopMapStrToI["nexthop_address"]; ok && !isIntfNil(v) {
+
+																	sl := v.([]interface{})
+																	nexthopAddress := &ves_io_schema.IpAddressType{}
+																	nexthop.NexthopAddress = nexthopAddress
+																	for _, set := range sl {
+																		if set != nil {
+																			nexthopAddressMapStrToI := set.(map[string]interface{})
+
+																			verTypeFound := false
+
+																			if v, ok := nexthopAddressMapStrToI["ipv4"]; ok && !isIntfNil(v) && !verTypeFound {
+
+																				verTypeFound = true
+																				verInt := &ves_io_schema.IpAddressType_Ipv4{}
+																				verInt.Ipv4 = &ves_io_schema.Ipv4AddressType{}
+																				nexthopAddress.Ver = verInt
+
+																				sl := v.([]interface{})
+																				for _, set := range sl {
+																					if set != nil {
+																						cs := set.(map[string]interface{})
+
+																						if v, ok := cs["addr"]; ok && !isIntfNil(v) {
+
+																							verInt.Ipv4.Addr = v.(string)
+
+																						}
+
+																					}
+																				}
+
+																			}
+
+																			if v, ok := nexthopAddressMapStrToI["ipv6"]; ok && !isIntfNil(v) && !verTypeFound {
+
+																				verTypeFound = true
+																				verInt := &ves_io_schema.IpAddressType_Ipv6{}
+																				verInt.Ipv6 = &ves_io_schema.Ipv6AddressType{}
+																				nexthopAddress.Ver = verInt
+
+																				sl := v.([]interface{})
+																				for _, set := range sl {
+																					if set != nil {
+																						cs := set.(map[string]interface{})
+
+																						if v, ok := cs["addr"]; ok && !isIntfNil(v) {
+
+																							verInt.Ipv6.Addr = v.(string)
+
+																						}
+
+																					}
+																				}
+
+																			}
+
+																		}
+																	}
+
+																}
+
+																if v, ok := nexthopMapStrToI["type"]; ok && !isIntfNil(v) {
+
+																	nexthop.Type = ves_io_schema.NextHopTypes(ves_io_schema.NextHopTypes_value[v.(string)])
+
+																}
 
 															}
-
 														}
 
 													}
 
-													if v, ok := nexthopAddressMapStrToI["ipv6"]; ok && !isIntfNil(v) && !verTypeFound {
+													if v, ok := cs["subnets"]; ok && !isIntfNil(v) {
 
-														verTypeFound = true
-														verInt := &ves_io_schema.IpAddressType_Ipv6{}
-														verInt.Ipv6 = &ves_io_schema.Ipv6AddressType{}
-														nexthopAddress.Ver = verInt
+														sl := v.([]interface{})
+														subnets := make([]*ves_io_schema.IpSubnetType, len(sl))
+														configModeChoiceInt.CustomStaticRoute.Subnets = subnets
+														for i, set := range sl {
+															if set != nil {
+																subnets[i] = &ves_io_schema.IpSubnetType{}
+																subnetsMapStrToI := set.(map[string]interface{})
 
-														sl := v.(*schema.Set).List()
-														for _, set := range sl {
-															cs := set.(map[string]interface{})
+																verTypeFound := false
 
-															if v, ok := cs["addr"]; ok && !isIntfNil(v) {
+																if v, ok := subnetsMapStrToI["ipv4"]; ok && !isIntfNil(v) && !verTypeFound {
 
-																verInt.Ipv6.Addr = v.(string)
+																	verTypeFound = true
+																	verInt := &ves_io_schema.IpSubnetType_Ipv4{}
+																	verInt.Ipv4 = &ves_io_schema.Ipv4SubnetType{}
+																	subnets[i].Ver = verInt
+
+																	sl := v.([]interface{})
+																	for _, set := range sl {
+																		if set != nil {
+																			cs := set.(map[string]interface{})
+
+																			if v, ok := cs["plen"]; ok && !isIntfNil(v) {
+
+																				verInt.Ipv4.Plen = uint32(v.(int))
+
+																			}
+
+																			if v, ok := cs["prefix"]; ok && !isIntfNil(v) {
+
+																				verInt.Ipv4.Prefix = v.(string)
+
+																			}
+
+																		}
+																	}
+
+																}
+
+																if v, ok := subnetsMapStrToI["ipv6"]; ok && !isIntfNil(v) && !verTypeFound {
+
+																	verTypeFound = true
+																	verInt := &ves_io_schema.IpSubnetType_Ipv6{}
+																	verInt.Ipv6 = &ves_io_schema.Ipv6SubnetType{}
+																	subnets[i].Ver = verInt
+
+																	sl := v.([]interface{})
+																	for _, set := range sl {
+																		if set != nil {
+																			cs := set.(map[string]interface{})
+
+																			if v, ok := cs["plen"]; ok && !isIntfNil(v) {
+
+																				verInt.Ipv6.Plen = uint32(v.(int))
+
+																			}
+
+																			if v, ok := cs["prefix"]; ok && !isIntfNil(v) {
+
+																				verInt.Ipv6.Prefix = v.(string)
+
+																			}
+
+																		}
+																	}
+
+																}
 
 															}
-
 														}
 
 													}
 
 												}
-
-											}
-
-											if v, ok := nexthopMapStrToI["type"]; ok && !isIntfNil(v) {
-
-												nexthop.Type = ves_io_schema.NextHopTypes(ves_io_schema.NextHopTypes_value[v.(string)])
-
 											}
 
 										}
 
-									}
+										if v, ok := staticRouteListMapStrToI["simple_static_route"]; ok && !isIntfNil(v) && !configModeChoiceTypeFound {
 
-									if v, ok := cs["subnets"]; ok && !isIntfNil(v) {
+											configModeChoiceTypeFound = true
+											configModeChoiceInt := &ves_io_schema_views.SiteStaticRoutesType_SimpleStaticRoute{}
 
-										sl := v.([]interface{})
-										subnets := make([]*ves_io_schema.IpSubnetType, len(sl))
-										configModeChoiceInt.CustomStaticRoute.Subnets = subnets
-										for i, set := range sl {
-											subnets[i] = &ves_io_schema.IpSubnetType{}
-											subnetsMapStrToI := set.(map[string]interface{})
+											staticRouteList[i].ConfigModeChoice = configModeChoiceInt
 
-											verTypeFound := false
-
-											if v, ok := subnetsMapStrToI["ipv4"]; ok && !isIntfNil(v) && !verTypeFound {
-
-												verTypeFound = true
-												verInt := &ves_io_schema.IpSubnetType_Ipv4{}
-												verInt.Ipv4 = &ves_io_schema.Ipv4SubnetType{}
-												subnets[i].Ver = verInt
-
-												sl := v.(*schema.Set).List()
-												for _, set := range sl {
-													cs := set.(map[string]interface{})
-
-													if v, ok := cs["plen"]; ok && !isIntfNil(v) {
-
-														verInt.Ipv4.Plen = uint32(v.(int))
-
-													}
-
-													if v, ok := cs["prefix"]; ok && !isIntfNil(v) {
-
-														verInt.Ipv4.Prefix = v.(string)
-
-													}
-
-												}
-
-											}
-
-											if v, ok := subnetsMapStrToI["ipv6"]; ok && !isIntfNil(v) && !verTypeFound {
-
-												verTypeFound = true
-												verInt := &ves_io_schema.IpSubnetType_Ipv6{}
-												verInt.Ipv6 = &ves_io_schema.Ipv6SubnetType{}
-												subnets[i].Ver = verInt
-
-												sl := v.(*schema.Set).List()
-												for _, set := range sl {
-													cs := set.(map[string]interface{})
-
-													if v, ok := cs["plen"]; ok && !isIntfNil(v) {
-
-														verInt.Ipv6.Plen = uint32(v.(int))
-
-													}
-
-													if v, ok := cs["prefix"]; ok && !isIntfNil(v) {
-
-														verInt.Ipv6.Prefix = v.(string)
-
-													}
-
-												}
-
-											}
+											configModeChoiceInt.SimpleStaticRoute = v.(string)
 
 										}
 
 									}
-
 								}
 
 							}
 
-							if v, ok := staticRouteListMapStrToI["simple_static_route"]; ok && !isIntfNil(v) && !configModeChoiceTypeFound {
+						}
+					}
 
-								configModeChoiceTypeFound = true
-								configModeChoiceInt := &ves_io_schema_views.SiteStaticRoutesType_SimpleStaticRoute{}
+				}
 
-								staticRouteList[i].ConfigModeChoice = configModeChoiceInt
+				if v, ok := vnConfigMapStrToI["no_inside_static_routes"]; ok && !isIntfNil(v) && !insideStaticRouteChoiceTypeFound {
 
-								configModeChoiceInt.SimpleStaticRoute = v.(string)
+					insideStaticRouteChoiceTypeFound = true
+
+					if v.(bool) {
+						insideStaticRouteChoiceInt := &ves_io_schema_views_aws_tgw_site.VnConfiguration_NoInsideStaticRoutes{}
+						insideStaticRouteChoiceInt.NoInsideStaticRoutes = &ves_io_schema.Empty{}
+						vnConfig.InsideStaticRouteChoice = insideStaticRouteChoiceInt
+					}
+
+				}
+
+				outsideStaticRouteChoiceTypeFound := false
+
+				if v, ok := vnConfigMapStrToI["no_outside_static_routes"]; ok && !isIntfNil(v) && !outsideStaticRouteChoiceTypeFound {
+
+					outsideStaticRouteChoiceTypeFound = true
+
+					if v.(bool) {
+						outsideStaticRouteChoiceInt := &ves_io_schema_views_aws_tgw_site.VnConfiguration_NoOutsideStaticRoutes{}
+						outsideStaticRouteChoiceInt.NoOutsideStaticRoutes = &ves_io_schema.Empty{}
+						vnConfig.OutsideStaticRouteChoice = outsideStaticRouteChoiceInt
+					}
+
+				}
+
+				if v, ok := vnConfigMapStrToI["outside_static_routes"]; ok && !isIntfNil(v) && !outsideStaticRouteChoiceTypeFound {
+
+					outsideStaticRouteChoiceTypeFound = true
+					outsideStaticRouteChoiceInt := &ves_io_schema_views_aws_tgw_site.VnConfiguration_OutsideStaticRoutes{}
+					outsideStaticRouteChoiceInt.OutsideStaticRoutes = &ves_io_schema_views.SiteStaticRoutesListType{}
+					vnConfig.OutsideStaticRouteChoice = outsideStaticRouteChoiceInt
+
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["static_route_list"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								staticRouteList := make([]*ves_io_schema_views.SiteStaticRoutesType, len(sl))
+								outsideStaticRouteChoiceInt.OutsideStaticRoutes.StaticRouteList = staticRouteList
+								for i, set := range sl {
+									if set != nil {
+										staticRouteList[i] = &ves_io_schema_views.SiteStaticRoutesType{}
+										staticRouteListMapStrToI := set.(map[string]interface{})
+
+										configModeChoiceTypeFound := false
+
+										if v, ok := staticRouteListMapStrToI["custom_static_route"]; ok && !isIntfNil(v) && !configModeChoiceTypeFound {
+
+											configModeChoiceTypeFound = true
+											configModeChoiceInt := &ves_io_schema_views.SiteStaticRoutesType_CustomStaticRoute{}
+											configModeChoiceInt.CustomStaticRoute = &ves_io_schema.StaticRouteType{}
+											staticRouteList[i].ConfigModeChoice = configModeChoiceInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["attrs"]; ok && !isIntfNil(v) {
+
+														attrsList := []ves_io_schema.RouteAttrType{}
+														for _, j := range v.([]interface{}) {
+															attrsList = append(attrsList, ves_io_schema.RouteAttrType(ves_io_schema.RouteAttrType_value[j.(string)]))
+														}
+														configModeChoiceInt.CustomStaticRoute.Attrs = attrsList
+
+													}
+
+													if v, ok := cs["labels"]; ok && !isIntfNil(v) {
+
+														ms := map[string]string{}
+														for k, v := range v.(map[string]interface{}) {
+															ms[k] = v.(string)
+														}
+														configModeChoiceInt.CustomStaticRoute.Labels = ms
+													}
+
+													if v, ok := cs["nexthop"]; ok && !isIntfNil(v) {
+
+														sl := v.([]interface{})
+														nexthop := &ves_io_schema.NextHopType{}
+														configModeChoiceInt.CustomStaticRoute.Nexthop = nexthop
+														for _, set := range sl {
+															if set != nil {
+																nexthopMapStrToI := set.(map[string]interface{})
+
+																if v, ok := nexthopMapStrToI["interface"]; ok && !isIntfNil(v) {
+
+																	sl := v.([]interface{})
+																	intfInt := make([]*ves_io_schema.ObjectRefType, len(sl))
+																	nexthop.Interface = intfInt
+																	for i, ps := range sl {
+
+																		iMapToStrVal := ps.(map[string]interface{})
+																		intfInt[i] = &ves_io_schema.ObjectRefType{}
+
+																		intfInt[i].Kind = "network_interface"
+
+																		if v, ok := iMapToStrVal["name"]; ok && !isIntfNil(v) {
+																			intfInt[i].Name = v.(string)
+																		}
+
+																		if v, ok := iMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+																			intfInt[i].Namespace = v.(string)
+																		}
+
+																		if v, ok := iMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+																			intfInt[i].Tenant = v.(string)
+																		}
+
+																		if v, ok := iMapToStrVal["uid"]; ok && !isIntfNil(v) {
+																			intfInt[i].Uid = v.(string)
+																		}
+
+																	}
+
+																}
+
+																if v, ok := nexthopMapStrToI["nexthop_address"]; ok && !isIntfNil(v) {
+
+																	sl := v.([]interface{})
+																	nexthopAddress := &ves_io_schema.IpAddressType{}
+																	nexthop.NexthopAddress = nexthopAddress
+																	for _, set := range sl {
+																		if set != nil {
+																			nexthopAddressMapStrToI := set.(map[string]interface{})
+
+																			verTypeFound := false
+
+																			if v, ok := nexthopAddressMapStrToI["ipv4"]; ok && !isIntfNil(v) && !verTypeFound {
+
+																				verTypeFound = true
+																				verInt := &ves_io_schema.IpAddressType_Ipv4{}
+																				verInt.Ipv4 = &ves_io_schema.Ipv4AddressType{}
+																				nexthopAddress.Ver = verInt
+
+																				sl := v.([]interface{})
+																				for _, set := range sl {
+																					if set != nil {
+																						cs := set.(map[string]interface{})
+
+																						if v, ok := cs["addr"]; ok && !isIntfNil(v) {
+
+																							verInt.Ipv4.Addr = v.(string)
+
+																						}
+
+																					}
+																				}
+
+																			}
+
+																			if v, ok := nexthopAddressMapStrToI["ipv6"]; ok && !isIntfNil(v) && !verTypeFound {
+
+																				verTypeFound = true
+																				verInt := &ves_io_schema.IpAddressType_Ipv6{}
+																				verInt.Ipv6 = &ves_io_schema.Ipv6AddressType{}
+																				nexthopAddress.Ver = verInt
+
+																				sl := v.([]interface{})
+																				for _, set := range sl {
+																					if set != nil {
+																						cs := set.(map[string]interface{})
+
+																						if v, ok := cs["addr"]; ok && !isIntfNil(v) {
+
+																							verInt.Ipv6.Addr = v.(string)
+
+																						}
+
+																					}
+																				}
+
+																			}
+
+																		}
+																	}
+
+																}
+
+																if v, ok := nexthopMapStrToI["type"]; ok && !isIntfNil(v) {
+
+																	nexthop.Type = ves_io_schema.NextHopTypes(ves_io_schema.NextHopTypes_value[v.(string)])
+
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := cs["subnets"]; ok && !isIntfNil(v) {
+
+														sl := v.([]interface{})
+														subnets := make([]*ves_io_schema.IpSubnetType, len(sl))
+														configModeChoiceInt.CustomStaticRoute.Subnets = subnets
+														for i, set := range sl {
+															if set != nil {
+																subnets[i] = &ves_io_schema.IpSubnetType{}
+																subnetsMapStrToI := set.(map[string]interface{})
+
+																verTypeFound := false
+
+																if v, ok := subnetsMapStrToI["ipv4"]; ok && !isIntfNil(v) && !verTypeFound {
+
+																	verTypeFound = true
+																	verInt := &ves_io_schema.IpSubnetType_Ipv4{}
+																	verInt.Ipv4 = &ves_io_schema.Ipv4SubnetType{}
+																	subnets[i].Ver = verInt
+
+																	sl := v.([]interface{})
+																	for _, set := range sl {
+																		if set != nil {
+																			cs := set.(map[string]interface{})
+
+																			if v, ok := cs["plen"]; ok && !isIntfNil(v) {
+
+																				verInt.Ipv4.Plen = uint32(v.(int))
+
+																			}
+
+																			if v, ok := cs["prefix"]; ok && !isIntfNil(v) {
+
+																				verInt.Ipv4.Prefix = v.(string)
+
+																			}
+
+																		}
+																	}
+
+																}
+
+																if v, ok := subnetsMapStrToI["ipv6"]; ok && !isIntfNil(v) && !verTypeFound {
+
+																	verTypeFound = true
+																	verInt := &ves_io_schema.IpSubnetType_Ipv6{}
+																	verInt.Ipv6 = &ves_io_schema.Ipv6SubnetType{}
+																	subnets[i].Ver = verInt
+
+																	sl := v.([]interface{})
+																	for _, set := range sl {
+																		if set != nil {
+																			cs := set.(map[string]interface{})
+
+																			if v, ok := cs["plen"]; ok && !isIntfNil(v) {
+
+																				verInt.Ipv6.Plen = uint32(v.(int))
+
+																			}
+
+																			if v, ok := cs["prefix"]; ok && !isIntfNil(v) {
+
+																				verInt.Ipv6.Prefix = v.(string)
+
+																			}
+
+																		}
+																	}
+
+																}
+
+															}
+														}
+
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := staticRouteListMapStrToI["simple_static_route"]; ok && !isIntfNil(v) && !configModeChoiceTypeFound {
+
+											configModeChoiceTypeFound = true
+											configModeChoiceInt := &ves_io_schema_views.SiteStaticRoutesType_SimpleStaticRoute{}
+
+											staticRouteList[i].ConfigModeChoice = configModeChoiceInt
+
+											configModeChoiceInt.SimpleStaticRoute = v.(string)
+
+										}
+
+									}
+								}
 
 							}
 
 						}
+					}
 
+				}
+
+				siteMeshGroupChoiceTypeFound := false
+
+				if v, ok := vnConfigMapStrToI["sm_connection_public_ip"]; ok && !isIntfNil(v) && !siteMeshGroupChoiceTypeFound {
+
+					siteMeshGroupChoiceTypeFound = true
+
+					if v.(bool) {
+						siteMeshGroupChoiceInt := &ves_io_schema_views_aws_tgw_site.VnConfiguration_SmConnectionPublicIp{}
+						siteMeshGroupChoiceInt.SmConnectionPublicIp = &ves_io_schema.Empty{}
+						vnConfig.SiteMeshGroupChoice = siteMeshGroupChoiceInt
+					}
+
+				}
+
+				if v, ok := vnConfigMapStrToI["sm_connection_pvt_ip"]; ok && !isIntfNil(v) && !siteMeshGroupChoiceTypeFound {
+
+					siteMeshGroupChoiceTypeFound = true
+
+					if v.(bool) {
+						siteMeshGroupChoiceInt := &ves_io_schema_views_aws_tgw_site.VnConfiguration_SmConnectionPvtIp{}
+						siteMeshGroupChoiceInt.SmConnectionPvtIp = &ves_io_schema.Empty{}
+						vnConfig.SiteMeshGroupChoice = siteMeshGroupChoiceInt
 					}
 
 				}
 
 			}
-
-			siteMeshGroupChoiceTypeFound := false
-
-			if v, ok := vnConfigMapStrToI["sm_connection_public_ip"]; ok && !isIntfNil(v) && !siteMeshGroupChoiceTypeFound {
-
-				siteMeshGroupChoiceTypeFound = true
-
-				if v.(bool) {
-					siteMeshGroupChoiceInt := &ves_io_schema_views_aws_tgw_site.VnConfiguration_SmConnectionPublicIp{}
-					siteMeshGroupChoiceInt.SmConnectionPublicIp = &ves_io_schema.Empty{}
-					vnConfig.SiteMeshGroupChoice = siteMeshGroupChoiceInt
-				}
-
-			}
-
-			if v, ok := vnConfigMapStrToI["sm_connection_pvt_ip"]; ok && !isIntfNil(v) && !siteMeshGroupChoiceTypeFound {
-
-				siteMeshGroupChoiceTypeFound = true
-
-				if v.(bool) {
-					siteMeshGroupChoiceInt := &ves_io_schema_views_aws_tgw_site.VnConfiguration_SmConnectionPvtIp{}
-					siteMeshGroupChoiceInt.SmConnectionPvtIp = &ves_io_schema.Empty{}
-					vnConfig.SiteMeshGroupChoice = siteMeshGroupChoiceInt
-				}
-
-			}
-
 		}
 
 	}
@@ -5525,37 +5789,41 @@ func resourceVolterraAwsTgwSiteCreate(d *schema.ResourceData, meta interface{}) 
 	//vpc_attachments
 	if v, ok := d.GetOk("vpc_attachments"); ok && !isIntfNil(v) {
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		vpcAttachments := &ves_io_schema_views_aws_tgw_site.VPCAttachmentListType{}
 		createSpec.VpcAttachments = vpcAttachments
 		for _, set := range sl {
-			vpcAttachmentsMapStrToI := set.(map[string]interface{})
+			if set != nil {
+				vpcAttachmentsMapStrToI := set.(map[string]interface{})
 
-			if v, ok := vpcAttachmentsMapStrToI["vpc_list"]; ok && !isIntfNil(v) {
+				if v, ok := vpcAttachmentsMapStrToI["vpc_list"]; ok && !isIntfNil(v) {
 
-				sl := v.([]interface{})
-				vpcList := make([]*ves_io_schema_views_aws_tgw_site.VPCAttachmentType, len(sl))
-				vpcAttachments.VpcList = vpcList
-				for i, set := range sl {
-					vpcList[i] = &ves_io_schema_views_aws_tgw_site.VPCAttachmentType{}
-					vpcListMapStrToI := set.(map[string]interface{})
+					sl := v.([]interface{})
+					vpcList := make([]*ves_io_schema_views_aws_tgw_site.VPCAttachmentType, len(sl))
+					vpcAttachments.VpcList = vpcList
+					for i, set := range sl {
+						if set != nil {
+							vpcList[i] = &ves_io_schema_views_aws_tgw_site.VPCAttachmentType{}
+							vpcListMapStrToI := set.(map[string]interface{})
 
-					if w, ok := vpcListMapStrToI["labels"]; ok && !isIntfNil(w) {
-						ms := map[string]string{}
-						for k, v := range w.(map[string]interface{}) {
-							ms[k] = v.(string)
+							if w, ok := vpcListMapStrToI["labels"]; ok && !isIntfNil(w) {
+								ms := map[string]string{}
+								for k, v := range w.(map[string]interface{}) {
+									ms[k] = v.(string)
+								}
+								vpcList[i].Labels = ms
+							}
+
+							if w, ok := vpcListMapStrToI["vpc_id"]; ok && !isIntfNil(w) {
+								vpcList[i].VpcId = w.(string)
+							}
+
 						}
-						vpcList[i].Labels = ms
-					}
-
-					if w, ok := vpcListMapStrToI["vpc_id"]; ok && !isIntfNil(w) {
-						vpcList[i].VpcId = w.(string)
 					}
 
 				}
 
 			}
-
 		}
 
 	}
@@ -5661,528 +5929,556 @@ func resourceVolterraAwsTgwSiteUpdate(d *schema.ResourceData, meta interface{}) 
 
 	if v, ok := d.GetOk("aws_parameters"); ok && !isIntfNil(v) {
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		awsParameters := &ves_io_schema_views_aws_tgw_site.ServicesVPCReplaceType{}
 		updateSpec.AwsParameters = awsParameters
 		for _, set := range sl {
-			awsParametersMapStrToI := set.(map[string]interface{})
+			if set != nil {
+				awsParametersMapStrToI := set.(map[string]interface{})
 
-			if w, ok := awsParametersMapStrToI["aws_region"]; ok && !isIntfNil(w) {
-				awsParameters.AwsRegion = w.(string)
-			}
+				if w, ok := awsParametersMapStrToI["aws_region"]; ok && !isIntfNil(w) {
+					awsParameters.AwsRegion = w.(string)
+				}
 
-			if v, ok := awsParametersMapStrToI["az_nodes"]; ok && !isIntfNil(v) {
+				if v, ok := awsParametersMapStrToI["az_nodes"]; ok && !isIntfNil(v) {
 
-				sl := v.([]interface{})
-				azNodes := make([]*ves_io_schema_views.AWSVPCTwoInterfaceNodeType, len(sl))
-				awsParameters.AzNodes = azNodes
-				for i, set := range sl {
-					azNodes[i] = &ves_io_schema_views.AWSVPCTwoInterfaceNodeType{}
-					azNodesMapStrToI := set.(map[string]interface{})
+					sl := v.([]interface{})
+					azNodes := make([]*ves_io_schema_views.AWSVPCTwoInterfaceNodeType, len(sl))
+					awsParameters.AzNodes = azNodes
+					for i, set := range sl {
+						if set != nil {
+							azNodes[i] = &ves_io_schema_views.AWSVPCTwoInterfaceNodeType{}
+							azNodesMapStrToI := set.(map[string]interface{})
 
-					if w, ok := azNodesMapStrToI["aws_az_name"]; ok && !isIntfNil(w) {
-						azNodes[i].AwsAzName = w.(string)
+							if w, ok := azNodesMapStrToI["aws_az_name"]; ok && !isIntfNil(w) {
+								azNodes[i].AwsAzName = w.(string)
+							}
+
+							choiceTypeFound := false
+
+							if v, ok := azNodesMapStrToI["inside_subnet"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+								choiceTypeFound = true
+								choiceInt := &ves_io_schema_views.AWSVPCTwoInterfaceNodeType_InsideSubnet{}
+								choiceInt.InsideSubnet = &ves_io_schema_views.CloudSubnetType{}
+								azNodes[i].Choice = choiceInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										choiceTypeFound := false
+
+										if v, ok := cs["existing_subnet_id"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+											choiceTypeFound = true
+											choiceIntNew := &ves_io_schema_views.CloudSubnetType_ExistingSubnetId{}
+
+											choiceInt.InsideSubnet.Choice = choiceIntNew
+
+											choiceIntNew.ExistingSubnetId = v.(string)
+
+										}
+
+										if v, ok := cs["subnet_param"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+											choiceTypeFound = true
+											choiceIntNew := &ves_io_schema_views.CloudSubnetType_SubnetParam{}
+											choiceIntNew.SubnetParam = &ves_io_schema_views.CloudSubnetParamType{}
+											choiceInt.InsideSubnet.Choice = choiceIntNew
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["ipv4"]; ok && !isIntfNil(v) {
+
+														choiceIntNew.SubnetParam.Ipv4 = v.(string)
+
+													}
+
+													if v, ok := cs["ipv6"]; ok && !isIntfNil(v) {
+
+														choiceIntNew.SubnetParam.Ipv6 = v.(string)
+
+													}
+
+												}
+											}
+
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := azNodesMapStrToI["reserved_inside_subnet"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+								choiceTypeFound = true
+
+								if v.(bool) {
+									choiceInt := &ves_io_schema_views.AWSVPCTwoInterfaceNodeType_ReservedInsideSubnet{}
+									choiceInt.ReservedInsideSubnet = &ves_io_schema.Empty{}
+									azNodes[i].Choice = choiceInt
+								}
+
+							}
+
+							if w, ok := azNodesMapStrToI["disk_size"]; ok && !isIntfNil(w) {
+								azNodes[i].DiskSize = uint32(w.(int))
+							}
+
+							if v, ok := azNodesMapStrToI["outside_subnet"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								outsideSubnet := &ves_io_schema_views.CloudSubnetType{}
+								azNodes[i].OutsideSubnet = outsideSubnet
+								for _, set := range sl {
+									if set != nil {
+										outsideSubnetMapStrToI := set.(map[string]interface{})
+
+										choiceTypeFound := false
+
+										if v, ok := outsideSubnetMapStrToI["existing_subnet_id"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+											choiceTypeFound = true
+											choiceInt := &ves_io_schema_views.CloudSubnetType_ExistingSubnetId{}
+
+											outsideSubnet.Choice = choiceInt
+
+											choiceInt.ExistingSubnetId = v.(string)
+
+										}
+
+										if v, ok := outsideSubnetMapStrToI["subnet_param"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+											choiceTypeFound = true
+											choiceInt := &ves_io_schema_views.CloudSubnetType_SubnetParam{}
+											choiceInt.SubnetParam = &ves_io_schema_views.CloudSubnetParamType{}
+											outsideSubnet.Choice = choiceInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["ipv4"]; ok && !isIntfNil(v) {
+
+														choiceInt.SubnetParam.Ipv4 = v.(string)
+
+													}
+
+													if v, ok := cs["ipv6"]; ok && !isIntfNil(v) {
+
+														choiceInt.SubnetParam.Ipv6 = v.(string)
+
+													}
+
+												}
+											}
+
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := azNodesMapStrToI["workload_subnet"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								workloadSubnet := &ves_io_schema_views.CloudSubnetType{}
+								azNodes[i].WorkloadSubnet = workloadSubnet
+								for _, set := range sl {
+									if set != nil {
+										workloadSubnetMapStrToI := set.(map[string]interface{})
+
+										choiceTypeFound := false
+
+										if v, ok := workloadSubnetMapStrToI["existing_subnet_id"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+											choiceTypeFound = true
+											choiceInt := &ves_io_schema_views.CloudSubnetType_ExistingSubnetId{}
+
+											workloadSubnet.Choice = choiceInt
+
+											choiceInt.ExistingSubnetId = v.(string)
+
+										}
+
+										if v, ok := workloadSubnetMapStrToI["subnet_param"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+											choiceTypeFound = true
+											choiceInt := &ves_io_schema_views.CloudSubnetType_SubnetParam{}
+											choiceInt.SubnetParam = &ves_io_schema_views.CloudSubnetParamType{}
+											workloadSubnet.Choice = choiceInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["ipv4"]; ok && !isIntfNil(v) {
+
+														choiceInt.SubnetParam.Ipv4 = v.(string)
+
+													}
+
+													if v, ok := cs["ipv6"]; ok && !isIntfNil(v) {
+
+														choiceInt.SubnetParam.Ipv6 = v.(string)
+
+													}
+
+												}
+											}
+
+										}
+
+									}
+								}
+
+							}
+
+						}
 					}
 
-					choiceTypeFound := false
+				}
 
-					if v, ok := azNodesMapStrToI["inside_subnet"]; ok && !isIntfNil(v) && !choiceTypeFound {
+				deploymentTypeFound := false
 
-						choiceTypeFound = true
-						choiceInt := &ves_io_schema_views.AWSVPCTwoInterfaceNodeType_InsideSubnet{}
-						choiceInt.InsideSubnet = &ves_io_schema_views.CloudSubnetType{}
-						azNodes[i].Choice = choiceInt
+				if v, ok := awsParametersMapStrToI["assisted"]; ok && !isIntfNil(v) && !deploymentTypeFound {
 
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
+					deploymentTypeFound = true
+
+					if v.(bool) {
+						deploymentInt := &ves_io_schema_views_aws_tgw_site.ServicesVPCReplaceType_Assisted{}
+						deploymentInt.Assisted = &ves_io_schema.Empty{}
+						awsParameters.Deployment = deploymentInt
+					}
+
+				}
+
+				if v, ok := awsParametersMapStrToI["aws_cred"]; ok && !isIntfNil(v) && !deploymentTypeFound {
+
+					deploymentTypeFound = true
+					deploymentInt := &ves_io_schema_views_aws_tgw_site.ServicesVPCReplaceType_AwsCred{}
+					deploymentInt.AwsCred = &ves_io_schema_views.ObjectRefType{}
+					awsParameters.Deployment = deploymentInt
+
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
 							cs := set.(map[string]interface{})
 
-							choiceTypeFound := false
+							if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
-							if v, ok := cs["existing_subnet_id"]; ok && !isIntfNil(v) && !choiceTypeFound {
-
-								choiceTypeFound = true
-								choiceIntNew := &ves_io_schema_views.CloudSubnetType_ExistingSubnetId{}
-
-								choiceInt.InsideSubnet.Choice = choiceIntNew
-
-								choiceIntNew.ExistingSubnetId = v.(string)
+								deploymentInt.AwsCred.Name = v.(string)
 
 							}
 
-							if v, ok := cs["subnet_param"]; ok && !isIntfNil(v) && !choiceTypeFound {
+							if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
 
-								choiceTypeFound = true
-								choiceIntNew := &ves_io_schema_views.CloudSubnetType_SubnetParam{}
-								choiceIntNew.SubnetParam = &ves_io_schema_views.CloudSubnetParamType{}
-								choiceInt.InsideSubnet.Choice = choiceIntNew
+								deploymentInt.AwsCred.Namespace = v.(string)
 
-								sl := v.(*schema.Set).List()
-								for _, set := range sl {
-									cs := set.(map[string]interface{})
+							}
 
-									if v, ok := cs["ipv4"]; ok && !isIntfNil(v) {
+							if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
 
-										choiceIntNew.SubnetParam.Ipv4 = v.(string)
-
-									}
-
-									if v, ok := cs["ipv6"]; ok && !isIntfNil(v) {
-
-										choiceIntNew.SubnetParam.Ipv6 = v.(string)
-
-									}
-
-								}
+								deploymentInt.AwsCred.Tenant = v.(string)
 
 							}
 
 						}
-
-					}
-
-					if v, ok := azNodesMapStrToI["reserved_inside_subnet"]; ok && !isIntfNil(v) && !choiceTypeFound {
-
-						choiceTypeFound = true
-
-						if v.(bool) {
-							choiceInt := &ves_io_schema_views.AWSVPCTwoInterfaceNodeType_ReservedInsideSubnet{}
-							choiceInt.ReservedInsideSubnet = &ves_io_schema.Empty{}
-							azNodes[i].Choice = choiceInt
-						}
-
-					}
-
-					if w, ok := azNodesMapStrToI["disk_size"]; ok && !isIntfNil(w) {
-						azNodes[i].DiskSize = uint32(w.(int))
-					}
-
-					if v, ok := azNodesMapStrToI["outside_subnet"]; ok && !isIntfNil(v) {
-
-						sl := v.(*schema.Set).List()
-						outsideSubnet := &ves_io_schema_views.CloudSubnetType{}
-						azNodes[i].OutsideSubnet = outsideSubnet
-						for _, set := range sl {
-							outsideSubnetMapStrToI := set.(map[string]interface{})
-
-							choiceTypeFound := false
-
-							if v, ok := outsideSubnetMapStrToI["existing_subnet_id"]; ok && !isIntfNil(v) && !choiceTypeFound {
-
-								choiceTypeFound = true
-								choiceInt := &ves_io_schema_views.CloudSubnetType_ExistingSubnetId{}
-
-								outsideSubnet.Choice = choiceInt
-
-								choiceInt.ExistingSubnetId = v.(string)
-
-							}
-
-							if v, ok := outsideSubnetMapStrToI["subnet_param"]; ok && !isIntfNil(v) && !choiceTypeFound {
-
-								choiceTypeFound = true
-								choiceInt := &ves_io_schema_views.CloudSubnetType_SubnetParam{}
-								choiceInt.SubnetParam = &ves_io_schema_views.CloudSubnetParamType{}
-								outsideSubnet.Choice = choiceInt
-
-								sl := v.(*schema.Set).List()
-								for _, set := range sl {
-									cs := set.(map[string]interface{})
-
-									if v, ok := cs["ipv4"]; ok && !isIntfNil(v) {
-
-										choiceInt.SubnetParam.Ipv4 = v.(string)
-
-									}
-
-									if v, ok := cs["ipv6"]; ok && !isIntfNil(v) {
-
-										choiceInt.SubnetParam.Ipv6 = v.(string)
-
-									}
-
-								}
-
-							}
-
-						}
-
-					}
-
-					if v, ok := azNodesMapStrToI["workload_subnet"]; ok && !isIntfNil(v) {
-
-						sl := v.(*schema.Set).List()
-						workloadSubnet := &ves_io_schema_views.CloudSubnetType{}
-						azNodes[i].WorkloadSubnet = workloadSubnet
-						for _, set := range sl {
-							workloadSubnetMapStrToI := set.(map[string]interface{})
-
-							choiceTypeFound := false
-
-							if v, ok := workloadSubnetMapStrToI["existing_subnet_id"]; ok && !isIntfNil(v) && !choiceTypeFound {
-
-								choiceTypeFound = true
-								choiceInt := &ves_io_schema_views.CloudSubnetType_ExistingSubnetId{}
-
-								workloadSubnet.Choice = choiceInt
-
-								choiceInt.ExistingSubnetId = v.(string)
-
-							}
-
-							if v, ok := workloadSubnetMapStrToI["subnet_param"]; ok && !isIntfNil(v) && !choiceTypeFound {
-
-								choiceTypeFound = true
-								choiceInt := &ves_io_schema_views.CloudSubnetType_SubnetParam{}
-								choiceInt.SubnetParam = &ves_io_schema_views.CloudSubnetParamType{}
-								workloadSubnet.Choice = choiceInt
-
-								sl := v.(*schema.Set).List()
-								for _, set := range sl {
-									cs := set.(map[string]interface{})
-
-									if v, ok := cs["ipv4"]; ok && !isIntfNil(v) {
-
-										choiceInt.SubnetParam.Ipv4 = v.(string)
-
-									}
-
-									if v, ok := cs["ipv6"]; ok && !isIntfNil(v) {
-
-										choiceInt.SubnetParam.Ipv6 = v.(string)
-
-									}
-
-								}
-
-							}
-
-						}
-
 					}
 
 				}
 
-			}
-
-			deploymentTypeFound := false
-
-			if v, ok := awsParametersMapStrToI["assisted"]; ok && !isIntfNil(v) && !deploymentTypeFound {
-
-				deploymentTypeFound = true
-
-				if v.(bool) {
-					deploymentInt := &ves_io_schema_views_aws_tgw_site.ServicesVPCReplaceType_Assisted{}
-					deploymentInt.Assisted = &ves_io_schema.Empty{}
-					awsParameters.Deployment = deploymentInt
+				if w, ok := awsParametersMapStrToI["disk_size"]; ok && !isIntfNil(w) {
+					awsParameters.DiskSize = uint32(w.(int))
 				}
 
-			}
+				if w, ok := awsParametersMapStrToI["instance_type"]; ok && !isIntfNil(w) {
+					awsParameters.InstanceType = w.(string)
+				}
 
-			if v, ok := awsParametersMapStrToI["aws_cred"]; ok && !isIntfNil(v) && !deploymentTypeFound {
+				internetVipChoiceTypeFound := false
 
-				deploymentTypeFound = true
-				deploymentInt := &ves_io_schema_views_aws_tgw_site.ServicesVPCReplaceType_AwsCred{}
-				deploymentInt.AwsCred = &ves_io_schema_views.ObjectRefType{}
-				awsParameters.Deployment = deploymentInt
+				if v, ok := awsParametersMapStrToI["disable_internet_vip"]; ok && !isIntfNil(v) && !internetVipChoiceTypeFound {
 
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
+					internetVipChoiceTypeFound = true
 
-					if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-						deploymentInt.AwsCred.Name = v.(string)
-
-					}
-
-					if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
-
-						deploymentInt.AwsCred.Namespace = v.(string)
-
-					}
-
-					if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
-
-						deploymentInt.AwsCred.Tenant = v.(string)
-
+					if v.(bool) {
+						internetVipChoiceInt := &ves_io_schema_views_aws_tgw_site.ServicesVPCReplaceType_DisableInternetVip{}
+						internetVipChoiceInt.DisableInternetVip = &ves_io_schema.Empty{}
+						awsParameters.InternetVipChoice = internetVipChoiceInt
 					}
 
 				}
 
-			}
+				if v, ok := awsParametersMapStrToI["enable_internet_vip"]; ok && !isIntfNil(v) && !internetVipChoiceTypeFound {
 
-			if w, ok := awsParametersMapStrToI["disk_size"]; ok && !isIntfNil(w) {
-				awsParameters.DiskSize = uint32(w.(int))
-			}
+					internetVipChoiceTypeFound = true
 
-			if w, ok := awsParametersMapStrToI["instance_type"]; ok && !isIntfNil(w) {
-				awsParameters.InstanceType = w.(string)
-			}
-
-			internetVipChoiceTypeFound := false
-
-			if v, ok := awsParametersMapStrToI["disable_internet_vip"]; ok && !isIntfNil(v) && !internetVipChoiceTypeFound {
-
-				internetVipChoiceTypeFound = true
-
-				if v.(bool) {
-					internetVipChoiceInt := &ves_io_schema_views_aws_tgw_site.ServicesVPCReplaceType_DisableInternetVip{}
-					internetVipChoiceInt.DisableInternetVip = &ves_io_schema.Empty{}
-					awsParameters.InternetVipChoice = internetVipChoiceInt
-				}
-
-			}
-
-			if v, ok := awsParametersMapStrToI["enable_internet_vip"]; ok && !isIntfNil(v) && !internetVipChoiceTypeFound {
-
-				internetVipChoiceTypeFound = true
-
-				if v.(bool) {
-					internetVipChoiceInt := &ves_io_schema_views_aws_tgw_site.ServicesVPCReplaceType_EnableInternetVip{}
-					internetVipChoiceInt.EnableInternetVip = &ves_io_schema.Empty{}
-					awsParameters.InternetVipChoice = internetVipChoiceInt
-				}
-
-			}
-
-			securityGroupChoiceTypeFound := false
-
-			if v, ok := awsParametersMapStrToI["custom_security_group"]; ok && !isIntfNil(v) && !securityGroupChoiceTypeFound {
-
-				securityGroupChoiceTypeFound = true
-				securityGroupChoiceInt := &ves_io_schema_views_aws_tgw_site.ServicesVPCReplaceType_CustomSecurityGroup{}
-				securityGroupChoiceInt.CustomSecurityGroup = &ves_io_schema_views.SecurityGroupType{}
-				awsParameters.SecurityGroupChoice = securityGroupChoiceInt
-
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
-
-					if v, ok := cs["inside_security_group_id"]; ok && !isIntfNil(v) {
-
-						securityGroupChoiceInt.CustomSecurityGroup.InsideSecurityGroupId = v.(string)
-
-					}
-
-					if v, ok := cs["outside_security_group_id"]; ok && !isIntfNil(v) {
-
-						securityGroupChoiceInt.CustomSecurityGroup.OutsideSecurityGroupId = v.(string)
-
+					if v.(bool) {
+						internetVipChoiceInt := &ves_io_schema_views_aws_tgw_site.ServicesVPCReplaceType_EnableInternetVip{}
+						internetVipChoiceInt.EnableInternetVip = &ves_io_schema.Empty{}
+						awsParameters.InternetVipChoice = internetVipChoiceInt
 					}
 
 				}
 
-			}
+				securityGroupChoiceTypeFound := false
 
-			if v, ok := awsParametersMapStrToI["f5xc_security_group"]; ok && !isIntfNil(v) && !securityGroupChoiceTypeFound {
+				if v, ok := awsParametersMapStrToI["custom_security_group"]; ok && !isIntfNil(v) && !securityGroupChoiceTypeFound {
 
-				securityGroupChoiceTypeFound = true
-
-				if v.(bool) {
-					securityGroupChoiceInt := &ves_io_schema_views_aws_tgw_site.ServicesVPCReplaceType_F5XcSecurityGroup{}
-					securityGroupChoiceInt.F5XcSecurityGroup = &ves_io_schema.Empty{}
+					securityGroupChoiceTypeFound = true
+					securityGroupChoiceInt := &ves_io_schema_views_aws_tgw_site.ServicesVPCReplaceType_CustomSecurityGroup{}
+					securityGroupChoiceInt.CustomSecurityGroup = &ves_io_schema_views.SecurityGroupType{}
 					awsParameters.SecurityGroupChoice = securityGroupChoiceInt
-				}
 
-			}
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
 
-			serviceVpcChoiceTypeFound := false
+							if v, ok := cs["inside_security_group_id"]; ok && !isIntfNil(v) {
 
-			if v, ok := awsParametersMapStrToI["new_vpc"]; ok && !isIntfNil(v) && !serviceVpcChoiceTypeFound {
+								securityGroupChoiceInt.CustomSecurityGroup.InsideSecurityGroupId = v.(string)
 
-				serviceVpcChoiceTypeFound = true
-				serviceVpcChoiceInt := &ves_io_schema_views_aws_tgw_site.ServicesVPCReplaceType_NewVpc{}
-				serviceVpcChoiceInt.NewVpc = &ves_io_schema_views.AWSVPCParamsType{}
-				awsParameters.ServiceVpcChoice = serviceVpcChoiceInt
+							}
 
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
+							if v, ok := cs["outside_security_group_id"]; ok && !isIntfNil(v) {
 
-					if v, ok := cs["allocate_ipv6"]; ok && !isIntfNil(v) {
+								securityGroupChoiceInt.CustomSecurityGroup.OutsideSecurityGroupId = v.(string)
 
-						serviceVpcChoiceInt.NewVpc.AllocateIpv6 = v.(bool)
+							}
 
-					}
-
-					nameChoiceTypeFound := false
-
-					if v, ok := cs["autogenerate"]; ok && !isIntfNil(v) && !nameChoiceTypeFound {
-
-						nameChoiceTypeFound = true
-
-						if v.(bool) {
-							nameChoiceInt := &ves_io_schema_views.AWSVPCParamsType_Autogenerate{}
-							nameChoiceInt.Autogenerate = &ves_io_schema.Empty{}
-							serviceVpcChoiceInt.NewVpc.NameChoice = nameChoiceInt
 						}
-
-					}
-
-					if v, ok := cs["name_tag"]; ok && !isIntfNil(v) && !nameChoiceTypeFound {
-
-						nameChoiceTypeFound = true
-						nameChoiceInt := &ves_io_schema_views.AWSVPCParamsType_NameTag{}
-
-						serviceVpcChoiceInt.NewVpc.NameChoice = nameChoiceInt
-
-						nameChoiceInt.NameTag = v.(string)
-
-					}
-
-					if v, ok := cs["primary_ipv4"]; ok && !isIntfNil(v) {
-
-						serviceVpcChoiceInt.NewVpc.PrimaryIpv4 = v.(string)
-
 					}
 
 				}
 
-			}
+				if v, ok := awsParametersMapStrToI["f5xc_security_group"]; ok && !isIntfNil(v) && !securityGroupChoiceTypeFound {
 
-			if v, ok := awsParametersMapStrToI["vpc_id"]; ok && !isIntfNil(v) && !serviceVpcChoiceTypeFound {
+					securityGroupChoiceTypeFound = true
 
-				serviceVpcChoiceTypeFound = true
-				serviceVpcChoiceInt := &ves_io_schema_views_aws_tgw_site.ServicesVPCReplaceType_VpcId{}
-
-				awsParameters.ServiceVpcChoice = serviceVpcChoiceInt
-
-				serviceVpcChoiceInt.VpcId = v.(string)
-
-			}
-
-			if w, ok := awsParametersMapStrToI["ssh_key"]; ok && !isIntfNil(w) {
-				awsParameters.SshKey = w.(string)
-			}
-
-			tgwChoiceTypeFound := false
-
-			if v, ok := awsParametersMapStrToI["existing_tgw"]; ok && !isIntfNil(v) && !tgwChoiceTypeFound {
-
-				tgwChoiceTypeFound = true
-				tgwChoiceInt := &ves_io_schema_views_aws_tgw_site.ServicesVPCReplaceType_ExistingTgw{}
-				tgwChoiceInt.ExistingTgw = &ves_io_schema_views_aws_tgw_site.ExistingTGWType{}
-				awsParameters.TgwChoice = tgwChoiceInt
-
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
-
-					if v, ok := cs["tgw_asn"]; ok && !isIntfNil(v) {
-
-						tgwChoiceInt.ExistingTgw.TgwAsn = uint32(v.(int))
-
-					}
-
-					if v, ok := cs["tgw_id"]; ok && !isIntfNil(v) {
-
-						tgwChoiceInt.ExistingTgw.TgwId = v.(string)
-
-					}
-
-					if v, ok := cs["volterra_site_asn"]; ok && !isIntfNil(v) {
-
-						tgwChoiceInt.ExistingTgw.VolterraSiteAsn = uint32(v.(int))
-
+					if v.(bool) {
+						securityGroupChoiceInt := &ves_io_schema_views_aws_tgw_site.ServicesVPCReplaceType_F5XcSecurityGroup{}
+						securityGroupChoiceInt.F5XcSecurityGroup = &ves_io_schema.Empty{}
+						awsParameters.SecurityGroupChoice = securityGroupChoiceInt
 					}
 
 				}
 
-			}
+				serviceVpcChoiceTypeFound := false
 
-			if v, ok := awsParametersMapStrToI["new_tgw"]; ok && !isIntfNil(v) && !tgwChoiceTypeFound {
+				if v, ok := awsParametersMapStrToI["new_vpc"]; ok && !isIntfNil(v) && !serviceVpcChoiceTypeFound {
 
-				tgwChoiceTypeFound = true
-				tgwChoiceInt := &ves_io_schema_views_aws_tgw_site.ServicesVPCReplaceType_NewTgw{}
-				tgwChoiceInt.NewTgw = &ves_io_schema_views_aws_tgw_site.TGWParamsType{}
-				awsParameters.TgwChoice = tgwChoiceInt
+					serviceVpcChoiceTypeFound = true
+					serviceVpcChoiceInt := &ves_io_schema_views_aws_tgw_site.ServicesVPCReplaceType_NewVpc{}
+					serviceVpcChoiceInt.NewVpc = &ves_io_schema_views.AWSVPCParamsType{}
+					awsParameters.ServiceVpcChoice = serviceVpcChoiceInt
 
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
 
-					asnChoiceTypeFound := false
+							if v, ok := cs["allocate_ipv6"]; ok && !isIntfNil(v) {
 
-					if v, ok := cs["system_generated"]; ok && !isIntfNil(v) && !asnChoiceTypeFound {
+								serviceVpcChoiceInt.NewVpc.AllocateIpv6 = v.(bool)
 
-						asnChoiceTypeFound = true
+							}
 
-						if v.(bool) {
-							asnChoiceInt := &ves_io_schema_views_aws_tgw_site.TGWParamsType_SystemGenerated{}
-							asnChoiceInt.SystemGenerated = &ves_io_schema.Empty{}
-							tgwChoiceInt.NewTgw.AsnChoice = asnChoiceInt
+							nameChoiceTypeFound := false
+
+							if v, ok := cs["autogenerate"]; ok && !isIntfNil(v) && !nameChoiceTypeFound {
+
+								nameChoiceTypeFound = true
+
+								if v.(bool) {
+									nameChoiceInt := &ves_io_schema_views.AWSVPCParamsType_Autogenerate{}
+									nameChoiceInt.Autogenerate = &ves_io_schema.Empty{}
+									serviceVpcChoiceInt.NewVpc.NameChoice = nameChoiceInt
+								}
+
+							}
+
+							if v, ok := cs["name_tag"]; ok && !isIntfNil(v) && !nameChoiceTypeFound {
+
+								nameChoiceTypeFound = true
+								nameChoiceInt := &ves_io_schema_views.AWSVPCParamsType_NameTag{}
+
+								serviceVpcChoiceInt.NewVpc.NameChoice = nameChoiceInt
+
+								nameChoiceInt.NameTag = v.(string)
+
+							}
+
+							if v, ok := cs["primary_ipv4"]; ok && !isIntfNil(v) {
+
+								serviceVpcChoiceInt.NewVpc.PrimaryIpv4 = v.(string)
+
+							}
+
 						}
-
 					}
 
-					if v, ok := cs["user_assigned"]; ok && !isIntfNil(v) && !asnChoiceTypeFound {
+				}
 
-						asnChoiceTypeFound = true
-						asnChoiceInt := &ves_io_schema_views_aws_tgw_site.TGWParamsType_UserAssigned{}
-						asnChoiceInt.UserAssigned = &ves_io_schema_views_aws_tgw_site.TGWAssignedASNType{}
-						tgwChoiceInt.NewTgw.AsnChoice = asnChoiceInt
+				if v, ok := awsParametersMapStrToI["vpc_id"]; ok && !isIntfNil(v) && !serviceVpcChoiceTypeFound {
 
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
+					serviceVpcChoiceTypeFound = true
+					serviceVpcChoiceInt := &ves_io_schema_views_aws_tgw_site.ServicesVPCReplaceType_VpcId{}
+
+					awsParameters.ServiceVpcChoice = serviceVpcChoiceInt
+
+					serviceVpcChoiceInt.VpcId = v.(string)
+
+				}
+
+				if w, ok := awsParametersMapStrToI["ssh_key"]; ok && !isIntfNil(w) {
+					awsParameters.SshKey = w.(string)
+				}
+
+				tgwChoiceTypeFound := false
+
+				if v, ok := awsParametersMapStrToI["existing_tgw"]; ok && !isIntfNil(v) && !tgwChoiceTypeFound {
+
+					tgwChoiceTypeFound = true
+					tgwChoiceInt := &ves_io_schema_views_aws_tgw_site.ServicesVPCReplaceType_ExistingTgw{}
+					tgwChoiceInt.ExistingTgw = &ves_io_schema_views.ExistingTGWType{}
+					awsParameters.TgwChoice = tgwChoiceInt
+
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
 							cs := set.(map[string]interface{})
 
 							if v, ok := cs["tgw_asn"]; ok && !isIntfNil(v) {
 
-								asnChoiceInt.UserAssigned.TgwAsn = uint32(v.(int))
+								tgwChoiceInt.ExistingTgw.TgwAsn = uint32(v.(int))
+
+							}
+
+							if v, ok := cs["tgw_id"]; ok && !isIntfNil(v) {
+
+								tgwChoiceInt.ExistingTgw.TgwId = v.(string)
 
 							}
 
 							if v, ok := cs["volterra_site_asn"]; ok && !isIntfNil(v) {
 
-								asnChoiceInt.UserAssigned.VolterraSiteAsn = uint32(v.(int))
+								tgwChoiceInt.ExistingTgw.VolterraSiteAsn = uint32(v.(int))
 
 							}
 
 						}
-
 					}
 
 				}
 
-			}
+				if v, ok := awsParametersMapStrToI["new_tgw"]; ok && !isIntfNil(v) && !tgwChoiceTypeFound {
 
-			workerNodesTypeFound := false
+					tgwChoiceTypeFound = true
+					tgwChoiceInt := &ves_io_schema_views_aws_tgw_site.ServicesVPCReplaceType_NewTgw{}
+					tgwChoiceInt.NewTgw = &ves_io_schema_views.TGWParamsType{}
+					awsParameters.TgwChoice = tgwChoiceInt
 
-			if v, ok := awsParametersMapStrToI["no_worker_nodes"]; ok && !isIntfNil(v) && !workerNodesTypeFound {
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
 
-				workerNodesTypeFound = true
+							asnChoiceTypeFound := false
 
-				if v.(bool) {
-					workerNodesInt := &ves_io_schema_views_aws_tgw_site.ServicesVPCReplaceType_NoWorkerNodes{}
-					workerNodesInt.NoWorkerNodes = &ves_io_schema.Empty{}
+							if v, ok := cs["system_generated"]; ok && !isIntfNil(v) && !asnChoiceTypeFound {
+
+								asnChoiceTypeFound = true
+
+								if v.(bool) {
+									asnChoiceInt := &ves_io_schema_views.TGWParamsType_SystemGenerated{}
+									asnChoiceInt.SystemGenerated = &ves_io_schema.Empty{}
+									tgwChoiceInt.NewTgw.AsnChoice = asnChoiceInt
+								}
+
+							}
+
+							if v, ok := cs["user_assigned"]; ok && !isIntfNil(v) && !asnChoiceTypeFound {
+
+								asnChoiceTypeFound = true
+								asnChoiceInt := &ves_io_schema_views.TGWParamsType_UserAssigned{}
+								asnChoiceInt.UserAssigned = &ves_io_schema_views.TGWAssignedASNType{}
+								tgwChoiceInt.NewTgw.AsnChoice = asnChoiceInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["tgw_asn"]; ok && !isIntfNil(v) {
+
+											asnChoiceInt.UserAssigned.TgwAsn = uint32(v.(int))
+
+										}
+
+										if v, ok := cs["volterra_site_asn"]; ok && !isIntfNil(v) {
+
+											asnChoiceInt.UserAssigned.VolterraSiteAsn = uint32(v.(int))
+
+										}
+
+									}
+								}
+
+							}
+
+						}
+					}
+
+				}
+
+				workerNodesTypeFound := false
+
+				if v, ok := awsParametersMapStrToI["no_worker_nodes"]; ok && !isIntfNil(v) && !workerNodesTypeFound {
+
+					workerNodesTypeFound = true
+
+					if v.(bool) {
+						workerNodesInt := &ves_io_schema_views_aws_tgw_site.ServicesVPCReplaceType_NoWorkerNodes{}
+						workerNodesInt.NoWorkerNodes = &ves_io_schema.Empty{}
+						awsParameters.WorkerNodes = workerNodesInt
+					}
+
+				}
+
+				if v, ok := awsParametersMapStrToI["nodes_per_az"]; ok && !isIntfNil(v) && !workerNodesTypeFound {
+
+					workerNodesTypeFound = true
+					workerNodesInt := &ves_io_schema_views_aws_tgw_site.ServicesVPCReplaceType_NodesPerAz{}
+
 					awsParameters.WorkerNodes = workerNodesInt
+
+					workerNodesInt.NodesPerAz = uint32(v.(int))
+
+				}
+
+				if v, ok := awsParametersMapStrToI["total_nodes"]; ok && !isIntfNil(v) && !workerNodesTypeFound {
+
+					workerNodesTypeFound = true
+					workerNodesInt := &ves_io_schema_views_aws_tgw_site.ServicesVPCReplaceType_TotalNodes{}
+
+					awsParameters.WorkerNodes = workerNodesInt
+
+					workerNodesInt.TotalNodes = uint32(v.(int))
+
 				}
 
 			}
-
-			if v, ok := awsParametersMapStrToI["nodes_per_az"]; ok && !isIntfNil(v) && !workerNodesTypeFound {
-
-				workerNodesTypeFound = true
-				workerNodesInt := &ves_io_schema_views_aws_tgw_site.ServicesVPCReplaceType_NodesPerAz{}
-
-				awsParameters.WorkerNodes = workerNodesInt
-
-				workerNodesInt.NodesPerAz = uint32(v.(int))
-
-			}
-
-			if v, ok := awsParametersMapStrToI["total_nodes"]; ok && !isIntfNil(v) && !workerNodesTypeFound {
-
-				workerNodesTypeFound = true
-				workerNodesInt := &ves_io_schema_views_aws_tgw_site.ServicesVPCReplaceType_TotalNodes{}
-
-				awsParameters.WorkerNodes = workerNodesInt
-
-				workerNodesInt.TotalNodes = uint32(v.(int))
-
-			}
-
 		}
 
 	}
@@ -6208,67 +6504,71 @@ func resourceVolterraAwsTgwSiteUpdate(d *schema.ResourceData, meta interface{}) 
 		blockedServicesChoiceInt.BlockedServices = &ves_io_schema_fleet.BlockedServicesListType{}
 		updateSpec.BlockedServicesChoice = blockedServicesChoiceInt
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
+			if set != nil {
+				cs := set.(map[string]interface{})
 
-			if v, ok := cs["blocked_sevice"]; ok && !isIntfNil(v) {
+				if v, ok := cs["blocked_sevice"]; ok && !isIntfNil(v) {
 
-				sl := v.([]interface{})
-				blockedSevice := make([]*ves_io_schema_fleet.BlockedServices, len(sl))
-				blockedServicesChoiceInt.BlockedServices.BlockedSevice = blockedSevice
-				for i, set := range sl {
-					blockedSevice[i] = &ves_io_schema_fleet.BlockedServices{}
-					blockedSeviceMapStrToI := set.(map[string]interface{})
+					sl := v.([]interface{})
+					blockedSevice := make([]*ves_io_schema_fleet.BlockedServices, len(sl))
+					blockedServicesChoiceInt.BlockedServices.BlockedSevice = blockedSevice
+					for i, set := range sl {
+						if set != nil {
+							blockedSevice[i] = &ves_io_schema_fleet.BlockedServices{}
+							blockedSeviceMapStrToI := set.(map[string]interface{})
 
-					blockedServicesValueTypeChoiceTypeFound := false
+							blockedServicesValueTypeChoiceTypeFound := false
 
-					if v, ok := blockedSeviceMapStrToI["dns"]; ok && !isIntfNil(v) && !blockedServicesValueTypeChoiceTypeFound {
+							if v, ok := blockedSeviceMapStrToI["dns"]; ok && !isIntfNil(v) && !blockedServicesValueTypeChoiceTypeFound {
 
-						blockedServicesValueTypeChoiceTypeFound = true
+								blockedServicesValueTypeChoiceTypeFound = true
 
-						if v.(bool) {
-							blockedServicesValueTypeChoiceInt := &ves_io_schema_fleet.BlockedServices_Dns{}
-							blockedServicesValueTypeChoiceInt.Dns = &ves_io_schema.Empty{}
-							blockedSevice[i].BlockedServicesValueTypeChoice = blockedServicesValueTypeChoiceInt
+								if v.(bool) {
+									blockedServicesValueTypeChoiceInt := &ves_io_schema_fleet.BlockedServices_Dns{}
+									blockedServicesValueTypeChoiceInt.Dns = &ves_io_schema.Empty{}
+									blockedSevice[i].BlockedServicesValueTypeChoice = blockedServicesValueTypeChoiceInt
+								}
+
+							}
+
+							if v, ok := blockedSeviceMapStrToI["ssh"]; ok && !isIntfNil(v) && !blockedServicesValueTypeChoiceTypeFound {
+
+								blockedServicesValueTypeChoiceTypeFound = true
+
+								if v.(bool) {
+									blockedServicesValueTypeChoiceInt := &ves_io_schema_fleet.BlockedServices_Ssh{}
+									blockedServicesValueTypeChoiceInt.Ssh = &ves_io_schema.Empty{}
+									blockedSevice[i].BlockedServicesValueTypeChoice = blockedServicesValueTypeChoiceInt
+								}
+
+							}
+
+							if v, ok := blockedSeviceMapStrToI["web_user_interface"]; ok && !isIntfNil(v) && !blockedServicesValueTypeChoiceTypeFound {
+
+								blockedServicesValueTypeChoiceTypeFound = true
+
+								if v.(bool) {
+									blockedServicesValueTypeChoiceInt := &ves_io_schema_fleet.BlockedServices_WebUserInterface{}
+									blockedServicesValueTypeChoiceInt.WebUserInterface = &ves_io_schema.Empty{}
+									blockedSevice[i].BlockedServicesValueTypeChoice = blockedServicesValueTypeChoiceInt
+								}
+
+							}
+
+							if v, ok := blockedSeviceMapStrToI["network_type"]; ok && !isIntfNil(v) {
+
+								blockedSevice[i].NetworkType = ves_io_schema.VirtualNetworkType(ves_io_schema.VirtualNetworkType_value[v.(string)])
+
+							}
+
 						}
-
-					}
-
-					if v, ok := blockedSeviceMapStrToI["ssh"]; ok && !isIntfNil(v) && !blockedServicesValueTypeChoiceTypeFound {
-
-						blockedServicesValueTypeChoiceTypeFound = true
-
-						if v.(bool) {
-							blockedServicesValueTypeChoiceInt := &ves_io_schema_fleet.BlockedServices_Ssh{}
-							blockedServicesValueTypeChoiceInt.Ssh = &ves_io_schema.Empty{}
-							blockedSevice[i].BlockedServicesValueTypeChoice = blockedServicesValueTypeChoiceInt
-						}
-
-					}
-
-					if v, ok := blockedSeviceMapStrToI["web_user_interface"]; ok && !isIntfNil(v) && !blockedServicesValueTypeChoiceTypeFound {
-
-						blockedServicesValueTypeChoiceTypeFound = true
-
-						if v.(bool) {
-							blockedServicesValueTypeChoiceInt := &ves_io_schema_fleet.BlockedServices_WebUserInterface{}
-							blockedServicesValueTypeChoiceInt.WebUserInterface = &ves_io_schema.Empty{}
-							blockedSevice[i].BlockedServicesValueTypeChoice = blockedServicesValueTypeChoiceInt
-						}
-
-					}
-
-					if v, ok := blockedSeviceMapStrToI["network_type"]; ok && !isIntfNil(v) {
-
-						blockedSevice[i].NetworkType = ves_io_schema.VirtualNetworkType(ves_io_schema.VirtualNetworkType_value[v.(string)])
-
 					}
 
 				}
 
 			}
-
 		}
 
 	}
@@ -6287,48 +6587,52 @@ func resourceVolterraAwsTgwSiteUpdate(d *schema.ResourceData, meta interface{}) 
 
 	if v, ok := d.GetOk("coordinates"); ok && !isIntfNil(v) {
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		coordinates := &ves_io_schema_site.Coordinates{}
 		updateSpec.Coordinates = coordinates
 		for _, set := range sl {
-			coordinatesMapStrToI := set.(map[string]interface{})
+			if set != nil {
+				coordinatesMapStrToI := set.(map[string]interface{})
 
-			if w, ok := coordinatesMapStrToI["latitude"]; ok && !isIntfNil(w) {
-				coordinates.Latitude = float32(w.(float64))
+				if w, ok := coordinatesMapStrToI["latitude"]; ok && !isIntfNil(w) {
+					coordinates.Latitude = float32(w.(float64))
+				}
+
+				if w, ok := coordinatesMapStrToI["longitude"]; ok && !isIntfNil(w) {
+					coordinates.Longitude = float32(w.(float64))
+				}
+
 			}
-
-			if w, ok := coordinatesMapStrToI["longitude"]; ok && !isIntfNil(w) {
-				coordinates.Longitude = float32(w.(float64))
-			}
-
 		}
 
 	}
 
 	if v, ok := d.GetOk("custom_dns"); ok && !isIntfNil(v) {
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		customDns := &ves_io_schema_views.CustomDNS{}
 		updateSpec.CustomDns = customDns
 		for _, set := range sl {
-			customDnsMapStrToI := set.(map[string]interface{})
+			if set != nil {
+				customDnsMapStrToI := set.(map[string]interface{})
 
-			if w, ok := customDnsMapStrToI["inside_nameserver"]; ok && !isIntfNil(w) {
-				customDns.InsideNameserver = w.(string)
+				if w, ok := customDnsMapStrToI["inside_nameserver"]; ok && !isIntfNil(w) {
+					customDns.InsideNameserver = w.(string)
+				}
+
+				if w, ok := customDnsMapStrToI["inside_nameserver_v6"]; ok && !isIntfNil(w) {
+					customDns.InsideNameserverV6 = w.(string)
+				}
+
+				if w, ok := customDnsMapStrToI["outside_nameserver"]; ok && !isIntfNil(w) {
+					customDns.OutsideNameserver = w.(string)
+				}
+
+				if w, ok := customDnsMapStrToI["outside_nameserver_v6"]; ok && !isIntfNil(w) {
+					customDns.OutsideNameserverV6 = w.(string)
+				}
+
 			}
-
-			if w, ok := customDnsMapStrToI["inside_nameserver_v6"]; ok && !isIntfNil(w) {
-				customDns.InsideNameserverV6 = w.(string)
-			}
-
-			if w, ok := customDnsMapStrToI["outside_nameserver"]; ok && !isIntfNil(w) {
-				customDns.OutsideNameserver = w.(string)
-			}
-
-			if w, ok := customDnsMapStrToI["outside_nameserver_v6"]; ok && !isIntfNil(w) {
-				customDns.OutsideNameserverV6 = w.(string)
-			}
-
 		}
 
 	}
@@ -6354,163 +6658,171 @@ func resourceVolterraAwsTgwSiteUpdate(d *schema.ResourceData, meta interface{}) 
 		directConnectChoiceInt.DirectConnectEnabled = &ves_io_schema_views.DirectConnectConfigType{}
 		updateSpec.DirectConnectChoice = directConnectChoiceInt
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
+			if set != nil {
+				cs := set.(map[string]interface{})
 
-			asnChoiceTypeFound := false
+				asnChoiceTypeFound := false
 
-			if v, ok := cs["auto_asn"]; ok && !isIntfNil(v) && !asnChoiceTypeFound {
+				if v, ok := cs["auto_asn"]; ok && !isIntfNil(v) && !asnChoiceTypeFound {
 
-				asnChoiceTypeFound = true
+					asnChoiceTypeFound = true
 
-				if v.(bool) {
-					asnChoiceInt := &ves_io_schema_views.DirectConnectConfigType_AutoAsn{}
-					asnChoiceInt.AutoAsn = &ves_io_schema.Empty{}
-					directConnectChoiceInt.DirectConnectEnabled.AsnChoice = asnChoiceInt
+					if v.(bool) {
+						asnChoiceInt := &ves_io_schema_views.DirectConnectConfigType_AutoAsn{}
+						asnChoiceInt.AutoAsn = &ves_io_schema.Empty{}
+						directConnectChoiceInt.DirectConnectEnabled.AsnChoice = asnChoiceInt
+					}
+
 				}
 
-			}
+				if v, ok := cs["custom_asn"]; ok && !isIntfNil(v) && !asnChoiceTypeFound {
 
-			if v, ok := cs["custom_asn"]; ok && !isIntfNil(v) && !asnChoiceTypeFound {
+					asnChoiceTypeFound = true
+					asnChoiceInt := &ves_io_schema_views.DirectConnectConfigType_CustomAsn{}
 
-				asnChoiceTypeFound = true
-				asnChoiceInt := &ves_io_schema_views.DirectConnectConfigType_CustomAsn{}
+					directConnectChoiceInt.DirectConnectEnabled.AsnChoice = asnChoiceInt
 
-				directConnectChoiceInt.DirectConnectEnabled.AsnChoice = asnChoiceInt
+					asnChoiceInt.CustomAsn = uint32(v.(int))
 
-				asnChoiceInt.CustomAsn = uint32(v.(int))
+				}
 
-			}
+				vifChoiceTypeFound := false
 
-			vifChoiceTypeFound := false
+				if v, ok := cs["hosted_vifs"]; ok && !isIntfNil(v) && !vifChoiceTypeFound {
 
-			if v, ok := cs["hosted_vifs"]; ok && !isIntfNil(v) && !vifChoiceTypeFound {
+					vifChoiceTypeFound = true
+					vifChoiceInt := &ves_io_schema_views.DirectConnectConfigType_HostedVifs{}
+					vifChoiceInt.HostedVifs = &ves_io_schema_views.HostedVIFConfigType{}
+					directConnectChoiceInt.DirectConnectEnabled.VifChoice = vifChoiceInt
 
-				vifChoiceTypeFound = true
-				vifChoiceInt := &ves_io_schema_views.DirectConnectConfigType_HostedVifs{}
-				vifChoiceInt.HostedVifs = &ves_io_schema_views.HostedVIFConfigType{}
-				directConnectChoiceInt.DirectConnectEnabled.VifChoice = vifChoiceInt
-
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
-
-					connectivityOptionsTypeFound := false
-
-					if v, ok := cs["site_registration_over_direct_connect"]; ok && !isIntfNil(v) && !connectivityOptionsTypeFound {
-
-						connectivityOptionsTypeFound = true
-						connectivityOptionsInt := &ves_io_schema_views.HostedVIFConfigType_SiteRegistrationOverDirectConnect{}
-						connectivityOptionsInt.SiteRegistrationOverDirectConnect = &ves_io_schema_views.CloudLinkADNType{}
-						vifChoiceInt.HostedVifs.ConnectivityOptions = connectivityOptionsInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
 							cs := set.(map[string]interface{})
 
-							if v, ok := cs["cloudlink_network_name"]; ok && !isIntfNil(v) {
+							connectivityOptionsTypeFound := false
 
-								connectivityOptionsInt.SiteRegistrationOverDirectConnect.CloudlinkNetworkName = v.(string)
+							if v, ok := cs["site_registration_over_direct_connect"]; ok && !isIntfNil(v) && !connectivityOptionsTypeFound {
 
-							}
+								connectivityOptionsTypeFound = true
+								connectivityOptionsInt := &ves_io_schema_views.HostedVIFConfigType_SiteRegistrationOverDirectConnect{}
+								connectivityOptionsInt.SiteRegistrationOverDirectConnect = &ves_io_schema_views.CloudLinkADNType{}
+								vifChoiceInt.HostedVifs.ConnectivityOptions = connectivityOptionsInt
 
-						}
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
 
-					}
+										if v, ok := cs["cloudlink_network_name"]; ok && !isIntfNil(v) {
 
-					if v, ok := cs["site_registration_over_internet"]; ok && !isIntfNil(v) && !connectivityOptionsTypeFound {
+											connectivityOptionsInt.SiteRegistrationOverDirectConnect.CloudlinkNetworkName = v.(string)
 
-						connectivityOptionsTypeFound = true
+										}
 
-						if v.(bool) {
-							connectivityOptionsInt := &ves_io_schema_views.HostedVIFConfigType_SiteRegistrationOverInternet{}
-							connectivityOptionsInt.SiteRegistrationOverInternet = &ves_io_schema.Empty{}
-							vifChoiceInt.HostedVifs.ConnectivityOptions = connectivityOptionsInt
-						}
-
-					}
-
-					if v, ok := cs["vif_list"]; ok && !isIntfNil(v) {
-
-						sl := v.([]interface{})
-						vifList := make([]*ves_io_schema_views.VifRegionConfig, len(sl))
-						vifChoiceInt.HostedVifs.VifList = vifList
-						for i, set := range sl {
-							vifList[i] = &ves_io_schema_views.VifRegionConfig{}
-							vifListMapStrToI := set.(map[string]interface{})
-
-							if w, ok := vifListMapStrToI["vif_id"]; ok && !isIntfNil(w) {
-								vifList[i].VifId = w.(string)
-							}
-
-							vifRegionChoiceTypeFound := false
-
-							if v, ok := vifListMapStrToI["other_region"]; ok && !isIntfNil(v) && !vifRegionChoiceTypeFound {
-
-								vifRegionChoiceTypeFound = true
-								vifRegionChoiceInt := &ves_io_schema_views.VifRegionConfig_OtherRegion{}
-
-								vifList[i].VifRegionChoice = vifRegionChoiceInt
-
-								vifRegionChoiceInt.OtherRegion = v.(string)
-
-							}
-
-							if v, ok := vifListMapStrToI["same_as_site_region"]; ok && !isIntfNil(v) && !vifRegionChoiceTypeFound {
-
-								vifRegionChoiceTypeFound = true
-
-								if v.(bool) {
-									vifRegionChoiceInt := &ves_io_schema_views.VifRegionConfig_SameAsSiteRegion{}
-									vifRegionChoiceInt.SameAsSiteRegion = &ves_io_schema.Empty{}
-									vifList[i].VifRegionChoice = vifRegionChoiceInt
+									}
 								}
 
 							}
 
-						}
+							if v, ok := cs["site_registration_over_internet"]; ok && !isIntfNil(v) && !connectivityOptionsTypeFound {
 
+								connectivityOptionsTypeFound = true
+
+								if v.(bool) {
+									connectivityOptionsInt := &ves_io_schema_views.HostedVIFConfigType_SiteRegistrationOverInternet{}
+									connectivityOptionsInt.SiteRegistrationOverInternet = &ves_io_schema.Empty{}
+									vifChoiceInt.HostedVifs.ConnectivityOptions = connectivityOptionsInt
+								}
+
+							}
+
+							if v, ok := cs["vif_list"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								vifList := make([]*ves_io_schema_views.VifRegionConfig, len(sl))
+								vifChoiceInt.HostedVifs.VifList = vifList
+								for i, set := range sl {
+									if set != nil {
+										vifList[i] = &ves_io_schema_views.VifRegionConfig{}
+										vifListMapStrToI := set.(map[string]interface{})
+
+										if w, ok := vifListMapStrToI["vif_id"]; ok && !isIntfNil(w) {
+											vifList[i].VifId = w.(string)
+										}
+
+										vifRegionChoiceTypeFound := false
+
+										if v, ok := vifListMapStrToI["other_region"]; ok && !isIntfNil(v) && !vifRegionChoiceTypeFound {
+
+											vifRegionChoiceTypeFound = true
+											vifRegionChoiceInt := &ves_io_schema_views.VifRegionConfig_OtherRegion{}
+
+											vifList[i].VifRegionChoice = vifRegionChoiceInt
+
+											vifRegionChoiceInt.OtherRegion = v.(string)
+
+										}
+
+										if v, ok := vifListMapStrToI["same_as_site_region"]; ok && !isIntfNil(v) && !vifRegionChoiceTypeFound {
+
+											vifRegionChoiceTypeFound = true
+
+											if v.(bool) {
+												vifRegionChoiceInt := &ves_io_schema_views.VifRegionConfig_SameAsSiteRegion{}
+												vifRegionChoiceInt.SameAsSiteRegion = &ves_io_schema.Empty{}
+												vifList[i].VifRegionChoice = vifRegionChoiceInt
+											}
+
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := cs["vifs"]; ok && !isIntfNil(v) {
+
+								ls := make([]string, len(v.([]interface{})))
+								for i, v := range v.([]interface{}) {
+									ls[i] = v.(string)
+								}
+								vifChoiceInt.HostedVifs.Vifs = ls
+
+							}
+
+						}
 					}
 
-					if v, ok := cs["vifs"]; ok && !isIntfNil(v) {
+				}
 
-						ls := make([]string, len(v.([]interface{})))
-						for i, v := range v.([]interface{}) {
-							ls[i] = v.(string)
-						}
-						vifChoiceInt.HostedVifs.Vifs = ls
+				if v, ok := cs["manual_gw"]; ok && !isIntfNil(v) && !vifChoiceTypeFound {
 
+					vifChoiceTypeFound = true
+
+					if v.(bool) {
+						vifChoiceInt := &ves_io_schema_views.DirectConnectConfigType_ManualGw{}
+						vifChoiceInt.ManualGw = &ves_io_schema.Empty{}
+						directConnectChoiceInt.DirectConnectEnabled.VifChoice = vifChoiceInt
+					}
+
+				}
+
+				if v, ok := cs["standard_vifs"]; ok && !isIntfNil(v) && !vifChoiceTypeFound {
+
+					vifChoiceTypeFound = true
+
+					if v.(bool) {
+						vifChoiceInt := &ves_io_schema_views.DirectConnectConfigType_StandardVifs{}
+						vifChoiceInt.StandardVifs = &ves_io_schema.Empty{}
+						directConnectChoiceInt.DirectConnectEnabled.VifChoice = vifChoiceInt
 					}
 
 				}
 
 			}
-
-			if v, ok := cs["manual_gw"]; ok && !isIntfNil(v) && !vifChoiceTypeFound {
-
-				vifChoiceTypeFound = true
-
-				if v.(bool) {
-					vifChoiceInt := &ves_io_schema_views.DirectConnectConfigType_ManualGw{}
-					vifChoiceInt.ManualGw = &ves_io_schema.Empty{}
-					directConnectChoiceInt.DirectConnectEnabled.VifChoice = vifChoiceInt
-				}
-
-			}
-
-			if v, ok := cs["standard_vifs"]; ok && !isIntfNil(v) && !vifChoiceTypeFound {
-
-				vifChoiceTypeFound = true
-
-				if v.(bool) {
-					vifChoiceInt := &ves_io_schema_views.DirectConnectConfigType_StandardVifs{}
-					vifChoiceInt.StandardVifs = &ves_io_schema.Empty{}
-					directConnectChoiceInt.DirectConnectEnabled.VifChoice = vifChoiceInt
-				}
-
-			}
-
 		}
 
 	}
@@ -6522,157 +6834,165 @@ func resourceVolterraAwsTgwSiteUpdate(d *schema.ResourceData, meta interface{}) 
 		directConnectChoiceInt.PrivateConnectivity = &ves_io_schema_views.PrivateConnectConfigType{}
 		updateSpec.DirectConnectChoice = directConnectChoiceInt
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
+			if set != nil {
+				cs := set.(map[string]interface{})
 
-			if v, ok := cs["cloud_link"]; ok && !isIntfNil(v) {
+				if v, ok := cs["cloud_link"]; ok && !isIntfNil(v) {
 
-				sl := v.(*schema.Set).List()
-				cloudLink := &ves_io_schema_views.ObjectRefType{}
-				directConnectChoiceInt.PrivateConnectivity.CloudLink = cloudLink
-				for _, set := range sl {
-					cloudLinkMapStrToI := set.(map[string]interface{})
+					sl := v.([]interface{})
+					cloudLink := &ves_io_schema_views.ObjectRefType{}
+					directConnectChoiceInt.PrivateConnectivity.CloudLink = cloudLink
+					for _, set := range sl {
+						if set != nil {
+							cloudLinkMapStrToI := set.(map[string]interface{})
 
-					if w, ok := cloudLinkMapStrToI["name"]; ok && !isIntfNil(w) {
-						cloudLink.Name = w.(string)
+							if w, ok := cloudLinkMapStrToI["name"]; ok && !isIntfNil(w) {
+								cloudLink.Name = w.(string)
+							}
+
+							if w, ok := cloudLinkMapStrToI["namespace"]; ok && !isIntfNil(w) {
+								cloudLink.Namespace = w.(string)
+							}
+
+							if w, ok := cloudLinkMapStrToI["tenant"]; ok && !isIntfNil(w) {
+								cloudLink.Tenant = w.(string)
+							}
+
+						}
 					}
 
-					if w, ok := cloudLinkMapStrToI["namespace"]; ok && !isIntfNil(w) {
-						cloudLink.Namespace = w.(string)
+				}
+
+				networkOptionsTypeFound := false
+
+				if v, ok := cs["inside"]; ok && !isIntfNil(v) && !networkOptionsTypeFound {
+
+					networkOptionsTypeFound = true
+
+					if v.(bool) {
+						networkOptionsInt := &ves_io_schema_views.PrivateConnectConfigType_Inside{}
+						networkOptionsInt.Inside = &ves_io_schema.Empty{}
+						directConnectChoiceInt.PrivateConnectivity.NetworkOptions = networkOptionsInt
 					}
 
-					if w, ok := cloudLinkMapStrToI["tenant"]; ok && !isIntfNil(w) {
-						cloudLink.Tenant = w.(string)
+				}
+
+				if v, ok := cs["outside"]; ok && !isIntfNil(v) && !networkOptionsTypeFound {
+
+					networkOptionsTypeFound = true
+
+					if v.(bool) {
+						networkOptionsInt := &ves_io_schema_views.PrivateConnectConfigType_Outside{}
+						networkOptionsInt.Outside = &ves_io_schema.Empty{}
+						directConnectChoiceInt.PrivateConnectivity.NetworkOptions = networkOptionsInt
 					}
 
 				}
 
 			}
-
-			networkOptionsTypeFound := false
-
-			if v, ok := cs["inside"]; ok && !isIntfNil(v) && !networkOptionsTypeFound {
-
-				networkOptionsTypeFound = true
-
-				if v.(bool) {
-					networkOptionsInt := &ves_io_schema_views.PrivateConnectConfigType_Inside{}
-					networkOptionsInt.Inside = &ves_io_schema.Empty{}
-					directConnectChoiceInt.PrivateConnectivity.NetworkOptions = networkOptionsInt
-				}
-
-			}
-
-			if v, ok := cs["outside"]; ok && !isIntfNil(v) && !networkOptionsTypeFound {
-
-				networkOptionsTypeFound = true
-
-				if v.(bool) {
-					networkOptionsInt := &ves_io_schema_views.PrivateConnectConfigType_Outside{}
-					networkOptionsInt.Outside = &ves_io_schema.Empty{}
-					directConnectChoiceInt.PrivateConnectivity.NetworkOptions = networkOptionsInt
-				}
-
-			}
-
 		}
 
 	}
 
 	if v, ok := d.GetOk("kubernetes_upgrade_drain"); ok && !isIntfNil(v) {
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		kubernetesUpgradeDrain := &ves_io_schema_views.KubernetesUpgradeDrain{}
 		updateSpec.KubernetesUpgradeDrain = kubernetesUpgradeDrain
 		for _, set := range sl {
-			kubernetesUpgradeDrainMapStrToI := set.(map[string]interface{})
+			if set != nil {
+				kubernetesUpgradeDrainMapStrToI := set.(map[string]interface{})
 
-			kubernetesUpgradeDrainEnableChoiceTypeFound := false
+				kubernetesUpgradeDrainEnableChoiceTypeFound := false
 
-			if v, ok := kubernetesUpgradeDrainMapStrToI["disable_upgrade_drain"]; ok && !isIntfNil(v) && !kubernetesUpgradeDrainEnableChoiceTypeFound {
+				if v, ok := kubernetesUpgradeDrainMapStrToI["disable_upgrade_drain"]; ok && !isIntfNil(v) && !kubernetesUpgradeDrainEnableChoiceTypeFound {
 
-				kubernetesUpgradeDrainEnableChoiceTypeFound = true
+					kubernetesUpgradeDrainEnableChoiceTypeFound = true
 
-				if v.(bool) {
-					kubernetesUpgradeDrainEnableChoiceInt := &ves_io_schema_views.KubernetesUpgradeDrain_DisableUpgradeDrain{}
-					kubernetesUpgradeDrainEnableChoiceInt.DisableUpgradeDrain = &ves_io_schema.Empty{}
+					if v.(bool) {
+						kubernetesUpgradeDrainEnableChoiceInt := &ves_io_schema_views.KubernetesUpgradeDrain_DisableUpgradeDrain{}
+						kubernetesUpgradeDrainEnableChoiceInt.DisableUpgradeDrain = &ves_io_schema.Empty{}
+						kubernetesUpgradeDrain.KubernetesUpgradeDrainEnableChoice = kubernetesUpgradeDrainEnableChoiceInt
+					}
+
+				}
+
+				if v, ok := kubernetesUpgradeDrainMapStrToI["enable_upgrade_drain"]; ok && !isIntfNil(v) && !kubernetesUpgradeDrainEnableChoiceTypeFound {
+
+					kubernetesUpgradeDrainEnableChoiceTypeFound = true
+					kubernetesUpgradeDrainEnableChoiceInt := &ves_io_schema_views.KubernetesUpgradeDrain_EnableUpgradeDrain{}
+					kubernetesUpgradeDrainEnableChoiceInt.EnableUpgradeDrain = &ves_io_schema_views.KubernetesUpgradeDrainConfig{}
 					kubernetesUpgradeDrain.KubernetesUpgradeDrainEnableChoice = kubernetesUpgradeDrainEnableChoiceInt
-				}
 
-			}
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
 
-			if v, ok := kubernetesUpgradeDrainMapStrToI["enable_upgrade_drain"]; ok && !isIntfNil(v) && !kubernetesUpgradeDrainEnableChoiceTypeFound {
+							drainMaxUnavailableChoiceTypeFound := false
 
-				kubernetesUpgradeDrainEnableChoiceTypeFound = true
-				kubernetesUpgradeDrainEnableChoiceInt := &ves_io_schema_views.KubernetesUpgradeDrain_EnableUpgradeDrain{}
-				kubernetesUpgradeDrainEnableChoiceInt.EnableUpgradeDrain = &ves_io_schema_views.KubernetesUpgradeDrainConfig{}
-				kubernetesUpgradeDrain.KubernetesUpgradeDrainEnableChoice = kubernetesUpgradeDrainEnableChoiceInt
+							if v, ok := cs["drain_max_unavailable_node_count"]; ok && !isIntfNil(v) && !drainMaxUnavailableChoiceTypeFound {
 
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
+								drainMaxUnavailableChoiceTypeFound = true
+								drainMaxUnavailableChoiceInt := &ves_io_schema_views.KubernetesUpgradeDrainConfig_DrainMaxUnavailableNodeCount{}
 
-					drainMaxUnavailableChoiceTypeFound := false
+								kubernetesUpgradeDrainEnableChoiceInt.EnableUpgradeDrain.DrainMaxUnavailableChoice = drainMaxUnavailableChoiceInt
 
-					if v, ok := cs["drain_max_unavailable_node_count"]; ok && !isIntfNil(v) && !drainMaxUnavailableChoiceTypeFound {
+								drainMaxUnavailableChoiceInt.DrainMaxUnavailableNodeCount = uint32(v.(int))
 
-						drainMaxUnavailableChoiceTypeFound = true
-						drainMaxUnavailableChoiceInt := &ves_io_schema_views.KubernetesUpgradeDrainConfig_DrainMaxUnavailableNodeCount{}
+							}
 
-						kubernetesUpgradeDrainEnableChoiceInt.EnableUpgradeDrain.DrainMaxUnavailableChoice = drainMaxUnavailableChoiceInt
+							if v, ok := cs["drain_max_unavailable_node_percentage"]; ok && !isIntfNil(v) && !drainMaxUnavailableChoiceTypeFound {
 
-						drainMaxUnavailableChoiceInt.DrainMaxUnavailableNodeCount = uint32(v.(int))
+								drainMaxUnavailableChoiceTypeFound = true
+								drainMaxUnavailableChoiceInt := &ves_io_schema_views.KubernetesUpgradeDrainConfig_DrainMaxUnavailableNodePercentage{}
 
-					}
+								kubernetesUpgradeDrainEnableChoiceInt.EnableUpgradeDrain.DrainMaxUnavailableChoice = drainMaxUnavailableChoiceInt
 
-					if v, ok := cs["drain_max_unavailable_node_percentage"]; ok && !isIntfNil(v) && !drainMaxUnavailableChoiceTypeFound {
+								drainMaxUnavailableChoiceInt.DrainMaxUnavailableNodePercentage = uint32(v.(int))
 
-						drainMaxUnavailableChoiceTypeFound = true
-						drainMaxUnavailableChoiceInt := &ves_io_schema_views.KubernetesUpgradeDrainConfig_DrainMaxUnavailableNodePercentage{}
+							}
 
-						kubernetesUpgradeDrainEnableChoiceInt.EnableUpgradeDrain.DrainMaxUnavailableChoice = drainMaxUnavailableChoiceInt
+							if v, ok := cs["drain_node_timeout"]; ok && !isIntfNil(v) {
 
-						drainMaxUnavailableChoiceInt.DrainMaxUnavailableNodePercentage = uint32(v.(int))
+								kubernetesUpgradeDrainEnableChoiceInt.EnableUpgradeDrain.DrainNodeTimeout = uint32(v.(int))
 
-					}
+							}
 
-					if v, ok := cs["drain_node_timeout"]; ok && !isIntfNil(v) {
+							vegaUpgradeModeToggleChoiceTypeFound := false
 
-						kubernetesUpgradeDrainEnableChoiceInt.EnableUpgradeDrain.DrainNodeTimeout = uint32(v.(int))
+							if v, ok := cs["disable_vega_upgrade_mode"]; ok && !isIntfNil(v) && !vegaUpgradeModeToggleChoiceTypeFound {
 
-					}
+								vegaUpgradeModeToggleChoiceTypeFound = true
 
-					vegaUpgradeModeToggleChoiceTypeFound := false
+								if v.(bool) {
+									vegaUpgradeModeToggleChoiceInt := &ves_io_schema_views.KubernetesUpgradeDrainConfig_DisableVegaUpgradeMode{}
+									vegaUpgradeModeToggleChoiceInt.DisableVegaUpgradeMode = &ves_io_schema.Empty{}
+									kubernetesUpgradeDrainEnableChoiceInt.EnableUpgradeDrain.VegaUpgradeModeToggleChoice = vegaUpgradeModeToggleChoiceInt
+								}
 
-					if v, ok := cs["disable_vega_upgrade_mode"]; ok && !isIntfNil(v) && !vegaUpgradeModeToggleChoiceTypeFound {
+							}
 
-						vegaUpgradeModeToggleChoiceTypeFound = true
+							if v, ok := cs["enable_vega_upgrade_mode"]; ok && !isIntfNil(v) && !vegaUpgradeModeToggleChoiceTypeFound {
 
-						if v.(bool) {
-							vegaUpgradeModeToggleChoiceInt := &ves_io_schema_views.KubernetesUpgradeDrainConfig_DisableVegaUpgradeMode{}
-							vegaUpgradeModeToggleChoiceInt.DisableVegaUpgradeMode = &ves_io_schema.Empty{}
-							kubernetesUpgradeDrainEnableChoiceInt.EnableUpgradeDrain.VegaUpgradeModeToggleChoice = vegaUpgradeModeToggleChoiceInt
+								vegaUpgradeModeToggleChoiceTypeFound = true
+
+								if v.(bool) {
+									vegaUpgradeModeToggleChoiceInt := &ves_io_schema_views.KubernetesUpgradeDrainConfig_EnableVegaUpgradeMode{}
+									vegaUpgradeModeToggleChoiceInt.EnableVegaUpgradeMode = &ves_io_schema.Empty{}
+									kubernetesUpgradeDrainEnableChoiceInt.EnableUpgradeDrain.VegaUpgradeModeToggleChoice = vegaUpgradeModeToggleChoiceInt
+								}
+
+							}
+
 						}
-
-					}
-
-					if v, ok := cs["enable_vega_upgrade_mode"]; ok && !isIntfNil(v) && !vegaUpgradeModeToggleChoiceTypeFound {
-
-						vegaUpgradeModeToggleChoiceTypeFound = true
-
-						if v.(bool) {
-							vegaUpgradeModeToggleChoiceInt := &ves_io_schema_views.KubernetesUpgradeDrainConfig_EnableVegaUpgradeMode{}
-							vegaUpgradeModeToggleChoiceInt.EnableVegaUpgradeMode = &ves_io_schema.Empty{}
-							kubernetesUpgradeDrainEnableChoiceInt.EnableUpgradeDrain.VegaUpgradeModeToggleChoice = vegaUpgradeModeToggleChoiceInt
-						}
-
 					}
 
 				}
 
 			}
-
 		}
 
 	}
@@ -6686,28 +7006,30 @@ func resourceVolterraAwsTgwSiteUpdate(d *schema.ResourceData, meta interface{}) 
 		logsReceiverChoiceInt.LogReceiver = &ves_io_schema_views.ObjectRefType{}
 		updateSpec.LogsReceiverChoice = logsReceiverChoiceInt
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
+			if set != nil {
+				cs := set.(map[string]interface{})
 
-			if v, ok := cs["name"]; ok && !isIntfNil(v) {
+				if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
-				logsReceiverChoiceInt.LogReceiver.Name = v.(string)
+					logsReceiverChoiceInt.LogReceiver.Name = v.(string)
+
+				}
+
+				if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+					logsReceiverChoiceInt.LogReceiver.Namespace = v.(string)
+
+				}
+
+				if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+					logsReceiverChoiceInt.LogReceiver.Tenant = v.(string)
+
+				}
 
 			}
-
-			if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
-
-				logsReceiverChoiceInt.LogReceiver.Namespace = v.(string)
-
-			}
-
-			if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
-
-				logsReceiverChoiceInt.LogReceiver.Tenant = v.(string)
-
-			}
-
 		}
 
 	}
@@ -6726,1804 +7048,1916 @@ func resourceVolterraAwsTgwSiteUpdate(d *schema.ResourceData, meta interface{}) 
 
 	if v, ok := d.GetOk("offline_survivability_mode"); ok && !isIntfNil(v) {
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		offlineSurvivabilityMode := &ves_io_schema_views.OfflineSurvivabilityModeType{}
 		updateSpec.OfflineSurvivabilityMode = offlineSurvivabilityMode
 		for _, set := range sl {
-			offlineSurvivabilityModeMapStrToI := set.(map[string]interface{})
+			if set != nil {
+				offlineSurvivabilityModeMapStrToI := set.(map[string]interface{})
 
-			offlineSurvivabilityModeChoiceTypeFound := false
+				offlineSurvivabilityModeChoiceTypeFound := false
 
-			if v, ok := offlineSurvivabilityModeMapStrToI["enable_offline_survivability_mode"]; ok && !isIntfNil(v) && !offlineSurvivabilityModeChoiceTypeFound {
+				if v, ok := offlineSurvivabilityModeMapStrToI["enable_offline_survivability_mode"]; ok && !isIntfNil(v) && !offlineSurvivabilityModeChoiceTypeFound {
 
-				offlineSurvivabilityModeChoiceTypeFound = true
+					offlineSurvivabilityModeChoiceTypeFound = true
 
-				if v.(bool) {
-					offlineSurvivabilityModeChoiceInt := &ves_io_schema_views.OfflineSurvivabilityModeType_EnableOfflineSurvivabilityMode{}
-					offlineSurvivabilityModeChoiceInt.EnableOfflineSurvivabilityMode = &ves_io_schema.Empty{}
-					offlineSurvivabilityMode.OfflineSurvivabilityModeChoice = offlineSurvivabilityModeChoiceInt
+					if v.(bool) {
+						offlineSurvivabilityModeChoiceInt := &ves_io_schema_views.OfflineSurvivabilityModeType_EnableOfflineSurvivabilityMode{}
+						offlineSurvivabilityModeChoiceInt.EnableOfflineSurvivabilityMode = &ves_io_schema.Empty{}
+						offlineSurvivabilityMode.OfflineSurvivabilityModeChoice = offlineSurvivabilityModeChoiceInt
+					}
+
+				}
+
+				if v, ok := offlineSurvivabilityModeMapStrToI["no_offline_survivability_mode"]; ok && !isIntfNil(v) && !offlineSurvivabilityModeChoiceTypeFound {
+
+					offlineSurvivabilityModeChoiceTypeFound = true
+
+					if v.(bool) {
+						offlineSurvivabilityModeChoiceInt := &ves_io_schema_views.OfflineSurvivabilityModeType_NoOfflineSurvivabilityMode{}
+						offlineSurvivabilityModeChoiceInt.NoOfflineSurvivabilityMode = &ves_io_schema.Empty{}
+						offlineSurvivabilityMode.OfflineSurvivabilityModeChoice = offlineSurvivabilityModeChoiceInt
+					}
+
 				}
 
 			}
-
-			if v, ok := offlineSurvivabilityModeMapStrToI["no_offline_survivability_mode"]; ok && !isIntfNil(v) && !offlineSurvivabilityModeChoiceTypeFound {
-
-				offlineSurvivabilityModeChoiceTypeFound = true
-
-				if v.(bool) {
-					offlineSurvivabilityModeChoiceInt := &ves_io_schema_views.OfflineSurvivabilityModeType_NoOfflineSurvivabilityMode{}
-					offlineSurvivabilityModeChoiceInt.NoOfflineSurvivabilityMode = &ves_io_schema.Empty{}
-					offlineSurvivabilityMode.OfflineSurvivabilityModeChoice = offlineSurvivabilityModeChoiceInt
-				}
-
-			}
-
 		}
 
 	}
 
 	if v, ok := d.GetOk("performance_enhancement_mode"); ok && !isIntfNil(v) {
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		performanceEnhancementMode := &ves_io_schema_views.PerformanceEnhancementModeType{}
 		updateSpec.PerformanceEnhancementMode = performanceEnhancementMode
 		for _, set := range sl {
-			performanceEnhancementModeMapStrToI := set.(map[string]interface{})
+			if set != nil {
+				performanceEnhancementModeMapStrToI := set.(map[string]interface{})
 
-			perfModeChoiceTypeFound := false
+				perfModeChoiceTypeFound := false
 
-			if v, ok := performanceEnhancementModeMapStrToI["perf_mode_l3_enhanced"]; ok && !isIntfNil(v) && !perfModeChoiceTypeFound {
+				if v, ok := performanceEnhancementModeMapStrToI["perf_mode_l3_enhanced"]; ok && !isIntfNil(v) && !perfModeChoiceTypeFound {
 
-				perfModeChoiceTypeFound = true
-				perfModeChoiceInt := &ves_io_schema_views.PerformanceEnhancementModeType_PerfModeL3Enhanced{}
-				perfModeChoiceInt.PerfModeL3Enhanced = &ves_io_schema_views.L3PerformanceEnhancementType{}
-				performanceEnhancementMode.PerfModeChoice = perfModeChoiceInt
-
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
-
-					perfModeChoiceTypeFound := false
-
-					if v, ok := cs["jumbo"]; ok && !isIntfNil(v) && !perfModeChoiceTypeFound {
-
-						perfModeChoiceTypeFound = true
-
-						if v.(bool) {
-							perfModeChoiceIntNew := &ves_io_schema_views.L3PerformanceEnhancementType_Jumbo{}
-							perfModeChoiceIntNew.Jumbo = &ves_io_schema.Empty{}
-							perfModeChoiceInt.PerfModeL3Enhanced.PerfModeChoice = perfModeChoiceIntNew
-						}
-
-					}
-
-					if v, ok := cs["no_jumbo"]; ok && !isIntfNil(v) && !perfModeChoiceTypeFound {
-
-						perfModeChoiceTypeFound = true
-
-						if v.(bool) {
-							perfModeChoiceIntNew := &ves_io_schema_views.L3PerformanceEnhancementType_NoJumbo{}
-							perfModeChoiceIntNew.NoJumbo = &ves_io_schema.Empty{}
-							perfModeChoiceInt.PerfModeL3Enhanced.PerfModeChoice = perfModeChoiceIntNew
-						}
-
-					}
-
-				}
-
-			}
-
-			if v, ok := performanceEnhancementModeMapStrToI["perf_mode_l7_enhanced"]; ok && !isIntfNil(v) && !perfModeChoiceTypeFound {
-
-				perfModeChoiceTypeFound = true
-
-				if v.(bool) {
-					perfModeChoiceInt := &ves_io_schema_views.PerformanceEnhancementModeType_PerfModeL7Enhanced{}
-					perfModeChoiceInt.PerfModeL7Enhanced = &ves_io_schema.Empty{}
+					perfModeChoiceTypeFound = true
+					perfModeChoiceInt := &ves_io_schema_views.PerformanceEnhancementModeType_PerfModeL3Enhanced{}
+					perfModeChoiceInt.PerfModeL3Enhanced = &ves_io_schema_views.L3PerformanceEnhancementType{}
 					performanceEnhancementMode.PerfModeChoice = perfModeChoiceInt
+
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
+
+							perfModeChoiceTypeFound := false
+
+							if v, ok := cs["jumbo"]; ok && !isIntfNil(v) && !perfModeChoiceTypeFound {
+
+								perfModeChoiceTypeFound = true
+
+								if v.(bool) {
+									perfModeChoiceIntNew := &ves_io_schema_views.L3PerformanceEnhancementType_Jumbo{}
+									perfModeChoiceIntNew.Jumbo = &ves_io_schema.Empty{}
+									perfModeChoiceInt.PerfModeL3Enhanced.PerfModeChoice = perfModeChoiceIntNew
+								}
+
+							}
+
+							if v, ok := cs["no_jumbo"]; ok && !isIntfNil(v) && !perfModeChoiceTypeFound {
+
+								perfModeChoiceTypeFound = true
+
+								if v.(bool) {
+									perfModeChoiceIntNew := &ves_io_schema_views.L3PerformanceEnhancementType_NoJumbo{}
+									perfModeChoiceIntNew.NoJumbo = &ves_io_schema.Empty{}
+									perfModeChoiceInt.PerfModeL3Enhanced.PerfModeChoice = perfModeChoiceIntNew
+								}
+
+							}
+
+						}
+					}
+
+				}
+
+				if v, ok := performanceEnhancementModeMapStrToI["perf_mode_l7_enhanced"]; ok && !isIntfNil(v) && !perfModeChoiceTypeFound {
+
+					perfModeChoiceTypeFound = true
+
+					if v.(bool) {
+						perfModeChoiceInt := &ves_io_schema_views.PerformanceEnhancementModeType_PerfModeL7Enhanced{}
+						perfModeChoiceInt.PerfModeL7Enhanced = &ves_io_schema.Empty{}
+						performanceEnhancementMode.PerfModeChoice = perfModeChoiceInt
+					}
+
 				}
 
 			}
-
 		}
 
 	}
 
 	if v, ok := d.GetOk("tgw_security"); ok && !isIntfNil(v) {
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		tgwSecurity := &ves_io_schema_views_aws_tgw_site.SecurityConfigType{}
 		updateSpec.TgwSecurity = tgwSecurity
 		for _, set := range sl {
-			tgwSecurityMapStrToI := set.(map[string]interface{})
+			if set != nil {
+				tgwSecurityMapStrToI := set.(map[string]interface{})
 
-			eastWestServicePolicyChoiceTypeFound := false
+				eastWestServicePolicyChoiceTypeFound := false
 
-			if v, ok := tgwSecurityMapStrToI["active_east_west_service_policies"]; ok && !isIntfNil(v) && !eastWestServicePolicyChoiceTypeFound {
+				if v, ok := tgwSecurityMapStrToI["active_east_west_service_policies"]; ok && !isIntfNil(v) && !eastWestServicePolicyChoiceTypeFound {
 
-				eastWestServicePolicyChoiceTypeFound = true
-				eastWestServicePolicyChoiceInt := &ves_io_schema_views_aws_tgw_site.SecurityConfigType_ActiveEastWestServicePolicies{}
-				eastWestServicePolicyChoiceInt.ActiveEastWestServicePolicies = &ves_io_schema_views_aws_tgw_site.ActiveServicePoliciesType{}
-				tgwSecurity.EastWestServicePolicyChoice = eastWestServicePolicyChoiceInt
-
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
-
-					if v, ok := cs["service_policies"]; ok && !isIntfNil(v) {
-
-						sl := v.([]interface{})
-						servicePoliciesInt := make([]*ves_io_schema_views.ObjectRefType, len(sl))
-						eastWestServicePolicyChoiceInt.ActiveEastWestServicePolicies.ServicePolicies = servicePoliciesInt
-						for i, ps := range sl {
-
-							spMapToStrVal := ps.(map[string]interface{})
-							servicePoliciesInt[i] = &ves_io_schema_views.ObjectRefType{}
-
-							if v, ok := spMapToStrVal["name"]; ok && !isIntfNil(v) {
-								servicePoliciesInt[i].Name = v.(string)
-							}
-
-							if v, ok := spMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-								servicePoliciesInt[i].Namespace = v.(string)
-							}
-
-							if v, ok := spMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-								servicePoliciesInt[i].Tenant = v.(string)
-							}
-
-						}
-
-					}
-
-				}
-
-			}
-
-			if v, ok := tgwSecurityMapStrToI["east_west_service_policy_allow_all"]; ok && !isIntfNil(v) && !eastWestServicePolicyChoiceTypeFound {
-
-				eastWestServicePolicyChoiceTypeFound = true
-
-				if v.(bool) {
-					eastWestServicePolicyChoiceInt := &ves_io_schema_views_aws_tgw_site.SecurityConfigType_EastWestServicePolicyAllowAll{}
-					eastWestServicePolicyChoiceInt.EastWestServicePolicyAllowAll = &ves_io_schema.Empty{}
+					eastWestServicePolicyChoiceTypeFound = true
+					eastWestServicePolicyChoiceInt := &ves_io_schema_views_aws_tgw_site.SecurityConfigType_ActiveEastWestServicePolicies{}
+					eastWestServicePolicyChoiceInt.ActiveEastWestServicePolicies = &ves_io_schema_views_aws_tgw_site.ActiveServicePoliciesType{}
 					tgwSecurity.EastWestServicePolicyChoice = eastWestServicePolicyChoiceInt
-				}
 
-			}
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
 
-			if v, ok := tgwSecurityMapStrToI["no_east_west_policy"]; ok && !isIntfNil(v) && !eastWestServicePolicyChoiceTypeFound {
+							if v, ok := cs["service_policies"]; ok && !isIntfNil(v) {
 
-				eastWestServicePolicyChoiceTypeFound = true
+								sl := v.([]interface{})
+								servicePoliciesInt := make([]*ves_io_schema_views.ObjectRefType, len(sl))
+								eastWestServicePolicyChoiceInt.ActiveEastWestServicePolicies.ServicePolicies = servicePoliciesInt
+								for i, ps := range sl {
 
-				if v.(bool) {
-					eastWestServicePolicyChoiceInt := &ves_io_schema_views_aws_tgw_site.SecurityConfigType_NoEastWestPolicy{}
-					eastWestServicePolicyChoiceInt.NoEastWestPolicy = &ves_io_schema.Empty{}
-					tgwSecurity.EastWestServicePolicyChoice = eastWestServicePolicyChoiceInt
-				}
+									spMapToStrVal := ps.(map[string]interface{})
+									servicePoliciesInt[i] = &ves_io_schema_views.ObjectRefType{}
 
-			}
+									if v, ok := spMapToStrVal["name"]; ok && !isIntfNil(v) {
+										servicePoliciesInt[i].Name = v.(string)
+									}
 
-			forwardProxyChoiceTypeFound := false
+									if v, ok := spMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+										servicePoliciesInt[i].Namespace = v.(string)
+									}
 
-			if v, ok := tgwSecurityMapStrToI["active_forward_proxy_policies"]; ok && !isIntfNil(v) && !forwardProxyChoiceTypeFound {
+									if v, ok := spMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+										servicePoliciesInt[i].Tenant = v.(string)
+									}
 
-				forwardProxyChoiceTypeFound = true
-				forwardProxyChoiceInt := &ves_io_schema_views_aws_tgw_site.SecurityConfigType_ActiveForwardProxyPolicies{}
-				forwardProxyChoiceInt.ActiveForwardProxyPolicies = &ves_io_schema_network_firewall.ActiveForwardProxyPoliciesType{}
-				tgwSecurity.ForwardProxyChoice = forwardProxyChoiceInt
+								}
 
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
-
-					if v, ok := cs["forward_proxy_policies"]; ok && !isIntfNil(v) {
-
-						sl := v.([]interface{})
-						forwardProxyPoliciesInt := make([]*ves_io_schema_views.ObjectRefType, len(sl))
-						forwardProxyChoiceInt.ActiveForwardProxyPolicies.ForwardProxyPolicies = forwardProxyPoliciesInt
-						for i, ps := range sl {
-
-							fppMapToStrVal := ps.(map[string]interface{})
-							forwardProxyPoliciesInt[i] = &ves_io_schema_views.ObjectRefType{}
-
-							if v, ok := fppMapToStrVal["name"]; ok && !isIntfNil(v) {
-								forwardProxyPoliciesInt[i].Name = v.(string)
-							}
-
-							if v, ok := fppMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-								forwardProxyPoliciesInt[i].Namespace = v.(string)
-							}
-
-							if v, ok := fppMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-								forwardProxyPoliciesInt[i].Tenant = v.(string)
 							}
 
 						}
-
 					}
 
 				}
 
-			}
+				if v, ok := tgwSecurityMapStrToI["east_west_service_policy_allow_all"]; ok && !isIntfNil(v) && !eastWestServicePolicyChoiceTypeFound {
 
-			if v, ok := tgwSecurityMapStrToI["forward_proxy_allow_all"]; ok && !isIntfNil(v) && !forwardProxyChoiceTypeFound {
+					eastWestServicePolicyChoiceTypeFound = true
 
-				forwardProxyChoiceTypeFound = true
+					if v.(bool) {
+						eastWestServicePolicyChoiceInt := &ves_io_schema_views_aws_tgw_site.SecurityConfigType_EastWestServicePolicyAllowAll{}
+						eastWestServicePolicyChoiceInt.EastWestServicePolicyAllowAll = &ves_io_schema.Empty{}
+						tgwSecurity.EastWestServicePolicyChoice = eastWestServicePolicyChoiceInt
+					}
 
-				if v.(bool) {
-					forwardProxyChoiceInt := &ves_io_schema_views_aws_tgw_site.SecurityConfigType_ForwardProxyAllowAll{}
-					forwardProxyChoiceInt.ForwardProxyAllowAll = &ves_io_schema.Empty{}
+				}
+
+				if v, ok := tgwSecurityMapStrToI["no_east_west_policy"]; ok && !isIntfNil(v) && !eastWestServicePolicyChoiceTypeFound {
+
+					eastWestServicePolicyChoiceTypeFound = true
+
+					if v.(bool) {
+						eastWestServicePolicyChoiceInt := &ves_io_schema_views_aws_tgw_site.SecurityConfigType_NoEastWestPolicy{}
+						eastWestServicePolicyChoiceInt.NoEastWestPolicy = &ves_io_schema.Empty{}
+						tgwSecurity.EastWestServicePolicyChoice = eastWestServicePolicyChoiceInt
+					}
+
+				}
+
+				forwardProxyChoiceTypeFound := false
+
+				if v, ok := tgwSecurityMapStrToI["active_forward_proxy_policies"]; ok && !isIntfNil(v) && !forwardProxyChoiceTypeFound {
+
+					forwardProxyChoiceTypeFound = true
+					forwardProxyChoiceInt := &ves_io_schema_views_aws_tgw_site.SecurityConfigType_ActiveForwardProxyPolicies{}
+					forwardProxyChoiceInt.ActiveForwardProxyPolicies = &ves_io_schema_network_firewall.ActiveForwardProxyPoliciesType{}
 					tgwSecurity.ForwardProxyChoice = forwardProxyChoiceInt
-				}
 
-			}
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
 
-			if v, ok := tgwSecurityMapStrToI["no_forward_proxy"]; ok && !isIntfNil(v) && !forwardProxyChoiceTypeFound {
+							if v, ok := cs["forward_proxy_policies"]; ok && !isIntfNil(v) {
 
-				forwardProxyChoiceTypeFound = true
+								sl := v.([]interface{})
+								forwardProxyPoliciesInt := make([]*ves_io_schema_views.ObjectRefType, len(sl))
+								forwardProxyChoiceInt.ActiveForwardProxyPolicies.ForwardProxyPolicies = forwardProxyPoliciesInt
+								for i, ps := range sl {
 
-				if v.(bool) {
-					forwardProxyChoiceInt := &ves_io_schema_views_aws_tgw_site.SecurityConfigType_NoForwardProxy{}
-					forwardProxyChoiceInt.NoForwardProxy = &ves_io_schema.Empty{}
-					tgwSecurity.ForwardProxyChoice = forwardProxyChoiceInt
-				}
+									fppMapToStrVal := ps.(map[string]interface{})
+									forwardProxyPoliciesInt[i] = &ves_io_schema_views.ObjectRefType{}
 
-			}
+									if v, ok := fppMapToStrVal["name"]; ok && !isIntfNil(v) {
+										forwardProxyPoliciesInt[i].Name = v.(string)
+									}
 
-			networkPolicyChoiceTypeFound := false
+									if v, ok := fppMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+										forwardProxyPoliciesInt[i].Namespace = v.(string)
+									}
 
-			if v, ok := tgwSecurityMapStrToI["active_enhanced_firewall_policies"]; ok && !isIntfNil(v) && !networkPolicyChoiceTypeFound {
+									if v, ok := fppMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+										forwardProxyPoliciesInt[i].Tenant = v.(string)
+									}
 
-				networkPolicyChoiceTypeFound = true
-				networkPolicyChoiceInt := &ves_io_schema_views_aws_tgw_site.SecurityConfigType_ActiveEnhancedFirewallPolicies{}
-				networkPolicyChoiceInt.ActiveEnhancedFirewallPolicies = &ves_io_schema_network_firewall.ActiveEnhancedFirewallPoliciesType{}
-				tgwSecurity.NetworkPolicyChoice = networkPolicyChoiceInt
+								}
 
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
-
-					if v, ok := cs["enhanced_firewall_policies"]; ok && !isIntfNil(v) {
-
-						sl := v.([]interface{})
-						enhancedFirewallPoliciesInt := make([]*ves_io_schema_views.ObjectRefType, len(sl))
-						networkPolicyChoiceInt.ActiveEnhancedFirewallPolicies.EnhancedFirewallPolicies = enhancedFirewallPoliciesInt
-						for i, ps := range sl {
-
-							efpMapToStrVal := ps.(map[string]interface{})
-							enhancedFirewallPoliciesInt[i] = &ves_io_schema_views.ObjectRefType{}
-
-							if v, ok := efpMapToStrVal["name"]; ok && !isIntfNil(v) {
-								enhancedFirewallPoliciesInt[i].Name = v.(string)
-							}
-
-							if v, ok := efpMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-								enhancedFirewallPoliciesInt[i].Namespace = v.(string)
-							}
-
-							if v, ok := efpMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-								enhancedFirewallPoliciesInt[i].Tenant = v.(string)
 							}
 
 						}
-
 					}
 
 				}
 
-			}
+				if v, ok := tgwSecurityMapStrToI["forward_proxy_allow_all"]; ok && !isIntfNil(v) && !forwardProxyChoiceTypeFound {
 
-			if v, ok := tgwSecurityMapStrToI["active_network_policies"]; ok && !isIntfNil(v) && !networkPolicyChoiceTypeFound {
+					forwardProxyChoiceTypeFound = true
 
-				networkPolicyChoiceTypeFound = true
-				networkPolicyChoiceInt := &ves_io_schema_views_aws_tgw_site.SecurityConfigType_ActiveNetworkPolicies{}
-				networkPolicyChoiceInt.ActiveNetworkPolicies = &ves_io_schema_network_firewall.ActiveNetworkPoliciesType{}
-				tgwSecurity.NetworkPolicyChoice = networkPolicyChoiceInt
-
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
-
-					if v, ok := cs["network_policies"]; ok && !isIntfNil(v) {
-
-						sl := v.([]interface{})
-						networkPoliciesInt := make([]*ves_io_schema_views.ObjectRefType, len(sl))
-						networkPolicyChoiceInt.ActiveNetworkPolicies.NetworkPolicies = networkPoliciesInt
-						for i, ps := range sl {
-
-							npMapToStrVal := ps.(map[string]interface{})
-							networkPoliciesInt[i] = &ves_io_schema_views.ObjectRefType{}
-
-							if v, ok := npMapToStrVal["name"]; ok && !isIntfNil(v) {
-								networkPoliciesInt[i].Name = v.(string)
-							}
-
-							if v, ok := npMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-								networkPoliciesInt[i].Namespace = v.(string)
-							}
-
-							if v, ok := npMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-								networkPoliciesInt[i].Tenant = v.(string)
-							}
-
-						}
-
+					if v.(bool) {
+						forwardProxyChoiceInt := &ves_io_schema_views_aws_tgw_site.SecurityConfigType_ForwardProxyAllowAll{}
+						forwardProxyChoiceInt.ForwardProxyAllowAll = &ves_io_schema.Empty{}
+						tgwSecurity.ForwardProxyChoice = forwardProxyChoiceInt
 					}
 
 				}
 
-			}
+				if v, ok := tgwSecurityMapStrToI["no_forward_proxy"]; ok && !isIntfNil(v) && !forwardProxyChoiceTypeFound {
 
-			if v, ok := tgwSecurityMapStrToI["no_network_policy"]; ok && !isIntfNil(v) && !networkPolicyChoiceTypeFound {
+					forwardProxyChoiceTypeFound = true
 
-				networkPolicyChoiceTypeFound = true
+					if v.(bool) {
+						forwardProxyChoiceInt := &ves_io_schema_views_aws_tgw_site.SecurityConfigType_NoForwardProxy{}
+						forwardProxyChoiceInt.NoForwardProxy = &ves_io_schema.Empty{}
+						tgwSecurity.ForwardProxyChoice = forwardProxyChoiceInt
+					}
 
-				if v.(bool) {
-					networkPolicyChoiceInt := &ves_io_schema_views_aws_tgw_site.SecurityConfigType_NoNetworkPolicy{}
-					networkPolicyChoiceInt.NoNetworkPolicy = &ves_io_schema.Empty{}
+				}
+
+				networkPolicyChoiceTypeFound := false
+
+				if v, ok := tgwSecurityMapStrToI["active_enhanced_firewall_policies"]; ok && !isIntfNil(v) && !networkPolicyChoiceTypeFound {
+
+					networkPolicyChoiceTypeFound = true
+					networkPolicyChoiceInt := &ves_io_schema_views_aws_tgw_site.SecurityConfigType_ActiveEnhancedFirewallPolicies{}
+					networkPolicyChoiceInt.ActiveEnhancedFirewallPolicies = &ves_io_schema_network_firewall.ActiveEnhancedFirewallPoliciesType{}
 					tgwSecurity.NetworkPolicyChoice = networkPolicyChoiceInt
+
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["enhanced_firewall_policies"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								enhancedFirewallPoliciesInt := make([]*ves_io_schema_views.ObjectRefType, len(sl))
+								networkPolicyChoiceInt.ActiveEnhancedFirewallPolicies.EnhancedFirewallPolicies = enhancedFirewallPoliciesInt
+								for i, ps := range sl {
+
+									efpMapToStrVal := ps.(map[string]interface{})
+									enhancedFirewallPoliciesInt[i] = &ves_io_schema_views.ObjectRefType{}
+
+									if v, ok := efpMapToStrVal["name"]; ok && !isIntfNil(v) {
+										enhancedFirewallPoliciesInt[i].Name = v.(string)
+									}
+
+									if v, ok := efpMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+										enhancedFirewallPoliciesInt[i].Namespace = v.(string)
+									}
+
+									if v, ok := efpMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+										enhancedFirewallPoliciesInt[i].Tenant = v.(string)
+									}
+
+								}
+
+							}
+
+						}
+					}
+
+				}
+
+				if v, ok := tgwSecurityMapStrToI["active_network_policies"]; ok && !isIntfNil(v) && !networkPolicyChoiceTypeFound {
+
+					networkPolicyChoiceTypeFound = true
+					networkPolicyChoiceInt := &ves_io_schema_views_aws_tgw_site.SecurityConfigType_ActiveNetworkPolicies{}
+					networkPolicyChoiceInt.ActiveNetworkPolicies = &ves_io_schema_network_firewall.ActiveNetworkPoliciesType{}
+					tgwSecurity.NetworkPolicyChoice = networkPolicyChoiceInt
+
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["network_policies"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								networkPoliciesInt := make([]*ves_io_schema_views.ObjectRefType, len(sl))
+								networkPolicyChoiceInt.ActiveNetworkPolicies.NetworkPolicies = networkPoliciesInt
+								for i, ps := range sl {
+
+									npMapToStrVal := ps.(map[string]interface{})
+									networkPoliciesInt[i] = &ves_io_schema_views.ObjectRefType{}
+
+									if v, ok := npMapToStrVal["name"]; ok && !isIntfNil(v) {
+										networkPoliciesInt[i].Name = v.(string)
+									}
+
+									if v, ok := npMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+										networkPoliciesInt[i].Namespace = v.(string)
+									}
+
+									if v, ok := npMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+										networkPoliciesInt[i].Tenant = v.(string)
+									}
+
+								}
+
+							}
+
+						}
+					}
+
+				}
+
+				if v, ok := tgwSecurityMapStrToI["no_network_policy"]; ok && !isIntfNil(v) && !networkPolicyChoiceTypeFound {
+
+					networkPolicyChoiceTypeFound = true
+
+					if v.(bool) {
+						networkPolicyChoiceInt := &ves_io_schema_views_aws_tgw_site.SecurityConfigType_NoNetworkPolicy{}
+						networkPolicyChoiceInt.NoNetworkPolicy = &ves_io_schema.Empty{}
+						tgwSecurity.NetworkPolicyChoice = networkPolicyChoiceInt
+					}
+
 				}
 
 			}
-
 		}
 
 	}
 
 	if v, ok := d.GetOk("vn_config"); ok && !isIntfNil(v) {
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		vnConfig := &ves_io_schema_views_aws_tgw_site.VnConfiguration{}
 		updateSpec.VnConfig = vnConfig
 		for _, set := range sl {
-			vnConfigMapStrToI := set.(map[string]interface{})
+			if set != nil {
+				vnConfigMapStrToI := set.(map[string]interface{})
 
-			if v, ok := vnConfigMapStrToI["allowed_vip_port"]; ok && !isIntfNil(v) {
+				if v, ok := vnConfigMapStrToI["allowed_vip_port"]; ok && !isIntfNil(v) {
 
-				sl := v.(*schema.Set).List()
-				allowedVipPort := &ves_io_schema_views.AllowedVIPPorts{}
-				vnConfig.AllowedVipPort = allowedVipPort
-				for _, set := range sl {
-					allowedVipPortMapStrToI := set.(map[string]interface{})
+					sl := v.([]interface{})
+					allowedVipPort := &ves_io_schema_views.AllowedVIPPorts{}
+					vnConfig.AllowedVipPort = allowedVipPort
+					for _, set := range sl {
+						if set != nil {
+							allowedVipPortMapStrToI := set.(map[string]interface{})
 
-					portChoiceTypeFound := false
+							portChoiceTypeFound := false
 
-					if v, ok := allowedVipPortMapStrToI["custom_ports"]; ok && !isIntfNil(v) && !portChoiceTypeFound {
+							if v, ok := allowedVipPortMapStrToI["custom_ports"]; ok && !isIntfNil(v) && !portChoiceTypeFound {
 
-						portChoiceTypeFound = true
-						portChoiceInt := &ves_io_schema_views.AllowedVIPPorts_CustomPorts{}
-						portChoiceInt.CustomPorts = &ves_io_schema_views.CustomPorts{}
-						allowedVipPort.PortChoice = portChoiceInt
+								portChoiceTypeFound = true
+								portChoiceInt := &ves_io_schema_views.AllowedVIPPorts_CustomPorts{}
+								portChoiceInt.CustomPorts = &ves_io_schema_views.CustomPorts{}
+								allowedVipPort.PortChoice = portChoiceInt
 
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["port_ranges"]; ok && !isIntfNil(v) {
-
-								portChoiceInt.CustomPorts.PortRanges = v.(string)
-
-							}
-
-						}
-
-					}
-
-					if v, ok := allowedVipPortMapStrToI["disable_allowed_vip_port"]; ok && !isIntfNil(v) && !portChoiceTypeFound {
-
-						portChoiceTypeFound = true
-
-						if v.(bool) {
-							portChoiceInt := &ves_io_schema_views.AllowedVIPPorts_DisableAllowedVipPort{}
-							portChoiceInt.DisableAllowedVipPort = &ves_io_schema.Empty{}
-							allowedVipPort.PortChoice = portChoiceInt
-						}
-
-					}
-
-					if v, ok := allowedVipPortMapStrToI["use_http_https_port"]; ok && !isIntfNil(v) && !portChoiceTypeFound {
-
-						portChoiceTypeFound = true
-
-						if v.(bool) {
-							portChoiceInt := &ves_io_schema_views.AllowedVIPPorts_UseHttpHttpsPort{}
-							portChoiceInt.UseHttpHttpsPort = &ves_io_schema.Empty{}
-							allowedVipPort.PortChoice = portChoiceInt
-						}
-
-					}
-
-					if v, ok := allowedVipPortMapStrToI["use_http_port"]; ok && !isIntfNil(v) && !portChoiceTypeFound {
-
-						portChoiceTypeFound = true
-
-						if v.(bool) {
-							portChoiceInt := &ves_io_schema_views.AllowedVIPPorts_UseHttpPort{}
-							portChoiceInt.UseHttpPort = &ves_io_schema.Empty{}
-							allowedVipPort.PortChoice = portChoiceInt
-						}
-
-					}
-
-					if v, ok := allowedVipPortMapStrToI["use_https_port"]; ok && !isIntfNil(v) && !portChoiceTypeFound {
-
-						portChoiceTypeFound = true
-
-						if v.(bool) {
-							portChoiceInt := &ves_io_schema_views.AllowedVIPPorts_UseHttpsPort{}
-							portChoiceInt.UseHttpsPort = &ves_io_schema.Empty{}
-							allowedVipPort.PortChoice = portChoiceInt
-						}
-
-					}
-
-				}
-
-			}
-
-			if v, ok := vnConfigMapStrToI["allowed_vip_port_sli"]; ok && !isIntfNil(v) {
-
-				sl := v.(*schema.Set).List()
-				allowedVipPortSli := &ves_io_schema_views.AllowedVIPPorts{}
-				vnConfig.AllowedVipPortSli = allowedVipPortSli
-				for _, set := range sl {
-					allowedVipPortSliMapStrToI := set.(map[string]interface{})
-
-					portChoiceTypeFound := false
-
-					if v, ok := allowedVipPortSliMapStrToI["custom_ports"]; ok && !isIntfNil(v) && !portChoiceTypeFound {
-
-						portChoiceTypeFound = true
-						portChoiceInt := &ves_io_schema_views.AllowedVIPPorts_CustomPorts{}
-						portChoiceInt.CustomPorts = &ves_io_schema_views.CustomPorts{}
-						allowedVipPortSli.PortChoice = portChoiceInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["port_ranges"]; ok && !isIntfNil(v) {
-
-								portChoiceInt.CustomPorts.PortRanges = v.(string)
-
-							}
-
-						}
-
-					}
-
-					if v, ok := allowedVipPortSliMapStrToI["disable_allowed_vip_port"]; ok && !isIntfNil(v) && !portChoiceTypeFound {
-
-						portChoiceTypeFound = true
-
-						if v.(bool) {
-							portChoiceInt := &ves_io_schema_views.AllowedVIPPorts_DisableAllowedVipPort{}
-							portChoiceInt.DisableAllowedVipPort = &ves_io_schema.Empty{}
-							allowedVipPortSli.PortChoice = portChoiceInt
-						}
-
-					}
-
-					if v, ok := allowedVipPortSliMapStrToI["use_http_https_port"]; ok && !isIntfNil(v) && !portChoiceTypeFound {
-
-						portChoiceTypeFound = true
-
-						if v.(bool) {
-							portChoiceInt := &ves_io_schema_views.AllowedVIPPorts_UseHttpHttpsPort{}
-							portChoiceInt.UseHttpHttpsPort = &ves_io_schema.Empty{}
-							allowedVipPortSli.PortChoice = portChoiceInt
-						}
-
-					}
-
-					if v, ok := allowedVipPortSliMapStrToI["use_http_port"]; ok && !isIntfNil(v) && !portChoiceTypeFound {
-
-						portChoiceTypeFound = true
-
-						if v.(bool) {
-							portChoiceInt := &ves_io_schema_views.AllowedVIPPorts_UseHttpPort{}
-							portChoiceInt.UseHttpPort = &ves_io_schema.Empty{}
-							allowedVipPortSli.PortChoice = portChoiceInt
-						}
-
-					}
-
-					if v, ok := allowedVipPortSliMapStrToI["use_https_port"]; ok && !isIntfNil(v) && !portChoiceTypeFound {
-
-						portChoiceTypeFound = true
-
-						if v.(bool) {
-							portChoiceInt := &ves_io_schema_views.AllowedVIPPorts_UseHttpsPort{}
-							portChoiceInt.UseHttpsPort = &ves_io_schema.Empty{}
-							allowedVipPortSli.PortChoice = portChoiceInt
-						}
-
-					}
-
-				}
-
-			}
-
-			dcClusterGroupChoiceTypeFound := false
-
-			if v, ok := vnConfigMapStrToI["dc_cluster_group_inside_vn"]; ok && !isIntfNil(v) && !dcClusterGroupChoiceTypeFound {
-
-				dcClusterGroupChoiceTypeFound = true
-				dcClusterGroupChoiceInt := &ves_io_schema_views_aws_tgw_site.VnConfiguration_DcClusterGroupInsideVn{}
-				dcClusterGroupChoiceInt.DcClusterGroupInsideVn = &ves_io_schema_views.ObjectRefType{}
-				vnConfig.DcClusterGroupChoice = dcClusterGroupChoiceInt
-
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
-
-					if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-						dcClusterGroupChoiceInt.DcClusterGroupInsideVn.Name = v.(string)
-
-					}
-
-					if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
-
-						dcClusterGroupChoiceInt.DcClusterGroupInsideVn.Namespace = v.(string)
-
-					}
-
-					if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
-
-						dcClusterGroupChoiceInt.DcClusterGroupInsideVn.Tenant = v.(string)
-
-					}
-
-				}
-
-			}
-
-			if v, ok := vnConfigMapStrToI["dc_cluster_group_outside_vn"]; ok && !isIntfNil(v) && !dcClusterGroupChoiceTypeFound {
-
-				dcClusterGroupChoiceTypeFound = true
-				dcClusterGroupChoiceInt := &ves_io_schema_views_aws_tgw_site.VnConfiguration_DcClusterGroupOutsideVn{}
-				dcClusterGroupChoiceInt.DcClusterGroupOutsideVn = &ves_io_schema_views.ObjectRefType{}
-				vnConfig.DcClusterGroupChoice = dcClusterGroupChoiceInt
-
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
-
-					if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-						dcClusterGroupChoiceInt.DcClusterGroupOutsideVn.Name = v.(string)
-
-					}
-
-					if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
-
-						dcClusterGroupChoiceInt.DcClusterGroupOutsideVn.Namespace = v.(string)
-
-					}
-
-					if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
-
-						dcClusterGroupChoiceInt.DcClusterGroupOutsideVn.Tenant = v.(string)
-
-					}
-
-				}
-
-			}
-
-			if v, ok := vnConfigMapStrToI["no_dc_cluster_group"]; ok && !isIntfNil(v) && !dcClusterGroupChoiceTypeFound {
-
-				dcClusterGroupChoiceTypeFound = true
-
-				if v.(bool) {
-					dcClusterGroupChoiceInt := &ves_io_schema_views_aws_tgw_site.VnConfiguration_NoDcClusterGroup{}
-					dcClusterGroupChoiceInt.NoDcClusterGroup = &ves_io_schema.Empty{}
-					vnConfig.DcClusterGroupChoice = dcClusterGroupChoiceInt
-				}
-
-			}
-
-			globalNetworkChoiceTypeFound := false
-
-			if v, ok := vnConfigMapStrToI["global_network_list"]; ok && !isIntfNil(v) && !globalNetworkChoiceTypeFound {
-
-				globalNetworkChoiceTypeFound = true
-				globalNetworkChoiceInt := &ves_io_schema_views_aws_tgw_site.VnConfiguration_GlobalNetworkList{}
-				globalNetworkChoiceInt.GlobalNetworkList = &ves_io_schema_views.GlobalNetworkConnectionListType{}
-				vnConfig.GlobalNetworkChoice = globalNetworkChoiceInt
-
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
-
-					if v, ok := cs["global_network_connections"]; ok && !isIntfNil(v) {
-
-						sl := v.([]interface{})
-						globalNetworkConnections := make([]*ves_io_schema_views.GlobalNetworkConnectionType, len(sl))
-						globalNetworkChoiceInt.GlobalNetworkList.GlobalNetworkConnections = globalNetworkConnections
-						for i, set := range sl {
-							globalNetworkConnections[i] = &ves_io_schema_views.GlobalNetworkConnectionType{}
-							globalNetworkConnectionsMapStrToI := set.(map[string]interface{})
-
-							connectionChoiceTypeFound := false
-
-							if v, ok := globalNetworkConnectionsMapStrToI["sli_to_global_dr"]; ok && !isIntfNil(v) && !connectionChoiceTypeFound {
-
-								connectionChoiceTypeFound = true
-								connectionChoiceInt := &ves_io_schema_views.GlobalNetworkConnectionType_SliToGlobalDr{}
-								connectionChoiceInt.SliToGlobalDr = &ves_io_schema_views.GlobalConnectorType{}
-								globalNetworkConnections[i].ConnectionChoice = connectionChoiceInt
-
-								sl := v.(*schema.Set).List()
+								sl := v.([]interface{})
 								for _, set := range sl {
-									cs := set.(map[string]interface{})
+									if set != nil {
+										cs := set.(map[string]interface{})
 
-									if v, ok := cs["global_vn"]; ok && !isIntfNil(v) {
+										if v, ok := cs["port_ranges"]; ok && !isIntfNil(v) {
 
-										sl := v.(*schema.Set).List()
-										globalVn := &ves_io_schema_views.ObjectRefType{}
-										connectionChoiceInt.SliToGlobalDr.GlobalVn = globalVn
-										for _, set := range sl {
-											globalVnMapStrToI := set.(map[string]interface{})
-
-											if w, ok := globalVnMapStrToI["name"]; ok && !isIntfNil(w) {
-												globalVn.Name = w.(string)
-											}
-
-											if w, ok := globalVnMapStrToI["namespace"]; ok && !isIntfNil(w) {
-												globalVn.Namespace = w.(string)
-											}
-
-											if w, ok := globalVnMapStrToI["tenant"]; ok && !isIntfNil(w) {
-												globalVn.Tenant = w.(string)
-											}
+											portChoiceInt.CustomPorts.PortRanges = v.(string)
 
 										}
 
 									}
-
 								}
 
 							}
 
-							if v, ok := globalNetworkConnectionsMapStrToI["slo_to_global_dr"]; ok && !isIntfNil(v) && !connectionChoiceTypeFound {
+							if v, ok := allowedVipPortMapStrToI["disable_allowed_vip_port"]; ok && !isIntfNil(v) && !portChoiceTypeFound {
 
-								connectionChoiceTypeFound = true
-								connectionChoiceInt := &ves_io_schema_views.GlobalNetworkConnectionType_SloToGlobalDr{}
-								connectionChoiceInt.SloToGlobalDr = &ves_io_schema_views.GlobalConnectorType{}
-								globalNetworkConnections[i].ConnectionChoice = connectionChoiceInt
-
-								sl := v.(*schema.Set).List()
-								for _, set := range sl {
-									cs := set.(map[string]interface{})
-
-									if v, ok := cs["global_vn"]; ok && !isIntfNil(v) {
-
-										sl := v.(*schema.Set).List()
-										globalVn := &ves_io_schema_views.ObjectRefType{}
-										connectionChoiceInt.SloToGlobalDr.GlobalVn = globalVn
-										for _, set := range sl {
-											globalVnMapStrToI := set.(map[string]interface{})
-
-											if w, ok := globalVnMapStrToI["name"]; ok && !isIntfNil(w) {
-												globalVn.Name = w.(string)
-											}
-
-											if w, ok := globalVnMapStrToI["namespace"]; ok && !isIntfNil(w) {
-												globalVn.Namespace = w.(string)
-											}
-
-											if w, ok := globalVnMapStrToI["tenant"]; ok && !isIntfNil(w) {
-												globalVn.Tenant = w.(string)
-											}
-
-										}
-
-									}
-
-								}
-
-							}
-
-							forwardProxyChoiceTypeFound := false
-
-							if v, ok := globalNetworkConnectionsMapStrToI["disable_forward_proxy"]; ok && !isIntfNil(v) && !forwardProxyChoiceTypeFound {
-
-								forwardProxyChoiceTypeFound = true
+								portChoiceTypeFound = true
 
 								if v.(bool) {
-									forwardProxyChoiceInt := &ves_io_schema_views.GlobalNetworkConnectionType_DisableForwardProxy{}
-									forwardProxyChoiceInt.DisableForwardProxy = &ves_io_schema.Empty{}
-									globalNetworkConnections[i].ForwardProxyChoice = forwardProxyChoiceInt
+									portChoiceInt := &ves_io_schema_views.AllowedVIPPorts_DisableAllowedVipPort{}
+									portChoiceInt.DisableAllowedVipPort = &ves_io_schema.Empty{}
+									allowedVipPort.PortChoice = portChoiceInt
 								}
 
 							}
 
-							if v, ok := globalNetworkConnectionsMapStrToI["enable_forward_proxy"]; ok && !isIntfNil(v) && !forwardProxyChoiceTypeFound {
+							if v, ok := allowedVipPortMapStrToI["use_http_https_port"]; ok && !isIntfNil(v) && !portChoiceTypeFound {
 
-								forwardProxyChoiceTypeFound = true
-								forwardProxyChoiceInt := &ves_io_schema_views.GlobalNetworkConnectionType_EnableForwardProxy{}
-								forwardProxyChoiceInt.EnableForwardProxy = &ves_io_schema.ForwardProxyConfigType{}
-								globalNetworkConnections[i].ForwardProxyChoice = forwardProxyChoiceInt
+								portChoiceTypeFound = true
 
-								sl := v.(*schema.Set).List()
+								if v.(bool) {
+									portChoiceInt := &ves_io_schema_views.AllowedVIPPorts_UseHttpHttpsPort{}
+									portChoiceInt.UseHttpHttpsPort = &ves_io_schema.Empty{}
+									allowedVipPort.PortChoice = portChoiceInt
+								}
+
+							}
+
+							if v, ok := allowedVipPortMapStrToI["use_http_port"]; ok && !isIntfNil(v) && !portChoiceTypeFound {
+
+								portChoiceTypeFound = true
+
+								if v.(bool) {
+									portChoiceInt := &ves_io_schema_views.AllowedVIPPorts_UseHttpPort{}
+									portChoiceInt.UseHttpPort = &ves_io_schema.Empty{}
+									allowedVipPort.PortChoice = portChoiceInt
+								}
+
+							}
+
+							if v, ok := allowedVipPortMapStrToI["use_https_port"]; ok && !isIntfNil(v) && !portChoiceTypeFound {
+
+								portChoiceTypeFound = true
+
+								if v.(bool) {
+									portChoiceInt := &ves_io_schema_views.AllowedVIPPorts_UseHttpsPort{}
+									portChoiceInt.UseHttpsPort = &ves_io_schema.Empty{}
+									allowedVipPort.PortChoice = portChoiceInt
+								}
+
+							}
+
+						}
+					}
+
+				}
+
+				if v, ok := vnConfigMapStrToI["allowed_vip_port_sli"]; ok && !isIntfNil(v) {
+
+					sl := v.([]interface{})
+					allowedVipPortSli := &ves_io_schema_views.AllowedVIPPorts{}
+					vnConfig.AllowedVipPortSli = allowedVipPortSli
+					for _, set := range sl {
+						if set != nil {
+							allowedVipPortSliMapStrToI := set.(map[string]interface{})
+
+							portChoiceTypeFound := false
+
+							if v, ok := allowedVipPortSliMapStrToI["custom_ports"]; ok && !isIntfNil(v) && !portChoiceTypeFound {
+
+								portChoiceTypeFound = true
+								portChoiceInt := &ves_io_schema_views.AllowedVIPPorts_CustomPorts{}
+								portChoiceInt.CustomPorts = &ves_io_schema_views.CustomPorts{}
+								allowedVipPortSli.PortChoice = portChoiceInt
+
+								sl := v.([]interface{})
 								for _, set := range sl {
-									cs := set.(map[string]interface{})
+									if set != nil {
+										cs := set.(map[string]interface{})
 
-									if v, ok := cs["connection_timeout"]; ok && !isIntfNil(v) {
+										if v, ok := cs["port_ranges"]; ok && !isIntfNil(v) {
 
-										forwardProxyChoiceInt.EnableForwardProxy.ConnectionTimeout = uint32(v.(int))
+											portChoiceInt.CustomPorts.PortRanges = v.(string)
 
-									}
-
-									if v, ok := cs["max_connect_attempts"]; ok && !isIntfNil(v) {
-
-										forwardProxyChoiceInt.EnableForwardProxy.MaxConnectAttempts = uint32(v.(int))
-
-									}
-
-									tlsInterceptionChoiceTypeFound := false
-
-									if v, ok := cs["no_interception"]; ok && !isIntfNil(v) && !tlsInterceptionChoiceTypeFound {
-
-										tlsInterceptionChoiceTypeFound = true
-
-										if v.(bool) {
-											tlsInterceptionChoiceInt := &ves_io_schema.ForwardProxyConfigType_NoInterception{}
-											tlsInterceptionChoiceInt.NoInterception = &ves_io_schema.Empty{}
-											forwardProxyChoiceInt.EnableForwardProxy.TlsInterceptionChoice = tlsInterceptionChoiceInt
 										}
 
 									}
+								}
 
-									if v, ok := cs["tls_intercept"]; ok && !isIntfNil(v) && !tlsInterceptionChoiceTypeFound {
+							}
 
-										tlsInterceptionChoiceTypeFound = true
-										tlsInterceptionChoiceInt := &ves_io_schema.ForwardProxyConfigType_TlsIntercept{}
-										tlsInterceptionChoiceInt.TlsIntercept = &ves_io_schema.TlsInterceptionType{}
-										forwardProxyChoiceInt.EnableForwardProxy.TlsInterceptionChoice = tlsInterceptionChoiceInt
+							if v, ok := allowedVipPortSliMapStrToI["disable_allowed_vip_port"]; ok && !isIntfNil(v) && !portChoiceTypeFound {
 
-										sl := v.(*schema.Set).List()
-										for _, set := range sl {
-											cs := set.(map[string]interface{})
+								portChoiceTypeFound = true
 
-											interceptionPolicyChoiceTypeFound := false
+								if v.(bool) {
+									portChoiceInt := &ves_io_schema_views.AllowedVIPPorts_DisableAllowedVipPort{}
+									portChoiceInt.DisableAllowedVipPort = &ves_io_schema.Empty{}
+									allowedVipPortSli.PortChoice = portChoiceInt
+								}
 
-											if v, ok := cs["enable_for_all_domains"]; ok && !isIntfNil(v) && !interceptionPolicyChoiceTypeFound {
+							}
 
-												interceptionPolicyChoiceTypeFound = true
+							if v, ok := allowedVipPortSliMapStrToI["use_http_https_port"]; ok && !isIntfNil(v) && !portChoiceTypeFound {
 
-												if v.(bool) {
-													interceptionPolicyChoiceInt := &ves_io_schema.TlsInterceptionType_EnableForAllDomains{}
-													interceptionPolicyChoiceInt.EnableForAllDomains = &ves_io_schema.Empty{}
-													tlsInterceptionChoiceInt.TlsIntercept.InterceptionPolicyChoice = interceptionPolicyChoiceInt
-												}
+								portChoiceTypeFound = true
 
-											}
+								if v.(bool) {
+									portChoiceInt := &ves_io_schema_views.AllowedVIPPorts_UseHttpHttpsPort{}
+									portChoiceInt.UseHttpHttpsPort = &ves_io_schema.Empty{}
+									allowedVipPortSli.PortChoice = portChoiceInt
+								}
 
-											if v, ok := cs["policy"]; ok && !isIntfNil(v) && !interceptionPolicyChoiceTypeFound {
+							}
 
-												interceptionPolicyChoiceTypeFound = true
-												interceptionPolicyChoiceInt := &ves_io_schema.TlsInterceptionType_Policy{}
-												interceptionPolicyChoiceInt.Policy = &ves_io_schema.TlsInterceptionPolicy{}
-												tlsInterceptionChoiceInt.TlsIntercept.InterceptionPolicyChoice = interceptionPolicyChoiceInt
+							if v, ok := allowedVipPortSliMapStrToI["use_http_port"]; ok && !isIntfNil(v) && !portChoiceTypeFound {
 
-												sl := v.(*schema.Set).List()
-												for _, set := range sl {
+								portChoiceTypeFound = true
+
+								if v.(bool) {
+									portChoiceInt := &ves_io_schema_views.AllowedVIPPorts_UseHttpPort{}
+									portChoiceInt.UseHttpPort = &ves_io_schema.Empty{}
+									allowedVipPortSli.PortChoice = portChoiceInt
+								}
+
+							}
+
+							if v, ok := allowedVipPortSliMapStrToI["use_https_port"]; ok && !isIntfNil(v) && !portChoiceTypeFound {
+
+								portChoiceTypeFound = true
+
+								if v.(bool) {
+									portChoiceInt := &ves_io_schema_views.AllowedVIPPorts_UseHttpsPort{}
+									portChoiceInt.UseHttpsPort = &ves_io_schema.Empty{}
+									allowedVipPortSli.PortChoice = portChoiceInt
+								}
+
+							}
+
+						}
+					}
+
+				}
+
+				dcClusterGroupChoiceTypeFound := false
+
+				if v, ok := vnConfigMapStrToI["dc_cluster_group_inside_vn"]; ok && !isIntfNil(v) && !dcClusterGroupChoiceTypeFound {
+
+					dcClusterGroupChoiceTypeFound = true
+					dcClusterGroupChoiceInt := &ves_io_schema_views_aws_tgw_site.VnConfiguration_DcClusterGroupInsideVn{}
+					dcClusterGroupChoiceInt.DcClusterGroupInsideVn = &ves_io_schema_views.ObjectRefType{}
+					vnConfig.DcClusterGroupChoice = dcClusterGroupChoiceInt
+
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+								dcClusterGroupChoiceInt.DcClusterGroupInsideVn.Name = v.(string)
+
+							}
+
+							if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+								dcClusterGroupChoiceInt.DcClusterGroupInsideVn.Namespace = v.(string)
+
+							}
+
+							if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+								dcClusterGroupChoiceInt.DcClusterGroupInsideVn.Tenant = v.(string)
+
+							}
+
+						}
+					}
+
+				}
+
+				if v, ok := vnConfigMapStrToI["dc_cluster_group_outside_vn"]; ok && !isIntfNil(v) && !dcClusterGroupChoiceTypeFound {
+
+					dcClusterGroupChoiceTypeFound = true
+					dcClusterGroupChoiceInt := &ves_io_schema_views_aws_tgw_site.VnConfiguration_DcClusterGroupOutsideVn{}
+					dcClusterGroupChoiceInt.DcClusterGroupOutsideVn = &ves_io_schema_views.ObjectRefType{}
+					vnConfig.DcClusterGroupChoice = dcClusterGroupChoiceInt
+
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+								dcClusterGroupChoiceInt.DcClusterGroupOutsideVn.Name = v.(string)
+
+							}
+
+							if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+								dcClusterGroupChoiceInt.DcClusterGroupOutsideVn.Namespace = v.(string)
+
+							}
+
+							if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+								dcClusterGroupChoiceInt.DcClusterGroupOutsideVn.Tenant = v.(string)
+
+							}
+
+						}
+					}
+
+				}
+
+				if v, ok := vnConfigMapStrToI["no_dc_cluster_group"]; ok && !isIntfNil(v) && !dcClusterGroupChoiceTypeFound {
+
+					dcClusterGroupChoiceTypeFound = true
+
+					if v.(bool) {
+						dcClusterGroupChoiceInt := &ves_io_schema_views_aws_tgw_site.VnConfiguration_NoDcClusterGroup{}
+						dcClusterGroupChoiceInt.NoDcClusterGroup = &ves_io_schema.Empty{}
+						vnConfig.DcClusterGroupChoice = dcClusterGroupChoiceInt
+					}
+
+				}
+
+				globalNetworkChoiceTypeFound := false
+
+				if v, ok := vnConfigMapStrToI["global_network_list"]; ok && !isIntfNil(v) && !globalNetworkChoiceTypeFound {
+
+					globalNetworkChoiceTypeFound = true
+					globalNetworkChoiceInt := &ves_io_schema_views_aws_tgw_site.VnConfiguration_GlobalNetworkList{}
+					globalNetworkChoiceInt.GlobalNetworkList = &ves_io_schema_views.GlobalNetworkConnectionListType{}
+					vnConfig.GlobalNetworkChoice = globalNetworkChoiceInt
+
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["global_network_connections"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								globalNetworkConnections := make([]*ves_io_schema_views.GlobalNetworkConnectionType, len(sl))
+								globalNetworkChoiceInt.GlobalNetworkList.GlobalNetworkConnections = globalNetworkConnections
+								for i, set := range sl {
+									if set != nil {
+										globalNetworkConnections[i] = &ves_io_schema_views.GlobalNetworkConnectionType{}
+										globalNetworkConnectionsMapStrToI := set.(map[string]interface{})
+
+										connectionChoiceTypeFound := false
+
+										if v, ok := globalNetworkConnectionsMapStrToI["sli_to_global_dr"]; ok && !isIntfNil(v) && !connectionChoiceTypeFound {
+
+											connectionChoiceTypeFound = true
+											connectionChoiceInt := &ves_io_schema_views.GlobalNetworkConnectionType_SliToGlobalDr{}
+											connectionChoiceInt.SliToGlobalDr = &ves_io_schema_views.GlobalConnectorType{}
+											globalNetworkConnections[i].ConnectionChoice = connectionChoiceInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
 													cs := set.(map[string]interface{})
 
-													if v, ok := cs["interception_rules"]; ok && !isIntfNil(v) {
+													if v, ok := cs["global_vn"]; ok && !isIntfNil(v) {
 
 														sl := v.([]interface{})
-														interceptionRules := make([]*ves_io_schema.TlsInterceptionRule, len(sl))
-														interceptionPolicyChoiceInt.Policy.InterceptionRules = interceptionRules
-														for i, set := range sl {
-															interceptionRules[i] = &ves_io_schema.TlsInterceptionRule{}
-															interceptionRulesMapStrToI := set.(map[string]interface{})
+														globalVn := &ves_io_schema_views.ObjectRefType{}
+														connectionChoiceInt.SliToGlobalDr.GlobalVn = globalVn
+														for _, set := range sl {
+															if set != nil {
+																globalVnMapStrToI := set.(map[string]interface{})
 
-															if v, ok := interceptionRulesMapStrToI["domain_match"]; ok && !isIntfNil(v) {
+																if w, ok := globalVnMapStrToI["name"]; ok && !isIntfNil(w) {
+																	globalVn.Name = w.(string)
+																}
 
-																sl := v.(*schema.Set).List()
-																domainMatch := &ves_io_schema.DomainType{}
-																interceptionRules[i].DomainMatch = domainMatch
-																for _, set := range sl {
-																	domainMatchMapStrToI := set.(map[string]interface{})
+																if w, ok := globalVnMapStrToI["namespace"]; ok && !isIntfNil(w) {
+																	globalVn.Namespace = w.(string)
+																}
 
-																	domainChoiceTypeFound := false
-
-																	if v, ok := domainMatchMapStrToI["exact_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
-
-																		domainChoiceTypeFound = true
-																		domainChoiceInt := &ves_io_schema.DomainType_ExactValue{}
-
-																		domainMatch.DomainChoice = domainChoiceInt
-
-																		domainChoiceInt.ExactValue = v.(string)
-
-																	}
-
-																	if v, ok := domainMatchMapStrToI["regex_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
-
-																		domainChoiceTypeFound = true
-																		domainChoiceInt := &ves_io_schema.DomainType_RegexValue{}
-
-																		domainMatch.DomainChoice = domainChoiceInt
-
-																		domainChoiceInt.RegexValue = v.(string)
-
-																	}
-
-																	if v, ok := domainMatchMapStrToI["suffix_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
-
-																		domainChoiceTypeFound = true
-																		domainChoiceInt := &ves_io_schema.DomainType_SuffixValue{}
-
-																		domainMatch.DomainChoice = domainChoiceInt
-
-																		domainChoiceInt.SuffixValue = v.(string)
-
-																	}
-
+																if w, ok := globalVnMapStrToI["tenant"]; ok && !isIntfNil(w) {
+																	globalVn.Tenant = w.(string)
 																}
 
 															}
-
-															enableDisableChoiceTypeFound := false
-
-															if v, ok := interceptionRulesMapStrToI["disable_interception"]; ok && !isIntfNil(v) && !enableDisableChoiceTypeFound {
-
-																enableDisableChoiceTypeFound = true
-
-																if v.(bool) {
-																	enableDisableChoiceInt := &ves_io_schema.TlsInterceptionRule_DisableInterception{}
-																	enableDisableChoiceInt.DisableInterception = &ves_io_schema.Empty{}
-																	interceptionRules[i].EnableDisableChoice = enableDisableChoiceInt
-																}
-
-															}
-
-															if v, ok := interceptionRulesMapStrToI["enable_interception"]; ok && !isIntfNil(v) && !enableDisableChoiceTypeFound {
-
-																enableDisableChoiceTypeFound = true
-
-																if v.(bool) {
-																	enableDisableChoiceInt := &ves_io_schema.TlsInterceptionRule_EnableInterception{}
-																	enableDisableChoiceInt.EnableInterception = &ves_io_schema.Empty{}
-																	interceptionRules[i].EnableDisableChoice = enableDisableChoiceInt
-																}
-
-															}
-
 														}
 
 													}
 
 												}
-
 											}
 
-											signingCertChoiceTypeFound := false
+										}
 
-											if v, ok := cs["custom_certificate"]; ok && !isIntfNil(v) && !signingCertChoiceTypeFound {
+										if v, ok := globalNetworkConnectionsMapStrToI["slo_to_global_dr"]; ok && !isIntfNil(v) && !connectionChoiceTypeFound {
 
-												signingCertChoiceTypeFound = true
-												signingCertChoiceInt := &ves_io_schema.TlsInterceptionType_CustomCertificate{}
-												signingCertChoiceInt.CustomCertificate = &ves_io_schema.TlsCertificateType{}
-												tlsInterceptionChoiceInt.TlsIntercept.SigningCertChoice = signingCertChoiceInt
+											connectionChoiceTypeFound = true
+											connectionChoiceInt := &ves_io_schema_views.GlobalNetworkConnectionType_SloToGlobalDr{}
+											connectionChoiceInt.SloToGlobalDr = &ves_io_schema_views.GlobalConnectorType{}
+											globalNetworkConnections[i].ConnectionChoice = connectionChoiceInt
 
-												sl := v.(*schema.Set).List()
-												for _, set := range sl {
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
 													cs := set.(map[string]interface{})
 
-													if v, ok := cs["certificate_url"]; ok && !isIntfNil(v) {
+													if v, ok := cs["global_vn"]; ok && !isIntfNil(v) {
 
-														signingCertChoiceInt.CustomCertificate.CertificateUrl = v.(string)
-
-													}
-
-													if v, ok := cs["description"]; ok && !isIntfNil(v) {
-
-														signingCertChoiceInt.CustomCertificate.Description = v.(string)
-
-													}
-
-													ocspStaplingChoiceTypeFound := false
-
-													if v, ok := cs["custom_hash_algorithms"]; ok && !isIntfNil(v) && !ocspStaplingChoiceTypeFound {
-
-														ocspStaplingChoiceTypeFound = true
-														ocspStaplingChoiceInt := &ves_io_schema.TlsCertificateType_CustomHashAlgorithms{}
-														ocspStaplingChoiceInt.CustomHashAlgorithms = &ves_io_schema.HashAlgorithms{}
-														signingCertChoiceInt.CustomCertificate.OcspStaplingChoice = ocspStaplingChoiceInt
-
-														sl := v.(*schema.Set).List()
+														sl := v.([]interface{})
+														globalVn := &ves_io_schema_views.ObjectRefType{}
+														connectionChoiceInt.SloToGlobalDr.GlobalVn = globalVn
 														for _, set := range sl {
-															cs := set.(map[string]interface{})
+															if set != nil {
+																globalVnMapStrToI := set.(map[string]interface{})
 
-															if v, ok := cs["hash_algorithms"]; ok && !isIntfNil(v) {
-
-																hash_algorithmsList := []ves_io_schema.HashAlgorithm{}
-																for _, j := range v.([]interface{}) {
-																	hash_algorithmsList = append(hash_algorithmsList, ves_io_schema.HashAlgorithm(ves_io_schema.HashAlgorithm_value[j.(string)]))
+																if w, ok := globalVnMapStrToI["name"]; ok && !isIntfNil(w) {
+																	globalVn.Name = w.(string)
 																}
-																ocspStaplingChoiceInt.CustomHashAlgorithms.HashAlgorithms = hash_algorithmsList
 
-															}
+																if w, ok := globalVnMapStrToI["namespace"]; ok && !isIntfNil(w) {
+																	globalVn.Namespace = w.(string)
+																}
 
-														}
-
-													}
-
-													if _, ok := cs["disable_ocsp_stapling"]; ok && !ocspStaplingChoiceTypeFound {
-
-														ocspStaplingChoiceTypeFound = true
-														ocspStaplingChoiceInt := &ves_io_schema.TlsCertificateType_DisableOcspStapling{}
-														ocspStaplingChoiceInt.DisableOcspStapling = &ves_io_schema.Empty{}
-														signingCertChoiceInt.CustomCertificate.OcspStaplingChoice = ocspStaplingChoiceInt
-
-													}
-
-													if _, ok := cs["use_system_defaults"]; ok && !ocspStaplingChoiceTypeFound {
-
-														ocspStaplingChoiceTypeFound = true
-														ocspStaplingChoiceInt := &ves_io_schema.TlsCertificateType_UseSystemDefaults{}
-														ocspStaplingChoiceInt.UseSystemDefaults = &ves_io_schema.Empty{}
-														signingCertChoiceInt.CustomCertificate.OcspStaplingChoice = ocspStaplingChoiceInt
-
-													}
-
-													if v, ok := cs["private_key"]; ok && !isIntfNil(v) {
-
-														sl := v.(*schema.Set).List()
-														privateKey := &ves_io_schema.SecretType{}
-														signingCertChoiceInt.CustomCertificate.PrivateKey = privateKey
-														for _, set := range sl {
-															privateKeyMapStrToI := set.(map[string]interface{})
-
-															if v, ok := privateKeyMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
-
-																sl := v.(*schema.Set).List()
-																blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
-																privateKey.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
-																for _, set := range sl {
-																	blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
-
-																	if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
-																		blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
-																	}
-
-																	if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
-																		blindfoldSecretInfoInternal.Location = w.(string)
-																	}
-
-																	if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
-																		blindfoldSecretInfoInternal.StoreProvider = w.(string)
-																	}
-
+																if w, ok := globalVnMapStrToI["tenant"]; ok && !isIntfNil(w) {
+																	globalVn.Tenant = w.(string)
 																}
 
 															}
-
-															if v, ok := privateKeyMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
-
-																privateKey.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
-
-															}
-
-															secretInfoOneofTypeFound := false
-
-															if v, ok := privateKeyMapStrToI["blindfold_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
-
-																secretInfoOneofTypeFound = true
-																secretInfoOneofInt := &ves_io_schema.SecretType_BlindfoldSecretInfo{}
-																secretInfoOneofInt.BlindfoldSecretInfo = &ves_io_schema.BlindfoldSecretInfoType{}
-																privateKey.SecretInfoOneof = secretInfoOneofInt
-
-																sl := v.(*schema.Set).List()
-																for _, set := range sl {
-																	cs := set.(map[string]interface{})
-
-																	if v, ok := cs["decryption_provider"]; ok && !isIntfNil(v) {
-
-																		secretInfoOneofInt.BlindfoldSecretInfo.DecryptionProvider = v.(string)
-
-																	}
-
-																	if v, ok := cs["location"]; ok && !isIntfNil(v) {
-
-																		secretInfoOneofInt.BlindfoldSecretInfo.Location = v.(string)
-
-																	}
-
-																	if v, ok := cs["store_provider"]; ok && !isIntfNil(v) {
-
-																		secretInfoOneofInt.BlindfoldSecretInfo.StoreProvider = v.(string)
-
-																	}
-
-																}
-
-															}
-
-															if v, ok := privateKeyMapStrToI["clear_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
-
-																secretInfoOneofTypeFound = true
-																secretInfoOneofInt := &ves_io_schema.SecretType_ClearSecretInfo{}
-																secretInfoOneofInt.ClearSecretInfo = &ves_io_schema.ClearSecretInfoType{}
-																privateKey.SecretInfoOneof = secretInfoOneofInt
-
-																sl := v.(*schema.Set).List()
-																for _, set := range sl {
-																	cs := set.(map[string]interface{})
-
-																	if v, ok := cs["provider"]; ok && !isIntfNil(v) {
-
-																		secretInfoOneofInt.ClearSecretInfo.Provider = v.(string)
-
-																	}
-
-																	if v, ok := cs["url"]; ok && !isIntfNil(v) {
-
-																		secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
-
-																	}
-
-																}
-
-															}
-
-															if v, ok := privateKeyMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
-
-																secretInfoOneofTypeFound = true
-																secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
-																secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
-																privateKey.SecretInfoOneof = secretInfoOneofInt
-
-																sl := v.(*schema.Set).List()
-																for _, set := range sl {
-																	cs := set.(map[string]interface{})
-
-																	if v, ok := cs["key"]; ok && !isIntfNil(v) {
-
-																		secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
-
-																	}
-
-																	if v, ok := cs["location"]; ok && !isIntfNil(v) {
-
-																		secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
-
-																	}
-
-																	if v, ok := cs["provider"]; ok && !isIntfNil(v) {
-
-																		secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
-
-																	}
-
-																	if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
-
-																		secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
-
-																	}
-
-																	if v, ok := cs["version"]; ok && !isIntfNil(v) {
-
-																		secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
-
-																	}
-
-																}
-
-															}
-
-															if v, ok := privateKeyMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
-
-																secretInfoOneofTypeFound = true
-																secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
-																secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
-																privateKey.SecretInfoOneof = secretInfoOneofInt
-
-																sl := v.(*schema.Set).List()
-																for _, set := range sl {
-																	cs := set.(map[string]interface{})
-
-																	if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-																		secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
-
-																	}
-
-																}
-
-															}
-
 														}
 
 													}
 
 												}
-
 											}
 
-											if v, ok := cs["volterra_certificate"]; ok && !isIntfNil(v) && !signingCertChoiceTypeFound {
+										}
 
-												signingCertChoiceTypeFound = true
+										forwardProxyChoiceTypeFound := false
 
-												if v.(bool) {
-													signingCertChoiceInt := &ves_io_schema.TlsInterceptionType_VolterraCertificate{}
-													signingCertChoiceInt.VolterraCertificate = &ves_io_schema.Empty{}
-													tlsInterceptionChoiceInt.TlsIntercept.SigningCertChoice = signingCertChoiceInt
+										if v, ok := globalNetworkConnectionsMapStrToI["disable_forward_proxy"]; ok && !isIntfNil(v) && !forwardProxyChoiceTypeFound {
+
+											forwardProxyChoiceTypeFound = true
+
+											if v.(bool) {
+												forwardProxyChoiceInt := &ves_io_schema_views.GlobalNetworkConnectionType_DisableForwardProxy{}
+												forwardProxyChoiceInt.DisableForwardProxy = &ves_io_schema.Empty{}
+												globalNetworkConnections[i].ForwardProxyChoice = forwardProxyChoiceInt
+											}
+
+										}
+
+										if v, ok := globalNetworkConnectionsMapStrToI["enable_forward_proxy"]; ok && !isIntfNil(v) && !forwardProxyChoiceTypeFound {
+
+											forwardProxyChoiceTypeFound = true
+											forwardProxyChoiceInt := &ves_io_schema_views.GlobalNetworkConnectionType_EnableForwardProxy{}
+											forwardProxyChoiceInt.EnableForwardProxy = &ves_io_schema.ForwardProxyConfigType{}
+											globalNetworkConnections[i].ForwardProxyChoice = forwardProxyChoiceInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["connection_timeout"]; ok && !isIntfNil(v) {
+
+														forwardProxyChoiceInt.EnableForwardProxy.ConnectionTimeout = uint32(v.(int))
+
+													}
+
+													if v, ok := cs["max_connect_attempts"]; ok && !isIntfNil(v) {
+
+														forwardProxyChoiceInt.EnableForwardProxy.MaxConnectAttempts = uint32(v.(int))
+
+													}
+
+													tlsInterceptionChoiceTypeFound := false
+
+													if v, ok := cs["no_interception"]; ok && !isIntfNil(v) && !tlsInterceptionChoiceTypeFound {
+
+														tlsInterceptionChoiceTypeFound = true
+
+														if v.(bool) {
+															tlsInterceptionChoiceInt := &ves_io_schema.ForwardProxyConfigType_NoInterception{}
+															tlsInterceptionChoiceInt.NoInterception = &ves_io_schema.Empty{}
+															forwardProxyChoiceInt.EnableForwardProxy.TlsInterceptionChoice = tlsInterceptionChoiceInt
+														}
+
+													}
+
+													if v, ok := cs["tls_intercept"]; ok && !isIntfNil(v) && !tlsInterceptionChoiceTypeFound {
+
+														tlsInterceptionChoiceTypeFound = true
+														tlsInterceptionChoiceInt := &ves_io_schema.ForwardProxyConfigType_TlsIntercept{}
+														tlsInterceptionChoiceInt.TlsIntercept = &ves_io_schema.TlsInterceptionType{}
+														forwardProxyChoiceInt.EnableForwardProxy.TlsInterceptionChoice = tlsInterceptionChoiceInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																interceptionPolicyChoiceTypeFound := false
+
+																if v, ok := cs["enable_for_all_domains"]; ok && !isIntfNil(v) && !interceptionPolicyChoiceTypeFound {
+
+																	interceptionPolicyChoiceTypeFound = true
+
+																	if v.(bool) {
+																		interceptionPolicyChoiceInt := &ves_io_schema.TlsInterceptionType_EnableForAllDomains{}
+																		interceptionPolicyChoiceInt.EnableForAllDomains = &ves_io_schema.Empty{}
+																		tlsInterceptionChoiceInt.TlsIntercept.InterceptionPolicyChoice = interceptionPolicyChoiceInt
+																	}
+
+																}
+
+																if v, ok := cs["policy"]; ok && !isIntfNil(v) && !interceptionPolicyChoiceTypeFound {
+
+																	interceptionPolicyChoiceTypeFound = true
+																	interceptionPolicyChoiceInt := &ves_io_schema.TlsInterceptionType_Policy{}
+																	interceptionPolicyChoiceInt.Policy = &ves_io_schema.TlsInterceptionPolicy{}
+																	tlsInterceptionChoiceInt.TlsIntercept.InterceptionPolicyChoice = interceptionPolicyChoiceInt
+
+																	sl := v.([]interface{})
+																	for _, set := range sl {
+																		if set != nil {
+																			cs := set.(map[string]interface{})
+
+																			if v, ok := cs["interception_rules"]; ok && !isIntfNil(v) {
+
+																				sl := v.([]interface{})
+																				interceptionRules := make([]*ves_io_schema.TlsInterceptionRule, len(sl))
+																				interceptionPolicyChoiceInt.Policy.InterceptionRules = interceptionRules
+																				for i, set := range sl {
+																					if set != nil {
+																						interceptionRules[i] = &ves_io_schema.TlsInterceptionRule{}
+																						interceptionRulesMapStrToI := set.(map[string]interface{})
+
+																						if v, ok := interceptionRulesMapStrToI["domain_match"]; ok && !isIntfNil(v) {
+
+																							sl := v.([]interface{})
+																							domainMatch := &ves_io_schema.DomainType{}
+																							interceptionRules[i].DomainMatch = domainMatch
+																							for _, set := range sl {
+																								if set != nil {
+																									domainMatchMapStrToI := set.(map[string]interface{})
+
+																									domainChoiceTypeFound := false
+
+																									if v, ok := domainMatchMapStrToI["exact_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
+
+																										domainChoiceTypeFound = true
+																										domainChoiceInt := &ves_io_schema.DomainType_ExactValue{}
+
+																										domainMatch.DomainChoice = domainChoiceInt
+
+																										domainChoiceInt.ExactValue = v.(string)
+
+																									}
+
+																									if v, ok := domainMatchMapStrToI["regex_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
+
+																										domainChoiceTypeFound = true
+																										domainChoiceInt := &ves_io_schema.DomainType_RegexValue{}
+
+																										domainMatch.DomainChoice = domainChoiceInt
+
+																										domainChoiceInt.RegexValue = v.(string)
+
+																									}
+
+																									if v, ok := domainMatchMapStrToI["suffix_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
+
+																										domainChoiceTypeFound = true
+																										domainChoiceInt := &ves_io_schema.DomainType_SuffixValue{}
+
+																										domainMatch.DomainChoice = domainChoiceInt
+
+																										domainChoiceInt.SuffixValue = v.(string)
+
+																									}
+
+																								}
+																							}
+
+																						}
+
+																						enableDisableChoiceTypeFound := false
+
+																						if v, ok := interceptionRulesMapStrToI["disable_interception"]; ok && !isIntfNil(v) && !enableDisableChoiceTypeFound {
+
+																							enableDisableChoiceTypeFound = true
+
+																							if v.(bool) {
+																								enableDisableChoiceInt := &ves_io_schema.TlsInterceptionRule_DisableInterception{}
+																								enableDisableChoiceInt.DisableInterception = &ves_io_schema.Empty{}
+																								interceptionRules[i].EnableDisableChoice = enableDisableChoiceInt
+																							}
+
+																						}
+
+																						if v, ok := interceptionRulesMapStrToI["enable_interception"]; ok && !isIntfNil(v) && !enableDisableChoiceTypeFound {
+
+																							enableDisableChoiceTypeFound = true
+
+																							if v.(bool) {
+																								enableDisableChoiceInt := &ves_io_schema.TlsInterceptionRule_EnableInterception{}
+																								enableDisableChoiceInt.EnableInterception = &ves_io_schema.Empty{}
+																								interceptionRules[i].EnableDisableChoice = enableDisableChoiceInt
+																							}
+
+																						}
+
+																					}
+																				}
+
+																			}
+
+																		}
+																	}
+
+																}
+
+																signingCertChoiceTypeFound := false
+
+																if v, ok := cs["custom_certificate"]; ok && !isIntfNil(v) && !signingCertChoiceTypeFound {
+
+																	signingCertChoiceTypeFound = true
+																	signingCertChoiceInt := &ves_io_schema.TlsInterceptionType_CustomCertificate{}
+																	signingCertChoiceInt.CustomCertificate = &ves_io_schema.TlsCertificateType{}
+																	tlsInterceptionChoiceInt.TlsIntercept.SigningCertChoice = signingCertChoiceInt
+
+																	sl := v.([]interface{})
+																	for _, set := range sl {
+																		if set != nil {
+																			cs := set.(map[string]interface{})
+
+																			if v, ok := cs["certificate_url"]; ok && !isIntfNil(v) {
+
+																				signingCertChoiceInt.CustomCertificate.CertificateUrl = v.(string)
+
+																			}
+
+																			if v, ok := cs["description"]; ok && !isIntfNil(v) {
+
+																				signingCertChoiceInt.CustomCertificate.Description = v.(string)
+
+																			}
+
+																			ocspStaplingChoiceTypeFound := false
+
+																			if v, ok := cs["custom_hash_algorithms"]; ok && !isIntfNil(v) && !ocspStaplingChoiceTypeFound {
+
+																				ocspStaplingChoiceTypeFound = true
+																				ocspStaplingChoiceInt := &ves_io_schema.TlsCertificateType_CustomHashAlgorithms{}
+																				ocspStaplingChoiceInt.CustomHashAlgorithms = &ves_io_schema.HashAlgorithms{}
+																				signingCertChoiceInt.CustomCertificate.OcspStaplingChoice = ocspStaplingChoiceInt
+
+																				sl := v.([]interface{})
+																				for _, set := range sl {
+																					if set != nil {
+																						cs := set.(map[string]interface{})
+
+																						if v, ok := cs["hash_algorithms"]; ok && !isIntfNil(v) {
+
+																							hash_algorithmsList := []ves_io_schema.HashAlgorithm{}
+																							for _, j := range v.([]interface{}) {
+																								hash_algorithmsList = append(hash_algorithmsList, ves_io_schema.HashAlgorithm(ves_io_schema.HashAlgorithm_value[j.(string)]))
+																							}
+																							ocspStaplingChoiceInt.CustomHashAlgorithms.HashAlgorithms = hash_algorithmsList
+
+																						}
+
+																					}
+																				}
+
+																			}
+
+																			if _, ok := cs["disable_ocsp_stapling"]; ok && !ocspStaplingChoiceTypeFound {
+
+																				ocspStaplingChoiceTypeFound = true
+																				ocspStaplingChoiceInt := &ves_io_schema.TlsCertificateType_DisableOcspStapling{}
+																				ocspStaplingChoiceInt.DisableOcspStapling = &ves_io_schema.Empty{}
+																				signingCertChoiceInt.CustomCertificate.OcspStaplingChoice = ocspStaplingChoiceInt
+
+																			}
+
+																			if _, ok := cs["use_system_defaults"]; ok && !ocspStaplingChoiceTypeFound {
+
+																				ocspStaplingChoiceTypeFound = true
+																				ocspStaplingChoiceInt := &ves_io_schema.TlsCertificateType_UseSystemDefaults{}
+																				ocspStaplingChoiceInt.UseSystemDefaults = &ves_io_schema.Empty{}
+																				signingCertChoiceInt.CustomCertificate.OcspStaplingChoice = ocspStaplingChoiceInt
+
+																			}
+
+																			if v, ok := cs["private_key"]; ok && !isIntfNil(v) {
+
+																				sl := v.([]interface{})
+																				privateKey := &ves_io_schema.SecretType{}
+																				signingCertChoiceInt.CustomCertificate.PrivateKey = privateKey
+																				for _, set := range sl {
+																					if set != nil {
+																						privateKeyMapStrToI := set.(map[string]interface{})
+
+																						if v, ok := privateKeyMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
+
+																							sl := v.([]interface{})
+																							blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
+																							privateKey.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
+																							for _, set := range sl {
+																								if set != nil {
+																									blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
+
+																									if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
+																										blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
+																									}
+
+																									if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
+																										blindfoldSecretInfoInternal.Location = w.(string)
+																									}
+
+																									if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
+																										blindfoldSecretInfoInternal.StoreProvider = w.(string)
+																									}
+
+																								}
+																							}
+
+																						}
+
+																						if v, ok := privateKeyMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
+
+																							privateKey.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+																						}
+
+																						secretInfoOneofTypeFound := false
+
+																						if v, ok := privateKeyMapStrToI["blindfold_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																							secretInfoOneofTypeFound = true
+																							secretInfoOneofInt := &ves_io_schema.SecretType_BlindfoldSecretInfo{}
+																							secretInfoOneofInt.BlindfoldSecretInfo = &ves_io_schema.BlindfoldSecretInfoType{}
+																							privateKey.SecretInfoOneof = secretInfoOneofInt
+
+																							sl := v.([]interface{})
+																							for _, set := range sl {
+																								if set != nil {
+																									cs := set.(map[string]interface{})
+
+																									if v, ok := cs["decryption_provider"]; ok && !isIntfNil(v) {
+
+																										secretInfoOneofInt.BlindfoldSecretInfo.DecryptionProvider = v.(string)
+
+																									}
+
+																									if v, ok := cs["location"]; ok && !isIntfNil(v) {
+
+																										secretInfoOneofInt.BlindfoldSecretInfo.Location = v.(string)
+
+																									}
+
+																									if v, ok := cs["store_provider"]; ok && !isIntfNil(v) {
+
+																										secretInfoOneofInt.BlindfoldSecretInfo.StoreProvider = v.(string)
+
+																									}
+
+																								}
+																							}
+
+																						}
+
+																						if v, ok := privateKeyMapStrToI["clear_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																							secretInfoOneofTypeFound = true
+																							secretInfoOneofInt := &ves_io_schema.SecretType_ClearSecretInfo{}
+																							secretInfoOneofInt.ClearSecretInfo = &ves_io_schema.ClearSecretInfoType{}
+																							privateKey.SecretInfoOneof = secretInfoOneofInt
+
+																							sl := v.([]interface{})
+																							for _, set := range sl {
+																								if set != nil {
+																									cs := set.(map[string]interface{})
+
+																									if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+
+																										secretInfoOneofInt.ClearSecretInfo.Provider = v.(string)
+
+																									}
+
+																									if v, ok := cs["url"]; ok && !isIntfNil(v) {
+
+																										secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+
+																									}
+
+																								}
+																							}
+
+																						}
+
+																						if v, ok := privateKeyMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																							secretInfoOneofTypeFound = true
+																							secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
+																							secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
+																							privateKey.SecretInfoOneof = secretInfoOneofInt
+
+																							sl := v.([]interface{})
+																							for _, set := range sl {
+																								if set != nil {
+																									cs := set.(map[string]interface{})
+
+																									if v, ok := cs["key"]; ok && !isIntfNil(v) {
+
+																										secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
+																									}
+
+																									if v, ok := cs["location"]; ok && !isIntfNil(v) {
+
+																										secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
+																									}
+
+																									if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+
+																										secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
+																									}
+
+																									if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
+
+																										secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+																									}
+
+																									if v, ok := cs["version"]; ok && !isIntfNil(v) {
+
+																										secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
+																									}
+
+																								}
+																							}
+
+																						}
+
+																						if v, ok := privateKeyMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																							secretInfoOneofTypeFound = true
+																							secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
+																							secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
+																							privateKey.SecretInfoOneof = secretInfoOneofInt
+
+																							sl := v.([]interface{})
+																							for _, set := range sl {
+																								if set != nil {
+																									cs := set.(map[string]interface{})
+
+																									if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+																										secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
+
+																									}
+
+																								}
+																							}
+
+																						}
+
+																					}
+																				}
+
+																			}
+
+																		}
+																	}
+
+																}
+
+																if v, ok := cs["volterra_certificate"]; ok && !isIntfNil(v) && !signingCertChoiceTypeFound {
+
+																	signingCertChoiceTypeFound = true
+
+																	if v.(bool) {
+																		signingCertChoiceInt := &ves_io_schema.TlsInterceptionType_VolterraCertificate{}
+																		signingCertChoiceInt.VolterraCertificate = &ves_io_schema.Empty{}
+																		tlsInterceptionChoiceInt.TlsIntercept.SigningCertChoice = signingCertChoiceInt
+																	}
+
+																}
+
+																trustedCaChoiceTypeFound := false
+
+																if v, ok := cs["trusted_ca_url"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
+
+																	trustedCaChoiceTypeFound = true
+																	trustedCaChoiceInt := &ves_io_schema.TlsInterceptionType_TrustedCaUrl{}
+
+																	tlsInterceptionChoiceInt.TlsIntercept.TrustedCaChoice = trustedCaChoiceInt
+
+																	trustedCaChoiceInt.TrustedCaUrl = v.(string)
+
+																}
+
+																if v, ok := cs["volterra_trusted_ca"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
+
+																	trustedCaChoiceTypeFound = true
+
+																	if v.(bool) {
+																		trustedCaChoiceInt := &ves_io_schema.TlsInterceptionType_VolterraTrustedCa{}
+																		trustedCaChoiceInt.VolterraTrustedCa = &ves_io_schema.Empty{}
+																		tlsInterceptionChoiceInt.TlsIntercept.TrustedCaChoice = trustedCaChoiceInt
+																	}
+
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := cs["white_listed_ports"]; ok && !isIntfNil(v) {
+
+														ls := make([]uint32, len(v.([]interface{})))
+														for i, v := range v.([]interface{}) {
+															ls[i] = uint32(v.(int))
+														}
+														forwardProxyChoiceInt.EnableForwardProxy.WhiteListedPorts = ls
+
+													}
+
+													if v, ok := cs["white_listed_prefixes"]; ok && !isIntfNil(v) {
+
+														ls := make([]string, len(v.([]interface{})))
+														for i, v := range v.([]interface{}) {
+															ls[i] = v.(string)
+														}
+														forwardProxyChoiceInt.EnableForwardProxy.WhiteListedPrefixes = ls
+
+													}
+
 												}
-
-											}
-
-											trustedCaChoiceTypeFound := false
-
-											if v, ok := cs["trusted_ca_url"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
-
-												trustedCaChoiceTypeFound = true
-												trustedCaChoiceInt := &ves_io_schema.TlsInterceptionType_TrustedCaUrl{}
-
-												tlsInterceptionChoiceInt.TlsIntercept.TrustedCaChoice = trustedCaChoiceInt
-
-												trustedCaChoiceInt.TrustedCaUrl = v.(string)
-
-											}
-
-											if v, ok := cs["volterra_trusted_ca"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
-
-												trustedCaChoiceTypeFound = true
-
-												if v.(bool) {
-													trustedCaChoiceInt := &ves_io_schema.TlsInterceptionType_VolterraTrustedCa{}
-													trustedCaChoiceInt.VolterraTrustedCa = &ves_io_schema.Empty{}
-													tlsInterceptionChoiceInt.TlsIntercept.TrustedCaChoice = trustedCaChoiceInt
-												}
-
 											}
 
 										}
 
 									}
-
-									if v, ok := cs["white_listed_ports"]; ok && !isIntfNil(v) {
-
-										ls := make([]uint32, len(v.([]interface{})))
-										for i, v := range v.([]interface{}) {
-											ls[i] = uint32(v.(int))
-										}
-										forwardProxyChoiceInt.EnableForwardProxy.WhiteListedPorts = ls
-
-									}
-
-									if v, ok := cs["white_listed_prefixes"]; ok && !isIntfNil(v) {
-
-										ls := make([]string, len(v.([]interface{})))
-										for i, v := range v.([]interface{}) {
-											ls[i] = v.(string)
-										}
-										forwardProxyChoiceInt.EnableForwardProxy.WhiteListedPrefixes = ls
-
-									}
-
 								}
 
 							}
 
 						}
-
 					}
 
 				}
 
-			}
+				if v, ok := vnConfigMapStrToI["no_global_network"]; ok && !isIntfNil(v) && !globalNetworkChoiceTypeFound {
 
-			if v, ok := vnConfigMapStrToI["no_global_network"]; ok && !isIntfNil(v) && !globalNetworkChoiceTypeFound {
+					globalNetworkChoiceTypeFound = true
 
-				globalNetworkChoiceTypeFound = true
-
-				if v.(bool) {
-					globalNetworkChoiceInt := &ves_io_schema_views_aws_tgw_site.VnConfiguration_NoGlobalNetwork{}
-					globalNetworkChoiceInt.NoGlobalNetwork = &ves_io_schema.Empty{}
-					vnConfig.GlobalNetworkChoice = globalNetworkChoiceInt
-				}
-
-			}
-
-			insideStaticRouteChoiceTypeFound := false
-
-			if v, ok := vnConfigMapStrToI["inside_static_routes"]; ok && !isIntfNil(v) && !insideStaticRouteChoiceTypeFound {
-
-				insideStaticRouteChoiceTypeFound = true
-				insideStaticRouteChoiceInt := &ves_io_schema_views_aws_tgw_site.VnConfiguration_InsideStaticRoutes{}
-				insideStaticRouteChoiceInt.InsideStaticRoutes = &ves_io_schema_views.SiteStaticRoutesListType{}
-				vnConfig.InsideStaticRouteChoice = insideStaticRouteChoiceInt
-
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
-
-					if v, ok := cs["static_route_list"]; ok && !isIntfNil(v) {
-
-						sl := v.([]interface{})
-						staticRouteList := make([]*ves_io_schema_views.SiteStaticRoutesType, len(sl))
-						insideStaticRouteChoiceInt.InsideStaticRoutes.StaticRouteList = staticRouteList
-						for i, set := range sl {
-							staticRouteList[i] = &ves_io_schema_views.SiteStaticRoutesType{}
-							staticRouteListMapStrToI := set.(map[string]interface{})
-
-							configModeChoiceTypeFound := false
-
-							if v, ok := staticRouteListMapStrToI["custom_static_route"]; ok && !isIntfNil(v) && !configModeChoiceTypeFound {
-
-								configModeChoiceTypeFound = true
-								configModeChoiceInt := &ves_io_schema_views.SiteStaticRoutesType_CustomStaticRoute{}
-								configModeChoiceInt.CustomStaticRoute = &ves_io_schema.StaticRouteType{}
-								staticRouteList[i].ConfigModeChoice = configModeChoiceInt
-
-								sl := v.(*schema.Set).List()
-								for _, set := range sl {
-									cs := set.(map[string]interface{})
-
-									if v, ok := cs["attrs"]; ok && !isIntfNil(v) {
-
-										attrsList := []ves_io_schema.RouteAttrType{}
-										for _, j := range v.([]interface{}) {
-											attrsList = append(attrsList, ves_io_schema.RouteAttrType(ves_io_schema.RouteAttrType_value[j.(string)]))
-										}
-										configModeChoiceInt.CustomStaticRoute.Attrs = attrsList
-
-									}
-
-									if v, ok := cs["labels"]; ok && !isIntfNil(v) {
-
-										ms := map[string]string{}
-										for k, v := range v.(map[string]interface{}) {
-											ms[k] = v.(string)
-										}
-										configModeChoiceInt.CustomStaticRoute.Labels = ms
-									}
-
-									if v, ok := cs["nexthop"]; ok && !isIntfNil(v) {
-
-										sl := v.(*schema.Set).List()
-										nexthop := &ves_io_schema.NextHopType{}
-										configModeChoiceInt.CustomStaticRoute.Nexthop = nexthop
-										for _, set := range sl {
-											nexthopMapStrToI := set.(map[string]interface{})
-
-											if v, ok := nexthopMapStrToI["interface"]; ok && !isIntfNil(v) {
-
-												sl := v.([]interface{})
-												intfInt := make([]*ves_io_schema.ObjectRefType, len(sl))
-												nexthop.Interface = intfInt
-												for i, ps := range sl {
-
-													iMapToStrVal := ps.(map[string]interface{})
-													intfInt[i] = &ves_io_schema.ObjectRefType{}
-
-													intfInt[i].Kind = "network_interface"
-
-													if v, ok := iMapToStrVal["name"]; ok && !isIntfNil(v) {
-														intfInt[i].Name = v.(string)
-													}
-
-													if v, ok := iMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-														intfInt[i].Namespace = v.(string)
-													}
-
-													if v, ok := iMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-														intfInt[i].Tenant = v.(string)
-													}
-
-													if v, ok := iMapToStrVal["uid"]; ok && !isIntfNil(v) {
-														intfInt[i].Uid = v.(string)
-													}
-
-												}
-
-											}
-
-											if v, ok := nexthopMapStrToI["nexthop_address"]; ok && !isIntfNil(v) {
-
-												sl := v.(*schema.Set).List()
-												nexthopAddress := &ves_io_schema.IpAddressType{}
-												nexthop.NexthopAddress = nexthopAddress
-												for _, set := range sl {
-													nexthopAddressMapStrToI := set.(map[string]interface{})
-
-													verTypeFound := false
-
-													if v, ok := nexthopAddressMapStrToI["ipv4"]; ok && !isIntfNil(v) && !verTypeFound {
-
-														verTypeFound = true
-														verInt := &ves_io_schema.IpAddressType_Ipv4{}
-														verInt.Ipv4 = &ves_io_schema.Ipv4AddressType{}
-														nexthopAddress.Ver = verInt
-
-														sl := v.(*schema.Set).List()
-														for _, set := range sl {
-															cs := set.(map[string]interface{})
-
-															if v, ok := cs["addr"]; ok && !isIntfNil(v) {
-
-																verInt.Ipv4.Addr = v.(string)
-
-															}
-
-														}
-
-													}
-
-													if v, ok := nexthopAddressMapStrToI["ipv6"]; ok && !isIntfNil(v) && !verTypeFound {
-
-														verTypeFound = true
-														verInt := &ves_io_schema.IpAddressType_Ipv6{}
-														verInt.Ipv6 = &ves_io_schema.Ipv6AddressType{}
-														nexthopAddress.Ver = verInt
-
-														sl := v.(*schema.Set).List()
-														for _, set := range sl {
-															cs := set.(map[string]interface{})
-
-															if v, ok := cs["addr"]; ok && !isIntfNil(v) {
-
-																verInt.Ipv6.Addr = v.(string)
-
-															}
-
-														}
-
-													}
-
-												}
-
-											}
-
-											if v, ok := nexthopMapStrToI["type"]; ok && !isIntfNil(v) {
-
-												nexthop.Type = ves_io_schema.NextHopTypes(ves_io_schema.NextHopTypes_value[v.(string)])
-
-											}
-
-										}
-
-									}
-
-									if v, ok := cs["subnets"]; ok && !isIntfNil(v) {
-
-										sl := v.([]interface{})
-										subnets := make([]*ves_io_schema.IpSubnetType, len(sl))
-										configModeChoiceInt.CustomStaticRoute.Subnets = subnets
-										for i, set := range sl {
-											subnets[i] = &ves_io_schema.IpSubnetType{}
-											subnetsMapStrToI := set.(map[string]interface{})
-
-											verTypeFound := false
-
-											if v, ok := subnetsMapStrToI["ipv4"]; ok && !isIntfNil(v) && !verTypeFound {
-
-												verTypeFound = true
-												verInt := &ves_io_schema.IpSubnetType_Ipv4{}
-												verInt.Ipv4 = &ves_io_schema.Ipv4SubnetType{}
-												subnets[i].Ver = verInt
-
-												sl := v.(*schema.Set).List()
-												for _, set := range sl {
-													cs := set.(map[string]interface{})
-
-													if v, ok := cs["plen"]; ok && !isIntfNil(v) {
-
-														verInt.Ipv4.Plen = uint32(v.(int))
-
-													}
-
-													if v, ok := cs["prefix"]; ok && !isIntfNil(v) {
-
-														verInt.Ipv4.Prefix = v.(string)
-
-													}
-
-												}
-
-											}
-
-											if v, ok := subnetsMapStrToI["ipv6"]; ok && !isIntfNil(v) && !verTypeFound {
-
-												verTypeFound = true
-												verInt := &ves_io_schema.IpSubnetType_Ipv6{}
-												verInt.Ipv6 = &ves_io_schema.Ipv6SubnetType{}
-												subnets[i].Ver = verInt
-
-												sl := v.(*schema.Set).List()
-												for _, set := range sl {
-													cs := set.(map[string]interface{})
-
-													if v, ok := cs["plen"]; ok && !isIntfNil(v) {
-
-														verInt.Ipv6.Plen = uint32(v.(int))
-
-													}
-
-													if v, ok := cs["prefix"]; ok && !isIntfNil(v) {
-
-														verInt.Ipv6.Prefix = v.(string)
-
-													}
-
-												}
-
-											}
-
-										}
-
-									}
-
-								}
-
-							}
-
-							if v, ok := staticRouteListMapStrToI["simple_static_route"]; ok && !isIntfNil(v) && !configModeChoiceTypeFound {
-
-								configModeChoiceTypeFound = true
-								configModeChoiceInt := &ves_io_schema_views.SiteStaticRoutesType_SimpleStaticRoute{}
-
-								staticRouteList[i].ConfigModeChoice = configModeChoiceInt
-
-								configModeChoiceInt.SimpleStaticRoute = v.(string)
-
-							}
-
-						}
-
+					if v.(bool) {
+						globalNetworkChoiceInt := &ves_io_schema_views_aws_tgw_site.VnConfiguration_NoGlobalNetwork{}
+						globalNetworkChoiceInt.NoGlobalNetwork = &ves_io_schema.Empty{}
+						vnConfig.GlobalNetworkChoice = globalNetworkChoiceInt
 					}
 
 				}
 
-			}
+				insideStaticRouteChoiceTypeFound := false
 
-			if v, ok := vnConfigMapStrToI["no_inside_static_routes"]; ok && !isIntfNil(v) && !insideStaticRouteChoiceTypeFound {
+				if v, ok := vnConfigMapStrToI["inside_static_routes"]; ok && !isIntfNil(v) && !insideStaticRouteChoiceTypeFound {
 
-				insideStaticRouteChoiceTypeFound = true
-
-				if v.(bool) {
-					insideStaticRouteChoiceInt := &ves_io_schema_views_aws_tgw_site.VnConfiguration_NoInsideStaticRoutes{}
-					insideStaticRouteChoiceInt.NoInsideStaticRoutes = &ves_io_schema.Empty{}
+					insideStaticRouteChoiceTypeFound = true
+					insideStaticRouteChoiceInt := &ves_io_schema_views_aws_tgw_site.VnConfiguration_InsideStaticRoutes{}
+					insideStaticRouteChoiceInt.InsideStaticRoutes = &ves_io_schema_views.SiteStaticRoutesListType{}
 					vnConfig.InsideStaticRouteChoice = insideStaticRouteChoiceInt
-				}
 
-			}
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
 
-			outsideStaticRouteChoiceTypeFound := false
+							if v, ok := cs["static_route_list"]; ok && !isIntfNil(v) {
 
-			if v, ok := vnConfigMapStrToI["no_outside_static_routes"]; ok && !isIntfNil(v) && !outsideStaticRouteChoiceTypeFound {
+								sl := v.([]interface{})
+								staticRouteList := make([]*ves_io_schema_views.SiteStaticRoutesType, len(sl))
+								insideStaticRouteChoiceInt.InsideStaticRoutes.StaticRouteList = staticRouteList
+								for i, set := range sl {
+									if set != nil {
+										staticRouteList[i] = &ves_io_schema_views.SiteStaticRoutesType{}
+										staticRouteListMapStrToI := set.(map[string]interface{})
 
-				outsideStaticRouteChoiceTypeFound = true
+										configModeChoiceTypeFound := false
 
-				if v.(bool) {
-					outsideStaticRouteChoiceInt := &ves_io_schema_views_aws_tgw_site.VnConfiguration_NoOutsideStaticRoutes{}
-					outsideStaticRouteChoiceInt.NoOutsideStaticRoutes = &ves_io_schema.Empty{}
-					vnConfig.OutsideStaticRouteChoice = outsideStaticRouteChoiceInt
-				}
+										if v, ok := staticRouteListMapStrToI["custom_static_route"]; ok && !isIntfNil(v) && !configModeChoiceTypeFound {
 
-			}
+											configModeChoiceTypeFound = true
+											configModeChoiceInt := &ves_io_schema_views.SiteStaticRoutesType_CustomStaticRoute{}
+											configModeChoiceInt.CustomStaticRoute = &ves_io_schema.StaticRouteType{}
+											staticRouteList[i].ConfigModeChoice = configModeChoiceInt
 
-			if v, ok := vnConfigMapStrToI["outside_static_routes"]; ok && !isIntfNil(v) && !outsideStaticRouteChoiceTypeFound {
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
 
-				outsideStaticRouteChoiceTypeFound = true
-				outsideStaticRouteChoiceInt := &ves_io_schema_views_aws_tgw_site.VnConfiguration_OutsideStaticRoutes{}
-				outsideStaticRouteChoiceInt.OutsideStaticRoutes = &ves_io_schema_views.SiteStaticRoutesListType{}
-				vnConfig.OutsideStaticRouteChoice = outsideStaticRouteChoiceInt
+													if v, ok := cs["attrs"]; ok && !isIntfNil(v) {
 
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
+														attrsList := []ves_io_schema.RouteAttrType{}
+														for _, j := range v.([]interface{}) {
+															attrsList = append(attrsList, ves_io_schema.RouteAttrType(ves_io_schema.RouteAttrType_value[j.(string)]))
+														}
+														configModeChoiceInt.CustomStaticRoute.Attrs = attrsList
 
-					if v, ok := cs["static_route_list"]; ok && !isIntfNil(v) {
-
-						sl := v.([]interface{})
-						staticRouteList := make([]*ves_io_schema_views.SiteStaticRoutesType, len(sl))
-						outsideStaticRouteChoiceInt.OutsideStaticRoutes.StaticRouteList = staticRouteList
-						for i, set := range sl {
-							staticRouteList[i] = &ves_io_schema_views.SiteStaticRoutesType{}
-							staticRouteListMapStrToI := set.(map[string]interface{})
-
-							configModeChoiceTypeFound := false
-
-							if v, ok := staticRouteListMapStrToI["custom_static_route"]; ok && !isIntfNil(v) && !configModeChoiceTypeFound {
-
-								configModeChoiceTypeFound = true
-								configModeChoiceInt := &ves_io_schema_views.SiteStaticRoutesType_CustomStaticRoute{}
-								configModeChoiceInt.CustomStaticRoute = &ves_io_schema.StaticRouteType{}
-								staticRouteList[i].ConfigModeChoice = configModeChoiceInt
-
-								sl := v.(*schema.Set).List()
-								for _, set := range sl {
-									cs := set.(map[string]interface{})
-
-									if v, ok := cs["attrs"]; ok && !isIntfNil(v) {
-
-										attrsList := []ves_io_schema.RouteAttrType{}
-										for _, j := range v.([]interface{}) {
-											attrsList = append(attrsList, ves_io_schema.RouteAttrType(ves_io_schema.RouteAttrType_value[j.(string)]))
-										}
-										configModeChoiceInt.CustomStaticRoute.Attrs = attrsList
-
-									}
-
-									if v, ok := cs["labels"]; ok && !isIntfNil(v) {
-
-										ms := map[string]string{}
-										for k, v := range v.(map[string]interface{}) {
-											ms[k] = v.(string)
-										}
-										configModeChoiceInt.CustomStaticRoute.Labels = ms
-									}
-
-									if v, ok := cs["nexthop"]; ok && !isIntfNil(v) {
-
-										sl := v.(*schema.Set).List()
-										nexthop := &ves_io_schema.NextHopType{}
-										configModeChoiceInt.CustomStaticRoute.Nexthop = nexthop
-										for _, set := range sl {
-											nexthopMapStrToI := set.(map[string]interface{})
-
-											if v, ok := nexthopMapStrToI["interface"]; ok && !isIntfNil(v) {
-
-												sl := v.([]interface{})
-												intfInt := make([]*ves_io_schema.ObjectRefType, len(sl))
-												nexthop.Interface = intfInt
-												for i, ps := range sl {
-
-													iMapToStrVal := ps.(map[string]interface{})
-													intfInt[i] = &ves_io_schema.ObjectRefType{}
-
-													intfInt[i].Kind = "network_interface"
-
-													if v, ok := iMapToStrVal["name"]; ok && !isIntfNil(v) {
-														intfInt[i].Name = v.(string)
 													}
 
-													if v, ok := iMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-														intfInt[i].Namespace = v.(string)
+													if v, ok := cs["labels"]; ok && !isIntfNil(v) {
+
+														ms := map[string]string{}
+														for k, v := range v.(map[string]interface{}) {
+															ms[k] = v.(string)
+														}
+														configModeChoiceInt.CustomStaticRoute.Labels = ms
 													}
 
-													if v, ok := iMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-														intfInt[i].Tenant = v.(string)
-													}
+													if v, ok := cs["nexthop"]; ok && !isIntfNil(v) {
 
-													if v, ok := iMapToStrVal["uid"]; ok && !isIntfNil(v) {
-														intfInt[i].Uid = v.(string)
-													}
-
-												}
-
-											}
-
-											if v, ok := nexthopMapStrToI["nexthop_address"]; ok && !isIntfNil(v) {
-
-												sl := v.(*schema.Set).List()
-												nexthopAddress := &ves_io_schema.IpAddressType{}
-												nexthop.NexthopAddress = nexthopAddress
-												for _, set := range sl {
-													nexthopAddressMapStrToI := set.(map[string]interface{})
-
-													verTypeFound := false
-
-													if v, ok := nexthopAddressMapStrToI["ipv4"]; ok && !isIntfNil(v) && !verTypeFound {
-
-														verTypeFound = true
-														verInt := &ves_io_schema.IpAddressType_Ipv4{}
-														verInt.Ipv4 = &ves_io_schema.Ipv4AddressType{}
-														nexthopAddress.Ver = verInt
-
-														sl := v.(*schema.Set).List()
+														sl := v.([]interface{})
+														nexthop := &ves_io_schema.NextHopType{}
+														configModeChoiceInt.CustomStaticRoute.Nexthop = nexthop
 														for _, set := range sl {
-															cs := set.(map[string]interface{})
+															if set != nil {
+																nexthopMapStrToI := set.(map[string]interface{})
 
-															if v, ok := cs["addr"]; ok && !isIntfNil(v) {
+																if v, ok := nexthopMapStrToI["interface"]; ok && !isIntfNil(v) {
 
-																verInt.Ipv4.Addr = v.(string)
+																	sl := v.([]interface{})
+																	intfInt := make([]*ves_io_schema.ObjectRefType, len(sl))
+																	nexthop.Interface = intfInt
+																	for i, ps := range sl {
+
+																		iMapToStrVal := ps.(map[string]interface{})
+																		intfInt[i] = &ves_io_schema.ObjectRefType{}
+
+																		intfInt[i].Kind = "network_interface"
+
+																		if v, ok := iMapToStrVal["name"]; ok && !isIntfNil(v) {
+																			intfInt[i].Name = v.(string)
+																		}
+
+																		if v, ok := iMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+																			intfInt[i].Namespace = v.(string)
+																		}
+
+																		if v, ok := iMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+																			intfInt[i].Tenant = v.(string)
+																		}
+
+																		if v, ok := iMapToStrVal["uid"]; ok && !isIntfNil(v) {
+																			intfInt[i].Uid = v.(string)
+																		}
+
+																	}
+
+																}
+
+																if v, ok := nexthopMapStrToI["nexthop_address"]; ok && !isIntfNil(v) {
+
+																	sl := v.([]interface{})
+																	nexthopAddress := &ves_io_schema.IpAddressType{}
+																	nexthop.NexthopAddress = nexthopAddress
+																	for _, set := range sl {
+																		if set != nil {
+																			nexthopAddressMapStrToI := set.(map[string]interface{})
+
+																			verTypeFound := false
+
+																			if v, ok := nexthopAddressMapStrToI["ipv4"]; ok && !isIntfNil(v) && !verTypeFound {
+
+																				verTypeFound = true
+																				verInt := &ves_io_schema.IpAddressType_Ipv4{}
+																				verInt.Ipv4 = &ves_io_schema.Ipv4AddressType{}
+																				nexthopAddress.Ver = verInt
+
+																				sl := v.([]interface{})
+																				for _, set := range sl {
+																					if set != nil {
+																						cs := set.(map[string]interface{})
+
+																						if v, ok := cs["addr"]; ok && !isIntfNil(v) {
+
+																							verInt.Ipv4.Addr = v.(string)
+
+																						}
+
+																					}
+																				}
+
+																			}
+
+																			if v, ok := nexthopAddressMapStrToI["ipv6"]; ok && !isIntfNil(v) && !verTypeFound {
+
+																				verTypeFound = true
+																				verInt := &ves_io_schema.IpAddressType_Ipv6{}
+																				verInt.Ipv6 = &ves_io_schema.Ipv6AddressType{}
+																				nexthopAddress.Ver = verInt
+
+																				sl := v.([]interface{})
+																				for _, set := range sl {
+																					if set != nil {
+																						cs := set.(map[string]interface{})
+
+																						if v, ok := cs["addr"]; ok && !isIntfNil(v) {
+
+																							verInt.Ipv6.Addr = v.(string)
+
+																						}
+
+																					}
+																				}
+
+																			}
+
+																		}
+																	}
+
+																}
+
+																if v, ok := nexthopMapStrToI["type"]; ok && !isIntfNil(v) {
+
+																	nexthop.Type = ves_io_schema.NextHopTypes(ves_io_schema.NextHopTypes_value[v.(string)])
+
+																}
 
 															}
-
 														}
 
 													}
 
-													if v, ok := nexthopAddressMapStrToI["ipv6"]; ok && !isIntfNil(v) && !verTypeFound {
+													if v, ok := cs["subnets"]; ok && !isIntfNil(v) {
 
-														verTypeFound = true
-														verInt := &ves_io_schema.IpAddressType_Ipv6{}
-														verInt.Ipv6 = &ves_io_schema.Ipv6AddressType{}
-														nexthopAddress.Ver = verInt
+														sl := v.([]interface{})
+														subnets := make([]*ves_io_schema.IpSubnetType, len(sl))
+														configModeChoiceInt.CustomStaticRoute.Subnets = subnets
+														for i, set := range sl {
+															if set != nil {
+																subnets[i] = &ves_io_schema.IpSubnetType{}
+																subnetsMapStrToI := set.(map[string]interface{})
 
-														sl := v.(*schema.Set).List()
-														for _, set := range sl {
-															cs := set.(map[string]interface{})
+																verTypeFound := false
 
-															if v, ok := cs["addr"]; ok && !isIntfNil(v) {
+																if v, ok := subnetsMapStrToI["ipv4"]; ok && !isIntfNil(v) && !verTypeFound {
 
-																verInt.Ipv6.Addr = v.(string)
+																	verTypeFound = true
+																	verInt := &ves_io_schema.IpSubnetType_Ipv4{}
+																	verInt.Ipv4 = &ves_io_schema.Ipv4SubnetType{}
+																	subnets[i].Ver = verInt
+
+																	sl := v.([]interface{})
+																	for _, set := range sl {
+																		if set != nil {
+																			cs := set.(map[string]interface{})
+
+																			if v, ok := cs["plen"]; ok && !isIntfNil(v) {
+
+																				verInt.Ipv4.Plen = uint32(v.(int))
+
+																			}
+
+																			if v, ok := cs["prefix"]; ok && !isIntfNil(v) {
+
+																				verInt.Ipv4.Prefix = v.(string)
+
+																			}
+
+																		}
+																	}
+
+																}
+
+																if v, ok := subnetsMapStrToI["ipv6"]; ok && !isIntfNil(v) && !verTypeFound {
+
+																	verTypeFound = true
+																	verInt := &ves_io_schema.IpSubnetType_Ipv6{}
+																	verInt.Ipv6 = &ves_io_schema.Ipv6SubnetType{}
+																	subnets[i].Ver = verInt
+
+																	sl := v.([]interface{})
+																	for _, set := range sl {
+																		if set != nil {
+																			cs := set.(map[string]interface{})
+
+																			if v, ok := cs["plen"]; ok && !isIntfNil(v) {
+
+																				verInt.Ipv6.Plen = uint32(v.(int))
+
+																			}
+
+																			if v, ok := cs["prefix"]; ok && !isIntfNil(v) {
+
+																				verInt.Ipv6.Prefix = v.(string)
+
+																			}
+
+																		}
+																	}
+
+																}
 
 															}
-
 														}
 
 													}
 
 												}
-
-											}
-
-											if v, ok := nexthopMapStrToI["type"]; ok && !isIntfNil(v) {
-
-												nexthop.Type = ves_io_schema.NextHopTypes(ves_io_schema.NextHopTypes_value[v.(string)])
-
 											}
 
 										}
 
-									}
+										if v, ok := staticRouteListMapStrToI["simple_static_route"]; ok && !isIntfNil(v) && !configModeChoiceTypeFound {
 
-									if v, ok := cs["subnets"]; ok && !isIntfNil(v) {
+											configModeChoiceTypeFound = true
+											configModeChoiceInt := &ves_io_schema_views.SiteStaticRoutesType_SimpleStaticRoute{}
 
-										sl := v.([]interface{})
-										subnets := make([]*ves_io_schema.IpSubnetType, len(sl))
-										configModeChoiceInt.CustomStaticRoute.Subnets = subnets
-										for i, set := range sl {
-											subnets[i] = &ves_io_schema.IpSubnetType{}
-											subnetsMapStrToI := set.(map[string]interface{})
+											staticRouteList[i].ConfigModeChoice = configModeChoiceInt
 
-											verTypeFound := false
-
-											if v, ok := subnetsMapStrToI["ipv4"]; ok && !isIntfNil(v) && !verTypeFound {
-
-												verTypeFound = true
-												verInt := &ves_io_schema.IpSubnetType_Ipv4{}
-												verInt.Ipv4 = &ves_io_schema.Ipv4SubnetType{}
-												subnets[i].Ver = verInt
-
-												sl := v.(*schema.Set).List()
-												for _, set := range sl {
-													cs := set.(map[string]interface{})
-
-													if v, ok := cs["plen"]; ok && !isIntfNil(v) {
-
-														verInt.Ipv4.Plen = uint32(v.(int))
-
-													}
-
-													if v, ok := cs["prefix"]; ok && !isIntfNil(v) {
-
-														verInt.Ipv4.Prefix = v.(string)
-
-													}
-
-												}
-
-											}
-
-											if v, ok := subnetsMapStrToI["ipv6"]; ok && !isIntfNil(v) && !verTypeFound {
-
-												verTypeFound = true
-												verInt := &ves_io_schema.IpSubnetType_Ipv6{}
-												verInt.Ipv6 = &ves_io_schema.Ipv6SubnetType{}
-												subnets[i].Ver = verInt
-
-												sl := v.(*schema.Set).List()
-												for _, set := range sl {
-													cs := set.(map[string]interface{})
-
-													if v, ok := cs["plen"]; ok && !isIntfNil(v) {
-
-														verInt.Ipv6.Plen = uint32(v.(int))
-
-													}
-
-													if v, ok := cs["prefix"]; ok && !isIntfNil(v) {
-
-														verInt.Ipv6.Prefix = v.(string)
-
-													}
-
-												}
-
-											}
+											configModeChoiceInt.SimpleStaticRoute = v.(string)
 
 										}
 
 									}
-
 								}
 
 							}
 
-							if v, ok := staticRouteListMapStrToI["simple_static_route"]; ok && !isIntfNil(v) && !configModeChoiceTypeFound {
+						}
+					}
 
-								configModeChoiceTypeFound = true
-								configModeChoiceInt := &ves_io_schema_views.SiteStaticRoutesType_SimpleStaticRoute{}
+				}
 
-								staticRouteList[i].ConfigModeChoice = configModeChoiceInt
+				if v, ok := vnConfigMapStrToI["no_inside_static_routes"]; ok && !isIntfNil(v) && !insideStaticRouteChoiceTypeFound {
 
-								configModeChoiceInt.SimpleStaticRoute = v.(string)
+					insideStaticRouteChoiceTypeFound = true
+
+					if v.(bool) {
+						insideStaticRouteChoiceInt := &ves_io_schema_views_aws_tgw_site.VnConfiguration_NoInsideStaticRoutes{}
+						insideStaticRouteChoiceInt.NoInsideStaticRoutes = &ves_io_schema.Empty{}
+						vnConfig.InsideStaticRouteChoice = insideStaticRouteChoiceInt
+					}
+
+				}
+
+				outsideStaticRouteChoiceTypeFound := false
+
+				if v, ok := vnConfigMapStrToI["no_outside_static_routes"]; ok && !isIntfNil(v) && !outsideStaticRouteChoiceTypeFound {
+
+					outsideStaticRouteChoiceTypeFound = true
+
+					if v.(bool) {
+						outsideStaticRouteChoiceInt := &ves_io_schema_views_aws_tgw_site.VnConfiguration_NoOutsideStaticRoutes{}
+						outsideStaticRouteChoiceInt.NoOutsideStaticRoutes = &ves_io_schema.Empty{}
+						vnConfig.OutsideStaticRouteChoice = outsideStaticRouteChoiceInt
+					}
+
+				}
+
+				if v, ok := vnConfigMapStrToI["outside_static_routes"]; ok && !isIntfNil(v) && !outsideStaticRouteChoiceTypeFound {
+
+					outsideStaticRouteChoiceTypeFound = true
+					outsideStaticRouteChoiceInt := &ves_io_schema_views_aws_tgw_site.VnConfiguration_OutsideStaticRoutes{}
+					outsideStaticRouteChoiceInt.OutsideStaticRoutes = &ves_io_schema_views.SiteStaticRoutesListType{}
+					vnConfig.OutsideStaticRouteChoice = outsideStaticRouteChoiceInt
+
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["static_route_list"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								staticRouteList := make([]*ves_io_schema_views.SiteStaticRoutesType, len(sl))
+								outsideStaticRouteChoiceInt.OutsideStaticRoutes.StaticRouteList = staticRouteList
+								for i, set := range sl {
+									if set != nil {
+										staticRouteList[i] = &ves_io_schema_views.SiteStaticRoutesType{}
+										staticRouteListMapStrToI := set.(map[string]interface{})
+
+										configModeChoiceTypeFound := false
+
+										if v, ok := staticRouteListMapStrToI["custom_static_route"]; ok && !isIntfNil(v) && !configModeChoiceTypeFound {
+
+											configModeChoiceTypeFound = true
+											configModeChoiceInt := &ves_io_schema_views.SiteStaticRoutesType_CustomStaticRoute{}
+											configModeChoiceInt.CustomStaticRoute = &ves_io_schema.StaticRouteType{}
+											staticRouteList[i].ConfigModeChoice = configModeChoiceInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["attrs"]; ok && !isIntfNil(v) {
+
+														attrsList := []ves_io_schema.RouteAttrType{}
+														for _, j := range v.([]interface{}) {
+															attrsList = append(attrsList, ves_io_schema.RouteAttrType(ves_io_schema.RouteAttrType_value[j.(string)]))
+														}
+														configModeChoiceInt.CustomStaticRoute.Attrs = attrsList
+
+													}
+
+													if v, ok := cs["labels"]; ok && !isIntfNil(v) {
+
+														ms := map[string]string{}
+														for k, v := range v.(map[string]interface{}) {
+															ms[k] = v.(string)
+														}
+														configModeChoiceInt.CustomStaticRoute.Labels = ms
+													}
+
+													if v, ok := cs["nexthop"]; ok && !isIntfNil(v) {
+
+														sl := v.([]interface{})
+														nexthop := &ves_io_schema.NextHopType{}
+														configModeChoiceInt.CustomStaticRoute.Nexthop = nexthop
+														for _, set := range sl {
+															if set != nil {
+																nexthopMapStrToI := set.(map[string]interface{})
+
+																if v, ok := nexthopMapStrToI["interface"]; ok && !isIntfNil(v) {
+
+																	sl := v.([]interface{})
+																	intfInt := make([]*ves_io_schema.ObjectRefType, len(sl))
+																	nexthop.Interface = intfInt
+																	for i, ps := range sl {
+
+																		iMapToStrVal := ps.(map[string]interface{})
+																		intfInt[i] = &ves_io_schema.ObjectRefType{}
+
+																		intfInt[i].Kind = "network_interface"
+
+																		if v, ok := iMapToStrVal["name"]; ok && !isIntfNil(v) {
+																			intfInt[i].Name = v.(string)
+																		}
+
+																		if v, ok := iMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+																			intfInt[i].Namespace = v.(string)
+																		}
+
+																		if v, ok := iMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+																			intfInt[i].Tenant = v.(string)
+																		}
+
+																		if v, ok := iMapToStrVal["uid"]; ok && !isIntfNil(v) {
+																			intfInt[i].Uid = v.(string)
+																		}
+
+																	}
+
+																}
+
+																if v, ok := nexthopMapStrToI["nexthop_address"]; ok && !isIntfNil(v) {
+
+																	sl := v.([]interface{})
+																	nexthopAddress := &ves_io_schema.IpAddressType{}
+																	nexthop.NexthopAddress = nexthopAddress
+																	for _, set := range sl {
+																		if set != nil {
+																			nexthopAddressMapStrToI := set.(map[string]interface{})
+
+																			verTypeFound := false
+
+																			if v, ok := nexthopAddressMapStrToI["ipv4"]; ok && !isIntfNil(v) && !verTypeFound {
+
+																				verTypeFound = true
+																				verInt := &ves_io_schema.IpAddressType_Ipv4{}
+																				verInt.Ipv4 = &ves_io_schema.Ipv4AddressType{}
+																				nexthopAddress.Ver = verInt
+
+																				sl := v.([]interface{})
+																				for _, set := range sl {
+																					if set != nil {
+																						cs := set.(map[string]interface{})
+
+																						if v, ok := cs["addr"]; ok && !isIntfNil(v) {
+
+																							verInt.Ipv4.Addr = v.(string)
+
+																						}
+
+																					}
+																				}
+
+																			}
+
+																			if v, ok := nexthopAddressMapStrToI["ipv6"]; ok && !isIntfNil(v) && !verTypeFound {
+
+																				verTypeFound = true
+																				verInt := &ves_io_schema.IpAddressType_Ipv6{}
+																				verInt.Ipv6 = &ves_io_schema.Ipv6AddressType{}
+																				nexthopAddress.Ver = verInt
+
+																				sl := v.([]interface{})
+																				for _, set := range sl {
+																					if set != nil {
+																						cs := set.(map[string]interface{})
+
+																						if v, ok := cs["addr"]; ok && !isIntfNil(v) {
+
+																							verInt.Ipv6.Addr = v.(string)
+
+																						}
+
+																					}
+																				}
+
+																			}
+
+																		}
+																	}
+
+																}
+
+																if v, ok := nexthopMapStrToI["type"]; ok && !isIntfNil(v) {
+
+																	nexthop.Type = ves_io_schema.NextHopTypes(ves_io_schema.NextHopTypes_value[v.(string)])
+
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := cs["subnets"]; ok && !isIntfNil(v) {
+
+														sl := v.([]interface{})
+														subnets := make([]*ves_io_schema.IpSubnetType, len(sl))
+														configModeChoiceInt.CustomStaticRoute.Subnets = subnets
+														for i, set := range sl {
+															if set != nil {
+																subnets[i] = &ves_io_schema.IpSubnetType{}
+																subnetsMapStrToI := set.(map[string]interface{})
+
+																verTypeFound := false
+
+																if v, ok := subnetsMapStrToI["ipv4"]; ok && !isIntfNil(v) && !verTypeFound {
+
+																	verTypeFound = true
+																	verInt := &ves_io_schema.IpSubnetType_Ipv4{}
+																	verInt.Ipv4 = &ves_io_schema.Ipv4SubnetType{}
+																	subnets[i].Ver = verInt
+
+																	sl := v.([]interface{})
+																	for _, set := range sl {
+																		if set != nil {
+																			cs := set.(map[string]interface{})
+
+																			if v, ok := cs["plen"]; ok && !isIntfNil(v) {
+
+																				verInt.Ipv4.Plen = uint32(v.(int))
+
+																			}
+
+																			if v, ok := cs["prefix"]; ok && !isIntfNil(v) {
+
+																				verInt.Ipv4.Prefix = v.(string)
+
+																			}
+
+																		}
+																	}
+
+																}
+
+																if v, ok := subnetsMapStrToI["ipv6"]; ok && !isIntfNil(v) && !verTypeFound {
+
+																	verTypeFound = true
+																	verInt := &ves_io_schema.IpSubnetType_Ipv6{}
+																	verInt.Ipv6 = &ves_io_schema.Ipv6SubnetType{}
+																	subnets[i].Ver = verInt
+
+																	sl := v.([]interface{})
+																	for _, set := range sl {
+																		if set != nil {
+																			cs := set.(map[string]interface{})
+
+																			if v, ok := cs["plen"]; ok && !isIntfNil(v) {
+
+																				verInt.Ipv6.Plen = uint32(v.(int))
+
+																			}
+
+																			if v, ok := cs["prefix"]; ok && !isIntfNil(v) {
+
+																				verInt.Ipv6.Prefix = v.(string)
+
+																			}
+
+																		}
+																	}
+
+																}
+
+															}
+														}
+
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := staticRouteListMapStrToI["simple_static_route"]; ok && !isIntfNil(v) && !configModeChoiceTypeFound {
+
+											configModeChoiceTypeFound = true
+											configModeChoiceInt := &ves_io_schema_views.SiteStaticRoutesType_SimpleStaticRoute{}
+
+											staticRouteList[i].ConfigModeChoice = configModeChoiceInt
+
+											configModeChoiceInt.SimpleStaticRoute = v.(string)
+
+										}
+
+									}
+								}
 
 							}
 
 						}
+					}
 
+				}
+
+				siteMeshGroupChoiceTypeFound := false
+
+				if v, ok := vnConfigMapStrToI["sm_connection_public_ip"]; ok && !isIntfNil(v) && !siteMeshGroupChoiceTypeFound {
+
+					siteMeshGroupChoiceTypeFound = true
+
+					if v.(bool) {
+						siteMeshGroupChoiceInt := &ves_io_schema_views_aws_tgw_site.VnConfiguration_SmConnectionPublicIp{}
+						siteMeshGroupChoiceInt.SmConnectionPublicIp = &ves_io_schema.Empty{}
+						vnConfig.SiteMeshGroupChoice = siteMeshGroupChoiceInt
+					}
+
+				}
+
+				if v, ok := vnConfigMapStrToI["sm_connection_pvt_ip"]; ok && !isIntfNil(v) && !siteMeshGroupChoiceTypeFound {
+
+					siteMeshGroupChoiceTypeFound = true
+
+					if v.(bool) {
+						siteMeshGroupChoiceInt := &ves_io_schema_views_aws_tgw_site.VnConfiguration_SmConnectionPvtIp{}
+						siteMeshGroupChoiceInt.SmConnectionPvtIp = &ves_io_schema.Empty{}
+						vnConfig.SiteMeshGroupChoice = siteMeshGroupChoiceInt
 					}
 
 				}
 
 			}
-
-			siteMeshGroupChoiceTypeFound := false
-
-			if v, ok := vnConfigMapStrToI["sm_connection_public_ip"]; ok && !isIntfNil(v) && !siteMeshGroupChoiceTypeFound {
-
-				siteMeshGroupChoiceTypeFound = true
-
-				if v.(bool) {
-					siteMeshGroupChoiceInt := &ves_io_schema_views_aws_tgw_site.VnConfiguration_SmConnectionPublicIp{}
-					siteMeshGroupChoiceInt.SmConnectionPublicIp = &ves_io_schema.Empty{}
-					vnConfig.SiteMeshGroupChoice = siteMeshGroupChoiceInt
-				}
-
-			}
-
-			if v, ok := vnConfigMapStrToI["sm_connection_pvt_ip"]; ok && !isIntfNil(v) && !siteMeshGroupChoiceTypeFound {
-
-				siteMeshGroupChoiceTypeFound = true
-
-				if v.(bool) {
-					siteMeshGroupChoiceInt := &ves_io_schema_views_aws_tgw_site.VnConfiguration_SmConnectionPvtIp{}
-					siteMeshGroupChoiceInt.SmConnectionPvtIp = &ves_io_schema.Empty{}
-					vnConfig.SiteMeshGroupChoice = siteMeshGroupChoiceInt
-				}
-
-			}
-
 		}
 
 	}
 
 	if v, ok := d.GetOk("vpc_attachments"); ok && !isIntfNil(v) {
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		vpcAttachments := &ves_io_schema_views_aws_tgw_site.VPCAttachmentListType{}
 		updateSpec.VpcAttachments = vpcAttachments
 		for _, set := range sl {
-			vpcAttachmentsMapStrToI := set.(map[string]interface{})
+			if set != nil {
+				vpcAttachmentsMapStrToI := set.(map[string]interface{})
 
-			if v, ok := vpcAttachmentsMapStrToI["vpc_list"]; ok && !isIntfNil(v) {
+				if v, ok := vpcAttachmentsMapStrToI["vpc_list"]; ok && !isIntfNil(v) {
 
-				sl := v.([]interface{})
-				vpcList := make([]*ves_io_schema_views_aws_tgw_site.VPCAttachmentType, len(sl))
-				vpcAttachments.VpcList = vpcList
-				for i, set := range sl {
-					vpcList[i] = &ves_io_schema_views_aws_tgw_site.VPCAttachmentType{}
-					vpcListMapStrToI := set.(map[string]interface{})
+					sl := v.([]interface{})
+					vpcList := make([]*ves_io_schema_views_aws_tgw_site.VPCAttachmentType, len(sl))
+					vpcAttachments.VpcList = vpcList
+					for i, set := range sl {
+						if set != nil {
+							vpcList[i] = &ves_io_schema_views_aws_tgw_site.VPCAttachmentType{}
+							vpcListMapStrToI := set.(map[string]interface{})
 
-					if w, ok := vpcListMapStrToI["labels"]; ok && !isIntfNil(w) {
-						ms := map[string]string{}
-						for k, v := range w.(map[string]interface{}) {
-							ms[k] = v.(string)
+							if w, ok := vpcListMapStrToI["labels"]; ok && !isIntfNil(w) {
+								ms := map[string]string{}
+								for k, v := range w.(map[string]interface{}) {
+									ms[k] = v.(string)
+								}
+								vpcList[i].Labels = ms
+							}
+
+							if w, ok := vpcListMapStrToI["vpc_id"]; ok && !isIntfNil(w) {
+								vpcList[i].VpcId = w.(string)
+							}
+
 						}
-						vpcList[i].Labels = ms
-					}
-
-					if w, ok := vpcListMapStrToI["vpc_id"]; ok && !isIntfNil(w) {
-						vpcList[i].VpcId = w.(string)
 					}
 
 				}
 
 			}
-
 		}
 
 	}

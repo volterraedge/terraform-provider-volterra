@@ -1149,16 +1149,25 @@ func (s *APISrv) Create(ctx context.Context, req *CreateRequest) (*CreateRespons
 	}
 	reqMsgFQN := "ves.io.schema.uztna.uztna_flow.CreateRequest"
 	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.sf, reqMsgFQN, req)
+	var retErr error
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
 		}
+		userMsg := "The 'ves.io.schema.uztna.uztna_flow.API.Create' operation on 'uztna_flow'"
+		if retErr == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
 	obj := NewDBObject(nil)
 	req.ToObject(obj)
 	if conv, exists := s.sf.Config().MsgToObjConverters[reqMsgFQN]; exists {
 		if err := conv(req, obj); err != nil {
+			retErr = err
 			return nil, err
 		}
 	}
@@ -1167,16 +1176,19 @@ func (s *APISrv) Create(ctx context.Context, req *CreateRequest) (*CreateRespons
 	rsrcRsp, err := s.opts.RsrcHandler.CreateFn(ctx, rsrcReq, s.apiWrapper)
 	if err != nil {
 		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "CreateResource"))
+		retErr = err
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 	rsp, err := NewObjectCreateRsp(rsrcRsp.Entry)
 	if err != nil {
 		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "CreateResponse"))
+		retErr = err
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 	rspMsgFQN := "ves.io.schema.uztna.uztna_flow.CreateResponse"
 	if conv, exists := s.sf.Config().ObjToMsgConverters[rspMsgFQN]; exists {
 		if err := conv(rsrcRsp.Entry, rsp); err != nil {
+			retErr = err
 			return nil, err
 		}
 	}
@@ -1208,21 +1220,31 @@ func (s *APISrv) Replace(ctx context.Context, req *ReplaceRequest) (*ReplaceResp
 		}
 	}
 	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.sf, "ves.io.schema.uztna.uztna_flow.API.ReplaceRequest", req)
+	var retErr error
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
 		}
+		userMsg := "The 'ves.io.schema.uztna.uztna_flow.API.Replace' operation on 'uztna_flow'"
+		if retErr == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
 	rsrcReq := &server.ResourceReplaceRequest{RequestMsg: req}
 	rsrcRsp, err := s.opts.RsrcHandler.ReplaceFn(ctx, rsrcReq, s.apiWrapper)
 	if err != nil {
 		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "ReplaceResource"))
+		retErr = err
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 	rsp, err := NewObjectReplaceRsp(rsrcRsp.Entry)
 	if err != nil {
 		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "ReplaceResponse"))
+		retErr = err
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.sf, "ves.io.schema.uztna.uztna_flow.API.ReplaceResponse", rsp)...)
@@ -1341,10 +1363,18 @@ func (s *APISrv) Delete(ctx context.Context, req *DeleteRequest) (*google_protob
 		}
 	}
 	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.sf, "ves.io.schema.uztna.uztna_flow.API.DeleteRequest", req)
+	var retErr error
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
 		}
+		userMsg := "The 'ves.io.schema.uztna.uztna_flow.API.Delete' operation on 'uztna_flow'"
+		if retErr == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
 	tenant := server.TenantFromContext(ctx)
@@ -1354,6 +1384,7 @@ func (s *APISrv) Delete(ctx context.Context, req *DeleteRequest) (*google_protob
 	_, err := s.opts.RsrcHandler.DeleteFn(ctx, rsrcReq, s.apiWrapper)
 	if err != nil {
 		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "DeleteResource"))
+		retErr = err
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 	return &google_protobuf.Empty{}, nil
@@ -1766,7 +1797,6 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-uztna-uztna_flow-api-create"
                 },
-                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.uztna.uztna_flow.API.Create"
             },
             "x-displayname": "flow",
@@ -1867,7 +1897,6 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-uztna-uztna_flow-api-replace"
                 },
-                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.uztna.uztna_flow.API.Replace"
             },
             "x-displayname": "flow",
@@ -1984,7 +2013,6 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-uztna-uztna_flow-api-list"
                 },
-                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.uztna.uztna_flow.API.List"
             },
             "x-displayname": "flow",
@@ -2095,7 +2123,6 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-uztna-uztna_flow-api-get"
                 },
-                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.uztna.uztna_flow.API.Get"
             },
             "delete": {
@@ -2189,7 +2216,6 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-uztna-uztna_flow-api-delete"
                 },
-                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.uztna.uztna_flow.API.Delete"
             },
             "x-displayname": "flow",
@@ -3159,6 +3185,94 @@ var APISwaggerJSON string = `{
             ],
             "default": "GET_RSP_FORMAT_DEFAULT"
         },
+        "uztna_flowIdentityProvider": {
+            "type": "object",
+            "description": "Identity Provider Metadata is an XML file containing information about your identity provider (IdP),\nincluding security certificates and endpoints used for single sign-on (SSO).",
+            "title": "Identity Provider Metadata",
+            "x-displayname": "Identity Provider Metadata",
+            "x-ves-oneof-field-sso_service_binding": "[\"post\",\"redirect\"]",
+            "x-ves-proto-message": "ves.io.schema.uztna.uztna_flow.IdentityProvider",
+            "properties": {
+                "idp_assert_verification_cert": {
+                    "description": "\n Used for identity provider's assertion verification ",
+                    "title": "Identity Provider's Assertion Verification Certificate",
+                    "$ref": "#/definitions/uztna_flowCertificate",
+                    "x-displayname": "Identity Provider's Assertion Verification Certificate"
+                },
+                "idp_security_property": {
+                    "description": " Identity Provider's Security Property\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "IDP Security Properties",
+                    "$ref": "#/definitions/uztna_flowIdpSecurityProperty",
+                    "x-displayname": "Security Properties",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "issuer": {
+                    "type": "string",
+                    "description": "  URI that is assigned to the entity, \n and it is used to identify the entity in SAML messages\n\nExample: - \"https://issuerentity.com\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 2048\n  ves.io.schema.rules.string.uri: true\n",
+                    "title": "Issuer Identity URL",
+                    "maxLength": 2048,
+                    "x-displayname": "Issuer Identity URL",
+                    "x-ves-example": "https://issuerentity.com",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_len": "2048",
+                        "ves.io.schema.rules.string.uri": "true"
+                    }
+                },
+                "post": {
+                    "description": "Exclusive with [redirect]\n\n SSO Service binding as POST request",
+                    "title": "Post",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "POST"
+                },
+                "redirect": {
+                    "description": "Exclusive with [post]\n\n SSO Service binding as Redirect request ",
+                    "title": "Redirect",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "REDIRECT"
+                },
+                "sso_url": {
+                    "type": "string",
+                    "description": "  URL required for SSO authentication\n\nExample: - \"https://issuersignon.com\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_bytes: 1024\n  ves.io.schema.rules.string.uri_ref: true\n",
+                    "title": "SSO Service URL",
+                    "maxLength": 1024,
+                    "x-displayname": "SSO Service URL",
+                    "x-ves-example": "https://issuersignon.com",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_bytes": "1024",
+                        "ves.io.schema.rules.string.uri_ref": "true"
+                    }
+                }
+            }
+        },
+        "uztna_flowIdpSecurityProperty": {
+            "type": "object",
+            "description": "\nIdentity Provider's Securuty Property",
+            "title": "IDP Secuirty Properties",
+            "x-displayname": "Secuirty Properties",
+            "x-ves-oneof-field-auth_request_signed": "[\"no\",\"yes\"]",
+            "x-ves-proto-message": "ves.io.schema.uztna.uztna_flow.IdpSecurityProperty",
+            "properties": {
+                "no": {
+                    "description": "Exclusive with [yes]\n\n Auth Request is not signed ",
+                    "title": "No",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "No"
+                },
+                "yes": {
+                    "description": "Exclusive with [no]\n\n Auth Request is signed  ",
+                    "title": "Yes",
+                    "$ref": "#/definitions/uztna_flowSignAlgorithm",
+                    "x-displayname": "Yes"
+                }
+            }
+        },
         "uztna_flowListResponse": {
             "type": "object",
             "description": "This is the output message of 'List' RPC.",
@@ -3296,34 +3410,6 @@ var APISwaggerJSON string = `{
                 }
             }
         },
-        "uztna_flowProviderMetadata": {
-            "type": "object",
-            "title": "Provider Metadata",
-            "x-displayname": "Provider Metadata",
-            "x-ves-proto-message": "ves.io.schema.uztna.uztna_flow.ProviderMetadata",
-            "properties": {
-                "idp_provider_metadata": {
-                    "type": "string",
-                    "description": " Identity Provider Metadata is an XML file containing information about your identity provider (IdP),\n including security certificates and endpoints used for single sign-on (SSO).\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 1024\n",
-                    "title": "Identity Provider Metadata",
-                    "maxLength": 1024,
-                    "x-displayname": "Identity Provider Metadata",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.max_len": "1024"
-                    }
-                },
-                "service_provider_metadata": {
-                    "type": "string",
-                    "description": " Service Provider Metadata is an XML file containing information needed to establish\n a secure connection between Distributed Cloud and an Identity Provider for single sign-on (SSO).\n Once downloaded, securely send this file to your identity provider so they can complete the federation.\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 1024\n",
-                    "title": "Service  Provider Metadata",
-                    "maxLength": 1024,
-                    "x-displayname": "Service Provider Metadata",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.max_len": "1024"
-                    }
-                }
-            }
-        },
         "uztna_flowReplaceRequest": {
             "type": "object",
             "description": "This is the input message of the 'Replace' RPC",
@@ -3366,11 +3452,11 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.message.required": "true"
                     }
                 },
-                "provider_metadata": {
-                    "description": " Provide metadata is xml kind of input for Service provider metadata and IDP .\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
-                    "title": "Provider Properties",
-                    "$ref": "#/definitions/uztna_flowProviderMetadata",
-                    "x-displayname": "Provider Metadata ",
+                "idp": {
+                    "description": " Identity Provider containing information about your identity provider (IdP),\n including security certificates and endpoints used for single sign-on (SSO). \n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Identity Provider",
+                    "$ref": "#/definitions/uztna_flowIdentityProvider",
+                    "x-displayname": "Identity Provider",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true"
@@ -3456,6 +3542,40 @@ var APISwaggerJSON string = `{
                     "title": "Want Signed Assertion",
                     "format": "boolean",
                     "x-displayname": "Want Signed Assertion"
+                }
+            }
+        },
+        "uztna_flowSignAlgorithm": {
+            "type": "object",
+            "description": "x-example: sha1/sha256/sha384/sha512",
+            "title": "Signing Algoritm",
+            "x-displayname": "Signing Algorithm",
+            "x-ves-oneof-field-sign_algo": "[\"rsa_sha1\",\"rsa_sha256\",\"rsa_sha384\",\"rsa_sha512\"]",
+            "x-ves-proto-message": "ves.io.schema.uztna.uztna_flow.SignAlgorithm",
+            "properties": {
+                "rsa_sha1": {
+                    "description": "Exclusive with [rsa_sha256 rsa_sha384 rsa_sha512]\n RSA-SHA1",
+                    "title": "RSA-SHA1",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "RSA-SHA1"
+                },
+                "rsa_sha256": {
+                    "description": "Exclusive with [rsa_sha1 rsa_sha384 rsa_sha512]\n RSA-SHA256",
+                    "title": "RSA-SHA256",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "RSA-SHA256"
+                },
+                "rsa_sha384": {
+                    "description": "Exclusive with [rsa_sha1 rsa_sha256 rsa_sha512]\n RSA-SHA384",
+                    "title": "RSA-SHA384",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "RSA-SHA384"
+                },
+                "rsa_sha512": {
+                    "description": "Exclusive with [rsa_sha1 rsa_sha256 rsa_sha384]\n RSA-SHA512",
+                    "title": "RSA-SHA512",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "RSA-SHA512"
                 }
             }
         },

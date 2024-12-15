@@ -32,32 +32,105 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
-// Status of the virtual server
+// Availability Status of the virtual server
 //
-// x-displayName: "Virtual Server Status"
-// Status of the virtual server.
+// x-displayName: "Virtual Server Availability Status"
+// Availability Status of the virtual server.
 type VirtualServerStatus int32
 
 const (
-	UP       VirtualServerStatus = 0
-	DOWN     VirtualServerStatus = 1
-	DISABLED VirtualServerStatus = 2
+	// UNSPECIFIED
+	//
+	// x-displayName: "Unspecified"
+	// Invalid status.
+	UNSPECIFIED VirtualServerStatus = 0
+	// AVAILABLE
+	//
+	// x-displayName: "Available"
+	// Virtual Server is available and serving traffic.
+	AVAILABLE VirtualServerStatus = 1
+	// OFFLINE
+	//
+	// x-displayName: "Offline"
+	// Virtual Server is not serving traffic.
+	OFFLINE VirtualServerStatus = 2
+	// UNKNOWN
+	//
+	// x-displayName: "Unknown"
+	// Virtual Server availability is unknown. It can indicate that no service checks are enabled on the virtual server.
+	UNKNOWN VirtualServerStatus = 3
+	// UNAVAILABLE
+	//
+	// x-displayName: "Unavailable"
+	// Virtual Server is temporarily unavailable maybe due to hitting connection limit.
+	UNAVAILABLE VirtualServerStatus = 4
+	// DELETED
+	//
+	// x-displayName: "Deleted"
+	// Virtual Server has been deleted on the BIG-IP but is in use on Distributed Cloud.
+	DELETED VirtualServerStatus = 5
 )
 
 var VirtualServerStatus_name = map[int32]string{
-	0: "UP",
-	1: "DOWN",
-	2: "DISABLED",
+	0: "UNSPECIFIED",
+	1: "AVAILABLE",
+	2: "OFFLINE",
+	3: "UNKNOWN",
+	4: "UNAVAILABLE",
+	5: "DELETED",
 }
 
 var VirtualServerStatus_value = map[string]int32{
-	"UP":       0,
-	"DOWN":     1,
-	"DISABLED": 2,
+	"UNSPECIFIED": 0,
+	"AVAILABLE":   1,
+	"OFFLINE":     2,
+	"UNKNOWN":     3,
+	"UNAVAILABLE": 4,
+	"DELETED":     5,
 }
 
 func (VirtualServerStatus) EnumDescriptor() ([]byte, []int) {
 	return fileDescriptor_5e612cab0245916d, []int{0}
+}
+
+// Enabled state of the virtual server
+//
+// x-displayName: "Virtual Server Enabled State"
+// Enabled state of the virtual server.
+type VirtualServerEnabledState int32
+
+const (
+	// NONE
+	//
+	// x-displayName: "None"
+	// Invalid state.
+	NONE VirtualServerEnabledState = 0
+	// ENABLED
+	//
+	// x-displayName: "Enabled"
+	// Virtual Server is enabled.
+	ENABLED VirtualServerEnabledState = 1
+	// DISABLED
+	//
+	// x-displayName: "Disabled"
+	// Virtual Server is administratively disabled.
+	DISABLED VirtualServerEnabledState = 2
+)
+
+var VirtualServerEnabledState_name = map[int32]string{
+	0: "NONE",
+	1: "ENABLED",
+	2: "DISABLED",
+}
+
+var VirtualServerEnabledState_value = map[string]int32{
+	"NONE":     0,
+	"ENABLED":  1,
+	"DISABLED": 2,
+}
+
+func (VirtualServerEnabledState) EnumDescriptor() ([]byte, []int) {
+	return fileDescriptor_5e612cab0245916d, []int{1}
 }
 
 // TransmissionProtocol
@@ -68,25 +141,28 @@ func (VirtualServerStatus) EnumDescriptor() ([]byte, []int) {
 type TransmissionProtocol int32
 
 const (
-	HTTP  TransmissionProtocol = 0
-	HTTPS TransmissionProtocol = 1
-	TCP   TransmissionProtocol = 2
+	UNDEFINED TransmissionProtocol = 0
+	HTTP      TransmissionProtocol = 1
+	HTTPS     TransmissionProtocol = 2
+	TCP       TransmissionProtocol = 3
 )
 
 var TransmissionProtocol_name = map[int32]string{
-	0: "HTTP",
-	1: "HTTPS",
-	2: "TCP",
+	0: "UNDEFINED",
+	1: "HTTP",
+	2: "HTTPS",
+	3: "TCP",
 }
 
 var TransmissionProtocol_value = map[string]int32{
-	"HTTP":  0,
-	"HTTPS": 1,
-	"TCP":   2,
+	"UNDEFINED": 0,
+	"HTTP":      1,
+	"HTTPS":     2,
+	"TCP":       3,
 }
 
 func (TransmissionProtocol) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_5e612cab0245916d, []int{1}
+	return fileDescriptor_5e612cab0245916d, []int{2}
 }
 
 // Discovered Services Record
@@ -104,16 +180,16 @@ type GlobalSpecType struct {
 	// x-displayName: "TCP Load Balancers"
 	// List of references to TCP Load Balancers using this service
 	TcpLoadBalancers []*views.ObjectRefType `protobuf:"bytes,2,rep,name=tcp_load_balancers,json=tcpLoadBalancers,proto3" json:"tcp_load_balancers,omitempty"`
-	// waap_action_choice
+	// visibility_action_choice
 	//
-	// x-displayName: "WAAP Action Choice"
+	// x-displayName: "Visibility Action Choice"
 	// x-required
-	// Setting around WAAP usage for discovered service
+	// Setting to control visibility of discovered service across workspaces
 	//
-	// Types that are valid to be assigned to WaapActionChoice:
-	//	*GlobalSpecType_WaapVisibilityEnabled
-	//	*GlobalSpecType_WaapVisibilityDisabled
-	WaapActionChoice isGlobalSpecType_WaapActionChoice `protobuf_oneof:"waap_action_choice"`
+	// Types that are valid to be assigned to VisibilityActionChoice:
+	//	*GlobalSpecType_VisibilityEnabled
+	//	*GlobalSpecType_VisibilityDisabled
+	VisibilityActionChoice isGlobalSpecType_VisibilityActionChoice `protobuf_oneof:"visibility_action_choice"`
 	// service_type
 	//
 	// x-displayName: "Discovered Service Type"
@@ -123,6 +199,16 @@ type GlobalSpecType struct {
 	// Types that are valid to be assigned to ServiceType:
 	//	*GlobalSpecType_VirtualServer
 	ServiceType isGlobalSpecType_ServiceType `protobuf_oneof:"service_type"`
+	// Reference to the internally created vhost of type bigip_virtual_server
+	//
+	// x-displayName: "Internal Virtual Host"
+	// Internal virtual_host of type BIGIP_VIRTUAL_SERVER
+	InternalVirtualHost *views.ObjectRefType `protobuf:"bytes,8,opt,name=internal_virtual_host,json=internalVirtualHost,proto3" json:"internal_virtual_host,omitempty"`
+	// view_internal
+	//
+	// x-displayName: "View Internal"
+	// Reference to view internal object
+	ViewInternal *views.ObjectRefType `protobuf:"bytes,1000,opt,name=view_internal,json=viewInternal,proto3" json:"view_internal,omitempty"`
 }
 
 func (m *GlobalSpecType) Reset()      { *m = GlobalSpecType{} }
@@ -153,8 +239,8 @@ func (m *GlobalSpecType) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_GlobalSpecType proto.InternalMessageInfo
 
-type isGlobalSpecType_WaapActionChoice interface {
-	isGlobalSpecType_WaapActionChoice()
+type isGlobalSpecType_VisibilityActionChoice interface {
+	isGlobalSpecType_VisibilityActionChoice()
 	Equal(interface{}) bool
 	MarshalTo([]byte) (int, error)
 	Size() int
@@ -166,23 +252,23 @@ type isGlobalSpecType_ServiceType interface {
 	Size() int
 }
 
-type GlobalSpecType_WaapVisibilityEnabled struct {
-	WaapVisibilityEnabled *schema.Empty `protobuf:"bytes,4,opt,name=waap_visibility_enabled,json=waapVisibilityEnabled,proto3,oneof" json:"waap_visibility_enabled,omitempty"`
+type GlobalSpecType_VisibilityEnabled struct {
+	VisibilityEnabled *schema.Empty `protobuf:"bytes,4,opt,name=visibility_enabled,json=visibilityEnabled,proto3,oneof" json:"visibility_enabled,omitempty"`
 }
-type GlobalSpecType_WaapVisibilityDisabled struct {
-	WaapVisibilityDisabled *schema.Empty `protobuf:"bytes,5,opt,name=waap_visibility_disabled,json=waapVisibilityDisabled,proto3,oneof" json:"waap_visibility_disabled,omitempty"`
+type GlobalSpecType_VisibilityDisabled struct {
+	VisibilityDisabled *schema.Empty `protobuf:"bytes,5,opt,name=visibility_disabled,json=visibilityDisabled,proto3,oneof" json:"visibility_disabled,omitempty"`
 }
 type GlobalSpecType_VirtualServer struct {
 	VirtualServer *VirtualServer `protobuf:"bytes,7,opt,name=virtual_server,json=virtualServer,proto3,oneof" json:"virtual_server,omitempty"`
 }
 
-func (*GlobalSpecType_WaapVisibilityEnabled) isGlobalSpecType_WaapActionChoice()  {}
-func (*GlobalSpecType_WaapVisibilityDisabled) isGlobalSpecType_WaapActionChoice() {}
-func (*GlobalSpecType_VirtualServer) isGlobalSpecType_ServiceType()               {}
+func (*GlobalSpecType_VisibilityEnabled) isGlobalSpecType_VisibilityActionChoice()  {}
+func (*GlobalSpecType_VisibilityDisabled) isGlobalSpecType_VisibilityActionChoice() {}
+func (*GlobalSpecType_VirtualServer) isGlobalSpecType_ServiceType()                 {}
 
-func (m *GlobalSpecType) GetWaapActionChoice() isGlobalSpecType_WaapActionChoice {
+func (m *GlobalSpecType) GetVisibilityActionChoice() isGlobalSpecType_VisibilityActionChoice {
 	if m != nil {
-		return m.WaapActionChoice
+		return m.VisibilityActionChoice
 	}
 	return nil
 }
@@ -207,16 +293,16 @@ func (m *GlobalSpecType) GetTcpLoadBalancers() []*views.ObjectRefType {
 	return nil
 }
 
-func (m *GlobalSpecType) GetWaapVisibilityEnabled() *schema.Empty {
-	if x, ok := m.GetWaapActionChoice().(*GlobalSpecType_WaapVisibilityEnabled); ok {
-		return x.WaapVisibilityEnabled
+func (m *GlobalSpecType) GetVisibilityEnabled() *schema.Empty {
+	if x, ok := m.GetVisibilityActionChoice().(*GlobalSpecType_VisibilityEnabled); ok {
+		return x.VisibilityEnabled
 	}
 	return nil
 }
 
-func (m *GlobalSpecType) GetWaapVisibilityDisabled() *schema.Empty {
-	if x, ok := m.GetWaapActionChoice().(*GlobalSpecType_WaapVisibilityDisabled); ok {
-		return x.WaapVisibilityDisabled
+func (m *GlobalSpecType) GetVisibilityDisabled() *schema.Empty {
+	if x, ok := m.GetVisibilityActionChoice().(*GlobalSpecType_VisibilityDisabled); ok {
+		return x.VisibilityDisabled
 	}
 	return nil
 }
@@ -228,11 +314,25 @@ func (m *GlobalSpecType) GetVirtualServer() *VirtualServer {
 	return nil
 }
 
+func (m *GlobalSpecType) GetInternalVirtualHost() *views.ObjectRefType {
+	if m != nil {
+		return m.InternalVirtualHost
+	}
+	return nil
+}
+
+func (m *GlobalSpecType) GetViewInternal() *views.ObjectRefType {
+	if m != nil {
+		return m.ViewInternal
+	}
+	return nil
+}
+
 // XXX_OneofWrappers is for the internal use of the proto package.
 func (*GlobalSpecType) XXX_OneofWrappers() []interface{} {
 	return []interface{}{
-		(*GlobalSpecType_WaapVisibilityEnabled)(nil),
-		(*GlobalSpecType_WaapVisibilityDisabled)(nil),
+		(*GlobalSpecType_VisibilityEnabled)(nil),
+		(*GlobalSpecType_VisibilityDisabled)(nil),
 		(*GlobalSpecType_VirtualServer)(nil),
 	}
 }
@@ -257,7 +357,6 @@ type VirtualServer struct {
 	//
 	// x-displayName: "Protocol"
 	// x-example: "TCP"
-	// x-required
 	// Protocol on which the virtual-server is exposed
 	Protocol TransmissionProtocol `protobuf:"varint,3,opt,name=protocol,proto3,enum=ves.io.schema.discovered_service.TransmissionProtocol" json:"protocol,omitempty"`
 	// Port
@@ -266,11 +365,11 @@ type VirtualServer struct {
 	// x-example: "8080"
 	// Port number on which the virtual-server is exposed
 	Port uint32 `protobuf:"varint,4,opt,name=port,proto3" json:"port,omitempty"`
-	// Status of virtual server
+	// Availability Status of virtual server
 	//
 	// x-displayName: "Status"
 	// x-required
-	// Status of virtual server.
+	// Availability Status of virtual server.
 	Status VirtualServerStatus `protobuf:"varint,5,opt,name=status,proto3,enum=ves.io.schema.discovered_service.VirtualServerStatus" json:"status,omitempty"`
 	// CBIP Cluster Name
 	//
@@ -278,6 +377,34 @@ type VirtualServer struct {
 	// x-required
 	// Name of CBIP Cluster.
 	CbipCluster string `protobuf:"bytes,6,opt,name=cbip_cluster,json=cbipCluster,proto3" json:"cbip_cluster,omitempty"`
+	// BIG-IP version
+	//
+	// x-displayName: "BIG-IP Version"
+	// x-required
+	// Version of the BIG-IP from where the service was discovered
+	BigipVersion string `protobuf:"bytes,7,opt,name=bigip_version,json=bigipVersion,proto3" json:"bigip_version,omitempty"`
+	// Virtual Server IP Address
+	//
+	// x-displayName: "Virtual Server IP"
+	// x-required
+	// IP address of the BIG-IP Virtual Server
+	IpAddress string `protobuf:"bytes,8,opt,name=ip_address,json=ipAddress,proto3" json:"ip_address,omitempty"`
+	// Virtual Server Description
+	//
+	// Virtual Server description stored internally for validating Discovery filter replace requests
+	Description string `protobuf:"bytes,9,opt,name=description,proto3" json:"description,omitempty"`
+	// Enabled State of virtual server
+	//
+	// x-displayName: "Enabled State"
+	// x-required
+	// Enabled State of virtual server.
+	EnabledState VirtualServerEnabledState `protobuf:"varint,10,opt,name=enabled_state,json=enabledState,proto3,enum=ves.io.schema.discovered_service.VirtualServerEnabledState" json:"enabled_state,omitempty"`
+	// Management IP
+	//
+	// x-displayName: "Management IP"
+	// x-required
+	// Management IP
+	MgmtIp string `protobuf:"bytes,11,opt,name=mgmt_ip,json=mgmtIp,proto3" json:"mgmt_ip,omitempty"`
 }
 
 func (m *VirtualServer) Reset()      { *m = VirtualServer{} }
@@ -326,7 +453,7 @@ func (m *VirtualServer) GetProtocol() TransmissionProtocol {
 	if m != nil {
 		return m.Protocol
 	}
-	return HTTP
+	return UNDEFINED
 }
 
 func (m *VirtualServer) GetPort() uint32 {
@@ -340,12 +467,47 @@ func (m *VirtualServer) GetStatus() VirtualServerStatus {
 	if m != nil {
 		return m.Status
 	}
-	return UP
+	return UNSPECIFIED
 }
 
 func (m *VirtualServer) GetCbipCluster() string {
 	if m != nil {
 		return m.CbipCluster
+	}
+	return ""
+}
+
+func (m *VirtualServer) GetBigipVersion() string {
+	if m != nil {
+		return m.BigipVersion
+	}
+	return ""
+}
+
+func (m *VirtualServer) GetIpAddress() string {
+	if m != nil {
+		return m.IpAddress
+	}
+	return ""
+}
+
+func (m *VirtualServer) GetDescription() string {
+	if m != nil {
+		return m.Description
+	}
+	return ""
+}
+
+func (m *VirtualServer) GetEnabledState() VirtualServerEnabledState {
+	if m != nil {
+		return m.EnabledState
+	}
+	return NONE
+}
+
+func (m *VirtualServer) GetMgmtIp() string {
+	if m != nil {
+		return m.MgmtIp
 	}
 	return ""
 }
@@ -357,10 +519,10 @@ func (m *VirtualServer) GetCbipCluster() string {
 type CreateSpecType struct {
 	HttpLoadBalancers []*views.ObjectRefType `protobuf:"bytes,1,rep,name=http_load_balancers,json=httpLoadBalancers,proto3" json:"http_load_balancers,omitempty"`
 	TcpLoadBalancers  []*views.ObjectRefType `protobuf:"bytes,2,rep,name=tcp_load_balancers,json=tcpLoadBalancers,proto3" json:"tcp_load_balancers,omitempty"`
-	// Types that are valid to be assigned to WaapActionChoice:
-	//	*CreateSpecType_WaapVisibilityEnabled
-	//	*CreateSpecType_WaapVisibilityDisabled
-	WaapActionChoice isCreateSpecType_WaapActionChoice `protobuf_oneof:"waap_action_choice"`
+	// Types that are valid to be assigned to VisibilityActionChoice:
+	//	*CreateSpecType_VisibilityEnabled
+	//	*CreateSpecType_VisibilityDisabled
+	VisibilityActionChoice isCreateSpecType_VisibilityActionChoice `protobuf_oneof:"visibility_action_choice"`
 	// Types that are valid to be assigned to ServiceType:
 	//	*CreateSpecType_VirtualServer
 	ServiceType isCreateSpecType_ServiceType `protobuf_oneof:"service_type"`
@@ -394,8 +556,8 @@ func (m *CreateSpecType) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_CreateSpecType proto.InternalMessageInfo
 
-type isCreateSpecType_WaapActionChoice interface {
-	isCreateSpecType_WaapActionChoice()
+type isCreateSpecType_VisibilityActionChoice interface {
+	isCreateSpecType_VisibilityActionChoice()
 	Equal(interface{}) bool
 	MarshalTo([]byte) (int, error)
 	Size() int
@@ -407,23 +569,23 @@ type isCreateSpecType_ServiceType interface {
 	Size() int
 }
 
-type CreateSpecType_WaapVisibilityEnabled struct {
-	WaapVisibilityEnabled *schema.Empty `protobuf:"bytes,4,opt,name=waap_visibility_enabled,json=waapVisibilityEnabled,proto3,oneof" json:"waap_visibility_enabled,omitempty"`
+type CreateSpecType_VisibilityEnabled struct {
+	VisibilityEnabled *schema.Empty `protobuf:"bytes,4,opt,name=visibility_enabled,json=visibilityEnabled,proto3,oneof" json:"visibility_enabled,omitempty"`
 }
-type CreateSpecType_WaapVisibilityDisabled struct {
-	WaapVisibilityDisabled *schema.Empty `protobuf:"bytes,5,opt,name=waap_visibility_disabled,json=waapVisibilityDisabled,proto3,oneof" json:"waap_visibility_disabled,omitempty"`
+type CreateSpecType_VisibilityDisabled struct {
+	VisibilityDisabled *schema.Empty `protobuf:"bytes,5,opt,name=visibility_disabled,json=visibilityDisabled,proto3,oneof" json:"visibility_disabled,omitempty"`
 }
 type CreateSpecType_VirtualServer struct {
 	VirtualServer *VirtualServer `protobuf:"bytes,7,opt,name=virtual_server,json=virtualServer,proto3,oneof" json:"virtual_server,omitempty"`
 }
 
-func (*CreateSpecType_WaapVisibilityEnabled) isCreateSpecType_WaapActionChoice()  {}
-func (*CreateSpecType_WaapVisibilityDisabled) isCreateSpecType_WaapActionChoice() {}
-func (*CreateSpecType_VirtualServer) isCreateSpecType_ServiceType()               {}
+func (*CreateSpecType_VisibilityEnabled) isCreateSpecType_VisibilityActionChoice()  {}
+func (*CreateSpecType_VisibilityDisabled) isCreateSpecType_VisibilityActionChoice() {}
+func (*CreateSpecType_VirtualServer) isCreateSpecType_ServiceType()                 {}
 
-func (m *CreateSpecType) GetWaapActionChoice() isCreateSpecType_WaapActionChoice {
+func (m *CreateSpecType) GetVisibilityActionChoice() isCreateSpecType_VisibilityActionChoice {
 	if m != nil {
-		return m.WaapActionChoice
+		return m.VisibilityActionChoice
 	}
 	return nil
 }
@@ -448,16 +610,16 @@ func (m *CreateSpecType) GetTcpLoadBalancers() []*views.ObjectRefType {
 	return nil
 }
 
-func (m *CreateSpecType) GetWaapVisibilityEnabled() *schema.Empty {
-	if x, ok := m.GetWaapActionChoice().(*CreateSpecType_WaapVisibilityEnabled); ok {
-		return x.WaapVisibilityEnabled
+func (m *CreateSpecType) GetVisibilityEnabled() *schema.Empty {
+	if x, ok := m.GetVisibilityActionChoice().(*CreateSpecType_VisibilityEnabled); ok {
+		return x.VisibilityEnabled
 	}
 	return nil
 }
 
-func (m *CreateSpecType) GetWaapVisibilityDisabled() *schema.Empty {
-	if x, ok := m.GetWaapActionChoice().(*CreateSpecType_WaapVisibilityDisabled); ok {
-		return x.WaapVisibilityDisabled
+func (m *CreateSpecType) GetVisibilityDisabled() *schema.Empty {
+	if x, ok := m.GetVisibilityActionChoice().(*CreateSpecType_VisibilityDisabled); ok {
+		return x.VisibilityDisabled
 	}
 	return nil
 }
@@ -472,8 +634,8 @@ func (m *CreateSpecType) GetVirtualServer() *VirtualServer {
 // XXX_OneofWrappers is for the internal use of the proto package.
 func (*CreateSpecType) XXX_OneofWrappers() []interface{} {
 	return []interface{}{
-		(*CreateSpecType_WaapVisibilityEnabled)(nil),
-		(*CreateSpecType_WaapVisibilityDisabled)(nil),
+		(*CreateSpecType_VisibilityEnabled)(nil),
+		(*CreateSpecType_VisibilityDisabled)(nil),
 		(*CreateSpecType_VirtualServer)(nil),
 	}
 }
@@ -485,10 +647,10 @@ func (*CreateSpecType) XXX_OneofWrappers() []interface{} {
 type GetSpecType struct {
 	HttpLoadBalancers []*views.ObjectRefType `protobuf:"bytes,1,rep,name=http_load_balancers,json=httpLoadBalancers,proto3" json:"http_load_balancers,omitempty"`
 	TcpLoadBalancers  []*views.ObjectRefType `protobuf:"bytes,2,rep,name=tcp_load_balancers,json=tcpLoadBalancers,proto3" json:"tcp_load_balancers,omitempty"`
-	// Types that are valid to be assigned to WaapActionChoice:
-	//	*GetSpecType_WaapVisibilityEnabled
-	//	*GetSpecType_WaapVisibilityDisabled
-	WaapActionChoice isGetSpecType_WaapActionChoice `protobuf_oneof:"waap_action_choice"`
+	// Types that are valid to be assigned to VisibilityActionChoice:
+	//	*GetSpecType_VisibilityEnabled
+	//	*GetSpecType_VisibilityDisabled
+	VisibilityActionChoice isGetSpecType_VisibilityActionChoice `protobuf_oneof:"visibility_action_choice"`
 	// Types that are valid to be assigned to ServiceType:
 	//	*GetSpecType_VirtualServer
 	ServiceType isGetSpecType_ServiceType `protobuf_oneof:"service_type"`
@@ -522,8 +684,8 @@ func (m *GetSpecType) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_GetSpecType proto.InternalMessageInfo
 
-type isGetSpecType_WaapActionChoice interface {
-	isGetSpecType_WaapActionChoice()
+type isGetSpecType_VisibilityActionChoice interface {
+	isGetSpecType_VisibilityActionChoice()
 	Equal(interface{}) bool
 	MarshalTo([]byte) (int, error)
 	Size() int
@@ -535,23 +697,23 @@ type isGetSpecType_ServiceType interface {
 	Size() int
 }
 
-type GetSpecType_WaapVisibilityEnabled struct {
-	WaapVisibilityEnabled *schema.Empty `protobuf:"bytes,4,opt,name=waap_visibility_enabled,json=waapVisibilityEnabled,proto3,oneof" json:"waap_visibility_enabled,omitempty"`
+type GetSpecType_VisibilityEnabled struct {
+	VisibilityEnabled *schema.Empty `protobuf:"bytes,4,opt,name=visibility_enabled,json=visibilityEnabled,proto3,oneof" json:"visibility_enabled,omitempty"`
 }
-type GetSpecType_WaapVisibilityDisabled struct {
-	WaapVisibilityDisabled *schema.Empty `protobuf:"bytes,5,opt,name=waap_visibility_disabled,json=waapVisibilityDisabled,proto3,oneof" json:"waap_visibility_disabled,omitempty"`
+type GetSpecType_VisibilityDisabled struct {
+	VisibilityDisabled *schema.Empty `protobuf:"bytes,5,opt,name=visibility_disabled,json=visibilityDisabled,proto3,oneof" json:"visibility_disabled,omitempty"`
 }
 type GetSpecType_VirtualServer struct {
 	VirtualServer *VirtualServer `protobuf:"bytes,7,opt,name=virtual_server,json=virtualServer,proto3,oneof" json:"virtual_server,omitempty"`
 }
 
-func (*GetSpecType_WaapVisibilityEnabled) isGetSpecType_WaapActionChoice()  {}
-func (*GetSpecType_WaapVisibilityDisabled) isGetSpecType_WaapActionChoice() {}
-func (*GetSpecType_VirtualServer) isGetSpecType_ServiceType()               {}
+func (*GetSpecType_VisibilityEnabled) isGetSpecType_VisibilityActionChoice()  {}
+func (*GetSpecType_VisibilityDisabled) isGetSpecType_VisibilityActionChoice() {}
+func (*GetSpecType_VirtualServer) isGetSpecType_ServiceType()                 {}
 
-func (m *GetSpecType) GetWaapActionChoice() isGetSpecType_WaapActionChoice {
+func (m *GetSpecType) GetVisibilityActionChoice() isGetSpecType_VisibilityActionChoice {
 	if m != nil {
-		return m.WaapActionChoice
+		return m.VisibilityActionChoice
 	}
 	return nil
 }
@@ -576,16 +738,16 @@ func (m *GetSpecType) GetTcpLoadBalancers() []*views.ObjectRefType {
 	return nil
 }
 
-func (m *GetSpecType) GetWaapVisibilityEnabled() *schema.Empty {
-	if x, ok := m.GetWaapActionChoice().(*GetSpecType_WaapVisibilityEnabled); ok {
-		return x.WaapVisibilityEnabled
+func (m *GetSpecType) GetVisibilityEnabled() *schema.Empty {
+	if x, ok := m.GetVisibilityActionChoice().(*GetSpecType_VisibilityEnabled); ok {
+		return x.VisibilityEnabled
 	}
 	return nil
 }
 
-func (m *GetSpecType) GetWaapVisibilityDisabled() *schema.Empty {
-	if x, ok := m.GetWaapActionChoice().(*GetSpecType_WaapVisibilityDisabled); ok {
-		return x.WaapVisibilityDisabled
+func (m *GetSpecType) GetVisibilityDisabled() *schema.Empty {
+	if x, ok := m.GetVisibilityActionChoice().(*GetSpecType_VisibilityDisabled); ok {
+		return x.VisibilityDisabled
 	}
 	return nil
 }
@@ -600,8 +762,8 @@ func (m *GetSpecType) GetVirtualServer() *VirtualServer {
 // XXX_OneofWrappers is for the internal use of the proto package.
 func (*GetSpecType) XXX_OneofWrappers() []interface{} {
 	return []interface{}{
-		(*GetSpecType_WaapVisibilityEnabled)(nil),
-		(*GetSpecType_WaapVisibilityDisabled)(nil),
+		(*GetSpecType_VisibilityEnabled)(nil),
+		(*GetSpecType_VisibilityDisabled)(nil),
 		(*GetSpecType_VirtualServer)(nil),
 	}
 }
@@ -613,10 +775,10 @@ func (*GetSpecType) XXX_OneofWrappers() []interface{} {
 type ReplaceSpecType struct {
 	HttpLoadBalancers []*views.ObjectRefType `protobuf:"bytes,1,rep,name=http_load_balancers,json=httpLoadBalancers,proto3" json:"http_load_balancers,omitempty"`
 	TcpLoadBalancers  []*views.ObjectRefType `protobuf:"bytes,2,rep,name=tcp_load_balancers,json=tcpLoadBalancers,proto3" json:"tcp_load_balancers,omitempty"`
-	// Types that are valid to be assigned to WaapActionChoice:
-	//	*ReplaceSpecType_WaapVisibilityEnabled
-	//	*ReplaceSpecType_WaapVisibilityDisabled
-	WaapActionChoice isReplaceSpecType_WaapActionChoice `protobuf_oneof:"waap_action_choice"`
+	// Types that are valid to be assigned to VisibilityActionChoice:
+	//	*ReplaceSpecType_VisibilityEnabled
+	//	*ReplaceSpecType_VisibilityDisabled
+	VisibilityActionChoice isReplaceSpecType_VisibilityActionChoice `protobuf_oneof:"visibility_action_choice"`
 	// Types that are valid to be assigned to ServiceType:
 	//	*ReplaceSpecType_VirtualServer
 	ServiceType isReplaceSpecType_ServiceType `protobuf_oneof:"service_type"`
@@ -650,8 +812,8 @@ func (m *ReplaceSpecType) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_ReplaceSpecType proto.InternalMessageInfo
 
-type isReplaceSpecType_WaapActionChoice interface {
-	isReplaceSpecType_WaapActionChoice()
+type isReplaceSpecType_VisibilityActionChoice interface {
+	isReplaceSpecType_VisibilityActionChoice()
 	Equal(interface{}) bool
 	MarshalTo([]byte) (int, error)
 	Size() int
@@ -663,23 +825,23 @@ type isReplaceSpecType_ServiceType interface {
 	Size() int
 }
 
-type ReplaceSpecType_WaapVisibilityEnabled struct {
-	WaapVisibilityEnabled *schema.Empty `protobuf:"bytes,4,opt,name=waap_visibility_enabled,json=waapVisibilityEnabled,proto3,oneof" json:"waap_visibility_enabled,omitempty"`
+type ReplaceSpecType_VisibilityEnabled struct {
+	VisibilityEnabled *schema.Empty `protobuf:"bytes,4,opt,name=visibility_enabled,json=visibilityEnabled,proto3,oneof" json:"visibility_enabled,omitempty"`
 }
-type ReplaceSpecType_WaapVisibilityDisabled struct {
-	WaapVisibilityDisabled *schema.Empty `protobuf:"bytes,5,opt,name=waap_visibility_disabled,json=waapVisibilityDisabled,proto3,oneof" json:"waap_visibility_disabled,omitempty"`
+type ReplaceSpecType_VisibilityDisabled struct {
+	VisibilityDisabled *schema.Empty `protobuf:"bytes,5,opt,name=visibility_disabled,json=visibilityDisabled,proto3,oneof" json:"visibility_disabled,omitempty"`
 }
 type ReplaceSpecType_VirtualServer struct {
 	VirtualServer *VirtualServer `protobuf:"bytes,7,opt,name=virtual_server,json=virtualServer,proto3,oneof" json:"virtual_server,omitempty"`
 }
 
-func (*ReplaceSpecType_WaapVisibilityEnabled) isReplaceSpecType_WaapActionChoice()  {}
-func (*ReplaceSpecType_WaapVisibilityDisabled) isReplaceSpecType_WaapActionChoice() {}
-func (*ReplaceSpecType_VirtualServer) isReplaceSpecType_ServiceType()               {}
+func (*ReplaceSpecType_VisibilityEnabled) isReplaceSpecType_VisibilityActionChoice()  {}
+func (*ReplaceSpecType_VisibilityDisabled) isReplaceSpecType_VisibilityActionChoice() {}
+func (*ReplaceSpecType_VirtualServer) isReplaceSpecType_ServiceType()                 {}
 
-func (m *ReplaceSpecType) GetWaapActionChoice() isReplaceSpecType_WaapActionChoice {
+func (m *ReplaceSpecType) GetVisibilityActionChoice() isReplaceSpecType_VisibilityActionChoice {
 	if m != nil {
-		return m.WaapActionChoice
+		return m.VisibilityActionChoice
 	}
 	return nil
 }
@@ -704,16 +866,16 @@ func (m *ReplaceSpecType) GetTcpLoadBalancers() []*views.ObjectRefType {
 	return nil
 }
 
-func (m *ReplaceSpecType) GetWaapVisibilityEnabled() *schema.Empty {
-	if x, ok := m.GetWaapActionChoice().(*ReplaceSpecType_WaapVisibilityEnabled); ok {
-		return x.WaapVisibilityEnabled
+func (m *ReplaceSpecType) GetVisibilityEnabled() *schema.Empty {
+	if x, ok := m.GetVisibilityActionChoice().(*ReplaceSpecType_VisibilityEnabled); ok {
+		return x.VisibilityEnabled
 	}
 	return nil
 }
 
-func (m *ReplaceSpecType) GetWaapVisibilityDisabled() *schema.Empty {
-	if x, ok := m.GetWaapActionChoice().(*ReplaceSpecType_WaapVisibilityDisabled); ok {
-		return x.WaapVisibilityDisabled
+func (m *ReplaceSpecType) GetVisibilityDisabled() *schema.Empty {
+	if x, ok := m.GetVisibilityActionChoice().(*ReplaceSpecType_VisibilityDisabled); ok {
+		return x.VisibilityDisabled
 	}
 	return nil
 }
@@ -728,8 +890,8 @@ func (m *ReplaceSpecType) GetVirtualServer() *VirtualServer {
 // XXX_OneofWrappers is for the internal use of the proto package.
 func (*ReplaceSpecType) XXX_OneofWrappers() []interface{} {
 	return []interface{}{
-		(*ReplaceSpecType_WaapVisibilityEnabled)(nil),
-		(*ReplaceSpecType_WaapVisibilityDisabled)(nil),
+		(*ReplaceSpecType_VisibilityEnabled)(nil),
+		(*ReplaceSpecType_VisibilityDisabled)(nil),
 		(*ReplaceSpecType_VirtualServer)(nil),
 	}
 }
@@ -737,6 +899,8 @@ func (*ReplaceSpecType) XXX_OneofWrappers() []interface{} {
 func init() {
 	proto.RegisterEnum("ves.io.schema.discovered_service.VirtualServerStatus", VirtualServerStatus_name, VirtualServerStatus_value)
 	golang_proto.RegisterEnum("ves.io.schema.discovered_service.VirtualServerStatus", VirtualServerStatus_name, VirtualServerStatus_value)
+	proto.RegisterEnum("ves.io.schema.discovered_service.VirtualServerEnabledState", VirtualServerEnabledState_name, VirtualServerEnabledState_value)
+	golang_proto.RegisterEnum("ves.io.schema.discovered_service.VirtualServerEnabledState", VirtualServerEnabledState_name, VirtualServerEnabledState_value)
 	proto.RegisterEnum("ves.io.schema.discovered_service.TransmissionProtocol", TransmissionProtocol_name, TransmissionProtocol_value)
 	golang_proto.RegisterEnum("ves.io.schema.discovered_service.TransmissionProtocol", TransmissionProtocol_name, TransmissionProtocol_value)
 	proto.RegisterType((*GlobalSpecType)(nil), "ves.io.schema.discovered_service.GlobalSpecType")
@@ -759,67 +923,92 @@ func init() {
 }
 
 var fileDescriptor_5e612cab0245916d = []byte{
-	// 895 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x57, 0xbf, 0x6f, 0xdb, 0x46,
-	0x14, 0xd6, 0x49, 0xb4, 0x2c, 0x9f, 0x6d, 0x85, 0x39, 0xbb, 0x09, 0xeb, 0x16, 0x8c, 0xea, 0x49,
-	0x30, 0x64, 0x12, 0x55, 0x9a, 0x0c, 0x1d, 0x02, 0x94, 0xb6, 0x11, 0x37, 0x48, 0x13, 0x83, 0x52,
-	0xdd, 0xa2, 0x1d, 0x88, 0x23, 0x75, 0x96, 0xae, 0xa5, 0x74, 0xc4, 0xdd, 0x89, 0xa9, 0x06, 0x03,
-	0x41, 0xd6, 0x2e, 0x1d, 0xfa, 0x47, 0x14, 0xee, 0x7f, 0xd0, 0x2c, 0x1e, 0xdb, 0xa2, 0x05, 0x3c,
-	0x7a, 0xac, 0xe5, 0xa5, 0xdd, 0x82, 0x8e, 0x59, 0x52, 0xf0, 0xf4, 0x23, 0xa6, 0xad, 0x36, 0x29,
-	0xbc, 0x05, 0xda, 0x8e, 0xef, 0x7b, 0xdf, 0xf7, 0x1e, 0x79, 0xdf, 0x23, 0x8f, 0xb0, 0x12, 0x13,
-	0x61, 0x51, 0x66, 0x8b, 0xa0, 0x45, 0xda, 0xd8, 0x6e, 0x50, 0x11, 0xb0, 0x98, 0x70, 0xd2, 0xf0,
-	0x04, 0xe1, 0x31, 0x0d, 0x88, 0x2d, 0x7b, 0x11, 0x11, 0x56, 0xc4, 0x99, 0x64, 0xa8, 0x34, 0xc8,
-	0xb6, 0x06, 0xd9, 0xd6, 0xc5, 0xec, 0x95, 0xf5, 0x26, 0x95, 0xad, 0xae, 0x6f, 0x05, 0xac, 0x6d,
-	0x37, 0x59, 0x93, 0xd9, 0x8a, 0xe8, 0x77, 0xf7, 0xd4, 0x95, 0xba, 0x50, 0xab, 0x81, 0xe0, 0xca,
-	0x8d, 0x26, 0x63, 0xcd, 0x90, 0xbc, 0xcc, 0x92, 0xb4, 0x4d, 0x84, 0xc4, 0xed, 0x68, 0x98, 0x70,
-	0x3d, 0xdd, 0x5f, 0x87, 0xc8, 0x21, 0xf0, 0x4e, 0x1a, 0x60, 0x91, 0xa4, 0xac, 0x33, 0xec, 0x73,
-	0xa5, 0x94, 0x06, 0x23, 0x16, 0xd2, 0xa0, 0x77, 0xf6, 0x4e, 0x56, 0xde, 0x4e, 0x67, 0x9c, 0x85,
-	0xde, 0x4d, 0x43, 0x31, 0x0e, 0x69, 0x03, 0x4b, 0x32, 0x59, 0x3a, 0xa6, 0xe4, 0x91, 0x97, 0x2e,
-	0x7e, 0xe3, 0x62, 0x86, 0x38, 0x5b, 0x60, 0xf5, 0x47, 0x0d, 0x16, 0xef, 0x86, 0xcc, 0xc7, 0x61,
-	0x2d, 0x22, 0x41, 0xbd, 0x17, 0x11, 0xd4, 0x82, 0x4b, 0x2d, 0x29, 0x23, 0x2f, 0x64, 0xb8, 0xe1,
-	0xf9, 0x38, 0xc4, 0x9d, 0x80, 0x70, 0x61, 0x80, 0x52, 0xae, 0x3c, 0x5f, 0x5d, 0xb5, 0xd2, 0x8f,
-	0x5d, 0x29, 0x5a, 0x0f, 0xfd, 0xaf, 0x48, 0x20, 0x5d, 0xb2, 0x97, 0x08, 0x38, 0xcb, 0x07, 0xfb,
-	0x57, 0xc7, 0x0a, 0x23, 0x01, 0x57, 0x85, 0xee, 0x33, 0xdc, 0x70, 0x46, 0x92, 0x88, 0x40, 0x24,
-	0x83, 0x0b, 0x85, 0xb2, 0xaf, 0x5d, 0x68, 0xe9, 0x60, 0x5f, 0x1f, 0x09, 0x8c, 0xeb, 0x24, 0x91,
-	0x74, 0x99, 0x07, 0xf0, 0xfa, 0x23, 0x8c, 0x23, 0x2f, 0xa6, 0x82, 0xfa, 0x34, 0xa4, 0xb2, 0xe7,
-	0x91, 0x0e, 0xf6, 0x43, 0xd2, 0x30, 0xb4, 0x12, 0x28, 0xcf, 0x57, 0x97, 0xcf, 0xd5, 0xda, 0x6a,
-	0x47, 0xb2, 0xb7, 0x9d, 0x71, 0xdf, 0x4a, 0x68, 0xbb, 0x63, 0xd6, 0xd6, 0x80, 0x84, 0x76, 0xa0,
-	0x71, 0x5e, 0xaf, 0x41, 0xc5, 0x40, 0x70, 0xe6, 0x3f, 0x05, 0xaf, 0xa5, 0x05, 0x37, 0x87, 0x2c,
-	0xf4, 0x39, 0x2c, 0xc6, 0x94, 0xcb, 0x2e, 0x0e, 0x95, 0x79, 0x09, 0x37, 0x66, 0x95, 0x8e, 0x6d,
-	0xbd, 0xca, 0xe4, 0xd6, 0xee, 0x80, 0x57, 0x53, 0xb4, 0x6d, 0xe0, 0x2e, 0xc6, 0x67, 0x03, 0x1f,
-	0xc2, 0xbf, 0xef, 0xcc, 0xde, 0xae, 0xbc, 0x5f, 0xb9, 0x59, 0xa9, 0x3a, 0x26, 0x44, 0xaa, 0x6f,
-	0x1c, 0x24, 0x16, 0xf1, 0x82, 0x16, 0xa3, 0x01, 0x41, 0x85, 0xc3, 0xa7, 0x40, 0x3b, 0x7a, 0x0a,
-	0x72, 0xce, 0x32, 0x5c, 0x18, 0xaa, 0x7a, 0x89, 0x45, 0x50, 0x12, 0xcd, 0xdf, 0xd3, 0x0a, 0x39,
-	0x5d, 0xbb, 0xa7, 0x15, 0xf2, 0xfa, 0xec, 0xea, 0xb7, 0x39, 0xb8, 0x98, 0x2a, 0x88, 0xbe, 0x84,
-	0xfa, 0xa8, 0xa9, 0x9e, 0xc7, 0xd4, 0xee, 0x18, 0x40, 0xf5, 0xfe, 0x3a, 0x1b, 0xb8, 0x70, 0xb0,
-	0x3f, 0x37, 0xa6, 0xbb, 0x57, 0xc6, 0xcb, 0x41, 0x16, 0x2a, 0xc3, 0xb9, 0x08, 0x73, 0x49, 0x93,
-	0x76, 0x8d, 0x6c, 0x09, 0x94, 0xe7, 0x1c, 0xf8, 0xd3, 0x5f, 0x87, 0xb9, 0x19, 0x9e, 0x33, 0x1e,
-	0x67, 0xdd, 0x97, 0x20, 0x72, 0x61, 0x41, 0xf9, 0x39, 0x60, 0xa1, 0x91, 0x2b, 0x81, 0x72, 0xb1,
-	0x7a, 0xfb, 0xd5, 0x8f, 0xae, 0xce, 0x71, 0x47, 0xb4, 0xa9, 0x10, 0x94, 0x75, 0x76, 0x86, 0x6c,
-	0x77, 0xac, 0x83, 0xde, 0x83, 0x5a, 0xc4, 0xb8, 0x54, 0x1e, 0x59, 0x74, 0x16, 0x93, 0xc2, 0x85,
-	0xb5, 0xbc, 0xf1, 0xe2, 0x45, 0xae, 0x0c, 0x5c, 0x05, 0xa1, 0x4f, 0x60, 0x5e, 0x48, 0x2c, 0xbb,
-	0x42, 0xed, 0x7b, 0xb1, 0x7a, 0xeb, 0x7f, 0xee, 0x57, 0x4d, 0x91, 0xdd, 0xa1, 0x08, 0x5a, 0x87,
-	0x0b, 0x81, 0x4f, 0x23, 0x2f, 0x08, 0xbb, 0x42, 0x12, 0x6e, 0xe4, 0x2f, 0xdc, 0xf2, 0x7c, 0x82,
-	0x6f, 0x0c, 0xe0, 0xd5, 0xdf, 0x34, 0x58, 0xdc, 0xe0, 0x04, 0x4b, 0x32, 0x9d, 0xdd, 0x37, 0x71,
-	0x76, 0xaf, 0xfe, 0x7a, 0xe7, 0xdc, 0xbb, 0xd9, 0xa9, 0x4c, 0x1c, 0xe1, 0x6b, 0x4f, 0x9e, 0x83,
-	0x09, 0x71, 0xa7, 0x74, 0x6e, 0xa0, 0xf5, 0x27, 0xcf, 0x41, 0x2a, 0x92, 0x1a, 0xee, 0x5f, 0x34,
-	0x38, 0x7f, 0x97, 0xc8, 0xa9, 0x97, 0xa6, 0x5e, 0xba, 0xb4, 0x97, 0x7e, 0xd7, 0xe0, 0x15, 0x97,
-	0x44, 0x21, 0x0e, 0xa6, 0xef, 0xa6, 0xa9, 0x9f, 0x2e, 0xed, 0xa7, 0xb5, 0x5b, 0x70, 0x69, 0xc2,
-	0x87, 0x13, 0xe5, 0x61, 0xf6, 0xd3, 0x1d, 0x3d, 0x83, 0x0a, 0x50, 0xdb, 0x7c, 0xf8, 0xd9, 0x03,
-	0x1d, 0xa0, 0x05, 0x58, 0xd8, 0xfc, 0xb8, 0xf6, 0x91, 0x73, 0x7f, 0x6b, 0x53, 0xcf, 0xae, 0x7d,
-	0x00, 0x97, 0x27, 0x7d, 0xe4, 0x93, 0xfc, 0xed, 0x7a, 0x3d, 0x61, 0xce, 0xc1, 0x99, 0x64, 0x55,
-	0xd3, 0x01, 0x9a, 0x85, 0xb9, 0xfa, 0xc6, 0x8e, 0x9e, 0x75, 0xbe, 0x07, 0x47, 0x27, 0x66, 0xe6,
-	0xf8, 0xc4, 0xcc, 0x3c, 0x3b, 0x31, 0xc1, 0xe3, 0xbe, 0x09, 0x7e, 0xe8, 0x9b, 0xe0, 0xe7, 0xbe,
-	0x09, 0x8e, 0xfa, 0x26, 0x38, 0xee, 0x9b, 0xe0, 0x8f, 0xbe, 0x09, 0xfe, 0xec, 0x9b, 0x99, 0x67,
-	0x7d, 0x13, 0x7c, 0x77, 0x6a, 0x66, 0x0e, 0x4f, 0x4d, 0x70, 0x74, 0x6a, 0x66, 0x8e, 0x4f, 0xcd,
-	0xcc, 0x17, 0xbb, 0x4d, 0x16, 0x7d, 0xdd, 0xb4, 0x62, 0x16, 0x4a, 0xc2, 0x39, 0xb6, 0xba, 0xc2,
-	0x56, 0x8b, 0x3d, 0xc6, 0xdb, 0xeb, 0x11, 0x67, 0x31, 0x6d, 0x10, 0xbe, 0x3e, 0x82, 0xed, 0xc8,
-	0x6f, 0x32, 0x9b, 0x7c, 0x23, 0x87, 0x47, 0xf4, 0x7f, 0xfd, 0xf9, 0xf1, 0xf3, 0xea, 0x64, 0x72,
-	0xf3, 0x9f, 0x00, 0x00, 0x00, 0xff, 0xff, 0xf4, 0xd3, 0xad, 0x2d, 0x27, 0x0d, 0x00, 0x00,
+	// 1176 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x57, 0xcd, 0x6e, 0xdb, 0x46,
+	0x17, 0xd5, 0x48, 0xd4, 0xdf, 0x48, 0x72, 0xe8, 0xb1, 0x3f, 0x84, 0xf1, 0x17, 0x30, 0xaa, 0xd1,
+	0x85, 0x6a, 0xd8, 0x12, 0xea, 0xa0, 0x41, 0x91, 0x02, 0x41, 0x4d, 0x8b, 0x8e, 0x95, 0xba, 0xb2,
+	0x41, 0x29, 0x6e, 0xd1, 0x2e, 0x58, 0x8a, 0x9c, 0x48, 0xd3, 0x50, 0x1a, 0x82, 0x1c, 0xa9, 0xd5,
+	0x42, 0x40, 0x90, 0x27, 0xe8, 0xa2, 0x0f, 0x51, 0xf8, 0x11, 0x9a, 0x4d, 0x8a, 0x02, 0x6d, 0xd1,
+	0x95, 0x97, 0x5e, 0x36, 0xf2, 0x26, 0xdd, 0x05, 0x5d, 0x66, 0x93, 0x82, 0x43, 0x4a, 0x16, 0xe3,
+	0x38, 0x71, 0x90, 0x55, 0x01, 0xef, 0x66, 0xe6, 0x9c, 0x7b, 0xcf, 0x9d, 0xab, 0xc3, 0x2b, 0x12,
+	0xae, 0x0e, 0xb0, 0x57, 0x26, 0xb4, 0xe2, 0x99, 0x1d, 0xdc, 0x35, 0x2a, 0x16, 0xf1, 0x4c, 0x3a,
+	0xc0, 0x2e, 0xb6, 0x74, 0x0f, 0xbb, 0x03, 0x62, 0xe2, 0x0a, 0x1b, 0x3a, 0xd8, 0x2b, 0x3b, 0x2e,
+	0x65, 0x14, 0x15, 0x03, 0x76, 0x39, 0x60, 0x97, 0x4f, 0xb3, 0x97, 0xd6, 0xda, 0x84, 0x75, 0xfa,
+	0xad, 0xb2, 0x49, 0xbb, 0x95, 0x36, 0x6d, 0xd3, 0x0a, 0x0f, 0x6c, 0xf5, 0xef, 0xf1, 0x1d, 0xdf,
+	0xf0, 0x55, 0x90, 0x70, 0xe9, 0x5a, 0x9b, 0xd2, 0xb6, 0x8d, 0x4f, 0x58, 0x8c, 0x74, 0xb1, 0xc7,
+	0x8c, 0xae, 0x13, 0x12, 0x2e, 0x47, 0xeb, 0xeb, 0x61, 0x16, 0x02, 0xff, 0x8f, 0x02, 0xd4, 0x61,
+	0x84, 0xf6, 0xc2, 0x3a, 0x97, 0x8a, 0x51, 0xd0, 0xa1, 0x36, 0x31, 0x87, 0xb3, 0x37, 0x59, 0xba,
+	0x12, 0x65, 0xcc, 0x42, 0x57, 0xa3, 0xd0, 0xc0, 0xb0, 0x89, 0x65, 0x30, 0xfc, 0xea, 0xd4, 0x03,
+	0x82, 0xbf, 0xd3, 0xa3, 0xe2, 0xd7, 0x4e, 0x33, 0xbc, 0x59, 0x81, 0xe5, 0xe7, 0x49, 0x38, 0x77,
+	0xdb, 0xa6, 0x2d, 0xc3, 0x6e, 0x38, 0xd8, 0x6c, 0x0e, 0x1d, 0x8c, 0x3a, 0x70, 0xa1, 0xc3, 0x98,
+	0xa3, 0xdb, 0xd4, 0xb0, 0xf4, 0x96, 0x61, 0x1b, 0x3d, 0x13, 0xbb, 0x9e, 0x04, 0x8a, 0x89, 0x52,
+	0x6e, 0x7d, 0xb9, 0x1c, 0x6d, 0x3b, 0xcf, 0x58, 0xde, 0x6d, 0x7d, 0x8b, 0x4d, 0xa6, 0xe1, 0x7b,
+	0x7e, 0x02, 0x65, 0xf1, 0x60, 0x34, 0x3f, 0xcd, 0x30, 0x49, 0xa0, 0xf1, 0xa3, 0x1d, 0x6a, 0x58,
+	0xca, 0x24, 0x25, 0xc2, 0x10, 0x31, 0xf3, 0x94, 0x50, 0xfc, 0xdc, 0x42, 0x0b, 0x07, 0x23, 0x71,
+	0x92, 0x60, 0xaa, 0xe3, 0x9f, 0x44, 0x65, 0x54, 0x88, 0x06, 0xc4, 0x23, 0x2d, 0x62, 0x13, 0x36,
+	0xd4, 0x71, 0xcf, 0x68, 0xd9, 0xd8, 0x92, 0x84, 0x22, 0x28, 0xe5, 0xd6, 0x17, 0x5f, 0x92, 0x51,
+	0xbb, 0x0e, 0x1b, 0x6e, 0xc7, 0xb4, 0xf9, 0x93, 0x08, 0x35, 0x08, 0x40, 0xb7, 0xe1, 0xc2, 0x4c,
+	0x1a, 0x8b, 0x78, 0x41, 0x9e, 0xe4, 0x6b, 0xf3, 0xcc, 0x28, 0x57, 0xc3, 0x08, 0xf4, 0x25, 0x9c,
+	0x1b, 0x10, 0x97, 0xf5, 0x0d, 0x9b, 0x5b, 0x15, 0xbb, 0x52, 0x9a, 0xe7, 0xa8, 0x94, 0xdf, 0x64,
+	0xe9, 0xf2, 0x7e, 0x10, 0xd7, 0xe0, 0x61, 0xdb, 0x40, 0x2b, 0x0c, 0x66, 0x0f, 0xd0, 0x00, 0xfe,
+	0x8f, 0xf4, 0x18, 0x76, 0x7b, 0x86, 0xad, 0x4f, 0x24, 0x3a, 0xd4, 0x63, 0x52, 0x86, 0x0b, 0x9c,
+	0xa7, 0xa7, 0xf2, 0xc1, 0x68, 0xb1, 0x45, 0xda, 0xc4, 0xd1, 0xa3, 0x35, 0x1e, 0x8d, 0xc0, 0xd3,
+	0x47, 0x00, 0x68, 0x0b, 0x13, 0x81, 0xb0, 0x94, 0x6d, 0xea, 0x31, 0x64, 0xc0, 0x02, 0x37, 0xdf,
+	0x04, 0x93, 0x9e, 0xa6, 0xcf, 0x2d, 0x78, 0xf9, 0x60, 0x14, 0x0d, 0x9e, 0x28, 0xe5, 0xfd, 0xd3,
+	0x5a, 0x78, 0x78, 0x13, 0xfe, 0x73, 0x2b, 0x7d, 0x63, 0xf5, 0xc3, 0xd5, 0xeb, 0xab, 0xeb, 0xca,
+	0xfb, 0x50, 0x9a, 0xf9, 0x25, 0x0c, 0xd3, 0x77, 0xbc, 0x6e, 0x76, 0x28, 0x31, 0x31, 0xca, 0x3c,
+	0x7e, 0x04, 0x84, 0xc3, 0x47, 0x20, 0xa1, 0x2c, 0xc2, 0x7c, 0xd8, 0x36, 0xdd, 0x77, 0x3c, 0xf2,
+	0x4f, 0x53, 0x77, 0x84, 0x4c, 0x42, 0x14, 0xee, 0x08, 0x99, 0x94, 0x98, 0x5e, 0xfe, 0x25, 0x09,
+	0x0b, 0x91, 0x8e, 0xa2, 0xaf, 0xa1, 0x38, 0xe9, 0xfa, 0x50, 0xa7, 0xbc, 0x4e, 0x09, 0x9c, 0xfb,
+	0x2a, 0xf9, 0x83, 0x51, 0x76, 0x1a, 0xae, 0x5d, 0x9a, 0x2e, 0x03, 0x16, 0x2a, 0xc1, 0xac, 0x63,
+	0xb8, 0x8c, 0xf8, 0xe5, 0x4a, 0xf1, 0x22, 0x28, 0x65, 0x15, 0xf8, 0xf3, 0xdf, 0x8f, 0x13, 0x49,
+	0x37, 0x21, 0x3d, 0x88, 0x6b, 0x27, 0x20, 0xba, 0x0f, 0x33, 0xfc, 0xf1, 0x34, 0xa9, 0x2d, 0x25,
+	0x8a, 0xa0, 0x34, 0xb7, 0x7e, 0xe3, 0xcd, 0xde, 0x68, 0xba, 0x46, 0xcf, 0xeb, 0x12, 0xcf, 0x23,
+	0xb4, 0xb7, 0x17, 0x46, 0x2b, 0x97, 0x8f, 0x46, 0x60, 0x3c, 0x2a, 0xd4, 0x29, 0x2b, 0x7a, 0x7d,
+	0xc7, 0xa1, 0x2e, 0xc3, 0x16, 0xef, 0xee, 0x54, 0x00, 0xbd, 0x07, 0x05, 0xff, 0x9c, 0x3f, 0x10,
+	0x05, 0xa5, 0xe0, 0x57, 0x94, 0x59, 0x49, 0x49, 0x2f, 0x5e, 0x24, 0x4a, 0x40, 0xe3, 0x10, 0xfa,
+	0x1c, 0xa6, 0x3c, 0x66, 0xb0, 0xbe, 0xc7, 0xdd, 0x3e, 0xb7, 0xfe, 0xd1, 0x5b, 0x3a, 0xb5, 0xc1,
+	0x83, 0xb5, 0x30, 0x09, 0x5a, 0x83, 0x79, 0xb3, 0x45, 0x1c, 0xdd, 0xb4, 0xfb, 0x1e, 0xc3, 0xae,
+	0x94, 0x3a, 0xd5, 0x8b, 0x9c, 0x8f, 0x6f, 0x06, 0x30, 0xaa, 0xc0, 0x42, 0xe8, 0x48, 0xec, 0xfa,
+	0x97, 0xe3, 0x8f, 0x4b, 0x94, 0x9f, 0xe7, 0x84, 0xfd, 0x00, 0x47, 0x25, 0x08, 0x89, 0xa3, 0x1b,
+	0x96, 0xe5, 0x62, 0xcf, 0xe3, 0xde, 0xcf, 0x2a, 0x59, 0x9f, 0x2d, 0xb8, 0x71, 0x07, 0x68, 0x59,
+	0xe2, 0x6c, 0x04, 0x18, 0xba, 0x0e, 0x73, 0x16, 0xf6, 0x4c, 0x97, 0xf0, 0xa9, 0x29, 0x65, 0x39,
+	0x75, 0x3e, 0x74, 0xe0, 0x34, 0x7f, 0x46, 0x9b, 0x65, 0xa1, 0x6f, 0x60, 0x21, 0x1c, 0x22, 0xba,
+	0x7f, 0x21, 0x2c, 0x41, 0xde, 0x94, 0x4f, 0xde, 0xb2, 0x29, 0xe1, 0x5c, 0xf1, 0x7b, 0x83, 0xb5,
+	0x3c, 0x9e, 0xd9, 0xa1, 0x0f, 0x60, 0xba, 0xdb, 0xee, 0x32, 0x9d, 0x38, 0x52, 0x8e, 0x97, 0x24,
+	0xce, 0x94, 0x14, 0x5c, 0x22, 0xe5, 0x13, 0x6a, 0xce, 0xf2, 0x6f, 0x02, 0x9c, 0xdb, 0x74, 0xb1,
+	0xc1, 0xf0, 0xc5, 0x00, 0xff, 0xcf, 0x0f, 0xf0, 0x9b, 0xf3, 0x7f, 0xde, 0x7a, 0xe9, 0xef, 0x58,
+	0xf9, 0xf8, 0x35, 0xc3, 0xee, 0xea, 0xc3, 0xe7, 0xe0, 0x4c, 0x54, 0x29, 0xbe, 0x34, 0x00, 0xc5,
+	0x87, 0xcf, 0x41, 0xe4, 0x24, 0x32, 0x0c, 0x7f, 0x15, 0x60, 0xee, 0x36, 0x66, 0x17, 0x2e, 0xba,
+	0x70, 0xd1, 0x3b, 0xb8, 0xe8, 0x77, 0x01, 0x5e, 0xd2, 0xb0, 0x63, 0x1b, 0xe6, 0xc5, 0x3c, 0xba,
+	0x70, 0xd2, 0x3b, 0x38, 0x69, 0xa5, 0x0b, 0x17, 0x5e, 0xf1, 0x0e, 0x81, 0x2e, 0xc1, 0xdc, 0xdd,
+	0x7a, 0x63, 0x4f, 0xdd, 0xac, 0x6d, 0xd5, 0xd4, 0xaa, 0x18, 0x43, 0x05, 0x98, 0xdd, 0xd8, 0xdf,
+	0xa8, 0xed, 0x6c, 0x28, 0x3b, 0xaa, 0x08, 0x50, 0x0e, 0xa6, 0x77, 0xb7, 0xb6, 0x76, 0x6a, 0x75,
+	0x55, 0x8c, 0xfb, 0x9b, 0xbb, 0xf5, 0xcf, 0xea, 0xbb, 0x5f, 0xd4, 0xc5, 0x44, 0x10, 0x79, 0x42,
+	0x15, 0x7c, 0xb4, 0xaa, 0xee, 0xa8, 0x4d, 0xb5, 0x2a, 0x26, 0x57, 0x3e, 0x85, 0x57, 0xce, 0xfc,
+	0x77, 0x46, 0x19, 0x28, 0xd4, 0x77, 0xeb, 0xaa, 0x18, 0xf3, 0x63, 0xd4, 0xba, 0x1f, 0x5f, 0x15,
+	0x01, 0xca, 0xc3, 0x4c, 0xb5, 0xd6, 0x08, 0x76, 0xf1, 0x95, 0x4d, 0xb8, 0xf8, 0xaa, 0x57, 0x30,
+	0xbf, 0xc0, 0xbb, 0xf5, 0xaa, 0xba, 0x55, 0xab, 0xf3, 0x7a, 0x33, 0x50, 0xd8, 0x6e, 0x36, 0xf7,
+	0x44, 0x80, 0xb2, 0x30, 0xe9, 0xaf, 0x1a, 0x62, 0x1c, 0xa5, 0x61, 0xa2, 0xb9, 0xb9, 0x27, 0x26,
+	0x94, 0x1f, 0xc1, 0xe1, 0x13, 0x39, 0x76, 0xf4, 0x44, 0x8e, 0x3d, 0x7b, 0x22, 0x83, 0x07, 0x63,
+	0x19, 0xfc, 0x34, 0x96, 0xc1, 0x1f, 0x63, 0x19, 0x1c, 0x8e, 0x65, 0x70, 0x34, 0x96, 0xc1, 0x5f,
+	0x63, 0x19, 0x3c, 0x1d, 0xcb, 0xb1, 0x67, 0x63, 0x19, 0xfc, 0x70, 0x2c, 0xc7, 0x1e, 0x1f, 0xcb,
+	0xe0, 0xf0, 0x58, 0x8e, 0x1d, 0x1d, 0xcb, 0xb1, 0xaf, 0xf6, 0xdb, 0xd4, 0xb9, 0xdf, 0x2e, 0x0f,
+	0xa8, 0xcd, 0xb0, 0xeb, 0x1a, 0xe5, 0xbe, 0x57, 0xe1, 0x8b, 0x7b, 0xd4, 0xed, 0xae, 0x39, 0x2e,
+	0x1d, 0x10, 0x0b, 0xbb, 0x6b, 0x13, 0xb8, 0xe2, 0xb4, 0xda, 0xb4, 0x82, 0xbf, 0x67, 0xe1, 0xe7,
+	0xe1, 0x99, 0x1f, 0xde, 0xad, 0x14, 0x7f, 0x5b, 0xbc, 0xfe, 0x6f, 0x00, 0x00, 0x00, 0xff, 0xff,
+	0x2a, 0xef, 0x94, 0xca, 0xa3, 0x0f, 0x00, 0x00,
 }
 
 func (x VirtualServerStatus) String() string {
 	s, ok := VirtualServerStatus_name[int32(x)]
+	if ok {
+		return s
+	}
+	return strconv.Itoa(int(x))
+}
+func (x VirtualServerEnabledState) String() string {
+	s, ok := VirtualServerEnabledState_name[int32(x)]
 	if ok {
 		return s
 	}
@@ -867,13 +1056,13 @@ func (this *GlobalSpecType) Equal(that interface{}) bool {
 			return false
 		}
 	}
-	if that1.WaapActionChoice == nil {
-		if this.WaapActionChoice != nil {
+	if that1.VisibilityActionChoice == nil {
+		if this.VisibilityActionChoice != nil {
 			return false
 		}
-	} else if this.WaapActionChoice == nil {
+	} else if this.VisibilityActionChoice == nil {
 		return false
-	} else if !this.WaapActionChoice.Equal(that1.WaapActionChoice) {
+	} else if !this.VisibilityActionChoice.Equal(that1.VisibilityActionChoice) {
 		return false
 	}
 	if that1.ServiceType == nil {
@@ -885,16 +1074,22 @@ func (this *GlobalSpecType) Equal(that interface{}) bool {
 	} else if !this.ServiceType.Equal(that1.ServiceType) {
 		return false
 	}
+	if !this.InternalVirtualHost.Equal(that1.InternalVirtualHost) {
+		return false
+	}
+	if !this.ViewInternal.Equal(that1.ViewInternal) {
+		return false
+	}
 	return true
 }
-func (this *GlobalSpecType_WaapVisibilityEnabled) Equal(that interface{}) bool {
+func (this *GlobalSpecType_VisibilityEnabled) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
 	}
 
-	that1, ok := that.(*GlobalSpecType_WaapVisibilityEnabled)
+	that1, ok := that.(*GlobalSpecType_VisibilityEnabled)
 	if !ok {
-		that2, ok := that.(GlobalSpecType_WaapVisibilityEnabled)
+		that2, ok := that.(GlobalSpecType_VisibilityEnabled)
 		if ok {
 			that1 = &that2
 		} else {
@@ -906,19 +1101,19 @@ func (this *GlobalSpecType_WaapVisibilityEnabled) Equal(that interface{}) bool {
 	} else if this == nil {
 		return false
 	}
-	if !this.WaapVisibilityEnabled.Equal(that1.WaapVisibilityEnabled) {
+	if !this.VisibilityEnabled.Equal(that1.VisibilityEnabled) {
 		return false
 	}
 	return true
 }
-func (this *GlobalSpecType_WaapVisibilityDisabled) Equal(that interface{}) bool {
+func (this *GlobalSpecType_VisibilityDisabled) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
 	}
 
-	that1, ok := that.(*GlobalSpecType_WaapVisibilityDisabled)
+	that1, ok := that.(*GlobalSpecType_VisibilityDisabled)
 	if !ok {
-		that2, ok := that.(GlobalSpecType_WaapVisibilityDisabled)
+		that2, ok := that.(GlobalSpecType_VisibilityDisabled)
 		if ok {
 			that1 = &that2
 		} else {
@@ -930,7 +1125,7 @@ func (this *GlobalSpecType_WaapVisibilityDisabled) Equal(that interface{}) bool 
 	} else if this == nil {
 		return false
 	}
-	if !this.WaapVisibilityDisabled.Equal(that1.WaapVisibilityDisabled) {
+	if !this.VisibilityDisabled.Equal(that1.VisibilityDisabled) {
 		return false
 	}
 	return true
@@ -996,6 +1191,21 @@ func (this *VirtualServer) Equal(that interface{}) bool {
 	if this.CbipCluster != that1.CbipCluster {
 		return false
 	}
+	if this.BigipVersion != that1.BigipVersion {
+		return false
+	}
+	if this.IpAddress != that1.IpAddress {
+		return false
+	}
+	if this.Description != that1.Description {
+		return false
+	}
+	if this.EnabledState != that1.EnabledState {
+		return false
+	}
+	if this.MgmtIp != that1.MgmtIp {
+		return false
+	}
 	return true
 }
 func (this *CreateSpecType) Equal(that interface{}) bool {
@@ -1033,13 +1243,13 @@ func (this *CreateSpecType) Equal(that interface{}) bool {
 			return false
 		}
 	}
-	if that1.WaapActionChoice == nil {
-		if this.WaapActionChoice != nil {
+	if that1.VisibilityActionChoice == nil {
+		if this.VisibilityActionChoice != nil {
 			return false
 		}
-	} else if this.WaapActionChoice == nil {
+	} else if this.VisibilityActionChoice == nil {
 		return false
-	} else if !this.WaapActionChoice.Equal(that1.WaapActionChoice) {
+	} else if !this.VisibilityActionChoice.Equal(that1.VisibilityActionChoice) {
 		return false
 	}
 	if that1.ServiceType == nil {
@@ -1053,14 +1263,14 @@ func (this *CreateSpecType) Equal(that interface{}) bool {
 	}
 	return true
 }
-func (this *CreateSpecType_WaapVisibilityEnabled) Equal(that interface{}) bool {
+func (this *CreateSpecType_VisibilityEnabled) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
 	}
 
-	that1, ok := that.(*CreateSpecType_WaapVisibilityEnabled)
+	that1, ok := that.(*CreateSpecType_VisibilityEnabled)
 	if !ok {
-		that2, ok := that.(CreateSpecType_WaapVisibilityEnabled)
+		that2, ok := that.(CreateSpecType_VisibilityEnabled)
 		if ok {
 			that1 = &that2
 		} else {
@@ -1072,19 +1282,19 @@ func (this *CreateSpecType_WaapVisibilityEnabled) Equal(that interface{}) bool {
 	} else if this == nil {
 		return false
 	}
-	if !this.WaapVisibilityEnabled.Equal(that1.WaapVisibilityEnabled) {
+	if !this.VisibilityEnabled.Equal(that1.VisibilityEnabled) {
 		return false
 	}
 	return true
 }
-func (this *CreateSpecType_WaapVisibilityDisabled) Equal(that interface{}) bool {
+func (this *CreateSpecType_VisibilityDisabled) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
 	}
 
-	that1, ok := that.(*CreateSpecType_WaapVisibilityDisabled)
+	that1, ok := that.(*CreateSpecType_VisibilityDisabled)
 	if !ok {
-		that2, ok := that.(CreateSpecType_WaapVisibilityDisabled)
+		that2, ok := that.(CreateSpecType_VisibilityDisabled)
 		if ok {
 			that1 = &that2
 		} else {
@@ -1096,7 +1306,7 @@ func (this *CreateSpecType_WaapVisibilityDisabled) Equal(that interface{}) bool 
 	} else if this == nil {
 		return false
 	}
-	if !this.WaapVisibilityDisabled.Equal(that1.WaapVisibilityDisabled) {
+	if !this.VisibilityDisabled.Equal(that1.VisibilityDisabled) {
 		return false
 	}
 	return true
@@ -1160,13 +1370,13 @@ func (this *GetSpecType) Equal(that interface{}) bool {
 			return false
 		}
 	}
-	if that1.WaapActionChoice == nil {
-		if this.WaapActionChoice != nil {
+	if that1.VisibilityActionChoice == nil {
+		if this.VisibilityActionChoice != nil {
 			return false
 		}
-	} else if this.WaapActionChoice == nil {
+	} else if this.VisibilityActionChoice == nil {
 		return false
-	} else if !this.WaapActionChoice.Equal(that1.WaapActionChoice) {
+	} else if !this.VisibilityActionChoice.Equal(that1.VisibilityActionChoice) {
 		return false
 	}
 	if that1.ServiceType == nil {
@@ -1180,14 +1390,14 @@ func (this *GetSpecType) Equal(that interface{}) bool {
 	}
 	return true
 }
-func (this *GetSpecType_WaapVisibilityEnabled) Equal(that interface{}) bool {
+func (this *GetSpecType_VisibilityEnabled) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
 	}
 
-	that1, ok := that.(*GetSpecType_WaapVisibilityEnabled)
+	that1, ok := that.(*GetSpecType_VisibilityEnabled)
 	if !ok {
-		that2, ok := that.(GetSpecType_WaapVisibilityEnabled)
+		that2, ok := that.(GetSpecType_VisibilityEnabled)
 		if ok {
 			that1 = &that2
 		} else {
@@ -1199,19 +1409,19 @@ func (this *GetSpecType_WaapVisibilityEnabled) Equal(that interface{}) bool {
 	} else if this == nil {
 		return false
 	}
-	if !this.WaapVisibilityEnabled.Equal(that1.WaapVisibilityEnabled) {
+	if !this.VisibilityEnabled.Equal(that1.VisibilityEnabled) {
 		return false
 	}
 	return true
 }
-func (this *GetSpecType_WaapVisibilityDisabled) Equal(that interface{}) bool {
+func (this *GetSpecType_VisibilityDisabled) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
 	}
 
-	that1, ok := that.(*GetSpecType_WaapVisibilityDisabled)
+	that1, ok := that.(*GetSpecType_VisibilityDisabled)
 	if !ok {
-		that2, ok := that.(GetSpecType_WaapVisibilityDisabled)
+		that2, ok := that.(GetSpecType_VisibilityDisabled)
 		if ok {
 			that1 = &that2
 		} else {
@@ -1223,7 +1433,7 @@ func (this *GetSpecType_WaapVisibilityDisabled) Equal(that interface{}) bool {
 	} else if this == nil {
 		return false
 	}
-	if !this.WaapVisibilityDisabled.Equal(that1.WaapVisibilityDisabled) {
+	if !this.VisibilityDisabled.Equal(that1.VisibilityDisabled) {
 		return false
 	}
 	return true
@@ -1287,13 +1497,13 @@ func (this *ReplaceSpecType) Equal(that interface{}) bool {
 			return false
 		}
 	}
-	if that1.WaapActionChoice == nil {
-		if this.WaapActionChoice != nil {
+	if that1.VisibilityActionChoice == nil {
+		if this.VisibilityActionChoice != nil {
 			return false
 		}
-	} else if this.WaapActionChoice == nil {
+	} else if this.VisibilityActionChoice == nil {
 		return false
-	} else if !this.WaapActionChoice.Equal(that1.WaapActionChoice) {
+	} else if !this.VisibilityActionChoice.Equal(that1.VisibilityActionChoice) {
 		return false
 	}
 	if that1.ServiceType == nil {
@@ -1307,14 +1517,14 @@ func (this *ReplaceSpecType) Equal(that interface{}) bool {
 	}
 	return true
 }
-func (this *ReplaceSpecType_WaapVisibilityEnabled) Equal(that interface{}) bool {
+func (this *ReplaceSpecType_VisibilityEnabled) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
 	}
 
-	that1, ok := that.(*ReplaceSpecType_WaapVisibilityEnabled)
+	that1, ok := that.(*ReplaceSpecType_VisibilityEnabled)
 	if !ok {
-		that2, ok := that.(ReplaceSpecType_WaapVisibilityEnabled)
+		that2, ok := that.(ReplaceSpecType_VisibilityEnabled)
 		if ok {
 			that1 = &that2
 		} else {
@@ -1326,19 +1536,19 @@ func (this *ReplaceSpecType_WaapVisibilityEnabled) Equal(that interface{}) bool 
 	} else if this == nil {
 		return false
 	}
-	if !this.WaapVisibilityEnabled.Equal(that1.WaapVisibilityEnabled) {
+	if !this.VisibilityEnabled.Equal(that1.VisibilityEnabled) {
 		return false
 	}
 	return true
 }
-func (this *ReplaceSpecType_WaapVisibilityDisabled) Equal(that interface{}) bool {
+func (this *ReplaceSpecType_VisibilityDisabled) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
 	}
 
-	that1, ok := that.(*ReplaceSpecType_WaapVisibilityDisabled)
+	that1, ok := that.(*ReplaceSpecType_VisibilityDisabled)
 	if !ok {
-		that2, ok := that.(ReplaceSpecType_WaapVisibilityDisabled)
+		that2, ok := that.(ReplaceSpecType_VisibilityDisabled)
 		if ok {
 			that1 = &that2
 		} else {
@@ -1350,7 +1560,7 @@ func (this *ReplaceSpecType_WaapVisibilityDisabled) Equal(that interface{}) bool
 	} else if this == nil {
 		return false
 	}
-	if !this.WaapVisibilityDisabled.Equal(that1.WaapVisibilityDisabled) {
+	if !this.VisibilityDisabled.Equal(that1.VisibilityDisabled) {
 		return false
 	}
 	return true
@@ -1383,7 +1593,7 @@ func (this *GlobalSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 9)
+	s := make([]string, 0, 11)
 	s = append(s, "&discovered_service.GlobalSpecType{")
 	if this.HttpLoadBalancers != nil {
 		s = append(s, "HttpLoadBalancers: "+fmt.Sprintf("%#v", this.HttpLoadBalancers)+",\n")
@@ -1391,29 +1601,35 @@ func (this *GlobalSpecType) GoString() string {
 	if this.TcpLoadBalancers != nil {
 		s = append(s, "TcpLoadBalancers: "+fmt.Sprintf("%#v", this.TcpLoadBalancers)+",\n")
 	}
-	if this.WaapActionChoice != nil {
-		s = append(s, "WaapActionChoice: "+fmt.Sprintf("%#v", this.WaapActionChoice)+",\n")
+	if this.VisibilityActionChoice != nil {
+		s = append(s, "VisibilityActionChoice: "+fmt.Sprintf("%#v", this.VisibilityActionChoice)+",\n")
 	}
 	if this.ServiceType != nil {
 		s = append(s, "ServiceType: "+fmt.Sprintf("%#v", this.ServiceType)+",\n")
 	}
+	if this.InternalVirtualHost != nil {
+		s = append(s, "InternalVirtualHost: "+fmt.Sprintf("%#v", this.InternalVirtualHost)+",\n")
+	}
+	if this.ViewInternal != nil {
+		s = append(s, "ViewInternal: "+fmt.Sprintf("%#v", this.ViewInternal)+",\n")
+	}
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
-func (this *GlobalSpecType_WaapVisibilityEnabled) GoString() string {
+func (this *GlobalSpecType_VisibilityEnabled) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&discovered_service.GlobalSpecType_WaapVisibilityEnabled{` +
-		`WaapVisibilityEnabled:` + fmt.Sprintf("%#v", this.WaapVisibilityEnabled) + `}`}, ", ")
+	s := strings.Join([]string{`&discovered_service.GlobalSpecType_VisibilityEnabled{` +
+		`VisibilityEnabled:` + fmt.Sprintf("%#v", this.VisibilityEnabled) + `}`}, ", ")
 	return s
 }
-func (this *GlobalSpecType_WaapVisibilityDisabled) GoString() string {
+func (this *GlobalSpecType_VisibilityDisabled) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&discovered_service.GlobalSpecType_WaapVisibilityDisabled{` +
-		`WaapVisibilityDisabled:` + fmt.Sprintf("%#v", this.WaapVisibilityDisabled) + `}`}, ", ")
+	s := strings.Join([]string{`&discovered_service.GlobalSpecType_VisibilityDisabled{` +
+		`VisibilityDisabled:` + fmt.Sprintf("%#v", this.VisibilityDisabled) + `}`}, ", ")
 	return s
 }
 func (this *GlobalSpecType_VirtualServer) GoString() string {
@@ -1428,7 +1644,7 @@ func (this *VirtualServer) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 10)
+	s := make([]string, 0, 15)
 	s = append(s, "&discovered_service.VirtualServer{")
 	if this.DiscoveryObject != nil {
 		s = append(s, "DiscoveryObject: "+fmt.Sprintf("%#v", this.DiscoveryObject)+",\n")
@@ -1438,6 +1654,11 @@ func (this *VirtualServer) GoString() string {
 	s = append(s, "Port: "+fmt.Sprintf("%#v", this.Port)+",\n")
 	s = append(s, "Status: "+fmt.Sprintf("%#v", this.Status)+",\n")
 	s = append(s, "CbipCluster: "+fmt.Sprintf("%#v", this.CbipCluster)+",\n")
+	s = append(s, "BigipVersion: "+fmt.Sprintf("%#v", this.BigipVersion)+",\n")
+	s = append(s, "IpAddress: "+fmt.Sprintf("%#v", this.IpAddress)+",\n")
+	s = append(s, "Description: "+fmt.Sprintf("%#v", this.Description)+",\n")
+	s = append(s, "EnabledState: "+fmt.Sprintf("%#v", this.EnabledState)+",\n")
+	s = append(s, "MgmtIp: "+fmt.Sprintf("%#v", this.MgmtIp)+",\n")
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
@@ -1453,8 +1674,8 @@ func (this *CreateSpecType) GoString() string {
 	if this.TcpLoadBalancers != nil {
 		s = append(s, "TcpLoadBalancers: "+fmt.Sprintf("%#v", this.TcpLoadBalancers)+",\n")
 	}
-	if this.WaapActionChoice != nil {
-		s = append(s, "WaapActionChoice: "+fmt.Sprintf("%#v", this.WaapActionChoice)+",\n")
+	if this.VisibilityActionChoice != nil {
+		s = append(s, "VisibilityActionChoice: "+fmt.Sprintf("%#v", this.VisibilityActionChoice)+",\n")
 	}
 	if this.ServiceType != nil {
 		s = append(s, "ServiceType: "+fmt.Sprintf("%#v", this.ServiceType)+",\n")
@@ -1462,20 +1683,20 @@ func (this *CreateSpecType) GoString() string {
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
-func (this *CreateSpecType_WaapVisibilityEnabled) GoString() string {
+func (this *CreateSpecType_VisibilityEnabled) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&discovered_service.CreateSpecType_WaapVisibilityEnabled{` +
-		`WaapVisibilityEnabled:` + fmt.Sprintf("%#v", this.WaapVisibilityEnabled) + `}`}, ", ")
+	s := strings.Join([]string{`&discovered_service.CreateSpecType_VisibilityEnabled{` +
+		`VisibilityEnabled:` + fmt.Sprintf("%#v", this.VisibilityEnabled) + `}`}, ", ")
 	return s
 }
-func (this *CreateSpecType_WaapVisibilityDisabled) GoString() string {
+func (this *CreateSpecType_VisibilityDisabled) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&discovered_service.CreateSpecType_WaapVisibilityDisabled{` +
-		`WaapVisibilityDisabled:` + fmt.Sprintf("%#v", this.WaapVisibilityDisabled) + `}`}, ", ")
+	s := strings.Join([]string{`&discovered_service.CreateSpecType_VisibilityDisabled{` +
+		`VisibilityDisabled:` + fmt.Sprintf("%#v", this.VisibilityDisabled) + `}`}, ", ")
 	return s
 }
 func (this *CreateSpecType_VirtualServer) GoString() string {
@@ -1498,8 +1719,8 @@ func (this *GetSpecType) GoString() string {
 	if this.TcpLoadBalancers != nil {
 		s = append(s, "TcpLoadBalancers: "+fmt.Sprintf("%#v", this.TcpLoadBalancers)+",\n")
 	}
-	if this.WaapActionChoice != nil {
-		s = append(s, "WaapActionChoice: "+fmt.Sprintf("%#v", this.WaapActionChoice)+",\n")
+	if this.VisibilityActionChoice != nil {
+		s = append(s, "VisibilityActionChoice: "+fmt.Sprintf("%#v", this.VisibilityActionChoice)+",\n")
 	}
 	if this.ServiceType != nil {
 		s = append(s, "ServiceType: "+fmt.Sprintf("%#v", this.ServiceType)+",\n")
@@ -1507,20 +1728,20 @@ func (this *GetSpecType) GoString() string {
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
-func (this *GetSpecType_WaapVisibilityEnabled) GoString() string {
+func (this *GetSpecType_VisibilityEnabled) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&discovered_service.GetSpecType_WaapVisibilityEnabled{` +
-		`WaapVisibilityEnabled:` + fmt.Sprintf("%#v", this.WaapVisibilityEnabled) + `}`}, ", ")
+	s := strings.Join([]string{`&discovered_service.GetSpecType_VisibilityEnabled{` +
+		`VisibilityEnabled:` + fmt.Sprintf("%#v", this.VisibilityEnabled) + `}`}, ", ")
 	return s
 }
-func (this *GetSpecType_WaapVisibilityDisabled) GoString() string {
+func (this *GetSpecType_VisibilityDisabled) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&discovered_service.GetSpecType_WaapVisibilityDisabled{` +
-		`WaapVisibilityDisabled:` + fmt.Sprintf("%#v", this.WaapVisibilityDisabled) + `}`}, ", ")
+	s := strings.Join([]string{`&discovered_service.GetSpecType_VisibilityDisabled{` +
+		`VisibilityDisabled:` + fmt.Sprintf("%#v", this.VisibilityDisabled) + `}`}, ", ")
 	return s
 }
 func (this *GetSpecType_VirtualServer) GoString() string {
@@ -1543,8 +1764,8 @@ func (this *ReplaceSpecType) GoString() string {
 	if this.TcpLoadBalancers != nil {
 		s = append(s, "TcpLoadBalancers: "+fmt.Sprintf("%#v", this.TcpLoadBalancers)+",\n")
 	}
-	if this.WaapActionChoice != nil {
-		s = append(s, "WaapActionChoice: "+fmt.Sprintf("%#v", this.WaapActionChoice)+",\n")
+	if this.VisibilityActionChoice != nil {
+		s = append(s, "VisibilityActionChoice: "+fmt.Sprintf("%#v", this.VisibilityActionChoice)+",\n")
 	}
 	if this.ServiceType != nil {
 		s = append(s, "ServiceType: "+fmt.Sprintf("%#v", this.ServiceType)+",\n")
@@ -1552,20 +1773,20 @@ func (this *ReplaceSpecType) GoString() string {
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
-func (this *ReplaceSpecType_WaapVisibilityEnabled) GoString() string {
+func (this *ReplaceSpecType_VisibilityEnabled) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&discovered_service.ReplaceSpecType_WaapVisibilityEnabled{` +
-		`WaapVisibilityEnabled:` + fmt.Sprintf("%#v", this.WaapVisibilityEnabled) + `}`}, ", ")
+	s := strings.Join([]string{`&discovered_service.ReplaceSpecType_VisibilityEnabled{` +
+		`VisibilityEnabled:` + fmt.Sprintf("%#v", this.VisibilityEnabled) + `}`}, ", ")
 	return s
 }
-func (this *ReplaceSpecType_WaapVisibilityDisabled) GoString() string {
+func (this *ReplaceSpecType_VisibilityDisabled) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&discovered_service.ReplaceSpecType_WaapVisibilityDisabled{` +
-		`WaapVisibilityDisabled:` + fmt.Sprintf("%#v", this.WaapVisibilityDisabled) + `}`}, ", ")
+	s := strings.Join([]string{`&discovered_service.ReplaceSpecType_VisibilityDisabled{` +
+		`VisibilityDisabled:` + fmt.Sprintf("%#v", this.VisibilityDisabled) + `}`}, ", ")
 	return s
 }
 func (this *ReplaceSpecType_VirtualServer) GoString() string {
@@ -1604,6 +1825,32 @@ func (m *GlobalSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if m.ViewInternal != nil {
+		{
+			size, err := m.ViewInternal.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x3e
+		i--
+		dAtA[i] = 0xc2
+	}
+	if m.InternalVirtualHost != nil {
+		{
+			size, err := m.InternalVirtualHost.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x42
+	}
 	if m.ServiceType != nil {
 		{
 			size := m.ServiceType.Size()
@@ -1613,11 +1860,11 @@ func (m *GlobalSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 			}
 		}
 	}
-	if m.WaapActionChoice != nil {
+	if m.VisibilityActionChoice != nil {
 		{
-			size := m.WaapActionChoice.Size()
+			size := m.VisibilityActionChoice.Size()
 			i -= size
-			if _, err := m.WaapActionChoice.MarshalTo(dAtA[i:]); err != nil {
+			if _, err := m.VisibilityActionChoice.MarshalTo(dAtA[i:]); err != nil {
 				return 0, err
 			}
 		}
@@ -1653,16 +1900,16 @@ func (m *GlobalSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
-func (m *GlobalSpecType_WaapVisibilityEnabled) MarshalTo(dAtA []byte) (int, error) {
+func (m *GlobalSpecType_VisibilityEnabled) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *GlobalSpecType_WaapVisibilityEnabled) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *GlobalSpecType_VisibilityEnabled) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
-	if m.WaapVisibilityEnabled != nil {
+	if m.VisibilityEnabled != nil {
 		{
-			size, err := m.WaapVisibilityEnabled.MarshalToSizedBuffer(dAtA[:i])
+			size, err := m.VisibilityEnabled.MarshalToSizedBuffer(dAtA[:i])
 			if err != nil {
 				return 0, err
 			}
@@ -1674,16 +1921,16 @@ func (m *GlobalSpecType_WaapVisibilityEnabled) MarshalToSizedBuffer(dAtA []byte)
 	}
 	return len(dAtA) - i, nil
 }
-func (m *GlobalSpecType_WaapVisibilityDisabled) MarshalTo(dAtA []byte) (int, error) {
+func (m *GlobalSpecType_VisibilityDisabled) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *GlobalSpecType_WaapVisibilityDisabled) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *GlobalSpecType_VisibilityDisabled) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
-	if m.WaapVisibilityDisabled != nil {
+	if m.VisibilityDisabled != nil {
 		{
-			size, err := m.WaapVisibilityDisabled.MarshalToSizedBuffer(dAtA[:i])
+			size, err := m.VisibilityDisabled.MarshalToSizedBuffer(dAtA[:i])
 			if err != nil {
 				return 0, err
 			}
@@ -1736,6 +1983,39 @@ func (m *VirtualServer) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if len(m.MgmtIp) > 0 {
+		i -= len(m.MgmtIp)
+		copy(dAtA[i:], m.MgmtIp)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.MgmtIp)))
+		i--
+		dAtA[i] = 0x5a
+	}
+	if m.EnabledState != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.EnabledState))
+		i--
+		dAtA[i] = 0x50
+	}
+	if len(m.Description) > 0 {
+		i -= len(m.Description)
+		copy(dAtA[i:], m.Description)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.Description)))
+		i--
+		dAtA[i] = 0x4a
+	}
+	if len(m.IpAddress) > 0 {
+		i -= len(m.IpAddress)
+		copy(dAtA[i:], m.IpAddress)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.IpAddress)))
+		i--
+		dAtA[i] = 0x42
+	}
+	if len(m.BigipVersion) > 0 {
+		i -= len(m.BigipVersion)
+		copy(dAtA[i:], m.BigipVersion)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.BigipVersion)))
+		i--
+		dAtA[i] = 0x3a
+	}
 	if len(m.CbipCluster) > 0 {
 		i -= len(m.CbipCluster)
 		copy(dAtA[i:], m.CbipCluster)
@@ -1809,11 +2089,11 @@ func (m *CreateSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 			}
 		}
 	}
-	if m.WaapActionChoice != nil {
+	if m.VisibilityActionChoice != nil {
 		{
-			size := m.WaapActionChoice.Size()
+			size := m.VisibilityActionChoice.Size()
 			i -= size
-			if _, err := m.WaapActionChoice.MarshalTo(dAtA[i:]); err != nil {
+			if _, err := m.VisibilityActionChoice.MarshalTo(dAtA[i:]); err != nil {
 				return 0, err
 			}
 		}
@@ -1849,16 +2129,16 @@ func (m *CreateSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
-func (m *CreateSpecType_WaapVisibilityEnabled) MarshalTo(dAtA []byte) (int, error) {
+func (m *CreateSpecType_VisibilityEnabled) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *CreateSpecType_WaapVisibilityEnabled) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *CreateSpecType_VisibilityEnabled) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
-	if m.WaapVisibilityEnabled != nil {
+	if m.VisibilityEnabled != nil {
 		{
-			size, err := m.WaapVisibilityEnabled.MarshalToSizedBuffer(dAtA[:i])
+			size, err := m.VisibilityEnabled.MarshalToSizedBuffer(dAtA[:i])
 			if err != nil {
 				return 0, err
 			}
@@ -1870,16 +2150,16 @@ func (m *CreateSpecType_WaapVisibilityEnabled) MarshalToSizedBuffer(dAtA []byte)
 	}
 	return len(dAtA) - i, nil
 }
-func (m *CreateSpecType_WaapVisibilityDisabled) MarshalTo(dAtA []byte) (int, error) {
+func (m *CreateSpecType_VisibilityDisabled) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *CreateSpecType_WaapVisibilityDisabled) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *CreateSpecType_VisibilityDisabled) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
-	if m.WaapVisibilityDisabled != nil {
+	if m.VisibilityDisabled != nil {
 		{
-			size, err := m.WaapVisibilityDisabled.MarshalToSizedBuffer(dAtA[:i])
+			size, err := m.VisibilityDisabled.MarshalToSizedBuffer(dAtA[:i])
 			if err != nil {
 				return 0, err
 			}
@@ -1941,11 +2221,11 @@ func (m *GetSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 			}
 		}
 	}
-	if m.WaapActionChoice != nil {
+	if m.VisibilityActionChoice != nil {
 		{
-			size := m.WaapActionChoice.Size()
+			size := m.VisibilityActionChoice.Size()
 			i -= size
-			if _, err := m.WaapActionChoice.MarshalTo(dAtA[i:]); err != nil {
+			if _, err := m.VisibilityActionChoice.MarshalTo(dAtA[i:]); err != nil {
 				return 0, err
 			}
 		}
@@ -1981,16 +2261,16 @@ func (m *GetSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
-func (m *GetSpecType_WaapVisibilityEnabled) MarshalTo(dAtA []byte) (int, error) {
+func (m *GetSpecType_VisibilityEnabled) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *GetSpecType_WaapVisibilityEnabled) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *GetSpecType_VisibilityEnabled) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
-	if m.WaapVisibilityEnabled != nil {
+	if m.VisibilityEnabled != nil {
 		{
-			size, err := m.WaapVisibilityEnabled.MarshalToSizedBuffer(dAtA[:i])
+			size, err := m.VisibilityEnabled.MarshalToSizedBuffer(dAtA[:i])
 			if err != nil {
 				return 0, err
 			}
@@ -2002,16 +2282,16 @@ func (m *GetSpecType_WaapVisibilityEnabled) MarshalToSizedBuffer(dAtA []byte) (i
 	}
 	return len(dAtA) - i, nil
 }
-func (m *GetSpecType_WaapVisibilityDisabled) MarshalTo(dAtA []byte) (int, error) {
+func (m *GetSpecType_VisibilityDisabled) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *GetSpecType_WaapVisibilityDisabled) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *GetSpecType_VisibilityDisabled) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
-	if m.WaapVisibilityDisabled != nil {
+	if m.VisibilityDisabled != nil {
 		{
-			size, err := m.WaapVisibilityDisabled.MarshalToSizedBuffer(dAtA[:i])
+			size, err := m.VisibilityDisabled.MarshalToSizedBuffer(dAtA[:i])
 			if err != nil {
 				return 0, err
 			}
@@ -2073,11 +2353,11 @@ func (m *ReplaceSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 			}
 		}
 	}
-	if m.WaapActionChoice != nil {
+	if m.VisibilityActionChoice != nil {
 		{
-			size := m.WaapActionChoice.Size()
+			size := m.VisibilityActionChoice.Size()
 			i -= size
-			if _, err := m.WaapActionChoice.MarshalTo(dAtA[i:]); err != nil {
+			if _, err := m.VisibilityActionChoice.MarshalTo(dAtA[i:]); err != nil {
 				return 0, err
 			}
 		}
@@ -2113,16 +2393,16 @@ func (m *ReplaceSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
-func (m *ReplaceSpecType_WaapVisibilityEnabled) MarshalTo(dAtA []byte) (int, error) {
+func (m *ReplaceSpecType_VisibilityEnabled) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *ReplaceSpecType_WaapVisibilityEnabled) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *ReplaceSpecType_VisibilityEnabled) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
-	if m.WaapVisibilityEnabled != nil {
+	if m.VisibilityEnabled != nil {
 		{
-			size, err := m.WaapVisibilityEnabled.MarshalToSizedBuffer(dAtA[:i])
+			size, err := m.VisibilityEnabled.MarshalToSizedBuffer(dAtA[:i])
 			if err != nil {
 				return 0, err
 			}
@@ -2134,16 +2414,16 @@ func (m *ReplaceSpecType_WaapVisibilityEnabled) MarshalToSizedBuffer(dAtA []byte
 	}
 	return len(dAtA) - i, nil
 }
-func (m *ReplaceSpecType_WaapVisibilityDisabled) MarshalTo(dAtA []byte) (int, error) {
+func (m *ReplaceSpecType_VisibilityDisabled) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *ReplaceSpecType_WaapVisibilityDisabled) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *ReplaceSpecType_VisibilityDisabled) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
-	if m.WaapVisibilityDisabled != nil {
+	if m.VisibilityDisabled != nil {
 		{
-			size, err := m.WaapVisibilityDisabled.MarshalToSizedBuffer(dAtA[:i])
+			size, err := m.VisibilityDisabled.MarshalToSizedBuffer(dAtA[:i])
 			if err != nil {
 				return 0, err
 			}
@@ -2205,35 +2485,43 @@ func (m *GlobalSpecType) Size() (n int) {
 			n += 1 + l + sovTypes(uint64(l))
 		}
 	}
-	if m.WaapActionChoice != nil {
-		n += m.WaapActionChoice.Size()
+	if m.VisibilityActionChoice != nil {
+		n += m.VisibilityActionChoice.Size()
 	}
 	if m.ServiceType != nil {
 		n += m.ServiceType.Size()
 	}
+	if m.InternalVirtualHost != nil {
+		l = m.InternalVirtualHost.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.ViewInternal != nil {
+		l = m.ViewInternal.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
 	return n
 }
 
-func (m *GlobalSpecType_WaapVisibilityEnabled) Size() (n int) {
+func (m *GlobalSpecType_VisibilityEnabled) Size() (n int) {
 	if m == nil {
 		return 0
 	}
 	var l int
 	_ = l
-	if m.WaapVisibilityEnabled != nil {
-		l = m.WaapVisibilityEnabled.Size()
+	if m.VisibilityEnabled != nil {
+		l = m.VisibilityEnabled.Size()
 		n += 1 + l + sovTypes(uint64(l))
 	}
 	return n
 }
-func (m *GlobalSpecType_WaapVisibilityDisabled) Size() (n int) {
+func (m *GlobalSpecType_VisibilityDisabled) Size() (n int) {
 	if m == nil {
 		return 0
 	}
 	var l int
 	_ = l
-	if m.WaapVisibilityDisabled != nil {
-		l = m.WaapVisibilityDisabled.Size()
+	if m.VisibilityDisabled != nil {
+		l = m.VisibilityDisabled.Size()
 		n += 1 + l + sovTypes(uint64(l))
 	}
 	return n
@@ -2277,6 +2565,25 @@ func (m *VirtualServer) Size() (n int) {
 	if l > 0 {
 		n += 1 + l + sovTypes(uint64(l))
 	}
+	l = len(m.BigipVersion)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	l = len(m.IpAddress)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	l = len(m.Description)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.EnabledState != 0 {
+		n += 1 + sovTypes(uint64(m.EnabledState))
+	}
+	l = len(m.MgmtIp)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
 	return n
 }
 
@@ -2298,8 +2605,8 @@ func (m *CreateSpecType) Size() (n int) {
 			n += 1 + l + sovTypes(uint64(l))
 		}
 	}
-	if m.WaapActionChoice != nil {
-		n += m.WaapActionChoice.Size()
+	if m.VisibilityActionChoice != nil {
+		n += m.VisibilityActionChoice.Size()
 	}
 	if m.ServiceType != nil {
 		n += m.ServiceType.Size()
@@ -2307,26 +2614,26 @@ func (m *CreateSpecType) Size() (n int) {
 	return n
 }
 
-func (m *CreateSpecType_WaapVisibilityEnabled) Size() (n int) {
+func (m *CreateSpecType_VisibilityEnabled) Size() (n int) {
 	if m == nil {
 		return 0
 	}
 	var l int
 	_ = l
-	if m.WaapVisibilityEnabled != nil {
-		l = m.WaapVisibilityEnabled.Size()
+	if m.VisibilityEnabled != nil {
+		l = m.VisibilityEnabled.Size()
 		n += 1 + l + sovTypes(uint64(l))
 	}
 	return n
 }
-func (m *CreateSpecType_WaapVisibilityDisabled) Size() (n int) {
+func (m *CreateSpecType_VisibilityDisabled) Size() (n int) {
 	if m == nil {
 		return 0
 	}
 	var l int
 	_ = l
-	if m.WaapVisibilityDisabled != nil {
-		l = m.WaapVisibilityDisabled.Size()
+	if m.VisibilityDisabled != nil {
+		l = m.VisibilityDisabled.Size()
 		n += 1 + l + sovTypes(uint64(l))
 	}
 	return n
@@ -2361,8 +2668,8 @@ func (m *GetSpecType) Size() (n int) {
 			n += 1 + l + sovTypes(uint64(l))
 		}
 	}
-	if m.WaapActionChoice != nil {
-		n += m.WaapActionChoice.Size()
+	if m.VisibilityActionChoice != nil {
+		n += m.VisibilityActionChoice.Size()
 	}
 	if m.ServiceType != nil {
 		n += m.ServiceType.Size()
@@ -2370,26 +2677,26 @@ func (m *GetSpecType) Size() (n int) {
 	return n
 }
 
-func (m *GetSpecType_WaapVisibilityEnabled) Size() (n int) {
+func (m *GetSpecType_VisibilityEnabled) Size() (n int) {
 	if m == nil {
 		return 0
 	}
 	var l int
 	_ = l
-	if m.WaapVisibilityEnabled != nil {
-		l = m.WaapVisibilityEnabled.Size()
+	if m.VisibilityEnabled != nil {
+		l = m.VisibilityEnabled.Size()
 		n += 1 + l + sovTypes(uint64(l))
 	}
 	return n
 }
-func (m *GetSpecType_WaapVisibilityDisabled) Size() (n int) {
+func (m *GetSpecType_VisibilityDisabled) Size() (n int) {
 	if m == nil {
 		return 0
 	}
 	var l int
 	_ = l
-	if m.WaapVisibilityDisabled != nil {
-		l = m.WaapVisibilityDisabled.Size()
+	if m.VisibilityDisabled != nil {
+		l = m.VisibilityDisabled.Size()
 		n += 1 + l + sovTypes(uint64(l))
 	}
 	return n
@@ -2424,8 +2731,8 @@ func (m *ReplaceSpecType) Size() (n int) {
 			n += 1 + l + sovTypes(uint64(l))
 		}
 	}
-	if m.WaapActionChoice != nil {
-		n += m.WaapActionChoice.Size()
+	if m.VisibilityActionChoice != nil {
+		n += m.VisibilityActionChoice.Size()
 	}
 	if m.ServiceType != nil {
 		n += m.ServiceType.Size()
@@ -2433,26 +2740,26 @@ func (m *ReplaceSpecType) Size() (n int) {
 	return n
 }
 
-func (m *ReplaceSpecType_WaapVisibilityEnabled) Size() (n int) {
+func (m *ReplaceSpecType_VisibilityEnabled) Size() (n int) {
 	if m == nil {
 		return 0
 	}
 	var l int
 	_ = l
-	if m.WaapVisibilityEnabled != nil {
-		l = m.WaapVisibilityEnabled.Size()
+	if m.VisibilityEnabled != nil {
+		l = m.VisibilityEnabled.Size()
 		n += 1 + l + sovTypes(uint64(l))
 	}
 	return n
 }
-func (m *ReplaceSpecType_WaapVisibilityDisabled) Size() (n int) {
+func (m *ReplaceSpecType_VisibilityDisabled) Size() (n int) {
 	if m == nil {
 		return 0
 	}
 	var l int
 	_ = l
-	if m.WaapVisibilityDisabled != nil {
-		l = m.WaapVisibilityDisabled.Size()
+	if m.VisibilityDisabled != nil {
+		l = m.VisibilityDisabled.Size()
 		n += 1 + l + sovTypes(uint64(l))
 	}
 	return n
@@ -2493,28 +2800,30 @@ func (this *GlobalSpecType) String() string {
 	s := strings.Join([]string{`&GlobalSpecType{`,
 		`HttpLoadBalancers:` + repeatedStringForHttpLoadBalancers + `,`,
 		`TcpLoadBalancers:` + repeatedStringForTcpLoadBalancers + `,`,
-		`WaapActionChoice:` + fmt.Sprintf("%v", this.WaapActionChoice) + `,`,
+		`VisibilityActionChoice:` + fmt.Sprintf("%v", this.VisibilityActionChoice) + `,`,
 		`ServiceType:` + fmt.Sprintf("%v", this.ServiceType) + `,`,
+		`InternalVirtualHost:` + strings.Replace(fmt.Sprintf("%v", this.InternalVirtualHost), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
+		`ViewInternal:` + strings.Replace(fmt.Sprintf("%v", this.ViewInternal), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
 }
-func (this *GlobalSpecType_WaapVisibilityEnabled) String() string {
+func (this *GlobalSpecType_VisibilityEnabled) String() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&GlobalSpecType_WaapVisibilityEnabled{`,
-		`WaapVisibilityEnabled:` + strings.Replace(fmt.Sprintf("%v", this.WaapVisibilityEnabled), "Empty", "schema.Empty", 1) + `,`,
+	s := strings.Join([]string{`&GlobalSpecType_VisibilityEnabled{`,
+		`VisibilityEnabled:` + strings.Replace(fmt.Sprintf("%v", this.VisibilityEnabled), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
 }
-func (this *GlobalSpecType_WaapVisibilityDisabled) String() string {
+func (this *GlobalSpecType_VisibilityDisabled) String() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&GlobalSpecType_WaapVisibilityDisabled{`,
-		`WaapVisibilityDisabled:` + strings.Replace(fmt.Sprintf("%v", this.WaapVisibilityDisabled), "Empty", "schema.Empty", 1) + `,`,
+	s := strings.Join([]string{`&GlobalSpecType_VisibilityDisabled{`,
+		`VisibilityDisabled:` + strings.Replace(fmt.Sprintf("%v", this.VisibilityDisabled), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2540,6 +2849,11 @@ func (this *VirtualServer) String() string {
 		`Port:` + fmt.Sprintf("%v", this.Port) + `,`,
 		`Status:` + fmt.Sprintf("%v", this.Status) + `,`,
 		`CbipCluster:` + fmt.Sprintf("%v", this.CbipCluster) + `,`,
+		`BigipVersion:` + fmt.Sprintf("%v", this.BigipVersion) + `,`,
+		`IpAddress:` + fmt.Sprintf("%v", this.IpAddress) + `,`,
+		`Description:` + fmt.Sprintf("%v", this.Description) + `,`,
+		`EnabledState:` + fmt.Sprintf("%v", this.EnabledState) + `,`,
+		`MgmtIp:` + fmt.Sprintf("%v", this.MgmtIp) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2561,28 +2875,28 @@ func (this *CreateSpecType) String() string {
 	s := strings.Join([]string{`&CreateSpecType{`,
 		`HttpLoadBalancers:` + repeatedStringForHttpLoadBalancers + `,`,
 		`TcpLoadBalancers:` + repeatedStringForTcpLoadBalancers + `,`,
-		`WaapActionChoice:` + fmt.Sprintf("%v", this.WaapActionChoice) + `,`,
+		`VisibilityActionChoice:` + fmt.Sprintf("%v", this.VisibilityActionChoice) + `,`,
 		`ServiceType:` + fmt.Sprintf("%v", this.ServiceType) + `,`,
 		`}`,
 	}, "")
 	return s
 }
-func (this *CreateSpecType_WaapVisibilityEnabled) String() string {
+func (this *CreateSpecType_VisibilityEnabled) String() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&CreateSpecType_WaapVisibilityEnabled{`,
-		`WaapVisibilityEnabled:` + strings.Replace(fmt.Sprintf("%v", this.WaapVisibilityEnabled), "Empty", "schema.Empty", 1) + `,`,
+	s := strings.Join([]string{`&CreateSpecType_VisibilityEnabled{`,
+		`VisibilityEnabled:` + strings.Replace(fmt.Sprintf("%v", this.VisibilityEnabled), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
 }
-func (this *CreateSpecType_WaapVisibilityDisabled) String() string {
+func (this *CreateSpecType_VisibilityDisabled) String() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&CreateSpecType_WaapVisibilityDisabled{`,
-		`WaapVisibilityDisabled:` + strings.Replace(fmt.Sprintf("%v", this.WaapVisibilityDisabled), "Empty", "schema.Empty", 1) + `,`,
+	s := strings.Join([]string{`&CreateSpecType_VisibilityDisabled{`,
+		`VisibilityDisabled:` + strings.Replace(fmt.Sprintf("%v", this.VisibilityDisabled), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2614,28 +2928,28 @@ func (this *GetSpecType) String() string {
 	s := strings.Join([]string{`&GetSpecType{`,
 		`HttpLoadBalancers:` + repeatedStringForHttpLoadBalancers + `,`,
 		`TcpLoadBalancers:` + repeatedStringForTcpLoadBalancers + `,`,
-		`WaapActionChoice:` + fmt.Sprintf("%v", this.WaapActionChoice) + `,`,
+		`VisibilityActionChoice:` + fmt.Sprintf("%v", this.VisibilityActionChoice) + `,`,
 		`ServiceType:` + fmt.Sprintf("%v", this.ServiceType) + `,`,
 		`}`,
 	}, "")
 	return s
 }
-func (this *GetSpecType_WaapVisibilityEnabled) String() string {
+func (this *GetSpecType_VisibilityEnabled) String() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&GetSpecType_WaapVisibilityEnabled{`,
-		`WaapVisibilityEnabled:` + strings.Replace(fmt.Sprintf("%v", this.WaapVisibilityEnabled), "Empty", "schema.Empty", 1) + `,`,
+	s := strings.Join([]string{`&GetSpecType_VisibilityEnabled{`,
+		`VisibilityEnabled:` + strings.Replace(fmt.Sprintf("%v", this.VisibilityEnabled), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
 }
-func (this *GetSpecType_WaapVisibilityDisabled) String() string {
+func (this *GetSpecType_VisibilityDisabled) String() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&GetSpecType_WaapVisibilityDisabled{`,
-		`WaapVisibilityDisabled:` + strings.Replace(fmt.Sprintf("%v", this.WaapVisibilityDisabled), "Empty", "schema.Empty", 1) + `,`,
+	s := strings.Join([]string{`&GetSpecType_VisibilityDisabled{`,
+		`VisibilityDisabled:` + strings.Replace(fmt.Sprintf("%v", this.VisibilityDisabled), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2667,28 +2981,28 @@ func (this *ReplaceSpecType) String() string {
 	s := strings.Join([]string{`&ReplaceSpecType{`,
 		`HttpLoadBalancers:` + repeatedStringForHttpLoadBalancers + `,`,
 		`TcpLoadBalancers:` + repeatedStringForTcpLoadBalancers + `,`,
-		`WaapActionChoice:` + fmt.Sprintf("%v", this.WaapActionChoice) + `,`,
+		`VisibilityActionChoice:` + fmt.Sprintf("%v", this.VisibilityActionChoice) + `,`,
 		`ServiceType:` + fmt.Sprintf("%v", this.ServiceType) + `,`,
 		`}`,
 	}, "")
 	return s
 }
-func (this *ReplaceSpecType_WaapVisibilityEnabled) String() string {
+func (this *ReplaceSpecType_VisibilityEnabled) String() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&ReplaceSpecType_WaapVisibilityEnabled{`,
-		`WaapVisibilityEnabled:` + strings.Replace(fmt.Sprintf("%v", this.WaapVisibilityEnabled), "Empty", "schema.Empty", 1) + `,`,
+	s := strings.Join([]string{`&ReplaceSpecType_VisibilityEnabled{`,
+		`VisibilityEnabled:` + strings.Replace(fmt.Sprintf("%v", this.VisibilityEnabled), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
 }
-func (this *ReplaceSpecType_WaapVisibilityDisabled) String() string {
+func (this *ReplaceSpecType_VisibilityDisabled) String() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&ReplaceSpecType_WaapVisibilityDisabled{`,
-		`WaapVisibilityDisabled:` + strings.Replace(fmt.Sprintf("%v", this.WaapVisibilityDisabled), "Empty", "schema.Empty", 1) + `,`,
+	s := strings.Join([]string{`&ReplaceSpecType_VisibilityDisabled{`,
+		`VisibilityDisabled:` + strings.Replace(fmt.Sprintf("%v", this.VisibilityDisabled), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2810,7 +3124,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 			iNdEx = postIndex
 		case 4:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field WaapVisibilityEnabled", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field VisibilityEnabled", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -2841,11 +3155,11 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
-			m.WaapActionChoice = &GlobalSpecType_WaapVisibilityEnabled{v}
+			m.VisibilityActionChoice = &GlobalSpecType_VisibilityEnabled{v}
 			iNdEx = postIndex
 		case 5:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field WaapVisibilityDisabled", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field VisibilityDisabled", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -2876,7 +3190,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
-			m.WaapActionChoice = &GlobalSpecType_WaapVisibilityDisabled{v}
+			m.VisibilityActionChoice = &GlobalSpecType_VisibilityDisabled{v}
 			iNdEx = postIndex
 		case 7:
 			if wireType != 2 {
@@ -2912,6 +3226,78 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			m.ServiceType = &GlobalSpecType_VirtualServer{v}
+			iNdEx = postIndex
+		case 8:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field InternalVirtualHost", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.InternalVirtualHost == nil {
+				m.InternalVirtualHost = &views.ObjectRefType{}
+			}
+			if err := m.InternalVirtualHost.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 1000:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ViewInternal", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.ViewInternal == nil {
+				m.ViewInternal = &views.ObjectRefType{}
+			}
+			if err := m.ViewInternal.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
@@ -3123,6 +3509,153 @@ func (m *VirtualServer) Unmarshal(dAtA []byte) error {
 			}
 			m.CbipCluster = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
+		case 7:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field BigipVersion", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.BigipVersion = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 8:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field IpAddress", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.IpAddress = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 9:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Description", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Description = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 10:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field EnabledState", wireType)
+			}
+			m.EnabledState = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.EnabledState |= VirtualServerEnabledState(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 11:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field MgmtIp", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.MgmtIp = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTypes(dAtA[iNdEx:])
@@ -3246,7 +3779,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 			iNdEx = postIndex
 		case 4:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field WaapVisibilityEnabled", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field VisibilityEnabled", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -3277,11 +3810,11 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
-			m.WaapActionChoice = &CreateSpecType_WaapVisibilityEnabled{v}
+			m.VisibilityActionChoice = &CreateSpecType_VisibilityEnabled{v}
 			iNdEx = postIndex
 		case 5:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field WaapVisibilityDisabled", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field VisibilityDisabled", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -3312,7 +3845,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
-			m.WaapActionChoice = &CreateSpecType_WaapVisibilityDisabled{v}
+			m.VisibilityActionChoice = &CreateSpecType_VisibilityDisabled{v}
 			iNdEx = postIndex
 		case 7:
 			if wireType != 2 {
@@ -3472,7 +4005,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 			iNdEx = postIndex
 		case 4:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field WaapVisibilityEnabled", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field VisibilityEnabled", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -3503,11 +4036,11 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
-			m.WaapActionChoice = &GetSpecType_WaapVisibilityEnabled{v}
+			m.VisibilityActionChoice = &GetSpecType_VisibilityEnabled{v}
 			iNdEx = postIndex
 		case 5:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field WaapVisibilityDisabled", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field VisibilityDisabled", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -3538,7 +4071,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
-			m.WaapActionChoice = &GetSpecType_WaapVisibilityDisabled{v}
+			m.VisibilityActionChoice = &GetSpecType_VisibilityDisabled{v}
 			iNdEx = postIndex
 		case 7:
 			if wireType != 2 {
@@ -3698,7 +4231,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 			iNdEx = postIndex
 		case 4:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field WaapVisibilityEnabled", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field VisibilityEnabled", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -3729,11 +4262,11 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
-			m.WaapActionChoice = &ReplaceSpecType_WaapVisibilityEnabled{v}
+			m.VisibilityActionChoice = &ReplaceSpecType_VisibilityEnabled{v}
 			iNdEx = postIndex
 		case 5:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field WaapVisibilityDisabled", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field VisibilityDisabled", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -3764,7 +4297,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
-			m.WaapActionChoice = &ReplaceSpecType_WaapVisibilityDisabled{v}
+			m.VisibilityActionChoice = &ReplaceSpecType_VisibilityDisabled{v}
 			iNdEx = postIndex
 		case 7:
 			if wireType != 2 {

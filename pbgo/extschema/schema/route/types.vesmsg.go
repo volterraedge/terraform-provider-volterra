@@ -1840,6 +1840,170 @@ func MirrorPolicyTypeValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *QueryParamsSimpleRoute) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *QueryParamsSimpleRoute) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *QueryParamsSimpleRoute) DeepCopy() *QueryParamsSimpleRoute {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &QueryParamsSimpleRoute{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *QueryParamsSimpleRoute) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *QueryParamsSimpleRoute) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return QueryParamsSimpleRouteValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateQueryParamsSimpleRoute struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateQueryParamsSimpleRoute) QueryParamsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for query_params")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateQueryParamsSimpleRoute) QueryParamsReplaceParamsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_ReplaceParams, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for replace_params")
+	}
+	return oValidatorFn_ReplaceParams, nil
+}
+
+func (v *ValidateQueryParamsSimpleRoute) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*QueryParamsSimpleRoute)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *QueryParamsSimpleRoute got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["query_params"]; exists {
+		val := m.GetQueryParams()
+		vOpts := append(opts,
+			db.WithValidateField("query_params"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetQueryParams().(type) {
+	case *QueryParamsSimpleRoute_RetainAllParams:
+		if fv, exists := v.FldValidators["query_params.retain_all_params"]; exists {
+			val := m.GetQueryParams().(*QueryParamsSimpleRoute_RetainAllParams).RetainAllParams
+			vOpts := append(opts,
+				db.WithValidateField("query_params"),
+				db.WithValidateField("retain_all_params"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *QueryParamsSimpleRoute_RemoveAllParams:
+		if fv, exists := v.FldValidators["query_params.remove_all_params"]; exists {
+			val := m.GetQueryParams().(*QueryParamsSimpleRoute_RemoveAllParams).RemoveAllParams
+			vOpts := append(opts,
+				db.WithValidateField("query_params"),
+				db.WithValidateField("remove_all_params"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *QueryParamsSimpleRoute_ReplaceParams:
+		if fv, exists := v.FldValidators["query_params.replace_params"]; exists {
+			val := m.GetQueryParams().(*QueryParamsSimpleRoute_ReplaceParams).ReplaceParams
+			vOpts := append(opts,
+				db.WithValidateField("query_params"),
+				db.WithValidateField("replace_params"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultQueryParamsSimpleRouteValidator = func() *ValidateQueryParamsSimpleRoute {
+	v := &ValidateQueryParamsSimpleRoute{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhQueryParams := v.QueryParamsValidationRuleHandler
+	rulesQueryParams := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhQueryParams(rulesQueryParams)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for QueryParamsSimpleRoute.query_params: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["query_params"] = vFn
+
+	vrhQueryParamsReplaceParams := v.QueryParamsReplaceParamsValidationRuleHandler
+	rulesQueryParamsReplaceParams := map[string]string{
+		"ves.io.schema.rules.string.max_len": "256",
+		"ves.io.schema.rules.string.min_len": "1",
+	}
+	vFnMap["query_params.replace_params"], err = vrhQueryParamsReplaceParams(rulesQueryParamsReplaceParams)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field QueryParamsSimpleRoute.query_params_replace_params: %s", err)
+		panic(errMsg)
+	}
+
+	v.FldValidators["query_params.replace_params"] = vFnMap["query_params.replace_params"]
+
+	return v
+}()
+
+func QueryParamsSimpleRouteValidator() db.Validator {
+	return DefaultQueryParamsSimpleRouteValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *ReplaceSpecType) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -2776,6 +2940,15 @@ func (v *ValidateRouteDestinationList) Validate(ctx context.Context, pm interfac
 
 	}
 
+	if fv, exists := v.FldValidators["query_params"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("query_params"))
+		if err := fv(ctx, m.GetQueryParams(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["retry_policy"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("retry_policy"))
@@ -2946,6 +3119,8 @@ var DefaultRouteDestinationListValidator = func() *ValidateRouteDestinationList 
 	v.FldValidators["cors_policy"] = ves_io_schema.CorsPolicyValidator().Validate
 
 	v.FldValidators["csrf_policy"] = ves_io_schema.CsrfPolicyValidator().Validate
+
+	v.FldValidators["query_params"] = QueryParamsSimpleRouteValidator().Validate
 
 	return v
 }()

@@ -41,6 +41,7 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.global_log_receiver.CreateSpecType"] = CreateSpecTypeValidator()
 	vr["ves.io.schema.global_log_receiver.DatadogConfig"] = DatadogConfigValidator()
 	vr["ves.io.schema.global_log_receiver.ElasticConfig"] = ElasticConfigValidator()
+	vr["ves.io.schema.global_log_receiver.FilenameOptionsType"] = FilenameOptionsTypeValidator()
 	vr["ves.io.schema.global_log_receiver.GCPBucketConfig"] = GCPBucketConfigValidator()
 	vr["ves.io.schema.global_log_receiver.GetSpecType"] = GetSpecTypeValidator()
 	vr["ves.io.schema.global_log_receiver.GlobalSpecType"] = GlobalSpecTypeValidator()

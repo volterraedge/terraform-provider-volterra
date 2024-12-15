@@ -1149,16 +1149,25 @@ func (s *APISrv) Create(ctx context.Context, req *CreateRequest) (*CreateRespons
 	}
 	reqMsgFQN := "ves.io.schema.ip_prefix_set.CreateRequest"
 	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.sf, reqMsgFQN, req)
+	var retErr error
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
 		}
+		userMsg := "The 'ves.io.schema.ip_prefix_set.API.Create' operation on 'ip_prefix_set'"
+		if retErr == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
 	obj := NewDBObject(nil)
 	req.ToObject(obj)
 	if conv, exists := s.sf.Config().MsgToObjConverters[reqMsgFQN]; exists {
 		if err := conv(req, obj); err != nil {
+			retErr = err
 			return nil, err
 		}
 	}
@@ -1167,16 +1176,19 @@ func (s *APISrv) Create(ctx context.Context, req *CreateRequest) (*CreateRespons
 	rsrcRsp, err := s.opts.RsrcHandler.CreateFn(ctx, rsrcReq, s.apiWrapper)
 	if err != nil {
 		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "CreateResource"))
+		retErr = err
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 	rsp, err := NewObjectCreateRsp(rsrcRsp.Entry)
 	if err != nil {
 		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "CreateResponse"))
+		retErr = err
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 	rspMsgFQN := "ves.io.schema.ip_prefix_set.CreateResponse"
 	if conv, exists := s.sf.Config().ObjToMsgConverters[rspMsgFQN]; exists {
 		if err := conv(rsrcRsp.Entry, rsp); err != nil {
+			retErr = err
 			return nil, err
 		}
 	}
@@ -1208,21 +1220,31 @@ func (s *APISrv) Replace(ctx context.Context, req *ReplaceRequest) (*ReplaceResp
 		}
 	}
 	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.sf, "ves.io.schema.ip_prefix_set.API.ReplaceRequest", req)
+	var retErr error
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
 		}
+		userMsg := "The 'ves.io.schema.ip_prefix_set.API.Replace' operation on 'ip_prefix_set'"
+		if retErr == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
 	rsrcReq := &server.ResourceReplaceRequest{RequestMsg: req}
 	rsrcRsp, err := s.opts.RsrcHandler.ReplaceFn(ctx, rsrcReq, s.apiWrapper)
 	if err != nil {
 		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "ReplaceResource"))
+		retErr = err
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 	rsp, err := NewObjectReplaceRsp(rsrcRsp.Entry)
 	if err != nil {
 		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "ReplaceResponse"))
+		retErr = err
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.sf, "ves.io.schema.ip_prefix_set.API.ReplaceResponse", rsp)...)
@@ -1341,10 +1363,18 @@ func (s *APISrv) Delete(ctx context.Context, req *DeleteRequest) (*google_protob
 		}
 	}
 	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.sf, "ves.io.schema.ip_prefix_set.API.DeleteRequest", req)
+	var retErr error
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
 		}
+		userMsg := "The 'ves.io.schema.ip_prefix_set.API.Delete' operation on 'ip_prefix_set'"
+		if retErr == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
 	tenant := server.TenantFromContext(ctx)
@@ -1354,6 +1384,7 @@ func (s *APISrv) Delete(ctx context.Context, req *DeleteRequest) (*google_protob
 	_, err := s.opts.RsrcHandler.DeleteFn(ctx, rsrcReq, s.apiWrapper)
 	if err != nil {
 		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "DeleteResource"))
+		retErr = err
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 	return &google_protobuf.Empty{}, nil
@@ -2245,34 +2276,28 @@ var APISwaggerJSON string = `{
             "x-displayname": "Create IP Prefix Set",
             "x-ves-proto-message": "ves.io.schema.ip_prefix_set.CreateSpecType",
             "properties": {
-                "ipv6_prefix": {
+                "ipv4_prefixes": {
                     "type": "array",
-                    "description": " An unordered list of IPv6 prefixes.\n\nExample: - \"['2001:db8:abcd:0012::0/64', 'fd48:fa09:d9d4::/48', 'fdd8:3a62:45c7:98a5::/64']\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.ipv6_prefix: true\n  ves.io.schema.rules.repeated.items.string.not_empty: true\n  ves.io.schema.rules.repeated.max_items: 1024\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " list of IPv4 prefixes with description.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1024\n  ves.io.schema.rules.repeated.unique: true\n",
                     "maxItems": 1024,
                     "items": {
-                        "type": "string"
+                        "$ref": "#/definitions/ip_prefix_setIpv4Prefix"
                     },
-                    "x-displayname": "IPv6 Prefix",
-                    "x-ves-example": "['2001:db8:abcd:0012::0/64', 'fd48:fa09:d9d4::/48', 'fdd8:3a62:45c7:98a5::/64']",
+                    "x-displayname": "IPv4 Prefixes",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.items.string.ipv6_prefix": "true",
-                        "ves.io.schema.rules.repeated.items.string.not_empty": "true",
                         "ves.io.schema.rules.repeated.max_items": "1024",
                         "ves.io.schema.rules.repeated.unique": "true"
                     }
                 },
-                "prefix": {
+                "ipv6_prefixes": {
                     "type": "array",
-                    "description": " An unordered list of IPv4 prefixes.\n\nExample: - \"['10.2.1.0/24', '192.168.8.0/29', '10.7.64.160/27']\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.ipv4_prefix: true\n  ves.io.schema.rules.repeated.items.string.not_empty: true\n  ves.io.schema.rules.repeated.max_items: 1024\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " list of IPv6 prefixes with description.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1024\n  ves.io.schema.rules.repeated.unique: true\n",
                     "maxItems": 1024,
                     "items": {
-                        "type": "string"
+                        "$ref": "#/definitions/ip_prefix_setIpv6Prefix"
                     },
-                    "x-displayname": "IPV4 Prefix",
-                    "x-ves-example": "['10.2.1.0/24', '192.168.8.0/29', '10.7.64.160/27']",
+                    "x-displayname": "IPv6 Prefixes",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.items.string.ipv4_prefix": "true",
-                        "ves.io.schema.rules.repeated.items.string.not_empty": "true",
                         "ves.io.schema.rules.repeated.max_items": "1024",
                         "ves.io.schema.rules.repeated.unique": "true"
                     }
@@ -2406,36 +2431,96 @@ var APISwaggerJSON string = `{
             "x-displayname": "Get IP Prefix Set",
             "x-ves-proto-message": "ves.io.schema.ip_prefix_set.GetSpecType",
             "properties": {
-                "ipv6_prefix": {
+                "ipv4_prefixes": {
                     "type": "array",
-                    "description": " An unordered list of IPv6 prefixes.\n\nExample: - \"['2001:db8:abcd:0012::0/64', 'fd48:fa09:d9d4::/48', 'fdd8:3a62:45c7:98a5::/64']\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.ipv6_prefix: true\n  ves.io.schema.rules.repeated.items.string.not_empty: true\n  ves.io.schema.rules.repeated.max_items: 1024\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " list of IPv4 prefixes with description.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1024\n  ves.io.schema.rules.repeated.unique: true\n",
                     "maxItems": 1024,
                     "items": {
-                        "type": "string"
+                        "$ref": "#/definitions/ip_prefix_setIpv4Prefix"
                     },
-                    "x-displayname": "IPv6 Prefix",
-                    "x-ves-example": "['2001:db8:abcd:0012::0/64', 'fd48:fa09:d9d4::/48', 'fdd8:3a62:45c7:98a5::/64']",
+                    "x-displayname": "IPv4 Prefixes",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.items.string.ipv6_prefix": "true",
-                        "ves.io.schema.rules.repeated.items.string.not_empty": "true",
                         "ves.io.schema.rules.repeated.max_items": "1024",
                         "ves.io.schema.rules.repeated.unique": "true"
                     }
                 },
-                "prefix": {
+                "ipv6_prefixes": {
                     "type": "array",
-                    "description": " An unordered list of IPv4 prefixes.\n\nExample: - \"['10.2.1.0/24', '192.168.8.0/29', '10.7.64.160/27']\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.ipv4_prefix: true\n  ves.io.schema.rules.repeated.items.string.not_empty: true\n  ves.io.schema.rules.repeated.max_items: 1024\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " list of IPv6 prefixes with description.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1024\n  ves.io.schema.rules.repeated.unique: true\n",
                     "maxItems": 1024,
                     "items": {
-                        "type": "string"
+                        "$ref": "#/definitions/ip_prefix_setIpv6Prefix"
                     },
-                    "x-displayname": "IPV4 Prefix",
-                    "x-ves-example": "['10.2.1.0/24', '192.168.8.0/29', '10.7.64.160/27']",
+                    "x-displayname": "IPv6 Prefixes",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.items.string.ipv4_prefix": "true",
-                        "ves.io.schema.rules.repeated.items.string.not_empty": "true",
                         "ves.io.schema.rules.repeated.max_items": "1024",
                         "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                }
+            }
+        },
+        "ip_prefix_setIpv4Prefix": {
+            "type": "object",
+            "description": "IPv4 Prefix with Description",
+            "title": "IPv4Prefix",
+            "x-displayname": "IPv4 Prefix with Description",
+            "x-ves-proto-message": "ves.io.schema.ip_prefix_set.Ipv4Prefix",
+            "properties": {
+                "description": {
+                    "type": "string",
+                    "description": "\n\nExample: - \"blocked ip\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 64\n",
+                    "title": "description",
+                    "maxLength": 64,
+                    "x-displayname": "Description",
+                    "x-ves-example": "blocked ip",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_bytes": "64"
+                    }
+                },
+                "ipv4_prefix": {
+                    "type": "string",
+                    "description": "\nExample: - \"192.0.2.146/22\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.ipv4_prefix: true\n  ves.io.schema.rules.string.not_empty: true\n",
+                    "title": "ipv4 prefix",
+                    "x-displayname": "IPv4 Prefix",
+                    "x-ves-example": "192.0.2.146/22",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.ipv4_prefix": "true",
+                        "ves.io.schema.rules.string.not_empty": "true"
+                    }
+                }
+            }
+        },
+        "ip_prefix_setIpv6Prefix": {
+            "type": "object",
+            "description": "IPv6 Prefix with Description",
+            "title": "IPv6Prefix",
+            "x-displayname": "IPv6 Prefix with Description",
+            "x-ves-proto-message": "ves.io.schema.ip_prefix_set.Ipv6Prefix",
+            "properties": {
+                "description": {
+                    "type": "string",
+                    "description": "\n\nExample: - \"blocked ip\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 64\n",
+                    "title": "description",
+                    "maxLength": 64,
+                    "x-displayname": "Description",
+                    "x-ves-example": "blocked ip",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_bytes": "64"
+                    }
+                },
+                "ipv6_prefix": {
+                    "type": "string",
+                    "description": "\nExample: - \"2001:db8:3c4d:15::/64\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.ipv6_prefix: true\n  ves.io.schema.rules.string.not_empty: true\n",
+                    "title": "ipv6 prefix",
+                    "x-displayname": "IPv6 Prefix",
+                    "x-ves-example": "2001:db8:3c4d:15::/64",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.ipv6_prefix": "true",
+                        "ves.io.schema.rules.string.not_empty": "true"
                     }
                 }
             }
@@ -2594,34 +2679,28 @@ var APISwaggerJSON string = `{
             "x-displayname": "Replace IP Prefix Set",
             "x-ves-proto-message": "ves.io.schema.ip_prefix_set.ReplaceSpecType",
             "properties": {
-                "ipv6_prefix": {
+                "ipv4_prefixes": {
                     "type": "array",
-                    "description": " An unordered list of IPv6 prefixes.\n\nExample: - \"['2001:db8:abcd:0012::0/64', 'fd48:fa09:d9d4::/48', 'fdd8:3a62:45c7:98a5::/64']\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.ipv6_prefix: true\n  ves.io.schema.rules.repeated.items.string.not_empty: true\n  ves.io.schema.rules.repeated.max_items: 1024\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " list of IPv4 prefixes with description.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1024\n  ves.io.schema.rules.repeated.unique: true\n",
                     "maxItems": 1024,
                     "items": {
-                        "type": "string"
+                        "$ref": "#/definitions/ip_prefix_setIpv4Prefix"
                     },
-                    "x-displayname": "IPv6 Prefix",
-                    "x-ves-example": "['2001:db8:abcd:0012::0/64', 'fd48:fa09:d9d4::/48', 'fdd8:3a62:45c7:98a5::/64']",
+                    "x-displayname": "IPv4 Prefixes",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.items.string.ipv6_prefix": "true",
-                        "ves.io.schema.rules.repeated.items.string.not_empty": "true",
                         "ves.io.schema.rules.repeated.max_items": "1024",
                         "ves.io.schema.rules.repeated.unique": "true"
                     }
                 },
-                "prefix": {
+                "ipv6_prefixes": {
                     "type": "array",
-                    "description": " An unordered list of IPv4 prefixes.\n\nExample: - \"['10.2.1.0/24', '192.168.8.0/29', '10.7.64.160/27']\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.ipv4_prefix: true\n  ves.io.schema.rules.repeated.items.string.not_empty: true\n  ves.io.schema.rules.repeated.max_items: 1024\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " list of IPv6 prefixes with description.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1024\n  ves.io.schema.rules.repeated.unique: true\n",
                     "maxItems": 1024,
                     "items": {
-                        "type": "string"
+                        "$ref": "#/definitions/ip_prefix_setIpv6Prefix"
                     },
-                    "x-displayname": "IPV4 Prefix",
-                    "x-ves-example": "['10.2.1.0/24', '192.168.8.0/29', '10.7.64.160/27']",
+                    "x-displayname": "IPv6 Prefixes",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.items.string.ipv4_prefix": "true",
-                        "ves.io.schema.rules.repeated.items.string.not_empty": "true",
                         "ves.io.schema.rules.repeated.max_items": "1024",
                         "ves.io.schema.rules.repeated.unique": "true"
                     }

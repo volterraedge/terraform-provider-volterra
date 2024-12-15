@@ -13,6 +13,8 @@ import (
 	"gopkg.volterra.us/stdlib/codec"
 	"gopkg.volterra.us/stdlib/db"
 	"gopkg.volterra.us/stdlib/errors"
+
+	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 )
 
 var (
@@ -21,6 +23,228 @@ var (
 	_ = errors.Wrap
 	_ = strings.Split
 )
+
+// augmented methods on protoc/std generated struct
+
+func (m *ClickhouseParams) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *ClickhouseParams) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+// Redact squashes sensitive info in m (in-place)
+func (m *ClickhouseParams) Redact(ctx context.Context) error {
+	// clear fields with confidential option set (at message or field level)
+	if m == nil {
+		return nil
+	}
+
+	if err := m.GetPassword().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting ClickhouseParams.password")
+	}
+
+	return nil
+}
+
+func (m *ClickhouseParams) DeepCopy() *ClickhouseParams {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &ClickhouseParams{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *ClickhouseParams) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *ClickhouseParams) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return ClickhouseParamsValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateClickhouseParams struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateClickhouseParams) HostValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for host")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateClickhouseParams) PortValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewInt32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for port")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateClickhouseParams) UserValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for user")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateClickhouseParams) PasswordValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for password")
+	}
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		if err := ves_io_schema.SecretTypeValidator().Validate(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateClickhouseParams) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*ClickhouseParams)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *ClickhouseParams got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["host"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("host"))
+		if err := fv(ctx, m.GetHost(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["password"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("password"))
+		if err := fv(ctx, m.GetPassword(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["port"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("port"))
+		if err := fv(ctx, m.GetPort(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["user"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("user"))
+		if err := fv(ctx, m.GetUser(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultClickhouseParamsValidator = func() *ValidateClickhouseParams {
+	v := &ValidateClickhouseParams{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhHost := v.HostValidationRuleHandler
+	rulesHost := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhHost(rulesHost)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ClickhouseParams.host: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["host"] = vFn
+
+	vrhPort := v.PortValidationRuleHandler
+	rulesPort := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhPort(rulesPort)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ClickhouseParams.port: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["port"] = vFn
+
+	vrhUser := v.UserValidationRuleHandler
+	rulesUser := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhUser(rulesUser)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ClickhouseParams.user: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["user"] = vFn
+
+	vrhPassword := v.PasswordValidationRuleHandler
+	rulesPassword := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhPassword(rulesPassword)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ClickhouseParams.password: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["password"] = vFn
+
+	return v
+}()
+
+func ClickhouseParamsValidator() db.Validator {
+	return DefaultClickhouseParamsValidator
+}
 
 // augmented methods on protoc/std generated struct
 
@@ -171,6 +395,20 @@ func (m *GetSpecType) ToYAML() (string, error) {
 	return codec.ToYAML(m)
 }
 
+// Redact squashes sensitive info in m (in-place)
+func (m *GetSpecType) Redact(ctx context.Context) error {
+	// clear fields with confidential option set (at message or field level)
+	if m == nil {
+		return nil
+	}
+
+	if err := m.GetClickhouseParams().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting GetSpecType.clickhouse_params")
+	}
+
+	return nil
+}
+
 func (m *GetSpecType) DeepCopy() *GetSpecType {
 	if m == nil {
 		return nil
@@ -244,6 +482,27 @@ func (v *ValidateGetSpecType) ElasticParamsValidationRuleHandler(rules map[strin
 	return validatorFn, nil
 }
 
+func (v *ValidateGetSpecType) ClickhouseParamsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for clickhouse_params")
+	}
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		if err := ClickhouseParamsValidator().Validate(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*GetSpecType)
 	if !ok {
@@ -256,6 +515,15 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 	}
 	if m == nil {
 		return nil
+	}
+
+	if fv, exists := v.FldValidators["clickhouse_params"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("clickhouse_params"))
+		if err := fv(ctx, m.GetClickhouseParams(), vOpts...); err != nil {
+			return err
+		}
+
 	}
 
 	if fv, exists := v.FldValidators["elastic_params"]; exists {
@@ -322,6 +590,17 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	}
 	v.FldValidators["elastic_params"] = vFn
 
+	vrhClickhouseParams := v.ClickhouseParamsValidationRuleHandler
+	rulesClickhouseParams := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhClickhouseParams(rulesClickhouseParams)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.clickhouse_params: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["clickhouse_params"] = vFn
+
 	return v
 }()
 
@@ -337,6 +616,20 @@ func (m *GlobalSpecType) ToJSON() (string, error) {
 
 func (m *GlobalSpecType) ToYAML() (string, error) {
 	return codec.ToYAML(m)
+}
+
+// Redact squashes sensitive info in m (in-place)
+func (m *GlobalSpecType) Redact(ctx context.Context) error {
+	// clear fields with confidential option set (at message or field level)
+	if m == nil {
+		return nil
+	}
+
+	if err := m.GetClickhouseParams().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting GlobalSpecType.clickhouse_params")
+	}
+
+	return nil
 }
 
 func (m *GlobalSpecType) DeepCopy() *GlobalSpecType {
@@ -412,6 +705,27 @@ func (v *ValidateGlobalSpecType) ElasticParamsValidationRuleHandler(rules map[st
 	return validatorFn, nil
 }
 
+func (v *ValidateGlobalSpecType) ClickhouseParamsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for clickhouse_params")
+	}
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		if err := ClickhouseParamsValidator().Validate(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*GlobalSpecType)
 	if !ok {
@@ -424,6 +738,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 	}
 	if m == nil {
 		return nil
+	}
+
+	if fv, exists := v.FldValidators["clickhouse_params"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("clickhouse_params"))
+		if err := fv(ctx, m.GetClickhouseParams(), vOpts...); err != nil {
+			return err
+		}
+
 	}
 
 	if fv, exists := v.FldValidators["elastic_params"]; exists {
@@ -489,6 +812,17 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["elastic_params"] = vFn
+
+	vrhClickhouseParams := v.ClickhouseParamsValidationRuleHandler
+	rulesClickhouseParams := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhClickhouseParams(rulesClickhouseParams)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.clickhouse_params: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["clickhouse_params"] = vFn
 
 	return v
 }()
@@ -640,6 +974,7 @@ func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	if f == nil {
 		return
 	}
+	m.ClickhouseParams = f.GetClickhouseParams()
 	m.ElasticParams = f.GetElasticParams()
 	m.IsDefault = f.GetIsDefault()
 	m.KafkaParams = f.GetKafkaParams()
@@ -660,6 +995,7 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	}
 	_ = m1
 
+	f.ClickhouseParams = m1.ClickhouseParams
 	f.ElasticParams = m1.ElasticParams
 	f.IsDefault = m1.IsDefault
 	f.KafkaParams = m1.KafkaParams

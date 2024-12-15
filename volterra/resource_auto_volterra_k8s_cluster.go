@@ -63,7 +63,8 @@ func resourceVolterraK8SCluster() *schema.Resource {
 
 			"cluster_wide_app_list": {
 
-				Type:     schema.TypeSet,
+				Type:     schema.TypeList,
+				MaxItems: 1,
 				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
@@ -77,7 +78,8 @@ func resourceVolterraK8SCluster() *schema.Resource {
 
 									"argo_cd": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -90,7 +92,8 @@ func resourceVolterraK8SCluster() *schema.Resource {
 
 												"local_domain": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Optional: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -102,14 +105,16 @@ func resourceVolterraK8SCluster() *schema.Resource {
 
 															"password": {
 
-																Type:     schema.TypeSet,
+																Type:     schema.TypeList,
+																MaxItems: 1,
 																Required: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
 																		"blindfold_secret_info_internal": {
 
-																			Type:       schema.TypeSet,
+																			Type:       schema.TypeList,
+																			MaxItems:   1,
 																			Optional:   true,
 																			Deprecated: "This field is deprecated and will be removed in future release.",
 																			Elem: &schema.Resource{
@@ -144,7 +149,8 @@ func resourceVolterraK8SCluster() *schema.Resource {
 
 																		"blindfold_secret_info": {
 
-																			Type:     schema.TypeSet,
+																			Type:     schema.TypeList,
+																			MaxItems: 1,
 																			Optional: true,
 																			Elem: &schema.Resource{
 																				Schema: map[string]*schema.Schema{
@@ -169,7 +175,8 @@ func resourceVolterraK8SCluster() *schema.Resource {
 
 																		"clear_secret_info": {
 
-																			Type:     schema.TypeSet,
+																			Type:     schema.TypeList,
+																			MaxItems: 1,
 																			Optional: true,
 																			Elem: &schema.Resource{
 																				Schema: map[string]*schema.Schema{
@@ -189,7 +196,8 @@ func resourceVolterraK8SCluster() *schema.Resource {
 
 																		"vault_secret_info": {
 
-																			Type:       schema.TypeSet,
+																			Type:       schema.TypeList,
+																			MaxItems:   1,
 																			Optional:   true,
 																			Deprecated: "This field is deprecated and will be removed in future release.",
 																			Elem: &schema.Resource{
@@ -230,7 +238,8 @@ func resourceVolterraK8SCluster() *schema.Resource {
 
 																		"wingman_secret_info": {
 
-																			Type:       schema.TypeSet,
+																			Type:       schema.TypeList,
+																			MaxItems:   1,
 																			Optional:   true,
 																			Deprecated: "This field is deprecated and will be removed in future release.",
 																			Elem: &schema.Resource{
@@ -268,7 +277,8 @@ func resourceVolterraK8SCluster() *schema.Resource {
 
 									"dashboard": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -284,7 +294,8 @@ func resourceVolterraK8SCluster() *schema.Resource {
 
 									"metrics_server": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -300,7 +311,8 @@ func resourceVolterraK8SCluster() *schema.Resource {
 
 									"prometheus": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -328,7 +340,8 @@ func resourceVolterraK8SCluster() *schema.Resource {
 
 			"use_custom_cluster_role_bindings": {
 
-				Type:     schema.TypeSet,
+				Type:     schema.TypeList,
+				MaxItems: 1,
 				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
@@ -367,7 +380,8 @@ func resourceVolterraK8SCluster() *schema.Resource {
 
 			"use_custom_cluster_role_list": {
 
-				Type:     schema.TypeSet,
+				Type:     schema.TypeList,
+				MaxItems: 1,
 				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
@@ -430,7 +444,8 @@ func resourceVolterraK8SCluster() *schema.Resource {
 
 			"insecure_registry_list": {
 
-				Type:     schema.TypeSet,
+				Type:     schema.TypeList,
+				MaxItems: 1,
 				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
@@ -456,7 +471,8 @@ func resourceVolterraK8SCluster() *schema.Resource {
 
 			"local_access_config": {
 
-				Type:     schema.TypeSet,
+				Type:     schema.TypeList,
+				MaxItems: 1,
 				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
@@ -489,7 +505,8 @@ func resourceVolterraK8SCluster() *schema.Resource {
 
 			"use_custom_pod_security_admission": {
 
-				Type:     schema.TypeSet,
+				Type:     schema.TypeList,
+				MaxItems: 1,
 				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
@@ -518,7 +535,8 @@ func resourceVolterraK8SCluster() *schema.Resource {
 
 			"use_custom_psp_list": {
 
-				Type:     schema.TypeSet,
+				Type:     schema.TypeList,
+				MaxItems: 1,
 				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
@@ -634,320 +652,346 @@ func resourceVolterraK8SClusterCreate(d *schema.ResourceData, meta interface{}) 
 		appsChoiceInt.ClusterWideAppList = &ves_io_schema_k8s_cluster.ClusterWideAppListType{}
 		createSpec.AppsChoice = appsChoiceInt
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
+			if set != nil {
+				cs := set.(map[string]interface{})
 
-			if v, ok := cs["cluster_wide_apps"]; ok && !isIntfNil(v) {
+				if v, ok := cs["cluster_wide_apps"]; ok && !isIntfNil(v) {
 
-				sl := v.([]interface{})
-				clusterWideApps := make([]*ves_io_schema_k8s_cluster.ClusterWideAppType, len(sl))
-				appsChoiceInt.ClusterWideAppList.ClusterWideApps = clusterWideApps
-				for i, set := range sl {
-					clusterWideApps[i] = &ves_io_schema_k8s_cluster.ClusterWideAppType{}
-					clusterWideAppsMapStrToI := set.(map[string]interface{})
+					sl := v.([]interface{})
+					clusterWideApps := make([]*ves_io_schema_k8s_cluster.ClusterWideAppType, len(sl))
+					appsChoiceInt.ClusterWideAppList.ClusterWideApps = clusterWideApps
+					for i, set := range sl {
+						if set != nil {
+							clusterWideApps[i] = &ves_io_schema_k8s_cluster.ClusterWideAppType{}
+							clusterWideAppsMapStrToI := set.(map[string]interface{})
 
-					appChoiceTypeFound := false
+							appChoiceTypeFound := false
 
-					if v, ok := clusterWideAppsMapStrToI["argo_cd"]; ok && !isIntfNil(v) && !appChoiceTypeFound {
+							if v, ok := clusterWideAppsMapStrToI["argo_cd"]; ok && !isIntfNil(v) && !appChoiceTypeFound {
 
-						appChoiceTypeFound = true
-						appChoiceInt := &ves_io_schema_k8s_cluster.ClusterWideAppType_ArgoCd{}
-						appChoiceInt.ArgoCd = &ves_io_schema_k8s_cluster.ApplicationArgoCDType{}
-						clusterWideApps[i].AppChoice = appChoiceInt
+								appChoiceTypeFound = true
+								appChoiceInt := &ves_io_schema_k8s_cluster.ClusterWideAppType_ArgoCd{}
+								appChoiceInt.ArgoCd = &ves_io_schema_k8s_cluster.ApplicationArgoCDType{}
+								clusterWideApps[i].AppChoice = appChoiceInt
 
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
 
-							if v, ok := cs["generated_yaml"]; ok && !isIntfNil(v) {
+										if v, ok := cs["generated_yaml"]; ok && !isIntfNil(v) {
 
-								appChoiceInt.ArgoCd.GeneratedYaml = v.(string)
+											appChoiceInt.ArgoCd.GeneratedYaml = v.(string)
+
+										}
+
+										if v, ok := cs["local_domain"]; ok && !isIntfNil(v) {
+
+											sl := v.([]interface{})
+											localDomain := &ves_io_schema_k8s_cluster.LocalAccessArgoCDType{}
+											appChoiceInt.ArgoCd.LocalDomain = localDomain
+											for _, set := range sl {
+												if set != nil {
+													localDomainMapStrToI := set.(map[string]interface{})
+
+													if w, ok := localDomainMapStrToI["local_domain"]; ok && !isIntfNil(w) {
+														localDomain.LocalDomain = w.(string)
+													}
+
+													if v, ok := localDomainMapStrToI["password"]; ok && !isIntfNil(v) {
+
+														sl := v.([]interface{})
+														password := &ves_io_schema.SecretType{}
+														localDomain.Password = password
+														for _, set := range sl {
+															if set != nil {
+																passwordMapStrToI := set.(map[string]interface{})
+
+																if v, ok := passwordMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
+
+																	sl := v.([]interface{})
+																	blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
+																	password.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
+																	for _, set := range sl {
+																		if set != nil {
+																			blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
+
+																			if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
+																				blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
+																			}
+
+																			if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
+																				blindfoldSecretInfoInternal.Location = w.(string)
+																			}
+
+																			if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
+																				blindfoldSecretInfoInternal.StoreProvider = w.(string)
+																			}
+
+																		}
+																	}
+
+																}
+
+																if v, ok := passwordMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
+
+																	password.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+																}
+
+																secretInfoOneofTypeFound := false
+
+																if v, ok := passwordMapStrToI["blindfold_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																	secretInfoOneofTypeFound = true
+																	secretInfoOneofInt := &ves_io_schema.SecretType_BlindfoldSecretInfo{}
+																	secretInfoOneofInt.BlindfoldSecretInfo = &ves_io_schema.BlindfoldSecretInfoType{}
+																	password.SecretInfoOneof = secretInfoOneofInt
+
+																	sl := v.([]interface{})
+																	for _, set := range sl {
+																		if set != nil {
+																			cs := set.(map[string]interface{})
+
+																			if v, ok := cs["decryption_provider"]; ok && !isIntfNil(v) {
+
+																				secretInfoOneofInt.BlindfoldSecretInfo.DecryptionProvider = v.(string)
+
+																			}
+
+																			if v, ok := cs["location"]; ok && !isIntfNil(v) {
+
+																				secretInfoOneofInt.BlindfoldSecretInfo.Location = v.(string)
+
+																			}
+
+																			if v, ok := cs["store_provider"]; ok && !isIntfNil(v) {
+
+																				secretInfoOneofInt.BlindfoldSecretInfo.StoreProvider = v.(string)
+
+																			}
+
+																		}
+																	}
+
+																}
+
+																if v, ok := passwordMapStrToI["clear_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																	secretInfoOneofTypeFound = true
+																	secretInfoOneofInt := &ves_io_schema.SecretType_ClearSecretInfo{}
+																	secretInfoOneofInt.ClearSecretInfo = &ves_io_schema.ClearSecretInfoType{}
+																	password.SecretInfoOneof = secretInfoOneofInt
+
+																	sl := v.([]interface{})
+																	for _, set := range sl {
+																		if set != nil {
+																			cs := set.(map[string]interface{})
+
+																			if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+
+																				secretInfoOneofInt.ClearSecretInfo.Provider = v.(string)
+
+																			}
+
+																			if v, ok := cs["url"]; ok && !isIntfNil(v) {
+
+																				secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+
+																			}
+
+																		}
+																	}
+
+																}
+
+																if v, ok := passwordMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																	secretInfoOneofTypeFound = true
+																	secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
+																	secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
+																	password.SecretInfoOneof = secretInfoOneofInt
+
+																	sl := v.([]interface{})
+																	for _, set := range sl {
+																		if set != nil {
+																			cs := set.(map[string]interface{})
+
+																			if v, ok := cs["key"]; ok && !isIntfNil(v) {
+
+																				secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
+																			}
+
+																			if v, ok := cs["location"]; ok && !isIntfNil(v) {
+
+																				secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
+																			}
+
+																			if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+
+																				secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
+																			}
+
+																			if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
+
+																				secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+																			}
+
+																			if v, ok := cs["version"]; ok && !isIntfNil(v) {
+
+																				secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
+																			}
+
+																		}
+																	}
+
+																}
+
+																if v, ok := passwordMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																	secretInfoOneofTypeFound = true
+																	secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
+																	secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
+																	password.SecretInfoOneof = secretInfoOneofInt
+
+																	sl := v.([]interface{})
+																	for _, set := range sl {
+																		if set != nil {
+																			cs := set.(map[string]interface{})
+
+																			if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+																				secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
+
+																			}
+
+																		}
+																	}
+
+																}
+
+															}
+														}
+
+													}
+
+													portChoiceTypeFound := false
+
+													if v, ok := localDomainMapStrToI["default_port"]; ok && !isIntfNil(v) && !portChoiceTypeFound {
+
+														portChoiceTypeFound = true
+
+														if v.(bool) {
+															portChoiceInt := &ves_io_schema_k8s_cluster.LocalAccessArgoCDType_DefaultPort{}
+															portChoiceInt.DefaultPort = &ves_io_schema.Empty{}
+															localDomain.PortChoice = portChoiceInt
+														}
+
+													}
+
+													if v, ok := localDomainMapStrToI["port"]; ok && !isIntfNil(v) && !portChoiceTypeFound {
+
+														portChoiceTypeFound = true
+														portChoiceInt := &ves_io_schema_k8s_cluster.LocalAccessArgoCDType_Port{}
+
+														localDomain.PortChoice = portChoiceInt
+
+														portChoiceInt.Port = uint32(v.(int))
+
+													}
+
+												}
+											}
+
+										}
+
+									}
+								}
 
 							}
 
-							if v, ok := cs["local_domain"]; ok && !isIntfNil(v) {
+							if v, ok := clusterWideAppsMapStrToI["dashboard"]; ok && !isIntfNil(v) && !appChoiceTypeFound {
 
-								sl := v.(*schema.Set).List()
-								localDomain := &ves_io_schema_k8s_cluster.LocalAccessArgoCDType{}
-								appChoiceInt.ArgoCd.LocalDomain = localDomain
+								appChoiceTypeFound = true
+								appChoiceInt := &ves_io_schema_k8s_cluster.ClusterWideAppType_Dashboard{}
+								appChoiceInt.Dashboard = &ves_io_schema_k8s_cluster.ApplicationDashboardType{}
+								clusterWideApps[i].AppChoice = appChoiceInt
+
+								sl := v.([]interface{})
 								for _, set := range sl {
-									localDomainMapStrToI := set.(map[string]interface{})
+									if set != nil {
+										cs := set.(map[string]interface{})
 
-									if w, ok := localDomainMapStrToI["local_domain"]; ok && !isIntfNil(w) {
-										localDomain.LocalDomain = w.(string)
-									}
+										if v, ok := cs["generated_yaml"]; ok && !isIntfNil(v) {
 
-									if v, ok := localDomainMapStrToI["password"]; ok && !isIntfNil(v) {
-
-										sl := v.(*schema.Set).List()
-										password := &ves_io_schema.SecretType{}
-										localDomain.Password = password
-										for _, set := range sl {
-											passwordMapStrToI := set.(map[string]interface{})
-
-											if v, ok := passwordMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
-
-												sl := v.(*schema.Set).List()
-												blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
-												password.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
-												for _, set := range sl {
-													blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
-
-													if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
-														blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
-													}
-
-													if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
-														blindfoldSecretInfoInternal.Location = w.(string)
-													}
-
-													if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
-														blindfoldSecretInfoInternal.StoreProvider = w.(string)
-													}
-
-												}
-
-											}
-
-											if v, ok := passwordMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
-
-												password.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
-
-											}
-
-											secretInfoOneofTypeFound := false
-
-											if v, ok := passwordMapStrToI["blindfold_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
-
-												secretInfoOneofTypeFound = true
-												secretInfoOneofInt := &ves_io_schema.SecretType_BlindfoldSecretInfo{}
-												secretInfoOneofInt.BlindfoldSecretInfo = &ves_io_schema.BlindfoldSecretInfoType{}
-												password.SecretInfoOneof = secretInfoOneofInt
-
-												sl := v.(*schema.Set).List()
-												for _, set := range sl {
-													cs := set.(map[string]interface{})
-
-													if v, ok := cs["decryption_provider"]; ok && !isIntfNil(v) {
-
-														secretInfoOneofInt.BlindfoldSecretInfo.DecryptionProvider = v.(string)
-
-													}
-
-													if v, ok := cs["location"]; ok && !isIntfNil(v) {
-
-														secretInfoOneofInt.BlindfoldSecretInfo.Location = v.(string)
-
-													}
-
-													if v, ok := cs["store_provider"]; ok && !isIntfNil(v) {
-
-														secretInfoOneofInt.BlindfoldSecretInfo.StoreProvider = v.(string)
-
-													}
-
-												}
-
-											}
-
-											if v, ok := passwordMapStrToI["clear_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
-
-												secretInfoOneofTypeFound = true
-												secretInfoOneofInt := &ves_io_schema.SecretType_ClearSecretInfo{}
-												secretInfoOneofInt.ClearSecretInfo = &ves_io_schema.ClearSecretInfoType{}
-												password.SecretInfoOneof = secretInfoOneofInt
-
-												sl := v.(*schema.Set).List()
-												for _, set := range sl {
-													cs := set.(map[string]interface{})
-
-													if v, ok := cs["provider"]; ok && !isIntfNil(v) {
-
-														secretInfoOneofInt.ClearSecretInfo.Provider = v.(string)
-
-													}
-
-													if v, ok := cs["url"]; ok && !isIntfNil(v) {
-
-														secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
-
-													}
-
-												}
-
-											}
-
-											if v, ok := passwordMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
-
-												secretInfoOneofTypeFound = true
-												secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
-												secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
-												password.SecretInfoOneof = secretInfoOneofInt
-
-												sl := v.(*schema.Set).List()
-												for _, set := range sl {
-													cs := set.(map[string]interface{})
-
-													if v, ok := cs["key"]; ok && !isIntfNil(v) {
-
-														secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
-
-													}
-
-													if v, ok := cs["location"]; ok && !isIntfNil(v) {
-
-														secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
-
-													}
-
-													if v, ok := cs["provider"]; ok && !isIntfNil(v) {
-
-														secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
-
-													}
-
-													if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
-
-														secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
-
-													}
-
-													if v, ok := cs["version"]; ok && !isIntfNil(v) {
-
-														secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
-
-													}
-
-												}
-
-											}
-
-											if v, ok := passwordMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
-
-												secretInfoOneofTypeFound = true
-												secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
-												secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
-												password.SecretInfoOneof = secretInfoOneofInt
-
-												sl := v.(*schema.Set).List()
-												for _, set := range sl {
-													cs := set.(map[string]interface{})
-
-													if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-														secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
-
-													}
-
-												}
-
-											}
+											appChoiceInt.Dashboard.GeneratedYaml = v.(string)
 
 										}
 
 									}
+								}
 
-									portChoiceTypeFound := false
+							}
 
-									if v, ok := localDomainMapStrToI["default_port"]; ok && !isIntfNil(v) && !portChoiceTypeFound {
+							if v, ok := clusterWideAppsMapStrToI["metrics_server"]; ok && !isIntfNil(v) && !appChoiceTypeFound {
 
-										portChoiceTypeFound = true
+								appChoiceTypeFound = true
+								appChoiceInt := &ves_io_schema_k8s_cluster.ClusterWideAppType_MetricsServer{}
+								appChoiceInt.MetricsServer = &ves_io_schema_k8s_cluster.ApplicationMetricsServerType{}
+								clusterWideApps[i].AppChoice = appChoiceInt
 
-										if v.(bool) {
-											portChoiceInt := &ves_io_schema_k8s_cluster.LocalAccessArgoCDType_DefaultPort{}
-											portChoiceInt.DefaultPort = &ves_io_schema.Empty{}
-											localDomain.PortChoice = portChoiceInt
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["generated_yaml"]; ok && !isIntfNil(v) {
+
+											appChoiceInt.MetricsServer.GeneratedYaml = v.(string)
+
 										}
 
 									}
+								}
 
-									if v, ok := localDomainMapStrToI["port"]; ok && !isIntfNil(v) && !portChoiceTypeFound {
+							}
 
-										portChoiceTypeFound = true
-										portChoiceInt := &ves_io_schema_k8s_cluster.LocalAccessArgoCDType_Port{}
+							if v, ok := clusterWideAppsMapStrToI["prometheus"]; ok && !isIntfNil(v) && !appChoiceTypeFound {
 
-										localDomain.PortChoice = portChoiceInt
+								appChoiceTypeFound = true
+								appChoiceInt := &ves_io_schema_k8s_cluster.ClusterWideAppType_Prometheus{}
+								appChoiceInt.Prometheus = &ves_io_schema_k8s_cluster.ApplicationPrometheusType{}
+								clusterWideApps[i].AppChoice = appChoiceInt
 
-										portChoiceInt.Port = uint32(v.(int))
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["generated_yaml"]; ok && !isIntfNil(v) {
+
+											appChoiceInt.Prometheus.GeneratedYaml = v.(string)
+
+										}
 
 									}
-
 								}
 
 							}
 
 						}
-
-					}
-
-					if v, ok := clusterWideAppsMapStrToI["dashboard"]; ok && !isIntfNil(v) && !appChoiceTypeFound {
-
-						appChoiceTypeFound = true
-						appChoiceInt := &ves_io_schema_k8s_cluster.ClusterWideAppType_Dashboard{}
-						appChoiceInt.Dashboard = &ves_io_schema_k8s_cluster.ApplicationDashboardType{}
-						clusterWideApps[i].AppChoice = appChoiceInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["generated_yaml"]; ok && !isIntfNil(v) {
-
-								appChoiceInt.Dashboard.GeneratedYaml = v.(string)
-
-							}
-
-						}
-
-					}
-
-					if v, ok := clusterWideAppsMapStrToI["metrics_server"]; ok && !isIntfNil(v) && !appChoiceTypeFound {
-
-						appChoiceTypeFound = true
-						appChoiceInt := &ves_io_schema_k8s_cluster.ClusterWideAppType_MetricsServer{}
-						appChoiceInt.MetricsServer = &ves_io_schema_k8s_cluster.ApplicationMetricsServerType{}
-						clusterWideApps[i].AppChoice = appChoiceInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["generated_yaml"]; ok && !isIntfNil(v) {
-
-								appChoiceInt.MetricsServer.GeneratedYaml = v.(string)
-
-							}
-
-						}
-
-					}
-
-					if v, ok := clusterWideAppsMapStrToI["prometheus"]; ok && !isIntfNil(v) && !appChoiceTypeFound {
-
-						appChoiceTypeFound = true
-						appChoiceInt := &ves_io_schema_k8s_cluster.ClusterWideAppType_Prometheus{}
-						appChoiceInt.Prometheus = &ves_io_schema_k8s_cluster.ApplicationPrometheusType{}
-						clusterWideApps[i].AppChoice = appChoiceInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["generated_yaml"]; ok && !isIntfNil(v) {
-
-								appChoiceInt.Prometheus.GeneratedYaml = v.(string)
-
-							}
-
-						}
-
 					}
 
 				}
 
 			}
-
 		}
 
 	}
@@ -975,36 +1019,38 @@ func resourceVolterraK8SClusterCreate(d *schema.ResourceData, meta interface{}) 
 		clusterRoleBindingsChoiceInt.UseCustomClusterRoleBindings = &ves_io_schema_k8s_cluster.ClusterRoleBindingListType{}
 		createSpec.ClusterRoleBindingsChoice = clusterRoleBindingsChoiceInt
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
+			if set != nil {
+				cs := set.(map[string]interface{})
 
-			if v, ok := cs["cluster_role_bindings"]; ok && !isIntfNil(v) {
+				if v, ok := cs["cluster_role_bindings"]; ok && !isIntfNil(v) {
 
-				sl := v.([]interface{})
-				clusterRoleBindingsIntNew := make([]*ves_io_schema_views.ObjectRefType, len(sl))
-				clusterRoleBindingsChoiceInt.UseCustomClusterRoleBindings.ClusterRoleBindings = clusterRoleBindingsIntNew
-				for i, ps := range sl {
+					sl := v.([]interface{})
+					clusterRoleBindingsIntNew := make([]*ves_io_schema_views.ObjectRefType, len(sl))
+					clusterRoleBindingsChoiceInt.UseCustomClusterRoleBindings.ClusterRoleBindings = clusterRoleBindingsIntNew
+					for i, ps := range sl {
 
-					crbMapToStrVal := ps.(map[string]interface{})
-					clusterRoleBindingsIntNew[i] = &ves_io_schema_views.ObjectRefType{}
+						crbMapToStrVal := ps.(map[string]interface{})
+						clusterRoleBindingsIntNew[i] = &ves_io_schema_views.ObjectRefType{}
 
-					if v, ok := crbMapToStrVal["name"]; ok && !isIntfNil(v) {
-						clusterRoleBindingsIntNew[i].Name = v.(string)
-					}
+						if v, ok := crbMapToStrVal["name"]; ok && !isIntfNil(v) {
+							clusterRoleBindingsIntNew[i].Name = v.(string)
+						}
 
-					if v, ok := crbMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-						clusterRoleBindingsIntNew[i].Namespace = v.(string)
-					}
+						if v, ok := crbMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+							clusterRoleBindingsIntNew[i].Namespace = v.(string)
+						}
 
-					if v, ok := crbMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-						clusterRoleBindingsIntNew[i].Tenant = v.(string)
+						if v, ok := crbMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+							clusterRoleBindingsIntNew[i].Tenant = v.(string)
+						}
+
 					}
 
 				}
 
 			}
-
 		}
 
 	}
@@ -1032,36 +1078,38 @@ func resourceVolterraK8SClusterCreate(d *schema.ResourceData, meta interface{}) 
 		clusterRoleChoiceInt.UseCustomClusterRoleList = &ves_io_schema_k8s_cluster.ClusterRoleListType{}
 		createSpec.ClusterRoleChoice = clusterRoleChoiceInt
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
+			if set != nil {
+				cs := set.(map[string]interface{})
 
-			if v, ok := cs["cluster_roles"]; ok && !isIntfNil(v) {
+				if v, ok := cs["cluster_roles"]; ok && !isIntfNil(v) {
 
-				sl := v.([]interface{})
-				clusterRolesInt := make([]*ves_io_schema_views.ObjectRefType, len(sl))
-				clusterRoleChoiceInt.UseCustomClusterRoleList.ClusterRoles = clusterRolesInt
-				for i, ps := range sl {
+					sl := v.([]interface{})
+					clusterRolesInt := make([]*ves_io_schema_views.ObjectRefType, len(sl))
+					clusterRoleChoiceInt.UseCustomClusterRoleList.ClusterRoles = clusterRolesInt
+					for i, ps := range sl {
 
-					crMapToStrVal := ps.(map[string]interface{})
-					clusterRolesInt[i] = &ves_io_schema_views.ObjectRefType{}
+						crMapToStrVal := ps.(map[string]interface{})
+						clusterRolesInt[i] = &ves_io_schema_views.ObjectRefType{}
 
-					if v, ok := crMapToStrVal["name"]; ok && !isIntfNil(v) {
-						clusterRolesInt[i].Name = v.(string)
-					}
+						if v, ok := crMapToStrVal["name"]; ok && !isIntfNil(v) {
+							clusterRolesInt[i].Name = v.(string)
+						}
 
-					if v, ok := crMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-						clusterRolesInt[i].Namespace = v.(string)
-					}
+						if v, ok := crMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+							clusterRolesInt[i].Namespace = v.(string)
+						}
 
-					if v, ok := crMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-						clusterRolesInt[i].Tenant = v.(string)
+						if v, ok := crMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+							clusterRolesInt[i].Tenant = v.(string)
+						}
+
 					}
 
 				}
 
 			}
-
 		}
 
 	}
@@ -1145,20 +1193,22 @@ func resourceVolterraK8SClusterCreate(d *schema.ResourceData, meta interface{}) 
 		insecureRegistriesChoiceInt.InsecureRegistryList = &ves_io_schema_k8s_cluster.InsecureRegistryListType{}
 		createSpec.InsecureRegistriesChoice = insecureRegistriesChoiceInt
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
+			if set != nil {
+				cs := set.(map[string]interface{})
 
-			if v, ok := cs["insecure_registries"]; ok && !isIntfNil(v) {
+				if v, ok := cs["insecure_registries"]; ok && !isIntfNil(v) {
 
-				ls := make([]string, len(v.([]interface{})))
-				for i, v := range v.([]interface{}) {
-					ls[i] = v.(string)
+					ls := make([]string, len(v.([]interface{})))
+					for i, v := range v.([]interface{}) {
+						ls[i] = v.(string)
+					}
+					insecureRegistriesChoiceInt.InsecureRegistryList.InsecureRegistries = ls
+
 				}
-				insecureRegistriesChoiceInt.InsecureRegistryList.InsecureRegistries = ls
 
 			}
-
 		}
 
 	}
@@ -1186,41 +1236,43 @@ func resourceVolterraK8SClusterCreate(d *schema.ResourceData, meta interface{}) 
 		localAccessChoiceInt.LocalAccessConfig = &ves_io_schema_k8s_cluster.LocalAccessConfigType{}
 		createSpec.LocalAccessChoice = localAccessChoiceInt
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
+			if set != nil {
+				cs := set.(map[string]interface{})
 
-			if v, ok := cs["local_domain"]; ok && !isIntfNil(v) {
+				if v, ok := cs["local_domain"]; ok && !isIntfNil(v) {
 
-				localAccessChoiceInt.LocalAccessConfig.LocalDomain = v.(string)
+					localAccessChoiceInt.LocalAccessConfig.LocalDomain = v.(string)
 
-			}
+				}
 
-			portChoiceTypeFound := false
+				portChoiceTypeFound := false
 
-			if v, ok := cs["default_port"]; ok && !isIntfNil(v) && !portChoiceTypeFound {
+				if v, ok := cs["default_port"]; ok && !isIntfNil(v) && !portChoiceTypeFound {
 
-				portChoiceTypeFound = true
+					portChoiceTypeFound = true
 
-				if v.(bool) {
-					portChoiceInt := &ves_io_schema_k8s_cluster.LocalAccessConfigType_DefaultPort{}
-					portChoiceInt.DefaultPort = &ves_io_schema.Empty{}
+					if v.(bool) {
+						portChoiceInt := &ves_io_schema_k8s_cluster.LocalAccessConfigType_DefaultPort{}
+						portChoiceInt.DefaultPort = &ves_io_schema.Empty{}
+						localAccessChoiceInt.LocalAccessConfig.PortChoice = portChoiceInt
+					}
+
+				}
+
+				if v, ok := cs["port"]; ok && !isIntfNil(v) && !portChoiceTypeFound {
+
+					portChoiceTypeFound = true
+					portChoiceInt := &ves_io_schema_k8s_cluster.LocalAccessConfigType_Port{}
+
 					localAccessChoiceInt.LocalAccessConfig.PortChoice = portChoiceInt
+
+					portChoiceInt.Port = uint32(v.(int))
+
 				}
 
 			}
-
-			if v, ok := cs["port"]; ok && !isIntfNil(v) && !portChoiceTypeFound {
-
-				portChoiceTypeFound = true
-				portChoiceInt := &ves_io_schema_k8s_cluster.LocalAccessConfigType_Port{}
-
-				localAccessChoiceInt.LocalAccessConfig.PortChoice = portChoiceInt
-
-				portChoiceInt.Port = uint32(v.(int))
-
-			}
-
 		}
 
 	}
@@ -1248,28 +1300,30 @@ func resourceVolterraK8SClusterCreate(d *schema.ResourceData, meta interface{}) 
 		podSecurityAdmissionChoiceInt.UseCustomPodSecurityAdmission = &ves_io_schema_views.ObjectRefType{}
 		createSpec.PodSecurityAdmissionChoice = podSecurityAdmissionChoiceInt
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
+			if set != nil {
+				cs := set.(map[string]interface{})
 
-			if v, ok := cs["name"]; ok && !isIntfNil(v) {
+				if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
-				podSecurityAdmissionChoiceInt.UseCustomPodSecurityAdmission.Name = v.(string)
+					podSecurityAdmissionChoiceInt.UseCustomPodSecurityAdmission.Name = v.(string)
+
+				}
+
+				if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+					podSecurityAdmissionChoiceInt.UseCustomPodSecurityAdmission.Namespace = v.(string)
+
+				}
+
+				if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+					podSecurityAdmissionChoiceInt.UseCustomPodSecurityAdmission.Tenant = v.(string)
+
+				}
 
 			}
-
-			if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
-
-				podSecurityAdmissionChoiceInt.UseCustomPodSecurityAdmission.Namespace = v.(string)
-
-			}
-
-			if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
-
-				podSecurityAdmissionChoiceInt.UseCustomPodSecurityAdmission.Tenant = v.(string)
-
-			}
-
 		}
 
 	}
@@ -1297,36 +1351,38 @@ func resourceVolterraK8SClusterCreate(d *schema.ResourceData, meta interface{}) 
 		podSecurityPolicyChoiceInt.UseCustomPspList = &ves_io_schema_k8s_cluster.PodSecurityPolicyListType{}
 		createSpec.PodSecurityPolicyChoice = podSecurityPolicyChoiceInt
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
+			if set != nil {
+				cs := set.(map[string]interface{})
 
-			if v, ok := cs["pod_security_policies"]; ok && !isIntfNil(v) {
+				if v, ok := cs["pod_security_policies"]; ok && !isIntfNil(v) {
 
-				sl := v.([]interface{})
-				podSecurityPoliciesInt := make([]*ves_io_schema_views.ObjectRefType, len(sl))
-				podSecurityPolicyChoiceInt.UseCustomPspList.PodSecurityPolicies = podSecurityPoliciesInt
-				for i, ps := range sl {
+					sl := v.([]interface{})
+					podSecurityPoliciesInt := make([]*ves_io_schema_views.ObjectRefType, len(sl))
+					podSecurityPolicyChoiceInt.UseCustomPspList.PodSecurityPolicies = podSecurityPoliciesInt
+					for i, ps := range sl {
 
-					pspMapToStrVal := ps.(map[string]interface{})
-					podSecurityPoliciesInt[i] = &ves_io_schema_views.ObjectRefType{}
+						pspMapToStrVal := ps.(map[string]interface{})
+						podSecurityPoliciesInt[i] = &ves_io_schema_views.ObjectRefType{}
 
-					if v, ok := pspMapToStrVal["name"]; ok && !isIntfNil(v) {
-						podSecurityPoliciesInt[i].Name = v.(string)
-					}
+						if v, ok := pspMapToStrVal["name"]; ok && !isIntfNil(v) {
+							podSecurityPoliciesInt[i].Name = v.(string)
+						}
 
-					if v, ok := pspMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-						podSecurityPoliciesInt[i].Namespace = v.(string)
-					}
+						if v, ok := pspMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+							podSecurityPoliciesInt[i].Namespace = v.(string)
+						}
 
-					if v, ok := pspMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-						podSecurityPoliciesInt[i].Tenant = v.(string)
+						if v, ok := pspMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+							podSecurityPoliciesInt[i].Tenant = v.(string)
+						}
+
 					}
 
 				}
 
 			}
-
 		}
 
 	}
@@ -1479,320 +1535,346 @@ func resourceVolterraK8SClusterUpdate(d *schema.ResourceData, meta interface{}) 
 		appsChoiceInt.ClusterWideAppList = &ves_io_schema_k8s_cluster.ClusterWideAppListType{}
 		updateSpec.AppsChoice = appsChoiceInt
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
+			if set != nil {
+				cs := set.(map[string]interface{})
 
-			if v, ok := cs["cluster_wide_apps"]; ok && !isIntfNil(v) {
+				if v, ok := cs["cluster_wide_apps"]; ok && !isIntfNil(v) {
 
-				sl := v.([]interface{})
-				clusterWideApps := make([]*ves_io_schema_k8s_cluster.ClusterWideAppType, len(sl))
-				appsChoiceInt.ClusterWideAppList.ClusterWideApps = clusterWideApps
-				for i, set := range sl {
-					clusterWideApps[i] = &ves_io_schema_k8s_cluster.ClusterWideAppType{}
-					clusterWideAppsMapStrToI := set.(map[string]interface{})
+					sl := v.([]interface{})
+					clusterWideApps := make([]*ves_io_schema_k8s_cluster.ClusterWideAppType, len(sl))
+					appsChoiceInt.ClusterWideAppList.ClusterWideApps = clusterWideApps
+					for i, set := range sl {
+						if set != nil {
+							clusterWideApps[i] = &ves_io_schema_k8s_cluster.ClusterWideAppType{}
+							clusterWideAppsMapStrToI := set.(map[string]interface{})
 
-					appChoiceTypeFound := false
+							appChoiceTypeFound := false
 
-					if v, ok := clusterWideAppsMapStrToI["argo_cd"]; ok && !isIntfNil(v) && !appChoiceTypeFound {
+							if v, ok := clusterWideAppsMapStrToI["argo_cd"]; ok && !isIntfNil(v) && !appChoiceTypeFound {
 
-						appChoiceTypeFound = true
-						appChoiceInt := &ves_io_schema_k8s_cluster.ClusterWideAppType_ArgoCd{}
-						appChoiceInt.ArgoCd = &ves_io_schema_k8s_cluster.ApplicationArgoCDType{}
-						clusterWideApps[i].AppChoice = appChoiceInt
+								appChoiceTypeFound = true
+								appChoiceInt := &ves_io_schema_k8s_cluster.ClusterWideAppType_ArgoCd{}
+								appChoiceInt.ArgoCd = &ves_io_schema_k8s_cluster.ApplicationArgoCDType{}
+								clusterWideApps[i].AppChoice = appChoiceInt
 
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
 
-							if v, ok := cs["generated_yaml"]; ok && !isIntfNil(v) {
+										if v, ok := cs["generated_yaml"]; ok && !isIntfNil(v) {
 
-								appChoiceInt.ArgoCd.GeneratedYaml = v.(string)
+											appChoiceInt.ArgoCd.GeneratedYaml = v.(string)
+
+										}
+
+										if v, ok := cs["local_domain"]; ok && !isIntfNil(v) {
+
+											sl := v.([]interface{})
+											localDomain := &ves_io_schema_k8s_cluster.LocalAccessArgoCDType{}
+											appChoiceInt.ArgoCd.LocalDomain = localDomain
+											for _, set := range sl {
+												if set != nil {
+													localDomainMapStrToI := set.(map[string]interface{})
+
+													if w, ok := localDomainMapStrToI["local_domain"]; ok && !isIntfNil(w) {
+														localDomain.LocalDomain = w.(string)
+													}
+
+													if v, ok := localDomainMapStrToI["password"]; ok && !isIntfNil(v) {
+
+														sl := v.([]interface{})
+														password := &ves_io_schema.SecretType{}
+														localDomain.Password = password
+														for _, set := range sl {
+															if set != nil {
+																passwordMapStrToI := set.(map[string]interface{})
+
+																if v, ok := passwordMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
+
+																	sl := v.([]interface{})
+																	blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
+																	password.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
+																	for _, set := range sl {
+																		if set != nil {
+																			blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
+
+																			if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
+																				blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
+																			}
+
+																			if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
+																				blindfoldSecretInfoInternal.Location = w.(string)
+																			}
+
+																			if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
+																				blindfoldSecretInfoInternal.StoreProvider = w.(string)
+																			}
+
+																		}
+																	}
+
+																}
+
+																if v, ok := passwordMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
+
+																	password.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+																}
+
+																secretInfoOneofTypeFound := false
+
+																if v, ok := passwordMapStrToI["blindfold_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																	secretInfoOneofTypeFound = true
+																	secretInfoOneofInt := &ves_io_schema.SecretType_BlindfoldSecretInfo{}
+																	secretInfoOneofInt.BlindfoldSecretInfo = &ves_io_schema.BlindfoldSecretInfoType{}
+																	password.SecretInfoOneof = secretInfoOneofInt
+
+																	sl := v.([]interface{})
+																	for _, set := range sl {
+																		if set != nil {
+																			cs := set.(map[string]interface{})
+
+																			if v, ok := cs["decryption_provider"]; ok && !isIntfNil(v) {
+
+																				secretInfoOneofInt.BlindfoldSecretInfo.DecryptionProvider = v.(string)
+
+																			}
+
+																			if v, ok := cs["location"]; ok && !isIntfNil(v) {
+
+																				secretInfoOneofInt.BlindfoldSecretInfo.Location = v.(string)
+
+																			}
+
+																			if v, ok := cs["store_provider"]; ok && !isIntfNil(v) {
+
+																				secretInfoOneofInt.BlindfoldSecretInfo.StoreProvider = v.(string)
+
+																			}
+
+																		}
+																	}
+
+																}
+
+																if v, ok := passwordMapStrToI["clear_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																	secretInfoOneofTypeFound = true
+																	secretInfoOneofInt := &ves_io_schema.SecretType_ClearSecretInfo{}
+																	secretInfoOneofInt.ClearSecretInfo = &ves_io_schema.ClearSecretInfoType{}
+																	password.SecretInfoOneof = secretInfoOneofInt
+
+																	sl := v.([]interface{})
+																	for _, set := range sl {
+																		if set != nil {
+																			cs := set.(map[string]interface{})
+
+																			if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+
+																				secretInfoOneofInt.ClearSecretInfo.Provider = v.(string)
+
+																			}
+
+																			if v, ok := cs["url"]; ok && !isIntfNil(v) {
+
+																				secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+
+																			}
+
+																		}
+																	}
+
+																}
+
+																if v, ok := passwordMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																	secretInfoOneofTypeFound = true
+																	secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
+																	secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
+																	password.SecretInfoOneof = secretInfoOneofInt
+
+																	sl := v.([]interface{})
+																	for _, set := range sl {
+																		if set != nil {
+																			cs := set.(map[string]interface{})
+
+																			if v, ok := cs["key"]; ok && !isIntfNil(v) {
+
+																				secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
+																			}
+
+																			if v, ok := cs["location"]; ok && !isIntfNil(v) {
+
+																				secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
+																			}
+
+																			if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+
+																				secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
+																			}
+
+																			if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
+
+																				secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+																			}
+
+																			if v, ok := cs["version"]; ok && !isIntfNil(v) {
+
+																				secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
+																			}
+
+																		}
+																	}
+
+																}
+
+																if v, ok := passwordMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																	secretInfoOneofTypeFound = true
+																	secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
+																	secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
+																	password.SecretInfoOneof = secretInfoOneofInt
+
+																	sl := v.([]interface{})
+																	for _, set := range sl {
+																		if set != nil {
+																			cs := set.(map[string]interface{})
+
+																			if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+																				secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
+
+																			}
+
+																		}
+																	}
+
+																}
+
+															}
+														}
+
+													}
+
+													portChoiceTypeFound := false
+
+													if v, ok := localDomainMapStrToI["default_port"]; ok && !isIntfNil(v) && !portChoiceTypeFound {
+
+														portChoiceTypeFound = true
+
+														if v.(bool) {
+															portChoiceInt := &ves_io_schema_k8s_cluster.LocalAccessArgoCDType_DefaultPort{}
+															portChoiceInt.DefaultPort = &ves_io_schema.Empty{}
+															localDomain.PortChoice = portChoiceInt
+														}
+
+													}
+
+													if v, ok := localDomainMapStrToI["port"]; ok && !isIntfNil(v) && !portChoiceTypeFound {
+
+														portChoiceTypeFound = true
+														portChoiceInt := &ves_io_schema_k8s_cluster.LocalAccessArgoCDType_Port{}
+
+														localDomain.PortChoice = portChoiceInt
+
+														portChoiceInt.Port = uint32(v.(int))
+
+													}
+
+												}
+											}
+
+										}
+
+									}
+								}
 
 							}
 
-							if v, ok := cs["local_domain"]; ok && !isIntfNil(v) {
+							if v, ok := clusterWideAppsMapStrToI["dashboard"]; ok && !isIntfNil(v) && !appChoiceTypeFound {
 
-								sl := v.(*schema.Set).List()
-								localDomain := &ves_io_schema_k8s_cluster.LocalAccessArgoCDType{}
-								appChoiceInt.ArgoCd.LocalDomain = localDomain
+								appChoiceTypeFound = true
+								appChoiceInt := &ves_io_schema_k8s_cluster.ClusterWideAppType_Dashboard{}
+								appChoiceInt.Dashboard = &ves_io_schema_k8s_cluster.ApplicationDashboardType{}
+								clusterWideApps[i].AppChoice = appChoiceInt
+
+								sl := v.([]interface{})
 								for _, set := range sl {
-									localDomainMapStrToI := set.(map[string]interface{})
+									if set != nil {
+										cs := set.(map[string]interface{})
 
-									if w, ok := localDomainMapStrToI["local_domain"]; ok && !isIntfNil(w) {
-										localDomain.LocalDomain = w.(string)
-									}
+										if v, ok := cs["generated_yaml"]; ok && !isIntfNil(v) {
 
-									if v, ok := localDomainMapStrToI["password"]; ok && !isIntfNil(v) {
-
-										sl := v.(*schema.Set).List()
-										password := &ves_io_schema.SecretType{}
-										localDomain.Password = password
-										for _, set := range sl {
-											passwordMapStrToI := set.(map[string]interface{})
-
-											if v, ok := passwordMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
-
-												sl := v.(*schema.Set).List()
-												blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
-												password.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
-												for _, set := range sl {
-													blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
-
-													if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
-														blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
-													}
-
-													if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
-														blindfoldSecretInfoInternal.Location = w.(string)
-													}
-
-													if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
-														blindfoldSecretInfoInternal.StoreProvider = w.(string)
-													}
-
-												}
-
-											}
-
-											if v, ok := passwordMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
-
-												password.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
-
-											}
-
-											secretInfoOneofTypeFound := false
-
-											if v, ok := passwordMapStrToI["blindfold_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
-
-												secretInfoOneofTypeFound = true
-												secretInfoOneofInt := &ves_io_schema.SecretType_BlindfoldSecretInfo{}
-												secretInfoOneofInt.BlindfoldSecretInfo = &ves_io_schema.BlindfoldSecretInfoType{}
-												password.SecretInfoOneof = secretInfoOneofInt
-
-												sl := v.(*schema.Set).List()
-												for _, set := range sl {
-													cs := set.(map[string]interface{})
-
-													if v, ok := cs["decryption_provider"]; ok && !isIntfNil(v) {
-
-														secretInfoOneofInt.BlindfoldSecretInfo.DecryptionProvider = v.(string)
-
-													}
-
-													if v, ok := cs["location"]; ok && !isIntfNil(v) {
-
-														secretInfoOneofInt.BlindfoldSecretInfo.Location = v.(string)
-
-													}
-
-													if v, ok := cs["store_provider"]; ok && !isIntfNil(v) {
-
-														secretInfoOneofInt.BlindfoldSecretInfo.StoreProvider = v.(string)
-
-													}
-
-												}
-
-											}
-
-											if v, ok := passwordMapStrToI["clear_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
-
-												secretInfoOneofTypeFound = true
-												secretInfoOneofInt := &ves_io_schema.SecretType_ClearSecretInfo{}
-												secretInfoOneofInt.ClearSecretInfo = &ves_io_schema.ClearSecretInfoType{}
-												password.SecretInfoOneof = secretInfoOneofInt
-
-												sl := v.(*schema.Set).List()
-												for _, set := range sl {
-													cs := set.(map[string]interface{})
-
-													if v, ok := cs["provider"]; ok && !isIntfNil(v) {
-
-														secretInfoOneofInt.ClearSecretInfo.Provider = v.(string)
-
-													}
-
-													if v, ok := cs["url"]; ok && !isIntfNil(v) {
-
-														secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
-
-													}
-
-												}
-
-											}
-
-											if v, ok := passwordMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
-
-												secretInfoOneofTypeFound = true
-												secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
-												secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
-												password.SecretInfoOneof = secretInfoOneofInt
-
-												sl := v.(*schema.Set).List()
-												for _, set := range sl {
-													cs := set.(map[string]interface{})
-
-													if v, ok := cs["key"]; ok && !isIntfNil(v) {
-
-														secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
-
-													}
-
-													if v, ok := cs["location"]; ok && !isIntfNil(v) {
-
-														secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
-
-													}
-
-													if v, ok := cs["provider"]; ok && !isIntfNil(v) {
-
-														secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
-
-													}
-
-													if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
-
-														secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
-
-													}
-
-													if v, ok := cs["version"]; ok && !isIntfNil(v) {
-
-														secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
-
-													}
-
-												}
-
-											}
-
-											if v, ok := passwordMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
-
-												secretInfoOneofTypeFound = true
-												secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
-												secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
-												password.SecretInfoOneof = secretInfoOneofInt
-
-												sl := v.(*schema.Set).List()
-												for _, set := range sl {
-													cs := set.(map[string]interface{})
-
-													if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-														secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
-
-													}
-
-												}
-
-											}
+											appChoiceInt.Dashboard.GeneratedYaml = v.(string)
 
 										}
 
 									}
+								}
 
-									portChoiceTypeFound := false
+							}
 
-									if v, ok := localDomainMapStrToI["default_port"]; ok && !isIntfNil(v) && !portChoiceTypeFound {
+							if v, ok := clusterWideAppsMapStrToI["metrics_server"]; ok && !isIntfNil(v) && !appChoiceTypeFound {
 
-										portChoiceTypeFound = true
+								appChoiceTypeFound = true
+								appChoiceInt := &ves_io_schema_k8s_cluster.ClusterWideAppType_MetricsServer{}
+								appChoiceInt.MetricsServer = &ves_io_schema_k8s_cluster.ApplicationMetricsServerType{}
+								clusterWideApps[i].AppChoice = appChoiceInt
 
-										if v.(bool) {
-											portChoiceInt := &ves_io_schema_k8s_cluster.LocalAccessArgoCDType_DefaultPort{}
-											portChoiceInt.DefaultPort = &ves_io_schema.Empty{}
-											localDomain.PortChoice = portChoiceInt
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["generated_yaml"]; ok && !isIntfNil(v) {
+
+											appChoiceInt.MetricsServer.GeneratedYaml = v.(string)
+
 										}
 
 									}
+								}
 
-									if v, ok := localDomainMapStrToI["port"]; ok && !isIntfNil(v) && !portChoiceTypeFound {
+							}
 
-										portChoiceTypeFound = true
-										portChoiceInt := &ves_io_schema_k8s_cluster.LocalAccessArgoCDType_Port{}
+							if v, ok := clusterWideAppsMapStrToI["prometheus"]; ok && !isIntfNil(v) && !appChoiceTypeFound {
 
-										localDomain.PortChoice = portChoiceInt
+								appChoiceTypeFound = true
+								appChoiceInt := &ves_io_schema_k8s_cluster.ClusterWideAppType_Prometheus{}
+								appChoiceInt.Prometheus = &ves_io_schema_k8s_cluster.ApplicationPrometheusType{}
+								clusterWideApps[i].AppChoice = appChoiceInt
 
-										portChoiceInt.Port = uint32(v.(int))
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["generated_yaml"]; ok && !isIntfNil(v) {
+
+											appChoiceInt.Prometheus.GeneratedYaml = v.(string)
+
+										}
 
 									}
-
 								}
 
 							}
 
 						}
-
-					}
-
-					if v, ok := clusterWideAppsMapStrToI["dashboard"]; ok && !isIntfNil(v) && !appChoiceTypeFound {
-
-						appChoiceTypeFound = true
-						appChoiceInt := &ves_io_schema_k8s_cluster.ClusterWideAppType_Dashboard{}
-						appChoiceInt.Dashboard = &ves_io_schema_k8s_cluster.ApplicationDashboardType{}
-						clusterWideApps[i].AppChoice = appChoiceInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["generated_yaml"]; ok && !isIntfNil(v) {
-
-								appChoiceInt.Dashboard.GeneratedYaml = v.(string)
-
-							}
-
-						}
-
-					}
-
-					if v, ok := clusterWideAppsMapStrToI["metrics_server"]; ok && !isIntfNil(v) && !appChoiceTypeFound {
-
-						appChoiceTypeFound = true
-						appChoiceInt := &ves_io_schema_k8s_cluster.ClusterWideAppType_MetricsServer{}
-						appChoiceInt.MetricsServer = &ves_io_schema_k8s_cluster.ApplicationMetricsServerType{}
-						clusterWideApps[i].AppChoice = appChoiceInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["generated_yaml"]; ok && !isIntfNil(v) {
-
-								appChoiceInt.MetricsServer.GeneratedYaml = v.(string)
-
-							}
-
-						}
-
-					}
-
-					if v, ok := clusterWideAppsMapStrToI["prometheus"]; ok && !isIntfNil(v) && !appChoiceTypeFound {
-
-						appChoiceTypeFound = true
-						appChoiceInt := &ves_io_schema_k8s_cluster.ClusterWideAppType_Prometheus{}
-						appChoiceInt.Prometheus = &ves_io_schema_k8s_cluster.ApplicationPrometheusType{}
-						clusterWideApps[i].AppChoice = appChoiceInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["generated_yaml"]; ok && !isIntfNil(v) {
-
-								appChoiceInt.Prometheus.GeneratedYaml = v.(string)
-
-							}
-
-						}
-
 					}
 
 				}
 
 			}
-
 		}
 
 	}
@@ -1818,36 +1900,38 @@ func resourceVolterraK8SClusterUpdate(d *schema.ResourceData, meta interface{}) 
 		clusterRoleBindingsChoiceInt.UseCustomClusterRoleBindings = &ves_io_schema_k8s_cluster.ClusterRoleBindingListType{}
 		updateSpec.ClusterRoleBindingsChoice = clusterRoleBindingsChoiceInt
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
+			if set != nil {
+				cs := set.(map[string]interface{})
 
-			if v, ok := cs["cluster_role_bindings"]; ok && !isIntfNil(v) {
+				if v, ok := cs["cluster_role_bindings"]; ok && !isIntfNil(v) {
 
-				sl := v.([]interface{})
-				clusterRoleBindingsIntNew := make([]*ves_io_schema_views.ObjectRefType, len(sl))
-				clusterRoleBindingsChoiceInt.UseCustomClusterRoleBindings.ClusterRoleBindings = clusterRoleBindingsIntNew
-				for i, ps := range sl {
+					sl := v.([]interface{})
+					clusterRoleBindingsIntNew := make([]*ves_io_schema_views.ObjectRefType, len(sl))
+					clusterRoleBindingsChoiceInt.UseCustomClusterRoleBindings.ClusterRoleBindings = clusterRoleBindingsIntNew
+					for i, ps := range sl {
 
-					crbMapToStrVal := ps.(map[string]interface{})
-					clusterRoleBindingsIntNew[i] = &ves_io_schema_views.ObjectRefType{}
+						crbMapToStrVal := ps.(map[string]interface{})
+						clusterRoleBindingsIntNew[i] = &ves_io_schema_views.ObjectRefType{}
 
-					if v, ok := crbMapToStrVal["name"]; ok && !isIntfNil(v) {
-						clusterRoleBindingsIntNew[i].Name = v.(string)
-					}
+						if v, ok := crbMapToStrVal["name"]; ok && !isIntfNil(v) {
+							clusterRoleBindingsIntNew[i].Name = v.(string)
+						}
 
-					if v, ok := crbMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-						clusterRoleBindingsIntNew[i].Namespace = v.(string)
-					}
+						if v, ok := crbMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+							clusterRoleBindingsIntNew[i].Namespace = v.(string)
+						}
 
-					if v, ok := crbMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-						clusterRoleBindingsIntNew[i].Tenant = v.(string)
+						if v, ok := crbMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+							clusterRoleBindingsIntNew[i].Tenant = v.(string)
+						}
+
 					}
 
 				}
 
 			}
-
 		}
 
 	}
@@ -1873,36 +1957,38 @@ func resourceVolterraK8SClusterUpdate(d *schema.ResourceData, meta interface{}) 
 		clusterRoleChoiceInt.UseCustomClusterRoleList = &ves_io_schema_k8s_cluster.ClusterRoleListType{}
 		updateSpec.ClusterRoleChoice = clusterRoleChoiceInt
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
+			if set != nil {
+				cs := set.(map[string]interface{})
 
-			if v, ok := cs["cluster_roles"]; ok && !isIntfNil(v) {
+				if v, ok := cs["cluster_roles"]; ok && !isIntfNil(v) {
 
-				sl := v.([]interface{})
-				clusterRolesInt := make([]*ves_io_schema_views.ObjectRefType, len(sl))
-				clusterRoleChoiceInt.UseCustomClusterRoleList.ClusterRoles = clusterRolesInt
-				for i, ps := range sl {
+					sl := v.([]interface{})
+					clusterRolesInt := make([]*ves_io_schema_views.ObjectRefType, len(sl))
+					clusterRoleChoiceInt.UseCustomClusterRoleList.ClusterRoles = clusterRolesInt
+					for i, ps := range sl {
 
-					crMapToStrVal := ps.(map[string]interface{})
-					clusterRolesInt[i] = &ves_io_schema_views.ObjectRefType{}
+						crMapToStrVal := ps.(map[string]interface{})
+						clusterRolesInt[i] = &ves_io_schema_views.ObjectRefType{}
 
-					if v, ok := crMapToStrVal["name"]; ok && !isIntfNil(v) {
-						clusterRolesInt[i].Name = v.(string)
-					}
+						if v, ok := crMapToStrVal["name"]; ok && !isIntfNil(v) {
+							clusterRolesInt[i].Name = v.(string)
+						}
 
-					if v, ok := crMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-						clusterRolesInt[i].Namespace = v.(string)
-					}
+						if v, ok := crMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+							clusterRolesInt[i].Namespace = v.(string)
+						}
 
-					if v, ok := crMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-						clusterRolesInt[i].Tenant = v.(string)
+						if v, ok := crMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+							clusterRolesInt[i].Tenant = v.(string)
+						}
+
 					}
 
 				}
 
 			}
-
 		}
 
 	}
@@ -1980,20 +2066,22 @@ func resourceVolterraK8SClusterUpdate(d *schema.ResourceData, meta interface{}) 
 		insecureRegistriesChoiceInt.InsecureRegistryList = &ves_io_schema_k8s_cluster.InsecureRegistryListType{}
 		updateSpec.InsecureRegistriesChoice = insecureRegistriesChoiceInt
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
+			if set != nil {
+				cs := set.(map[string]interface{})
 
-			if v, ok := cs["insecure_registries"]; ok && !isIntfNil(v) {
+				if v, ok := cs["insecure_registries"]; ok && !isIntfNil(v) {
 
-				ls := make([]string, len(v.([]interface{})))
-				for i, v := range v.([]interface{}) {
-					ls[i] = v.(string)
+					ls := make([]string, len(v.([]interface{})))
+					for i, v := range v.([]interface{}) {
+						ls[i] = v.(string)
+					}
+					insecureRegistriesChoiceInt.InsecureRegistryList.InsecureRegistries = ls
+
 				}
-				insecureRegistriesChoiceInt.InsecureRegistryList.InsecureRegistries = ls
 
 			}
-
 		}
 
 	}
@@ -2019,41 +2107,43 @@ func resourceVolterraK8SClusterUpdate(d *schema.ResourceData, meta interface{}) 
 		localAccessChoiceInt.LocalAccessConfig = &ves_io_schema_k8s_cluster.LocalAccessConfigType{}
 		updateSpec.LocalAccessChoice = localAccessChoiceInt
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
+			if set != nil {
+				cs := set.(map[string]interface{})
 
-			if v, ok := cs["local_domain"]; ok && !isIntfNil(v) {
+				if v, ok := cs["local_domain"]; ok && !isIntfNil(v) {
 
-				localAccessChoiceInt.LocalAccessConfig.LocalDomain = v.(string)
+					localAccessChoiceInt.LocalAccessConfig.LocalDomain = v.(string)
 
-			}
+				}
 
-			portChoiceTypeFound := false
+				portChoiceTypeFound := false
 
-			if v, ok := cs["default_port"]; ok && !isIntfNil(v) && !portChoiceTypeFound {
+				if v, ok := cs["default_port"]; ok && !isIntfNil(v) && !portChoiceTypeFound {
 
-				portChoiceTypeFound = true
+					portChoiceTypeFound = true
 
-				if v.(bool) {
-					portChoiceInt := &ves_io_schema_k8s_cluster.LocalAccessConfigType_DefaultPort{}
-					portChoiceInt.DefaultPort = &ves_io_schema.Empty{}
+					if v.(bool) {
+						portChoiceInt := &ves_io_schema_k8s_cluster.LocalAccessConfigType_DefaultPort{}
+						portChoiceInt.DefaultPort = &ves_io_schema.Empty{}
+						localAccessChoiceInt.LocalAccessConfig.PortChoice = portChoiceInt
+					}
+
+				}
+
+				if v, ok := cs["port"]; ok && !isIntfNil(v) && !portChoiceTypeFound {
+
+					portChoiceTypeFound = true
+					portChoiceInt := &ves_io_schema_k8s_cluster.LocalAccessConfigType_Port{}
+
 					localAccessChoiceInt.LocalAccessConfig.PortChoice = portChoiceInt
+
+					portChoiceInt.Port = uint32(v.(int))
+
 				}
 
 			}
-
-			if v, ok := cs["port"]; ok && !isIntfNil(v) && !portChoiceTypeFound {
-
-				portChoiceTypeFound = true
-				portChoiceInt := &ves_io_schema_k8s_cluster.LocalAccessConfigType_Port{}
-
-				localAccessChoiceInt.LocalAccessConfig.PortChoice = portChoiceInt
-
-				portChoiceInt.Port = uint32(v.(int))
-
-			}
-
 		}
 
 	}
@@ -2079,28 +2169,30 @@ func resourceVolterraK8SClusterUpdate(d *schema.ResourceData, meta interface{}) 
 		podSecurityAdmissionChoiceInt.UseCustomPodSecurityAdmission = &ves_io_schema_views.ObjectRefType{}
 		updateSpec.PodSecurityAdmissionChoice = podSecurityAdmissionChoiceInt
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
+			if set != nil {
+				cs := set.(map[string]interface{})
 
-			if v, ok := cs["name"]; ok && !isIntfNil(v) {
+				if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
-				podSecurityAdmissionChoiceInt.UseCustomPodSecurityAdmission.Name = v.(string)
+					podSecurityAdmissionChoiceInt.UseCustomPodSecurityAdmission.Name = v.(string)
+
+				}
+
+				if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+					podSecurityAdmissionChoiceInt.UseCustomPodSecurityAdmission.Namespace = v.(string)
+
+				}
+
+				if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+					podSecurityAdmissionChoiceInt.UseCustomPodSecurityAdmission.Tenant = v.(string)
+
+				}
 
 			}
-
-			if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
-
-				podSecurityAdmissionChoiceInt.UseCustomPodSecurityAdmission.Namespace = v.(string)
-
-			}
-
-			if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
-
-				podSecurityAdmissionChoiceInt.UseCustomPodSecurityAdmission.Tenant = v.(string)
-
-			}
-
 		}
 
 	}
@@ -2126,36 +2218,38 @@ func resourceVolterraK8SClusterUpdate(d *schema.ResourceData, meta interface{}) 
 		podSecurityPolicyChoiceInt.UseCustomPspList = &ves_io_schema_k8s_cluster.PodSecurityPolicyListType{}
 		updateSpec.PodSecurityPolicyChoice = podSecurityPolicyChoiceInt
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
+			if set != nil {
+				cs := set.(map[string]interface{})
 
-			if v, ok := cs["pod_security_policies"]; ok && !isIntfNil(v) {
+				if v, ok := cs["pod_security_policies"]; ok && !isIntfNil(v) {
 
-				sl := v.([]interface{})
-				podSecurityPoliciesInt := make([]*ves_io_schema_views.ObjectRefType, len(sl))
-				podSecurityPolicyChoiceInt.UseCustomPspList.PodSecurityPolicies = podSecurityPoliciesInt
-				for i, ps := range sl {
+					sl := v.([]interface{})
+					podSecurityPoliciesInt := make([]*ves_io_schema_views.ObjectRefType, len(sl))
+					podSecurityPolicyChoiceInt.UseCustomPspList.PodSecurityPolicies = podSecurityPoliciesInt
+					for i, ps := range sl {
 
-					pspMapToStrVal := ps.(map[string]interface{})
-					podSecurityPoliciesInt[i] = &ves_io_schema_views.ObjectRefType{}
+						pspMapToStrVal := ps.(map[string]interface{})
+						podSecurityPoliciesInt[i] = &ves_io_schema_views.ObjectRefType{}
 
-					if v, ok := pspMapToStrVal["name"]; ok && !isIntfNil(v) {
-						podSecurityPoliciesInt[i].Name = v.(string)
-					}
+						if v, ok := pspMapToStrVal["name"]; ok && !isIntfNil(v) {
+							podSecurityPoliciesInt[i].Name = v.(string)
+						}
 
-					if v, ok := pspMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-						podSecurityPoliciesInt[i].Namespace = v.(string)
-					}
+						if v, ok := pspMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+							podSecurityPoliciesInt[i].Namespace = v.(string)
+						}
 
-					if v, ok := pspMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-						podSecurityPoliciesInt[i].Tenant = v.(string)
+						if v, ok := pspMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+							podSecurityPoliciesInt[i].Tenant = v.(string)
+						}
+
 					}
 
 				}
 
 			}
-
 		}
 
 	}

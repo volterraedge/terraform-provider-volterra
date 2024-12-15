@@ -1,9 +1,9 @@
 ---
 
 page_title: "Volterra: usb_policy"
-description: "The usb_policy allows CRUD of Usb Policy resource on Volterra SaaS"
 
----
+description: "The usb_policy allows CRUD of Usb Policy resource on Volterra SaaS"
+---------------------------------------------------------------------------------
 
 Resource volterra_usb_policy
 ============================

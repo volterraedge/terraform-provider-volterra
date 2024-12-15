@@ -2456,6 +2456,315 @@ func ApiCodeReposValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *ApiCrawler) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *ApiCrawler) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+// Redact squashes sensitive info in m (in-place)
+func (m *ApiCrawler) Redact(ctx context.Context) error {
+	// clear fields with confidential option set (at message or field level)
+	if m == nil {
+		return nil
+	}
+
+	if err := m.GetApiCrawlerConfig().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting ApiCrawler.api_crawler_config")
+	}
+
+	return nil
+}
+
+func (m *ApiCrawler) DeepCopy() *ApiCrawler {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &ApiCrawler{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *ApiCrawler) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *ApiCrawler) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return ApiCrawlerValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateApiCrawler struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateApiCrawler) ApiCrawlerValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for api_crawler")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateApiCrawler) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*ApiCrawler)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *ApiCrawler got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["api_crawler"]; exists {
+		val := m.GetApiCrawler()
+		vOpts := append(opts,
+			db.WithValidateField("api_crawler"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetApiCrawler().(type) {
+	case *ApiCrawler_DisableApiCrawler:
+		if fv, exists := v.FldValidators["api_crawler.disable_api_crawler"]; exists {
+			val := m.GetApiCrawler().(*ApiCrawler_DisableApiCrawler).DisableApiCrawler
+			vOpts := append(opts,
+				db.WithValidateField("api_crawler"),
+				db.WithValidateField("disable_api_crawler"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ApiCrawler_ApiCrawlerConfig:
+		if fv, exists := v.FldValidators["api_crawler.api_crawler_config"]; exists {
+			val := m.GetApiCrawler().(*ApiCrawler_ApiCrawlerConfig).ApiCrawlerConfig
+			vOpts := append(opts,
+				db.WithValidateField("api_crawler"),
+				db.WithValidateField("api_crawler_config"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultApiCrawlerValidator = func() *ValidateApiCrawler {
+	v := &ValidateApiCrawler{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhApiCrawler := v.ApiCrawlerValidationRuleHandler
+	rulesApiCrawler := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhApiCrawler(rulesApiCrawler)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ApiCrawler.api_crawler: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["api_crawler"] = vFn
+
+	v.FldValidators["api_crawler.api_crawler_config"] = ApiCrawlerConfigurationValidator().Validate
+
+	return v
+}()
+
+func ApiCrawlerValidator() db.Validator {
+	return DefaultApiCrawlerValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *ApiCrawlerConfiguration) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *ApiCrawlerConfiguration) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+// Redact squashes sensitive info in m (in-place)
+func (m *ApiCrawlerConfiguration) Redact(ctx context.Context) error {
+	// clear fields with confidential option set (at message or field level)
+	if m == nil {
+		return nil
+	}
+
+	for idx, e := range m.GetDomains() {
+		if err := e.Redact(ctx); err != nil {
+			return errors.Wrapf(err, "Redacting ApiCrawlerConfiguration.domains idx %v", idx)
+		}
+	}
+
+	return nil
+}
+
+func (m *ApiCrawlerConfiguration) DeepCopy() *ApiCrawlerConfiguration {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &ApiCrawlerConfiguration{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *ApiCrawlerConfiguration) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *ApiCrawlerConfiguration) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return ApiCrawlerConfigurationValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateApiCrawlerConfiguration struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateApiCrawlerConfiguration) DomainsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for domains")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*DomainConfiguration, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := DomainConfigurationValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for domains")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*DomainConfiguration)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*DomainConfiguration, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated domains")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items domains")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateApiCrawlerConfiguration) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*ApiCrawlerConfiguration)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *ApiCrawlerConfiguration got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["domains"]; exists {
+		vOpts := append(opts, db.WithValidateField("domains"))
+		if err := fv(ctx, m.GetDomains(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultApiCrawlerConfigurationValidator = func() *ValidateApiCrawlerConfiguration {
+	v := &ValidateApiCrawlerConfiguration{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhDomains := v.DomainsValidationRuleHandler
+	rulesDomains := map[string]string{
+		"ves.io.schema.rules.message.required":   "true",
+		"ves.io.schema.rules.repeated.max_items": "32",
+	}
+	vFn, err = vrhDomains(rulesDomains)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ApiCrawlerConfiguration.domains: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["domains"] = vFn
+
+	return v
+}()
+
+func ApiCrawlerConfigurationValidator() db.Validator {
+	return DefaultApiCrawlerConfigurationValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *ApiDefinitionList) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -2665,6 +2974,182 @@ func ApiDefinitionListValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *ApiDiscoveryAdvancedSettings) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *ApiDiscoveryAdvancedSettings) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *ApiDiscoveryAdvancedSettings) DeepCopy() *ApiDiscoveryAdvancedSettings {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &ApiDiscoveryAdvancedSettings{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *ApiDiscoveryAdvancedSettings) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *ApiDiscoveryAdvancedSettings) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return ApiDiscoveryAdvancedSettingsValidator().Validate(ctx, m, opts...)
+}
+
+func (m *ApiDiscoveryAdvancedSettings) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetApiDiscoveryRefDRefInfo()
+
+}
+
+func (m *ApiDiscoveryAdvancedSettings) GetApiDiscoveryRefDRefInfo() ([]db.DRefInfo, error) {
+
+	vref := m.GetApiDiscoveryRef()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("api_discovery.Object")
+	dri := db.DRefInfo{
+		RefdType:   "api_discovery.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "api_discovery_ref",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+
+}
+
+// GetApiDiscoveryRefDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *ApiDiscoveryAdvancedSettings) GetApiDiscoveryRefDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "api_discovery.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: api_discovery")
+	}
+
+	vref := m.GetApiDiscoveryRef()
+	if vref == nil {
+		return nil, nil
+	}
+	ref := &ves_io_schema.ObjectRefType{
+		Kind:      "api_discovery.Object",
+		Tenant:    vref.Tenant,
+		Namespace: vref.Namespace,
+		Name:      vref.Name,
+	}
+	refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+	if err != nil {
+		return nil, errors.Wrap(err, "Getting referred entry")
+	}
+	if refdEnt != nil {
+		entries = append(entries, refdEnt)
+	}
+
+	return entries, nil
+}
+
+type ValidateApiDiscoveryAdvancedSettings struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateApiDiscoveryAdvancedSettings) ApiDiscoveryRefValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for api_discovery_ref")
+	}
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		if err := ves_io_schema_views.ObjectRefTypeValidator().Validate(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateApiDiscoveryAdvancedSettings) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*ApiDiscoveryAdvancedSettings)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *ApiDiscoveryAdvancedSettings got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["api_discovery_ref"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("api_discovery_ref"))
+		if err := fv(ctx, m.GetApiDiscoveryRef(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultApiDiscoveryAdvancedSettingsValidator = func() *ValidateApiDiscoveryAdvancedSettings {
+	v := &ValidateApiDiscoveryAdvancedSettings{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhApiDiscoveryRef := v.ApiDiscoveryRefValidationRuleHandler
+	rulesApiDiscoveryRef := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhApiDiscoveryRef(rulesApiDiscoveryRef)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ApiDiscoveryAdvancedSettings.api_discovery_ref: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["api_discovery_ref"] = vFn
+
+	return v
+}()
+
+func ApiDiscoveryAdvancedSettingsValidator() db.Validator {
+	return DefaultApiDiscoveryAdvancedSettingsValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *ApiDiscoveryFromCodeScan) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -2850,6 +3335,20 @@ func (m *ApiDiscoverySetting) ToYAML() (string, error) {
 	return codec.ToYAML(m)
 }
 
+// Redact squashes sensitive info in m (in-place)
+func (m *ApiDiscoverySetting) Redact(ctx context.Context) error {
+	// clear fields with confidential option set (at message or field level)
+	if m == nil {
+		return nil
+	}
+
+	if err := m.GetApiCrawler().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting ApiDiscoverySetting.api_crawler")
+	}
+
+	return nil
+}
+
 func (m *ApiDiscoverySetting) DeepCopy() *ApiDiscoverySetting {
 	if m == nil {
 		return nil
@@ -2882,7 +3381,20 @@ func (m *ApiDiscoverySetting) GetDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 	}
 
-	return m.GetApiDiscoveryFromCodeScanDRefInfo()
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetApiDiscoveryFromCodeScanDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetApiDiscoveryFromCodeScanDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetApiDiscoverySettingsChoiceDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetApiDiscoverySettingsChoiceDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	return drInfos, nil
 
 }
 
@@ -2904,8 +3416,44 @@ func (m *ApiDiscoverySetting) GetApiDiscoveryFromCodeScanDRefInfo() ([]db.DRefIn
 
 }
 
+// GetDRefInfo for the field's type
+func (m *ApiDiscoverySetting) GetApiDiscoverySettingsChoiceDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetApiDiscoverySettingsChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetApiDiscoverySettingsChoice().(type) {
+	case *ApiDiscoverySetting_DefaultApiAuthDiscovery:
+
+		return nil, nil
+
+	case *ApiDiscoverySetting_CustomApiAuthDiscovery:
+
+		drInfos, err := m.GetCustomApiAuthDiscovery().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetCustomApiAuthDiscovery().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "custom_api_auth_discovery." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
+	}
+
+}
+
 type ValidateApiDiscoverySetting struct {
 	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateApiDiscoverySetting) ApiDiscoverySettingsChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for api_discovery_settings_choice")
+	}
+	return validatorFn, nil
 }
 
 func (v *ValidateApiDiscoverySetting) LearnFromRedirectTrafficValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
@@ -2930,11 +3478,56 @@ func (v *ValidateApiDiscoverySetting) Validate(ctx context.Context, pm interface
 		return nil
 	}
 
+	if fv, exists := v.FldValidators["api_crawler"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("api_crawler"))
+		if err := fv(ctx, m.GetApiCrawler(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["api_discovery_from_code_scan"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("api_discovery_from_code_scan"))
 		if err := fv(ctx, m.GetApiDiscoveryFromCodeScan(), vOpts...); err != nil {
 			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["api_discovery_settings_choice"]; exists {
+		val := m.GetApiDiscoverySettingsChoice()
+		vOpts := append(opts,
+			db.WithValidateField("api_discovery_settings_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetApiDiscoverySettingsChoice().(type) {
+	case *ApiDiscoverySetting_DefaultApiAuthDiscovery:
+		if fv, exists := v.FldValidators["api_discovery_settings_choice.default_api_auth_discovery"]; exists {
+			val := m.GetApiDiscoverySettingsChoice().(*ApiDiscoverySetting_DefaultApiAuthDiscovery).DefaultApiAuthDiscovery
+			vOpts := append(opts,
+				db.WithValidateField("api_discovery_settings_choice"),
+				db.WithValidateField("default_api_auth_discovery"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ApiDiscoverySetting_CustomApiAuthDiscovery:
+		if fv, exists := v.FldValidators["api_discovery_settings_choice.custom_api_auth_discovery"]; exists {
+			val := m.GetApiDiscoverySettingsChoice().(*ApiDiscoverySetting_CustomApiAuthDiscovery).CustomApiAuthDiscovery
+			vOpts := append(opts,
+				db.WithValidateField("api_discovery_settings_choice"),
+				db.WithValidateField("custom_api_auth_discovery"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
 		}
 
 	}
@@ -3008,6 +3601,17 @@ var DefaultApiDiscoverySettingValidator = func() *ValidateApiDiscoverySetting {
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
 
+	vrhApiDiscoverySettingsChoice := v.ApiDiscoverySettingsChoiceValidationRuleHandler
+	rulesApiDiscoverySettingsChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhApiDiscoverySettingsChoice(rulesApiDiscoverySettingsChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ApiDiscoverySetting.api_discovery_settings_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["api_discovery_settings_choice"] = vFn
+
 	vrhLearnFromRedirectTraffic := v.LearnFromRedirectTrafficValidationRuleHandler
 	rulesLearnFromRedirectTraffic := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -3019,11 +3623,15 @@ var DefaultApiDiscoverySettingValidator = func() *ValidateApiDiscoverySetting {
 	}
 	v.FldValidators["learn_from_redirect_traffic"] = vFn
 
+	v.FldValidators["api_discovery_settings_choice.custom_api_auth_discovery"] = ApiDiscoveryAdvancedSettingsValidator().Validate
+
 	v.FldValidators["sensitive_data_detection_rules"] = ves_io_schema_app_type.SensitiveDataDetectionRulesValidator().Validate
 
 	v.FldValidators["discovered_api_settings"] = ves_io_schema_app_type.DiscoveredAPISettingsValidator().Validate
 
 	v.FldValidators["api_discovery_from_code_scan"] = ApiDiscoveryFromCodeScanValidator().Validate
+
+	v.FldValidators["api_crawler"] = ApiCrawlerValidator().Validate
 
 	return v
 }()
@@ -5300,6 +5908,170 @@ var DefaultCustomIpAllowedListValidator = func() *ValidateCustomIpAllowedList {
 
 func CustomIpAllowedListValidator() db.Validator {
 	return DefaultCustomIpAllowedListValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *DomainConfiguration) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *DomainConfiguration) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+// Redact squashes sensitive info in m (in-place)
+func (m *DomainConfiguration) Redact(ctx context.Context) error {
+	// clear fields with confidential option set (at message or field level)
+	if m == nil {
+		return nil
+	}
+
+	if err := m.GetSimpleLogin().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting DomainConfiguration.simple_login")
+	}
+
+	return nil
+}
+
+func (m *DomainConfiguration) DeepCopy() *DomainConfiguration {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &DomainConfiguration{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *DomainConfiguration) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *DomainConfiguration) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return DomainConfigurationValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateDomainConfiguration struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateDomainConfiguration) DomainValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for domain")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateDomainConfiguration) SimpleLoginValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for simple_login")
+	}
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		if err := SimpleLoginValidator().Validate(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateDomainConfiguration) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*DomainConfiguration)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *DomainConfiguration got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["domain"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("domain"))
+		if err := fv(ctx, m.GetDomain(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["simple_login"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("simple_login"))
+		if err := fv(ctx, m.GetSimpleLogin(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultDomainConfigurationValidator = func() *ValidateDomainConfiguration {
+	v := &ValidateDomainConfiguration{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhDomain := v.DomainValidationRuleHandler
+	rulesDomain := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.max_len":   "256",
+		"ves.io.schema.rules.string.vh_domain": "true",
+	}
+	vFn, err = vrhDomain(rulesDomain)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for DomainConfiguration.domain: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["domain"] = vFn
+
+	vrhSimpleLogin := v.SimpleLoginValidationRuleHandler
+	rulesSimpleLogin := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhSimpleLogin(rulesSimpleLogin)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for DomainConfiguration.simple_login: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["simple_login"] = vFn
+
+	return v
+}()
+
+func DomainConfigurationValidator() db.Validator {
+	return DefaultDomainConfigurationValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -9918,6 +10690,13 @@ func (v *ValidateSimpleClientSrcRule) ClientSourceChoiceUserIdentifierValidation
 	}
 	return oValidatorFn_UserIdentifier, nil
 }
+func (v *ValidateSimpleClientSrcRule) ClientSourceChoiceIpv6PrefixValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_Ipv6Prefix, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for ipv6_prefix")
+	}
+	return oValidatorFn_Ipv6Prefix, nil
+}
 
 func (v *ValidateSimpleClientSrcRule) ExpirationTimestampValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
@@ -10122,6 +10901,17 @@ func (v *ValidateSimpleClientSrcRule) Validate(ctx context.Context, pm interface
 				return err
 			}
 		}
+	case *SimpleClientSrcRule_Ipv6Prefix:
+		if fv, exists := v.FldValidators["client_source_choice.ipv6_prefix"]; exists {
+			val := m.GetClientSourceChoice().(*SimpleClientSrcRule_Ipv6Prefix).Ipv6Prefix
+			vOpts := append(opts,
+				db.WithValidateField("client_source_choice"),
+				db.WithValidateField("ipv6_prefix"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
@@ -10197,10 +10987,20 @@ var DefaultSimpleClientSrcRuleValidator = func() *ValidateSimpleClientSrcRule {
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field SimpleClientSrcRule.client_source_choice_user_identifier: %s", err)
 		panic(errMsg)
 	}
+	vrhClientSourceChoiceIpv6Prefix := v.ClientSourceChoiceIpv6PrefixValidationRuleHandler
+	rulesClientSourceChoiceIpv6Prefix := map[string]string{
+		"ves.io.schema.rules.string.ipv6_prefix": "true",
+	}
+	vFnMap["client_source_choice.ipv6_prefix"], err = vrhClientSourceChoiceIpv6Prefix(rulesClientSourceChoiceIpv6Prefix)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field SimpleClientSrcRule.client_source_choice_ipv6_prefix: %s", err)
+		panic(errMsg)
+	}
 
 	v.FldValidators["client_source_choice.ip_prefix"] = vFnMap["client_source_choice.ip_prefix"]
 	v.FldValidators["client_source_choice.as_number"] = vFnMap["client_source_choice.as_number"]
 	v.FldValidators["client_source_choice.user_identifier"] = vFnMap["client_source_choice.user_identifier"]
+	v.FldValidators["client_source_choice.ipv6_prefix"] = vFnMap["client_source_choice.ipv6_prefix"]
 
 	vrhExpirationTimestamp := v.ExpirationTimestampValidationRuleHandler
 	rulesExpirationTimestamp := map[string]string{
@@ -10244,6 +11044,170 @@ var DefaultSimpleClientSrcRuleValidator = func() *ValidateSimpleClientSrcRule {
 
 func SimpleClientSrcRuleValidator() db.Validator {
 	return DefaultSimpleClientSrcRuleValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *SimpleLogin) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *SimpleLogin) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+// Redact squashes sensitive info in m (in-place)
+func (m *SimpleLogin) Redact(ctx context.Context) error {
+	// clear fields with confidential option set (at message or field level)
+	if m == nil {
+		return nil
+	}
+
+	if err := m.GetPassword().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting SimpleLogin.password")
+	}
+
+	return nil
+}
+
+func (m *SimpleLogin) DeepCopy() *SimpleLogin {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &SimpleLogin{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *SimpleLogin) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *SimpleLogin) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return SimpleLoginValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateSimpleLogin struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateSimpleLogin) UserValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for user")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateSimpleLogin) PasswordValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for password")
+	}
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		if err := ves_io_schema.SecretTypeValidator().Validate(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateSimpleLogin) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*SimpleLogin)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *SimpleLogin got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["password"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("password"))
+		if err := fv(ctx, m.GetPassword(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["user"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("user"))
+		if err := fv(ctx, m.GetUser(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultSimpleLoginValidator = func() *ValidateSimpleLogin {
+	v := &ValidateSimpleLogin{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhUser := v.UserValidationRuleHandler
+	rulesUser := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.max_len":   "64",
+	}
+	vFn, err = vrhUser(rulesUser)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for SimpleLogin.user: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["user"] = vFn
+
+	vrhPassword := v.PasswordValidationRuleHandler
+	rulesPassword := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.max_len":   "128",
+	}
+	vFn, err = vrhPassword(rulesPassword)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for SimpleLogin.password: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["password"] = vFn
+
+	return v
+}()
+
+func SimpleLoginValidator() db.Validator {
+	return DefaultSimpleLoginValidator
 }
 
 // augmented methods on protoc/std generated struct

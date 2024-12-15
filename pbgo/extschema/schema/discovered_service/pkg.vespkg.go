@@ -24,19 +24,28 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.discovered_service.ListResponse"] = ListResponseValidator()
 	vr["ves.io.schema.discovered_service.ListResponseItem"] = ListResponseItemValidator()
 
+	vr["ves.io.schema.discovered_service.DiscoveredServiceHealthStatusRequest"] = DiscoveredServiceHealthStatusRequestValidator()
+	vr["ves.io.schema.discovered_service.DiscoveredServiceHealthStatusResponse"] = DiscoveredServiceHealthStatusResponseValidator()
+	vr["ves.io.schema.discovered_service.VirtualServerPoolHealthStatusListResponseItem"] = VirtualServerPoolHealthStatusListResponseItemValidator()
+	vr["ves.io.schema.discovered_service.VirtualServerPoolMemberHealth"] = VirtualServerPoolMemberHealthValidator()
+
 	vr["ves.io.schema.discovered_service.CreateHTTPLoadBalancerRequest"] = CreateHTTPLoadBalancerRequestValidator()
 	vr["ves.io.schema.discovered_service.CreateHTTPLoadBalancerResponse"] = CreateHTTPLoadBalancerResponseValidator()
 	vr["ves.io.schema.discovered_service.CreateTCPLoadBalancerRequest"] = CreateTCPLoadBalancerRequestValidator()
 	vr["ves.io.schema.discovered_service.CreateTCPLoadBalancerResponse"] = CreateTCPLoadBalancerResponseValidator()
-	vr["ves.io.schema.discovered_service.DisableWAAPRequest"] = DisableWAAPRequestValidator()
-	vr["ves.io.schema.discovered_service.DisableWAAPResponse"] = DisableWAAPResponseValidator()
-	vr["ves.io.schema.discovered_service.EnableWAAPRequest"] = EnableWAAPRequestValidator()
-	vr["ves.io.schema.discovered_service.EnableWAAPResponse"] = EnableWAAPResponseValidator()
+	vr["ves.io.schema.discovered_service.DisableVisibilityRequest"] = DisableVisibilityRequestValidator()
+	vr["ves.io.schema.discovered_service.DisableVisibilityResponse"] = DisableVisibilityResponseValidator()
+	vr["ves.io.schema.discovered_service.EnableVisibilityRequest"] = EnableVisibilityRequestValidator()
+	vr["ves.io.schema.discovered_service.EnableVisibilityResponse"] = EnableVisibilityResponseValidator()
 	vr["ves.io.schema.discovered_service.HTTPLBRequest"] = HTTPLBRequestValidator()
 	vr["ves.io.schema.discovered_service.ListServicesRequest"] = ListServicesRequestValidator()
 	vr["ves.io.schema.discovered_service.ListServicesResponse"] = ListServicesResponseValidator()
 	vr["ves.io.schema.discovered_service.ListServicesResponseItem"] = ListServicesResponseItemValidator()
+	vr["ves.io.schema.discovered_service.ProxyTypeHttp"] = ProxyTypeHttpValidator()
+	vr["ves.io.schema.discovered_service.ProxyTypeHttps"] = ProxyTypeHttpsValidator()
 	vr["ves.io.schema.discovered_service.TCPLBRequest"] = TCPLBRequestValidator()
+	vr["ves.io.schema.discovered_service.WhereSite"] = WhereSiteValidator()
+	vr["ves.io.schema.discovered_service.WhereVirtualSite"] = WhereVirtualSiteValidator()
 
 	vr["ves.io.schema.discovered_service.CreateSpecType"] = CreateSpecTypeValidator()
 	vr["ves.io.schema.discovered_service.GetSpecType"] = GetSpecTypeValidator()
@@ -60,6 +69,14 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 
+	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.discovered_service.API.Get"] = []string{
+		"spec.virtual_server.protocol",
+	}
+
+	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.discovered_service.API.List"] = []string{
+		"items.#.get_spec.virtual_server.protocol",
+	}
+
 	mdr.RPCSubscriptionFieldsRegistry["ves.io.schema.discovered_service.CustomAPI.CreateHTTPLoadBalancer"] = []svcfw.SubscriptionField{
 		{
 			FieldPath:     "ves.io.schema.discovered_service.CreateHTTPLoadBalancerRequest.http_lb_request.advertise_choice.advertise_custom.advertise_where.choice.cloud_edge_segment.ipv6",
@@ -74,10 +91,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AddonServices: []string{"f5xc-ipv6-standard"},
 		},
 		{
-			FieldPath:     "ves.io.schema.discovered_service.CreateHTTPLoadBalancerRequest.http_lb_request.advertise_choice.advertise_custom.advertise_where.choice.virtual_network.v6_vip_choice.default_v6_vip",
-			AddonServices: []string{"f5xc-ipv6-standard"},
-		},
-		{
 			FieldPath:     "ves.io.schema.discovered_service.CreateHTTPLoadBalancerRequest.http_lb_request.advertise_choice.advertise_custom.advertise_where.choice.virtual_network.v6_vip_choice.specific_v6_vip",
 			AddonServices: []string{"f5xc-ipv6-standard"},
 		},
@@ -85,6 +98,11 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			FieldPath:     "ves.io.schema.discovered_service.CreateHTTPLoadBalancerRequest.http_lb_request.advertise_choice.advertise_custom.advertise_where.choice.virtual_site_segment.ipv6",
 			AddonServices: []string{"f5xc-ipv6-standard"},
 		},
+	}
+
+	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.discovered_service.CustomAPI.CreateHTTPLoadBalancer"] = []string{
+		"http_lb_request.advertise_custom",
+		"http_lb_request.advertise_on_public_default_vip",
 	}
 
 	mdr.RPCAvailableInReqFieldRegistry["ves.io.schema.discovered_service.CustomAPI.CreateHTTPLoadBalancer"] = []svcfw.EnvironmentField{
@@ -128,10 +146,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AddonServices: []string{"f5xc-ipv6-standard"},
 		},
 		{
-			FieldPath:     "ves.io.schema.discovered_service.CreateTCPLoadBalancerRequest.tcp_lb_request.advertise_choice.advertise_custom.advertise_where.choice.virtual_network.v6_vip_choice.default_v6_vip",
-			AddonServices: []string{"f5xc-ipv6-standard"},
-		},
-		{
 			FieldPath:     "ves.io.schema.discovered_service.CreateTCPLoadBalancerRequest.tcp_lb_request.advertise_choice.advertise_custom.advertise_where.choice.virtual_network.v6_vip_choice.specific_v6_vip",
 			AddonServices: []string{"f5xc-ipv6-standard"},
 		},
@@ -168,10 +182,15 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		},
 	}
 
+	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.discovered_service.CustomAPI.ListDiscoveredServices"] = []string{
+		"items.#.get_spec.virtual_server.protocol",
+	}
+
 }
 
 func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {
 	sm["ves.io.schema.discovered_service.API"] = "discovery"
+	sm["ves.io.schema.discovered_service.CustomDataAPI"] = "data"
 	sm["ves.io.schema.discovered_service.CustomAPI"] = "discovery"
 
 }
@@ -202,6 +221,26 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		mdr.SvcRegisterHandlers["ves.io.schema.discovered_service.API"] = RegisterAPIServer
 		mdr.SvcGwRegisterHandlers["ves.io.schema.discovered_service.API"] = RegisterGwAPIHandler
 		csr.CRUDServerRegistry["ves.io.schema.discovered_service.Object"] = NewCRUDAPIServer
+
+	}()
+
+	customCSR = mdr.PubCustomServiceRegistry
+
+	func() {
+		// set swagger jsons for our and external schemas
+
+		customCSR.SwaggerRegistry["ves.io.schema.discovered_service.Object"] = CustomDataAPISwaggerJSON
+
+		customCSR.GrpcClientRegistry["ves.io.schema.discovered_service.CustomDataAPI"] = NewCustomDataAPIGrpcClient
+		customCSR.RestClientRegistry["ves.io.schema.discovered_service.CustomDataAPI"] = NewCustomDataAPIRestClient
+		if isExternal {
+			return
+		}
+		mdr.SvcRegisterHandlers["ves.io.schema.discovered_service.CustomDataAPI"] = RegisterCustomDataAPIServer
+		mdr.SvcGwRegisterHandlers["ves.io.schema.discovered_service.CustomDataAPI"] = RegisterGwCustomDataAPIHandler
+		customCSR.ServerRegistry["ves.io.schema.discovered_service.CustomDataAPI"] = func(svc svcfw.Service) server.APIHandler {
+			return NewCustomDataAPIServer(svc)
+		}
 
 	}()
 

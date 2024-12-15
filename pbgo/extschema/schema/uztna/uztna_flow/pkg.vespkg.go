@@ -34,9 +34,11 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.uztna.uztna_flow.ApplicationTagging"] = ApplicationTaggingValidator()
 	vr["ves.io.schema.uztna.uztna_flow.AudienceUri"] = AudienceUriValidator()
 	vr["ves.io.schema.uztna.uztna_flow.Certificate"] = CertificateValidator()
-	vr["ves.io.schema.uztna.uztna_flow.ProviderMetadata"] = ProviderMetadataValidator()
+	vr["ves.io.schema.uztna.uztna_flow.IdentityProvider"] = IdentityProviderValidator()
+	vr["ves.io.schema.uztna.uztna_flow.IdpSecurityProperty"] = IdpSecurityPropertyValidator()
 	vr["ves.io.schema.uztna.uztna_flow.SAMLMessage"] = SAMLMessageValidator()
 	vr["ves.io.schema.uztna.uztna_flow.ServiceProviderProperties"] = ServiceProviderPropertiesValidator()
+	vr["ves.io.schema.uztna.uztna_flow.SignAlgorithm"] = SignAlgorithmValidator()
 	vr["ves.io.schema.uztna.uztna_flow.SignAuthenticationRequest"] = SignAuthenticationRequestValidator()
 	vr["ves.io.schema.uztna.uztna_flow.UniformResourceLocator"] = UniformResourceLocatorValidator()
 	vr["ves.io.schema.uztna.uztna_flow.UniformResourceName"] = UniformResourceNameValidator()
@@ -64,6 +66,14 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 }
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
+
+	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.uztna.uztna_flow.API.Create"] = []string{
+		"spec.flow_type.saml_message.idp.name",
+	}
+
+	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.uztna.uztna_flow.API.Replace"] = []string{
+		"spec.flow_type.saml_message.idp.name",
+	}
 
 }
 

@@ -1,9 +1,9 @@
 ---
 
 page_title: "Volterra: app_firewall"
-description: "The app_firewall allows CRUD of App Firewall resource on Volterra SaaS"
 
----
+description: "The app_firewall allows CRUD of App Firewall resource on Volterra SaaS"
+-------------------------------------------------------------------------------------
 
 Resource volterra_app_firewall
 ==============================
@@ -26,23 +26,36 @@ resource "volterra_app_firewall" "example" {
 
   // One of the arguments from this list "custom_anonymization default_anonymization disable_anonymization" must be set
 
-  default_anonymization = true
+  disable_anonymization = true
 
   // One of the arguments from this list "blocking_page use_default_blocking_page" must be set
 
-  use_default_blocking_page = true
+  blocking_page {
+    blocking_page = "<html><head><title>Request Rejected</title></head><body>The requested URL was rejected. Please consult with your administrator.<br/><br/>Your support ID is: {{request_id}}<br/><br/><a href=\\\"javascript:history.back()\\\">[Go Back]</a></body></html>"
+
+    response_code = "response_code"
+  }
 
   // One of the arguments from this list "bot_protection_setting default_bot_setting" must be set
 
-  default_bot_setting = true
+  bot_protection_setting {
+    good_bot_action = "good_bot_action"
+
+    malicious_bot_action = "malicious_bot_action"
+
+    suspicious_bot_action = "suspicious_bot_action"
+  }
 
   // One of the arguments from this list "ai_risk_based_blocking default_detection_settings detection_settings" must be set
 
   detection_settings {
+    // One of the arguments from this list "bot_protection_setting default_bot_setting" must be set
+
+    default_bot_setting = true
+
     // One of the arguments from this list "disable_suppression enable_suppression" must be set
 
     enable_suppression = true
-
     signature_selection_setting {
       // One of the arguments from this list "attack_type_settings default_attack_type_settings" must be set
 
@@ -55,9 +68,7 @@ resource "volterra_app_firewall" "example" {
 
     // One of the arguments from this list "disable_staging stage_new_and_updated_signatures stage_new_signatures" can be set
 
-    stage_new_and_updated_signatures {
-      staging_period = "7"
-    }
+    disable_staging = true
 
     // One of the arguments from this list "disable_threat_campaigns enable_threat_campaigns" must be set
 
@@ -70,7 +81,7 @@ resource "volterra_app_firewall" "example" {
 
   // One of the arguments from this list "blocking monitoring use_loadbalancer_setting" must be set
 
-  monitoring = true
+  use_loadbalancer_setting = true
 }
 
 ```
@@ -116,13 +127,13 @@ Argument Reference
 
 ###### One of the arguments from this list "bot_protection_setting, default_bot_setting" must be set
 
-`bot_protection_setting` - (Optional) Define custom Bot Protection settings. See [Bot Protection Choice Bot Protection Setting ](#bot-protection-choice-bot-protection-setting) below for details.
+`bot_protection_setting` - (Optional) Define custom Bot Protection settings. See [Bot Protection Choice Bot Protection Setting ](#bot-protection-choice-bot-protection-setting) below for details.(Deprecated)
 
-`default_bot_setting` - (Optional) Malicious bots will be blocked, Suspicious and Good bots will be reported. (`Bool`).
+`default_bot_setting` - (Optional) Malicious bots will be blocked, Suspicious and Good bots will be reported. (`Bool`).(Deprecated)
 
 ###### One of the arguments from this list "ai_risk_based_blocking, default_detection_settings, detection_settings" must be set
 
-`ai_risk_based_blocking` - (Optional) assess transaction risk, and only high-risk transactions will be blocked.. See [Detection Setting Choice Ai Risk Based Blocking ](#detection-setting-choice-ai-risk-based-blocking) below for details.(Deprecated)
+`ai_risk_based_blocking` - (Optional) only high-risk requests will be blocked by default. This feature is in preview mode.. See [Detection Setting Choice Ai Risk Based Blocking ](#detection-setting-choice-ai-risk-based-blocking) below for details.
 
 `default_detection_settings` - (Optional) All Attack Types, high and medium accuracy signatures, automatic Attack Signatures tuning, Threat Campaigns and all Violations will be enabled. (`Bool`).
 
@@ -194,6 +205,10 @@ Define custom Bot Protection settings.
 
 `suspicious_bot_action` - (Optional) A client that exhibits non-malicious tools such as site crawlers, monitors, spiders, web downloaders and bots behaviors, signatures such as search bots and social media agents (`String`).
 
+### Bot Protection Choice Default Bot Setting
+
+Malicious bots will be blocked, Suspicious and Good bots will be reported..
+
 ### Custom Anonymization Anonymization Config
 
 List of HTTP headers, cookies and query parameters whose values will be masked.
@@ -208,7 +223,7 @@ List of HTTP headers, cookies and query parameters whose values will be masked.
 
 ### Detection Setting Choice Ai Risk Based Blocking
 
-assess transaction risk, and only high-risk transactions will be blocked..
+only high-risk requests will be blocked by default. This feature is in preview mode..
 
 `high_risk_action` - (Required) High-risk HTTP transactions are associated with attack attempts or requests that violate the application firewall policy. (`String`).
 
@@ -219,6 +234,12 @@ assess transaction risk, and only high-risk transactions will be blocked..
 ### Detection Setting Choice Detection Settings
 
 Define Custom Security Policy settings.
+
+###### One of the arguments from this list "bot_protection_setting, default_bot_setting" must be set
+
+`bot_protection_setting` - (Optional) Define custom Bot Protection settings. See [Bot Protection Choice Bot Protection Setting ](#bot-protection-choice-bot-protection-setting) below for details.
+
+`default_bot_setting` - (Optional) Malicious bots will be blocked, Suspicious and Good bots will be reported. (`Bool`).
 
 ###### One of the arguments from this list "disable_suppression, enable_suppression" must be set
 

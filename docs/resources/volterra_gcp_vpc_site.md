@@ -1,9 +1,9 @@
 ---
 
 page_title: "Volterra: gcp_vpc_site"
-description: "The gcp_vpc_site allows CRUD of Gcp Vpc Site resource on Volterra SaaS"
 
----
+description: "The gcp_vpc_site allows CRUD of Gcp Vpc Site resource on Volterra SaaS"
+-------------------------------------------------------------------------------------
 
 Resource volterra_gcp_vpc_site
 ==============================
@@ -22,7 +22,7 @@ resource "volterra_gcp_vpc_site" "example" {
 
   // One of the arguments from this list "block_all_services blocked_services default_blocked_services" must be set
 
-  block_all_services = true
+  default_blocked_services = true
 
   // One of the arguments from this list "cloud_credentials" must be set
 
@@ -36,7 +36,11 @@ resource "volterra_gcp_vpc_site" "example" {
 
   // One of the arguments from this list "log_receiver logs_streaming_disabled" must be set
 
-  logs_streaming_disabled = true
+  log_receiver {
+    name      = "test1"
+    namespace = "staging"
+    tenant    = "acmecorp"
+  }
 
   // One of the arguments from this list "private_connect_disabled private_connectivity" must be set
 
@@ -49,7 +53,7 @@ resource "volterra_gcp_vpc_site" "example" {
 
     // One of the arguments from this list "inside outside" can be set
 
-    outside = true
+    inside = true
   }
 
   // One of the arguments from this list "ingress_egress_gw ingress_gw voltstack_cluster" must be set
@@ -62,8 +66,8 @@ resource "volterra_gcp_vpc_site" "example" {
     local_network {
       // One of the arguments from this list "existing_network new_network new_network_autogenerate" must be set
 
-      new_network_autogenerate {
-        autogenerate = true
+      new_network {
+        name = "network1"
       }
     }
 
@@ -213,9 +217,9 @@ Enable Kubernetes Drain during OS or SW upgrade.
 
 ###### One of the arguments from this list "disable_upgrade_drain, enable_upgrade_drain" must be set
 
-`disable_upgrade_drain` - (Optional) x-displayName: "Disable Node by Node Upgrade" (`Bool`).
+`disable_upgrade_drain` - (Optional) x-displayName: "Disable" (`Bool`).
 
-`enable_upgrade_drain` - (Optional) x-displayName: "Enable Node by Node Upgrade". See [Kubernetes Upgrade Drain Enable Choice Enable Upgrade Drain ](#kubernetes-upgrade-drain-enable-choice-enable-upgrade-drain) below for details.
+`enable_upgrade_drain` - (Optional) x-displayName: "Enable". See [Kubernetes Upgrade Drain Enable Choice Enable Upgrade Drain ](#kubernetes-upgrade-drain-enable-choice-enable-upgrade-drain) below for details.
 
 ### Offline Survivability Mode
 
@@ -591,11 +595,11 @@ Site Local K8s API access is disabled.
 
 ### Kubernetes Upgrade Drain Enable Choice Disable Upgrade Drain
 
-x-displayName: "Disable Node by Node Upgrade".
+x-displayName: "Disable".
 
 ### Kubernetes Upgrade Drain Enable Choice Enable Upgrade Drain
 
-x-displayName: "Enable Node by Node Upgrade".
+x-displayName: "Enable".
 
 ###### One of the arguments from this list "drain_max_unavailable_node_count, drain_max_unavailable_node_percentage" must be set
 

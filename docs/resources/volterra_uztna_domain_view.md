@@ -1,9 +1,9 @@
 ---
 
 page_title: "Volterra: uztna_domain_view"
-description: "The uztna_domain_view allows CRUD of Uztna Domain View resource on Volterra SaaS"
 
----
+description: "The uztna_domain_view allows CRUD of Uztna Domain View resource on Volterra SaaS"
+-----------------------------------------------------------------------------------------------
 
 Resource volterra_uztna_domain_view
 ===================================
@@ -30,30 +30,36 @@ resource "volterra_uztna_domain_view" "example" {
   }
 
   gateways {
-    bigip_ce {
-      uztna_gateway {
-        name      = "test1"
-        namespace = "staging"
-        tenant    = "acmecorp"
-      }
-    }
-
     perimeter_re {
-      // One of the arguments from this list "all_perimeter re_sites" can be set
+      // One of the arguments from this list "all_cloud re_sites" can be set
 
-      all_perimeter = true
+      all_cloud = true
     }
-  }
 
-  lease_pool {
-    uztna_lpool {
+    uztna_gateway {
       name      = "test1"
       namespace = "staging"
       tenant    = "acmecorp"
     }
   }
 
-  profile_name = ["profile_name"]
+  lease_pool {
+    // One of the arguments from this list "ipv4_ipv6_leasepool ipv4_leasepool ipv6_leasepool" must be set
+
+    ipv4_leasepool {
+      name      = "test1"
+      namespace = "staging"
+      tenant    = "acmecorp"
+    }
+  }
+
+  policy {
+    policy_name {
+      name      = "test1"
+      namespace = "staging"
+      tenant    = "acmecorp"
+    }
+  }
 }
 
 ```
@@ -79,13 +85,21 @@ Argument Reference
 
 `access_url` - (Required) Url to access the gateways (`String`).
 
+`app_vip_pool` - (Optional) Application VIP Pools . See [App Vip Pool ](#app-vip-pool) below for details.
+
 `cert` - (Required) Domain in XC is an established pattern and we would reuse the same.. See [Cert ](#cert) below for details.
 
 `gateways` - (Required) List of all RE prime and Big Ip edge CE. See [Gateways ](#gateways) below for details.
 
 `lease_pool` - (Required) The Lease Pool assigned to the Zero Trust Domain. . See [Lease Pool ](#lease-pool) below for details.
 
-`profile_name` - (Required) The name of the ZTNA profile (`String`).
+`policy` - (Required) The name of the ZTNA profile. See [Policy ](#policy) below for details.
+
+### App Vip Pool
+
+Application VIP Pools .
+
+`app_vip_pool` - (Optional) VIP Pools. See [ref](#ref) below for details.
 
 ### Cert
 
@@ -97,41 +111,55 @@ Domain in XC is an established pattern and we would reuse the same..
 
 List of all RE prime and Big Ip edge CE.
 
-`bigip_ce` - (Optional) From the available bigip CE List select bigip CE .. See [Gateways Bigip Ce ](#gateways-bigip-ce) below for details.
+`perimeter_re` - (Optional) Cloud Gateways and Big-IP Edge Gateways. See [Gateways Perimeter Re ](#gateways-perimeter-re) below for details.
 
-`perimeter_re` - (Optional) Select the Gateways (either Perimeter RE or BigIP CE).. See [Gateways Perimeter Re ](#gateways-perimeter-re) below for details.
+`uztna_gateway` - (Optional) Select BIG-IP Edge Gateway for Advertisement .. See [ref](#ref) below for details.
 
 ### Lease Pool
 
 The Lease Pool assigned to the Zero Trust Domain. .
 
-`uztna_lpool` - (Optional) Lease Pool for UZTNA Domain View. See [ref](#ref) below for details.
+###### One of the arguments from this list "ipv4_ipv6_leasepool, ipv4_leasepool, ipv6_leasepool" must be set
 
-### Gateways Bigip Ce
+`ipv4_ipv6_leasepool` - (Optional) Select or create new IPv4 and IPv6 Leasepools. See [Ipaddress Type Ipv4 Ipv6 Leasepool ](#ipaddress-type-ipv4-ipv6-leasepool) below for details.(Deprecated)
 
-From the available bigip CE List select bigip CE ..
+`ipv4_leasepool` - (Optional) Select or create new IPv4 Leasepools. See [ref](#ref) below for details.
 
-`uztna_gateway` - (Optional) Selected Big IP CE . See [ref](#ref) below for details.
+`ipv6_leasepool` - (Optional) Select or create new IPv4 Leasepools. See [ref](#ref) below for details.(Deprecated)
+
+### Policy
+
+The name of the ZTNA profile.
+
+`policy_name` - (Optional) Select/Add ZTNA Policy to associate with this ZeroTrust Domain. See [ref](#ref) below for details.
+
+### Cloud Gateway Choice All Cloud
+
+Advertise on all Cloud Gateways.
+
+### Cloud Gateway Choice Re Sites
+
+Advertise on selected Cloud Gateways.
+
+`cloud_gateways` - (Optional) Cloud Gateways. See [ref](#ref) below for details.
 
 ### Gateways Perimeter Re
 
-Select the Gateways (either Perimeter RE or BigIP CE)..
+Cloud Gateways and Big-IP Edge Gateways.
 
-###### One of the arguments from this list "all_perimeter, re_sites" can be set
+###### One of the arguments from this list "all_cloud, re_sites" can be set
 
-`all_perimeter` - (Optional) This option will allow to advertise on all available perimeter RE sites (`Bool`).
+`all_cloud` - (Optional) Advertise on all Cloud Gateways (`Bool`).
 
-`re_sites` - (Optional) This option will allow advertise on specific Perimeter RE sites. See [Perimeter Re Choice Re Sites ](#perimeter-re-choice-re-sites) below for details.
+`re_sites` - (Optional) Advertise on selected Cloud Gateways. See [Cloud Gateway Choice Re Sites ](#cloud-gateway-choice-re-sites) below for details.(Deprecated)
 
-### Perimeter Re Choice All Perimeter
+### Ipaddress Type Ipv4 Ipv6 Leasepool
 
-This option will allow to advertise on all available perimeter RE sites.
+Select or create new IPv4 and IPv6 Leasepools.
 
-### Perimeter Re Choice Re Sites
+`ipv4_leasepool` - (Required) Select or create new IPv4 Leasepools. See [ref](#ref) below for details.
 
-This option will allow advertise on specific Perimeter RE sites.
-
-`perimeter_re_site` - (Optional) Selected Perimeter RE Site.. See [ref](#ref) below for details.
+`ipv6_leasepool` - (Required) Select or create new IPv4 Lease Pools. See [ref](#ref) below for details.
 
 ### Ref
 

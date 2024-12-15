@@ -10,10 +10,14 @@ import (
 
 func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.log.access_log.AggregationRequest"] = AggregationRequestValidator()
+	vr["ves.io.schema.log.access_log.AvgAggregation"] = AvgAggregationValidator()
 	vr["ves.io.schema.log.access_log.CardinalityAggregation"] = CardinalityAggregationValidator()
 	vr["ves.io.schema.log.access_log.DateAggregation"] = DateAggregationValidator()
 	vr["ves.io.schema.log.access_log.DateSubAggregation"] = DateSubAggregationValidator()
 	vr["ves.io.schema.log.access_log.FieldAggregation"] = FieldAggregationValidator()
+	vr["ves.io.schema.log.access_log.FieldSubAggregation"] = FieldSubAggregationValidator()
+	vr["ves.io.schema.log.access_log.MaxAggregation"] = MaxAggregationValidator()
+	vr["ves.io.schema.log.access_log.MinAggregation"] = MinAggregationValidator()
 	vr["ves.io.schema.log.access_log.MultiFieldAggregation"] = MultiFieldAggregationValidator()
 
 }

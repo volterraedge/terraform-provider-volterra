@@ -62,7 +62,8 @@ func resourceVolterraZtna() *schema.Resource {
 
 			"connectivity": {
 
-				Type:     schema.TypeSet,
+				Type:     schema.TypeList,
+				MaxItems: 1,
 				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
@@ -82,14 +83,16 @@ func resourceVolterraZtna() *schema.Resource {
 
 			"per_session": {
 
-				Type:     schema.TypeSet,
+				Type:     schema.TypeList,
+				MaxItems: 1,
 				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 
 						"external_server": {
 
-							Type:     schema.TypeSet,
+							Type:     schema.TypeList,
+							MaxItems: 1,
 							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
@@ -99,21 +102,25 @@ func resourceVolterraZtna() *schema.Resource {
 										Required: true,
 									},
 									"value": {
-										Type:     schema.TypeSet,
+
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
 												"admin_password": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Optional: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
 															"blindfold_secret_info_internal": {
 
-																Type:       schema.TypeSet,
+																Type:       schema.TypeList,
+																MaxItems:   1,
 																Optional:   true,
 																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
@@ -148,7 +155,8 @@ func resourceVolterraZtna() *schema.Resource {
 
 															"blindfold_secret_info": {
 
-																Type:     schema.TypeSet,
+																Type:     schema.TypeList,
+																MaxItems: 1,
 																Optional: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
@@ -173,7 +181,8 @@ func resourceVolterraZtna() *schema.Resource {
 
 															"clear_secret_info": {
 
-																Type:     schema.TypeSet,
+																Type:     schema.TypeList,
+																MaxItems: 1,
 																Optional: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
@@ -193,7 +202,8 @@ func resourceVolterraZtna() *schema.Resource {
 
 															"vault_secret_info": {
 
-																Type:       schema.TypeSet,
+																Type:       schema.TypeList,
+																MaxItems:   1,
 																Optional:   true,
 																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
@@ -234,7 +244,8 @@ func resourceVolterraZtna() *schema.Resource {
 
 															"wingman_secret_info": {
 
-																Type:       schema.TypeSet,
+																Type:       schema.TypeList,
+																MaxItems:   1,
 																Optional:   true,
 																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
@@ -275,7 +286,8 @@ func resourceVolterraZtna() *schema.Resource {
 
 						"lease_pool_member": {
 
-							Type:     schema.TypeSet,
+							Type:     schema.TypeList,
+							MaxItems: 1,
 							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
@@ -285,21 +297,25 @@ func resourceVolterraZtna() *schema.Resource {
 										Required: true,
 									},
 									"value": {
-										Type:     schema.TypeSet,
+
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
 												"end_address": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Optional: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
 															"ipv4": {
 
-																Type:     schema.TypeSet,
+																Type:     schema.TypeList,
+																MaxItems: 1,
 																Optional: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
@@ -314,7 +330,8 @@ func resourceVolterraZtna() *schema.Resource {
 
 															"ipv6": {
 
-																Type:     schema.TypeSet,
+																Type:     schema.TypeList,
+																MaxItems: 1,
 																Optional: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
@@ -332,14 +349,16 @@ func resourceVolterraZtna() *schema.Resource {
 
 												"start_address": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Optional: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
 															"ipv4": {
 
-																Type:     schema.TypeSet,
+																Type:     schema.TypeList,
+																MaxItems: 1,
 																Optional: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
@@ -354,7 +373,8 @@ func resourceVolterraZtna() *schema.Resource {
 
 															"ipv6": {
 
-																Type:     schema.TypeSet,
+																Type:     schema.TypeList,
+																MaxItems: 1,
 																Optional: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
@@ -383,7 +403,8 @@ func resourceVolterraZtna() *schema.Resource {
 
 						"resources": {
 
-							Type:     schema.TypeSet,
+							Type:     schema.TypeList,
+							MaxItems: 1,
 							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
@@ -393,14 +414,17 @@ func resourceVolterraZtna() *schema.Resource {
 										Required: true,
 									},
 									"value": {
-										Type:     schema.TypeSet,
+
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
 												"acl": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Optional: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -424,14 +448,16 @@ func resourceVolterraZtna() *schema.Resource {
 
 																		"destination_ip": {
 
-																			Type:     schema.TypeSet,
+																			Type:     schema.TypeList,
+																			MaxItems: 1,
 																			Optional: true,
 																			Elem: &schema.Resource{
 																				Schema: map[string]*schema.Schema{
 
 																					"ipv4": {
 
-																						Type:     schema.TypeSet,
+																						Type:     schema.TypeList,
+																						MaxItems: 1,
 																						Optional: true,
 																						Elem: &schema.Resource{
 																							Schema: map[string]*schema.Schema{
@@ -446,7 +472,8 @@ func resourceVolterraZtna() *schema.Resource {
 
 																					"ipv6": {
 
-																						Type:     schema.TypeSet,
+																						Type:     schema.TypeList,
+																						MaxItems: 1,
 																						Optional: true,
 																						Elem: &schema.Resource{
 																							Schema: map[string]*schema.Schema{
@@ -493,7 +520,8 @@ func resourceVolterraZtna() *schema.Resource {
 
 						"sequence_action": {
 
-							Type:     schema.TypeSet,
+							Type:     schema.TypeList,
+							MaxItems: 1,
 							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
@@ -505,14 +533,16 @@ func resourceVolterraZtna() *schema.Resource {
 
 									"next_action": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
 												"active_directory_auth": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Optional: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -536,7 +566,8 @@ func resourceVolterraZtna() *schema.Resource {
 
 																		"resource_assign": {
 
-																			Type:     schema.TypeSet,
+																			Type:     schema.TypeList,
+																			MaxItems: 1,
 																			Optional: true,
 																			Elem: &schema.Resource{
 																				Schema: map[string]*schema.Schema{
@@ -632,7 +663,8 @@ func resourceVolterraZtna() *schema.Resource {
 
 												"active_directory_query": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Optional: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -649,7 +681,8 @@ func resourceVolterraZtna() *schema.Resource {
 
 															"resource_assign": {
 
-																Type:     schema.TypeSet,
+																Type:     schema.TypeList,
+																MaxItems: 1,
 																Optional: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
@@ -727,7 +760,8 @@ func resourceVolterraZtna() *schema.Resource {
 
 												"log_on": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Optional: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -758,7 +792,8 @@ func resourceVolterraZtna() *schema.Resource {
 
 																					"resource_assign": {
 
-																						Type:     schema.TypeSet,
+																						Type:     schema.TypeList,
+																						MaxItems: 1,
 																						Optional: true,
 																						Elem: &schema.Resource{
 																							Schema: map[string]*schema.Schema{
@@ -861,14 +896,16 @@ func resourceVolterraZtna() *schema.Resource {
 
 																		"password": {
 
-																			Type:     schema.TypeSet,
+																			Type:     schema.TypeList,
+																			MaxItems: 1,
 																			Optional: true,
 																			Elem: &schema.Resource{
 																				Schema: map[string]*schema.Schema{
 
 																					"blindfold_secret_info_internal": {
 
-																						Type:       schema.TypeSet,
+																						Type:       schema.TypeList,
+																						MaxItems:   1,
 																						Optional:   true,
 																						Deprecated: "This field is deprecated and will be removed in future release.",
 																						Elem: &schema.Resource{
@@ -903,7 +940,8 @@ func resourceVolterraZtna() *schema.Resource {
 
 																					"blindfold_secret_info": {
 
-																						Type:     schema.TypeSet,
+																						Type:     schema.TypeList,
+																						MaxItems: 1,
 																						Optional: true,
 																						Elem: &schema.Resource{
 																							Schema: map[string]*schema.Schema{
@@ -928,7 +966,8 @@ func resourceVolterraZtna() *schema.Resource {
 
 																					"clear_secret_info": {
 
-																						Type:     schema.TypeSet,
+																						Type:     schema.TypeList,
+																						MaxItems: 1,
 																						Optional: true,
 																						Elem: &schema.Resource{
 																							Schema: map[string]*schema.Schema{
@@ -948,7 +987,8 @@ func resourceVolterraZtna() *schema.Resource {
 
 																					"vault_secret_info": {
 
-																						Type:       schema.TypeSet,
+																						Type:       schema.TypeList,
+																						MaxItems:   1,
 																						Optional:   true,
 																						Deprecated: "This field is deprecated and will be removed in future release.",
 																						Elem: &schema.Resource{
@@ -989,7 +1029,8 @@ func resourceVolterraZtna() *schema.Resource {
 
 																					"wingman_secret_info": {
 
-																						Type:       schema.TypeSet,
+																						Type:       schema.TypeList,
+																						MaxItems:   1,
 																						Optional:   true,
 																						Deprecated: "This field is deprecated and will be removed in future release.",
 																						Elem: &schema.Resource{
@@ -1020,7 +1061,8 @@ func resourceVolterraZtna() *schema.Resource {
 
 												"resource_assign": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Optional: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -1156,22 +1198,24 @@ func resourceVolterraZtnaCreate(d *schema.ResourceData, meta interface{}) error 
 	//connectivity
 	if v, ok := d.GetOk("connectivity"); ok && !isIntfNil(v) {
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		connectivity := &ves_io_schema_ztna.ConnectivityPolicyType{}
 		createSpec.Connectivity = connectivity
 		for _, set := range sl {
-			connectivityMapStrToI := set.(map[string]interface{})
+			if set != nil {
+				connectivityMapStrToI := set.(map[string]interface{})
 
-			if v, ok := connectivityMapStrToI["connectivities"]; ok && !isIntfNil(v) {
+				if v, ok := connectivityMapStrToI["connectivities"]; ok && !isIntfNil(v) {
 
-				connectivity.Connectivities = ves_io_schema_ztna.Connectivity(ves_io_schema_ztna.Connectivity_value[v.(string)])
+					connectivity.Connectivities = ves_io_schema_ztna.Connectivity(ves_io_schema_ztna.Connectivity_value[v.(string)])
+
+				}
+
+				if w, ok := connectivityMapStrToI["connectivity_policy_name"]; ok && !isIntfNil(w) {
+					connectivity.ConnectivityPolicyName = w.(string)
+				}
 
 			}
-
-			if w, ok := connectivityMapStrToI["connectivity_policy_name"]; ok && !isIntfNil(w) {
-				connectivity.ConnectivityPolicyName = w.(string)
-			}
-
 		}
 
 	}
@@ -1179,560 +1223,920 @@ func resourceVolterraZtnaCreate(d *schema.ResourceData, meta interface{}) error 
 	//per_session
 	if v, ok := d.GetOk("per_session"); ok && !isIntfNil(v) {
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		perSession := &ves_io_schema_ztna.PerSessionPolicyType{}
 		createSpec.PerSession = perSession
 		for _, set := range sl {
-			perSessionMapStrToI := set.(map[string]interface{})
+			if set != nil {
+				perSessionMapStrToI := set.(map[string]interface{})
 
-			if v, ok := perSessionMapStrToI["external_server"]; ok && !isIntfNil(v) {
+				if v, ok := perSessionMapStrToI["external_server"]; ok && !isIntfNil(v) {
 
-				sl := v.(*schema.Set).List()
-				externalServer := make(map[string]*ves_io_schema_ztna.ExternalServers)
-				perSession.ExternalServer = externalServer
-				for _, set := range sl {
-					externalServerMapStrToI := set.(map[string]interface{})
-					key, ok := externalServerMapStrToI["name"]
-					if ok && !isIntfNil(key) {
-						externalServer[key.(string)] = &ves_io_schema_ztna.ExternalServers{}
-						val, _ := externalServerMapStrToI["value"]
+					sl := v.([]interface{})
+					externalServer := make(map[string]*ves_io_schema_ztna.ExternalServers)
+					perSession.ExternalServer = externalServer
+					for _, set := range sl {
+						if set != nil {
+							externalServerMapStrToI := set.(map[string]interface{})
+							key, ok := externalServerMapStrToI["name"]
+							if ok && !isIntfNil(key) {
+								externalServer[key.(string)] = &ves_io_schema_ztna.ExternalServers{}
+								val, _ := externalServerMapStrToI["value"]
 
-						externalServerVals := val.(*schema.Set).List()
-						for _, intVal := range externalServerVals {
+								externalServerVals := val.([]interface{})
+								for _, intVal := range externalServerVals {
+									if intVal != nil {
 
-							externalServerStaticMap := intVal.(map[string]interface{})
+										externalServerStaticMap := intVal.(map[string]interface{})
 
-							if w, ok := externalServerStaticMap["admin_password"]; ok && !isIntfNil(w) {
-								externalServer[key.(string)].AdminPassword = w.(*ves_io_schema.SecretType)
+										if w, ok := externalServerStaticMap["admin_password"]; ok && !isIntfNil(w) {
+											externalServer[key.(string)].AdminPassword = w.(*ves_io_schema.SecretType)
+										}
+
+										if w, ok := externalServerStaticMap["admin_username"]; ok && !isIntfNil(w) {
+											externalServer[key.(string)].AdminUsername = w.(string)
+										}
+
+										if w, ok := externalServerStaticMap["domain"]; ok && !isIntfNil(w) {
+											externalServer[key.(string)].Domain = w.(string)
+										}
+
+										if w, ok := externalServerStaticMap["server_type"]; ok && !isIntfNil(w) {
+											externalServer[key.(string)].ServerType =  w.(ves_io_schema_ztna.ServerType)
+										}
+
+										// break after one loop
+										break
+									}
+								}
 							}
-
-							if w, ok := externalServerStaticMap["admin_username"]; ok && !isIntfNil(w) {
-								externalServer[key.(string)].AdminUsername = w.(string)
-							}
-
-							if w, ok := externalServerStaticMap["domain"]; ok && !isIntfNil(w) {
-								externalServer[key.(string)].Domain = w.(string)
-							}
-
-							if w, ok := externalServerStaticMap["server_type"]; ok && !isIntfNil(w) {
-								externalServer[key.(string)].ServerType = w.(ves_io_schema_ztna.ServerType)
-							}
-
-							// break after one loop
-							break
 						}
 					}
+
 				}
 
-			}
+				if v, ok := perSessionMapStrToI["lease_pool_member"]; ok && !isIntfNil(v) {
 
-			if v, ok := perSessionMapStrToI["lease_pool_member"]; ok && !isIntfNil(v) {
+					sl := v.([]interface{})
+					leasePoolMember := make(map[string]*ves_io_schema_ztna.LeasePoolMember)
+					perSession.LeasePoolMember = leasePoolMember
+					for _, set := range sl {
+						if set != nil {
+							leasePoolMemberMapStrToI := set.(map[string]interface{})
+							key, ok := leasePoolMemberMapStrToI["name"]
+							if ok && !isIntfNil(key) {
+								leasePoolMember[key.(string)] = &ves_io_schema_ztna.LeasePoolMember{}
+								val, _ := leasePoolMemberMapStrToI["value"]
 
-				sl := v.(*schema.Set).List()
-				leasePoolMember := make(map[string]*ves_io_schema_ztna.LeasePoolMember)
-				perSession.LeasePoolMember = leasePoolMember
-				for _, set := range sl {
-					leasePoolMemberMapStrToI := set.(map[string]interface{})
-					key, ok := leasePoolMemberMapStrToI["name"]
-					if ok && !isIntfNil(key) {
-						leasePoolMember[key.(string)] = &ves_io_schema_ztna.LeasePoolMember{}
-						val, _ := leasePoolMemberMapStrToI["value"]
+								leasePoolMemberVals := val.([]interface{})
+								for _, intVal := range leasePoolMemberVals {
+									if intVal != nil {
 
-						leasePoolMemberVals := val.(*schema.Set).List()
-						for _, intVal := range leasePoolMemberVals {
+										leasePoolMemberStaticMap := intVal.(map[string]interface{})
 
-							leasePoolMemberStaticMap := intVal.(map[string]interface{})
+										if w, ok := leasePoolMemberStaticMap["end_address"]; ok && !isIntfNil(w) {
+											leasePoolMember[key.(string)].EndAddress = w.(*ves_io_schema.IpAddressType)
+										}
 
-							if w, ok := leasePoolMemberStaticMap["end_address"]; ok && !isIntfNil(w) {
-								leasePoolMember[key.(string)].EndAddress = w.(*ves_io_schema.IpAddressType)
+										if w, ok := leasePoolMemberStaticMap["start_address"]; ok && !isIntfNil(w) {
+											leasePoolMember[key.(string)].StartAddress = w.(*ves_io_schema.IpAddressType)
+										}
+
+										// break after one loop
+										break
+									}
+								}
 							}
-
-							if w, ok := leasePoolMemberStaticMap["start_address"]; ok && !isIntfNil(w) {
-								leasePoolMember[key.(string)].StartAddress = w.(*ves_io_schema.IpAddressType)
-							}
-
-							// break after one loop
-							break
 						}
 					}
+
 				}
 
-			}
+				if w, ok := perSessionMapStrToI["per_session_policy_name"]; ok && !isIntfNil(w) {
+					perSession.PerSessionPolicyName = w.(string)
+				}
 
-			if w, ok := perSessionMapStrToI["per_session_policy_name"]; ok && !isIntfNil(w) {
-				perSession.PerSessionPolicyName = w.(string)
-			}
+				if v, ok := perSessionMapStrToI["resources"]; ok && !isIntfNil(v) {
 
-			if v, ok := perSessionMapStrToI["resources"]; ok && !isIntfNil(v) {
+					sl := v.([]interface{})
+					resources := make(map[string]*ves_io_schema_ztna.Resource)
+					perSession.Resources = resources
+					for _, set := range sl {
+						if set != nil {
+							resourcesMapStrToI := set.(map[string]interface{})
+							key, ok := resourcesMapStrToI["name"]
+							if ok && !isIntfNil(key) {
+								resources[key.(string)] = &ves_io_schema_ztna.Resource{}
+								val, _ := resourcesMapStrToI["value"]
 
-				sl := v.(*schema.Set).List()
-				resources := make(map[string]*ves_io_schema_ztna.Resource)
-				perSession.Resources = resources
-				for _, set := range sl {
-					resourcesMapStrToI := set.(map[string]interface{})
-					key, ok := resourcesMapStrToI["name"]
-					if ok && !isIntfNil(key) {
-						resources[key.(string)] = &ves_io_schema_ztna.Resource{}
-						val, _ := resourcesMapStrToI["value"]
+								resourcesVals := val.([]interface{})
+								for _, intVal := range resourcesVals {
+									if intVal != nil {
 
-						resourcesVals := val.(*schema.Set).List()
-						for _, intVal := range resourcesVals {
+										resourcesStaticMap := intVal.(map[string]interface{})
 
-							resourcesStaticMap := intVal.(map[string]interface{})
+										resourceTypeTypeFound := false
 
-							resourceTypeTypeFound := false
+										if v, ok := resourcesStaticMap["acl"]; ok && !isIntfNil(v) && !resourceTypeTypeFound {
 
-							if v, ok := resourcesStaticMap["acl"]; ok && !isIntfNil(v) && !resourceTypeTypeFound {
+											resourceTypeTypeFound = true
+											resourceTypeInt := &ves_io_schema_ztna.Resource_Acl{}
+											resourceTypeInt.Acl = &ves_io_schema_ztna.AclResourceEntry{}
+											resources[key.(string)].ResourceType = resourceTypeInt
 
-								resourceTypeTypeFound = true
-								resourceTypeInt := &ves_io_schema_ztna.Resource_Acl{}
-								resourceTypeInt.Acl = &ves_io_schema_ztna.AclResourceEntry{}
-								resources[key.(string)].ResourceType = resourceTypeInt
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
 
-								sl := v.(*schema.Set).List()
-								for _, set := range sl {
-									cs := set.(map[string]interface{})
+													if v, ok := cs["entries"]; ok && !isIntfNil(v) {
 
-									if v, ok := cs["entries"]; ok && !isIntfNil(v) {
+														sl := v.([]interface{})
+														entries := make([]*ves_io_schema_ztna.Entry, len(sl))
+														resourceTypeInt.Acl.Entries = entries
+														for i, set := range sl {
+															if set != nil {
+																entries[i] = &ves_io_schema_ztna.Entry{}
+																entriesMapStrToI := set.(map[string]interface{})
 
-										sl := v.([]interface{})
-										entries := make([]*ves_io_schema_ztna.Entry, len(sl))
-										resourceTypeInt.Acl.Entries = entries
-										for i, set := range sl {
-											entries[i] = &ves_io_schema_ztna.Entry{}
-											entriesMapStrToI := set.(map[string]interface{})
+																if v, ok := entriesMapStrToI["action"]; ok && !isIntfNil(v) {
 
-											if v, ok := entriesMapStrToI["action"]; ok && !isIntfNil(v) {
+																	entries[i].Action = ves_io_schema_ztna.Action(ves_io_schema_ztna.Action_value[v.(string)])
 
-												entries[i].Action = ves_io_schema_ztna.Action(ves_io_schema_ztna.Action_value[v.(string)])
+																}
 
-											}
+																if w, ok := entriesMapStrToI["destination_end_port"]; ok && !isIntfNil(w) {
+																	entries[i].DestinationEndPort = uint32(w.(int))
+																}
 
-											if w, ok := entriesMapStrToI["destination_end_port"]; ok && !isIntfNil(w) {
-												entries[i].DestinationEndPort = uint32(w.(int))
-											}
+																if v, ok := entriesMapStrToI["destination_ip"]; ok && !isIntfNil(v) {
 
-											if v, ok := entriesMapStrToI["destination_ip"]; ok && !isIntfNil(v) {
+																	sl := v.([]interface{})
+																	destinationIp := &ves_io_schema.IpAddressType{}
+																	entries[i].DestinationIp = destinationIp
+																	for _, set := range sl {
+																		if set != nil {
+																			destinationIpMapStrToI := set.(map[string]interface{})
 
-												sl := v.(*schema.Set).List()
-												destinationIp := &ves_io_schema.IpAddressType{}
-												entries[i].DestinationIp = destinationIp
-												for _, set := range sl {
-													destinationIpMapStrToI := set.(map[string]interface{})
+																			verTypeFound := false
 
-													verTypeFound := false
+																			if v, ok := destinationIpMapStrToI["ipv4"]; ok && !isIntfNil(v) && !verTypeFound {
 
-													if v, ok := destinationIpMapStrToI["ipv4"]; ok && !isIntfNil(v) && !verTypeFound {
+																				verTypeFound = true
+																				verInt := &ves_io_schema.IpAddressType_Ipv4{}
+																				verInt.Ipv4 = &ves_io_schema.Ipv4AddressType{}
+																				destinationIp.Ver = verInt
 
-														verTypeFound = true
-														verInt := &ves_io_schema.IpAddressType_Ipv4{}
-														verInt.Ipv4 = &ves_io_schema.Ipv4AddressType{}
-														destinationIp.Ver = verInt
+																				sl := v.([]interface{})
+																				for _, set := range sl {
+																					if set != nil {
+																						cs := set.(map[string]interface{})
 
-														sl := v.(*schema.Set).List()
-														for _, set := range sl {
-															cs := set.(map[string]interface{})
+																						if v, ok := cs["addr"]; ok && !isIntfNil(v) {
 
-															if v, ok := cs["addr"]; ok && !isIntfNil(v) {
+																							verInt.Ipv4.Addr = v.(string)
 
-																verInt.Ipv4.Addr = v.(string)
+																						}
+
+																					}
+																				}
+
+																			}
+
+																			if v, ok := destinationIpMapStrToI["ipv6"]; ok && !isIntfNil(v) && !verTypeFound {
+
+																				verTypeFound = true
+																				verInt := &ves_io_schema.IpAddressType_Ipv6{}
+																				verInt.Ipv6 = &ves_io_schema.Ipv6AddressType{}
+																				destinationIp.Ver = verInt
+
+																				sl := v.([]interface{})
+																				for _, set := range sl {
+																					if set != nil {
+																						cs := set.(map[string]interface{})
+
+																						if v, ok := cs["addr"]; ok && !isIntfNil(v) {
+
+																							verInt.Ipv6.Addr = v.(string)
+
+																						}
+
+																					}
+																				}
+
+																			}
+
+																		}
+																	}
+
+																}
+
+																if w, ok := entriesMapStrToI["destination_start_port"]; ok && !isIntfNil(w) {
+																	entries[i].DestinationStartPort = uint32(w.(int))
+																}
 
 															}
-
-														}
-
-													}
-
-													if v, ok := destinationIpMapStrToI["ipv6"]; ok && !isIntfNil(v) && !verTypeFound {
-
-														verTypeFound = true
-														verInt := &ves_io_schema.IpAddressType_Ipv6{}
-														verInt.Ipv6 = &ves_io_schema.Ipv6AddressType{}
-														destinationIp.Ver = verInt
-
-														sl := v.(*schema.Set).List()
-														for _, set := range sl {
-															cs := set.(map[string]interface{})
-
-															if v, ok := cs["addr"]; ok && !isIntfNil(v) {
-
-																verInt.Ipv6.Addr = v.(string)
-
-															}
-
 														}
 
 													}
 
 												}
-
-											}
-
-											if w, ok := entriesMapStrToI["destination_start_port"]; ok && !isIntfNil(w) {
-												entries[i].DestinationStartPort = uint32(w.(int))
 											}
 
 										}
 
+										if v, ok := resourcesStaticMap["connectivity"]; ok && !isIntfNil(v) && !resourceTypeTypeFound {
+
+											resourceTypeTypeFound = true
+
+											if v.(bool) {
+												resourceTypeInt := &ves_io_schema_ztna.Resource_Connectivity{}
+												resourceTypeInt.Connectivity = &ves_io_schema.Empty{}
+												resources[key.(string)].ResourceType = resourceTypeInt
+											}
+
+										}
+
+										if v, ok := resourcesStaticMap["web"]; ok && !isIntfNil(v) && !resourceTypeTypeFound {
+
+											resourceTypeTypeFound = true
+
+											if v.(bool) {
+												resourceTypeInt := &ves_io_schema_ztna.Resource_Web{}
+												resourceTypeInt.Web = &ves_io_schema.Empty{}
+												resources[key.(string)].ResourceType = resourceTypeInt
+											}
+
+										}
+
+										// break after one loop
+										break
 									}
-
 								}
-
 							}
-
-							if v, ok := resourcesStaticMap["connectivity"]; ok && !isIntfNil(v) && !resourceTypeTypeFound {
-
-								resourceTypeTypeFound = true
-
-								if v.(bool) {
-									resourceTypeInt := &ves_io_schema_ztna.Resource_Connectivity{}
-									resourceTypeInt.Connectivity = &ves_io_schema.Empty{}
-									resources[key.(string)].ResourceType = resourceTypeInt
-								}
-
-							}
-
-							if v, ok := resourcesStaticMap["web"]; ok && !isIntfNil(v) && !resourceTypeTypeFound {
-
-								resourceTypeTypeFound = true
-
-								if v.(bool) {
-									resourceTypeInt := &ves_io_schema_ztna.Resource_Web{}
-									resourceTypeInt.Web = &ves_io_schema.Empty{}
-									resources[key.(string)].ResourceType = resourceTypeInt
-								}
-
-							}
-
-							// break after one loop
-							break
 						}
 					}
+
 				}
 
-			}
+				if v, ok := perSessionMapStrToI["sequence_action"]; ok && !isIntfNil(v) {
 
-			if v, ok := perSessionMapStrToI["sequence_action"]; ok && !isIntfNil(v) {
+					sl := v.([]interface{})
+					sequenceAction := &ves_io_schema_ztna.SequenceAction{}
+					perSession.SequenceAction = sequenceAction
+					for _, set := range sl {
+						if set != nil {
+							sequenceActionMapStrToI := set.(map[string]interface{})
 
-				sl := v.(*schema.Set).List()
-				sequenceAction := &ves_io_schema_ztna.SequenceAction{}
-				perSession.SequenceAction = sequenceAction
-				for _, set := range sl {
-					sequenceActionMapStrToI := set.(map[string]interface{})
+							if w, ok := sequenceActionMapStrToI["connectivity_access_policy_name"]; ok && !isIntfNil(w) {
+								sequenceAction.ConnectivityAccessPolicyName = w.(string)
+							}
 
-					if w, ok := sequenceActionMapStrToI["connectivity_access_policy_name"]; ok && !isIntfNil(w) {
-						sequenceAction.ConnectivityAccessPolicyName = w.(string)
-					}
+							if v, ok := sequenceActionMapStrToI["next_action"]; ok && !isIntfNil(v) {
 
-					if v, ok := sequenceActionMapStrToI["next_action"]; ok && !isIntfNil(v) {
-
-						sl := v.(*schema.Set).List()
-						nextAction := &ves_io_schema_ztna.ActionType{}
-						sequenceAction.NextAction = nextAction
-						for _, set := range sl {
-							nextActionMapStrToI := set.(map[string]interface{})
-
-							itemTypeTypeFound := false
-
-							if v, ok := nextActionMapStrToI["active_directory_auth"]; ok && !isIntfNil(v) && !itemTypeTypeFound {
-
-								itemTypeTypeFound = true
-								itemTypeInt := &ves_io_schema_ztna.ActionType_ActiveDirectoryAuth{}
-								itemTypeInt.ActiveDirectoryAuth = &ves_io_schema_ztna.ActiveDirectoryAuth{}
-								nextAction.ItemType = itemTypeInt
-
-								sl := v.(*schema.Set).List()
+								sl := v.([]interface{})
+								nextAction := &ves_io_schema_ztna.ActionType{}
+								sequenceAction.NextAction = nextAction
 								for _, set := range sl {
-									cs := set.(map[string]interface{})
+									if set != nil {
+										nextActionMapStrToI := set.(map[string]interface{})
 
-									if v, ok := cs["active_directory_query"]; ok && !isIntfNil(v) {
+										itemTypeTypeFound := false
 
-										sl := v.([]interface{})
-										activeDirectoryQuery := make([]*ves_io_schema_ztna.ActiveDirectoryQuery, len(sl))
-										itemTypeInt.ActiveDirectoryAuth.ActiveDirectoryQuery = activeDirectoryQuery
-										for i, set := range sl {
-											activeDirectoryQuery[i] = &ves_io_schema_ztna.ActiveDirectoryQuery{}
-											activeDirectoryQueryMapStrToI := set.(map[string]interface{})
+										if v, ok := nextActionMapStrToI["active_directory_auth"]; ok && !isIntfNil(v) && !itemTypeTypeFound {
 
-											if w, ok := activeDirectoryQueryMapStrToI["deny_name"]; ok && !isIntfNil(w) {
-												activeDirectoryQuery[i].DenyName = w.(string)
+											itemTypeTypeFound = true
+											itemTypeInt := &ves_io_schema_ztna.ActionType_ActiveDirectoryAuth{}
+											itemTypeInt.ActiveDirectoryAuth = &ves_io_schema_ztna.ActiveDirectoryAuth{}
+											nextAction.ItemType = itemTypeInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["active_directory_query"]; ok && !isIntfNil(v) {
+
+														sl := v.([]interface{})
+														activeDirectoryQuery := make([]*ves_io_schema_ztna.ActiveDirectoryQuery, len(sl))
+														itemTypeInt.ActiveDirectoryAuth.ActiveDirectoryQuery = activeDirectoryQuery
+														for i, set := range sl {
+															if set != nil {
+																activeDirectoryQuery[i] = &ves_io_schema_ztna.ActiveDirectoryQuery{}
+																activeDirectoryQueryMapStrToI := set.(map[string]interface{})
+
+																if w, ok := activeDirectoryQueryMapStrToI["deny_name"]; ok && !isIntfNil(w) {
+																	activeDirectoryQuery[i].DenyName = w.(string)
+																}
+
+																if w, ok := activeDirectoryQueryMapStrToI["filter"]; ok && !isIntfNil(w) {
+																	activeDirectoryQuery[i].Filter = w.(string)
+																}
+
+																if v, ok := activeDirectoryQueryMapStrToI["resource_assign"]; ok && !isIntfNil(v) {
+
+																	sl := v.([]interface{})
+																	resourceAssign := &ves_io_schema_ztna.ResourceAssign{}
+																	activeDirectoryQuery[i].ResourceAssign = resourceAssign
+																	for _, set := range sl {
+																		if set != nil {
+																			resourceAssignMapStrToI := set.(map[string]interface{})
+
+																			if v, ok := resourceAssignMapStrToI["allow"]; ok && !isIntfNil(v) {
+
+																				sl := v.([]interface{})
+																				allow := make([]*ves_io_schema_ztna.AllowResourceAssign, len(sl))
+																				resourceAssign.Allow = allow
+																				for i, set := range sl {
+																					if set != nil {
+																						allow[i] = &ves_io_schema_ztna.AllowResourceAssign{}
+																						allowMapStrToI := set.(map[string]interface{})
+
+																						if w, ok := allowMapStrToI["allow_name"]; ok && !isIntfNil(w) {
+																							allow[i].AllowName = w.(string)
+																						}
+
+																						if w, ok := allowMapStrToI["deny_name"]; ok && !isIntfNil(w) {
+																							allow[i].DenyName = w.(string)
+																						}
+
+																						if v, ok := allowMapStrToI["rules_resource_assign"]; ok && !isIntfNil(v) {
+
+																							sl := v.([]interface{})
+																							rulesResourceAssign := make([]*ves_io_schema_ztna.Rules, len(sl))
+																							allow[i].RulesResourceAssign = rulesResourceAssign
+																							for i, set := range sl {
+																								if set != nil {
+																									rulesResourceAssign[i] = &ves_io_schema_ztna.Rules{}
+																									rulesResourceAssignMapStrToI := set.(map[string]interface{})
+
+																									if w, ok := rulesResourceAssignMapStrToI["acls"]; ok && !isIntfNil(w) {
+																										ls := make([]string, len(w.([]interface{})))
+																										for i, v := range w.([]interface{}) {
+																											ls[i] = v.(string)
+																										}
+																										rulesResourceAssign[i].Acls = ls
+																									}
+
+																									if w, ok := rulesResourceAssignMapStrToI["network_access_rule"]; ok && !isIntfNil(w) {
+																										ls := make([]string, len(w.([]interface{})))
+																										for i, v := range w.([]interface{}) {
+																											ls[i] = v.(string)
+																										}
+																										rulesResourceAssign[i].NetworkAccessRule = ls
+																									}
+
+																									if w, ok := rulesResourceAssignMapStrToI["web_top_name"]; ok && !isIntfNil(w) {
+																										rulesResourceAssign[i].WebTopName = w.(string)
+																									}
+
+																								}
+																							}
+
+																						}
+
+																						if w, ok := allowMapStrToI["server"]; ok && !isIntfNil(w) {
+																							allow[i].Server = w.(string)
+																						}
+
+																					}
+																				}
+
+																			}
+
+																		}
+																	}
+
+																}
+
+																if w, ok := activeDirectoryQueryMapStrToI["server"]; ok && !isIntfNil(w) {
+																	activeDirectoryQuery[i].Server = w.(string)
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := cs["deny_name"]; ok && !isIntfNil(v) {
+
+														itemTypeInt.ActiveDirectoryAuth.DenyName = v.(string)
+
+													}
+
+													if v, ok := cs["expression"]; ok && !isIntfNil(v) {
+
+														itemTypeInt.ActiveDirectoryAuth.Expression = v.(string)
+
+													}
+
+													if v, ok := cs["server"]; ok && !isIntfNil(v) {
+
+														itemTypeInt.ActiveDirectoryAuth.Server = v.(string)
+
+													}
+
+												}
 											}
 
-											if w, ok := activeDirectoryQueryMapStrToI["filter"]; ok && !isIntfNil(w) {
-												activeDirectoryQuery[i].Filter = w.(string)
+										}
+
+										if v, ok := nextActionMapStrToI["active_directory_query"]; ok && !isIntfNil(v) && !itemTypeTypeFound {
+
+											itemTypeTypeFound = true
+											itemTypeInt := &ves_io_schema_ztna.ActionType_ActiveDirectoryQuery{}
+											itemTypeInt.ActiveDirectoryQuery = &ves_io_schema_ztna.ActiveDirectoryQuery{}
+											nextAction.ItemType = itemTypeInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["deny_name"]; ok && !isIntfNil(v) {
+
+														itemTypeInt.ActiveDirectoryQuery.DenyName = v.(string)
+
+													}
+
+													if v, ok := cs["filter"]; ok && !isIntfNil(v) {
+
+														itemTypeInt.ActiveDirectoryQuery.Filter = v.(string)
+
+													}
+
+													if v, ok := cs["resource_assign"]; ok && !isIntfNil(v) {
+
+														sl := v.([]interface{})
+														resourceAssign := &ves_io_schema_ztna.ResourceAssign{}
+														itemTypeInt.ActiveDirectoryQuery.ResourceAssign = resourceAssign
+														for _, set := range sl {
+															if set != nil {
+																resourceAssignMapStrToI := set.(map[string]interface{})
+
+																if v, ok := resourceAssignMapStrToI["allow"]; ok && !isIntfNil(v) {
+
+																	sl := v.([]interface{})
+																	allow := make([]*ves_io_schema_ztna.AllowResourceAssign, len(sl))
+																	resourceAssign.Allow = allow
+																	for i, set := range sl {
+																		if set != nil {
+																			allow[i] = &ves_io_schema_ztna.AllowResourceAssign{}
+																			allowMapStrToI := set.(map[string]interface{})
+
+																			if w, ok := allowMapStrToI["allow_name"]; ok && !isIntfNil(w) {
+																				allow[i].AllowName = w.(string)
+																			}
+
+																			if w, ok := allowMapStrToI["deny_name"]; ok && !isIntfNil(w) {
+																				allow[i].DenyName = w.(string)
+																			}
+
+																			if v, ok := allowMapStrToI["rules_resource_assign"]; ok && !isIntfNil(v) {
+
+																				sl := v.([]interface{})
+																				rulesResourceAssign := make([]*ves_io_schema_ztna.Rules, len(sl))
+																				allow[i].RulesResourceAssign = rulesResourceAssign
+																				for i, set := range sl {
+																					if set != nil {
+																						rulesResourceAssign[i] = &ves_io_schema_ztna.Rules{}
+																						rulesResourceAssignMapStrToI := set.(map[string]interface{})
+
+																						if w, ok := rulesResourceAssignMapStrToI["acls"]; ok && !isIntfNil(w) {
+																							ls := make([]string, len(w.([]interface{})))
+																							for i, v := range w.([]interface{}) {
+																								ls[i] = v.(string)
+																							}
+																							rulesResourceAssign[i].Acls = ls
+																						}
+
+																						if w, ok := rulesResourceAssignMapStrToI["network_access_rule"]; ok && !isIntfNil(w) {
+																							ls := make([]string, len(w.([]interface{})))
+																							for i, v := range w.([]interface{}) {
+																								ls[i] = v.(string)
+																							}
+																							rulesResourceAssign[i].NetworkAccessRule = ls
+																						}
+
+																						if w, ok := rulesResourceAssignMapStrToI["web_top_name"]; ok && !isIntfNil(w) {
+																							rulesResourceAssign[i].WebTopName = w.(string)
+																						}
+
+																					}
+																				}
+
+																			}
+
+																			if w, ok := allowMapStrToI["server"]; ok && !isIntfNil(w) {
+																				allow[i].Server = w.(string)
+																			}
+
+																		}
+																	}
+
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := cs["server"]; ok && !isIntfNil(v) {
+
+														itemTypeInt.ActiveDirectoryQuery.Server = v.(string)
+
+													}
+
+												}
 											}
 
-											if v, ok := activeDirectoryQueryMapStrToI["resource_assign"]; ok && !isIntfNil(v) {
+										}
 
-												sl := v.(*schema.Set).List()
-												resourceAssign := &ves_io_schema_ztna.ResourceAssign{}
-												activeDirectoryQuery[i].ResourceAssign = resourceAssign
-												for _, set := range sl {
-													resourceAssignMapStrToI := set.(map[string]interface{})
+										if v, ok := nextActionMapStrToI["log_on"]; ok && !isIntfNil(v) && !itemTypeTypeFound {
 
-													if v, ok := resourceAssignMapStrToI["allow"]; ok && !isIntfNil(v) {
+											itemTypeTypeFound = true
+											itemTypeInt := &ves_io_schema_ztna.ActionType_LogOn{}
+											itemTypeInt.LogOn = &ves_io_schema_ztna.LogonItemType{}
+											nextAction.ItemType = itemTypeInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["active_directory_auth"]; ok && !isIntfNil(v) {
+
+														sl := v.([]interface{})
+														activeDirectoryAuth := make([]*ves_io_schema_ztna.ActiveDirectoryAuth, len(sl))
+														itemTypeInt.LogOn.ActiveDirectoryAuth = activeDirectoryAuth
+														for i, set := range sl {
+															if set != nil {
+																activeDirectoryAuth[i] = &ves_io_schema_ztna.ActiveDirectoryAuth{}
+																activeDirectoryAuthMapStrToI := set.(map[string]interface{})
+
+																if v, ok := activeDirectoryAuthMapStrToI["active_directory_query"]; ok && !isIntfNil(v) {
+
+																	sl := v.([]interface{})
+																	activeDirectoryQuery := make([]*ves_io_schema_ztna.ActiveDirectoryQuery, len(sl))
+																	activeDirectoryAuth[i].ActiveDirectoryQuery = activeDirectoryQuery
+																	for i, set := range sl {
+																		if set != nil {
+																			activeDirectoryQuery[i] = &ves_io_schema_ztna.ActiveDirectoryQuery{}
+																			activeDirectoryQueryMapStrToI := set.(map[string]interface{})
+
+																			if w, ok := activeDirectoryQueryMapStrToI["deny_name"]; ok && !isIntfNil(w) {
+																				activeDirectoryQuery[i].DenyName = w.(string)
+																			}
+
+																			if w, ok := activeDirectoryQueryMapStrToI["filter"]; ok && !isIntfNil(w) {
+																				activeDirectoryQuery[i].Filter = w.(string)
+																			}
+
+																			if v, ok := activeDirectoryQueryMapStrToI["resource_assign"]; ok && !isIntfNil(v) {
+
+																				sl := v.([]interface{})
+																				resourceAssign := &ves_io_schema_ztna.ResourceAssign{}
+																				activeDirectoryQuery[i].ResourceAssign = resourceAssign
+																				for _, set := range sl {
+																					if set != nil {
+																						resourceAssignMapStrToI := set.(map[string]interface{})
+
+																						if v, ok := resourceAssignMapStrToI["allow"]; ok && !isIntfNil(v) {
+
+																							sl := v.([]interface{})
+																							allow := make([]*ves_io_schema_ztna.AllowResourceAssign, len(sl))
+																							resourceAssign.Allow = allow
+																							for i, set := range sl {
+																								if set != nil {
+																									allow[i] = &ves_io_schema_ztna.AllowResourceAssign{}
+																									allowMapStrToI := set.(map[string]interface{})
+
+																									if w, ok := allowMapStrToI["allow_name"]; ok && !isIntfNil(w) {
+																										allow[i].AllowName = w.(string)
+																									}
+
+																									if w, ok := allowMapStrToI["deny_name"]; ok && !isIntfNil(w) {
+																										allow[i].DenyName = w.(string)
+																									}
+
+																									if v, ok := allowMapStrToI["rules_resource_assign"]; ok && !isIntfNil(v) {
+
+																										sl := v.([]interface{})
+																										rulesResourceAssign := make([]*ves_io_schema_ztna.Rules, len(sl))
+																										allow[i].RulesResourceAssign = rulesResourceAssign
+																										for i, set := range sl {
+																											if set != nil {
+																												rulesResourceAssign[i] = &ves_io_schema_ztna.Rules{}
+																												rulesResourceAssignMapStrToI := set.(map[string]interface{})
+
+																												if w, ok := rulesResourceAssignMapStrToI["acls"]; ok && !isIntfNil(w) {
+																													ls := make([]string, len(w.([]interface{})))
+																													for i, v := range w.([]interface{}) {
+																														ls[i] = v.(string)
+																													}
+																													rulesResourceAssign[i].Acls = ls
+																												}
+
+																												if w, ok := rulesResourceAssignMapStrToI["network_access_rule"]; ok && !isIntfNil(w) {
+																													ls := make([]string, len(w.([]interface{})))
+																													for i, v := range w.([]interface{}) {
+																														ls[i] = v.(string)
+																													}
+																													rulesResourceAssign[i].NetworkAccessRule = ls
+																												}
+
+																												if w, ok := rulesResourceAssignMapStrToI["web_top_name"]; ok && !isIntfNil(w) {
+																													rulesResourceAssign[i].WebTopName = w.(string)
+																												}
+
+																											}
+																										}
+
+																									}
+
+																									if w, ok := allowMapStrToI["server"]; ok && !isIntfNil(w) {
+																										allow[i].Server = w.(string)
+																									}
+
+																								}
+																							}
+
+																						}
+
+																					}
+																				}
+
+																			}
+
+																			if w, ok := activeDirectoryQueryMapStrToI["server"]; ok && !isIntfNil(w) {
+																				activeDirectoryQuery[i].Server = w.(string)
+																			}
+
+																		}
+																	}
+
+																}
+
+																if w, ok := activeDirectoryAuthMapStrToI["deny_name"]; ok && !isIntfNil(w) {
+																	activeDirectoryAuth[i].DenyName = w.(string)
+																}
+
+																if w, ok := activeDirectoryAuthMapStrToI["expression"]; ok && !isIntfNil(w) {
+																	activeDirectoryAuth[i].Expression = w.(string)
+																}
+
+																if w, ok := activeDirectoryAuthMapStrToI["server"]; ok && !isIntfNil(w) {
+																	activeDirectoryAuth[i].Server = w.(string)
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := cs["customization"]; ok && !isIntfNil(v) {
+
+														sl := v.([]interface{})
+														customization := make([]*ves_io_schema_ztna.Custmization, len(sl))
+														itemTypeInt.LogOn.Customization = customization
+														for i, set := range sl {
+															if set != nil {
+																customization[i] = &ves_io_schema_ztna.Custmization{}
+																customizationMapStrToI := set.(map[string]interface{})
+
+																if v, ok := customizationMapStrToI["password"]; ok && !isIntfNil(v) {
+
+																	sl := v.([]interface{})
+																	password := &ves_io_schema.SecretType{}
+																	customization[i].Password = password
+																	for _, set := range sl {
+																		if set != nil {
+																			passwordMapStrToI := set.(map[string]interface{})
+
+																			if v, ok := passwordMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
+
+																				sl := v.([]interface{})
+																				blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
+																				password.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
+																				for _, set := range sl {
+																					if set != nil {
+																						blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
+
+																						if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
+																							blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
+																						}
+
+																						if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
+																							blindfoldSecretInfoInternal.Location = w.(string)
+																						}
+
+																						if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
+																							blindfoldSecretInfoInternal.StoreProvider = w.(string)
+																						}
+
+																					}
+																				}
+
+																			}
+
+																			if v, ok := passwordMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
+
+																				password.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+																			}
+
+																			secretInfoOneofTypeFound := false
+
+																			if v, ok := passwordMapStrToI["blindfold_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																				secretInfoOneofTypeFound = true
+																				secretInfoOneofInt := &ves_io_schema.SecretType_BlindfoldSecretInfo{}
+																				secretInfoOneofInt.BlindfoldSecretInfo = &ves_io_schema.BlindfoldSecretInfoType{}
+																				password.SecretInfoOneof = secretInfoOneofInt
+
+																				sl := v.([]interface{})
+																				for _, set := range sl {
+																					if set != nil {
+																						cs := set.(map[string]interface{})
+
+																						if v, ok := cs["decryption_provider"]; ok && !isIntfNil(v) {
+
+																							secretInfoOneofInt.BlindfoldSecretInfo.DecryptionProvider = v.(string)
+
+																						}
+
+																						if v, ok := cs["location"]; ok && !isIntfNil(v) {
+
+																							secretInfoOneofInt.BlindfoldSecretInfo.Location = v.(string)
+
+																						}
+
+																						if v, ok := cs["store_provider"]; ok && !isIntfNil(v) {
+
+																							secretInfoOneofInt.BlindfoldSecretInfo.StoreProvider = v.(string)
+
+																						}
+
+																					}
+																				}
+
+																			}
+
+																			if v, ok := passwordMapStrToI["clear_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																				secretInfoOneofTypeFound = true
+																				secretInfoOneofInt := &ves_io_schema.SecretType_ClearSecretInfo{}
+																				secretInfoOneofInt.ClearSecretInfo = &ves_io_schema.ClearSecretInfoType{}
+																				password.SecretInfoOneof = secretInfoOneofInt
+
+																				sl := v.([]interface{})
+																				for _, set := range sl {
+																					if set != nil {
+																						cs := set.(map[string]interface{})
+
+																						if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+
+																							secretInfoOneofInt.ClearSecretInfo.Provider = v.(string)
+
+																						}
+
+																						if v, ok := cs["url"]; ok && !isIntfNil(v) {
+
+																							secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+
+																						}
+
+																					}
+																				}
+
+																			}
+
+																			if v, ok := passwordMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																				secretInfoOneofTypeFound = true
+																				secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
+																				secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
+																				password.SecretInfoOneof = secretInfoOneofInt
+
+																				sl := v.([]interface{})
+																				for _, set := range sl {
+																					if set != nil {
+																						cs := set.(map[string]interface{})
+
+																						if v, ok := cs["key"]; ok && !isIntfNil(v) {
+
+																							secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
+																						}
+
+																						if v, ok := cs["location"]; ok && !isIntfNil(v) {
+
+																							secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
+																						}
+
+																						if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+
+																							secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
+																						}
+
+																						if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
+
+																							secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+																						}
+
+																						if v, ok := cs["version"]; ok && !isIntfNil(v) {
+
+																							secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
+																						}
+
+																					}
+																				}
+
+																			}
+
+																			if v, ok := passwordMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																				secretInfoOneofTypeFound = true
+																				secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
+																				secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
+																				password.SecretInfoOneof = secretInfoOneofInt
+
+																				sl := v.([]interface{})
+																				for _, set := range sl {
+																					if set != nil {
+																						cs := set.(map[string]interface{})
+
+																						if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+																							secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
+
+																						}
+
+																					}
+																				}
+
+																			}
+
+																		}
+																	}
+
+																}
+
+																if w, ok := customizationMapStrToI["user_name"]; ok && !isIntfNil(w) {
+																	customization[i].UserName = w.(string)
+																}
+
+															}
+														}
+
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := nextActionMapStrToI["resource_assign"]; ok && !isIntfNil(v) && !itemTypeTypeFound {
+
+											itemTypeTypeFound = true
+											itemTypeInt := &ves_io_schema_ztna.ActionType_ResourceAssign{}
+											itemTypeInt.ResourceAssign = &ves_io_schema_ztna.ResourceAssign{}
+											nextAction.ItemType = itemTypeInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["allow"]; ok && !isIntfNil(v) {
 
 														sl := v.([]interface{})
 														allow := make([]*ves_io_schema_ztna.AllowResourceAssign, len(sl))
-														resourceAssign.Allow = allow
+														itemTypeInt.ResourceAssign.Allow = allow
 														for i, set := range sl {
-															allow[i] = &ves_io_schema_ztna.AllowResourceAssign{}
-															allowMapStrToI := set.(map[string]interface{})
+															if set != nil {
+																allow[i] = &ves_io_schema_ztna.AllowResourceAssign{}
+																allowMapStrToI := set.(map[string]interface{})
 
-															if w, ok := allowMapStrToI["allow_name"]; ok && !isIntfNil(w) {
-																allow[i].AllowName = w.(string)
-															}
-
-															if w, ok := allowMapStrToI["deny_name"]; ok && !isIntfNil(w) {
-																allow[i].DenyName = w.(string)
-															}
-
-															if v, ok := allowMapStrToI["rules_resource_assign"]; ok && !isIntfNil(v) {
-
-																sl := v.([]interface{})
-																rulesResourceAssign := make([]*ves_io_schema_ztna.Rules, len(sl))
-																allow[i].RulesResourceAssign = rulesResourceAssign
-																for i, set := range sl {
-																	rulesResourceAssign[i] = &ves_io_schema_ztna.Rules{}
-																	rulesResourceAssignMapStrToI := set.(map[string]interface{})
-
-																	if w, ok := rulesResourceAssignMapStrToI["acls"]; ok && !isIntfNil(w) {
-																		ls := make([]string, len(w.([]interface{})))
-																		for i, v := range w.([]interface{}) {
-																			ls[i] = v.(string)
-																		}
-																		rulesResourceAssign[i].Acls = ls
-																	}
-
-																	if w, ok := rulesResourceAssignMapStrToI["network_access_rule"]; ok && !isIntfNil(w) {
-																		ls := make([]string, len(w.([]interface{})))
-																		for i, v := range w.([]interface{}) {
-																			ls[i] = v.(string)
-																		}
-																		rulesResourceAssign[i].NetworkAccessRule = ls
-																	}
-
-																	if w, ok := rulesResourceAssignMapStrToI["web_top_name"]; ok && !isIntfNil(w) {
-																		rulesResourceAssign[i].WebTopName = w.(string)
-																	}
-
+																if w, ok := allowMapStrToI["allow_name"]; ok && !isIntfNil(w) {
+																	allow[i].AllowName = w.(string)
 																}
 
-															}
-
-															if w, ok := allowMapStrToI["server"]; ok && !isIntfNil(w) {
-																allow[i].Server = w.(string)
-															}
-
-														}
-
-													}
-
-												}
-
-											}
-
-											if w, ok := activeDirectoryQueryMapStrToI["server"]; ok && !isIntfNil(w) {
-												activeDirectoryQuery[i].Server = w.(string)
-											}
-
-										}
-
-									}
-
-									if v, ok := cs["deny_name"]; ok && !isIntfNil(v) {
-
-										itemTypeInt.ActiveDirectoryAuth.DenyName = v.(string)
-
-									}
-
-									if v, ok := cs["expression"]; ok && !isIntfNil(v) {
-
-										itemTypeInt.ActiveDirectoryAuth.Expression = v.(string)
-
-									}
-
-									if v, ok := cs["server"]; ok && !isIntfNil(v) {
-
-										itemTypeInt.ActiveDirectoryAuth.Server = v.(string)
-
-									}
-
-								}
-
-							}
-
-							if v, ok := nextActionMapStrToI["active_directory_query"]; ok && !isIntfNil(v) && !itemTypeTypeFound {
-
-								itemTypeTypeFound = true
-								itemTypeInt := &ves_io_schema_ztna.ActionType_ActiveDirectoryQuery{}
-								itemTypeInt.ActiveDirectoryQuery = &ves_io_schema_ztna.ActiveDirectoryQuery{}
-								nextAction.ItemType = itemTypeInt
-
-								sl := v.(*schema.Set).List()
-								for _, set := range sl {
-									cs := set.(map[string]interface{})
-
-									if v, ok := cs["deny_name"]; ok && !isIntfNil(v) {
-
-										itemTypeInt.ActiveDirectoryQuery.DenyName = v.(string)
-
-									}
-
-									if v, ok := cs["filter"]; ok && !isIntfNil(v) {
-
-										itemTypeInt.ActiveDirectoryQuery.Filter = v.(string)
-
-									}
-
-									if v, ok := cs["resource_assign"]; ok && !isIntfNil(v) {
-
-										sl := v.(*schema.Set).List()
-										resourceAssign := &ves_io_schema_ztna.ResourceAssign{}
-										itemTypeInt.ActiveDirectoryQuery.ResourceAssign = resourceAssign
-										for _, set := range sl {
-											resourceAssignMapStrToI := set.(map[string]interface{})
-
-											if v, ok := resourceAssignMapStrToI["allow"]; ok && !isIntfNil(v) {
-
-												sl := v.([]interface{})
-												allow := make([]*ves_io_schema_ztna.AllowResourceAssign, len(sl))
-												resourceAssign.Allow = allow
-												for i, set := range sl {
-													allow[i] = &ves_io_schema_ztna.AllowResourceAssign{}
-													allowMapStrToI := set.(map[string]interface{})
-
-													if w, ok := allowMapStrToI["allow_name"]; ok && !isIntfNil(w) {
-														allow[i].AllowName = w.(string)
-													}
-
-													if w, ok := allowMapStrToI["deny_name"]; ok && !isIntfNil(w) {
-														allow[i].DenyName = w.(string)
-													}
-
-													if v, ok := allowMapStrToI["rules_resource_assign"]; ok && !isIntfNil(v) {
-
-														sl := v.([]interface{})
-														rulesResourceAssign := make([]*ves_io_schema_ztna.Rules, len(sl))
-														allow[i].RulesResourceAssign = rulesResourceAssign
-														for i, set := range sl {
-															rulesResourceAssign[i] = &ves_io_schema_ztna.Rules{}
-															rulesResourceAssignMapStrToI := set.(map[string]interface{})
-
-															if w, ok := rulesResourceAssignMapStrToI["acls"]; ok && !isIntfNil(w) {
-																ls := make([]string, len(w.([]interface{})))
-																for i, v := range w.([]interface{}) {
-																	ls[i] = v.(string)
+																if w, ok := allowMapStrToI["deny_name"]; ok && !isIntfNil(w) {
+																	allow[i].DenyName = w.(string)
 																}
-																rulesResourceAssign[i].Acls = ls
-															}
 
-															if w, ok := rulesResourceAssignMapStrToI["network_access_rule"]; ok && !isIntfNil(w) {
-																ls := make([]string, len(w.([]interface{})))
-																for i, v := range w.([]interface{}) {
-																	ls[i] = v.(string)
-																}
-																rulesResourceAssign[i].NetworkAccessRule = ls
-															}
+																if v, ok := allowMapStrToI["rules_resource_assign"]; ok && !isIntfNil(v) {
 
-															if w, ok := rulesResourceAssignMapStrToI["web_top_name"]; ok && !isIntfNil(w) {
-																rulesResourceAssign[i].WebTopName = w.(string)
-															}
-
-														}
-
-													}
-
-													if w, ok := allowMapStrToI["server"]; ok && !isIntfNil(w) {
-														allow[i].Server = w.(string)
-													}
-
-												}
-
-											}
-
-										}
-
-									}
-
-									if v, ok := cs["server"]; ok && !isIntfNil(v) {
-
-										itemTypeInt.ActiveDirectoryQuery.Server = v.(string)
-
-									}
-
-								}
-
-							}
-
-							if v, ok := nextActionMapStrToI["log_on"]; ok && !isIntfNil(v) && !itemTypeTypeFound {
-
-								itemTypeTypeFound = true
-								itemTypeInt := &ves_io_schema_ztna.ActionType_LogOn{}
-								itemTypeInt.LogOn = &ves_io_schema_ztna.LogonItemType{}
-								nextAction.ItemType = itemTypeInt
-
-								sl := v.(*schema.Set).List()
-								for _, set := range sl {
-									cs := set.(map[string]interface{})
-
-									if v, ok := cs["active_directory_auth"]; ok && !isIntfNil(v) {
-
-										sl := v.([]interface{})
-										activeDirectoryAuth := make([]*ves_io_schema_ztna.ActiveDirectoryAuth, len(sl))
-										itemTypeInt.LogOn.ActiveDirectoryAuth = activeDirectoryAuth
-										for i, set := range sl {
-											activeDirectoryAuth[i] = &ves_io_schema_ztna.ActiveDirectoryAuth{}
-											activeDirectoryAuthMapStrToI := set.(map[string]interface{})
-
-											if v, ok := activeDirectoryAuthMapStrToI["active_directory_query"]; ok && !isIntfNil(v) {
-
-												sl := v.([]interface{})
-												activeDirectoryQuery := make([]*ves_io_schema_ztna.ActiveDirectoryQuery, len(sl))
-												activeDirectoryAuth[i].ActiveDirectoryQuery = activeDirectoryQuery
-												for i, set := range sl {
-													activeDirectoryQuery[i] = &ves_io_schema_ztna.ActiveDirectoryQuery{}
-													activeDirectoryQueryMapStrToI := set.(map[string]interface{})
-
-													if w, ok := activeDirectoryQueryMapStrToI["deny_name"]; ok && !isIntfNil(w) {
-														activeDirectoryQuery[i].DenyName = w.(string)
-													}
-
-													if w, ok := activeDirectoryQueryMapStrToI["filter"]; ok && !isIntfNil(w) {
-														activeDirectoryQuery[i].Filter = w.(string)
-													}
-
-													if v, ok := activeDirectoryQueryMapStrToI["resource_assign"]; ok && !isIntfNil(v) {
-
-														sl := v.(*schema.Set).List()
-														resourceAssign := &ves_io_schema_ztna.ResourceAssign{}
-														activeDirectoryQuery[i].ResourceAssign = resourceAssign
-														for _, set := range sl {
-															resourceAssignMapStrToI := set.(map[string]interface{})
-
-															if v, ok := resourceAssignMapStrToI["allow"]; ok && !isIntfNil(v) {
-
-																sl := v.([]interface{})
-																allow := make([]*ves_io_schema_ztna.AllowResourceAssign, len(sl))
-																resourceAssign.Allow = allow
-																for i, set := range sl {
-																	allow[i] = &ves_io_schema_ztna.AllowResourceAssign{}
-																	allowMapStrToI := set.(map[string]interface{})
-
-																	if w, ok := allowMapStrToI["allow_name"]; ok && !isIntfNil(w) {
-																		allow[i].AllowName = w.(string)
-																	}
-
-																	if w, ok := allowMapStrToI["deny_name"]; ok && !isIntfNil(w) {
-																		allow[i].DenyName = w.(string)
-																	}
-
-																	if v, ok := allowMapStrToI["rules_resource_assign"]; ok && !isIntfNil(v) {
-
-																		sl := v.([]interface{})
-																		rulesResourceAssign := make([]*ves_io_schema_ztna.Rules, len(sl))
-																		allow[i].RulesResourceAssign = rulesResourceAssign
-																		for i, set := range sl {
+																	sl := v.([]interface{})
+																	rulesResourceAssign := make([]*ves_io_schema_ztna.Rules, len(sl))
+																	allow[i].RulesResourceAssign = rulesResourceAssign
+																	for i, set := range sl {
+																		if set != nil {
 																			rulesResourceAssign[i] = &ves_io_schema_ztna.Rules{}
 																			rulesResourceAssignMapStrToI := set.(map[string]interface{})
 
@@ -1757,317 +2161,35 @@ func resourceVolterraZtnaCreate(d *schema.ResourceData, meta interface{}) error 
 																			}
 
 																		}
-
-																	}
-
-																	if w, ok := allowMapStrToI["server"]; ok && !isIntfNil(w) {
-																		allow[i].Server = w.(string)
 																	}
 
 																}
 
-															}
-
-														}
-
-													}
-
-													if w, ok := activeDirectoryQueryMapStrToI["server"]; ok && !isIntfNil(w) {
-														activeDirectoryQuery[i].Server = w.(string)
-													}
-
-												}
-
-											}
-
-											if w, ok := activeDirectoryAuthMapStrToI["deny_name"]; ok && !isIntfNil(w) {
-												activeDirectoryAuth[i].DenyName = w.(string)
-											}
-
-											if w, ok := activeDirectoryAuthMapStrToI["expression"]; ok && !isIntfNil(w) {
-												activeDirectoryAuth[i].Expression = w.(string)
-											}
-
-											if w, ok := activeDirectoryAuthMapStrToI["server"]; ok && !isIntfNil(w) {
-												activeDirectoryAuth[i].Server = w.(string)
-											}
-
-										}
-
-									}
-
-									if v, ok := cs["customization"]; ok && !isIntfNil(v) {
-
-										sl := v.([]interface{})
-										customization := make([]*ves_io_schema_ztna.Custmization, len(sl))
-										itemTypeInt.LogOn.Customization = customization
-										for i, set := range sl {
-											customization[i] = &ves_io_schema_ztna.Custmization{}
-											customizationMapStrToI := set.(map[string]interface{})
-
-											if v, ok := customizationMapStrToI["password"]; ok && !isIntfNil(v) {
-
-												sl := v.(*schema.Set).List()
-												password := &ves_io_schema.SecretType{}
-												customization[i].Password = password
-												for _, set := range sl {
-													passwordMapStrToI := set.(map[string]interface{})
-
-													if v, ok := passwordMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
-
-														sl := v.(*schema.Set).List()
-														blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
-														password.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
-														for _, set := range sl {
-															blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
-
-															if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
-																blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
-															}
-
-															if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
-																blindfoldSecretInfoInternal.Location = w.(string)
-															}
-
-															if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
-																blindfoldSecretInfoInternal.StoreProvider = w.(string)
-															}
-
-														}
-
-													}
-
-													if v, ok := passwordMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
-
-														password.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
-
-													}
-
-													secretInfoOneofTypeFound := false
-
-													if v, ok := passwordMapStrToI["blindfold_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
-
-														secretInfoOneofTypeFound = true
-														secretInfoOneofInt := &ves_io_schema.SecretType_BlindfoldSecretInfo{}
-														secretInfoOneofInt.BlindfoldSecretInfo = &ves_io_schema.BlindfoldSecretInfoType{}
-														password.SecretInfoOneof = secretInfoOneofInt
-
-														sl := v.(*schema.Set).List()
-														for _, set := range sl {
-															cs := set.(map[string]interface{})
-
-															if v, ok := cs["decryption_provider"]; ok && !isIntfNil(v) {
-
-																secretInfoOneofInt.BlindfoldSecretInfo.DecryptionProvider = v.(string)
+																if w, ok := allowMapStrToI["server"]; ok && !isIntfNil(w) {
+																	allow[i].Server = w.(string)
+																}
 
 															}
-
-															if v, ok := cs["location"]; ok && !isIntfNil(v) {
-
-																secretInfoOneofInt.BlindfoldSecretInfo.Location = v.(string)
-
-															}
-
-															if v, ok := cs["store_provider"]; ok && !isIntfNil(v) {
-
-																secretInfoOneofInt.BlindfoldSecretInfo.StoreProvider = v.(string)
-
-															}
-
-														}
-
-													}
-
-													if v, ok := passwordMapStrToI["clear_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
-
-														secretInfoOneofTypeFound = true
-														secretInfoOneofInt := &ves_io_schema.SecretType_ClearSecretInfo{}
-														secretInfoOneofInt.ClearSecretInfo = &ves_io_schema.ClearSecretInfoType{}
-														password.SecretInfoOneof = secretInfoOneofInt
-
-														sl := v.(*schema.Set).List()
-														for _, set := range sl {
-															cs := set.(map[string]interface{})
-
-															if v, ok := cs["provider"]; ok && !isIntfNil(v) {
-
-																secretInfoOneofInt.ClearSecretInfo.Provider = v.(string)
-
-															}
-
-															if v, ok := cs["url"]; ok && !isIntfNil(v) {
-
-																secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
-
-															}
-
-														}
-
-													}
-
-													if v, ok := passwordMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
-
-														secretInfoOneofTypeFound = true
-														secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
-														secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
-														password.SecretInfoOneof = secretInfoOneofInt
-
-														sl := v.(*schema.Set).List()
-														for _, set := range sl {
-															cs := set.(map[string]interface{})
-
-															if v, ok := cs["key"]; ok && !isIntfNil(v) {
-
-																secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
-
-															}
-
-															if v, ok := cs["location"]; ok && !isIntfNil(v) {
-
-																secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
-
-															}
-
-															if v, ok := cs["provider"]; ok && !isIntfNil(v) {
-
-																secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
-
-															}
-
-															if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
-
-																secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
-
-															}
-
-															if v, ok := cs["version"]; ok && !isIntfNil(v) {
-
-																secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
-
-															}
-
-														}
-
-													}
-
-													if v, ok := passwordMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
-
-														secretInfoOneofTypeFound = true
-														secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
-														secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
-														password.SecretInfoOneof = secretInfoOneofInt
-
-														sl := v.(*schema.Set).List()
-														for _, set := range sl {
-															cs := set.(map[string]interface{})
-
-															if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-																secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
-
-															}
-
 														}
 
 													}
 
 												}
-
-											}
-
-											if w, ok := customizationMapStrToI["user_name"]; ok && !isIntfNil(w) {
-												customization[i].UserName = w.(string)
 											}
 
 										}
 
 									}
-
-								}
-
-							}
-
-							if v, ok := nextActionMapStrToI["resource_assign"]; ok && !isIntfNil(v) && !itemTypeTypeFound {
-
-								itemTypeTypeFound = true
-								itemTypeInt := &ves_io_schema_ztna.ActionType_ResourceAssign{}
-								itemTypeInt.ResourceAssign = &ves_io_schema_ztna.ResourceAssign{}
-								nextAction.ItemType = itemTypeInt
-
-								sl := v.(*schema.Set).List()
-								for _, set := range sl {
-									cs := set.(map[string]interface{})
-
-									if v, ok := cs["allow"]; ok && !isIntfNil(v) {
-
-										sl := v.([]interface{})
-										allow := make([]*ves_io_schema_ztna.AllowResourceAssign, len(sl))
-										itemTypeInt.ResourceAssign.Allow = allow
-										for i, set := range sl {
-											allow[i] = &ves_io_schema_ztna.AllowResourceAssign{}
-											allowMapStrToI := set.(map[string]interface{})
-
-											if w, ok := allowMapStrToI["allow_name"]; ok && !isIntfNil(w) {
-												allow[i].AllowName = w.(string)
-											}
-
-											if w, ok := allowMapStrToI["deny_name"]; ok && !isIntfNil(w) {
-												allow[i].DenyName = w.(string)
-											}
-
-											if v, ok := allowMapStrToI["rules_resource_assign"]; ok && !isIntfNil(v) {
-
-												sl := v.([]interface{})
-												rulesResourceAssign := make([]*ves_io_schema_ztna.Rules, len(sl))
-												allow[i].RulesResourceAssign = rulesResourceAssign
-												for i, set := range sl {
-													rulesResourceAssign[i] = &ves_io_schema_ztna.Rules{}
-													rulesResourceAssignMapStrToI := set.(map[string]interface{})
-
-													if w, ok := rulesResourceAssignMapStrToI["acls"]; ok && !isIntfNil(w) {
-														ls := make([]string, len(w.([]interface{})))
-														for i, v := range w.([]interface{}) {
-															ls[i] = v.(string)
-														}
-														rulesResourceAssign[i].Acls = ls
-													}
-
-													if w, ok := rulesResourceAssignMapStrToI["network_access_rule"]; ok && !isIntfNil(w) {
-														ls := make([]string, len(w.([]interface{})))
-														for i, v := range w.([]interface{}) {
-															ls[i] = v.(string)
-														}
-														rulesResourceAssign[i].NetworkAccessRule = ls
-													}
-
-													if w, ok := rulesResourceAssignMapStrToI["web_top_name"]; ok && !isIntfNil(w) {
-														rulesResourceAssign[i].WebTopName = w.(string)
-													}
-
-												}
-
-											}
-
-											if w, ok := allowMapStrToI["server"]; ok && !isIntfNil(w) {
-												allow[i].Server = w.(string)
-											}
-
-										}
-
-									}
-
 								}
 
 							}
 
 						}
-
 					}
 
 				}
 
 			}
-
 		}
 
 	}
@@ -2173,582 +2295,944 @@ func resourceVolterraZtnaUpdate(d *schema.ResourceData, meta interface{}) error 
 
 	if v, ok := d.GetOk("connectivity"); ok && !isIntfNil(v) {
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		connectivity := &ves_io_schema_ztna.ConnectivityPolicyType{}
 		updateSpec.Connectivity = connectivity
 		for _, set := range sl {
-			connectivityMapStrToI := set.(map[string]interface{})
+			if set != nil {
+				connectivityMapStrToI := set.(map[string]interface{})
 
-			if v, ok := connectivityMapStrToI["connectivities"]; ok && !isIntfNil(v) {
+				if v, ok := connectivityMapStrToI["connectivities"]; ok && !isIntfNil(v) {
 
-				connectivity.Connectivities = ves_io_schema_ztna.Connectivity(ves_io_schema_ztna.Connectivity_value[v.(string)])
+					connectivity.Connectivities = ves_io_schema_ztna.Connectivity(ves_io_schema_ztna.Connectivity_value[v.(string)])
+
+				}
+
+				if w, ok := connectivityMapStrToI["connectivity_policy_name"]; ok && !isIntfNil(w) {
+					connectivity.ConnectivityPolicyName = w.(string)
+				}
 
 			}
-
-			if w, ok := connectivityMapStrToI["connectivity_policy_name"]; ok && !isIntfNil(w) {
-				connectivity.ConnectivityPolicyName = w.(string)
-			}
-
 		}
 
 	}
 
 	if v, ok := d.GetOk("per_session"); ok && !isIntfNil(v) {
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		perSession := &ves_io_schema_ztna.PerSessionPolicyType{}
 		updateSpec.PerSession = perSession
 		for _, set := range sl {
-			perSessionMapStrToI := set.(map[string]interface{})
+			if set != nil {
+				perSessionMapStrToI := set.(map[string]interface{})
 
-			if v, ok := perSessionMapStrToI["external_server"]; ok && !isIntfNil(v) {
+				if v, ok := perSessionMapStrToI["external_server"]; ok && !isIntfNil(v) {
 
-				sl := v.(*schema.Set).List()
-				externalServer := make(map[string]*ves_io_schema_ztna.ExternalServers)
-				perSession.ExternalServer = externalServer
-				for _, set := range sl {
-					externalServerMapStrToI := set.(map[string]interface{})
-					key, ok := externalServerMapStrToI["name"]
-					if ok && !isIntfNil(key) {
-						externalServer[key.(string)] = &ves_io_schema_ztna.ExternalServers{}
-						val, _ := externalServerMapStrToI["value"]
+					sl := v.([]interface{})
+					externalServer := make(map[string]*ves_io_schema_ztna.ExternalServers)
+					perSession.ExternalServer = externalServer
+					for _, set := range sl {
+						if set != nil {
+							externalServerMapStrToI := set.(map[string]interface{})
+							key, ok := externalServerMapStrToI["name"]
+							if ok && !isIntfNil(key) {
+								externalServer[key.(string)] = &ves_io_schema_ztna.ExternalServers{}
+								val, _ := externalServerMapStrToI["value"]
 
-						externalServerVals := val.(*schema.Set).List()
-						for _, intVal := range externalServerVals {
+								externalServerVals := val.([]interface{})
+								for _, intVal := range externalServerVals {
+									if intVal != nil {
 
-							externalServerStaticMap := intVal.(map[string]interface{})
+										externalServerStaticMap := intVal.(map[string]interface{})
 
-							if w, ok := externalServerStaticMap["admin_password"]; ok && !isIntfNil(w) {
-								externalServer[key.(string)].AdminPassword = w.(*ves_io_schema.SecretType)
+										if w, ok := externalServerStaticMap["admin_password"]; ok && !isIntfNil(w) {
+											externalServer[key.(string)].AdminPassword = w.(*ves_io_schema.SecretType)
+										}
+
+										if w, ok := externalServerStaticMap["admin_username"]; ok && !isIntfNil(w) {
+											externalServer[key.(string)].AdminUsername = w.(string)
+										}
+
+										if w, ok := externalServerStaticMap["domain"]; ok && !isIntfNil(w) {
+											externalServer[key.(string)].Domain = w.(string)
+										}
+
+										if w, ok := externalServerStaticMap["server_type"]; ok && !isIntfNil(w) {
+											externalServer[key.(string)].ServerType =  w.(ves_io_schema_ztna.ServerType)
+										}
+
+										// break after one loop
+										break
+									}
+								}
 							}
-
-							if w, ok := externalServerStaticMap["admin_username"]; ok && !isIntfNil(w) {
-								externalServer[key.(string)].AdminUsername = w.(string)
-							}
-
-							if w, ok := externalServerStaticMap["domain"]; ok && !isIntfNil(w) {
-								externalServer[key.(string)].Domain = w.(string)
-							}
-
-							if w, ok := externalServerStaticMap["server_type"]; ok && !isIntfNil(w) {
-								externalServer[key.(string)].ServerType = w.(ves_io_schema_ztna.ServerType)
-							}
-
-							// break after one loop
-							break
 						}
 					}
+
 				}
 
-			}
+				if v, ok := perSessionMapStrToI["lease_pool_member"]; ok && !isIntfNil(v) {
 
-			if v, ok := perSessionMapStrToI["lease_pool_member"]; ok && !isIntfNil(v) {
+					sl := v.([]interface{})
+					leasePoolMember := make(map[string]*ves_io_schema_ztna.LeasePoolMember)
+					perSession.LeasePoolMember = leasePoolMember
+					for _, set := range sl {
+						if set != nil {
+							leasePoolMemberMapStrToI := set.(map[string]interface{})
+							key, ok := leasePoolMemberMapStrToI["name"]
+							if ok && !isIntfNil(key) {
+								leasePoolMember[key.(string)] = &ves_io_schema_ztna.LeasePoolMember{}
+								val, _ := leasePoolMemberMapStrToI["value"]
 
-				sl := v.(*schema.Set).List()
-				leasePoolMember := make(map[string]*ves_io_schema_ztna.LeasePoolMember)
-				perSession.LeasePoolMember = leasePoolMember
-				for _, set := range sl {
-					leasePoolMemberMapStrToI := set.(map[string]interface{})
-					key, ok := leasePoolMemberMapStrToI["name"]
-					if ok && !isIntfNil(key) {
-						leasePoolMember[key.(string)] = &ves_io_schema_ztna.LeasePoolMember{}
-						val, _ := leasePoolMemberMapStrToI["value"]
+								leasePoolMemberVals := val.([]interface{})
+								for _, intVal := range leasePoolMemberVals {
+									if intVal != nil {
 
-						leasePoolMemberVals := val.(*schema.Set).List()
-						for _, intVal := range leasePoolMemberVals {
+										leasePoolMemberStaticMap := intVal.(map[string]interface{})
 
-							leasePoolMemberStaticMap := intVal.(map[string]interface{})
+										if w, ok := leasePoolMemberStaticMap["end_address"]; ok && !isIntfNil(w) {
+											leasePoolMember[key.(string)].EndAddress = w.(*ves_io_schema.IpAddressType)
+										}
 
-							if w, ok := leasePoolMemberStaticMap["end_address"]; ok && !isIntfNil(w) {
-								leasePoolMember[key.(string)].EndAddress = w.(*ves_io_schema.IpAddressType)
+										if w, ok := leasePoolMemberStaticMap["start_address"]; ok && !isIntfNil(w) {
+											leasePoolMember[key.(string)].StartAddress = w.(*ves_io_schema.IpAddressType)
+										}
+
+										// break after one loop
+										break
+									}
+								}
 							}
-
-							if w, ok := leasePoolMemberStaticMap["start_address"]; ok && !isIntfNil(w) {
-								leasePoolMember[key.(string)].StartAddress = w.(*ves_io_schema.IpAddressType)
-							}
-
-							// break after one loop
-							break
 						}
 					}
+
 				}
 
-			}
+				if w, ok := perSessionMapStrToI["per_session_policy_name"]; ok && !isIntfNil(w) {
+					perSession.PerSessionPolicyName = w.(string)
+				}
 
-			if w, ok := perSessionMapStrToI["per_session_policy_name"]; ok && !isIntfNil(w) {
-				perSession.PerSessionPolicyName = w.(string)
-			}
+				if v, ok := perSessionMapStrToI["resources"]; ok && !isIntfNil(v) {
 
-			if v, ok := perSessionMapStrToI["resources"]; ok && !isIntfNil(v) {
+					sl := v.([]interface{})
+					resources := make(map[string]*ves_io_schema_ztna.Resource)
+					perSession.Resources = resources
+					for _, set := range sl {
+						if set != nil {
+							resourcesMapStrToI := set.(map[string]interface{})
+							key, ok := resourcesMapStrToI["name"]
+							if ok && !isIntfNil(key) {
+								resources[key.(string)] = &ves_io_schema_ztna.Resource{}
+								val, _ := resourcesMapStrToI["value"]
 
-				sl := v.(*schema.Set).List()
-				resources := make(map[string]*ves_io_schema_ztna.Resource)
-				perSession.Resources = resources
-				for _, set := range sl {
-					resourcesMapStrToI := set.(map[string]interface{})
-					key, ok := resourcesMapStrToI["name"]
-					if ok && !isIntfNil(key) {
-						resources[key.(string)] = &ves_io_schema_ztna.Resource{}
-						val, _ := resourcesMapStrToI["value"]
+								resourcesVals := val.([]interface{})
+								for _, intVal := range resourcesVals {
+									if intVal != nil {
 
-						resourcesVals := val.(*schema.Set).List()
-						for _, intVal := range resourcesVals {
+										resourcesStaticMap := intVal.(map[string]interface{})
 
-							resourcesStaticMap := intVal.(map[string]interface{})
+										resourceTypeTypeFound := false
 
-							resourceTypeTypeFound := false
+										if v, ok := resourcesStaticMap["acl"]; ok && !isIntfNil(v) && !resourceTypeTypeFound {
 
-							if v, ok := resourcesStaticMap["acl"]; ok && !isIntfNil(v) && !resourceTypeTypeFound {
+											resourceTypeTypeFound = true
+											resourceTypeInt := &ves_io_schema_ztna.Resource_Acl{}
+											resourceTypeInt.Acl = &ves_io_schema_ztna.AclResourceEntry{}
+											resources[key.(string)].ResourceType = resourceTypeInt
 
-								resourceTypeTypeFound = true
-								resourceTypeInt := &ves_io_schema_ztna.Resource_Acl{}
-								resourceTypeInt.Acl = &ves_io_schema_ztna.AclResourceEntry{}
-								resources[key.(string)].ResourceType = resourceTypeInt
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
 
-								sl := v.(*schema.Set).List()
-								for _, set := range sl {
-									cs := set.(map[string]interface{})
+													if v, ok := cs["entries"]; ok && !isIntfNil(v) {
 
-									if v, ok := cs["entries"]; ok && !isIntfNil(v) {
+														sl := v.([]interface{})
+														entries := make([]*ves_io_schema_ztna.Entry, len(sl))
+														resourceTypeInt.Acl.Entries = entries
+														for i, set := range sl {
+															if set != nil {
+																entries[i] = &ves_io_schema_ztna.Entry{}
+																entriesMapStrToI := set.(map[string]interface{})
 
-										sl := v.([]interface{})
-										entries := make([]*ves_io_schema_ztna.Entry, len(sl))
-										resourceTypeInt.Acl.Entries = entries
-										for i, set := range sl {
-											entries[i] = &ves_io_schema_ztna.Entry{}
-											entriesMapStrToI := set.(map[string]interface{})
+																if v, ok := entriesMapStrToI["action"]; ok && !isIntfNil(v) {
 
-											if v, ok := entriesMapStrToI["action"]; ok && !isIntfNil(v) {
+																	entries[i].Action = ves_io_schema_ztna.Action(ves_io_schema_ztna.Action_value[v.(string)])
 
-												entries[i].Action = ves_io_schema_ztna.Action(ves_io_schema_ztna.Action_value[v.(string)])
+																}
 
-											}
+																if w, ok := entriesMapStrToI["destination_end_port"]; ok && !isIntfNil(w) {
+																	entries[i].DestinationEndPort = uint32(w.(int))
+																}
 
-											if w, ok := entriesMapStrToI["destination_end_port"]; ok && !isIntfNil(w) {
-												entries[i].DestinationEndPort = uint32(w.(int))
-											}
+																if v, ok := entriesMapStrToI["destination_ip"]; ok && !isIntfNil(v) {
 
-											if v, ok := entriesMapStrToI["destination_ip"]; ok && !isIntfNil(v) {
+																	sl := v.([]interface{})
+																	destinationIp := &ves_io_schema.IpAddressType{}
+																	entries[i].DestinationIp = destinationIp
+																	for _, set := range sl {
+																		if set != nil {
+																			destinationIpMapStrToI := set.(map[string]interface{})
 
-												sl := v.(*schema.Set).List()
-												destinationIp := &ves_io_schema.IpAddressType{}
-												entries[i].DestinationIp = destinationIp
-												for _, set := range sl {
-													destinationIpMapStrToI := set.(map[string]interface{})
+																			verTypeFound := false
 
-													verTypeFound := false
+																			if v, ok := destinationIpMapStrToI["ipv4"]; ok && !isIntfNil(v) && !verTypeFound {
 
-													if v, ok := destinationIpMapStrToI["ipv4"]; ok && !isIntfNil(v) && !verTypeFound {
+																				verTypeFound = true
+																				verInt := &ves_io_schema.IpAddressType_Ipv4{}
+																				verInt.Ipv4 = &ves_io_schema.Ipv4AddressType{}
+																				destinationIp.Ver = verInt
 
-														verTypeFound = true
-														verInt := &ves_io_schema.IpAddressType_Ipv4{}
-														verInt.Ipv4 = &ves_io_schema.Ipv4AddressType{}
-														destinationIp.Ver = verInt
+																				sl := v.([]interface{})
+																				for _, set := range sl {
+																					if set != nil {
+																						cs := set.(map[string]interface{})
 
-														sl := v.(*schema.Set).List()
-														for _, set := range sl {
-															cs := set.(map[string]interface{})
+																						if v, ok := cs["addr"]; ok && !isIntfNil(v) {
 
-															if v, ok := cs["addr"]; ok && !isIntfNil(v) {
+																							verInt.Ipv4.Addr = v.(string)
 
-																verInt.Ipv4.Addr = v.(string)
+																						}
+
+																					}
+																				}
+
+																			}
+
+																			if v, ok := destinationIpMapStrToI["ipv6"]; ok && !isIntfNil(v) && !verTypeFound {
+
+																				verTypeFound = true
+																				verInt := &ves_io_schema.IpAddressType_Ipv6{}
+																				verInt.Ipv6 = &ves_io_schema.Ipv6AddressType{}
+																				destinationIp.Ver = verInt
+
+																				sl := v.([]interface{})
+																				for _, set := range sl {
+																					if set != nil {
+																						cs := set.(map[string]interface{})
+
+																						if v, ok := cs["addr"]; ok && !isIntfNil(v) {
+
+																							verInt.Ipv6.Addr = v.(string)
+
+																						}
+
+																					}
+																				}
+
+																			}
+
+																		}
+																	}
+
+																}
+
+																if w, ok := entriesMapStrToI["destination_start_port"]; ok && !isIntfNil(w) {
+																	entries[i].DestinationStartPort = uint32(w.(int))
+																}
 
 															}
-
-														}
-
-													}
-
-													if v, ok := destinationIpMapStrToI["ipv6"]; ok && !isIntfNil(v) && !verTypeFound {
-
-														verTypeFound = true
-														verInt := &ves_io_schema.IpAddressType_Ipv6{}
-														verInt.Ipv6 = &ves_io_schema.Ipv6AddressType{}
-														destinationIp.Ver = verInt
-
-														sl := v.(*schema.Set).List()
-														for _, set := range sl {
-															cs := set.(map[string]interface{})
-
-															if v, ok := cs["addr"]; ok && !isIntfNil(v) {
-
-																verInt.Ipv6.Addr = v.(string)
-
-															}
-
 														}
 
 													}
 
 												}
-
-											}
-
-											if w, ok := entriesMapStrToI["destination_start_port"]; ok && !isIntfNil(w) {
-												entries[i].DestinationStartPort = uint32(w.(int))
 											}
 
 										}
 
+										if v, ok := resourcesStaticMap["connectivity"]; ok && !isIntfNil(v) && !resourceTypeTypeFound {
+
+											resourceTypeTypeFound = true
+
+											if v.(bool) {
+												resourceTypeInt := &ves_io_schema_ztna.Resource_Connectivity{}
+												resourceTypeInt.Connectivity = &ves_io_schema.Empty{}
+												resources[key.(string)].ResourceType = resourceTypeInt
+											}
+
+										}
+
+										if v, ok := resourcesStaticMap["web"]; ok && !isIntfNil(v) && !resourceTypeTypeFound {
+
+											resourceTypeTypeFound = true
+
+											if v.(bool) {
+												resourceTypeInt := &ves_io_schema_ztna.Resource_Web{}
+												resourceTypeInt.Web = &ves_io_schema.Empty{}
+												resources[key.(string)].ResourceType = resourceTypeInt
+											}
+
+										}
+
+										// break after one loop
+										break
 									}
-
 								}
-
 							}
-
-							if v, ok := resourcesStaticMap["connectivity"]; ok && !isIntfNil(v) && !resourceTypeTypeFound {
-
-								resourceTypeTypeFound = true
-
-								if v.(bool) {
-									resourceTypeInt := &ves_io_schema_ztna.Resource_Connectivity{}
-									resourceTypeInt.Connectivity = &ves_io_schema.Empty{}
-									resources[key.(string)].ResourceType = resourceTypeInt
-								}
-
-							}
-
-							if v, ok := resourcesStaticMap["web"]; ok && !isIntfNil(v) && !resourceTypeTypeFound {
-
-								resourceTypeTypeFound = true
-
-								if v.(bool) {
-									resourceTypeInt := &ves_io_schema_ztna.Resource_Web{}
-									resourceTypeInt.Web = &ves_io_schema.Empty{}
-									resources[key.(string)].ResourceType = resourceTypeInt
-								}
-
-							}
-
-							// break after one loop
-							break
 						}
 					}
+
 				}
 
-			}
+				if v, ok := perSessionMapStrToI["sequence_action"]; ok && !isIntfNil(v) {
 
-			if v, ok := perSessionMapStrToI["sequence_action"]; ok && !isIntfNil(v) {
+					sl := v.([]interface{})
+					sequenceAction := &ves_io_schema_ztna.SequenceAction{}
+					perSession.SequenceAction = sequenceAction
+					for _, set := range sl {
+						if set != nil {
+							sequenceActionMapStrToI := set.(map[string]interface{})
 
-				sl := v.(*schema.Set).List()
-				sequenceAction := &ves_io_schema_ztna.SequenceAction{}
-				perSession.SequenceAction = sequenceAction
-				for _, set := range sl {
-					sequenceActionMapStrToI := set.(map[string]interface{})
+							if w, ok := sequenceActionMapStrToI["connectivity_access_policy_name"]; ok && !isIntfNil(w) {
+								sequenceAction.ConnectivityAccessPolicyName = w.(string)
+							}
 
-					if w, ok := sequenceActionMapStrToI["connectivity_access_policy_name"]; ok && !isIntfNil(w) {
-						sequenceAction.ConnectivityAccessPolicyName = w.(string)
-					}
+							if v, ok := sequenceActionMapStrToI["next_action"]; ok && !isIntfNil(v) {
 
-					if v, ok := sequenceActionMapStrToI["next_action"]; ok && !isIntfNil(v) {
-
-						sl := v.(*schema.Set).List()
-						nextAction := &ves_io_schema_ztna.ActionType{}
-						sequenceAction.NextAction = nextAction
-						for _, set := range sl {
-							nextActionMapStrToI := set.(map[string]interface{})
-
-							itemTypeTypeFound := false
-
-							if v, ok := nextActionMapStrToI["active_directory_auth"]; ok && !isIntfNil(v) && !itemTypeTypeFound {
-
-								itemTypeTypeFound = true
-								itemTypeInt := &ves_io_schema_ztna.ActionType_ActiveDirectoryAuth{}
-								itemTypeInt.ActiveDirectoryAuth = &ves_io_schema_ztna.ActiveDirectoryAuth{}
-								nextAction.ItemType = itemTypeInt
-
-								sl := v.(*schema.Set).List()
+								sl := v.([]interface{})
+								nextAction := &ves_io_schema_ztna.ActionType{}
+								sequenceAction.NextAction = nextAction
 								for _, set := range sl {
-									cs := set.(map[string]interface{})
+									if set != nil {
+										nextActionMapStrToI := set.(map[string]interface{})
 
-									if v, ok := cs["active_directory_query"]; ok && !isIntfNil(v) {
+										itemTypeTypeFound := false
 
-										sl := v.([]interface{})
-										activeDirectoryQuery := make([]*ves_io_schema_ztna.ActiveDirectoryQuery, len(sl))
-										itemTypeInt.ActiveDirectoryAuth.ActiveDirectoryQuery = activeDirectoryQuery
-										for i, set := range sl {
-											activeDirectoryQuery[i] = &ves_io_schema_ztna.ActiveDirectoryQuery{}
-											activeDirectoryQueryMapStrToI := set.(map[string]interface{})
+										if v, ok := nextActionMapStrToI["active_directory_auth"]; ok && !isIntfNil(v) && !itemTypeTypeFound {
 
-											if w, ok := activeDirectoryQueryMapStrToI["deny_name"]; ok && !isIntfNil(w) {
-												activeDirectoryQuery[i].DenyName = w.(string)
+											itemTypeTypeFound = true
+											itemTypeInt := &ves_io_schema_ztna.ActionType_ActiveDirectoryAuth{}
+											itemTypeInt.ActiveDirectoryAuth = &ves_io_schema_ztna.ActiveDirectoryAuth{}
+											nextAction.ItemType = itemTypeInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["active_directory_query"]; ok && !isIntfNil(v) {
+
+														sl := v.([]interface{})
+														activeDirectoryQuery := make([]*ves_io_schema_ztna.ActiveDirectoryQuery, len(sl))
+														itemTypeInt.ActiveDirectoryAuth.ActiveDirectoryQuery = activeDirectoryQuery
+														for i, set := range sl {
+															if set != nil {
+																activeDirectoryQuery[i] = &ves_io_schema_ztna.ActiveDirectoryQuery{}
+																activeDirectoryQueryMapStrToI := set.(map[string]interface{})
+
+																if w, ok := activeDirectoryQueryMapStrToI["deny_name"]; ok && !isIntfNil(w) {
+																	activeDirectoryQuery[i].DenyName = w.(string)
+																}
+
+																if w, ok := activeDirectoryQueryMapStrToI["filter"]; ok && !isIntfNil(w) {
+																	activeDirectoryQuery[i].Filter = w.(string)
+																}
+
+																if v, ok := activeDirectoryQueryMapStrToI["resource_assign"]; ok && !isIntfNil(v) {
+
+																	sl := v.([]interface{})
+																	resourceAssign := &ves_io_schema_ztna.ResourceAssign{}
+																	activeDirectoryQuery[i].ResourceAssign = resourceAssign
+																	for _, set := range sl {
+																		if set != nil {
+																			resourceAssignMapStrToI := set.(map[string]interface{})
+
+																			if v, ok := resourceAssignMapStrToI["allow"]; ok && !isIntfNil(v) {
+
+																				sl := v.([]interface{})
+																				allow := make([]*ves_io_schema_ztna.AllowResourceAssign, len(sl))
+																				resourceAssign.Allow = allow
+																				for i, set := range sl {
+																					if set != nil {
+																						allow[i] = &ves_io_schema_ztna.AllowResourceAssign{}
+																						allowMapStrToI := set.(map[string]interface{})
+
+																						if w, ok := allowMapStrToI["allow_name"]; ok && !isIntfNil(w) {
+																							allow[i].AllowName = w.(string)
+																						}
+
+																						if w, ok := allowMapStrToI["deny_name"]; ok && !isIntfNil(w) {
+																							allow[i].DenyName = w.(string)
+																						}
+
+																						if v, ok := allowMapStrToI["rules_resource_assign"]; ok && !isIntfNil(v) {
+
+																							sl := v.([]interface{})
+																							rulesResourceAssign := make([]*ves_io_schema_ztna.Rules, len(sl))
+																							allow[i].RulesResourceAssign = rulesResourceAssign
+																							for i, set := range sl {
+																								if set != nil {
+																									rulesResourceAssign[i] = &ves_io_schema_ztna.Rules{}
+																									rulesResourceAssignMapStrToI := set.(map[string]interface{})
+
+																									if w, ok := rulesResourceAssignMapStrToI["acls"]; ok && !isIntfNil(w) {
+																										ls := make([]string, len(w.([]interface{})))
+																										for i, v := range w.([]interface{}) {
+																											ls[i] = v.(string)
+																										}
+																										rulesResourceAssign[i].Acls = ls
+																									}
+
+																									if w, ok := rulesResourceAssignMapStrToI["network_access_rule"]; ok && !isIntfNil(w) {
+																										ls := make([]string, len(w.([]interface{})))
+																										for i, v := range w.([]interface{}) {
+																											ls[i] = v.(string)
+																										}
+																										rulesResourceAssign[i].NetworkAccessRule = ls
+																									}
+
+																									if w, ok := rulesResourceAssignMapStrToI["web_top_name"]; ok && !isIntfNil(w) {
+																										rulesResourceAssign[i].WebTopName = w.(string)
+																									}
+
+																								}
+																							}
+
+																						}
+
+																						if w, ok := allowMapStrToI["server"]; ok && !isIntfNil(w) {
+																							allow[i].Server = w.(string)
+																						}
+
+																					}
+																				}
+
+																			}
+
+																		}
+																	}
+
+																}
+
+																if w, ok := activeDirectoryQueryMapStrToI["server"]; ok && !isIntfNil(w) {
+																	activeDirectoryQuery[i].Server = w.(string)
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := cs["deny_name"]; ok && !isIntfNil(v) {
+
+														itemTypeInt.ActiveDirectoryAuth.DenyName = v.(string)
+
+													}
+
+													if v, ok := cs["expression"]; ok && !isIntfNil(v) {
+
+														itemTypeInt.ActiveDirectoryAuth.Expression = v.(string)
+
+													}
+
+													if v, ok := cs["server"]; ok && !isIntfNil(v) {
+
+														itemTypeInt.ActiveDirectoryAuth.Server = v.(string)
+
+													}
+
+												}
 											}
 
-											if w, ok := activeDirectoryQueryMapStrToI["filter"]; ok && !isIntfNil(w) {
-												activeDirectoryQuery[i].Filter = w.(string)
+										}
+
+										if v, ok := nextActionMapStrToI["active_directory_query"]; ok && !isIntfNil(v) && !itemTypeTypeFound {
+
+											itemTypeTypeFound = true
+											itemTypeInt := &ves_io_schema_ztna.ActionType_ActiveDirectoryQuery{}
+											itemTypeInt.ActiveDirectoryQuery = &ves_io_schema_ztna.ActiveDirectoryQuery{}
+											nextAction.ItemType = itemTypeInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["deny_name"]; ok && !isIntfNil(v) {
+
+														itemTypeInt.ActiveDirectoryQuery.DenyName = v.(string)
+
+													}
+
+													if v, ok := cs["filter"]; ok && !isIntfNil(v) {
+
+														itemTypeInt.ActiveDirectoryQuery.Filter = v.(string)
+
+													}
+
+													if v, ok := cs["resource_assign"]; ok && !isIntfNil(v) {
+
+														sl := v.([]interface{})
+														resourceAssign := &ves_io_schema_ztna.ResourceAssign{}
+														itemTypeInt.ActiveDirectoryQuery.ResourceAssign = resourceAssign
+														for _, set := range sl {
+															if set != nil {
+																resourceAssignMapStrToI := set.(map[string]interface{})
+
+																if v, ok := resourceAssignMapStrToI["allow"]; ok && !isIntfNil(v) {
+
+																	sl := v.([]interface{})
+																	allow := make([]*ves_io_schema_ztna.AllowResourceAssign, len(sl))
+																	resourceAssign.Allow = allow
+																	for i, set := range sl {
+																		if set != nil {
+																			allow[i] = &ves_io_schema_ztna.AllowResourceAssign{}
+																			allowMapStrToI := set.(map[string]interface{})
+
+																			if w, ok := allowMapStrToI["allow_name"]; ok && !isIntfNil(w) {
+																				allow[i].AllowName = w.(string)
+																			}
+
+																			if w, ok := allowMapStrToI["deny_name"]; ok && !isIntfNil(w) {
+																				allow[i].DenyName = w.(string)
+																			}
+
+																			if v, ok := allowMapStrToI["rules_resource_assign"]; ok && !isIntfNil(v) {
+
+																				sl := v.([]interface{})
+																				rulesResourceAssign := make([]*ves_io_schema_ztna.Rules, len(sl))
+																				allow[i].RulesResourceAssign = rulesResourceAssign
+																				for i, set := range sl {
+																					if set != nil {
+																						rulesResourceAssign[i] = &ves_io_schema_ztna.Rules{}
+																						rulesResourceAssignMapStrToI := set.(map[string]interface{})
+
+																						if w, ok := rulesResourceAssignMapStrToI["acls"]; ok && !isIntfNil(w) {
+																							ls := make([]string, len(w.([]interface{})))
+																							for i, v := range w.([]interface{}) {
+																								ls[i] = v.(string)
+																							}
+																							rulesResourceAssign[i].Acls = ls
+																						}
+
+																						if w, ok := rulesResourceAssignMapStrToI["network_access_rule"]; ok && !isIntfNil(w) {
+																							ls := make([]string, len(w.([]interface{})))
+																							for i, v := range w.([]interface{}) {
+																								ls[i] = v.(string)
+																							}
+																							rulesResourceAssign[i].NetworkAccessRule = ls
+																						}
+
+																						if w, ok := rulesResourceAssignMapStrToI["web_top_name"]; ok && !isIntfNil(w) {
+																							rulesResourceAssign[i].WebTopName = w.(string)
+																						}
+
+																					}
+																				}
+
+																			}
+
+																			if w, ok := allowMapStrToI["server"]; ok && !isIntfNil(w) {
+																				allow[i].Server = w.(string)
+																			}
+
+																		}
+																	}
+
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := cs["server"]; ok && !isIntfNil(v) {
+
+														itemTypeInt.ActiveDirectoryQuery.Server = v.(string)
+
+													}
+
+												}
 											}
 
-											if v, ok := activeDirectoryQueryMapStrToI["resource_assign"]; ok && !isIntfNil(v) {
+										}
 
-												sl := v.(*schema.Set).List()
-												resourceAssign := &ves_io_schema_ztna.ResourceAssign{}
-												activeDirectoryQuery[i].ResourceAssign = resourceAssign
-												for _, set := range sl {
-													resourceAssignMapStrToI := set.(map[string]interface{})
+										if v, ok := nextActionMapStrToI["log_on"]; ok && !isIntfNil(v) && !itemTypeTypeFound {
 
-													if v, ok := resourceAssignMapStrToI["allow"]; ok && !isIntfNil(v) {
+											itemTypeTypeFound = true
+											itemTypeInt := &ves_io_schema_ztna.ActionType_LogOn{}
+											itemTypeInt.LogOn = &ves_io_schema_ztna.LogonItemType{}
+											nextAction.ItemType = itemTypeInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["active_directory_auth"]; ok && !isIntfNil(v) {
+
+														sl := v.([]interface{})
+														activeDirectoryAuth := make([]*ves_io_schema_ztna.ActiveDirectoryAuth, len(sl))
+														itemTypeInt.LogOn.ActiveDirectoryAuth = activeDirectoryAuth
+														for i, set := range sl {
+															if set != nil {
+																activeDirectoryAuth[i] = &ves_io_schema_ztna.ActiveDirectoryAuth{}
+																activeDirectoryAuthMapStrToI := set.(map[string]interface{})
+
+																if v, ok := activeDirectoryAuthMapStrToI["active_directory_query"]; ok && !isIntfNil(v) {
+
+																	sl := v.([]interface{})
+																	activeDirectoryQuery := make([]*ves_io_schema_ztna.ActiveDirectoryQuery, len(sl))
+																	activeDirectoryAuth[i].ActiveDirectoryQuery = activeDirectoryQuery
+																	for i, set := range sl {
+																		if set != nil {
+																			activeDirectoryQuery[i] = &ves_io_schema_ztna.ActiveDirectoryQuery{}
+																			activeDirectoryQueryMapStrToI := set.(map[string]interface{})
+
+																			if w, ok := activeDirectoryQueryMapStrToI["deny_name"]; ok && !isIntfNil(w) {
+																				activeDirectoryQuery[i].DenyName = w.(string)
+																			}
+
+																			if w, ok := activeDirectoryQueryMapStrToI["filter"]; ok && !isIntfNil(w) {
+																				activeDirectoryQuery[i].Filter = w.(string)
+																			}
+
+																			if v, ok := activeDirectoryQueryMapStrToI["resource_assign"]; ok && !isIntfNil(v) {
+
+																				sl := v.([]interface{})
+																				resourceAssign := &ves_io_schema_ztna.ResourceAssign{}
+																				activeDirectoryQuery[i].ResourceAssign = resourceAssign
+																				for _, set := range sl {
+																					if set != nil {
+																						resourceAssignMapStrToI := set.(map[string]interface{})
+
+																						if v, ok := resourceAssignMapStrToI["allow"]; ok && !isIntfNil(v) {
+
+																							sl := v.([]interface{})
+																							allow := make([]*ves_io_schema_ztna.AllowResourceAssign, len(sl))
+																							resourceAssign.Allow = allow
+																							for i, set := range sl {
+																								if set != nil {
+																									allow[i] = &ves_io_schema_ztna.AllowResourceAssign{}
+																									allowMapStrToI := set.(map[string]interface{})
+
+																									if w, ok := allowMapStrToI["allow_name"]; ok && !isIntfNil(w) {
+																										allow[i].AllowName = w.(string)
+																									}
+
+																									if w, ok := allowMapStrToI["deny_name"]; ok && !isIntfNil(w) {
+																										allow[i].DenyName = w.(string)
+																									}
+
+																									if v, ok := allowMapStrToI["rules_resource_assign"]; ok && !isIntfNil(v) {
+
+																										sl := v.([]interface{})
+																										rulesResourceAssign := make([]*ves_io_schema_ztna.Rules, len(sl))
+																										allow[i].RulesResourceAssign = rulesResourceAssign
+																										for i, set := range sl {
+																											if set != nil {
+																												rulesResourceAssign[i] = &ves_io_schema_ztna.Rules{}
+																												rulesResourceAssignMapStrToI := set.(map[string]interface{})
+
+																												if w, ok := rulesResourceAssignMapStrToI["acls"]; ok && !isIntfNil(w) {
+																													ls := make([]string, len(w.([]interface{})))
+																													for i, v := range w.([]interface{}) {
+																														ls[i] = v.(string)
+																													}
+																													rulesResourceAssign[i].Acls = ls
+																												}
+
+																												if w, ok := rulesResourceAssignMapStrToI["network_access_rule"]; ok && !isIntfNil(w) {
+																													ls := make([]string, len(w.([]interface{})))
+																													for i, v := range w.([]interface{}) {
+																														ls[i] = v.(string)
+																													}
+																													rulesResourceAssign[i].NetworkAccessRule = ls
+																												}
+
+																												if w, ok := rulesResourceAssignMapStrToI["web_top_name"]; ok && !isIntfNil(w) {
+																													rulesResourceAssign[i].WebTopName = w.(string)
+																												}
+
+																											}
+																										}
+
+																									}
+
+																									if w, ok := allowMapStrToI["server"]; ok && !isIntfNil(w) {
+																										allow[i].Server = w.(string)
+																									}
+
+																								}
+																							}
+
+																						}
+
+																					}
+																				}
+
+																			}
+
+																			if w, ok := activeDirectoryQueryMapStrToI["server"]; ok && !isIntfNil(w) {
+																				activeDirectoryQuery[i].Server = w.(string)
+																			}
+
+																		}
+																	}
+
+																}
+
+																if w, ok := activeDirectoryAuthMapStrToI["deny_name"]; ok && !isIntfNil(w) {
+																	activeDirectoryAuth[i].DenyName = w.(string)
+																}
+
+																if w, ok := activeDirectoryAuthMapStrToI["expression"]; ok && !isIntfNil(w) {
+																	activeDirectoryAuth[i].Expression = w.(string)
+																}
+
+																if w, ok := activeDirectoryAuthMapStrToI["server"]; ok && !isIntfNil(w) {
+																	activeDirectoryAuth[i].Server = w.(string)
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := cs["customization"]; ok && !isIntfNil(v) {
+
+														sl := v.([]interface{})
+														customization := make([]*ves_io_schema_ztna.Custmization, len(sl))
+														itemTypeInt.LogOn.Customization = customization
+														for i, set := range sl {
+															if set != nil {
+																customization[i] = &ves_io_schema_ztna.Custmization{}
+																customizationMapStrToI := set.(map[string]interface{})
+
+																if v, ok := customizationMapStrToI["password"]; ok && !isIntfNil(v) {
+
+																	sl := v.([]interface{})
+																	password := &ves_io_schema.SecretType{}
+																	customization[i].Password = password
+																	for _, set := range sl {
+																		if set != nil {
+																			passwordMapStrToI := set.(map[string]interface{})
+
+																			if v, ok := passwordMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
+
+																				sl := v.([]interface{})
+																				blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
+																				password.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
+																				for _, set := range sl {
+																					if set != nil {
+																						blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
+
+																						if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
+																							blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
+																						}
+
+																						if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
+																							blindfoldSecretInfoInternal.Location = w.(string)
+																						}
+
+																						if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
+																							blindfoldSecretInfoInternal.StoreProvider = w.(string)
+																						}
+
+																					}
+																				}
+
+																			}
+
+																			if v, ok := passwordMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
+
+																				password.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+																			}
+
+																			secretInfoOneofTypeFound := false
+
+																			if v, ok := passwordMapStrToI["blindfold_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																				secretInfoOneofTypeFound = true
+																				secretInfoOneofInt := &ves_io_schema.SecretType_BlindfoldSecretInfo{}
+																				secretInfoOneofInt.BlindfoldSecretInfo = &ves_io_schema.BlindfoldSecretInfoType{}
+																				password.SecretInfoOneof = secretInfoOneofInt
+
+																				sl := v.([]interface{})
+																				for _, set := range sl {
+																					if set != nil {
+																						cs := set.(map[string]interface{})
+
+																						if v, ok := cs["decryption_provider"]; ok && !isIntfNil(v) {
+
+																							secretInfoOneofInt.BlindfoldSecretInfo.DecryptionProvider = v.(string)
+
+																						}
+
+																						if v, ok := cs["location"]; ok && !isIntfNil(v) {
+
+																							secretInfoOneofInt.BlindfoldSecretInfo.Location = v.(string)
+
+																						}
+
+																						if v, ok := cs["store_provider"]; ok && !isIntfNil(v) {
+
+																							secretInfoOneofInt.BlindfoldSecretInfo.StoreProvider = v.(string)
+
+																						}
+
+																					}
+																				}
+
+																			}
+
+																			if v, ok := passwordMapStrToI["clear_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																				secretInfoOneofTypeFound = true
+																				secretInfoOneofInt := &ves_io_schema.SecretType_ClearSecretInfo{}
+																				secretInfoOneofInt.ClearSecretInfo = &ves_io_schema.ClearSecretInfoType{}
+																				password.SecretInfoOneof = secretInfoOneofInt
+
+																				sl := v.([]interface{})
+																				for _, set := range sl {
+																					if set != nil {
+																						cs := set.(map[string]interface{})
+
+																						if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+
+																							secretInfoOneofInt.ClearSecretInfo.Provider = v.(string)
+
+																						}
+
+																						if v, ok := cs["url"]; ok && !isIntfNil(v) {
+
+																							secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+
+																						}
+
+																					}
+																				}
+
+																			}
+
+																			if v, ok := passwordMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																				secretInfoOneofTypeFound = true
+																				secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
+																				secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
+																				password.SecretInfoOneof = secretInfoOneofInt
+
+																				sl := v.([]interface{})
+																				for _, set := range sl {
+																					if set != nil {
+																						cs := set.(map[string]interface{})
+
+																						if v, ok := cs["key"]; ok && !isIntfNil(v) {
+
+																							secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
+																						}
+
+																						if v, ok := cs["location"]; ok && !isIntfNil(v) {
+
+																							secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
+																						}
+
+																						if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+
+																							secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
+																						}
+
+																						if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
+
+																							secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+																						}
+
+																						if v, ok := cs["version"]; ok && !isIntfNil(v) {
+
+																							secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
+																						}
+
+																					}
+																				}
+
+																			}
+
+																			if v, ok := passwordMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																				secretInfoOneofTypeFound = true
+																				secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
+																				secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
+																				password.SecretInfoOneof = secretInfoOneofInt
+
+																				sl := v.([]interface{})
+																				for _, set := range sl {
+																					if set != nil {
+																						cs := set.(map[string]interface{})
+
+																						if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+																							secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
+
+																						}
+
+																					}
+																				}
+
+																			}
+
+																		}
+																	}
+
+																}
+
+																if w, ok := customizationMapStrToI["user_name"]; ok && !isIntfNil(w) {
+																	customization[i].UserName = w.(string)
+																}
+
+															}
+														}
+
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := nextActionMapStrToI["resource_assign"]; ok && !isIntfNil(v) && !itemTypeTypeFound {
+
+											itemTypeTypeFound = true
+											itemTypeInt := &ves_io_schema_ztna.ActionType_ResourceAssign{}
+											itemTypeInt.ResourceAssign = &ves_io_schema_ztna.ResourceAssign{}
+											nextAction.ItemType = itemTypeInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["allow"]; ok && !isIntfNil(v) {
 
 														sl := v.([]interface{})
 														allow := make([]*ves_io_schema_ztna.AllowResourceAssign, len(sl))
-														resourceAssign.Allow = allow
+														itemTypeInt.ResourceAssign.Allow = allow
 														for i, set := range sl {
-															allow[i] = &ves_io_schema_ztna.AllowResourceAssign{}
-															allowMapStrToI := set.(map[string]interface{})
+															if set != nil {
+																allow[i] = &ves_io_schema_ztna.AllowResourceAssign{}
+																allowMapStrToI := set.(map[string]interface{})
 
-															if w, ok := allowMapStrToI["allow_name"]; ok && !isIntfNil(w) {
-																allow[i].AllowName = w.(string)
-															}
-
-															if w, ok := allowMapStrToI["deny_name"]; ok && !isIntfNil(w) {
-																allow[i].DenyName = w.(string)
-															}
-
-															if v, ok := allowMapStrToI["rules_resource_assign"]; ok && !isIntfNil(v) {
-
-																sl := v.([]interface{})
-																rulesResourceAssign := make([]*ves_io_schema_ztna.Rules, len(sl))
-																allow[i].RulesResourceAssign = rulesResourceAssign
-																for i, set := range sl {
-																	rulesResourceAssign[i] = &ves_io_schema_ztna.Rules{}
-																	rulesResourceAssignMapStrToI := set.(map[string]interface{})
-
-																	if w, ok := rulesResourceAssignMapStrToI["acls"]; ok && !isIntfNil(w) {
-																		ls := make([]string, len(w.([]interface{})))
-																		for i, v := range w.([]interface{}) {
-																			ls[i] = v.(string)
-																		}
-																		rulesResourceAssign[i].Acls = ls
-																	}
-
-																	if w, ok := rulesResourceAssignMapStrToI["network_access_rule"]; ok && !isIntfNil(w) {
-																		ls := make([]string, len(w.([]interface{})))
-																		for i, v := range w.([]interface{}) {
-																			ls[i] = v.(string)
-																		}
-																		rulesResourceAssign[i].NetworkAccessRule = ls
-																	}
-
-																	if w, ok := rulesResourceAssignMapStrToI["web_top_name"]; ok && !isIntfNil(w) {
-																		rulesResourceAssign[i].WebTopName = w.(string)
-																	}
-
+																if w, ok := allowMapStrToI["allow_name"]; ok && !isIntfNil(w) {
+																	allow[i].AllowName = w.(string)
 																}
 
-															}
-
-															if w, ok := allowMapStrToI["server"]; ok && !isIntfNil(w) {
-																allow[i].Server = w.(string)
-															}
-
-														}
-
-													}
-
-												}
-
-											}
-
-											if w, ok := activeDirectoryQueryMapStrToI["server"]; ok && !isIntfNil(w) {
-												activeDirectoryQuery[i].Server = w.(string)
-											}
-
-										}
-
-									}
-
-									if v, ok := cs["deny_name"]; ok && !isIntfNil(v) {
-
-										itemTypeInt.ActiveDirectoryAuth.DenyName = v.(string)
-
-									}
-
-									if v, ok := cs["expression"]; ok && !isIntfNil(v) {
-
-										itemTypeInt.ActiveDirectoryAuth.Expression = v.(string)
-
-									}
-
-									if v, ok := cs["server"]; ok && !isIntfNil(v) {
-
-										itemTypeInt.ActiveDirectoryAuth.Server = v.(string)
-
-									}
-
-								}
-
-							}
-
-							if v, ok := nextActionMapStrToI["active_directory_query"]; ok && !isIntfNil(v) && !itemTypeTypeFound {
-
-								itemTypeTypeFound = true
-								itemTypeInt := &ves_io_schema_ztna.ActionType_ActiveDirectoryQuery{}
-								itemTypeInt.ActiveDirectoryQuery = &ves_io_schema_ztna.ActiveDirectoryQuery{}
-								nextAction.ItemType = itemTypeInt
-
-								sl := v.(*schema.Set).List()
-								for _, set := range sl {
-									cs := set.(map[string]interface{})
-
-									if v, ok := cs["deny_name"]; ok && !isIntfNil(v) {
-
-										itemTypeInt.ActiveDirectoryQuery.DenyName = v.(string)
-
-									}
-
-									if v, ok := cs["filter"]; ok && !isIntfNil(v) {
-
-										itemTypeInt.ActiveDirectoryQuery.Filter = v.(string)
-
-									}
-
-									if v, ok := cs["resource_assign"]; ok && !isIntfNil(v) {
-
-										sl := v.(*schema.Set).List()
-										resourceAssign := &ves_io_schema_ztna.ResourceAssign{}
-										itemTypeInt.ActiveDirectoryQuery.ResourceAssign = resourceAssign
-										for _, set := range sl {
-											resourceAssignMapStrToI := set.(map[string]interface{})
-
-											if v, ok := resourceAssignMapStrToI["allow"]; ok && !isIntfNil(v) {
-
-												sl := v.([]interface{})
-												allow := make([]*ves_io_schema_ztna.AllowResourceAssign, len(sl))
-												resourceAssign.Allow = allow
-												for i, set := range sl {
-													allow[i] = &ves_io_schema_ztna.AllowResourceAssign{}
-													allowMapStrToI := set.(map[string]interface{})
-
-													if w, ok := allowMapStrToI["allow_name"]; ok && !isIntfNil(w) {
-														allow[i].AllowName = w.(string)
-													}
-
-													if w, ok := allowMapStrToI["deny_name"]; ok && !isIntfNil(w) {
-														allow[i].DenyName = w.(string)
-													}
-
-													if v, ok := allowMapStrToI["rules_resource_assign"]; ok && !isIntfNil(v) {
-
-														sl := v.([]interface{})
-														rulesResourceAssign := make([]*ves_io_schema_ztna.Rules, len(sl))
-														allow[i].RulesResourceAssign = rulesResourceAssign
-														for i, set := range sl {
-															rulesResourceAssign[i] = &ves_io_schema_ztna.Rules{}
-															rulesResourceAssignMapStrToI := set.(map[string]interface{})
-
-															if w, ok := rulesResourceAssignMapStrToI["acls"]; ok && !isIntfNil(w) {
-																ls := make([]string, len(w.([]interface{})))
-																for i, v := range w.([]interface{}) {
-																	ls[i] = v.(string)
+																if w, ok := allowMapStrToI["deny_name"]; ok && !isIntfNil(w) {
+																	allow[i].DenyName = w.(string)
 																}
-																rulesResourceAssign[i].Acls = ls
-															}
 
-															if w, ok := rulesResourceAssignMapStrToI["network_access_rule"]; ok && !isIntfNil(w) {
-																ls := make([]string, len(w.([]interface{})))
-																for i, v := range w.([]interface{}) {
-																	ls[i] = v.(string)
-																}
-																rulesResourceAssign[i].NetworkAccessRule = ls
-															}
+																if v, ok := allowMapStrToI["rules_resource_assign"]; ok && !isIntfNil(v) {
 
-															if w, ok := rulesResourceAssignMapStrToI["web_top_name"]; ok && !isIntfNil(w) {
-																rulesResourceAssign[i].WebTopName = w.(string)
-															}
-
-														}
-
-													}
-
-													if w, ok := allowMapStrToI["server"]; ok && !isIntfNil(w) {
-														allow[i].Server = w.(string)
-													}
-
-												}
-
-											}
-
-										}
-
-									}
-
-									if v, ok := cs["server"]; ok && !isIntfNil(v) {
-
-										itemTypeInt.ActiveDirectoryQuery.Server = v.(string)
-
-									}
-
-								}
-
-							}
-
-							if v, ok := nextActionMapStrToI["log_on"]; ok && !isIntfNil(v) && !itemTypeTypeFound {
-
-								itemTypeTypeFound = true
-								itemTypeInt := &ves_io_schema_ztna.ActionType_LogOn{}
-								itemTypeInt.LogOn = &ves_io_schema_ztna.LogonItemType{}
-								nextAction.ItemType = itemTypeInt
-
-								sl := v.(*schema.Set).List()
-								for _, set := range sl {
-									cs := set.(map[string]interface{})
-
-									if v, ok := cs["active_directory_auth"]; ok && !isIntfNil(v) {
-
-										sl := v.([]interface{})
-										activeDirectoryAuth := make([]*ves_io_schema_ztna.ActiveDirectoryAuth, len(sl))
-										itemTypeInt.LogOn.ActiveDirectoryAuth = activeDirectoryAuth
-										for i, set := range sl {
-											activeDirectoryAuth[i] = &ves_io_schema_ztna.ActiveDirectoryAuth{}
-											activeDirectoryAuthMapStrToI := set.(map[string]interface{})
-
-											if v, ok := activeDirectoryAuthMapStrToI["active_directory_query"]; ok && !isIntfNil(v) {
-
-												sl := v.([]interface{})
-												activeDirectoryQuery := make([]*ves_io_schema_ztna.ActiveDirectoryQuery, len(sl))
-												activeDirectoryAuth[i].ActiveDirectoryQuery = activeDirectoryQuery
-												for i, set := range sl {
-													activeDirectoryQuery[i] = &ves_io_schema_ztna.ActiveDirectoryQuery{}
-													activeDirectoryQueryMapStrToI := set.(map[string]interface{})
-
-													if w, ok := activeDirectoryQueryMapStrToI["deny_name"]; ok && !isIntfNil(w) {
-														activeDirectoryQuery[i].DenyName = w.(string)
-													}
-
-													if w, ok := activeDirectoryQueryMapStrToI["filter"]; ok && !isIntfNil(w) {
-														activeDirectoryQuery[i].Filter = w.(string)
-													}
-
-													if v, ok := activeDirectoryQueryMapStrToI["resource_assign"]; ok && !isIntfNil(v) {
-
-														sl := v.(*schema.Set).List()
-														resourceAssign := &ves_io_schema_ztna.ResourceAssign{}
-														activeDirectoryQuery[i].ResourceAssign = resourceAssign
-														for _, set := range sl {
-															resourceAssignMapStrToI := set.(map[string]interface{})
-
-															if v, ok := resourceAssignMapStrToI["allow"]; ok && !isIntfNil(v) {
-
-																sl := v.([]interface{})
-																allow := make([]*ves_io_schema_ztna.AllowResourceAssign, len(sl))
-																resourceAssign.Allow = allow
-																for i, set := range sl {
-																	allow[i] = &ves_io_schema_ztna.AllowResourceAssign{}
-																	allowMapStrToI := set.(map[string]interface{})
-
-																	if w, ok := allowMapStrToI["allow_name"]; ok && !isIntfNil(w) {
-																		allow[i].AllowName = w.(string)
-																	}
-
-																	if w, ok := allowMapStrToI["deny_name"]; ok && !isIntfNil(w) {
-																		allow[i].DenyName = w.(string)
-																	}
-
-																	if v, ok := allowMapStrToI["rules_resource_assign"]; ok && !isIntfNil(v) {
-
-																		sl := v.([]interface{})
-																		rulesResourceAssign := make([]*ves_io_schema_ztna.Rules, len(sl))
-																		allow[i].RulesResourceAssign = rulesResourceAssign
-																		for i, set := range sl {
+																	sl := v.([]interface{})
+																	rulesResourceAssign := make([]*ves_io_schema_ztna.Rules, len(sl))
+																	allow[i].RulesResourceAssign = rulesResourceAssign
+																	for i, set := range sl {
+																		if set != nil {
 																			rulesResourceAssign[i] = &ves_io_schema_ztna.Rules{}
 																			rulesResourceAssignMapStrToI := set.(map[string]interface{})
 
@@ -2773,317 +3257,35 @@ func resourceVolterraZtnaUpdate(d *schema.ResourceData, meta interface{}) error 
 																			}
 
 																		}
-
-																	}
-
-																	if w, ok := allowMapStrToI["server"]; ok && !isIntfNil(w) {
-																		allow[i].Server = w.(string)
 																	}
 
 																}
 
-															}
-
-														}
-
-													}
-
-													if w, ok := activeDirectoryQueryMapStrToI["server"]; ok && !isIntfNil(w) {
-														activeDirectoryQuery[i].Server = w.(string)
-													}
-
-												}
-
-											}
-
-											if w, ok := activeDirectoryAuthMapStrToI["deny_name"]; ok && !isIntfNil(w) {
-												activeDirectoryAuth[i].DenyName = w.(string)
-											}
-
-											if w, ok := activeDirectoryAuthMapStrToI["expression"]; ok && !isIntfNil(w) {
-												activeDirectoryAuth[i].Expression = w.(string)
-											}
-
-											if w, ok := activeDirectoryAuthMapStrToI["server"]; ok && !isIntfNil(w) {
-												activeDirectoryAuth[i].Server = w.(string)
-											}
-
-										}
-
-									}
-
-									if v, ok := cs["customization"]; ok && !isIntfNil(v) {
-
-										sl := v.([]interface{})
-										customization := make([]*ves_io_schema_ztna.Custmization, len(sl))
-										itemTypeInt.LogOn.Customization = customization
-										for i, set := range sl {
-											customization[i] = &ves_io_schema_ztna.Custmization{}
-											customizationMapStrToI := set.(map[string]interface{})
-
-											if v, ok := customizationMapStrToI["password"]; ok && !isIntfNil(v) {
-
-												sl := v.(*schema.Set).List()
-												password := &ves_io_schema.SecretType{}
-												customization[i].Password = password
-												for _, set := range sl {
-													passwordMapStrToI := set.(map[string]interface{})
-
-													if v, ok := passwordMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
-
-														sl := v.(*schema.Set).List()
-														blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
-														password.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
-														for _, set := range sl {
-															blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
-
-															if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
-																blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
-															}
-
-															if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
-																blindfoldSecretInfoInternal.Location = w.(string)
-															}
-
-															if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
-																blindfoldSecretInfoInternal.StoreProvider = w.(string)
-															}
-
-														}
-
-													}
-
-													if v, ok := passwordMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
-
-														password.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
-
-													}
-
-													secretInfoOneofTypeFound := false
-
-													if v, ok := passwordMapStrToI["blindfold_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
-
-														secretInfoOneofTypeFound = true
-														secretInfoOneofInt := &ves_io_schema.SecretType_BlindfoldSecretInfo{}
-														secretInfoOneofInt.BlindfoldSecretInfo = &ves_io_schema.BlindfoldSecretInfoType{}
-														password.SecretInfoOneof = secretInfoOneofInt
-
-														sl := v.(*schema.Set).List()
-														for _, set := range sl {
-															cs := set.(map[string]interface{})
-
-															if v, ok := cs["decryption_provider"]; ok && !isIntfNil(v) {
-
-																secretInfoOneofInt.BlindfoldSecretInfo.DecryptionProvider = v.(string)
+																if w, ok := allowMapStrToI["server"]; ok && !isIntfNil(w) {
+																	allow[i].Server = w.(string)
+																}
 
 															}
-
-															if v, ok := cs["location"]; ok && !isIntfNil(v) {
-
-																secretInfoOneofInt.BlindfoldSecretInfo.Location = v.(string)
-
-															}
-
-															if v, ok := cs["store_provider"]; ok && !isIntfNil(v) {
-
-																secretInfoOneofInt.BlindfoldSecretInfo.StoreProvider = v.(string)
-
-															}
-
-														}
-
-													}
-
-													if v, ok := passwordMapStrToI["clear_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
-
-														secretInfoOneofTypeFound = true
-														secretInfoOneofInt := &ves_io_schema.SecretType_ClearSecretInfo{}
-														secretInfoOneofInt.ClearSecretInfo = &ves_io_schema.ClearSecretInfoType{}
-														password.SecretInfoOneof = secretInfoOneofInt
-
-														sl := v.(*schema.Set).List()
-														for _, set := range sl {
-															cs := set.(map[string]interface{})
-
-															if v, ok := cs["provider"]; ok && !isIntfNil(v) {
-
-																secretInfoOneofInt.ClearSecretInfo.Provider = v.(string)
-
-															}
-
-															if v, ok := cs["url"]; ok && !isIntfNil(v) {
-
-																secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
-
-															}
-
-														}
-
-													}
-
-													if v, ok := passwordMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
-
-														secretInfoOneofTypeFound = true
-														secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
-														secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
-														password.SecretInfoOneof = secretInfoOneofInt
-
-														sl := v.(*schema.Set).List()
-														for _, set := range sl {
-															cs := set.(map[string]interface{})
-
-															if v, ok := cs["key"]; ok && !isIntfNil(v) {
-
-																secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
-
-															}
-
-															if v, ok := cs["location"]; ok && !isIntfNil(v) {
-
-																secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
-
-															}
-
-															if v, ok := cs["provider"]; ok && !isIntfNil(v) {
-
-																secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
-
-															}
-
-															if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
-
-																secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
-
-															}
-
-															if v, ok := cs["version"]; ok && !isIntfNil(v) {
-
-																secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
-
-															}
-
-														}
-
-													}
-
-													if v, ok := passwordMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
-
-														secretInfoOneofTypeFound = true
-														secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
-														secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
-														password.SecretInfoOneof = secretInfoOneofInt
-
-														sl := v.(*schema.Set).List()
-														for _, set := range sl {
-															cs := set.(map[string]interface{})
-
-															if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-																secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
-
-															}
-
 														}
 
 													}
 
 												}
-
-											}
-
-											if w, ok := customizationMapStrToI["user_name"]; ok && !isIntfNil(w) {
-												customization[i].UserName = w.(string)
 											}
 
 										}
 
 									}
-
-								}
-
-							}
-
-							if v, ok := nextActionMapStrToI["resource_assign"]; ok && !isIntfNil(v) && !itemTypeTypeFound {
-
-								itemTypeTypeFound = true
-								itemTypeInt := &ves_io_schema_ztna.ActionType_ResourceAssign{}
-								itemTypeInt.ResourceAssign = &ves_io_schema_ztna.ResourceAssign{}
-								nextAction.ItemType = itemTypeInt
-
-								sl := v.(*schema.Set).List()
-								for _, set := range sl {
-									cs := set.(map[string]interface{})
-
-									if v, ok := cs["allow"]; ok && !isIntfNil(v) {
-
-										sl := v.([]interface{})
-										allow := make([]*ves_io_schema_ztna.AllowResourceAssign, len(sl))
-										itemTypeInt.ResourceAssign.Allow = allow
-										for i, set := range sl {
-											allow[i] = &ves_io_schema_ztna.AllowResourceAssign{}
-											allowMapStrToI := set.(map[string]interface{})
-
-											if w, ok := allowMapStrToI["allow_name"]; ok && !isIntfNil(w) {
-												allow[i].AllowName = w.(string)
-											}
-
-											if w, ok := allowMapStrToI["deny_name"]; ok && !isIntfNil(w) {
-												allow[i].DenyName = w.(string)
-											}
-
-											if v, ok := allowMapStrToI["rules_resource_assign"]; ok && !isIntfNil(v) {
-
-												sl := v.([]interface{})
-												rulesResourceAssign := make([]*ves_io_schema_ztna.Rules, len(sl))
-												allow[i].RulesResourceAssign = rulesResourceAssign
-												for i, set := range sl {
-													rulesResourceAssign[i] = &ves_io_schema_ztna.Rules{}
-													rulesResourceAssignMapStrToI := set.(map[string]interface{})
-
-													if w, ok := rulesResourceAssignMapStrToI["acls"]; ok && !isIntfNil(w) {
-														ls := make([]string, len(w.([]interface{})))
-														for i, v := range w.([]interface{}) {
-															ls[i] = v.(string)
-														}
-														rulesResourceAssign[i].Acls = ls
-													}
-
-													if w, ok := rulesResourceAssignMapStrToI["network_access_rule"]; ok && !isIntfNil(w) {
-														ls := make([]string, len(w.([]interface{})))
-														for i, v := range w.([]interface{}) {
-															ls[i] = v.(string)
-														}
-														rulesResourceAssign[i].NetworkAccessRule = ls
-													}
-
-													if w, ok := rulesResourceAssignMapStrToI["web_top_name"]; ok && !isIntfNil(w) {
-														rulesResourceAssign[i].WebTopName = w.(string)
-													}
-
-												}
-
-											}
-
-											if w, ok := allowMapStrToI["server"]; ok && !isIntfNil(w) {
-												allow[i].Server = w.(string)
-											}
-
-										}
-
-									}
-
 								}
 
 							}
 
 						}
-
 					}
 
 				}
 
 			}
-
 		}
 
 	}

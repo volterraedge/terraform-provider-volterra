@@ -1,9 +1,9 @@
 ---
 
 page_title: "Volterra: virtual_network"
-description: "The virtual_network allows CRUD of Virtual Network resource on Volterra SaaS"
 
----
+description: "The virtual_network allows CRUD of Virtual Network resource on Volterra SaaS"
+-------------------------------------------------------------------------------------------
 
 Resource volterra_virtual_network
 =================================
@@ -22,7 +22,7 @@ resource "volterra_virtual_network" "example" {
 
   // One of the arguments from this list "global_network legacy_type site_local_inside_network site_local_network srv6_network" must be set
 
-  site_local_inside_network = true
+  global_network = true
 }
 
 ```

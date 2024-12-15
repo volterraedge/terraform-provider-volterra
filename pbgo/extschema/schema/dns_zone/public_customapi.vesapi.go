@@ -3080,7 +3080,7 @@ var CustomAPISwaggerJSON string = `{
             "properties": {
                 "html_data": {
                     "type": "string",
-                    "description": " report data in HTML",
+                    "description": " Base64-encoded zone file",
                     "title": "HTML data",
                     "x-displayname": "HTML Data"
                 }

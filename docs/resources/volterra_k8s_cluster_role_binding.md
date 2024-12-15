@@ -1,9 +1,9 @@
 ---
 
 page_title: "Volterra: k8s_cluster_role_binding"
-description: "The k8s_cluster_role_binding allows CRUD of K8s Cluster Role Binding resource on Volterra SaaS"
 
----
+description: "The k8s_cluster_role_binding allows CRUD of K8s Cluster Role Binding resource on Volterra SaaS"
+-------------------------------------------------------------------------------------------------------------
 
 Resource volterra_k8s_cluster_role_binding
 ==========================================

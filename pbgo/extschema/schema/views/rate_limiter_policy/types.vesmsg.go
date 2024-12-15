@@ -1034,7 +1034,7 @@ var DefaultPolicyListValidator = func() *ValidatePolicyList {
 	vrhPolicies := v.PoliciesValidationRuleHandler
 	rulesPolicies := map[string]string{
 		"ves.io.schema.rules.message.required":   "true",
-		"ves.io.schema.rules.repeated.max_items": "64",
+		"ves.io.schema.rules.repeated.max_items": "16",
 	}
 	vFn, err = vrhPolicies(rulesPolicies)
 	if err != nil {

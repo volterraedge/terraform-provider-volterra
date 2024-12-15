@@ -1,9 +1,9 @@
 ---
 
 page_title: "Volterra: azure_vnet_site"
-description: "The azure_vnet_site allows CRUD of Azure Vnet Site resource on Volterra SaaS"
 
----
+description: "The azure_vnet_site allows CRUD of Azure Vnet Site resource on Volterra SaaS"
+-------------------------------------------------------------------------------------------
 
 Resource volterra_azure_vnet_site
 =================================
@@ -39,41 +39,22 @@ resource "volterra_azure_vnet_site" "example" {
 
   // One of the arguments from this list "alternate_region azure_region" must be set
 
-  alternate_region = "northcentralus"
+  azure_region = "eastus"
   resource_group = ["my-resources"]
 
   // One of the arguments from this list "ingress_egress_gw ingress_egress_gw_ar ingress_gw ingress_gw_ar voltstack_cluster voltstack_cluster_ar" must be set
 
-  ingress_egress_gw_ar {
+  ingress_egress_gw {
     accelerated_networking {
       // One of the arguments from this list "disable enable" must be set
 
       disable = true
     }
 
-    azure_certified_hw = "azure-byol-multi-nic-voltmesh"
+    az_nodes {
+      azure_az = "1"
 
-    // One of the arguments from this list "dc_cluster_group_inside_vn dc_cluster_group_outside_vn no_dc_cluster_group" must be set
-
-    no_dc_cluster_group = true
-
-    // One of the arguments from this list "active_forward_proxy_policies forward_proxy_allow_all no_forward_proxy" must be set
-
-    no_forward_proxy = true
-
-    // One of the arguments from this list "global_network_list no_global_network" must be set
-
-    no_global_network = true
-
-    // One of the arguments from this list "k8s_cluster no_k8s_cluster" must be set
-
-    no_k8s_cluster = true
-
-    // One of the arguments from this list "active_enhanced_firewall_policies active_network_policies no_network_policy" must be set
-
-    no_network_policy = true
-    node {
-      fault_domain = "1"
+      disk_size = "80"
 
       inside_subnet {
         // One of the arguments from this list "subnet subnet_param" must be set
@@ -87,19 +68,59 @@ resource "volterra_azure_vnet_site" "example" {
         }
       }
 
-      node_number = "1"
-
       outside_subnet {
         // One of the arguments from this list "subnet subnet_param" must be set
 
-        subnet_param {
-          ipv4 = "10.1.2.0/24"
+        subnet {
+          // One of the arguments from this list "subnet_resource_grp vnet_resource_group" can be set
 
-          ipv6 = "1234:568:abcd:9100::/64"
+          vnet_resource_group = true
+
+          subnet_name = "MySubnet"
         }
       }
+    }
 
-      update_domain = "1"
+    azure_certified_hw = "azure-byol-multi-nic-voltmesh"
+
+    // One of the arguments from this list "dc_cluster_group_inside_vn dc_cluster_group_outside_vn no_dc_cluster_group" must be set
+
+    dc_cluster_group_outside_vn {
+      name      = "test1"
+      namespace = "staging"
+      tenant    = "acmecorp"
+    }
+
+    // One of the arguments from this list "active_forward_proxy_policies forward_proxy_allow_all no_forward_proxy" must be set
+
+    active_forward_proxy_policies {
+      forward_proxy_policies {
+        name      = "test1"
+        namespace = "staging"
+        tenant    = "acmecorp"
+      }
+    }
+
+    // One of the arguments from this list "global_network_list no_global_network" must be set
+
+    no_global_network = true
+
+    // One of the arguments from this list "hub not_hub" must be set
+
+    not_hub = true
+
+    // One of the arguments from this list "inside_static_routes no_inside_static_routes" must be set
+
+    no_inside_static_routes = true
+
+    // One of the arguments from this list "active_enhanced_firewall_policies active_network_policies no_network_policy" must be set
+
+    active_enhanced_firewall_policies {
+      enhanced_firewall_policies {
+        name      = "test1"
+        namespace = "staging"
+        tenant    = "acmecorp"
+      }
     }
 
     // One of the arguments from this list "no_outside_static_routes outside_static_routes" must be set
@@ -130,7 +151,7 @@ resource "volterra_azure_vnet_site" "example" {
 
   // One of the arguments from this list "no_worker_nodes nodes_per_az total_nodes" must be set
 
-  nodes_per_az = "2"
+  total_nodes = "1"
 }
 
 ```
@@ -272,9 +293,9 @@ Enable Kubernetes Drain during OS or SW upgrade.
 
 ###### One of the arguments from this list "disable_upgrade_drain, enable_upgrade_drain" must be set
 
-`disable_upgrade_drain` - (Optional) x-displayName: "Disable Node by Node Upgrade" (`Bool`).
+`disable_upgrade_drain` - (Optional) x-displayName: "Disable" (`Bool`).
 
-`enable_upgrade_drain` - (Optional) x-displayName: "Enable Node by Node Upgrade". See [Kubernetes Upgrade Drain Enable Choice Enable Upgrade Drain ](#kubernetes-upgrade-drain-enable-choice-enable-upgrade-drain) below for details.
+`enable_upgrade_drain` - (Optional) x-displayName: "Enable". See [Kubernetes Upgrade Drain Enable Choice Enable Upgrade Drain ](#kubernetes-upgrade-drain-enable-choice-enable-upgrade-drain) below for details.
 
 ### Offline Survivability Mode
 
@@ -419,6 +440,12 @@ The subnet CIDR is autogenerated..
 Information about existing Vnet.
 
 `resource_group` - (Required) Resource group of existing Vnet (`String`).
+
+###### One of the arguments from this list "f5_orchestrated_routing, manual_routing" must be set
+
+`f5_orchestrated_routing` - (Optional) F5 will orchestrate required routes for SLO Route Table towards Internet and SLI RT towards the CE. (`Bool`).
+
+`manual_routing` - (Optional) In this mode, F5 will not create nor alter any route tables or routes within the existing VPCs/Vnets providing better integration for existing environments. (`Bool`).
 
 `vnet_name` - (Required) Name of existing Vnet (`String`).
 
@@ -906,11 +933,11 @@ Site Local K8s API access is disabled.
 
 ### Kubernetes Upgrade Drain Enable Choice Disable Upgrade Drain
 
-x-displayName: "Disable Node by Node Upgrade".
+x-displayName: "Disable".
 
 ### Kubernetes Upgrade Drain Enable Choice Enable Upgrade Drain
 
-x-displayName: "Enable Node by Node Upgrade".
+x-displayName: "Enable".
 
 ###### One of the arguments from this list "drain_max_unavailable_node_count, drain_max_unavailable_node_percentage" must be set
 
@@ -1115,6 +1142,14 @@ setup routing for all existing subnets on spoke VNet.
 ### Routing Choice Manual
 
 Manually setup routing on spoke VNet.
+
+### Routing Type F5 Orchestrated Routing
+
+F5 will orchestrate required routes for SLO Route Table towards Internet and SLI RT towards the CE..
+
+### Routing Type Manual Routing
+
+In this mode, F5 will not create nor alter any route tables or routes within the existing VPCs/Vnets providing better integration for existing environments. .
 
 ### Secret Info Oneof Blindfold Secret Info
 
@@ -1493,6 +1528,12 @@ Do Not Advertise Spoke Vnet CIDR Routes To Azure Route Server via BGP.
 Information about existing VNet.
 
 `resource_group` - (Required) Resource group of existing Vnet (`String`).
+
+###### One of the arguments from this list "f5_orchestrated_routing, manual_routing" must be set
+
+`f5_orchestrated_routing` - (Optional) F5 will orchestrate required routes for SLO Route Table towards Internet and SLI RT towards the CE. (`Bool`).
+
+`manual_routing` - (Optional) In this mode, F5 will not create nor alter any route tables or routes within the existing VPCs/Vnets providing better integration for existing environments. (`Bool`).
 
 `vnet_name` - (Required) Name of existing Vnet (`String`).
 

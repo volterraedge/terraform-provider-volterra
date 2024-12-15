@@ -1,9 +1,9 @@
 ---
 
 page_title: "Volterra: alert_policy"
-description: "The alert_policy allows CRUD of Alert Policy resource on Volterra SaaS"
 
----
+description: "The alert_policy allows CRUD of Alert Policy resource on Volterra SaaS"
+-------------------------------------------------------------------------------------
 
 Resource volterra_alert_policy
 ==============================
@@ -33,31 +33,7 @@ resource "volterra_alert_policy" "example" {
 
     // One of the arguments from this list "alertname alertname_regex any custom group severity" can be set
 
-    custom {
-      alertlabel {
-        // One of the arguments from this list "exact_match regex_match" must be set
-
-        exact_match = "Major"
-      }
-
-      alertname {
-        // One of the arguments from this list "exact_match regex_match" must be set
-
-        exact_match = "Major"
-      }
-
-      group {
-        // One of the arguments from this list "exact_match regex_match" must be set
-
-        exact_match = "Major"
-      }
-
-      severity {
-        // One of the arguments from this list "exact_match regex_match" must be set
-
-        regex_match = "Major|Critical"
-      }
-    }
+    any = true
     notification_parameters {
       // One of the arguments from this list "custom default individual ves_io_group" must be set
 

@@ -52,21 +52,21 @@ func (c *CustomAPIGrpcClient) doRPCCreateTCPLoadBalancer(ctx context.Context, ya
 	return rsp, err
 }
 
-func (c *CustomAPIGrpcClient) doRPCDisableWAAP(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
-	req := &DisableWAAPRequest{}
+func (c *CustomAPIGrpcClient) doRPCDisableVisibility(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
+	req := &DisableVisibilityRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
-		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.discovered_service.DisableWAAPRequest", yamlReq)
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.discovered_service.DisableVisibilityRequest", yamlReq)
 	}
-	rsp, err := c.grpcClient.DisableWAAP(ctx, req, opts...)
+	rsp, err := c.grpcClient.DisableVisibility(ctx, req, opts...)
 	return rsp, err
 }
 
-func (c *CustomAPIGrpcClient) doRPCEnableWAAP(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
-	req := &EnableWAAPRequest{}
+func (c *CustomAPIGrpcClient) doRPCEnableVisibility(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
+	req := &EnableVisibilityRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
-		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.discovered_service.EnableWAAPRequest", yamlReq)
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.discovered_service.EnableVisibilityRequest", yamlReq)
 	}
-	rsp, err := c.grpcClient.EnableWAAP(ctx, req, opts...)
+	rsp, err := c.grpcClient.EnableVisibility(ctx, req, opts...)
 	return rsp, err
 }
 
@@ -113,9 +113,9 @@ func NewCustomAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 
 	rpcFns["CreateTCPLoadBalancer"] = ccl.doRPCCreateTCPLoadBalancer
 
-	rpcFns["DisableWAAP"] = ccl.doRPCDisableWAAP
+	rpcFns["DisableVisibility"] = ccl.doRPCDisableVisibility
 
-	rpcFns["EnableWAAP"] = ccl.doRPCEnableWAAP
+	rpcFns["EnableVisibility"] = ccl.doRPCEnableVisibility
 
 	rpcFns["ListDiscoveredServices"] = ccl.doRPCListDiscoveredServices
 
@@ -302,16 +302,16 @@ func (c *CustomAPIRestClient) doRPCCreateTCPLoadBalancer(ctx context.Context, ca
 	return pbRsp, nil
 }
 
-func (c *CustomAPIRestClient) doRPCDisableWAAP(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
+func (c *CustomAPIRestClient) doRPCDisableVisibility(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
 	}
 	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
 
 	yamlReq := callOpts.YAMLReq
-	req := &DisableWAAPRequest{}
+	req := &DisableVisibilityRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
-		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.discovered_service.DisableWAAPRequest: %s", yamlReq, err)
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.discovered_service.DisableVisibilityRequest: %s", yamlReq, err)
 	}
 
 	var hReq *http.Request
@@ -374,9 +374,9 @@ func (c *CustomAPIRestClient) doRPCDisableWAAP(ctx context.Context, callOpts *se
 	if err != nil {
 		return nil, errors.Wrap(err, "Custom API RestClient read body")
 	}
-	pbRsp := &DisableWAAPResponse{}
+	pbRsp := &DisableVisibilityResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.discovered_service.DisableWAAPResponse", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.discovered_service.DisableVisibilityResponse", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -386,16 +386,16 @@ func (c *CustomAPIRestClient) doRPCDisableWAAP(ctx context.Context, callOpts *se
 	return pbRsp, nil
 }
 
-func (c *CustomAPIRestClient) doRPCEnableWAAP(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
+func (c *CustomAPIRestClient) doRPCEnableVisibility(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
 	}
 	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
 
 	yamlReq := callOpts.YAMLReq
-	req := &EnableWAAPRequest{}
+	req := &EnableVisibilityRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
-		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.discovered_service.EnableWAAPRequest: %s", yamlReq, err)
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.discovered_service.EnableVisibilityRequest: %s", yamlReq, err)
 	}
 
 	var hReq *http.Request
@@ -458,9 +458,9 @@ func (c *CustomAPIRestClient) doRPCEnableWAAP(ctx context.Context, callOpts *ser
 	if err != nil {
 		return nil, errors.Wrap(err, "Custom API RestClient read body")
 	}
-	pbRsp := &EnableWAAPResponse{}
+	pbRsp := &EnableVisibilityResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.discovered_service.EnableWAAPResponse", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.discovered_service.EnableVisibilityResponse", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -509,8 +509,9 @@ func (c *CustomAPIRestClient) doRPCListDiscoveredServices(ctx context.Context, c
 		hReq = newReq
 		q := hReq.URL.Query()
 		_ = q
-		q.Add("discovered_service_type", fmt.Sprintf("%v", req.DiscoveredServiceType))
+		q.Add("discovery_name", fmt.Sprintf("%v", req.DiscoveryName))
 		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
+		q.Add("service_type", fmt.Sprintf("%v", req.ServiceType))
 
 		hReq.URL.RawQuery += q.Encode()
 	case "delete":
@@ -582,9 +583,9 @@ func NewCustomAPIRestClient(baseURL string, hc http.Client) server.CustomClient 
 
 	rpcFns["CreateTCPLoadBalancer"] = ccl.doRPCCreateTCPLoadBalancer
 
-	rpcFns["DisableWAAP"] = ccl.doRPCDisableWAAP
+	rpcFns["DisableVisibility"] = ccl.doRPCDisableVisibility
 
-	rpcFns["EnableWAAP"] = ccl.doRPCEnableWAAP
+	rpcFns["EnableVisibility"] = ccl.doRPCEnableVisibility
 
 	rpcFns["ListDiscoveredServices"] = ccl.doRPCListDiscoveredServices
 
@@ -608,13 +609,13 @@ func (c *customAPIInprocClient) CreateTCPLoadBalancer(ctx context.Context, in *C
 	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.discovered_service.CustomAPI.CreateTCPLoadBalancer")
 	return c.CustomAPIServer.CreateTCPLoadBalancer(ctx, in)
 }
-func (c *customAPIInprocClient) DisableWAAP(ctx context.Context, in *DisableWAAPRequest, opts ...grpc.CallOption) (*DisableWAAPResponse, error) {
-	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.discovered_service.CustomAPI.DisableWAAP")
-	return c.CustomAPIServer.DisableWAAP(ctx, in)
+func (c *customAPIInprocClient) DisableVisibility(ctx context.Context, in *DisableVisibilityRequest, opts ...grpc.CallOption) (*DisableVisibilityResponse, error) {
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.discovered_service.CustomAPI.DisableVisibility")
+	return c.CustomAPIServer.DisableVisibility(ctx, in)
 }
-func (c *customAPIInprocClient) EnableWAAP(ctx context.Context, in *EnableWAAPRequest, opts ...grpc.CallOption) (*EnableWAAPResponse, error) {
-	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.discovered_service.CustomAPI.EnableWAAP")
-	return c.CustomAPIServer.EnableWAAP(ctx, in)
+func (c *customAPIInprocClient) EnableVisibility(ctx context.Context, in *EnableVisibilityRequest, opts ...grpc.CallOption) (*EnableVisibilityResponse, error) {
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.discovered_service.CustomAPI.EnableVisibility")
+	return c.CustomAPIServer.EnableVisibility(ctx, in)
 }
 func (c *customAPIInprocClient) ListDiscoveredServices(ctx context.Context, in *ListServicesRequest, opts ...grpc.CallOption) (*ListServicesResponse, error) {
 	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.discovered_service.CustomAPI.ListDiscoveredServices")
@@ -746,7 +747,7 @@ func (s *customAPISrv) CreateTCPLoadBalancer(ctx context.Context, in *CreateTCPL
 
 	return rsp, nil
 }
-func (s *customAPISrv) DisableWAAP(ctx context.Context, in *DisableWAAPRequest) (*DisableWAAPResponse, error) {
+func (s *customAPISrv) DisableVisibility(ctx context.Context, in *DisableVisibilityRequest) (*DisableVisibilityResponse, error) {
 	ah := s.svc.GetAPIHandler("ves.io.schema.discovered_service.CustomAPI")
 	cah, ok := ah.(CustomAPIServer)
 	if !ok {
@@ -754,16 +755,16 @@ func (s *customAPISrv) DisableWAAP(ctx context.Context, in *DisableWAAPRequest) 
 	}
 
 	var (
-		rsp *DisableWAAPResponse
+		rsp *DisableVisibilityResponse
 		err error
 	)
 
-	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.discovered_service.DisableWAAPRequest", in)
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.discovered_service.DisableVisibilityRequest", in)
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
 		}
-		userMsg := "The 'CustomAPI.DisableWAAP' operation on 'discovered_service'"
+		userMsg := "The 'CustomAPI.DisableVisibility' operation on 'discovered_service'"
 		if err == nil {
 			userMsg += " was successfully performed."
 		} else {
@@ -778,7 +779,7 @@ func (s *customAPISrv) DisableWAAP(ctx context.Context, in *DisableWAAPRequest) 
 	}
 
 	if s.svc.Config().EnableAPIValidation {
-		if rvFn := s.svc.GetRPCValidator("ves.io.schema.discovered_service.CustomAPI.DisableWAAP"); rvFn != nil {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.discovered_service.CustomAPI.DisableVisibility"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
 				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
 				return nil, server.GRPCStatusFromError(err).Err()
@@ -786,16 +787,16 @@ func (s *customAPISrv) DisableWAAP(ctx context.Context, in *DisableWAAPRequest) 
 		}
 	}
 
-	rsp, err = cah.DisableWAAP(ctx, in)
+	rsp, err = cah.DisableVisibility(ctx, in)
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
 
-	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.discovered_service.DisableWAAPResponse", rsp)...)
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.discovered_service.DisableVisibilityResponse", rsp)...)
 
 	return rsp, nil
 }
-func (s *customAPISrv) EnableWAAP(ctx context.Context, in *EnableWAAPRequest) (*EnableWAAPResponse, error) {
+func (s *customAPISrv) EnableVisibility(ctx context.Context, in *EnableVisibilityRequest) (*EnableVisibilityResponse, error) {
 	ah := s.svc.GetAPIHandler("ves.io.schema.discovered_service.CustomAPI")
 	cah, ok := ah.(CustomAPIServer)
 	if !ok {
@@ -803,16 +804,16 @@ func (s *customAPISrv) EnableWAAP(ctx context.Context, in *EnableWAAPRequest) (*
 	}
 
 	var (
-		rsp *EnableWAAPResponse
+		rsp *EnableVisibilityResponse
 		err error
 	)
 
-	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.discovered_service.EnableWAAPRequest", in)
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.discovered_service.EnableVisibilityRequest", in)
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
 		}
-		userMsg := "The 'CustomAPI.EnableWAAP' operation on 'discovered_service'"
+		userMsg := "The 'CustomAPI.EnableVisibility' operation on 'discovered_service'"
 		if err == nil {
 			userMsg += " was successfully performed."
 		} else {
@@ -827,7 +828,7 @@ func (s *customAPISrv) EnableWAAP(ctx context.Context, in *EnableWAAPRequest) (*
 	}
 
 	if s.svc.Config().EnableAPIValidation {
-		if rvFn := s.svc.GetRPCValidator("ves.io.schema.discovered_service.CustomAPI.EnableWAAP"); rvFn != nil {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.discovered_service.CustomAPI.EnableVisibility"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
 				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
 				return nil, server.GRPCStatusFromError(err).Err()
@@ -835,12 +836,12 @@ func (s *customAPISrv) EnableWAAP(ctx context.Context, in *EnableWAAPRequest) (*
 		}
 	}
 
-	rsp, err = cah.EnableWAAP(ctx, in)
+	rsp, err = cah.EnableVisibility(ctx, in)
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
 
-	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.discovered_service.EnableWAAPResponse", rsp)...)
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.discovered_service.EnableVisibilityResponse", rsp)...)
 
 	return rsp, nil
 }
@@ -917,7 +918,7 @@ var CustomAPISwaggerJSON string = `{
     ],
     "tags": [],
     "paths": {
-        "/public/namespaces/{namespace}/discovered_services/{discovered_service_type}/services": {
+        "/public/custom/namespaces/{namespace}/discovered_services": {
             "get": {
                 "summary": "List discovered services of specific type",
                 "description": "List the discoverd services of specific type like virtual-servers, k8s, consul, ngix server, etc",
@@ -988,12 +989,20 @@ var CustomAPISwaggerJSON string = `{
                         "x-displayname": "Namespace"
                     },
                     {
-                        "name": "discovered_service_type",
-                        "description": "Service type\n\nx-example: \"bigip_virtual_server\"\nx-required\nIdentifies the discovered service type",
-                        "in": "path",
-                        "required": true,
+                        "name": "service_type",
+                        "description": "x-example: \"bigip_virtual_server\"\nx-required\nIdentifies the discovered service type",
+                        "in": "query",
+                        "required": false,
                         "type": "string",
                         "x-displayname": "Service Type"
+                    },
+                    {
+                        "name": "discovery_name",
+                        "description": "x-example: \"disc-cbip-1\"\nFilter results to only include items referencing this discovery object name",
+                        "in": "query",
+                        "required": false,
+                        "type": "string",
+                        "x-displayname": "Discovery Name Filter"
                     }
                 ],
                 "tags": [
@@ -1003,7 +1012,6 @@ var CustomAPISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-discovered_service-customapi-listdiscoveredservices"
                 },
-                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.discovered_service.CustomAPI.ListDiscoveredServices"
             },
             "x-displayname": "Discovered Service Custom API",
@@ -1104,7 +1112,6 @@ var CustomAPISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-discovered_service-customapi-createhttploadbalancer"
                 },
-                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.discovered_service.CustomAPI.CreateHTTPLoadBalancer"
             },
             "x-displayname": "Discovered Service Custom API",
@@ -1205,23 +1212,22 @@ var CustomAPISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-discovered_service-customapi-createtcploadbalancer"
                 },
-                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.discovered_service.CustomAPI.CreateTCPLoadBalancer"
             },
             "x-displayname": "Discovered Service Custom API",
             "x-ves-proto-service": "ves.io.schema.discovered_service.CustomAPI",
             "x-ves-proto-service-type": "CUSTOM_PUBLIC"
         },
-        "/public/namespaces/{namespace}/discovered_services/{name}/disable_waap": {
+        "/public/namespaces/{namespace}/discovered_services/{name}/disable_visibility": {
             "post": {
-                "summary": "Disable WAAP visibility",
-                "description": "Disable WAAP Visibility",
-                "operationId": "ves.io.schema.discovered_service.CustomAPI.DisableWAAP",
+                "summary": "Disable visibility in all workspaces",
+                "description": "Disable Visibility of the service in all workspaces. This will remove the discovered service\nfrom being visible in other wokspaces like WAAP.",
+                "operationId": "ves.io.schema.discovered_service.CustomAPI.DisableVisibility",
                 "responses": {
                     "200": {
                         "description": "A successful response.",
                         "schema": {
-                            "$ref": "#/definitions/discovered_serviceDisableWAAPResponse"
+                            "$ref": "#/definitions/discovered_serviceDisableVisibilityResponse"
                         }
                     },
                     "401": {
@@ -1295,7 +1301,7 @@ var CustomAPISwaggerJSON string = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/discovered_serviceDisableWAAPRequest"
+                            "$ref": "#/definitions/discovered_serviceDisableVisibilityRequest"
                         }
                     }
                 ],
@@ -1304,25 +1310,24 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-discovered_service-customapi-disablewaap"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-discovered_service-customapi-disablevisibility"
                 },
-                "x-ves-in-development": "true",
-                "x-ves-proto-rpc": "ves.io.schema.discovered_service.CustomAPI.DisableWAAP"
+                "x-ves-proto-rpc": "ves.io.schema.discovered_service.CustomAPI.DisableVisibility"
             },
             "x-displayname": "Discovered Service Custom API",
             "x-ves-proto-service": "ves.io.schema.discovered_service.CustomAPI",
             "x-ves-proto-service-type": "CUSTOM_PUBLIC"
         },
-        "/public/namespaces/{namespace}/discovered_services/{name}/enable_waap": {
+        "/public/namespaces/{namespace}/discovered_services/{name}/enable_visibility": {
             "post": {
-                "summary": "Enable WAAP visibility",
-                "description": "Enable WAAP Visibility",
-                "operationId": "ves.io.schema.discovered_service.CustomAPI.EnableWAAP",
+                "summary": "Enable visibility in all workspaces",
+                "description": "Enable Visibility of the service in all workspaces. This action will make the\ndiscovered service visible within WAAP, App Connect where the user can perform\nthe workspace specific actions.",
+                "operationId": "ves.io.schema.discovered_service.CustomAPI.EnableVisibility",
                 "responses": {
                     "200": {
                         "description": "A successful response.",
                         "schema": {
-                            "$ref": "#/definitions/discovered_serviceEnableWAAPResponse"
+                            "$ref": "#/definitions/discovered_serviceEnableVisibilityResponse"
                         }
                     },
                     "401": {
@@ -1396,7 +1401,7 @@ var CustomAPISwaggerJSON string = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/discovered_serviceEnableWAAPRequest"
+                            "$ref": "#/definitions/discovered_serviceEnableVisibilityRequest"
                         }
                     }
                 ],
@@ -1405,10 +1410,9 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-discovered_service-customapi-enablewaap"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-discovered_service-customapi-enablevisibility"
                 },
-                "x-ves-in-development": "true",
-                "x-ves-proto-rpc": "ves.io.schema.discovered_service.CustomAPI.EnableWAAP"
+                "x-ves-proto-rpc": "ves.io.schema.discovered_service.CustomAPI.EnableVisibility"
             },
             "x-displayname": "Discovered Service Custom API",
             "x-ves-proto-service": "ves.io.schema.discovered_service.CustomAPI",
@@ -1428,28 +1432,6 @@ var CustomAPISwaggerJSON string = `{
                     "title": "HTTPLBRequest",
                     "$ref": "#/definitions/discovered_serviceHTTPLBRequest",
                     "x-displayname": "HTTP(s) LB Request Parameters",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
-                },
-                "name": {
-                    "type": "string",
-                    "description": " Identifies the discovered service name\n\nExample: - \"vs1\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
-                    "title": "Service Name",
-                    "x-displayname": "Service Name",
-                    "x-ves-example": "vs1",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
-                },
-                "namespace": {
-                    "type": "string",
-                    "description": " Namespace of the discovered service for current request\n\nExample: - \"shared\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
-                    "title": "Namespace",
-                    "x-displayname": "Namespace",
-                    "x-ves-example": "shared",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true"
@@ -1522,12 +1504,12 @@ var CustomAPISwaggerJSON string = `{
                 }
             }
         },
-        "discovered_serviceDisableWAAPRequest": {
+        "discovered_serviceDisableVisibilityRequest": {
             "type": "object",
-            "description": "Disable WAAP on the discovered service",
-            "title": "DisableWAAPRequest",
-            "x-displayname": "Disable WAAP on the discovered service",
-            "x-ves-proto-message": "ves.io.schema.discovered_service.DisableWAAPRequest",
+            "description": "Disable visibility on the discovered service",
+            "title": "DisableVisibilityRequest",
+            "x-displayname": "Disable visibility on the discovered service",
+            "x-ves-proto-message": "ves.io.schema.discovered_service.DisableVisibilityRequest",
             "properties": {
                 "name": {
                     "type": "string",
@@ -1553,19 +1535,19 @@ var CustomAPISwaggerJSON string = `{
                 }
             }
         },
-        "discovered_serviceDisableWAAPResponse": {
+        "discovered_serviceDisableVisibilityResponse": {
             "type": "object",
-            "description": "Response to the Disable WAAP request",
-            "title": "DisableWAAPResponse",
-            "x-displayname": "Disable WAAP Response",
-            "x-ves-proto-message": "ves.io.schema.discovered_service.DisableWAAPResponse"
+            "description": "Response to the Disable Visibility request",
+            "title": "DisableVisibilityResponse",
+            "x-displayname": "Disable Visibility Response",
+            "x-ves-proto-message": "ves.io.schema.discovered_service.DisableVisibilityResponse"
         },
-        "discovered_serviceEnableWAAPRequest": {
+        "discovered_serviceEnableVisibilityRequest": {
             "type": "object",
-            "description": "Enable WAAP on the discovered service",
-            "title": "EnableWAAPRequest",
-            "x-displayname": "Enable WAAP",
-            "x-ves-proto-message": "ves.io.schema.discovered_service.EnableWAAPRequest",
+            "description": "Enable visibility of the discovered service in all workspaces like WAAP, App Connect, etc",
+            "title": "EnableVisibilityRequest",
+            "x-displayname": "Enable visibility",
+            "x-ves-proto-message": "ves.io.schema.discovered_service.EnableVisibilityRequest",
             "properties": {
                 "name": {
                     "type": "string",
@@ -1591,16 +1573,16 @@ var CustomAPISwaggerJSON string = `{
                 }
             }
         },
-        "discovered_serviceEnableWAAPResponse": {
+        "discovered_serviceEnableVisibilityResponse": {
             "type": "object",
-            "description": "Response to the Enable WAAP request",
-            "title": "EnableWAAPResponse",
-            "x-displayname": "Enable WAAP Response",
-            "x-ves-proto-message": "ves.io.schema.discovered_service.EnableWAAPResponse",
+            "description": "Response to the Enable Visibility request",
+            "title": "EnableVisibilityResponse",
+            "x-displayname": "Enable Visibility Response",
+            "x-ves-proto-message": "ves.io.schema.discovered_service.EnableVisibilityResponse",
             "properties": {
                 "virtual_host_ref": {
                     "description": " Reference to the virtual host ",
-                    "title": "The virtual host of specific type created as part of the WAAP enablement workflow",
+                    "title": "The virtual host of specific type created as part of the visibility enablement workflow",
                     "$ref": "#/definitions/schemaviewsObjectRefType",
                     "x-displayname": "Virtual Host corresponding to the discovered service"
                 }
@@ -1611,23 +1593,12 @@ var CustomAPISwaggerJSON string = `{
             "description": "HTTP LB Request Parameters",
             "title": "HTTP LB Request",
             "x-displayname": "HTTP(s) LB Request",
-            "x-ves-displayorder": "1,2,3,6",
-            "x-ves-oneof-field-advertise_choice": "[\"advertise_custom\",\"advertise_on_public_default_vip\"]",
+            "x-ves-displayorder": "1,2,9,6",
+            "x-ves-oneof-field-advertise_choice": "[]",
+            "x-ves-oneof-field-loadbalancer_type": "[\"http\",\"https\",\"https_auto_cert\"]",
             "x-ves-oneof-field-server_validation_choice": "[\"skip_server_verification\",\"trusted_ca\"]",
             "x-ves-proto-message": "ves.io.schema.discovered_service.HTTPLBRequest",
             "properties": {
-                "advertise_custom": {
-                    "description": "Exclusive with [advertise_on_public_default_vip]\n Advertise this load balancer on specific sites",
-                    "title": "Advertise Custom",
-                    "$ref": "#/definitions/viewsAdvertiseCustom",
-                    "x-displayname": "Custom"
-                },
-                "advertise_on_public_default_vip": {
-                    "description": "Exclusive with [advertise_custom]\n Advertise this load balancer on public network with default VIP",
-                    "title": "Advertise On Public Default VIP",
-                    "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Internet"
-                },
                 "domain": {
                     "type": "string",
                     "description": "\nExample: - \"www.foo.com\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.vh_domain: true\n",
@@ -1639,6 +1610,24 @@ var CustomAPISwaggerJSON string = `{
                         "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.string.vh_domain": "true"
                     }
+                },
+                "http": {
+                    "description": "Exclusive with [https https_auto_cert]\n HTTP Load Balancer.",
+                    "title": "HTTP",
+                    "$ref": "#/definitions/discovered_serviceProxyTypeHttp",
+                    "x-displayname": "HTTP"
+                },
+                "https": {
+                    "description": "Exclusive with [http https_auto_cert]\n HTTPS load balancer with a custom public/private certificate.\n This is also known as BYOC (Bring Your Own Certificate).\n User is responsible for managing DNS to this load balancer.",
+                    "title": "HTTPS",
+                    "$ref": "#/definitions/discovered_serviceProxyTypeHttps",
+                    "x-displayname": "HTTPS with Custom Certificate"
+                },
+                "https_auto_cert": {
+                    "description": "Exclusive with [http https]\n HTTPS load balancer with automatic public certificate provisioning.\n DNS records for the domains will be automatically managed by F5 Distributed Cloud.\n As a prerequisite, the domain must be delegated to F5 Distributed Cloud (see the DNS Management section)\n or a DNS CNAME record should be created in your DNS provider's portal(only for Domains not managed by F5 Distributed Cloud).",
+                    "title": "HTTPS with AutoCert",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "HTTPS with Automatic Certificate"
                 },
                 "name": {
                     "type": "string",
@@ -1787,6 +1776,77 @@ var CustomAPISwaggerJSON string = `{
                 }
             }
         },
+        "discovered_serviceProxyTypeHttp": {
+            "type": "object",
+            "description": "Choice for selecting HTTP proxy",
+            "title": "HTTP Choice",
+            "x-displayname": "HTTP",
+            "x-ves-oneof-field-advertise_choice": "[\"advertise_on_public_default_vip\",\"site\",\"virtual_site\"]",
+            "x-ves-proto-message": "ves.io.schema.discovered_service.ProxyTypeHttp",
+            "properties": {
+                "advertise_on_public_default_vip": {
+                    "description": "Exclusive with [site virtual_site]\n Advertise this load balancer on public network with default VIP",
+                    "title": "Advertise On Public Default VIP",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Internet"
+                },
+                "site": {
+                    "description": "Exclusive with [advertise_on_public_default_vip virtual_site]\n Advertise on a customer site",
+                    "title": "Advertise on Site",
+                    "$ref": "#/definitions/schemadiscovered_serviceWhereSite",
+                    "x-displayname": "Site"
+                },
+                "virtual_site": {
+                    "description": "Exclusive with [advertise_on_public_default_vip site]\n Advertise on a virtual site",
+                    "title": "Advertise on Virtual Site",
+                    "$ref": "#/definitions/schemadiscovered_serviceWhereVirtualSite",
+                    "x-displayname": "Virtual Site"
+                }
+            }
+        },
+        "discovered_serviceProxyTypeHttps": {
+            "type": "object",
+            "description": "Choice for selecting HTTP proxy with bring your own certificate",
+            "title": "BYOC HTTPS Choice",
+            "x-displayname": "BYOC HTTPS Choice",
+            "x-ves-oneof-field-advertise_choice": "[\"advertise_on_public_default_vip\",\"site\",\"virtual_site\"]",
+            "x-ves-proto-message": "ves.io.schema.discovered_service.ProxyTypeHttps",
+            "properties": {
+                "advertise_on_public_default_vip": {
+                    "description": "Exclusive with [site virtual_site]\n Advertise this load balancer on public network with default VIP",
+                    "title": "Advertise On Public Default VIP",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Internet"
+                },
+                "certificates": {
+                    "type": "array",
+                    "description": " Select a certificate\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 1\n",
+                    "title": "TLS Certificate",
+                    "maxItems": 1,
+                    "items": {
+                        "$ref": "#/definitions/ioschemaObjectRefType"
+                    },
+                    "x-displayname": "TLS Certificate",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.max_items": "1"
+                    }
+                },
+                "site": {
+                    "description": "Exclusive with [advertise_on_public_default_vip virtual_site]\n Advertise on a customer site and Inside network",
+                    "title": "Advertise on Site",
+                    "$ref": "#/definitions/schemadiscovered_serviceWhereSite",
+                    "x-displayname": "Site"
+                },
+                "virtual_site": {
+                    "description": "Exclusive with [advertise_on_public_default_vip site]\n Advertise on a virtual site and Inside network",
+                    "title": "Advertise on Virtual Site",
+                    "$ref": "#/definitions/schemadiscovered_serviceWhereVirtualSite",
+                    "x-displayname": "Virtual Site"
+                }
+            }
+        },
         "discovered_serviceStatusObject": {
             "type": "object",
             "description": "Most recently observed status of object",
@@ -1899,16 +1959,15 @@ var CustomAPISwaggerJSON string = `{
         },
         "discovered_serviceTransmissionProtocol": {
             "type": "string",
-            "description": "x-example: \"TCP\"\nProtocol on which the virtual-server will transmit data",
+            "description": "x-displayName: \"Transmission Protocol\"\nx-example: \"TCP\"\nProtocol on which the virtual-server will transmit data",
             "title": "TransmissionProtocol",
             "enum": [
+                "UNDEFINED",
                 "HTTP",
                 "HTTPS",
                 "TCP"
             ],
-            "default": "HTTP",
-            "x-displayname": "Transmission Protocol",
-            "x-ves-proto-enum": "ves.io.schema.discovered_service.TransmissionProtocol"
+            "default": "UNDEFINED"
         },
         "discovered_serviceVirtualServer": {
             "type": "object",
@@ -1917,6 +1976,18 @@ var CustomAPISwaggerJSON string = `{
             "x-displayname": "Virtual Server",
             "x-ves-proto-message": "ves.io.schema.discovered_service.VirtualServer",
             "properties": {
+                "bigip_version": {
+                    "type": "string",
+                    "description": " Version of the BIG-IP from where the service was discovered\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 256\n",
+                    "title": "BIG-IP version",
+                    "maxLength": 256,
+                    "x-displayname": "BIG-IP Version",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_len": "256"
+                    }
+                },
                 "cbip_cluster": {
                     "type": "string",
                     "description": " Name of CBIP Cluster.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 256\n",
@@ -1934,6 +2005,27 @@ var CustomAPISwaggerJSON string = `{
                     "title": "discovery_object",
                     "$ref": "#/definitions/schemaviewsObjectRefType",
                     "x-displayname": "Reference to Discovery Object"
+                },
+                "enabled_state": {
+                    "description": " Enabled State of virtual server.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Enabled State of virtual server",
+                    "$ref": "#/definitions/discovered_serviceVirtualServerEnabledState",
+                    "x-displayname": "Enabled State",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "ip_address": {
+                    "type": "string",
+                    "description": " IP address of the BIG-IP Virtual Server\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.ip: true\n",
+                    "title": "Virtual Server IP Address",
+                    "x-displayname": "Virtual Server IP",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.ip": "true"
+                    }
                 },
                 "partition": {
                     "type": "string",
@@ -1959,20 +2051,9 @@ var CustomAPISwaggerJSON string = `{
                         "ves.io.schema.rules.uint32.lte": "65535"
                     }
                 },
-                "protocol": {
-                    "description": " Protocol on which the virtual-server is exposed\n\nExample: - \"TCP\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
-                    "title": "Protocol",
-                    "$ref": "#/definitions/discovered_serviceTransmissionProtocol",
-                    "x-displayname": "Protocol",
-                    "x-ves-example": "TCP",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
-                },
                 "status": {
-                    "description": " Status of virtual server.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
-                    "title": "Status of virtual server",
+                    "description": " Availability Status of virtual server.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Availability Status of virtual server",
                     "$ref": "#/definitions/discovered_serviceVirtualServerStatus",
                     "x-displayname": "Status",
                     "x-ves-required": "true",
@@ -1982,17 +2063,33 @@ var CustomAPISwaggerJSON string = `{
                 }
             }
         },
-        "discovered_serviceVirtualServerStatus": {
+        "discovered_serviceVirtualServerEnabledState": {
             "type": "string",
-            "description": "Status of the virtual server.",
-            "title": "Status of the virtual server",
+            "description": "Enabled state of the virtual server.\n\n - NONE: NONE\n\nInvalid state.\n - ENABLED: ENABLED\n\nVirtual Server is enabled.\n - DISABLED: DISABLED\n\nVirtual Server is administratively disabled.",
+            "title": "Enabled state of the virtual server",
             "enum": [
-                "UP",
-                "DOWN",
+                "NONE",
+                "ENABLED",
                 "DISABLED"
             ],
-            "default": "UP",
-            "x-displayname": "Virtual Server Status",
+            "default": "NONE",
+            "x-displayname": "Virtual Server Enabled State",
+            "x-ves-proto-enum": "ves.io.schema.discovered_service.VirtualServerEnabledState"
+        },
+        "discovered_serviceVirtualServerStatus": {
+            "type": "string",
+            "description": "Availability Status of the virtual server.\n\n - UNSPECIFIED: UNSPECIFIED\n\nInvalid status.\n - AVAILABLE: AVAILABLE\n\nVirtual Server is available and serving traffic.\n - OFFLINE: OFFLINE\n\nVirtual Server is not serving traffic.\n - UNKNOWN: UNKNOWN\n\nVirtual Server availability is unknown. It can indicate that no service checks are enabled on the virtual server.\n - UNAVAILABLE: UNAVAILABLE\n\nVirtual Server is temporarily unavailable maybe due to hitting connection limit.\n - DELETED: DELETED\n\nVirtual Server has been deleted on the BIG-IP but is in use on Distributed Cloud.",
+            "title": "Availability Status of the virtual server",
+            "enum": [
+                "UNSPECIFIED",
+                "AVAILABLE",
+                "OFFLINE",
+                "UNKNOWN",
+                "UNAVAILABLE",
+                "DELETED"
+            ],
+            "default": "UNSPECIFIED",
+            "x-displayname": "Virtual Server Availability Status",
             "x-ves-proto-enum": "ves.io.schema.discovered_service.VirtualServerStatus"
         },
         "ioschemaEmpty": {
@@ -2001,6 +2098,50 @@ var CustomAPISwaggerJSON string = `{
             "title": "Empty",
             "x-displayname": "Empty",
             "x-ves-proto-message": "ves.io.schema.Empty"
+        },
+        "ioschemaObjectRefType": {
+            "type": "object",
+            "description": "This type establishes a 'direct reference' from one object(the referrer) to another(the referred).\nSuch a reference is in form of tenant/namespace/name for public API and Uid for private API\nThis type of reference is called direct because the relation is explicit and concrete (as opposed\nto selector reference which builds a group based on labels of selectee objects)",
+            "title": "ObjectRefType",
+            "x-displayname": "Object reference",
+            "x-ves-proto-message": "ves.io.schema.ObjectRefType",
+            "properties": {
+                "kind": {
+                    "type": "string",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then kind will hold the referred object's kind (e.g. \"route\")\n\nExample: - \"virtual_site\"-",
+                    "title": "kind",
+                    "x-displayname": "Kind",
+                    "x-ves-example": "virtual_site"
+                },
+                "name": {
+                    "type": "string",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then name will hold the referred object's(e.g. route's) name.\n\nExample: - \"contactus-route\"-",
+                    "title": "name",
+                    "x-displayname": "Name",
+                    "x-ves-example": "contactus-route"
+                },
+                "namespace": {
+                    "type": "string",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then namespace will hold the referred object's(e.g. route's) namespace.\n\nExample: - \"ns1\"-",
+                    "title": "namespace",
+                    "x-displayname": "Namespace",
+                    "x-ves-example": "ns1"
+                },
+                "tenant": {
+                    "type": "string",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then tenant will hold the referred object's(e.g. route's) tenant.\n\nExample: - \"acmecorp\"-",
+                    "title": "tenant",
+                    "x-displayname": "Tenant",
+                    "x-ves-example": "acmecorp"
+                },
+                "uid": {
+                    "type": "string",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then uid will hold the referred object's(e.g. route's) uid.\n\nExample: - \"d15f1fad-4d37-48c0-8706-df1824d76d31\"-",
+                    "title": "uid",
+                    "x-displayname": "UID",
+                    "x-ves-example": "d15f1fad-4d37-48c0-8706-df1824d76d31"
+                }
+            }
         },
         "protobufAny": {
             "type": "object",
@@ -2467,7 +2608,7 @@ var CustomAPISwaggerJSON string = `{
             "title": "Get Discovered Service Object",
             "x-displayname": "Get Discovered Service Object",
             "x-ves-oneof-field-service_type": "[\"virtual_server\"]",
-            "x-ves-oneof-field-waap_action_choice": "[\"waap_visibility_disabled\",\"waap_visibility_enabled\"]",
+            "x-ves-oneof-field-visibility_action_choice": "[\"visibility_disabled\",\"visibility_enabled\"]",
             "x-ves-proto-message": "ves.io.schema.discovered_service.GetSpecType",
             "properties": {
                 "http_load_balancers": {
@@ -2491,15 +2632,63 @@ var CustomAPISwaggerJSON string = `{
                     "$ref": "#/definitions/discovered_serviceVirtualServer",
                     "x-displayname": "Virtual Server"
                 },
-                "waap_visibility_disabled": {
-                    "description": "Exclusive with [waap_visibility_enabled]\n Option for disabling WAAP Visibility for API Discovery",
+                "visibility_disabled": {
+                    "description": "Exclusive with [visibility_enabled]\n Option for disabling visibility across workspaces",
                     "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "WAAP Visibility Disabled"
+                    "x-displayname": "Visibility Disabled"
                 },
-                "waap_visibility_enabled": {
-                    "description": "Exclusive with [waap_visibility_disabled]\n Option for enabling WAAP Visibility for API Discovery",
+                "visibility_enabled": {
+                    "description": "Exclusive with [visibility_disabled]\n Option for enabling Visibility across workspaces",
                     "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "WAAP Visibility Enabled"
+                    "x-displayname": "Visibility Enabled"
+                }
+            }
+        },
+        "schemadiscovered_serviceWhereSite": {
+            "type": "object",
+            "description": "This defines a reference to a CE site where a load balancer could be advertised",
+            "title": "WhereSite",
+            "x-displayname": "Site",
+            "x-ves-proto-message": "ves.io.schema.discovered_service.WhereSite",
+            "properties": {
+                "site": {
+                    "type": "array",
+                    "description": " Reference to site object\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 1\n",
+                    "title": "Site",
+                    "maxItems": 1,
+                    "items": {
+                        "$ref": "#/definitions/ioschemaObjectRefType"
+                    },
+                    "x-displayname": "Site Reference",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.max_items": "1"
+                    }
+                }
+            }
+        },
+        "schemadiscovered_serviceWhereVirtualSite": {
+            "type": "object",
+            "description": "This defines a reference to a customer site virtual site where a load balancer could be advertised",
+            "title": "WhereVirtualSite",
+            "x-displayname": "Virtual Site",
+            "x-ves-proto-message": "ves.io.schema.discovered_service.WhereVirtualSite",
+            "properties": {
+                "virtual_site": {
+                    "type": "array",
+                    "description": " Reference to virtual site object\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 1\n",
+                    "title": "Virtual Site",
+                    "maxItems": 1,
+                    "items": {
+                        "$ref": "#/definitions/ioschemaObjectRefType"
+                    },
+                    "x-displayname": "Virtual Site Reference",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.max_items": "1"
+                    }
                 }
             }
         },
@@ -2545,6 +2734,86 @@ var CustomAPISwaggerJSON string = `{
                     "x-ves-example": "acmecorp",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.string.max_bytes": "64"
+                    }
+                }
+            }
+        },
+        "schemaviewsWhereSite": {
+            "type": "object",
+            "description": "This defines a reference to a CE site along with network type and an optional ip address where a load balancer could be advertised",
+            "title": "WhereSite",
+            "x-displayname": "Site",
+            "x-ves-displayorder": "1,2,3",
+            "x-ves-proto-message": "ves.io.schema.views.WhereSite",
+            "properties": {
+                "ip": {
+                    "type": "string",
+                    "description": " Use given IP address as VIP on the site\n\nExample: - \"8.8.8.8\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv4: true\n",
+                    "title": "IP address on the site",
+                    "x-displayname": "IP Address",
+                    "x-ves-example": "8.8.8.8",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.ipv4": "true"
+                    }
+                },
+                "ipv6": {
+                    "type": "string",
+                    "description": " Use given IPv6 address as VIP on the site\n\nExample: - \"2001::1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6: true\n",
+                    "title": "IPv6 address on the site",
+                    "x-displayname": "IPv6 Address",
+                    "x-ves-example": "2001::1",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.ipv6": "true"
+                    }
+                },
+                "network": {
+                    "description": " Select network types to be used on site\n By default VIP chosen as ip address of primary network interface in the network\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Network",
+                    "$ref": "#/definitions/viewsSiteNetwork",
+                    "x-displayname": "Network",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "site": {
+                    "description": " Reference to site object\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Site",
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "Site Reference",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                }
+            }
+        },
+        "schemaviewsWhereVirtualSite": {
+            "type": "object",
+            "description": "This defines a reference to a customer site virtual site along with network type where a load balancer could be advertised",
+            "title": "WhereVirtualSite",
+            "x-displayname": "Virtual Site",
+            "x-ves-displayorder": "1,2",
+            "x-ves-proto-message": "ves.io.schema.views.WhereVirtualSite",
+            "properties": {
+                "network": {
+                    "description": " Select network types to be used on site.\n IP address of primary network interface in the network\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Network",
+                    "$ref": "#/definitions/viewsSiteNetwork",
+                    "x-displayname": "Network",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "virtual_site": {
+                    "description": " Reference to virtual site object\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Virtual Site",
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "Virtual Site Reference",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
                     }
                 }
             }
@@ -2716,56 +2985,6 @@ var CustomAPISwaggerJSON string = `{
                 }
             }
         },
-        "viewsWhereSite": {
-            "type": "object",
-            "description": "This defines a reference to a CE site along with network type and an optional ip address where a load balancer could be advertised",
-            "title": "WhereSite",
-            "x-displayname": "Site",
-            "x-ves-displayorder": "1,2,3",
-            "x-ves-proto-message": "ves.io.schema.views.WhereSite",
-            "properties": {
-                "ip": {
-                    "type": "string",
-                    "description": " Use given IP address as VIP on the site\n\nExample: - \"8.8.8.8\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv4: true\n",
-                    "title": "IP address on the site",
-                    "x-displayname": "IP Address",
-                    "x-ves-example": "8.8.8.8",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.ipv4": "true"
-                    }
-                },
-                "ipv6": {
-                    "type": "string",
-                    "description": " Use given IPv6 address as VIP on the site\n\nExample: - \"2001::1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6: true\n",
-                    "title": "IPv6 address on the site",
-                    "x-displayname": "IPv6 Address",
-                    "x-ves-example": "2001::1",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.ipv6": "true"
-                    }
-                },
-                "network": {
-                    "description": " Select network types to be used on site\n By default VIP chosen as ip address of primary network interface in the network\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
-                    "title": "Network",
-                    "$ref": "#/definitions/viewsSiteNetwork",
-                    "x-displayname": "Network",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
-                },
-                "site": {
-                    "description": " Reference to site object\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
-                    "title": "Site",
-                    "$ref": "#/definitions/schemaviewsObjectRefType",
-                    "x-displayname": "Site Reference",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
-                }
-            }
-        },
         "viewsWhereSiteSegment": {
             "type": "object",
             "description": "This defines a reference to a Segment on a Site and an optional ip address where a load balancer could be advertised",
@@ -2875,7 +3094,7 @@ var CustomAPISwaggerJSON string = `{
                 "site": {
                     "description": "Exclusive with [advertise_on_public cloud_edge_segment segment site_segment virtual_network virtual_site virtual_site_segment virtual_site_with_vip vk8s_service]\n Advertise on a customer site and a given network.",
                     "title": "Site",
-                    "$ref": "#/definitions/viewsWhereSite",
+                    "$ref": "#/definitions/schemaviewsWhereSite",
                     "x-displayname": "Site"
                 },
                 "site_segment": {
@@ -2899,7 +3118,7 @@ var CustomAPISwaggerJSON string = `{
                 "virtual_site": {
                     "description": "Exclusive with [advertise_on_public cloud_edge_segment segment site site_segment virtual_network virtual_site_segment virtual_site_with_vip vk8s_service]\n Advertise on a customer virtual site and a given network.",
                     "title": "Virtual Site",
-                    "$ref": "#/definitions/viewsWhereVirtualSite",
+                    "$ref": "#/definitions/schemaviewsWhereVirtualSite",
                     "x-displayname": "Virtual Site"
                 },
                 "virtual_site_segment": {
@@ -2990,36 +3209,6 @@ var CustomAPISwaggerJSON string = `{
                     "title": "Network",
                     "$ref": "#/definitions/schemaviewsObjectRefType",
                     "x-displayname": "Network",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
-                }
-            }
-        },
-        "viewsWhereVirtualSite": {
-            "type": "object",
-            "description": "This defines a reference to a customer site virtual site along with network type where a load balancer could be advertised",
-            "title": "WhereVirtualSite",
-            "x-displayname": "Virtual Site",
-            "x-ves-displayorder": "1,2",
-            "x-ves-proto-message": "ves.io.schema.views.WhereVirtualSite",
-            "properties": {
-                "network": {
-                    "description": " Select network types to be used on site.\n IP address of primary network interface in the network\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
-                    "title": "Network",
-                    "$ref": "#/definitions/viewsSiteNetwork",
-                    "x-displayname": "Network",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
-                },
-                "virtual_site": {
-                    "description": " Reference to virtual site object\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
-                    "title": "Virtual Site",
-                    "$ref": "#/definitions/schemaviewsObjectRefType",
-                    "x-displayname": "Virtual Site Reference",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true"
@@ -3129,6 +3318,6 @@ var CustomAPISwaggerJSON string = `{
             }
         }
     },
-    "x-displayname": "Discovered Service Custom API",
+    "x-displayname": "Discovered Services",
     "x-ves-proto-file": "ves.io/schema/discovered_service/public_customapi.proto"
 }`

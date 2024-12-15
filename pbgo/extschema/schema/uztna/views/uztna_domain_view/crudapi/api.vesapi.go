@@ -1614,7 +1614,6 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-uztna-views-uztna_domain_view-crudapi-api-get"
                 },
-                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.uztna.views.uztna_domain_view.crudapi.API.Get"
             },
             "delete": {
@@ -1690,7 +1689,6 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-uztna-views-uztna_domain_view-crudapi-api-delete"
                 },
-                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.uztna.views.uztna_domain_view.crudapi.API.Delete"
             },
             "put": {
@@ -1774,7 +1772,6 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-uztna-views-uztna_domain_view-crudapi-api-replace"
                 },
-                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.uztna.views.uztna_domain_view.crudapi.API.Replace"
             },
             "x-displayname": "",
@@ -1922,7 +1919,6 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-uztna-views-uztna_domain_view-crudapi-api-list"
                 },
-                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.uztna.views.uztna_domain_view.crudapi.API.List"
             },
             "post": {
@@ -2000,7 +1996,6 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-uztna-views-uztna_domain_view-crudapi-api-create"
                 },
-                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.uztna.views.uztna_domain_view.crudapi.API.Create"
             },
             "x-displayname": "",
@@ -2148,7 +2143,6 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-uztna-views-uztna_domain_view-crudapi-api-liststream"
                 },
-                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.uztna.views.uztna_domain_view.crudapi.API.ListStream"
             },
             "x-displayname": "",
@@ -2256,7 +2250,6 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-uztna-views-uztna_domain_view-crudapi-api-get"
                 },
-                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.uztna.views.uztna_domain_view.crudapi.API.Get"
             },
             "x-displayname": "",
@@ -2404,7 +2397,6 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-uztna-views-uztna_domain_view-crudapi-api-list"
                 },
-                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.uztna.views.uztna_domain_view.crudapi.API.List"
             },
             "x-displayname": "",
@@ -2487,7 +2479,6 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-uztna-views-uztna_domain_view-crudapi-api-delete"
                 },
-                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.uztna.views.uztna_domain_view.crudapi.API.Delete"
             },
             "put": {
@@ -2571,7 +2562,6 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-uztna-views-uztna_domain_view-crudapi-api-replace"
                 },
-                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.uztna.views.uztna_domain_view.crudapi.API.Replace"
             },
             "x-displayname": "",
@@ -2656,7 +2646,6 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-uztna-views-uztna_domain_view-crudapi-api-create"
                 },
-                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.uztna.views.uztna_domain_view.crudapi.API.Create"
             },
             "x-displayname": "",
@@ -3258,6 +3247,12 @@ var APISwaggerJSON string = `{
                     "format": "date-time",
                     "x-displayname": "Deletion Timestamp"
                 },
+                "direct_ref_hash": {
+                    "type": "string",
+                    "description": " A hash of the UIDs of  direct references on this object. This can be used to determine if \n this object hash has had references become resolved/unresolved",
+                    "title": "direct_ref_hash",
+                    "x-displayname": "Direct Reference Hash"
+                },
                 "finalizers": {
                     "type": "array",
                     "description": " Must be empty before the object is deleted from the registry. Each entry\n is an identifier for the responsible component that will remove the entry\n from the list. If the deletionTimestamp of the object is non-nil, entries\n in this list can only be removed.\n\nExample: - \"value\"-",
@@ -3442,25 +3437,34 @@ var APISwaggerJSON string = `{
                 }
             }
         },
-        "uztna_domain_viewDVPerimeterREAdvertisement": {
+        "uztna_domain_viewDVCloudGatewayAdvertisement": {
             "type": "object",
-            "description": "Advertise on all perimeter RE or some selective \nPerimter RE list",
-            "title": "PerimeterREAdvertisement",
-            "x-displayname": "PerimeterREAdvertisement",
-            "x-ves-oneof-field-perimeter_re_choice": "[\"all_perimeter\",\"re_sites\"]",
-            "x-ves-proto-message": "ves.io.schema.uztna.views.uztna_domain_view.DVPerimeterREAdvertisement",
+            "description": "\nGateways for Advertisemen",
+            "title": "CloudGatewayAdvertisement",
+            "x-displayname": "Cloud Gateway Advertisement",
+            "x-ves-oneof-field-cloud_gateway_choice": "[\"all_cloud\"]",
+            "x-ves-proto-message": "ves.io.schema.uztna.views.uztna_domain_view.DVCloudGatewayAdvertisement",
             "properties": {
-                "all_perimeter": {
-                    "description": "Exclusive with [re_sites]\n This option will allow to advertise on all available perimeter RE sites",
+                "all_cloud": {
+                    "description": "Exclusive with []\n\n Advertise on all Cloud Gateways",
                     "title": "All",
                     "$ref": "#/definitions/schemaEmpty",
-                    "x-displayname": "Advertise on all Perimeter RE sites"
-                },
-                "re_sites": {
-                    "description": "Exclusive with [all_perimeter]\n This option will allow advertise on specific Perimeter RE sites",
-                    "title": "Specific",
-                    "$ref": "#/definitions/uztna_domain_viewDomainViewPerimeterRE",
-                    "x-displayname": "Advertise on specific Perimeter RE site"
+                    "x-displayname": "Advertise on All Cloud Gateways"
+                }
+            }
+        },
+        "uztna_domain_viewDomainViewAppVIPPool": {
+            "type": "object",
+            "description": "This is used to select VIP Network and VIP Range from \nVIP Pool.",
+            "title": "Application VIP Pool",
+            "x-displayname": "Application VIP Pool",
+            "x-ves-proto-message": "ves.io.schema.uztna.views.uztna_domain_view.DomainViewAppVIPPool",
+            "properties": {
+                "app_vip_pool": {
+                    "description": " VIP Pools",
+                    "title": "Selected VIP Pool for Application",
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "Selected VIP Pools"
                 }
             }
         },
@@ -3479,6 +3483,38 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "uztna_domain_viewDomainViewCloudGateways": {
+            "type": "object",
+            "description": "x-displayName: \"Cloud Gateway\"\n\nCloud Gateways",
+            "title": "Cloud Gateway",
+            "properties": {
+                "cloud_gateways": {
+                    "type": "array",
+                    "description": "x-displayName: \"Cloud Gateways\"\n\nCloud Gateways",
+                    "title": "Cloud Gateway",
+                    "items": {
+                        "$ref": "#/definitions/schemaviewsObjectRefType"
+                    }
+                }
+            }
+        },
+        "uztna_domain_viewDomainViewDualStackLeasePool": {
+            "type": "object",
+            "description": "x-displayName: \"Dual Stack Lease Pools\"\n\nThis is used to import or create new IPv4 and Ipv6 Lease Pools",
+            "title": "Dual Stack Lease Pool",
+            "properties": {
+                "ipv4_leasepool": {
+                    "description": "x-displayName: \"IPv4 Lease Pools\"\nx-required\nSelect or create new IPv4 Leasepools",
+                    "title": "IPv4 Lease Pools",
+                    "$ref": "#/definitions/schemaviewsObjectRefType"
+                },
+                "ipv6_leasepool": {
+                    "description": "x-displayName: \"IPv6 Lease Pools\"\nx-required\nSelect or create new IPv4 Lease Pools",
+                    "title": "IPv6 Lease Pool",
+                    "$ref": "#/definitions/schemaviewsObjectRefType"
+                }
+            }
+        },
         "uztna_domain_viewDomainViewGateways": {
             "type": "object",
             "description": "\nEach UZTNA ZeroTrust Domain will have one or more gateways associated with it.\nThe gateways represent the sites where the end user can connect to terminate \nthe mTLS/DTLS tunnels. The gateways associated with a UZTNA ZeroTrust Domain would all be front \nending the same set of applications and will enforce same set of policies for \nauthentication and authorisation to grant access to these applications.\nThis ensures same user experience no matter which gateway is reached for tunnel termination.\nEach Gateway will have a lease pool defined to allocate IP address to \nclient for the terminated tunne",
@@ -3486,75 +3522,50 @@ var APISwaggerJSON string = `{
             "x-displayname": "Gateways",
             "x-ves-proto-message": "ves.io.schema.uztna.views.uztna_domain_view.DomainViewGateways",
             "properties": {
-                "bigip_ce": {
-                    "description": " This is used to show all the available big ip ce.\n From the available bigip CE List select bigip CE .",
-                    "title": "BigIP CE List",
-                    "$ref": "#/definitions/uztna_domain_viewDomainViewSites",
-                    "x-displayname": "Available BigIP Next CE"
-                },
                 "perimeter_re": {
-                    "description": " Select the Gateways (either Perimeter RE or BigIP CE).",
+                    "description": "\n Cloud Gateways and Big-IP Edge Gateways",
                     "title": "PerimeterREAdvertisement",
-                    "$ref": "#/definitions/uztna_domain_viewDVPerimeterREAdvertisement",
-                    "x-displayname": "Perimeter RE"
+                    "$ref": "#/definitions/uztna_domain_viewDVCloudGatewayAdvertisement",
+                    "x-displayname": "Cloud Gateways"
+                },
+                "uztna_gateway": {
+                    "type": "array",
+                    "description": "\n Select BIG-IP Edge Gateway for Advertisement .",
+                    "title": "BigIP Edge Gateways",
+                    "items": {
+                        "$ref": "#/definitions/schemaviewsObjectRefType"
+                    },
+                    "x-displayname": "BIG-IP Edge Gateways"
                 }
             }
         },
         "uztna_domain_viewDomainViewLeasePoolList": {
             "type": "object",
-            "description": "Lease Pool For UZTNA Domain View.",
-            "title": "Lease Pool",
-            "x-displayname": "Lease Pool",
+            "description": "\nLease Pool For UZTNA Domain View.",
+            "title": "Lease Pools",
+            "x-displayname": "Lease Pools",
+            "x-ves-oneof-field-ipaddress_type": "[\"ipv4_leasepool\"]",
             "x-ves-proto-message": "ves.io.schema.uztna.views.uztna_domain_view.DomainViewLeasePoolList",
             "properties": {
-                "uztna_lpool": {
-                    "type": "array",
-                    "description": " Lease Pool for UZTNA Domain View\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1\n",
-                    "title": "LeasePool",
-                    "maxItems": 1,
-                    "items": {
-                        "$ref": "#/definitions/schemaviewsObjectRefType"
-                    },
-                    "x-displayname": "LeasePool",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.max_items": "1"
-                    }
+                "ipv4_leasepool": {
+                    "description": "Exclusive with []\n\n Select or create new IPv4 Leasepools",
+                    "title": "IPv4 Lease Pool",
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "IPv4 Lease Pool"
                 }
             }
         },
-        "uztna_domain_viewDomainViewPerimeterRE": {
+        "uztna_domain_viewDomainViewPolicy": {
             "type": "object",
-            "description": "\nSelected Perimeter RE Sites",
-            "title": "Perimeter RE Site",
-            "x-displayname": "Perimeter RE Sites",
-            "x-ves-proto-message": "ves.io.schema.uztna.views.uztna_domain_view.DomainViewPerimeterRE",
+            "title": "ZTNA Policy",
+            "x-displayname": "ZTNA Policy",
+            "x-ves-proto-message": "ves.io.schema.uztna.views.uztna_domain_view.DomainViewPolicy",
             "properties": {
-                "perimeter_re_site": {
-                    "type": "array",
-                    "description": " Selected Perimeter RE Site.",
-                    "title": "Permitere RE Site",
-                    "items": {
-                        "$ref": "#/definitions/schemaviewsObjectRefType"
-                    },
-                    "x-displayname": "Perimeter RE Site"
-                }
-            }
-        },
-        "uztna_domain_viewDomainViewSites": {
-            "type": "object",
-            "description": "Selected BigIP CE.",
-            "title": "BigIP CE",
-            "x-displayname": "BigIP CE",
-            "x-ves-proto-message": "ves.io.schema.uztna.views.uztna_domain_view.DomainViewSites",
-            "properties": {
-                "uztna_gateway": {
-                    "type": "array",
-                    "description": " Selected Big IP CE ",
-                    "title": "Big IP CE",
-                    "items": {
-                        "$ref": "#/definitions/schemaviewsObjectRefType"
-                    },
-                    "x-displayname": "Big IP CE "
+                "policy_name": {
+                    "description": "\n Select/Add ZTNA Policy to associate with this ZeroTrust Domain",
+                    "title": "ZTNA Policy",
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "ZTNA Policy"
                 }
             }
         },
@@ -3637,6 +3648,12 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.string.url_or_uri_ref": "true"
                     }
                 },
+                "app_vip_pool": {
+                    "description": " Application VIP Pools ",
+                    "title": "Selected VIP Pools",
+                    "$ref": "#/definitions/uztna_domain_viewDomainViewAppVIPPool",
+                    "x-displayname": "Application VIP Pools"
+                },
                 "cert": {
                     "description": " A ZTNA ZeroTrust Domain being a TLS Gateway requires a Valid \n Certificate associated with the Access FQDN. \n The approach to attach a certificate and key to a \n Domain in XC is an established pattern and we would reuse the same.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Certificate",
@@ -3659,24 +3676,22 @@ var APISwaggerJSON string = `{
                 },
                 "lease_pool": {
                     "description": " The Lease Pool assigned to the Zero Trust Domain. \n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
-                    "title": "LeasePool",
+                    "title": "Lease Pool",
                     "$ref": "#/definitions/uztna_domain_viewDomainViewLeasePoolList",
-                    "x-displayname": "LeasePool",
+                    "x-displayname": "Lease Pool",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true"
                     }
                 },
-                "profile_name": {
-                    "type": "string",
-                    "description": " The name of the ZTNA profile\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 1024\n",
+                "policy": {
+                    "description": " The name of the ZTNA profile\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Profile Name",
-                    "maxLength": 1024,
+                    "$ref": "#/definitions/uztna_domain_viewDomainViewPolicy",
                     "x-displayname": "ZTNA Profile",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.string.max_len": "1024"
+                        "ves.io.schema.rules.message.required": "true"
                     }
                 },
                 "view_internal": {

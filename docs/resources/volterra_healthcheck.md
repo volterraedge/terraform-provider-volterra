@@ -1,9 +1,9 @@
 ---
 
 page_title: "Volterra: healthcheck"
-description: "The healthcheck allows CRUD of Healthcheck resource on Volterra SaaS"
 
----
+description: "The healthcheck allows CRUD of Healthcheck resource on Volterra SaaS"
+-----------------------------------------------------------------------------------
 
 Resource volterra_healthcheck
 =============================
@@ -22,11 +22,23 @@ resource "volterra_healthcheck" "example" {
 
   // One of the arguments from this list "dns_health_check dns_proxy_icmp_health_check dns_proxy_tcp_health_check dns_proxy_udp_health_check http_health_check tcp_health_check" must be set
 
-  dns_proxy_icmp_health_check = true
-  healthy_threshold           = ["2"]
-  interval                    = ["10"]
-  timeout                     = ["1"]
-  unhealthy_threshold         = ["5"]
+  dns_health_check {
+    expected_rcode = "no-error"
+
+    expected_record_type = "REQUESTED_QUERY_TYPE"
+
+    expected_response = "10.0.0.1"
+
+    query_name = "www.example.com"
+
+    query_type = "A"
+
+    reverse = true
+  }
+  healthy_threshold   = ["2"]
+  interval            = ["10"]
+  timeout             = ["1"]
+  unhealthy_threshold = ["5"]
 }
 
 ```

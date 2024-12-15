@@ -994,6 +994,14 @@ func (m *CreateSpecType) Redact(ctx context.Context) error {
 		return errors.Wrapf(err, "Redacting CreateSpecType.more_option")
 	}
 
+	if err := m.GetSingleLbApp().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting CreateSpecType.single_lb_app")
+	}
+
+	if err := m.GetEnableApiDiscovery().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting CreateSpecType.enable_api_discovery")
+	}
+
 	if err := m.GetDefaultPool().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting CreateSpecType.default_pool")
 	}
@@ -1935,6 +1943,14 @@ func (v *ValidateCreateSpecType) MaliciousUserDetectionChoiceValidationRuleHandl
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for malicious_user_detection_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateCreateSpecType) MalwareProtectionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for malware_protection")
 	}
 	return validatorFn, nil
 }
@@ -3125,6 +3141,42 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["malware_protection"]; exists {
+		val := m.GetMalwareProtection()
+		vOpts := append(opts,
+			db.WithValidateField("malware_protection"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetMalwareProtection().(type) {
+	case *CreateSpecType_DisableMalwareProtection:
+		if fv, exists := v.FldValidators["malware_protection.disable_malware_protection"]; exists {
+			val := m.GetMalwareProtection().(*CreateSpecType_DisableMalwareProtection).DisableMalwareProtection
+			vOpts := append(opts,
+				db.WithValidateField("malware_protection"),
+				db.WithValidateField("disable_malware_protection"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CreateSpecType_MalwareProtectionSettings:
+		if fv, exists := v.FldValidators["malware_protection.malware_protection_settings"]; exists {
+			val := m.GetMalwareProtection().(*CreateSpecType_MalwareProtectionSettings).MalwareProtectionSettings
+			vOpts := append(opts,
+				db.WithValidateField("malware_protection"),
+				db.WithValidateField("malware_protection_settings"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	switch m.GetMlConfigChoice().(type) {
 	case *CreateSpecType_SingleLbApp:
 		if fv, exists := v.FldValidators["ml_config_choice.single_lb_app"]; exists {
@@ -3639,6 +3691,17 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	}
 	v.FldValidators["malicious_user_detection_choice"] = vFn
 
+	vrhMalwareProtection := v.MalwareProtectionValidationRuleHandler
+	rulesMalwareProtection := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhMalwareProtection(rulesMalwareProtection)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.malware_protection: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["malware_protection"] = vFn
+
 	vrhRateLimitChoice := v.RateLimitChoiceValidationRuleHandler
 	rulesRateLimitChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -3871,6 +3934,8 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v.FldValidators["loadbalancer_type.https"] = ProxyTypeHttpsValidator().Validate
 	v.FldValidators["loadbalancer_type.https_auto_cert"] = ProxyTypeHttpsAutoCertsValidator().Validate
 
+	v.FldValidators["malware_protection.malware_protection_settings"] = ves_io_schema_views_common_security.MalwareProtectionPolicyValidator().Validate
+
 	v.FldValidators["ml_config_choice.single_lb_app"] = SingleLoadBalancerAppSettingValidator().Validate
 
 	v.FldValidators["origin_pool_choice.default_pool"] = ves_io_schema_views_origin_pool.GlobalSpecTypeValidator().Validate
@@ -3945,6 +4010,14 @@ func (m *GetSpecType) Redact(ctx context.Context) error {
 
 	if err := m.GetMoreOption().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting GetSpecType.more_option")
+	}
+
+	if err := m.GetSingleLbApp().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting GetSpecType.single_lb_app")
+	}
+
+	if err := m.GetEnableApiDiscovery().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting GetSpecType.enable_api_discovery")
 	}
 
 	if err := m.GetDefaultPool().Redact(ctx); err != nil {
@@ -4888,6 +4961,14 @@ func (v *ValidateGetSpecType) MaliciousUserDetectionChoiceValidationRuleHandler(
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for malicious_user_detection_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateGetSpecType) MalwareProtectionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for malware_protection")
 	}
 	return validatorFn, nil
 }
@@ -6141,6 +6222,42 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
+	if fv, exists := v.FldValidators["malware_protection"]; exists {
+		val := m.GetMalwareProtection()
+		vOpts := append(opts,
+			db.WithValidateField("malware_protection"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetMalwareProtection().(type) {
+	case *GetSpecType_DisableMalwareProtection:
+		if fv, exists := v.FldValidators["malware_protection.disable_malware_protection"]; exists {
+			val := m.GetMalwareProtection().(*GetSpecType_DisableMalwareProtection).DisableMalwareProtection
+			vOpts := append(opts,
+				db.WithValidateField("malware_protection"),
+				db.WithValidateField("disable_malware_protection"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GetSpecType_MalwareProtectionSettings:
+		if fv, exists := v.FldValidators["malware_protection.malware_protection_settings"]; exists {
+			val := m.GetMalwareProtection().(*GetSpecType_MalwareProtectionSettings).MalwareProtectionSettings
+			vOpts := append(opts,
+				db.WithValidateField("malware_protection"),
+				db.WithValidateField("malware_protection_settings"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	switch m.GetMlConfigChoice().(type) {
 	case *GetSpecType_SingleLbApp:
 		if fv, exists := v.FldValidators["ml_config_choice.single_lb_app"]; exists {
@@ -6664,6 +6781,17 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	}
 	v.FldValidators["malicious_user_detection_choice"] = vFn
 
+	vrhMalwareProtection := v.MalwareProtectionValidationRuleHandler
+	rulesMalwareProtection := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhMalwareProtection(rulesMalwareProtection)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.malware_protection: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["malware_protection"] = vFn
+
 	vrhRateLimitChoice := v.RateLimitChoiceValidationRuleHandler
 	rulesRateLimitChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -6896,6 +7024,8 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v.FldValidators["loadbalancer_type.https"] = ProxyTypeHttpsValidator().Validate
 	v.FldValidators["loadbalancer_type.https_auto_cert"] = ProxyTypeHttpsAutoCertsValidator().Validate
 
+	v.FldValidators["malware_protection.malware_protection_settings"] = ves_io_schema_views_common_security.MalwareProtectionPolicyValidator().Validate
+
 	v.FldValidators["ml_config_choice.single_lb_app"] = SingleLoadBalancerAppSettingValidator().Validate
 
 	v.FldValidators["origin_pool_choice.default_pool"] = ves_io_schema_views_origin_pool.GlobalSpecTypeValidator().Validate
@@ -6972,6 +7102,14 @@ func (m *GlobalSpecType) Redact(ctx context.Context) error {
 
 	if err := m.GetMoreOption().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting GlobalSpecType.more_option")
+	}
+
+	if err := m.GetSingleLbApp().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting GlobalSpecType.single_lb_app")
+	}
+
+	if err := m.GetEnableApiDiscovery().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting GlobalSpecType.enable_api_discovery")
 	}
 
 	if err := m.GetDefaultPool().Redact(ctx); err != nil {
@@ -7978,6 +8116,14 @@ func (v *ValidateGlobalSpecType) MaliciousUserDetectionChoiceValidationRuleHandl
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for malicious_user_detection_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateGlobalSpecType) MalwareProtectionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for malware_protection")
 	}
 	return validatorFn, nil
 }
@@ -9277,6 +9423,42 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["malware_protection"]; exists {
+		val := m.GetMalwareProtection()
+		vOpts := append(opts,
+			db.WithValidateField("malware_protection"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetMalwareProtection().(type) {
+	case *GlobalSpecType_DisableMalwareProtection:
+		if fv, exists := v.FldValidators["malware_protection.disable_malware_protection"]; exists {
+			val := m.GetMalwareProtection().(*GlobalSpecType_DisableMalwareProtection).DisableMalwareProtection
+			vOpts := append(opts,
+				db.WithValidateField("malware_protection"),
+				db.WithValidateField("disable_malware_protection"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_MalwareProtectionSettings:
+		if fv, exists := v.FldValidators["malware_protection.malware_protection_settings"]; exists {
+			val := m.GetMalwareProtection().(*GlobalSpecType_MalwareProtectionSettings).MalwareProtectionSettings
+			vOpts := append(opts,
+				db.WithValidateField("malware_protection"),
+				db.WithValidateField("malware_protection_settings"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	switch m.GetMlConfigChoice().(type) {
 	case *GlobalSpecType_SingleLbApp:
 		if fv, exists := v.FldValidators["ml_config_choice.single_lb_app"]; exists {
@@ -9821,6 +10003,17 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	}
 	v.FldValidators["malicious_user_detection_choice"] = vFn
 
+	vrhMalwareProtection := v.MalwareProtectionValidationRuleHandler
+	rulesMalwareProtection := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhMalwareProtection(rulesMalwareProtection)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.malware_protection: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["malware_protection"] = vFn
+
 	vrhRateLimitChoice := v.RateLimitChoiceValidationRuleHandler
 	rulesRateLimitChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -10052,6 +10245,8 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v.FldValidators["loadbalancer_type.http"] = ProxyTypeHttpValidator().Validate
 	v.FldValidators["loadbalancer_type.https"] = ProxyTypeHttpsValidator().Validate
 	v.FldValidators["loadbalancer_type.https_auto_cert"] = ProxyTypeHttpsAutoCertsValidator().Validate
+
+	v.FldValidators["malware_protection.malware_protection_settings"] = ves_io_schema_views_common_security.MalwareProtectionPolicyValidator().Validate
 
 	v.FldValidators["ml_config_choice.single_lb_app"] = SingleLoadBalancerAppSettingValidator().Validate
 
@@ -11009,6 +11204,15 @@ func (v *ValidateProxyTypeHttps) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["coalescing_options"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("coalescing_options"))
+		if err := fv(ctx, m.GetCoalescingOptions(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["connection_idle_timeout"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("connection_idle_timeout"))
@@ -11340,6 +11544,8 @@ var DefaultProxyTypeHttpsValidator = func() *ValidateProxyTypeHttps {
 
 	v.FldValidators["http_protocol_options"] = ves_io_schema_virtual_host.HttpProtocolOptionsValidator().Validate
 
+	v.FldValidators["coalescing_options"] = ves_io_schema.TLSCoalescingOptionsValidator().Validate
+
 	return v
 }()
 
@@ -11499,6 +11705,15 @@ func (v *ValidateProxyTypeHttpsAutoCerts) Validate(ctx context.Context, pm inter
 
 		vOpts := append(opts, db.WithValidateField("add_hsts"))
 		if err := fv(ctx, m.GetAddHsts(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["coalescing_options"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("coalescing_options"))
+		if err := fv(ctx, m.GetCoalescingOptions(), vOpts...); err != nil {
 			return err
 		}
 
@@ -11824,6 +12039,8 @@ var DefaultProxyTypeHttpsAutoCertsValidator = func() *ValidateProxyTypeHttpsAuto
 
 	v.FldValidators["http_protocol_options"] = ves_io_schema_virtual_host.HttpProtocolOptionsValidator().Validate
 
+	v.FldValidators["coalescing_options"] = ves_io_schema.TLSCoalescingOptionsValidator().Validate
+
 	return v
 }()
 
@@ -11860,6 +12077,14 @@ func (m *ReplaceSpecType) Redact(ctx context.Context) error {
 
 	if err := m.GetMoreOption().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting ReplaceSpecType.more_option")
+	}
+
+	if err := m.GetSingleLbApp().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting ReplaceSpecType.single_lb_app")
+	}
+
+	if err := m.GetEnableApiDiscovery().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting ReplaceSpecType.enable_api_discovery")
 	}
 
 	if err := m.GetDefaultPool().Redact(ctx); err != nil {
@@ -12803,6 +13028,14 @@ func (v *ValidateReplaceSpecType) MaliciousUserDetectionChoiceValidationRuleHand
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for malicious_user_detection_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateReplaceSpecType) MalwareProtectionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for malware_protection")
 	}
 	return validatorFn, nil
 }
@@ -13993,6 +14226,42 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 
 	}
 
+	if fv, exists := v.FldValidators["malware_protection"]; exists {
+		val := m.GetMalwareProtection()
+		vOpts := append(opts,
+			db.WithValidateField("malware_protection"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetMalwareProtection().(type) {
+	case *ReplaceSpecType_DisableMalwareProtection:
+		if fv, exists := v.FldValidators["malware_protection.disable_malware_protection"]; exists {
+			val := m.GetMalwareProtection().(*ReplaceSpecType_DisableMalwareProtection).DisableMalwareProtection
+			vOpts := append(opts,
+				db.WithValidateField("malware_protection"),
+				db.WithValidateField("disable_malware_protection"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ReplaceSpecType_MalwareProtectionSettings:
+		if fv, exists := v.FldValidators["malware_protection.malware_protection_settings"]; exists {
+			val := m.GetMalwareProtection().(*ReplaceSpecType_MalwareProtectionSettings).MalwareProtectionSettings
+			vOpts := append(opts,
+				db.WithValidateField("malware_protection"),
+				db.WithValidateField("malware_protection_settings"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	switch m.GetMlConfigChoice().(type) {
 	case *ReplaceSpecType_SingleLbApp:
 		if fv, exists := v.FldValidators["ml_config_choice.single_lb_app"]; exists {
@@ -14507,6 +14776,17 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	}
 	v.FldValidators["malicious_user_detection_choice"] = vFn
 
+	vrhMalwareProtection := v.MalwareProtectionValidationRuleHandler
+	rulesMalwareProtection := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhMalwareProtection(rulesMalwareProtection)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.malware_protection: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["malware_protection"] = vFn
+
 	vrhRateLimitChoice := v.RateLimitChoiceValidationRuleHandler
 	rulesRateLimitChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -14738,6 +15018,8 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v.FldValidators["loadbalancer_type.http"] = ProxyTypeHttpValidator().Validate
 	v.FldValidators["loadbalancer_type.https"] = ProxyTypeHttpsValidator().Validate
 	v.FldValidators["loadbalancer_type.https_auto_cert"] = ProxyTypeHttpsAutoCertsValidator().Validate
+
+	v.FldValidators["malware_protection.malware_protection_settings"] = ves_io_schema_views_common_security.MalwareProtectionPolicyValidator().Validate
 
 	v.FldValidators["ml_config_choice.single_lb_app"] = SingleLoadBalancerAppSettingValidator().Validate
 
@@ -17123,6 +17405,15 @@ func (v *ValidateRouteTypeSimple) Validate(ctx context.Context, pm interface{}, 
 
 	}
 
+	if fv, exists := v.FldValidators["query_params"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("query_params"))
+		if err := fv(ctx, m.GetQueryParams(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	return nil
 }
 
@@ -17201,6 +17492,8 @@ var DefaultRouteTypeSimpleValidator = func() *ValidateRouteTypeSimple {
 	v.FldValidators["advanced_options"] = RouteSimpleAdvancedOptionsValidator().Validate
 
 	v.FldValidators["incoming_port"] = ves_io_schema.PortMatcherTypeValidator().Validate
+
+	v.FldValidators["query_params"] = ves_io_schema_route.QueryParamsSimpleRouteValidator().Validate
 
 	return v
 }()
@@ -17795,6 +18088,20 @@ func (m *SingleLoadBalancerAppSetting) ToJSON() (string, error) {
 
 func (m *SingleLoadBalancerAppSetting) ToYAML() (string, error) {
 	return codec.ToYAML(m)
+}
+
+// Redact squashes sensitive info in m (in-place)
+func (m *SingleLoadBalancerAppSetting) Redact(ctx context.Context) error {
+	// clear fields with confidential option set (at message or field level)
+	if m == nil {
+		return nil
+	}
+
+	if err := m.GetEnableDiscovery().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting SingleLoadBalancerAppSetting.enable_discovery")
+	}
+
+	return nil
 }
 
 func (m *SingleLoadBalancerAppSetting) DeepCopy() *SingleLoadBalancerAppSetting {
@@ -18489,6 +18796,41 @@ func (r *CreateSpecType) GetMaliciousUserDetectionChoiceFromGlobalSpecType(o *Gl
 }
 
 // create setters in CreateSpecType from GlobalSpecType for oneof fields
+func (r *CreateSpecType) SetMalwareProtectionToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.MalwareProtection.(type) {
+	case nil:
+		o.MalwareProtection = nil
+
+	case *CreateSpecType_DisableMalwareProtection:
+		o.MalwareProtection = &GlobalSpecType_DisableMalwareProtection{DisableMalwareProtection: of.DisableMalwareProtection}
+
+	case *CreateSpecType_MalwareProtectionSettings:
+		o.MalwareProtection = &GlobalSpecType_MalwareProtectionSettings{MalwareProtectionSettings: of.MalwareProtectionSettings}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *CreateSpecType) GetMalwareProtectionFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.MalwareProtection.(type) {
+	case nil:
+		r.MalwareProtection = nil
+
+	case *GlobalSpecType_DisableMalwareProtection:
+		r.MalwareProtection = &CreateSpecType_DisableMalwareProtection{DisableMalwareProtection: of.DisableMalwareProtection}
+
+	case *GlobalSpecType_MalwareProtectionSettings:
+		r.MalwareProtection = &CreateSpecType_MalwareProtectionSettings{MalwareProtectionSettings: of.MalwareProtectionSettings}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+// create setters in CreateSpecType from GlobalSpecType for oneof fields
 func (r *CreateSpecType) SetMlConfigChoiceToGlobalSpecType(o *GlobalSpecType) error {
 	switch of := r.MlConfigChoice.(type) {
 	case nil:
@@ -18878,6 +19220,7 @@ func (m *CreateSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool
 	m.GetLoadbalancerTypeFromGlobalSpecType(f)
 	m.GetMaliciousUserDetectionChoiceFromGlobalSpecType(f)
 	m.MaliciousUserMitigation = f.GetMaliciousUserMitigation()
+	m.GetMalwareProtectionFromGlobalSpecType(f)
 	m.GetMlConfigChoiceFromGlobalSpecType(f)
 	m.MoreOption = f.GetMoreOption()
 	m.GetOriginPoolChoiceFromGlobalSpecType(f)
@@ -18936,6 +19279,7 @@ func (m *CreateSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) 
 	m1.SetLoadbalancerTypeToGlobalSpecType(f)
 	m1.SetMaliciousUserDetectionChoiceToGlobalSpecType(f)
 	f.MaliciousUserMitigation = m1.MaliciousUserMitigation
+	m1.SetMalwareProtectionToGlobalSpecType(f)
 	m1.SetMlConfigChoiceToGlobalSpecType(f)
 	f.MoreOption = m1.MoreOption
 	m1.SetOriginPoolChoiceToGlobalSpecType(f)
@@ -19439,6 +19783,41 @@ func (r *GetSpecType) GetMaliciousUserDetectionChoiceFromGlobalSpecType(o *Globa
 }
 
 // create setters in GetSpecType from GlobalSpecType for oneof fields
+func (r *GetSpecType) SetMalwareProtectionToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.MalwareProtection.(type) {
+	case nil:
+		o.MalwareProtection = nil
+
+	case *GetSpecType_DisableMalwareProtection:
+		o.MalwareProtection = &GlobalSpecType_DisableMalwareProtection{DisableMalwareProtection: of.DisableMalwareProtection}
+
+	case *GetSpecType_MalwareProtectionSettings:
+		o.MalwareProtection = &GlobalSpecType_MalwareProtectionSettings{MalwareProtectionSettings: of.MalwareProtectionSettings}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *GetSpecType) GetMalwareProtectionFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.MalwareProtection.(type) {
+	case nil:
+		r.MalwareProtection = nil
+
+	case *GlobalSpecType_DisableMalwareProtection:
+		r.MalwareProtection = &GetSpecType_DisableMalwareProtection{DisableMalwareProtection: of.DisableMalwareProtection}
+
+	case *GlobalSpecType_MalwareProtectionSettings:
+		r.MalwareProtection = &GetSpecType_MalwareProtectionSettings{MalwareProtectionSettings: of.MalwareProtectionSettings}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+// create setters in GetSpecType from GlobalSpecType for oneof fields
 func (r *GetSpecType) SetMlConfigChoiceToGlobalSpecType(o *GlobalSpecType) error {
 	switch of := r.MlConfigChoice.(type) {
 	case nil:
@@ -19834,6 +20213,7 @@ func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	m.GetLoadbalancerTypeFromGlobalSpecType(f)
 	m.GetMaliciousUserDetectionChoiceFromGlobalSpecType(f)
 	m.MaliciousUserMitigation = f.GetMaliciousUserMitigation()
+	m.GetMalwareProtectionFromGlobalSpecType(f)
 	m.GetMlConfigChoiceFromGlobalSpecType(f)
 	m.MoreOption = f.GetMoreOption()
 	m.GetOriginPoolChoiceFromGlobalSpecType(f)
@@ -19899,6 +20279,7 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	m1.SetLoadbalancerTypeToGlobalSpecType(f)
 	m1.SetMaliciousUserDetectionChoiceToGlobalSpecType(f)
 	f.MaliciousUserMitigation = m1.MaliciousUserMitigation
+	m1.SetMalwareProtectionToGlobalSpecType(f)
 	m1.SetMlConfigChoiceToGlobalSpecType(f)
 	f.MoreOption = m1.MoreOption
 	m1.SetOriginPoolChoiceToGlobalSpecType(f)
@@ -20403,6 +20784,41 @@ func (r *ReplaceSpecType) GetMaliciousUserDetectionChoiceFromGlobalSpecType(o *G
 }
 
 // create setters in ReplaceSpecType from GlobalSpecType for oneof fields
+func (r *ReplaceSpecType) SetMalwareProtectionToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.MalwareProtection.(type) {
+	case nil:
+		o.MalwareProtection = nil
+
+	case *ReplaceSpecType_DisableMalwareProtection:
+		o.MalwareProtection = &GlobalSpecType_DisableMalwareProtection{DisableMalwareProtection: of.DisableMalwareProtection}
+
+	case *ReplaceSpecType_MalwareProtectionSettings:
+		o.MalwareProtection = &GlobalSpecType_MalwareProtectionSettings{MalwareProtectionSettings: of.MalwareProtectionSettings}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *ReplaceSpecType) GetMalwareProtectionFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.MalwareProtection.(type) {
+	case nil:
+		r.MalwareProtection = nil
+
+	case *GlobalSpecType_DisableMalwareProtection:
+		r.MalwareProtection = &ReplaceSpecType_DisableMalwareProtection{DisableMalwareProtection: of.DisableMalwareProtection}
+
+	case *GlobalSpecType_MalwareProtectionSettings:
+		r.MalwareProtection = &ReplaceSpecType_MalwareProtectionSettings{MalwareProtectionSettings: of.MalwareProtectionSettings}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+// create setters in ReplaceSpecType from GlobalSpecType for oneof fields
 func (r *ReplaceSpecType) SetMlConfigChoiceToGlobalSpecType(o *GlobalSpecType) error {
 	switch of := r.MlConfigChoice.(type) {
 	case nil:
@@ -20792,6 +21208,7 @@ func (m *ReplaceSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy boo
 	m.GetLoadbalancerTypeFromGlobalSpecType(f)
 	m.GetMaliciousUserDetectionChoiceFromGlobalSpecType(f)
 	m.MaliciousUserMitigation = f.GetMaliciousUserMitigation()
+	m.GetMalwareProtectionFromGlobalSpecType(f)
 	m.GetMlConfigChoiceFromGlobalSpecType(f)
 	m.MoreOption = f.GetMoreOption()
 	m.GetOriginPoolChoiceFromGlobalSpecType(f)
@@ -20850,6 +21267,7 @@ func (m *ReplaceSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool)
 	m1.SetLoadbalancerTypeToGlobalSpecType(f)
 	m1.SetMaliciousUserDetectionChoiceToGlobalSpecType(f)
 	f.MaliciousUserMitigation = m1.MaliciousUserMitigation
+	m1.SetMalwareProtectionToGlobalSpecType(f)
 	m1.SetMlConfigChoiceToGlobalSpecType(f)
 	f.MoreOption = m1.MoreOption
 	m1.SetOriginPoolChoiceToGlobalSpecType(f)

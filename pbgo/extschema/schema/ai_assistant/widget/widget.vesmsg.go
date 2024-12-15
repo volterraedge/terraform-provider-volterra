@@ -88,6 +88,15 @@ func (v *ValidateCell) Validate(ctx context.Context, pm interface{}, opts ...db.
 
 	}
 
+	if fv, exists := v.FldValidators["properties"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("properties"))
+		if err := fv(ctx, m.GetProperties(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["value"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("value"))

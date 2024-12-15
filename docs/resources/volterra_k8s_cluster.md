@@ -1,9 +1,9 @@
 ---
 
 page_title: "Volterra: k8s_cluster"
-description: "The k8s_cluster allows CRUD of K8s Cluster resource on Volterra SaaS"
 
----
+description: "The k8s_cluster allows CRUD of K8s Cluster resource on Volterra SaaS"
+-----------------------------------------------------------------------------------
 
 Resource volterra_k8s_cluster
 =============================
@@ -58,7 +58,7 @@ resource "volterra_k8s_cluster" "example" {
 
   // One of the arguments from this list "vk8s_namespace_access_deny vk8s_namespace_access_permit" must be set
 
-  vk8s_namespace_access_deny = true
+  vk8s_namespace_access_permit = true
 }
 
 ```

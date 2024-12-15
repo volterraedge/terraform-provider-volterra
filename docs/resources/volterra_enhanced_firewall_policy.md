@@ -1,9 +1,9 @@
 ---
 
 page_title: "Volterra: enhanced_firewall_policy"
-description: "The enhanced_firewall_policy allows CRUD of Enhanced Firewall Policy resource on Volterra SaaS"
 
----
+description: "The enhanced_firewall_policy allows CRUD of Enhanced Firewall Policy resource on Volterra SaaS"
+-------------------------------------------------------------------------------------------------------------
 
 Resource volterra_enhanced_firewall_policy
 ==========================================
@@ -22,7 +22,11 @@ resource "volterra_enhanced_firewall_policy" "example" {
 
   // One of the arguments from this list "allow_all allowed_destinations allowed_sources denied_destinations denied_sources deny_all rule_list" must be set
 
-  allow_all = true
+  allowed_destinations {
+    ipv6_prefix = ["[2001:db8::1::/112, 2001::db8::2::/112]"]
+
+    prefix = ["[192.168.1.0/24, 192.168.2.0/24]\""]
+  }
 }
 
 ```

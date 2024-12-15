@@ -7,6 +7,7 @@ import (
 	"reflect"
 
 	"gopkg.volterra.us/stdlib/db"
+	"gopkg.volterra.us/stdlib/server"
 	"gopkg.volterra.us/stdlib/store"
 	"gopkg.volterra.us/stdlib/svcfw"
 )
@@ -27,6 +28,9 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.bgp.ListResponseItem"] = ListResponseItemValidator()
 	vr["ves.io.schema.bgp.ReplaceRequest"] = ReplaceRequestValidator()
 	vr["ves.io.schema.bgp.ReplaceResponse"] = ReplaceResponseValidator()
+
+	vr["ves.io.schema.bgp.GetStatusRequest"] = GetStatusRequestValidator()
+	vr["ves.io.schema.bgp.GetStatusResponse"] = GetStatusResponseValidator()
 
 	vr["ves.io.schema.bgp.BgpParameters"] = BgpParametersValidator()
 	vr["ves.io.schema.bgp.BgpPeer"] = BgpPeerValidator()
@@ -87,7 +91,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AddonServices: []string{"f5xc-ipv6-standard"},
 		},
 		{
-			FieldPath:     "ves.io.schema.bgp.CreateRequest.spec.peers.type_choice.external.family_inet_v6",
+			FieldPath:     "ves.io.schema.bgp.CreateRequest.spec.peers.type_choice.external.family_inet_v6.enable_choice.enable",
 			AddonServices: []string{"f5xc-ipv6-standard"},
 		},
 	}
@@ -189,7 +193,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AddonServices: []string{"f5xc-ipv6-standard"},
 		},
 		{
-			FieldPath:     "ves.io.schema.bgp.ReplaceRequest.spec.peers.type_choice.external.family_inet_v6",
+			FieldPath:     "ves.io.schema.bgp.ReplaceRequest.spec.peers.type_choice.external.family_inet_v6.enable_choice.enable",
 			AddonServices: []string{"f5xc-ipv6-standard"},
 		},
 	}
@@ -224,6 +228,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 
 func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {
 	sm["ves.io.schema.bgp.API"] = "config"
+	sm["ves.io.schema.bgp.CustomAPI"] = "config"
 
 }
 
@@ -258,6 +263,26 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		mdr.SvcRegisterHandlers["ves.io.schema.bgp.API"] = RegisterAPIServer
 		mdr.SvcGwRegisterHandlers["ves.io.schema.bgp.API"] = RegisterGwAPIHandler
 		csr.CRUDServerRegistry["ves.io.schema.bgp.Object"] = NewCRUDAPIServer
+
+	}()
+
+	customCSR = mdr.PubCustomServiceRegistry
+
+	func() {
+		// set swagger jsons for our and external schemas
+
+		customCSR.SwaggerRegistry["ves.io.schema.bgp.Object"] = CustomAPISwaggerJSON
+
+		customCSR.GrpcClientRegistry["ves.io.schema.bgp.CustomAPI"] = NewCustomAPIGrpcClient
+		customCSR.RestClientRegistry["ves.io.schema.bgp.CustomAPI"] = NewCustomAPIRestClient
+		if isExternal {
+			return
+		}
+		mdr.SvcRegisterHandlers["ves.io.schema.bgp.CustomAPI"] = RegisterCustomAPIServer
+		mdr.SvcGwRegisterHandlers["ves.io.schema.bgp.CustomAPI"] = RegisterGwCustomAPIHandler
+		customCSR.ServerRegistry["ves.io.schema.bgp.CustomAPI"] = func(svc svcfw.Service) server.APIHandler {
+			return NewCustomAPIServer(svc)
+		}
 
 	}()
 

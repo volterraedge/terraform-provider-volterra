@@ -1,9 +1,9 @@
 ---
 
 page_title: "Volterra: certificate_chain"
-description: "The certificate_chain allows CRUD of Certificate Chain resource on Volterra SaaS"
 
----
+description: "The certificate_chain allows CRUD of Certificate Chain resource on Volterra SaaS"
+-----------------------------------------------------------------------------------------------
 
 Resource volterra_certificate_chain
 ===================================

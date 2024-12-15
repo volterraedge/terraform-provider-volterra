@@ -74,7 +74,8 @@ func resourceVolterraSecretPolicyRule() *schema.Resource {
 
 			"client_name_matcher": {
 
-				Type:     schema.TypeSet,
+				Type:     schema.TypeList,
+				MaxItems: 1,
 				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
@@ -104,7 +105,8 @@ func resourceVolterraSecretPolicyRule() *schema.Resource {
 
 			"client_selector": {
 
-				Type:     schema.TypeSet,
+				Type:     schema.TypeList,
+				MaxItems: 1,
 				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
@@ -124,7 +126,8 @@ func resourceVolterraSecretPolicyRule() *schema.Resource {
 
 			"label_matcher": {
 
-				Type:       schema.TypeSet,
+				Type:       schema.TypeList,
+				MaxItems:   1,
 				Optional:   true,
 				Deprecated: "This field is deprecated and will be removed in future release.",
 				Elem: &schema.Resource{
@@ -229,30 +232,32 @@ func resourceVolterraSecretPolicyRuleCreate(d *schema.ResourceData, meta interfa
 		clientChoiceInt.ClientNameMatcher = &ves_io_schema_policy.MatcherTypeBasic{}
 		createSpec.ClientChoice = clientChoiceInt
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
+			if set != nil {
+				cs := set.(map[string]interface{})
 
-			if v, ok := cs["exact_values"]; ok && !isIntfNil(v) {
+				if v, ok := cs["exact_values"]; ok && !isIntfNil(v) {
 
-				ls := make([]string, len(v.([]interface{})))
-				for i, v := range v.([]interface{}) {
-					ls[i] = v.(string)
+					ls := make([]string, len(v.([]interface{})))
+					for i, v := range v.([]interface{}) {
+						ls[i] = v.(string)
+					}
+					clientChoiceInt.ClientNameMatcher.ExactValues = ls
+
 				}
-				clientChoiceInt.ClientNameMatcher.ExactValues = ls
+
+				if v, ok := cs["regex_values"]; ok && !isIntfNil(v) {
+
+					ls := make([]string, len(v.([]interface{})))
+					for i, v := range v.([]interface{}) {
+						ls[i] = v.(string)
+					}
+					clientChoiceInt.ClientNameMatcher.RegexValues = ls
+
+				}
 
 			}
-
-			if v, ok := cs["regex_values"]; ok && !isIntfNil(v) {
-
-				ls := make([]string, len(v.([]interface{})))
-				for i, v := range v.([]interface{}) {
-					ls[i] = v.(string)
-				}
-				clientChoiceInt.ClientNameMatcher.RegexValues = ls
-
-			}
-
 		}
 
 	}
@@ -264,20 +269,22 @@ func resourceVolterraSecretPolicyRuleCreate(d *schema.ResourceData, meta interfa
 		clientChoiceInt.ClientSelector = &ves_io_schema.LabelSelectorType{}
 		createSpec.ClientChoice = clientChoiceInt
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
+			if set != nil {
+				cs := set.(map[string]interface{})
 
-			if v, ok := cs["expressions"]; ok && !isIntfNil(v) {
+				if v, ok := cs["expressions"]; ok && !isIntfNil(v) {
 
-				ls := make([]string, len(v.([]interface{})))
-				for i, v := range v.([]interface{}) {
-					ls[i] = v.(string)
+					ls := make([]string, len(v.([]interface{})))
+					for i, v := range v.([]interface{}) {
+						ls[i] = v.(string)
+					}
+					clientChoiceInt.ClientSelector.Expressions = ls
+
 				}
-				clientChoiceInt.ClientSelector.Expressions = ls
 
 			}
-
 		}
 
 	}
@@ -285,20 +292,22 @@ func resourceVolterraSecretPolicyRuleCreate(d *schema.ResourceData, meta interfa
 	//label_matcher
 	if v, ok := d.GetOk("label_matcher"); ok && !isIntfNil(v) {
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		labelMatcher := &ves_io_schema.LabelMatcherType{}
 		createSpec.LabelMatcher = labelMatcher
 		for _, set := range sl {
-			labelMatcherMapStrToI := set.(map[string]interface{})
+			if set != nil {
+				labelMatcherMapStrToI := set.(map[string]interface{})
 
-			if w, ok := labelMatcherMapStrToI["keys"]; ok && !isIntfNil(w) {
-				ls := make([]string, len(w.([]interface{})))
-				for i, v := range w.([]interface{}) {
-					ls[i] = v.(string)
+				if w, ok := labelMatcherMapStrToI["keys"]; ok && !isIntfNil(w) {
+					ls := make([]string, len(w.([]interface{})))
+					for i, v := range w.([]interface{}) {
+						ls[i] = v.(string)
+					}
+					labelMatcher.Keys = ls
 				}
-				labelMatcher.Keys = ls
-			}
 
+			}
 		}
 
 	}
@@ -428,30 +437,32 @@ func resourceVolterraSecretPolicyRuleUpdate(d *schema.ResourceData, meta interfa
 		clientChoiceInt.ClientNameMatcher = &ves_io_schema_policy.MatcherTypeBasic{}
 		updateSpec.ClientChoice = clientChoiceInt
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
+			if set != nil {
+				cs := set.(map[string]interface{})
 
-			if v, ok := cs["exact_values"]; ok && !isIntfNil(v) {
+				if v, ok := cs["exact_values"]; ok && !isIntfNil(v) {
 
-				ls := make([]string, len(v.([]interface{})))
-				for i, v := range v.([]interface{}) {
-					ls[i] = v.(string)
+					ls := make([]string, len(v.([]interface{})))
+					for i, v := range v.([]interface{}) {
+						ls[i] = v.(string)
+					}
+					clientChoiceInt.ClientNameMatcher.ExactValues = ls
+
 				}
-				clientChoiceInt.ClientNameMatcher.ExactValues = ls
+
+				if v, ok := cs["regex_values"]; ok && !isIntfNil(v) {
+
+					ls := make([]string, len(v.([]interface{})))
+					for i, v := range v.([]interface{}) {
+						ls[i] = v.(string)
+					}
+					clientChoiceInt.ClientNameMatcher.RegexValues = ls
+
+				}
 
 			}
-
-			if v, ok := cs["regex_values"]; ok && !isIntfNil(v) {
-
-				ls := make([]string, len(v.([]interface{})))
-				for i, v := range v.([]interface{}) {
-					ls[i] = v.(string)
-				}
-				clientChoiceInt.ClientNameMatcher.RegexValues = ls
-
-			}
-
 		}
 
 	}
@@ -463,40 +474,44 @@ func resourceVolterraSecretPolicyRuleUpdate(d *schema.ResourceData, meta interfa
 		clientChoiceInt.ClientSelector = &ves_io_schema.LabelSelectorType{}
 		updateSpec.ClientChoice = clientChoiceInt
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
+			if set != nil {
+				cs := set.(map[string]interface{})
 
-			if v, ok := cs["expressions"]; ok && !isIntfNil(v) {
+				if v, ok := cs["expressions"]; ok && !isIntfNil(v) {
 
-				ls := make([]string, len(v.([]interface{})))
-				for i, v := range v.([]interface{}) {
-					ls[i] = v.(string)
+					ls := make([]string, len(v.([]interface{})))
+					for i, v := range v.([]interface{}) {
+						ls[i] = v.(string)
+					}
+					clientChoiceInt.ClientSelector.Expressions = ls
+
 				}
-				clientChoiceInt.ClientSelector.Expressions = ls
 
 			}
-
 		}
 
 	}
 
 	if v, ok := d.GetOk("label_matcher"); ok && !isIntfNil(v) {
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		labelMatcher := &ves_io_schema.LabelMatcherType{}
 		updateSpec.LabelMatcher = labelMatcher
 		for _, set := range sl {
-			labelMatcherMapStrToI := set.(map[string]interface{})
+			if set != nil {
+				labelMatcherMapStrToI := set.(map[string]interface{})
 
-			if w, ok := labelMatcherMapStrToI["keys"]; ok && !isIntfNil(w) {
-				ls := make([]string, len(w.([]interface{})))
-				for i, v := range w.([]interface{}) {
-					ls[i] = v.(string)
+				if w, ok := labelMatcherMapStrToI["keys"]; ok && !isIntfNil(w) {
+					ls := make([]string, len(w.([]interface{})))
+					for i, v := range w.([]interface{}) {
+						ls[i] = v.(string)
+					}
+					labelMatcher.Keys = ls
 				}
-				labelMatcher.Keys = ls
-			}
 
+			}
 		}
 
 	}

@@ -1,9 +1,9 @@
 ---
 
 page_title: "Volterra: endpoint"
-description: "The endpoint allows CRUD of Endpoint resource on Volterra SaaS"
 
----
+description: "The endpoint allows CRUD of Endpoint resource on Volterra SaaS"
+-----------------------------------------------------------------------------
 
 Resource volterra_endpoint
 ==========================

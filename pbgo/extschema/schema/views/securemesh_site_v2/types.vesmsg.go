@@ -94,6 +94,18 @@ func (m *AWSProviderType) GetOrchestrationChoiceDRefInfo() ([]db.DRefInfo, error
 		}
 		return drInfos, err
 
+	case *AWSProviderType_Managed:
+
+		drInfos, err := m.GetManaged().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetManaged().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "managed." + dri.DRField
+		}
+		return drInfos, err
+
 	default:
 		return nil, nil
 	}
@@ -130,6 +142,17 @@ func (v *ValidateAWSProviderType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
+	case *AWSProviderType_Managed:
+		if fv, exists := v.FldValidators["orchestration_choice.managed"]; exists {
+			val := m.GetOrchestrationChoice().(*AWSProviderType_Managed).Managed
+			vOpts := append(opts,
+				db.WithValidateField("orchestration_choice"),
+				db.WithValidateField("managed"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
@@ -141,6 +164,7 @@ var DefaultAWSProviderTypeValidator = func() *ValidateAWSProviderType {
 	v := &ValidateAWSProviderType{FldValidators: map[string]db.ValidatorFunc{}}
 
 	v.FldValidators["orchestration_choice.not_managed"] = NodeListValidator().Validate
+	v.FldValidators["orchestration_choice.managed"] = AWSManagedModeValidator().Validate
 
 	return v
 }()
@@ -395,6 +419,24 @@ func (m *CreateSpecType) ToJSON() (string, error) {
 
 func (m *CreateSpecType) ToYAML() (string, error) {
 	return codec.ToYAML(m)
+}
+
+// Redact squashes sensitive info in m (in-place)
+func (m *CreateSpecType) Redact(ctx context.Context) error {
+	// clear fields with confidential option set (at message or field level)
+	if m == nil {
+		return nil
+	}
+
+	if err := m.GetAdminUserCredentials().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting CreateSpecType.admin_user_credentials")
+	}
+
+	if err := m.GetCustomProxy().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting CreateSpecType.custom_proxy")
+	}
+
+	return nil
 }
 
 func (m *CreateSpecType) DeepCopy() *CreateSpecType {
@@ -717,6 +759,30 @@ func (m *CreateSpecType) GetProviderChoiceDRefInfo() ([]db.DRefInfo, error) {
 		}
 		return drInfos, err
 
+	case *CreateSpecType_Openstack:
+
+		drInfos, err := m.GetOpenstack().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetOpenstack().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "openstack." + dri.DRField
+		}
+		return drInfos, err
+
+	case *CreateSpecType_Nutanix:
+
+		drInfos, err := m.GetNutanix().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetNutanix().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "nutanix." + dri.DRField
+		}
+		return drInfos, err
+
 	default:
 		return nil, nil
 	}
@@ -886,6 +952,15 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 		return nil
 	}
 
+	if fv, exists := v.FldValidators["admin_user_credentials"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("admin_user_credentials"))
+		if err := fv(ctx, m.GetAdminUserCredentials(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["blocked_services_choice"]; exists {
 		val := m.GetBlockedServicesChoice()
 		vOpts := append(opts,
@@ -914,6 +989,41 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 			vOpts := append(opts,
 				db.WithValidateField("blocked_services_choice"),
 				db.WithValidateField("blocked_services"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["dns_ntp_config"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("dns_ntp_config"))
+		if err := fv(ctx, m.GetDnsNtpConfig(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	switch m.GetEnterpriseProxyChoice().(type) {
+	case *CreateSpecType_F5Proxy:
+		if fv, exists := v.FldValidators["enterprise_proxy_choice.f5_proxy"]; exists {
+			val := m.GetEnterpriseProxyChoice().(*CreateSpecType_F5Proxy).F5Proxy
+			vOpts := append(opts,
+				db.WithValidateField("enterprise_proxy_choice"),
+				db.WithValidateField("f5_proxy"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CreateSpecType_CustomProxy:
+		if fv, exists := v.FldValidators["enterprise_proxy_choice.custom_proxy"]; exists {
+			val := m.GetEnterpriseProxyChoice().(*CreateSpecType_CustomProxy).CustomProxy
+			vOpts := append(opts,
+				db.WithValidateField("enterprise_proxy_choice"),
+				db.WithValidateField("custom_proxy"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
@@ -1072,6 +1182,15 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["proactive_monitoring"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("proactive_monitoring"))
+		if err := fv(ctx, m.GetProactiveMonitoring(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["provider_choice"]; exists {
 		val := m.GetProviderChoice()
 		vOpts := append(opts,
@@ -1166,6 +1285,28 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 			vOpts := append(opts,
 				db.WithValidateField("provider_choice"),
 				db.WithValidateField("oci"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CreateSpecType_Openstack:
+		if fv, exists := v.FldValidators["provider_choice.openstack"]; exists {
+			val := m.GetProviderChoice().(*CreateSpecType_Openstack).Openstack
+			vOpts := append(opts,
+				db.WithValidateField("provider_choice"),
+				db.WithValidateField("openstack"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CreateSpecType_Nutanix:
+		if fv, exists := v.FldValidators["provider_choice.nutanix"]; exists {
+			val := m.GetProviderChoice().(*CreateSpecType_Nutanix).Nutanix
+			vOpts := append(opts,
+				db.WithValidateField("provider_choice"),
+				db.WithValidateField("nutanix"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
@@ -1344,6 +1485,8 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 
 	v.FldValidators["blocked_services_choice.blocked_services"] = ves_io_schema_fleet.BlockedServicesListTypeValidator().Validate
 
+	v.FldValidators["enterprise_proxy_choice.custom_proxy"] = CustomProxyValidator().Validate
+
 	v.FldValidators["forward_proxy_choice.active_forward_proxy_policies"] = ves_io_schema_network_firewall.ActiveForwardProxyPoliciesTypeValidator().Validate
 
 	v.FldValidators["logs_receiver_choice.log_receiver"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
@@ -1358,6 +1501,8 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v.FldValidators["provider_choice.rseries"] = RSeriesProviderTypeValidator().Validate
 	v.FldValidators["provider_choice.baremetal"] = BaremetalProviderTypeValidator().Validate
 	v.FldValidators["provider_choice.oci"] = OCIProviderTypeValidator().Validate
+	v.FldValidators["provider_choice.openstack"] = OpenstackProviderTypeValidator().Validate
+	v.FldValidators["provider_choice.nutanix"] = NutanixProviderTypeValidator().Validate
 
 	v.FldValidators["s2s_connectivity_sli_choice.dc_cluster_group_sli"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
@@ -1376,11 +1521,618 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 
 	v.FldValidators["re_select"] = ves_io_schema_views.RegionalEdgeSelectionValidator().Validate
 
+	v.FldValidators["admin_user_credentials"] = ves_io_schema_views.AdminUserCredentialsTypeValidator().Validate
+
+	v.FldValidators["dns_ntp_config"] = DNSNTPServerConfigValidator().Validate
+
 	return v
 }()
 
 func CreateSpecTypeValidator() db.Validator {
 	return DefaultCreateSpecTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *CustomDNSSettings) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *CustomDNSSettings) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *CustomDNSSettings) DeepCopy() *CustomDNSSettings {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &CustomDNSSettings{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *CustomDNSSettings) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *CustomDNSSettings) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return CustomDNSSettingsValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateCustomDNSSettings struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateCustomDNSSettings) DnsServersValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepStringItemRules(rules)
+	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Item ValidationRuleHandler for dns_servers")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []string, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for dns_servers")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]string)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []string, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal := fmt.Sprintf("%v", elem)
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated dns_servers")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items dns_servers")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateCustomDNSSettings) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*CustomDNSSettings)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *CustomDNSSettings got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["dns_servers"]; exists {
+		vOpts := append(opts, db.WithValidateField("dns_servers"))
+		if err := fv(ctx, m.GetDnsServers(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultCustomDNSSettingsValidator = func() *ValidateCustomDNSSettings {
+	v := &ValidateCustomDNSSettings{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhDnsServers := v.DnsServersValidationRuleHandler
+	rulesDnsServers := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "64",
+		"ves.io.schema.rules.repeated.unique":    "true",
+	}
+	vFn, err = vrhDnsServers(rulesDnsServers)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CustomDNSSettings.dns_servers: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["dns_servers"] = vFn
+
+	return v
+}()
+
+func CustomDNSSettingsValidator() db.Validator {
+	return DefaultCustomDNSSettingsValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *CustomNTPSettings) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *CustomNTPSettings) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *CustomNTPSettings) DeepCopy() *CustomNTPSettings {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &CustomNTPSettings{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *CustomNTPSettings) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *CustomNTPSettings) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return CustomNTPSettingsValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateCustomNTPSettings struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateCustomNTPSettings) NtpServersValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepStringItemRules(rules)
+	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Item ValidationRuleHandler for ntp_servers")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []string, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for ntp_servers")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]string)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []string, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal := fmt.Sprintf("%v", elem)
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated ntp_servers")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items ntp_servers")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateCustomNTPSettings) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*CustomNTPSettings)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *CustomNTPSettings got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["ntp_servers"]; exists {
+		vOpts := append(opts, db.WithValidateField("ntp_servers"))
+		if err := fv(ctx, m.GetNtpServers(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultCustomNTPSettingsValidator = func() *ValidateCustomNTPSettings {
+	v := &ValidateCustomNTPSettings{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhNtpServers := v.NtpServersValidationRuleHandler
+	rulesNtpServers := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "64",
+		"ves.io.schema.rules.repeated.unique":    "true",
+	}
+	vFn, err = vrhNtpServers(rulesNtpServers)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CustomNTPSettings.ntp_servers: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["ntp_servers"] = vFn
+
+	return v
+}()
+
+func CustomNTPSettingsValidator() db.Validator {
+	return DefaultCustomNTPSettingsValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *CustomProxy) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *CustomProxy) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+// Redact squashes sensitive info in m (in-place)
+func (m *CustomProxy) Redact(ctx context.Context) error {
+	// clear fields with confidential option set (at message or field level)
+	if m == nil {
+		return nil
+	}
+
+	if err := m.GetPassword().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting CustomProxy.password")
+	}
+
+	return nil
+}
+
+func (m *CustomProxy) DeepCopy() *CustomProxy {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &CustomProxy{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *CustomProxy) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *CustomProxy) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return CustomProxyValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateCustomProxy struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateCustomProxy) ProxyIpAddressValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for proxy_ip_address")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateCustomProxy) ProxyPortValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for proxy_port")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateCustomProxy) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*CustomProxy)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *CustomProxy got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["password"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("password"))
+		if err := fv(ctx, m.GetPassword(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["proxy_ip_address"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("proxy_ip_address"))
+		if err := fv(ctx, m.GetProxyIpAddress(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["proxy_port"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("proxy_port"))
+		if err := fv(ctx, m.GetProxyPort(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	switch m.GetUseForReTunnelChoice().(type) {
+	case *CustomProxy_DisableReTunnel:
+		if fv, exists := v.FldValidators["use_for_re_tunnel_choice.disable_re_tunnel"]; exists {
+			val := m.GetUseForReTunnelChoice().(*CustomProxy_DisableReTunnel).DisableReTunnel
+			vOpts := append(opts,
+				db.WithValidateField("use_for_re_tunnel_choice"),
+				db.WithValidateField("disable_re_tunnel"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CustomProxy_EnableReTunnel:
+		if fv, exists := v.FldValidators["use_for_re_tunnel_choice.enable_re_tunnel"]; exists {
+			val := m.GetUseForReTunnelChoice().(*CustomProxy_EnableReTunnel).EnableReTunnel
+			vOpts := append(opts,
+				db.WithValidateField("use_for_re_tunnel_choice"),
+				db.WithValidateField("enable_re_tunnel"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["username"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("username"))
+		if err := fv(ctx, m.GetUsername(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultCustomProxyValidator = func() *ValidateCustomProxy {
+	v := &ValidateCustomProxy{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhProxyIpAddress := v.ProxyIpAddressValidationRuleHandler
+	rulesProxyIpAddress := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.ipv4":      "true",
+	}
+	vFn, err = vrhProxyIpAddress(rulesProxyIpAddress)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CustomProxy.proxy_ip_address: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["proxy_ip_address"] = vFn
+
+	vrhProxyPort := v.ProxyPortValidationRuleHandler
+	rulesProxyPort := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.uint32.gte":       "0",
+		"ves.io.schema.rules.uint32.lte":       "65535",
+	}
+	vFn, err = vrhProxyPort(rulesProxyPort)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CustomProxy.proxy_port: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["proxy_port"] = vFn
+
+	v.FldValidators["password"] = ves_io_schema.SecretTypeValidator().Validate
+
+	return v
+}()
+
+func CustomProxyValidator() db.Validator {
+	return DefaultCustomProxyValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *DNSNTPServerConfig) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *DNSNTPServerConfig) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *DNSNTPServerConfig) DeepCopy() *DNSNTPServerConfig {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &DNSNTPServerConfig{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *DNSNTPServerConfig) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *DNSNTPServerConfig) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return DNSNTPServerConfigValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateDNSNTPServerConfig struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateDNSNTPServerConfig) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*DNSNTPServerConfig)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *DNSNTPServerConfig got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	switch m.GetDnsServerChoice().(type) {
+	case *DNSNTPServerConfig_F5DnsDefault:
+		if fv, exists := v.FldValidators["dns_server_choice.f5_dns_default"]; exists {
+			val := m.GetDnsServerChoice().(*DNSNTPServerConfig_F5DnsDefault).F5DnsDefault
+			vOpts := append(opts,
+				db.WithValidateField("dns_server_choice"),
+				db.WithValidateField("f5_dns_default"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *DNSNTPServerConfig_CustomDns:
+		if fv, exists := v.FldValidators["dns_server_choice.custom_dns"]; exists {
+			val := m.GetDnsServerChoice().(*DNSNTPServerConfig_CustomDns).CustomDns
+			vOpts := append(opts,
+				db.WithValidateField("dns_server_choice"),
+				db.WithValidateField("custom_dns"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	switch m.GetNtpServerChoice().(type) {
+	case *DNSNTPServerConfig_F5NtpDefault:
+		if fv, exists := v.FldValidators["ntp_server_choice.f5_ntp_default"]; exists {
+			val := m.GetNtpServerChoice().(*DNSNTPServerConfig_F5NtpDefault).F5NtpDefault
+			vOpts := append(opts,
+				db.WithValidateField("ntp_server_choice"),
+				db.WithValidateField("f5_ntp_default"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *DNSNTPServerConfig_CustomNtp:
+		if fv, exists := v.FldValidators["ntp_server_choice.custom_ntp"]; exists {
+			val := m.GetNtpServerChoice().(*DNSNTPServerConfig_CustomNtp).CustomNtp
+			vOpts := append(opts,
+				db.WithValidateField("ntp_server_choice"),
+				db.WithValidateField("custom_ntp"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultDNSNTPServerConfigValidator = func() *ValidateDNSNTPServerConfig {
+	v := &ValidateDNSNTPServerConfig{FldValidators: map[string]db.ValidatorFunc{}}
+
+	v.FldValidators["dns_server_choice.custom_dns"] = CustomDNSSettingsValidator().Validate
+
+	v.FldValidators["ntp_server_choice.custom_ntp"] = CustomNTPSettingsValidator().Validate
+
+	return v
+}()
+
+func DNSNTPServerConfigValidator() db.Validator {
+	return DefaultDNSNTPServerConfigValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -1649,6 +2401,24 @@ func (m *GetSpecType) ToJSON() (string, error) {
 
 func (m *GetSpecType) ToYAML() (string, error) {
 	return codec.ToYAML(m)
+}
+
+// Redact squashes sensitive info in m (in-place)
+func (m *GetSpecType) Redact(ctx context.Context) error {
+	// clear fields with confidential option set (at message or field level)
+	if m == nil {
+		return nil
+	}
+
+	if err := m.GetAdminUserCredentials().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting GetSpecType.admin_user_credentials")
+	}
+
+	if err := m.GetCustomProxy().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting GetSpecType.custom_proxy")
+	}
+
+	return nil
 }
 
 func (m *GetSpecType) DeepCopy() *GetSpecType {
@@ -1971,6 +2741,30 @@ func (m *GetSpecType) GetProviderChoiceDRefInfo() ([]db.DRefInfo, error) {
 		}
 		return drInfos, err
 
+	case *GetSpecType_Openstack:
+
+		drInfos, err := m.GetOpenstack().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetOpenstack().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "openstack." + dri.DRField
+		}
+		return drInfos, err
+
+	case *GetSpecType_Nutanix:
+
+		drInfos, err := m.GetNutanix().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetNutanix().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "nutanix." + dri.DRField
+		}
+		return drInfos, err
+
 	default:
 		return nil, nil
 	}
@@ -2160,6 +2954,15 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 		return nil
 	}
 
+	if fv, exists := v.FldValidators["admin_user_credentials"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("admin_user_credentials"))
+		if err := fv(ctx, m.GetAdminUserCredentials(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["blocked_services_choice"]; exists {
 		val := m.GetBlockedServicesChoice()
 		vOpts := append(opts,
@@ -2188,6 +2991,41 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 			vOpts := append(opts,
 				db.WithValidateField("blocked_services_choice"),
 				db.WithValidateField("blocked_services"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["dns_ntp_config"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("dns_ntp_config"))
+		if err := fv(ctx, m.GetDnsNtpConfig(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	switch m.GetEnterpriseProxyChoice().(type) {
+	case *GetSpecType_F5Proxy:
+		if fv, exists := v.FldValidators["enterprise_proxy_choice.f5_proxy"]; exists {
+			val := m.GetEnterpriseProxyChoice().(*GetSpecType_F5Proxy).F5Proxy
+			vOpts := append(opts,
+				db.WithValidateField("enterprise_proxy_choice"),
+				db.WithValidateField("f5_proxy"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GetSpecType_CustomProxy:
+		if fv, exists := v.FldValidators["enterprise_proxy_choice.custom_proxy"]; exists {
+			val := m.GetEnterpriseProxyChoice().(*GetSpecType_CustomProxy).CustomProxy
+			vOpts := append(opts,
+				db.WithValidateField("enterprise_proxy_choice"),
+				db.WithValidateField("custom_proxy"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
@@ -2355,6 +3193,15 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
+	if fv, exists := v.FldValidators["proactive_monitoring"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("proactive_monitoring"))
+		if err := fv(ctx, m.GetProactiveMonitoring(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["provider_choice"]; exists {
 		val := m.GetProviderChoice()
 		vOpts := append(opts,
@@ -2449,6 +3296,28 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 			vOpts := append(opts,
 				db.WithValidateField("provider_choice"),
 				db.WithValidateField("oci"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GetSpecType_Openstack:
+		if fv, exists := v.FldValidators["provider_choice.openstack"]; exists {
+			val := m.GetProviderChoice().(*GetSpecType_Openstack).Openstack
+			vOpts := append(opts,
+				db.WithValidateField("provider_choice"),
+				db.WithValidateField("openstack"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GetSpecType_Nutanix:
+		if fv, exists := v.FldValidators["provider_choice.nutanix"]; exists {
+			val := m.GetProviderChoice().(*GetSpecType_Nutanix).Nutanix
+			vOpts := append(opts,
+				db.WithValidateField("provider_choice"),
+				db.WithValidateField("nutanix"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
@@ -2667,6 +3536,8 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 
 	v.FldValidators["blocked_services_choice.blocked_services"] = ves_io_schema_fleet.BlockedServicesListTypeValidator().Validate
 
+	v.FldValidators["enterprise_proxy_choice.custom_proxy"] = CustomProxyValidator().Validate
+
 	v.FldValidators["forward_proxy_choice.active_forward_proxy_policies"] = ves_io_schema_network_firewall.ActiveForwardProxyPoliciesTypeValidator().Validate
 
 	v.FldValidators["logs_receiver_choice.log_receiver"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
@@ -2681,6 +3552,8 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v.FldValidators["provider_choice.rseries"] = RSeriesProviderTypeValidator().Validate
 	v.FldValidators["provider_choice.baremetal"] = BaremetalProviderTypeValidator().Validate
 	v.FldValidators["provider_choice.oci"] = OCIProviderTypeValidator().Validate
+	v.FldValidators["provider_choice.openstack"] = OpenstackProviderTypeValidator().Validate
+	v.FldValidators["provider_choice.nutanix"] = NutanixProviderTypeValidator().Validate
 
 	v.FldValidators["s2s_connectivity_sli_choice.dc_cluster_group_sli"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
@@ -2699,6 +3572,10 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 
 	v.FldValidators["re_select"] = ves_io_schema_views.RegionalEdgeSelectionValidator().Validate
 
+	v.FldValidators["admin_user_credentials"] = ves_io_schema_views.AdminUserCredentialsTypeValidator().Validate
+
+	v.FldValidators["dns_ntp_config"] = DNSNTPServerConfigValidator().Validate
+
 	return v
 }()
 
@@ -2714,6 +3591,24 @@ func (m *GlobalSpecType) ToJSON() (string, error) {
 
 func (m *GlobalSpecType) ToYAML() (string, error) {
 	return codec.ToYAML(m)
+}
+
+// Redact squashes sensitive info in m (in-place)
+func (m *GlobalSpecType) Redact(ctx context.Context) error {
+	// clear fields with confidential option set (at message or field level)
+	if m == nil {
+		return nil
+	}
+
+	if err := m.GetAdminUserCredentials().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting GlobalSpecType.admin_user_credentials")
+	}
+
+	if err := m.GetCustomProxy().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting GlobalSpecType.custom_proxy")
+	}
+
+	return nil
 }
 
 func (m *GlobalSpecType) DeepCopy() *GlobalSpecType {
@@ -3042,6 +3937,30 @@ func (m *GlobalSpecType) GetProviderChoiceDRefInfo() ([]db.DRefInfo, error) {
 		}
 		return drInfos, err
 
+	case *GlobalSpecType_Openstack:
+
+		drInfos, err := m.GetOpenstack().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetOpenstack().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "openstack." + dri.DRField
+		}
+		return drInfos, err
+
+	case *GlobalSpecType_Nutanix:
+
+		drInfos, err := m.GetNutanix().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetNutanix().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "nutanix." + dri.DRField
+		}
+		return drInfos, err
+
 	default:
 		return nil, nil
 	}
@@ -3299,6 +4218,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["admin_user_credentials"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("admin_user_credentials"))
+		if err := fv(ctx, m.GetAdminUserCredentials(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["blocked_services_choice"]; exists {
 		val := m.GetBlockedServicesChoice()
 		vOpts := append(opts,
@@ -3340,6 +4268,41 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 		vOpts := append(opts, db.WithValidateField("coordinates"))
 		if err := fv(ctx, m.GetCoordinates(), vOpts...); err != nil {
 			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["dns_ntp_config"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("dns_ntp_config"))
+		if err := fv(ctx, m.GetDnsNtpConfig(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	switch m.GetEnterpriseProxyChoice().(type) {
+	case *GlobalSpecType_F5Proxy:
+		if fv, exists := v.FldValidators["enterprise_proxy_choice.f5_proxy"]; exists {
+			val := m.GetEnterpriseProxyChoice().(*GlobalSpecType_F5Proxy).F5Proxy
+			vOpts := append(opts,
+				db.WithValidateField("enterprise_proxy_choice"),
+				db.WithValidateField("f5_proxy"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_CustomProxy:
+		if fv, exists := v.FldValidators["enterprise_proxy_choice.custom_proxy"]; exists {
+			val := m.GetEnterpriseProxyChoice().(*GlobalSpecType_CustomProxy).CustomProxy
+			vOpts := append(opts,
+				db.WithValidateField("enterprise_proxy_choice"),
+				db.WithValidateField("custom_proxy"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
 		}
 
 	}
@@ -3503,6 +4466,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["proactive_monitoring"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("proactive_monitoring"))
+		if err := fv(ctx, m.GetProactiveMonitoring(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["provider_choice"]; exists {
 		val := m.GetProviderChoice()
 		vOpts := append(opts,
@@ -3597,6 +4569,28 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 			vOpts := append(opts,
 				db.WithValidateField("provider_choice"),
 				db.WithValidateField("oci"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_Openstack:
+		if fv, exists := v.FldValidators["provider_choice.openstack"]; exists {
+			val := m.GetProviderChoice().(*GlobalSpecType_Openstack).Openstack
+			vOpts := append(opts,
+				db.WithValidateField("provider_choice"),
+				db.WithValidateField("openstack"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_Nutanix:
+		if fv, exists := v.FldValidators["provider_choice.nutanix"]; exists {
+			val := m.GetProviderChoice().(*GlobalSpecType_Nutanix).Nutanix
+			vOpts := append(opts,
+				db.WithValidateField("provider_choice"),
+				db.WithValidateField("nutanix"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
@@ -3835,6 +4829,8 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 	v.FldValidators["blocked_services_choice.blocked_services"] = ves_io_schema_fleet.BlockedServicesListTypeValidator().Validate
 
+	v.FldValidators["enterprise_proxy_choice.custom_proxy"] = CustomProxyValidator().Validate
+
 	v.FldValidators["forward_proxy_choice.active_forward_proxy_policies"] = ves_io_schema_network_firewall.ActiveForwardProxyPoliciesTypeValidator().Validate
 
 	v.FldValidators["logs_receiver_choice.log_receiver"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
@@ -3849,6 +4845,8 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v.FldValidators["provider_choice.rseries"] = RSeriesProviderTypeValidator().Validate
 	v.FldValidators["provider_choice.baremetal"] = BaremetalProviderTypeValidator().Validate
 	v.FldValidators["provider_choice.oci"] = OCIProviderTypeValidator().Validate
+	v.FldValidators["provider_choice.openstack"] = OpenstackProviderTypeValidator().Validate
+	v.FldValidators["provider_choice.nutanix"] = NutanixProviderTypeValidator().Validate
 
 	v.FldValidators["s2s_connectivity_sli_choice.dc_cluster_group_sli"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
@@ -3866,6 +4864,10 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v.FldValidators["local_vrf"] = LocalVRFSettingTypeValidator().Validate
 
 	v.FldValidators["re_select"] = ves_io_schema_views.RegionalEdgeSelectionValidator().Validate
+
+	v.FldValidators["admin_user_credentials"] = ves_io_schema_views.AdminUserCredentialsTypeValidator().Validate
+
+	v.FldValidators["dns_ntp_config"] = DNSNTPServerConfigValidator().Validate
 
 	v.FldValidators["coordinates"] = ves_io_schema_site.CoordinatesValidator().Validate
 
@@ -5002,194 +6004,6 @@ func LocalVRFSettingTypeValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
-func (m *NetworkSelectType) ToJSON() (string, error) {
-	return codec.ToJSON(m)
-}
-
-func (m *NetworkSelectType) ToYAML() (string, error) {
-	return codec.ToYAML(m)
-}
-
-func (m *NetworkSelectType) DeepCopy() *NetworkSelectType {
-	if m == nil {
-		return nil
-	}
-	ser, err := m.Marshal()
-	if err != nil {
-		return nil
-	}
-	c := &NetworkSelectType{}
-	err = c.Unmarshal(ser)
-	if err != nil {
-		return nil
-	}
-	return c
-}
-
-func (m *NetworkSelectType) DeepCopyProto() proto.Message {
-	if m == nil {
-		return nil
-	}
-	return m.DeepCopy()
-}
-
-func (m *NetworkSelectType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
-	return NetworkSelectTypeValidator().Validate(ctx, m, opts...)
-}
-
-func (m *NetworkSelectType) GetDRefInfo() ([]db.DRefInfo, error) {
-	if m == nil {
-		return nil, nil
-	}
-
-	return m.GetNetworkChoiceDRefInfo()
-
-}
-
-func (m *NetworkSelectType) GetNetworkChoiceDRefInfo() ([]db.DRefInfo, error) {
-	switch m.GetNetworkChoice().(type) {
-	case *NetworkSelectType_SiteLocalNetwork:
-
-		return nil, nil
-
-	case *NetworkSelectType_SiteLocalInsideNetwork:
-
-		return nil, nil
-
-	case *NetworkSelectType_SegmentNetwork:
-
-		vref := m.GetSegmentNetwork()
-		if vref == nil {
-			return nil, nil
-		}
-		vdRef := db.NewDirectRefForView(vref)
-		vdRef.SetKind("segment.Object")
-		dri := db.DRefInfo{
-			RefdType:   "segment.Object",
-			RefdTenant: vref.Tenant,
-			RefdNS:     vref.Namespace,
-			RefdName:   vref.Name,
-			DRField:    "segment_network",
-			Ref:        vdRef,
-		}
-		return []db.DRefInfo{dri}, nil
-
-	default:
-		return nil, nil
-	}
-}
-
-// GetNetworkChoiceDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
-func (m *NetworkSelectType) GetNetworkChoiceDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
-	var entries []db.Entry
-
-	switch m.GetNetworkChoice().(type) {
-	case *NetworkSelectType_SiteLocalNetwork:
-
-	case *NetworkSelectType_SiteLocalInsideNetwork:
-
-	case *NetworkSelectType_SegmentNetwork:
-		refdType, err := d.TypeForEntryKind("", "", "segment.Object")
-		if err != nil {
-			return nil, errors.Wrap(err, "Cannot find type for kind: segment")
-		}
-
-		vref := m.GetSegmentNetwork()
-		if vref == nil {
-			return nil, nil
-		}
-		ref := &ves_io_schema.ObjectRefType{
-			Kind:      "segment.Object",
-			Tenant:    vref.Tenant,
-			Namespace: vref.Namespace,
-			Name:      vref.Name,
-		}
-		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
-		if err != nil {
-			return nil, errors.Wrap(err, "Getting referred entry")
-		}
-		if refdEnt != nil {
-			entries = append(entries, refdEnt)
-		}
-
-	}
-
-	return entries, nil
-}
-
-type ValidateNetworkSelectType struct {
-	FldValidators map[string]db.ValidatorFunc
-}
-
-func (v *ValidateNetworkSelectType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
-	m, ok := pm.(*NetworkSelectType)
-	if !ok {
-		switch t := pm.(type) {
-		case nil:
-			return nil
-		default:
-			return fmt.Errorf("Expected type *NetworkSelectType got type %s", t)
-		}
-	}
-	if m == nil {
-		return nil
-	}
-
-	switch m.GetNetworkChoice().(type) {
-	case *NetworkSelectType_SiteLocalNetwork:
-		if fv, exists := v.FldValidators["network_choice.site_local_network"]; exists {
-			val := m.GetNetworkChoice().(*NetworkSelectType_SiteLocalNetwork).SiteLocalNetwork
-			vOpts := append(opts,
-				db.WithValidateField("network_choice"),
-				db.WithValidateField("site_local_network"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *NetworkSelectType_SiteLocalInsideNetwork:
-		if fv, exists := v.FldValidators["network_choice.site_local_inside_network"]; exists {
-			val := m.GetNetworkChoice().(*NetworkSelectType_SiteLocalInsideNetwork).SiteLocalInsideNetwork
-			vOpts := append(opts,
-				db.WithValidateField("network_choice"),
-				db.WithValidateField("site_local_inside_network"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *NetworkSelectType_SegmentNetwork:
-		if fv, exists := v.FldValidators["network_choice.segment_network"]; exists {
-			val := m.GetNetworkChoice().(*NetworkSelectType_SegmentNetwork).SegmentNetwork
-			vOpts := append(opts,
-				db.WithValidateField("network_choice"),
-				db.WithValidateField("segment_network"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-
-	}
-
-	return nil
-}
-
-// Well-known symbol for default validator implementation
-var DefaultNetworkSelectTypeValidator = func() *ValidateNetworkSelectType {
-	v := &ValidateNetworkSelectType{FldValidators: map[string]db.ValidatorFunc{}}
-
-	v.FldValidators["network_choice.segment_network"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
-
-	return v
-}()
-
-func NetworkSelectTypeValidator() db.Validator {
-	return DefaultNetworkSelectTypeValidator
-}
-
-// augmented methods on protoc/std generated struct
-
 func (m *Node) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -5632,6 +6446,125 @@ func NodeListValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *NutanixProviderType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *NutanixProviderType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *NutanixProviderType) DeepCopy() *NutanixProviderType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &NutanixProviderType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *NutanixProviderType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *NutanixProviderType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return NutanixProviderTypeValidator().Validate(ctx, m, opts...)
+}
+
+func (m *NutanixProviderType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetOrchestrationChoiceDRefInfo()
+
+}
+
+// GetDRefInfo for the field's type
+func (m *NutanixProviderType) GetOrchestrationChoiceDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetOrchestrationChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetOrchestrationChoice().(type) {
+	case *NutanixProviderType_NotManaged:
+
+		drInfos, err := m.GetNotManaged().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetNotManaged().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "not_managed." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
+	}
+
+}
+
+type ValidateNutanixProviderType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateNutanixProviderType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*NutanixProviderType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *NutanixProviderType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	switch m.GetOrchestrationChoice().(type) {
+	case *NutanixProviderType_NotManaged:
+		if fv, exists := v.FldValidators["orchestration_choice.not_managed"]; exists {
+			val := m.GetOrchestrationChoice().(*NutanixProviderType_NotManaged).NotManaged
+			vOpts := append(opts,
+				db.WithValidateField("orchestration_choice"),
+				db.WithValidateField("not_managed"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultNutanixProviderTypeValidator = func() *ValidateNutanixProviderType {
+	v := &ValidateNutanixProviderType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	v.FldValidators["orchestration_choice.not_managed"] = NodeListValidator().Validate
+
+	return v
+}()
+
+func NutanixProviderTypeValidator() db.Validator {
+	return DefaultNutanixProviderTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *OCIProviderType) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -5747,6 +6680,125 @@ var DefaultOCIProviderTypeValidator = func() *ValidateOCIProviderType {
 
 func OCIProviderTypeValidator() db.Validator {
 	return DefaultOCIProviderTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *OpenstackProviderType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *OpenstackProviderType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *OpenstackProviderType) DeepCopy() *OpenstackProviderType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &OpenstackProviderType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *OpenstackProviderType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *OpenstackProviderType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return OpenstackProviderTypeValidator().Validate(ctx, m, opts...)
+}
+
+func (m *OpenstackProviderType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetOrchestrationChoiceDRefInfo()
+
+}
+
+// GetDRefInfo for the field's type
+func (m *OpenstackProviderType) GetOrchestrationChoiceDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetOrchestrationChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetOrchestrationChoice().(type) {
+	case *OpenstackProviderType_NotManaged:
+
+		drInfos, err := m.GetNotManaged().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetNotManaged().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "not_managed." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
+	}
+
+}
+
+type ValidateOpenstackProviderType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateOpenstackProviderType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*OpenstackProviderType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *OpenstackProviderType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	switch m.GetOrchestrationChoice().(type) {
+	case *OpenstackProviderType_NotManaged:
+		if fv, exists := v.FldValidators["orchestration_choice.not_managed"]; exists {
+			val := m.GetOrchestrationChoice().(*OpenstackProviderType_NotManaged).NotManaged
+			vOpts := append(opts,
+				db.WithValidateField("orchestration_choice"),
+				db.WithValidateField("not_managed"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultOpenstackProviderTypeValidator = func() *ValidateOpenstackProviderType {
+	v := &ValidateOpenstackProviderType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	v.FldValidators["orchestration_choice.not_managed"] = NodeListValidator().Validate
+
+	return v
+}()
+
+func OpenstackProviderTypeValidator() db.Validator {
+	return DefaultOpenstackProviderTypeValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -5876,6 +6928,24 @@ func (m *ReplaceSpecType) ToJSON() (string, error) {
 
 func (m *ReplaceSpecType) ToYAML() (string, error) {
 	return codec.ToYAML(m)
+}
+
+// Redact squashes sensitive info in m (in-place)
+func (m *ReplaceSpecType) Redact(ctx context.Context) error {
+	// clear fields with confidential option set (at message or field level)
+	if m == nil {
+		return nil
+	}
+
+	if err := m.GetAdminUserCredentials().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting ReplaceSpecType.admin_user_credentials")
+	}
+
+	if err := m.GetCustomProxy().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting ReplaceSpecType.custom_proxy")
+	}
+
+	return nil
 }
 
 func (m *ReplaceSpecType) DeepCopy() *ReplaceSpecType {
@@ -6198,6 +7268,30 @@ func (m *ReplaceSpecType) GetProviderChoiceDRefInfo() ([]db.DRefInfo, error) {
 		}
 		return drInfos, err
 
+	case *ReplaceSpecType_Openstack:
+
+		drInfos, err := m.GetOpenstack().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetOpenstack().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "openstack." + dri.DRField
+		}
+		return drInfos, err
+
+	case *ReplaceSpecType_Nutanix:
+
+		drInfos, err := m.GetNutanix().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetNutanix().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "nutanix." + dri.DRField
+		}
+		return drInfos, err
+
 	default:
 		return nil, nil
 	}
@@ -6367,6 +7461,15 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 		return nil
 	}
 
+	if fv, exists := v.FldValidators["admin_user_credentials"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("admin_user_credentials"))
+		if err := fv(ctx, m.GetAdminUserCredentials(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["blocked_services_choice"]; exists {
 		val := m.GetBlockedServicesChoice()
 		vOpts := append(opts,
@@ -6395,6 +7498,41 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 			vOpts := append(opts,
 				db.WithValidateField("blocked_services_choice"),
 				db.WithValidateField("blocked_services"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["dns_ntp_config"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("dns_ntp_config"))
+		if err := fv(ctx, m.GetDnsNtpConfig(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	switch m.GetEnterpriseProxyChoice().(type) {
+	case *ReplaceSpecType_F5Proxy:
+		if fv, exists := v.FldValidators["enterprise_proxy_choice.f5_proxy"]; exists {
+			val := m.GetEnterpriseProxyChoice().(*ReplaceSpecType_F5Proxy).F5Proxy
+			vOpts := append(opts,
+				db.WithValidateField("enterprise_proxy_choice"),
+				db.WithValidateField("f5_proxy"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ReplaceSpecType_CustomProxy:
+		if fv, exists := v.FldValidators["enterprise_proxy_choice.custom_proxy"]; exists {
+			val := m.GetEnterpriseProxyChoice().(*ReplaceSpecType_CustomProxy).CustomProxy
+			vOpts := append(opts,
+				db.WithValidateField("enterprise_proxy_choice"),
+				db.WithValidateField("custom_proxy"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
@@ -6553,6 +7691,15 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 
 	}
 
+	if fv, exists := v.FldValidators["proactive_monitoring"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("proactive_monitoring"))
+		if err := fv(ctx, m.GetProactiveMonitoring(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["provider_choice"]; exists {
 		val := m.GetProviderChoice()
 		vOpts := append(opts,
@@ -6647,6 +7794,28 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 			vOpts := append(opts,
 				db.WithValidateField("provider_choice"),
 				db.WithValidateField("oci"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ReplaceSpecType_Openstack:
+		if fv, exists := v.FldValidators["provider_choice.openstack"]; exists {
+			val := m.GetProviderChoice().(*ReplaceSpecType_Openstack).Openstack
+			vOpts := append(opts,
+				db.WithValidateField("provider_choice"),
+				db.WithValidateField("openstack"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ReplaceSpecType_Nutanix:
+		if fv, exists := v.FldValidators["provider_choice.nutanix"]; exists {
+			val := m.GetProviderChoice().(*ReplaceSpecType_Nutanix).Nutanix
+			vOpts := append(opts,
+				db.WithValidateField("provider_choice"),
+				db.WithValidateField("nutanix"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
@@ -6825,6 +7994,8 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 
 	v.FldValidators["blocked_services_choice.blocked_services"] = ves_io_schema_fleet.BlockedServicesListTypeValidator().Validate
 
+	v.FldValidators["enterprise_proxy_choice.custom_proxy"] = CustomProxyValidator().Validate
+
 	v.FldValidators["forward_proxy_choice.active_forward_proxy_policies"] = ves_io_schema_network_firewall.ActiveForwardProxyPoliciesTypeValidator().Validate
 
 	v.FldValidators["logs_receiver_choice.log_receiver"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
@@ -6839,6 +8010,8 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v.FldValidators["provider_choice.rseries"] = RSeriesProviderTypeValidator().Validate
 	v.FldValidators["provider_choice.baremetal"] = BaremetalProviderTypeValidator().Validate
 	v.FldValidators["provider_choice.oci"] = OCIProviderTypeValidator().Validate
+	v.FldValidators["provider_choice.openstack"] = OpenstackProviderTypeValidator().Validate
+	v.FldValidators["provider_choice.nutanix"] = NutanixProviderTypeValidator().Validate
 
 	v.FldValidators["s2s_connectivity_sli_choice.dc_cluster_group_sli"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
@@ -6856,6 +8029,10 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v.FldValidators["local_vrf"] = LocalVRFSettingTypeValidator().Validate
 
 	v.FldValidators["re_select"] = ves_io_schema_views.RegionalEdgeSelectionValidator().Validate
+
+	v.FldValidators["admin_user_credentials"] = ves_io_schema_views.AdminUserCredentialsTypeValidator().Validate
+
+	v.FldValidators["dns_ntp_config"] = DNSNTPServerConfigValidator().Validate
 
 	return v
 }()
@@ -8228,6 +9405,41 @@ func (r *CreateSpecType) GetBlockedServicesChoiceFromGlobalSpecType(o *GlobalSpe
 }
 
 // create setters in CreateSpecType from GlobalSpecType for oneof fields
+func (r *CreateSpecType) SetEnterpriseProxyChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.EnterpriseProxyChoice.(type) {
+	case nil:
+		o.EnterpriseProxyChoice = nil
+
+	case *CreateSpecType_CustomProxy:
+		o.EnterpriseProxyChoice = &GlobalSpecType_CustomProxy{CustomProxy: of.CustomProxy}
+
+	case *CreateSpecType_F5Proxy:
+		o.EnterpriseProxyChoice = &GlobalSpecType_F5Proxy{F5Proxy: of.F5Proxy}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *CreateSpecType) GetEnterpriseProxyChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.EnterpriseProxyChoice.(type) {
+	case nil:
+		r.EnterpriseProxyChoice = nil
+
+	case *GlobalSpecType_CustomProxy:
+		r.EnterpriseProxyChoice = &CreateSpecType_CustomProxy{CustomProxy: of.CustomProxy}
+
+	case *GlobalSpecType_F5Proxy:
+		r.EnterpriseProxyChoice = &CreateSpecType_F5Proxy{F5Proxy: of.F5Proxy}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+// create setters in CreateSpecType from GlobalSpecType for oneof fields
 func (r *CreateSpecType) SetForwardProxyChoiceToGlobalSpecType(o *GlobalSpecType) error {
 	switch of := r.ForwardProxyChoice.(type) {
 	case nil:
@@ -8388,8 +9600,14 @@ func (r *CreateSpecType) SetProviderChoiceToGlobalSpecType(o *GlobalSpecType) er
 	case *CreateSpecType_Kvm:
 		o.ProviderChoice = &GlobalSpecType_Kvm{Kvm: of.Kvm}
 
+	case *CreateSpecType_Nutanix:
+		o.ProviderChoice = &GlobalSpecType_Nutanix{Nutanix: of.Nutanix}
+
 	case *CreateSpecType_Oci:
 		o.ProviderChoice = &GlobalSpecType_Oci{Oci: of.Oci}
+
+	case *CreateSpecType_Openstack:
+		o.ProviderChoice = &GlobalSpecType_Openstack{Openstack: of.Openstack}
 
 	case *CreateSpecType_Rseries:
 		o.ProviderChoice = &GlobalSpecType_Rseries{Rseries: of.Rseries}
@@ -8423,8 +9641,14 @@ func (r *CreateSpecType) GetProviderChoiceFromGlobalSpecType(o *GlobalSpecType) 
 	case *GlobalSpecType_Kvm:
 		r.ProviderChoice = &CreateSpecType_Kvm{Kvm: of.Kvm}
 
+	case *GlobalSpecType_Nutanix:
+		r.ProviderChoice = &CreateSpecType_Nutanix{Nutanix: of.Nutanix}
+
 	case *GlobalSpecType_Oci:
 		r.ProviderChoice = &CreateSpecType_Oci{Oci: of.Oci}
+
+	case *GlobalSpecType_Openstack:
+		r.ProviderChoice = &CreateSpecType_Openstack{Openstack: of.Openstack}
 
 	case *GlobalSpecType_Rseries:
 		r.ProviderChoice = &CreateSpecType_Rseries{Rseries: of.Rseries}
@@ -8518,7 +9742,10 @@ func (m *CreateSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool
 	if f == nil {
 		return
 	}
+	m.AdminUserCredentials = f.GetAdminUserCredentials()
 	m.GetBlockedServicesChoiceFromGlobalSpecType(f)
+	m.DnsNtpConfig = f.GetDnsNtpConfig()
+	m.GetEnterpriseProxyChoiceFromGlobalSpecType(f)
 	m.GetForwardProxyChoiceFromGlobalSpecType(f)
 	m.LoadBalancing = f.GetLoadBalancing()
 	m.LocalVrf = f.GetLocalVrf()
@@ -8527,6 +9754,7 @@ func (m *CreateSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool
 	m.GetNodeHaChoiceFromGlobalSpecType(f)
 	m.OfflineSurvivabilityMode = f.GetOfflineSurvivabilityMode()
 	m.PerformanceEnhancementMode = f.GetPerformanceEnhancementMode()
+	m.ProactiveMonitoring = f.GetProactiveMonitoring()
 	m.GetProviderChoiceFromGlobalSpecType(f)
 	m.ReSelect = f.GetReSelect()
 	m.GetS2SConnectivitySliChoiceFromGlobalSpecType(f)
@@ -8552,7 +9780,10 @@ func (m *CreateSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) 
 	}
 	_ = m1
 
+	f.AdminUserCredentials = m1.AdminUserCredentials
 	m1.SetBlockedServicesChoiceToGlobalSpecType(f)
+	f.DnsNtpConfig = m1.DnsNtpConfig
+	m1.SetEnterpriseProxyChoiceToGlobalSpecType(f)
 	m1.SetForwardProxyChoiceToGlobalSpecType(f)
 	f.LoadBalancing = m1.LoadBalancing
 	f.LocalVrf = m1.LocalVrf
@@ -8561,6 +9792,7 @@ func (m *CreateSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) 
 	m1.SetNodeHaChoiceToGlobalSpecType(f)
 	f.OfflineSurvivabilityMode = m1.OfflineSurvivabilityMode
 	f.PerformanceEnhancementMode = m1.PerformanceEnhancementMode
+	f.ProactiveMonitoring = m1.ProactiveMonitoring
 	m1.SetProviderChoiceToGlobalSpecType(f)
 	f.ReSelect = m1.ReSelect
 	m1.SetS2SConnectivitySliChoiceToGlobalSpecType(f)
@@ -8607,6 +9839,41 @@ func (r *GetSpecType) GetBlockedServicesChoiceFromGlobalSpecType(o *GlobalSpecTy
 
 	case *GlobalSpecType_BlockedServices:
 		r.BlockedServicesChoice = &GetSpecType_BlockedServices{BlockedServices: of.BlockedServices}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+// create setters in GetSpecType from GlobalSpecType for oneof fields
+func (r *GetSpecType) SetEnterpriseProxyChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.EnterpriseProxyChoice.(type) {
+	case nil:
+		o.EnterpriseProxyChoice = nil
+
+	case *GetSpecType_CustomProxy:
+		o.EnterpriseProxyChoice = &GlobalSpecType_CustomProxy{CustomProxy: of.CustomProxy}
+
+	case *GetSpecType_F5Proxy:
+		o.EnterpriseProxyChoice = &GlobalSpecType_F5Proxy{F5Proxy: of.F5Proxy}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *GetSpecType) GetEnterpriseProxyChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.EnterpriseProxyChoice.(type) {
+	case nil:
+		r.EnterpriseProxyChoice = nil
+
+	case *GlobalSpecType_CustomProxy:
+		r.EnterpriseProxyChoice = &GetSpecType_CustomProxy{CustomProxy: of.CustomProxy}
+
+	case *GlobalSpecType_F5Proxy:
+		r.EnterpriseProxyChoice = &GetSpecType_F5Proxy{F5Proxy: of.F5Proxy}
 
 	default:
 		return fmt.Errorf("Unknown oneof field %T", of)
@@ -8775,8 +10042,14 @@ func (r *GetSpecType) SetProviderChoiceToGlobalSpecType(o *GlobalSpecType) error
 	case *GetSpecType_Kvm:
 		o.ProviderChoice = &GlobalSpecType_Kvm{Kvm: of.Kvm}
 
+	case *GetSpecType_Nutanix:
+		o.ProviderChoice = &GlobalSpecType_Nutanix{Nutanix: of.Nutanix}
+
 	case *GetSpecType_Oci:
 		o.ProviderChoice = &GlobalSpecType_Oci{Oci: of.Oci}
+
+	case *GetSpecType_Openstack:
+		o.ProviderChoice = &GlobalSpecType_Openstack{Openstack: of.Openstack}
 
 	case *GetSpecType_Rseries:
 		o.ProviderChoice = &GlobalSpecType_Rseries{Rseries: of.Rseries}
@@ -8810,8 +10083,14 @@ func (r *GetSpecType) GetProviderChoiceFromGlobalSpecType(o *GlobalSpecType) err
 	case *GlobalSpecType_Kvm:
 		r.ProviderChoice = &GetSpecType_Kvm{Kvm: of.Kvm}
 
+	case *GlobalSpecType_Nutanix:
+		r.ProviderChoice = &GetSpecType_Nutanix{Nutanix: of.Nutanix}
+
 	case *GlobalSpecType_Oci:
 		r.ProviderChoice = &GetSpecType_Oci{Oci: of.Oci}
+
+	case *GlobalSpecType_Openstack:
+		r.ProviderChoice = &GetSpecType_Openstack{Openstack: of.Openstack}
 
 	case *GlobalSpecType_Rseries:
 		r.ProviderChoice = &GetSpecType_Rseries{Rseries: of.Rseries}
@@ -8905,7 +10184,10 @@ func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	if f == nil {
 		return
 	}
+	m.AdminUserCredentials = f.GetAdminUserCredentials()
 	m.GetBlockedServicesChoiceFromGlobalSpecType(f)
+	m.DnsNtpConfig = f.GetDnsNtpConfig()
+	m.GetEnterpriseProxyChoiceFromGlobalSpecType(f)
 	m.GetForwardProxyChoiceFromGlobalSpecType(f)
 	m.LoadBalancing = f.GetLoadBalancing()
 	m.LocalVrf = f.GetLocalVrf()
@@ -8915,6 +10197,7 @@ func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	m.OfflineSurvivabilityMode = f.GetOfflineSurvivabilityMode()
 	m.OperatingSystemVersion = f.GetOperatingSystemVersion()
 	m.PerformanceEnhancementMode = f.GetPerformanceEnhancementMode()
+	m.ProactiveMonitoring = f.GetProactiveMonitoring()
 	m.GetProviderChoiceFromGlobalSpecType(f)
 	m.ReSelect = f.GetReSelect()
 	m.GetS2SConnectivitySliChoiceFromGlobalSpecType(f)
@@ -8942,7 +10225,10 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	}
 	_ = m1
 
+	f.AdminUserCredentials = m1.AdminUserCredentials
 	m1.SetBlockedServicesChoiceToGlobalSpecType(f)
+	f.DnsNtpConfig = m1.DnsNtpConfig
+	m1.SetEnterpriseProxyChoiceToGlobalSpecType(f)
 	m1.SetForwardProxyChoiceToGlobalSpecType(f)
 	f.LoadBalancing = m1.LoadBalancing
 	f.LocalVrf = m1.LocalVrf
@@ -8952,6 +10238,7 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	f.OfflineSurvivabilityMode = m1.OfflineSurvivabilityMode
 	f.OperatingSystemVersion = m1.OperatingSystemVersion
 	f.PerformanceEnhancementMode = m1.PerformanceEnhancementMode
+	f.ProactiveMonitoring = m1.ProactiveMonitoring
 	m1.SetProviderChoiceToGlobalSpecType(f)
 	f.ReSelect = m1.ReSelect
 	m1.SetS2SConnectivitySliChoiceToGlobalSpecType(f)
@@ -9000,6 +10287,41 @@ func (r *ReplaceSpecType) GetBlockedServicesChoiceFromGlobalSpecType(o *GlobalSp
 
 	case *GlobalSpecType_BlockedServices:
 		r.BlockedServicesChoice = &ReplaceSpecType_BlockedServices{BlockedServices: of.BlockedServices}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+// create setters in ReplaceSpecType from GlobalSpecType for oneof fields
+func (r *ReplaceSpecType) SetEnterpriseProxyChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.EnterpriseProxyChoice.(type) {
+	case nil:
+		o.EnterpriseProxyChoice = nil
+
+	case *ReplaceSpecType_CustomProxy:
+		o.EnterpriseProxyChoice = &GlobalSpecType_CustomProxy{CustomProxy: of.CustomProxy}
+
+	case *ReplaceSpecType_F5Proxy:
+		o.EnterpriseProxyChoice = &GlobalSpecType_F5Proxy{F5Proxy: of.F5Proxy}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *ReplaceSpecType) GetEnterpriseProxyChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.EnterpriseProxyChoice.(type) {
+	case nil:
+		r.EnterpriseProxyChoice = nil
+
+	case *GlobalSpecType_CustomProxy:
+		r.EnterpriseProxyChoice = &ReplaceSpecType_CustomProxy{CustomProxy: of.CustomProxy}
+
+	case *GlobalSpecType_F5Proxy:
+		r.EnterpriseProxyChoice = &ReplaceSpecType_F5Proxy{F5Proxy: of.F5Proxy}
 
 	default:
 		return fmt.Errorf("Unknown oneof field %T", of)
@@ -9168,8 +10490,14 @@ func (r *ReplaceSpecType) SetProviderChoiceToGlobalSpecType(o *GlobalSpecType) e
 	case *ReplaceSpecType_Kvm:
 		o.ProviderChoice = &GlobalSpecType_Kvm{Kvm: of.Kvm}
 
+	case *ReplaceSpecType_Nutanix:
+		o.ProviderChoice = &GlobalSpecType_Nutanix{Nutanix: of.Nutanix}
+
 	case *ReplaceSpecType_Oci:
 		o.ProviderChoice = &GlobalSpecType_Oci{Oci: of.Oci}
+
+	case *ReplaceSpecType_Openstack:
+		o.ProviderChoice = &GlobalSpecType_Openstack{Openstack: of.Openstack}
 
 	case *ReplaceSpecType_Rseries:
 		o.ProviderChoice = &GlobalSpecType_Rseries{Rseries: of.Rseries}
@@ -9203,8 +10531,14 @@ func (r *ReplaceSpecType) GetProviderChoiceFromGlobalSpecType(o *GlobalSpecType)
 	case *GlobalSpecType_Kvm:
 		r.ProviderChoice = &ReplaceSpecType_Kvm{Kvm: of.Kvm}
 
+	case *GlobalSpecType_Nutanix:
+		r.ProviderChoice = &ReplaceSpecType_Nutanix{Nutanix: of.Nutanix}
+
 	case *GlobalSpecType_Oci:
 		r.ProviderChoice = &ReplaceSpecType_Oci{Oci: of.Oci}
+
+	case *GlobalSpecType_Openstack:
+		r.ProviderChoice = &ReplaceSpecType_Openstack{Openstack: of.Openstack}
 
 	case *GlobalSpecType_Rseries:
 		r.ProviderChoice = &ReplaceSpecType_Rseries{Rseries: of.Rseries}
@@ -9298,7 +10632,10 @@ func (m *ReplaceSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy boo
 	if f == nil {
 		return
 	}
+	m.AdminUserCredentials = f.GetAdminUserCredentials()
 	m.GetBlockedServicesChoiceFromGlobalSpecType(f)
+	m.DnsNtpConfig = f.GetDnsNtpConfig()
+	m.GetEnterpriseProxyChoiceFromGlobalSpecType(f)
 	m.GetForwardProxyChoiceFromGlobalSpecType(f)
 	m.LoadBalancing = f.GetLoadBalancing()
 	m.LocalVrf = f.GetLocalVrf()
@@ -9307,6 +10644,7 @@ func (m *ReplaceSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy boo
 	m.GetNodeHaChoiceFromGlobalSpecType(f)
 	m.OfflineSurvivabilityMode = f.GetOfflineSurvivabilityMode()
 	m.PerformanceEnhancementMode = f.GetPerformanceEnhancementMode()
+	m.ProactiveMonitoring = f.GetProactiveMonitoring()
 	m.GetProviderChoiceFromGlobalSpecType(f)
 	m.ReSelect = f.GetReSelect()
 	m.GetS2SConnectivitySliChoiceFromGlobalSpecType(f)
@@ -9332,7 +10670,10 @@ func (m *ReplaceSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool)
 	}
 	_ = m1
 
+	f.AdminUserCredentials = m1.AdminUserCredentials
 	m1.SetBlockedServicesChoiceToGlobalSpecType(f)
+	f.DnsNtpConfig = m1.DnsNtpConfig
+	m1.SetEnterpriseProxyChoiceToGlobalSpecType(f)
 	m1.SetForwardProxyChoiceToGlobalSpecType(f)
 	f.LoadBalancing = m1.LoadBalancing
 	f.LocalVrf = m1.LocalVrf
@@ -9341,6 +10682,7 @@ func (m *ReplaceSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool)
 	m1.SetNodeHaChoiceToGlobalSpecType(f)
 	f.OfflineSurvivabilityMode = m1.OfflineSurvivabilityMode
 	f.PerformanceEnhancementMode = m1.PerformanceEnhancementMode
+	f.ProactiveMonitoring = m1.ProactiveMonitoring
 	m1.SetProviderChoiceToGlobalSpecType(f)
 	f.ReSelect = m1.ReSelect
 	m1.SetS2SConnectivitySliChoiceToGlobalSpecType(f)

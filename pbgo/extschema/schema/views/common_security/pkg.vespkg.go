@@ -26,6 +26,8 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.views.common_security.ClientSideDefenseType"] = ClientSideDefenseTypeValidator()
 	vr["ves.io.schema.views.common_security.DDoSClientSource"] = DDoSClientSourceValidator()
 	vr["ves.io.schema.views.common_security.DDoSMitigationRule"] = DDoSMitigationRuleValidator()
+	vr["ves.io.schema.views.common_security.MalwareProtectionPolicy"] = MalwareProtectionPolicyValidator()
+	vr["ves.io.schema.views.common_security.MalwareProtectionRule"] = MalwareProtectionRuleValidator()
 	vr["ves.io.schema.views.common_security.MobileSDKConfigType"] = MobileSDKConfigTypeValidator()
 	vr["ves.io.schema.views.common_security.MobileTrafficIdentifierType"] = MobileTrafficIdentifierTypeValidator()
 	vr["ves.io.schema.views.common_security.ProtectedAppEndpointType"] = ProtectedAppEndpointTypeValidator()
