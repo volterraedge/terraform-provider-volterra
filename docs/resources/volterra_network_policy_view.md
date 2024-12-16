@@ -1,9 +1,9 @@
 ---
 
 page_title: "Volterra: network_policy_view"
-description: "The network_policy_view allows CRUD of Network Policy View resource on Volterra SaaS"
 
----
+description: "The network_policy_view allows CRUD of Network Policy View resource on Volterra SaaS"
+---------------------------------------------------------------------------------------------------
 
 Resource volterra_network_policy_view
 =====================================
@@ -23,7 +23,9 @@ resource "volterra_network_policy_view" "example" {
   endpoint {
     // One of the arguments from this list "any inside_endpoints interface label_selector namespace outside_endpoints prefix_list" must be set
 
-    any = true
+    label_selector {
+      expressions = ["region in (us-west1, us-west2),tier in (staging)"]
+    }
   }
 }
 

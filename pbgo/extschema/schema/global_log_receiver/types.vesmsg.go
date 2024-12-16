@@ -309,6 +309,8 @@ var DefaultAWSCloudwatchConfigValidator = func() *ValidateAWSCloudwatchConfig {
 	}
 	v.FldValidators["aws_region"] = vFn
 
+	v.FldValidators["compression"] = CompressionTypeValidator().Validate
+
 	v.FldValidators["batch"] = BatchOptionTypeValidator().Validate
 
 	return v
@@ -548,6 +550,15 @@ func (v *ValidateAzureBlobConfig) Validate(ctx context.Context, pm interface{}, 
 
 	}
 
+	if fv, exists := v.FldValidators["filename_options"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("filename_options"))
+		if err := fv(ctx, m.GetFilenameOptions(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	return nil
 }
 
@@ -588,7 +599,11 @@ var DefaultAzureBlobConfigValidator = func() *ValidateAzureBlobConfig {
 	}
 	v.FldValidators["container_name"] = vFn
 
+	v.FldValidators["compression"] = CompressionTypeValidator().Validate
+
 	v.FldValidators["batch"] = BatchOptionTypeValidator().Validate
+
+	v.FldValidators["filename_options"] = FilenameOptionsTypeValidator().Validate
 
 	return v
 }()
@@ -1054,6 +1069,14 @@ type ValidateCompressionType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateCompressionType) CompressionChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for compression_choice")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidateCompressionType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*CompressionType)
 	if !ok {
@@ -1068,13 +1091,23 @@ func (v *ValidateCompressionType) Validate(ctx context.Context, pm interface{}, 
 		return nil
 	}
 
+	if fv, exists := v.FldValidators["compression_choice"]; exists {
+		val := m.GetCompressionChoice()
+		vOpts := append(opts,
+			db.WithValidateField("compression_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
 	switch m.GetCompressionChoice().(type) {
-	case *CompressionType_CompressionNone:
-		if fv, exists := v.FldValidators["compression_choice.compression_none"]; exists {
-			val := m.GetCompressionChoice().(*CompressionType_CompressionNone).CompressionNone
+	case *CompressionType_CompressionDefault:
+		if fv, exists := v.FldValidators["compression_choice.compression_default"]; exists {
+			val := m.GetCompressionChoice().(*CompressionType_CompressionDefault).CompressionDefault
 			vOpts := append(opts,
 				db.WithValidateField("compression_choice"),
-				db.WithValidateField("compression_none"),
+				db.WithValidateField("compression_default"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
@@ -1091,6 +1124,17 @@ func (v *ValidateCompressionType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
+	case *CompressionType_CompressionNone:
+		if fv, exists := v.FldValidators["compression_choice.compression_none"]; exists {
+			val := m.GetCompressionChoice().(*CompressionType_CompressionNone).CompressionNone
+			vOpts := append(opts,
+				db.WithValidateField("compression_choice"),
+				db.WithValidateField("compression_none"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
@@ -1100,6 +1144,25 @@ func (v *ValidateCompressionType) Validate(ctx context.Context, pm interface{}, 
 // Well-known symbol for default validator implementation
 var DefaultCompressionTypeValidator = func() *ValidateCompressionType {
 	v := &ValidateCompressionType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhCompressionChoice := v.CompressionChoiceValidationRuleHandler
+	rulesCompressionChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhCompressionChoice(rulesCompressionChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CompressionType.compression_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["compression_choice"] = vFn
 
 	return v
 }()
@@ -1965,6 +2028,8 @@ var DefaultDatadogConfigValidator = func() *ValidateDatadogConfig {
 
 	v.FldValidators["tls_choice.use_tls"] = TLSConfigTypeValidator().Validate
 
+	v.FldValidators["compression"] = CompressionTypeValidator().Validate
+
 	v.FldValidators["batch"] = BatchOptionTypeValidator().Validate
 
 	return v
@@ -2316,6 +2381,8 @@ var DefaultElasticConfigValidator = func() *ValidateElasticConfig {
 
 	v.FldValidators["tls_choice.use_tls"] = TLSConfigTypeValidator().Validate
 
+	v.FldValidators["compression"] = CompressionTypeValidator().Validate
+
 	v.FldValidators["batch"] = BatchOptionTypeValidator().Validate
 
 	return v
@@ -2323,6 +2390,140 @@ var DefaultElasticConfigValidator = func() *ValidateElasticConfig {
 
 func ElasticConfigValidator() db.Validator {
 	return DefaultElasticConfigValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *FilenameOptionsType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *FilenameOptionsType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *FilenameOptionsType) DeepCopy() *FilenameOptionsType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &FilenameOptionsType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *FilenameOptionsType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *FilenameOptionsType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return FilenameOptionsTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateFilenameOptionsType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateFilenameOptionsType) FolderCustomFolderValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_CustomFolder, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for custom_folder")
+	}
+	return oValidatorFn_CustomFolder, nil
+}
+
+func (v *ValidateFilenameOptionsType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*FilenameOptionsType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *FilenameOptionsType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	switch m.GetFolder().(type) {
+	case *FilenameOptionsType_NoFolder:
+		if fv, exists := v.FldValidators["folder.no_folder"]; exists {
+			val := m.GetFolder().(*FilenameOptionsType_NoFolder).NoFolder
+			vOpts := append(opts,
+				db.WithValidateField("folder"),
+				db.WithValidateField("no_folder"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *FilenameOptionsType_LogTypeFolder:
+		if fv, exists := v.FldValidators["folder.log_type_folder"]; exists {
+			val := m.GetFolder().(*FilenameOptionsType_LogTypeFolder).LogTypeFolder
+			vOpts := append(opts,
+				db.WithValidateField("folder"),
+				db.WithValidateField("log_type_folder"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *FilenameOptionsType_CustomFolder:
+		if fv, exists := v.FldValidators["folder.custom_folder"]; exists {
+			val := m.GetFolder().(*FilenameOptionsType_CustomFolder).CustomFolder
+			vOpts := append(opts,
+				db.WithValidateField("folder"),
+				db.WithValidateField("custom_folder"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultFilenameOptionsTypeValidator = func() *ValidateFilenameOptionsType {
+	v := &ValidateFilenameOptionsType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhFolderCustomFolder := v.FolderCustomFolderValidationRuleHandler
+	rulesFolderCustomFolder := map[string]string{
+		"ves.io.schema.rules.string.pattern": "^[A-Za-z_][A-Za-z0-9\\-\\._]*$",
+	}
+	vFnMap["folder.custom_folder"], err = vrhFolderCustomFolder(rulesFolderCustomFolder)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field FilenameOptionsType.folder_custom_folder: %s", err)
+		panic(errMsg)
+	}
+
+	v.FldValidators["folder.custom_folder"] = vFnMap["folder.custom_folder"]
+
+	return v
+}()
+
+func FilenameOptionsTypeValidator() db.Validator {
+	return DefaultFilenameOptionsTypeValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -2496,6 +2697,15 @@ func (v *ValidateGCPBucketConfig) Validate(ctx context.Context, pm interface{}, 
 
 	}
 
+	if fv, exists := v.FldValidators["filename_options"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("filename_options"))
+		if err := fv(ctx, m.GetFilenameOptions(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["gcp_cred"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("gcp_cred"))
@@ -2545,7 +2755,11 @@ var DefaultGCPBucketConfigValidator = func() *ValidateGCPBucketConfig {
 	}
 	v.FldValidators["gcp_cred"] = vFn
 
+	v.FldValidators["compression"] = CompressionTypeValidator().Validate
+
 	v.FldValidators["batch"] = BatchOptionTypeValidator().Validate
+
+	v.FldValidators["filename_options"] = FilenameOptionsTypeValidator().Validate
 
 	return v
 }()
@@ -4050,6 +4264,8 @@ var DefaultHTTPConfigValidator = func() *ValidateHTTPConfig {
 
 	v.FldValidators["tls_choice.use_tls"] = TLSConfigTypeValidator().Validate
 
+	v.FldValidators["compression"] = CompressionTypeValidator().Validate
+
 	v.FldValidators["batch"] = BatchOptionTypeValidator().Validate
 
 	return v
@@ -4448,6 +4664,8 @@ var DefaultKafkaConfigValidator = func() *ValidateKafkaConfig {
 	v.FldValidators["kafka_topic"] = vFn
 
 	v.FldValidators["tls_choice.use_tls"] = TLSConfigTypeValidator().Validate
+
+	v.FldValidators["compression"] = CompressionTypeValidator().Validate
 
 	v.FldValidators["batch"] = BatchOptionTypeValidator().Validate
 
@@ -4973,6 +5191,8 @@ var DefaultQRadarConfigValidator = func() *ValidateQRadarConfig {
 	v.FldValidators["uri"] = vFn
 
 	v.FldValidators["tls_choice.use_tls"] = TLSConfigTypeValidator().Validate
+
+	v.FldValidators["compression"] = CompressionTypeValidator().Validate
 
 	v.FldValidators["batch"] = BatchOptionTypeValidator().Validate
 
@@ -5760,6 +5980,15 @@ func (v *ValidateS3Config) Validate(ctx context.Context, pm interface{}, opts ..
 
 	}
 
+	if fv, exists := v.FldValidators["filename_options"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("filename_options"))
+		if err := fv(ctx, m.GetFilenameOptions(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	return nil
 }
 
@@ -5812,7 +6041,11 @@ var DefaultS3ConfigValidator = func() *ValidateS3Config {
 	}
 	v.FldValidators["aws_region"] = vFn
 
+	v.FldValidators["compression"] = CompressionTypeValidator().Validate
+
 	v.FldValidators["batch"] = BatchOptionTypeValidator().Validate
+
+	v.FldValidators["filename_options"] = FilenameOptionsTypeValidator().Validate
 
 	return v
 }()
@@ -6055,6 +6288,8 @@ var DefaultSplunkConfigValidator = func() *ValidateSplunkConfig {
 	v.FldValidators["splunk_hec_token"] = vFn
 
 	v.FldValidators["tls_choice.use_tls"] = TLSConfigTypeValidator().Validate
+
+	v.FldValidators["compression"] = CompressionTypeValidator().Validate
 
 	v.FldValidators["batch"] = BatchOptionTypeValidator().Validate
 

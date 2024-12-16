@@ -1,9 +1,9 @@
 ---
 
 page_title: "Volterra: dns_domain"
-description: "The dns_domain allows CRUD of Dns Domain resource on Volterra SaaS"
 
----
+description: "The dns_domain allows CRUD of Dns Domain resource on Volterra SaaS"
+---------------------------------------------------------------------------------
 
 Resource volterra_dns_domain
 ============================
@@ -22,7 +22,7 @@ resource "volterra_dns_domain" "example" {
 
   // One of the arguments from this list "route53 verification_only volterra_managed" must be set
 
-  volterra_managed = true
+  verification_only = true
 }
 
 ```

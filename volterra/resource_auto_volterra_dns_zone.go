@@ -63,7 +63,8 @@ func resourceVolterraDnsZone() *schema.Resource {
 
 			"primary": {
 
-				Type:     schema.TypeSet,
+				Type:     schema.TypeList,
+				MaxItems: 1,
 				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
@@ -92,7 +93,8 @@ func resourceVolterraDnsZone() *schema.Resource {
 
 									"a_record": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -117,7 +119,8 @@ func resourceVolterraDnsZone() *schema.Resource {
 
 									"aaaa_record": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -142,7 +145,8 @@ func resourceVolterraDnsZone() *schema.Resource {
 
 									"afsdb_record": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -177,7 +181,8 @@ func resourceVolterraDnsZone() *schema.Resource {
 
 									"alias_record": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -198,7 +203,8 @@ func resourceVolterraDnsZone() *schema.Resource {
 
 									"caa_record": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -238,7 +244,8 @@ func resourceVolterraDnsZone() *schema.Resource {
 
 									"cds_record": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -257,7 +264,8 @@ func resourceVolterraDnsZone() *schema.Resource {
 
 															"sha1_digest": {
 
-																Type:     schema.TypeSet,
+																Type:     schema.TypeList,
+																MaxItems: 1,
 																Optional: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
@@ -272,7 +280,8 @@ func resourceVolterraDnsZone() *schema.Resource {
 
 															"sha256_digest": {
 
-																Type:     schema.TypeSet,
+																Type:     schema.TypeList,
+																MaxItems: 1,
 																Optional: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
@@ -287,7 +296,8 @@ func resourceVolterraDnsZone() *schema.Resource {
 
 															"sha384_digest": {
 
-																Type:     schema.TypeSet,
+																Type:     schema.TypeList,
+																MaxItems: 1,
 																Optional: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
@@ -318,7 +328,8 @@ func resourceVolterraDnsZone() *schema.Resource {
 
 									"cert_record": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -363,7 +374,8 @@ func resourceVolterraDnsZone() *schema.Resource {
 
 									"cname_record": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -383,7 +395,8 @@ func resourceVolterraDnsZone() *schema.Resource {
 
 									"dlv_record": {
 
-										Type:       schema.TypeSet,
+										Type:       schema.TypeList,
+										MaxItems:   1,
 										Optional:   true,
 										Deprecated: "This field is deprecated and will be removed in future release.",
 										Elem: &schema.Resource{
@@ -405,7 +418,8 @@ func resourceVolterraDnsZone() *schema.Resource {
 
 															"sha1_digest": {
 
-																Type:       schema.TypeSet,
+																Type:       schema.TypeList,
+																MaxItems:   1,
 																Optional:   true,
 																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
@@ -422,7 +436,8 @@ func resourceVolterraDnsZone() *schema.Resource {
 
 															"sha256_digest": {
 
-																Type:       schema.TypeSet,
+																Type:       schema.TypeList,
+																MaxItems:   1,
 																Optional:   true,
 																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
@@ -439,7 +454,8 @@ func resourceVolterraDnsZone() *schema.Resource {
 
 															"sha384_digest": {
 
-																Type:       schema.TypeSet,
+																Type:       schema.TypeList,
+																MaxItems:   1,
 																Optional:   true,
 																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
@@ -474,7 +490,8 @@ func resourceVolterraDnsZone() *schema.Resource {
 
 									"ds_record": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -493,7 +510,8 @@ func resourceVolterraDnsZone() *schema.Resource {
 
 															"sha1_digest": {
 
-																Type:     schema.TypeSet,
+																Type:     schema.TypeList,
+																MaxItems: 1,
 																Optional: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
@@ -508,7 +526,8 @@ func resourceVolterraDnsZone() *schema.Resource {
 
 															"sha256_digest": {
 
-																Type:     schema.TypeSet,
+																Type:     schema.TypeList,
+																MaxItems: 1,
 																Optional: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
@@ -523,7 +542,8 @@ func resourceVolterraDnsZone() *schema.Resource {
 
 															"sha384_digest": {
 
-																Type:     schema.TypeSet,
+																Type:     schema.TypeList,
+																MaxItems: 1,
 																Optional: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
@@ -554,7 +574,8 @@ func resourceVolterraDnsZone() *schema.Resource {
 
 									"eui48_record": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -574,7 +595,8 @@ func resourceVolterraDnsZone() *schema.Resource {
 
 									"eui64_record": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -594,7 +616,8 @@ func resourceVolterraDnsZone() *schema.Resource {
 
 									"lb_record": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -606,7 +629,8 @@ func resourceVolterraDnsZone() *schema.Resource {
 
 												"value": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Optional: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -632,7 +656,8 @@ func resourceVolterraDnsZone() *schema.Resource {
 
 									"loc_record": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -717,7 +742,8 @@ func resourceVolterraDnsZone() *schema.Resource {
 
 									"mx_record": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -752,7 +778,8 @@ func resourceVolterraDnsZone() *schema.Resource {
 
 									"naptr_record": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -807,7 +834,8 @@ func resourceVolterraDnsZone() *schema.Resource {
 
 									"ns_record": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -832,7 +860,8 @@ func resourceVolterraDnsZone() *schema.Resource {
 
 									"ptr_record": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -857,7 +886,8 @@ func resourceVolterraDnsZone() *schema.Resource {
 
 									"srv_record": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -902,7 +932,8 @@ func resourceVolterraDnsZone() *schema.Resource {
 
 									"sshfp_record": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -932,7 +963,8 @@ func resourceVolterraDnsZone() *schema.Resource {
 
 															"sha1_fingerprint": {
 
-																Type:     schema.TypeSet,
+																Type:     schema.TypeList,
+																MaxItems: 1,
 																Optional: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
@@ -947,7 +979,8 @@ func resourceVolterraDnsZone() *schema.Resource {
 
 															"sha256_fingerprint": {
 
-																Type:     schema.TypeSet,
+																Type:     schema.TypeList,
+																MaxItems: 1,
 																Optional: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
@@ -974,7 +1007,8 @@ func resourceVolterraDnsZone() *schema.Resource {
 
 									"tlsa_record": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -1019,7 +1053,8 @@ func resourceVolterraDnsZone() *schema.Resource {
 
 									"txt_record": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -1047,7 +1082,8 @@ func resourceVolterraDnsZone() *schema.Resource {
 
 						"dnssec_mode": {
 
-							Type:     schema.TypeSet,
+							Type:     schema.TypeList,
+							MaxItems: 1,
 							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
@@ -1060,7 +1096,8 @@ func resourceVolterraDnsZone() *schema.Resource {
 
 									"enable": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{},
@@ -1079,7 +1116,8 @@ func resourceVolterraDnsZone() *schema.Resource {
 
 									"metadata": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -1122,7 +1160,8 @@ func resourceVolterraDnsZone() *schema.Resource {
 
 												"a_record": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Optional: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -1147,7 +1186,8 @@ func resourceVolterraDnsZone() *schema.Resource {
 
 												"aaaa_record": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Optional: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -1172,7 +1212,8 @@ func resourceVolterraDnsZone() *schema.Resource {
 
 												"afsdb_record": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Optional: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -1207,7 +1248,8 @@ func resourceVolterraDnsZone() *schema.Resource {
 
 												"alias_record": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Optional: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -1228,7 +1270,8 @@ func resourceVolterraDnsZone() *schema.Resource {
 
 												"caa_record": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Optional: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -1268,7 +1311,8 @@ func resourceVolterraDnsZone() *schema.Resource {
 
 												"cds_record": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Optional: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -1287,7 +1331,8 @@ func resourceVolterraDnsZone() *schema.Resource {
 
 																		"sha1_digest": {
 
-																			Type:     schema.TypeSet,
+																			Type:     schema.TypeList,
+																			MaxItems: 1,
 																			Optional: true,
 																			Elem: &schema.Resource{
 																				Schema: map[string]*schema.Schema{
@@ -1302,7 +1347,8 @@ func resourceVolterraDnsZone() *schema.Resource {
 
 																		"sha256_digest": {
 
-																			Type:     schema.TypeSet,
+																			Type:     schema.TypeList,
+																			MaxItems: 1,
 																			Optional: true,
 																			Elem: &schema.Resource{
 																				Schema: map[string]*schema.Schema{
@@ -1317,7 +1363,8 @@ func resourceVolterraDnsZone() *schema.Resource {
 
 																		"sha384_digest": {
 
-																			Type:     schema.TypeSet,
+																			Type:     schema.TypeList,
+																			MaxItems: 1,
 																			Optional: true,
 																			Elem: &schema.Resource{
 																				Schema: map[string]*schema.Schema{
@@ -1348,7 +1395,8 @@ func resourceVolterraDnsZone() *schema.Resource {
 
 												"cert_record": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Optional: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -1393,7 +1441,8 @@ func resourceVolterraDnsZone() *schema.Resource {
 
 												"cname_record": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Optional: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -1413,7 +1462,8 @@ func resourceVolterraDnsZone() *schema.Resource {
 
 												"dlv_record": {
 
-													Type:       schema.TypeSet,
+													Type:       schema.TypeList,
+													MaxItems:   1,
 													Optional:   true,
 													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
@@ -1435,7 +1485,8 @@ func resourceVolterraDnsZone() *schema.Resource {
 
 																		"sha1_digest": {
 
-																			Type:       schema.TypeSet,
+																			Type:       schema.TypeList,
+																			MaxItems:   1,
 																			Optional:   true,
 																			Deprecated: "This field is deprecated and will be removed in future release.",
 																			Elem: &schema.Resource{
@@ -1452,7 +1503,8 @@ func resourceVolterraDnsZone() *schema.Resource {
 
 																		"sha256_digest": {
 
-																			Type:       schema.TypeSet,
+																			Type:       schema.TypeList,
+																			MaxItems:   1,
 																			Optional:   true,
 																			Deprecated: "This field is deprecated and will be removed in future release.",
 																			Elem: &schema.Resource{
@@ -1469,7 +1521,8 @@ func resourceVolterraDnsZone() *schema.Resource {
 
 																		"sha384_digest": {
 
-																			Type:       schema.TypeSet,
+																			Type:       schema.TypeList,
+																			MaxItems:   1,
 																			Optional:   true,
 																			Deprecated: "This field is deprecated and will be removed in future release.",
 																			Elem: &schema.Resource{
@@ -1504,7 +1557,8 @@ func resourceVolterraDnsZone() *schema.Resource {
 
 												"ds_record": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Optional: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -1523,7 +1577,8 @@ func resourceVolterraDnsZone() *schema.Resource {
 
 																		"sha1_digest": {
 
-																			Type:     schema.TypeSet,
+																			Type:     schema.TypeList,
+																			MaxItems: 1,
 																			Optional: true,
 																			Elem: &schema.Resource{
 																				Schema: map[string]*schema.Schema{
@@ -1538,7 +1593,8 @@ func resourceVolterraDnsZone() *schema.Resource {
 
 																		"sha256_digest": {
 
-																			Type:     schema.TypeSet,
+																			Type:     schema.TypeList,
+																			MaxItems: 1,
 																			Optional: true,
 																			Elem: &schema.Resource{
 																				Schema: map[string]*schema.Schema{
@@ -1553,7 +1609,8 @@ func resourceVolterraDnsZone() *schema.Resource {
 
 																		"sha384_digest": {
 
-																			Type:     schema.TypeSet,
+																			Type:     schema.TypeList,
+																			MaxItems: 1,
 																			Optional: true,
 																			Elem: &schema.Resource{
 																				Schema: map[string]*schema.Schema{
@@ -1584,7 +1641,8 @@ func resourceVolterraDnsZone() *schema.Resource {
 
 												"eui48_record": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Optional: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -1604,7 +1662,8 @@ func resourceVolterraDnsZone() *schema.Resource {
 
 												"eui64_record": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Optional: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -1624,7 +1683,8 @@ func resourceVolterraDnsZone() *schema.Resource {
 
 												"lb_record": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Optional: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -1636,7 +1696,8 @@ func resourceVolterraDnsZone() *schema.Resource {
 
 															"value": {
 
-																Type:     schema.TypeSet,
+																Type:     schema.TypeList,
+																MaxItems: 1,
 																Optional: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
@@ -1662,7 +1723,8 @@ func resourceVolterraDnsZone() *schema.Resource {
 
 												"loc_record": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Optional: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -1747,7 +1809,8 @@ func resourceVolterraDnsZone() *schema.Resource {
 
 												"mx_record": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Optional: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -1782,7 +1845,8 @@ func resourceVolterraDnsZone() *schema.Resource {
 
 												"naptr_record": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Optional: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -1837,7 +1901,8 @@ func resourceVolterraDnsZone() *schema.Resource {
 
 												"ns_record": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Optional: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -1862,7 +1927,8 @@ func resourceVolterraDnsZone() *schema.Resource {
 
 												"ptr_record": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Optional: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -1887,7 +1953,8 @@ func resourceVolterraDnsZone() *schema.Resource {
 
 												"srv_record": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Optional: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -1932,7 +1999,8 @@ func resourceVolterraDnsZone() *schema.Resource {
 
 												"sshfp_record": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Optional: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -1962,7 +2030,8 @@ func resourceVolterraDnsZone() *schema.Resource {
 
 																		"sha1_fingerprint": {
 
-																			Type:     schema.TypeSet,
+																			Type:     schema.TypeList,
+																			MaxItems: 1,
 																			Optional: true,
 																			Elem: &schema.Resource{
 																				Schema: map[string]*schema.Schema{
@@ -1977,7 +2046,8 @@ func resourceVolterraDnsZone() *schema.Resource {
 
 																		"sha256_fingerprint": {
 
-																			Type:     schema.TypeSet,
+																			Type:     schema.TypeList,
+																			MaxItems: 1,
 																			Optional: true,
 																			Elem: &schema.Resource{
 																				Schema: map[string]*schema.Schema{
@@ -2004,7 +2074,8 @@ func resourceVolterraDnsZone() *schema.Resource {
 
 												"tlsa_record": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Optional: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -2049,7 +2120,8 @@ func resourceVolterraDnsZone() *schema.Resource {
 
 												"txt_record": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Optional: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -2086,7 +2158,8 @@ func resourceVolterraDnsZone() *schema.Resource {
 
 						"soa_parameters": {
 
-							Type:     schema.TypeSet,
+							Type:     schema.TypeList,
+							MaxItems: 1,
 							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
@@ -2124,7 +2197,8 @@ func resourceVolterraDnsZone() *schema.Resource {
 
 			"secondary": {
 
-				Type:     schema.TypeSet,
+				Type:     schema.TypeList,
+				MaxItems: 1,
 				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
@@ -2151,14 +2225,16 @@ func resourceVolterraDnsZone() *schema.Resource {
 
 						"tsig_key_value": {
 
-							Type:     schema.TypeSet,
+							Type:     schema.TypeList,
+							MaxItems: 1,
 							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
 									"blindfold_secret_info_internal": {
 
-										Type:       schema.TypeSet,
+										Type:       schema.TypeList,
+										MaxItems:   1,
 										Optional:   true,
 										Deprecated: "This field is deprecated and will be removed in future release.",
 										Elem: &schema.Resource{
@@ -2193,7 +2269,8 @@ func resourceVolterraDnsZone() *schema.Resource {
 
 									"blindfold_secret_info": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -2218,7 +2295,8 @@ func resourceVolterraDnsZone() *schema.Resource {
 
 									"clear_secret_info": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -2238,7 +2316,8 @@ func resourceVolterraDnsZone() *schema.Resource {
 
 									"vault_secret_info": {
 
-										Type:       schema.TypeSet,
+										Type:       schema.TypeList,
+										MaxItems:   1,
 										Optional:   true,
 										Deprecated: "This field is deprecated and will be removed in future release.",
 										Elem: &schema.Resource{
@@ -2279,7 +2358,8 @@ func resourceVolterraDnsZone() *schema.Resource {
 
 									"wingman_secret_info": {
 
-										Type:       schema.TypeSet,
+										Type:       schema.TypeList,
+										MaxItems:   1,
 										Optional:   true,
 										Deprecated: "This field is deprecated and will be removed in future release.",
 										Elem: &schema.Resource{
@@ -2367,2519 +2447,2717 @@ func resourceVolterraDnsZoneCreate(d *schema.ResourceData, meta interface{}) err
 		dnsTypeInt.Primary = &ves_io_schema_dns_zone.PrimaryDNSCreateSpecType{}
 		createSpec.DnsType = dnsTypeInt
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
+			if set != nil {
+				cs := set.(map[string]interface{})
 
-			if v, ok := cs["allow_http_lb_managed_records"]; ok && !isIntfNil(v) {
+				if v, ok := cs["allow_http_lb_managed_records"]; ok && !isIntfNil(v) {
 
-				dnsTypeInt.Primary.AllowHttpLbManagedRecords = v.(bool)
-
-			}
-
-			if v, ok := cs["default_rr_set_group"]; ok && !isIntfNil(v) {
-
-				sl := v.([]interface{})
-				defaultRrSetGroup := make([]*ves_io_schema_dns_zone.RRSet, len(sl))
-				dnsTypeInt.Primary.DefaultRrSetGroup = defaultRrSetGroup
-				for i, set := range sl {
-					defaultRrSetGroup[i] = &ves_io_schema_dns_zone.RRSet{}
-					defaultRrSetGroupMapStrToI := set.(map[string]interface{})
-
-					if w, ok := defaultRrSetGroupMapStrToI["description"]; ok && !isIntfNil(w) {
-						defaultRrSetGroup[i].Description = w.(string)
-					}
-
-					if w, ok := defaultRrSetGroupMapStrToI["ttl"]; ok && !isIntfNil(w) {
-						defaultRrSetGroup[i].Ttl = uint32(w.(int))
-					}
-
-					typeRecordSetTypeFound := false
-
-					if v, ok := defaultRrSetGroupMapStrToI["a_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
-
-						typeRecordSetTypeFound = true
-						typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_ARecord{}
-						typeRecordSetInt.ARecord = &ves_io_schema_dns_zone.DNSAResourceRecord{}
-						defaultRrSetGroup[i].TypeRecordSet = typeRecordSetInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-								typeRecordSetInt.ARecord.Name = v.(string)
-
-							}
-
-							if v, ok := cs["values"]; ok && !isIntfNil(v) {
-
-								ls := make([]string, len(v.([]interface{})))
-								for i, v := range v.([]interface{}) {
-									ls[i] = v.(string)
-								}
-								typeRecordSetInt.ARecord.Values = ls
-
-							}
-
-						}
-
-					}
-
-					if v, ok := defaultRrSetGroupMapStrToI["aaaa_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
-
-						typeRecordSetTypeFound = true
-						typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_AaaaRecord{}
-						typeRecordSetInt.AaaaRecord = &ves_io_schema_dns_zone.DNSAAAAResourceRecord{}
-						defaultRrSetGroup[i].TypeRecordSet = typeRecordSetInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-								typeRecordSetInt.AaaaRecord.Name = v.(string)
-
-							}
-
-							if v, ok := cs["values"]; ok && !isIntfNil(v) {
-
-								ls := make([]string, len(v.([]interface{})))
-								for i, v := range v.([]interface{}) {
-									ls[i] = v.(string)
-								}
-								typeRecordSetInt.AaaaRecord.Values = ls
-
-							}
-
-						}
-
-					}
-
-					if v, ok := defaultRrSetGroupMapStrToI["afsdb_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
-
-						typeRecordSetTypeFound = true
-						typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_AfsdbRecord{}
-						typeRecordSetInt.AfsdbRecord = &ves_io_schema_dns_zone.DNSAFSDBRecord{}
-						defaultRrSetGroup[i].TypeRecordSet = typeRecordSetInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-								typeRecordSetInt.AfsdbRecord.Name = v.(string)
-
-							}
-
-							if v, ok := cs["values"]; ok && !isIntfNil(v) {
-
-								sl := v.([]interface{})
-								values := make([]*ves_io_schema_dns_zone.AFSDBRecordValue, len(sl))
-								typeRecordSetInt.AfsdbRecord.Values = values
-								for i, set := range sl {
-									values[i] = &ves_io_schema_dns_zone.AFSDBRecordValue{}
-									valuesMapStrToI := set.(map[string]interface{})
-
-									if w, ok := valuesMapStrToI["hostname"]; ok && !isIntfNil(w) {
-										values[i].Hostname = w.(string)
-									}
-
-									if v, ok := valuesMapStrToI["subtype"]; ok && !isIntfNil(v) {
-
-										values[i].Subtype = ves_io_schema_dns_zone.AFSDBRecordSubtype(ves_io_schema_dns_zone.AFSDBRecordSubtype_value[v.(string)])
-
-									}
-
-								}
-
-							}
-
-						}
-
-					}
-
-					if v, ok := defaultRrSetGroupMapStrToI["alias_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
-
-						typeRecordSetTypeFound = true
-						typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_AliasRecord{}
-						typeRecordSetInt.AliasRecord = &ves_io_schema_dns_zone.DNSAliasResourceRecord{}
-						defaultRrSetGroup[i].TypeRecordSet = typeRecordSetInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-								typeRecordSetInt.AliasRecord.Name = v.(string)
-
-							}
-
-							if v, ok := cs["value"]; ok && !isIntfNil(v) {
-
-								typeRecordSetInt.AliasRecord.Value = v.(string)
-
-							}
-
-						}
-
-					}
-
-					if v, ok := defaultRrSetGroupMapStrToI["caa_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
-
-						typeRecordSetTypeFound = true
-						typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_CaaRecord{}
-						typeRecordSetInt.CaaRecord = &ves_io_schema_dns_zone.DNSCAAResourceRecord{}
-						defaultRrSetGroup[i].TypeRecordSet = typeRecordSetInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-								typeRecordSetInt.CaaRecord.Name = v.(string)
-
-							}
-
-							if v, ok := cs["values"]; ok && !isIntfNil(v) {
-
-								sl := v.([]interface{})
-								values := make([]*ves_io_schema_dns_zone.CertificationAuthorityAuthorization, len(sl))
-								typeRecordSetInt.CaaRecord.Values = values
-								for i, set := range sl {
-									values[i] = &ves_io_schema_dns_zone.CertificationAuthorityAuthorization{}
-									valuesMapStrToI := set.(map[string]interface{})
-
-									if w, ok := valuesMapStrToI["flags"]; ok && !isIntfNil(w) {
-										values[i].Flags = uint32(w.(int))
-									}
-
-									if w, ok := valuesMapStrToI["tag"]; ok && !isIntfNil(w) {
-										values[i].Tag = w.(string)
-									}
-
-									if w, ok := valuesMapStrToI["value"]; ok && !isIntfNil(w) {
-										values[i].Value = w.(string)
-									}
-
-								}
-
-							}
-
-						}
-
-					}
-
-					if v, ok := defaultRrSetGroupMapStrToI["cds_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
-
-						typeRecordSetTypeFound = true
-						typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_CdsRecord{}
-						typeRecordSetInt.CdsRecord = &ves_io_schema_dns_zone.DNSCDSRecord{}
-						defaultRrSetGroup[i].TypeRecordSet = typeRecordSetInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-								typeRecordSetInt.CdsRecord.Name = v.(string)
-
-							}
-
-							if v, ok := cs["values"]; ok && !isIntfNil(v) {
-
-								sl := v.([]interface{})
-								values := make([]*ves_io_schema_dns_zone.DSRecordValue, len(sl))
-								typeRecordSetInt.CdsRecord.Values = values
-								for i, set := range sl {
-									values[i] = &ves_io_schema_dns_zone.DSRecordValue{}
-									valuesMapStrToI := set.(map[string]interface{})
-
-									digestChoiceTypeFound := false
-
-									if v, ok := valuesMapStrToI["sha1_digest"]; ok && !isIntfNil(v) && !digestChoiceTypeFound {
-
-										digestChoiceTypeFound = true
-										digestChoiceInt := &ves_io_schema_dns_zone.DSRecordValue_Sha1Digest{}
-										digestChoiceInt.Sha1Digest = &ves_io_schema_dns_zone.SHA1Digest{}
-										values[i].DigestChoice = digestChoiceInt
-
-										sl := v.(*schema.Set).List()
-										for _, set := range sl {
-											cs := set.(map[string]interface{})
-
-											if v, ok := cs["digest"]; ok && !isIntfNil(v) {
-
-												digestChoiceInt.Sha1Digest.Digest = v.(string)
-
-											}
-
-										}
-
-									}
-
-									if v, ok := valuesMapStrToI["sha256_digest"]; ok && !isIntfNil(v) && !digestChoiceTypeFound {
-
-										digestChoiceTypeFound = true
-										digestChoiceInt := &ves_io_schema_dns_zone.DSRecordValue_Sha256Digest{}
-										digestChoiceInt.Sha256Digest = &ves_io_schema_dns_zone.SHA256Digest{}
-										values[i].DigestChoice = digestChoiceInt
-
-										sl := v.(*schema.Set).List()
-										for _, set := range sl {
-											cs := set.(map[string]interface{})
-
-											if v, ok := cs["digest"]; ok && !isIntfNil(v) {
-
-												digestChoiceInt.Sha256Digest.Digest = v.(string)
-
-											}
-
-										}
-
-									}
-
-									if v, ok := valuesMapStrToI["sha384_digest"]; ok && !isIntfNil(v) && !digestChoiceTypeFound {
-
-										digestChoiceTypeFound = true
-										digestChoiceInt := &ves_io_schema_dns_zone.DSRecordValue_Sha384Digest{}
-										digestChoiceInt.Sha384Digest = &ves_io_schema_dns_zone.SHA384Digest{}
-										values[i].DigestChoice = digestChoiceInt
-
-										sl := v.(*schema.Set).List()
-										for _, set := range sl {
-											cs := set.(map[string]interface{})
-
-											if v, ok := cs["digest"]; ok && !isIntfNil(v) {
-
-												digestChoiceInt.Sha384Digest.Digest = v.(string)
-
-											}
-
-										}
-
-									}
-
-									if v, ok := valuesMapStrToI["ds_key_algorithm"]; ok && !isIntfNil(v) {
-
-										values[i].DsKeyAlgorithm = ves_io_schema_dns_zone.DSKeyAlgorithm(ves_io_schema_dns_zone.DSKeyAlgorithm_value[v.(string)])
-
-									}
-
-									if w, ok := valuesMapStrToI["key_tag"]; ok && !isIntfNil(w) {
-										values[i].KeyTag = uint32(w.(int))
-									}
-
-								}
-
-							}
-
-						}
-
-					}
-
-					if v, ok := defaultRrSetGroupMapStrToI["cert_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
-
-						typeRecordSetTypeFound = true
-						typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_CertRecord{}
-						typeRecordSetInt.CertRecord = &ves_io_schema_dns_zone.CERTResourceRecord{}
-						defaultRrSetGroup[i].TypeRecordSet = typeRecordSetInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-								typeRecordSetInt.CertRecord.Name = v.(string)
-
-							}
-
-							if v, ok := cs["values"]; ok && !isIntfNil(v) {
-
-								sl := v.([]interface{})
-								values := make([]*ves_io_schema_dns_zone.CERTRecordValue, len(sl))
-								typeRecordSetInt.CertRecord.Values = values
-								for i, set := range sl {
-									values[i] = &ves_io_schema_dns_zone.CERTRecordValue{}
-									valuesMapStrToI := set.(map[string]interface{})
-
-									if v, ok := valuesMapStrToI["algorithm"]; ok && !isIntfNil(v) {
-
-										values[i].Algorithm = ves_io_schema_dns_zone.CERTAlgorithm(ves_io_schema_dns_zone.CERTAlgorithm_value[v.(string)])
-
-									}
-
-									if w, ok := valuesMapStrToI["cert_key_tag"]; ok && !isIntfNil(w) {
-										values[i].CertKeyTag = uint32(w.(int))
-									}
-
-									if v, ok := valuesMapStrToI["cert_type"]; ok && !isIntfNil(v) {
-
-										values[i].CertType = ves_io_schema_dns_zone.CERTType(ves_io_schema_dns_zone.CERTType_value[v.(string)])
-
-									}
-
-									if w, ok := valuesMapStrToI["certificate"]; ok && !isIntfNil(w) {
-										values[i].Certificate = w.(string)
-									}
-
-								}
-
-							}
-
-						}
-
-					}
-
-					if v, ok := defaultRrSetGroupMapStrToI["cname_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
-
-						typeRecordSetTypeFound = true
-						typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_CnameRecord{}
-						typeRecordSetInt.CnameRecord = &ves_io_schema_dns_zone.DNSCNAMEResourceRecord{}
-						defaultRrSetGroup[i].TypeRecordSet = typeRecordSetInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-								typeRecordSetInt.CnameRecord.Name = v.(string)
-
-							}
-
-							if v, ok := cs["value"]; ok && !isIntfNil(v) {
-
-								typeRecordSetInt.CnameRecord.Value = v.(string)
-
-							}
-
-						}
-
-					}
-
-					if v, ok := defaultRrSetGroupMapStrToI["dlv_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
-
-						typeRecordSetTypeFound = true
-						typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_DlvRecord{}
-						typeRecordSetInt.DlvRecord = &ves_io_schema_dns_zone.DLVResourceRecord{}
-						defaultRrSetGroup[i].TypeRecordSet = typeRecordSetInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-								typeRecordSetInt.DlvRecord.Name = v.(string)
-
-							}
-
-							if v, ok := cs["values"]; ok && !isIntfNil(v) {
-
-								sl := v.([]interface{})
-								values := make([]*ves_io_schema_dns_zone.DSRecordValue, len(sl))
-								typeRecordSetInt.DlvRecord.Values = values
-								for i, set := range sl {
-									values[i] = &ves_io_schema_dns_zone.DSRecordValue{}
-									valuesMapStrToI := set.(map[string]interface{})
-
-									digestChoiceTypeFound := false
-
-									if v, ok := valuesMapStrToI["sha1_digest"]; ok && !isIntfNil(v) && !digestChoiceTypeFound {
-
-										digestChoiceTypeFound = true
-										digestChoiceInt := &ves_io_schema_dns_zone.DSRecordValue_Sha1Digest{}
-										digestChoiceInt.Sha1Digest = &ves_io_schema_dns_zone.SHA1Digest{}
-										values[i].DigestChoice = digestChoiceInt
-
-										sl := v.(*schema.Set).List()
-										for _, set := range sl {
-											cs := set.(map[string]interface{})
-
-											if v, ok := cs["digest"]; ok && !isIntfNil(v) {
-
-												digestChoiceInt.Sha1Digest.Digest = v.(string)
-
-											}
-
-										}
-
-									}
-
-									if v, ok := valuesMapStrToI["sha256_digest"]; ok && !isIntfNil(v) && !digestChoiceTypeFound {
-
-										digestChoiceTypeFound = true
-										digestChoiceInt := &ves_io_schema_dns_zone.DSRecordValue_Sha256Digest{}
-										digestChoiceInt.Sha256Digest = &ves_io_schema_dns_zone.SHA256Digest{}
-										values[i].DigestChoice = digestChoiceInt
-
-										sl := v.(*schema.Set).List()
-										for _, set := range sl {
-											cs := set.(map[string]interface{})
-
-											if v, ok := cs["digest"]; ok && !isIntfNil(v) {
-
-												digestChoiceInt.Sha256Digest.Digest = v.(string)
-
-											}
-
-										}
-
-									}
-
-									if v, ok := valuesMapStrToI["sha384_digest"]; ok && !isIntfNil(v) && !digestChoiceTypeFound {
-
-										digestChoiceTypeFound = true
-										digestChoiceInt := &ves_io_schema_dns_zone.DSRecordValue_Sha384Digest{}
-										digestChoiceInt.Sha384Digest = &ves_io_schema_dns_zone.SHA384Digest{}
-										values[i].DigestChoice = digestChoiceInt
-
-										sl := v.(*schema.Set).List()
-										for _, set := range sl {
-											cs := set.(map[string]interface{})
-
-											if v, ok := cs["digest"]; ok && !isIntfNil(v) {
-
-												digestChoiceInt.Sha384Digest.Digest = v.(string)
-
-											}
-
-										}
-
-									}
-
-									if v, ok := valuesMapStrToI["ds_key_algorithm"]; ok && !isIntfNil(v) {
-
-										values[i].DsKeyAlgorithm = ves_io_schema_dns_zone.DSKeyAlgorithm(ves_io_schema_dns_zone.DSKeyAlgorithm_value[v.(string)])
-
-									}
-
-									if w, ok := valuesMapStrToI["key_tag"]; ok && !isIntfNil(w) {
-										values[i].KeyTag = uint32(w.(int))
-									}
-
-								}
-
-							}
-
-						}
-
-					}
-
-					if v, ok := defaultRrSetGroupMapStrToI["ds_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
-
-						typeRecordSetTypeFound = true
-						typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_DsRecord{}
-						typeRecordSetInt.DsRecord = &ves_io_schema_dns_zone.DNSDSRecord{}
-						defaultRrSetGroup[i].TypeRecordSet = typeRecordSetInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-								typeRecordSetInt.DsRecord.Name = v.(string)
-
-							}
-
-							if v, ok := cs["values"]; ok && !isIntfNil(v) {
-
-								sl := v.([]interface{})
-								values := make([]*ves_io_schema_dns_zone.DSRecordValue, len(sl))
-								typeRecordSetInt.DsRecord.Values = values
-								for i, set := range sl {
-									values[i] = &ves_io_schema_dns_zone.DSRecordValue{}
-									valuesMapStrToI := set.(map[string]interface{})
-
-									digestChoiceTypeFound := false
-
-									if v, ok := valuesMapStrToI["sha1_digest"]; ok && !isIntfNil(v) && !digestChoiceTypeFound {
-
-										digestChoiceTypeFound = true
-										digestChoiceInt := &ves_io_schema_dns_zone.DSRecordValue_Sha1Digest{}
-										digestChoiceInt.Sha1Digest = &ves_io_schema_dns_zone.SHA1Digest{}
-										values[i].DigestChoice = digestChoiceInt
-
-										sl := v.(*schema.Set).List()
-										for _, set := range sl {
-											cs := set.(map[string]interface{})
-
-											if v, ok := cs["digest"]; ok && !isIntfNil(v) {
-
-												digestChoiceInt.Sha1Digest.Digest = v.(string)
-
-											}
-
-										}
-
-									}
-
-									if v, ok := valuesMapStrToI["sha256_digest"]; ok && !isIntfNil(v) && !digestChoiceTypeFound {
-
-										digestChoiceTypeFound = true
-										digestChoiceInt := &ves_io_schema_dns_zone.DSRecordValue_Sha256Digest{}
-										digestChoiceInt.Sha256Digest = &ves_io_schema_dns_zone.SHA256Digest{}
-										values[i].DigestChoice = digestChoiceInt
-
-										sl := v.(*schema.Set).List()
-										for _, set := range sl {
-											cs := set.(map[string]interface{})
-
-											if v, ok := cs["digest"]; ok && !isIntfNil(v) {
-
-												digestChoiceInt.Sha256Digest.Digest = v.(string)
-
-											}
-
-										}
-
-									}
-
-									if v, ok := valuesMapStrToI["sha384_digest"]; ok && !isIntfNil(v) && !digestChoiceTypeFound {
-
-										digestChoiceTypeFound = true
-										digestChoiceInt := &ves_io_schema_dns_zone.DSRecordValue_Sha384Digest{}
-										digestChoiceInt.Sha384Digest = &ves_io_schema_dns_zone.SHA384Digest{}
-										values[i].DigestChoice = digestChoiceInt
-
-										sl := v.(*schema.Set).List()
-										for _, set := range sl {
-											cs := set.(map[string]interface{})
-
-											if v, ok := cs["digest"]; ok && !isIntfNil(v) {
-
-												digestChoiceInt.Sha384Digest.Digest = v.(string)
-
-											}
-
-										}
-
-									}
-
-									if v, ok := valuesMapStrToI["ds_key_algorithm"]; ok && !isIntfNil(v) {
-
-										values[i].DsKeyAlgorithm = ves_io_schema_dns_zone.DSKeyAlgorithm(ves_io_schema_dns_zone.DSKeyAlgorithm_value[v.(string)])
-
-									}
-
-									if w, ok := valuesMapStrToI["key_tag"]; ok && !isIntfNil(w) {
-										values[i].KeyTag = uint32(w.(int))
-									}
-
-								}
-
-							}
-
-						}
-
-					}
-
-					if v, ok := defaultRrSetGroupMapStrToI["eui48_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
-
-						typeRecordSetTypeFound = true
-						typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_Eui48Record{}
-						typeRecordSetInt.Eui48Record = &ves_io_schema_dns_zone.DNSEUI48ResourceRecord{}
-						defaultRrSetGroup[i].TypeRecordSet = typeRecordSetInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-								typeRecordSetInt.Eui48Record.Name = v.(string)
-
-							}
-
-							if v, ok := cs["value"]; ok && !isIntfNil(v) {
-
-								typeRecordSetInt.Eui48Record.Value = v.(string)
-
-							}
-
-						}
-
-					}
-
-					if v, ok := defaultRrSetGroupMapStrToI["eui64_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
-
-						typeRecordSetTypeFound = true
-						typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_Eui64Record{}
-						typeRecordSetInt.Eui64Record = &ves_io_schema_dns_zone.DNSEUI64ResourceRecord{}
-						defaultRrSetGroup[i].TypeRecordSet = typeRecordSetInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-								typeRecordSetInt.Eui64Record.Name = v.(string)
-
-							}
-
-							if v, ok := cs["value"]; ok && !isIntfNil(v) {
-
-								typeRecordSetInt.Eui64Record.Value = v.(string)
-
-							}
-
-						}
-
-					}
-
-					if v, ok := defaultRrSetGroupMapStrToI["lb_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
-
-						typeRecordSetTypeFound = true
-						typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_LbRecord{}
-						typeRecordSetInt.LbRecord = &ves_io_schema_dns_zone.DNSLBResourceRecord{}
-						defaultRrSetGroup[i].TypeRecordSet = typeRecordSetInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-								typeRecordSetInt.LbRecord.Name = v.(string)
-
-							}
-
-							if v, ok := cs["value"]; ok && !isIntfNil(v) {
-
-								sl := v.(*schema.Set).List()
-								valueInt := &ves_io_schema_views.ObjectRefType{}
-								typeRecordSetInt.LbRecord.Value = valueInt
-
-								for _, set := range sl {
-									vMapToStrVal := set.(map[string]interface{})
-									if val, ok := vMapToStrVal["name"]; ok && !isIntfNil(v) {
-										valueInt.Name = val.(string)
-									}
-									if val, ok := vMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-										valueInt.Namespace = val.(string)
-									}
-
-									if val, ok := vMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-										valueInt.Tenant = val.(string)
-									}
-								}
-
-							}
-
-						}
-
-					}
-
-					if v, ok := defaultRrSetGroupMapStrToI["loc_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
-
-						typeRecordSetTypeFound = true
-						typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_LocRecord{}
-						typeRecordSetInt.LocRecord = &ves_io_schema_dns_zone.DNSLOCResourceRecord{}
-						defaultRrSetGroup[i].TypeRecordSet = typeRecordSetInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-								typeRecordSetInt.LocRecord.Name = v.(string)
-
-							}
-
-							if v, ok := cs["values"]; ok && !isIntfNil(v) {
-
-								sl := v.([]interface{})
-								values := make([]*ves_io_schema_dns_zone.LOCValue, len(sl))
-								typeRecordSetInt.LocRecord.Values = values
-								for i, set := range sl {
-									values[i] = &ves_io_schema_dns_zone.LOCValue{}
-									valuesMapStrToI := set.(map[string]interface{})
-
-									if w, ok := valuesMapStrToI["altitude"]; ok && !isIntfNil(w) {
-										values[i].Altitude = float32(w.(float64))
-									}
-
-									if w, ok := valuesMapStrToI["horizontal_precision"]; ok && !isIntfNil(w) {
-										values[i].HorizontalPrecision = float32(w.(float64))
-									}
-
-									if w, ok := valuesMapStrToI["latitude_degree"]; ok && !isIntfNil(w) {
-										values[i].LatitudeDegree = int32(w.(int))
-									}
-
-									if v, ok := valuesMapStrToI["latitude_hemisphere"]; ok && !isIntfNil(v) {
-
-										values[i].LatitudeHemisphere = ves_io_schema_dns_zone.LatitudeHemisphere(ves_io_schema_dns_zone.LatitudeHemisphere_value[v.(string)])
-
-									}
-
-									if w, ok := valuesMapStrToI["latitude_minute"]; ok && !isIntfNil(w) {
-										values[i].LatitudeMinute = int32(w.(int))
-									}
-
-									if w, ok := valuesMapStrToI["latitude_second"]; ok && !isIntfNil(w) {
-										values[i].LatitudeSecond = float32(w.(float64))
-									}
-
-									if w, ok := valuesMapStrToI["location_diameter"]; ok && !isIntfNil(w) {
-										values[i].LocationDiameter = float32(w.(float64))
-									}
-
-									if w, ok := valuesMapStrToI["longitude_degree"]; ok && !isIntfNil(w) {
-										values[i].LongitudeDegree = int32(w.(int))
-									}
-
-									if v, ok := valuesMapStrToI["longitude_hemisphere"]; ok && !isIntfNil(v) {
-
-										values[i].LongitudeHemisphere = ves_io_schema_dns_zone.LongitudeHemisphere(ves_io_schema_dns_zone.LongitudeHemisphere_value[v.(string)])
-
-									}
-
-									if w, ok := valuesMapStrToI["longitude_minute"]; ok && !isIntfNil(w) {
-										values[i].LongitudeMinute = int32(w.(int))
-									}
-
-									if w, ok := valuesMapStrToI["longitude_second"]; ok && !isIntfNil(w) {
-										values[i].LongitudeSecond = float32(w.(float64))
-									}
-
-									if w, ok := valuesMapStrToI["vertical_precision"]; ok && !isIntfNil(w) {
-										values[i].VerticalPrecision = float32(w.(float64))
-									}
-
-								}
-
-							}
-
-						}
-
-					}
-
-					if v, ok := defaultRrSetGroupMapStrToI["mx_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
-
-						typeRecordSetTypeFound = true
-						typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_MxRecord{}
-						typeRecordSetInt.MxRecord = &ves_io_schema_dns_zone.DNSMXResourceRecord{}
-						defaultRrSetGroup[i].TypeRecordSet = typeRecordSetInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-								typeRecordSetInt.MxRecord.Name = v.(string)
-
-							}
-
-							if v, ok := cs["values"]; ok && !isIntfNil(v) {
-
-								sl := v.([]interface{})
-								values := make([]*ves_io_schema_dns_zone.MailExchanger, len(sl))
-								typeRecordSetInt.MxRecord.Values = values
-								for i, set := range sl {
-									values[i] = &ves_io_schema_dns_zone.MailExchanger{}
-									valuesMapStrToI := set.(map[string]interface{})
-
-									if w, ok := valuesMapStrToI["domain"]; ok && !isIntfNil(w) {
-										values[i].Domain = w.(string)
-									}
-
-									if w, ok := valuesMapStrToI["priority"]; ok && !isIntfNil(w) {
-										values[i].Priority = uint32(w.(int))
-									}
-
-								}
-
-							}
-
-						}
-
-					}
-
-					if v, ok := defaultRrSetGroupMapStrToI["naptr_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
-
-						typeRecordSetTypeFound = true
-						typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_NaptrRecord{}
-						typeRecordSetInt.NaptrRecord = &ves_io_schema_dns_zone.DNSNAPTRResourceRecord{}
-						defaultRrSetGroup[i].TypeRecordSet = typeRecordSetInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-								typeRecordSetInt.NaptrRecord.Name = v.(string)
-
-							}
-
-							if v, ok := cs["values"]; ok && !isIntfNil(v) {
-
-								sl := v.([]interface{})
-								values := make([]*ves_io_schema_dns_zone.NAPTRValue, len(sl))
-								typeRecordSetInt.NaptrRecord.Values = values
-								for i, set := range sl {
-									values[i] = &ves_io_schema_dns_zone.NAPTRValue{}
-									valuesMapStrToI := set.(map[string]interface{})
-
-									if w, ok := valuesMapStrToI["flags"]; ok && !isIntfNil(w) {
-										values[i].Flags = w.(string)
-									}
-
-									if w, ok := valuesMapStrToI["order"]; ok && !isIntfNil(w) {
-										values[i].Order = uint32(w.(int))
-									}
-
-									if w, ok := valuesMapStrToI["preference"]; ok && !isIntfNil(w) {
-										values[i].Preference = uint32(w.(int))
-									}
-
-									if w, ok := valuesMapStrToI["regexp"]; ok && !isIntfNil(w) {
-										values[i].Regexp = w.(string)
-									}
-
-									if w, ok := valuesMapStrToI["replacement"]; ok && !isIntfNil(w) {
-										values[i].Replacement = w.(string)
-									}
-
-									if w, ok := valuesMapStrToI["service"]; ok && !isIntfNil(w) {
-										values[i].Service = w.(string)
-									}
-
-								}
-
-							}
-
-						}
-
-					}
-
-					if v, ok := defaultRrSetGroupMapStrToI["ns_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
-
-						typeRecordSetTypeFound = true
-						typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_NsRecord{}
-						typeRecordSetInt.NsRecord = &ves_io_schema_dns_zone.DNSNSResourceRecord{}
-						defaultRrSetGroup[i].TypeRecordSet = typeRecordSetInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-								typeRecordSetInt.NsRecord.Name = v.(string)
-
-							}
-
-							if v, ok := cs["values"]; ok && !isIntfNil(v) {
-
-								ls := make([]string, len(v.([]interface{})))
-								for i, v := range v.([]interface{}) {
-									ls[i] = v.(string)
-								}
-								typeRecordSetInt.NsRecord.Values = ls
-
-							}
-
-						}
-
-					}
-
-					if v, ok := defaultRrSetGroupMapStrToI["ptr_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
-
-						typeRecordSetTypeFound = true
-						typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_PtrRecord{}
-						typeRecordSetInt.PtrRecord = &ves_io_schema_dns_zone.DNSPTRResourceRecord{}
-						defaultRrSetGroup[i].TypeRecordSet = typeRecordSetInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-								typeRecordSetInt.PtrRecord.Name = v.(string)
-
-							}
-
-							if v, ok := cs["values"]; ok && !isIntfNil(v) {
-
-								ls := make([]string, len(v.([]interface{})))
-								for i, v := range v.([]interface{}) {
-									ls[i] = v.(string)
-								}
-								typeRecordSetInt.PtrRecord.Values = ls
-
-							}
-
-						}
-
-					}
-
-					if v, ok := defaultRrSetGroupMapStrToI["srv_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
-
-						typeRecordSetTypeFound = true
-						typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_SrvRecord{}
-						typeRecordSetInt.SrvRecord = &ves_io_schema_dns_zone.DNSSRVResourceRecord{}
-						defaultRrSetGroup[i].TypeRecordSet = typeRecordSetInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-								typeRecordSetInt.SrvRecord.Name = v.(string)
-
-							}
-
-							if v, ok := cs["values"]; ok && !isIntfNil(v) {
-
-								sl := v.([]interface{})
-								values := make([]*ves_io_schema_dns_zone.SRVService, len(sl))
-								typeRecordSetInt.SrvRecord.Values = values
-								for i, set := range sl {
-									values[i] = &ves_io_schema_dns_zone.SRVService{}
-									valuesMapStrToI := set.(map[string]interface{})
-
-									if w, ok := valuesMapStrToI["port"]; ok && !isIntfNil(w) {
-										values[i].Port = uint32(w.(int))
-									}
-
-									if w, ok := valuesMapStrToI["priority"]; ok && !isIntfNil(w) {
-										values[i].Priority = uint32(w.(int))
-									}
-
-									if w, ok := valuesMapStrToI["target"]; ok && !isIntfNil(w) {
-										values[i].Target = w.(string)
-									}
-
-									if w, ok := valuesMapStrToI["weight"]; ok && !isIntfNil(w) {
-										values[i].Weight = uint32(w.(int))
-									}
-
-								}
-
-							}
-
-						}
-
-					}
-
-					if v, ok := defaultRrSetGroupMapStrToI["sshfp_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
-
-						typeRecordSetTypeFound = true
-						typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_SshfpRecord{}
-						typeRecordSetInt.SshfpRecord = &ves_io_schema_dns_zone.SSHFPResourceRecord{}
-						defaultRrSetGroup[i].TypeRecordSet = typeRecordSetInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-								typeRecordSetInt.SshfpRecord.Name = v.(string)
-
-							}
-
-							if v, ok := cs["values"]; ok && !isIntfNil(v) {
-
-								sl := v.([]interface{})
-								values := make([]*ves_io_schema_dns_zone.SSHFPRecordValue, len(sl))
-								typeRecordSetInt.SshfpRecord.Values = values
-								for i, set := range sl {
-									values[i] = &ves_io_schema_dns_zone.SSHFPRecordValue{}
-									valuesMapStrToI := set.(map[string]interface{})
-
-									if v, ok := valuesMapStrToI["algorithm"]; ok && !isIntfNil(v) {
-
-										values[i].Algorithm = ves_io_schema_dns_zone.SSHFPAlgorithm(ves_io_schema_dns_zone.SSHFPAlgorithm_value[v.(string)])
-
-									}
-
-									if w, ok := valuesMapStrToI["fingerprint"]; ok && !isIntfNil(w) {
-										values[i].Fingerprint = w.(string)
-									}
-
-									fingerprintTypeTypeFound := false
-
-									if v, ok := valuesMapStrToI["sha1_fingerprint"]; ok && !isIntfNil(v) && !fingerprintTypeTypeFound {
-
-										fingerprintTypeTypeFound = true
-										fingerprintTypeInt := &ves_io_schema_dns_zone.SSHFPRecordValue_Sha1Fingerprint{}
-										fingerprintTypeInt.Sha1Fingerprint = &ves_io_schema_dns_zone.SHA1Fingerprint{}
-										values[i].FingerprintType = fingerprintTypeInt
-
-										sl := v.(*schema.Set).List()
-										for _, set := range sl {
-											cs := set.(map[string]interface{})
-
-											if v, ok := cs["fingerprint"]; ok && !isIntfNil(v) {
-
-												fingerprintTypeInt.Sha1Fingerprint.Fingerprint = v.(string)
-
-											}
-
-										}
-
-									}
-
-									if v, ok := valuesMapStrToI["sha256_fingerprint"]; ok && !isIntfNil(v) && !fingerprintTypeTypeFound {
-
-										fingerprintTypeTypeFound = true
-										fingerprintTypeInt := &ves_io_schema_dns_zone.SSHFPRecordValue_Sha256Fingerprint{}
-										fingerprintTypeInt.Sha256Fingerprint = &ves_io_schema_dns_zone.SHA256Fingerprint{}
-										values[i].FingerprintType = fingerprintTypeInt
-
-										sl := v.(*schema.Set).List()
-										for _, set := range sl {
-											cs := set.(map[string]interface{})
-
-											if v, ok := cs["fingerprint"]; ok && !isIntfNil(v) {
-
-												fingerprintTypeInt.Sha256Fingerprint.Fingerprint = v.(string)
-
-											}
-
-										}
-
-									}
-
-									if v, ok := valuesMapStrToI["fingerprinttype"]; ok && !isIntfNil(v) {
-
-										values[i].Fingerprinttype = ves_io_schema_dns_zone.SSHFPFingerprintType(ves_io_schema_dns_zone.SSHFPFingerprintType_value[v.(string)])
-
-									}
-
-								}
-
-							}
-
-						}
-
-					}
-
-					if v, ok := defaultRrSetGroupMapStrToI["tlsa_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
-
-						typeRecordSetTypeFound = true
-						typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_TlsaRecord{}
-						typeRecordSetInt.TlsaRecord = &ves_io_schema_dns_zone.TLSAResourceRecord{}
-						defaultRrSetGroup[i].TypeRecordSet = typeRecordSetInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-								typeRecordSetInt.TlsaRecord.Name = v.(string)
-
-							}
-
-							if v, ok := cs["values"]; ok && !isIntfNil(v) {
-
-								sl := v.([]interface{})
-								values := make([]*ves_io_schema_dns_zone.TLSARecordValue, len(sl))
-								typeRecordSetInt.TlsaRecord.Values = values
-								for i, set := range sl {
-									values[i] = &ves_io_schema_dns_zone.TLSARecordValue{}
-									valuesMapStrToI := set.(map[string]interface{})
-
-									if w, ok := valuesMapStrToI["certificate_association_data"]; ok && !isIntfNil(w) {
-										values[i].CertificateAssociationData = w.(string)
-									}
-
-									if v, ok := valuesMapStrToI["certificate_usage"]; ok && !isIntfNil(v) {
-
-										values[i].CertificateUsage = ves_io_schema_dns_zone.TLSARecordCertificateUsage(ves_io_schema_dns_zone.TLSARecordCertificateUsage_value[v.(string)])
-
-									}
-
-									if v, ok := valuesMapStrToI["matching_type"]; ok && !isIntfNil(v) {
-
-										values[i].MatchingType = ves_io_schema_dns_zone.TLSARecordMatchingType(ves_io_schema_dns_zone.TLSARecordMatchingType_value[v.(string)])
-
-									}
-
-									if v, ok := valuesMapStrToI["selector"]; ok && !isIntfNil(v) {
-
-										values[i].Selector = ves_io_schema_dns_zone.TLSARecordCSelector(ves_io_schema_dns_zone.TLSARecordCSelector_value[v.(string)])
-
-									}
-
-								}
-
-							}
-
-						}
-
-					}
-
-					if v, ok := defaultRrSetGroupMapStrToI["txt_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
-
-						typeRecordSetTypeFound = true
-						typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_TxtRecord{}
-						typeRecordSetInt.TxtRecord = &ves_io_schema_dns_zone.DNSTXTResourceRecord{}
-						defaultRrSetGroup[i].TypeRecordSet = typeRecordSetInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-								typeRecordSetInt.TxtRecord.Name = v.(string)
-
-							}
-
-							if v, ok := cs["values"]; ok && !isIntfNil(v) {
-
-								ls := make([]string, len(v.([]interface{})))
-								for i, v := range v.([]interface{}) {
-									ls[i] = v.(string)
-								}
-								typeRecordSetInt.TxtRecord.Values = ls
-
-							}
-
-						}
-
-					}
+					dnsTypeInt.Primary.AllowHttpLbManagedRecords = v.(bool)
 
 				}
 
-			}
+				if v, ok := cs["default_rr_set_group"]; ok && !isIntfNil(v) {
 
-			if v, ok := cs["dnssec_mode"]; ok && !isIntfNil(v) {
+					sl := v.([]interface{})
+					defaultRrSetGroup := make([]*ves_io_schema_dns_zone.RRSet, len(sl))
+					dnsTypeInt.Primary.DefaultRrSetGroup = defaultRrSetGroup
+					for i, set := range sl {
+						if set != nil {
+							defaultRrSetGroup[i] = &ves_io_schema_dns_zone.RRSet{}
+							defaultRrSetGroupMapStrToI := set.(map[string]interface{})
 
-				sl := v.(*schema.Set).List()
-				dnssecMode := &ves_io_schema_dns_zone.DNSSECMode{}
-				dnsTypeInt.Primary.DnssecMode = dnssecMode
-				for _, set := range sl {
-					dnssecModeMapStrToI := set.(map[string]interface{})
-
-					modeTypeFound := false
-
-					if v, ok := dnssecModeMapStrToI["disable"]; ok && !isIntfNil(v) && !modeTypeFound {
-
-						modeTypeFound = true
-
-						if v.(bool) {
-							modeInt := &ves_io_schema_dns_zone.DNSSECMode_Disable{}
-							modeInt.Disable = &ves_io_schema.Empty{}
-							dnssecMode.Mode = modeInt
-						}
-
-					}
-
-					if _, ok := dnssecModeMapStrToI["enable"]; ok && !modeTypeFound {
-
-						modeTypeFound = true
-						modeInt := &ves_io_schema_dns_zone.DNSSECMode_Enable{}
-						modeInt.Enable = &ves_io_schema_dns_zone.DNSSECModeEnable{}
-						dnssecMode.Mode = modeInt
-
-					}
-
-				}
-
-			}
-
-			if v, ok := cs["rr_set_group"]; ok && !isIntfNil(v) {
-
-				sl := v.([]interface{})
-				rrSetGroup := make([]*ves_io_schema_dns_zone.RRSetGroup, len(sl))
-				dnsTypeInt.Primary.RrSetGroup = rrSetGroup
-				for i, set := range sl {
-					rrSetGroup[i] = &ves_io_schema_dns_zone.RRSetGroup{}
-					rrSetGroupMapStrToI := set.(map[string]interface{})
-
-					if v, ok := rrSetGroupMapStrToI["metadata"]; ok && !isIntfNil(v) {
-
-						sl := v.(*schema.Set).List()
-						metadata := &ves_io_schema.MessageMetaType{}
-						rrSetGroup[i].Metadata = metadata
-						for _, set := range sl {
-							metadataMapStrToI := set.(map[string]interface{})
-
-							if w, ok := metadataMapStrToI["description"]; ok && !isIntfNil(w) {
-								metadata.Description = w.(string)
+							if w, ok := defaultRrSetGroupMapStrToI["description"]; ok && !isIntfNil(w) {
+								defaultRrSetGroup[i].Description = w.(string)
 							}
 
-							if w, ok := metadataMapStrToI["disable"]; ok && !isIntfNil(w) {
-								metadata.Disable = w.(bool)
-							}
-
-							if w, ok := metadataMapStrToI["name"]; ok && !isIntfNil(w) {
-								metadata.Name = w.(string)
-							}
-
-						}
-
-					}
-
-					if v, ok := rrSetGroupMapStrToI["rr_set"]; ok && !isIntfNil(v) {
-
-						sl := v.([]interface{})
-						rrSet := make([]*ves_io_schema_dns_zone.RRSet, len(sl))
-						rrSetGroup[i].RrSet = rrSet
-						for i, set := range sl {
-							rrSet[i] = &ves_io_schema_dns_zone.RRSet{}
-							rrSetMapStrToI := set.(map[string]interface{})
-
-							if w, ok := rrSetMapStrToI["description"]; ok && !isIntfNil(w) {
-								rrSet[i].Description = w.(string)
-							}
-
-							if w, ok := rrSetMapStrToI["ttl"]; ok && !isIntfNil(w) {
-								rrSet[i].Ttl = uint32(w.(int))
+							if w, ok := defaultRrSetGroupMapStrToI["ttl"]; ok && !isIntfNil(w) {
+								defaultRrSetGroup[i].Ttl = uint32(w.(int))
 							}
 
 							typeRecordSetTypeFound := false
 
-							if v, ok := rrSetMapStrToI["a_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
+							if v, ok := defaultRrSetGroupMapStrToI["a_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
 
 								typeRecordSetTypeFound = true
 								typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_ARecord{}
 								typeRecordSetInt.ARecord = &ves_io_schema_dns_zone.DNSAResourceRecord{}
-								rrSet[i].TypeRecordSet = typeRecordSetInt
+								defaultRrSetGroup[i].TypeRecordSet = typeRecordSetInt
 
-								sl := v.(*schema.Set).List()
+								sl := v.([]interface{})
 								for _, set := range sl {
-									cs := set.(map[string]interface{})
+									if set != nil {
+										cs := set.(map[string]interface{})
 
-									if v, ok := cs["name"]; ok && !isIntfNil(v) {
+										if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
-										typeRecordSetInt.ARecord.Name = v.(string)
+											typeRecordSetInt.ARecord.Name = v.(string)
 
-									}
-
-									if v, ok := cs["values"]; ok && !isIntfNil(v) {
-
-										ls := make([]string, len(v.([]interface{})))
-										for i, v := range v.([]interface{}) {
-											ls[i] = v.(string)
 										}
-										typeRecordSetInt.ARecord.Values = ls
+
+										if v, ok := cs["values"]; ok && !isIntfNil(v) {
+
+											ls := make([]string, len(v.([]interface{})))
+											for i, v := range v.([]interface{}) {
+												ls[i] = v.(string)
+											}
+											typeRecordSetInt.ARecord.Values = ls
+
+										}
 
 									}
-
 								}
 
 							}
 
-							if v, ok := rrSetMapStrToI["aaaa_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
+							if v, ok := defaultRrSetGroupMapStrToI["aaaa_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
 
 								typeRecordSetTypeFound = true
 								typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_AaaaRecord{}
 								typeRecordSetInt.AaaaRecord = &ves_io_schema_dns_zone.DNSAAAAResourceRecord{}
-								rrSet[i].TypeRecordSet = typeRecordSetInt
+								defaultRrSetGroup[i].TypeRecordSet = typeRecordSetInt
 
-								sl := v.(*schema.Set).List()
+								sl := v.([]interface{})
 								for _, set := range sl {
-									cs := set.(map[string]interface{})
+									if set != nil {
+										cs := set.(map[string]interface{})
 
-									if v, ok := cs["name"]; ok && !isIntfNil(v) {
+										if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
-										typeRecordSetInt.AaaaRecord.Name = v.(string)
+											typeRecordSetInt.AaaaRecord.Name = v.(string)
 
-									}
-
-									if v, ok := cs["values"]; ok && !isIntfNil(v) {
-
-										ls := make([]string, len(v.([]interface{})))
-										for i, v := range v.([]interface{}) {
-											ls[i] = v.(string)
 										}
-										typeRecordSetInt.AaaaRecord.Values = ls
+
+										if v, ok := cs["values"]; ok && !isIntfNil(v) {
+
+											ls := make([]string, len(v.([]interface{})))
+											for i, v := range v.([]interface{}) {
+												ls[i] = v.(string)
+											}
+											typeRecordSetInt.AaaaRecord.Values = ls
+
+										}
 
 									}
-
 								}
 
 							}
 
-							if v, ok := rrSetMapStrToI["afsdb_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
+							if v, ok := defaultRrSetGroupMapStrToI["afsdb_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
 
 								typeRecordSetTypeFound = true
 								typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_AfsdbRecord{}
 								typeRecordSetInt.AfsdbRecord = &ves_io_schema_dns_zone.DNSAFSDBRecord{}
-								rrSet[i].TypeRecordSet = typeRecordSetInt
+								defaultRrSetGroup[i].TypeRecordSet = typeRecordSetInt
 
-								sl := v.(*schema.Set).List()
+								sl := v.([]interface{})
 								for _, set := range sl {
-									cs := set.(map[string]interface{})
+									if set != nil {
+										cs := set.(map[string]interface{})
 
-									if v, ok := cs["name"]; ok && !isIntfNil(v) {
+										if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
-										typeRecordSetInt.AfsdbRecord.Name = v.(string)
+											typeRecordSetInt.AfsdbRecord.Name = v.(string)
 
-									}
+										}
 
-									if v, ok := cs["values"]; ok && !isIntfNil(v) {
+										if v, ok := cs["values"]; ok && !isIntfNil(v) {
 
-										sl := v.([]interface{})
-										values := make([]*ves_io_schema_dns_zone.AFSDBRecordValue, len(sl))
-										typeRecordSetInt.AfsdbRecord.Values = values
-										for i, set := range sl {
-											values[i] = &ves_io_schema_dns_zone.AFSDBRecordValue{}
-											valuesMapStrToI := set.(map[string]interface{})
+											sl := v.([]interface{})
+											values := make([]*ves_io_schema_dns_zone.AFSDBRecordValue, len(sl))
+											typeRecordSetInt.AfsdbRecord.Values = values
+											for i, set := range sl {
+												if set != nil {
+													values[i] = &ves_io_schema_dns_zone.AFSDBRecordValue{}
+													valuesMapStrToI := set.(map[string]interface{})
 
-											if w, ok := valuesMapStrToI["hostname"]; ok && !isIntfNil(w) {
-												values[i].Hostname = w.(string)
-											}
+													if w, ok := valuesMapStrToI["hostname"]; ok && !isIntfNil(w) {
+														values[i].Hostname = w.(string)
+													}
 
-											if v, ok := valuesMapStrToI["subtype"]; ok && !isIntfNil(v) {
+													if v, ok := valuesMapStrToI["subtype"]; ok && !isIntfNil(v) {
 
-												values[i].Subtype = ves_io_schema_dns_zone.AFSDBRecordSubtype(ves_io_schema_dns_zone.AFSDBRecordSubtype_value[v.(string)])
+														values[i].Subtype = ves_io_schema_dns_zone.AFSDBRecordSubtype(ves_io_schema_dns_zone.AFSDBRecordSubtype_value[v.(string)])
 
+													}
+
+												}
 											}
 
 										}
 
 									}
-
 								}
 
 							}
 
-							if v, ok := rrSetMapStrToI["alias_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
+							if v, ok := defaultRrSetGroupMapStrToI["alias_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
 
 								typeRecordSetTypeFound = true
 								typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_AliasRecord{}
 								typeRecordSetInt.AliasRecord = &ves_io_schema_dns_zone.DNSAliasResourceRecord{}
-								rrSet[i].TypeRecordSet = typeRecordSetInt
+								defaultRrSetGroup[i].TypeRecordSet = typeRecordSetInt
 
-								sl := v.(*schema.Set).List()
+								sl := v.([]interface{})
 								for _, set := range sl {
-									cs := set.(map[string]interface{})
+									if set != nil {
+										cs := set.(map[string]interface{})
 
-									if v, ok := cs["name"]; ok && !isIntfNil(v) {
+										if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
-										typeRecordSetInt.AliasRecord.Name = v.(string)
+											typeRecordSetInt.AliasRecord.Name = v.(string)
+
+										}
+
+										if v, ok := cs["value"]; ok && !isIntfNil(v) {
+
+											typeRecordSetInt.AliasRecord.Value = v.(string)
+
+										}
 
 									}
-
-									if v, ok := cs["value"]; ok && !isIntfNil(v) {
-
-										typeRecordSetInt.AliasRecord.Value = v.(string)
-
-									}
-
 								}
 
 							}
 
-							if v, ok := rrSetMapStrToI["caa_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
+							if v, ok := defaultRrSetGroupMapStrToI["caa_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
 
 								typeRecordSetTypeFound = true
 								typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_CaaRecord{}
 								typeRecordSetInt.CaaRecord = &ves_io_schema_dns_zone.DNSCAAResourceRecord{}
-								rrSet[i].TypeRecordSet = typeRecordSetInt
+								defaultRrSetGroup[i].TypeRecordSet = typeRecordSetInt
 
-								sl := v.(*schema.Set).List()
+								sl := v.([]interface{})
 								for _, set := range sl {
-									cs := set.(map[string]interface{})
+									if set != nil {
+										cs := set.(map[string]interface{})
 
-									if v, ok := cs["name"]; ok && !isIntfNil(v) {
+										if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
-										typeRecordSetInt.CaaRecord.Name = v.(string)
+											typeRecordSetInt.CaaRecord.Name = v.(string)
 
-									}
+										}
 
-									if v, ok := cs["values"]; ok && !isIntfNil(v) {
+										if v, ok := cs["values"]; ok && !isIntfNil(v) {
 
-										sl := v.([]interface{})
-										values := make([]*ves_io_schema_dns_zone.CertificationAuthorityAuthorization, len(sl))
-										typeRecordSetInt.CaaRecord.Values = values
-										for i, set := range sl {
-											values[i] = &ves_io_schema_dns_zone.CertificationAuthorityAuthorization{}
-											valuesMapStrToI := set.(map[string]interface{})
+											sl := v.([]interface{})
+											values := make([]*ves_io_schema_dns_zone.CertificationAuthorityAuthorization, len(sl))
+											typeRecordSetInt.CaaRecord.Values = values
+											for i, set := range sl {
+												if set != nil {
+													values[i] = &ves_io_schema_dns_zone.CertificationAuthorityAuthorization{}
+													valuesMapStrToI := set.(map[string]interface{})
 
-											if w, ok := valuesMapStrToI["flags"]; ok && !isIntfNil(w) {
-												values[i].Flags = uint32(w.(int))
-											}
+													if w, ok := valuesMapStrToI["flags"]; ok && !isIntfNil(w) {
+														values[i].Flags = uint32(w.(int))
+													}
 
-											if w, ok := valuesMapStrToI["tag"]; ok && !isIntfNil(w) {
-												values[i].Tag = w.(string)
-											}
+													if w, ok := valuesMapStrToI["tag"]; ok && !isIntfNil(w) {
+														values[i].Tag = w.(string)
+													}
 
-											if w, ok := valuesMapStrToI["value"]; ok && !isIntfNil(w) {
-												values[i].Value = w.(string)
+													if w, ok := valuesMapStrToI["value"]; ok && !isIntfNil(w) {
+														values[i].Value = w.(string)
+													}
+
+												}
 											}
 
 										}
 
 									}
-
 								}
 
 							}
 
-							if v, ok := rrSetMapStrToI["cds_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
+							if v, ok := defaultRrSetGroupMapStrToI["cds_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
 
 								typeRecordSetTypeFound = true
 								typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_CdsRecord{}
 								typeRecordSetInt.CdsRecord = &ves_io_schema_dns_zone.DNSCDSRecord{}
-								rrSet[i].TypeRecordSet = typeRecordSetInt
+								defaultRrSetGroup[i].TypeRecordSet = typeRecordSetInt
 
-								sl := v.(*schema.Set).List()
+								sl := v.([]interface{})
 								for _, set := range sl {
-									cs := set.(map[string]interface{})
+									if set != nil {
+										cs := set.(map[string]interface{})
 
-									if v, ok := cs["name"]; ok && !isIntfNil(v) {
+										if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
-										typeRecordSetInt.CdsRecord.Name = v.(string)
+											typeRecordSetInt.CdsRecord.Name = v.(string)
 
-									}
+										}
 
-									if v, ok := cs["values"]; ok && !isIntfNil(v) {
+										if v, ok := cs["values"]; ok && !isIntfNil(v) {
 
-										sl := v.([]interface{})
-										values := make([]*ves_io_schema_dns_zone.DSRecordValue, len(sl))
-										typeRecordSetInt.CdsRecord.Values = values
-										for i, set := range sl {
-											values[i] = &ves_io_schema_dns_zone.DSRecordValue{}
-											valuesMapStrToI := set.(map[string]interface{})
+											sl := v.([]interface{})
+											values := make([]*ves_io_schema_dns_zone.DSRecordValue, len(sl))
+											typeRecordSetInt.CdsRecord.Values = values
+											for i, set := range sl {
+												if set != nil {
+													values[i] = &ves_io_schema_dns_zone.DSRecordValue{}
+													valuesMapStrToI := set.(map[string]interface{})
 
-											digestChoiceTypeFound := false
+													digestChoiceTypeFound := false
 
-											if v, ok := valuesMapStrToI["sha1_digest"]; ok && !isIntfNil(v) && !digestChoiceTypeFound {
+													if v, ok := valuesMapStrToI["sha1_digest"]; ok && !isIntfNil(v) && !digestChoiceTypeFound {
 
-												digestChoiceTypeFound = true
-												digestChoiceInt := &ves_io_schema_dns_zone.DSRecordValue_Sha1Digest{}
-												digestChoiceInt.Sha1Digest = &ves_io_schema_dns_zone.SHA1Digest{}
-												values[i].DigestChoice = digestChoiceInt
+														digestChoiceTypeFound = true
+														digestChoiceInt := &ves_io_schema_dns_zone.DSRecordValue_Sha1Digest{}
+														digestChoiceInt.Sha1Digest = &ves_io_schema_dns_zone.SHA1Digest{}
+														values[i].DigestChoice = digestChoiceInt
 
-												sl := v.(*schema.Set).List()
-												for _, set := range sl {
-													cs := set.(map[string]interface{})
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
 
-													if v, ok := cs["digest"]; ok && !isIntfNil(v) {
+																if v, ok := cs["digest"]; ok && !isIntfNil(v) {
 
-														digestChoiceInt.Sha1Digest.Digest = v.(string)
+																	digestChoiceInt.Sha1Digest.Digest = v.(string)
 
-													}
+																}
 
-												}
-
-											}
-
-											if v, ok := valuesMapStrToI["sha256_digest"]; ok && !isIntfNil(v) && !digestChoiceTypeFound {
-
-												digestChoiceTypeFound = true
-												digestChoiceInt := &ves_io_schema_dns_zone.DSRecordValue_Sha256Digest{}
-												digestChoiceInt.Sha256Digest = &ves_io_schema_dns_zone.SHA256Digest{}
-												values[i].DigestChoice = digestChoiceInt
-
-												sl := v.(*schema.Set).List()
-												for _, set := range sl {
-													cs := set.(map[string]interface{})
-
-													if v, ok := cs["digest"]; ok && !isIntfNil(v) {
-
-														digestChoiceInt.Sha256Digest.Digest = v.(string)
+															}
+														}
 
 													}
 
-												}
+													if v, ok := valuesMapStrToI["sha256_digest"]; ok && !isIntfNil(v) && !digestChoiceTypeFound {
 
-											}
+														digestChoiceTypeFound = true
+														digestChoiceInt := &ves_io_schema_dns_zone.DSRecordValue_Sha256Digest{}
+														digestChoiceInt.Sha256Digest = &ves_io_schema_dns_zone.SHA256Digest{}
+														values[i].DigestChoice = digestChoiceInt
 
-											if v, ok := valuesMapStrToI["sha384_digest"]; ok && !isIntfNil(v) && !digestChoiceTypeFound {
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
 
-												digestChoiceTypeFound = true
-												digestChoiceInt := &ves_io_schema_dns_zone.DSRecordValue_Sha384Digest{}
-												digestChoiceInt.Sha384Digest = &ves_io_schema_dns_zone.SHA384Digest{}
-												values[i].DigestChoice = digestChoiceInt
+																if v, ok := cs["digest"]; ok && !isIntfNil(v) {
 
-												sl := v.(*schema.Set).List()
-												for _, set := range sl {
-													cs := set.(map[string]interface{})
+																	digestChoiceInt.Sha256Digest.Digest = v.(string)
 
-													if v, ok := cs["digest"]; ok && !isIntfNil(v) {
+																}
 
-														digestChoiceInt.Sha384Digest.Digest = v.(string)
+															}
+														}
 
 													}
 
+													if v, ok := valuesMapStrToI["sha384_digest"]; ok && !isIntfNil(v) && !digestChoiceTypeFound {
+
+														digestChoiceTypeFound = true
+														digestChoiceInt := &ves_io_schema_dns_zone.DSRecordValue_Sha384Digest{}
+														digestChoiceInt.Sha384Digest = &ves_io_schema_dns_zone.SHA384Digest{}
+														values[i].DigestChoice = digestChoiceInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["digest"]; ok && !isIntfNil(v) {
+
+																	digestChoiceInt.Sha384Digest.Digest = v.(string)
+
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := valuesMapStrToI["ds_key_algorithm"]; ok && !isIntfNil(v) {
+
+														values[i].DsKeyAlgorithm = ves_io_schema_dns_zone.DSKeyAlgorithm(ves_io_schema_dns_zone.DSKeyAlgorithm_value[v.(string)])
+
+													}
+
+													if w, ok := valuesMapStrToI["key_tag"]; ok && !isIntfNil(w) {
+														values[i].KeyTag = uint32(w.(int))
+													}
+
 												}
-
-											}
-
-											if v, ok := valuesMapStrToI["ds_key_algorithm"]; ok && !isIntfNil(v) {
-
-												values[i].DsKeyAlgorithm = ves_io_schema_dns_zone.DSKeyAlgorithm(ves_io_schema_dns_zone.DSKeyAlgorithm_value[v.(string)])
-
-											}
-
-											if w, ok := valuesMapStrToI["key_tag"]; ok && !isIntfNil(w) {
-												values[i].KeyTag = uint32(w.(int))
 											}
 
 										}
 
 									}
-
 								}
 
 							}
 
-							if v, ok := rrSetMapStrToI["cert_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
+							if v, ok := defaultRrSetGroupMapStrToI["cert_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
 
 								typeRecordSetTypeFound = true
 								typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_CertRecord{}
 								typeRecordSetInt.CertRecord = &ves_io_schema_dns_zone.CERTResourceRecord{}
-								rrSet[i].TypeRecordSet = typeRecordSetInt
+								defaultRrSetGroup[i].TypeRecordSet = typeRecordSetInt
 
-								sl := v.(*schema.Set).List()
+								sl := v.([]interface{})
 								for _, set := range sl {
-									cs := set.(map[string]interface{})
+									if set != nil {
+										cs := set.(map[string]interface{})
 
-									if v, ok := cs["name"]; ok && !isIntfNil(v) {
+										if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
-										typeRecordSetInt.CertRecord.Name = v.(string)
+											typeRecordSetInt.CertRecord.Name = v.(string)
 
-									}
+										}
 
-									if v, ok := cs["values"]; ok && !isIntfNil(v) {
+										if v, ok := cs["values"]; ok && !isIntfNil(v) {
 
-										sl := v.([]interface{})
-										values := make([]*ves_io_schema_dns_zone.CERTRecordValue, len(sl))
-										typeRecordSetInt.CertRecord.Values = values
-										for i, set := range sl {
-											values[i] = &ves_io_schema_dns_zone.CERTRecordValue{}
-											valuesMapStrToI := set.(map[string]interface{})
+											sl := v.([]interface{})
+											values := make([]*ves_io_schema_dns_zone.CERTRecordValue, len(sl))
+											typeRecordSetInt.CertRecord.Values = values
+											for i, set := range sl {
+												if set != nil {
+													values[i] = &ves_io_schema_dns_zone.CERTRecordValue{}
+													valuesMapStrToI := set.(map[string]interface{})
 
-											if v, ok := valuesMapStrToI["algorithm"]; ok && !isIntfNil(v) {
+													if v, ok := valuesMapStrToI["algorithm"]; ok && !isIntfNil(v) {
 
-												values[i].Algorithm = ves_io_schema_dns_zone.CERTAlgorithm(ves_io_schema_dns_zone.CERTAlgorithm_value[v.(string)])
+														values[i].Algorithm = ves_io_schema_dns_zone.CERTAlgorithm(ves_io_schema_dns_zone.CERTAlgorithm_value[v.(string)])
 
-											}
+													}
 
-											if w, ok := valuesMapStrToI["cert_key_tag"]; ok && !isIntfNil(w) {
-												values[i].CertKeyTag = uint32(w.(int))
-											}
+													if w, ok := valuesMapStrToI["cert_key_tag"]; ok && !isIntfNil(w) {
+														values[i].CertKeyTag = uint32(w.(int))
+													}
 
-											if v, ok := valuesMapStrToI["cert_type"]; ok && !isIntfNil(v) {
+													if v, ok := valuesMapStrToI["cert_type"]; ok && !isIntfNil(v) {
 
-												values[i].CertType = ves_io_schema_dns_zone.CERTType(ves_io_schema_dns_zone.CERTType_value[v.(string)])
+														values[i].CertType = ves_io_schema_dns_zone.CERTType(ves_io_schema_dns_zone.CERTType_value[v.(string)])
 
-											}
+													}
 
-											if w, ok := valuesMapStrToI["certificate"]; ok && !isIntfNil(w) {
-												values[i].Certificate = w.(string)
+													if w, ok := valuesMapStrToI["certificate"]; ok && !isIntfNil(w) {
+														values[i].Certificate = w.(string)
+													}
+
+												}
 											}
 
 										}
 
 									}
-
 								}
 
 							}
 
-							if v, ok := rrSetMapStrToI["cname_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
+							if v, ok := defaultRrSetGroupMapStrToI["cname_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
 
 								typeRecordSetTypeFound = true
 								typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_CnameRecord{}
 								typeRecordSetInt.CnameRecord = &ves_io_schema_dns_zone.DNSCNAMEResourceRecord{}
-								rrSet[i].TypeRecordSet = typeRecordSetInt
+								defaultRrSetGroup[i].TypeRecordSet = typeRecordSetInt
 
-								sl := v.(*schema.Set).List()
+								sl := v.([]interface{})
 								for _, set := range sl {
-									cs := set.(map[string]interface{})
+									if set != nil {
+										cs := set.(map[string]interface{})
 
-									if v, ok := cs["name"]; ok && !isIntfNil(v) {
+										if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
-										typeRecordSetInt.CnameRecord.Name = v.(string)
+											typeRecordSetInt.CnameRecord.Name = v.(string)
+
+										}
+
+										if v, ok := cs["value"]; ok && !isIntfNil(v) {
+
+											typeRecordSetInt.CnameRecord.Value = v.(string)
+
+										}
 
 									}
-
-									if v, ok := cs["value"]; ok && !isIntfNil(v) {
-
-										typeRecordSetInt.CnameRecord.Value = v.(string)
-
-									}
-
 								}
 
 							}
 
-							if v, ok := rrSetMapStrToI["dlv_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
+							if v, ok := defaultRrSetGroupMapStrToI["dlv_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
 
 								typeRecordSetTypeFound = true
 								typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_DlvRecord{}
 								typeRecordSetInt.DlvRecord = &ves_io_schema_dns_zone.DLVResourceRecord{}
-								rrSet[i].TypeRecordSet = typeRecordSetInt
+								defaultRrSetGroup[i].TypeRecordSet = typeRecordSetInt
 
-								sl := v.(*schema.Set).List()
+								sl := v.([]interface{})
 								for _, set := range sl {
-									cs := set.(map[string]interface{})
+									if set != nil {
+										cs := set.(map[string]interface{})
 
-									if v, ok := cs["name"]; ok && !isIntfNil(v) {
+										if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
-										typeRecordSetInt.DlvRecord.Name = v.(string)
+											typeRecordSetInt.DlvRecord.Name = v.(string)
 
-									}
+										}
 
-									if v, ok := cs["values"]; ok && !isIntfNil(v) {
+										if v, ok := cs["values"]; ok && !isIntfNil(v) {
 
-										sl := v.([]interface{})
-										values := make([]*ves_io_schema_dns_zone.DSRecordValue, len(sl))
-										typeRecordSetInt.DlvRecord.Values = values
-										for i, set := range sl {
-											values[i] = &ves_io_schema_dns_zone.DSRecordValue{}
-											valuesMapStrToI := set.(map[string]interface{})
+											sl := v.([]interface{})
+											values := make([]*ves_io_schema_dns_zone.DSRecordValue, len(sl))
+											typeRecordSetInt.DlvRecord.Values = values
+											for i, set := range sl {
+												if set != nil {
+													values[i] = &ves_io_schema_dns_zone.DSRecordValue{}
+													valuesMapStrToI := set.(map[string]interface{})
 
-											digestChoiceTypeFound := false
+													digestChoiceTypeFound := false
 
-											if v, ok := valuesMapStrToI["sha1_digest"]; ok && !isIntfNil(v) && !digestChoiceTypeFound {
+													if v, ok := valuesMapStrToI["sha1_digest"]; ok && !isIntfNil(v) && !digestChoiceTypeFound {
 
-												digestChoiceTypeFound = true
-												digestChoiceInt := &ves_io_schema_dns_zone.DSRecordValue_Sha1Digest{}
-												digestChoiceInt.Sha1Digest = &ves_io_schema_dns_zone.SHA1Digest{}
-												values[i].DigestChoice = digestChoiceInt
+														digestChoiceTypeFound = true
+														digestChoiceInt := &ves_io_schema_dns_zone.DSRecordValue_Sha1Digest{}
+														digestChoiceInt.Sha1Digest = &ves_io_schema_dns_zone.SHA1Digest{}
+														values[i].DigestChoice = digestChoiceInt
 
-												sl := v.(*schema.Set).List()
-												for _, set := range sl {
-													cs := set.(map[string]interface{})
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
 
-													if v, ok := cs["digest"]; ok && !isIntfNil(v) {
+																if v, ok := cs["digest"]; ok && !isIntfNil(v) {
 
-														digestChoiceInt.Sha1Digest.Digest = v.(string)
+																	digestChoiceInt.Sha1Digest.Digest = v.(string)
 
-													}
+																}
 
-												}
-
-											}
-
-											if v, ok := valuesMapStrToI["sha256_digest"]; ok && !isIntfNil(v) && !digestChoiceTypeFound {
-
-												digestChoiceTypeFound = true
-												digestChoiceInt := &ves_io_schema_dns_zone.DSRecordValue_Sha256Digest{}
-												digestChoiceInt.Sha256Digest = &ves_io_schema_dns_zone.SHA256Digest{}
-												values[i].DigestChoice = digestChoiceInt
-
-												sl := v.(*schema.Set).List()
-												for _, set := range sl {
-													cs := set.(map[string]interface{})
-
-													if v, ok := cs["digest"]; ok && !isIntfNil(v) {
-
-														digestChoiceInt.Sha256Digest.Digest = v.(string)
+															}
+														}
 
 													}
 
-												}
+													if v, ok := valuesMapStrToI["sha256_digest"]; ok && !isIntfNil(v) && !digestChoiceTypeFound {
 
-											}
+														digestChoiceTypeFound = true
+														digestChoiceInt := &ves_io_schema_dns_zone.DSRecordValue_Sha256Digest{}
+														digestChoiceInt.Sha256Digest = &ves_io_schema_dns_zone.SHA256Digest{}
+														values[i].DigestChoice = digestChoiceInt
 
-											if v, ok := valuesMapStrToI["sha384_digest"]; ok && !isIntfNil(v) && !digestChoiceTypeFound {
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
 
-												digestChoiceTypeFound = true
-												digestChoiceInt := &ves_io_schema_dns_zone.DSRecordValue_Sha384Digest{}
-												digestChoiceInt.Sha384Digest = &ves_io_schema_dns_zone.SHA384Digest{}
-												values[i].DigestChoice = digestChoiceInt
+																if v, ok := cs["digest"]; ok && !isIntfNil(v) {
 
-												sl := v.(*schema.Set).List()
-												for _, set := range sl {
-													cs := set.(map[string]interface{})
+																	digestChoiceInt.Sha256Digest.Digest = v.(string)
 
-													if v, ok := cs["digest"]; ok && !isIntfNil(v) {
+																}
 
-														digestChoiceInt.Sha384Digest.Digest = v.(string)
+															}
+														}
 
 													}
 
+													if v, ok := valuesMapStrToI["sha384_digest"]; ok && !isIntfNil(v) && !digestChoiceTypeFound {
+
+														digestChoiceTypeFound = true
+														digestChoiceInt := &ves_io_schema_dns_zone.DSRecordValue_Sha384Digest{}
+														digestChoiceInt.Sha384Digest = &ves_io_schema_dns_zone.SHA384Digest{}
+														values[i].DigestChoice = digestChoiceInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["digest"]; ok && !isIntfNil(v) {
+
+																	digestChoiceInt.Sha384Digest.Digest = v.(string)
+
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := valuesMapStrToI["ds_key_algorithm"]; ok && !isIntfNil(v) {
+
+														values[i].DsKeyAlgorithm = ves_io_schema_dns_zone.DSKeyAlgorithm(ves_io_schema_dns_zone.DSKeyAlgorithm_value[v.(string)])
+
+													}
+
+													if w, ok := valuesMapStrToI["key_tag"]; ok && !isIntfNil(w) {
+														values[i].KeyTag = uint32(w.(int))
+													}
+
 												}
-
-											}
-
-											if v, ok := valuesMapStrToI["ds_key_algorithm"]; ok && !isIntfNil(v) {
-
-												values[i].DsKeyAlgorithm = ves_io_schema_dns_zone.DSKeyAlgorithm(ves_io_schema_dns_zone.DSKeyAlgorithm_value[v.(string)])
-
-											}
-
-											if w, ok := valuesMapStrToI["key_tag"]; ok && !isIntfNil(w) {
-												values[i].KeyTag = uint32(w.(int))
 											}
 
 										}
 
 									}
-
 								}
 
 							}
 
-							if v, ok := rrSetMapStrToI["ds_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
+							if v, ok := defaultRrSetGroupMapStrToI["ds_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
 
 								typeRecordSetTypeFound = true
 								typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_DsRecord{}
 								typeRecordSetInt.DsRecord = &ves_io_schema_dns_zone.DNSDSRecord{}
-								rrSet[i].TypeRecordSet = typeRecordSetInt
+								defaultRrSetGroup[i].TypeRecordSet = typeRecordSetInt
 
-								sl := v.(*schema.Set).List()
+								sl := v.([]interface{})
 								for _, set := range sl {
-									cs := set.(map[string]interface{})
+									if set != nil {
+										cs := set.(map[string]interface{})
 
-									if v, ok := cs["name"]; ok && !isIntfNil(v) {
+										if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
-										typeRecordSetInt.DsRecord.Name = v.(string)
+											typeRecordSetInt.DsRecord.Name = v.(string)
 
-									}
+										}
 
-									if v, ok := cs["values"]; ok && !isIntfNil(v) {
+										if v, ok := cs["values"]; ok && !isIntfNil(v) {
 
-										sl := v.([]interface{})
-										values := make([]*ves_io_schema_dns_zone.DSRecordValue, len(sl))
-										typeRecordSetInt.DsRecord.Values = values
-										for i, set := range sl {
-											values[i] = &ves_io_schema_dns_zone.DSRecordValue{}
-											valuesMapStrToI := set.(map[string]interface{})
+											sl := v.([]interface{})
+											values := make([]*ves_io_schema_dns_zone.DSRecordValue, len(sl))
+											typeRecordSetInt.DsRecord.Values = values
+											for i, set := range sl {
+												if set != nil {
+													values[i] = &ves_io_schema_dns_zone.DSRecordValue{}
+													valuesMapStrToI := set.(map[string]interface{})
 
-											digestChoiceTypeFound := false
+													digestChoiceTypeFound := false
 
-											if v, ok := valuesMapStrToI["sha1_digest"]; ok && !isIntfNil(v) && !digestChoiceTypeFound {
+													if v, ok := valuesMapStrToI["sha1_digest"]; ok && !isIntfNil(v) && !digestChoiceTypeFound {
 
-												digestChoiceTypeFound = true
-												digestChoiceInt := &ves_io_schema_dns_zone.DSRecordValue_Sha1Digest{}
-												digestChoiceInt.Sha1Digest = &ves_io_schema_dns_zone.SHA1Digest{}
-												values[i].DigestChoice = digestChoiceInt
+														digestChoiceTypeFound = true
+														digestChoiceInt := &ves_io_schema_dns_zone.DSRecordValue_Sha1Digest{}
+														digestChoiceInt.Sha1Digest = &ves_io_schema_dns_zone.SHA1Digest{}
+														values[i].DigestChoice = digestChoiceInt
 
-												sl := v.(*schema.Set).List()
-												for _, set := range sl {
-													cs := set.(map[string]interface{})
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
 
-													if v, ok := cs["digest"]; ok && !isIntfNil(v) {
+																if v, ok := cs["digest"]; ok && !isIntfNil(v) {
 
-														digestChoiceInt.Sha1Digest.Digest = v.(string)
+																	digestChoiceInt.Sha1Digest.Digest = v.(string)
 
-													}
+																}
 
-												}
-
-											}
-
-											if v, ok := valuesMapStrToI["sha256_digest"]; ok && !isIntfNil(v) && !digestChoiceTypeFound {
-
-												digestChoiceTypeFound = true
-												digestChoiceInt := &ves_io_schema_dns_zone.DSRecordValue_Sha256Digest{}
-												digestChoiceInt.Sha256Digest = &ves_io_schema_dns_zone.SHA256Digest{}
-												values[i].DigestChoice = digestChoiceInt
-
-												sl := v.(*schema.Set).List()
-												for _, set := range sl {
-													cs := set.(map[string]interface{})
-
-													if v, ok := cs["digest"]; ok && !isIntfNil(v) {
-
-														digestChoiceInt.Sha256Digest.Digest = v.(string)
+															}
+														}
 
 													}
 
-												}
+													if v, ok := valuesMapStrToI["sha256_digest"]; ok && !isIntfNil(v) && !digestChoiceTypeFound {
 
-											}
+														digestChoiceTypeFound = true
+														digestChoiceInt := &ves_io_schema_dns_zone.DSRecordValue_Sha256Digest{}
+														digestChoiceInt.Sha256Digest = &ves_io_schema_dns_zone.SHA256Digest{}
+														values[i].DigestChoice = digestChoiceInt
 
-											if v, ok := valuesMapStrToI["sha384_digest"]; ok && !isIntfNil(v) && !digestChoiceTypeFound {
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
 
-												digestChoiceTypeFound = true
-												digestChoiceInt := &ves_io_schema_dns_zone.DSRecordValue_Sha384Digest{}
-												digestChoiceInt.Sha384Digest = &ves_io_schema_dns_zone.SHA384Digest{}
-												values[i].DigestChoice = digestChoiceInt
+																if v, ok := cs["digest"]; ok && !isIntfNil(v) {
 
-												sl := v.(*schema.Set).List()
-												for _, set := range sl {
-													cs := set.(map[string]interface{})
+																	digestChoiceInt.Sha256Digest.Digest = v.(string)
 
-													if v, ok := cs["digest"]; ok && !isIntfNil(v) {
+																}
 
-														digestChoiceInt.Sha384Digest.Digest = v.(string)
+															}
+														}
 
 													}
 
+													if v, ok := valuesMapStrToI["sha384_digest"]; ok && !isIntfNil(v) && !digestChoiceTypeFound {
+
+														digestChoiceTypeFound = true
+														digestChoiceInt := &ves_io_schema_dns_zone.DSRecordValue_Sha384Digest{}
+														digestChoiceInt.Sha384Digest = &ves_io_schema_dns_zone.SHA384Digest{}
+														values[i].DigestChoice = digestChoiceInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["digest"]; ok && !isIntfNil(v) {
+
+																	digestChoiceInt.Sha384Digest.Digest = v.(string)
+
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := valuesMapStrToI["ds_key_algorithm"]; ok && !isIntfNil(v) {
+
+														values[i].DsKeyAlgorithm = ves_io_schema_dns_zone.DSKeyAlgorithm(ves_io_schema_dns_zone.DSKeyAlgorithm_value[v.(string)])
+
+													}
+
+													if w, ok := valuesMapStrToI["key_tag"]; ok && !isIntfNil(w) {
+														values[i].KeyTag = uint32(w.(int))
+													}
+
 												}
-
-											}
-
-											if v, ok := valuesMapStrToI["ds_key_algorithm"]; ok && !isIntfNil(v) {
-
-												values[i].DsKeyAlgorithm = ves_io_schema_dns_zone.DSKeyAlgorithm(ves_io_schema_dns_zone.DSKeyAlgorithm_value[v.(string)])
-
-											}
-
-											if w, ok := valuesMapStrToI["key_tag"]; ok && !isIntfNil(w) {
-												values[i].KeyTag = uint32(w.(int))
 											}
 
 										}
 
 									}
-
 								}
 
 							}
 
-							if v, ok := rrSetMapStrToI["eui48_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
+							if v, ok := defaultRrSetGroupMapStrToI["eui48_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
 
 								typeRecordSetTypeFound = true
 								typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_Eui48Record{}
 								typeRecordSetInt.Eui48Record = &ves_io_schema_dns_zone.DNSEUI48ResourceRecord{}
-								rrSet[i].TypeRecordSet = typeRecordSetInt
+								defaultRrSetGroup[i].TypeRecordSet = typeRecordSetInt
 
-								sl := v.(*schema.Set).List()
+								sl := v.([]interface{})
 								for _, set := range sl {
-									cs := set.(map[string]interface{})
+									if set != nil {
+										cs := set.(map[string]interface{})
 
-									if v, ok := cs["name"]; ok && !isIntfNil(v) {
+										if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
-										typeRecordSetInt.Eui48Record.Name = v.(string)
+											typeRecordSetInt.Eui48Record.Name = v.(string)
+
+										}
+
+										if v, ok := cs["value"]; ok && !isIntfNil(v) {
+
+											typeRecordSetInt.Eui48Record.Value = v.(string)
+
+										}
 
 									}
-
-									if v, ok := cs["value"]; ok && !isIntfNil(v) {
-
-										typeRecordSetInt.Eui48Record.Value = v.(string)
-
-									}
-
 								}
 
 							}
 
-							if v, ok := rrSetMapStrToI["eui64_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
+							if v, ok := defaultRrSetGroupMapStrToI["eui64_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
 
 								typeRecordSetTypeFound = true
 								typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_Eui64Record{}
 								typeRecordSetInt.Eui64Record = &ves_io_schema_dns_zone.DNSEUI64ResourceRecord{}
-								rrSet[i].TypeRecordSet = typeRecordSetInt
+								defaultRrSetGroup[i].TypeRecordSet = typeRecordSetInt
 
-								sl := v.(*schema.Set).List()
+								sl := v.([]interface{})
 								for _, set := range sl {
-									cs := set.(map[string]interface{})
+									if set != nil {
+										cs := set.(map[string]interface{})
 
-									if v, ok := cs["name"]; ok && !isIntfNil(v) {
+										if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
-										typeRecordSetInt.Eui64Record.Name = v.(string)
+											typeRecordSetInt.Eui64Record.Name = v.(string)
+
+										}
+
+										if v, ok := cs["value"]; ok && !isIntfNil(v) {
+
+											typeRecordSetInt.Eui64Record.Value = v.(string)
+
+										}
 
 									}
-
-									if v, ok := cs["value"]; ok && !isIntfNil(v) {
-
-										typeRecordSetInt.Eui64Record.Value = v.(string)
-
-									}
-
 								}
 
 							}
 
-							if v, ok := rrSetMapStrToI["lb_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
+							if v, ok := defaultRrSetGroupMapStrToI["lb_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
 
 								typeRecordSetTypeFound = true
 								typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_LbRecord{}
 								typeRecordSetInt.LbRecord = &ves_io_schema_dns_zone.DNSLBResourceRecord{}
-								rrSet[i].TypeRecordSet = typeRecordSetInt
+								defaultRrSetGroup[i].TypeRecordSet = typeRecordSetInt
 
-								sl := v.(*schema.Set).List()
+								sl := v.([]interface{})
 								for _, set := range sl {
-									cs := set.(map[string]interface{})
+									if set != nil {
+										cs := set.(map[string]interface{})
 
-									if v, ok := cs["name"]; ok && !isIntfNil(v) {
+										if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
-										typeRecordSetInt.LbRecord.Name = v.(string)
+											typeRecordSetInt.LbRecord.Name = v.(string)
 
-									}
+										}
 
-									if v, ok := cs["value"]; ok && !isIntfNil(v) {
+										if v, ok := cs["value"]; ok && !isIntfNil(v) {
 
-										sl := v.(*schema.Set).List()
-										valueInt := &ves_io_schema_views.ObjectRefType{}
-										typeRecordSetInt.LbRecord.Value = valueInt
+											sl := v.([]interface{})
+											valueInt := &ves_io_schema_views.ObjectRefType{}
+											typeRecordSetInt.LbRecord.Value = valueInt
 
-										for _, set := range sl {
-											vMapToStrVal := set.(map[string]interface{})
-											if val, ok := vMapToStrVal["name"]; ok && !isIntfNil(v) {
-												valueInt.Name = val.(string)
+											for _, set := range sl {
+												if set != nil {
+													vMapToStrVal := set.(map[string]interface{})
+													if val, ok := vMapToStrVal["name"]; ok && !isIntfNil(v) {
+														valueInt.Name = val.(string)
+													}
+													if val, ok := vMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+														valueInt.Namespace = val.(string)
+													}
+
+													if val, ok := vMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+														valueInt.Tenant = val.(string)
+													}
+												}
 											}
-											if val, ok := vMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-												valueInt.Namespace = val.(string)
-											}
 
-											if val, ok := vMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-												valueInt.Tenant = val.(string)
-											}
 										}
 
 									}
-
 								}
 
 							}
 
-							if v, ok := rrSetMapStrToI["loc_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
+							if v, ok := defaultRrSetGroupMapStrToI["loc_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
 
 								typeRecordSetTypeFound = true
 								typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_LocRecord{}
 								typeRecordSetInt.LocRecord = &ves_io_schema_dns_zone.DNSLOCResourceRecord{}
-								rrSet[i].TypeRecordSet = typeRecordSetInt
+								defaultRrSetGroup[i].TypeRecordSet = typeRecordSetInt
 
-								sl := v.(*schema.Set).List()
+								sl := v.([]interface{})
 								for _, set := range sl {
-									cs := set.(map[string]interface{})
+									if set != nil {
+										cs := set.(map[string]interface{})
 
-									if v, ok := cs["name"]; ok && !isIntfNil(v) {
+										if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
-										typeRecordSetInt.LocRecord.Name = v.(string)
+											typeRecordSetInt.LocRecord.Name = v.(string)
 
-									}
+										}
 
-									if v, ok := cs["values"]; ok && !isIntfNil(v) {
+										if v, ok := cs["values"]; ok && !isIntfNil(v) {
 
-										sl := v.([]interface{})
-										values := make([]*ves_io_schema_dns_zone.LOCValue, len(sl))
-										typeRecordSetInt.LocRecord.Values = values
-										for i, set := range sl {
-											values[i] = &ves_io_schema_dns_zone.LOCValue{}
-											valuesMapStrToI := set.(map[string]interface{})
+											sl := v.([]interface{})
+											values := make([]*ves_io_schema_dns_zone.LOCValue, len(sl))
+											typeRecordSetInt.LocRecord.Values = values
+											for i, set := range sl {
+												if set != nil {
+													values[i] = &ves_io_schema_dns_zone.LOCValue{}
+													valuesMapStrToI := set.(map[string]interface{})
 
-											if w, ok := valuesMapStrToI["altitude"]; ok && !isIntfNil(w) {
-												values[i].Altitude = float32(w.(float64))
-											}
+													if w, ok := valuesMapStrToI["altitude"]; ok && !isIntfNil(w) {
+														values[i].Altitude = float32(w.(float64))
+													}
 
-											if w, ok := valuesMapStrToI["horizontal_precision"]; ok && !isIntfNil(w) {
-												values[i].HorizontalPrecision = float32(w.(float64))
-											}
+													if w, ok := valuesMapStrToI["horizontal_precision"]; ok && !isIntfNil(w) {
+														values[i].HorizontalPrecision = float32(w.(float64))
+													}
 
-											if w, ok := valuesMapStrToI["latitude_degree"]; ok && !isIntfNil(w) {
-												values[i].LatitudeDegree = int32(w.(int))
-											}
+													if w, ok := valuesMapStrToI["latitude_degree"]; ok && !isIntfNil(w) {
+														values[i].LatitudeDegree = int32(w.(int))
+													}
 
-											if v, ok := valuesMapStrToI["latitude_hemisphere"]; ok && !isIntfNil(v) {
+													if v, ok := valuesMapStrToI["latitude_hemisphere"]; ok && !isIntfNil(v) {
 
-												values[i].LatitudeHemisphere = ves_io_schema_dns_zone.LatitudeHemisphere(ves_io_schema_dns_zone.LatitudeHemisphere_value[v.(string)])
+														values[i].LatitudeHemisphere = ves_io_schema_dns_zone.LatitudeHemisphere(ves_io_schema_dns_zone.LatitudeHemisphere_value[v.(string)])
 
-											}
+													}
 
-											if w, ok := valuesMapStrToI["latitude_minute"]; ok && !isIntfNil(w) {
-												values[i].LatitudeMinute = int32(w.(int))
-											}
+													if w, ok := valuesMapStrToI["latitude_minute"]; ok && !isIntfNil(w) {
+														values[i].LatitudeMinute = int32(w.(int))
+													}
 
-											if w, ok := valuesMapStrToI["latitude_second"]; ok && !isIntfNil(w) {
-												values[i].LatitudeSecond = float32(w.(float64))
-											}
+													if w, ok := valuesMapStrToI["latitude_second"]; ok && !isIntfNil(w) {
+														values[i].LatitudeSecond = float32(w.(float64))
+													}
 
-											if w, ok := valuesMapStrToI["location_diameter"]; ok && !isIntfNil(w) {
-												values[i].LocationDiameter = float32(w.(float64))
-											}
+													if w, ok := valuesMapStrToI["location_diameter"]; ok && !isIntfNil(w) {
+														values[i].LocationDiameter = float32(w.(float64))
+													}
 
-											if w, ok := valuesMapStrToI["longitude_degree"]; ok && !isIntfNil(w) {
-												values[i].LongitudeDegree = int32(w.(int))
-											}
+													if w, ok := valuesMapStrToI["longitude_degree"]; ok && !isIntfNil(w) {
+														values[i].LongitudeDegree = int32(w.(int))
+													}
 
-											if v, ok := valuesMapStrToI["longitude_hemisphere"]; ok && !isIntfNil(v) {
+													if v, ok := valuesMapStrToI["longitude_hemisphere"]; ok && !isIntfNil(v) {
 
-												values[i].LongitudeHemisphere = ves_io_schema_dns_zone.LongitudeHemisphere(ves_io_schema_dns_zone.LongitudeHemisphere_value[v.(string)])
+														values[i].LongitudeHemisphere = ves_io_schema_dns_zone.LongitudeHemisphere(ves_io_schema_dns_zone.LongitudeHemisphere_value[v.(string)])
 
-											}
+													}
 
-											if w, ok := valuesMapStrToI["longitude_minute"]; ok && !isIntfNil(w) {
-												values[i].LongitudeMinute = int32(w.(int))
-											}
+													if w, ok := valuesMapStrToI["longitude_minute"]; ok && !isIntfNil(w) {
+														values[i].LongitudeMinute = int32(w.(int))
+													}
 
-											if w, ok := valuesMapStrToI["longitude_second"]; ok && !isIntfNil(w) {
-												values[i].LongitudeSecond = float32(w.(float64))
-											}
+													if w, ok := valuesMapStrToI["longitude_second"]; ok && !isIntfNil(w) {
+														values[i].LongitudeSecond = float32(w.(float64))
+													}
 
-											if w, ok := valuesMapStrToI["vertical_precision"]; ok && !isIntfNil(w) {
-												values[i].VerticalPrecision = float32(w.(float64))
+													if w, ok := valuesMapStrToI["vertical_precision"]; ok && !isIntfNil(w) {
+														values[i].VerticalPrecision = float32(w.(float64))
+													}
+
+												}
 											}
 
 										}
 
 									}
-
 								}
 
 							}
 
-							if v, ok := rrSetMapStrToI["mx_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
+							if v, ok := defaultRrSetGroupMapStrToI["mx_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
 
 								typeRecordSetTypeFound = true
 								typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_MxRecord{}
 								typeRecordSetInt.MxRecord = &ves_io_schema_dns_zone.DNSMXResourceRecord{}
-								rrSet[i].TypeRecordSet = typeRecordSetInt
+								defaultRrSetGroup[i].TypeRecordSet = typeRecordSetInt
 
-								sl := v.(*schema.Set).List()
+								sl := v.([]interface{})
 								for _, set := range sl {
-									cs := set.(map[string]interface{})
+									if set != nil {
+										cs := set.(map[string]interface{})
 
-									if v, ok := cs["name"]; ok && !isIntfNil(v) {
+										if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
-										typeRecordSetInt.MxRecord.Name = v.(string)
+											typeRecordSetInt.MxRecord.Name = v.(string)
 
-									}
+										}
 
-									if v, ok := cs["values"]; ok && !isIntfNil(v) {
+										if v, ok := cs["values"]; ok && !isIntfNil(v) {
 
-										sl := v.([]interface{})
-										values := make([]*ves_io_schema_dns_zone.MailExchanger, len(sl))
-										typeRecordSetInt.MxRecord.Values = values
-										for i, set := range sl {
-											values[i] = &ves_io_schema_dns_zone.MailExchanger{}
-											valuesMapStrToI := set.(map[string]interface{})
+											sl := v.([]interface{})
+											values := make([]*ves_io_schema_dns_zone.MailExchanger, len(sl))
+											typeRecordSetInt.MxRecord.Values = values
+											for i, set := range sl {
+												if set != nil {
+													values[i] = &ves_io_schema_dns_zone.MailExchanger{}
+													valuesMapStrToI := set.(map[string]interface{})
 
-											if w, ok := valuesMapStrToI["domain"]; ok && !isIntfNil(w) {
-												values[i].Domain = w.(string)
-											}
+													if w, ok := valuesMapStrToI["domain"]; ok && !isIntfNil(w) {
+														values[i].Domain = w.(string)
+													}
 
-											if w, ok := valuesMapStrToI["priority"]; ok && !isIntfNil(w) {
-												values[i].Priority = uint32(w.(int))
+													if w, ok := valuesMapStrToI["priority"]; ok && !isIntfNil(w) {
+														values[i].Priority = uint32(w.(int))
+													}
+
+												}
 											}
 
 										}
 
 									}
-
 								}
 
 							}
 
-							if v, ok := rrSetMapStrToI["naptr_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
+							if v, ok := defaultRrSetGroupMapStrToI["naptr_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
 
 								typeRecordSetTypeFound = true
 								typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_NaptrRecord{}
 								typeRecordSetInt.NaptrRecord = &ves_io_schema_dns_zone.DNSNAPTRResourceRecord{}
-								rrSet[i].TypeRecordSet = typeRecordSetInt
+								defaultRrSetGroup[i].TypeRecordSet = typeRecordSetInt
 
-								sl := v.(*schema.Set).List()
+								sl := v.([]interface{})
 								for _, set := range sl {
-									cs := set.(map[string]interface{})
+									if set != nil {
+										cs := set.(map[string]interface{})
 
-									if v, ok := cs["name"]; ok && !isIntfNil(v) {
+										if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
-										typeRecordSetInt.NaptrRecord.Name = v.(string)
+											typeRecordSetInt.NaptrRecord.Name = v.(string)
 
-									}
+										}
 
-									if v, ok := cs["values"]; ok && !isIntfNil(v) {
+										if v, ok := cs["values"]; ok && !isIntfNil(v) {
 
-										sl := v.([]interface{})
-										values := make([]*ves_io_schema_dns_zone.NAPTRValue, len(sl))
-										typeRecordSetInt.NaptrRecord.Values = values
-										for i, set := range sl {
-											values[i] = &ves_io_schema_dns_zone.NAPTRValue{}
-											valuesMapStrToI := set.(map[string]interface{})
+											sl := v.([]interface{})
+											values := make([]*ves_io_schema_dns_zone.NAPTRValue, len(sl))
+											typeRecordSetInt.NaptrRecord.Values = values
+											for i, set := range sl {
+												if set != nil {
+													values[i] = &ves_io_schema_dns_zone.NAPTRValue{}
+													valuesMapStrToI := set.(map[string]interface{})
 
-											if w, ok := valuesMapStrToI["flags"]; ok && !isIntfNil(w) {
-												values[i].Flags = w.(string)
-											}
+													if w, ok := valuesMapStrToI["flags"]; ok && !isIntfNil(w) {
+														values[i].Flags = w.(string)
+													}
 
-											if w, ok := valuesMapStrToI["order"]; ok && !isIntfNil(w) {
-												values[i].Order = uint32(w.(int))
-											}
+													if w, ok := valuesMapStrToI["order"]; ok && !isIntfNil(w) {
+														values[i].Order = uint32(w.(int))
+													}
 
-											if w, ok := valuesMapStrToI["preference"]; ok && !isIntfNil(w) {
-												values[i].Preference = uint32(w.(int))
-											}
+													if w, ok := valuesMapStrToI["preference"]; ok && !isIntfNil(w) {
+														values[i].Preference = uint32(w.(int))
+													}
 
-											if w, ok := valuesMapStrToI["regexp"]; ok && !isIntfNil(w) {
-												values[i].Regexp = w.(string)
-											}
+													if w, ok := valuesMapStrToI["regexp"]; ok && !isIntfNil(w) {
+														values[i].Regexp = w.(string)
+													}
 
-											if w, ok := valuesMapStrToI["replacement"]; ok && !isIntfNil(w) {
-												values[i].Replacement = w.(string)
-											}
+													if w, ok := valuesMapStrToI["replacement"]; ok && !isIntfNil(w) {
+														values[i].Replacement = w.(string)
+													}
 
-											if w, ok := valuesMapStrToI["service"]; ok && !isIntfNil(w) {
-												values[i].Service = w.(string)
+													if w, ok := valuesMapStrToI["service"]; ok && !isIntfNil(w) {
+														values[i].Service = w.(string)
+													}
+
+												}
 											}
 
 										}
 
 									}
-
 								}
 
 							}
 
-							if v, ok := rrSetMapStrToI["ns_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
+							if v, ok := defaultRrSetGroupMapStrToI["ns_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
 
 								typeRecordSetTypeFound = true
 								typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_NsRecord{}
 								typeRecordSetInt.NsRecord = &ves_io_schema_dns_zone.DNSNSResourceRecord{}
-								rrSet[i].TypeRecordSet = typeRecordSetInt
+								defaultRrSetGroup[i].TypeRecordSet = typeRecordSetInt
 
-								sl := v.(*schema.Set).List()
+								sl := v.([]interface{})
 								for _, set := range sl {
-									cs := set.(map[string]interface{})
+									if set != nil {
+										cs := set.(map[string]interface{})
 
-									if v, ok := cs["name"]; ok && !isIntfNil(v) {
+										if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
-										typeRecordSetInt.NsRecord.Name = v.(string)
+											typeRecordSetInt.NsRecord.Name = v.(string)
 
-									}
-
-									if v, ok := cs["values"]; ok && !isIntfNil(v) {
-
-										ls := make([]string, len(v.([]interface{})))
-										for i, v := range v.([]interface{}) {
-											ls[i] = v.(string)
 										}
-										typeRecordSetInt.NsRecord.Values = ls
+
+										if v, ok := cs["values"]; ok && !isIntfNil(v) {
+
+											ls := make([]string, len(v.([]interface{})))
+											for i, v := range v.([]interface{}) {
+												ls[i] = v.(string)
+											}
+											typeRecordSetInt.NsRecord.Values = ls
+
+										}
 
 									}
-
 								}
 
 							}
 
-							if v, ok := rrSetMapStrToI["ptr_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
+							if v, ok := defaultRrSetGroupMapStrToI["ptr_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
 
 								typeRecordSetTypeFound = true
 								typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_PtrRecord{}
 								typeRecordSetInt.PtrRecord = &ves_io_schema_dns_zone.DNSPTRResourceRecord{}
-								rrSet[i].TypeRecordSet = typeRecordSetInt
+								defaultRrSetGroup[i].TypeRecordSet = typeRecordSetInt
 
-								sl := v.(*schema.Set).List()
+								sl := v.([]interface{})
 								for _, set := range sl {
-									cs := set.(map[string]interface{})
+									if set != nil {
+										cs := set.(map[string]interface{})
 
-									if v, ok := cs["name"]; ok && !isIntfNil(v) {
+										if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
-										typeRecordSetInt.PtrRecord.Name = v.(string)
+											typeRecordSetInt.PtrRecord.Name = v.(string)
 
-									}
-
-									if v, ok := cs["values"]; ok && !isIntfNil(v) {
-
-										ls := make([]string, len(v.([]interface{})))
-										for i, v := range v.([]interface{}) {
-											ls[i] = v.(string)
 										}
-										typeRecordSetInt.PtrRecord.Values = ls
+
+										if v, ok := cs["values"]; ok && !isIntfNil(v) {
+
+											ls := make([]string, len(v.([]interface{})))
+											for i, v := range v.([]interface{}) {
+												ls[i] = v.(string)
+											}
+											typeRecordSetInt.PtrRecord.Values = ls
+
+										}
 
 									}
-
 								}
 
 							}
 
-							if v, ok := rrSetMapStrToI["srv_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
+							if v, ok := defaultRrSetGroupMapStrToI["srv_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
 
 								typeRecordSetTypeFound = true
 								typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_SrvRecord{}
 								typeRecordSetInt.SrvRecord = &ves_io_schema_dns_zone.DNSSRVResourceRecord{}
-								rrSet[i].TypeRecordSet = typeRecordSetInt
+								defaultRrSetGroup[i].TypeRecordSet = typeRecordSetInt
 
-								sl := v.(*schema.Set).List()
+								sl := v.([]interface{})
 								for _, set := range sl {
-									cs := set.(map[string]interface{})
+									if set != nil {
+										cs := set.(map[string]interface{})
 
-									if v, ok := cs["name"]; ok && !isIntfNil(v) {
+										if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
-										typeRecordSetInt.SrvRecord.Name = v.(string)
+											typeRecordSetInt.SrvRecord.Name = v.(string)
 
-									}
+										}
 
-									if v, ok := cs["values"]; ok && !isIntfNil(v) {
+										if v, ok := cs["values"]; ok && !isIntfNil(v) {
 
-										sl := v.([]interface{})
-										values := make([]*ves_io_schema_dns_zone.SRVService, len(sl))
-										typeRecordSetInt.SrvRecord.Values = values
-										for i, set := range sl {
-											values[i] = &ves_io_schema_dns_zone.SRVService{}
-											valuesMapStrToI := set.(map[string]interface{})
+											sl := v.([]interface{})
+											values := make([]*ves_io_schema_dns_zone.SRVService, len(sl))
+											typeRecordSetInt.SrvRecord.Values = values
+											for i, set := range sl {
+												if set != nil {
+													values[i] = &ves_io_schema_dns_zone.SRVService{}
+													valuesMapStrToI := set.(map[string]interface{})
 
-											if w, ok := valuesMapStrToI["port"]; ok && !isIntfNil(w) {
-												values[i].Port = uint32(w.(int))
-											}
+													if w, ok := valuesMapStrToI["port"]; ok && !isIntfNil(w) {
+														values[i].Port = uint32(w.(int))
+													}
 
-											if w, ok := valuesMapStrToI["priority"]; ok && !isIntfNil(w) {
-												values[i].Priority = uint32(w.(int))
-											}
+													if w, ok := valuesMapStrToI["priority"]; ok && !isIntfNil(w) {
+														values[i].Priority = uint32(w.(int))
+													}
 
-											if w, ok := valuesMapStrToI["target"]; ok && !isIntfNil(w) {
-												values[i].Target = w.(string)
-											}
+													if w, ok := valuesMapStrToI["target"]; ok && !isIntfNil(w) {
+														values[i].Target = w.(string)
+													}
 
-											if w, ok := valuesMapStrToI["weight"]; ok && !isIntfNil(w) {
-												values[i].Weight = uint32(w.(int))
+													if w, ok := valuesMapStrToI["weight"]; ok && !isIntfNil(w) {
+														values[i].Weight = uint32(w.(int))
+													}
+
+												}
 											}
 
 										}
 
 									}
-
 								}
 
 							}
 
-							if v, ok := rrSetMapStrToI["sshfp_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
+							if v, ok := defaultRrSetGroupMapStrToI["sshfp_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
 
 								typeRecordSetTypeFound = true
 								typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_SshfpRecord{}
 								typeRecordSetInt.SshfpRecord = &ves_io_schema_dns_zone.SSHFPResourceRecord{}
-								rrSet[i].TypeRecordSet = typeRecordSetInt
+								defaultRrSetGroup[i].TypeRecordSet = typeRecordSetInt
 
-								sl := v.(*schema.Set).List()
+								sl := v.([]interface{})
 								for _, set := range sl {
-									cs := set.(map[string]interface{})
+									if set != nil {
+										cs := set.(map[string]interface{})
 
-									if v, ok := cs["name"]; ok && !isIntfNil(v) {
+										if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
-										typeRecordSetInt.SshfpRecord.Name = v.(string)
+											typeRecordSetInt.SshfpRecord.Name = v.(string)
 
-									}
+										}
 
-									if v, ok := cs["values"]; ok && !isIntfNil(v) {
+										if v, ok := cs["values"]; ok && !isIntfNil(v) {
 
-										sl := v.([]interface{})
-										values := make([]*ves_io_schema_dns_zone.SSHFPRecordValue, len(sl))
-										typeRecordSetInt.SshfpRecord.Values = values
-										for i, set := range sl {
-											values[i] = &ves_io_schema_dns_zone.SSHFPRecordValue{}
-											valuesMapStrToI := set.(map[string]interface{})
+											sl := v.([]interface{})
+											values := make([]*ves_io_schema_dns_zone.SSHFPRecordValue, len(sl))
+											typeRecordSetInt.SshfpRecord.Values = values
+											for i, set := range sl {
+												if set != nil {
+													values[i] = &ves_io_schema_dns_zone.SSHFPRecordValue{}
+													valuesMapStrToI := set.(map[string]interface{})
 
-											if v, ok := valuesMapStrToI["algorithm"]; ok && !isIntfNil(v) {
+													if v, ok := valuesMapStrToI["algorithm"]; ok && !isIntfNil(v) {
 
-												values[i].Algorithm = ves_io_schema_dns_zone.SSHFPAlgorithm(ves_io_schema_dns_zone.SSHFPAlgorithm_value[v.(string)])
+														values[i].Algorithm = ves_io_schema_dns_zone.SSHFPAlgorithm(ves_io_schema_dns_zone.SSHFPAlgorithm_value[v.(string)])
 
-											}
+													}
 
-											if w, ok := valuesMapStrToI["fingerprint"]; ok && !isIntfNil(w) {
-												values[i].Fingerprint = w.(string)
-											}
+													if w, ok := valuesMapStrToI["fingerprint"]; ok && !isIntfNil(w) {
+														values[i].Fingerprint = w.(string)
+													}
 
-											fingerprintTypeTypeFound := false
+													fingerprintTypeTypeFound := false
 
-											if v, ok := valuesMapStrToI["sha1_fingerprint"]; ok && !isIntfNil(v) && !fingerprintTypeTypeFound {
+													if v, ok := valuesMapStrToI["sha1_fingerprint"]; ok && !isIntfNil(v) && !fingerprintTypeTypeFound {
 
-												fingerprintTypeTypeFound = true
-												fingerprintTypeInt := &ves_io_schema_dns_zone.SSHFPRecordValue_Sha1Fingerprint{}
-												fingerprintTypeInt.Sha1Fingerprint = &ves_io_schema_dns_zone.SHA1Fingerprint{}
-												values[i].FingerprintType = fingerprintTypeInt
+														fingerprintTypeTypeFound = true
+														fingerprintTypeInt := &ves_io_schema_dns_zone.SSHFPRecordValue_Sha1Fingerprint{}
+														fingerprintTypeInt.Sha1Fingerprint = &ves_io_schema_dns_zone.SHA1Fingerprint{}
+														values[i].FingerprintType = fingerprintTypeInt
 
-												sl := v.(*schema.Set).List()
-												for _, set := range sl {
-													cs := set.(map[string]interface{})
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
 
-													if v, ok := cs["fingerprint"]; ok && !isIntfNil(v) {
+																if v, ok := cs["fingerprint"]; ok && !isIntfNil(v) {
 
-														fingerprintTypeInt.Sha1Fingerprint.Fingerprint = v.(string)
+																	fingerprintTypeInt.Sha1Fingerprint.Fingerprint = v.(string)
+
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := valuesMapStrToI["sha256_fingerprint"]; ok && !isIntfNil(v) && !fingerprintTypeTypeFound {
+
+														fingerprintTypeTypeFound = true
+														fingerprintTypeInt := &ves_io_schema_dns_zone.SSHFPRecordValue_Sha256Fingerprint{}
+														fingerprintTypeInt.Sha256Fingerprint = &ves_io_schema_dns_zone.SHA256Fingerprint{}
+														values[i].FingerprintType = fingerprintTypeInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["fingerprint"]; ok && !isIntfNil(v) {
+
+																	fingerprintTypeInt.Sha256Fingerprint.Fingerprint = v.(string)
+
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := valuesMapStrToI["fingerprinttype"]; ok && !isIntfNil(v) {
+
+														values[i].Fingerprinttype = ves_io_schema_dns_zone.SSHFPFingerprintType(ves_io_schema_dns_zone.SSHFPFingerprintType_value[v.(string)])
 
 													}
 
 												}
-
-											}
-
-											if v, ok := valuesMapStrToI["sha256_fingerprint"]; ok && !isIntfNil(v) && !fingerprintTypeTypeFound {
-
-												fingerprintTypeTypeFound = true
-												fingerprintTypeInt := &ves_io_schema_dns_zone.SSHFPRecordValue_Sha256Fingerprint{}
-												fingerprintTypeInt.Sha256Fingerprint = &ves_io_schema_dns_zone.SHA256Fingerprint{}
-												values[i].FingerprintType = fingerprintTypeInt
-
-												sl := v.(*schema.Set).List()
-												for _, set := range sl {
-													cs := set.(map[string]interface{})
-
-													if v, ok := cs["fingerprint"]; ok && !isIntfNil(v) {
-
-														fingerprintTypeInt.Sha256Fingerprint.Fingerprint = v.(string)
-
-													}
-
-												}
-
-											}
-
-											if v, ok := valuesMapStrToI["fingerprinttype"]; ok && !isIntfNil(v) {
-
-												values[i].Fingerprinttype = ves_io_schema_dns_zone.SSHFPFingerprintType(ves_io_schema_dns_zone.SSHFPFingerprintType_value[v.(string)])
-
 											}
 
 										}
 
 									}
-
 								}
 
 							}
 
-							if v, ok := rrSetMapStrToI["tlsa_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
+							if v, ok := defaultRrSetGroupMapStrToI["tlsa_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
 
 								typeRecordSetTypeFound = true
 								typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_TlsaRecord{}
 								typeRecordSetInt.TlsaRecord = &ves_io_schema_dns_zone.TLSAResourceRecord{}
-								rrSet[i].TypeRecordSet = typeRecordSetInt
+								defaultRrSetGroup[i].TypeRecordSet = typeRecordSetInt
 
-								sl := v.(*schema.Set).List()
+								sl := v.([]interface{})
 								for _, set := range sl {
-									cs := set.(map[string]interface{})
+									if set != nil {
+										cs := set.(map[string]interface{})
 
-									if v, ok := cs["name"]; ok && !isIntfNil(v) {
+										if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
-										typeRecordSetInt.TlsaRecord.Name = v.(string)
+											typeRecordSetInt.TlsaRecord.Name = v.(string)
 
-									}
+										}
 
-									if v, ok := cs["values"]; ok && !isIntfNil(v) {
+										if v, ok := cs["values"]; ok && !isIntfNil(v) {
 
-										sl := v.([]interface{})
-										values := make([]*ves_io_schema_dns_zone.TLSARecordValue, len(sl))
-										typeRecordSetInt.TlsaRecord.Values = values
-										for i, set := range sl {
-											values[i] = &ves_io_schema_dns_zone.TLSARecordValue{}
-											valuesMapStrToI := set.(map[string]interface{})
+											sl := v.([]interface{})
+											values := make([]*ves_io_schema_dns_zone.TLSARecordValue, len(sl))
+											typeRecordSetInt.TlsaRecord.Values = values
+											for i, set := range sl {
+												if set != nil {
+													values[i] = &ves_io_schema_dns_zone.TLSARecordValue{}
+													valuesMapStrToI := set.(map[string]interface{})
 
-											if w, ok := valuesMapStrToI["certificate_association_data"]; ok && !isIntfNil(w) {
-												values[i].CertificateAssociationData = w.(string)
-											}
+													if w, ok := valuesMapStrToI["certificate_association_data"]; ok && !isIntfNil(w) {
+														values[i].CertificateAssociationData = w.(string)
+													}
 
-											if v, ok := valuesMapStrToI["certificate_usage"]; ok && !isIntfNil(v) {
+													if v, ok := valuesMapStrToI["certificate_usage"]; ok && !isIntfNil(v) {
 
-												values[i].CertificateUsage = ves_io_schema_dns_zone.TLSARecordCertificateUsage(ves_io_schema_dns_zone.TLSARecordCertificateUsage_value[v.(string)])
+														values[i].CertificateUsage = ves_io_schema_dns_zone.TLSARecordCertificateUsage(ves_io_schema_dns_zone.TLSARecordCertificateUsage_value[v.(string)])
 
-											}
+													}
 
-											if v, ok := valuesMapStrToI["matching_type"]; ok && !isIntfNil(v) {
+													if v, ok := valuesMapStrToI["matching_type"]; ok && !isIntfNil(v) {
 
-												values[i].MatchingType = ves_io_schema_dns_zone.TLSARecordMatchingType(ves_io_schema_dns_zone.TLSARecordMatchingType_value[v.(string)])
+														values[i].MatchingType = ves_io_schema_dns_zone.TLSARecordMatchingType(ves_io_schema_dns_zone.TLSARecordMatchingType_value[v.(string)])
 
-											}
+													}
 
-											if v, ok := valuesMapStrToI["selector"]; ok && !isIntfNil(v) {
+													if v, ok := valuesMapStrToI["selector"]; ok && !isIntfNil(v) {
 
-												values[i].Selector = ves_io_schema_dns_zone.TLSARecordCSelector(ves_io_schema_dns_zone.TLSARecordCSelector_value[v.(string)])
+														values[i].Selector = ves_io_schema_dns_zone.TLSARecordCSelector(ves_io_schema_dns_zone.TLSARecordCSelector_value[v.(string)])
 
+													}
+
+												}
 											}
 
 										}
 
 									}
-
 								}
 
 							}
 
-							if v, ok := rrSetMapStrToI["txt_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
+							if v, ok := defaultRrSetGroupMapStrToI["txt_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
 
 								typeRecordSetTypeFound = true
 								typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_TxtRecord{}
 								typeRecordSetInt.TxtRecord = &ves_io_schema_dns_zone.DNSTXTResourceRecord{}
-								rrSet[i].TypeRecordSet = typeRecordSetInt
+								defaultRrSetGroup[i].TypeRecordSet = typeRecordSetInt
 
-								sl := v.(*schema.Set).List()
+								sl := v.([]interface{})
 								for _, set := range sl {
-									cs := set.(map[string]interface{})
+									if set != nil {
+										cs := set.(map[string]interface{})
 
-									if v, ok := cs["name"]; ok && !isIntfNil(v) {
+										if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
-										typeRecordSetInt.TxtRecord.Name = v.(string)
+											typeRecordSetInt.TxtRecord.Name = v.(string)
 
-									}
-
-									if v, ok := cs["values"]; ok && !isIntfNil(v) {
-
-										ls := make([]string, len(v.([]interface{})))
-										for i, v := range v.([]interface{}) {
-											ls[i] = v.(string)
 										}
-										typeRecordSetInt.TxtRecord.Values = ls
+
+										if v, ok := cs["values"]; ok && !isIntfNil(v) {
+
+											ls := make([]string, len(v.([]interface{})))
+											for i, v := range v.([]interface{}) {
+												ls[i] = v.(string)
+											}
+											typeRecordSetInt.TxtRecord.Values = ls
+
+										}
 
 									}
-
 								}
 
 							}
 
 						}
-
 					}
 
 				}
 
-			}
+				if v, ok := cs["dnssec_mode"]; ok && !isIntfNil(v) {
 
-			soaRecordParametersChoiceTypeFound := false
+					sl := v.([]interface{})
+					dnssecMode := &ves_io_schema_dns_zone.DNSSECMode{}
+					dnsTypeInt.Primary.DnssecMode = dnssecMode
+					for _, set := range sl {
+						if set != nil {
+							dnssecModeMapStrToI := set.(map[string]interface{})
 
-			if v, ok := cs["default_soa_parameters"]; ok && !isIntfNil(v) && !soaRecordParametersChoiceTypeFound {
+							modeTypeFound := false
 
-				soaRecordParametersChoiceTypeFound = true
+							if v, ok := dnssecModeMapStrToI["disable"]; ok && !isIntfNil(v) && !modeTypeFound {
 
-				if v.(bool) {
-					soaRecordParametersChoiceInt := &ves_io_schema_dns_zone.PrimaryDNSCreateSpecType_DefaultSoaParameters{}
-					soaRecordParametersChoiceInt.DefaultSoaParameters = &ves_io_schema.Empty{}
+								modeTypeFound = true
+
+								if v.(bool) {
+									modeInt := &ves_io_schema_dns_zone.DNSSECMode_Disable{}
+									modeInt.Disable = &ves_io_schema.Empty{}
+									dnssecMode.Mode = modeInt
+								}
+
+							}
+
+							if _, ok := dnssecModeMapStrToI["enable"]; ok && !modeTypeFound {
+
+								modeTypeFound = true
+								modeInt := &ves_io_schema_dns_zone.DNSSECMode_Enable{}
+								modeInt.Enable = &ves_io_schema_dns_zone.DNSSECModeEnable{}
+								dnssecMode.Mode = modeInt
+
+							}
+
+						}
+					}
+
+				}
+
+				if v, ok := cs["rr_set_group"]; ok && !isIntfNil(v) {
+
+					sl := v.([]interface{})
+					rrSetGroup := make([]*ves_io_schema_dns_zone.RRSetGroup, len(sl))
+					dnsTypeInt.Primary.RrSetGroup = rrSetGroup
+					for i, set := range sl {
+						if set != nil {
+							rrSetGroup[i] = &ves_io_schema_dns_zone.RRSetGroup{}
+							rrSetGroupMapStrToI := set.(map[string]interface{})
+
+							if v, ok := rrSetGroupMapStrToI["metadata"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								metadata := &ves_io_schema.MessageMetaType{}
+								rrSetGroup[i].Metadata = metadata
+								for _, set := range sl {
+									if set != nil {
+										metadataMapStrToI := set.(map[string]interface{})
+
+										if w, ok := metadataMapStrToI["description"]; ok && !isIntfNil(w) {
+											metadata.Description = w.(string)
+										}
+
+										if w, ok := metadataMapStrToI["disable"]; ok && !isIntfNil(w) {
+											metadata.Disable = w.(bool)
+										}
+
+										if w, ok := metadataMapStrToI["name"]; ok && !isIntfNil(w) {
+											metadata.Name = w.(string)
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := rrSetGroupMapStrToI["rr_set"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								rrSet := make([]*ves_io_schema_dns_zone.RRSet, len(sl))
+								rrSetGroup[i].RrSet = rrSet
+								for i, set := range sl {
+									if set != nil {
+										rrSet[i] = &ves_io_schema_dns_zone.RRSet{}
+										rrSetMapStrToI := set.(map[string]interface{})
+
+										if w, ok := rrSetMapStrToI["description"]; ok && !isIntfNil(w) {
+											rrSet[i].Description = w.(string)
+										}
+
+										if w, ok := rrSetMapStrToI["ttl"]; ok && !isIntfNil(w) {
+											rrSet[i].Ttl = uint32(w.(int))
+										}
+
+										typeRecordSetTypeFound := false
+
+										if v, ok := rrSetMapStrToI["a_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
+
+											typeRecordSetTypeFound = true
+											typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_ARecord{}
+											typeRecordSetInt.ARecord = &ves_io_schema_dns_zone.DNSAResourceRecord{}
+											rrSet[i].TypeRecordSet = typeRecordSetInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+														typeRecordSetInt.ARecord.Name = v.(string)
+
+													}
+
+													if v, ok := cs["values"]; ok && !isIntfNil(v) {
+
+														ls := make([]string, len(v.([]interface{})))
+														for i, v := range v.([]interface{}) {
+															ls[i] = v.(string)
+														}
+														typeRecordSetInt.ARecord.Values = ls
+
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := rrSetMapStrToI["aaaa_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
+
+											typeRecordSetTypeFound = true
+											typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_AaaaRecord{}
+											typeRecordSetInt.AaaaRecord = &ves_io_schema_dns_zone.DNSAAAAResourceRecord{}
+											rrSet[i].TypeRecordSet = typeRecordSetInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+														typeRecordSetInt.AaaaRecord.Name = v.(string)
+
+													}
+
+													if v, ok := cs["values"]; ok && !isIntfNil(v) {
+
+														ls := make([]string, len(v.([]interface{})))
+														for i, v := range v.([]interface{}) {
+															ls[i] = v.(string)
+														}
+														typeRecordSetInt.AaaaRecord.Values = ls
+
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := rrSetMapStrToI["afsdb_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
+
+											typeRecordSetTypeFound = true
+											typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_AfsdbRecord{}
+											typeRecordSetInt.AfsdbRecord = &ves_io_schema_dns_zone.DNSAFSDBRecord{}
+											rrSet[i].TypeRecordSet = typeRecordSetInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+														typeRecordSetInt.AfsdbRecord.Name = v.(string)
+
+													}
+
+													if v, ok := cs["values"]; ok && !isIntfNil(v) {
+
+														sl := v.([]interface{})
+														values := make([]*ves_io_schema_dns_zone.AFSDBRecordValue, len(sl))
+														typeRecordSetInt.AfsdbRecord.Values = values
+														for i, set := range sl {
+															if set != nil {
+																values[i] = &ves_io_schema_dns_zone.AFSDBRecordValue{}
+																valuesMapStrToI := set.(map[string]interface{})
+
+																if w, ok := valuesMapStrToI["hostname"]; ok && !isIntfNil(w) {
+																	values[i].Hostname = w.(string)
+																}
+
+																if v, ok := valuesMapStrToI["subtype"]; ok && !isIntfNil(v) {
+
+																	values[i].Subtype = ves_io_schema_dns_zone.AFSDBRecordSubtype(ves_io_schema_dns_zone.AFSDBRecordSubtype_value[v.(string)])
+
+																}
+
+															}
+														}
+
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := rrSetMapStrToI["alias_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
+
+											typeRecordSetTypeFound = true
+											typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_AliasRecord{}
+											typeRecordSetInt.AliasRecord = &ves_io_schema_dns_zone.DNSAliasResourceRecord{}
+											rrSet[i].TypeRecordSet = typeRecordSetInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+														typeRecordSetInt.AliasRecord.Name = v.(string)
+
+													}
+
+													if v, ok := cs["value"]; ok && !isIntfNil(v) {
+
+														typeRecordSetInt.AliasRecord.Value = v.(string)
+
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := rrSetMapStrToI["caa_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
+
+											typeRecordSetTypeFound = true
+											typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_CaaRecord{}
+											typeRecordSetInt.CaaRecord = &ves_io_schema_dns_zone.DNSCAAResourceRecord{}
+											rrSet[i].TypeRecordSet = typeRecordSetInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+														typeRecordSetInt.CaaRecord.Name = v.(string)
+
+													}
+
+													if v, ok := cs["values"]; ok && !isIntfNil(v) {
+
+														sl := v.([]interface{})
+														values := make([]*ves_io_schema_dns_zone.CertificationAuthorityAuthorization, len(sl))
+														typeRecordSetInt.CaaRecord.Values = values
+														for i, set := range sl {
+															if set != nil {
+																values[i] = &ves_io_schema_dns_zone.CertificationAuthorityAuthorization{}
+																valuesMapStrToI := set.(map[string]interface{})
+
+																if w, ok := valuesMapStrToI["flags"]; ok && !isIntfNil(w) {
+																	values[i].Flags = uint32(w.(int))
+																}
+
+																if w, ok := valuesMapStrToI["tag"]; ok && !isIntfNil(w) {
+																	values[i].Tag = w.(string)
+																}
+
+																if w, ok := valuesMapStrToI["value"]; ok && !isIntfNil(w) {
+																	values[i].Value = w.(string)
+																}
+
+															}
+														}
+
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := rrSetMapStrToI["cds_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
+
+											typeRecordSetTypeFound = true
+											typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_CdsRecord{}
+											typeRecordSetInt.CdsRecord = &ves_io_schema_dns_zone.DNSCDSRecord{}
+											rrSet[i].TypeRecordSet = typeRecordSetInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+														typeRecordSetInt.CdsRecord.Name = v.(string)
+
+													}
+
+													if v, ok := cs["values"]; ok && !isIntfNil(v) {
+
+														sl := v.([]interface{})
+														values := make([]*ves_io_schema_dns_zone.DSRecordValue, len(sl))
+														typeRecordSetInt.CdsRecord.Values = values
+														for i, set := range sl {
+															if set != nil {
+																values[i] = &ves_io_schema_dns_zone.DSRecordValue{}
+																valuesMapStrToI := set.(map[string]interface{})
+
+																digestChoiceTypeFound := false
+
+																if v, ok := valuesMapStrToI["sha1_digest"]; ok && !isIntfNil(v) && !digestChoiceTypeFound {
+
+																	digestChoiceTypeFound = true
+																	digestChoiceInt := &ves_io_schema_dns_zone.DSRecordValue_Sha1Digest{}
+																	digestChoiceInt.Sha1Digest = &ves_io_schema_dns_zone.SHA1Digest{}
+																	values[i].DigestChoice = digestChoiceInt
+
+																	sl := v.([]interface{})
+																	for _, set := range sl {
+																		if set != nil {
+																			cs := set.(map[string]interface{})
+
+																			if v, ok := cs["digest"]; ok && !isIntfNil(v) {
+
+																				digestChoiceInt.Sha1Digest.Digest = v.(string)
+
+																			}
+
+																		}
+																	}
+
+																}
+
+																if v, ok := valuesMapStrToI["sha256_digest"]; ok && !isIntfNil(v) && !digestChoiceTypeFound {
+
+																	digestChoiceTypeFound = true
+																	digestChoiceInt := &ves_io_schema_dns_zone.DSRecordValue_Sha256Digest{}
+																	digestChoiceInt.Sha256Digest = &ves_io_schema_dns_zone.SHA256Digest{}
+																	values[i].DigestChoice = digestChoiceInt
+
+																	sl := v.([]interface{})
+																	for _, set := range sl {
+																		if set != nil {
+																			cs := set.(map[string]interface{})
+
+																			if v, ok := cs["digest"]; ok && !isIntfNil(v) {
+
+																				digestChoiceInt.Sha256Digest.Digest = v.(string)
+
+																			}
+
+																		}
+																	}
+
+																}
+
+																if v, ok := valuesMapStrToI["sha384_digest"]; ok && !isIntfNil(v) && !digestChoiceTypeFound {
+
+																	digestChoiceTypeFound = true
+																	digestChoiceInt := &ves_io_schema_dns_zone.DSRecordValue_Sha384Digest{}
+																	digestChoiceInt.Sha384Digest = &ves_io_schema_dns_zone.SHA384Digest{}
+																	values[i].DigestChoice = digestChoiceInt
+
+																	sl := v.([]interface{})
+																	for _, set := range sl {
+																		if set != nil {
+																			cs := set.(map[string]interface{})
+
+																			if v, ok := cs["digest"]; ok && !isIntfNil(v) {
+
+																				digestChoiceInt.Sha384Digest.Digest = v.(string)
+
+																			}
+
+																		}
+																	}
+
+																}
+
+																if v, ok := valuesMapStrToI["ds_key_algorithm"]; ok && !isIntfNil(v) {
+
+																	values[i].DsKeyAlgorithm = ves_io_schema_dns_zone.DSKeyAlgorithm(ves_io_schema_dns_zone.DSKeyAlgorithm_value[v.(string)])
+
+																}
+
+																if w, ok := valuesMapStrToI["key_tag"]; ok && !isIntfNil(w) {
+																	values[i].KeyTag = uint32(w.(int))
+																}
+
+															}
+														}
+
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := rrSetMapStrToI["cert_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
+
+											typeRecordSetTypeFound = true
+											typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_CertRecord{}
+											typeRecordSetInt.CertRecord = &ves_io_schema_dns_zone.CERTResourceRecord{}
+											rrSet[i].TypeRecordSet = typeRecordSetInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+														typeRecordSetInt.CertRecord.Name = v.(string)
+
+													}
+
+													if v, ok := cs["values"]; ok && !isIntfNil(v) {
+
+														sl := v.([]interface{})
+														values := make([]*ves_io_schema_dns_zone.CERTRecordValue, len(sl))
+														typeRecordSetInt.CertRecord.Values = values
+														for i, set := range sl {
+															if set != nil {
+																values[i] = &ves_io_schema_dns_zone.CERTRecordValue{}
+																valuesMapStrToI := set.(map[string]interface{})
+
+																if v, ok := valuesMapStrToI["algorithm"]; ok && !isIntfNil(v) {
+
+																	values[i].Algorithm = ves_io_schema_dns_zone.CERTAlgorithm(ves_io_schema_dns_zone.CERTAlgorithm_value[v.(string)])
+
+																}
+
+																if w, ok := valuesMapStrToI["cert_key_tag"]; ok && !isIntfNil(w) {
+																	values[i].CertKeyTag = uint32(w.(int))
+																}
+
+																if v, ok := valuesMapStrToI["cert_type"]; ok && !isIntfNil(v) {
+
+																	values[i].CertType = ves_io_schema_dns_zone.CERTType(ves_io_schema_dns_zone.CERTType_value[v.(string)])
+
+																}
+
+																if w, ok := valuesMapStrToI["certificate"]; ok && !isIntfNil(w) {
+																	values[i].Certificate = w.(string)
+																}
+
+															}
+														}
+
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := rrSetMapStrToI["cname_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
+
+											typeRecordSetTypeFound = true
+											typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_CnameRecord{}
+											typeRecordSetInt.CnameRecord = &ves_io_schema_dns_zone.DNSCNAMEResourceRecord{}
+											rrSet[i].TypeRecordSet = typeRecordSetInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+														typeRecordSetInt.CnameRecord.Name = v.(string)
+
+													}
+
+													if v, ok := cs["value"]; ok && !isIntfNil(v) {
+
+														typeRecordSetInt.CnameRecord.Value = v.(string)
+
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := rrSetMapStrToI["dlv_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
+
+											typeRecordSetTypeFound = true
+											typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_DlvRecord{}
+											typeRecordSetInt.DlvRecord = &ves_io_schema_dns_zone.DLVResourceRecord{}
+											rrSet[i].TypeRecordSet = typeRecordSetInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+														typeRecordSetInt.DlvRecord.Name = v.(string)
+
+													}
+
+													if v, ok := cs["values"]; ok && !isIntfNil(v) {
+
+														sl := v.([]interface{})
+														values := make([]*ves_io_schema_dns_zone.DSRecordValue, len(sl))
+														typeRecordSetInt.DlvRecord.Values = values
+														for i, set := range sl {
+															if set != nil {
+																values[i] = &ves_io_schema_dns_zone.DSRecordValue{}
+																valuesMapStrToI := set.(map[string]interface{})
+
+																digestChoiceTypeFound := false
+
+																if v, ok := valuesMapStrToI["sha1_digest"]; ok && !isIntfNil(v) && !digestChoiceTypeFound {
+
+																	digestChoiceTypeFound = true
+																	digestChoiceInt := &ves_io_schema_dns_zone.DSRecordValue_Sha1Digest{}
+																	digestChoiceInt.Sha1Digest = &ves_io_schema_dns_zone.SHA1Digest{}
+																	values[i].DigestChoice = digestChoiceInt
+
+																	sl := v.([]interface{})
+																	for _, set := range sl {
+																		if set != nil {
+																			cs := set.(map[string]interface{})
+
+																			if v, ok := cs["digest"]; ok && !isIntfNil(v) {
+
+																				digestChoiceInt.Sha1Digest.Digest = v.(string)
+
+																			}
+
+																		}
+																	}
+
+																}
+
+																if v, ok := valuesMapStrToI["sha256_digest"]; ok && !isIntfNil(v) && !digestChoiceTypeFound {
+
+																	digestChoiceTypeFound = true
+																	digestChoiceInt := &ves_io_schema_dns_zone.DSRecordValue_Sha256Digest{}
+																	digestChoiceInt.Sha256Digest = &ves_io_schema_dns_zone.SHA256Digest{}
+																	values[i].DigestChoice = digestChoiceInt
+
+																	sl := v.([]interface{})
+																	for _, set := range sl {
+																		if set != nil {
+																			cs := set.(map[string]interface{})
+
+																			if v, ok := cs["digest"]; ok && !isIntfNil(v) {
+
+																				digestChoiceInt.Sha256Digest.Digest = v.(string)
+
+																			}
+
+																		}
+																	}
+
+																}
+
+																if v, ok := valuesMapStrToI["sha384_digest"]; ok && !isIntfNil(v) && !digestChoiceTypeFound {
+
+																	digestChoiceTypeFound = true
+																	digestChoiceInt := &ves_io_schema_dns_zone.DSRecordValue_Sha384Digest{}
+																	digestChoiceInt.Sha384Digest = &ves_io_schema_dns_zone.SHA384Digest{}
+																	values[i].DigestChoice = digestChoiceInt
+
+																	sl := v.([]interface{})
+																	for _, set := range sl {
+																		if set != nil {
+																			cs := set.(map[string]interface{})
+
+																			if v, ok := cs["digest"]; ok && !isIntfNil(v) {
+
+																				digestChoiceInt.Sha384Digest.Digest = v.(string)
+
+																			}
+
+																		}
+																	}
+
+																}
+
+																if v, ok := valuesMapStrToI["ds_key_algorithm"]; ok && !isIntfNil(v) {
+
+																	values[i].DsKeyAlgorithm = ves_io_schema_dns_zone.DSKeyAlgorithm(ves_io_schema_dns_zone.DSKeyAlgorithm_value[v.(string)])
+
+																}
+
+																if w, ok := valuesMapStrToI["key_tag"]; ok && !isIntfNil(w) {
+																	values[i].KeyTag = uint32(w.(int))
+																}
+
+															}
+														}
+
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := rrSetMapStrToI["ds_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
+
+											typeRecordSetTypeFound = true
+											typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_DsRecord{}
+											typeRecordSetInt.DsRecord = &ves_io_schema_dns_zone.DNSDSRecord{}
+											rrSet[i].TypeRecordSet = typeRecordSetInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+														typeRecordSetInt.DsRecord.Name = v.(string)
+
+													}
+
+													if v, ok := cs["values"]; ok && !isIntfNil(v) {
+
+														sl := v.([]interface{})
+														values := make([]*ves_io_schema_dns_zone.DSRecordValue, len(sl))
+														typeRecordSetInt.DsRecord.Values = values
+														for i, set := range sl {
+															if set != nil {
+																values[i] = &ves_io_schema_dns_zone.DSRecordValue{}
+																valuesMapStrToI := set.(map[string]interface{})
+
+																digestChoiceTypeFound := false
+
+																if v, ok := valuesMapStrToI["sha1_digest"]; ok && !isIntfNil(v) && !digestChoiceTypeFound {
+
+																	digestChoiceTypeFound = true
+																	digestChoiceInt := &ves_io_schema_dns_zone.DSRecordValue_Sha1Digest{}
+																	digestChoiceInt.Sha1Digest = &ves_io_schema_dns_zone.SHA1Digest{}
+																	values[i].DigestChoice = digestChoiceInt
+
+																	sl := v.([]interface{})
+																	for _, set := range sl {
+																		if set != nil {
+																			cs := set.(map[string]interface{})
+
+																			if v, ok := cs["digest"]; ok && !isIntfNil(v) {
+
+																				digestChoiceInt.Sha1Digest.Digest = v.(string)
+
+																			}
+
+																		}
+																	}
+
+																}
+
+																if v, ok := valuesMapStrToI["sha256_digest"]; ok && !isIntfNil(v) && !digestChoiceTypeFound {
+
+																	digestChoiceTypeFound = true
+																	digestChoiceInt := &ves_io_schema_dns_zone.DSRecordValue_Sha256Digest{}
+																	digestChoiceInt.Sha256Digest = &ves_io_schema_dns_zone.SHA256Digest{}
+																	values[i].DigestChoice = digestChoiceInt
+
+																	sl := v.([]interface{})
+																	for _, set := range sl {
+																		if set != nil {
+																			cs := set.(map[string]interface{})
+
+																			if v, ok := cs["digest"]; ok && !isIntfNil(v) {
+
+																				digestChoiceInt.Sha256Digest.Digest = v.(string)
+
+																			}
+
+																		}
+																	}
+
+																}
+
+																if v, ok := valuesMapStrToI["sha384_digest"]; ok && !isIntfNil(v) && !digestChoiceTypeFound {
+
+																	digestChoiceTypeFound = true
+																	digestChoiceInt := &ves_io_schema_dns_zone.DSRecordValue_Sha384Digest{}
+																	digestChoiceInt.Sha384Digest = &ves_io_schema_dns_zone.SHA384Digest{}
+																	values[i].DigestChoice = digestChoiceInt
+
+																	sl := v.([]interface{})
+																	for _, set := range sl {
+																		if set != nil {
+																			cs := set.(map[string]interface{})
+
+																			if v, ok := cs["digest"]; ok && !isIntfNil(v) {
+
+																				digestChoiceInt.Sha384Digest.Digest = v.(string)
+
+																			}
+
+																		}
+																	}
+
+																}
+
+																if v, ok := valuesMapStrToI["ds_key_algorithm"]; ok && !isIntfNil(v) {
+
+																	values[i].DsKeyAlgorithm = ves_io_schema_dns_zone.DSKeyAlgorithm(ves_io_schema_dns_zone.DSKeyAlgorithm_value[v.(string)])
+
+																}
+
+																if w, ok := valuesMapStrToI["key_tag"]; ok && !isIntfNil(w) {
+																	values[i].KeyTag = uint32(w.(int))
+																}
+
+															}
+														}
+
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := rrSetMapStrToI["eui48_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
+
+											typeRecordSetTypeFound = true
+											typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_Eui48Record{}
+											typeRecordSetInt.Eui48Record = &ves_io_schema_dns_zone.DNSEUI48ResourceRecord{}
+											rrSet[i].TypeRecordSet = typeRecordSetInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+														typeRecordSetInt.Eui48Record.Name = v.(string)
+
+													}
+
+													if v, ok := cs["value"]; ok && !isIntfNil(v) {
+
+														typeRecordSetInt.Eui48Record.Value = v.(string)
+
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := rrSetMapStrToI["eui64_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
+
+											typeRecordSetTypeFound = true
+											typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_Eui64Record{}
+											typeRecordSetInt.Eui64Record = &ves_io_schema_dns_zone.DNSEUI64ResourceRecord{}
+											rrSet[i].TypeRecordSet = typeRecordSetInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+														typeRecordSetInt.Eui64Record.Name = v.(string)
+
+													}
+
+													if v, ok := cs["value"]; ok && !isIntfNil(v) {
+
+														typeRecordSetInt.Eui64Record.Value = v.(string)
+
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := rrSetMapStrToI["lb_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
+
+											typeRecordSetTypeFound = true
+											typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_LbRecord{}
+											typeRecordSetInt.LbRecord = &ves_io_schema_dns_zone.DNSLBResourceRecord{}
+											rrSet[i].TypeRecordSet = typeRecordSetInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+														typeRecordSetInt.LbRecord.Name = v.(string)
+
+													}
+
+													if v, ok := cs["value"]; ok && !isIntfNil(v) {
+
+														sl := v.([]interface{})
+														valueInt := &ves_io_schema_views.ObjectRefType{}
+														typeRecordSetInt.LbRecord.Value = valueInt
+
+														for _, set := range sl {
+															if set != nil {
+																vMapToStrVal := set.(map[string]interface{})
+																if val, ok := vMapToStrVal["name"]; ok && !isIntfNil(v) {
+																	valueInt.Name = val.(string)
+																}
+																if val, ok := vMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+																	valueInt.Namespace = val.(string)
+																}
+
+																if val, ok := vMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+																	valueInt.Tenant = val.(string)
+																}
+															}
+														}
+
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := rrSetMapStrToI["loc_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
+
+											typeRecordSetTypeFound = true
+											typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_LocRecord{}
+											typeRecordSetInt.LocRecord = &ves_io_schema_dns_zone.DNSLOCResourceRecord{}
+											rrSet[i].TypeRecordSet = typeRecordSetInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+														typeRecordSetInt.LocRecord.Name = v.(string)
+
+													}
+
+													if v, ok := cs["values"]; ok && !isIntfNil(v) {
+
+														sl := v.([]interface{})
+														values := make([]*ves_io_schema_dns_zone.LOCValue, len(sl))
+														typeRecordSetInt.LocRecord.Values = values
+														for i, set := range sl {
+															if set != nil {
+																values[i] = &ves_io_schema_dns_zone.LOCValue{}
+																valuesMapStrToI := set.(map[string]interface{})
+
+																if w, ok := valuesMapStrToI["altitude"]; ok && !isIntfNil(w) {
+																	values[i].Altitude = float32(w.(float64))
+																}
+
+																if w, ok := valuesMapStrToI["horizontal_precision"]; ok && !isIntfNil(w) {
+																	values[i].HorizontalPrecision = float32(w.(float64))
+																}
+
+																if w, ok := valuesMapStrToI["latitude_degree"]; ok && !isIntfNil(w) {
+																	values[i].LatitudeDegree = int32(w.(int))
+																}
+
+																if v, ok := valuesMapStrToI["latitude_hemisphere"]; ok && !isIntfNil(v) {
+
+																	values[i].LatitudeHemisphere = ves_io_schema_dns_zone.LatitudeHemisphere(ves_io_schema_dns_zone.LatitudeHemisphere_value[v.(string)])
+
+																}
+
+																if w, ok := valuesMapStrToI["latitude_minute"]; ok && !isIntfNil(w) {
+																	values[i].LatitudeMinute = int32(w.(int))
+																}
+
+																if w, ok := valuesMapStrToI["latitude_second"]; ok && !isIntfNil(w) {
+																	values[i].LatitudeSecond = float32(w.(float64))
+																}
+
+																if w, ok := valuesMapStrToI["location_diameter"]; ok && !isIntfNil(w) {
+																	values[i].LocationDiameter = float32(w.(float64))
+																}
+
+																if w, ok := valuesMapStrToI["longitude_degree"]; ok && !isIntfNil(w) {
+																	values[i].LongitudeDegree = int32(w.(int))
+																}
+
+																if v, ok := valuesMapStrToI["longitude_hemisphere"]; ok && !isIntfNil(v) {
+
+																	values[i].LongitudeHemisphere = ves_io_schema_dns_zone.LongitudeHemisphere(ves_io_schema_dns_zone.LongitudeHemisphere_value[v.(string)])
+
+																}
+
+																if w, ok := valuesMapStrToI["longitude_minute"]; ok && !isIntfNil(w) {
+																	values[i].LongitudeMinute = int32(w.(int))
+																}
+
+																if w, ok := valuesMapStrToI["longitude_second"]; ok && !isIntfNil(w) {
+																	values[i].LongitudeSecond = float32(w.(float64))
+																}
+
+																if w, ok := valuesMapStrToI["vertical_precision"]; ok && !isIntfNil(w) {
+																	values[i].VerticalPrecision = float32(w.(float64))
+																}
+
+															}
+														}
+
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := rrSetMapStrToI["mx_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
+
+											typeRecordSetTypeFound = true
+											typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_MxRecord{}
+											typeRecordSetInt.MxRecord = &ves_io_schema_dns_zone.DNSMXResourceRecord{}
+											rrSet[i].TypeRecordSet = typeRecordSetInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+														typeRecordSetInt.MxRecord.Name = v.(string)
+
+													}
+
+													if v, ok := cs["values"]; ok && !isIntfNil(v) {
+
+														sl := v.([]interface{})
+														values := make([]*ves_io_schema_dns_zone.MailExchanger, len(sl))
+														typeRecordSetInt.MxRecord.Values = values
+														for i, set := range sl {
+															if set != nil {
+																values[i] = &ves_io_schema_dns_zone.MailExchanger{}
+																valuesMapStrToI := set.(map[string]interface{})
+
+																if w, ok := valuesMapStrToI["domain"]; ok && !isIntfNil(w) {
+																	values[i].Domain = w.(string)
+																}
+
+																if w, ok := valuesMapStrToI["priority"]; ok && !isIntfNil(w) {
+																	values[i].Priority = uint32(w.(int))
+																}
+
+															}
+														}
+
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := rrSetMapStrToI["naptr_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
+
+											typeRecordSetTypeFound = true
+											typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_NaptrRecord{}
+											typeRecordSetInt.NaptrRecord = &ves_io_schema_dns_zone.DNSNAPTRResourceRecord{}
+											rrSet[i].TypeRecordSet = typeRecordSetInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+														typeRecordSetInt.NaptrRecord.Name = v.(string)
+
+													}
+
+													if v, ok := cs["values"]; ok && !isIntfNil(v) {
+
+														sl := v.([]interface{})
+														values := make([]*ves_io_schema_dns_zone.NAPTRValue, len(sl))
+														typeRecordSetInt.NaptrRecord.Values = values
+														for i, set := range sl {
+															if set != nil {
+																values[i] = &ves_io_schema_dns_zone.NAPTRValue{}
+																valuesMapStrToI := set.(map[string]interface{})
+
+																if w, ok := valuesMapStrToI["flags"]; ok && !isIntfNil(w) {
+																	values[i].Flags = w.(string)
+																}
+
+																if w, ok := valuesMapStrToI["order"]; ok && !isIntfNil(w) {
+																	values[i].Order = uint32(w.(int))
+																}
+
+																if w, ok := valuesMapStrToI["preference"]; ok && !isIntfNil(w) {
+																	values[i].Preference = uint32(w.(int))
+																}
+
+																if w, ok := valuesMapStrToI["regexp"]; ok && !isIntfNil(w) {
+																	values[i].Regexp = w.(string)
+																}
+
+																if w, ok := valuesMapStrToI["replacement"]; ok && !isIntfNil(w) {
+																	values[i].Replacement = w.(string)
+																}
+
+																if w, ok := valuesMapStrToI["service"]; ok && !isIntfNil(w) {
+																	values[i].Service = w.(string)
+																}
+
+															}
+														}
+
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := rrSetMapStrToI["ns_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
+
+											typeRecordSetTypeFound = true
+											typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_NsRecord{}
+											typeRecordSetInt.NsRecord = &ves_io_schema_dns_zone.DNSNSResourceRecord{}
+											rrSet[i].TypeRecordSet = typeRecordSetInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+														typeRecordSetInt.NsRecord.Name = v.(string)
+
+													}
+
+													if v, ok := cs["values"]; ok && !isIntfNil(v) {
+
+														ls := make([]string, len(v.([]interface{})))
+														for i, v := range v.([]interface{}) {
+															ls[i] = v.(string)
+														}
+														typeRecordSetInt.NsRecord.Values = ls
+
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := rrSetMapStrToI["ptr_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
+
+											typeRecordSetTypeFound = true
+											typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_PtrRecord{}
+											typeRecordSetInt.PtrRecord = &ves_io_schema_dns_zone.DNSPTRResourceRecord{}
+											rrSet[i].TypeRecordSet = typeRecordSetInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+														typeRecordSetInt.PtrRecord.Name = v.(string)
+
+													}
+
+													if v, ok := cs["values"]; ok && !isIntfNil(v) {
+
+														ls := make([]string, len(v.([]interface{})))
+														for i, v := range v.([]interface{}) {
+															ls[i] = v.(string)
+														}
+														typeRecordSetInt.PtrRecord.Values = ls
+
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := rrSetMapStrToI["srv_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
+
+											typeRecordSetTypeFound = true
+											typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_SrvRecord{}
+											typeRecordSetInt.SrvRecord = &ves_io_schema_dns_zone.DNSSRVResourceRecord{}
+											rrSet[i].TypeRecordSet = typeRecordSetInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+														typeRecordSetInt.SrvRecord.Name = v.(string)
+
+													}
+
+													if v, ok := cs["values"]; ok && !isIntfNil(v) {
+
+														sl := v.([]interface{})
+														values := make([]*ves_io_schema_dns_zone.SRVService, len(sl))
+														typeRecordSetInt.SrvRecord.Values = values
+														for i, set := range sl {
+															if set != nil {
+																values[i] = &ves_io_schema_dns_zone.SRVService{}
+																valuesMapStrToI := set.(map[string]interface{})
+
+																if w, ok := valuesMapStrToI["port"]; ok && !isIntfNil(w) {
+																	values[i].Port = uint32(w.(int))
+																}
+
+																if w, ok := valuesMapStrToI["priority"]; ok && !isIntfNil(w) {
+																	values[i].Priority = uint32(w.(int))
+																}
+
+																if w, ok := valuesMapStrToI["target"]; ok && !isIntfNil(w) {
+																	values[i].Target = w.(string)
+																}
+
+																if w, ok := valuesMapStrToI["weight"]; ok && !isIntfNil(w) {
+																	values[i].Weight = uint32(w.(int))
+																}
+
+															}
+														}
+
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := rrSetMapStrToI["sshfp_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
+
+											typeRecordSetTypeFound = true
+											typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_SshfpRecord{}
+											typeRecordSetInt.SshfpRecord = &ves_io_schema_dns_zone.SSHFPResourceRecord{}
+											rrSet[i].TypeRecordSet = typeRecordSetInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+														typeRecordSetInt.SshfpRecord.Name = v.(string)
+
+													}
+
+													if v, ok := cs["values"]; ok && !isIntfNil(v) {
+
+														sl := v.([]interface{})
+														values := make([]*ves_io_schema_dns_zone.SSHFPRecordValue, len(sl))
+														typeRecordSetInt.SshfpRecord.Values = values
+														for i, set := range sl {
+															if set != nil {
+																values[i] = &ves_io_schema_dns_zone.SSHFPRecordValue{}
+																valuesMapStrToI := set.(map[string]interface{})
+
+																if v, ok := valuesMapStrToI["algorithm"]; ok && !isIntfNil(v) {
+
+																	values[i].Algorithm = ves_io_schema_dns_zone.SSHFPAlgorithm(ves_io_schema_dns_zone.SSHFPAlgorithm_value[v.(string)])
+
+																}
+
+																if w, ok := valuesMapStrToI["fingerprint"]; ok && !isIntfNil(w) {
+																	values[i].Fingerprint = w.(string)
+																}
+
+																fingerprintTypeTypeFound := false
+
+																if v, ok := valuesMapStrToI["sha1_fingerprint"]; ok && !isIntfNil(v) && !fingerprintTypeTypeFound {
+
+																	fingerprintTypeTypeFound = true
+																	fingerprintTypeInt := &ves_io_schema_dns_zone.SSHFPRecordValue_Sha1Fingerprint{}
+																	fingerprintTypeInt.Sha1Fingerprint = &ves_io_schema_dns_zone.SHA1Fingerprint{}
+																	values[i].FingerprintType = fingerprintTypeInt
+
+																	sl := v.([]interface{})
+																	for _, set := range sl {
+																		if set != nil {
+																			cs := set.(map[string]interface{})
+
+																			if v, ok := cs["fingerprint"]; ok && !isIntfNil(v) {
+
+																				fingerprintTypeInt.Sha1Fingerprint.Fingerprint = v.(string)
+
+																			}
+
+																		}
+																	}
+
+																}
+
+																if v, ok := valuesMapStrToI["sha256_fingerprint"]; ok && !isIntfNil(v) && !fingerprintTypeTypeFound {
+
+																	fingerprintTypeTypeFound = true
+																	fingerprintTypeInt := &ves_io_schema_dns_zone.SSHFPRecordValue_Sha256Fingerprint{}
+																	fingerprintTypeInt.Sha256Fingerprint = &ves_io_schema_dns_zone.SHA256Fingerprint{}
+																	values[i].FingerprintType = fingerprintTypeInt
+
+																	sl := v.([]interface{})
+																	for _, set := range sl {
+																		if set != nil {
+																			cs := set.(map[string]interface{})
+
+																			if v, ok := cs["fingerprint"]; ok && !isIntfNil(v) {
+
+																				fingerprintTypeInt.Sha256Fingerprint.Fingerprint = v.(string)
+
+																			}
+
+																		}
+																	}
+
+																}
+
+																if v, ok := valuesMapStrToI["fingerprinttype"]; ok && !isIntfNil(v) {
+
+																	values[i].Fingerprinttype = ves_io_schema_dns_zone.SSHFPFingerprintType(ves_io_schema_dns_zone.SSHFPFingerprintType_value[v.(string)])
+
+																}
+
+															}
+														}
+
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := rrSetMapStrToI["tlsa_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
+
+											typeRecordSetTypeFound = true
+											typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_TlsaRecord{}
+											typeRecordSetInt.TlsaRecord = &ves_io_schema_dns_zone.TLSAResourceRecord{}
+											rrSet[i].TypeRecordSet = typeRecordSetInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+														typeRecordSetInt.TlsaRecord.Name = v.(string)
+
+													}
+
+													if v, ok := cs["values"]; ok && !isIntfNil(v) {
+
+														sl := v.([]interface{})
+														values := make([]*ves_io_schema_dns_zone.TLSARecordValue, len(sl))
+														typeRecordSetInt.TlsaRecord.Values = values
+														for i, set := range sl {
+															if set != nil {
+																values[i] = &ves_io_schema_dns_zone.TLSARecordValue{}
+																valuesMapStrToI := set.(map[string]interface{})
+
+																if w, ok := valuesMapStrToI["certificate_association_data"]; ok && !isIntfNil(w) {
+																	values[i].CertificateAssociationData = w.(string)
+																}
+
+																if v, ok := valuesMapStrToI["certificate_usage"]; ok && !isIntfNil(v) {
+
+																	values[i].CertificateUsage = ves_io_schema_dns_zone.TLSARecordCertificateUsage(ves_io_schema_dns_zone.TLSARecordCertificateUsage_value[v.(string)])
+
+																}
+
+																if v, ok := valuesMapStrToI["matching_type"]; ok && !isIntfNil(v) {
+
+																	values[i].MatchingType = ves_io_schema_dns_zone.TLSARecordMatchingType(ves_io_schema_dns_zone.TLSARecordMatchingType_value[v.(string)])
+
+																}
+
+																if v, ok := valuesMapStrToI["selector"]; ok && !isIntfNil(v) {
+
+																	values[i].Selector = ves_io_schema_dns_zone.TLSARecordCSelector(ves_io_schema_dns_zone.TLSARecordCSelector_value[v.(string)])
+
+																}
+
+															}
+														}
+
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := rrSetMapStrToI["txt_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
+
+											typeRecordSetTypeFound = true
+											typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_TxtRecord{}
+											typeRecordSetInt.TxtRecord = &ves_io_schema_dns_zone.DNSTXTResourceRecord{}
+											rrSet[i].TypeRecordSet = typeRecordSetInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+														typeRecordSetInt.TxtRecord.Name = v.(string)
+
+													}
+
+													if v, ok := cs["values"]; ok && !isIntfNil(v) {
+
+														ls := make([]string, len(v.([]interface{})))
+														for i, v := range v.([]interface{}) {
+															ls[i] = v.(string)
+														}
+														typeRecordSetInt.TxtRecord.Values = ls
+
+													}
+
+												}
+											}
+
+										}
+
+									}
+								}
+
+							}
+
+						}
+					}
+
+				}
+
+				soaRecordParametersChoiceTypeFound := false
+
+				if v, ok := cs["default_soa_parameters"]; ok && !isIntfNil(v) && !soaRecordParametersChoiceTypeFound {
+
+					soaRecordParametersChoiceTypeFound = true
+
+					if v.(bool) {
+						soaRecordParametersChoiceInt := &ves_io_schema_dns_zone.PrimaryDNSCreateSpecType_DefaultSoaParameters{}
+						soaRecordParametersChoiceInt.DefaultSoaParameters = &ves_io_schema.Empty{}
+						dnsTypeInt.Primary.SoaRecordParametersChoice = soaRecordParametersChoiceInt
+					}
+
+				}
+
+				if v, ok := cs["soa_parameters"]; ok && !isIntfNil(v) && !soaRecordParametersChoiceTypeFound {
+
+					soaRecordParametersChoiceTypeFound = true
+					soaRecordParametersChoiceInt := &ves_io_schema_dns_zone.PrimaryDNSCreateSpecType_SoaParameters{}
+					soaRecordParametersChoiceInt.SoaParameters = &ves_io_schema_dns_zone.SOARecordParameterConfig{}
 					dnsTypeInt.Primary.SoaRecordParametersChoice = soaRecordParametersChoiceInt
-				}
 
-			}
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
 
-			if v, ok := cs["soa_parameters"]; ok && !isIntfNil(v) && !soaRecordParametersChoiceTypeFound {
+							if v, ok := cs["expire"]; ok && !isIntfNil(v) {
 
-				soaRecordParametersChoiceTypeFound = true
-				soaRecordParametersChoiceInt := &ves_io_schema_dns_zone.PrimaryDNSCreateSpecType_SoaParameters{}
-				soaRecordParametersChoiceInt.SoaParameters = &ves_io_schema_dns_zone.SOARecordParameterConfig{}
-				dnsTypeInt.Primary.SoaRecordParametersChoice = soaRecordParametersChoiceInt
+								soaRecordParametersChoiceInt.SoaParameters.Expire = uint32(v.(int))
 
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
+							}
 
-					if v, ok := cs["expire"]; ok && !isIntfNil(v) {
+							if v, ok := cs["negative_ttl"]; ok && !isIntfNil(v) {
 
-						soaRecordParametersChoiceInt.SoaParameters.Expire = uint32(v.(int))
+								soaRecordParametersChoiceInt.SoaParameters.NegativeTtl = uint32(v.(int))
 
-					}
+							}
 
-					if v, ok := cs["negative_ttl"]; ok && !isIntfNil(v) {
+							if v, ok := cs["refresh"]; ok && !isIntfNil(v) {
 
-						soaRecordParametersChoiceInt.SoaParameters.NegativeTtl = uint32(v.(int))
+								soaRecordParametersChoiceInt.SoaParameters.Refresh = uint32(v.(int))
 
-					}
+							}
 
-					if v, ok := cs["refresh"]; ok && !isIntfNil(v) {
+							if v, ok := cs["retry"]; ok && !isIntfNil(v) {
 
-						soaRecordParametersChoiceInt.SoaParameters.Refresh = uint32(v.(int))
+								soaRecordParametersChoiceInt.SoaParameters.Retry = uint32(v.(int))
 
-					}
+							}
 
-					if v, ok := cs["retry"]; ok && !isIntfNil(v) {
+							if v, ok := cs["ttl"]; ok && !isIntfNil(v) {
 
-						soaRecordParametersChoiceInt.SoaParameters.Retry = uint32(v.(int))
+								soaRecordParametersChoiceInt.SoaParameters.Ttl = uint32(v.(int))
 
-					}
+							}
 
-					if v, ok := cs["ttl"]; ok && !isIntfNil(v) {
-
-						soaRecordParametersChoiceInt.SoaParameters.Ttl = uint32(v.(int))
-
+						}
 					}
 
 				}
 
 			}
-
 		}
 
 	}
@@ -4891,202 +5169,216 @@ func resourceVolterraDnsZoneCreate(d *schema.ResourceData, meta interface{}) err
 		dnsTypeInt.Secondary = &ves_io_schema_dns_zone.SecondaryDNSCreateSpecType{}
 		createSpec.DnsType = dnsTypeInt
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
+			if set != nil {
+				cs := set.(map[string]interface{})
 
-			if v, ok := cs["primary_servers"]; ok && !isIntfNil(v) {
+				if v, ok := cs["primary_servers"]; ok && !isIntfNil(v) {
 
-				ls := make([]string, len(v.([]interface{})))
-				for i, v := range v.([]interface{}) {
-					ls[i] = v.(string)
-				}
-				dnsTypeInt.Secondary.PrimaryServers = ls
-
-			}
-
-			if v, ok := cs["tsig_key_algorithm"]; ok && !isIntfNil(v) {
-
-				dnsTypeInt.Secondary.TsigKeyAlgorithm = ves_io_schema_dns_zone.TSIGKeyAlgorithm(ves_io_schema_dns_zone.TSIGKeyAlgorithm_value[v.(string)])
-
-			}
-
-			if v, ok := cs["tsig_key_name"]; ok && !isIntfNil(v) {
-
-				dnsTypeInt.Secondary.TsigKeyName = v.(string)
-
-			}
-
-			if v, ok := cs["tsig_key_value"]; ok && !isIntfNil(v) {
-
-				sl := v.(*schema.Set).List()
-				tsigKeyValue := &ves_io_schema.SecretType{}
-				dnsTypeInt.Secondary.TsigKeyValue = tsigKeyValue
-				for _, set := range sl {
-					tsigKeyValueMapStrToI := set.(map[string]interface{})
-
-					if v, ok := tsigKeyValueMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
-
-						sl := v.(*schema.Set).List()
-						blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
-						tsigKeyValue.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
-						for _, set := range sl {
-							blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
-
-							if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
-								blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
-							}
-
-							if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
-								blindfoldSecretInfoInternal.Location = w.(string)
-							}
-
-							if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
-								blindfoldSecretInfoInternal.StoreProvider = w.(string)
-							}
-
-						}
-
+					ls := make([]string, len(v.([]interface{})))
+					for i, v := range v.([]interface{}) {
+						ls[i] = v.(string)
 					}
-
-					if v, ok := tsigKeyValueMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
-
-						tsigKeyValue.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
-
-					}
-
-					secretInfoOneofTypeFound := false
-
-					if v, ok := tsigKeyValueMapStrToI["blindfold_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
-
-						secretInfoOneofTypeFound = true
-						secretInfoOneofInt := &ves_io_schema.SecretType_BlindfoldSecretInfo{}
-						secretInfoOneofInt.BlindfoldSecretInfo = &ves_io_schema.BlindfoldSecretInfoType{}
-						tsigKeyValue.SecretInfoOneof = secretInfoOneofInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["decryption_provider"]; ok && !isIntfNil(v) {
-
-								secretInfoOneofInt.BlindfoldSecretInfo.DecryptionProvider = v.(string)
-
-							}
-
-							if v, ok := cs["location"]; ok && !isIntfNil(v) {
-
-								secretInfoOneofInt.BlindfoldSecretInfo.Location = v.(string)
-
-							}
-
-							if v, ok := cs["store_provider"]; ok && !isIntfNil(v) {
-
-								secretInfoOneofInt.BlindfoldSecretInfo.StoreProvider = v.(string)
-
-							}
-
-						}
-
-					}
-
-					if v, ok := tsigKeyValueMapStrToI["clear_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
-
-						secretInfoOneofTypeFound = true
-						secretInfoOneofInt := &ves_io_schema.SecretType_ClearSecretInfo{}
-						secretInfoOneofInt.ClearSecretInfo = &ves_io_schema.ClearSecretInfoType{}
-						tsigKeyValue.SecretInfoOneof = secretInfoOneofInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["provider"]; ok && !isIntfNil(v) {
-
-								secretInfoOneofInt.ClearSecretInfo.Provider = v.(string)
-
-							}
-
-							if v, ok := cs["url"]; ok && !isIntfNil(v) {
-
-								secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
-
-							}
-
-						}
-
-					}
-
-					if v, ok := tsigKeyValueMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
-
-						secretInfoOneofTypeFound = true
-						secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
-						secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
-						tsigKeyValue.SecretInfoOneof = secretInfoOneofInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["key"]; ok && !isIntfNil(v) {
-
-								secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
-
-							}
-
-							if v, ok := cs["location"]; ok && !isIntfNil(v) {
-
-								secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
-
-							}
-
-							if v, ok := cs["provider"]; ok && !isIntfNil(v) {
-
-								secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
-
-							}
-
-							if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
-
-								secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
-
-							}
-
-							if v, ok := cs["version"]; ok && !isIntfNil(v) {
-
-								secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
-
-							}
-
-						}
-
-					}
-
-					if v, ok := tsigKeyValueMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
-
-						secretInfoOneofTypeFound = true
-						secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
-						secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
-						tsigKeyValue.SecretInfoOneof = secretInfoOneofInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-								secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
-
-							}
-
-						}
-
-					}
+					dnsTypeInt.Secondary.PrimaryServers = ls
 
 				}
 
-			}
+				if v, ok := cs["tsig_key_algorithm"]; ok && !isIntfNil(v) {
 
+					dnsTypeInt.Secondary.TsigKeyAlgorithm = ves_io_schema_dns_zone.TSIGKeyAlgorithm(ves_io_schema_dns_zone.TSIGKeyAlgorithm_value[v.(string)])
+
+				}
+
+				if v, ok := cs["tsig_key_name"]; ok && !isIntfNil(v) {
+
+					dnsTypeInt.Secondary.TsigKeyName = v.(string)
+
+				}
+
+				if v, ok := cs["tsig_key_value"]; ok && !isIntfNil(v) {
+
+					sl := v.([]interface{})
+					tsigKeyValue := &ves_io_schema.SecretType{}
+					dnsTypeInt.Secondary.TsigKeyValue = tsigKeyValue
+					for _, set := range sl {
+						if set != nil {
+							tsigKeyValueMapStrToI := set.(map[string]interface{})
+
+							if v, ok := tsigKeyValueMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
+								tsigKeyValue.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
+								for _, set := range sl {
+									if set != nil {
+										blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
+
+										if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
+											blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
+										}
+
+										if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
+											blindfoldSecretInfoInternal.Location = w.(string)
+										}
+
+										if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
+											blindfoldSecretInfoInternal.StoreProvider = w.(string)
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := tsigKeyValueMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
+
+								tsigKeyValue.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+							}
+
+							secretInfoOneofTypeFound := false
+
+							if v, ok := tsigKeyValueMapStrToI["blindfold_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+								secretInfoOneofTypeFound = true
+								secretInfoOneofInt := &ves_io_schema.SecretType_BlindfoldSecretInfo{}
+								secretInfoOneofInt.BlindfoldSecretInfo = &ves_io_schema.BlindfoldSecretInfoType{}
+								tsigKeyValue.SecretInfoOneof = secretInfoOneofInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["decryption_provider"]; ok && !isIntfNil(v) {
+
+											secretInfoOneofInt.BlindfoldSecretInfo.DecryptionProvider = v.(string)
+
+										}
+
+										if v, ok := cs["location"]; ok && !isIntfNil(v) {
+
+											secretInfoOneofInt.BlindfoldSecretInfo.Location = v.(string)
+
+										}
+
+										if v, ok := cs["store_provider"]; ok && !isIntfNil(v) {
+
+											secretInfoOneofInt.BlindfoldSecretInfo.StoreProvider = v.(string)
+
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := tsigKeyValueMapStrToI["clear_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+								secretInfoOneofTypeFound = true
+								secretInfoOneofInt := &ves_io_schema.SecretType_ClearSecretInfo{}
+								secretInfoOneofInt.ClearSecretInfo = &ves_io_schema.ClearSecretInfoType{}
+								tsigKeyValue.SecretInfoOneof = secretInfoOneofInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+
+											secretInfoOneofInt.ClearSecretInfo.Provider = v.(string)
+
+										}
+
+										if v, ok := cs["url"]; ok && !isIntfNil(v) {
+
+											secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := tsigKeyValueMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+								secretInfoOneofTypeFound = true
+								secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
+								secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
+								tsigKeyValue.SecretInfoOneof = secretInfoOneofInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["key"]; ok && !isIntfNil(v) {
+
+											secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
+										}
+
+										if v, ok := cs["location"]; ok && !isIntfNil(v) {
+
+											secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
+										}
+
+										if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+
+											secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
+										}
+
+										if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
+
+											secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+										}
+
+										if v, ok := cs["version"]; ok && !isIntfNil(v) {
+
+											secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := tsigKeyValueMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+								secretInfoOneofTypeFound = true
+								secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
+								secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
+								tsigKeyValue.SecretInfoOneof = secretInfoOneofInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+											secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
+
+										}
+
+									}
+								}
+
+							}
+
+						}
+					}
+
+				}
+
+			}
 		}
 
 	}
@@ -5199,2519 +5491,2717 @@ func resourceVolterraDnsZoneUpdate(d *schema.ResourceData, meta interface{}) err
 		dnsTypeInt.Primary = &ves_io_schema_dns_zone.PrimaryDNSCreateSpecType{}
 		updateSpec.DnsType = dnsTypeInt
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
+			if set != nil {
+				cs := set.(map[string]interface{})
 
-			if v, ok := cs["allow_http_lb_managed_records"]; ok && !isIntfNil(v) {
+				if v, ok := cs["allow_http_lb_managed_records"]; ok && !isIntfNil(v) {
 
-				dnsTypeInt.Primary.AllowHttpLbManagedRecords = v.(bool)
-
-			}
-
-			if v, ok := cs["default_rr_set_group"]; ok && !isIntfNil(v) {
-
-				sl := v.([]interface{})
-				defaultRrSetGroup := make([]*ves_io_schema_dns_zone.RRSet, len(sl))
-				dnsTypeInt.Primary.DefaultRrSetGroup = defaultRrSetGroup
-				for i, set := range sl {
-					defaultRrSetGroup[i] = &ves_io_schema_dns_zone.RRSet{}
-					defaultRrSetGroupMapStrToI := set.(map[string]interface{})
-
-					if w, ok := defaultRrSetGroupMapStrToI["description"]; ok && !isIntfNil(w) {
-						defaultRrSetGroup[i].Description = w.(string)
-					}
-
-					if w, ok := defaultRrSetGroupMapStrToI["ttl"]; ok && !isIntfNil(w) {
-						defaultRrSetGroup[i].Ttl = uint32(w.(int))
-					}
-
-					typeRecordSetTypeFound := false
-
-					if v, ok := defaultRrSetGroupMapStrToI["a_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
-
-						typeRecordSetTypeFound = true
-						typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_ARecord{}
-						typeRecordSetInt.ARecord = &ves_io_schema_dns_zone.DNSAResourceRecord{}
-						defaultRrSetGroup[i].TypeRecordSet = typeRecordSetInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-								typeRecordSetInt.ARecord.Name = v.(string)
-
-							}
-
-							if v, ok := cs["values"]; ok && !isIntfNil(v) {
-
-								ls := make([]string, len(v.([]interface{})))
-								for i, v := range v.([]interface{}) {
-									ls[i] = v.(string)
-								}
-								typeRecordSetInt.ARecord.Values = ls
-
-							}
-
-						}
-
-					}
-
-					if v, ok := defaultRrSetGroupMapStrToI["aaaa_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
-
-						typeRecordSetTypeFound = true
-						typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_AaaaRecord{}
-						typeRecordSetInt.AaaaRecord = &ves_io_schema_dns_zone.DNSAAAAResourceRecord{}
-						defaultRrSetGroup[i].TypeRecordSet = typeRecordSetInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-								typeRecordSetInt.AaaaRecord.Name = v.(string)
-
-							}
-
-							if v, ok := cs["values"]; ok && !isIntfNil(v) {
-
-								ls := make([]string, len(v.([]interface{})))
-								for i, v := range v.([]interface{}) {
-									ls[i] = v.(string)
-								}
-								typeRecordSetInt.AaaaRecord.Values = ls
-
-							}
-
-						}
-
-					}
-
-					if v, ok := defaultRrSetGroupMapStrToI["afsdb_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
-
-						typeRecordSetTypeFound = true
-						typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_AfsdbRecord{}
-						typeRecordSetInt.AfsdbRecord = &ves_io_schema_dns_zone.DNSAFSDBRecord{}
-						defaultRrSetGroup[i].TypeRecordSet = typeRecordSetInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-								typeRecordSetInt.AfsdbRecord.Name = v.(string)
-
-							}
-
-							if v, ok := cs["values"]; ok && !isIntfNil(v) {
-
-								sl := v.([]interface{})
-								values := make([]*ves_io_schema_dns_zone.AFSDBRecordValue, len(sl))
-								typeRecordSetInt.AfsdbRecord.Values = values
-								for i, set := range sl {
-									values[i] = &ves_io_schema_dns_zone.AFSDBRecordValue{}
-									valuesMapStrToI := set.(map[string]interface{})
-
-									if w, ok := valuesMapStrToI["hostname"]; ok && !isIntfNil(w) {
-										values[i].Hostname = w.(string)
-									}
-
-									if v, ok := valuesMapStrToI["subtype"]; ok && !isIntfNil(v) {
-
-										values[i].Subtype = ves_io_schema_dns_zone.AFSDBRecordSubtype(ves_io_schema_dns_zone.AFSDBRecordSubtype_value[v.(string)])
-
-									}
-
-								}
-
-							}
-
-						}
-
-					}
-
-					if v, ok := defaultRrSetGroupMapStrToI["alias_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
-
-						typeRecordSetTypeFound = true
-						typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_AliasRecord{}
-						typeRecordSetInt.AliasRecord = &ves_io_schema_dns_zone.DNSAliasResourceRecord{}
-						defaultRrSetGroup[i].TypeRecordSet = typeRecordSetInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-								typeRecordSetInt.AliasRecord.Name = v.(string)
-
-							}
-
-							if v, ok := cs["value"]; ok && !isIntfNil(v) {
-
-								typeRecordSetInt.AliasRecord.Value = v.(string)
-
-							}
-
-						}
-
-					}
-
-					if v, ok := defaultRrSetGroupMapStrToI["caa_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
-
-						typeRecordSetTypeFound = true
-						typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_CaaRecord{}
-						typeRecordSetInt.CaaRecord = &ves_io_schema_dns_zone.DNSCAAResourceRecord{}
-						defaultRrSetGroup[i].TypeRecordSet = typeRecordSetInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-								typeRecordSetInt.CaaRecord.Name = v.(string)
-
-							}
-
-							if v, ok := cs["values"]; ok && !isIntfNil(v) {
-
-								sl := v.([]interface{})
-								values := make([]*ves_io_schema_dns_zone.CertificationAuthorityAuthorization, len(sl))
-								typeRecordSetInt.CaaRecord.Values = values
-								for i, set := range sl {
-									values[i] = &ves_io_schema_dns_zone.CertificationAuthorityAuthorization{}
-									valuesMapStrToI := set.(map[string]interface{})
-
-									if w, ok := valuesMapStrToI["flags"]; ok && !isIntfNil(w) {
-										values[i].Flags = uint32(w.(int))
-									}
-
-									if w, ok := valuesMapStrToI["tag"]; ok && !isIntfNil(w) {
-										values[i].Tag = w.(string)
-									}
-
-									if w, ok := valuesMapStrToI["value"]; ok && !isIntfNil(w) {
-										values[i].Value = w.(string)
-									}
-
-								}
-
-							}
-
-						}
-
-					}
-
-					if v, ok := defaultRrSetGroupMapStrToI["cds_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
-
-						typeRecordSetTypeFound = true
-						typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_CdsRecord{}
-						typeRecordSetInt.CdsRecord = &ves_io_schema_dns_zone.DNSCDSRecord{}
-						defaultRrSetGroup[i].TypeRecordSet = typeRecordSetInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-								typeRecordSetInt.CdsRecord.Name = v.(string)
-
-							}
-
-							if v, ok := cs["values"]; ok && !isIntfNil(v) {
-
-								sl := v.([]interface{})
-								values := make([]*ves_io_schema_dns_zone.DSRecordValue, len(sl))
-								typeRecordSetInt.CdsRecord.Values = values
-								for i, set := range sl {
-									values[i] = &ves_io_schema_dns_zone.DSRecordValue{}
-									valuesMapStrToI := set.(map[string]interface{})
-
-									digestChoiceTypeFound := false
-
-									if v, ok := valuesMapStrToI["sha1_digest"]; ok && !isIntfNil(v) && !digestChoiceTypeFound {
-
-										digestChoiceTypeFound = true
-										digestChoiceInt := &ves_io_schema_dns_zone.DSRecordValue_Sha1Digest{}
-										digestChoiceInt.Sha1Digest = &ves_io_schema_dns_zone.SHA1Digest{}
-										values[i].DigestChoice = digestChoiceInt
-
-										sl := v.(*schema.Set).List()
-										for _, set := range sl {
-											cs := set.(map[string]interface{})
-
-											if v, ok := cs["digest"]; ok && !isIntfNil(v) {
-
-												digestChoiceInt.Sha1Digest.Digest = v.(string)
-
-											}
-
-										}
-
-									}
-
-									if v, ok := valuesMapStrToI["sha256_digest"]; ok && !isIntfNil(v) && !digestChoiceTypeFound {
-
-										digestChoiceTypeFound = true
-										digestChoiceInt := &ves_io_schema_dns_zone.DSRecordValue_Sha256Digest{}
-										digestChoiceInt.Sha256Digest = &ves_io_schema_dns_zone.SHA256Digest{}
-										values[i].DigestChoice = digestChoiceInt
-
-										sl := v.(*schema.Set).List()
-										for _, set := range sl {
-											cs := set.(map[string]interface{})
-
-											if v, ok := cs["digest"]; ok && !isIntfNil(v) {
-
-												digestChoiceInt.Sha256Digest.Digest = v.(string)
-
-											}
-
-										}
-
-									}
-
-									if v, ok := valuesMapStrToI["sha384_digest"]; ok && !isIntfNil(v) && !digestChoiceTypeFound {
-
-										digestChoiceTypeFound = true
-										digestChoiceInt := &ves_io_schema_dns_zone.DSRecordValue_Sha384Digest{}
-										digestChoiceInt.Sha384Digest = &ves_io_schema_dns_zone.SHA384Digest{}
-										values[i].DigestChoice = digestChoiceInt
-
-										sl := v.(*schema.Set).List()
-										for _, set := range sl {
-											cs := set.(map[string]interface{})
-
-											if v, ok := cs["digest"]; ok && !isIntfNil(v) {
-
-												digestChoiceInt.Sha384Digest.Digest = v.(string)
-
-											}
-
-										}
-
-									}
-
-									if v, ok := valuesMapStrToI["ds_key_algorithm"]; ok && !isIntfNil(v) {
-
-										values[i].DsKeyAlgorithm = ves_io_schema_dns_zone.DSKeyAlgorithm(ves_io_schema_dns_zone.DSKeyAlgorithm_value[v.(string)])
-
-									}
-
-									if w, ok := valuesMapStrToI["key_tag"]; ok && !isIntfNil(w) {
-										values[i].KeyTag = uint32(w.(int))
-									}
-
-								}
-
-							}
-
-						}
-
-					}
-
-					if v, ok := defaultRrSetGroupMapStrToI["cert_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
-
-						typeRecordSetTypeFound = true
-						typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_CertRecord{}
-						typeRecordSetInt.CertRecord = &ves_io_schema_dns_zone.CERTResourceRecord{}
-						defaultRrSetGroup[i].TypeRecordSet = typeRecordSetInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-								typeRecordSetInt.CertRecord.Name = v.(string)
-
-							}
-
-							if v, ok := cs["values"]; ok && !isIntfNil(v) {
-
-								sl := v.([]interface{})
-								values := make([]*ves_io_schema_dns_zone.CERTRecordValue, len(sl))
-								typeRecordSetInt.CertRecord.Values = values
-								for i, set := range sl {
-									values[i] = &ves_io_schema_dns_zone.CERTRecordValue{}
-									valuesMapStrToI := set.(map[string]interface{})
-
-									if v, ok := valuesMapStrToI["algorithm"]; ok && !isIntfNil(v) {
-
-										values[i].Algorithm = ves_io_schema_dns_zone.CERTAlgorithm(ves_io_schema_dns_zone.CERTAlgorithm_value[v.(string)])
-
-									}
-
-									if w, ok := valuesMapStrToI["cert_key_tag"]; ok && !isIntfNil(w) {
-										values[i].CertKeyTag = uint32(w.(int))
-									}
-
-									if v, ok := valuesMapStrToI["cert_type"]; ok && !isIntfNil(v) {
-
-										values[i].CertType = ves_io_schema_dns_zone.CERTType(ves_io_schema_dns_zone.CERTType_value[v.(string)])
-
-									}
-
-									if w, ok := valuesMapStrToI["certificate"]; ok && !isIntfNil(w) {
-										values[i].Certificate = w.(string)
-									}
-
-								}
-
-							}
-
-						}
-
-					}
-
-					if v, ok := defaultRrSetGroupMapStrToI["cname_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
-
-						typeRecordSetTypeFound = true
-						typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_CnameRecord{}
-						typeRecordSetInt.CnameRecord = &ves_io_schema_dns_zone.DNSCNAMEResourceRecord{}
-						defaultRrSetGroup[i].TypeRecordSet = typeRecordSetInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-								typeRecordSetInt.CnameRecord.Name = v.(string)
-
-							}
-
-							if v, ok := cs["value"]; ok && !isIntfNil(v) {
-
-								typeRecordSetInt.CnameRecord.Value = v.(string)
-
-							}
-
-						}
-
-					}
-
-					if v, ok := defaultRrSetGroupMapStrToI["dlv_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
-
-						typeRecordSetTypeFound = true
-						typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_DlvRecord{}
-						typeRecordSetInt.DlvRecord = &ves_io_schema_dns_zone.DLVResourceRecord{}
-						defaultRrSetGroup[i].TypeRecordSet = typeRecordSetInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-								typeRecordSetInt.DlvRecord.Name = v.(string)
-
-							}
-
-							if v, ok := cs["values"]; ok && !isIntfNil(v) {
-
-								sl := v.([]interface{})
-								values := make([]*ves_io_schema_dns_zone.DSRecordValue, len(sl))
-								typeRecordSetInt.DlvRecord.Values = values
-								for i, set := range sl {
-									values[i] = &ves_io_schema_dns_zone.DSRecordValue{}
-									valuesMapStrToI := set.(map[string]interface{})
-
-									digestChoiceTypeFound := false
-
-									if v, ok := valuesMapStrToI["sha1_digest"]; ok && !isIntfNil(v) && !digestChoiceTypeFound {
-
-										digestChoiceTypeFound = true
-										digestChoiceInt := &ves_io_schema_dns_zone.DSRecordValue_Sha1Digest{}
-										digestChoiceInt.Sha1Digest = &ves_io_schema_dns_zone.SHA1Digest{}
-										values[i].DigestChoice = digestChoiceInt
-
-										sl := v.(*schema.Set).List()
-										for _, set := range sl {
-											cs := set.(map[string]interface{})
-
-											if v, ok := cs["digest"]; ok && !isIntfNil(v) {
-
-												digestChoiceInt.Sha1Digest.Digest = v.(string)
-
-											}
-
-										}
-
-									}
-
-									if v, ok := valuesMapStrToI["sha256_digest"]; ok && !isIntfNil(v) && !digestChoiceTypeFound {
-
-										digestChoiceTypeFound = true
-										digestChoiceInt := &ves_io_schema_dns_zone.DSRecordValue_Sha256Digest{}
-										digestChoiceInt.Sha256Digest = &ves_io_schema_dns_zone.SHA256Digest{}
-										values[i].DigestChoice = digestChoiceInt
-
-										sl := v.(*schema.Set).List()
-										for _, set := range sl {
-											cs := set.(map[string]interface{})
-
-											if v, ok := cs["digest"]; ok && !isIntfNil(v) {
-
-												digestChoiceInt.Sha256Digest.Digest = v.(string)
-
-											}
-
-										}
-
-									}
-
-									if v, ok := valuesMapStrToI["sha384_digest"]; ok && !isIntfNil(v) && !digestChoiceTypeFound {
-
-										digestChoiceTypeFound = true
-										digestChoiceInt := &ves_io_schema_dns_zone.DSRecordValue_Sha384Digest{}
-										digestChoiceInt.Sha384Digest = &ves_io_schema_dns_zone.SHA384Digest{}
-										values[i].DigestChoice = digestChoiceInt
-
-										sl := v.(*schema.Set).List()
-										for _, set := range sl {
-											cs := set.(map[string]interface{})
-
-											if v, ok := cs["digest"]; ok && !isIntfNil(v) {
-
-												digestChoiceInt.Sha384Digest.Digest = v.(string)
-
-											}
-
-										}
-
-									}
-
-									if v, ok := valuesMapStrToI["ds_key_algorithm"]; ok && !isIntfNil(v) {
-
-										values[i].DsKeyAlgorithm = ves_io_schema_dns_zone.DSKeyAlgorithm(ves_io_schema_dns_zone.DSKeyAlgorithm_value[v.(string)])
-
-									}
-
-									if w, ok := valuesMapStrToI["key_tag"]; ok && !isIntfNil(w) {
-										values[i].KeyTag = uint32(w.(int))
-									}
-
-								}
-
-							}
-
-						}
-
-					}
-
-					if v, ok := defaultRrSetGroupMapStrToI["ds_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
-
-						typeRecordSetTypeFound = true
-						typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_DsRecord{}
-						typeRecordSetInt.DsRecord = &ves_io_schema_dns_zone.DNSDSRecord{}
-						defaultRrSetGroup[i].TypeRecordSet = typeRecordSetInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-								typeRecordSetInt.DsRecord.Name = v.(string)
-
-							}
-
-							if v, ok := cs["values"]; ok && !isIntfNil(v) {
-
-								sl := v.([]interface{})
-								values := make([]*ves_io_schema_dns_zone.DSRecordValue, len(sl))
-								typeRecordSetInt.DsRecord.Values = values
-								for i, set := range sl {
-									values[i] = &ves_io_schema_dns_zone.DSRecordValue{}
-									valuesMapStrToI := set.(map[string]interface{})
-
-									digestChoiceTypeFound := false
-
-									if v, ok := valuesMapStrToI["sha1_digest"]; ok && !isIntfNil(v) && !digestChoiceTypeFound {
-
-										digestChoiceTypeFound = true
-										digestChoiceInt := &ves_io_schema_dns_zone.DSRecordValue_Sha1Digest{}
-										digestChoiceInt.Sha1Digest = &ves_io_schema_dns_zone.SHA1Digest{}
-										values[i].DigestChoice = digestChoiceInt
-
-										sl := v.(*schema.Set).List()
-										for _, set := range sl {
-											cs := set.(map[string]interface{})
-
-											if v, ok := cs["digest"]; ok && !isIntfNil(v) {
-
-												digestChoiceInt.Sha1Digest.Digest = v.(string)
-
-											}
-
-										}
-
-									}
-
-									if v, ok := valuesMapStrToI["sha256_digest"]; ok && !isIntfNil(v) && !digestChoiceTypeFound {
-
-										digestChoiceTypeFound = true
-										digestChoiceInt := &ves_io_schema_dns_zone.DSRecordValue_Sha256Digest{}
-										digestChoiceInt.Sha256Digest = &ves_io_schema_dns_zone.SHA256Digest{}
-										values[i].DigestChoice = digestChoiceInt
-
-										sl := v.(*schema.Set).List()
-										for _, set := range sl {
-											cs := set.(map[string]interface{})
-
-											if v, ok := cs["digest"]; ok && !isIntfNil(v) {
-
-												digestChoiceInt.Sha256Digest.Digest = v.(string)
-
-											}
-
-										}
-
-									}
-
-									if v, ok := valuesMapStrToI["sha384_digest"]; ok && !isIntfNil(v) && !digestChoiceTypeFound {
-
-										digestChoiceTypeFound = true
-										digestChoiceInt := &ves_io_schema_dns_zone.DSRecordValue_Sha384Digest{}
-										digestChoiceInt.Sha384Digest = &ves_io_schema_dns_zone.SHA384Digest{}
-										values[i].DigestChoice = digestChoiceInt
-
-										sl := v.(*schema.Set).List()
-										for _, set := range sl {
-											cs := set.(map[string]interface{})
-
-											if v, ok := cs["digest"]; ok && !isIntfNil(v) {
-
-												digestChoiceInt.Sha384Digest.Digest = v.(string)
-
-											}
-
-										}
-
-									}
-
-									if v, ok := valuesMapStrToI["ds_key_algorithm"]; ok && !isIntfNil(v) {
-
-										values[i].DsKeyAlgorithm = ves_io_schema_dns_zone.DSKeyAlgorithm(ves_io_schema_dns_zone.DSKeyAlgorithm_value[v.(string)])
-
-									}
-
-									if w, ok := valuesMapStrToI["key_tag"]; ok && !isIntfNil(w) {
-										values[i].KeyTag = uint32(w.(int))
-									}
-
-								}
-
-							}
-
-						}
-
-					}
-
-					if v, ok := defaultRrSetGroupMapStrToI["eui48_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
-
-						typeRecordSetTypeFound = true
-						typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_Eui48Record{}
-						typeRecordSetInt.Eui48Record = &ves_io_schema_dns_zone.DNSEUI48ResourceRecord{}
-						defaultRrSetGroup[i].TypeRecordSet = typeRecordSetInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-								typeRecordSetInt.Eui48Record.Name = v.(string)
-
-							}
-
-							if v, ok := cs["value"]; ok && !isIntfNil(v) {
-
-								typeRecordSetInt.Eui48Record.Value = v.(string)
-
-							}
-
-						}
-
-					}
-
-					if v, ok := defaultRrSetGroupMapStrToI["eui64_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
-
-						typeRecordSetTypeFound = true
-						typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_Eui64Record{}
-						typeRecordSetInt.Eui64Record = &ves_io_schema_dns_zone.DNSEUI64ResourceRecord{}
-						defaultRrSetGroup[i].TypeRecordSet = typeRecordSetInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-								typeRecordSetInt.Eui64Record.Name = v.(string)
-
-							}
-
-							if v, ok := cs["value"]; ok && !isIntfNil(v) {
-
-								typeRecordSetInt.Eui64Record.Value = v.(string)
-
-							}
-
-						}
-
-					}
-
-					if v, ok := defaultRrSetGroupMapStrToI["lb_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
-
-						typeRecordSetTypeFound = true
-						typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_LbRecord{}
-						typeRecordSetInt.LbRecord = &ves_io_schema_dns_zone.DNSLBResourceRecord{}
-						defaultRrSetGroup[i].TypeRecordSet = typeRecordSetInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-								typeRecordSetInt.LbRecord.Name = v.(string)
-
-							}
-
-							if v, ok := cs["value"]; ok && !isIntfNil(v) {
-
-								sl := v.(*schema.Set).List()
-								valueInt := &ves_io_schema_views.ObjectRefType{}
-								typeRecordSetInt.LbRecord.Value = valueInt
-
-								for _, set := range sl {
-									vMapToStrVal := set.(map[string]interface{})
-									if val, ok := vMapToStrVal["name"]; ok && !isIntfNil(v) {
-										valueInt.Name = val.(string)
-									}
-									if val, ok := vMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-										valueInt.Namespace = val.(string)
-									}
-
-									if val, ok := vMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-										valueInt.Tenant = val.(string)
-									}
-								}
-
-							}
-
-						}
-
-					}
-
-					if v, ok := defaultRrSetGroupMapStrToI["loc_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
-
-						typeRecordSetTypeFound = true
-						typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_LocRecord{}
-						typeRecordSetInt.LocRecord = &ves_io_schema_dns_zone.DNSLOCResourceRecord{}
-						defaultRrSetGroup[i].TypeRecordSet = typeRecordSetInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-								typeRecordSetInt.LocRecord.Name = v.(string)
-
-							}
-
-							if v, ok := cs["values"]; ok && !isIntfNil(v) {
-
-								sl := v.([]interface{})
-								values := make([]*ves_io_schema_dns_zone.LOCValue, len(sl))
-								typeRecordSetInt.LocRecord.Values = values
-								for i, set := range sl {
-									values[i] = &ves_io_schema_dns_zone.LOCValue{}
-									valuesMapStrToI := set.(map[string]interface{})
-
-									if w, ok := valuesMapStrToI["altitude"]; ok && !isIntfNil(w) {
-										values[i].Altitude = float32(w.(float64))
-									}
-
-									if w, ok := valuesMapStrToI["horizontal_precision"]; ok && !isIntfNil(w) {
-										values[i].HorizontalPrecision = float32(w.(float64))
-									}
-
-									if w, ok := valuesMapStrToI["latitude_degree"]; ok && !isIntfNil(w) {
-										values[i].LatitudeDegree = int32(w.(int))
-									}
-
-									if v, ok := valuesMapStrToI["latitude_hemisphere"]; ok && !isIntfNil(v) {
-
-										values[i].LatitudeHemisphere = ves_io_schema_dns_zone.LatitudeHemisphere(ves_io_schema_dns_zone.LatitudeHemisphere_value[v.(string)])
-
-									}
-
-									if w, ok := valuesMapStrToI["latitude_minute"]; ok && !isIntfNil(w) {
-										values[i].LatitudeMinute = int32(w.(int))
-									}
-
-									if w, ok := valuesMapStrToI["latitude_second"]; ok && !isIntfNil(w) {
-										values[i].LatitudeSecond = float32(w.(float64))
-									}
-
-									if w, ok := valuesMapStrToI["location_diameter"]; ok && !isIntfNil(w) {
-										values[i].LocationDiameter = float32(w.(float64))
-									}
-
-									if w, ok := valuesMapStrToI["longitude_degree"]; ok && !isIntfNil(w) {
-										values[i].LongitudeDegree = int32(w.(int))
-									}
-
-									if v, ok := valuesMapStrToI["longitude_hemisphere"]; ok && !isIntfNil(v) {
-
-										values[i].LongitudeHemisphere = ves_io_schema_dns_zone.LongitudeHemisphere(ves_io_schema_dns_zone.LongitudeHemisphere_value[v.(string)])
-
-									}
-
-									if w, ok := valuesMapStrToI["longitude_minute"]; ok && !isIntfNil(w) {
-										values[i].LongitudeMinute = int32(w.(int))
-									}
-
-									if w, ok := valuesMapStrToI["longitude_second"]; ok && !isIntfNil(w) {
-										values[i].LongitudeSecond = float32(w.(float64))
-									}
-
-									if w, ok := valuesMapStrToI["vertical_precision"]; ok && !isIntfNil(w) {
-										values[i].VerticalPrecision = float32(w.(float64))
-									}
-
-								}
-
-							}
-
-						}
-
-					}
-
-					if v, ok := defaultRrSetGroupMapStrToI["mx_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
-
-						typeRecordSetTypeFound = true
-						typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_MxRecord{}
-						typeRecordSetInt.MxRecord = &ves_io_schema_dns_zone.DNSMXResourceRecord{}
-						defaultRrSetGroup[i].TypeRecordSet = typeRecordSetInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-								typeRecordSetInt.MxRecord.Name = v.(string)
-
-							}
-
-							if v, ok := cs["values"]; ok && !isIntfNil(v) {
-
-								sl := v.([]interface{})
-								values := make([]*ves_io_schema_dns_zone.MailExchanger, len(sl))
-								typeRecordSetInt.MxRecord.Values = values
-								for i, set := range sl {
-									values[i] = &ves_io_schema_dns_zone.MailExchanger{}
-									valuesMapStrToI := set.(map[string]interface{})
-
-									if w, ok := valuesMapStrToI["domain"]; ok && !isIntfNil(w) {
-										values[i].Domain = w.(string)
-									}
-
-									if w, ok := valuesMapStrToI["priority"]; ok && !isIntfNil(w) {
-										values[i].Priority = uint32(w.(int))
-									}
-
-								}
-
-							}
-
-						}
-
-					}
-
-					if v, ok := defaultRrSetGroupMapStrToI["naptr_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
-
-						typeRecordSetTypeFound = true
-						typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_NaptrRecord{}
-						typeRecordSetInt.NaptrRecord = &ves_io_schema_dns_zone.DNSNAPTRResourceRecord{}
-						defaultRrSetGroup[i].TypeRecordSet = typeRecordSetInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-								typeRecordSetInt.NaptrRecord.Name = v.(string)
-
-							}
-
-							if v, ok := cs["values"]; ok && !isIntfNil(v) {
-
-								sl := v.([]interface{})
-								values := make([]*ves_io_schema_dns_zone.NAPTRValue, len(sl))
-								typeRecordSetInt.NaptrRecord.Values = values
-								for i, set := range sl {
-									values[i] = &ves_io_schema_dns_zone.NAPTRValue{}
-									valuesMapStrToI := set.(map[string]interface{})
-
-									if w, ok := valuesMapStrToI["flags"]; ok && !isIntfNil(w) {
-										values[i].Flags = w.(string)
-									}
-
-									if w, ok := valuesMapStrToI["order"]; ok && !isIntfNil(w) {
-										values[i].Order = uint32(w.(int))
-									}
-
-									if w, ok := valuesMapStrToI["preference"]; ok && !isIntfNil(w) {
-										values[i].Preference = uint32(w.(int))
-									}
-
-									if w, ok := valuesMapStrToI["regexp"]; ok && !isIntfNil(w) {
-										values[i].Regexp = w.(string)
-									}
-
-									if w, ok := valuesMapStrToI["replacement"]; ok && !isIntfNil(w) {
-										values[i].Replacement = w.(string)
-									}
-
-									if w, ok := valuesMapStrToI["service"]; ok && !isIntfNil(w) {
-										values[i].Service = w.(string)
-									}
-
-								}
-
-							}
-
-						}
-
-					}
-
-					if v, ok := defaultRrSetGroupMapStrToI["ns_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
-
-						typeRecordSetTypeFound = true
-						typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_NsRecord{}
-						typeRecordSetInt.NsRecord = &ves_io_schema_dns_zone.DNSNSResourceRecord{}
-						defaultRrSetGroup[i].TypeRecordSet = typeRecordSetInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-								typeRecordSetInt.NsRecord.Name = v.(string)
-
-							}
-
-							if v, ok := cs["values"]; ok && !isIntfNil(v) {
-
-								ls := make([]string, len(v.([]interface{})))
-								for i, v := range v.([]interface{}) {
-									ls[i] = v.(string)
-								}
-								typeRecordSetInt.NsRecord.Values = ls
-
-							}
-
-						}
-
-					}
-
-					if v, ok := defaultRrSetGroupMapStrToI["ptr_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
-
-						typeRecordSetTypeFound = true
-						typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_PtrRecord{}
-						typeRecordSetInt.PtrRecord = &ves_io_schema_dns_zone.DNSPTRResourceRecord{}
-						defaultRrSetGroup[i].TypeRecordSet = typeRecordSetInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-								typeRecordSetInt.PtrRecord.Name = v.(string)
-
-							}
-
-							if v, ok := cs["values"]; ok && !isIntfNil(v) {
-
-								ls := make([]string, len(v.([]interface{})))
-								for i, v := range v.([]interface{}) {
-									ls[i] = v.(string)
-								}
-								typeRecordSetInt.PtrRecord.Values = ls
-
-							}
-
-						}
-
-					}
-
-					if v, ok := defaultRrSetGroupMapStrToI["srv_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
-
-						typeRecordSetTypeFound = true
-						typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_SrvRecord{}
-						typeRecordSetInt.SrvRecord = &ves_io_schema_dns_zone.DNSSRVResourceRecord{}
-						defaultRrSetGroup[i].TypeRecordSet = typeRecordSetInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-								typeRecordSetInt.SrvRecord.Name = v.(string)
-
-							}
-
-							if v, ok := cs["values"]; ok && !isIntfNil(v) {
-
-								sl := v.([]interface{})
-								values := make([]*ves_io_schema_dns_zone.SRVService, len(sl))
-								typeRecordSetInt.SrvRecord.Values = values
-								for i, set := range sl {
-									values[i] = &ves_io_schema_dns_zone.SRVService{}
-									valuesMapStrToI := set.(map[string]interface{})
-
-									if w, ok := valuesMapStrToI["port"]; ok && !isIntfNil(w) {
-										values[i].Port = uint32(w.(int))
-									}
-
-									if w, ok := valuesMapStrToI["priority"]; ok && !isIntfNil(w) {
-										values[i].Priority = uint32(w.(int))
-									}
-
-									if w, ok := valuesMapStrToI["target"]; ok && !isIntfNil(w) {
-										values[i].Target = w.(string)
-									}
-
-									if w, ok := valuesMapStrToI["weight"]; ok && !isIntfNil(w) {
-										values[i].Weight = uint32(w.(int))
-									}
-
-								}
-
-							}
-
-						}
-
-					}
-
-					if v, ok := defaultRrSetGroupMapStrToI["sshfp_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
-
-						typeRecordSetTypeFound = true
-						typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_SshfpRecord{}
-						typeRecordSetInt.SshfpRecord = &ves_io_schema_dns_zone.SSHFPResourceRecord{}
-						defaultRrSetGroup[i].TypeRecordSet = typeRecordSetInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-								typeRecordSetInt.SshfpRecord.Name = v.(string)
-
-							}
-
-							if v, ok := cs["values"]; ok && !isIntfNil(v) {
-
-								sl := v.([]interface{})
-								values := make([]*ves_io_schema_dns_zone.SSHFPRecordValue, len(sl))
-								typeRecordSetInt.SshfpRecord.Values = values
-								for i, set := range sl {
-									values[i] = &ves_io_schema_dns_zone.SSHFPRecordValue{}
-									valuesMapStrToI := set.(map[string]interface{})
-
-									if v, ok := valuesMapStrToI["algorithm"]; ok && !isIntfNil(v) {
-
-										values[i].Algorithm = ves_io_schema_dns_zone.SSHFPAlgorithm(ves_io_schema_dns_zone.SSHFPAlgorithm_value[v.(string)])
-
-									}
-
-									if w, ok := valuesMapStrToI["fingerprint"]; ok && !isIntfNil(w) {
-										values[i].Fingerprint = w.(string)
-									}
-
-									fingerprintTypeTypeFound := false
-
-									if v, ok := valuesMapStrToI["sha1_fingerprint"]; ok && !isIntfNil(v) && !fingerprintTypeTypeFound {
-
-										fingerprintTypeTypeFound = true
-										fingerprintTypeInt := &ves_io_schema_dns_zone.SSHFPRecordValue_Sha1Fingerprint{}
-										fingerprintTypeInt.Sha1Fingerprint = &ves_io_schema_dns_zone.SHA1Fingerprint{}
-										values[i].FingerprintType = fingerprintTypeInt
-
-										sl := v.(*schema.Set).List()
-										for _, set := range sl {
-											cs := set.(map[string]interface{})
-
-											if v, ok := cs["fingerprint"]; ok && !isIntfNil(v) {
-
-												fingerprintTypeInt.Sha1Fingerprint.Fingerprint = v.(string)
-
-											}
-
-										}
-
-									}
-
-									if v, ok := valuesMapStrToI["sha256_fingerprint"]; ok && !isIntfNil(v) && !fingerprintTypeTypeFound {
-
-										fingerprintTypeTypeFound = true
-										fingerprintTypeInt := &ves_io_schema_dns_zone.SSHFPRecordValue_Sha256Fingerprint{}
-										fingerprintTypeInt.Sha256Fingerprint = &ves_io_schema_dns_zone.SHA256Fingerprint{}
-										values[i].FingerprintType = fingerprintTypeInt
-
-										sl := v.(*schema.Set).List()
-										for _, set := range sl {
-											cs := set.(map[string]interface{})
-
-											if v, ok := cs["fingerprint"]; ok && !isIntfNil(v) {
-
-												fingerprintTypeInt.Sha256Fingerprint.Fingerprint = v.(string)
-
-											}
-
-										}
-
-									}
-
-									if v, ok := valuesMapStrToI["fingerprinttype"]; ok && !isIntfNil(v) {
-
-										values[i].Fingerprinttype = ves_io_schema_dns_zone.SSHFPFingerprintType(ves_io_schema_dns_zone.SSHFPFingerprintType_value[v.(string)])
-
-									}
-
-								}
-
-							}
-
-						}
-
-					}
-
-					if v, ok := defaultRrSetGroupMapStrToI["tlsa_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
-
-						typeRecordSetTypeFound = true
-						typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_TlsaRecord{}
-						typeRecordSetInt.TlsaRecord = &ves_io_schema_dns_zone.TLSAResourceRecord{}
-						defaultRrSetGroup[i].TypeRecordSet = typeRecordSetInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-								typeRecordSetInt.TlsaRecord.Name = v.(string)
-
-							}
-
-							if v, ok := cs["values"]; ok && !isIntfNil(v) {
-
-								sl := v.([]interface{})
-								values := make([]*ves_io_schema_dns_zone.TLSARecordValue, len(sl))
-								typeRecordSetInt.TlsaRecord.Values = values
-								for i, set := range sl {
-									values[i] = &ves_io_schema_dns_zone.TLSARecordValue{}
-									valuesMapStrToI := set.(map[string]interface{})
-
-									if w, ok := valuesMapStrToI["certificate_association_data"]; ok && !isIntfNil(w) {
-										values[i].CertificateAssociationData = w.(string)
-									}
-
-									if v, ok := valuesMapStrToI["certificate_usage"]; ok && !isIntfNil(v) {
-
-										values[i].CertificateUsage = ves_io_schema_dns_zone.TLSARecordCertificateUsage(ves_io_schema_dns_zone.TLSARecordCertificateUsage_value[v.(string)])
-
-									}
-
-									if v, ok := valuesMapStrToI["matching_type"]; ok && !isIntfNil(v) {
-
-										values[i].MatchingType = ves_io_schema_dns_zone.TLSARecordMatchingType(ves_io_schema_dns_zone.TLSARecordMatchingType_value[v.(string)])
-
-									}
-
-									if v, ok := valuesMapStrToI["selector"]; ok && !isIntfNil(v) {
-
-										values[i].Selector = ves_io_schema_dns_zone.TLSARecordCSelector(ves_io_schema_dns_zone.TLSARecordCSelector_value[v.(string)])
-
-									}
-
-								}
-
-							}
-
-						}
-
-					}
-
-					if v, ok := defaultRrSetGroupMapStrToI["txt_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
-
-						typeRecordSetTypeFound = true
-						typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_TxtRecord{}
-						typeRecordSetInt.TxtRecord = &ves_io_schema_dns_zone.DNSTXTResourceRecord{}
-						defaultRrSetGroup[i].TypeRecordSet = typeRecordSetInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-								typeRecordSetInt.TxtRecord.Name = v.(string)
-
-							}
-
-							if v, ok := cs["values"]; ok && !isIntfNil(v) {
-
-								ls := make([]string, len(v.([]interface{})))
-								for i, v := range v.([]interface{}) {
-									ls[i] = v.(string)
-								}
-								typeRecordSetInt.TxtRecord.Values = ls
-
-							}
-
-						}
-
-					}
+					dnsTypeInt.Primary.AllowHttpLbManagedRecords = v.(bool)
 
 				}
 
-			}
+				if v, ok := cs["default_rr_set_group"]; ok && !isIntfNil(v) {
 
-			if v, ok := cs["dnssec_mode"]; ok && !isIntfNil(v) {
+					sl := v.([]interface{})
+					defaultRrSetGroup := make([]*ves_io_schema_dns_zone.RRSet, len(sl))
+					dnsTypeInt.Primary.DefaultRrSetGroup = defaultRrSetGroup
+					for i, set := range sl {
+						if set != nil {
+							defaultRrSetGroup[i] = &ves_io_schema_dns_zone.RRSet{}
+							defaultRrSetGroupMapStrToI := set.(map[string]interface{})
 
-				sl := v.(*schema.Set).List()
-				dnssecMode := &ves_io_schema_dns_zone.DNSSECMode{}
-				dnsTypeInt.Primary.DnssecMode = dnssecMode
-				for _, set := range sl {
-					dnssecModeMapStrToI := set.(map[string]interface{})
-
-					modeTypeFound := false
-
-					if v, ok := dnssecModeMapStrToI["disable"]; ok && !isIntfNil(v) && !modeTypeFound {
-
-						modeTypeFound = true
-
-						if v.(bool) {
-							modeInt := &ves_io_schema_dns_zone.DNSSECMode_Disable{}
-							modeInt.Disable = &ves_io_schema.Empty{}
-							dnssecMode.Mode = modeInt
-						}
-
-					}
-
-					if _, ok := dnssecModeMapStrToI["enable"]; ok && !modeTypeFound {
-
-						modeTypeFound = true
-						modeInt := &ves_io_schema_dns_zone.DNSSECMode_Enable{}
-						modeInt.Enable = &ves_io_schema_dns_zone.DNSSECModeEnable{}
-						dnssecMode.Mode = modeInt
-
-					}
-
-				}
-
-			}
-
-			if v, ok := cs["rr_set_group"]; ok && !isIntfNil(v) {
-
-				sl := v.([]interface{})
-				rrSetGroup := make([]*ves_io_schema_dns_zone.RRSetGroup, len(sl))
-				dnsTypeInt.Primary.RrSetGroup = rrSetGroup
-				for i, set := range sl {
-					rrSetGroup[i] = &ves_io_schema_dns_zone.RRSetGroup{}
-					rrSetGroupMapStrToI := set.(map[string]interface{})
-
-					if v, ok := rrSetGroupMapStrToI["metadata"]; ok && !isIntfNil(v) {
-
-						sl := v.(*schema.Set).List()
-						metadata := &ves_io_schema.MessageMetaType{}
-						rrSetGroup[i].Metadata = metadata
-						for _, set := range sl {
-							metadataMapStrToI := set.(map[string]interface{})
-
-							if w, ok := metadataMapStrToI["description"]; ok && !isIntfNil(w) {
-								metadata.Description = w.(string)
+							if w, ok := defaultRrSetGroupMapStrToI["description"]; ok && !isIntfNil(w) {
+								defaultRrSetGroup[i].Description = w.(string)
 							}
 
-							if w, ok := metadataMapStrToI["disable"]; ok && !isIntfNil(w) {
-								metadata.Disable = w.(bool)
-							}
-
-							if w, ok := metadataMapStrToI["name"]; ok && !isIntfNil(w) {
-								metadata.Name = w.(string)
-							}
-
-						}
-
-					}
-
-					if v, ok := rrSetGroupMapStrToI["rr_set"]; ok && !isIntfNil(v) {
-
-						sl := v.([]interface{})
-						rrSet := make([]*ves_io_schema_dns_zone.RRSet, len(sl))
-						rrSetGroup[i].RrSet = rrSet
-						for i, set := range sl {
-							rrSet[i] = &ves_io_schema_dns_zone.RRSet{}
-							rrSetMapStrToI := set.(map[string]interface{})
-
-							if w, ok := rrSetMapStrToI["description"]; ok && !isIntfNil(w) {
-								rrSet[i].Description = w.(string)
-							}
-
-							if w, ok := rrSetMapStrToI["ttl"]; ok && !isIntfNil(w) {
-								rrSet[i].Ttl = uint32(w.(int))
+							if w, ok := defaultRrSetGroupMapStrToI["ttl"]; ok && !isIntfNil(w) {
+								defaultRrSetGroup[i].Ttl = uint32(w.(int))
 							}
 
 							typeRecordSetTypeFound := false
 
-							if v, ok := rrSetMapStrToI["a_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
+							if v, ok := defaultRrSetGroupMapStrToI["a_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
 
 								typeRecordSetTypeFound = true
 								typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_ARecord{}
 								typeRecordSetInt.ARecord = &ves_io_schema_dns_zone.DNSAResourceRecord{}
-								rrSet[i].TypeRecordSet = typeRecordSetInt
+								defaultRrSetGroup[i].TypeRecordSet = typeRecordSetInt
 
-								sl := v.(*schema.Set).List()
+								sl := v.([]interface{})
 								for _, set := range sl {
-									cs := set.(map[string]interface{})
+									if set != nil {
+										cs := set.(map[string]interface{})
 
-									if v, ok := cs["name"]; ok && !isIntfNil(v) {
+										if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
-										typeRecordSetInt.ARecord.Name = v.(string)
+											typeRecordSetInt.ARecord.Name = v.(string)
 
-									}
-
-									if v, ok := cs["values"]; ok && !isIntfNil(v) {
-
-										ls := make([]string, len(v.([]interface{})))
-										for i, v := range v.([]interface{}) {
-											ls[i] = v.(string)
 										}
-										typeRecordSetInt.ARecord.Values = ls
+
+										if v, ok := cs["values"]; ok && !isIntfNil(v) {
+
+											ls := make([]string, len(v.([]interface{})))
+											for i, v := range v.([]interface{}) {
+												ls[i] = v.(string)
+											}
+											typeRecordSetInt.ARecord.Values = ls
+
+										}
 
 									}
-
 								}
 
 							}
 
-							if v, ok := rrSetMapStrToI["aaaa_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
+							if v, ok := defaultRrSetGroupMapStrToI["aaaa_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
 
 								typeRecordSetTypeFound = true
 								typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_AaaaRecord{}
 								typeRecordSetInt.AaaaRecord = &ves_io_schema_dns_zone.DNSAAAAResourceRecord{}
-								rrSet[i].TypeRecordSet = typeRecordSetInt
+								defaultRrSetGroup[i].TypeRecordSet = typeRecordSetInt
 
-								sl := v.(*schema.Set).List()
+								sl := v.([]interface{})
 								for _, set := range sl {
-									cs := set.(map[string]interface{})
+									if set != nil {
+										cs := set.(map[string]interface{})
 
-									if v, ok := cs["name"]; ok && !isIntfNil(v) {
+										if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
-										typeRecordSetInt.AaaaRecord.Name = v.(string)
+											typeRecordSetInt.AaaaRecord.Name = v.(string)
 
-									}
-
-									if v, ok := cs["values"]; ok && !isIntfNil(v) {
-
-										ls := make([]string, len(v.([]interface{})))
-										for i, v := range v.([]interface{}) {
-											ls[i] = v.(string)
 										}
-										typeRecordSetInt.AaaaRecord.Values = ls
+
+										if v, ok := cs["values"]; ok && !isIntfNil(v) {
+
+											ls := make([]string, len(v.([]interface{})))
+											for i, v := range v.([]interface{}) {
+												ls[i] = v.(string)
+											}
+											typeRecordSetInt.AaaaRecord.Values = ls
+
+										}
 
 									}
-
 								}
 
 							}
 
-							if v, ok := rrSetMapStrToI["afsdb_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
+							if v, ok := defaultRrSetGroupMapStrToI["afsdb_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
 
 								typeRecordSetTypeFound = true
 								typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_AfsdbRecord{}
 								typeRecordSetInt.AfsdbRecord = &ves_io_schema_dns_zone.DNSAFSDBRecord{}
-								rrSet[i].TypeRecordSet = typeRecordSetInt
+								defaultRrSetGroup[i].TypeRecordSet = typeRecordSetInt
 
-								sl := v.(*schema.Set).List()
+								sl := v.([]interface{})
 								for _, set := range sl {
-									cs := set.(map[string]interface{})
+									if set != nil {
+										cs := set.(map[string]interface{})
 
-									if v, ok := cs["name"]; ok && !isIntfNil(v) {
+										if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
-										typeRecordSetInt.AfsdbRecord.Name = v.(string)
+											typeRecordSetInt.AfsdbRecord.Name = v.(string)
 
-									}
+										}
 
-									if v, ok := cs["values"]; ok && !isIntfNil(v) {
+										if v, ok := cs["values"]; ok && !isIntfNil(v) {
 
-										sl := v.([]interface{})
-										values := make([]*ves_io_schema_dns_zone.AFSDBRecordValue, len(sl))
-										typeRecordSetInt.AfsdbRecord.Values = values
-										for i, set := range sl {
-											values[i] = &ves_io_schema_dns_zone.AFSDBRecordValue{}
-											valuesMapStrToI := set.(map[string]interface{})
+											sl := v.([]interface{})
+											values := make([]*ves_io_schema_dns_zone.AFSDBRecordValue, len(sl))
+											typeRecordSetInt.AfsdbRecord.Values = values
+											for i, set := range sl {
+												if set != nil {
+													values[i] = &ves_io_schema_dns_zone.AFSDBRecordValue{}
+													valuesMapStrToI := set.(map[string]interface{})
 
-											if w, ok := valuesMapStrToI["hostname"]; ok && !isIntfNil(w) {
-												values[i].Hostname = w.(string)
-											}
+													if w, ok := valuesMapStrToI["hostname"]; ok && !isIntfNil(w) {
+														values[i].Hostname = w.(string)
+													}
 
-											if v, ok := valuesMapStrToI["subtype"]; ok && !isIntfNil(v) {
+													if v, ok := valuesMapStrToI["subtype"]; ok && !isIntfNil(v) {
 
-												values[i].Subtype = ves_io_schema_dns_zone.AFSDBRecordSubtype(ves_io_schema_dns_zone.AFSDBRecordSubtype_value[v.(string)])
+														values[i].Subtype = ves_io_schema_dns_zone.AFSDBRecordSubtype(ves_io_schema_dns_zone.AFSDBRecordSubtype_value[v.(string)])
 
+													}
+
+												}
 											}
 
 										}
 
 									}
-
 								}
 
 							}
 
-							if v, ok := rrSetMapStrToI["alias_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
+							if v, ok := defaultRrSetGroupMapStrToI["alias_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
 
 								typeRecordSetTypeFound = true
 								typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_AliasRecord{}
 								typeRecordSetInt.AliasRecord = &ves_io_schema_dns_zone.DNSAliasResourceRecord{}
-								rrSet[i].TypeRecordSet = typeRecordSetInt
+								defaultRrSetGroup[i].TypeRecordSet = typeRecordSetInt
 
-								sl := v.(*schema.Set).List()
+								sl := v.([]interface{})
 								for _, set := range sl {
-									cs := set.(map[string]interface{})
+									if set != nil {
+										cs := set.(map[string]interface{})
 
-									if v, ok := cs["name"]; ok && !isIntfNil(v) {
+										if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
-										typeRecordSetInt.AliasRecord.Name = v.(string)
+											typeRecordSetInt.AliasRecord.Name = v.(string)
+
+										}
+
+										if v, ok := cs["value"]; ok && !isIntfNil(v) {
+
+											typeRecordSetInt.AliasRecord.Value = v.(string)
+
+										}
 
 									}
-
-									if v, ok := cs["value"]; ok && !isIntfNil(v) {
-
-										typeRecordSetInt.AliasRecord.Value = v.(string)
-
-									}
-
 								}
 
 							}
 
-							if v, ok := rrSetMapStrToI["caa_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
+							if v, ok := defaultRrSetGroupMapStrToI["caa_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
 
 								typeRecordSetTypeFound = true
 								typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_CaaRecord{}
 								typeRecordSetInt.CaaRecord = &ves_io_schema_dns_zone.DNSCAAResourceRecord{}
-								rrSet[i].TypeRecordSet = typeRecordSetInt
+								defaultRrSetGroup[i].TypeRecordSet = typeRecordSetInt
 
-								sl := v.(*schema.Set).List()
+								sl := v.([]interface{})
 								for _, set := range sl {
-									cs := set.(map[string]interface{})
+									if set != nil {
+										cs := set.(map[string]interface{})
 
-									if v, ok := cs["name"]; ok && !isIntfNil(v) {
+										if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
-										typeRecordSetInt.CaaRecord.Name = v.(string)
+											typeRecordSetInt.CaaRecord.Name = v.(string)
 
-									}
+										}
 
-									if v, ok := cs["values"]; ok && !isIntfNil(v) {
+										if v, ok := cs["values"]; ok && !isIntfNil(v) {
 
-										sl := v.([]interface{})
-										values := make([]*ves_io_schema_dns_zone.CertificationAuthorityAuthorization, len(sl))
-										typeRecordSetInt.CaaRecord.Values = values
-										for i, set := range sl {
-											values[i] = &ves_io_schema_dns_zone.CertificationAuthorityAuthorization{}
-											valuesMapStrToI := set.(map[string]interface{})
+											sl := v.([]interface{})
+											values := make([]*ves_io_schema_dns_zone.CertificationAuthorityAuthorization, len(sl))
+											typeRecordSetInt.CaaRecord.Values = values
+											for i, set := range sl {
+												if set != nil {
+													values[i] = &ves_io_schema_dns_zone.CertificationAuthorityAuthorization{}
+													valuesMapStrToI := set.(map[string]interface{})
 
-											if w, ok := valuesMapStrToI["flags"]; ok && !isIntfNil(w) {
-												values[i].Flags = uint32(w.(int))
-											}
+													if w, ok := valuesMapStrToI["flags"]; ok && !isIntfNil(w) {
+														values[i].Flags = uint32(w.(int))
+													}
 
-											if w, ok := valuesMapStrToI["tag"]; ok && !isIntfNil(w) {
-												values[i].Tag = w.(string)
-											}
+													if w, ok := valuesMapStrToI["tag"]; ok && !isIntfNil(w) {
+														values[i].Tag = w.(string)
+													}
 
-											if w, ok := valuesMapStrToI["value"]; ok && !isIntfNil(w) {
-												values[i].Value = w.(string)
+													if w, ok := valuesMapStrToI["value"]; ok && !isIntfNil(w) {
+														values[i].Value = w.(string)
+													}
+
+												}
 											}
 
 										}
 
 									}
-
 								}
 
 							}
 
-							if v, ok := rrSetMapStrToI["cds_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
+							if v, ok := defaultRrSetGroupMapStrToI["cds_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
 
 								typeRecordSetTypeFound = true
 								typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_CdsRecord{}
 								typeRecordSetInt.CdsRecord = &ves_io_schema_dns_zone.DNSCDSRecord{}
-								rrSet[i].TypeRecordSet = typeRecordSetInt
+								defaultRrSetGroup[i].TypeRecordSet = typeRecordSetInt
 
-								sl := v.(*schema.Set).List()
+								sl := v.([]interface{})
 								for _, set := range sl {
-									cs := set.(map[string]interface{})
+									if set != nil {
+										cs := set.(map[string]interface{})
 
-									if v, ok := cs["name"]; ok && !isIntfNil(v) {
+										if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
-										typeRecordSetInt.CdsRecord.Name = v.(string)
+											typeRecordSetInt.CdsRecord.Name = v.(string)
 
-									}
+										}
 
-									if v, ok := cs["values"]; ok && !isIntfNil(v) {
+										if v, ok := cs["values"]; ok && !isIntfNil(v) {
 
-										sl := v.([]interface{})
-										values := make([]*ves_io_schema_dns_zone.DSRecordValue, len(sl))
-										typeRecordSetInt.CdsRecord.Values = values
-										for i, set := range sl {
-											values[i] = &ves_io_schema_dns_zone.DSRecordValue{}
-											valuesMapStrToI := set.(map[string]interface{})
+											sl := v.([]interface{})
+											values := make([]*ves_io_schema_dns_zone.DSRecordValue, len(sl))
+											typeRecordSetInt.CdsRecord.Values = values
+											for i, set := range sl {
+												if set != nil {
+													values[i] = &ves_io_schema_dns_zone.DSRecordValue{}
+													valuesMapStrToI := set.(map[string]interface{})
 
-											digestChoiceTypeFound := false
+													digestChoiceTypeFound := false
 
-											if v, ok := valuesMapStrToI["sha1_digest"]; ok && !isIntfNil(v) && !digestChoiceTypeFound {
+													if v, ok := valuesMapStrToI["sha1_digest"]; ok && !isIntfNil(v) && !digestChoiceTypeFound {
 
-												digestChoiceTypeFound = true
-												digestChoiceInt := &ves_io_schema_dns_zone.DSRecordValue_Sha1Digest{}
-												digestChoiceInt.Sha1Digest = &ves_io_schema_dns_zone.SHA1Digest{}
-												values[i].DigestChoice = digestChoiceInt
+														digestChoiceTypeFound = true
+														digestChoiceInt := &ves_io_schema_dns_zone.DSRecordValue_Sha1Digest{}
+														digestChoiceInt.Sha1Digest = &ves_io_schema_dns_zone.SHA1Digest{}
+														values[i].DigestChoice = digestChoiceInt
 
-												sl := v.(*schema.Set).List()
-												for _, set := range sl {
-													cs := set.(map[string]interface{})
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
 
-													if v, ok := cs["digest"]; ok && !isIntfNil(v) {
+																if v, ok := cs["digest"]; ok && !isIntfNil(v) {
 
-														digestChoiceInt.Sha1Digest.Digest = v.(string)
+																	digestChoiceInt.Sha1Digest.Digest = v.(string)
 
-													}
+																}
 
-												}
-
-											}
-
-											if v, ok := valuesMapStrToI["sha256_digest"]; ok && !isIntfNil(v) && !digestChoiceTypeFound {
-
-												digestChoiceTypeFound = true
-												digestChoiceInt := &ves_io_schema_dns_zone.DSRecordValue_Sha256Digest{}
-												digestChoiceInt.Sha256Digest = &ves_io_schema_dns_zone.SHA256Digest{}
-												values[i].DigestChoice = digestChoiceInt
-
-												sl := v.(*schema.Set).List()
-												for _, set := range sl {
-													cs := set.(map[string]interface{})
-
-													if v, ok := cs["digest"]; ok && !isIntfNil(v) {
-
-														digestChoiceInt.Sha256Digest.Digest = v.(string)
+															}
+														}
 
 													}
 
-												}
+													if v, ok := valuesMapStrToI["sha256_digest"]; ok && !isIntfNil(v) && !digestChoiceTypeFound {
 
-											}
+														digestChoiceTypeFound = true
+														digestChoiceInt := &ves_io_schema_dns_zone.DSRecordValue_Sha256Digest{}
+														digestChoiceInt.Sha256Digest = &ves_io_schema_dns_zone.SHA256Digest{}
+														values[i].DigestChoice = digestChoiceInt
 
-											if v, ok := valuesMapStrToI["sha384_digest"]; ok && !isIntfNil(v) && !digestChoiceTypeFound {
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
 
-												digestChoiceTypeFound = true
-												digestChoiceInt := &ves_io_schema_dns_zone.DSRecordValue_Sha384Digest{}
-												digestChoiceInt.Sha384Digest = &ves_io_schema_dns_zone.SHA384Digest{}
-												values[i].DigestChoice = digestChoiceInt
+																if v, ok := cs["digest"]; ok && !isIntfNil(v) {
 
-												sl := v.(*schema.Set).List()
-												for _, set := range sl {
-													cs := set.(map[string]interface{})
+																	digestChoiceInt.Sha256Digest.Digest = v.(string)
 
-													if v, ok := cs["digest"]; ok && !isIntfNil(v) {
+																}
 
-														digestChoiceInt.Sha384Digest.Digest = v.(string)
+															}
+														}
 
 													}
 
+													if v, ok := valuesMapStrToI["sha384_digest"]; ok && !isIntfNil(v) && !digestChoiceTypeFound {
+
+														digestChoiceTypeFound = true
+														digestChoiceInt := &ves_io_schema_dns_zone.DSRecordValue_Sha384Digest{}
+														digestChoiceInt.Sha384Digest = &ves_io_schema_dns_zone.SHA384Digest{}
+														values[i].DigestChoice = digestChoiceInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["digest"]; ok && !isIntfNil(v) {
+
+																	digestChoiceInt.Sha384Digest.Digest = v.(string)
+
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := valuesMapStrToI["ds_key_algorithm"]; ok && !isIntfNil(v) {
+
+														values[i].DsKeyAlgorithm = ves_io_schema_dns_zone.DSKeyAlgorithm(ves_io_schema_dns_zone.DSKeyAlgorithm_value[v.(string)])
+
+													}
+
+													if w, ok := valuesMapStrToI["key_tag"]; ok && !isIntfNil(w) {
+														values[i].KeyTag = uint32(w.(int))
+													}
+
 												}
-
-											}
-
-											if v, ok := valuesMapStrToI["ds_key_algorithm"]; ok && !isIntfNil(v) {
-
-												values[i].DsKeyAlgorithm = ves_io_schema_dns_zone.DSKeyAlgorithm(ves_io_schema_dns_zone.DSKeyAlgorithm_value[v.(string)])
-
-											}
-
-											if w, ok := valuesMapStrToI["key_tag"]; ok && !isIntfNil(w) {
-												values[i].KeyTag = uint32(w.(int))
 											}
 
 										}
 
 									}
-
 								}
 
 							}
 
-							if v, ok := rrSetMapStrToI["cert_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
+							if v, ok := defaultRrSetGroupMapStrToI["cert_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
 
 								typeRecordSetTypeFound = true
 								typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_CertRecord{}
 								typeRecordSetInt.CertRecord = &ves_io_schema_dns_zone.CERTResourceRecord{}
-								rrSet[i].TypeRecordSet = typeRecordSetInt
+								defaultRrSetGroup[i].TypeRecordSet = typeRecordSetInt
 
-								sl := v.(*schema.Set).List()
+								sl := v.([]interface{})
 								for _, set := range sl {
-									cs := set.(map[string]interface{})
+									if set != nil {
+										cs := set.(map[string]interface{})
 
-									if v, ok := cs["name"]; ok && !isIntfNil(v) {
+										if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
-										typeRecordSetInt.CertRecord.Name = v.(string)
+											typeRecordSetInt.CertRecord.Name = v.(string)
 
-									}
+										}
 
-									if v, ok := cs["values"]; ok && !isIntfNil(v) {
+										if v, ok := cs["values"]; ok && !isIntfNil(v) {
 
-										sl := v.([]interface{})
-										values := make([]*ves_io_schema_dns_zone.CERTRecordValue, len(sl))
-										typeRecordSetInt.CertRecord.Values = values
-										for i, set := range sl {
-											values[i] = &ves_io_schema_dns_zone.CERTRecordValue{}
-											valuesMapStrToI := set.(map[string]interface{})
+											sl := v.([]interface{})
+											values := make([]*ves_io_schema_dns_zone.CERTRecordValue, len(sl))
+											typeRecordSetInt.CertRecord.Values = values
+											for i, set := range sl {
+												if set != nil {
+													values[i] = &ves_io_schema_dns_zone.CERTRecordValue{}
+													valuesMapStrToI := set.(map[string]interface{})
 
-											if v, ok := valuesMapStrToI["algorithm"]; ok && !isIntfNil(v) {
+													if v, ok := valuesMapStrToI["algorithm"]; ok && !isIntfNil(v) {
 
-												values[i].Algorithm = ves_io_schema_dns_zone.CERTAlgorithm(ves_io_schema_dns_zone.CERTAlgorithm_value[v.(string)])
+														values[i].Algorithm = ves_io_schema_dns_zone.CERTAlgorithm(ves_io_schema_dns_zone.CERTAlgorithm_value[v.(string)])
 
-											}
+													}
 
-											if w, ok := valuesMapStrToI["cert_key_tag"]; ok && !isIntfNil(w) {
-												values[i].CertKeyTag = uint32(w.(int))
-											}
+													if w, ok := valuesMapStrToI["cert_key_tag"]; ok && !isIntfNil(w) {
+														values[i].CertKeyTag = uint32(w.(int))
+													}
 
-											if v, ok := valuesMapStrToI["cert_type"]; ok && !isIntfNil(v) {
+													if v, ok := valuesMapStrToI["cert_type"]; ok && !isIntfNil(v) {
 
-												values[i].CertType = ves_io_schema_dns_zone.CERTType(ves_io_schema_dns_zone.CERTType_value[v.(string)])
+														values[i].CertType = ves_io_schema_dns_zone.CERTType(ves_io_schema_dns_zone.CERTType_value[v.(string)])
 
-											}
+													}
 
-											if w, ok := valuesMapStrToI["certificate"]; ok && !isIntfNil(w) {
-												values[i].Certificate = w.(string)
+													if w, ok := valuesMapStrToI["certificate"]; ok && !isIntfNil(w) {
+														values[i].Certificate = w.(string)
+													}
+
+												}
 											}
 
 										}
 
 									}
-
 								}
 
 							}
 
-							if v, ok := rrSetMapStrToI["cname_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
+							if v, ok := defaultRrSetGroupMapStrToI["cname_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
 
 								typeRecordSetTypeFound = true
 								typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_CnameRecord{}
 								typeRecordSetInt.CnameRecord = &ves_io_schema_dns_zone.DNSCNAMEResourceRecord{}
-								rrSet[i].TypeRecordSet = typeRecordSetInt
+								defaultRrSetGroup[i].TypeRecordSet = typeRecordSetInt
 
-								sl := v.(*schema.Set).List()
+								sl := v.([]interface{})
 								for _, set := range sl {
-									cs := set.(map[string]interface{})
+									if set != nil {
+										cs := set.(map[string]interface{})
 
-									if v, ok := cs["name"]; ok && !isIntfNil(v) {
+										if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
-										typeRecordSetInt.CnameRecord.Name = v.(string)
+											typeRecordSetInt.CnameRecord.Name = v.(string)
+
+										}
+
+										if v, ok := cs["value"]; ok && !isIntfNil(v) {
+
+											typeRecordSetInt.CnameRecord.Value = v.(string)
+
+										}
 
 									}
-
-									if v, ok := cs["value"]; ok && !isIntfNil(v) {
-
-										typeRecordSetInt.CnameRecord.Value = v.(string)
-
-									}
-
 								}
 
 							}
 
-							if v, ok := rrSetMapStrToI["dlv_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
+							if v, ok := defaultRrSetGroupMapStrToI["dlv_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
 
 								typeRecordSetTypeFound = true
 								typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_DlvRecord{}
 								typeRecordSetInt.DlvRecord = &ves_io_schema_dns_zone.DLVResourceRecord{}
-								rrSet[i].TypeRecordSet = typeRecordSetInt
+								defaultRrSetGroup[i].TypeRecordSet = typeRecordSetInt
 
-								sl := v.(*schema.Set).List()
+								sl := v.([]interface{})
 								for _, set := range sl {
-									cs := set.(map[string]interface{})
+									if set != nil {
+										cs := set.(map[string]interface{})
 
-									if v, ok := cs["name"]; ok && !isIntfNil(v) {
+										if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
-										typeRecordSetInt.DlvRecord.Name = v.(string)
+											typeRecordSetInt.DlvRecord.Name = v.(string)
 
-									}
+										}
 
-									if v, ok := cs["values"]; ok && !isIntfNil(v) {
+										if v, ok := cs["values"]; ok && !isIntfNil(v) {
 
-										sl := v.([]interface{})
-										values := make([]*ves_io_schema_dns_zone.DSRecordValue, len(sl))
-										typeRecordSetInt.DlvRecord.Values = values
-										for i, set := range sl {
-											values[i] = &ves_io_schema_dns_zone.DSRecordValue{}
-											valuesMapStrToI := set.(map[string]interface{})
+											sl := v.([]interface{})
+											values := make([]*ves_io_schema_dns_zone.DSRecordValue, len(sl))
+											typeRecordSetInt.DlvRecord.Values = values
+											for i, set := range sl {
+												if set != nil {
+													values[i] = &ves_io_schema_dns_zone.DSRecordValue{}
+													valuesMapStrToI := set.(map[string]interface{})
 
-											digestChoiceTypeFound := false
+													digestChoiceTypeFound := false
 
-											if v, ok := valuesMapStrToI["sha1_digest"]; ok && !isIntfNil(v) && !digestChoiceTypeFound {
+													if v, ok := valuesMapStrToI["sha1_digest"]; ok && !isIntfNil(v) && !digestChoiceTypeFound {
 
-												digestChoiceTypeFound = true
-												digestChoiceInt := &ves_io_schema_dns_zone.DSRecordValue_Sha1Digest{}
-												digestChoiceInt.Sha1Digest = &ves_io_schema_dns_zone.SHA1Digest{}
-												values[i].DigestChoice = digestChoiceInt
+														digestChoiceTypeFound = true
+														digestChoiceInt := &ves_io_schema_dns_zone.DSRecordValue_Sha1Digest{}
+														digestChoiceInt.Sha1Digest = &ves_io_schema_dns_zone.SHA1Digest{}
+														values[i].DigestChoice = digestChoiceInt
 
-												sl := v.(*schema.Set).List()
-												for _, set := range sl {
-													cs := set.(map[string]interface{})
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
 
-													if v, ok := cs["digest"]; ok && !isIntfNil(v) {
+																if v, ok := cs["digest"]; ok && !isIntfNil(v) {
 
-														digestChoiceInt.Sha1Digest.Digest = v.(string)
+																	digestChoiceInt.Sha1Digest.Digest = v.(string)
 
-													}
+																}
 
-												}
-
-											}
-
-											if v, ok := valuesMapStrToI["sha256_digest"]; ok && !isIntfNil(v) && !digestChoiceTypeFound {
-
-												digestChoiceTypeFound = true
-												digestChoiceInt := &ves_io_schema_dns_zone.DSRecordValue_Sha256Digest{}
-												digestChoiceInt.Sha256Digest = &ves_io_schema_dns_zone.SHA256Digest{}
-												values[i].DigestChoice = digestChoiceInt
-
-												sl := v.(*schema.Set).List()
-												for _, set := range sl {
-													cs := set.(map[string]interface{})
-
-													if v, ok := cs["digest"]; ok && !isIntfNil(v) {
-
-														digestChoiceInt.Sha256Digest.Digest = v.(string)
+															}
+														}
 
 													}
 
-												}
+													if v, ok := valuesMapStrToI["sha256_digest"]; ok && !isIntfNil(v) && !digestChoiceTypeFound {
 
-											}
+														digestChoiceTypeFound = true
+														digestChoiceInt := &ves_io_schema_dns_zone.DSRecordValue_Sha256Digest{}
+														digestChoiceInt.Sha256Digest = &ves_io_schema_dns_zone.SHA256Digest{}
+														values[i].DigestChoice = digestChoiceInt
 
-											if v, ok := valuesMapStrToI["sha384_digest"]; ok && !isIntfNil(v) && !digestChoiceTypeFound {
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
 
-												digestChoiceTypeFound = true
-												digestChoiceInt := &ves_io_schema_dns_zone.DSRecordValue_Sha384Digest{}
-												digestChoiceInt.Sha384Digest = &ves_io_schema_dns_zone.SHA384Digest{}
-												values[i].DigestChoice = digestChoiceInt
+																if v, ok := cs["digest"]; ok && !isIntfNil(v) {
 
-												sl := v.(*schema.Set).List()
-												for _, set := range sl {
-													cs := set.(map[string]interface{})
+																	digestChoiceInt.Sha256Digest.Digest = v.(string)
 
-													if v, ok := cs["digest"]; ok && !isIntfNil(v) {
+																}
 
-														digestChoiceInt.Sha384Digest.Digest = v.(string)
+															}
+														}
 
 													}
 
+													if v, ok := valuesMapStrToI["sha384_digest"]; ok && !isIntfNil(v) && !digestChoiceTypeFound {
+
+														digestChoiceTypeFound = true
+														digestChoiceInt := &ves_io_schema_dns_zone.DSRecordValue_Sha384Digest{}
+														digestChoiceInt.Sha384Digest = &ves_io_schema_dns_zone.SHA384Digest{}
+														values[i].DigestChoice = digestChoiceInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["digest"]; ok && !isIntfNil(v) {
+
+																	digestChoiceInt.Sha384Digest.Digest = v.(string)
+
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := valuesMapStrToI["ds_key_algorithm"]; ok && !isIntfNil(v) {
+
+														values[i].DsKeyAlgorithm = ves_io_schema_dns_zone.DSKeyAlgorithm(ves_io_schema_dns_zone.DSKeyAlgorithm_value[v.(string)])
+
+													}
+
+													if w, ok := valuesMapStrToI["key_tag"]; ok && !isIntfNil(w) {
+														values[i].KeyTag = uint32(w.(int))
+													}
+
 												}
-
-											}
-
-											if v, ok := valuesMapStrToI["ds_key_algorithm"]; ok && !isIntfNil(v) {
-
-												values[i].DsKeyAlgorithm = ves_io_schema_dns_zone.DSKeyAlgorithm(ves_io_schema_dns_zone.DSKeyAlgorithm_value[v.(string)])
-
-											}
-
-											if w, ok := valuesMapStrToI["key_tag"]; ok && !isIntfNil(w) {
-												values[i].KeyTag = uint32(w.(int))
 											}
 
 										}
 
 									}
-
 								}
 
 							}
 
-							if v, ok := rrSetMapStrToI["ds_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
+							if v, ok := defaultRrSetGroupMapStrToI["ds_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
 
 								typeRecordSetTypeFound = true
 								typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_DsRecord{}
 								typeRecordSetInt.DsRecord = &ves_io_schema_dns_zone.DNSDSRecord{}
-								rrSet[i].TypeRecordSet = typeRecordSetInt
+								defaultRrSetGroup[i].TypeRecordSet = typeRecordSetInt
 
-								sl := v.(*schema.Set).List()
+								sl := v.([]interface{})
 								for _, set := range sl {
-									cs := set.(map[string]interface{})
+									if set != nil {
+										cs := set.(map[string]interface{})
 
-									if v, ok := cs["name"]; ok && !isIntfNil(v) {
+										if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
-										typeRecordSetInt.DsRecord.Name = v.(string)
+											typeRecordSetInt.DsRecord.Name = v.(string)
 
-									}
+										}
 
-									if v, ok := cs["values"]; ok && !isIntfNil(v) {
+										if v, ok := cs["values"]; ok && !isIntfNil(v) {
 
-										sl := v.([]interface{})
-										values := make([]*ves_io_schema_dns_zone.DSRecordValue, len(sl))
-										typeRecordSetInt.DsRecord.Values = values
-										for i, set := range sl {
-											values[i] = &ves_io_schema_dns_zone.DSRecordValue{}
-											valuesMapStrToI := set.(map[string]interface{})
+											sl := v.([]interface{})
+											values := make([]*ves_io_schema_dns_zone.DSRecordValue, len(sl))
+											typeRecordSetInt.DsRecord.Values = values
+											for i, set := range sl {
+												if set != nil {
+													values[i] = &ves_io_schema_dns_zone.DSRecordValue{}
+													valuesMapStrToI := set.(map[string]interface{})
 
-											digestChoiceTypeFound := false
+													digestChoiceTypeFound := false
 
-											if v, ok := valuesMapStrToI["sha1_digest"]; ok && !isIntfNil(v) && !digestChoiceTypeFound {
+													if v, ok := valuesMapStrToI["sha1_digest"]; ok && !isIntfNil(v) && !digestChoiceTypeFound {
 
-												digestChoiceTypeFound = true
-												digestChoiceInt := &ves_io_schema_dns_zone.DSRecordValue_Sha1Digest{}
-												digestChoiceInt.Sha1Digest = &ves_io_schema_dns_zone.SHA1Digest{}
-												values[i].DigestChoice = digestChoiceInt
+														digestChoiceTypeFound = true
+														digestChoiceInt := &ves_io_schema_dns_zone.DSRecordValue_Sha1Digest{}
+														digestChoiceInt.Sha1Digest = &ves_io_schema_dns_zone.SHA1Digest{}
+														values[i].DigestChoice = digestChoiceInt
 
-												sl := v.(*schema.Set).List()
-												for _, set := range sl {
-													cs := set.(map[string]interface{})
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
 
-													if v, ok := cs["digest"]; ok && !isIntfNil(v) {
+																if v, ok := cs["digest"]; ok && !isIntfNil(v) {
 
-														digestChoiceInt.Sha1Digest.Digest = v.(string)
+																	digestChoiceInt.Sha1Digest.Digest = v.(string)
 
-													}
+																}
 
-												}
-
-											}
-
-											if v, ok := valuesMapStrToI["sha256_digest"]; ok && !isIntfNil(v) && !digestChoiceTypeFound {
-
-												digestChoiceTypeFound = true
-												digestChoiceInt := &ves_io_schema_dns_zone.DSRecordValue_Sha256Digest{}
-												digestChoiceInt.Sha256Digest = &ves_io_schema_dns_zone.SHA256Digest{}
-												values[i].DigestChoice = digestChoiceInt
-
-												sl := v.(*schema.Set).List()
-												for _, set := range sl {
-													cs := set.(map[string]interface{})
-
-													if v, ok := cs["digest"]; ok && !isIntfNil(v) {
-
-														digestChoiceInt.Sha256Digest.Digest = v.(string)
+															}
+														}
 
 													}
 
-												}
+													if v, ok := valuesMapStrToI["sha256_digest"]; ok && !isIntfNil(v) && !digestChoiceTypeFound {
 
-											}
+														digestChoiceTypeFound = true
+														digestChoiceInt := &ves_io_schema_dns_zone.DSRecordValue_Sha256Digest{}
+														digestChoiceInt.Sha256Digest = &ves_io_schema_dns_zone.SHA256Digest{}
+														values[i].DigestChoice = digestChoiceInt
 
-											if v, ok := valuesMapStrToI["sha384_digest"]; ok && !isIntfNil(v) && !digestChoiceTypeFound {
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
 
-												digestChoiceTypeFound = true
-												digestChoiceInt := &ves_io_schema_dns_zone.DSRecordValue_Sha384Digest{}
-												digestChoiceInt.Sha384Digest = &ves_io_schema_dns_zone.SHA384Digest{}
-												values[i].DigestChoice = digestChoiceInt
+																if v, ok := cs["digest"]; ok && !isIntfNil(v) {
 
-												sl := v.(*schema.Set).List()
-												for _, set := range sl {
-													cs := set.(map[string]interface{})
+																	digestChoiceInt.Sha256Digest.Digest = v.(string)
 
-													if v, ok := cs["digest"]; ok && !isIntfNil(v) {
+																}
 
-														digestChoiceInt.Sha384Digest.Digest = v.(string)
+															}
+														}
 
 													}
 
+													if v, ok := valuesMapStrToI["sha384_digest"]; ok && !isIntfNil(v) && !digestChoiceTypeFound {
+
+														digestChoiceTypeFound = true
+														digestChoiceInt := &ves_io_schema_dns_zone.DSRecordValue_Sha384Digest{}
+														digestChoiceInt.Sha384Digest = &ves_io_schema_dns_zone.SHA384Digest{}
+														values[i].DigestChoice = digestChoiceInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["digest"]; ok && !isIntfNil(v) {
+
+																	digestChoiceInt.Sha384Digest.Digest = v.(string)
+
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := valuesMapStrToI["ds_key_algorithm"]; ok && !isIntfNil(v) {
+
+														values[i].DsKeyAlgorithm = ves_io_schema_dns_zone.DSKeyAlgorithm(ves_io_schema_dns_zone.DSKeyAlgorithm_value[v.(string)])
+
+													}
+
+													if w, ok := valuesMapStrToI["key_tag"]; ok && !isIntfNil(w) {
+														values[i].KeyTag = uint32(w.(int))
+													}
+
 												}
-
-											}
-
-											if v, ok := valuesMapStrToI["ds_key_algorithm"]; ok && !isIntfNil(v) {
-
-												values[i].DsKeyAlgorithm = ves_io_schema_dns_zone.DSKeyAlgorithm(ves_io_schema_dns_zone.DSKeyAlgorithm_value[v.(string)])
-
-											}
-
-											if w, ok := valuesMapStrToI["key_tag"]; ok && !isIntfNil(w) {
-												values[i].KeyTag = uint32(w.(int))
 											}
 
 										}
 
 									}
-
 								}
 
 							}
 
-							if v, ok := rrSetMapStrToI["eui48_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
+							if v, ok := defaultRrSetGroupMapStrToI["eui48_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
 
 								typeRecordSetTypeFound = true
 								typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_Eui48Record{}
 								typeRecordSetInt.Eui48Record = &ves_io_schema_dns_zone.DNSEUI48ResourceRecord{}
-								rrSet[i].TypeRecordSet = typeRecordSetInt
+								defaultRrSetGroup[i].TypeRecordSet = typeRecordSetInt
 
-								sl := v.(*schema.Set).List()
+								sl := v.([]interface{})
 								for _, set := range sl {
-									cs := set.(map[string]interface{})
+									if set != nil {
+										cs := set.(map[string]interface{})
 
-									if v, ok := cs["name"]; ok && !isIntfNil(v) {
+										if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
-										typeRecordSetInt.Eui48Record.Name = v.(string)
+											typeRecordSetInt.Eui48Record.Name = v.(string)
+
+										}
+
+										if v, ok := cs["value"]; ok && !isIntfNil(v) {
+
+											typeRecordSetInt.Eui48Record.Value = v.(string)
+
+										}
 
 									}
-
-									if v, ok := cs["value"]; ok && !isIntfNil(v) {
-
-										typeRecordSetInt.Eui48Record.Value = v.(string)
-
-									}
-
 								}
 
 							}
 
-							if v, ok := rrSetMapStrToI["eui64_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
+							if v, ok := defaultRrSetGroupMapStrToI["eui64_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
 
 								typeRecordSetTypeFound = true
 								typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_Eui64Record{}
 								typeRecordSetInt.Eui64Record = &ves_io_schema_dns_zone.DNSEUI64ResourceRecord{}
-								rrSet[i].TypeRecordSet = typeRecordSetInt
+								defaultRrSetGroup[i].TypeRecordSet = typeRecordSetInt
 
-								sl := v.(*schema.Set).List()
+								sl := v.([]interface{})
 								for _, set := range sl {
-									cs := set.(map[string]interface{})
+									if set != nil {
+										cs := set.(map[string]interface{})
 
-									if v, ok := cs["name"]; ok && !isIntfNil(v) {
+										if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
-										typeRecordSetInt.Eui64Record.Name = v.(string)
+											typeRecordSetInt.Eui64Record.Name = v.(string)
+
+										}
+
+										if v, ok := cs["value"]; ok && !isIntfNil(v) {
+
+											typeRecordSetInt.Eui64Record.Value = v.(string)
+
+										}
 
 									}
-
-									if v, ok := cs["value"]; ok && !isIntfNil(v) {
-
-										typeRecordSetInt.Eui64Record.Value = v.(string)
-
-									}
-
 								}
 
 							}
 
-							if v, ok := rrSetMapStrToI["lb_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
+							if v, ok := defaultRrSetGroupMapStrToI["lb_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
 
 								typeRecordSetTypeFound = true
 								typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_LbRecord{}
 								typeRecordSetInt.LbRecord = &ves_io_schema_dns_zone.DNSLBResourceRecord{}
-								rrSet[i].TypeRecordSet = typeRecordSetInt
+								defaultRrSetGroup[i].TypeRecordSet = typeRecordSetInt
 
-								sl := v.(*schema.Set).List()
+								sl := v.([]interface{})
 								for _, set := range sl {
-									cs := set.(map[string]interface{})
+									if set != nil {
+										cs := set.(map[string]interface{})
 
-									if v, ok := cs["name"]; ok && !isIntfNil(v) {
+										if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
-										typeRecordSetInt.LbRecord.Name = v.(string)
+											typeRecordSetInt.LbRecord.Name = v.(string)
 
-									}
+										}
 
-									if v, ok := cs["value"]; ok && !isIntfNil(v) {
+										if v, ok := cs["value"]; ok && !isIntfNil(v) {
 
-										sl := v.(*schema.Set).List()
-										valueInt := &ves_io_schema_views.ObjectRefType{}
-										typeRecordSetInt.LbRecord.Value = valueInt
+											sl := v.([]interface{})
+											valueInt := &ves_io_schema_views.ObjectRefType{}
+											typeRecordSetInt.LbRecord.Value = valueInt
 
-										for _, set := range sl {
-											vMapToStrVal := set.(map[string]interface{})
-											if val, ok := vMapToStrVal["name"]; ok && !isIntfNil(v) {
-												valueInt.Name = val.(string)
+											for _, set := range sl {
+												if set != nil {
+													vMapToStrVal := set.(map[string]interface{})
+													if val, ok := vMapToStrVal["name"]; ok && !isIntfNil(v) {
+														valueInt.Name = val.(string)
+													}
+													if val, ok := vMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+														valueInt.Namespace = val.(string)
+													}
+
+													if val, ok := vMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+														valueInt.Tenant = val.(string)
+													}
+												}
 											}
-											if val, ok := vMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-												valueInt.Namespace = val.(string)
-											}
 
-											if val, ok := vMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-												valueInt.Tenant = val.(string)
-											}
 										}
 
 									}
-
 								}
 
 							}
 
-							if v, ok := rrSetMapStrToI["loc_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
+							if v, ok := defaultRrSetGroupMapStrToI["loc_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
 
 								typeRecordSetTypeFound = true
 								typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_LocRecord{}
 								typeRecordSetInt.LocRecord = &ves_io_schema_dns_zone.DNSLOCResourceRecord{}
-								rrSet[i].TypeRecordSet = typeRecordSetInt
+								defaultRrSetGroup[i].TypeRecordSet = typeRecordSetInt
 
-								sl := v.(*schema.Set).List()
+								sl := v.([]interface{})
 								for _, set := range sl {
-									cs := set.(map[string]interface{})
+									if set != nil {
+										cs := set.(map[string]interface{})
 
-									if v, ok := cs["name"]; ok && !isIntfNil(v) {
+										if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
-										typeRecordSetInt.LocRecord.Name = v.(string)
+											typeRecordSetInt.LocRecord.Name = v.(string)
 
-									}
+										}
 
-									if v, ok := cs["values"]; ok && !isIntfNil(v) {
+										if v, ok := cs["values"]; ok && !isIntfNil(v) {
 
-										sl := v.([]interface{})
-										values := make([]*ves_io_schema_dns_zone.LOCValue, len(sl))
-										typeRecordSetInt.LocRecord.Values = values
-										for i, set := range sl {
-											values[i] = &ves_io_schema_dns_zone.LOCValue{}
-											valuesMapStrToI := set.(map[string]interface{})
+											sl := v.([]interface{})
+											values := make([]*ves_io_schema_dns_zone.LOCValue, len(sl))
+											typeRecordSetInt.LocRecord.Values = values
+											for i, set := range sl {
+												if set != nil {
+													values[i] = &ves_io_schema_dns_zone.LOCValue{}
+													valuesMapStrToI := set.(map[string]interface{})
 
-											if w, ok := valuesMapStrToI["altitude"]; ok && !isIntfNil(w) {
-												values[i].Altitude = float32(w.(float64))
-											}
+													if w, ok := valuesMapStrToI["altitude"]; ok && !isIntfNil(w) {
+														values[i].Altitude = float32(w.(float64))
+													}
 
-											if w, ok := valuesMapStrToI["horizontal_precision"]; ok && !isIntfNil(w) {
-												values[i].HorizontalPrecision = float32(w.(float64))
-											}
+													if w, ok := valuesMapStrToI["horizontal_precision"]; ok && !isIntfNil(w) {
+														values[i].HorizontalPrecision = float32(w.(float64))
+													}
 
-											if w, ok := valuesMapStrToI["latitude_degree"]; ok && !isIntfNil(w) {
-												values[i].LatitudeDegree = int32(w.(int))
-											}
+													if w, ok := valuesMapStrToI["latitude_degree"]; ok && !isIntfNil(w) {
+														values[i].LatitudeDegree = int32(w.(int))
+													}
 
-											if v, ok := valuesMapStrToI["latitude_hemisphere"]; ok && !isIntfNil(v) {
+													if v, ok := valuesMapStrToI["latitude_hemisphere"]; ok && !isIntfNil(v) {
 
-												values[i].LatitudeHemisphere = ves_io_schema_dns_zone.LatitudeHemisphere(ves_io_schema_dns_zone.LatitudeHemisphere_value[v.(string)])
+														values[i].LatitudeHemisphere = ves_io_schema_dns_zone.LatitudeHemisphere(ves_io_schema_dns_zone.LatitudeHemisphere_value[v.(string)])
 
-											}
+													}
 
-											if w, ok := valuesMapStrToI["latitude_minute"]; ok && !isIntfNil(w) {
-												values[i].LatitudeMinute = int32(w.(int))
-											}
+													if w, ok := valuesMapStrToI["latitude_minute"]; ok && !isIntfNil(w) {
+														values[i].LatitudeMinute = int32(w.(int))
+													}
 
-											if w, ok := valuesMapStrToI["latitude_second"]; ok && !isIntfNil(w) {
-												values[i].LatitudeSecond = float32(w.(float64))
-											}
+													if w, ok := valuesMapStrToI["latitude_second"]; ok && !isIntfNil(w) {
+														values[i].LatitudeSecond = float32(w.(float64))
+													}
 
-											if w, ok := valuesMapStrToI["location_diameter"]; ok && !isIntfNil(w) {
-												values[i].LocationDiameter = float32(w.(float64))
-											}
+													if w, ok := valuesMapStrToI["location_diameter"]; ok && !isIntfNil(w) {
+														values[i].LocationDiameter = float32(w.(float64))
+													}
 
-											if w, ok := valuesMapStrToI["longitude_degree"]; ok && !isIntfNil(w) {
-												values[i].LongitudeDegree = int32(w.(int))
-											}
+													if w, ok := valuesMapStrToI["longitude_degree"]; ok && !isIntfNil(w) {
+														values[i].LongitudeDegree = int32(w.(int))
+													}
 
-											if v, ok := valuesMapStrToI["longitude_hemisphere"]; ok && !isIntfNil(v) {
+													if v, ok := valuesMapStrToI["longitude_hemisphere"]; ok && !isIntfNil(v) {
 
-												values[i].LongitudeHemisphere = ves_io_schema_dns_zone.LongitudeHemisphere(ves_io_schema_dns_zone.LongitudeHemisphere_value[v.(string)])
+														values[i].LongitudeHemisphere = ves_io_schema_dns_zone.LongitudeHemisphere(ves_io_schema_dns_zone.LongitudeHemisphere_value[v.(string)])
 
-											}
+													}
 
-											if w, ok := valuesMapStrToI["longitude_minute"]; ok && !isIntfNil(w) {
-												values[i].LongitudeMinute = int32(w.(int))
-											}
+													if w, ok := valuesMapStrToI["longitude_minute"]; ok && !isIntfNil(w) {
+														values[i].LongitudeMinute = int32(w.(int))
+													}
 
-											if w, ok := valuesMapStrToI["longitude_second"]; ok && !isIntfNil(w) {
-												values[i].LongitudeSecond = float32(w.(float64))
-											}
+													if w, ok := valuesMapStrToI["longitude_second"]; ok && !isIntfNil(w) {
+														values[i].LongitudeSecond = float32(w.(float64))
+													}
 
-											if w, ok := valuesMapStrToI["vertical_precision"]; ok && !isIntfNil(w) {
-												values[i].VerticalPrecision = float32(w.(float64))
+													if w, ok := valuesMapStrToI["vertical_precision"]; ok && !isIntfNil(w) {
+														values[i].VerticalPrecision = float32(w.(float64))
+													}
+
+												}
 											}
 
 										}
 
 									}
-
 								}
 
 							}
 
-							if v, ok := rrSetMapStrToI["mx_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
+							if v, ok := defaultRrSetGroupMapStrToI["mx_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
 
 								typeRecordSetTypeFound = true
 								typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_MxRecord{}
 								typeRecordSetInt.MxRecord = &ves_io_schema_dns_zone.DNSMXResourceRecord{}
-								rrSet[i].TypeRecordSet = typeRecordSetInt
+								defaultRrSetGroup[i].TypeRecordSet = typeRecordSetInt
 
-								sl := v.(*schema.Set).List()
+								sl := v.([]interface{})
 								for _, set := range sl {
-									cs := set.(map[string]interface{})
+									if set != nil {
+										cs := set.(map[string]interface{})
 
-									if v, ok := cs["name"]; ok && !isIntfNil(v) {
+										if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
-										typeRecordSetInt.MxRecord.Name = v.(string)
+											typeRecordSetInt.MxRecord.Name = v.(string)
 
-									}
+										}
 
-									if v, ok := cs["values"]; ok && !isIntfNil(v) {
+										if v, ok := cs["values"]; ok && !isIntfNil(v) {
 
-										sl := v.([]interface{})
-										values := make([]*ves_io_schema_dns_zone.MailExchanger, len(sl))
-										typeRecordSetInt.MxRecord.Values = values
-										for i, set := range sl {
-											values[i] = &ves_io_schema_dns_zone.MailExchanger{}
-											valuesMapStrToI := set.(map[string]interface{})
+											sl := v.([]interface{})
+											values := make([]*ves_io_schema_dns_zone.MailExchanger, len(sl))
+											typeRecordSetInt.MxRecord.Values = values
+											for i, set := range sl {
+												if set != nil {
+													values[i] = &ves_io_schema_dns_zone.MailExchanger{}
+													valuesMapStrToI := set.(map[string]interface{})
 
-											if w, ok := valuesMapStrToI["domain"]; ok && !isIntfNil(w) {
-												values[i].Domain = w.(string)
-											}
+													if w, ok := valuesMapStrToI["domain"]; ok && !isIntfNil(w) {
+														values[i].Domain = w.(string)
+													}
 
-											if w, ok := valuesMapStrToI["priority"]; ok && !isIntfNil(w) {
-												values[i].Priority = uint32(w.(int))
+													if w, ok := valuesMapStrToI["priority"]; ok && !isIntfNil(w) {
+														values[i].Priority = uint32(w.(int))
+													}
+
+												}
 											}
 
 										}
 
 									}
-
 								}
 
 							}
 
-							if v, ok := rrSetMapStrToI["naptr_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
+							if v, ok := defaultRrSetGroupMapStrToI["naptr_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
 
 								typeRecordSetTypeFound = true
 								typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_NaptrRecord{}
 								typeRecordSetInt.NaptrRecord = &ves_io_schema_dns_zone.DNSNAPTRResourceRecord{}
-								rrSet[i].TypeRecordSet = typeRecordSetInt
+								defaultRrSetGroup[i].TypeRecordSet = typeRecordSetInt
 
-								sl := v.(*schema.Set).List()
+								sl := v.([]interface{})
 								for _, set := range sl {
-									cs := set.(map[string]interface{})
+									if set != nil {
+										cs := set.(map[string]interface{})
 
-									if v, ok := cs["name"]; ok && !isIntfNil(v) {
+										if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
-										typeRecordSetInt.NaptrRecord.Name = v.(string)
+											typeRecordSetInt.NaptrRecord.Name = v.(string)
 
-									}
+										}
 
-									if v, ok := cs["values"]; ok && !isIntfNil(v) {
+										if v, ok := cs["values"]; ok && !isIntfNil(v) {
 
-										sl := v.([]interface{})
-										values := make([]*ves_io_schema_dns_zone.NAPTRValue, len(sl))
-										typeRecordSetInt.NaptrRecord.Values = values
-										for i, set := range sl {
-											values[i] = &ves_io_schema_dns_zone.NAPTRValue{}
-											valuesMapStrToI := set.(map[string]interface{})
+											sl := v.([]interface{})
+											values := make([]*ves_io_schema_dns_zone.NAPTRValue, len(sl))
+											typeRecordSetInt.NaptrRecord.Values = values
+											for i, set := range sl {
+												if set != nil {
+													values[i] = &ves_io_schema_dns_zone.NAPTRValue{}
+													valuesMapStrToI := set.(map[string]interface{})
 
-											if w, ok := valuesMapStrToI["flags"]; ok && !isIntfNil(w) {
-												values[i].Flags = w.(string)
-											}
+													if w, ok := valuesMapStrToI["flags"]; ok && !isIntfNil(w) {
+														values[i].Flags = w.(string)
+													}
 
-											if w, ok := valuesMapStrToI["order"]; ok && !isIntfNil(w) {
-												values[i].Order = uint32(w.(int))
-											}
+													if w, ok := valuesMapStrToI["order"]; ok && !isIntfNil(w) {
+														values[i].Order = uint32(w.(int))
+													}
 
-											if w, ok := valuesMapStrToI["preference"]; ok && !isIntfNil(w) {
-												values[i].Preference = uint32(w.(int))
-											}
+													if w, ok := valuesMapStrToI["preference"]; ok && !isIntfNil(w) {
+														values[i].Preference = uint32(w.(int))
+													}
 
-											if w, ok := valuesMapStrToI["regexp"]; ok && !isIntfNil(w) {
-												values[i].Regexp = w.(string)
-											}
+													if w, ok := valuesMapStrToI["regexp"]; ok && !isIntfNil(w) {
+														values[i].Regexp = w.(string)
+													}
 
-											if w, ok := valuesMapStrToI["replacement"]; ok && !isIntfNil(w) {
-												values[i].Replacement = w.(string)
-											}
+													if w, ok := valuesMapStrToI["replacement"]; ok && !isIntfNil(w) {
+														values[i].Replacement = w.(string)
+													}
 
-											if w, ok := valuesMapStrToI["service"]; ok && !isIntfNil(w) {
-												values[i].Service = w.(string)
+													if w, ok := valuesMapStrToI["service"]; ok && !isIntfNil(w) {
+														values[i].Service = w.(string)
+													}
+
+												}
 											}
 
 										}
 
 									}
-
 								}
 
 							}
 
-							if v, ok := rrSetMapStrToI["ns_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
+							if v, ok := defaultRrSetGroupMapStrToI["ns_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
 
 								typeRecordSetTypeFound = true
 								typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_NsRecord{}
 								typeRecordSetInt.NsRecord = &ves_io_schema_dns_zone.DNSNSResourceRecord{}
-								rrSet[i].TypeRecordSet = typeRecordSetInt
+								defaultRrSetGroup[i].TypeRecordSet = typeRecordSetInt
 
-								sl := v.(*schema.Set).List()
+								sl := v.([]interface{})
 								for _, set := range sl {
-									cs := set.(map[string]interface{})
+									if set != nil {
+										cs := set.(map[string]interface{})
 
-									if v, ok := cs["name"]; ok && !isIntfNil(v) {
+										if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
-										typeRecordSetInt.NsRecord.Name = v.(string)
+											typeRecordSetInt.NsRecord.Name = v.(string)
 
-									}
-
-									if v, ok := cs["values"]; ok && !isIntfNil(v) {
-
-										ls := make([]string, len(v.([]interface{})))
-										for i, v := range v.([]interface{}) {
-											ls[i] = v.(string)
 										}
-										typeRecordSetInt.NsRecord.Values = ls
+
+										if v, ok := cs["values"]; ok && !isIntfNil(v) {
+
+											ls := make([]string, len(v.([]interface{})))
+											for i, v := range v.([]interface{}) {
+												ls[i] = v.(string)
+											}
+											typeRecordSetInt.NsRecord.Values = ls
+
+										}
 
 									}
-
 								}
 
 							}
 
-							if v, ok := rrSetMapStrToI["ptr_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
+							if v, ok := defaultRrSetGroupMapStrToI["ptr_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
 
 								typeRecordSetTypeFound = true
 								typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_PtrRecord{}
 								typeRecordSetInt.PtrRecord = &ves_io_schema_dns_zone.DNSPTRResourceRecord{}
-								rrSet[i].TypeRecordSet = typeRecordSetInt
+								defaultRrSetGroup[i].TypeRecordSet = typeRecordSetInt
 
-								sl := v.(*schema.Set).List()
+								sl := v.([]interface{})
 								for _, set := range sl {
-									cs := set.(map[string]interface{})
+									if set != nil {
+										cs := set.(map[string]interface{})
 
-									if v, ok := cs["name"]; ok && !isIntfNil(v) {
+										if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
-										typeRecordSetInt.PtrRecord.Name = v.(string)
+											typeRecordSetInt.PtrRecord.Name = v.(string)
 
-									}
-
-									if v, ok := cs["values"]; ok && !isIntfNil(v) {
-
-										ls := make([]string, len(v.([]interface{})))
-										for i, v := range v.([]interface{}) {
-											ls[i] = v.(string)
 										}
-										typeRecordSetInt.PtrRecord.Values = ls
+
+										if v, ok := cs["values"]; ok && !isIntfNil(v) {
+
+											ls := make([]string, len(v.([]interface{})))
+											for i, v := range v.([]interface{}) {
+												ls[i] = v.(string)
+											}
+											typeRecordSetInt.PtrRecord.Values = ls
+
+										}
 
 									}
-
 								}
 
 							}
 
-							if v, ok := rrSetMapStrToI["srv_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
+							if v, ok := defaultRrSetGroupMapStrToI["srv_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
 
 								typeRecordSetTypeFound = true
 								typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_SrvRecord{}
 								typeRecordSetInt.SrvRecord = &ves_io_schema_dns_zone.DNSSRVResourceRecord{}
-								rrSet[i].TypeRecordSet = typeRecordSetInt
+								defaultRrSetGroup[i].TypeRecordSet = typeRecordSetInt
 
-								sl := v.(*schema.Set).List()
+								sl := v.([]interface{})
 								for _, set := range sl {
-									cs := set.(map[string]interface{})
+									if set != nil {
+										cs := set.(map[string]interface{})
 
-									if v, ok := cs["name"]; ok && !isIntfNil(v) {
+										if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
-										typeRecordSetInt.SrvRecord.Name = v.(string)
+											typeRecordSetInt.SrvRecord.Name = v.(string)
 
-									}
+										}
 
-									if v, ok := cs["values"]; ok && !isIntfNil(v) {
+										if v, ok := cs["values"]; ok && !isIntfNil(v) {
 
-										sl := v.([]interface{})
-										values := make([]*ves_io_schema_dns_zone.SRVService, len(sl))
-										typeRecordSetInt.SrvRecord.Values = values
-										for i, set := range sl {
-											values[i] = &ves_io_schema_dns_zone.SRVService{}
-											valuesMapStrToI := set.(map[string]interface{})
+											sl := v.([]interface{})
+											values := make([]*ves_io_schema_dns_zone.SRVService, len(sl))
+											typeRecordSetInt.SrvRecord.Values = values
+											for i, set := range sl {
+												if set != nil {
+													values[i] = &ves_io_schema_dns_zone.SRVService{}
+													valuesMapStrToI := set.(map[string]interface{})
 
-											if w, ok := valuesMapStrToI["port"]; ok && !isIntfNil(w) {
-												values[i].Port = uint32(w.(int))
-											}
+													if w, ok := valuesMapStrToI["port"]; ok && !isIntfNil(w) {
+														values[i].Port = uint32(w.(int))
+													}
 
-											if w, ok := valuesMapStrToI["priority"]; ok && !isIntfNil(w) {
-												values[i].Priority = uint32(w.(int))
-											}
+													if w, ok := valuesMapStrToI["priority"]; ok && !isIntfNil(w) {
+														values[i].Priority = uint32(w.(int))
+													}
 
-											if w, ok := valuesMapStrToI["target"]; ok && !isIntfNil(w) {
-												values[i].Target = w.(string)
-											}
+													if w, ok := valuesMapStrToI["target"]; ok && !isIntfNil(w) {
+														values[i].Target = w.(string)
+													}
 
-											if w, ok := valuesMapStrToI["weight"]; ok && !isIntfNil(w) {
-												values[i].Weight = uint32(w.(int))
+													if w, ok := valuesMapStrToI["weight"]; ok && !isIntfNil(w) {
+														values[i].Weight = uint32(w.(int))
+													}
+
+												}
 											}
 
 										}
 
 									}
-
 								}
 
 							}
 
-							if v, ok := rrSetMapStrToI["sshfp_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
+							if v, ok := defaultRrSetGroupMapStrToI["sshfp_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
 
 								typeRecordSetTypeFound = true
 								typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_SshfpRecord{}
 								typeRecordSetInt.SshfpRecord = &ves_io_schema_dns_zone.SSHFPResourceRecord{}
-								rrSet[i].TypeRecordSet = typeRecordSetInt
+								defaultRrSetGroup[i].TypeRecordSet = typeRecordSetInt
 
-								sl := v.(*schema.Set).List()
+								sl := v.([]interface{})
 								for _, set := range sl {
-									cs := set.(map[string]interface{})
+									if set != nil {
+										cs := set.(map[string]interface{})
 
-									if v, ok := cs["name"]; ok && !isIntfNil(v) {
+										if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
-										typeRecordSetInt.SshfpRecord.Name = v.(string)
+											typeRecordSetInt.SshfpRecord.Name = v.(string)
 
-									}
+										}
 
-									if v, ok := cs["values"]; ok && !isIntfNil(v) {
+										if v, ok := cs["values"]; ok && !isIntfNil(v) {
 
-										sl := v.([]interface{})
-										values := make([]*ves_io_schema_dns_zone.SSHFPRecordValue, len(sl))
-										typeRecordSetInt.SshfpRecord.Values = values
-										for i, set := range sl {
-											values[i] = &ves_io_schema_dns_zone.SSHFPRecordValue{}
-											valuesMapStrToI := set.(map[string]interface{})
+											sl := v.([]interface{})
+											values := make([]*ves_io_schema_dns_zone.SSHFPRecordValue, len(sl))
+											typeRecordSetInt.SshfpRecord.Values = values
+											for i, set := range sl {
+												if set != nil {
+													values[i] = &ves_io_schema_dns_zone.SSHFPRecordValue{}
+													valuesMapStrToI := set.(map[string]interface{})
 
-											if v, ok := valuesMapStrToI["algorithm"]; ok && !isIntfNil(v) {
+													if v, ok := valuesMapStrToI["algorithm"]; ok && !isIntfNil(v) {
 
-												values[i].Algorithm = ves_io_schema_dns_zone.SSHFPAlgorithm(ves_io_schema_dns_zone.SSHFPAlgorithm_value[v.(string)])
+														values[i].Algorithm = ves_io_schema_dns_zone.SSHFPAlgorithm(ves_io_schema_dns_zone.SSHFPAlgorithm_value[v.(string)])
 
-											}
+													}
 
-											if w, ok := valuesMapStrToI["fingerprint"]; ok && !isIntfNil(w) {
-												values[i].Fingerprint = w.(string)
-											}
+													if w, ok := valuesMapStrToI["fingerprint"]; ok && !isIntfNil(w) {
+														values[i].Fingerprint = w.(string)
+													}
 
-											fingerprintTypeTypeFound := false
+													fingerprintTypeTypeFound := false
 
-											if v, ok := valuesMapStrToI["sha1_fingerprint"]; ok && !isIntfNil(v) && !fingerprintTypeTypeFound {
+													if v, ok := valuesMapStrToI["sha1_fingerprint"]; ok && !isIntfNil(v) && !fingerprintTypeTypeFound {
 
-												fingerprintTypeTypeFound = true
-												fingerprintTypeInt := &ves_io_schema_dns_zone.SSHFPRecordValue_Sha1Fingerprint{}
-												fingerprintTypeInt.Sha1Fingerprint = &ves_io_schema_dns_zone.SHA1Fingerprint{}
-												values[i].FingerprintType = fingerprintTypeInt
+														fingerprintTypeTypeFound = true
+														fingerprintTypeInt := &ves_io_schema_dns_zone.SSHFPRecordValue_Sha1Fingerprint{}
+														fingerprintTypeInt.Sha1Fingerprint = &ves_io_schema_dns_zone.SHA1Fingerprint{}
+														values[i].FingerprintType = fingerprintTypeInt
 
-												sl := v.(*schema.Set).List()
-												for _, set := range sl {
-													cs := set.(map[string]interface{})
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
 
-													if v, ok := cs["fingerprint"]; ok && !isIntfNil(v) {
+																if v, ok := cs["fingerprint"]; ok && !isIntfNil(v) {
 
-														fingerprintTypeInt.Sha1Fingerprint.Fingerprint = v.(string)
+																	fingerprintTypeInt.Sha1Fingerprint.Fingerprint = v.(string)
+
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := valuesMapStrToI["sha256_fingerprint"]; ok && !isIntfNil(v) && !fingerprintTypeTypeFound {
+
+														fingerprintTypeTypeFound = true
+														fingerprintTypeInt := &ves_io_schema_dns_zone.SSHFPRecordValue_Sha256Fingerprint{}
+														fingerprintTypeInt.Sha256Fingerprint = &ves_io_schema_dns_zone.SHA256Fingerprint{}
+														values[i].FingerprintType = fingerprintTypeInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["fingerprint"]; ok && !isIntfNil(v) {
+
+																	fingerprintTypeInt.Sha256Fingerprint.Fingerprint = v.(string)
+
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := valuesMapStrToI["fingerprinttype"]; ok && !isIntfNil(v) {
+
+														values[i].Fingerprinttype = ves_io_schema_dns_zone.SSHFPFingerprintType(ves_io_schema_dns_zone.SSHFPFingerprintType_value[v.(string)])
 
 													}
 
 												}
-
-											}
-
-											if v, ok := valuesMapStrToI["sha256_fingerprint"]; ok && !isIntfNil(v) && !fingerprintTypeTypeFound {
-
-												fingerprintTypeTypeFound = true
-												fingerprintTypeInt := &ves_io_schema_dns_zone.SSHFPRecordValue_Sha256Fingerprint{}
-												fingerprintTypeInt.Sha256Fingerprint = &ves_io_schema_dns_zone.SHA256Fingerprint{}
-												values[i].FingerprintType = fingerprintTypeInt
-
-												sl := v.(*schema.Set).List()
-												for _, set := range sl {
-													cs := set.(map[string]interface{})
-
-													if v, ok := cs["fingerprint"]; ok && !isIntfNil(v) {
-
-														fingerprintTypeInt.Sha256Fingerprint.Fingerprint = v.(string)
-
-													}
-
-												}
-
-											}
-
-											if v, ok := valuesMapStrToI["fingerprinttype"]; ok && !isIntfNil(v) {
-
-												values[i].Fingerprinttype = ves_io_schema_dns_zone.SSHFPFingerprintType(ves_io_schema_dns_zone.SSHFPFingerprintType_value[v.(string)])
-
 											}
 
 										}
 
 									}
-
 								}
 
 							}
 
-							if v, ok := rrSetMapStrToI["tlsa_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
+							if v, ok := defaultRrSetGroupMapStrToI["tlsa_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
 
 								typeRecordSetTypeFound = true
 								typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_TlsaRecord{}
 								typeRecordSetInt.TlsaRecord = &ves_io_schema_dns_zone.TLSAResourceRecord{}
-								rrSet[i].TypeRecordSet = typeRecordSetInt
+								defaultRrSetGroup[i].TypeRecordSet = typeRecordSetInt
 
-								sl := v.(*schema.Set).List()
+								sl := v.([]interface{})
 								for _, set := range sl {
-									cs := set.(map[string]interface{})
+									if set != nil {
+										cs := set.(map[string]interface{})
 
-									if v, ok := cs["name"]; ok && !isIntfNil(v) {
+										if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
-										typeRecordSetInt.TlsaRecord.Name = v.(string)
+											typeRecordSetInt.TlsaRecord.Name = v.(string)
 
-									}
+										}
 
-									if v, ok := cs["values"]; ok && !isIntfNil(v) {
+										if v, ok := cs["values"]; ok && !isIntfNil(v) {
 
-										sl := v.([]interface{})
-										values := make([]*ves_io_schema_dns_zone.TLSARecordValue, len(sl))
-										typeRecordSetInt.TlsaRecord.Values = values
-										for i, set := range sl {
-											values[i] = &ves_io_schema_dns_zone.TLSARecordValue{}
-											valuesMapStrToI := set.(map[string]interface{})
+											sl := v.([]interface{})
+											values := make([]*ves_io_schema_dns_zone.TLSARecordValue, len(sl))
+											typeRecordSetInt.TlsaRecord.Values = values
+											for i, set := range sl {
+												if set != nil {
+													values[i] = &ves_io_schema_dns_zone.TLSARecordValue{}
+													valuesMapStrToI := set.(map[string]interface{})
 
-											if w, ok := valuesMapStrToI["certificate_association_data"]; ok && !isIntfNil(w) {
-												values[i].CertificateAssociationData = w.(string)
-											}
+													if w, ok := valuesMapStrToI["certificate_association_data"]; ok && !isIntfNil(w) {
+														values[i].CertificateAssociationData = w.(string)
+													}
 
-											if v, ok := valuesMapStrToI["certificate_usage"]; ok && !isIntfNil(v) {
+													if v, ok := valuesMapStrToI["certificate_usage"]; ok && !isIntfNil(v) {
 
-												values[i].CertificateUsage = ves_io_schema_dns_zone.TLSARecordCertificateUsage(ves_io_schema_dns_zone.TLSARecordCertificateUsage_value[v.(string)])
+														values[i].CertificateUsage = ves_io_schema_dns_zone.TLSARecordCertificateUsage(ves_io_schema_dns_zone.TLSARecordCertificateUsage_value[v.(string)])
 
-											}
+													}
 
-											if v, ok := valuesMapStrToI["matching_type"]; ok && !isIntfNil(v) {
+													if v, ok := valuesMapStrToI["matching_type"]; ok && !isIntfNil(v) {
 
-												values[i].MatchingType = ves_io_schema_dns_zone.TLSARecordMatchingType(ves_io_schema_dns_zone.TLSARecordMatchingType_value[v.(string)])
+														values[i].MatchingType = ves_io_schema_dns_zone.TLSARecordMatchingType(ves_io_schema_dns_zone.TLSARecordMatchingType_value[v.(string)])
 
-											}
+													}
 
-											if v, ok := valuesMapStrToI["selector"]; ok && !isIntfNil(v) {
+													if v, ok := valuesMapStrToI["selector"]; ok && !isIntfNil(v) {
 
-												values[i].Selector = ves_io_schema_dns_zone.TLSARecordCSelector(ves_io_schema_dns_zone.TLSARecordCSelector_value[v.(string)])
+														values[i].Selector = ves_io_schema_dns_zone.TLSARecordCSelector(ves_io_schema_dns_zone.TLSARecordCSelector_value[v.(string)])
 
+													}
+
+												}
 											}
 
 										}
 
 									}
-
 								}
 
 							}
 
-							if v, ok := rrSetMapStrToI["txt_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
+							if v, ok := defaultRrSetGroupMapStrToI["txt_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
 
 								typeRecordSetTypeFound = true
 								typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_TxtRecord{}
 								typeRecordSetInt.TxtRecord = &ves_io_schema_dns_zone.DNSTXTResourceRecord{}
-								rrSet[i].TypeRecordSet = typeRecordSetInt
+								defaultRrSetGroup[i].TypeRecordSet = typeRecordSetInt
 
-								sl := v.(*schema.Set).List()
+								sl := v.([]interface{})
 								for _, set := range sl {
-									cs := set.(map[string]interface{})
+									if set != nil {
+										cs := set.(map[string]interface{})
 
-									if v, ok := cs["name"]; ok && !isIntfNil(v) {
+										if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
-										typeRecordSetInt.TxtRecord.Name = v.(string)
+											typeRecordSetInt.TxtRecord.Name = v.(string)
 
-									}
-
-									if v, ok := cs["values"]; ok && !isIntfNil(v) {
-
-										ls := make([]string, len(v.([]interface{})))
-										for i, v := range v.([]interface{}) {
-											ls[i] = v.(string)
 										}
-										typeRecordSetInt.TxtRecord.Values = ls
+
+										if v, ok := cs["values"]; ok && !isIntfNil(v) {
+
+											ls := make([]string, len(v.([]interface{})))
+											for i, v := range v.([]interface{}) {
+												ls[i] = v.(string)
+											}
+											typeRecordSetInt.TxtRecord.Values = ls
+
+										}
 
 									}
-
 								}
 
 							}
 
 						}
-
 					}
 
 				}
 
-			}
+				if v, ok := cs["dnssec_mode"]; ok && !isIntfNil(v) {
 
-			soaRecordParametersChoiceTypeFound := false
+					sl := v.([]interface{})
+					dnssecMode := &ves_io_schema_dns_zone.DNSSECMode{}
+					dnsTypeInt.Primary.DnssecMode = dnssecMode
+					for _, set := range sl {
+						if set != nil {
+							dnssecModeMapStrToI := set.(map[string]interface{})
 
-			if v, ok := cs["default_soa_parameters"]; ok && !isIntfNil(v) && !soaRecordParametersChoiceTypeFound {
+							modeTypeFound := false
 
-				soaRecordParametersChoiceTypeFound = true
+							if v, ok := dnssecModeMapStrToI["disable"]; ok && !isIntfNil(v) && !modeTypeFound {
 
-				if v.(bool) {
-					soaRecordParametersChoiceInt := &ves_io_schema_dns_zone.PrimaryDNSCreateSpecType_DefaultSoaParameters{}
-					soaRecordParametersChoiceInt.DefaultSoaParameters = &ves_io_schema.Empty{}
+								modeTypeFound = true
+
+								if v.(bool) {
+									modeInt := &ves_io_schema_dns_zone.DNSSECMode_Disable{}
+									modeInt.Disable = &ves_io_schema.Empty{}
+									dnssecMode.Mode = modeInt
+								}
+
+							}
+
+							if _, ok := dnssecModeMapStrToI["enable"]; ok && !modeTypeFound {
+
+								modeTypeFound = true
+								modeInt := &ves_io_schema_dns_zone.DNSSECMode_Enable{}
+								modeInt.Enable = &ves_io_schema_dns_zone.DNSSECModeEnable{}
+								dnssecMode.Mode = modeInt
+
+							}
+
+						}
+					}
+
+				}
+
+				if v, ok := cs["rr_set_group"]; ok && !isIntfNil(v) {
+
+					sl := v.([]interface{})
+					rrSetGroup := make([]*ves_io_schema_dns_zone.RRSetGroup, len(sl))
+					dnsTypeInt.Primary.RrSetGroup = rrSetGroup
+					for i, set := range sl {
+						if set != nil {
+							rrSetGroup[i] = &ves_io_schema_dns_zone.RRSetGroup{}
+							rrSetGroupMapStrToI := set.(map[string]interface{})
+
+							if v, ok := rrSetGroupMapStrToI["metadata"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								metadata := &ves_io_schema.MessageMetaType{}
+								rrSetGroup[i].Metadata = metadata
+								for _, set := range sl {
+									if set != nil {
+										metadataMapStrToI := set.(map[string]interface{})
+
+										if w, ok := metadataMapStrToI["description"]; ok && !isIntfNil(w) {
+											metadata.Description = w.(string)
+										}
+
+										if w, ok := metadataMapStrToI["disable"]; ok && !isIntfNil(w) {
+											metadata.Disable = w.(bool)
+										}
+
+										if w, ok := metadataMapStrToI["name"]; ok && !isIntfNil(w) {
+											metadata.Name = w.(string)
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := rrSetGroupMapStrToI["rr_set"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								rrSet := make([]*ves_io_schema_dns_zone.RRSet, len(sl))
+								rrSetGroup[i].RrSet = rrSet
+								for i, set := range sl {
+									if set != nil {
+										rrSet[i] = &ves_io_schema_dns_zone.RRSet{}
+										rrSetMapStrToI := set.(map[string]interface{})
+
+										if w, ok := rrSetMapStrToI["description"]; ok && !isIntfNil(w) {
+											rrSet[i].Description = w.(string)
+										}
+
+										if w, ok := rrSetMapStrToI["ttl"]; ok && !isIntfNil(w) {
+											rrSet[i].Ttl = uint32(w.(int))
+										}
+
+										typeRecordSetTypeFound := false
+
+										if v, ok := rrSetMapStrToI["a_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
+
+											typeRecordSetTypeFound = true
+											typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_ARecord{}
+											typeRecordSetInt.ARecord = &ves_io_schema_dns_zone.DNSAResourceRecord{}
+											rrSet[i].TypeRecordSet = typeRecordSetInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+														typeRecordSetInt.ARecord.Name = v.(string)
+
+													}
+
+													if v, ok := cs["values"]; ok && !isIntfNil(v) {
+
+														ls := make([]string, len(v.([]interface{})))
+														for i, v := range v.([]interface{}) {
+															ls[i] = v.(string)
+														}
+														typeRecordSetInt.ARecord.Values = ls
+
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := rrSetMapStrToI["aaaa_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
+
+											typeRecordSetTypeFound = true
+											typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_AaaaRecord{}
+											typeRecordSetInt.AaaaRecord = &ves_io_schema_dns_zone.DNSAAAAResourceRecord{}
+											rrSet[i].TypeRecordSet = typeRecordSetInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+														typeRecordSetInt.AaaaRecord.Name = v.(string)
+
+													}
+
+													if v, ok := cs["values"]; ok && !isIntfNil(v) {
+
+														ls := make([]string, len(v.([]interface{})))
+														for i, v := range v.([]interface{}) {
+															ls[i] = v.(string)
+														}
+														typeRecordSetInt.AaaaRecord.Values = ls
+
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := rrSetMapStrToI["afsdb_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
+
+											typeRecordSetTypeFound = true
+											typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_AfsdbRecord{}
+											typeRecordSetInt.AfsdbRecord = &ves_io_schema_dns_zone.DNSAFSDBRecord{}
+											rrSet[i].TypeRecordSet = typeRecordSetInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+														typeRecordSetInt.AfsdbRecord.Name = v.(string)
+
+													}
+
+													if v, ok := cs["values"]; ok && !isIntfNil(v) {
+
+														sl := v.([]interface{})
+														values := make([]*ves_io_schema_dns_zone.AFSDBRecordValue, len(sl))
+														typeRecordSetInt.AfsdbRecord.Values = values
+														for i, set := range sl {
+															if set != nil {
+																values[i] = &ves_io_schema_dns_zone.AFSDBRecordValue{}
+																valuesMapStrToI := set.(map[string]interface{})
+
+																if w, ok := valuesMapStrToI["hostname"]; ok && !isIntfNil(w) {
+																	values[i].Hostname = w.(string)
+																}
+
+																if v, ok := valuesMapStrToI["subtype"]; ok && !isIntfNil(v) {
+
+																	values[i].Subtype = ves_io_schema_dns_zone.AFSDBRecordSubtype(ves_io_schema_dns_zone.AFSDBRecordSubtype_value[v.(string)])
+
+																}
+
+															}
+														}
+
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := rrSetMapStrToI["alias_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
+
+											typeRecordSetTypeFound = true
+											typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_AliasRecord{}
+											typeRecordSetInt.AliasRecord = &ves_io_schema_dns_zone.DNSAliasResourceRecord{}
+											rrSet[i].TypeRecordSet = typeRecordSetInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+														typeRecordSetInt.AliasRecord.Name = v.(string)
+
+													}
+
+													if v, ok := cs["value"]; ok && !isIntfNil(v) {
+
+														typeRecordSetInt.AliasRecord.Value = v.(string)
+
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := rrSetMapStrToI["caa_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
+
+											typeRecordSetTypeFound = true
+											typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_CaaRecord{}
+											typeRecordSetInt.CaaRecord = &ves_io_schema_dns_zone.DNSCAAResourceRecord{}
+											rrSet[i].TypeRecordSet = typeRecordSetInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+														typeRecordSetInt.CaaRecord.Name = v.(string)
+
+													}
+
+													if v, ok := cs["values"]; ok && !isIntfNil(v) {
+
+														sl := v.([]interface{})
+														values := make([]*ves_io_schema_dns_zone.CertificationAuthorityAuthorization, len(sl))
+														typeRecordSetInt.CaaRecord.Values = values
+														for i, set := range sl {
+															if set != nil {
+																values[i] = &ves_io_schema_dns_zone.CertificationAuthorityAuthorization{}
+																valuesMapStrToI := set.(map[string]interface{})
+
+																if w, ok := valuesMapStrToI["flags"]; ok && !isIntfNil(w) {
+																	values[i].Flags = uint32(w.(int))
+																}
+
+																if w, ok := valuesMapStrToI["tag"]; ok && !isIntfNil(w) {
+																	values[i].Tag = w.(string)
+																}
+
+																if w, ok := valuesMapStrToI["value"]; ok && !isIntfNil(w) {
+																	values[i].Value = w.(string)
+																}
+
+															}
+														}
+
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := rrSetMapStrToI["cds_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
+
+											typeRecordSetTypeFound = true
+											typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_CdsRecord{}
+											typeRecordSetInt.CdsRecord = &ves_io_schema_dns_zone.DNSCDSRecord{}
+											rrSet[i].TypeRecordSet = typeRecordSetInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+														typeRecordSetInt.CdsRecord.Name = v.(string)
+
+													}
+
+													if v, ok := cs["values"]; ok && !isIntfNil(v) {
+
+														sl := v.([]interface{})
+														values := make([]*ves_io_schema_dns_zone.DSRecordValue, len(sl))
+														typeRecordSetInt.CdsRecord.Values = values
+														for i, set := range sl {
+															if set != nil {
+																values[i] = &ves_io_schema_dns_zone.DSRecordValue{}
+																valuesMapStrToI := set.(map[string]interface{})
+
+																digestChoiceTypeFound := false
+
+																if v, ok := valuesMapStrToI["sha1_digest"]; ok && !isIntfNil(v) && !digestChoiceTypeFound {
+
+																	digestChoiceTypeFound = true
+																	digestChoiceInt := &ves_io_schema_dns_zone.DSRecordValue_Sha1Digest{}
+																	digestChoiceInt.Sha1Digest = &ves_io_schema_dns_zone.SHA1Digest{}
+																	values[i].DigestChoice = digestChoiceInt
+
+																	sl := v.([]interface{})
+																	for _, set := range sl {
+																		if set != nil {
+																			cs := set.(map[string]interface{})
+
+																			if v, ok := cs["digest"]; ok && !isIntfNil(v) {
+
+																				digestChoiceInt.Sha1Digest.Digest = v.(string)
+
+																			}
+
+																		}
+																	}
+
+																}
+
+																if v, ok := valuesMapStrToI["sha256_digest"]; ok && !isIntfNil(v) && !digestChoiceTypeFound {
+
+																	digestChoiceTypeFound = true
+																	digestChoiceInt := &ves_io_schema_dns_zone.DSRecordValue_Sha256Digest{}
+																	digestChoiceInt.Sha256Digest = &ves_io_schema_dns_zone.SHA256Digest{}
+																	values[i].DigestChoice = digestChoiceInt
+
+																	sl := v.([]interface{})
+																	for _, set := range sl {
+																		if set != nil {
+																			cs := set.(map[string]interface{})
+
+																			if v, ok := cs["digest"]; ok && !isIntfNil(v) {
+
+																				digestChoiceInt.Sha256Digest.Digest = v.(string)
+
+																			}
+
+																		}
+																	}
+
+																}
+
+																if v, ok := valuesMapStrToI["sha384_digest"]; ok && !isIntfNil(v) && !digestChoiceTypeFound {
+
+																	digestChoiceTypeFound = true
+																	digestChoiceInt := &ves_io_schema_dns_zone.DSRecordValue_Sha384Digest{}
+																	digestChoiceInt.Sha384Digest = &ves_io_schema_dns_zone.SHA384Digest{}
+																	values[i].DigestChoice = digestChoiceInt
+
+																	sl := v.([]interface{})
+																	for _, set := range sl {
+																		if set != nil {
+																			cs := set.(map[string]interface{})
+
+																			if v, ok := cs["digest"]; ok && !isIntfNil(v) {
+
+																				digestChoiceInt.Sha384Digest.Digest = v.(string)
+
+																			}
+
+																		}
+																	}
+
+																}
+
+																if v, ok := valuesMapStrToI["ds_key_algorithm"]; ok && !isIntfNil(v) {
+
+																	values[i].DsKeyAlgorithm = ves_io_schema_dns_zone.DSKeyAlgorithm(ves_io_schema_dns_zone.DSKeyAlgorithm_value[v.(string)])
+
+																}
+
+																if w, ok := valuesMapStrToI["key_tag"]; ok && !isIntfNil(w) {
+																	values[i].KeyTag = uint32(w.(int))
+																}
+
+															}
+														}
+
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := rrSetMapStrToI["cert_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
+
+											typeRecordSetTypeFound = true
+											typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_CertRecord{}
+											typeRecordSetInt.CertRecord = &ves_io_schema_dns_zone.CERTResourceRecord{}
+											rrSet[i].TypeRecordSet = typeRecordSetInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+														typeRecordSetInt.CertRecord.Name = v.(string)
+
+													}
+
+													if v, ok := cs["values"]; ok && !isIntfNil(v) {
+
+														sl := v.([]interface{})
+														values := make([]*ves_io_schema_dns_zone.CERTRecordValue, len(sl))
+														typeRecordSetInt.CertRecord.Values = values
+														for i, set := range sl {
+															if set != nil {
+																values[i] = &ves_io_schema_dns_zone.CERTRecordValue{}
+																valuesMapStrToI := set.(map[string]interface{})
+
+																if v, ok := valuesMapStrToI["algorithm"]; ok && !isIntfNil(v) {
+
+																	values[i].Algorithm = ves_io_schema_dns_zone.CERTAlgorithm(ves_io_schema_dns_zone.CERTAlgorithm_value[v.(string)])
+
+																}
+
+																if w, ok := valuesMapStrToI["cert_key_tag"]; ok && !isIntfNil(w) {
+																	values[i].CertKeyTag = uint32(w.(int))
+																}
+
+																if v, ok := valuesMapStrToI["cert_type"]; ok && !isIntfNil(v) {
+
+																	values[i].CertType = ves_io_schema_dns_zone.CERTType(ves_io_schema_dns_zone.CERTType_value[v.(string)])
+
+																}
+
+																if w, ok := valuesMapStrToI["certificate"]; ok && !isIntfNil(w) {
+																	values[i].Certificate = w.(string)
+																}
+
+															}
+														}
+
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := rrSetMapStrToI["cname_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
+
+											typeRecordSetTypeFound = true
+											typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_CnameRecord{}
+											typeRecordSetInt.CnameRecord = &ves_io_schema_dns_zone.DNSCNAMEResourceRecord{}
+											rrSet[i].TypeRecordSet = typeRecordSetInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+														typeRecordSetInt.CnameRecord.Name = v.(string)
+
+													}
+
+													if v, ok := cs["value"]; ok && !isIntfNil(v) {
+
+														typeRecordSetInt.CnameRecord.Value = v.(string)
+
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := rrSetMapStrToI["dlv_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
+
+											typeRecordSetTypeFound = true
+											typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_DlvRecord{}
+											typeRecordSetInt.DlvRecord = &ves_io_schema_dns_zone.DLVResourceRecord{}
+											rrSet[i].TypeRecordSet = typeRecordSetInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+														typeRecordSetInt.DlvRecord.Name = v.(string)
+
+													}
+
+													if v, ok := cs["values"]; ok && !isIntfNil(v) {
+
+														sl := v.([]interface{})
+														values := make([]*ves_io_schema_dns_zone.DSRecordValue, len(sl))
+														typeRecordSetInt.DlvRecord.Values = values
+														for i, set := range sl {
+															if set != nil {
+																values[i] = &ves_io_schema_dns_zone.DSRecordValue{}
+																valuesMapStrToI := set.(map[string]interface{})
+
+																digestChoiceTypeFound := false
+
+																if v, ok := valuesMapStrToI["sha1_digest"]; ok && !isIntfNil(v) && !digestChoiceTypeFound {
+
+																	digestChoiceTypeFound = true
+																	digestChoiceInt := &ves_io_schema_dns_zone.DSRecordValue_Sha1Digest{}
+																	digestChoiceInt.Sha1Digest = &ves_io_schema_dns_zone.SHA1Digest{}
+																	values[i].DigestChoice = digestChoiceInt
+
+																	sl := v.([]interface{})
+																	for _, set := range sl {
+																		if set != nil {
+																			cs := set.(map[string]interface{})
+
+																			if v, ok := cs["digest"]; ok && !isIntfNil(v) {
+
+																				digestChoiceInt.Sha1Digest.Digest = v.(string)
+
+																			}
+
+																		}
+																	}
+
+																}
+
+																if v, ok := valuesMapStrToI["sha256_digest"]; ok && !isIntfNil(v) && !digestChoiceTypeFound {
+
+																	digestChoiceTypeFound = true
+																	digestChoiceInt := &ves_io_schema_dns_zone.DSRecordValue_Sha256Digest{}
+																	digestChoiceInt.Sha256Digest = &ves_io_schema_dns_zone.SHA256Digest{}
+																	values[i].DigestChoice = digestChoiceInt
+
+																	sl := v.([]interface{})
+																	for _, set := range sl {
+																		if set != nil {
+																			cs := set.(map[string]interface{})
+
+																			if v, ok := cs["digest"]; ok && !isIntfNil(v) {
+
+																				digestChoiceInt.Sha256Digest.Digest = v.(string)
+
+																			}
+
+																		}
+																	}
+
+																}
+
+																if v, ok := valuesMapStrToI["sha384_digest"]; ok && !isIntfNil(v) && !digestChoiceTypeFound {
+
+																	digestChoiceTypeFound = true
+																	digestChoiceInt := &ves_io_schema_dns_zone.DSRecordValue_Sha384Digest{}
+																	digestChoiceInt.Sha384Digest = &ves_io_schema_dns_zone.SHA384Digest{}
+																	values[i].DigestChoice = digestChoiceInt
+
+																	sl := v.([]interface{})
+																	for _, set := range sl {
+																		if set != nil {
+																			cs := set.(map[string]interface{})
+
+																			if v, ok := cs["digest"]; ok && !isIntfNil(v) {
+
+																				digestChoiceInt.Sha384Digest.Digest = v.(string)
+
+																			}
+
+																		}
+																	}
+
+																}
+
+																if v, ok := valuesMapStrToI["ds_key_algorithm"]; ok && !isIntfNil(v) {
+
+																	values[i].DsKeyAlgorithm = ves_io_schema_dns_zone.DSKeyAlgorithm(ves_io_schema_dns_zone.DSKeyAlgorithm_value[v.(string)])
+
+																}
+
+																if w, ok := valuesMapStrToI["key_tag"]; ok && !isIntfNil(w) {
+																	values[i].KeyTag = uint32(w.(int))
+																}
+
+															}
+														}
+
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := rrSetMapStrToI["ds_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
+
+											typeRecordSetTypeFound = true
+											typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_DsRecord{}
+											typeRecordSetInt.DsRecord = &ves_io_schema_dns_zone.DNSDSRecord{}
+											rrSet[i].TypeRecordSet = typeRecordSetInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+														typeRecordSetInt.DsRecord.Name = v.(string)
+
+													}
+
+													if v, ok := cs["values"]; ok && !isIntfNil(v) {
+
+														sl := v.([]interface{})
+														values := make([]*ves_io_schema_dns_zone.DSRecordValue, len(sl))
+														typeRecordSetInt.DsRecord.Values = values
+														for i, set := range sl {
+															if set != nil {
+																values[i] = &ves_io_schema_dns_zone.DSRecordValue{}
+																valuesMapStrToI := set.(map[string]interface{})
+
+																digestChoiceTypeFound := false
+
+																if v, ok := valuesMapStrToI["sha1_digest"]; ok && !isIntfNil(v) && !digestChoiceTypeFound {
+
+																	digestChoiceTypeFound = true
+																	digestChoiceInt := &ves_io_schema_dns_zone.DSRecordValue_Sha1Digest{}
+																	digestChoiceInt.Sha1Digest = &ves_io_schema_dns_zone.SHA1Digest{}
+																	values[i].DigestChoice = digestChoiceInt
+
+																	sl := v.([]interface{})
+																	for _, set := range sl {
+																		if set != nil {
+																			cs := set.(map[string]interface{})
+
+																			if v, ok := cs["digest"]; ok && !isIntfNil(v) {
+
+																				digestChoiceInt.Sha1Digest.Digest = v.(string)
+
+																			}
+
+																		}
+																	}
+
+																}
+
+																if v, ok := valuesMapStrToI["sha256_digest"]; ok && !isIntfNil(v) && !digestChoiceTypeFound {
+
+																	digestChoiceTypeFound = true
+																	digestChoiceInt := &ves_io_schema_dns_zone.DSRecordValue_Sha256Digest{}
+																	digestChoiceInt.Sha256Digest = &ves_io_schema_dns_zone.SHA256Digest{}
+																	values[i].DigestChoice = digestChoiceInt
+
+																	sl := v.([]interface{})
+																	for _, set := range sl {
+																		if set != nil {
+																			cs := set.(map[string]interface{})
+
+																			if v, ok := cs["digest"]; ok && !isIntfNil(v) {
+
+																				digestChoiceInt.Sha256Digest.Digest = v.(string)
+
+																			}
+
+																		}
+																	}
+
+																}
+
+																if v, ok := valuesMapStrToI["sha384_digest"]; ok && !isIntfNil(v) && !digestChoiceTypeFound {
+
+																	digestChoiceTypeFound = true
+																	digestChoiceInt := &ves_io_schema_dns_zone.DSRecordValue_Sha384Digest{}
+																	digestChoiceInt.Sha384Digest = &ves_io_schema_dns_zone.SHA384Digest{}
+																	values[i].DigestChoice = digestChoiceInt
+
+																	sl := v.([]interface{})
+																	for _, set := range sl {
+																		if set != nil {
+																			cs := set.(map[string]interface{})
+
+																			if v, ok := cs["digest"]; ok && !isIntfNil(v) {
+
+																				digestChoiceInt.Sha384Digest.Digest = v.(string)
+
+																			}
+
+																		}
+																	}
+
+																}
+
+																if v, ok := valuesMapStrToI["ds_key_algorithm"]; ok && !isIntfNil(v) {
+
+																	values[i].DsKeyAlgorithm = ves_io_schema_dns_zone.DSKeyAlgorithm(ves_io_schema_dns_zone.DSKeyAlgorithm_value[v.(string)])
+
+																}
+
+																if w, ok := valuesMapStrToI["key_tag"]; ok && !isIntfNil(w) {
+																	values[i].KeyTag = uint32(w.(int))
+																}
+
+															}
+														}
+
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := rrSetMapStrToI["eui48_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
+
+											typeRecordSetTypeFound = true
+											typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_Eui48Record{}
+											typeRecordSetInt.Eui48Record = &ves_io_schema_dns_zone.DNSEUI48ResourceRecord{}
+											rrSet[i].TypeRecordSet = typeRecordSetInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+														typeRecordSetInt.Eui48Record.Name = v.(string)
+
+													}
+
+													if v, ok := cs["value"]; ok && !isIntfNil(v) {
+
+														typeRecordSetInt.Eui48Record.Value = v.(string)
+
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := rrSetMapStrToI["eui64_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
+
+											typeRecordSetTypeFound = true
+											typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_Eui64Record{}
+											typeRecordSetInt.Eui64Record = &ves_io_schema_dns_zone.DNSEUI64ResourceRecord{}
+											rrSet[i].TypeRecordSet = typeRecordSetInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+														typeRecordSetInt.Eui64Record.Name = v.(string)
+
+													}
+
+													if v, ok := cs["value"]; ok && !isIntfNil(v) {
+
+														typeRecordSetInt.Eui64Record.Value = v.(string)
+
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := rrSetMapStrToI["lb_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
+
+											typeRecordSetTypeFound = true
+											typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_LbRecord{}
+											typeRecordSetInt.LbRecord = &ves_io_schema_dns_zone.DNSLBResourceRecord{}
+											rrSet[i].TypeRecordSet = typeRecordSetInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+														typeRecordSetInt.LbRecord.Name = v.(string)
+
+													}
+
+													if v, ok := cs["value"]; ok && !isIntfNil(v) {
+
+														sl := v.([]interface{})
+														valueInt := &ves_io_schema_views.ObjectRefType{}
+														typeRecordSetInt.LbRecord.Value = valueInt
+
+														for _, set := range sl {
+															if set != nil {
+																vMapToStrVal := set.(map[string]interface{})
+																if val, ok := vMapToStrVal["name"]; ok && !isIntfNil(v) {
+																	valueInt.Name = val.(string)
+																}
+																if val, ok := vMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+																	valueInt.Namespace = val.(string)
+																}
+
+																if val, ok := vMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+																	valueInt.Tenant = val.(string)
+																}
+															}
+														}
+
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := rrSetMapStrToI["loc_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
+
+											typeRecordSetTypeFound = true
+											typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_LocRecord{}
+											typeRecordSetInt.LocRecord = &ves_io_schema_dns_zone.DNSLOCResourceRecord{}
+											rrSet[i].TypeRecordSet = typeRecordSetInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+														typeRecordSetInt.LocRecord.Name = v.(string)
+
+													}
+
+													if v, ok := cs["values"]; ok && !isIntfNil(v) {
+
+														sl := v.([]interface{})
+														values := make([]*ves_io_schema_dns_zone.LOCValue, len(sl))
+														typeRecordSetInt.LocRecord.Values = values
+														for i, set := range sl {
+															if set != nil {
+																values[i] = &ves_io_schema_dns_zone.LOCValue{}
+																valuesMapStrToI := set.(map[string]interface{})
+
+																if w, ok := valuesMapStrToI["altitude"]; ok && !isIntfNil(w) {
+																	values[i].Altitude = float32(w.(float64))
+																}
+
+																if w, ok := valuesMapStrToI["horizontal_precision"]; ok && !isIntfNil(w) {
+																	values[i].HorizontalPrecision = float32(w.(float64))
+																}
+
+																if w, ok := valuesMapStrToI["latitude_degree"]; ok && !isIntfNil(w) {
+																	values[i].LatitudeDegree = int32(w.(int))
+																}
+
+																if v, ok := valuesMapStrToI["latitude_hemisphere"]; ok && !isIntfNil(v) {
+
+																	values[i].LatitudeHemisphere = ves_io_schema_dns_zone.LatitudeHemisphere(ves_io_schema_dns_zone.LatitudeHemisphere_value[v.(string)])
+
+																}
+
+																if w, ok := valuesMapStrToI["latitude_minute"]; ok && !isIntfNil(w) {
+																	values[i].LatitudeMinute = int32(w.(int))
+																}
+
+																if w, ok := valuesMapStrToI["latitude_second"]; ok && !isIntfNil(w) {
+																	values[i].LatitudeSecond = float32(w.(float64))
+																}
+
+																if w, ok := valuesMapStrToI["location_diameter"]; ok && !isIntfNil(w) {
+																	values[i].LocationDiameter = float32(w.(float64))
+																}
+
+																if w, ok := valuesMapStrToI["longitude_degree"]; ok && !isIntfNil(w) {
+																	values[i].LongitudeDegree = int32(w.(int))
+																}
+
+																if v, ok := valuesMapStrToI["longitude_hemisphere"]; ok && !isIntfNil(v) {
+
+																	values[i].LongitudeHemisphere = ves_io_schema_dns_zone.LongitudeHemisphere(ves_io_schema_dns_zone.LongitudeHemisphere_value[v.(string)])
+
+																}
+
+																if w, ok := valuesMapStrToI["longitude_minute"]; ok && !isIntfNil(w) {
+																	values[i].LongitudeMinute = int32(w.(int))
+																}
+
+																if w, ok := valuesMapStrToI["longitude_second"]; ok && !isIntfNil(w) {
+																	values[i].LongitudeSecond = float32(w.(float64))
+																}
+
+																if w, ok := valuesMapStrToI["vertical_precision"]; ok && !isIntfNil(w) {
+																	values[i].VerticalPrecision = float32(w.(float64))
+																}
+
+															}
+														}
+
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := rrSetMapStrToI["mx_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
+
+											typeRecordSetTypeFound = true
+											typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_MxRecord{}
+											typeRecordSetInt.MxRecord = &ves_io_schema_dns_zone.DNSMXResourceRecord{}
+											rrSet[i].TypeRecordSet = typeRecordSetInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+														typeRecordSetInt.MxRecord.Name = v.(string)
+
+													}
+
+													if v, ok := cs["values"]; ok && !isIntfNil(v) {
+
+														sl := v.([]interface{})
+														values := make([]*ves_io_schema_dns_zone.MailExchanger, len(sl))
+														typeRecordSetInt.MxRecord.Values = values
+														for i, set := range sl {
+															if set != nil {
+																values[i] = &ves_io_schema_dns_zone.MailExchanger{}
+																valuesMapStrToI := set.(map[string]interface{})
+
+																if w, ok := valuesMapStrToI["domain"]; ok && !isIntfNil(w) {
+																	values[i].Domain = w.(string)
+																}
+
+																if w, ok := valuesMapStrToI["priority"]; ok && !isIntfNil(w) {
+																	values[i].Priority = uint32(w.(int))
+																}
+
+															}
+														}
+
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := rrSetMapStrToI["naptr_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
+
+											typeRecordSetTypeFound = true
+											typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_NaptrRecord{}
+											typeRecordSetInt.NaptrRecord = &ves_io_schema_dns_zone.DNSNAPTRResourceRecord{}
+											rrSet[i].TypeRecordSet = typeRecordSetInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+														typeRecordSetInt.NaptrRecord.Name = v.(string)
+
+													}
+
+													if v, ok := cs["values"]; ok && !isIntfNil(v) {
+
+														sl := v.([]interface{})
+														values := make([]*ves_io_schema_dns_zone.NAPTRValue, len(sl))
+														typeRecordSetInt.NaptrRecord.Values = values
+														for i, set := range sl {
+															if set != nil {
+																values[i] = &ves_io_schema_dns_zone.NAPTRValue{}
+																valuesMapStrToI := set.(map[string]interface{})
+
+																if w, ok := valuesMapStrToI["flags"]; ok && !isIntfNil(w) {
+																	values[i].Flags = w.(string)
+																}
+
+																if w, ok := valuesMapStrToI["order"]; ok && !isIntfNil(w) {
+																	values[i].Order = uint32(w.(int))
+																}
+
+																if w, ok := valuesMapStrToI["preference"]; ok && !isIntfNil(w) {
+																	values[i].Preference = uint32(w.(int))
+																}
+
+																if w, ok := valuesMapStrToI["regexp"]; ok && !isIntfNil(w) {
+																	values[i].Regexp = w.(string)
+																}
+
+																if w, ok := valuesMapStrToI["replacement"]; ok && !isIntfNil(w) {
+																	values[i].Replacement = w.(string)
+																}
+
+																if w, ok := valuesMapStrToI["service"]; ok && !isIntfNil(w) {
+																	values[i].Service = w.(string)
+																}
+
+															}
+														}
+
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := rrSetMapStrToI["ns_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
+
+											typeRecordSetTypeFound = true
+											typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_NsRecord{}
+											typeRecordSetInt.NsRecord = &ves_io_schema_dns_zone.DNSNSResourceRecord{}
+											rrSet[i].TypeRecordSet = typeRecordSetInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+														typeRecordSetInt.NsRecord.Name = v.(string)
+
+													}
+
+													if v, ok := cs["values"]; ok && !isIntfNil(v) {
+
+														ls := make([]string, len(v.([]interface{})))
+														for i, v := range v.([]interface{}) {
+															ls[i] = v.(string)
+														}
+														typeRecordSetInt.NsRecord.Values = ls
+
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := rrSetMapStrToI["ptr_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
+
+											typeRecordSetTypeFound = true
+											typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_PtrRecord{}
+											typeRecordSetInt.PtrRecord = &ves_io_schema_dns_zone.DNSPTRResourceRecord{}
+											rrSet[i].TypeRecordSet = typeRecordSetInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+														typeRecordSetInt.PtrRecord.Name = v.(string)
+
+													}
+
+													if v, ok := cs["values"]; ok && !isIntfNil(v) {
+
+														ls := make([]string, len(v.([]interface{})))
+														for i, v := range v.([]interface{}) {
+															ls[i] = v.(string)
+														}
+														typeRecordSetInt.PtrRecord.Values = ls
+
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := rrSetMapStrToI["srv_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
+
+											typeRecordSetTypeFound = true
+											typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_SrvRecord{}
+											typeRecordSetInt.SrvRecord = &ves_io_schema_dns_zone.DNSSRVResourceRecord{}
+											rrSet[i].TypeRecordSet = typeRecordSetInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+														typeRecordSetInt.SrvRecord.Name = v.(string)
+
+													}
+
+													if v, ok := cs["values"]; ok && !isIntfNil(v) {
+
+														sl := v.([]interface{})
+														values := make([]*ves_io_schema_dns_zone.SRVService, len(sl))
+														typeRecordSetInt.SrvRecord.Values = values
+														for i, set := range sl {
+															if set != nil {
+																values[i] = &ves_io_schema_dns_zone.SRVService{}
+																valuesMapStrToI := set.(map[string]interface{})
+
+																if w, ok := valuesMapStrToI["port"]; ok && !isIntfNil(w) {
+																	values[i].Port = uint32(w.(int))
+																}
+
+																if w, ok := valuesMapStrToI["priority"]; ok && !isIntfNil(w) {
+																	values[i].Priority = uint32(w.(int))
+																}
+
+																if w, ok := valuesMapStrToI["target"]; ok && !isIntfNil(w) {
+																	values[i].Target = w.(string)
+																}
+
+																if w, ok := valuesMapStrToI["weight"]; ok && !isIntfNil(w) {
+																	values[i].Weight = uint32(w.(int))
+																}
+
+															}
+														}
+
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := rrSetMapStrToI["sshfp_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
+
+											typeRecordSetTypeFound = true
+											typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_SshfpRecord{}
+											typeRecordSetInt.SshfpRecord = &ves_io_schema_dns_zone.SSHFPResourceRecord{}
+											rrSet[i].TypeRecordSet = typeRecordSetInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+														typeRecordSetInt.SshfpRecord.Name = v.(string)
+
+													}
+
+													if v, ok := cs["values"]; ok && !isIntfNil(v) {
+
+														sl := v.([]interface{})
+														values := make([]*ves_io_schema_dns_zone.SSHFPRecordValue, len(sl))
+														typeRecordSetInt.SshfpRecord.Values = values
+														for i, set := range sl {
+															if set != nil {
+																values[i] = &ves_io_schema_dns_zone.SSHFPRecordValue{}
+																valuesMapStrToI := set.(map[string]interface{})
+
+																if v, ok := valuesMapStrToI["algorithm"]; ok && !isIntfNil(v) {
+
+																	values[i].Algorithm = ves_io_schema_dns_zone.SSHFPAlgorithm(ves_io_schema_dns_zone.SSHFPAlgorithm_value[v.(string)])
+
+																}
+
+																if w, ok := valuesMapStrToI["fingerprint"]; ok && !isIntfNil(w) {
+																	values[i].Fingerprint = w.(string)
+																}
+
+																fingerprintTypeTypeFound := false
+
+																if v, ok := valuesMapStrToI["sha1_fingerprint"]; ok && !isIntfNil(v) && !fingerprintTypeTypeFound {
+
+																	fingerprintTypeTypeFound = true
+																	fingerprintTypeInt := &ves_io_schema_dns_zone.SSHFPRecordValue_Sha1Fingerprint{}
+																	fingerprintTypeInt.Sha1Fingerprint = &ves_io_schema_dns_zone.SHA1Fingerprint{}
+																	values[i].FingerprintType = fingerprintTypeInt
+
+																	sl := v.([]interface{})
+																	for _, set := range sl {
+																		if set != nil {
+																			cs := set.(map[string]interface{})
+
+																			if v, ok := cs["fingerprint"]; ok && !isIntfNil(v) {
+
+																				fingerprintTypeInt.Sha1Fingerprint.Fingerprint = v.(string)
+
+																			}
+
+																		}
+																	}
+
+																}
+
+																if v, ok := valuesMapStrToI["sha256_fingerprint"]; ok && !isIntfNil(v) && !fingerprintTypeTypeFound {
+
+																	fingerprintTypeTypeFound = true
+																	fingerprintTypeInt := &ves_io_schema_dns_zone.SSHFPRecordValue_Sha256Fingerprint{}
+																	fingerprintTypeInt.Sha256Fingerprint = &ves_io_schema_dns_zone.SHA256Fingerprint{}
+																	values[i].FingerprintType = fingerprintTypeInt
+
+																	sl := v.([]interface{})
+																	for _, set := range sl {
+																		if set != nil {
+																			cs := set.(map[string]interface{})
+
+																			if v, ok := cs["fingerprint"]; ok && !isIntfNil(v) {
+
+																				fingerprintTypeInt.Sha256Fingerprint.Fingerprint = v.(string)
+
+																			}
+
+																		}
+																	}
+
+																}
+
+																if v, ok := valuesMapStrToI["fingerprinttype"]; ok && !isIntfNil(v) {
+
+																	values[i].Fingerprinttype = ves_io_schema_dns_zone.SSHFPFingerprintType(ves_io_schema_dns_zone.SSHFPFingerprintType_value[v.(string)])
+
+																}
+
+															}
+														}
+
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := rrSetMapStrToI["tlsa_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
+
+											typeRecordSetTypeFound = true
+											typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_TlsaRecord{}
+											typeRecordSetInt.TlsaRecord = &ves_io_schema_dns_zone.TLSAResourceRecord{}
+											rrSet[i].TypeRecordSet = typeRecordSetInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+														typeRecordSetInt.TlsaRecord.Name = v.(string)
+
+													}
+
+													if v, ok := cs["values"]; ok && !isIntfNil(v) {
+
+														sl := v.([]interface{})
+														values := make([]*ves_io_schema_dns_zone.TLSARecordValue, len(sl))
+														typeRecordSetInt.TlsaRecord.Values = values
+														for i, set := range sl {
+															if set != nil {
+																values[i] = &ves_io_schema_dns_zone.TLSARecordValue{}
+																valuesMapStrToI := set.(map[string]interface{})
+
+																if w, ok := valuesMapStrToI["certificate_association_data"]; ok && !isIntfNil(w) {
+																	values[i].CertificateAssociationData = w.(string)
+																}
+
+																if v, ok := valuesMapStrToI["certificate_usage"]; ok && !isIntfNil(v) {
+
+																	values[i].CertificateUsage = ves_io_schema_dns_zone.TLSARecordCertificateUsage(ves_io_schema_dns_zone.TLSARecordCertificateUsage_value[v.(string)])
+
+																}
+
+																if v, ok := valuesMapStrToI["matching_type"]; ok && !isIntfNil(v) {
+
+																	values[i].MatchingType = ves_io_schema_dns_zone.TLSARecordMatchingType(ves_io_schema_dns_zone.TLSARecordMatchingType_value[v.(string)])
+
+																}
+
+																if v, ok := valuesMapStrToI["selector"]; ok && !isIntfNil(v) {
+
+																	values[i].Selector = ves_io_schema_dns_zone.TLSARecordCSelector(ves_io_schema_dns_zone.TLSARecordCSelector_value[v.(string)])
+
+																}
+
+															}
+														}
+
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := rrSetMapStrToI["txt_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
+
+											typeRecordSetTypeFound = true
+											typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_TxtRecord{}
+											typeRecordSetInt.TxtRecord = &ves_io_schema_dns_zone.DNSTXTResourceRecord{}
+											rrSet[i].TypeRecordSet = typeRecordSetInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+														typeRecordSetInt.TxtRecord.Name = v.(string)
+
+													}
+
+													if v, ok := cs["values"]; ok && !isIntfNil(v) {
+
+														ls := make([]string, len(v.([]interface{})))
+														for i, v := range v.([]interface{}) {
+															ls[i] = v.(string)
+														}
+														typeRecordSetInt.TxtRecord.Values = ls
+
+													}
+
+												}
+											}
+
+										}
+
+									}
+								}
+
+							}
+
+						}
+					}
+
+				}
+
+				soaRecordParametersChoiceTypeFound := false
+
+				if v, ok := cs["default_soa_parameters"]; ok && !isIntfNil(v) && !soaRecordParametersChoiceTypeFound {
+
+					soaRecordParametersChoiceTypeFound = true
+
+					if v.(bool) {
+						soaRecordParametersChoiceInt := &ves_io_schema_dns_zone.PrimaryDNSCreateSpecType_DefaultSoaParameters{}
+						soaRecordParametersChoiceInt.DefaultSoaParameters = &ves_io_schema.Empty{}
+						dnsTypeInt.Primary.SoaRecordParametersChoice = soaRecordParametersChoiceInt
+					}
+
+				}
+
+				if v, ok := cs["soa_parameters"]; ok && !isIntfNil(v) && !soaRecordParametersChoiceTypeFound {
+
+					soaRecordParametersChoiceTypeFound = true
+					soaRecordParametersChoiceInt := &ves_io_schema_dns_zone.PrimaryDNSCreateSpecType_SoaParameters{}
+					soaRecordParametersChoiceInt.SoaParameters = &ves_io_schema_dns_zone.SOARecordParameterConfig{}
 					dnsTypeInt.Primary.SoaRecordParametersChoice = soaRecordParametersChoiceInt
-				}
 
-			}
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
 
-			if v, ok := cs["soa_parameters"]; ok && !isIntfNil(v) && !soaRecordParametersChoiceTypeFound {
+							if v, ok := cs["expire"]; ok && !isIntfNil(v) {
 
-				soaRecordParametersChoiceTypeFound = true
-				soaRecordParametersChoiceInt := &ves_io_schema_dns_zone.PrimaryDNSCreateSpecType_SoaParameters{}
-				soaRecordParametersChoiceInt.SoaParameters = &ves_io_schema_dns_zone.SOARecordParameterConfig{}
-				dnsTypeInt.Primary.SoaRecordParametersChoice = soaRecordParametersChoiceInt
+								soaRecordParametersChoiceInt.SoaParameters.Expire = uint32(v.(int))
 
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
+							}
 
-					if v, ok := cs["expire"]; ok && !isIntfNil(v) {
+							if v, ok := cs["negative_ttl"]; ok && !isIntfNil(v) {
 
-						soaRecordParametersChoiceInt.SoaParameters.Expire = uint32(v.(int))
+								soaRecordParametersChoiceInt.SoaParameters.NegativeTtl = uint32(v.(int))
 
-					}
+							}
 
-					if v, ok := cs["negative_ttl"]; ok && !isIntfNil(v) {
+							if v, ok := cs["refresh"]; ok && !isIntfNil(v) {
 
-						soaRecordParametersChoiceInt.SoaParameters.NegativeTtl = uint32(v.(int))
+								soaRecordParametersChoiceInt.SoaParameters.Refresh = uint32(v.(int))
 
-					}
+							}
 
-					if v, ok := cs["refresh"]; ok && !isIntfNil(v) {
+							if v, ok := cs["retry"]; ok && !isIntfNil(v) {
 
-						soaRecordParametersChoiceInt.SoaParameters.Refresh = uint32(v.(int))
+								soaRecordParametersChoiceInt.SoaParameters.Retry = uint32(v.(int))
 
-					}
+							}
 
-					if v, ok := cs["retry"]; ok && !isIntfNil(v) {
+							if v, ok := cs["ttl"]; ok && !isIntfNil(v) {
 
-						soaRecordParametersChoiceInt.SoaParameters.Retry = uint32(v.(int))
+								soaRecordParametersChoiceInt.SoaParameters.Ttl = uint32(v.(int))
 
-					}
+							}
 
-					if v, ok := cs["ttl"]; ok && !isIntfNil(v) {
-
-						soaRecordParametersChoiceInt.SoaParameters.Ttl = uint32(v.(int))
-
+						}
 					}
 
 				}
 
 			}
-
 		}
 
 	}
@@ -7723,202 +8213,216 @@ func resourceVolterraDnsZoneUpdate(d *schema.ResourceData, meta interface{}) err
 		dnsTypeInt.Secondary = &ves_io_schema_dns_zone.SecondaryDNSCreateSpecType{}
 		updateSpec.DnsType = dnsTypeInt
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
+			if set != nil {
+				cs := set.(map[string]interface{})
 
-			if v, ok := cs["primary_servers"]; ok && !isIntfNil(v) {
+				if v, ok := cs["primary_servers"]; ok && !isIntfNil(v) {
 
-				ls := make([]string, len(v.([]interface{})))
-				for i, v := range v.([]interface{}) {
-					ls[i] = v.(string)
-				}
-				dnsTypeInt.Secondary.PrimaryServers = ls
-
-			}
-
-			if v, ok := cs["tsig_key_algorithm"]; ok && !isIntfNil(v) {
-
-				dnsTypeInt.Secondary.TsigKeyAlgorithm = ves_io_schema_dns_zone.TSIGKeyAlgorithm(ves_io_schema_dns_zone.TSIGKeyAlgorithm_value[v.(string)])
-
-			}
-
-			if v, ok := cs["tsig_key_name"]; ok && !isIntfNil(v) {
-
-				dnsTypeInt.Secondary.TsigKeyName = v.(string)
-
-			}
-
-			if v, ok := cs["tsig_key_value"]; ok && !isIntfNil(v) {
-
-				sl := v.(*schema.Set).List()
-				tsigKeyValue := &ves_io_schema.SecretType{}
-				dnsTypeInt.Secondary.TsigKeyValue = tsigKeyValue
-				for _, set := range sl {
-					tsigKeyValueMapStrToI := set.(map[string]interface{})
-
-					if v, ok := tsigKeyValueMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
-
-						sl := v.(*schema.Set).List()
-						blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
-						tsigKeyValue.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
-						for _, set := range sl {
-							blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
-
-							if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
-								blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
-							}
-
-							if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
-								blindfoldSecretInfoInternal.Location = w.(string)
-							}
-
-							if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
-								blindfoldSecretInfoInternal.StoreProvider = w.(string)
-							}
-
-						}
-
+					ls := make([]string, len(v.([]interface{})))
+					for i, v := range v.([]interface{}) {
+						ls[i] = v.(string)
 					}
-
-					if v, ok := tsigKeyValueMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
-
-						tsigKeyValue.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
-
-					}
-
-					secretInfoOneofTypeFound := false
-
-					if v, ok := tsigKeyValueMapStrToI["blindfold_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
-
-						secretInfoOneofTypeFound = true
-						secretInfoOneofInt := &ves_io_schema.SecretType_BlindfoldSecretInfo{}
-						secretInfoOneofInt.BlindfoldSecretInfo = &ves_io_schema.BlindfoldSecretInfoType{}
-						tsigKeyValue.SecretInfoOneof = secretInfoOneofInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["decryption_provider"]; ok && !isIntfNil(v) {
-
-								secretInfoOneofInt.BlindfoldSecretInfo.DecryptionProvider = v.(string)
-
-							}
-
-							if v, ok := cs["location"]; ok && !isIntfNil(v) {
-
-								secretInfoOneofInt.BlindfoldSecretInfo.Location = v.(string)
-
-							}
-
-							if v, ok := cs["store_provider"]; ok && !isIntfNil(v) {
-
-								secretInfoOneofInt.BlindfoldSecretInfo.StoreProvider = v.(string)
-
-							}
-
-						}
-
-					}
-
-					if v, ok := tsigKeyValueMapStrToI["clear_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
-
-						secretInfoOneofTypeFound = true
-						secretInfoOneofInt := &ves_io_schema.SecretType_ClearSecretInfo{}
-						secretInfoOneofInt.ClearSecretInfo = &ves_io_schema.ClearSecretInfoType{}
-						tsigKeyValue.SecretInfoOneof = secretInfoOneofInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["provider"]; ok && !isIntfNil(v) {
-
-								secretInfoOneofInt.ClearSecretInfo.Provider = v.(string)
-
-							}
-
-							if v, ok := cs["url"]; ok && !isIntfNil(v) {
-
-								secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
-
-							}
-
-						}
-
-					}
-
-					if v, ok := tsigKeyValueMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
-
-						secretInfoOneofTypeFound = true
-						secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
-						secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
-						tsigKeyValue.SecretInfoOneof = secretInfoOneofInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["key"]; ok && !isIntfNil(v) {
-
-								secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
-
-							}
-
-							if v, ok := cs["location"]; ok && !isIntfNil(v) {
-
-								secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
-
-							}
-
-							if v, ok := cs["provider"]; ok && !isIntfNil(v) {
-
-								secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
-
-							}
-
-							if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
-
-								secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
-
-							}
-
-							if v, ok := cs["version"]; ok && !isIntfNil(v) {
-
-								secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
-
-							}
-
-						}
-
-					}
-
-					if v, ok := tsigKeyValueMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
-
-						secretInfoOneofTypeFound = true
-						secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
-						secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
-						tsigKeyValue.SecretInfoOneof = secretInfoOneofInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-								secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
-
-							}
-
-						}
-
-					}
+					dnsTypeInt.Secondary.PrimaryServers = ls
 
 				}
 
-			}
+				if v, ok := cs["tsig_key_algorithm"]; ok && !isIntfNil(v) {
 
+					dnsTypeInt.Secondary.TsigKeyAlgorithm = ves_io_schema_dns_zone.TSIGKeyAlgorithm(ves_io_schema_dns_zone.TSIGKeyAlgorithm_value[v.(string)])
+
+				}
+
+				if v, ok := cs["tsig_key_name"]; ok && !isIntfNil(v) {
+
+					dnsTypeInt.Secondary.TsigKeyName = v.(string)
+
+				}
+
+				if v, ok := cs["tsig_key_value"]; ok && !isIntfNil(v) {
+
+					sl := v.([]interface{})
+					tsigKeyValue := &ves_io_schema.SecretType{}
+					dnsTypeInt.Secondary.TsigKeyValue = tsigKeyValue
+					for _, set := range sl {
+						if set != nil {
+							tsigKeyValueMapStrToI := set.(map[string]interface{})
+
+							if v, ok := tsigKeyValueMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
+								tsigKeyValue.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
+								for _, set := range sl {
+									if set != nil {
+										blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
+
+										if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
+											blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
+										}
+
+										if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
+											blindfoldSecretInfoInternal.Location = w.(string)
+										}
+
+										if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
+											blindfoldSecretInfoInternal.StoreProvider = w.(string)
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := tsigKeyValueMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
+
+								tsigKeyValue.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+							}
+
+							secretInfoOneofTypeFound := false
+
+							if v, ok := tsigKeyValueMapStrToI["blindfold_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+								secretInfoOneofTypeFound = true
+								secretInfoOneofInt := &ves_io_schema.SecretType_BlindfoldSecretInfo{}
+								secretInfoOneofInt.BlindfoldSecretInfo = &ves_io_schema.BlindfoldSecretInfoType{}
+								tsigKeyValue.SecretInfoOneof = secretInfoOneofInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["decryption_provider"]; ok && !isIntfNil(v) {
+
+											secretInfoOneofInt.BlindfoldSecretInfo.DecryptionProvider = v.(string)
+
+										}
+
+										if v, ok := cs["location"]; ok && !isIntfNil(v) {
+
+											secretInfoOneofInt.BlindfoldSecretInfo.Location = v.(string)
+
+										}
+
+										if v, ok := cs["store_provider"]; ok && !isIntfNil(v) {
+
+											secretInfoOneofInt.BlindfoldSecretInfo.StoreProvider = v.(string)
+
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := tsigKeyValueMapStrToI["clear_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+								secretInfoOneofTypeFound = true
+								secretInfoOneofInt := &ves_io_schema.SecretType_ClearSecretInfo{}
+								secretInfoOneofInt.ClearSecretInfo = &ves_io_schema.ClearSecretInfoType{}
+								tsigKeyValue.SecretInfoOneof = secretInfoOneofInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+
+											secretInfoOneofInt.ClearSecretInfo.Provider = v.(string)
+
+										}
+
+										if v, ok := cs["url"]; ok && !isIntfNil(v) {
+
+											secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := tsigKeyValueMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+								secretInfoOneofTypeFound = true
+								secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
+								secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
+								tsigKeyValue.SecretInfoOneof = secretInfoOneofInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["key"]; ok && !isIntfNil(v) {
+
+											secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
+										}
+
+										if v, ok := cs["location"]; ok && !isIntfNil(v) {
+
+											secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
+										}
+
+										if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+
+											secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
+										}
+
+										if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
+
+											secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+										}
+
+										if v, ok := cs["version"]; ok && !isIntfNil(v) {
+
+											secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := tsigKeyValueMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+								secretInfoOneofTypeFound = true
+								secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
+								secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
+								tsigKeyValue.SecretInfoOneof = secretInfoOneofInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+											secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
+
+										}
+
+									}
+								}
+
+							}
+
+						}
+					}
+
+				}
+
+			}
 		}
 
 	}

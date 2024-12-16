@@ -76,6 +76,18 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
+	if fdrInfos, err := m.GetApiDiscoveryDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetApiDiscoveryDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetCrawlerRefDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetCrawlerRefDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
 	if fdrInfos, err := m.GetSelectedCodeBaseIntegrationsDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetSelectedCodeBaseIntegrationsDRefInfo() FAILED")
 	} else {
@@ -132,6 +144,104 @@ func (m *GlobalSpecType) GetApiDefinitionRefDBEntries(ctx context.Context, d db.
 	}
 	ref := &ves_io_schema.ObjectRefType{
 		Kind:      "api_definition.Object",
+		Tenant:    vref.Tenant,
+		Namespace: vref.Namespace,
+		Name:      vref.Name,
+	}
+	refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+	if err != nil {
+		return nil, errors.Wrap(err, "Getting referred entry")
+	}
+	if refdEnt != nil {
+		entries = append(entries, refdEnt)
+	}
+
+	return entries, nil
+}
+
+func (m *GlobalSpecType) GetApiDiscoveryDRefInfo() ([]db.DRefInfo, error) {
+
+	vref := m.GetApiDiscovery()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("api_discovery.Object")
+	dri := db.DRefInfo{
+		RefdType:   "api_discovery.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "api_discovery",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+
+}
+
+// GetApiDiscoveryDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *GlobalSpecType) GetApiDiscoveryDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "api_discovery.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: api_discovery")
+	}
+
+	vref := m.GetApiDiscovery()
+	if vref == nil {
+		return nil, nil
+	}
+	ref := &ves_io_schema.ObjectRefType{
+		Kind:      "api_discovery.Object",
+		Tenant:    vref.Tenant,
+		Namespace: vref.Namespace,
+		Name:      vref.Name,
+	}
+	refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+	if err != nil {
+		return nil, errors.Wrap(err, "Getting referred entry")
+	}
+	if refdEnt != nil {
+		entries = append(entries, refdEnt)
+	}
+
+	return entries, nil
+}
+
+func (m *GlobalSpecType) GetCrawlerRefDRefInfo() ([]db.DRefInfo, error) {
+
+	vref := m.GetCrawlerRef()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("api_crawler.Object")
+	dri := db.DRefInfo{
+		RefdType:   "api_crawler.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "crawler_ref",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+
+}
+
+// GetCrawlerRefDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *GlobalSpecType) GetCrawlerRefDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "api_crawler.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: api_crawler")
+	}
+
+	vref := m.GetCrawlerRef()
+	if vref == nil {
+		return nil, nil
+	}
+	ref := &ves_io_schema.ObjectRefType{
+		Kind:      "api_crawler.Object",
 		Tenant:    vref.Tenant,
 		Namespace: vref.Namespace,
 		Name:      vref.Name,
@@ -294,6 +404,24 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["api_discovery"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("api_discovery"))
+		if err := fv(ctx, m.GetApiDiscovery(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["crawler_ref"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("crawler_ref"))
+		if err := fv(ctx, m.GetCrawlerRef(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["internal_api_groups_builders"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("internal_api_groups_builders"))
@@ -350,6 +478,10 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v.FldValidators["sensitive_data_policy_ref"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	v.FldValidators["selected_code_base_integrations"] = ves_io_schema_views_common_waf.CodeBaseIntegrationSelectionValidator().Validate
+
+	v.FldValidators["crawler_ref"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
+
+	v.FldValidators["api_discovery"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	v.FldValidators["view_internal"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 

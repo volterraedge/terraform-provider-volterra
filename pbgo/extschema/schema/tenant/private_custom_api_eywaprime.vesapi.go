@@ -35,18 +35,18 @@ type CustomPrivateAPIEywaprimeGrpcClient struct {
 }
 
 func (c *CustomPrivateAPIEywaprimeGrpcClient) doRPCDeactivateTenant(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
-	req := &DeactivateTenantRequest{}
+	req := &PrivateDeactivateTenantRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
-		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.tenant.DeactivateTenantRequest", yamlReq)
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.tenant.PrivateDeactivateTenantRequest", yamlReq)
 	}
 	rsp, err := c.grpcClient.DeactivateTenant(ctx, req, opts...)
 	return rsp, err
 }
 
 func (c *CustomPrivateAPIEywaprimeGrpcClient) doRPCRestrictedDeactivateTenant(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
-	req := &DeactivateTenantRequest{}
+	req := &PrivateDeactivateTenantRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
-		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.tenant.DeactivateTenantRequest", yamlReq)
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.tenant.PrivateDeactivateTenantRequest", yamlReq)
 	}
 	rsp, err := c.grpcClient.RestrictedDeactivateTenant(ctx, req, opts...)
 	return rsp, err
@@ -106,9 +106,9 @@ func (c *CustomPrivateAPIEywaprimeRestClient) doRPCDeactivateTenant(ctx context.
 	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
 
 	yamlReq := callOpts.YAMLReq
-	req := &DeactivateTenantRequest{}
+	req := &PrivateDeactivateTenantRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
-		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.tenant.DeactivateTenantRequest: %s", yamlReq, err)
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.tenant.PrivateDeactivateTenantRequest: %s", yamlReq, err)
 	}
 
 	var hReq *http.Request
@@ -174,9 +174,9 @@ func (c *CustomPrivateAPIEywaprimeRestClient) doRPCDeactivateTenant(ctx context.
 	if err != nil {
 		return nil, errors.Wrap(err, "Custom API RestClient read body")
 	}
-	pbRsp := &DeactivateTenantResponse{}
+	pbRsp := &PrivateDeactivateTenantResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.tenant.DeactivateTenantResponse", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.tenant.PrivateDeactivateTenantResponse", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -193,9 +193,9 @@ func (c *CustomPrivateAPIEywaprimeRestClient) doRPCRestrictedDeactivateTenant(ct
 	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
 
 	yamlReq := callOpts.YAMLReq
-	req := &DeactivateTenantRequest{}
+	req := &PrivateDeactivateTenantRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
-		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.tenant.DeactivateTenantRequest: %s", yamlReq, err)
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.tenant.PrivateDeactivateTenantRequest: %s", yamlReq, err)
 	}
 
 	var hReq *http.Request
@@ -261,9 +261,9 @@ func (c *CustomPrivateAPIEywaprimeRestClient) doRPCRestrictedDeactivateTenant(ct
 	if err != nil {
 		return nil, errors.Wrap(err, "Custom API RestClient read body")
 	}
-	pbRsp := &DeactivateTenantResponse{}
+	pbRsp := &PrivateDeactivateTenantResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.tenant.DeactivateTenantResponse", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.tenant.PrivateDeactivateTenantResponse", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -313,11 +313,11 @@ type customPrivateAPIEywaprimeInprocClient struct {
 	CustomPrivateAPIEywaprimeServer
 }
 
-func (c *customPrivateAPIEywaprimeInprocClient) DeactivateTenant(ctx context.Context, in *DeactivateTenantRequest, opts ...grpc.CallOption) (*DeactivateTenantResponse, error) {
+func (c *customPrivateAPIEywaprimeInprocClient) DeactivateTenant(ctx context.Context, in *PrivateDeactivateTenantRequest, opts ...grpc.CallOption) (*PrivateDeactivateTenantResponse, error) {
 	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.tenant.CustomPrivateAPIEywaprime.DeactivateTenant")
 	return c.CustomPrivateAPIEywaprimeServer.DeactivateTenant(ctx, in)
 }
-func (c *customPrivateAPIEywaprimeInprocClient) RestrictedDeactivateTenant(ctx context.Context, in *DeactivateTenantRequest, opts ...grpc.CallOption) (*DeactivateTenantResponse, error) {
+func (c *customPrivateAPIEywaprimeInprocClient) RestrictedDeactivateTenant(ctx context.Context, in *PrivateDeactivateTenantRequest, opts ...grpc.CallOption) (*PrivateDeactivateTenantResponse, error) {
 	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.tenant.CustomPrivateAPIEywaprime.RestrictedDeactivateTenant")
 	return c.CustomPrivateAPIEywaprimeServer.RestrictedDeactivateTenant(ctx, in)
 }
@@ -343,7 +343,7 @@ type customPrivateAPIEywaprimeSrv struct {
 	svc svcfw.Service
 }
 
-func (s *customPrivateAPIEywaprimeSrv) DeactivateTenant(ctx context.Context, in *DeactivateTenantRequest) (*DeactivateTenantResponse, error) {
+func (s *customPrivateAPIEywaprimeSrv) DeactivateTenant(ctx context.Context, in *PrivateDeactivateTenantRequest) (*PrivateDeactivateTenantResponse, error) {
 	ah := s.svc.GetAPIHandler("ves.io.schema.tenant.CustomPrivateAPIEywaprime")
 	cah, ok := ah.(CustomPrivateAPIEywaprimeServer)
 	if !ok {
@@ -351,7 +351,7 @@ func (s *customPrivateAPIEywaprimeSrv) DeactivateTenant(ctx context.Context, in 
 	}
 
 	var (
-		rsp *DeactivateTenantResponse
+		rsp *PrivateDeactivateTenantResponse
 		err error
 	)
 
@@ -376,7 +376,7 @@ func (s *customPrivateAPIEywaprimeSrv) DeactivateTenant(ctx context.Context, in 
 
 	return rsp, nil
 }
-func (s *customPrivateAPIEywaprimeSrv) RestrictedDeactivateTenant(ctx context.Context, in *DeactivateTenantRequest) (*DeactivateTenantResponse, error) {
+func (s *customPrivateAPIEywaprimeSrv) RestrictedDeactivateTenant(ctx context.Context, in *PrivateDeactivateTenantRequest) (*PrivateDeactivateTenantResponse, error) {
 	ah := s.svc.GetAPIHandler("ves.io.schema.tenant.CustomPrivateAPIEywaprime")
 	cah, ok := ah.(CustomPrivateAPIEywaprimeServer)
 	if !ok {
@@ -384,7 +384,7 @@ func (s *customPrivateAPIEywaprimeSrv) RestrictedDeactivateTenant(ctx context.Co
 	}
 
 	var (
-		rsp *DeactivateTenantResponse
+		rsp *PrivateDeactivateTenantResponse
 		err error
 	)
 
@@ -442,7 +442,7 @@ var CustomPrivateAPIEywaprimeSwaggerJSON string = `{
                     "200": {
                         "description": "A successful response.",
                         "schema": {
-                            "$ref": "#/definitions/tenantDeactivateTenantResponse"
+                            "$ref": "#/definitions/tenantPrivateDeactivateTenantResponse"
                         }
                     },
                     "401": {
@@ -500,7 +500,7 @@ var CustomPrivateAPIEywaprimeSwaggerJSON string = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/tenantDeactivateTenantRequest"
+                            "$ref": "#/definitions/tenantPrivateDeactivateTenantRequest"
                         }
                     }
                 ],
@@ -526,7 +526,7 @@ var CustomPrivateAPIEywaprimeSwaggerJSON string = `{
                     "200": {
                         "description": "A successful response.",
                         "schema": {
-                            "$ref": "#/definitions/tenantDeactivateTenantResponse"
+                            "$ref": "#/definitions/tenantPrivateDeactivateTenantResponse"
                         }
                     },
                     "401": {
@@ -584,7 +584,7 @@ var CustomPrivateAPIEywaprimeSwaggerJSON string = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/tenantDeactivateTenantRequest"
+                            "$ref": "#/definitions/tenantPrivateDeactivateTenantRequest"
                         }
                     }
                 ],
@@ -610,13 +610,28 @@ var CustomPrivateAPIEywaprimeSwaggerJSON string = `{
             "x-displayname": "Empty",
             "x-ves-proto-message": "ves.io.schema.Empty"
         },
-        "tenantDeactivateTenantRequest": {
+        "tenantDeletionReason": {
+            "type": "string",
+            "description": "List of available reason for account deletion.\n\n - REASON_UNKNOWN: Unknown reason\n\nUnknown reason\n - REASON_SWITCH_TO_FREE_PLAN: Switch to free plan\n\nSwitch to free plan\n - REASON_NO_LONGER_NEEDED: No longer needed\n\nNo longer needed\n - REASON_NOT_JUSTIFY_COSTS: Too expensive\n\nToo expensive\n - REASON_DIFFICULT_TO_USE: Difficult to use\n\nDifficult to use",
+            "title": "DeletionReason",
+            "enum": [
+                "REASON_UNKNOWN",
+                "REASON_SWITCH_TO_FREE_PLAN",
+                "REASON_NO_LONGER_NEEDED",
+                "REASON_NOT_JUSTIFY_COSTS",
+                "REASON_DIFFICULT_TO_USE"
+            ],
+            "default": "REASON_UNKNOWN",
+            "x-displayname": "DeletionReason",
+            "x-ves-proto-enum": "ves.io.schema.tenant.DeletionReason"
+        },
+        "tenantPrivateDeactivateTenantRequest": {
             "type": "object",
             "description": "Request to deactivate the tenant.",
-            "title": "DeactivateTenantRequest",
-            "x-displayname": "Deactivate Tenant Request",
+            "title": "PrivateDeactivateTenantRequest",
+            "x-displayname": "Private Deactivate Tenant Request",
             "x-ves-oneof-field-initiator": "[\"external_id\",\"internal\",\"user_email\"]",
-            "x-ves-proto-message": "ves.io.schema.tenant.DeactivateTenantRequest",
+            "x-ves-proto-message": "ves.io.schema.tenant.PrivateDeactivateTenantRequest",
             "properties": {
                 "external_id": {
                     "type": "string",
@@ -676,11 +691,11 @@ var CustomPrivateAPIEywaprimeSwaggerJSON string = `{
                 }
             }
         },
-        "tenantDeactivateTenantResponse": {
+        "tenantPrivateDeactivateTenantResponse": {
             "type": "object",
-            "title": "DeactivateTenantResponse",
-            "x-displayname": "Deactivate Tenant Response",
-            "x-ves-proto-message": "ves.io.schema.tenant.DeactivateTenantResponse",
+            "title": "PrivateDeactivateTenantResponse",
+            "x-displayname": "Private Deactivate Tenant Response",
+            "x-ves-proto-message": "ves.io.schema.tenant.PrivateDeactivateTenantResponse",
             "properties": {
                 "job_id": {
                     "type": "string",
@@ -689,21 +704,6 @@ var CustomPrivateAPIEywaprimeSwaggerJSON string = `{
                     "x-displayname": "Job Id"
                 }
             }
-        },
-        "tenantDeletionReason": {
-            "type": "string",
-            "description": "List of available reason for account deletion.\n\n - REASON_UNKNOWN: Unknown reason\n\nUnknown reason\n - REASON_SWITCH_TO_FREE_PLAN: Switch to free plan\n\nSwitch to free plan\n - REASON_NO_LONGER_NEEDED: No longer needed\n\nNo longer needed\n - REASON_NOT_JUSTIFY_COSTS: Too expensive\n\nToo expensive\n - REASON_DIFFICULT_TO_USE: Difficult to use\n\nDifficult to use",
-            "title": "DeletionReason",
-            "enum": [
-                "REASON_UNKNOWN",
-                "REASON_SWITCH_TO_FREE_PLAN",
-                "REASON_NO_LONGER_NEEDED",
-                "REASON_NOT_JUSTIFY_COSTS",
-                "REASON_DIFFICULT_TO_USE"
-            ],
-            "default": "REASON_UNKNOWN",
-            "x-displayname": "DeletionReason",
-            "x-ves-proto-enum": "ves.io.schema.tenant.DeletionReason"
         }
     },
     "x-displayname": "Tenant",

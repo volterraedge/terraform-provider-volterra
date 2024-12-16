@@ -54,6 +54,7 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 
 	vr["ves.io.schema.cloud_connect.AWSAttachmentsListStatusType"] = AWSAttachmentsListStatusTypeValidator()
 	vr["ves.io.schema.cloud_connect.AWSAttachmentsStatusType"] = AWSAttachmentsStatusTypeValidator()
+	vr["ves.io.schema.cloud_connect.AWSCloudTransitGatewayType"] = AWSCloudTransitGatewayTypeValidator()
 	vr["ves.io.schema.cloud_connect.AWSConnectAttachmentStatusType"] = AWSConnectAttachmentStatusTypeValidator()
 	vr["ves.io.schema.cloud_connect.AWSConnectPeerStatusType"] = AWSConnectPeerStatusTypeValidator()
 	vr["ves.io.schema.cloud_connect.AWSDefaultRoutesRouteTable"] = AWSDefaultRoutesRouteTableValidator()
@@ -75,9 +76,13 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.cloud_connect.AzureVNETAttachmentType"] = AzureVNETAttachmentTypeValidator()
 	vr["ves.io.schema.cloud_connect.AzureVNETSiteType"] = AzureVNETSiteTypeValidator()
 	vr["ves.io.schema.cloud_connect.AzureVnetAttachmentListType"] = AzureVnetAttachmentListTypeValidator()
+	vr["ves.io.schema.cloud_connect.CIDRConflictListType"] = CIDRConflictListTypeValidator()
+	vr["ves.io.schema.cloud_connect.CIDRConflictStatusType"] = CIDRConflictStatusTypeValidator()
 	vr["ves.io.schema.cloud_connect.CloudConnectData"] = CloudConnectDataValidator()
 	vr["ves.io.schema.cloud_connect.CloudConnectStatusType"] = CloudConnectStatusTypeValidator()
 	vr["ves.io.schema.cloud_connect.CloudLinkListType"] = CloudLinkListTypeValidator()
+	vr["ves.io.schema.cloud_connect.CreateAWSCloudTransitGatewayType"] = CreateAWSCloudTransitGatewayTypeValidator()
+	vr["ves.io.schema.cloud_connect.CreateAWSTGWSiteType"] = CreateAWSTGWSiteTypeValidator()
 	vr["ves.io.schema.cloud_connect.CreateSpecType"] = CreateSpecTypeValidator()
 	vr["ves.io.schema.cloud_connect.CustomerEdge"] = CustomerEdgeValidator()
 	vr["ves.io.schema.cloud_connect.DefaultRoute"] = DefaultRouteValidator()
@@ -87,12 +92,14 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.cloud_connect.LabelFilter"] = LabelFilterValidator()
 	vr["ves.io.schema.cloud_connect.MetricData"] = MetricDataValidator()
 	vr["ves.io.schema.cloud_connect.PeerType"] = PeerTypeValidator()
+	vr["ves.io.schema.cloud_connect.ReplaceAWSCloudTransitGatewayType"] = ReplaceAWSCloudTransitGatewayTypeValidator()
 	vr["ves.io.schema.cloud_connect.ReplaceAWSREType"] = ReplaceAWSRETypeValidator()
 	vr["ves.io.schema.cloud_connect.ReplaceAWSTGWSiteType"] = ReplaceAWSTGWSiteTypeValidator()
 	vr["ves.io.schema.cloud_connect.ReplaceAzureVNETSiteType"] = ReplaceAzureVNETSiteTypeValidator()
 	vr["ves.io.schema.cloud_connect.ReplaceSpecType"] = ReplaceSpecTypeValidator()
 	vr["ves.io.schema.cloud_connect.SegmentationData"] = SegmentationDataValidator()
 	vr["ves.io.schema.cloud_connect.SubnetStatusType"] = SubnetStatusTypeValidator()
+	vr["ves.io.schema.cloud_connect.VerStatusType"] = VerStatusTypeValidator()
 
 }
 
@@ -113,8 +120,50 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.cloud_connect.API.Create"] = []string{
 		"spec.aws_re.peers.#",
 		"spec.aws_re.tgw",
-		"spec.aws_tgw_site.peers.#",
 		"spec.azure_vnet_site.cred",
+	}
+
+	mdr.RPCAvailableInReqFieldRegistry["ves.io.schema.cloud_connect.API.Create"] = []svcfw.EnvironmentField{
+		{
+			FieldPath:           "spec.aws_cloud_transit_gateway",
+			AllowedEnvironments: []string{"demo1", "test"},
+		},
+	}
+
+	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.cloud_connect.API.Create"] = []svcfw.EnvironmentField{
+		{
+			FieldPath:           "spec.aws_cloud_transit_gateway",
+			AllowedEnvironments: []string{"demo1", "test"},
+		},
+	}
+
+	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.cloud_connect.API.Get"] = []svcfw.EnvironmentField{
+		{
+			FieldPath:           "create_form.spec.aws_cloud_transit_gateway",
+			AllowedEnvironments: []string{"demo1", "test"},
+		},
+		{
+			FieldPath:           "replace_form.spec.aws_cloud_transit_gateway",
+			AllowedEnvironments: []string{"demo1", "test"},
+		},
+		{
+			FieldPath:           "spec.aws_cloud_transit_gateway",
+			AllowedEnvironments: []string{"demo1", "test"},
+		},
+	}
+
+	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.cloud_connect.API.List"] = []svcfw.EnvironmentField{
+		{
+			FieldPath:           "items.#.get_spec.aws_cloud_transit_gateway",
+			AllowedEnvironments: []string{"demo1", "test"},
+		},
+	}
+
+	mdr.RPCAvailableInReqFieldRegistry["ves.io.schema.cloud_connect.API.Replace"] = []svcfw.EnvironmentField{
+		{
+			FieldPath:           "spec.aws_cloud_transit_gateway",
+			AllowedEnvironments: []string{"demo1", "test"},
+		},
 	}
 
 }

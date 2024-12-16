@@ -22,6 +22,7 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.waf_signatures_changelog.StagedSignaturesReq"] = StagedSignaturesReqValidator()
 	vr["ves.io.schema.waf_signatures_changelog.StagedSignaturesRsp"] = StagedSignaturesRspValidator()
 
+	vr["ves.io.schema.waf_signatures_changelog.ReleaseSignatures"] = ReleaseSignaturesValidator()
 	vr["ves.io.schema.waf_signatures_changelog.ReleasedSignaturesReq"] = ReleasedSignaturesReqValidator()
 	vr["ves.io.schema.waf_signatures_changelog.ReleasedSignaturesRsp"] = ReleasedSignaturesRspValidator()
 
@@ -46,11 +47,6 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 }
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
-
-	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.waf_signatures_changelog.WafSignatureChangelogCustomApi.GetReleasedSignatures"] = []string{
-		"released_signatures.#.added_signatures.#",
-		"released_signatures.#.updated_signatures.#",
-	}
 
 }
 

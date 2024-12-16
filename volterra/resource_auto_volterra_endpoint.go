@@ -68,7 +68,8 @@ func resourceVolterraEndpoint() *schema.Resource {
 
 			"dns_name_advanced": {
 
-				Type:     schema.TypeSet,
+				Type:     schema.TypeList,
+				MaxItems: 1,
 				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
@@ -102,7 +103,8 @@ func resourceVolterraEndpoint() *schema.Resource {
 
 			"service_info": {
 
-				Type:     schema.TypeSet,
+				Type:     schema.TypeList,
+				MaxItems: 1,
 				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
@@ -120,7 +122,8 @@ func resourceVolterraEndpoint() *schema.Resource {
 
 						"service_selector": {
 
-							Type:     schema.TypeSet,
+							Type:     schema.TypeList,
+							MaxItems: 1,
 							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
@@ -158,14 +161,16 @@ func resourceVolterraEndpoint() *schema.Resource {
 
 			"where": {
 
-				Type:     schema.TypeSet,
+				Type:     schema.TypeList,
+				MaxItems: 1,
 				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 
 						"site": {
 
-							Type:     schema.TypeSet,
+							Type:     schema.TypeList,
+							MaxItems: 1,
 							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
@@ -253,7 +258,8 @@ func resourceVolterraEndpoint() *schema.Resource {
 
 						"virtual_network": {
 
-							Type:     schema.TypeSet,
+							Type:     schema.TypeList,
+							MaxItems: 1,
 							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
@@ -291,7 +297,8 @@ func resourceVolterraEndpoint() *schema.Resource {
 
 						"virtual_site": {
 
-							Type:     schema.TypeSet,
+							Type:     schema.TypeList,
+							MaxItems: 1,
 							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
@@ -458,41 +465,43 @@ func resourceVolterraEndpointCreate(d *schema.ResourceData, meta interface{}) er
 		endpointAddressInt.DnsNameAdvanced = &ves_io_schema_endpoint.DnsNameAdvancedType{}
 		createSpec.EndpointAddress = endpointAddressInt
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
+			if set != nil {
+				cs := set.(map[string]interface{})
 
-			if v, ok := cs["name"]; ok && !isIntfNil(v) {
+				if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
-				endpointAddressInt.DnsNameAdvanced.Name = v.(string)
+					endpointAddressInt.DnsNameAdvanced.Name = v.(string)
 
-			}
+				}
 
-			ttlChoiceTypeFound := false
+				ttlChoiceTypeFound := false
 
-			if v, ok := cs["refresh_interval"]; ok && !isIntfNil(v) && !ttlChoiceTypeFound {
+				if v, ok := cs["refresh_interval"]; ok && !isIntfNil(v) && !ttlChoiceTypeFound {
 
-				ttlChoiceTypeFound = true
-				ttlChoiceInt := &ves_io_schema_endpoint.DnsNameAdvancedType_RefreshInterval{}
+					ttlChoiceTypeFound = true
+					ttlChoiceInt := &ves_io_schema_endpoint.DnsNameAdvancedType_RefreshInterval{}
 
-				endpointAddressInt.DnsNameAdvanced.TtlChoice = ttlChoiceInt
-
-				ttlChoiceInt.RefreshInterval = uint32(v.(int))
-
-			}
-
-			if v, ok := cs["strict_ttl"]; ok && !isIntfNil(v) && !ttlChoiceTypeFound {
-
-				ttlChoiceTypeFound = true
-
-				if v.(bool) {
-					ttlChoiceInt := &ves_io_schema_endpoint.DnsNameAdvancedType_StrictTtl{}
-					ttlChoiceInt.StrictTtl = &ves_io_schema.Empty{}
 					endpointAddressInt.DnsNameAdvanced.TtlChoice = ttlChoiceInt
+
+					ttlChoiceInt.RefreshInterval = uint32(v.(int))
+
+				}
+
+				if v, ok := cs["strict_ttl"]; ok && !isIntfNil(v) && !ttlChoiceTypeFound {
+
+					ttlChoiceTypeFound = true
+
+					if v.(bool) {
+						ttlChoiceInt := &ves_io_schema_endpoint.DnsNameAdvancedType_StrictTtl{}
+						ttlChoiceInt.StrictTtl = &ves_io_schema.Empty{}
+						endpointAddressInt.DnsNameAdvanced.TtlChoice = ttlChoiceInt
+					}
+
 				}
 
 			}
-
 		}
 
 	}
@@ -515,54 +524,58 @@ func resourceVolterraEndpointCreate(d *schema.ResourceData, meta interface{}) er
 		endpointAddressInt.ServiceInfo = &ves_io_schema_endpoint.ServiceInfoType{}
 		createSpec.EndpointAddress = endpointAddressInt
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
+			if set != nil {
+				cs := set.(map[string]interface{})
 
-			if v, ok := cs["discovery_type"]; ok && !isIntfNil(v) {
+				if v, ok := cs["discovery_type"]; ok && !isIntfNil(v) {
 
-				endpointAddressInt.ServiceInfo.DiscoveryType = ves_io_schema.DiscoveryType(ves_io_schema.DiscoveryType_value[v.(string)])
+					endpointAddressInt.ServiceInfo.DiscoveryType = ves_io_schema.DiscoveryType(ves_io_schema.DiscoveryType_value[v.(string)])
 
-			}
+				}
 
-			serviceInfoTypeFound := false
+				serviceInfoTypeFound := false
 
-			if v, ok := cs["service_name"]; ok && !isIntfNil(v) && !serviceInfoTypeFound {
+				if v, ok := cs["service_name"]; ok && !isIntfNil(v) && !serviceInfoTypeFound {
 
-				serviceInfoTypeFound = true
-				serviceInfoInt := &ves_io_schema_endpoint.ServiceInfoType_ServiceName{}
+					serviceInfoTypeFound = true
+					serviceInfoInt := &ves_io_schema_endpoint.ServiceInfoType_ServiceName{}
 
-				endpointAddressInt.ServiceInfo.ServiceInfo = serviceInfoInt
+					endpointAddressInt.ServiceInfo.ServiceInfo = serviceInfoInt
 
-				serviceInfoInt.ServiceName = v.(string)
+					serviceInfoInt.ServiceName = v.(string)
 
-			}
+				}
 
-			if v, ok := cs["service_selector"]; ok && !isIntfNil(v) && !serviceInfoTypeFound {
+				if v, ok := cs["service_selector"]; ok && !isIntfNil(v) && !serviceInfoTypeFound {
 
-				serviceInfoTypeFound = true
-				serviceInfoInt := &ves_io_schema_endpoint.ServiceInfoType_ServiceSelector{}
-				serviceInfoInt.ServiceSelector = &ves_io_schema.LabelSelectorType{}
-				endpointAddressInt.ServiceInfo.ServiceInfo = serviceInfoInt
+					serviceInfoTypeFound = true
+					serviceInfoInt := &ves_io_schema_endpoint.ServiceInfoType_ServiceSelector{}
+					serviceInfoInt.ServiceSelector = &ves_io_schema.LabelSelectorType{}
+					endpointAddressInt.ServiceInfo.ServiceInfo = serviceInfoInt
 
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
 
-					if v, ok := cs["expressions"]; ok && !isIntfNil(v) {
+							if v, ok := cs["expressions"]; ok && !isIntfNil(v) {
 
-						ls := make([]string, len(v.([]interface{})))
-						for i, v := range v.([]interface{}) {
-							ls[i] = v.(string)
+								ls := make([]string, len(v.([]interface{})))
+								for i, v := range v.([]interface{}) {
+									ls[i] = v.(string)
+								}
+								serviceInfoInt.ServiceSelector.Expressions = ls
+
+							}
+
 						}
-						serviceInfoInt.ServiceSelector.Expressions = ls
-
 					}
 
 				}
 
 			}
-
 		}
 
 	}
@@ -594,283 +607,291 @@ func resourceVolterraEndpointCreate(d *schema.ResourceData, meta interface{}) er
 	//where
 	if v, ok := d.GetOk("where"); ok && !isIntfNil(v) {
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		where := &ves_io_schema.NetworkSiteRefSelector{}
 		createSpec.Where = where
 		for _, set := range sl {
-			whereMapStrToI := set.(map[string]interface{})
+			if set != nil {
+				whereMapStrToI := set.(map[string]interface{})
 
-			refOrSelectorTypeFound := false
+				refOrSelectorTypeFound := false
 
-			if v, ok := whereMapStrToI["site"]; ok && !isIntfNil(v) && !refOrSelectorTypeFound {
+				if v, ok := whereMapStrToI["site"]; ok && !isIntfNil(v) && !refOrSelectorTypeFound {
 
-				refOrSelectorTypeFound = true
-				refOrSelectorInt := &ves_io_schema.NetworkSiteRefSelector_Site{}
-				refOrSelectorInt.Site = &ves_io_schema.SiteRefType{}
-				where.RefOrSelector = refOrSelectorInt
+					refOrSelectorTypeFound = true
+					refOrSelectorInt := &ves_io_schema.NetworkSiteRefSelector_Site{}
+					refOrSelectorInt.Site = &ves_io_schema.SiteRefType{}
+					where.RefOrSelector = refOrSelectorInt
 
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
 
-					internetVipChoiceTypeFound := false
+							internetVipChoiceTypeFound := false
 
-					if v, ok := cs["disable_internet_vip"]; ok && !isIntfNil(v) && !internetVipChoiceTypeFound {
+							if v, ok := cs["disable_internet_vip"]; ok && !isIntfNil(v) && !internetVipChoiceTypeFound {
 
-						internetVipChoiceTypeFound = true
+								internetVipChoiceTypeFound = true
 
-						if v.(bool) {
-							internetVipChoiceInt := &ves_io_schema.SiteRefType_DisableInternetVip{}
-							internetVipChoiceInt.DisableInternetVip = &ves_io_schema.Empty{}
-							refOrSelectorInt.Site.InternetVipChoice = internetVipChoiceInt
+								if v.(bool) {
+									internetVipChoiceInt := &ves_io_schema.SiteRefType_DisableInternetVip{}
+									internetVipChoiceInt.DisableInternetVip = &ves_io_schema.Empty{}
+									refOrSelectorInt.Site.InternetVipChoice = internetVipChoiceInt
+								}
+
+							}
+
+							if v, ok := cs["enable_internet_vip"]; ok && !isIntfNil(v) && !internetVipChoiceTypeFound {
+
+								internetVipChoiceTypeFound = true
+
+								if v.(bool) {
+									internetVipChoiceInt := &ves_io_schema.SiteRefType_EnableInternetVip{}
+									internetVipChoiceInt.EnableInternetVip = &ves_io_schema.Empty{}
+									refOrSelectorInt.Site.InternetVipChoice = internetVipChoiceInt
+								}
+
+							}
+
+							if v, ok := cs["network_type"]; ok && !isIntfNil(v) {
+
+								refOrSelectorInt.Site.NetworkType = ves_io_schema.VirtualNetworkType(ves_io_schema.VirtualNetworkType_value[v.(string)])
+
+							}
+
+							if v, ok := cs["ref"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								refIntNew := make([]*ves_io_schema.ObjectRefType, len(sl))
+								refOrSelectorInt.Site.Ref = refIntNew
+								for i, ps := range sl {
+
+									rMapToStrVal := ps.(map[string]interface{})
+									refIntNew[i] = &ves_io_schema.ObjectRefType{}
+
+									refIntNew[i].Kind = "site"
+
+									if v, ok := rMapToStrVal["name"]; ok && !isIntfNil(v) {
+										refIntNew[i].Name = v.(string)
+									}
+
+									if v, ok := rMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+										refIntNew[i].Namespace = v.(string)
+									}
+
+									if v, ok := rMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+										refIntNew[i].Tenant = v.(string)
+									}
+
+									if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
+										refIntNew[i].Uid = v.(string)
+									}
+
+								}
+
+							}
+
+							if v, ok := cs["refs"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								refsInt := make([]*ves_io_schema.ObjectRefType, len(sl))
+								refOrSelectorInt.Site.Refs = refsInt
+								for i, ps := range sl {
+
+									rMapToStrVal := ps.(map[string]interface{})
+									refsInt[i] = &ves_io_schema.ObjectRefType{}
+
+									refsInt[i].Kind = "virtual_network"
+
+									if v, ok := rMapToStrVal["name"]; ok && !isIntfNil(v) {
+										refsInt[i].Name = v.(string)
+									}
+
+									if v, ok := rMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+										refsInt[i].Namespace = v.(string)
+									}
+
+									if v, ok := rMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+										refsInt[i].Tenant = v.(string)
+									}
+
+									if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
+										refsInt[i].Uid = v.(string)
+									}
+
+								}
+
+							}
+
 						}
-
 					}
 
-					if v, ok := cs["enable_internet_vip"]; ok && !isIntfNil(v) && !internetVipChoiceTypeFound {
+				}
 
-						internetVipChoiceTypeFound = true
+				if v, ok := whereMapStrToI["virtual_network"]; ok && !isIntfNil(v) && !refOrSelectorTypeFound {
 
-						if v.(bool) {
-							internetVipChoiceInt := &ves_io_schema.SiteRefType_EnableInternetVip{}
-							internetVipChoiceInt.EnableInternetVip = &ves_io_schema.Empty{}
-							refOrSelectorInt.Site.InternetVipChoice = internetVipChoiceInt
-						}
+					refOrSelectorTypeFound = true
+					refOrSelectorInt := &ves_io_schema.NetworkSiteRefSelector_VirtualNetwork{}
+					refOrSelectorInt.VirtualNetwork = &ves_io_schema.NetworkRefType{}
+					where.RefOrSelector = refOrSelectorInt
 
-					}
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
 
-					if v, ok := cs["network_type"]; ok && !isIntfNil(v) {
+							if v, ok := cs["ref"]; ok && !isIntfNil(v) {
 
-						refOrSelectorInt.Site.NetworkType = ves_io_schema.VirtualNetworkType(ves_io_schema.VirtualNetworkType_value[v.(string)])
+								sl := v.([]interface{})
+								refIntNew := make([]*ves_io_schema.ObjectRefType, len(sl))
+								refOrSelectorInt.VirtualNetwork.Ref = refIntNew
+								for i, ps := range sl {
 
-					}
+									rMapToStrVal := ps.(map[string]interface{})
+									refIntNew[i] = &ves_io_schema.ObjectRefType{}
 
-					if v, ok := cs["ref"]; ok && !isIntfNil(v) {
+									refIntNew[i].Kind = "virtual_network"
 
-						sl := v.([]interface{})
-						refIntNew := make([]*ves_io_schema.ObjectRefType, len(sl))
-						refOrSelectorInt.Site.Ref = refIntNew
-						for i, ps := range sl {
+									if v, ok := rMapToStrVal["name"]; ok && !isIntfNil(v) {
+										refIntNew[i].Name = v.(string)
+									}
 
-							rMapToStrVal := ps.(map[string]interface{})
-							refIntNew[i] = &ves_io_schema.ObjectRefType{}
+									if v, ok := rMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+										refIntNew[i].Namespace = v.(string)
+									}
 
-							refIntNew[i].Kind = "site"
+									if v, ok := rMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+										refIntNew[i].Tenant = v.(string)
+									}
 
-							if v, ok := rMapToStrVal["name"]; ok && !isIntfNil(v) {
-								refIntNew[i].Name = v.(string)
-							}
+									if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
+										refIntNew[i].Uid = v.(string)
+									}
 
-							if v, ok := rMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-								refIntNew[i].Namespace = v.(string)
-							}
+								}
 
-							if v, ok := rMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-								refIntNew[i].Tenant = v.(string)
-							}
-
-							if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
-								refIntNew[i].Uid = v.(string)
-							}
-
-						}
-
-					}
-
-					if v, ok := cs["refs"]; ok && !isIntfNil(v) {
-
-						sl := v.([]interface{})
-						refsInt := make([]*ves_io_schema.ObjectRefType, len(sl))
-						refOrSelectorInt.Site.Refs = refsInt
-						for i, ps := range sl {
-
-							rMapToStrVal := ps.(map[string]interface{})
-							refsInt[i] = &ves_io_schema.ObjectRefType{}
-
-							refsInt[i].Kind = "virtual_network"
-
-							if v, ok := rMapToStrVal["name"]; ok && !isIntfNil(v) {
-								refsInt[i].Name = v.(string)
-							}
-
-							if v, ok := rMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-								refsInt[i].Namespace = v.(string)
-							}
-
-							if v, ok := rMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-								refsInt[i].Tenant = v.(string)
-							}
-
-							if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
-								refsInt[i].Uid = v.(string)
 							}
 
 						}
+					}
 
+				}
+
+				if v, ok := whereMapStrToI["virtual_site"]; ok && !isIntfNil(v) && !refOrSelectorTypeFound {
+
+					refOrSelectorTypeFound = true
+					refOrSelectorInt := &ves_io_schema.NetworkSiteRefSelector_VirtualSite{}
+					refOrSelectorInt.VirtualSite = &ves_io_schema.VSiteRefType{}
+					where.RefOrSelector = refOrSelectorInt
+
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
+
+							internetVipChoiceTypeFound := false
+
+							if v, ok := cs["disable_internet_vip"]; ok && !isIntfNil(v) && !internetVipChoiceTypeFound {
+
+								internetVipChoiceTypeFound = true
+
+								if v.(bool) {
+									internetVipChoiceInt := &ves_io_schema.VSiteRefType_DisableInternetVip{}
+									internetVipChoiceInt.DisableInternetVip = &ves_io_schema.Empty{}
+									refOrSelectorInt.VirtualSite.InternetVipChoice = internetVipChoiceInt
+								}
+
+							}
+
+							if v, ok := cs["enable_internet_vip"]; ok && !isIntfNil(v) && !internetVipChoiceTypeFound {
+
+								internetVipChoiceTypeFound = true
+
+								if v.(bool) {
+									internetVipChoiceInt := &ves_io_schema.VSiteRefType_EnableInternetVip{}
+									internetVipChoiceInt.EnableInternetVip = &ves_io_schema.Empty{}
+									refOrSelectorInt.VirtualSite.InternetVipChoice = internetVipChoiceInt
+								}
+
+							}
+
+							if v, ok := cs["network_type"]; ok && !isIntfNil(v) {
+
+								refOrSelectorInt.VirtualSite.NetworkType = ves_io_schema.VirtualNetworkType(ves_io_schema.VirtualNetworkType_value[v.(string)])
+
+							}
+
+							if v, ok := cs["ref"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								refIntNew := make([]*ves_io_schema.ObjectRefType, len(sl))
+								refOrSelectorInt.VirtualSite.Ref = refIntNew
+								for i, ps := range sl {
+
+									rMapToStrVal := ps.(map[string]interface{})
+									refIntNew[i] = &ves_io_schema.ObjectRefType{}
+
+									refIntNew[i].Kind = "virtual_site"
+
+									if v, ok := rMapToStrVal["name"]; ok && !isIntfNil(v) {
+										refIntNew[i].Name = v.(string)
+									}
+
+									if v, ok := rMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+										refIntNew[i].Namespace = v.(string)
+									}
+
+									if v, ok := rMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+										refIntNew[i].Tenant = v.(string)
+									}
+
+									if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
+										refIntNew[i].Uid = v.(string)
+									}
+
+								}
+
+							}
+
+							if v, ok := cs["refs"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								refsInt := make([]*ves_io_schema.ObjectRefType, len(sl))
+								refOrSelectorInt.VirtualSite.Refs = refsInt
+								for i, ps := range sl {
+
+									rMapToStrVal := ps.(map[string]interface{})
+									refsInt[i] = &ves_io_schema.ObjectRefType{}
+
+									refsInt[i].Kind = "virtual_network"
+
+									if v, ok := rMapToStrVal["name"]; ok && !isIntfNil(v) {
+										refsInt[i].Name = v.(string)
+									}
+
+									if v, ok := rMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+										refsInt[i].Namespace = v.(string)
+									}
+
+									if v, ok := rMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+										refsInt[i].Tenant = v.(string)
+									}
+
+									if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
+										refsInt[i].Uid = v.(string)
+									}
+
+								}
+
+							}
+
+						}
 					}
 
 				}
 
 			}
-
-			if v, ok := whereMapStrToI["virtual_network"]; ok && !isIntfNil(v) && !refOrSelectorTypeFound {
-
-				refOrSelectorTypeFound = true
-				refOrSelectorInt := &ves_io_schema.NetworkSiteRefSelector_VirtualNetwork{}
-				refOrSelectorInt.VirtualNetwork = &ves_io_schema.NetworkRefType{}
-				where.RefOrSelector = refOrSelectorInt
-
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
-
-					if v, ok := cs["ref"]; ok && !isIntfNil(v) {
-
-						sl := v.([]interface{})
-						refIntNew := make([]*ves_io_schema.ObjectRefType, len(sl))
-						refOrSelectorInt.VirtualNetwork.Ref = refIntNew
-						for i, ps := range sl {
-
-							rMapToStrVal := ps.(map[string]interface{})
-							refIntNew[i] = &ves_io_schema.ObjectRefType{}
-
-							refIntNew[i].Kind = "virtual_network"
-
-							if v, ok := rMapToStrVal["name"]; ok && !isIntfNil(v) {
-								refIntNew[i].Name = v.(string)
-							}
-
-							if v, ok := rMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-								refIntNew[i].Namespace = v.(string)
-							}
-
-							if v, ok := rMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-								refIntNew[i].Tenant = v.(string)
-							}
-
-							if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
-								refIntNew[i].Uid = v.(string)
-							}
-
-						}
-
-					}
-
-				}
-
-			}
-
-			if v, ok := whereMapStrToI["virtual_site"]; ok && !isIntfNil(v) && !refOrSelectorTypeFound {
-
-				refOrSelectorTypeFound = true
-				refOrSelectorInt := &ves_io_schema.NetworkSiteRefSelector_VirtualSite{}
-				refOrSelectorInt.VirtualSite = &ves_io_schema.VSiteRefType{}
-				where.RefOrSelector = refOrSelectorInt
-
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
-
-					internetVipChoiceTypeFound := false
-
-					if v, ok := cs["disable_internet_vip"]; ok && !isIntfNil(v) && !internetVipChoiceTypeFound {
-
-						internetVipChoiceTypeFound = true
-
-						if v.(bool) {
-							internetVipChoiceInt := &ves_io_schema.VSiteRefType_DisableInternetVip{}
-							internetVipChoiceInt.DisableInternetVip = &ves_io_schema.Empty{}
-							refOrSelectorInt.VirtualSite.InternetVipChoice = internetVipChoiceInt
-						}
-
-					}
-
-					if v, ok := cs["enable_internet_vip"]; ok && !isIntfNil(v) && !internetVipChoiceTypeFound {
-
-						internetVipChoiceTypeFound = true
-
-						if v.(bool) {
-							internetVipChoiceInt := &ves_io_schema.VSiteRefType_EnableInternetVip{}
-							internetVipChoiceInt.EnableInternetVip = &ves_io_schema.Empty{}
-							refOrSelectorInt.VirtualSite.InternetVipChoice = internetVipChoiceInt
-						}
-
-					}
-
-					if v, ok := cs["network_type"]; ok && !isIntfNil(v) {
-
-						refOrSelectorInt.VirtualSite.NetworkType = ves_io_schema.VirtualNetworkType(ves_io_schema.VirtualNetworkType_value[v.(string)])
-
-					}
-
-					if v, ok := cs["ref"]; ok && !isIntfNil(v) {
-
-						sl := v.([]interface{})
-						refIntNew := make([]*ves_io_schema.ObjectRefType, len(sl))
-						refOrSelectorInt.VirtualSite.Ref = refIntNew
-						for i, ps := range sl {
-
-							rMapToStrVal := ps.(map[string]interface{})
-							refIntNew[i] = &ves_io_schema.ObjectRefType{}
-
-							refIntNew[i].Kind = "virtual_site"
-
-							if v, ok := rMapToStrVal["name"]; ok && !isIntfNil(v) {
-								refIntNew[i].Name = v.(string)
-							}
-
-							if v, ok := rMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-								refIntNew[i].Namespace = v.(string)
-							}
-
-							if v, ok := rMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-								refIntNew[i].Tenant = v.(string)
-							}
-
-							if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
-								refIntNew[i].Uid = v.(string)
-							}
-
-						}
-
-					}
-
-					if v, ok := cs["refs"]; ok && !isIntfNil(v) {
-
-						sl := v.([]interface{})
-						refsInt := make([]*ves_io_schema.ObjectRefType, len(sl))
-						refOrSelectorInt.VirtualSite.Refs = refsInt
-						for i, ps := range sl {
-
-							rMapToStrVal := ps.(map[string]interface{})
-							refsInt[i] = &ves_io_schema.ObjectRefType{}
-
-							refsInt[i].Kind = "virtual_network"
-
-							if v, ok := rMapToStrVal["name"]; ok && !isIntfNil(v) {
-								refsInt[i].Name = v.(string)
-							}
-
-							if v, ok := rMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-								refsInt[i].Namespace = v.(string)
-							}
-
-							if v, ok := rMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-								refsInt[i].Tenant = v.(string)
-							}
-
-							if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
-								refsInt[i].Uid = v.(string)
-							}
-
-						}
-
-					}
-
-				}
-
-			}
-
 		}
 
 	}
@@ -994,41 +1015,43 @@ func resourceVolterraEndpointUpdate(d *schema.ResourceData, meta interface{}) er
 		endpointAddressInt.DnsNameAdvanced = &ves_io_schema_endpoint.DnsNameAdvancedType{}
 		updateSpec.EndpointAddress = endpointAddressInt
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
+			if set != nil {
+				cs := set.(map[string]interface{})
 
-			if v, ok := cs["name"]; ok && !isIntfNil(v) {
+				if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
-				endpointAddressInt.DnsNameAdvanced.Name = v.(string)
+					endpointAddressInt.DnsNameAdvanced.Name = v.(string)
 
-			}
+				}
 
-			ttlChoiceTypeFound := false
+				ttlChoiceTypeFound := false
 
-			if v, ok := cs["refresh_interval"]; ok && !isIntfNil(v) && !ttlChoiceTypeFound {
+				if v, ok := cs["refresh_interval"]; ok && !isIntfNil(v) && !ttlChoiceTypeFound {
 
-				ttlChoiceTypeFound = true
-				ttlChoiceInt := &ves_io_schema_endpoint.DnsNameAdvancedType_RefreshInterval{}
+					ttlChoiceTypeFound = true
+					ttlChoiceInt := &ves_io_schema_endpoint.DnsNameAdvancedType_RefreshInterval{}
 
-				endpointAddressInt.DnsNameAdvanced.TtlChoice = ttlChoiceInt
-
-				ttlChoiceInt.RefreshInterval = uint32(v.(int))
-
-			}
-
-			if v, ok := cs["strict_ttl"]; ok && !isIntfNil(v) && !ttlChoiceTypeFound {
-
-				ttlChoiceTypeFound = true
-
-				if v.(bool) {
-					ttlChoiceInt := &ves_io_schema_endpoint.DnsNameAdvancedType_StrictTtl{}
-					ttlChoiceInt.StrictTtl = &ves_io_schema.Empty{}
 					endpointAddressInt.DnsNameAdvanced.TtlChoice = ttlChoiceInt
+
+					ttlChoiceInt.RefreshInterval = uint32(v.(int))
+
+				}
+
+				if v, ok := cs["strict_ttl"]; ok && !isIntfNil(v) && !ttlChoiceTypeFound {
+
+					ttlChoiceTypeFound = true
+
+					if v.(bool) {
+						ttlChoiceInt := &ves_io_schema_endpoint.DnsNameAdvancedType_StrictTtl{}
+						ttlChoiceInt.StrictTtl = &ves_io_schema.Empty{}
+						endpointAddressInt.DnsNameAdvanced.TtlChoice = ttlChoiceInt
+					}
+
 				}
 
 			}
-
 		}
 
 	}
@@ -1051,54 +1074,58 @@ func resourceVolterraEndpointUpdate(d *schema.ResourceData, meta interface{}) er
 		endpointAddressInt.ServiceInfo = &ves_io_schema_endpoint.ServiceInfoType{}
 		updateSpec.EndpointAddress = endpointAddressInt
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
+			if set != nil {
+				cs := set.(map[string]interface{})
 
-			if v, ok := cs["discovery_type"]; ok && !isIntfNil(v) {
+				if v, ok := cs["discovery_type"]; ok && !isIntfNil(v) {
 
-				endpointAddressInt.ServiceInfo.DiscoveryType = ves_io_schema.DiscoveryType(ves_io_schema.DiscoveryType_value[v.(string)])
+					endpointAddressInt.ServiceInfo.DiscoveryType = ves_io_schema.DiscoveryType(ves_io_schema.DiscoveryType_value[v.(string)])
 
-			}
+				}
 
-			serviceInfoTypeFound := false
+				serviceInfoTypeFound := false
 
-			if v, ok := cs["service_name"]; ok && !isIntfNil(v) && !serviceInfoTypeFound {
+				if v, ok := cs["service_name"]; ok && !isIntfNil(v) && !serviceInfoTypeFound {
 
-				serviceInfoTypeFound = true
-				serviceInfoInt := &ves_io_schema_endpoint.ServiceInfoType_ServiceName{}
+					serviceInfoTypeFound = true
+					serviceInfoInt := &ves_io_schema_endpoint.ServiceInfoType_ServiceName{}
 
-				endpointAddressInt.ServiceInfo.ServiceInfo = serviceInfoInt
+					endpointAddressInt.ServiceInfo.ServiceInfo = serviceInfoInt
 
-				serviceInfoInt.ServiceName = v.(string)
+					serviceInfoInt.ServiceName = v.(string)
 
-			}
+				}
 
-			if v, ok := cs["service_selector"]; ok && !isIntfNil(v) && !serviceInfoTypeFound {
+				if v, ok := cs["service_selector"]; ok && !isIntfNil(v) && !serviceInfoTypeFound {
 
-				serviceInfoTypeFound = true
-				serviceInfoInt := &ves_io_schema_endpoint.ServiceInfoType_ServiceSelector{}
-				serviceInfoInt.ServiceSelector = &ves_io_schema.LabelSelectorType{}
-				endpointAddressInt.ServiceInfo.ServiceInfo = serviceInfoInt
+					serviceInfoTypeFound = true
+					serviceInfoInt := &ves_io_schema_endpoint.ServiceInfoType_ServiceSelector{}
+					serviceInfoInt.ServiceSelector = &ves_io_schema.LabelSelectorType{}
+					endpointAddressInt.ServiceInfo.ServiceInfo = serviceInfoInt
 
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
 
-					if v, ok := cs["expressions"]; ok && !isIntfNil(v) {
+							if v, ok := cs["expressions"]; ok && !isIntfNil(v) {
 
-						ls := make([]string, len(v.([]interface{})))
-						for i, v := range v.([]interface{}) {
-							ls[i] = v.(string)
+								ls := make([]string, len(v.([]interface{})))
+								for i, v := range v.([]interface{}) {
+									ls[i] = v.(string)
+								}
+								serviceInfoInt.ServiceSelector.Expressions = ls
+
+							}
+
 						}
-						serviceInfoInt.ServiceSelector.Expressions = ls
-
 					}
 
 				}
 
 			}
-
 		}
 
 	}
@@ -1126,283 +1153,291 @@ func resourceVolterraEndpointUpdate(d *schema.ResourceData, meta interface{}) er
 
 	if v, ok := d.GetOk("where"); ok && !isIntfNil(v) {
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		where := &ves_io_schema.NetworkSiteRefSelector{}
 		updateSpec.Where = where
 		for _, set := range sl {
-			whereMapStrToI := set.(map[string]interface{})
+			if set != nil {
+				whereMapStrToI := set.(map[string]interface{})
 
-			refOrSelectorTypeFound := false
+				refOrSelectorTypeFound := false
 
-			if v, ok := whereMapStrToI["site"]; ok && !isIntfNil(v) && !refOrSelectorTypeFound {
+				if v, ok := whereMapStrToI["site"]; ok && !isIntfNil(v) && !refOrSelectorTypeFound {
 
-				refOrSelectorTypeFound = true
-				refOrSelectorInt := &ves_io_schema.NetworkSiteRefSelector_Site{}
-				refOrSelectorInt.Site = &ves_io_schema.SiteRefType{}
-				where.RefOrSelector = refOrSelectorInt
+					refOrSelectorTypeFound = true
+					refOrSelectorInt := &ves_io_schema.NetworkSiteRefSelector_Site{}
+					refOrSelectorInt.Site = &ves_io_schema.SiteRefType{}
+					where.RefOrSelector = refOrSelectorInt
 
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
 
-					internetVipChoiceTypeFound := false
+							internetVipChoiceTypeFound := false
 
-					if v, ok := cs["disable_internet_vip"]; ok && !isIntfNil(v) && !internetVipChoiceTypeFound {
+							if v, ok := cs["disable_internet_vip"]; ok && !isIntfNil(v) && !internetVipChoiceTypeFound {
 
-						internetVipChoiceTypeFound = true
+								internetVipChoiceTypeFound = true
 
-						if v.(bool) {
-							internetVipChoiceInt := &ves_io_schema.SiteRefType_DisableInternetVip{}
-							internetVipChoiceInt.DisableInternetVip = &ves_io_schema.Empty{}
-							refOrSelectorInt.Site.InternetVipChoice = internetVipChoiceInt
+								if v.(bool) {
+									internetVipChoiceInt := &ves_io_schema.SiteRefType_DisableInternetVip{}
+									internetVipChoiceInt.DisableInternetVip = &ves_io_schema.Empty{}
+									refOrSelectorInt.Site.InternetVipChoice = internetVipChoiceInt
+								}
+
+							}
+
+							if v, ok := cs["enable_internet_vip"]; ok && !isIntfNil(v) && !internetVipChoiceTypeFound {
+
+								internetVipChoiceTypeFound = true
+
+								if v.(bool) {
+									internetVipChoiceInt := &ves_io_schema.SiteRefType_EnableInternetVip{}
+									internetVipChoiceInt.EnableInternetVip = &ves_io_schema.Empty{}
+									refOrSelectorInt.Site.InternetVipChoice = internetVipChoiceInt
+								}
+
+							}
+
+							if v, ok := cs["network_type"]; ok && !isIntfNil(v) {
+
+								refOrSelectorInt.Site.NetworkType = ves_io_schema.VirtualNetworkType(ves_io_schema.VirtualNetworkType_value[v.(string)])
+
+							}
+
+							if v, ok := cs["ref"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								refIntNew := make([]*ves_io_schema.ObjectRefType, len(sl))
+								refOrSelectorInt.Site.Ref = refIntNew
+								for i, ps := range sl {
+
+									rMapToStrVal := ps.(map[string]interface{})
+									refIntNew[i] = &ves_io_schema.ObjectRefType{}
+
+									refIntNew[i].Kind = "site"
+
+									if v, ok := rMapToStrVal["name"]; ok && !isIntfNil(v) {
+										refIntNew[i].Name = v.(string)
+									}
+
+									if v, ok := rMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+										refIntNew[i].Namespace = v.(string)
+									}
+
+									if v, ok := rMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+										refIntNew[i].Tenant = v.(string)
+									}
+
+									if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
+										refIntNew[i].Uid = v.(string)
+									}
+
+								}
+
+							}
+
+							if v, ok := cs["refs"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								refsInt := make([]*ves_io_schema.ObjectRefType, len(sl))
+								refOrSelectorInt.Site.Refs = refsInt
+								for i, ps := range sl {
+
+									rMapToStrVal := ps.(map[string]interface{})
+									refsInt[i] = &ves_io_schema.ObjectRefType{}
+
+									refsInt[i].Kind = "virtual_network"
+
+									if v, ok := rMapToStrVal["name"]; ok && !isIntfNil(v) {
+										refsInt[i].Name = v.(string)
+									}
+
+									if v, ok := rMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+										refsInt[i].Namespace = v.(string)
+									}
+
+									if v, ok := rMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+										refsInt[i].Tenant = v.(string)
+									}
+
+									if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
+										refsInt[i].Uid = v.(string)
+									}
+
+								}
+
+							}
+
 						}
-
 					}
 
-					if v, ok := cs["enable_internet_vip"]; ok && !isIntfNil(v) && !internetVipChoiceTypeFound {
+				}
 
-						internetVipChoiceTypeFound = true
+				if v, ok := whereMapStrToI["virtual_network"]; ok && !isIntfNil(v) && !refOrSelectorTypeFound {
 
-						if v.(bool) {
-							internetVipChoiceInt := &ves_io_schema.SiteRefType_EnableInternetVip{}
-							internetVipChoiceInt.EnableInternetVip = &ves_io_schema.Empty{}
-							refOrSelectorInt.Site.InternetVipChoice = internetVipChoiceInt
-						}
+					refOrSelectorTypeFound = true
+					refOrSelectorInt := &ves_io_schema.NetworkSiteRefSelector_VirtualNetwork{}
+					refOrSelectorInt.VirtualNetwork = &ves_io_schema.NetworkRefType{}
+					where.RefOrSelector = refOrSelectorInt
 
-					}
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
 
-					if v, ok := cs["network_type"]; ok && !isIntfNil(v) {
+							if v, ok := cs["ref"]; ok && !isIntfNil(v) {
 
-						refOrSelectorInt.Site.NetworkType = ves_io_schema.VirtualNetworkType(ves_io_schema.VirtualNetworkType_value[v.(string)])
+								sl := v.([]interface{})
+								refIntNew := make([]*ves_io_schema.ObjectRefType, len(sl))
+								refOrSelectorInt.VirtualNetwork.Ref = refIntNew
+								for i, ps := range sl {
 
-					}
+									rMapToStrVal := ps.(map[string]interface{})
+									refIntNew[i] = &ves_io_schema.ObjectRefType{}
 
-					if v, ok := cs["ref"]; ok && !isIntfNil(v) {
+									refIntNew[i].Kind = "virtual_network"
 
-						sl := v.([]interface{})
-						refIntNew := make([]*ves_io_schema.ObjectRefType, len(sl))
-						refOrSelectorInt.Site.Ref = refIntNew
-						for i, ps := range sl {
+									if v, ok := rMapToStrVal["name"]; ok && !isIntfNil(v) {
+										refIntNew[i].Name = v.(string)
+									}
 
-							rMapToStrVal := ps.(map[string]interface{})
-							refIntNew[i] = &ves_io_schema.ObjectRefType{}
+									if v, ok := rMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+										refIntNew[i].Namespace = v.(string)
+									}
 
-							refIntNew[i].Kind = "site"
+									if v, ok := rMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+										refIntNew[i].Tenant = v.(string)
+									}
 
-							if v, ok := rMapToStrVal["name"]; ok && !isIntfNil(v) {
-								refIntNew[i].Name = v.(string)
-							}
+									if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
+										refIntNew[i].Uid = v.(string)
+									}
 
-							if v, ok := rMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-								refIntNew[i].Namespace = v.(string)
-							}
+								}
 
-							if v, ok := rMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-								refIntNew[i].Tenant = v.(string)
-							}
-
-							if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
-								refIntNew[i].Uid = v.(string)
-							}
-
-						}
-
-					}
-
-					if v, ok := cs["refs"]; ok && !isIntfNil(v) {
-
-						sl := v.([]interface{})
-						refsInt := make([]*ves_io_schema.ObjectRefType, len(sl))
-						refOrSelectorInt.Site.Refs = refsInt
-						for i, ps := range sl {
-
-							rMapToStrVal := ps.(map[string]interface{})
-							refsInt[i] = &ves_io_schema.ObjectRefType{}
-
-							refsInt[i].Kind = "virtual_network"
-
-							if v, ok := rMapToStrVal["name"]; ok && !isIntfNil(v) {
-								refsInt[i].Name = v.(string)
-							}
-
-							if v, ok := rMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-								refsInt[i].Namespace = v.(string)
-							}
-
-							if v, ok := rMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-								refsInt[i].Tenant = v.(string)
-							}
-
-							if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
-								refsInt[i].Uid = v.(string)
 							}
 
 						}
+					}
 
+				}
+
+				if v, ok := whereMapStrToI["virtual_site"]; ok && !isIntfNil(v) && !refOrSelectorTypeFound {
+
+					refOrSelectorTypeFound = true
+					refOrSelectorInt := &ves_io_schema.NetworkSiteRefSelector_VirtualSite{}
+					refOrSelectorInt.VirtualSite = &ves_io_schema.VSiteRefType{}
+					where.RefOrSelector = refOrSelectorInt
+
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
+
+							internetVipChoiceTypeFound := false
+
+							if v, ok := cs["disable_internet_vip"]; ok && !isIntfNil(v) && !internetVipChoiceTypeFound {
+
+								internetVipChoiceTypeFound = true
+
+								if v.(bool) {
+									internetVipChoiceInt := &ves_io_schema.VSiteRefType_DisableInternetVip{}
+									internetVipChoiceInt.DisableInternetVip = &ves_io_schema.Empty{}
+									refOrSelectorInt.VirtualSite.InternetVipChoice = internetVipChoiceInt
+								}
+
+							}
+
+							if v, ok := cs["enable_internet_vip"]; ok && !isIntfNil(v) && !internetVipChoiceTypeFound {
+
+								internetVipChoiceTypeFound = true
+
+								if v.(bool) {
+									internetVipChoiceInt := &ves_io_schema.VSiteRefType_EnableInternetVip{}
+									internetVipChoiceInt.EnableInternetVip = &ves_io_schema.Empty{}
+									refOrSelectorInt.VirtualSite.InternetVipChoice = internetVipChoiceInt
+								}
+
+							}
+
+							if v, ok := cs["network_type"]; ok && !isIntfNil(v) {
+
+								refOrSelectorInt.VirtualSite.NetworkType = ves_io_schema.VirtualNetworkType(ves_io_schema.VirtualNetworkType_value[v.(string)])
+
+							}
+
+							if v, ok := cs["ref"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								refIntNew := make([]*ves_io_schema.ObjectRefType, len(sl))
+								refOrSelectorInt.VirtualSite.Ref = refIntNew
+								for i, ps := range sl {
+
+									rMapToStrVal := ps.(map[string]interface{})
+									refIntNew[i] = &ves_io_schema.ObjectRefType{}
+
+									refIntNew[i].Kind = "virtual_site"
+
+									if v, ok := rMapToStrVal["name"]; ok && !isIntfNil(v) {
+										refIntNew[i].Name = v.(string)
+									}
+
+									if v, ok := rMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+										refIntNew[i].Namespace = v.(string)
+									}
+
+									if v, ok := rMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+										refIntNew[i].Tenant = v.(string)
+									}
+
+									if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
+										refIntNew[i].Uid = v.(string)
+									}
+
+								}
+
+							}
+
+							if v, ok := cs["refs"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								refsInt := make([]*ves_io_schema.ObjectRefType, len(sl))
+								refOrSelectorInt.VirtualSite.Refs = refsInt
+								for i, ps := range sl {
+
+									rMapToStrVal := ps.(map[string]interface{})
+									refsInt[i] = &ves_io_schema.ObjectRefType{}
+
+									refsInt[i].Kind = "virtual_network"
+
+									if v, ok := rMapToStrVal["name"]; ok && !isIntfNil(v) {
+										refsInt[i].Name = v.(string)
+									}
+
+									if v, ok := rMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+										refsInt[i].Namespace = v.(string)
+									}
+
+									if v, ok := rMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+										refsInt[i].Tenant = v.(string)
+									}
+
+									if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
+										refsInt[i].Uid = v.(string)
+									}
+
+								}
+
+							}
+
+						}
 					}
 
 				}
 
 			}
-
-			if v, ok := whereMapStrToI["virtual_network"]; ok && !isIntfNil(v) && !refOrSelectorTypeFound {
-
-				refOrSelectorTypeFound = true
-				refOrSelectorInt := &ves_io_schema.NetworkSiteRefSelector_VirtualNetwork{}
-				refOrSelectorInt.VirtualNetwork = &ves_io_schema.NetworkRefType{}
-				where.RefOrSelector = refOrSelectorInt
-
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
-
-					if v, ok := cs["ref"]; ok && !isIntfNil(v) {
-
-						sl := v.([]interface{})
-						refIntNew := make([]*ves_io_schema.ObjectRefType, len(sl))
-						refOrSelectorInt.VirtualNetwork.Ref = refIntNew
-						for i, ps := range sl {
-
-							rMapToStrVal := ps.(map[string]interface{})
-							refIntNew[i] = &ves_io_schema.ObjectRefType{}
-
-							refIntNew[i].Kind = "virtual_network"
-
-							if v, ok := rMapToStrVal["name"]; ok && !isIntfNil(v) {
-								refIntNew[i].Name = v.(string)
-							}
-
-							if v, ok := rMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-								refIntNew[i].Namespace = v.(string)
-							}
-
-							if v, ok := rMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-								refIntNew[i].Tenant = v.(string)
-							}
-
-							if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
-								refIntNew[i].Uid = v.(string)
-							}
-
-						}
-
-					}
-
-				}
-
-			}
-
-			if v, ok := whereMapStrToI["virtual_site"]; ok && !isIntfNil(v) && !refOrSelectorTypeFound {
-
-				refOrSelectorTypeFound = true
-				refOrSelectorInt := &ves_io_schema.NetworkSiteRefSelector_VirtualSite{}
-				refOrSelectorInt.VirtualSite = &ves_io_schema.VSiteRefType{}
-				where.RefOrSelector = refOrSelectorInt
-
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
-
-					internetVipChoiceTypeFound := false
-
-					if v, ok := cs["disable_internet_vip"]; ok && !isIntfNil(v) && !internetVipChoiceTypeFound {
-
-						internetVipChoiceTypeFound = true
-
-						if v.(bool) {
-							internetVipChoiceInt := &ves_io_schema.VSiteRefType_DisableInternetVip{}
-							internetVipChoiceInt.DisableInternetVip = &ves_io_schema.Empty{}
-							refOrSelectorInt.VirtualSite.InternetVipChoice = internetVipChoiceInt
-						}
-
-					}
-
-					if v, ok := cs["enable_internet_vip"]; ok && !isIntfNil(v) && !internetVipChoiceTypeFound {
-
-						internetVipChoiceTypeFound = true
-
-						if v.(bool) {
-							internetVipChoiceInt := &ves_io_schema.VSiteRefType_EnableInternetVip{}
-							internetVipChoiceInt.EnableInternetVip = &ves_io_schema.Empty{}
-							refOrSelectorInt.VirtualSite.InternetVipChoice = internetVipChoiceInt
-						}
-
-					}
-
-					if v, ok := cs["network_type"]; ok && !isIntfNil(v) {
-
-						refOrSelectorInt.VirtualSite.NetworkType = ves_io_schema.VirtualNetworkType(ves_io_schema.VirtualNetworkType_value[v.(string)])
-
-					}
-
-					if v, ok := cs["ref"]; ok && !isIntfNil(v) {
-
-						sl := v.([]interface{})
-						refIntNew := make([]*ves_io_schema.ObjectRefType, len(sl))
-						refOrSelectorInt.VirtualSite.Ref = refIntNew
-						for i, ps := range sl {
-
-							rMapToStrVal := ps.(map[string]interface{})
-							refIntNew[i] = &ves_io_schema.ObjectRefType{}
-
-							refIntNew[i].Kind = "virtual_site"
-
-							if v, ok := rMapToStrVal["name"]; ok && !isIntfNil(v) {
-								refIntNew[i].Name = v.(string)
-							}
-
-							if v, ok := rMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-								refIntNew[i].Namespace = v.(string)
-							}
-
-							if v, ok := rMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-								refIntNew[i].Tenant = v.(string)
-							}
-
-							if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
-								refIntNew[i].Uid = v.(string)
-							}
-
-						}
-
-					}
-
-					if v, ok := cs["refs"]; ok && !isIntfNil(v) {
-
-						sl := v.([]interface{})
-						refsInt := make([]*ves_io_schema.ObjectRefType, len(sl))
-						refOrSelectorInt.VirtualSite.Refs = refsInt
-						for i, ps := range sl {
-
-							rMapToStrVal := ps.(map[string]interface{})
-							refsInt[i] = &ves_io_schema.ObjectRefType{}
-
-							refsInt[i].Kind = "virtual_network"
-
-							if v, ok := rMapToStrVal["name"]; ok && !isIntfNil(v) {
-								refsInt[i].Name = v.(string)
-							}
-
-							if v, ok := rMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-								refsInt[i].Namespace = v.(string)
-							}
-
-							if v, ok := rMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-								refsInt[i].Tenant = v.(string)
-							}
-
-							if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
-								refsInt[i].Uid = v.(string)
-							}
-
-						}
-
-					}
-
-				}
-
-			}
-
 		}
 
 	}

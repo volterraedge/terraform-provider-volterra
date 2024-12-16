@@ -1,9 +1,9 @@
 ---
 
 page_title: "Volterra: trusted_ca_list"
-description: "The trusted_ca_list allows CRUD of Trusted Ca List resource on Volterra SaaS"
 
----
+description: "The trusted_ca_list allows CRUD of Trusted Ca List resource on Volterra SaaS"
+-------------------------------------------------------------------------------------------
 
 Resource volterra_trusted_ca_list
 =================================

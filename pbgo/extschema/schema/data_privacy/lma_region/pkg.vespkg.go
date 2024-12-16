@@ -23,6 +23,7 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.data_privacy.lma_region.ListResponse"] = ListResponseValidator()
 	vr["ves.io.schema.data_privacy.lma_region.ListResponseItem"] = ListResponseItemValidator()
 
+	vr["ves.io.schema.data_privacy.lma_region.ClickhouseParams"] = ClickhouseParamsValidator()
 	vr["ves.io.schema.data_privacy.lma_region.ElasticParams"] = ElasticParamsValidator()
 	vr["ves.io.schema.data_privacy.lma_region.GetSpecType"] = GetSpecTypeValidator()
 	vr["ves.io.schema.data_privacy.lma_region.GlobalSpecType"] = GlobalSpecTypeValidator()

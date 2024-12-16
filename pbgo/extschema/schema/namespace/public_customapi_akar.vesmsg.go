@@ -81,6 +81,15 @@ func (v *ValidateAllApplicationInventoryRequest) Validate(ctx context.Context, p
 		return nil
 	}
 
+	if fv, exists := v.FldValidators["cdn_load_balancer_filter"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("cdn_load_balancer_filter"))
+		if err := fv(ctx, m.GetCdnLoadBalancerFilter(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["http_load_balancer_filter"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("http_load_balancer_filter"))
@@ -300,6 +309,18 @@ func (v *ValidateAllApplicationInventoryWafFilterResponse) Validate(ctx context.
 		return nil
 	}
 
+	if fv, exists := v.FldValidators["cdn_loadbalancers"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("cdn_loadbalancers"))
+		for idx, item := range m.GetCdnLoadbalancers() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["http_loadbalancers"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("http_loadbalancers"))
@@ -379,6 +400,15 @@ func (v *ValidateApplicationInventoryRequest) Validate(ctx context.Context, pm i
 	}
 	if m == nil {
 		return nil
+	}
+
+	if fv, exists := v.FldValidators["cdn_load_balancer_filter"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("cdn_load_balancer_filter"))
+		if err := fv(ctx, m.GetCdnLoadBalancerFilter(), vOpts...); err != nil {
+			return err
+		}
+
 	}
 
 	if fv, exists := v.FldValidators["http_load_balancer_filter"]; exists {
@@ -464,7 +494,38 @@ func (m *ApplicationInventoryResponse) GetDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 	}
 
-	return m.GetHttpLoadbalancersDRefInfo()
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetCdnLoadbalancersDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetCdnLoadbalancersDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetHttpLoadbalancersDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetHttpLoadbalancersDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	return drInfos, nil
+
+}
+
+// GetDRefInfo for the field's type
+func (m *ApplicationInventoryResponse) GetCdnLoadbalancersDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetCdnLoadbalancers() == nil {
+		return nil, nil
+	}
+
+	drInfos, err := m.GetCdnLoadbalancers().GetDRefInfo()
+	if err != nil {
+		return nil, errors.Wrap(err, "GetCdnLoadbalancers().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "cdn_loadbalancers." + dri.DRField
+	}
+	return drInfos, err
 
 }
 
@@ -502,6 +563,15 @@ func (v *ValidateApplicationInventoryResponse) Validate(ctx context.Context, pm 
 	}
 	if m == nil {
 		return nil
+	}
+
+	if fv, exists := v.FldValidators["cdn_loadbalancers"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("cdn_loadbalancers"))
+		if err := fv(ctx, m.GetCdnLoadbalancers(), vOpts...); err != nil {
+			return err
+		}
+
 	}
 
 	if fv, exists := v.FldValidators["http_loadbalancers"]; exists {
@@ -557,6 +627,8 @@ var DefaultApplicationInventoryResponseValidator = func() *ValidateApplicationIn
 	v := &ValidateApplicationInventoryResponse{FldValidators: map[string]db.ValidatorFunc{}}
 
 	v.FldValidators["http_loadbalancers"] = HTTPLoadbalancerInventoryTypeValidator().Validate
+
+	v.FldValidators["cdn_loadbalancers"] = HTTPLoadbalancerInventoryTypeValidator().Validate
 
 	return v
 }()
@@ -1913,7 +1985,42 @@ func (m *HTTPLoadbalancerInventoryType) GetDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 	}
 
-	return m.GetHttplbResultsDRefInfo()
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetCdnlbResultsDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetCdnlbResultsDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetHttplbResultsDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetHttplbResultsDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	return drInfos, nil
+
+}
+
+// GetDRefInfo for the field's type
+func (m *HTTPLoadbalancerInventoryType) GetCdnlbResultsDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetCdnlbResults() == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	for idx, e := range m.GetCdnlbResults() {
+		driSet, err := e.GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetCdnlbResults() GetDRefInfo() FAILED")
+		}
+		for i := range driSet {
+			dri := &driSet[i]
+			dri.DRField = fmt.Sprintf("cdnlb_results[%v].%s", idx, dri.DRField)
+		}
+		drInfos = append(drInfos, driSet...)
+	}
+	return drInfos, nil
 
 }
 
@@ -1980,6 +2087,18 @@ func (v *ValidateHTTPLoadbalancerInventoryType) Validate(ctx context.Context, pm
 		vOpts := append(opts, db.WithValidateField("bot_protection"))
 		if err := fv(ctx, m.GetBotProtection(), vOpts...); err != nil {
 			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["cdnlb_results"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("cdnlb_results"))
+		for idx, item := range m.GetCdnlbResults() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
 		}
 
 	}
@@ -2094,6 +2213,8 @@ var DefaultHTTPLoadbalancerInventoryTypeValidator = func() *ValidateHTTPLoadbala
 	v := &ValidateHTTPLoadbalancerInventoryType{FldValidators: map[string]db.ValidatorFunc{}}
 
 	v.FldValidators["httplb_results"] = HTTPLoadbalancerResultTypeValidator().Validate
+
+	v.FldValidators["cdnlb_results"] = HTTPLoadbalancerResultTypeValidator().Validate
 
 	return v
 }()

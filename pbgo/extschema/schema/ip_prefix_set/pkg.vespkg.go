@@ -31,6 +31,8 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.ip_prefix_set.CreateSpecType"] = CreateSpecTypeValidator()
 	vr["ves.io.schema.ip_prefix_set.GetSpecType"] = GetSpecTypeValidator()
 	vr["ves.io.schema.ip_prefix_set.GlobalSpecType"] = GlobalSpecTypeValidator()
+	vr["ves.io.schema.ip_prefix_set.Ipv4Prefix"] = Ipv4PrefixValidator()
+	vr["ves.io.schema.ip_prefix_set.Ipv6Prefix"] = Ipv6PrefixValidator()
 	vr["ves.io.schema.ip_prefix_set.ReplaceSpecType"] = ReplaceSpecTypeValidator()
 
 }
@@ -54,11 +56,34 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			FieldPath:     "ves.io.schema.ip_prefix_set.CreateRequest.spec.ipv6_prefix",
 			AddonServices: []string{"f5xc-ipv6-standard"},
 		},
+		{
+			FieldPath:     "ves.io.schema.ip_prefix_set.CreateRequest.spec.ipv6_prefixes",
+			AddonServices: []string{"f5xc-ipv6-standard"},
+		},
+	}
+
+	mdr.RPCDeprecatedRequestFieldsRegistry["ves.io.schema.ip_prefix_set.API.Create"] = []string{
+		"spec.ipv6_prefix.#",
+		"spec.prefix.#",
+	}
+
+	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.ip_prefix_set.API.Create"] = []string{
+		"spec.ipv6_prefix.#",
+		"spec.prefix.#",
+	}
+
+	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.ip_prefix_set.API.Create"] = []string{
+		"spec.ipv6_prefix.#",
+		"spec.prefix.#",
 	}
 
 	mdr.RPCAvailableInReqFieldRegistry["ves.io.schema.ip_prefix_set.API.Create"] = []svcfw.EnvironmentField{
 		{
 			FieldPath:           "spec.ipv6_prefix.#",
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.ipv6_prefixes.#",
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 	}
@@ -68,6 +93,19 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			FieldPath:           "spec.ipv6_prefix.#",
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
+		{
+			FieldPath:           "spec.ipv6_prefixes.#",
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
+		},
+	}
+
+	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.ip_prefix_set.API.Get"] = []string{
+		"create_form.spec.ipv6_prefix.#",
+		"create_form.spec.prefix.#",
+		"replace_form.spec.ipv6_prefix.#",
+		"replace_form.spec.prefix.#",
+		"spec.ipv6_prefix.#",
+		"spec.prefix.#",
 	}
 
 	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.ip_prefix_set.API.Get"] = []svcfw.EnvironmentField{
@@ -76,18 +114,39 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
+			FieldPath:           "create_form.spec.ipv6_prefixes.#",
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
+		},
+		{
 			FieldPath:           "replace_form.spec.ipv6_prefix.#",
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "replace_form.spec.ipv6_prefixes.#",
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
 			FieldPath:           "spec.ipv6_prefix.#",
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
+		{
+			FieldPath:           "spec.ipv6_prefixes.#",
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
+		},
+	}
+
+	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.ip_prefix_set.API.List"] = []string{
+		"items.#.get_spec.ipv6_prefix.#",
+		"items.#.get_spec.prefix.#",
 	}
 
 	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.ip_prefix_set.API.List"] = []svcfw.EnvironmentField{
 		{
 			FieldPath:           "items.#.get_spec.ipv6_prefix.#",
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "items.#.get_spec.ipv6_prefixes.#",
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 	}
@@ -97,11 +156,29 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			FieldPath:     "ves.io.schema.ip_prefix_set.ReplaceRequest.spec.ipv6_prefix",
 			AddonServices: []string{"f5xc-ipv6-standard"},
 		},
+		{
+			FieldPath:     "ves.io.schema.ip_prefix_set.ReplaceRequest.spec.ipv6_prefixes",
+			AddonServices: []string{"f5xc-ipv6-standard"},
+		},
+	}
+
+	mdr.RPCDeprecatedRequestFieldsRegistry["ves.io.schema.ip_prefix_set.API.Replace"] = []string{
+		"spec.ipv6_prefix.#",
+		"spec.prefix.#",
+	}
+
+	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.ip_prefix_set.API.Replace"] = []string{
+		"spec.ipv6_prefix.#",
+		"spec.prefix.#",
 	}
 
 	mdr.RPCAvailableInReqFieldRegistry["ves.io.schema.ip_prefix_set.API.Replace"] = []svcfw.EnvironmentField{
 		{
 			FieldPath:           "spec.ipv6_prefix.#",
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.ipv6_prefixes.#",
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 	}

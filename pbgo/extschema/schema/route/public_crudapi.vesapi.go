@@ -1149,16 +1149,25 @@ func (s *APISrv) Create(ctx context.Context, req *CreateRequest) (*CreateRespons
 	}
 	reqMsgFQN := "ves.io.schema.route.CreateRequest"
 	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.sf, reqMsgFQN, req)
+	var retErr error
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
 		}
+		userMsg := "The 'ves.io.schema.route.API.Create' operation on 'route'"
+		if retErr == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
 	obj := NewDBObject(nil)
 	req.ToObject(obj)
 	if conv, exists := s.sf.Config().MsgToObjConverters[reqMsgFQN]; exists {
 		if err := conv(req, obj); err != nil {
+			retErr = err
 			return nil, err
 		}
 	}
@@ -1167,16 +1176,19 @@ func (s *APISrv) Create(ctx context.Context, req *CreateRequest) (*CreateRespons
 	rsrcRsp, err := s.opts.RsrcHandler.CreateFn(ctx, rsrcReq, s.apiWrapper)
 	if err != nil {
 		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "CreateResource"))
+		retErr = err
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 	rsp, err := NewObjectCreateRsp(rsrcRsp.Entry)
 	if err != nil {
 		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "CreateResponse"))
+		retErr = err
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 	rspMsgFQN := "ves.io.schema.route.CreateResponse"
 	if conv, exists := s.sf.Config().ObjToMsgConverters[rspMsgFQN]; exists {
 		if err := conv(rsrcRsp.Entry, rsp); err != nil {
+			retErr = err
 			return nil, err
 		}
 	}
@@ -1208,21 +1220,31 @@ func (s *APISrv) Replace(ctx context.Context, req *ReplaceRequest) (*ReplaceResp
 		}
 	}
 	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.sf, "ves.io.schema.route.API.ReplaceRequest", req)
+	var retErr error
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
 		}
+		userMsg := "The 'ves.io.schema.route.API.Replace' operation on 'route'"
+		if retErr == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
 	rsrcReq := &server.ResourceReplaceRequest{RequestMsg: req}
 	rsrcRsp, err := s.opts.RsrcHandler.ReplaceFn(ctx, rsrcReq, s.apiWrapper)
 	if err != nil {
 		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "ReplaceResource"))
+		retErr = err
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 	rsp, err := NewObjectReplaceRsp(rsrcRsp.Entry)
 	if err != nil {
 		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "ReplaceResponse"))
+		retErr = err
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.sf, "ves.io.schema.route.API.ReplaceResponse", rsp)...)
@@ -1341,10 +1363,18 @@ func (s *APISrv) Delete(ctx context.Context, req *DeleteRequest) (*google_protob
 		}
 	}
 	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.sf, "ves.io.schema.route.API.DeleteRequest", req)
+	var retErr error
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
 		}
+		userMsg := "The 'ves.io.schema.route.API.Delete' operation on 'route'"
+		if retErr == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
 	tenant := server.TenantFromContext(ctx)
@@ -1354,6 +1384,7 @@ func (s *APISrv) Delete(ctx context.Context, req *DeleteRequest) (*google_protob
 	_, err := s.opts.RsrcHandler.DeleteFn(ctx, rsrcReq, s.apiWrapper)
 	if err != nil {
 		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "DeleteResource"))
+		retErr = err
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 	return &google_protobuf.Empty{}, nil
@@ -3037,6 +3068,40 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "routeQueryParamsSimpleRoute": {
+            "type": "object",
+            "description": "Handling of incoming query parameters in simple route.",
+            "title": "query_params",
+            "x-displayname": "Query Parameters",
+            "x-ves-oneof-field-query_params": "[\"remove_all_params\",\"replace_params\",\"retain_all_params\"]",
+            "x-ves-proto-message": "ves.io.schema.route.QueryParamsSimpleRoute",
+            "properties": {
+                "remove_all_params": {
+                    "description": "Exclusive with [replace_params retain_all_params]\n",
+                    "title": "Remove All Params",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Remove All Parameters"
+                },
+                "replace_params": {
+                    "type": "string",
+                    "description": "Exclusive with [remove_all_params retain_all_params]\n\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n  ves.io.schema.rules.string.min_len: 1\n",
+                    "title": "Replace All Params",
+                    "minLength": 1,
+                    "maxLength": 256,
+                    "x-displayname": "Replace All Parameters",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "256",
+                        "ves.io.schema.rules.string.min_len": "1"
+                    }
+                },
+                "retain_all_params": {
+                    "description": "Exclusive with [remove_all_params replace_params]\n",
+                    "title": "Retain All Params",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Retain All Parameters"
+                }
+            }
+        },
         "routeReplaceRequest": {
             "type": "object",
             "description": "This is the input message of the 'Replace' RPC",
@@ -3123,7 +3188,7 @@ var APISwaggerJSON string = `{
             "description": "List of destination to choose if the route is match.",
             "title": "RouteDestinationList",
             "x-displayname": "Destination List",
-            "x-ves-displayorder": "1,8,9,25,20,10,11,13,14,15,16,18,19,23",
+            "x-ves-displayorder": "1,8,9,25,20,27,10,11,13,14,15,16,18,19,23",
             "x-ves-oneof-field-cluster_retract_choice": "[\"do_not_retract_cluster\",\"retract_cluster\"]",
             "x-ves-oneof-field-host_rewrite_params": "[\"auto_host_rewrite\",\"host_rewrite\"]",
             "x-ves-oneof-field-route_destination_rewrite": "[\"prefix_rewrite\",\"regex_rewrite\"]",
@@ -3234,6 +3299,12 @@ var APISwaggerJSON string = `{
                     "title": "priority",
                     "$ref": "#/definitions/schemaRoutingPriority",
                     "x-displayname": "Priority"
+                },
+                "query_params": {
+                    "description": " Handling of incoming query parameters in simple route.",
+                    "title": "query_params",
+                    "$ref": "#/definitions/routeQueryParamsSimpleRoute",
+                    "x-displayname": "Query Parameters"
                 },
                 "regex_rewrite": {
                     "description": "Exclusive with [prefix_rewrite]\n regex_rewrite indicates that during forwarding, the matched regex should be swapped\n with the substitution value. \n\n Example :\n   gcSpec:\n     routes:\n     - match:\n       - headers: []\n         path:\n           regex : \"^/service/([^/]+)(/.*)$\"\n         query_params: []\n       routeDestination:\n         regexRewrite: \n              pattern: \"^/service/([^/]+)(/.*)$\" \n              substitution: \"\\\\2/instance/\\\\1\"\n         destinations:\n         - cluster:\n           - kind: cluster.Object\n             uid: cluster-1\n\n The path pattern \"^/service/([^/]+)(/.*)$\" paired with a substitution string of \"\\\\2/instance/\\\\1\" \n would transform \"/service/foo/v1/api\" into \"/v1/api/instance/foo\".\n\nExample: - \"^/service/([^/]+)(/.*)$\"-",

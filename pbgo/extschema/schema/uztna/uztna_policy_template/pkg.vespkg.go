@@ -54,6 +54,18 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 
+	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.uztna.uztna_policy_template.API.Create"] = []string{
+		"spec.continuous_flow",
+		"spec.on_start_flow.deny_all",
+		"spec.on_start_flow.simple.flows.#.allow_all",
+	}
+
+	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.uztna.uztna_policy_template.API.Replace"] = []string{
+		"spec.continuous_flow",
+		"spec.on_start_flow.deny_all",
+		"spec.on_start_flow.simple.flows.#.allow_all",
+	}
+
 }
 
 func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {

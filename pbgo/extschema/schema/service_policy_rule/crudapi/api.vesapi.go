@@ -3555,14 +3555,14 @@ var APISwaggerJSON string = `{
         },
         "policyJA4TlsFingerprintMatcherType": {
             "type": "object",
-            "description": "JA4 TLS fingerprints to be matched",
+            "description": "An extended version of JA3 that includes additional fields for more comprehensive fingerprinting of\nSSL/TLS clients and potentially has a different structure and length.",
             "title": "JA4TlsFingerprintMatcherType",
             "x-displayname": "JA4 TLS Fingerprint Matcher",
             "x-ves-proto-message": "ves.io.schema.policy.JA4TlsFingerprintMatcherType",
             "properties": {
                 "exact_values": {
                     "type": "array",
-                    "description": " A list of exact JA4 TLS fingerprint to match the input JA4 TLS fingerprint against\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 16\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " A list of exact JA4 TLS fingerprint to match the input JA4 TLS fingerprint against\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.len: 36\n  ves.io.schema.rules.repeated.max_items: 16\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "exact values",
                     "maxItems": 16,
                     "items": {
@@ -3570,6 +3570,7 @@ var APISwaggerJSON string = `{
                     },
                     "x-displayname": "Exact Values",
                     "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.items.string.len": "36",
                         "ves.io.schema.rules.repeated.max_items": "16",
                         "ves.io.schema.rules.repeated.unique": "true"
                     }
@@ -5122,6 +5123,12 @@ var APISwaggerJSON string = `{
                     "format": "date-time",
                     "x-displayname": "Deletion Timestamp"
                 },
+                "direct_ref_hash": {
+                    "type": "string",
+                    "description": " A hash of the UIDs of  direct references on this object. This can be used to determine if \n this object hash has had references become resolved/unresolved",
+                    "title": "direct_ref_hash",
+                    "x-displayname": "Direct Reference Hash"
+                },
                 "finalizers": {
                     "type": "array",
                     "description": " Must be empty before the object is deleted from the registry. Each entry\n is an identifier for the responsible component that will remove the entry\n from the list. If the deletionTimestamp of the object is non-nil, entries\n in this list can only be removed.\n\nExample: - \"value\"-",
@@ -5692,7 +5699,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "List of IP Threat Categories"
                 },
                 "ja4_tls_fingerprint": {
-                    "description": "Exclusive with [tls_fingerprint_matcher]\n JA4 TLS fingerprints to be matched",
+                    "description": "Exclusive with [tls_fingerprint_matcher]\n An extended version of JA3 that includes additional fields for more comprehensive fingerprinting of\n SSL/TLS clients and potentially has a different structure and length.",
                     "title": "ja4 tls fingerprint",
                     "$ref": "#/definitions/policyJA4TlsFingerprintMatcherType",
                     "x-displayname": "JA4 TLS Fingerprint"
@@ -5761,7 +5768,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Configure Segments"
                 },
                 "tls_fingerprint_matcher": {
-                    "description": "Exclusive with [ja4_tls_fingerprint]\n JA3 TLS fingerprints to be matched",
+                    "description": "Exclusive with [ja4_tls_fingerprint]\n A method for uniquely identifying SSL/TLS clients by creating a 32-character MD5 hash based on the\n parameters of the Client Hello packet during the handshake.",
                     "title": "TLS JA3 fingerprint matcher",
                     "$ref": "#/definitions/policyTlsFingerprintMatcherType",
                     "x-displayname": "JA3 TLS Fingerprint"

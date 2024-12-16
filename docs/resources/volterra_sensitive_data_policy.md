@@ -1,9 +1,9 @@
 ---
 
 page_title: "Volterra: sensitive_data_policy"
-description: "The sensitive_data_policy allows CRUD of Sensitive Data Policy resource on Volterra SaaS"
 
----
+description: "The sensitive_data_policy allows CRUD of Sensitive Data Policy resource on Volterra SaaS"
+-------------------------------------------------------------------------------------------------------
 
 Resource volterra_sensitive_data_policy
 =======================================

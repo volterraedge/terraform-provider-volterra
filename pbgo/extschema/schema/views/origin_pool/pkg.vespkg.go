@@ -33,6 +33,7 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.views.origin_pool.OriginPoolAdvancedOptions"] = OriginPoolAdvancedOptionsValidator()
 	vr["ves.io.schema.views.origin_pool.OriginPoolDefaultSubset"] = OriginPoolDefaultSubsetValidator()
 	vr["ves.io.schema.views.origin_pool.OriginPoolSubsets"] = OriginPoolSubsetsValidator()
+	vr["ves.io.schema.views.origin_pool.OriginServerCBIPService"] = OriginServerCBIPServiceValidator()
 	vr["ves.io.schema.views.origin_pool.OriginServerConsulService"] = OriginServerConsulServiceValidator()
 	vr["ves.io.schema.views.origin_pool.OriginServerCustomEndpoint"] = OriginServerCustomEndpointValidator()
 	vr["ves.io.schema.views.origin_pool.OriginServerK8SService"] = OriginServerK8SServiceValidator()

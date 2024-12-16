@@ -735,7 +735,7 @@ var SahayaAPISwaggerJSON string = `{
             "description": "AI Assistant Query Response",
             "title": "AI Assistant Query Response",
             "x-displayname": "AI Assistant Query Response",
-            "x-ves-oneof-field-response_choice": "[\"explain_log\",\"gen_dashboard_filter\",\"generic_response\",\"site_analysis_response\",\"widget_response\"]",
+            "x-ves-oneof-field-response_choice": "[\"explain_log\",\"gen_dashboard_filter\",\"generic_response\",\"list_response\",\"site_analysis_response\",\"widget_response\"]",
             "x-ves-proto-message": "ves.io.schema.ai_assistant.AIAssistantQueryResponse",
             "properties": {
                 "current_query": {
@@ -746,7 +746,7 @@ var SahayaAPISwaggerJSON string = `{
                     "x-ves-example": "Explain security event 07e03bc6-81d4-4c86-a865-67b5763fe294"
                 },
                 "explain_log": {
-                    "description": "Exclusive with [gen_dashboard_filter generic_response site_analysis_response widget_response]\n Explain log response",
+                    "description": "Exclusive with [gen_dashboard_filter generic_response list_response site_analysis_response widget_response]\n Explain log response",
                     "title": "explain_log",
                     "$ref": "#/definitions/explain_log_recordExplainLogRecordResponse",
                     "x-displayname": "Explain log"
@@ -765,16 +765,22 @@ var SahayaAPISwaggerJSON string = `{
                     }
                 },
                 "gen_dashboard_filter": {
-                    "description": "Exclusive with [explain_log generic_response site_analysis_response widget_response]\n Generate dashboard filter response",
+                    "description": "Exclusive with [explain_log generic_response list_response site_analysis_response widget_response]\n Generate dashboard filter response",
                     "title": "gen_dashboard_filter",
                     "$ref": "#/definitions/gen_dashboard_filterGenDashboardFilterResponse",
                     "x-displayname": "Generate dashboard filter"
                 },
                 "generic_response": {
-                    "description": "Exclusive with [explain_log gen_dashboard_filter site_analysis_response widget_response]\n Generic Response",
+                    "description": "Exclusive with [explain_log gen_dashboard_filter list_response site_analysis_response widget_response]\n Generic Response",
                     "title": "generic_response",
                     "$ref": "#/definitions/commonGenericResponse",
                     "x-displayname": "Generic Response"
+                },
+                "list_response": {
+                    "description": "Exclusive with [explain_log gen_dashboard_filter generic_response site_analysis_response widget_response]\n List Response",
+                    "title": "list_response",
+                    "$ref": "#/definitions/listListResponse",
+                    "x-displayname": "List Response"
                 },
                 "query_id": {
                     "type": "string",
@@ -787,13 +793,13 @@ var SahayaAPISwaggerJSON string = `{
                     }
                 },
                 "site_analysis_response": {
-                    "description": "Exclusive with [explain_log gen_dashboard_filter generic_response widget_response]\n Site Analysis",
+                    "description": "Exclusive with [explain_log gen_dashboard_filter generic_response list_response widget_response]\n Site Analysis",
                     "title": "site_analysis",
                     "$ref": "#/definitions/site_analysisSiteAnalysisResponse",
                     "x-displayname": "Site analysis"
                 },
                 "widget_response": {
-                    "description": "Exclusive with [explain_log gen_dashboard_filter generic_response site_analysis_response]\n Widget Response",
+                    "description": "Exclusive with [explain_log gen_dashboard_filter generic_response list_response site_analysis_response]\n Widget Response",
                     "title": "widget_response",
                     "$ref": "#/definitions/widgetWidgetResponse",
                     "x-displayname": "Generic Widget Response"
@@ -840,11 +846,13 @@ var SahayaAPISwaggerJSON string = `{
         },
         "ai_assistantcommonUnitType": {
             "type": "string",
-            "description": "Unit Type defines the unit for each fields.\n\n - UNIT_TYPE_NONE: None\n\nNone type\n - GB: GB\n",
+            "description": "Unit Type defines the unit for each fields.\n\n - UNIT_TYPE_NONE: None\n\nNone type\n - GB: GB\n\n - PERCENT: Percent\n\n - BYTE: Byte\n",
             "title": "UnitType",
             "enum": [
                 "UNIT_TYPE_NONE",
-                "GB"
+                "GB",
+                "PERCENT",
+                "BYTE"
             ],
             "default": "UNIT_TYPE_NONE",
             "x-displayname": "Unit Type",
@@ -864,9 +872,20 @@ var SahayaAPISwaggerJSON string = `{
             "x-displayname": "Action",
             "x-ves-proto-enum": "ves.io.schema.ai_assistant.explain_log_record.Action"
         },
+        "commonCellProperties": {
+            "type": "object",
+            "x-ves-proto-message": "ves.io.schema.ai_assistant.common.CellProperties",
+            "properties": {
+                "status_style": {
+                    "description": " x-displayName \"Status Style\"\n Colour Style for status.",
+                    "title": "Status Style",
+                    "$ref": "#/definitions/commonStatusStyle"
+                }
+            }
+        },
         "commonColourType": {
             "type": "string",
-            "description": "Colour Type defines the colour of fields to be displayed.\n\n - COLOUR_TYPE_NONE: None\n\nNo colour\n - DANGER: danger\n\ncolour type red\n - INFO: info\n\ncolour type blue\n - WARNING: warning\n\ncolour type orange\n - AMBER: amber\n\ncolour type yellow\n - SUCCESS: success\n\ncolour type  green",
+            "description": "Colour Type defines the colour of fields to be displayed.\n\n - COLOUR_TYPE_NONE: None\n\nNo colour\n - DANGER: danger\n\ncolour type red\n - INFO: info\n\ncolour type blue\n - WARNING: warning\n\ncolour type orange\n - AMBER: amber\n\ncolour type yellow\n - SUCCESS: success\n\ncolour type green\n - MALIBU: malibu\n\ncolour type blue",
             "title": "ColourType",
             "enum": [
                 "COLOUR_TYPE_NONE",
@@ -874,7 +893,8 @@ var SahayaAPISwaggerJSON string = `{
                 "INFO",
                 "WARNING",
                 "AMBER",
-                "SUCCESS"
+                "SUCCESS",
+                "MALIBU"
             ],
             "default": "COLOUR_TYPE_NONE",
             "x-displayname": "Colour Type",
@@ -961,14 +981,22 @@ var SahayaAPISwaggerJSON string = `{
         },
         "commonDashboardLinkType": {
             "type": "string",
-            "description": "Link Type to be presented\n\n - SECURITY_ANALYTICS_EVENTS: SECURITY_ANALYTICS_EVENTS\n\nSecurity analytics dashboard: /web/workspaces/web-app-and-api-protection/../dashboard/security-dashboard/../security_analytics/events\n - REQUESTS_EVENTS: REQUESTS_EVENTS\n\nRequests dashboard: /web/workspaces/web-app-and-api-protection/../dashboard/security-dashboard/../security_monitoring/request\n - SITES: SITES\n\nSites dashboard: /web/workspaces/multi-cloud-network-connect/overview/sites/dashboard\n - CLOUD_CREDENTIALS: CLOUD_CREDENTIALS\n\nCLOUD_CREDENTIALS --\u003e /web/workspaces/multi-cloud-network-connect/manage/site_management/cloud_sites/cloud_credential\n - SITES_UBER: SITES_UBER\n\nSites dashboard: /web/workspaces/multi-cloud-network-connect/overview/sites/dashboard",
+            "description": "Link Type to be presented\n\n - SECURITY_ANALYTICS_EVENTS: SECURITY_ANALYTICS_EVENTS\n\nSecurity analytics dashboard: /web/workspaces/web-app-and-api-protection/../dashboard/security-dashboard/../security_analytics/events\n - REQUESTS_EVENTS: REQUESTS_EVENTS\n\nRequests dashboard: /web/workspaces/web-app-and-api-protection/../dashboard/security-dashboard/../security_monitoring/request\n - SITES: SITES\n\nSites dashboard: /web/workspaces/multi-cloud-network-connect/overview/sites/dashboard\n - CLOUD_CREDENTIALS: CLOUD_CREDENTIALS\n\nCLOUD_CREDENTIALS --\u003e /web/workspaces/multi-cloud-network-connect/manage/site_management/cloud_sites/cloud_credential\n - SITES_UBER: SITES_UBER\n\nSites dashboard: /web/workspaces/multi-cloud-network-connect/overview/sites/dashboard\n - SITE_ALERTS: SITE_ALERTS\n\nAlerts dashboard: /web/workspaces/multi-cloud-network-connect/overview/infrastructure/sites/alerts\n - SITE_MANAGEMENT_AWS_VPC_SITES: SITE_MANAGEMENT_AWS_VPC_SITES\n\nSite Management dashboard: /web/workspaces/multi-cloud-network-connect/manage/site_management/cloud_sites/aws_vpc_site\n - SITE_MANAGEMENT_AWS_TGW_SITES: SITE_MANAGEMENT_AWS_TGW_SITES\n\nSite Management dashboard: /web/workspacesmulti-cloud-network-connect/manage/site_management/cloud_sites/aws_tgw_site\n - SITE_MANAGEMENT_AZURE_VNET_SITES: SITE_MANAGEMENT_AZURE_VNET_SITES\n\nSite Management dashboard: /web/workspaces/multi-cloud-network-connect/manage/site_management/cloud_sites/azure_site\n - SITE_MANAGEMENT_GCP_VPC_SITES: SITE_MANAGEMENT_GCP_VPC_SITES\n\nSite Management dashboard: /web/workspaces/multi-cloud-network-connect/manage/site_management/cloud_sites/gcp_vpc_site\n - SITE_MANAGEMENT_APP_STACK_SITES: SITE_MANAGEMENT_APP_STACK_SITES\n\nSite Management dashboard: /web/workspaces/multi-cloud-network-connect/manage/site_management/cloud_sites/appstack_site\n - SITE_MANAGEMENT_SECURE_MESH_SITES: SITE_MANAGEMENT_SECURE_MESH_SITES\n\nSite Management dashboard: /web/workspaces/multi-cloud-network-connect/manage/site_management/legacy_configs/securemesh_site\n - TENANT_OVERVIEW_PAGE: TENANT_OVERVIEW_PAGE\n\nTenant Overview Page: /web/workspaces/administration/tenant-settings/tenant-overview",
             "title": "LinkType",
             "enum": [
                 "SECURITY_ANALYTICS_EVENTS",
                 "REQUESTS_EVENTS",
                 "SITES",
                 "CLOUD_CREDENTIALS",
-                "SITES_UBER"
+                "SITES_UBER",
+                "SITE_ALERTS",
+                "SITE_MANAGEMENT_AWS_VPC_SITES",
+                "SITE_MANAGEMENT_AWS_TGW_SITES",
+                "SITE_MANAGEMENT_AZURE_VNET_SITES",
+                "SITE_MANAGEMENT_GCP_VPC_SITES",
+                "SITE_MANAGEMENT_APP_STACK_SITES",
+                "SITE_MANAGEMENT_SECURE_MESH_SITES",
+                "TENANT_OVERVIEW_PAGE"
             ],
             "default": "SECURITY_ANALYTICS_EVENTS",
             "x-displayname": "Link Type",
@@ -1009,11 +1037,15 @@ var SahayaAPISwaggerJSON string = `{
         },
         "commonDisplayType": {
             "type": "string",
-            "description": "Render Type defines the format to which data has to be rendered on UI.\n\n - DISPLAY_TYPE_NONE: None\n\nNone type\n - ICON: icon\n\nValue to be displayed as ICON",
+            "description": "Render Type defines the format to which data has to be rendered on UI.\n\n - DISPLAY_TYPE_NONE: None\n\nNone type\n - ICON: icon\n\nValue to be displayed as ICON\n - PROGRESS_BAR: progress bar\n\n - DATE: date\n\n - DURATION: duration\n",
             "title": "DisplayType",
             "enum": [
                 "DISPLAY_TYPE_NONE",
-                "ICON"
+                "ICON",
+                "DOT_WITH_VALUE",
+                "PROGRESS_BAR",
+                "DATE",
+                "DURATION"
             ],
             "default": "DISPLAY_TYPE_NONE",
             "x-displayname": "DisplayType Type",
@@ -1050,6 +1082,12 @@ var SahayaAPISwaggerJSON string = `{
                     "x-displayname": "title",
                     "x-ves-example": "Site Name"
                 },
+                "tooltip": {
+                    "type": "string",
+                    "description": " Tooltip for the field",
+                    "title": "Tooltip",
+                    "x-displayname": "tooltip"
+                },
                 "unit": {
                     "description": "\n\nExample: - \"GB\"-",
                     "title": "Unit",
@@ -1073,13 +1111,14 @@ var SahayaAPISwaggerJSON string = `{
         },
         "commonFormatType": {
             "type": "string",
-            "description": "Format Type defines the format type for each fields.\n\n - FORMAT_TYPE_NONE: None\n\nNo format\n - INLINE: Inline\n\nKey value to be displayed in inline format\n - BOLD: Bold\n\nValue to be displayed in bold format\n - REVERSE_KEY_VALUE_ORDER: ReverseKeyValueOrder\n\nKey value to be displayed in Reverse Key Value Order format",
+            "description": "Format Type defines the format type for each fields.\n\n - FORMAT_TYPE_NONE: None\n\nNo format\n - INLINE: Inline\n\nKey value to be displayed in inline format\n - BOLD: Bold\n\nValue to be displayed in bold format\n - REVERSE_KEY_VALUE_ORDER: ReverseKeyValueOrder\n\nKey value to be displayed in Reverse Key Value Order format\n - WRAP: Wrap\n\nValue to be wrapped",
             "title": "FormatType",
             "enum": [
                 "FORMAT_TYPE_NONE",
                 "INLINE",
                 "BOLD",
-                "REVERSE_KEY_VALUE_ORDER"
+                "REVERSE_KEY_VALUE_ORDER",
+                "WRAP"
             ],
             "default": "FORMAT_TYPE_NONE",
             "x-displayname": "Format Type",
@@ -1206,6 +1245,22 @@ var SahayaAPISwaggerJSON string = `{
                     }
                 }
             }
+        },
+        "commonStatusStyle": {
+            "type": "string",
+            "description": "Status Style defines the colour of status to be displayed.\n\n - STATUS_STYLE_UNKNOWN: Unknown\n\nNo colour\n - STATUS_STYLE_SUCCESS: success\n\ncolour type green\n - STATUS_STYLE_DANGER: danger\n\ncolour type red\n - STATUS_STYLE_WARNING: warning\n\ncolour type yellow\n - STATUS_STYLE_INACTIVE: inactive\n\ncolour type grey\n - STATUS_STYLE_MINOR: minor\n\ncolour type blue",
+            "title": "StatusStyle",
+            "enum": [
+                "STATUS_STYLE_UNKNOWN",
+                "STATUS_STYLE_SUCCESS",
+                "STATUS_STYLE_DANGER",
+                "STATUS_STYLE_WARNING",
+                "STATUS_STYLE_INACTIVE",
+                "STATUS_STYLE_MINOR"
+            ],
+            "default": "STATUS_STYLE_UNKNOWN",
+            "x-displayname": "Status Style",
+            "x-ves-proto-enum": "ves.io.schema.ai_assistant.common.StatusStyle"
         },
         "commonWidgetType": {
             "type": "string",
@@ -1719,6 +1774,80 @@ var SahayaAPISwaggerJSON string = `{
                 }
             }
         },
+        "listItem": {
+            "type": "object",
+            "x-ves-proto-message": "ves.io.schema.ai_assistant.list.Item",
+            "properties": {
+                "link": {
+                    "description": " Link for the field that will be presented to the user",
+                    "title": "Link",
+                    "$ref": "#/definitions/commonLink",
+                    "x-displayname": "link"
+                }
+            }
+        },
+        "listList": {
+            "type": "object",
+            "x-ves-proto-message": "ves.io.schema.ai_assistant.list.List",
+            "properties": {
+                "item": {
+                    "type": "array",
+                    "description": " List of item\n\nExample: - \"Entries for each item\"-",
+                    "title": "item",
+                    "items": {
+                        "$ref": "#/definitions/listItem"
+                    },
+                    "x-displayname": "Item",
+                    "x-ves-example": "Entries for each item"
+                },
+                "title": {
+                    "type": "string",
+                    "description": "\n\nExample: - \"Cloud Sites\"-",
+                    "title": "Title",
+                    "x-displayname": "Title",
+                    "x-ves-example": "Cloud Sites"
+                }
+            }
+        },
+        "listListResponse": {
+            "type": "object",
+            "description": "List response",
+            "title": "List Response",
+            "x-displayname": "List Response",
+            "x-ves-proto-message": "ves.io.schema.ai_assistant.list.ListResponse",
+            "properties": {
+                "external_links": {
+                    "type": "array",
+                    "description": " External doc links, that will be presented to the user\n\nValidation Rules:\n  ves.io.schema.rules.repeated.unique: true\n  ves.io.schema.rules.string.max_len: 6\n",
+                    "title": "external links",
+                    "items": {
+                        "$ref": "#/definitions/commonLink",
+                        "maximum": 6
+                    },
+                    "x-displayname": "External Links",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.unique": "true",
+                        "ves.io.schema.rules.string.max_len": "6"
+                    }
+                },
+                "items": {
+                    "type": "array",
+                    "description": " Response will have set of lists",
+                    "title": "Items",
+                    "items": {
+                        "$ref": "#/definitions/listList"
+                    },
+                    "x-displayname": "List View "
+                },
+                "summary": {
+                    "type": "string",
+                    "description": "\n\nExample: - \"This is summary of List response\"-",
+                    "title": "summary",
+                    "x-displayname": "Summary",
+                    "x-ves-example": "This is summary of List response"
+                }
+            }
+        },
         "policyIPThreatCategory": {
             "type": "string",
             "description": "The IP threat categories to use when a policy based IP threat category is configured.\n\n - SPAM_SOURCES: SPAM_SOURCES\n\n - WINDOWS_EXPLOITS: WINDOWS_EXPLOITS\n\n - WEB_ATTACKS: WEB_ATTACKS\n\n - BOTNETS: BOTNETS\n\n - SCANNERS: SCANNERS\n\n - REPUTATION: REPUTATION\n\n - PHISHING: PHISHING\n\n - PROXY: PROXY\n\n - MOBILE_THREATS: MOBILE_THREATS\n\n - TOR_PROXY: TOR_PROXY\n\n - DENIAL_OF_SERVICE: DENIAL_OF_SERVICE\n\n - NETWORK: NETWORK\n",
@@ -1810,29 +1939,6 @@ var SahayaAPISwaggerJSON string = `{
                 }
             }
         },
-        "site_analysisAnalysisAndAction": {
-            "type": "object",
-            "description": "Analysis and Action",
-            "title": "Analysis and Action",
-            "x-displayname": "Analysis and Action",
-            "x-ves-proto-message": "ves.io.schema.ai_assistant.site_analysis.AnalysisAndAction",
-            "properties": {
-                "action": {
-                    "type": "string",
-                    "description": "\n\nExample: - \"Retry provisioning the site\"-",
-                    "title": "action",
-                    "x-displayname": "Action",
-                    "x-ves-example": "Retry provisioning the site"
-                },
-                "analysis": {
-                    "type": "string",
-                    "description": "\n\nExample: - \"siteA is in provisioning state due to connectivity issues\"-",
-                    "title": "analysis",
-                    "x-displayname": "Analysis",
-                    "x-ves-example": "siteA is in provisioning state due to connectivity issues"
-                }
-            }
-        },
         "site_analysisSiteAnalysisResponse": {
             "type": "object",
             "description": "Site analysis response",
@@ -1840,27 +1946,33 @@ var SahayaAPISwaggerJSON string = `{
             "x-displayname": "Site Analysis Response",
             "x-ves-proto-message": "ves.io.schema.ai_assistant.site_analysis.SiteAnalysisResponse",
             "properties": {
-                "analysis_and_actions": {
+                "external_links": {
                     "type": "array",
-                    "description": " Site Status Analysis and Actions list\n\nExample: - \"The site failed because it was stuck in provisioning state. Retry provisioning the site\"-",
-                    "title": "analysis and action list",
+                    "description": " External doc links, that will be presented to the user\n\nValidation Rules:\n  ves.io.schema.rules.repeated.unique: true\n  ves.io.schema.rules.string.max_len: 6\n",
+                    "title": "external links",
                     "items": {
-                        "$ref": "#/definitions/site_analysisAnalysisAndAction"
+                        "$ref": "#/definitions/commonLink",
+                        "maximum": 6
                     },
-                    "x-displayname": "Analysis and Action list",
-                    "x-ves-example": "The site failed because it was stuck in provisioning state. Retry provisioning the site"
+                    "x-displayname": "External Links",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.unique": "true",
+                        "ves.io.schema.rules.string.max_len": "6"
+                    }
                 },
-                "external_link": {
-                    "description": " External doc link, that will be presented to the user",
-                    "title": "external doc link",
-                    "$ref": "#/definitions/commonLink",
-                    "x-displayname": "External Link"
-                },
-                "internal_link": {
-                    "description": " Internal Link like dashboard link, that will be presented to the user",
-                    "title": "internal link",
-                    "$ref": "#/definitions/commonLink",
-                    "x-displayname": "Internal Link"
+                "internal_links": {
+                    "type": "array",
+                    "description": " Internal Link like dashboard links, that will be presented to the user\n\nValidation Rules:\n  ves.io.schema.rules.repeated.unique: true\n  ves.io.schema.rules.string.max_len: 6\n",
+                    "title": "internal links",
+                    "items": {
+                        "$ref": "#/definitions/commonLink",
+                        "maximum": 6
+                    },
+                    "x-displayname": "Internal Links",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.unique": "true",
+                        "ves.io.schema.rules.string.max_len": "6"
+                    }
                 },
                 "summary": {
                     "type": "string",
@@ -1868,6 +1980,12 @@ var SahayaAPISwaggerJSON string = `{
                     "title": "summary",
                     "x-displayname": "Summary",
                     "x-ves-example": "This site analysis response provides status of sites."
+                },
+                "table_view": {
+                    "description": " Site Analysis response in table format.",
+                    "title": "Table View",
+                    "$ref": "#/definitions/widgetWidgetView",
+                    "x-displayname": "Table View "
                 }
             }
         },
@@ -1880,6 +1998,12 @@ var SahayaAPISwaggerJSON string = `{
                     "title": "Link",
                     "$ref": "#/definitions/commonLink",
                     "x-displayname": "link"
+                },
+                "properties": {
+                    "description": " Properties of the field",
+                    "title": "Properties\nx-displayName: \"Properties\"\nProperties of the field",
+                    "$ref": "#/definitions/commonCellProperties",
+                    "x-displayname": "Properties"
                 },
                 "value": {
                     "type": "string",

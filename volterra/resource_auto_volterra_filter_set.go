@@ -80,14 +80,16 @@ func resourceVolterraFilterSet() *schema.Resource {
 
 						"date_field": {
 
-							Type:     schema.TypeSet,
+							Type:     schema.TypeList,
+							MaxItems: 1,
 							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
 									"absolute": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -116,7 +118,8 @@ func resourceVolterraFilterSet() *schema.Resource {
 
 						"filter_expression_field": {
 
-							Type:     schema.TypeSet,
+							Type:     schema.TypeList,
+							MaxItems: 1,
 							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
@@ -131,7 +134,8 @@ func resourceVolterraFilterSet() *schema.Resource {
 
 						"label_selector_field": {
 
-							Type:       schema.TypeSet,
+							Type:       schema.TypeList,
+							MaxItems:   1,
 							Optional:   true,
 							Deprecated: "This field is deprecated and will be removed in future release.",
 							Elem: &schema.Resource{
@@ -153,7 +157,8 @@ func resourceVolterraFilterSet() *schema.Resource {
 
 						"string_field": {
 
-							Type:     schema.TypeSet,
+							Type:     schema.TypeList,
+							MaxItems: 1,
 							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
@@ -245,145 +250,157 @@ func resourceVolterraFilterSetCreate(d *schema.ResourceData, meta interface{}) e
 		filterFields := make([]*ves_io_schema_filter_set.FilterSetField, len(sl))
 		createSpec.FilterFields = filterFields
 		for i, set := range sl {
-			filterFields[i] = &ves_io_schema_filter_set.FilterSetField{}
-			filterFieldsMapStrToI := set.(map[string]interface{})
+			if set != nil {
+				filterFields[i] = &ves_io_schema_filter_set.FilterSetField{}
+				filterFieldsMapStrToI := set.(map[string]interface{})
 
-			if w, ok := filterFieldsMapStrToI["field_id"]; ok && !isIntfNil(w) {
-				filterFields[i].FieldId = w.(string)
-			}
+				if w, ok := filterFieldsMapStrToI["field_id"]; ok && !isIntfNil(w) {
+					filterFields[i].FieldId = w.(string)
+				}
 
-			fieldValueTypeFound := false
+				fieldValueTypeFound := false
 
-			if v, ok := filterFieldsMapStrToI["date_field"]; ok && !isIntfNil(v) && !fieldValueTypeFound {
+				if v, ok := filterFieldsMapStrToI["date_field"]; ok && !isIntfNil(v) && !fieldValueTypeFound {
 
-				fieldValueTypeFound = true
-				fieldValueInt := &ves_io_schema_filter_set.FilterSetField_DateField{}
-				fieldValueInt.DateField = &ves_io_schema_filter_set.FilterTimeRangeField{}
-				filterFields[i].FieldValue = fieldValueInt
+					fieldValueTypeFound = true
+					fieldValueInt := &ves_io_schema_filter_set.FilterSetField_DateField{}
+					fieldValueInt.DateField = &ves_io_schema_filter_set.FilterTimeRangeField{}
+					filterFields[i].FieldValue = fieldValueInt
 
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
-
-					rangeTypeTypeFound := false
-
-					if v, ok := cs["absolute"]; ok && !isIntfNil(v) && !rangeTypeTypeFound {
-
-						rangeTypeTypeFound = true
-						rangeTypeInt := &ves_io_schema_filter_set.FilterTimeRangeField_Absolute{}
-						rangeTypeInt.Absolute = &ves_io_schema.DateRange{}
-						fieldValueInt.DateField.RangeType = rangeTypeInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
 							cs := set.(map[string]interface{})
 
-							if v, ok := cs["end_date"]; ok && !isIntfNil(v) {
+							rangeTypeTypeFound := false
 
-								ts, err := parseTime(v.(string))
-								if err != nil {
-									return fmt.Errorf("error creating EndDate, timestamp format is wrong: %s", err)
+							if v, ok := cs["absolute"]; ok && !isIntfNil(v) && !rangeTypeTypeFound {
+
+								rangeTypeTypeFound = true
+								rangeTypeInt := &ves_io_schema_filter_set.FilterTimeRangeField_Absolute{}
+								rangeTypeInt.Absolute = &ves_io_schema.DateRange{}
+								fieldValueInt.DateField.RangeType = rangeTypeInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["end_date"]; ok && !isIntfNil(v) {
+
+											ts, err := parseTime(v.(string))
+											if err != nil {
+												return fmt.Errorf("error creating EndDate, timestamp format is wrong: %s", err)
+											}
+											rangeTypeInt.Absolute.EndDate = ts
+										}
+
+										if v, ok := cs["start_date"]; ok && !isIntfNil(v) {
+
+											ts, err := parseTime(v.(string))
+											if err != nil {
+												return fmt.Errorf("error creating StartDate, timestamp format is wrong: %s", err)
+											}
+											rangeTypeInt.Absolute.StartDate = ts
+										}
+
+									}
 								}
-								rangeTypeInt.Absolute.EndDate = ts
+
 							}
 
-							if v, ok := cs["start_date"]; ok && !isIntfNil(v) {
+							if _, ok := cs["relative"]; ok && !rangeTypeTypeFound {
 
-								ts, err := parseTime(v.(string))
-								if err != nil {
-									return fmt.Errorf("error creating StartDate, timestamp format is wrong: %s", err)
-								}
-								rangeTypeInt.Absolute.StartDate = ts
+								rangeTypeTypeFound = true
+								rangeTypeInt := &ves_io_schema_filter_set.FilterTimeRangeField_Relative{}
+								rangeTypeInt.Relative = &google_protobuf.Duration{}
+								fieldValueInt.DateField.RangeType = rangeTypeInt
+
 							}
 
 						}
-
-					}
-
-					if _, ok := cs["relative"]; ok && !rangeTypeTypeFound {
-
-						rangeTypeTypeFound = true
-						rangeTypeInt := &ves_io_schema_filter_set.FilterTimeRangeField_Relative{}
-						rangeTypeInt.Relative = &google_protobuf.Duration{}
-						fieldValueInt.DateField.RangeType = rangeTypeInt
-
 					}
 
 				}
 
-			}
+				if v, ok := filterFieldsMapStrToI["filter_expression_field"]; ok && !isIntfNil(v) && !fieldValueTypeFound {
 
-			if v, ok := filterFieldsMapStrToI["filter_expression_field"]; ok && !isIntfNil(v) && !fieldValueTypeFound {
+					fieldValueTypeFound = true
+					fieldValueInt := &ves_io_schema_filter_set.FilterSetField_FilterExpressionField{}
+					fieldValueInt.FilterExpressionField = &ves_io_schema_filter_set.FilterExpressionField{}
+					filterFields[i].FieldValue = fieldValueInt
 
-				fieldValueTypeFound = true
-				fieldValueInt := &ves_io_schema_filter_set.FilterSetField_FilterExpressionField{}
-				fieldValueInt.FilterExpressionField = &ves_io_schema_filter_set.FilterExpressionField{}
-				filterFields[i].FieldValue = fieldValueInt
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
 
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
+							if v, ok := cs["expression"]; ok && !isIntfNil(v) {
 
-					if v, ok := cs["expression"]; ok && !isIntfNil(v) {
+								fieldValueInt.FilterExpressionField.Expression = v.(string)
 
-						fieldValueInt.FilterExpressionField.Expression = v.(string)
+							}
 
-					}
-
-				}
-
-			}
-
-			if v, ok := filterFieldsMapStrToI["label_selector_field"]; ok && !isIntfNil(v) && !fieldValueTypeFound {
-
-				fieldValueTypeFound = true
-				fieldValueInt := &ves_io_schema_filter_set.FilterSetField_LabelSelectorField{}
-				fieldValueInt.LabelSelectorField = &ves_io_schema.LabelSelectorType{}
-				filterFields[i].FieldValue = fieldValueInt
-
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
-
-					if v, ok := cs["expressions"]; ok && !isIntfNil(v) {
-
-						ls := make([]string, len(v.([]interface{})))
-						for i, v := range v.([]interface{}) {
-							ls[i] = v.(string)
 						}
-						fieldValueInt.LabelSelectorField.Expressions = ls
-
 					}
 
 				}
 
-			}
+				if v, ok := filterFieldsMapStrToI["label_selector_field"]; ok && !isIntfNil(v) && !fieldValueTypeFound {
 
-			if v, ok := filterFieldsMapStrToI["string_field"]; ok && !isIntfNil(v) && !fieldValueTypeFound {
+					fieldValueTypeFound = true
+					fieldValueInt := &ves_io_schema_filter_set.FilterSetField_LabelSelectorField{}
+					fieldValueInt.LabelSelectorField = &ves_io_schema.LabelSelectorType{}
+					filterFields[i].FieldValue = fieldValueInt
 
-				fieldValueTypeFound = true
-				fieldValueInt := &ves_io_schema_filter_set.FilterSetField_StringField{}
-				fieldValueInt.StringField = &ves_io_schema_filter_set.FilterStringField{}
-				filterFields[i].FieldValue = fieldValueInt
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
 
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
+							if v, ok := cs["expressions"]; ok && !isIntfNil(v) {
 
-					if v, ok := cs["field_values"]; ok && !isIntfNil(v) {
+								ls := make([]string, len(v.([]interface{})))
+								for i, v := range v.([]interface{}) {
+									ls[i] = v.(string)
+								}
+								fieldValueInt.LabelSelectorField.Expressions = ls
 
-						ls := make([]string, len(v.([]interface{})))
-						for i, v := range v.([]interface{}) {
-							ls[i] = v.(string)
+							}
+
 						}
-						fieldValueInt.StringField.FieldValues = ls
+					}
 
+				}
+
+				if v, ok := filterFieldsMapStrToI["string_field"]; ok && !isIntfNil(v) && !fieldValueTypeFound {
+
+					fieldValueTypeFound = true
+					fieldValueInt := &ves_io_schema_filter_set.FilterSetField_StringField{}
+					fieldValueInt.StringField = &ves_io_schema_filter_set.FilterStringField{}
+					filterFields[i].FieldValue = fieldValueInt
+
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["field_values"]; ok && !isIntfNil(v) {
+
+								ls := make([]string, len(v.([]interface{})))
+								for i, v := range v.([]interface{}) {
+									ls[i] = v.(string)
+								}
+								fieldValueInt.StringField.FieldValues = ls
+
+							}
+
+						}
 					}
 
 				}
 
 			}
-
 		}
 
 	}
@@ -500,145 +517,157 @@ func resourceVolterraFilterSetUpdate(d *schema.ResourceData, meta interface{}) e
 		filterFields := make([]*ves_io_schema_filter_set.FilterSetField, len(sl))
 		updateSpec.FilterFields = filterFields
 		for i, set := range sl {
-			filterFields[i] = &ves_io_schema_filter_set.FilterSetField{}
-			filterFieldsMapStrToI := set.(map[string]interface{})
+			if set != nil {
+				filterFields[i] = &ves_io_schema_filter_set.FilterSetField{}
+				filterFieldsMapStrToI := set.(map[string]interface{})
 
-			if w, ok := filterFieldsMapStrToI["field_id"]; ok && !isIntfNil(w) {
-				filterFields[i].FieldId = w.(string)
-			}
+				if w, ok := filterFieldsMapStrToI["field_id"]; ok && !isIntfNil(w) {
+					filterFields[i].FieldId = w.(string)
+				}
 
-			fieldValueTypeFound := false
+				fieldValueTypeFound := false
 
-			if v, ok := filterFieldsMapStrToI["date_field"]; ok && !isIntfNil(v) && !fieldValueTypeFound {
+				if v, ok := filterFieldsMapStrToI["date_field"]; ok && !isIntfNil(v) && !fieldValueTypeFound {
 
-				fieldValueTypeFound = true
-				fieldValueInt := &ves_io_schema_filter_set.FilterSetField_DateField{}
-				fieldValueInt.DateField = &ves_io_schema_filter_set.FilterTimeRangeField{}
-				filterFields[i].FieldValue = fieldValueInt
+					fieldValueTypeFound = true
+					fieldValueInt := &ves_io_schema_filter_set.FilterSetField_DateField{}
+					fieldValueInt.DateField = &ves_io_schema_filter_set.FilterTimeRangeField{}
+					filterFields[i].FieldValue = fieldValueInt
 
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
-
-					rangeTypeTypeFound := false
-
-					if v, ok := cs["absolute"]; ok && !isIntfNil(v) && !rangeTypeTypeFound {
-
-						rangeTypeTypeFound = true
-						rangeTypeInt := &ves_io_schema_filter_set.FilterTimeRangeField_Absolute{}
-						rangeTypeInt.Absolute = &ves_io_schema.DateRange{}
-						fieldValueInt.DateField.RangeType = rangeTypeInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
 							cs := set.(map[string]interface{})
 
-							if v, ok := cs["end_date"]; ok && !isIntfNil(v) {
+							rangeTypeTypeFound := false
 
-								ts, err := parseTime(v.(string))
-								if err != nil {
-									return fmt.Errorf("error creating EndDate, timestamp format is wrong: %s", err)
+							if v, ok := cs["absolute"]; ok && !isIntfNil(v) && !rangeTypeTypeFound {
+
+								rangeTypeTypeFound = true
+								rangeTypeInt := &ves_io_schema_filter_set.FilterTimeRangeField_Absolute{}
+								rangeTypeInt.Absolute = &ves_io_schema.DateRange{}
+								fieldValueInt.DateField.RangeType = rangeTypeInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["end_date"]; ok && !isIntfNil(v) {
+
+											ts, err := parseTime(v.(string))
+											if err != nil {
+												return fmt.Errorf("error creating EndDate, timestamp format is wrong: %s", err)
+											}
+											rangeTypeInt.Absolute.EndDate = ts
+										}
+
+										if v, ok := cs["start_date"]; ok && !isIntfNil(v) {
+
+											ts, err := parseTime(v.(string))
+											if err != nil {
+												return fmt.Errorf("error creating StartDate, timestamp format is wrong: %s", err)
+											}
+											rangeTypeInt.Absolute.StartDate = ts
+										}
+
+									}
 								}
-								rangeTypeInt.Absolute.EndDate = ts
+
 							}
 
-							if v, ok := cs["start_date"]; ok && !isIntfNil(v) {
+							if _, ok := cs["relative"]; ok && !rangeTypeTypeFound {
 
-								ts, err := parseTime(v.(string))
-								if err != nil {
-									return fmt.Errorf("error creating StartDate, timestamp format is wrong: %s", err)
-								}
-								rangeTypeInt.Absolute.StartDate = ts
+								rangeTypeTypeFound = true
+								rangeTypeInt := &ves_io_schema_filter_set.FilterTimeRangeField_Relative{}
+								rangeTypeInt.Relative = &google_protobuf.Duration{}
+								fieldValueInt.DateField.RangeType = rangeTypeInt
+
 							}
 
 						}
-
-					}
-
-					if _, ok := cs["relative"]; ok && !rangeTypeTypeFound {
-
-						rangeTypeTypeFound = true
-						rangeTypeInt := &ves_io_schema_filter_set.FilterTimeRangeField_Relative{}
-						rangeTypeInt.Relative = &google_protobuf.Duration{}
-						fieldValueInt.DateField.RangeType = rangeTypeInt
-
 					}
 
 				}
 
-			}
+				if v, ok := filterFieldsMapStrToI["filter_expression_field"]; ok && !isIntfNil(v) && !fieldValueTypeFound {
 
-			if v, ok := filterFieldsMapStrToI["filter_expression_field"]; ok && !isIntfNil(v) && !fieldValueTypeFound {
+					fieldValueTypeFound = true
+					fieldValueInt := &ves_io_schema_filter_set.FilterSetField_FilterExpressionField{}
+					fieldValueInt.FilterExpressionField = &ves_io_schema_filter_set.FilterExpressionField{}
+					filterFields[i].FieldValue = fieldValueInt
 
-				fieldValueTypeFound = true
-				fieldValueInt := &ves_io_schema_filter_set.FilterSetField_FilterExpressionField{}
-				fieldValueInt.FilterExpressionField = &ves_io_schema_filter_set.FilterExpressionField{}
-				filterFields[i].FieldValue = fieldValueInt
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
 
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
+							if v, ok := cs["expression"]; ok && !isIntfNil(v) {
 
-					if v, ok := cs["expression"]; ok && !isIntfNil(v) {
+								fieldValueInt.FilterExpressionField.Expression = v.(string)
 
-						fieldValueInt.FilterExpressionField.Expression = v.(string)
+							}
 
-					}
-
-				}
-
-			}
-
-			if v, ok := filterFieldsMapStrToI["label_selector_field"]; ok && !isIntfNil(v) && !fieldValueTypeFound {
-
-				fieldValueTypeFound = true
-				fieldValueInt := &ves_io_schema_filter_set.FilterSetField_LabelSelectorField{}
-				fieldValueInt.LabelSelectorField = &ves_io_schema.LabelSelectorType{}
-				filterFields[i].FieldValue = fieldValueInt
-
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
-
-					if v, ok := cs["expressions"]; ok && !isIntfNil(v) {
-
-						ls := make([]string, len(v.([]interface{})))
-						for i, v := range v.([]interface{}) {
-							ls[i] = v.(string)
 						}
-						fieldValueInt.LabelSelectorField.Expressions = ls
-
 					}
 
 				}
 
-			}
+				if v, ok := filterFieldsMapStrToI["label_selector_field"]; ok && !isIntfNil(v) && !fieldValueTypeFound {
 
-			if v, ok := filterFieldsMapStrToI["string_field"]; ok && !isIntfNil(v) && !fieldValueTypeFound {
+					fieldValueTypeFound = true
+					fieldValueInt := &ves_io_schema_filter_set.FilterSetField_LabelSelectorField{}
+					fieldValueInt.LabelSelectorField = &ves_io_schema.LabelSelectorType{}
+					filterFields[i].FieldValue = fieldValueInt
 
-				fieldValueTypeFound = true
-				fieldValueInt := &ves_io_schema_filter_set.FilterSetField_StringField{}
-				fieldValueInt.StringField = &ves_io_schema_filter_set.FilterStringField{}
-				filterFields[i].FieldValue = fieldValueInt
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
 
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
+							if v, ok := cs["expressions"]; ok && !isIntfNil(v) {
 
-					if v, ok := cs["field_values"]; ok && !isIntfNil(v) {
+								ls := make([]string, len(v.([]interface{})))
+								for i, v := range v.([]interface{}) {
+									ls[i] = v.(string)
+								}
+								fieldValueInt.LabelSelectorField.Expressions = ls
 
-						ls := make([]string, len(v.([]interface{})))
-						for i, v := range v.([]interface{}) {
-							ls[i] = v.(string)
+							}
+
 						}
-						fieldValueInt.StringField.FieldValues = ls
+					}
 
+				}
+
+				if v, ok := filterFieldsMapStrToI["string_field"]; ok && !isIntfNil(v) && !fieldValueTypeFound {
+
+					fieldValueTypeFound = true
+					fieldValueInt := &ves_io_schema_filter_set.FilterSetField_StringField{}
+					fieldValueInt.StringField = &ves_io_schema_filter_set.FilterStringField{}
+					filterFields[i].FieldValue = fieldValueInt
+
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["field_values"]; ok && !isIntfNil(v) {
+
+								ls := make([]string, len(v.([]interface{})))
+								for i, v := range v.([]interface{}) {
+									ls[i] = v.(string)
+								}
+								fieldValueInt.StringField.FieldValues = ls
+
+							}
+
+						}
 					}
 
 				}
 
 			}
-
 		}
 
 	}

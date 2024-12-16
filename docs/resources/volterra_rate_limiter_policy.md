@@ -1,9 +1,9 @@
 ---
 
 page_title: "Volterra: rate_limiter_policy"
-description: "The rate_limiter_policy allows CRUD of Rate Limiter Policy resource on Volterra SaaS"
 
----
+description: "The rate_limiter_policy allows CRUD of Rate Limiter Policy resource on Volterra SaaS"
+---------------------------------------------------------------------------------------------------
 
 Resource volterra_rate_limiter_policy
 =====================================

@@ -81,7 +81,8 @@ func resourceVolterraSecretPolicy() *schema.Resource {
 
 			"legacy_rule_list": {
 
-				Type:       schema.TypeSet,
+				Type:       schema.TypeList,
+				MaxItems:   1,
 				Optional:   true,
 				Deprecated: "This field is deprecated and will be removed in future release.",
 				Elem: &schema.Resource{
@@ -125,7 +126,8 @@ func resourceVolterraSecretPolicy() *schema.Resource {
 
 			"rule_list": {
 
-				Type:     schema.TypeSet,
+				Type:     schema.TypeList,
+				MaxItems: 1,
 				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
@@ -139,7 +141,8 @@ func resourceVolterraSecretPolicy() *schema.Resource {
 
 									"metadata": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -165,7 +168,8 @@ func resourceVolterraSecretPolicy() *schema.Resource {
 
 									"spec": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -183,7 +187,8 @@ func resourceVolterraSecretPolicy() *schema.Resource {
 
 												"client_name_matcher": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Optional: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -223,7 +228,8 @@ func resourceVolterraSecretPolicy() *schema.Resource {
 
 												"client_selector": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Optional: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -243,7 +249,8 @@ func resourceVolterraSecretPolicy() *schema.Resource {
 
 												"label_matcher": {
 
-													Type:       schema.TypeSet,
+													Type:       schema.TypeList,
+													MaxItems:   1,
 													Optional:   true,
 													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
@@ -395,42 +402,44 @@ func resourceVolterraSecretPolicyCreate(d *schema.ResourceData, meta interface{}
 		ruleChoiceInt.LegacyRuleList = &ves_io_schema_secret_policy.LegacyRuleList{}
 		createSpec.RuleChoice = ruleChoiceInt
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
+			if set != nil {
+				cs := set.(map[string]interface{})
 
-			if v, ok := cs["rules"]; ok && !isIntfNil(v) {
+				if v, ok := cs["rules"]; ok && !isIntfNil(v) {
 
-				sl := v.([]interface{})
-				rulesInt := make([]*ves_io_schema.ObjectRefType, len(sl))
-				ruleChoiceInt.LegacyRuleList.Rules = rulesInt
-				for i, ps := range sl {
+					sl := v.([]interface{})
+					rulesInt := make([]*ves_io_schema.ObjectRefType, len(sl))
+					ruleChoiceInt.LegacyRuleList.Rules = rulesInt
+					for i, ps := range sl {
 
-					rMapToStrVal := ps.(map[string]interface{})
-					rulesInt[i] = &ves_io_schema.ObjectRefType{}
+						rMapToStrVal := ps.(map[string]interface{})
+						rulesInt[i] = &ves_io_schema.ObjectRefType{}
 
-					rulesInt[i].Kind = "secret_policy_rule"
+						rulesInt[i].Kind = "secret_policy_rule"
 
-					if v, ok := rMapToStrVal["name"]; ok && !isIntfNil(v) {
-						rulesInt[i].Name = v.(string)
-					}
+						if v, ok := rMapToStrVal["name"]; ok && !isIntfNil(v) {
+							rulesInt[i].Name = v.(string)
+						}
 
-					if v, ok := rMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-						rulesInt[i].Namespace = v.(string)
-					}
+						if v, ok := rMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+							rulesInt[i].Namespace = v.(string)
+						}
 
-					if v, ok := rMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-						rulesInt[i].Tenant = v.(string)
-					}
+						if v, ok := rMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+							rulesInt[i].Tenant = v.(string)
+						}
 
-					if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
-						rulesInt[i].Uid = v.(string)
+						if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
+							rulesInt[i].Uid = v.(string)
+						}
+
 					}
 
 				}
 
 			}
-
 		}
 
 	}
@@ -442,168 +451,182 @@ func resourceVolterraSecretPolicyCreate(d *schema.ResourceData, meta interface{}
 		ruleChoiceInt.RuleList = &ves_io_schema_secret_policy.RuleList{}
 		createSpec.RuleChoice = ruleChoiceInt
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
+			if set != nil {
+				cs := set.(map[string]interface{})
 
-			if v, ok := cs["rules"]; ok && !isIntfNil(v) {
+				if v, ok := cs["rules"]; ok && !isIntfNil(v) {
 
-				sl := v.([]interface{})
-				rules := make([]*ves_io_schema_secret_policy.Rule, len(sl))
-				ruleChoiceInt.RuleList.Rules = rules
-				for i, set := range sl {
-					rules[i] = &ves_io_schema_secret_policy.Rule{}
-					rulesMapStrToI := set.(map[string]interface{})
+					sl := v.([]interface{})
+					rules := make([]*ves_io_schema_secret_policy.Rule, len(sl))
+					ruleChoiceInt.RuleList.Rules = rules
+					for i, set := range sl {
+						if set != nil {
+							rules[i] = &ves_io_schema_secret_policy.Rule{}
+							rulesMapStrToI := set.(map[string]interface{})
 
-					if v, ok := rulesMapStrToI["metadata"]; ok && !isIntfNil(v) {
+							if v, ok := rulesMapStrToI["metadata"]; ok && !isIntfNil(v) {
 
-						sl := v.(*schema.Set).List()
-						metadata := &ves_io_schema.MessageMetaType{}
-						rules[i].Metadata = metadata
-						for _, set := range sl {
-							metadataMapStrToI := set.(map[string]interface{})
+								sl := v.([]interface{})
+								metadata := &ves_io_schema.MessageMetaType{}
+								rules[i].Metadata = metadata
+								for _, set := range sl {
+									if set != nil {
+										metadataMapStrToI := set.(map[string]interface{})
 
-							if w, ok := metadataMapStrToI["description"]; ok && !isIntfNil(w) {
-								metadata.Description = w.(string)
+										if w, ok := metadataMapStrToI["description"]; ok && !isIntfNil(w) {
+											metadata.Description = w.(string)
+										}
+
+										if w, ok := metadataMapStrToI["disable"]; ok && !isIntfNil(w) {
+											metadata.Disable = w.(bool)
+										}
+
+										if w, ok := metadataMapStrToI["name"]; ok && !isIntfNil(w) {
+											metadata.Name = w.(string)
+										}
+
+									}
+								}
+
 							}
 
-							if w, ok := metadataMapStrToI["disable"]; ok && !isIntfNil(w) {
-								metadata.Disable = w.(bool)
-							}
+							if v, ok := rulesMapStrToI["spec"]; ok && !isIntfNil(v) {
 
-							if w, ok := metadataMapStrToI["name"]; ok && !isIntfNil(w) {
-								metadata.Name = w.(string)
+								sl := v.([]interface{})
+								spec := &ves_io_schema_secret_policy_rule.GlobalSpecType{}
+								rules[i].Spec = spec
+								for _, set := range sl {
+									if set != nil {
+										specMapStrToI := set.(map[string]interface{})
+
+										if v, ok := specMapStrToI["action"]; ok && !isIntfNil(v) {
+
+											spec.Action = ves_io_schema_policy.RuleAction(ves_io_schema_policy.RuleAction_value[v.(string)])
+
+										}
+
+										clientChoiceTypeFound := false
+
+										if v, ok := specMapStrToI["client_name"]; ok && !isIntfNil(v) && !clientChoiceTypeFound {
+
+											clientChoiceTypeFound = true
+											clientChoiceInt := &ves_io_schema_secret_policy_rule.GlobalSpecType_ClientName{}
+
+											spec.ClientChoice = clientChoiceInt
+
+											clientChoiceInt.ClientName = v.(string)
+
+										}
+
+										if v, ok := specMapStrToI["client_name_matcher"]; ok && !isIntfNil(v) && !clientChoiceTypeFound {
+
+											clientChoiceTypeFound = true
+											clientChoiceInt := &ves_io_schema_secret_policy_rule.GlobalSpecType_ClientNameMatcher{}
+											clientChoiceInt.ClientNameMatcher = &ves_io_schema_policy.MatcherType{}
+											spec.ClientChoice = clientChoiceInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["exact_values"]; ok && !isIntfNil(v) {
+
+														ls := make([]string, len(v.([]interface{})))
+														for i, v := range v.([]interface{}) {
+															ls[i] = v.(string)
+														}
+														clientChoiceInt.ClientNameMatcher.ExactValues = ls
+
+													}
+
+													if v, ok := cs["regex_values"]; ok && !isIntfNil(v) {
+
+														ls := make([]string, len(v.([]interface{})))
+														for i, v := range v.([]interface{}) {
+															ls[i] = v.(string)
+														}
+														clientChoiceInt.ClientNameMatcher.RegexValues = ls
+
+													}
+
+													if v, ok := cs["transformers"]; ok && !isIntfNil(v) {
+
+														transformersList := []ves_io_schema_policy.Transformer{}
+														for _, j := range v.([]interface{}) {
+															transformersList = append(transformersList, ves_io_schema_policy.Transformer(ves_io_schema_policy.Transformer_value[j.(string)]))
+														}
+														clientChoiceInt.ClientNameMatcher.Transformers = transformersList
+
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := specMapStrToI["client_selector"]; ok && !isIntfNil(v) && !clientChoiceTypeFound {
+
+											clientChoiceTypeFound = true
+											clientChoiceInt := &ves_io_schema_secret_policy_rule.GlobalSpecType_ClientSelector{}
+											clientChoiceInt.ClientSelector = &ves_io_schema.LabelSelectorType{}
+											spec.ClientChoice = clientChoiceInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["expressions"]; ok && !isIntfNil(v) {
+
+														ls := make([]string, len(v.([]interface{})))
+														for i, v := range v.([]interface{}) {
+															ls[i] = v.(string)
+														}
+														clientChoiceInt.ClientSelector.Expressions = ls
+
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := specMapStrToI["label_matcher"]; ok && !isIntfNil(v) {
+
+											sl := v.([]interface{})
+											labelMatcher := &ves_io_schema.LabelMatcherType{}
+											spec.LabelMatcher = labelMatcher
+											for _, set := range sl {
+												if set != nil {
+													labelMatcherMapStrToI := set.(map[string]interface{})
+
+													if w, ok := labelMatcherMapStrToI["keys"]; ok && !isIntfNil(w) {
+														ls := make([]string, len(w.([]interface{})))
+														for i, v := range w.([]interface{}) {
+															ls[i] = v.(string)
+														}
+														labelMatcher.Keys = ls
+													}
+
+												}
+											}
+
+										}
+
+									}
+								}
+
 							}
 
 						}
-
-					}
-
-					if v, ok := rulesMapStrToI["spec"]; ok && !isIntfNil(v) {
-
-						sl := v.(*schema.Set).List()
-						spec := &ves_io_schema_secret_policy_rule.GlobalSpecType{}
-						rules[i].Spec = spec
-						for _, set := range sl {
-							specMapStrToI := set.(map[string]interface{})
-
-							if v, ok := specMapStrToI["action"]; ok && !isIntfNil(v) {
-
-								spec.Action = ves_io_schema_policy.RuleAction(ves_io_schema_policy.RuleAction_value[v.(string)])
-
-							}
-
-							clientChoiceTypeFound := false
-
-							if v, ok := specMapStrToI["client_name"]; ok && !isIntfNil(v) && !clientChoiceTypeFound {
-
-								clientChoiceTypeFound = true
-								clientChoiceInt := &ves_io_schema_secret_policy_rule.GlobalSpecType_ClientName{}
-
-								spec.ClientChoice = clientChoiceInt
-
-								clientChoiceInt.ClientName = v.(string)
-
-							}
-
-							if v, ok := specMapStrToI["client_name_matcher"]; ok && !isIntfNil(v) && !clientChoiceTypeFound {
-
-								clientChoiceTypeFound = true
-								clientChoiceInt := &ves_io_schema_secret_policy_rule.GlobalSpecType_ClientNameMatcher{}
-								clientChoiceInt.ClientNameMatcher = &ves_io_schema_policy.MatcherType{}
-								spec.ClientChoice = clientChoiceInt
-
-								sl := v.(*schema.Set).List()
-								for _, set := range sl {
-									cs := set.(map[string]interface{})
-
-									if v, ok := cs["exact_values"]; ok && !isIntfNil(v) {
-
-										ls := make([]string, len(v.([]interface{})))
-										for i, v := range v.([]interface{}) {
-											ls[i] = v.(string)
-										}
-										clientChoiceInt.ClientNameMatcher.ExactValues = ls
-
-									}
-
-									if v, ok := cs["regex_values"]; ok && !isIntfNil(v) {
-
-										ls := make([]string, len(v.([]interface{})))
-										for i, v := range v.([]interface{}) {
-											ls[i] = v.(string)
-										}
-										clientChoiceInt.ClientNameMatcher.RegexValues = ls
-
-									}
-
-									if v, ok := cs["transformers"]; ok && !isIntfNil(v) {
-
-										transformersList := []ves_io_schema_policy.Transformer{}
-										for _, j := range v.([]interface{}) {
-											transformersList = append(transformersList, ves_io_schema_policy.Transformer(ves_io_schema_policy.Transformer_value[j.(string)]))
-										}
-										clientChoiceInt.ClientNameMatcher.Transformers = transformersList
-
-									}
-
-								}
-
-							}
-
-							if v, ok := specMapStrToI["client_selector"]; ok && !isIntfNil(v) && !clientChoiceTypeFound {
-
-								clientChoiceTypeFound = true
-								clientChoiceInt := &ves_io_schema_secret_policy_rule.GlobalSpecType_ClientSelector{}
-								clientChoiceInt.ClientSelector = &ves_io_schema.LabelSelectorType{}
-								spec.ClientChoice = clientChoiceInt
-
-								sl := v.(*schema.Set).List()
-								for _, set := range sl {
-									cs := set.(map[string]interface{})
-
-									if v, ok := cs["expressions"]; ok && !isIntfNil(v) {
-
-										ls := make([]string, len(v.([]interface{})))
-										for i, v := range v.([]interface{}) {
-											ls[i] = v.(string)
-										}
-										clientChoiceInt.ClientSelector.Expressions = ls
-
-									}
-
-								}
-
-							}
-
-							if v, ok := specMapStrToI["label_matcher"]; ok && !isIntfNil(v) {
-
-								sl := v.(*schema.Set).List()
-								labelMatcher := &ves_io_schema.LabelMatcherType{}
-								spec.LabelMatcher = labelMatcher
-								for _, set := range sl {
-									labelMatcherMapStrToI := set.(map[string]interface{})
-
-									if w, ok := labelMatcherMapStrToI["keys"]; ok && !isIntfNil(w) {
-										ls := make([]string, len(w.([]interface{})))
-										for i, v := range w.([]interface{}) {
-											ls[i] = v.(string)
-										}
-										labelMatcher.Keys = ls
-									}
-
-								}
-
-							}
-
-						}
-
 					}
 
 				}
 
 			}
-
 		}
 
 	}
@@ -769,42 +792,44 @@ func resourceVolterraSecretPolicyUpdate(d *schema.ResourceData, meta interface{}
 		ruleChoiceInt.LegacyRuleList = &ves_io_schema_secret_policy.LegacyRuleList{}
 		updateSpec.RuleChoice = ruleChoiceInt
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
+			if set != nil {
+				cs := set.(map[string]interface{})
 
-			if v, ok := cs["rules"]; ok && !isIntfNil(v) {
+				if v, ok := cs["rules"]; ok && !isIntfNil(v) {
 
-				sl := v.([]interface{})
-				rulesInt := make([]*ves_io_schema.ObjectRefType, len(sl))
-				ruleChoiceInt.LegacyRuleList.Rules = rulesInt
-				for i, ps := range sl {
+					sl := v.([]interface{})
+					rulesInt := make([]*ves_io_schema.ObjectRefType, len(sl))
+					ruleChoiceInt.LegacyRuleList.Rules = rulesInt
+					for i, ps := range sl {
 
-					rMapToStrVal := ps.(map[string]interface{})
-					rulesInt[i] = &ves_io_schema.ObjectRefType{}
+						rMapToStrVal := ps.(map[string]interface{})
+						rulesInt[i] = &ves_io_schema.ObjectRefType{}
 
-					rulesInt[i].Kind = "secret_policy_rule"
+						rulesInt[i].Kind = "secret_policy_rule"
 
-					if v, ok := rMapToStrVal["name"]; ok && !isIntfNil(v) {
-						rulesInt[i].Name = v.(string)
-					}
+						if v, ok := rMapToStrVal["name"]; ok && !isIntfNil(v) {
+							rulesInt[i].Name = v.(string)
+						}
 
-					if v, ok := rMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-						rulesInt[i].Namespace = v.(string)
-					}
+						if v, ok := rMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+							rulesInt[i].Namespace = v.(string)
+						}
 
-					if v, ok := rMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-						rulesInt[i].Tenant = v.(string)
-					}
+						if v, ok := rMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+							rulesInt[i].Tenant = v.(string)
+						}
 
-					if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
-						rulesInt[i].Uid = v.(string)
+						if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
+							rulesInt[i].Uid = v.(string)
+						}
+
 					}
 
 				}
 
 			}
-
 		}
 
 	}
@@ -816,168 +841,182 @@ func resourceVolterraSecretPolicyUpdate(d *schema.ResourceData, meta interface{}
 		ruleChoiceInt.RuleList = &ves_io_schema_secret_policy.RuleList{}
 		updateSpec.RuleChoice = ruleChoiceInt
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
+			if set != nil {
+				cs := set.(map[string]interface{})
 
-			if v, ok := cs["rules"]; ok && !isIntfNil(v) {
+				if v, ok := cs["rules"]; ok && !isIntfNil(v) {
 
-				sl := v.([]interface{})
-				rules := make([]*ves_io_schema_secret_policy.Rule, len(sl))
-				ruleChoiceInt.RuleList.Rules = rules
-				for i, set := range sl {
-					rules[i] = &ves_io_schema_secret_policy.Rule{}
-					rulesMapStrToI := set.(map[string]interface{})
+					sl := v.([]interface{})
+					rules := make([]*ves_io_schema_secret_policy.Rule, len(sl))
+					ruleChoiceInt.RuleList.Rules = rules
+					for i, set := range sl {
+						if set != nil {
+							rules[i] = &ves_io_schema_secret_policy.Rule{}
+							rulesMapStrToI := set.(map[string]interface{})
 
-					if v, ok := rulesMapStrToI["metadata"]; ok && !isIntfNil(v) {
+							if v, ok := rulesMapStrToI["metadata"]; ok && !isIntfNil(v) {
 
-						sl := v.(*schema.Set).List()
-						metadata := &ves_io_schema.MessageMetaType{}
-						rules[i].Metadata = metadata
-						for _, set := range sl {
-							metadataMapStrToI := set.(map[string]interface{})
+								sl := v.([]interface{})
+								metadata := &ves_io_schema.MessageMetaType{}
+								rules[i].Metadata = metadata
+								for _, set := range sl {
+									if set != nil {
+										metadataMapStrToI := set.(map[string]interface{})
 
-							if w, ok := metadataMapStrToI["description"]; ok && !isIntfNil(w) {
-								metadata.Description = w.(string)
+										if w, ok := metadataMapStrToI["description"]; ok && !isIntfNil(w) {
+											metadata.Description = w.(string)
+										}
+
+										if w, ok := metadataMapStrToI["disable"]; ok && !isIntfNil(w) {
+											metadata.Disable = w.(bool)
+										}
+
+										if w, ok := metadataMapStrToI["name"]; ok && !isIntfNil(w) {
+											metadata.Name = w.(string)
+										}
+
+									}
+								}
+
 							}
 
-							if w, ok := metadataMapStrToI["disable"]; ok && !isIntfNil(w) {
-								metadata.Disable = w.(bool)
-							}
+							if v, ok := rulesMapStrToI["spec"]; ok && !isIntfNil(v) {
 
-							if w, ok := metadataMapStrToI["name"]; ok && !isIntfNil(w) {
-								metadata.Name = w.(string)
+								sl := v.([]interface{})
+								spec := &ves_io_schema_secret_policy_rule.GlobalSpecType{}
+								rules[i].Spec = spec
+								for _, set := range sl {
+									if set != nil {
+										specMapStrToI := set.(map[string]interface{})
+
+										if v, ok := specMapStrToI["action"]; ok && !isIntfNil(v) {
+
+											spec.Action = ves_io_schema_policy.RuleAction(ves_io_schema_policy.RuleAction_value[v.(string)])
+
+										}
+
+										clientChoiceTypeFound := false
+
+										if v, ok := specMapStrToI["client_name"]; ok && !isIntfNil(v) && !clientChoiceTypeFound {
+
+											clientChoiceTypeFound = true
+											clientChoiceInt := &ves_io_schema_secret_policy_rule.GlobalSpecType_ClientName{}
+
+											spec.ClientChoice = clientChoiceInt
+
+											clientChoiceInt.ClientName = v.(string)
+
+										}
+
+										if v, ok := specMapStrToI["client_name_matcher"]; ok && !isIntfNil(v) && !clientChoiceTypeFound {
+
+											clientChoiceTypeFound = true
+											clientChoiceInt := &ves_io_schema_secret_policy_rule.GlobalSpecType_ClientNameMatcher{}
+											clientChoiceInt.ClientNameMatcher = &ves_io_schema_policy.MatcherType{}
+											spec.ClientChoice = clientChoiceInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["exact_values"]; ok && !isIntfNil(v) {
+
+														ls := make([]string, len(v.([]interface{})))
+														for i, v := range v.([]interface{}) {
+															ls[i] = v.(string)
+														}
+														clientChoiceInt.ClientNameMatcher.ExactValues = ls
+
+													}
+
+													if v, ok := cs["regex_values"]; ok && !isIntfNil(v) {
+
+														ls := make([]string, len(v.([]interface{})))
+														for i, v := range v.([]interface{}) {
+															ls[i] = v.(string)
+														}
+														clientChoiceInt.ClientNameMatcher.RegexValues = ls
+
+													}
+
+													if v, ok := cs["transformers"]; ok && !isIntfNil(v) {
+
+														transformersList := []ves_io_schema_policy.Transformer{}
+														for _, j := range v.([]interface{}) {
+															transformersList = append(transformersList, ves_io_schema_policy.Transformer(ves_io_schema_policy.Transformer_value[j.(string)]))
+														}
+														clientChoiceInt.ClientNameMatcher.Transformers = transformersList
+
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := specMapStrToI["client_selector"]; ok && !isIntfNil(v) && !clientChoiceTypeFound {
+
+											clientChoiceTypeFound = true
+											clientChoiceInt := &ves_io_schema_secret_policy_rule.GlobalSpecType_ClientSelector{}
+											clientChoiceInt.ClientSelector = &ves_io_schema.LabelSelectorType{}
+											spec.ClientChoice = clientChoiceInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["expressions"]; ok && !isIntfNil(v) {
+
+														ls := make([]string, len(v.([]interface{})))
+														for i, v := range v.([]interface{}) {
+															ls[i] = v.(string)
+														}
+														clientChoiceInt.ClientSelector.Expressions = ls
+
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := specMapStrToI["label_matcher"]; ok && !isIntfNil(v) {
+
+											sl := v.([]interface{})
+											labelMatcher := &ves_io_schema.LabelMatcherType{}
+											spec.LabelMatcher = labelMatcher
+											for _, set := range sl {
+												if set != nil {
+													labelMatcherMapStrToI := set.(map[string]interface{})
+
+													if w, ok := labelMatcherMapStrToI["keys"]; ok && !isIntfNil(w) {
+														ls := make([]string, len(w.([]interface{})))
+														for i, v := range w.([]interface{}) {
+															ls[i] = v.(string)
+														}
+														labelMatcher.Keys = ls
+													}
+
+												}
+											}
+
+										}
+
+									}
+								}
+
 							}
 
 						}
-
-					}
-
-					if v, ok := rulesMapStrToI["spec"]; ok && !isIntfNil(v) {
-
-						sl := v.(*schema.Set).List()
-						spec := &ves_io_schema_secret_policy_rule.GlobalSpecType{}
-						rules[i].Spec = spec
-						for _, set := range sl {
-							specMapStrToI := set.(map[string]interface{})
-
-							if v, ok := specMapStrToI["action"]; ok && !isIntfNil(v) {
-
-								spec.Action = ves_io_schema_policy.RuleAction(ves_io_schema_policy.RuleAction_value[v.(string)])
-
-							}
-
-							clientChoiceTypeFound := false
-
-							if v, ok := specMapStrToI["client_name"]; ok && !isIntfNil(v) && !clientChoiceTypeFound {
-
-								clientChoiceTypeFound = true
-								clientChoiceInt := &ves_io_schema_secret_policy_rule.GlobalSpecType_ClientName{}
-
-								spec.ClientChoice = clientChoiceInt
-
-								clientChoiceInt.ClientName = v.(string)
-
-							}
-
-							if v, ok := specMapStrToI["client_name_matcher"]; ok && !isIntfNil(v) && !clientChoiceTypeFound {
-
-								clientChoiceTypeFound = true
-								clientChoiceInt := &ves_io_schema_secret_policy_rule.GlobalSpecType_ClientNameMatcher{}
-								clientChoiceInt.ClientNameMatcher = &ves_io_schema_policy.MatcherType{}
-								spec.ClientChoice = clientChoiceInt
-
-								sl := v.(*schema.Set).List()
-								for _, set := range sl {
-									cs := set.(map[string]interface{})
-
-									if v, ok := cs["exact_values"]; ok && !isIntfNil(v) {
-
-										ls := make([]string, len(v.([]interface{})))
-										for i, v := range v.([]interface{}) {
-											ls[i] = v.(string)
-										}
-										clientChoiceInt.ClientNameMatcher.ExactValues = ls
-
-									}
-
-									if v, ok := cs["regex_values"]; ok && !isIntfNil(v) {
-
-										ls := make([]string, len(v.([]interface{})))
-										for i, v := range v.([]interface{}) {
-											ls[i] = v.(string)
-										}
-										clientChoiceInt.ClientNameMatcher.RegexValues = ls
-
-									}
-
-									if v, ok := cs["transformers"]; ok && !isIntfNil(v) {
-
-										transformersList := []ves_io_schema_policy.Transformer{}
-										for _, j := range v.([]interface{}) {
-											transformersList = append(transformersList, ves_io_schema_policy.Transformer(ves_io_schema_policy.Transformer_value[j.(string)]))
-										}
-										clientChoiceInt.ClientNameMatcher.Transformers = transformersList
-
-									}
-
-								}
-
-							}
-
-							if v, ok := specMapStrToI["client_selector"]; ok && !isIntfNil(v) && !clientChoiceTypeFound {
-
-								clientChoiceTypeFound = true
-								clientChoiceInt := &ves_io_schema_secret_policy_rule.GlobalSpecType_ClientSelector{}
-								clientChoiceInt.ClientSelector = &ves_io_schema.LabelSelectorType{}
-								spec.ClientChoice = clientChoiceInt
-
-								sl := v.(*schema.Set).List()
-								for _, set := range sl {
-									cs := set.(map[string]interface{})
-
-									if v, ok := cs["expressions"]; ok && !isIntfNil(v) {
-
-										ls := make([]string, len(v.([]interface{})))
-										for i, v := range v.([]interface{}) {
-											ls[i] = v.(string)
-										}
-										clientChoiceInt.ClientSelector.Expressions = ls
-
-									}
-
-								}
-
-							}
-
-							if v, ok := specMapStrToI["label_matcher"]; ok && !isIntfNil(v) {
-
-								sl := v.(*schema.Set).List()
-								labelMatcher := &ves_io_schema.LabelMatcherType{}
-								spec.LabelMatcher = labelMatcher
-								for _, set := range sl {
-									labelMatcherMapStrToI := set.(map[string]interface{})
-
-									if w, ok := labelMatcherMapStrToI["keys"]; ok && !isIntfNil(w) {
-										ls := make([]string, len(w.([]interface{})))
-										for i, v := range w.([]interface{}) {
-											ls[i] = v.(string)
-										}
-										labelMatcher.Keys = ls
-									}
-
-								}
-
-							}
-
-						}
-
 					}
 
 				}
 
 			}
-
 		}
 
 	}

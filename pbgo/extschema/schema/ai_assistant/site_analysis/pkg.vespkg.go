@@ -9,7 +9,6 @@ import (
 )
 
 func initializeValidatorRegistry(vr map[string]db.Validator) {
-	vr["ves.io.schema.ai_assistant.site_analysis.AnalysisAndAction"] = AnalysisAndActionValidator()
 	vr["ves.io.schema.ai_assistant.site_analysis.SiteAnalysisResponse"] = SiteAnalysisResponseValidator()
 
 }

@@ -1,9 +1,9 @@
 ---
 
 page_title: "Volterra: dns_compliance_checks"
-description: "The dns_compliance_checks allows CRUD of Dns Compliance Checks resource on Volterra SaaS"
 
----
+description: "The dns_compliance_checks allows CRUD of Dns Compliance Checks resource on Volterra SaaS"
+-------------------------------------------------------------------------------------------------------
 
 Resource volterra_dns_compliance_checks
 =======================================

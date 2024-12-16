@@ -68,7 +68,8 @@ func resourceVolterraDnsLbPool() *schema.Resource {
 
 			"a_pool": {
 
-				Type:     schema.TypeSet,
+				Type:     schema.TypeList,
+				MaxItems: 1,
 				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
@@ -81,7 +82,8 @@ func resourceVolterraDnsLbPool() *schema.Resource {
 
 						"health_check": {
 
-							Type:     schema.TypeSet,
+							Type:     schema.TypeList,
+							MaxItems: 1,
 							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
@@ -147,7 +149,8 @@ func resourceVolterraDnsLbPool() *schema.Resource {
 
 			"aaaa_pool": {
 
-				Type:     schema.TypeSet,
+				Type:     schema.TypeList,
+				MaxItems: 1,
 				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
@@ -197,7 +200,8 @@ func resourceVolterraDnsLbPool() *schema.Resource {
 
 			"cname_pool": {
 
-				Type:     schema.TypeSet,
+				Type:     schema.TypeList,
+				MaxItems: 1,
 				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
@@ -237,7 +241,8 @@ func resourceVolterraDnsLbPool() *schema.Resource {
 
 			"mx_pool": {
 
-				Type:     schema.TypeSet,
+				Type:     schema.TypeList,
+				MaxItems: 1,
 				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
@@ -282,7 +287,8 @@ func resourceVolterraDnsLbPool() *schema.Resource {
 
 			"srv_pool": {
 
-				Type:     schema.TypeSet,
+				Type:     schema.TypeList,
+				MaxItems: 1,
 				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
@@ -426,96 +432,102 @@ func resourceVolterraDnsLbPoolCreate(d *schema.ResourceData, meta interface{}) e
 		poolTypeChoiceInt.APool = &ves_io_schema_dns_lb_pool.APool{}
 		createSpec.PoolTypeChoice = poolTypeChoiceInt
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
+			if set != nil {
+				cs := set.(map[string]interface{})
 
-			healthCheckChoiceTypeFound := false
+				healthCheckChoiceTypeFound := false
 
-			if v, ok := cs["disable_health_check"]; ok && !isIntfNil(v) && !healthCheckChoiceTypeFound {
+				if v, ok := cs["disable_health_check"]; ok && !isIntfNil(v) && !healthCheckChoiceTypeFound {
 
-				healthCheckChoiceTypeFound = true
+					healthCheckChoiceTypeFound = true
 
-				if v.(bool) {
-					healthCheckChoiceInt := &ves_io_schema_dns_lb_pool.APool_DisableHealthCheck{}
-					healthCheckChoiceInt.DisableHealthCheck = &ves_io_schema.Empty{}
+					if v.(bool) {
+						healthCheckChoiceInt := &ves_io_schema_dns_lb_pool.APool_DisableHealthCheck{}
+						healthCheckChoiceInt.DisableHealthCheck = &ves_io_schema.Empty{}
+						poolTypeChoiceInt.APool.HealthCheckChoice = healthCheckChoiceInt
+					}
+
+				}
+
+				if v, ok := cs["health_check"]; ok && !isIntfNil(v) && !healthCheckChoiceTypeFound {
+
+					healthCheckChoiceTypeFound = true
+					healthCheckChoiceInt := &ves_io_schema_dns_lb_pool.APool_HealthCheck{}
+					healthCheckChoiceInt.HealthCheck = &ves_io_schema_views.ObjectRefType{}
 					poolTypeChoiceInt.APool.HealthCheckChoice = healthCheckChoiceInt
-				}
 
-			}
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
 
-			if v, ok := cs["health_check"]; ok && !isIntfNil(v) && !healthCheckChoiceTypeFound {
+							if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
-				healthCheckChoiceTypeFound = true
-				healthCheckChoiceInt := &ves_io_schema_dns_lb_pool.APool_HealthCheck{}
-				healthCheckChoiceInt.HealthCheck = &ves_io_schema_views.ObjectRefType{}
-				poolTypeChoiceInt.APool.HealthCheckChoice = healthCheckChoiceInt
+								healthCheckChoiceInt.HealthCheck.Name = v.(string)
 
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
+							}
 
-					if v, ok := cs["name"]; ok && !isIntfNil(v) {
+							if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
 
-						healthCheckChoiceInt.HealthCheck.Name = v.(string)
+								healthCheckChoiceInt.HealthCheck.Namespace = v.(string)
 
-					}
+							}
 
-					if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+							if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
 
-						healthCheckChoiceInt.HealthCheck.Namespace = v.(string)
+								healthCheckChoiceInt.HealthCheck.Tenant = v.(string)
 
-					}
+							}
 
-					if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
-
-						healthCheckChoiceInt.HealthCheck.Tenant = v.(string)
-
+						}
 					}
 
 				}
 
-			}
+				if v, ok := cs["max_answers"]; ok && !isIntfNil(v) {
 
-			if v, ok := cs["max_answers"]; ok && !isIntfNil(v) {
+					poolTypeChoiceInt.APool.MaxAnswers = uint32(v.(int))
 
-				poolTypeChoiceInt.APool.MaxAnswers = uint32(v.(int))
+				}
 
-			}
+				if v, ok := cs["members"]; ok && !isIntfNil(v) {
 
-			if v, ok := cs["members"]; ok && !isIntfNil(v) {
+					sl := v.([]interface{})
+					members := make([]*ves_io_schema_dns_lb_pool.AddressMember, len(sl))
+					poolTypeChoiceInt.APool.Members = members
+					for i, set := range sl {
+						if set != nil {
+							members[i] = &ves_io_schema_dns_lb_pool.AddressMember{}
+							membersMapStrToI := set.(map[string]interface{})
 
-				sl := v.([]interface{})
-				members := make([]*ves_io_schema_dns_lb_pool.AddressMember, len(sl))
-				poolTypeChoiceInt.APool.Members = members
-				for i, set := range sl {
-					members[i] = &ves_io_schema_dns_lb_pool.AddressMember{}
-					membersMapStrToI := set.(map[string]interface{})
+							if w, ok := membersMapStrToI["disable"]; ok && !isIntfNil(w) {
+								members[i].Disable = w.(bool)
+							}
 
-					if w, ok := membersMapStrToI["disable"]; ok && !isIntfNil(w) {
-						members[i].Disable = w.(bool)
-					}
+							if w, ok := membersMapStrToI["ip_endpoint"]; ok && !isIntfNil(w) {
+								members[i].IpEndpoint = w.(string)
+							}
 
-					if w, ok := membersMapStrToI["ip_endpoint"]; ok && !isIntfNil(w) {
-						members[i].IpEndpoint = w.(string)
-					}
+							if w, ok := membersMapStrToI["name"]; ok && !isIntfNil(w) {
+								members[i].Name = w.(string)
+							}
 
-					if w, ok := membersMapStrToI["name"]; ok && !isIntfNil(w) {
-						members[i].Name = w.(string)
-					}
+							if w, ok := membersMapStrToI["priority"]; ok && !isIntfNil(w) {
+								members[i].Priority = uint32(w.(int))
+							}
 
-					if w, ok := membersMapStrToI["priority"]; ok && !isIntfNil(w) {
-						members[i].Priority = uint32(w.(int))
-					}
+							if w, ok := membersMapStrToI["ratio"]; ok && !isIntfNil(w) {
+								members[i].Ratio = uint32(w.(int))
+							}
 
-					if w, ok := membersMapStrToI["ratio"]; ok && !isIntfNil(w) {
-						members[i].Ratio = uint32(w.(int))
+						}
 					}
 
 				}
 
 			}
-
 		}
 
 	}
@@ -527,49 +539,53 @@ func resourceVolterraDnsLbPoolCreate(d *schema.ResourceData, meta interface{}) e
 		poolTypeChoiceInt.AaaaPool = &ves_io_schema_dns_lb_pool.AAAAPool{}
 		createSpec.PoolTypeChoice = poolTypeChoiceInt
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
+			if set != nil {
+				cs := set.(map[string]interface{})
 
-			if v, ok := cs["max_answers"]; ok && !isIntfNil(v) {
+				if v, ok := cs["max_answers"]; ok && !isIntfNil(v) {
 
-				poolTypeChoiceInt.AaaaPool.MaxAnswers = uint32(v.(int))
+					poolTypeChoiceInt.AaaaPool.MaxAnswers = uint32(v.(int))
 
-			}
+				}
 
-			if v, ok := cs["members"]; ok && !isIntfNil(v) {
+				if v, ok := cs["members"]; ok && !isIntfNil(v) {
 
-				sl := v.([]interface{})
-				members := make([]*ves_io_schema_dns_lb_pool.AddressMember, len(sl))
-				poolTypeChoiceInt.AaaaPool.Members = members
-				for i, set := range sl {
-					members[i] = &ves_io_schema_dns_lb_pool.AddressMember{}
-					membersMapStrToI := set.(map[string]interface{})
+					sl := v.([]interface{})
+					members := make([]*ves_io_schema_dns_lb_pool.AddressMember, len(sl))
+					poolTypeChoiceInt.AaaaPool.Members = members
+					for i, set := range sl {
+						if set != nil {
+							members[i] = &ves_io_schema_dns_lb_pool.AddressMember{}
+							membersMapStrToI := set.(map[string]interface{})
 
-					if w, ok := membersMapStrToI["disable"]; ok && !isIntfNil(w) {
-						members[i].Disable = w.(bool)
-					}
+							if w, ok := membersMapStrToI["disable"]; ok && !isIntfNil(w) {
+								members[i].Disable = w.(bool)
+							}
 
-					if w, ok := membersMapStrToI["ip_endpoint"]; ok && !isIntfNil(w) {
-						members[i].IpEndpoint = w.(string)
-					}
+							if w, ok := membersMapStrToI["ip_endpoint"]; ok && !isIntfNil(w) {
+								members[i].IpEndpoint = w.(string)
+							}
 
-					if w, ok := membersMapStrToI["name"]; ok && !isIntfNil(w) {
-						members[i].Name = w.(string)
-					}
+							if w, ok := membersMapStrToI["name"]; ok && !isIntfNil(w) {
+								members[i].Name = w.(string)
+							}
 
-					if w, ok := membersMapStrToI["priority"]; ok && !isIntfNil(w) {
-						members[i].Priority = uint32(w.(int))
-					}
+							if w, ok := membersMapStrToI["priority"]; ok && !isIntfNil(w) {
+								members[i].Priority = uint32(w.(int))
+							}
 
-					if w, ok := membersMapStrToI["ratio"]; ok && !isIntfNil(w) {
-						members[i].Ratio = uint32(w.(int))
+							if w, ok := membersMapStrToI["ratio"]; ok && !isIntfNil(w) {
+								members[i].Ratio = uint32(w.(int))
+							}
+
+						}
 					}
 
 				}
 
 			}
-
 		}
 
 	}
@@ -581,39 +597,43 @@ func resourceVolterraDnsLbPoolCreate(d *schema.ResourceData, meta interface{}) e
 		poolTypeChoiceInt.CnamePool = &ves_io_schema_dns_lb_pool.CNAMEPool{}
 		createSpec.PoolTypeChoice = poolTypeChoiceInt
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
+			if set != nil {
+				cs := set.(map[string]interface{})
 
-			if v, ok := cs["members"]; ok && !isIntfNil(v) {
+				if v, ok := cs["members"]; ok && !isIntfNil(v) {
 
-				sl := v.([]interface{})
-				members := make([]*ves_io_schema_dns_lb_pool.CNAMEMember, len(sl))
-				poolTypeChoiceInt.CnamePool.Members = members
-				for i, set := range sl {
-					members[i] = &ves_io_schema_dns_lb_pool.CNAMEMember{}
-					membersMapStrToI := set.(map[string]interface{})
+					sl := v.([]interface{})
+					members := make([]*ves_io_schema_dns_lb_pool.CNAMEMember, len(sl))
+					poolTypeChoiceInt.CnamePool.Members = members
+					for i, set := range sl {
+						if set != nil {
+							members[i] = &ves_io_schema_dns_lb_pool.CNAMEMember{}
+							membersMapStrToI := set.(map[string]interface{})
 
-					if w, ok := membersMapStrToI["domain"]; ok && !isIntfNil(w) {
-						members[i].Domain = w.(string)
-					}
+							if w, ok := membersMapStrToI["domain"]; ok && !isIntfNil(w) {
+								members[i].Domain = w.(string)
+							}
 
-					if w, ok := membersMapStrToI["final_translation"]; ok && !isIntfNil(w) {
-						members[i].FinalTranslation = w.(bool)
-					}
+							if w, ok := membersMapStrToI["final_translation"]; ok && !isIntfNil(w) {
+								members[i].FinalTranslation = w.(bool)
+							}
 
-					if w, ok := membersMapStrToI["name"]; ok && !isIntfNil(w) {
-						members[i].Name = w.(string)
-					}
+							if w, ok := membersMapStrToI["name"]; ok && !isIntfNil(w) {
+								members[i].Name = w.(string)
+							}
 
-					if w, ok := membersMapStrToI["ratio"]; ok && !isIntfNil(w) {
-						members[i].Ratio = uint32(w.(int))
+							if w, ok := membersMapStrToI["ratio"]; ok && !isIntfNil(w) {
+								members[i].Ratio = uint32(w.(int))
+							}
+
+						}
 					}
 
 				}
 
 			}
-
 		}
 
 	}
@@ -625,45 +645,49 @@ func resourceVolterraDnsLbPoolCreate(d *schema.ResourceData, meta interface{}) e
 		poolTypeChoiceInt.MxPool = &ves_io_schema_dns_lb_pool.MXPool{}
 		createSpec.PoolTypeChoice = poolTypeChoiceInt
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
+			if set != nil {
+				cs := set.(map[string]interface{})
 
-			if v, ok := cs["max_answers"]; ok && !isIntfNil(v) {
+				if v, ok := cs["max_answers"]; ok && !isIntfNil(v) {
 
-				poolTypeChoiceInt.MxPool.MaxAnswers = uint32(v.(int))
+					poolTypeChoiceInt.MxPool.MaxAnswers = uint32(v.(int))
 
-			}
+				}
 
-			if v, ok := cs["members"]; ok && !isIntfNil(v) {
+				if v, ok := cs["members"]; ok && !isIntfNil(v) {
 
-				sl := v.([]interface{})
-				members := make([]*ves_io_schema_dns_lb_pool.MXMember, len(sl))
-				poolTypeChoiceInt.MxPool.Members = members
-				for i, set := range sl {
-					members[i] = &ves_io_schema_dns_lb_pool.MXMember{}
-					membersMapStrToI := set.(map[string]interface{})
+					sl := v.([]interface{})
+					members := make([]*ves_io_schema_dns_lb_pool.MXMember, len(sl))
+					poolTypeChoiceInt.MxPool.Members = members
+					for i, set := range sl {
+						if set != nil {
+							members[i] = &ves_io_schema_dns_lb_pool.MXMember{}
+							membersMapStrToI := set.(map[string]interface{})
 
-					if w, ok := membersMapStrToI["domain"]; ok && !isIntfNil(w) {
-						members[i].Domain = w.(string)
-					}
+							if w, ok := membersMapStrToI["domain"]; ok && !isIntfNil(w) {
+								members[i].Domain = w.(string)
+							}
 
-					if w, ok := membersMapStrToI["name"]; ok && !isIntfNil(w) {
-						members[i].Name = w.(string)
-					}
+							if w, ok := membersMapStrToI["name"]; ok && !isIntfNil(w) {
+								members[i].Name = w.(string)
+							}
 
-					if w, ok := membersMapStrToI["priority"]; ok && !isIntfNil(w) {
-						members[i].Priority = uint32(w.(int))
-					}
+							if w, ok := membersMapStrToI["priority"]; ok && !isIntfNil(w) {
+								members[i].Priority = uint32(w.(int))
+							}
 
-					if w, ok := membersMapStrToI["ratio"]; ok && !isIntfNil(w) {
-						members[i].Ratio = uint32(w.(int))
+							if w, ok := membersMapStrToI["ratio"]; ok && !isIntfNil(w) {
+								members[i].Ratio = uint32(w.(int))
+							}
+
+						}
 					}
 
 				}
 
 			}
-
 		}
 
 	}
@@ -675,57 +699,61 @@ func resourceVolterraDnsLbPoolCreate(d *schema.ResourceData, meta interface{}) e
 		poolTypeChoiceInt.SrvPool = &ves_io_schema_dns_lb_pool.SRVPool{}
 		createSpec.PoolTypeChoice = poolTypeChoiceInt
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
+			if set != nil {
+				cs := set.(map[string]interface{})
 
-			if v, ok := cs["max_answers"]; ok && !isIntfNil(v) {
+				if v, ok := cs["max_answers"]; ok && !isIntfNil(v) {
 
-				poolTypeChoiceInt.SrvPool.MaxAnswers = uint32(v.(int))
+					poolTypeChoiceInt.SrvPool.MaxAnswers = uint32(v.(int))
 
-			}
+				}
 
-			if v, ok := cs["members"]; ok && !isIntfNil(v) {
+				if v, ok := cs["members"]; ok && !isIntfNil(v) {
 
-				sl := v.([]interface{})
-				members := make([]*ves_io_schema_dns_lb_pool.SRVMember, len(sl))
-				poolTypeChoiceInt.SrvPool.Members = members
-				for i, set := range sl {
-					members[i] = &ves_io_schema_dns_lb_pool.SRVMember{}
-					membersMapStrToI := set.(map[string]interface{})
+					sl := v.([]interface{})
+					members := make([]*ves_io_schema_dns_lb_pool.SRVMember, len(sl))
+					poolTypeChoiceInt.SrvPool.Members = members
+					for i, set := range sl {
+						if set != nil {
+							members[i] = &ves_io_schema_dns_lb_pool.SRVMember{}
+							membersMapStrToI := set.(map[string]interface{})
 
-					if w, ok := membersMapStrToI["final_translation"]; ok && !isIntfNil(w) {
-						members[i].FinalTranslation = w.(bool)
-					}
+							if w, ok := membersMapStrToI["final_translation"]; ok && !isIntfNil(w) {
+								members[i].FinalTranslation = w.(bool)
+							}
 
-					if w, ok := membersMapStrToI["name"]; ok && !isIntfNil(w) {
-						members[i].Name = w.(string)
-					}
+							if w, ok := membersMapStrToI["name"]; ok && !isIntfNil(w) {
+								members[i].Name = w.(string)
+							}
 
-					if w, ok := membersMapStrToI["port"]; ok && !isIntfNil(w) {
-						members[i].Port = uint32(w.(int))
-					}
+							if w, ok := membersMapStrToI["port"]; ok && !isIntfNil(w) {
+								members[i].Port = uint32(w.(int))
+							}
 
-					if w, ok := membersMapStrToI["priority"]; ok && !isIntfNil(w) {
-						members[i].Priority = uint32(w.(int))
-					}
+							if w, ok := membersMapStrToI["priority"]; ok && !isIntfNil(w) {
+								members[i].Priority = uint32(w.(int))
+							}
 
-					if w, ok := membersMapStrToI["ratio"]; ok && !isIntfNil(w) {
-						members[i].Ratio = uint32(w.(int))
-					}
+							if w, ok := membersMapStrToI["ratio"]; ok && !isIntfNil(w) {
+								members[i].Ratio = uint32(w.(int))
+							}
 
-					if w, ok := membersMapStrToI["target"]; ok && !isIntfNil(w) {
-						members[i].Target = w.(string)
-					}
+							if w, ok := membersMapStrToI["target"]; ok && !isIntfNil(w) {
+								members[i].Target = w.(string)
+							}
 
-					if w, ok := membersMapStrToI["weight"]; ok && !isIntfNil(w) {
-						members[i].Weight = uint32(w.(int))
+							if w, ok := membersMapStrToI["weight"]; ok && !isIntfNil(w) {
+								members[i].Weight = uint32(w.(int))
+							}
+
+						}
 					}
 
 				}
 
 			}
-
 		}
 
 	}
@@ -871,96 +899,102 @@ func resourceVolterraDnsLbPoolUpdate(d *schema.ResourceData, meta interface{}) e
 		poolTypeChoiceInt.APool = &ves_io_schema_dns_lb_pool.APool{}
 		updateSpec.PoolTypeChoice = poolTypeChoiceInt
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
+			if set != nil {
+				cs := set.(map[string]interface{})
 
-			healthCheckChoiceTypeFound := false
+				healthCheckChoiceTypeFound := false
 
-			if v, ok := cs["disable_health_check"]; ok && !isIntfNil(v) && !healthCheckChoiceTypeFound {
+				if v, ok := cs["disable_health_check"]; ok && !isIntfNil(v) && !healthCheckChoiceTypeFound {
 
-				healthCheckChoiceTypeFound = true
+					healthCheckChoiceTypeFound = true
 
-				if v.(bool) {
-					healthCheckChoiceInt := &ves_io_schema_dns_lb_pool.APool_DisableHealthCheck{}
-					healthCheckChoiceInt.DisableHealthCheck = &ves_io_schema.Empty{}
+					if v.(bool) {
+						healthCheckChoiceInt := &ves_io_schema_dns_lb_pool.APool_DisableHealthCheck{}
+						healthCheckChoiceInt.DisableHealthCheck = &ves_io_schema.Empty{}
+						poolTypeChoiceInt.APool.HealthCheckChoice = healthCheckChoiceInt
+					}
+
+				}
+
+				if v, ok := cs["health_check"]; ok && !isIntfNil(v) && !healthCheckChoiceTypeFound {
+
+					healthCheckChoiceTypeFound = true
+					healthCheckChoiceInt := &ves_io_schema_dns_lb_pool.APool_HealthCheck{}
+					healthCheckChoiceInt.HealthCheck = &ves_io_schema_views.ObjectRefType{}
 					poolTypeChoiceInt.APool.HealthCheckChoice = healthCheckChoiceInt
-				}
 
-			}
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
 
-			if v, ok := cs["health_check"]; ok && !isIntfNil(v) && !healthCheckChoiceTypeFound {
+							if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
-				healthCheckChoiceTypeFound = true
-				healthCheckChoiceInt := &ves_io_schema_dns_lb_pool.APool_HealthCheck{}
-				healthCheckChoiceInt.HealthCheck = &ves_io_schema_views.ObjectRefType{}
-				poolTypeChoiceInt.APool.HealthCheckChoice = healthCheckChoiceInt
+								healthCheckChoiceInt.HealthCheck.Name = v.(string)
 
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
+							}
 
-					if v, ok := cs["name"]; ok && !isIntfNil(v) {
+							if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
 
-						healthCheckChoiceInt.HealthCheck.Name = v.(string)
+								healthCheckChoiceInt.HealthCheck.Namespace = v.(string)
 
-					}
+							}
 
-					if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+							if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
 
-						healthCheckChoiceInt.HealthCheck.Namespace = v.(string)
+								healthCheckChoiceInt.HealthCheck.Tenant = v.(string)
 
-					}
+							}
 
-					if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
-
-						healthCheckChoiceInt.HealthCheck.Tenant = v.(string)
-
+						}
 					}
 
 				}
 
-			}
+				if v, ok := cs["max_answers"]; ok && !isIntfNil(v) {
 
-			if v, ok := cs["max_answers"]; ok && !isIntfNil(v) {
+					poolTypeChoiceInt.APool.MaxAnswers = uint32(v.(int))
 
-				poolTypeChoiceInt.APool.MaxAnswers = uint32(v.(int))
+				}
 
-			}
+				if v, ok := cs["members"]; ok && !isIntfNil(v) {
 
-			if v, ok := cs["members"]; ok && !isIntfNil(v) {
+					sl := v.([]interface{})
+					members := make([]*ves_io_schema_dns_lb_pool.AddressMember, len(sl))
+					poolTypeChoiceInt.APool.Members = members
+					for i, set := range sl {
+						if set != nil {
+							members[i] = &ves_io_schema_dns_lb_pool.AddressMember{}
+							membersMapStrToI := set.(map[string]interface{})
 
-				sl := v.([]interface{})
-				members := make([]*ves_io_schema_dns_lb_pool.AddressMember, len(sl))
-				poolTypeChoiceInt.APool.Members = members
-				for i, set := range sl {
-					members[i] = &ves_io_schema_dns_lb_pool.AddressMember{}
-					membersMapStrToI := set.(map[string]interface{})
+							if w, ok := membersMapStrToI["disable"]; ok && !isIntfNil(w) {
+								members[i].Disable = w.(bool)
+							}
 
-					if w, ok := membersMapStrToI["disable"]; ok && !isIntfNil(w) {
-						members[i].Disable = w.(bool)
-					}
+							if w, ok := membersMapStrToI["ip_endpoint"]; ok && !isIntfNil(w) {
+								members[i].IpEndpoint = w.(string)
+							}
 
-					if w, ok := membersMapStrToI["ip_endpoint"]; ok && !isIntfNil(w) {
-						members[i].IpEndpoint = w.(string)
-					}
+							if w, ok := membersMapStrToI["name"]; ok && !isIntfNil(w) {
+								members[i].Name = w.(string)
+							}
 
-					if w, ok := membersMapStrToI["name"]; ok && !isIntfNil(w) {
-						members[i].Name = w.(string)
-					}
+							if w, ok := membersMapStrToI["priority"]; ok && !isIntfNil(w) {
+								members[i].Priority = uint32(w.(int))
+							}
 
-					if w, ok := membersMapStrToI["priority"]; ok && !isIntfNil(w) {
-						members[i].Priority = uint32(w.(int))
-					}
+							if w, ok := membersMapStrToI["ratio"]; ok && !isIntfNil(w) {
+								members[i].Ratio = uint32(w.(int))
+							}
 
-					if w, ok := membersMapStrToI["ratio"]; ok && !isIntfNil(w) {
-						members[i].Ratio = uint32(w.(int))
+						}
 					}
 
 				}
 
 			}
-
 		}
 
 	}
@@ -972,49 +1006,53 @@ func resourceVolterraDnsLbPoolUpdate(d *schema.ResourceData, meta interface{}) e
 		poolTypeChoiceInt.AaaaPool = &ves_io_schema_dns_lb_pool.AAAAPool{}
 		updateSpec.PoolTypeChoice = poolTypeChoiceInt
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
+			if set != nil {
+				cs := set.(map[string]interface{})
 
-			if v, ok := cs["max_answers"]; ok && !isIntfNil(v) {
+				if v, ok := cs["max_answers"]; ok && !isIntfNil(v) {
 
-				poolTypeChoiceInt.AaaaPool.MaxAnswers = uint32(v.(int))
+					poolTypeChoiceInt.AaaaPool.MaxAnswers = uint32(v.(int))
 
-			}
+				}
 
-			if v, ok := cs["members"]; ok && !isIntfNil(v) {
+				if v, ok := cs["members"]; ok && !isIntfNil(v) {
 
-				sl := v.([]interface{})
-				members := make([]*ves_io_schema_dns_lb_pool.AddressMember, len(sl))
-				poolTypeChoiceInt.AaaaPool.Members = members
-				for i, set := range sl {
-					members[i] = &ves_io_schema_dns_lb_pool.AddressMember{}
-					membersMapStrToI := set.(map[string]interface{})
+					sl := v.([]interface{})
+					members := make([]*ves_io_schema_dns_lb_pool.AddressMember, len(sl))
+					poolTypeChoiceInt.AaaaPool.Members = members
+					for i, set := range sl {
+						if set != nil {
+							members[i] = &ves_io_schema_dns_lb_pool.AddressMember{}
+							membersMapStrToI := set.(map[string]interface{})
 
-					if w, ok := membersMapStrToI["disable"]; ok && !isIntfNil(w) {
-						members[i].Disable = w.(bool)
-					}
+							if w, ok := membersMapStrToI["disable"]; ok && !isIntfNil(w) {
+								members[i].Disable = w.(bool)
+							}
 
-					if w, ok := membersMapStrToI["ip_endpoint"]; ok && !isIntfNil(w) {
-						members[i].IpEndpoint = w.(string)
-					}
+							if w, ok := membersMapStrToI["ip_endpoint"]; ok && !isIntfNil(w) {
+								members[i].IpEndpoint = w.(string)
+							}
 
-					if w, ok := membersMapStrToI["name"]; ok && !isIntfNil(w) {
-						members[i].Name = w.(string)
-					}
+							if w, ok := membersMapStrToI["name"]; ok && !isIntfNil(w) {
+								members[i].Name = w.(string)
+							}
 
-					if w, ok := membersMapStrToI["priority"]; ok && !isIntfNil(w) {
-						members[i].Priority = uint32(w.(int))
-					}
+							if w, ok := membersMapStrToI["priority"]; ok && !isIntfNil(w) {
+								members[i].Priority = uint32(w.(int))
+							}
 
-					if w, ok := membersMapStrToI["ratio"]; ok && !isIntfNil(w) {
-						members[i].Ratio = uint32(w.(int))
+							if w, ok := membersMapStrToI["ratio"]; ok && !isIntfNil(w) {
+								members[i].Ratio = uint32(w.(int))
+							}
+
+						}
 					}
 
 				}
 
 			}
-
 		}
 
 	}
@@ -1026,39 +1064,43 @@ func resourceVolterraDnsLbPoolUpdate(d *schema.ResourceData, meta interface{}) e
 		poolTypeChoiceInt.CnamePool = &ves_io_schema_dns_lb_pool.CNAMEPool{}
 		updateSpec.PoolTypeChoice = poolTypeChoiceInt
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
+			if set != nil {
+				cs := set.(map[string]interface{})
 
-			if v, ok := cs["members"]; ok && !isIntfNil(v) {
+				if v, ok := cs["members"]; ok && !isIntfNil(v) {
 
-				sl := v.([]interface{})
-				members := make([]*ves_io_schema_dns_lb_pool.CNAMEMember, len(sl))
-				poolTypeChoiceInt.CnamePool.Members = members
-				for i, set := range sl {
-					members[i] = &ves_io_schema_dns_lb_pool.CNAMEMember{}
-					membersMapStrToI := set.(map[string]interface{})
+					sl := v.([]interface{})
+					members := make([]*ves_io_schema_dns_lb_pool.CNAMEMember, len(sl))
+					poolTypeChoiceInt.CnamePool.Members = members
+					for i, set := range sl {
+						if set != nil {
+							members[i] = &ves_io_schema_dns_lb_pool.CNAMEMember{}
+							membersMapStrToI := set.(map[string]interface{})
 
-					if w, ok := membersMapStrToI["domain"]; ok && !isIntfNil(w) {
-						members[i].Domain = w.(string)
-					}
+							if w, ok := membersMapStrToI["domain"]; ok && !isIntfNil(w) {
+								members[i].Domain = w.(string)
+							}
 
-					if w, ok := membersMapStrToI["final_translation"]; ok && !isIntfNil(w) {
-						members[i].FinalTranslation = w.(bool)
-					}
+							if w, ok := membersMapStrToI["final_translation"]; ok && !isIntfNil(w) {
+								members[i].FinalTranslation = w.(bool)
+							}
 
-					if w, ok := membersMapStrToI["name"]; ok && !isIntfNil(w) {
-						members[i].Name = w.(string)
-					}
+							if w, ok := membersMapStrToI["name"]; ok && !isIntfNil(w) {
+								members[i].Name = w.(string)
+							}
 
-					if w, ok := membersMapStrToI["ratio"]; ok && !isIntfNil(w) {
-						members[i].Ratio = uint32(w.(int))
+							if w, ok := membersMapStrToI["ratio"]; ok && !isIntfNil(w) {
+								members[i].Ratio = uint32(w.(int))
+							}
+
+						}
 					}
 
 				}
 
 			}
-
 		}
 
 	}
@@ -1070,45 +1112,49 @@ func resourceVolterraDnsLbPoolUpdate(d *schema.ResourceData, meta interface{}) e
 		poolTypeChoiceInt.MxPool = &ves_io_schema_dns_lb_pool.MXPool{}
 		updateSpec.PoolTypeChoice = poolTypeChoiceInt
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
+			if set != nil {
+				cs := set.(map[string]interface{})
 
-			if v, ok := cs["max_answers"]; ok && !isIntfNil(v) {
+				if v, ok := cs["max_answers"]; ok && !isIntfNil(v) {
 
-				poolTypeChoiceInt.MxPool.MaxAnswers = uint32(v.(int))
+					poolTypeChoiceInt.MxPool.MaxAnswers = uint32(v.(int))
 
-			}
+				}
 
-			if v, ok := cs["members"]; ok && !isIntfNil(v) {
+				if v, ok := cs["members"]; ok && !isIntfNil(v) {
 
-				sl := v.([]interface{})
-				members := make([]*ves_io_schema_dns_lb_pool.MXMember, len(sl))
-				poolTypeChoiceInt.MxPool.Members = members
-				for i, set := range sl {
-					members[i] = &ves_io_schema_dns_lb_pool.MXMember{}
-					membersMapStrToI := set.(map[string]interface{})
+					sl := v.([]interface{})
+					members := make([]*ves_io_schema_dns_lb_pool.MXMember, len(sl))
+					poolTypeChoiceInt.MxPool.Members = members
+					for i, set := range sl {
+						if set != nil {
+							members[i] = &ves_io_schema_dns_lb_pool.MXMember{}
+							membersMapStrToI := set.(map[string]interface{})
 
-					if w, ok := membersMapStrToI["domain"]; ok && !isIntfNil(w) {
-						members[i].Domain = w.(string)
-					}
+							if w, ok := membersMapStrToI["domain"]; ok && !isIntfNil(w) {
+								members[i].Domain = w.(string)
+							}
 
-					if w, ok := membersMapStrToI["name"]; ok && !isIntfNil(w) {
-						members[i].Name = w.(string)
-					}
+							if w, ok := membersMapStrToI["name"]; ok && !isIntfNil(w) {
+								members[i].Name = w.(string)
+							}
 
-					if w, ok := membersMapStrToI["priority"]; ok && !isIntfNil(w) {
-						members[i].Priority = uint32(w.(int))
-					}
+							if w, ok := membersMapStrToI["priority"]; ok && !isIntfNil(w) {
+								members[i].Priority = uint32(w.(int))
+							}
 
-					if w, ok := membersMapStrToI["ratio"]; ok && !isIntfNil(w) {
-						members[i].Ratio = uint32(w.(int))
+							if w, ok := membersMapStrToI["ratio"]; ok && !isIntfNil(w) {
+								members[i].Ratio = uint32(w.(int))
+							}
+
+						}
 					}
 
 				}
 
 			}
-
 		}
 
 	}
@@ -1120,57 +1166,61 @@ func resourceVolterraDnsLbPoolUpdate(d *schema.ResourceData, meta interface{}) e
 		poolTypeChoiceInt.SrvPool = &ves_io_schema_dns_lb_pool.SRVPool{}
 		updateSpec.PoolTypeChoice = poolTypeChoiceInt
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
+			if set != nil {
+				cs := set.(map[string]interface{})
 
-			if v, ok := cs["max_answers"]; ok && !isIntfNil(v) {
+				if v, ok := cs["max_answers"]; ok && !isIntfNil(v) {
 
-				poolTypeChoiceInt.SrvPool.MaxAnswers = uint32(v.(int))
+					poolTypeChoiceInt.SrvPool.MaxAnswers = uint32(v.(int))
 
-			}
+				}
 
-			if v, ok := cs["members"]; ok && !isIntfNil(v) {
+				if v, ok := cs["members"]; ok && !isIntfNil(v) {
 
-				sl := v.([]interface{})
-				members := make([]*ves_io_schema_dns_lb_pool.SRVMember, len(sl))
-				poolTypeChoiceInt.SrvPool.Members = members
-				for i, set := range sl {
-					members[i] = &ves_io_schema_dns_lb_pool.SRVMember{}
-					membersMapStrToI := set.(map[string]interface{})
+					sl := v.([]interface{})
+					members := make([]*ves_io_schema_dns_lb_pool.SRVMember, len(sl))
+					poolTypeChoiceInt.SrvPool.Members = members
+					for i, set := range sl {
+						if set != nil {
+							members[i] = &ves_io_schema_dns_lb_pool.SRVMember{}
+							membersMapStrToI := set.(map[string]interface{})
 
-					if w, ok := membersMapStrToI["final_translation"]; ok && !isIntfNil(w) {
-						members[i].FinalTranslation = w.(bool)
-					}
+							if w, ok := membersMapStrToI["final_translation"]; ok && !isIntfNil(w) {
+								members[i].FinalTranslation = w.(bool)
+							}
 
-					if w, ok := membersMapStrToI["name"]; ok && !isIntfNil(w) {
-						members[i].Name = w.(string)
-					}
+							if w, ok := membersMapStrToI["name"]; ok && !isIntfNil(w) {
+								members[i].Name = w.(string)
+							}
 
-					if w, ok := membersMapStrToI["port"]; ok && !isIntfNil(w) {
-						members[i].Port = uint32(w.(int))
-					}
+							if w, ok := membersMapStrToI["port"]; ok && !isIntfNil(w) {
+								members[i].Port = uint32(w.(int))
+							}
 
-					if w, ok := membersMapStrToI["priority"]; ok && !isIntfNil(w) {
-						members[i].Priority = uint32(w.(int))
-					}
+							if w, ok := membersMapStrToI["priority"]; ok && !isIntfNil(w) {
+								members[i].Priority = uint32(w.(int))
+							}
 
-					if w, ok := membersMapStrToI["ratio"]; ok && !isIntfNil(w) {
-						members[i].Ratio = uint32(w.(int))
-					}
+							if w, ok := membersMapStrToI["ratio"]; ok && !isIntfNil(w) {
+								members[i].Ratio = uint32(w.(int))
+							}
 
-					if w, ok := membersMapStrToI["target"]; ok && !isIntfNil(w) {
-						members[i].Target = w.(string)
-					}
+							if w, ok := membersMapStrToI["target"]; ok && !isIntfNil(w) {
+								members[i].Target = w.(string)
+							}
 
-					if w, ok := membersMapStrToI["weight"]; ok && !isIntfNil(w) {
-						members[i].Weight = uint32(w.(int))
+							if w, ok := membersMapStrToI["weight"]; ok && !isIntfNil(w) {
+								members[i].Weight = uint32(w.(int))
+							}
+
+						}
 					}
 
 				}
 
 			}
-
 		}
 
 	}

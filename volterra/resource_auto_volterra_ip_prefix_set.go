@@ -61,13 +61,54 @@ func resourceVolterraIpPrefixSet() *schema.Resource {
 				ForceNew: true,
 			},
 
+			"ipv4_prefixes": {
+
+				Type:     schema.TypeList,
+				Optional: true,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+
+						"description": {
+							Type:     schema.TypeString,
+							Optional: true,
+						},
+
+						"ipv4_prefix": {
+							Type:     schema.TypeString,
+							Required: true,
+						},
+					},
+				},
+			},
+
 			"ipv6_prefix": {
 
 				Type: schema.TypeList,
 
-				Optional: true,
+				Optional:   true,
+				Deprecated: "This field is deprecated and will be removed in future release.",
 				Elem: &schema.Schema{
 					Type: schema.TypeString,
+				},
+			},
+
+			"ipv6_prefixes": {
+
+				Type:     schema.TypeList,
+				Optional: true,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+
+						"description": {
+							Type:     schema.TypeString,
+							Optional: true,
+						},
+
+						"ipv6_prefix": {
+							Type:     schema.TypeString,
+							Required: true,
+						},
+					},
 				},
 			},
 
@@ -75,7 +116,8 @@ func resourceVolterraIpPrefixSet() *schema.Resource {
 
 				Type: schema.TypeList,
 
-				Optional: true,
+				Optional:   true,
+				Deprecated: "This field is deprecated and will be removed in future release.",
 				Elem: &schema.Schema{
 					Type: schema.TypeString,
 				},
@@ -137,6 +179,30 @@ func resourceVolterraIpPrefixSetCreate(d *schema.ResourceData, meta interface{})
 			v.(string)
 	}
 
+	//ipv4_prefixes
+	if v, ok := d.GetOk("ipv4_prefixes"); ok && !isIntfNil(v) {
+
+		sl := v.([]interface{})
+		ipv4Prefixes := make([]*ves_io_schema_ip_prefix_set.Ipv4Prefix, len(sl))
+		createSpec.Ipv4Prefixes = ipv4Prefixes
+		for i, set := range sl {
+			if set != nil {
+				ipv4Prefixes[i] = &ves_io_schema_ip_prefix_set.Ipv4Prefix{}
+				ipv4PrefixesMapStrToI := set.(map[string]interface{})
+
+				if w, ok := ipv4PrefixesMapStrToI["description"]; ok && !isIntfNil(w) {
+					ipv4Prefixes[i].Description = w.(string)
+				}
+
+				if w, ok := ipv4PrefixesMapStrToI["ipv4_prefix"]; ok && !isIntfNil(w) {
+					ipv4Prefixes[i].Ipv4Prefix = w.(string)
+				}
+
+			}
+		}
+
+	}
+
 	//ipv6_prefix
 	if v, ok := d.GetOk("ipv6_prefix"); ok && !isIntfNil(v) {
 
@@ -145,6 +211,30 @@ func resourceVolterraIpPrefixSetCreate(d *schema.ResourceData, meta interface{})
 			ls[i] = v.(string)
 		}
 		createSpec.Ipv6Prefix = ls
+
+	}
+
+	//ipv6_prefixes
+	if v, ok := d.GetOk("ipv6_prefixes"); ok && !isIntfNil(v) {
+
+		sl := v.([]interface{})
+		ipv6Prefixes := make([]*ves_io_schema_ip_prefix_set.Ipv6Prefix, len(sl))
+		createSpec.Ipv6Prefixes = ipv6Prefixes
+		for i, set := range sl {
+			if set != nil {
+				ipv6Prefixes[i] = &ves_io_schema_ip_prefix_set.Ipv6Prefix{}
+				ipv6PrefixesMapStrToI := set.(map[string]interface{})
+
+				if w, ok := ipv6PrefixesMapStrToI["description"]; ok && !isIntfNil(w) {
+					ipv6Prefixes[i].Description = w.(string)
+				}
+
+				if w, ok := ipv6PrefixesMapStrToI["ipv6_prefix"]; ok && !isIntfNil(w) {
+					ipv6Prefixes[i].Ipv6Prefix = w.(string)
+				}
+
+			}
+		}
 
 	}
 
@@ -204,7 +294,6 @@ func setIpPrefixSetFields(client *APIClient, d *schema.ResourceData, resp vesapi
 
 	drift.DriftDetectionSpecIpPrefixSet(d,resp)
 
-
 	return nil
 }
 
@@ -261,6 +350,29 @@ func resourceVolterraIpPrefixSetUpdate(d *schema.ResourceData, meta interface{})
 			v.(string)
 	}
 
+	if v, ok := d.GetOk("ipv4_prefixes"); ok && !isIntfNil(v) {
+
+		sl := v.([]interface{})
+		ipv4Prefixes := make([]*ves_io_schema_ip_prefix_set.Ipv4Prefix, len(sl))
+		updateSpec.Ipv4Prefixes = ipv4Prefixes
+		for i, set := range sl {
+			if set != nil {
+				ipv4Prefixes[i] = &ves_io_schema_ip_prefix_set.Ipv4Prefix{}
+				ipv4PrefixesMapStrToI := set.(map[string]interface{})
+
+				if w, ok := ipv4PrefixesMapStrToI["description"]; ok && !isIntfNil(w) {
+					ipv4Prefixes[i].Description = w.(string)
+				}
+
+				if w, ok := ipv4PrefixesMapStrToI["ipv4_prefix"]; ok && !isIntfNil(w) {
+					ipv4Prefixes[i].Ipv4Prefix = w.(string)
+				}
+
+			}
+		}
+
+	}
+
 	if v, ok := d.GetOk("ipv6_prefix"); ok && !isIntfNil(v) {
 
 		ls := make([]string, len(v.([]interface{})))
@@ -268,6 +380,29 @@ func resourceVolterraIpPrefixSetUpdate(d *schema.ResourceData, meta interface{})
 			ls[i] = v.(string)
 		}
 		updateSpec.Ipv6Prefix = ls
+
+	}
+
+	if v, ok := d.GetOk("ipv6_prefixes"); ok && !isIntfNil(v) {
+
+		sl := v.([]interface{})
+		ipv6Prefixes := make([]*ves_io_schema_ip_prefix_set.Ipv6Prefix, len(sl))
+		updateSpec.Ipv6Prefixes = ipv6Prefixes
+		for i, set := range sl {
+			if set != nil {
+				ipv6Prefixes[i] = &ves_io_schema_ip_prefix_set.Ipv6Prefix{}
+				ipv6PrefixesMapStrToI := set.(map[string]interface{})
+
+				if w, ok := ipv6PrefixesMapStrToI["description"]; ok && !isIntfNil(w) {
+					ipv6Prefixes[i].Description = w.(string)
+				}
+
+				if w, ok := ipv6PrefixesMapStrToI["ipv6_prefix"]; ok && !isIntfNil(w) {
+					ipv6Prefixes[i].Ipv6Prefix = w.(string)
+				}
+
+			}
+		}
 
 	}
 

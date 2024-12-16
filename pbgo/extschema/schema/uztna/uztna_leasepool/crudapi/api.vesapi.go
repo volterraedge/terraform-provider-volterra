@@ -1614,7 +1614,6 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-uztna-uztna_leasepool-crudapi-api-get"
                 },
-                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.uztna.uztna_leasepool.crudapi.API.Get"
             },
             "delete": {
@@ -1690,7 +1689,6 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-uztna-uztna_leasepool-crudapi-api-delete"
                 },
-                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.uztna.uztna_leasepool.crudapi.API.Delete"
             },
             "put": {
@@ -1774,7 +1772,6 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-uztna-uztna_leasepool-crudapi-api-replace"
                 },
-                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.uztna.uztna_leasepool.crudapi.API.Replace"
             },
             "x-displayname": "",
@@ -1922,7 +1919,6 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-uztna-uztna_leasepool-crudapi-api-list"
                 },
-                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.uztna.uztna_leasepool.crudapi.API.List"
             },
             "post": {
@@ -2000,7 +1996,6 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-uztna-uztna_leasepool-crudapi-api-create"
                 },
-                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.uztna.uztna_leasepool.crudapi.API.Create"
             },
             "x-displayname": "",
@@ -2148,7 +2143,6 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-uztna-uztna_leasepool-crudapi-api-liststream"
                 },
-                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.uztna.uztna_leasepool.crudapi.API.ListStream"
             },
             "x-displayname": "",
@@ -2256,7 +2250,6 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-uztna-uztna_leasepool-crudapi-api-get"
                 },
-                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.uztna.uztna_leasepool.crudapi.API.Get"
             },
             "x-displayname": "",
@@ -2404,7 +2397,6 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-uztna-uztna_leasepool-crudapi-api-list"
                 },
-                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.uztna.uztna_leasepool.crudapi.API.List"
             },
             "x-displayname": "",
@@ -2487,7 +2479,6 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-uztna-uztna_leasepool-crudapi-api-delete"
                 },
-                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.uztna.uztna_leasepool.crudapi.API.Delete"
             },
             "put": {
@@ -2571,7 +2562,6 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-uztna-uztna_leasepool-crudapi-api-replace"
                 },
-                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.uztna.uztna_leasepool.crudapi.API.Replace"
             },
             "x-displayname": "",
@@ -2656,7 +2646,6 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-uztna-uztna_leasepool-crudapi-api-create"
                 },
-                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.uztna.uztna_leasepool.crudapi.API.Create"
             },
             "x-displayname": "",
@@ -3045,20 +3034,13 @@ var APISwaggerJSON string = `{
         },
         "schemaIpv6AddressType": {
             "type": "object",
-            "description": "IPv6 Address specified as hexadecimal numbers separated by ':'",
+            "description": "x-displayName: \"IPv6 Address\"\nIPv6 Address specified as hexadecimal numbers separated by ':'",
             "title": "IPv6 Address",
-            "x-displayname": "IPv6 Address",
-            "x-ves-proto-message": "ves.io.schema.Ipv6AddressType",
             "properties": {
                 "addr": {
                     "type": "string",
-                    "description": " IPv6 Address in form of string. IPv6 address must be specified as hexadecimal numbers separated by ':'\n The address can be compacted by suppressing zeros\n e.g. '2001:db8:0:0:0:0:2:1' becomes '2001:db8::2:1' or '2001:db8:0:0:0:2:0:0' becomes '2001:db8::2::'\n\nExample: - \"2001:db8:0:0:0:0:2:1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6: true\n",
-                    "title": "IPv6 Address",
-                    "x-displayname": "IPv6 Address",
-                    "x-ves-example": "2001:db8:0:0:0:0:2:1",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.ipv6": "true"
-                    }
+                    "description": "x-displayName: \"IPv6 Address\"\nx-example: \"2001:db8:0:0:0:0:2:1\"\nIPv6 Address in form of string. IPv6 address must be specified as hexadecimal numbers separated by ':'\nThe address can be compacted by suppressing zeros\ne.g. '2001:db8:0:0:0:0:2:1' becomes '2001:db8::2:1' or '2001:db8:0:0:0:2:0:0' becomes '2001:db8::2::'",
+                    "title": "IPv6 Address"
                 }
             }
         },
@@ -3289,6 +3271,12 @@ var APISwaggerJSON string = `{
                     "format": "date-time",
                     "x-displayname": "Deletion Timestamp"
                 },
+                "direct_ref_hash": {
+                    "type": "string",
+                    "description": " A hash of the UIDs of  direct references on this object. This can be used to determine if \n this object hash has had references become resolved/unresolved",
+                    "title": "direct_ref_hash",
+                    "x-displayname": "Direct Reference Hash"
+                },
                 "finalizers": {
                     "type": "array",
                     "description": " Must be empty before the object is deleted from the registry. Each entry\n is an identifier for the responsible component that will remove the entry\n from the list. If the deletionTimestamp of the object is non-nil, entries\n in this list can only be removed.\n\nExample: - \"value\"-",
@@ -3436,33 +3424,33 @@ var APISwaggerJSON string = `{
             "properties": {
                 "prefix": {
                     "type": "array",
-                    "description": " IPV4 Lease Pool Network \n\nExample: - \"['10.2.1.0/24', '192.168.8.0/29', '10.7.64.160/27']\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.ipv4_prefix: true\n  ves.io.schema.rules.repeated.items.string.not_empty: true\n  ves.io.schema.rules.repeated.max_items: 1024\n  ves.io.schema.rules.repeated.unique: true\n",
-                    "title": "LeasePool Network",
+                    "description": " IPV4 Lease Pool Network \n\nExample: - \"['10.2.1.0/24', '192.168.8.0/29', '10.7.64.160/27']\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.items.string.ipv4_prefix: true\n  ves.io.schema.rules.repeated.items.string.not_empty: true\n  ves.io.schema.rules.repeated.max_items: 1024\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "Lease Pool Network",
+                    "minItems": 1,
                     "maxItems": 1024,
                     "items": {
                         "type": "string"
                     },
                     "x-displayname": "Lease Pool Network",
                     "x-ves-example": "['10.2.1.0/24', '192.168.8.0/29', '10.7.64.160/27']",
+                    "x-ves-required": "true",
                     "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.repeated.items.string.ipv4_prefix": "true",
                         "ves.io.schema.rules.repeated.items.string.not_empty": "true",
                         "ves.io.schema.rules.repeated.max_items": "1024",
+                        "ves.io.schema.rules.repeated.min_items": "1",
                         "ves.io.schema.rules.repeated.unique": "true"
                     }
                 },
                 "vip4_range": {
                     "type": "array",
-                    "description": " IPV4 Lease Pool Range\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": " IPV4 Lease Pool Range",
                     "title": "IPV4 Lease Pool Range",
                     "items": {
                         "$ref": "#/definitions/uztna_leasepoolIPV4LeasePoolRange"
                     },
-                    "x-displayname": "Lease Pool Range",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
+                    "x-displayname": "Lease Pool Range"
                 }
             }
         },
@@ -3489,61 +3477,41 @@ var APISwaggerJSON string = `{
         },
         "uztna_leasepoolIPV6LeasePoolConfig": {
             "type": "object",
-            "description": "\nIPV6 Lease Pool Config",
+            "description": "x-displayName: \"IPV6 Lease Pool\"\n\nIPV6 Lease Pool Config",
             "title": "IPV6 Lease Pool Config",
-            "x-displayname": "IPV6 Lease Pool",
-            "x-ves-proto-message": "ves.io.schema.uztna.uztna_leasepool.IPV6LeasePoolConfig",
             "properties": {
                 "ipv6_prefix": {
                     "type": "array",
-                    "description": " IPV6 Lease Pool Network\n\nExample: - \"['2001:db8:abcd:0012::0/64', 'fd48:fa09:d9d4::/48', 'fdd8:3a62:45c7:98a5::/64']\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.ipv6_prefix: true\n  ves.io.schema.rules.repeated.items.string.not_empty: true\n  ves.io.schema.rules.repeated.max_items: 1024\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": "x-displayName: \"Lease Pool Network\"\nx-example: \"['2001:db8:abcd:0012::0/64', 'fd48:fa09:d9d4::/48', 'fdd8:3a62:45c7:98a5::/64']\"\nIPV6 Lease Pool Network",
                     "title": "IPV6 Lease Pool Network",
-                    "maxItems": 1024,
                     "items": {
                         "type": "string"
-                    },
-                    "x-displayname": "Lease Pool Network",
-                    "x-ves-example": "['2001:db8:abcd:0012::0/64', 'fd48:fa09:d9d4::/48', 'fdd8:3a62:45c7:98a5::/64']",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.items.string.ipv6_prefix": "true",
-                        "ves.io.schema.rules.repeated.items.string.not_empty": "true",
-                        "ves.io.schema.rules.repeated.max_items": "1024",
-                        "ves.io.schema.rules.repeated.unique": "true"
                     }
                 },
                 "vip6_range": {
                     "type": "array",
-                    "description": " IPV6 Lease Pool Range\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": "x-displayName: \"Lease Pool Range\"\nx-required\nIPV6 Lease Pool Range",
                     "title": "IPV6 Lease Pool Range",
                     "items": {
                         "$ref": "#/definitions/uztna_leasepoolIPV6LeasePoolRange"
-                    },
-                    "x-displayname": "Lease Pool Range",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
                     }
                 }
             }
         },
         "uztna_leasepoolIPV6LeasePoolRange": {
             "type": "object",
-            "description": "\nIPV6 Lease Pool Range",
+            "description": "x-displayName: \"Lease Pool Range\"\n\nIPV6 Lease Pool Range",
             "title": "IPV6 Lease Pool Range",
-            "x-displayname": "Lease Pool Range",
-            "x-ves-proto-message": "ves.io.schema.uztna.uztna_leasepool.IPV6LeasePoolRange",
             "properties": {
                 "end_address": {
-                    "description": "\n IPV6 End Address",
+                    "description": "x-displayName: \"End Address\"\n\nIPV6 End Address",
                     "title": "IPV6 End Address",
-                    "$ref": "#/definitions/schemaIpv6AddressType",
-                    "x-displayname": "End Address"
+                    "$ref": "#/definitions/schemaIpv6AddressType"
                 },
                 "start_address": {
-                    "description": "\n IPV6 Start Address",
+                    "description": "x-displayName: \"Start Address\"\n\nIPV6 Start Address",
                     "title": "IPV6 Start Address",
-                    "$ref": "#/definitions/schemaIpv6AddressType",
-                    "x-displayname": "Start Address"
+                    "$ref": "#/definitions/schemaIpv6AddressType"
                 }
             }
         },
@@ -3552,20 +3520,14 @@ var APISwaggerJSON string = `{
             "description": "\nLease pool network and subnet ip",
             "title": "Lease Pool IP",
             "x-displayname": "Lease Pool IP",
-            "x-ves-oneof-field-ip_vip": "[\"ipv4_vip\",\"ipv6_vip\"]",
+            "x-ves-oneof-field-ip_vip": "[\"ipv4_vip\"]",
             "x-ves-proto-message": "ves.io.schema.uztna.uztna_leasepool.IPVersion",
             "properties": {
                 "ipv4_vip": {
-                    "description": "Exclusive with [ipv6_vip]\n\n IPV4 Only Lease Pool",
+                    "description": "Exclusive with []\n\n IPV4 Only Lease Pool",
                     "title": "IPV4 Only Lease Pool",
                     "$ref": "#/definitions/uztna_leasepoolIPV4LeasePoolConfig",
                     "x-displayname": "IPV4 Only Lease Pool"
-                },
-                "ipv6_vip": {
-                    "description": "Exclusive with [ipv4_vip]\n\n IPV6 Only Lease Pool",
-                    "title": "IPV6 Only Lease Pool",
-                    "$ref": "#/definitions/uztna_leasepoolIPV6LeasePoolConfig",
-                    "x-displayname": "IPV6 Only Lease Pool"
                 }
             }
         },
@@ -3630,13 +3592,13 @@ var APISwaggerJSON string = `{
         },
         "uztnauztna_leasepoolGlobalSpecType": {
             "type": "object",
-            "description": "\nShape of the UZTNA LeasePool",
+            "description": "\nShape of the UZTNA Lease Pool",
             "title": "GlobalSpecType",
             "x-displayname": "Global Specification",
             "x-ves-proto-message": "ves.io.schema.uztna.uztna_leasepool.GlobalSpecType",
             "properties": {
                 "ip_version": {
-                    "description": " IP address ranges for the Lease Pool Range \n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": " IP address ranges for the Lease Pools\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "IP Version",
                     "$ref": "#/definitions/uztna_leasepoolIPVersion",
                     "x-displayname": "IP Version",

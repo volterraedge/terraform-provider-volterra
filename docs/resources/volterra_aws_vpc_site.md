@@ -1,9 +1,9 @@
 ---
 
 page_title: "Volterra: aws_vpc_site"
-description: "The aws_vpc_site allows CRUD of Aws Vpc Site resource on Volterra SaaS"
 
----
+description: "The aws_vpc_site allows CRUD of Aws Vpc Site resource on Volterra SaaS"
+-------------------------------------------------------------------------------------
 
 Resource volterra_aws_vpc_site
 ==============================
@@ -23,7 +23,7 @@ resource "volterra_aws_vpc_site" "example" {
 
   // One of the arguments from this list "block_all_services blocked_services default_blocked_services" must be set
 
-  default_blocked_services = true
+  block_all_services = true
 
   // One of the arguments from this list "aws_cred" must be set
 
@@ -50,96 +50,42 @@ resource "volterra_aws_vpc_site" "example" {
 
   logs_streaming_disabled = true
 
+  // One of the arguments from this list "f5_orchestrated_routing manual_routing" must be set
+
+  manual_routing = true
+
   // One of the arguments from this list "custom_security_group f5xc_security_group" must be set
 
   f5xc_security_group = true
 
   // One of the arguments from this list "ingress_egress_gw ingress_gw voltstack_cluster" must be set
 
-  ingress_egress_gw {
+  ingress_gw {
     allowed_vip_port {
       // One of the arguments from this list "custom_ports disable_allowed_vip_port use_http_https_port use_http_port use_https_port" can be set
 
-      custom_ports {
-        port_ranges = "80, 8080-8085"
-      }
+      disable_allowed_vip_port = true
     }
 
-    allowed_vip_port_sli {
-      // One of the arguments from this list "custom_ports disable_allowed_vip_port use_http_https_port use_http_port use_https_port" can be set
-
-      custom_ports {
-        port_ranges = "80, 8080-8085"
-      }
-    }
-
-    aws_certified_hw = "aws-byol-multi-nic-voltmesh"
+    aws_certified_hw = "aws-byol-voltmesh"
 
     az_nodes {
       aws_az_name = "us-west-2a"
 
-      // One of the arguments from this list "inside_subnet reserved_inside_subnet" must be set
-
-      reserved_inside_subnet = true
       disk_size = "80"
-      outside_subnet {
-        // One of the arguments from this list "existing_subnet_id subnet_param" must be set
 
-        subnet_param {
-          ipv4 = "10.1.2.0/24"
-
-          ipv6 = "1234:568:abcd:9100::/64"
-        }
-      }
-      workload_subnet {
+      local_subnet {
         // One of the arguments from this list "existing_subnet_id subnet_param" must be set
 
         existing_subnet_id = "subnet-12345678901234567"
       }
     }
 
-    // One of the arguments from this list "dc_cluster_group_inside_vn dc_cluster_group_outside_vn no_dc_cluster_group" must be set
-
-    dc_cluster_group_inside_vn {
-      name      = "test1"
-      namespace = "staging"
-      tenant    = "acmecorp"
-    }
-
-    // One of the arguments from this list "active_forward_proxy_policies forward_proxy_allow_all no_forward_proxy" must be set
-
-    no_forward_proxy = true
-
-    // One of the arguments from this list "global_network_list no_global_network" must be set
-
-    no_global_network = true
-
-    // One of the arguments from this list "inside_static_routes no_inside_static_routes" must be set
-
-    no_inside_static_routes = true
-
-    // One of the arguments from this list "active_enhanced_firewall_policies active_network_policies no_network_policy" must be set
-
-    no_network_policy = true
-
-    // One of the arguments from this list "no_outside_static_routes outside_static_routes" must be set
-
-    outside_static_routes {
-      static_route_list {
-        // One of the arguments from this list "custom_static_route simple_static_route" must be set
-
-        simple_static_route = "10.5.1.0/24"
-      }
-    }
     performance_enhancement_mode {
       // One of the arguments from this list "perf_mode_l3_enhanced perf_mode_l7_enhanced" must be set
 
       perf_mode_l7_enhanced = true
     }
-
-    // One of the arguments from this list "sm_connection_public_ip sm_connection_pvt_ip" must be set
-
-    sm_connection_public_ip = true
   }
   ssh_key = ["ssh-rsa AAAAB..."]
 
@@ -229,6 +175,12 @@ Argument Reference
 
 `os` - (Optional) Operating System Details. See [Os ](#os) below for details.
 
+###### One of the arguments from this list "f5_orchestrated_routing, manual_routing" must be set
+
+`f5_orchestrated_routing` - (Optional) F5 will orchestrate required routes for SLO Route Table towards Internet and SLI RT towards the CE. (`Bool`).
+
+`manual_routing` - (Optional) In this mode, F5 will not create nor alter any route tables or routes within the existing VPCs/Vnets providing better integration for existing environments. (`Bool`).
+
 ###### One of the arguments from this list "custom_security_group, f5xc_security_group" must be set
 
 `custom_security_group` - (Optional) With this option, ingress and egress traffic will be controlled via security group ids.. See [Security Group Choice Custom Security Group ](#security-group-choice-custom-security-group) below for details.
@@ -303,9 +255,9 @@ Enable Kubernetes Drain during OS or SW upgrade.
 
 ###### One of the arguments from this list "disable_upgrade_drain, enable_upgrade_drain" must be set
 
-`disable_upgrade_drain` - (Optional) x-displayName: "Disable Node by Node Upgrade" (`Bool`).
+`disable_upgrade_drain` - (Optional) x-displayName: "Disable" (`Bool`).
 
-`enable_upgrade_drain` - (Optional) x-displayName: "Enable Node by Node Upgrade". See [Kubernetes Upgrade Drain Enable Choice Enable Upgrade Drain ](#kubernetes-upgrade-drain-enable-choice-enable-upgrade-drain) below for details.
+`enable_upgrade_drain` - (Optional) x-displayName: "Enable". See [Kubernetes Upgrade Drain Enable Choice Enable Upgrade Drain ](#kubernetes-upgrade-drain-enable-choice-enable-upgrade-drain) below for details.
 
 ### Offline Survivability Mode
 
@@ -807,11 +759,11 @@ Site Local K8s API access is disabled.
 
 ### Kubernetes Upgrade Drain Enable Choice Disable Upgrade Drain
 
-x-displayName: "Disable Node by Node Upgrade".
+x-displayName: "Disable".
 
 ### Kubernetes Upgrade Drain Enable Choice Enable Upgrade Drain
 
-x-displayName: "Enable Node by Node Upgrade".
+x-displayName: "Enable".
 
 ###### One of the arguments from this list "drain_max_unavailable_node_count, drain_max_unavailable_node_percentage" must be set
 

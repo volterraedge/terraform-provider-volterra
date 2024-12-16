@@ -2970,6 +2970,12 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.string.min_len": "3",
                         "ves.io.schema.rules.string.pattern": "^[A-Za-z0-9][A-Za-z0-9-]+[A-Za-z0-9]$"
                     }
+                },
+                "filename_options": {
+                    "description": " Filename Options allow customization of filename and folder paths for the blob",
+                    "title": "Filename Options",
+                    "$ref": "#/definitions/global_log_receiverFilenameOptionsType",
+                    "x-displayname": "Filename Options"
                 }
             }
         },
@@ -3096,17 +3102,23 @@ var APISwaggerJSON string = `{
             "description": "Compression Type",
             "title": "CompressionType",
             "x-displayname": "Compression Type",
-            "x-ves-oneof-field-compression_choice": "[\"compression_gzip\",\"compression_none\"]",
+            "x-ves-oneof-field-compression_choice": "[\"compression_default\",\"compression_gzip\",\"compression_none\"]",
             "x-ves-proto-message": "ves.io.schema.global_log_receiver.CompressionType",
             "properties": {
+                "compression_default": {
+                    "description": "Exclusive with [compression_gzip compression_none]\n Default Compression defaults to gzip for all endpoint types, except: HTTP, QRadar",
+                    "title": "Default Compression",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "default"
+                },
                 "compression_gzip": {
-                    "description": "Exclusive with [compression_none]\n Gzip Compression",
+                    "description": "Exclusive with [compression_default compression_none]\n Gzip Compression",
                     "title": "Gzip Compression",
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "gzip"
                 },
                 "compression_none": {
-                    "description": "Exclusive with [compression_gzip]\n No Compression",
+                    "description": "Exclusive with [compression_default compression_gzip]\n No Compression",
                     "title": "No Compression",
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "none"
@@ -3222,6 +3234,38 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "global_log_receiverFilenameOptionsType": {
+            "type": "object",
+            "description": "Filename Options allow customization of filename and folder paths used by a destination endpoint bucket or file",
+            "title": "Filename Options",
+            "x-displayname": "Filename Options",
+            "x-ves-oneof-field-folder": "[\"custom_folder\",\"log_type_folder\",\"no_folder\"]",
+            "x-ves-proto-message": "ves.io.schema.global_log_receiver.FilenameOptionsType",
+            "properties": {
+                "custom_folder": {
+                    "type": "string",
+                    "description": "Exclusive with [log_type_folder no_folder]\n Use your own folder name as the name of the folder in the endpoint bucket or file\n The folder name must match -/^[a-z_][a-z0-9\\\\-\\\\._]*$/i-\n\nExample: - \"logs\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.pattern: ^[A-Za-z_][A-Za-z0-9\\\\-\\\\._]*$\n",
+                    "title": "Custom Folder",
+                    "x-displayname": "Custom Folder",
+                    "x-ves-example": "logs",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.pattern": "^[A-Za-z_][A-Za-z0-9\\\\-\\\\._]*$"
+                    }
+                },
+                "log_type_folder": {
+                    "description": "Exclusive with [custom_folder no_folder]\n Use the name of the selected LogType as the name of the folder in the endpoint bucket or file\n depending on LogType selection, this will be one of: access, security, audit or dns",
+                    "title": "Log Type Folder",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Log Type Folder"
+                },
+                "no_folder": {
+                    "description": "Exclusive with [custom_folder log_type_folder]\n Do not use a folder path",
+                    "title": "No Folder",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "No Folder"
+                }
+            }
+        },
         "global_log_receiverGCPBucketConfig": {
             "type": "object",
             "description": "GCP Bucket Configuration for Global Log Receiver",
@@ -3256,6 +3300,12 @@ var APISwaggerJSON string = `{
                     "title": "Compression Options",
                     "$ref": "#/definitions/global_log_receiverCompressionType",
                     "x-displayname": "Compression Options"
+                },
+                "filename_options": {
+                    "description": " Filename Options allow customization of filename and folder paths for the bucket",
+                    "title": "Filename Options",
+                    "$ref": "#/definitions/global_log_receiverFilenameOptionsType",
+                    "x-displayname": "Filename Options"
                 },
                 "gcp_cred": {
                     "description": " Reference to GCP Cloud Credentials for access to the GCP bucket\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
@@ -3718,6 +3768,12 @@ var APISwaggerJSON string = `{
                     "title": "Compression Options",
                     "$ref": "#/definitions/global_log_receiverCompressionType",
                     "x-displayname": "Compression Options"
+                },
+                "filename_options": {
+                    "description": " Filename Options allow customization of filename and folder paths for the bucket",
+                    "title": "Filename Options",
+                    "$ref": "#/definitions/global_log_receiverFilenameOptionsType",
+                    "x-displayname": "Filename Options"
                 }
             }
         },
@@ -3757,7 +3813,7 @@ var APISwaggerJSON string = `{
                 },
                 "endpoint": {
                     "type": "string",
-                    "description": " Splunk HEC Logs Endpoint, example: -https://http-input-hec.splunkcloud.com-\n\nExample: - \"https://http-inputs-hec.splunkcloud.com\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.uri_ref: true\n",
+                    "description": " Splunk HEC Logs Endpoint, example: -https://http-input-hec.splunkcloud.com- (Note: must not contain -/services/collector-)\n\nExample: - \"https://http-inputs-hec.splunkcloud.com\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.uri_ref: true\n",
                     "title": "Splunk HEC Logs Endpoint",
                     "x-displayname": "Splunk HEC Logs Endpoint",
                     "x-ves-example": "https://http-inputs-hec.splunkcloud.com",
@@ -4459,6 +4515,12 @@ var APISwaggerJSON string = `{
                     "title": "deletion_timestamp",
                     "format": "date-time",
                     "x-displayname": "Deletion Timestamp"
+                },
+                "direct_ref_hash": {
+                    "type": "string",
+                    "description": " A hash of the UIDs of  direct references on this object. This can be used to determine if \n this object hash has had references become resolved/unresolved",
+                    "title": "direct_ref_hash",
+                    "x-displayname": "Direct Reference Hash"
                 },
                 "finalizers": {
                     "type": "array",

@@ -1,9 +1,9 @@
 ---
 
 page_title: "Volterra: bgp_asn_set"
-description: "The bgp_asn_set allows CRUD of Bgp Asn Set resource on Volterra SaaS"
 
----
+description: "The bgp_asn_set allows CRUD of Bgp Asn Set resource on Volterra SaaS"
+-----------------------------------------------------------------------------------
 
 Resource volterra_bgp_asn_set
 =============================

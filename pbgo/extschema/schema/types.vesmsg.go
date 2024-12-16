@@ -6151,6 +6151,404 @@ func ClearSecretInfoTypeValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *CloudConnectRefType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *CloudConnectRefType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *CloudConnectRefType) DeepCopy() *CloudConnectRefType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &CloudConnectRefType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *CloudConnectRefType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *CloudConnectRefType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return CloudConnectRefTypeValidator().Validate(ctx, m, opts...)
+}
+
+func (m *CloudConnectRefType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetRefsDRefInfo()
+
+}
+
+func (m *CloudConnectRefType) GetRefsDRefInfo() ([]db.DRefInfo, error) {
+	refs := m.GetRefs()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("CloudConnectRefType.refs[%d] has a nil value", i)
+		}
+		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "cloud_connect.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "refs",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+
+}
+
+// GetRefsDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *CloudConnectRefType) GetRefsDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "cloud_connect.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: cloud_connect")
+	}
+	for _, ref := range m.GetRefs() {
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
+	}
+
+	return entries, nil
+}
+
+type ValidateCloudConnectRefType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateCloudConnectRefType) RefsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for refs")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ObjectRefType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for refs")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ObjectRefType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ObjectRefType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated refs")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items refs")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateCloudConnectRefType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*CloudConnectRefType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *CloudConnectRefType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["refs"]; exists {
+		vOpts := append(opts, db.WithValidateField("refs"))
+		if err := fv(ctx, m.GetRefs(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultCloudConnectRefTypeValidator = func() *ValidateCloudConnectRefType {
+	v := &ValidateCloudConnectRefType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhRefs := v.RefsValidationRuleHandler
+	rulesRefs := map[string]string{
+		"ves.io.schema.rules.message.required":   "true",
+		"ves.io.schema.rules.repeated.max_items": "1",
+	}
+	vFn, err = vrhRefs(rulesRefs)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CloudConnectRefType.refs: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["refs"] = vFn
+
+	return v
+}()
+
+func CloudConnectRefTypeValidator() db.Validator {
+	return DefaultCloudConnectRefTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *CloudElasticIpRefListType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *CloudElasticIpRefListType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *CloudElasticIpRefListType) DeepCopy() *CloudElasticIpRefListType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &CloudElasticIpRefListType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *CloudElasticIpRefListType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *CloudElasticIpRefListType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return CloudElasticIpRefListTypeValidator().Validate(ctx, m, opts...)
+}
+
+func (m *CloudElasticIpRefListType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetRefsDRefInfo()
+
+}
+
+func (m *CloudElasticIpRefListType) GetRefsDRefInfo() ([]db.DRefInfo, error) {
+	refs := m.GetRefs()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("CloudElasticIpRefListType.refs[%d] has a nil value", i)
+		}
+		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "cloud_elastic_ip.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "refs",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+
+}
+
+// GetRefsDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *CloudElasticIpRefListType) GetRefsDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "cloud_elastic_ip.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: cloud_elastic_ip")
+	}
+	for _, ref := range m.GetRefs() {
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
+	}
+
+	return entries, nil
+}
+
+type ValidateCloudElasticIpRefListType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateCloudElasticIpRefListType) RefsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for refs")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ObjectRefType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for refs")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ObjectRefType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ObjectRefType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated refs")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items refs")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateCloudElasticIpRefListType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*CloudElasticIpRefListType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *CloudElasticIpRefListType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["refs"]; exists {
+		vOpts := append(opts, db.WithValidateField("refs"))
+		if err := fv(ctx, m.GetRefs(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultCloudElasticIpRefListTypeValidator = func() *ValidateCloudElasticIpRefListType {
+	v := &ValidateCloudElasticIpRefListType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhRefs := v.RefsValidationRuleHandler
+	rulesRefs := map[string]string{
+		"ves.io.schema.rules.message.required":   "true",
+		"ves.io.schema.rules.repeated.max_items": "4",
+	}
+	vFn, err = vrhRefs(rulesRefs)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CloudElasticIpRefListType.refs: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["refs"] = vFn
+
+	return v
+}()
+
+func CloudElasticIpRefListTypeValidator() db.Validator {
+	return DefaultCloudElasticIpRefListTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *ConditionType) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -7254,6 +7652,140 @@ var DefaultDateRangeValidator = func() *ValidateDateRange {
 
 func DateRangeValidator() db.Validator {
 	return DefaultDateRangeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *DomainMatcherType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *DomainMatcherType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *DomainMatcherType) DeepCopy() *DomainMatcherType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &DomainMatcherType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *DomainMatcherType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *DomainMatcherType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return DomainMatcherTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateDomainMatcherType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateDomainMatcherType) DomainMatcherValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for domain_matcher")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateDomainMatcherType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*DomainMatcherType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *DomainMatcherType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["domain_matcher"]; exists {
+		val := m.GetDomainMatcher()
+		vOpts := append(opts,
+			db.WithValidateField("domain_matcher"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetDomainMatcher().(type) {
+	case *DomainMatcherType_AnyDomain:
+		if fv, exists := v.FldValidators["domain_matcher.any_domain"]; exists {
+			val := m.GetDomainMatcher().(*DomainMatcherType_AnyDomain).AnyDomain
+			vOpts := append(opts,
+				db.WithValidateField("domain_matcher"),
+				db.WithValidateField("any_domain"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *DomainMatcherType_Domain:
+		if fv, exists := v.FldValidators["domain_matcher.domain"]; exists {
+			val := m.GetDomainMatcher().(*DomainMatcherType_Domain).Domain
+			vOpts := append(opts,
+				db.WithValidateField("domain_matcher"),
+				db.WithValidateField("domain"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultDomainMatcherTypeValidator = func() *ValidateDomainMatcherType {
+	v := &ValidateDomainMatcherType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhDomainMatcher := v.DomainMatcherValidationRuleHandler
+	rulesDomainMatcher := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhDomainMatcher(rulesDomainMatcher)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for DomainMatcherType.domain_matcher: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["domain_matcher"] = vFn
+
+	v.FldValidators["domain_matcher.domain"] = DomainTypeValidator().Validate
+
+	return v
+}()
+
+func DomainMatcherTypeValidator() db.Validator {
+	return DefaultDomainMatcherTypeValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -11087,6 +11619,205 @@ var DefaultNamespaceRoleTypeValidator = func() *ValidateNamespaceRoleType {
 
 func NamespaceRoleTypeValidator() db.Validator {
 	return DefaultNamespaceRoleTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *NetworkInterfaceRefType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *NetworkInterfaceRefType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *NetworkInterfaceRefType) DeepCopy() *NetworkInterfaceRefType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &NetworkInterfaceRefType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *NetworkInterfaceRefType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *NetworkInterfaceRefType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return NetworkInterfaceRefTypeValidator().Validate(ctx, m, opts...)
+}
+
+func (m *NetworkInterfaceRefType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetRefsDRefInfo()
+
+}
+
+func (m *NetworkInterfaceRefType) GetRefsDRefInfo() ([]db.DRefInfo, error) {
+	refs := m.GetRefs()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("NetworkInterfaceRefType.refs[%d] has a nil value", i)
+		}
+		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "network_interface.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "refs",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+
+}
+
+// GetRefsDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *NetworkInterfaceRefType) GetRefsDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "network_interface.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: network_interface")
+	}
+	for _, ref := range m.GetRefs() {
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
+	}
+
+	return entries, nil
+}
+
+type ValidateNetworkInterfaceRefType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateNetworkInterfaceRefType) RefsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for refs")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ObjectRefType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for refs")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ObjectRefType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ObjectRefType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated refs")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items refs")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateNetworkInterfaceRefType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*NetworkInterfaceRefType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *NetworkInterfaceRefType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["refs"]; exists {
+		vOpts := append(opts, db.WithValidateField("refs"))
+		if err := fv(ctx, m.GetRefs(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultNetworkInterfaceRefTypeValidator = func() *ValidateNetworkInterfaceRefType {
+	v := &ValidateNetworkInterfaceRefType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhRefs := v.RefsValidationRuleHandler
+	rulesRefs := map[string]string{
+		"ves.io.schema.rules.message.required":   "true",
+		"ves.io.schema.rules.repeated.max_items": "1",
+	}
+	vFn, err = vrhRefs(rulesRefs)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for NetworkInterfaceRefType.refs: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["refs"] = vFn
+
+	return v
+}()
+
+func NetworkInterfaceRefTypeValidator() db.Validator {
+	return DefaultNetworkInterfaceRefTypeValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -16018,6 +16749,275 @@ func SecretTypeValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *SegmentRefType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *SegmentRefType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *SegmentRefType) DeepCopy() *SegmentRefType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &SegmentRefType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *SegmentRefType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *SegmentRefType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return SegmentRefTypeValidator().Validate(ctx, m, opts...)
+}
+
+func (m *SegmentRefType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetRefsDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetRefsDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetVirtualNetworksDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetVirtualNetworksDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	return drInfos, nil
+
+}
+
+func (m *SegmentRefType) GetRefsDRefInfo() ([]db.DRefInfo, error) {
+	refs := m.GetRefs()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("SegmentRefType.refs[%d] has a nil value", i)
+		}
+		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "segment.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "refs",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+
+}
+
+// GetRefsDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *SegmentRefType) GetRefsDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "segment.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: segment")
+	}
+	for _, ref := range m.GetRefs() {
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
+	}
+
+	return entries, nil
+}
+
+func (m *SegmentRefType) GetVirtualNetworksDRefInfo() ([]db.DRefInfo, error) {
+	refs := m.GetVirtualNetworks()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("SegmentRefType.virtual_networks[%d] has a nil value", i)
+		}
+		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "virtual_network.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "virtual_networks",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+
+}
+
+// GetVirtualNetworksDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *SegmentRefType) GetVirtualNetworksDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "virtual_network.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: virtual_network")
+	}
+	for _, ref := range m.GetVirtualNetworks() {
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
+	}
+
+	return entries, nil
+}
+
+type ValidateSegmentRefType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateSegmentRefType) RefsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for refs")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ObjectRefType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for refs")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ObjectRefType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ObjectRefType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated refs")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items refs")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateSegmentRefType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*SegmentRefType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *SegmentRefType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["refs"]; exists {
+		vOpts := append(opts, db.WithValidateField("refs"))
+		if err := fv(ctx, m.GetRefs(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["virtual_networks"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("virtual_networks"))
+		for idx, item := range m.GetVirtualNetworks() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultSegmentRefTypeValidator = func() *ValidateSegmentRefType {
+	v := &ValidateSegmentRefType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhRefs := v.RefsValidationRuleHandler
+	rulesRefs := map[string]string{
+		"ves.io.schema.rules.message.required":   "true",
+		"ves.io.schema.rules.repeated.max_items": "1",
+	}
+	vFn, err = vrhRefs(rulesRefs)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for SegmentRefType.refs: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["refs"] = vFn
+
+	return v
+}()
+
+func SegmentRefTypeValidator() db.Validator {
+	return DefaultSegmentRefTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *SiteInfo) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -16860,6 +17860,204 @@ var DefaultSiteReferenceListTypeValidator = func() *ValidateSiteReferenceListTyp
 
 func SiteReferenceListTypeValidator() db.Validator {
 	return DefaultSiteReferenceListTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *SiteReferenceType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *SiteReferenceType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *SiteReferenceType) DeepCopy() *SiteReferenceType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &SiteReferenceType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *SiteReferenceType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *SiteReferenceType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return SiteReferenceTypeValidator().Validate(ctx, m, opts...)
+}
+
+func (m *SiteReferenceType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetRefsDRefInfo()
+
+}
+
+func (m *SiteReferenceType) GetRefsDRefInfo() ([]db.DRefInfo, error) {
+	refs := m.GetRefs()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("SiteReferenceType.refs[%d] has a nil value", i)
+		}
+		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "site.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "refs",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+
+}
+
+// GetRefsDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *SiteReferenceType) GetRefsDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "site.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: site")
+	}
+	for _, ref := range m.GetRefs() {
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
+	}
+
+	return entries, nil
+}
+
+type ValidateSiteReferenceType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateSiteReferenceType) RefsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for refs")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ObjectRefType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for refs")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ObjectRefType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ObjectRefType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated refs")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items refs")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateSiteReferenceType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*SiteReferenceType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *SiteReferenceType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["refs"]; exists {
+		vOpts := append(opts, db.WithValidateField("refs"))
+		if err := fv(ctx, m.GetRefs(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultSiteReferenceTypeValidator = func() *ValidateSiteReferenceType {
+	v := &ValidateSiteReferenceType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhRefs := v.RefsValidationRuleHandler
+	rulesRefs := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhRefs(rulesRefs)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for SiteReferenceType.refs: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["refs"] = vFn
+
+	return v
+}()
+
+func SiteReferenceTypeValidator() db.Validator {
+	return DefaultSiteReferenceTypeValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -17830,6 +19028,11 @@ func (m *SystemObjectMetaType) SetCreatorId(in string) {
 	m.CreatorId = in
 }
 
+// SetDirectRefHash sets the field
+func (m *SystemObjectMetaType) SetDirectRefHash(in string) {
+	m.DirectRefHash = in
+}
+
 // SetLabels sets the field
 func (m *SystemObjectMetaType) SetLabels(in map[string]string) {
 	m.Labels = in
@@ -18026,6 +19229,15 @@ func (v *ValidateSystemObjectMetaType) Validate(ctx context.Context, pm interfac
 
 		vOpts := append(opts, db.WithValidateField("deletion_timestamp"))
 		if err := fv(ctx, m.GetDeletionTimestamp(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["direct_ref_hash"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("direct_ref_hash"))
+		if err := fv(ctx, m.GetDirectRefHash(), vOpts...); err != nil {
 			return err
 		}
 
@@ -21064,6 +22276,14 @@ type ValidateWafType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateWafType) RefTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for ref_type")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidateWafType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*WafType)
 	if !ok {
@@ -21076,6 +22296,16 @@ func (v *ValidateWafType) Validate(ctx context.Context, pm interface{}, opts ...
 	}
 	if m == nil {
 		return nil
+	}
+
+	if fv, exists := v.FldValidators["ref_type"]; exists {
+		val := m.GetRefType()
+		vOpts := append(opts,
+			db.WithValidateField("ref_type"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
 	}
 
 	switch m.GetRefType().(type) {
@@ -21121,6 +22351,25 @@ func (v *ValidateWafType) Validate(ctx context.Context, pm interface{}, opts ...
 // Well-known symbol for default validator implementation
 var DefaultWafTypeValidator = func() *ValidateWafType {
 	v := &ValidateWafType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhRefType := v.RefTypeValidationRuleHandler
+	rulesRefType := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhRefType(rulesRefType)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for WafType.ref_type: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["ref_type"] = vFn
 
 	v.FldValidators["ref_type.app_firewall"] = AppFirewallRefTypeValidator().Validate
 

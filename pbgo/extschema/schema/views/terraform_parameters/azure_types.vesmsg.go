@@ -1471,6 +1471,15 @@ func (v *ValidateAzureVnetSiteType) Validate(ctx context.Context, pm interface{}
 
 	}
 
+	if fv, exists := v.FldValidators["manual_routing"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("manual_routing"))
+		if err := fv(ctx, m.GetManualRouting(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["master_nodes"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("master_nodes"))

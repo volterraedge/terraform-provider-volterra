@@ -24,6 +24,7 @@ import (
 	ves_io_schema_ai_assistant_common "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/ai_assistant/common"
 	ves_io_schema_ai_assistant_explain_log_record "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/ai_assistant/explain_log_record"
 	ves_io_schema_ai_assistant_gen_dashboard_filter "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/ai_assistant/gen_dashboard_filter"
+	ves_io_schema_ai_assistant_list "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/ai_assistant/list"
 	ves_io_schema_ai_assistant_site_analysis "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/ai_assistant/site_analysis"
 	ves_io_schema_ai_assistant_widget "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/ai_assistant/widget"
 	ves_io_schema_alert_policy "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/alert_policy"
@@ -36,8 +37,13 @@ import (
 	ves_io_schema_api_credential_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/api_credential/crudapi"
 	ves_io_schema_api_group_element "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/api_group_element"
 	ves_io_schema_api_group_element_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/api_group_element/crudapi"
+	ves_io_schema_api_sec_api_crawler "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/api_sec/api_crawler"
+	ves_io_schema_api_sec_api_crawler_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/api_sec/api_crawler/crudapi"
+	ves_io_schema_api_sec_api_discovery "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/api_sec/api_discovery"
+	ves_io_schema_api_sec_api_discovery_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/api_sec/api_discovery/crudapi"
 	ves_io_schema_api_sec_code_base_integration "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/api_sec/code_base_integration"
 	ves_io_schema_api_sec_code_base_integration_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/api_sec/code_base_integration/crudapi"
+	ves_io_schema_api_sec_rule_suggestion "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/api_sec/rule_suggestion"
 	ves_io_schema_app_firewall "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/app_firewall"
 	ves_io_schema_app_firewall_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/app_firewall/crudapi"
 	ves_io_schema_app_setting "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/app_setting"
@@ -67,10 +73,14 @@ import (
 	ves_io_schema_cloud_connect_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/cloud_connect/crudapi"
 	ves_io_schema_cloud_credentials "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/cloud_credentials"
 	ves_io_schema_cloud_credentials_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/cloud_credentials/crudapi"
+	ves_io_schema_cloud_elastic_ip "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/cloud_elastic_ip"
+	ves_io_schema_cloud_elastic_ip_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/cloud_elastic_ip/crudapi"
 	ves_io_schema_cloud_link "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/cloud_link"
 	ves_io_schema_cloud_link_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/cloud_link/crudapi"
 	ves_io_schema_cloud_re_region "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/cloud_re_region"
 	ves_io_schema_cloud_re_region_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/cloud_re_region/crudapi"
+	ves_io_schema_cloud_transit_gateway "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/cloud_transit_gateway"
+	ves_io_schema_cloud_transit_gateway_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/cloud_transit_gateway/crudapi"
 	ves_io_schema_cluster "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/cluster"
 	ves_io_schema_cluster_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/cluster/crudapi"
 	ves_io_schema_cminstance "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/cminstance"
@@ -185,6 +195,8 @@ import (
 	ves_io_schema_marketplace_xc_saas_asb_message_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/marketplace/xc_saas/asb/message/crudapi"
 	ves_io_schema_namespace "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/namespace"
 	ves_io_schema_namespace_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/namespace/crudapi"
+	ves_io_schema_nat_policy "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/nat_policy"
+	ves_io_schema_nat_policy_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/nat_policy/crudapi"
 	ves_io_schema_network_connector "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/network_connector"
 	ves_io_schema_network_connector_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/network_connector/crudapi"
 	ves_io_schema_network_firewall "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/network_firewall"
@@ -247,6 +259,11 @@ import (
 	ves_io_schema_subscription_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/subscription/crudapi"
 	ves_io_schema_tenant "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/tenant"
 	ves_io_schema_tenant_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/tenant/crudapi"
+	ves_io_schema_ticket_management "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/ticket_management"
+	ves_io_schema_ticket_management_ticket "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/ticket_management/ticket"
+	ves_io_schema_ticket_management_ticket_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/ticket_management/ticket/crudapi"
+	ves_io_schema_ticket_management_ticket_tracking_system "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/ticket_management/ticket_tracking_system"
+	ves_io_schema_ticket_management_ticket_tracking_system_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/ticket_management/ticket_tracking_system/crudapi"
 	ves_io_schema_token "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/token"
 	ves_io_schema_token_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/token/crudapi"
 	ves_io_schema_topology "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/topology"
@@ -291,16 +308,33 @@ import (
 	ves_io_schema_user_identification_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/user_identification/crudapi"
 	ves_io_schema_uztna_application_discovered "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/uztna/application/discovered"
 	ves_io_schema_uztna_application_discovered_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/uztna/application/discovered/crudapi"
+	ves_io_schema_uztna_application_uztna_application "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/uztna/application/uztna_application"
+	ves_io_schema_uztna_application_uztna_application_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/uztna/application/uztna_application/crudapi"
+	ves_io_schema_uztna_application_uztna_application_group "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/uztna/application/uztna_application_group"
+	ves_io_schema_uztna_application_uztna_application_group_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/uztna/application/uztna_application_group/crudapi"
+	ves_io_schema_uztna_application_uztna_application_tag "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/uztna/application/uztna_application_tag"
+	ves_io_schema_uztna_application_uztna_application_tag_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/uztna/application/uztna_application_tag/crudapi"
+	ves_io_schema_uztna_application_uztna_snat_pool "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/uztna/application/uztna_snat_pool"
+	ves_io_schema_uztna_application_uztna_snat_pool_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/uztna/application/uztna_snat_pool/crudapi"
+	ves_io_schema_uztna_uztna_active_sessions "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/uztna/uztna_active_sessions"
+	ves_io_schema_uztna_uztna_app_vip_pool "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/uztna/uztna_app_vip_pool"
+	ves_io_schema_uztna_uztna_app_vip_pool_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/uztna/uztna_app_vip_pool/crudapi"
 	ves_io_schema_uztna_uztna_domain "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/uztna/uztna_domain"
 	ves_io_schema_uztna_uztna_domain_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/uztna/uztna_domain/crudapi"
 	ves_io_schema_uztna_uztna_flow "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/uztna/uztna_flow"
 	ves_io_schema_uztna_uztna_flow_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/uztna/uztna_flow/crudapi"
 	ves_io_schema_uztna_uztna_gateway "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/uztna/uztna_gateway"
 	ves_io_schema_uztna_uztna_gateway_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/uztna/uztna_gateway/crudapi"
+	ves_io_schema_uztna_uztna_healthcheck "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/uztna/uztna_healthcheck"
+	ves_io_schema_uztna_uztna_healthcheck_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/uztna/uztna_healthcheck/crudapi"
 	ves_io_schema_uztna_uztna_leasepool "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/uztna/uztna_leasepool"
 	ves_io_schema_uztna_uztna_leasepool_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/uztna/uztna_leasepool/crudapi"
+	ves_io_schema_uztna_uztna_origin_pool "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/uztna/uztna_origin_pool"
+	ves_io_schema_uztna_uztna_origin_pool_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/uztna/uztna_origin_pool/crudapi"
 	ves_io_schema_uztna_uztna_policy_template "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/uztna/uztna_policy_template"
 	ves_io_schema_uztna_uztna_policy_template_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/uztna/uztna_policy_template/crudapi"
+	ves_io_schema_uztna_views_uztna_application_view "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/uztna/views/uztna_application_view"
+	ves_io_schema_uztna_views_uztna_application_view_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/uztna/views/uztna_application_view/crudapi"
 	ves_io_schema_uztna_views_uztna_domain_view "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/uztna/views/uztna_domain_view"
 	ves_io_schema_uztna_views_uztna_domain_view_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/uztna/views/uztna_domain_view/crudapi"
 	ves_io_schema_vesenv "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/vesenv"
@@ -321,6 +355,8 @@ import (
 	ves_io_schema_views_bigip_centralmanager_site_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/bigip_centralmanager_site/crudapi"
 	ves_io_schema_views_bigip_instance_site "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/bigip_instance_site"
 	ves_io_schema_views_bigip_instance_site_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/bigip_instance_site/crudapi"
+	ves_io_schema_views_bigip_virtual_server "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/bigip_virtual_server"
+	ves_io_schema_views_bigip_virtual_server_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/bigip_virtual_server/crudapi"
 	ves_io_schema_views_bot_defense_app_infrastructure "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/bot_defense_app_infrastructure"
 	ves_io_schema_views_bot_defense_app_infrastructure_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/bot_defense_app_infrastructure/crudapi"
 	ves_io_schema_views_cdn_loadbalancer "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/cdn_loadbalancer"
@@ -413,6 +449,7 @@ func init() {
 	ves_io_schema_ai_assistant_common.InitializeMDRegistry(MDR, false)
 	ves_io_schema_ai_assistant_explain_log_record.InitializeMDRegistry(MDR, false)
 	ves_io_schema_ai_assistant_gen_dashboard_filter.InitializeMDRegistry(MDR, false)
+	ves_io_schema_ai_assistant_list.InitializeMDRegistry(MDR, false)
 	ves_io_schema_ai_assistant_site_analysis.InitializeMDRegistry(MDR, false)
 	ves_io_schema_ai_assistant_widget.InitializeMDRegistry(MDR, false)
 	ves_io_schema_alert_policy.InitializeMDRegistry(MDR, false)
@@ -425,8 +462,13 @@ func init() {
 	ves_io_schema_api_credential_crudapi.InitializeMDRegistry(MDR, false)
 	ves_io_schema_api_group_element.InitializeMDRegistry(MDR, false)
 	ves_io_schema_api_group_element_crudapi.InitializeMDRegistry(MDR, false)
+	ves_io_schema_api_sec_api_crawler.InitializeMDRegistry(MDR, false)
+	ves_io_schema_api_sec_api_crawler_crudapi.InitializeMDRegistry(MDR, false)
+	ves_io_schema_api_sec_api_discovery.InitializeMDRegistry(MDR, false)
+	ves_io_schema_api_sec_api_discovery_crudapi.InitializeMDRegistry(MDR, false)
 	ves_io_schema_api_sec_code_base_integration.InitializeMDRegistry(MDR, false)
 	ves_io_schema_api_sec_code_base_integration_crudapi.InitializeMDRegistry(MDR, false)
+	ves_io_schema_api_sec_rule_suggestion.InitializeMDRegistry(MDR, false)
 	ves_io_schema_app_firewall.InitializeMDRegistry(MDR, false)
 	ves_io_schema_app_firewall_crudapi.InitializeMDRegistry(MDR, false)
 	ves_io_schema_app_setting.InitializeMDRegistry(MDR, false)
@@ -456,10 +498,14 @@ func init() {
 	ves_io_schema_cloud_connect_crudapi.InitializeMDRegistry(MDR, false)
 	ves_io_schema_cloud_credentials.InitializeMDRegistry(MDR, false)
 	ves_io_schema_cloud_credentials_crudapi.InitializeMDRegistry(MDR, false)
+	ves_io_schema_cloud_elastic_ip.InitializeMDRegistry(MDR, false)
+	ves_io_schema_cloud_elastic_ip_crudapi.InitializeMDRegistry(MDR, false)
 	ves_io_schema_cloud_link.InitializeMDRegistry(MDR, false)
 	ves_io_schema_cloud_link_crudapi.InitializeMDRegistry(MDR, false)
 	ves_io_schema_cloud_re_region.InitializeMDRegistry(MDR, false)
 	ves_io_schema_cloud_re_region_crudapi.InitializeMDRegistry(MDR, false)
+	ves_io_schema_cloud_transit_gateway.InitializeMDRegistry(MDR, false)
+	ves_io_schema_cloud_transit_gateway_crudapi.InitializeMDRegistry(MDR, false)
 	ves_io_schema_cluster.InitializeMDRegistry(MDR, false)
 	ves_io_schema_cluster_crudapi.InitializeMDRegistry(MDR, false)
 	ves_io_schema_cminstance.InitializeMDRegistry(MDR, false)
@@ -574,6 +620,8 @@ func init() {
 	ves_io_schema_marketplace_xc_saas_asb_message_crudapi.InitializeMDRegistry(MDR, false)
 	ves_io_schema_namespace.InitializeMDRegistry(MDR, false)
 	ves_io_schema_namespace_crudapi.InitializeMDRegistry(MDR, false)
+	ves_io_schema_nat_policy.InitializeMDRegistry(MDR, false)
+	ves_io_schema_nat_policy_crudapi.InitializeMDRegistry(MDR, false)
 	ves_io_schema_network_connector.InitializeMDRegistry(MDR, false)
 	ves_io_schema_network_connector_crudapi.InitializeMDRegistry(MDR, false)
 	ves_io_schema_network_firewall.InitializeMDRegistry(MDR, false)
@@ -636,6 +684,11 @@ func init() {
 	ves_io_schema_subscription_crudapi.InitializeMDRegistry(MDR, false)
 	ves_io_schema_tenant.InitializeMDRegistry(MDR, false)
 	ves_io_schema_tenant_crudapi.InitializeMDRegistry(MDR, false)
+	ves_io_schema_ticket_management.InitializeMDRegistry(MDR, false)
+	ves_io_schema_ticket_management_ticket.InitializeMDRegistry(MDR, false)
+	ves_io_schema_ticket_management_ticket_crudapi.InitializeMDRegistry(MDR, false)
+	ves_io_schema_ticket_management_ticket_tracking_system.InitializeMDRegistry(MDR, false)
+	ves_io_schema_ticket_management_ticket_tracking_system_crudapi.InitializeMDRegistry(MDR, false)
 	ves_io_schema_token.InitializeMDRegistry(MDR, false)
 	ves_io_schema_token_crudapi.InitializeMDRegistry(MDR, false)
 	ves_io_schema_topology.InitializeMDRegistry(MDR, false)
@@ -680,16 +733,33 @@ func init() {
 	ves_io_schema_user_identification_crudapi.InitializeMDRegistry(MDR, false)
 	ves_io_schema_uztna_application_discovered.InitializeMDRegistry(MDR, false)
 	ves_io_schema_uztna_application_discovered_crudapi.InitializeMDRegistry(MDR, false)
+	ves_io_schema_uztna_application_uztna_application.InitializeMDRegistry(MDR, false)
+	ves_io_schema_uztna_application_uztna_application_crudapi.InitializeMDRegistry(MDR, false)
+	ves_io_schema_uztna_application_uztna_application_group.InitializeMDRegistry(MDR, false)
+	ves_io_schema_uztna_application_uztna_application_group_crudapi.InitializeMDRegistry(MDR, false)
+	ves_io_schema_uztna_application_uztna_application_tag.InitializeMDRegistry(MDR, false)
+	ves_io_schema_uztna_application_uztna_application_tag_crudapi.InitializeMDRegistry(MDR, false)
+	ves_io_schema_uztna_application_uztna_snat_pool.InitializeMDRegistry(MDR, false)
+	ves_io_schema_uztna_application_uztna_snat_pool_crudapi.InitializeMDRegistry(MDR, false)
+	ves_io_schema_uztna_uztna_active_sessions.InitializeMDRegistry(MDR, false)
+	ves_io_schema_uztna_uztna_app_vip_pool.InitializeMDRegistry(MDR, false)
+	ves_io_schema_uztna_uztna_app_vip_pool_crudapi.InitializeMDRegistry(MDR, false)
 	ves_io_schema_uztna_uztna_domain.InitializeMDRegistry(MDR, false)
 	ves_io_schema_uztna_uztna_domain_crudapi.InitializeMDRegistry(MDR, false)
 	ves_io_schema_uztna_uztna_flow.InitializeMDRegistry(MDR, false)
 	ves_io_schema_uztna_uztna_flow_crudapi.InitializeMDRegistry(MDR, false)
 	ves_io_schema_uztna_uztna_gateway.InitializeMDRegistry(MDR, false)
 	ves_io_schema_uztna_uztna_gateway_crudapi.InitializeMDRegistry(MDR, false)
+	ves_io_schema_uztna_uztna_healthcheck.InitializeMDRegistry(MDR, false)
+	ves_io_schema_uztna_uztna_healthcheck_crudapi.InitializeMDRegistry(MDR, false)
 	ves_io_schema_uztna_uztna_leasepool.InitializeMDRegistry(MDR, false)
 	ves_io_schema_uztna_uztna_leasepool_crudapi.InitializeMDRegistry(MDR, false)
+	ves_io_schema_uztna_uztna_origin_pool.InitializeMDRegistry(MDR, false)
+	ves_io_schema_uztna_uztna_origin_pool_crudapi.InitializeMDRegistry(MDR, false)
 	ves_io_schema_uztna_uztna_policy_template.InitializeMDRegistry(MDR, false)
 	ves_io_schema_uztna_uztna_policy_template_crudapi.InitializeMDRegistry(MDR, false)
+	ves_io_schema_uztna_views_uztna_application_view.InitializeMDRegistry(MDR, false)
+	ves_io_schema_uztna_views_uztna_application_view_crudapi.InitializeMDRegistry(MDR, false)
 	ves_io_schema_uztna_views_uztna_domain_view.InitializeMDRegistry(MDR, false)
 	ves_io_schema_uztna_views_uztna_domain_view_crudapi.InitializeMDRegistry(MDR, false)
 	ves_io_schema_vesenv.InitializeMDRegistry(MDR, false)
@@ -710,6 +780,8 @@ func init() {
 	ves_io_schema_views_bigip_centralmanager_site_crudapi.InitializeMDRegistry(MDR, false)
 	ves_io_schema_views_bigip_instance_site.InitializeMDRegistry(MDR, false)
 	ves_io_schema_views_bigip_instance_site_crudapi.InitializeMDRegistry(MDR, false)
+	ves_io_schema_views_bigip_virtual_server.InitializeMDRegistry(MDR, false)
+	ves_io_schema_views_bigip_virtual_server_crudapi.InitializeMDRegistry(MDR, false)
 	ves_io_schema_views_bot_defense_app_infrastructure.InitializeMDRegistry(MDR, false)
 	ves_io_schema_views_bot_defense_app_infrastructure_crudapi.InitializeMDRegistry(MDR, false)
 	ves_io_schema_views_cdn_loadbalancer.InitializeMDRegistry(MDR, false)
@@ -953,6 +1025,14 @@ func init() {
 
 	MDR.PvtCRUDServiceRegistry.AllowedInNSTypes["ves.io.schema.api_group_element.Object"] = nil
 
+	MDR.PubCRUDServiceRegistry.AllowedInNSTypes["ves.io.schema.api_sec.api_crawler.Object"] = nil
+
+	MDR.PvtCRUDServiceRegistry.AllowedInNSTypes["ves.io.schema.api_sec.api_crawler.Object"] = nil
+
+	MDR.PubCRUDServiceRegistry.AllowedInNSTypes["ves.io.schema.api_sec.api_discovery.Object"] = nil
+
+	MDR.PvtCRUDServiceRegistry.AllowedInNSTypes["ves.io.schema.api_sec.api_discovery.Object"] = nil
+
 	MDR.PubCRUDServiceRegistry.AllowedInNSTypes["ves.io.schema.api_sec.code_base_integration.Object"] = nil
 
 	MDR.PvtCRUDServiceRegistry.AllowedInNSTypes["ves.io.schema.api_sec.code_base_integration.Object"] = nil
@@ -979,6 +1059,10 @@ func init() {
 		{
 			FieldPath: "ves.io.schema.app_firewall.CreateRequest.spec.detection_setting_choice.default_detection_settings",
 			GoType:    reflect.TypeOf(ves_io_schema_app_firewall.CreateSpecType_DefaultDetectionSettings{}),
+		},
+		{
+			FieldPath: "ves.io.schema.app_firewall.CreateRequest.spec.detection_setting_choice.detection_settings.bot_protection_choice.default_bot_setting",
+			GoType:    reflect.TypeOf(ves_io_schema_app_firewall.DetectionSetting_DefaultBotSetting{}),
 		},
 		{
 			FieldPath: "ves.io.schema.app_firewall.CreateRequest.spec.detection_setting_choice.detection_settings.false_positive_suppression.enable_suppression",
@@ -1026,6 +1110,10 @@ func init() {
 		{
 			FieldPath: "ves.io.schema.app_firewall.ReplaceRequest.spec.detection_setting_choice.default_detection_settings",
 			GoType:    reflect.TypeOf(ves_io_schema_app_firewall.ReplaceSpecType_DefaultDetectionSettings{}),
+		},
+		{
+			FieldPath: "ves.io.schema.app_firewall.ReplaceRequest.spec.detection_setting_choice.detection_settings.bot_protection_choice.default_bot_setting",
+			GoType:    reflect.TypeOf(ves_io_schema_app_firewall.DetectionSetting_DefaultBotSetting{}),
 		},
 		{
 			FieldPath: "ves.io.schema.app_firewall.ReplaceRequest.spec.detection_setting_choice.detection_settings.false_positive_suppression.enable_suppression",
@@ -1077,6 +1165,10 @@ func init() {
 			GoType:    reflect.TypeOf(ves_io_schema_app_firewall.GlobalSpecType_DefaultDetectionSettings{}),
 		},
 		{
+			FieldPath: "ves.io.schema.app_firewall.crudapi.ObjectCreateReq.spec.gc_spec.detection_setting_choice.detection_settings.bot_protection_choice.default_bot_setting",
+			GoType:    reflect.TypeOf(ves_io_schema_app_firewall.DetectionSetting_DefaultBotSetting{}),
+		},
+		{
 			FieldPath: "ves.io.schema.app_firewall.crudapi.ObjectCreateReq.spec.gc_spec.detection_setting_choice.detection_settings.false_positive_suppression.enable_suppression",
 			GoType:    reflect.TypeOf(ves_io_schema_app_firewall.DetectionSetting_EnableSuppression{}),
 		},
@@ -1122,6 +1214,10 @@ func init() {
 		{
 			FieldPath: "ves.io.schema.app_firewall.crudapi.ObjectReplaceReq.spec.gc_spec.detection_setting_choice.default_detection_settings",
 			GoType:    reflect.TypeOf(ves_io_schema_app_firewall.GlobalSpecType_DefaultDetectionSettings{}),
+		},
+		{
+			FieldPath: "ves.io.schema.app_firewall.crudapi.ObjectReplaceReq.spec.gc_spec.detection_setting_choice.detection_settings.bot_protection_choice.default_bot_setting",
+			GoType:    reflect.TypeOf(ves_io_schema_app_firewall.DetectionSetting_DefaultBotSetting{}),
 		},
 		{
 			FieldPath: "ves.io.schema.app_firewall.crudapi.ObjectReplaceReq.spec.gc_spec.detection_setting_choice.detection_settings.false_positive_suppression.enable_suppression",
@@ -1365,8 +1461,8 @@ func init() {
 			GoType:    reflect.TypeOf(ves_io_schema_bgp.FamilyInet_Enable{}),
 		},
 		{
-			FieldPath: "ves.io.schema.bgp.CreateRequest.spec.peers.type_choice.external.family_inet_v6.enable_choice.enable",
-			GoType:    reflect.TypeOf(ves_io_schema_bgp.FamilyInet6_Enable{}),
+			FieldPath: "ves.io.schema.bgp.CreateRequest.spec.peers.type_choice.external.family_inet_v6.enable_choice.disable",
+			GoType:    reflect.TypeOf(ves_io_schema_bgp.FamilyInet6_Disable{}),
 		},
 		{
 			FieldPath: "ves.io.schema.bgp.CreateRequest.spec.peers.type_choice.internal.family_inet6vpn.enable_choice.enable",
@@ -1412,8 +1508,8 @@ func init() {
 			GoType:    reflect.TypeOf(ves_io_schema_bgp.FamilyInet_Enable{}),
 		},
 		{
-			FieldPath: "ves.io.schema.bgp.ReplaceRequest.spec.peers.type_choice.external.family_inet_v6.enable_choice.enable",
-			GoType:    reflect.TypeOf(ves_io_schema_bgp.FamilyInet6_Enable{}),
+			FieldPath: "ves.io.schema.bgp.ReplaceRequest.spec.peers.type_choice.external.family_inet_v6.enable_choice.disable",
+			GoType:    reflect.TypeOf(ves_io_schema_bgp.FamilyInet6_Disable{}),
 		},
 		{
 			FieldPath: "ves.io.schema.bgp.ReplaceRequest.spec.peers.type_choice.internal.family_inet6vpn.enable_choice.enable",
@@ -1461,8 +1557,8 @@ func init() {
 			GoType:    reflect.TypeOf(ves_io_schema_bgp.FamilyInet_Enable{}),
 		},
 		{
-			FieldPath: "ves.io.schema.bgp.crudapi.ObjectCreateReq.spec.gc_spec.peers.type_choice.external.family_inet_v6.enable_choice.enable",
-			GoType:    reflect.TypeOf(ves_io_schema_bgp.FamilyInet6_Enable{}),
+			FieldPath: "ves.io.schema.bgp.crudapi.ObjectCreateReq.spec.gc_spec.peers.type_choice.external.family_inet_v6.enable_choice.disable",
+			GoType:    reflect.TypeOf(ves_io_schema_bgp.FamilyInet6_Disable{}),
 		},
 		{
 			FieldPath: "ves.io.schema.bgp.crudapi.ObjectCreateReq.spec.gc_spec.peers.type_choice.internal.family_inet6vpn.enable_choice.enable",
@@ -1508,8 +1604,8 @@ func init() {
 			GoType:    reflect.TypeOf(ves_io_schema_bgp.FamilyInet_Enable{}),
 		},
 		{
-			FieldPath: "ves.io.schema.bgp.crudapi.ObjectReplaceReq.spec.gc_spec.peers.type_choice.external.family_inet_v6.enable_choice.enable",
-			GoType:    reflect.TypeOf(ves_io_schema_bgp.FamilyInet6_Enable{}),
+			FieldPath: "ves.io.schema.bgp.crudapi.ObjectReplaceReq.spec.gc_spec.peers.type_choice.external.family_inet_v6.enable_choice.disable",
+			GoType:    reflect.TypeOf(ves_io_schema_bgp.FamilyInet6_Disable{}),
 		},
 		{
 			FieldPath: "ves.io.schema.bgp.crudapi.ObjectReplaceReq.spec.gc_spec.peers.type_choice.internal.family_inet6vpn.enable_choice.enable",
@@ -1829,6 +1925,10 @@ func init() {
 
 	MDR.RPCOneofDefaultChoiceFieldsRegistry["ves.io.schema.cloud_connect.API.Create"] = []svcfw.OneofDefaultChoiceField{
 		{
+			FieldPath: "ves.io.schema.cloud_connect.CreateRequest.spec.cloud.aws_cloud_transit_gateway.vpc_attachments.vpc_list.routing_choice.manual_routing",
+			GoType:    reflect.TypeOf(ves_io_schema_cloud_connect.AWSVPCAttachmentType_ManualRouting{}),
+		},
+		{
 			FieldPath: "ves.io.schema.cloud_connect.CreateRequest.spec.cloud.aws_re.vpc_attachments.vpc_list.routing_choice.manual_routing",
 			GoType:    reflect.TypeOf(ves_io_schema_cloud_connect.AWSVPCAttachmentType_ManualRouting{}),
 		},
@@ -1843,6 +1943,10 @@ func init() {
 	}
 
 	MDR.RPCOneofDefaultChoiceFieldsRegistry["ves.io.schema.cloud_connect.API.Replace"] = []svcfw.OneofDefaultChoiceField{
+		{
+			FieldPath: "ves.io.schema.cloud_connect.ReplaceRequest.spec.cloud.aws_cloud_transit_gateway.vpc_attachments.vpc_list.routing_choice.manual_routing",
+			GoType:    reflect.TypeOf(ves_io_schema_cloud_connect.AWSVPCAttachmentType_ManualRouting{}),
+		},
 		{
 			FieldPath: "ves.io.schema.cloud_connect.ReplaceRequest.spec.cloud.aws_re.vpc_attachments.vpc_list.routing_choice.manual_routing",
 			GoType:    reflect.TypeOf(ves_io_schema_cloud_connect.AWSVPCAttachmentType_ManualRouting{}),
@@ -1865,6 +1969,10 @@ func init() {
 			GoType:    reflect.TypeOf(ves_io_schema_cloud_connect.GlobalSpecType_Bandwidth_500Mbs{}),
 		},
 		{
+			FieldPath: "ves.io.schema.cloud_connect.crudapi.ObjectCreateReq.spec.gc_spec.cloud.aws_cloud_transit_gateway.vpc_attachments.vpc_list.routing_choice.manual_routing",
+			GoType:    reflect.TypeOf(ves_io_schema_cloud_connect.AWSVPCAttachmentType_ManualRouting{}),
+		},
+		{
 			FieldPath: "ves.io.schema.cloud_connect.crudapi.ObjectCreateReq.spec.gc_spec.cloud.aws_re.vpc_attachments.vpc_list.routing_choice.manual_routing",
 			GoType:    reflect.TypeOf(ves_io_schema_cloud_connect.AWSVPCAttachmentType_ManualRouting{}),
 		},
@@ -1882,6 +1990,10 @@ func init() {
 		{
 			FieldPath: "ves.io.schema.cloud_connect.crudapi.ObjectReplaceReq.spec.gc_spec.bandwidth_option.bandwidth_500mbs",
 			GoType:    reflect.TypeOf(ves_io_schema_cloud_connect.GlobalSpecType_Bandwidth_500Mbs{}),
+		},
+		{
+			FieldPath: "ves.io.schema.cloud_connect.crudapi.ObjectReplaceReq.spec.gc_spec.cloud.aws_cloud_transit_gateway.vpc_attachments.vpc_list.routing_choice.manual_routing",
+			GoType:    reflect.TypeOf(ves_io_schema_cloud_connect.AWSVPCAttachmentType_ManualRouting{}),
 		},
 		{
 			FieldPath: "ves.io.schema.cloud_connect.crudapi.ObjectReplaceReq.spec.gc_spec.cloud.aws_re.vpc_attachments.vpc_list.routing_choice.manual_routing",
@@ -1928,6 +2040,10 @@ func init() {
 			GoType:    reflect.TypeOf(ves_io_schema_cloud_credentials.AWSAssumeRoleType_ExternalIdIsTenantId{}),
 		},
 	}
+
+	MDR.PubCRUDServiceRegistry.AllowedInNSTypes["ves.io.schema.cloud_elastic_ip.Object"] = []svcfw.NamespaceType{svcfw.SystemNSType}
+
+	MDR.PvtCRUDServiceRegistry.AllowedInNSTypes["ves.io.schema.cloud_elastic_ip.Object"] = []svcfw.NamespaceType{svcfw.SystemNSType}
 
 	MDR.PubCRUDServiceRegistry.AllowedInNSTypes["ves.io.schema.cloud_link.Object"] = nil
 
@@ -1994,6 +2110,54 @@ func init() {
 	}
 
 	MDR.PvtCRUDServiceRegistry.AllowedInNSTypes["ves.io.schema.cloud_re_region.Object"] = []svcfw.NamespaceType{svcfw.SystemNSType}
+
+	MDR.PubCRUDServiceRegistry.AllowedInNSTypes["ves.io.schema.cloud_transit_gateway.Object"] = []svcfw.NamespaceType{svcfw.SystemNSType}
+
+	MDR.RPCOneofDefaultChoiceFieldsRegistry["ves.io.schema.cloud_transit_gateway.API.Create"] = []svcfw.OneofDefaultChoiceField{
+		{
+			FieldPath: "ves.io.schema.cloud_transit_gateway.CreateRequest.spec.cloud_choice.aws.tgw_choice.new_tgw.asn_choice.system_generated",
+			GoType:    reflect.TypeOf(ves_io_schema_views.TGWParamsType_SystemGenerated{}),
+		},
+		{
+			FieldPath: "ves.io.schema.cloud_transit_gateway.CreateRequest.spec.cloud_choice.aws.tgw_cidr_choice.reserved_tgw_cidr",
+			GoType:    reflect.TypeOf(ves_io_schema_cloud_transit_gateway.AWSType_ReservedTgwCidr{}),
+		},
+	}
+
+	MDR.RPCOneofDefaultChoiceFieldsRegistry["ves.io.schema.cloud_transit_gateway.API.Replace"] = []svcfw.OneofDefaultChoiceField{
+		{
+			FieldPath: "ves.io.schema.cloud_transit_gateway.ReplaceRequest.spec.cloud_choice.aws.tgw_choice.new_tgw.asn_choice.system_generated",
+			GoType:    reflect.TypeOf(ves_io_schema_views.TGWParamsType_SystemGenerated{}),
+		},
+		{
+			FieldPath: "ves.io.schema.cloud_transit_gateway.ReplaceRequest.spec.cloud_choice.aws.tgw_cidr_choice.reserved_tgw_cidr",
+			GoType:    reflect.TypeOf(ves_io_schema_cloud_transit_gateway.AWSType_ReservedTgwCidr{}),
+		},
+	}
+
+	MDR.PvtCRUDServiceRegistry.AllowedInNSTypes["ves.io.schema.cloud_transit_gateway.Object"] = []svcfw.NamespaceType{svcfw.SystemNSType}
+
+	MDR.RPCOneofDefaultChoiceFieldsRegistry["ves.io.schema.cloud_transit_gateway.crudapi.API.Create"] = []svcfw.OneofDefaultChoiceField{
+		{
+			FieldPath: "ves.io.schema.cloud_transit_gateway.crudapi.ObjectCreateReq.spec.gc_spec.cloud_choice.aws.tgw_choice.new_tgw.asn_choice.system_generated",
+			GoType:    reflect.TypeOf(ves_io_schema_views.TGWParamsType_SystemGenerated{}),
+		},
+		{
+			FieldPath: "ves.io.schema.cloud_transit_gateway.crudapi.ObjectCreateReq.spec.gc_spec.cloud_choice.aws.tgw_cidr_choice.reserved_tgw_cidr",
+			GoType:    reflect.TypeOf(ves_io_schema_cloud_transit_gateway.AWSType_ReservedTgwCidr{}),
+		},
+	}
+
+	MDR.RPCOneofDefaultChoiceFieldsRegistry["ves.io.schema.cloud_transit_gateway.crudapi.API.Replace"] = []svcfw.OneofDefaultChoiceField{
+		{
+			FieldPath: "ves.io.schema.cloud_transit_gateway.crudapi.ObjectReplaceReq.spec.gc_spec.cloud_choice.aws.tgw_choice.new_tgw.asn_choice.system_generated",
+			GoType:    reflect.TypeOf(ves_io_schema_views.TGWParamsType_SystemGenerated{}),
+		},
+		{
+			FieldPath: "ves.io.schema.cloud_transit_gateway.crudapi.ObjectReplaceReq.spec.gc_spec.cloud_choice.aws.tgw_cidr_choice.reserved_tgw_cidr",
+			GoType:    reflect.TypeOf(ves_io_schema_cloud_transit_gateway.AWSType_ReservedTgwCidr{}),
+		},
+	}
 
 	MDR.PubCRUDServiceRegistry.AllowedInNSTypes["ves.io.schema.cluster.Object"] = nil
 
@@ -2124,6 +2288,18 @@ func init() {
 			FieldPath: "ves.io.schema.discovered_service.CreateHTTPLoadBalancerRequest.http_lb_request.advertise_choice.advertise_on_public_default_vip",
 			GoType:    reflect.TypeOf(ves_io_schema_discovered_service.HTTPLBRequest_AdvertiseOnPublicDefaultVip{}),
 		},
+		{
+			FieldPath: "ves.io.schema.discovered_service.CreateHTTPLoadBalancerRequest.http_lb_request.loadbalancer_type.http.advertise_choice.advertise_on_public_default_vip",
+			GoType:    reflect.TypeOf(ves_io_schema_discovered_service.ProxyTypeHttp_AdvertiseOnPublicDefaultVip{}),
+		},
+		{
+			FieldPath: "ves.io.schema.discovered_service.CreateHTTPLoadBalancerRequest.http_lb_request.loadbalancer_type.https.advertise_choice.advertise_on_public_default_vip",
+			GoType:    reflect.TypeOf(ves_io_schema_discovered_service.ProxyTypeHttps_AdvertiseOnPublicDefaultVip{}),
+		},
+		{
+			FieldPath: "ves.io.schema.discovered_service.CreateHTTPLoadBalancerRequest.http_lb_request.loadbalancer_type.https_auto_cert",
+			GoType:    reflect.TypeOf(ves_io_schema_discovered_service.HTTPLBRequest_HttpsAutoCert{}),
+		},
 	}
 
 	MDR.RPCOneofDefaultChoiceFieldsRegistry["ves.io.schema.discovered_service.CustomAPI.CreateTCPLoadBalancer"] = []svcfw.OneofDefaultChoiceField{
@@ -2145,19 +2321,19 @@ func init() {
 
 	MDR.RPCOneofDefaultChoiceFieldsRegistry["ves.io.schema.discovered_service.crudapi.API.Create"] = []svcfw.OneofDefaultChoiceField{
 		{
-			FieldPath: "ves.io.schema.discovered_service.crudapi.ObjectCreateReq.spec.gc_spec.waap_action_choice.waap_visibility_enabled",
-			GoType:    reflect.TypeOf(ves_io_schema_discovered_service.GlobalSpecType_WaapVisibilityEnabled{}),
+			FieldPath: "ves.io.schema.discovered_service.crudapi.ObjectCreateReq.spec.gc_spec.visibility_action_choice.visibility_enabled",
+			GoType:    reflect.TypeOf(ves_io_schema_discovered_service.GlobalSpecType_VisibilityEnabled{}),
 		},
 	}
 
 	MDR.RPCOneofDefaultChoiceFieldsRegistry["ves.io.schema.discovered_service.crudapi.API.Replace"] = []svcfw.OneofDefaultChoiceField{
 		{
-			FieldPath: "ves.io.schema.discovered_service.crudapi.ObjectReplaceReq.spec.gc_spec.waap_action_choice.waap_visibility_enabled",
-			GoType:    reflect.TypeOf(ves_io_schema_discovered_service.GlobalSpecType_WaapVisibilityEnabled{}),
+			FieldPath: "ves.io.schema.discovered_service.crudapi.ObjectReplaceReq.spec.gc_spec.visibility_action_choice.visibility_enabled",
+			GoType:    reflect.TypeOf(ves_io_schema_discovered_service.GlobalSpecType_VisibilityEnabled{}),
 		},
 	}
 
-	MDR.PubCRUDServiceRegistry.AllowedInNSTypes["ves.io.schema.discovery.Object"] = []svcfw.NamespaceType{svcfw.SystemNSType}
+	MDR.PubCRUDServiceRegistry.AllowedInNSTypes["ves.io.schema.discovery.Object"] = nil
 
 	MDR.RPCOneofDefaultChoiceFieldsRegistry["ves.io.schema.discovery.API.Create"] = []svcfw.OneofDefaultChoiceField{
 		{
@@ -2165,8 +2341,8 @@ func init() {
 			GoType:    reflect.TypeOf(ves_io_schema_discovery.CreateSpecType_NoClusterId{}),
 		},
 		{
-			FieldPath: "ves.io.schema.discovery.CreateRequest.spec.discovery_choice.discovery_cbip.cbip_clusters.cbip_devices.virtual_server_filter.discover_disabled_choice.enabled_only",
-			GoType:    reflect.TypeOf(ves_io_schema_discovery.VirtualServerFilter_EnabledOnly{}),
+			FieldPath: "ves.io.schema.discovery.CreateRequest.spec.discovery_choice.discovery_cbip.cbip_clusters.cbip_devices.cbip_certificate_authority.server_validation_choice.skip_server_verification",
+			GoType:    reflect.TypeOf(ves_io_schema_discovery.CbipCertificateAuthority_SkipServerVerification{}),
 		},
 		{
 			FieldPath: "ves.io.schema.discovery.CreateRequest.spec.discovery_choice.discovery_consul.publish_info.publish_choice.disable",
@@ -2196,8 +2372,8 @@ func init() {
 			GoType:    reflect.TypeOf(ves_io_schema_discovery.ReplaceSpecType_NoClusterId{}),
 		},
 		{
-			FieldPath: "ves.io.schema.discovery.ReplaceRequest.spec.discovery_choice.discovery_cbip.cbip_clusters.cbip_devices.virtual_server_filter.discover_disabled_choice.enabled_only",
-			GoType:    reflect.TypeOf(ves_io_schema_discovery.VirtualServerFilter_EnabledOnly{}),
+			FieldPath: "ves.io.schema.discovery.ReplaceRequest.spec.discovery_choice.discovery_cbip.cbip_clusters.cbip_devices.cbip_certificate_authority.server_validation_choice.skip_server_verification",
+			GoType:    reflect.TypeOf(ves_io_schema_discovery.CbipCertificateAuthority_SkipServerVerification{}),
 		},
 		{
 			FieldPath: "ves.io.schema.discovery.ReplaceRequest.spec.discovery_choice.discovery_consul.publish_info.publish_choice.disable",
@@ -2221,7 +2397,7 @@ func init() {
 		},
 	}
 
-	MDR.PvtCRUDServiceRegistry.AllowedInNSTypes["ves.io.schema.discovery.Object"] = []svcfw.NamespaceType{svcfw.SystemNSType}
+	MDR.PvtCRUDServiceRegistry.AllowedInNSTypes["ves.io.schema.discovery.Object"] = nil
 
 	MDR.RPCOneofDefaultChoiceFieldsRegistry["ves.io.schema.discovery.crudapi.API.Create"] = []svcfw.OneofDefaultChoiceField{
 		{
@@ -2233,8 +2409,8 @@ func init() {
 			GoType:    reflect.TypeOf(ves_io_schema_discovery.GlobalSpecType_NoClusterId{}),
 		},
 		{
-			FieldPath: "ves.io.schema.discovery.crudapi.ObjectCreateReq.spec.gc_spec.discovery_choice.discovery_cbip.cbip_clusters.cbip_devices.virtual_server_filter.discover_disabled_choice.enabled_only",
-			GoType:    reflect.TypeOf(ves_io_schema_discovery.VirtualServerFilter_EnabledOnly{}),
+			FieldPath: "ves.io.schema.discovery.crudapi.ObjectCreateReq.spec.gc_spec.discovery_choice.discovery_cbip.cbip_clusters.cbip_devices.cbip_certificate_authority.server_validation_choice.skip_server_verification",
+			GoType:    reflect.TypeOf(ves_io_schema_discovery.CbipCertificateAuthority_SkipServerVerification{}),
 		},
 		{
 			FieldPath: "ves.io.schema.discovery.crudapi.ObjectCreateReq.spec.gc_spec.discovery_choice.discovery_consul.publish_info.publish_choice.disable",
@@ -2268,8 +2444,8 @@ func init() {
 			GoType:    reflect.TypeOf(ves_io_schema_discovery.GlobalSpecType_NoClusterId{}),
 		},
 		{
-			FieldPath: "ves.io.schema.discovery.crudapi.ObjectReplaceReq.spec.gc_spec.discovery_choice.discovery_cbip.cbip_clusters.cbip_devices.virtual_server_filter.discover_disabled_choice.enabled_only",
-			GoType:    reflect.TypeOf(ves_io_schema_discovery.VirtualServerFilter_EnabledOnly{}),
+			FieldPath: "ves.io.schema.discovery.crudapi.ObjectReplaceReq.spec.gc_spec.discovery_choice.discovery_cbip.cbip_clusters.cbip_devices.cbip_certificate_authority.server_validation_choice.skip_server_verification",
+			GoType:    reflect.TypeOf(ves_io_schema_discovery.CbipCertificateAuthority_SkipServerVerification{}),
 		},
 		{
 			FieldPath: "ves.io.schema.discovery.crudapi.ObjectReplaceReq.spec.gc_spec.discovery_choice.discovery_consul.publish_info.publish_choice.disable",
@@ -2845,8 +3021,8 @@ func init() {
 			GoType:    reflect.TypeOf(ves_io_schema_bgp.FamilyInet_Enable{}),
 		},
 		{
-			FieldPath: "ves.io.schema.fleet.crudapi.ObjectCreateReq.spec.gc_spec.local_control_plane.bgp_config.peers.type_choice.external.family_inet_v6.enable_choice.enable",
-			GoType:    reflect.TypeOf(ves_io_schema_bgp.FamilyInet6_Enable{}),
+			FieldPath: "ves.io.schema.fleet.crudapi.ObjectCreateReq.spec.gc_spec.local_control_plane.bgp_config.peers.type_choice.external.family_inet_v6.enable_choice.disable",
+			GoType:    reflect.TypeOf(ves_io_schema_bgp.FamilyInet6_Disable{}),
 		},
 		{
 			FieldPath: "ves.io.schema.fleet.crudapi.ObjectCreateReq.spec.gc_spec.local_control_plane.bgp_config.peers.type_choice.internal.family_inet6vpn.enable_choice.enable",
@@ -2960,8 +3136,8 @@ func init() {
 			GoType:    reflect.TypeOf(ves_io_schema_bgp.FamilyInet_Enable{}),
 		},
 		{
-			FieldPath: "ves.io.schema.fleet.crudapi.ObjectReplaceReq.spec.gc_spec.local_control_plane.bgp_config.peers.type_choice.external.family_inet_v6.enable_choice.enable",
-			GoType:    reflect.TypeOf(ves_io_schema_bgp.FamilyInet6_Enable{}),
+			FieldPath: "ves.io.schema.fleet.crudapi.ObjectReplaceReq.spec.gc_spec.local_control_plane.bgp_config.peers.type_choice.external.family_inet_v6.enable_choice.disable",
+			GoType:    reflect.TypeOf(ves_io_schema_bgp.FamilyInet6_Disable{}),
 		},
 		{
 			FieldPath: "ves.io.schema.fleet.crudapi.ObjectReplaceReq.spec.gc_spec.local_control_plane.bgp_config.peers.type_choice.internal.family_inet6vpn.enable_choice.enable",
@@ -3059,6 +3235,18 @@ func init() {
 			GoType:    reflect.TypeOf(ves_io_schema_global_log_receiver.CreateSpecType_RequestLogs{}),
 		},
 		{
+			FieldPath: "ves.io.schema.global_log_receiver.CreateRequest.spec.receiver.aws_cloud_watch_receiver.compression.compression_choice.compression_gzip",
+			GoType:    reflect.TypeOf(ves_io_schema_global_log_receiver.CompressionType_CompressionGzip{}),
+		},
+		{
+			FieldPath: "ves.io.schema.global_log_receiver.CreateRequest.spec.receiver.azure_receiver.compression.compression_choice.compression_gzip",
+			GoType:    reflect.TypeOf(ves_io_schema_global_log_receiver.CompressionType_CompressionGzip{}),
+		},
+		{
+			FieldPath: "ves.io.schema.global_log_receiver.CreateRequest.spec.receiver.datadog_receiver.compression.compression_choice.compression_gzip",
+			GoType:    reflect.TypeOf(ves_io_schema_global_log_receiver.CompressionType_CompressionGzip{}),
+		},
+		{
 			FieldPath: "ves.io.schema.global_log_receiver.CreateRequest.spec.receiver.datadog_receiver.tls_choice.no_tls",
 			GoType:    reflect.TypeOf(ves_io_schema_global_log_receiver.DatadogConfig_NoTls{}),
 		},
@@ -3075,6 +3263,10 @@ func init() {
 			GoType:    reflect.TypeOf(ves_io_schema_global_log_receiver.ElasticConfig_AuthNone{}),
 		},
 		{
+			FieldPath: "ves.io.schema.global_log_receiver.CreateRequest.spec.receiver.elastic_receiver.compression.compression_choice.compression_gzip",
+			GoType:    reflect.TypeOf(ves_io_schema_global_log_receiver.CompressionType_CompressionGzip{}),
+		},
+		{
 			FieldPath: "ves.io.schema.global_log_receiver.CreateRequest.spec.receiver.elastic_receiver.tls_choice.no_tls",
 			GoType:    reflect.TypeOf(ves_io_schema_global_log_receiver.ElasticConfig_NoTls{}),
 		},
@@ -3087,8 +3279,16 @@ func init() {
 			GoType:    reflect.TypeOf(ves_io_schema_global_log_receiver.TLSConfigType_MtlsDisabled{}),
 		},
 		{
+			FieldPath: "ves.io.schema.global_log_receiver.CreateRequest.spec.receiver.gcp_bucket_receiver.compression.compression_choice.compression_gzip",
+			GoType:    reflect.TypeOf(ves_io_schema_global_log_receiver.CompressionType_CompressionGzip{}),
+		},
+		{
 			FieldPath: "ves.io.schema.global_log_receiver.CreateRequest.spec.receiver.http_receiver.auth_choice.auth_none",
 			GoType:    reflect.TypeOf(ves_io_schema_global_log_receiver.HTTPConfig_AuthNone{}),
+		},
+		{
+			FieldPath: "ves.io.schema.global_log_receiver.CreateRequest.spec.receiver.http_receiver.compression.compression_choice.compression_gzip",
+			GoType:    reflect.TypeOf(ves_io_schema_global_log_receiver.CompressionType_CompressionGzip{}),
 		},
 		{
 			FieldPath: "ves.io.schema.global_log_receiver.CreateRequest.spec.receiver.http_receiver.tls_choice.no_tls",
@@ -3101,6 +3301,10 @@ func init() {
 		{
 			FieldPath: "ves.io.schema.global_log_receiver.CreateRequest.spec.receiver.http_receiver.tls_choice.use_tls.mtls_choice.mtls_disabled",
 			GoType:    reflect.TypeOf(ves_io_schema_global_log_receiver.TLSConfigType_MtlsDisabled{}),
+		},
+		{
+			FieldPath: "ves.io.schema.global_log_receiver.CreateRequest.spec.receiver.kafka_receiver.compression.compression_choice.compression_gzip",
+			GoType:    reflect.TypeOf(ves_io_schema_global_log_receiver.CompressionType_CompressionGzip{}),
 		},
 		{
 			FieldPath: "ves.io.schema.global_log_receiver.CreateRequest.spec.receiver.kafka_receiver.tls_choice.no_tls",
@@ -3119,6 +3323,10 @@ func init() {
 			GoType:    reflect.TypeOf(ves_io_schema_global_log_receiver.NewRelicConfig_Us{}),
 		},
 		{
+			FieldPath: "ves.io.schema.global_log_receiver.CreateRequest.spec.receiver.qradar_receiver.compression.compression_choice.compression_gzip",
+			GoType:    reflect.TypeOf(ves_io_schema_global_log_receiver.CompressionType_CompressionGzip{}),
+		},
+		{
 			FieldPath: "ves.io.schema.global_log_receiver.CreateRequest.spec.receiver.qradar_receiver.tls_choice.no_tls",
 			GoType:    reflect.TypeOf(ves_io_schema_global_log_receiver.QRadarConfig_NoTls{}),
 		},
@@ -3129,6 +3337,14 @@ func init() {
 		{
 			FieldPath: "ves.io.schema.global_log_receiver.CreateRequest.spec.receiver.qradar_receiver.tls_choice.use_tls.mtls_choice.mtls_disabled",
 			GoType:    reflect.TypeOf(ves_io_schema_global_log_receiver.TLSConfigType_MtlsDisabled{}),
+		},
+		{
+			FieldPath: "ves.io.schema.global_log_receiver.CreateRequest.spec.receiver.s3_receiver.compression.compression_choice.compression_gzip",
+			GoType:    reflect.TypeOf(ves_io_schema_global_log_receiver.CompressionType_CompressionGzip{}),
+		},
+		{
+			FieldPath: "ves.io.schema.global_log_receiver.CreateRequest.spec.receiver.splunk_receiver.compression.compression_choice.compression_gzip",
+			GoType:    reflect.TypeOf(ves_io_schema_global_log_receiver.CompressionType_CompressionGzip{}),
 		},
 		{
 			FieldPath: "ves.io.schema.global_log_receiver.CreateRequest.spec.receiver.splunk_receiver.tls_choice.no_tls",
@@ -3154,6 +3370,18 @@ func init() {
 			GoType:    reflect.TypeOf(ves_io_schema_global_log_receiver.ReplaceSpecType_RequestLogs{}),
 		},
 		{
+			FieldPath: "ves.io.schema.global_log_receiver.ReplaceRequest.spec.receiver.aws_cloud_watch_receiver.compression.compression_choice.compression_gzip",
+			GoType:    reflect.TypeOf(ves_io_schema_global_log_receiver.CompressionType_CompressionGzip{}),
+		},
+		{
+			FieldPath: "ves.io.schema.global_log_receiver.ReplaceRequest.spec.receiver.azure_receiver.compression.compression_choice.compression_gzip",
+			GoType:    reflect.TypeOf(ves_io_schema_global_log_receiver.CompressionType_CompressionGzip{}),
+		},
+		{
+			FieldPath: "ves.io.schema.global_log_receiver.ReplaceRequest.spec.receiver.datadog_receiver.compression.compression_choice.compression_gzip",
+			GoType:    reflect.TypeOf(ves_io_schema_global_log_receiver.CompressionType_CompressionGzip{}),
+		},
+		{
 			FieldPath: "ves.io.schema.global_log_receiver.ReplaceRequest.spec.receiver.datadog_receiver.tls_choice.no_tls",
 			GoType:    reflect.TypeOf(ves_io_schema_global_log_receiver.DatadogConfig_NoTls{}),
 		},
@@ -3170,6 +3398,10 @@ func init() {
 			GoType:    reflect.TypeOf(ves_io_schema_global_log_receiver.ElasticConfig_AuthNone{}),
 		},
 		{
+			FieldPath: "ves.io.schema.global_log_receiver.ReplaceRequest.spec.receiver.elastic_receiver.compression.compression_choice.compression_gzip",
+			GoType:    reflect.TypeOf(ves_io_schema_global_log_receiver.CompressionType_CompressionGzip{}),
+		},
+		{
 			FieldPath: "ves.io.schema.global_log_receiver.ReplaceRequest.spec.receiver.elastic_receiver.tls_choice.no_tls",
 			GoType:    reflect.TypeOf(ves_io_schema_global_log_receiver.ElasticConfig_NoTls{}),
 		},
@@ -3182,8 +3414,16 @@ func init() {
 			GoType:    reflect.TypeOf(ves_io_schema_global_log_receiver.TLSConfigType_MtlsDisabled{}),
 		},
 		{
+			FieldPath: "ves.io.schema.global_log_receiver.ReplaceRequest.spec.receiver.gcp_bucket_receiver.compression.compression_choice.compression_gzip",
+			GoType:    reflect.TypeOf(ves_io_schema_global_log_receiver.CompressionType_CompressionGzip{}),
+		},
+		{
 			FieldPath: "ves.io.schema.global_log_receiver.ReplaceRequest.spec.receiver.http_receiver.auth_choice.auth_none",
 			GoType:    reflect.TypeOf(ves_io_schema_global_log_receiver.HTTPConfig_AuthNone{}),
+		},
+		{
+			FieldPath: "ves.io.schema.global_log_receiver.ReplaceRequest.spec.receiver.http_receiver.compression.compression_choice.compression_gzip",
+			GoType:    reflect.TypeOf(ves_io_schema_global_log_receiver.CompressionType_CompressionGzip{}),
 		},
 		{
 			FieldPath: "ves.io.schema.global_log_receiver.ReplaceRequest.spec.receiver.http_receiver.tls_choice.no_tls",
@@ -3196,6 +3436,10 @@ func init() {
 		{
 			FieldPath: "ves.io.schema.global_log_receiver.ReplaceRequest.spec.receiver.http_receiver.tls_choice.use_tls.mtls_choice.mtls_disabled",
 			GoType:    reflect.TypeOf(ves_io_schema_global_log_receiver.TLSConfigType_MtlsDisabled{}),
+		},
+		{
+			FieldPath: "ves.io.schema.global_log_receiver.ReplaceRequest.spec.receiver.kafka_receiver.compression.compression_choice.compression_gzip",
+			GoType:    reflect.TypeOf(ves_io_schema_global_log_receiver.CompressionType_CompressionGzip{}),
 		},
 		{
 			FieldPath: "ves.io.schema.global_log_receiver.ReplaceRequest.spec.receiver.kafka_receiver.tls_choice.no_tls",
@@ -3214,6 +3458,10 @@ func init() {
 			GoType:    reflect.TypeOf(ves_io_schema_global_log_receiver.NewRelicConfig_Us{}),
 		},
 		{
+			FieldPath: "ves.io.schema.global_log_receiver.ReplaceRequest.spec.receiver.qradar_receiver.compression.compression_choice.compression_gzip",
+			GoType:    reflect.TypeOf(ves_io_schema_global_log_receiver.CompressionType_CompressionGzip{}),
+		},
+		{
 			FieldPath: "ves.io.schema.global_log_receiver.ReplaceRequest.spec.receiver.qradar_receiver.tls_choice.no_tls",
 			GoType:    reflect.TypeOf(ves_io_schema_global_log_receiver.QRadarConfig_NoTls{}),
 		},
@@ -3224,6 +3472,14 @@ func init() {
 		{
 			FieldPath: "ves.io.schema.global_log_receiver.ReplaceRequest.spec.receiver.qradar_receiver.tls_choice.use_tls.mtls_choice.mtls_disabled",
 			GoType:    reflect.TypeOf(ves_io_schema_global_log_receiver.TLSConfigType_MtlsDisabled{}),
+		},
+		{
+			FieldPath: "ves.io.schema.global_log_receiver.ReplaceRequest.spec.receiver.s3_receiver.compression.compression_choice.compression_gzip",
+			GoType:    reflect.TypeOf(ves_io_schema_global_log_receiver.CompressionType_CompressionGzip{}),
+		},
+		{
+			FieldPath: "ves.io.schema.global_log_receiver.ReplaceRequest.spec.receiver.splunk_receiver.compression.compression_choice.compression_gzip",
+			GoType:    reflect.TypeOf(ves_io_schema_global_log_receiver.CompressionType_CompressionGzip{}),
 		},
 		{
 			FieldPath: "ves.io.schema.global_log_receiver.ReplaceRequest.spec.receiver.splunk_receiver.tls_choice.no_tls",
@@ -3251,6 +3507,18 @@ func init() {
 			GoType:    reflect.TypeOf(ves_io_schema_global_log_receiver.GlobalSpecType_RequestLogs{}),
 		},
 		{
+			FieldPath: "ves.io.schema.global_log_receiver.crudapi.ObjectCreateReq.spec.gc_spec.receiver.aws_cloud_watch_receiver.compression.compression_choice.compression_gzip",
+			GoType:    reflect.TypeOf(ves_io_schema_global_log_receiver.CompressionType_CompressionGzip{}),
+		},
+		{
+			FieldPath: "ves.io.schema.global_log_receiver.crudapi.ObjectCreateReq.spec.gc_spec.receiver.azure_receiver.compression.compression_choice.compression_gzip",
+			GoType:    reflect.TypeOf(ves_io_schema_global_log_receiver.CompressionType_CompressionGzip{}),
+		},
+		{
+			FieldPath: "ves.io.schema.global_log_receiver.crudapi.ObjectCreateReq.spec.gc_spec.receiver.datadog_receiver.compression.compression_choice.compression_gzip",
+			GoType:    reflect.TypeOf(ves_io_schema_global_log_receiver.CompressionType_CompressionGzip{}),
+		},
+		{
 			FieldPath: "ves.io.schema.global_log_receiver.crudapi.ObjectCreateReq.spec.gc_spec.receiver.datadog_receiver.tls_choice.no_tls",
 			GoType:    reflect.TypeOf(ves_io_schema_global_log_receiver.DatadogConfig_NoTls{}),
 		},
@@ -3267,6 +3535,10 @@ func init() {
 			GoType:    reflect.TypeOf(ves_io_schema_global_log_receiver.ElasticConfig_AuthNone{}),
 		},
 		{
+			FieldPath: "ves.io.schema.global_log_receiver.crudapi.ObjectCreateReq.spec.gc_spec.receiver.elastic_receiver.compression.compression_choice.compression_gzip",
+			GoType:    reflect.TypeOf(ves_io_schema_global_log_receiver.CompressionType_CompressionGzip{}),
+		},
+		{
 			FieldPath: "ves.io.schema.global_log_receiver.crudapi.ObjectCreateReq.spec.gc_spec.receiver.elastic_receiver.tls_choice.no_tls",
 			GoType:    reflect.TypeOf(ves_io_schema_global_log_receiver.ElasticConfig_NoTls{}),
 		},
@@ -3279,8 +3551,16 @@ func init() {
 			GoType:    reflect.TypeOf(ves_io_schema_global_log_receiver.TLSConfigType_MtlsDisabled{}),
 		},
 		{
+			FieldPath: "ves.io.schema.global_log_receiver.crudapi.ObjectCreateReq.spec.gc_spec.receiver.gcp_bucket_receiver.compression.compression_choice.compression_gzip",
+			GoType:    reflect.TypeOf(ves_io_schema_global_log_receiver.CompressionType_CompressionGzip{}),
+		},
+		{
 			FieldPath: "ves.io.schema.global_log_receiver.crudapi.ObjectCreateReq.spec.gc_spec.receiver.http_receiver.auth_choice.auth_none",
 			GoType:    reflect.TypeOf(ves_io_schema_global_log_receiver.HTTPConfig_AuthNone{}),
+		},
+		{
+			FieldPath: "ves.io.schema.global_log_receiver.crudapi.ObjectCreateReq.spec.gc_spec.receiver.http_receiver.compression.compression_choice.compression_gzip",
+			GoType:    reflect.TypeOf(ves_io_schema_global_log_receiver.CompressionType_CompressionGzip{}),
 		},
 		{
 			FieldPath: "ves.io.schema.global_log_receiver.crudapi.ObjectCreateReq.spec.gc_spec.receiver.http_receiver.tls_choice.no_tls",
@@ -3293,6 +3573,10 @@ func init() {
 		{
 			FieldPath: "ves.io.schema.global_log_receiver.crudapi.ObjectCreateReq.spec.gc_spec.receiver.http_receiver.tls_choice.use_tls.mtls_choice.mtls_disabled",
 			GoType:    reflect.TypeOf(ves_io_schema_global_log_receiver.TLSConfigType_MtlsDisabled{}),
+		},
+		{
+			FieldPath: "ves.io.schema.global_log_receiver.crudapi.ObjectCreateReq.spec.gc_spec.receiver.kafka_receiver.compression.compression_choice.compression_gzip",
+			GoType:    reflect.TypeOf(ves_io_schema_global_log_receiver.CompressionType_CompressionGzip{}),
 		},
 		{
 			FieldPath: "ves.io.schema.global_log_receiver.crudapi.ObjectCreateReq.spec.gc_spec.receiver.kafka_receiver.tls_choice.no_tls",
@@ -3311,6 +3595,10 @@ func init() {
 			GoType:    reflect.TypeOf(ves_io_schema_global_log_receiver.NewRelicConfig_Us{}),
 		},
 		{
+			FieldPath: "ves.io.schema.global_log_receiver.crudapi.ObjectCreateReq.spec.gc_spec.receiver.qradar_receiver.compression.compression_choice.compression_gzip",
+			GoType:    reflect.TypeOf(ves_io_schema_global_log_receiver.CompressionType_CompressionGzip{}),
+		},
+		{
 			FieldPath: "ves.io.schema.global_log_receiver.crudapi.ObjectCreateReq.spec.gc_spec.receiver.qradar_receiver.tls_choice.no_tls",
 			GoType:    reflect.TypeOf(ves_io_schema_global_log_receiver.QRadarConfig_NoTls{}),
 		},
@@ -3321,6 +3609,14 @@ func init() {
 		{
 			FieldPath: "ves.io.schema.global_log_receiver.crudapi.ObjectCreateReq.spec.gc_spec.receiver.qradar_receiver.tls_choice.use_tls.mtls_choice.mtls_disabled",
 			GoType:    reflect.TypeOf(ves_io_schema_global_log_receiver.TLSConfigType_MtlsDisabled{}),
+		},
+		{
+			FieldPath: "ves.io.schema.global_log_receiver.crudapi.ObjectCreateReq.spec.gc_spec.receiver.s3_receiver.compression.compression_choice.compression_gzip",
+			GoType:    reflect.TypeOf(ves_io_schema_global_log_receiver.CompressionType_CompressionGzip{}),
+		},
+		{
+			FieldPath: "ves.io.schema.global_log_receiver.crudapi.ObjectCreateReq.spec.gc_spec.receiver.splunk_receiver.compression.compression_choice.compression_gzip",
+			GoType:    reflect.TypeOf(ves_io_schema_global_log_receiver.CompressionType_CompressionGzip{}),
 		},
 		{
 			FieldPath: "ves.io.schema.global_log_receiver.crudapi.ObjectCreateReq.spec.gc_spec.receiver.splunk_receiver.tls_choice.no_tls",
@@ -3346,6 +3642,18 @@ func init() {
 			GoType:    reflect.TypeOf(ves_io_schema_global_log_receiver.GlobalSpecType_RequestLogs{}),
 		},
 		{
+			FieldPath: "ves.io.schema.global_log_receiver.crudapi.ObjectReplaceReq.spec.gc_spec.receiver.aws_cloud_watch_receiver.compression.compression_choice.compression_gzip",
+			GoType:    reflect.TypeOf(ves_io_schema_global_log_receiver.CompressionType_CompressionGzip{}),
+		},
+		{
+			FieldPath: "ves.io.schema.global_log_receiver.crudapi.ObjectReplaceReq.spec.gc_spec.receiver.azure_receiver.compression.compression_choice.compression_gzip",
+			GoType:    reflect.TypeOf(ves_io_schema_global_log_receiver.CompressionType_CompressionGzip{}),
+		},
+		{
+			FieldPath: "ves.io.schema.global_log_receiver.crudapi.ObjectReplaceReq.spec.gc_spec.receiver.datadog_receiver.compression.compression_choice.compression_gzip",
+			GoType:    reflect.TypeOf(ves_io_schema_global_log_receiver.CompressionType_CompressionGzip{}),
+		},
+		{
 			FieldPath: "ves.io.schema.global_log_receiver.crudapi.ObjectReplaceReq.spec.gc_spec.receiver.datadog_receiver.tls_choice.no_tls",
 			GoType:    reflect.TypeOf(ves_io_schema_global_log_receiver.DatadogConfig_NoTls{}),
 		},
@@ -3362,6 +3670,10 @@ func init() {
 			GoType:    reflect.TypeOf(ves_io_schema_global_log_receiver.ElasticConfig_AuthNone{}),
 		},
 		{
+			FieldPath: "ves.io.schema.global_log_receiver.crudapi.ObjectReplaceReq.spec.gc_spec.receiver.elastic_receiver.compression.compression_choice.compression_gzip",
+			GoType:    reflect.TypeOf(ves_io_schema_global_log_receiver.CompressionType_CompressionGzip{}),
+		},
+		{
 			FieldPath: "ves.io.schema.global_log_receiver.crudapi.ObjectReplaceReq.spec.gc_spec.receiver.elastic_receiver.tls_choice.no_tls",
 			GoType:    reflect.TypeOf(ves_io_schema_global_log_receiver.ElasticConfig_NoTls{}),
 		},
@@ -3374,8 +3686,16 @@ func init() {
 			GoType:    reflect.TypeOf(ves_io_schema_global_log_receiver.TLSConfigType_MtlsDisabled{}),
 		},
 		{
+			FieldPath: "ves.io.schema.global_log_receiver.crudapi.ObjectReplaceReq.spec.gc_spec.receiver.gcp_bucket_receiver.compression.compression_choice.compression_gzip",
+			GoType:    reflect.TypeOf(ves_io_schema_global_log_receiver.CompressionType_CompressionGzip{}),
+		},
+		{
 			FieldPath: "ves.io.schema.global_log_receiver.crudapi.ObjectReplaceReq.spec.gc_spec.receiver.http_receiver.auth_choice.auth_none",
 			GoType:    reflect.TypeOf(ves_io_schema_global_log_receiver.HTTPConfig_AuthNone{}),
+		},
+		{
+			FieldPath: "ves.io.schema.global_log_receiver.crudapi.ObjectReplaceReq.spec.gc_spec.receiver.http_receiver.compression.compression_choice.compression_gzip",
+			GoType:    reflect.TypeOf(ves_io_schema_global_log_receiver.CompressionType_CompressionGzip{}),
 		},
 		{
 			FieldPath: "ves.io.schema.global_log_receiver.crudapi.ObjectReplaceReq.spec.gc_spec.receiver.http_receiver.tls_choice.no_tls",
@@ -3388,6 +3708,10 @@ func init() {
 		{
 			FieldPath: "ves.io.schema.global_log_receiver.crudapi.ObjectReplaceReq.spec.gc_spec.receiver.http_receiver.tls_choice.use_tls.mtls_choice.mtls_disabled",
 			GoType:    reflect.TypeOf(ves_io_schema_global_log_receiver.TLSConfigType_MtlsDisabled{}),
+		},
+		{
+			FieldPath: "ves.io.schema.global_log_receiver.crudapi.ObjectReplaceReq.spec.gc_spec.receiver.kafka_receiver.compression.compression_choice.compression_gzip",
+			GoType:    reflect.TypeOf(ves_io_schema_global_log_receiver.CompressionType_CompressionGzip{}),
 		},
 		{
 			FieldPath: "ves.io.schema.global_log_receiver.crudapi.ObjectReplaceReq.spec.gc_spec.receiver.kafka_receiver.tls_choice.no_tls",
@@ -3406,6 +3730,10 @@ func init() {
 			GoType:    reflect.TypeOf(ves_io_schema_global_log_receiver.NewRelicConfig_Us{}),
 		},
 		{
+			FieldPath: "ves.io.schema.global_log_receiver.crudapi.ObjectReplaceReq.spec.gc_spec.receiver.qradar_receiver.compression.compression_choice.compression_gzip",
+			GoType:    reflect.TypeOf(ves_io_schema_global_log_receiver.CompressionType_CompressionGzip{}),
+		},
+		{
 			FieldPath: "ves.io.schema.global_log_receiver.crudapi.ObjectReplaceReq.spec.gc_spec.receiver.qradar_receiver.tls_choice.no_tls",
 			GoType:    reflect.TypeOf(ves_io_schema_global_log_receiver.QRadarConfig_NoTls{}),
 		},
@@ -3416,6 +3744,14 @@ func init() {
 		{
 			FieldPath: "ves.io.schema.global_log_receiver.crudapi.ObjectReplaceReq.spec.gc_spec.receiver.qradar_receiver.tls_choice.use_tls.mtls_choice.mtls_disabled",
 			GoType:    reflect.TypeOf(ves_io_schema_global_log_receiver.TLSConfigType_MtlsDisabled{}),
+		},
+		{
+			FieldPath: "ves.io.schema.global_log_receiver.crudapi.ObjectReplaceReq.spec.gc_spec.receiver.s3_receiver.compression.compression_choice.compression_gzip",
+			GoType:    reflect.TypeOf(ves_io_schema_global_log_receiver.CompressionType_CompressionGzip{}),
+		},
+		{
+			FieldPath: "ves.io.schema.global_log_receiver.crudapi.ObjectReplaceReq.spec.gc_spec.receiver.splunk_receiver.compression.compression_choice.compression_gzip",
+			GoType:    reflect.TypeOf(ves_io_schema_global_log_receiver.CompressionType_CompressionGzip{}),
 		},
 		{
 			FieldPath: "ves.io.schema.global_log_receiver.crudapi.ObjectReplaceReq.spec.gc_spec.receiver.splunk_receiver.tls_choice.no_tls",
@@ -4362,6 +4698,38 @@ func init() {
 	MDR.PubCRUDServiceRegistry.AllowedInNSTypes["ves.io.schema.namespace.Object"] = nil
 
 	MDR.PvtCRUDServiceRegistry.AllowedInNSTypes["ves.io.schema.namespace.Object"] = nil
+
+	MDR.PubCRUDServiceRegistry.AllowedInNSTypes["ves.io.schema.nat_policy.Object"] = nil
+
+	MDR.RPCOneofDefaultChoiceFieldsRegistry["ves.io.schema.nat_policy.API.Create"] = []svcfw.OneofDefaultChoiceField{
+		{
+			FieldPath: "ves.io.schema.nat_policy.CreateRequest.spec.rules.enable_choice.enable",
+			GoType:    reflect.TypeOf(ves_io_schema_nat_policy.RuleType_Enable{}),
+		},
+	}
+
+	MDR.RPCOneofDefaultChoiceFieldsRegistry["ves.io.schema.nat_policy.API.Replace"] = []svcfw.OneofDefaultChoiceField{
+		{
+			FieldPath: "ves.io.schema.nat_policy.ReplaceRequest.spec.rules.enable_choice.enable",
+			GoType:    reflect.TypeOf(ves_io_schema_nat_policy.RuleType_Enable{}),
+		},
+	}
+
+	MDR.PvtCRUDServiceRegistry.AllowedInNSTypes["ves.io.schema.nat_policy.Object"] = nil
+
+	MDR.RPCOneofDefaultChoiceFieldsRegistry["ves.io.schema.nat_policy.crudapi.API.Create"] = []svcfw.OneofDefaultChoiceField{
+		{
+			FieldPath: "ves.io.schema.nat_policy.crudapi.ObjectCreateReq.spec.gc_spec.rules.enable_choice.enable",
+			GoType:    reflect.TypeOf(ves_io_schema_nat_policy.RuleType_Enable{}),
+		},
+	}
+
+	MDR.RPCOneofDefaultChoiceFieldsRegistry["ves.io.schema.nat_policy.crudapi.API.Replace"] = []svcfw.OneofDefaultChoiceField{
+		{
+			FieldPath: "ves.io.schema.nat_policy.crudapi.ObjectReplaceReq.spec.gc_spec.rules.enable_choice.enable",
+			GoType:    reflect.TypeOf(ves_io_schema_nat_policy.RuleType_Enable{}),
+		},
+	}
 
 	MDR.PubCRUDServiceRegistry.AllowedInNSTypes["ves.io.schema.network_connector.Object"] = nil
 
@@ -5372,12 +5740,28 @@ func init() {
 			FieldPath: "ves.io.schema.route.CreateRequest.spec.routes.route_action.route_destination.csrf_policy.allowed_domains.all_load_balancer_domains",
 			GoType:    reflect.TypeOf(ves_io_schema.CsrfPolicy_AllLoadBalancerDomains{}),
 		},
+		{
+			FieldPath: "ves.io.schema.route.CreateRequest.spec.routes.route_action.route_destination.query_params.query_params.retain_all_params",
+			GoType:    reflect.TypeOf(ves_io_schema_route.QueryParamsSimpleRoute_RetainAllParams{}),
+		},
+		{
+			FieldPath: "ves.io.schema.route.CreateRequest.spec.routes.waf_type.ref_type.inherit_waf",
+			GoType:    reflect.TypeOf(ves_io_schema.WafType_InheritWaf{}),
+		},
 	}
 
 	MDR.RPCOneofDefaultChoiceFieldsRegistry["ves.io.schema.route.API.Replace"] = []svcfw.OneofDefaultChoiceField{
 		{
 			FieldPath: "ves.io.schema.route.ReplaceRequest.spec.routes.route_action.route_destination.csrf_policy.allowed_domains.all_load_balancer_domains",
 			GoType:    reflect.TypeOf(ves_io_schema.CsrfPolicy_AllLoadBalancerDomains{}),
+		},
+		{
+			FieldPath: "ves.io.schema.route.ReplaceRequest.spec.routes.route_action.route_destination.query_params.query_params.retain_all_params",
+			GoType:    reflect.TypeOf(ves_io_schema_route.QueryParamsSimpleRoute_RetainAllParams{}),
+		},
+		{
+			FieldPath: "ves.io.schema.route.ReplaceRequest.spec.routes.waf_type.ref_type.inherit_waf",
+			GoType:    reflect.TypeOf(ves_io_schema.WafType_InheritWaf{}),
 		},
 	}
 
@@ -5388,12 +5772,28 @@ func init() {
 			FieldPath: "ves.io.schema.route.crudapi.ObjectCreateReq.spec.gc_spec.routes.route_action.route_destination.csrf_policy.allowed_domains.all_load_balancer_domains",
 			GoType:    reflect.TypeOf(ves_io_schema.CsrfPolicy_AllLoadBalancerDomains{}),
 		},
+		{
+			FieldPath: "ves.io.schema.route.crudapi.ObjectCreateReq.spec.gc_spec.routes.route_action.route_destination.query_params.query_params.retain_all_params",
+			GoType:    reflect.TypeOf(ves_io_schema_route.QueryParamsSimpleRoute_RetainAllParams{}),
+		},
+		{
+			FieldPath: "ves.io.schema.route.crudapi.ObjectCreateReq.spec.gc_spec.routes.waf_type.ref_type.inherit_waf",
+			GoType:    reflect.TypeOf(ves_io_schema.WafType_InheritWaf{}),
+		},
 	}
 
 	MDR.RPCOneofDefaultChoiceFieldsRegistry["ves.io.schema.route.crudapi.API.Replace"] = []svcfw.OneofDefaultChoiceField{
 		{
 			FieldPath: "ves.io.schema.route.crudapi.ObjectReplaceReq.spec.gc_spec.routes.route_action.route_destination.csrf_policy.allowed_domains.all_load_balancer_domains",
 			GoType:    reflect.TypeOf(ves_io_schema.CsrfPolicy_AllLoadBalancerDomains{}),
+		},
+		{
+			FieldPath: "ves.io.schema.route.crudapi.ObjectReplaceReq.spec.gc_spec.routes.route_action.route_destination.query_params.query_params.retain_all_params",
+			GoType:    reflect.TypeOf(ves_io_schema_route.QueryParamsSimpleRoute_RetainAllParams{}),
+		},
+		{
+			FieldPath: "ves.io.schema.route.crudapi.ObjectReplaceReq.spec.gc_spec.routes.waf_type.ref_type.inherit_waf",
+			GoType:    reflect.TypeOf(ves_io_schema.WafType_InheritWaf{}),
 		},
 	}
 
@@ -5747,6 +6147,14 @@ func init() {
 			GoType:    reflect.TypeOf(ves_io_schema_policy.ModifyAction_Default{}),
 		},
 		{
+			FieldPath: "ves.io.schema.service_policy.crudapi.ObjectCreateReq.spec.gc_spec.simple_rules.malware_protection_action.action_type.default",
+			GoType:    reflect.TypeOf(ves_io_schema_policy.ModifyAction_Default{}),
+		},
+		{
+			FieldPath: "ves.io.schema.service_policy.crudapi.ObjectCreateReq.spec.gc_spec.simple_rules.malware_protection_settings.action.action_choice.block",
+			GoType:    reflect.TypeOf(ves_io_schema.Action_Block{}),
+		},
+		{
 			FieldPath: "ves.io.schema.service_policy.crudapi.ObjectCreateReq.spec.gc_spec.simple_rules.mum_action.action_type.default",
 			GoType:    reflect.TypeOf(ves_io_schema_policy.ModifyAction_Default{}),
 		},
@@ -5932,6 +6340,14 @@ func init() {
 		{
 			FieldPath: "ves.io.schema.service_policy.crudapi.ObjectReplaceReq.spec.gc_spec.simple_rules.ip_reputation_action.action_type.default",
 			GoType:    reflect.TypeOf(ves_io_schema_policy.ModifyAction_Default{}),
+		},
+		{
+			FieldPath: "ves.io.schema.service_policy.crudapi.ObjectReplaceReq.spec.gc_spec.simple_rules.malware_protection_action.action_type.default",
+			GoType:    reflect.TypeOf(ves_io_schema_policy.ModifyAction_Default{}),
+		},
+		{
+			FieldPath: "ves.io.schema.service_policy.crudapi.ObjectReplaceReq.spec.gc_spec.simple_rules.malware_protection_settings.action.action_choice.block",
+			GoType:    reflect.TypeOf(ves_io_schema.Action_Block{}),
 		},
 		{
 			FieldPath: "ves.io.schema.service_policy.crudapi.ObjectReplaceReq.spec.gc_spec.simple_rules.mum_action.action_type.default",
@@ -6484,6 +6900,12 @@ func init() {
 
 	MDR.PvtCRUDServiceRegistry.AllowedInNSTypes["ves.io.schema.tenant.Object"] = nil
 
+	MDR.PvtCRUDServiceRegistry.AllowedInNSTypes["ves.io.schema.ticket_management.ticket.Object"] = nil
+
+	MDR.PubCRUDServiceRegistry.AllowedInNSTypes["ves.io.schema.ticket_management.ticket_tracking_system.Object"] = nil
+
+	MDR.PvtCRUDServiceRegistry.AllowedInNSTypes["ves.io.schema.ticket_management.ticket_tracking_system.Object"] = nil
+
 	MDR.PubCRUDServiceRegistry.AllowedInNSTypes["ves.io.schema.token.Object"] = []svcfw.NamespaceType{svcfw.SystemNSType}
 
 	MDR.PvtCRUDServiceRegistry.AllowedInNSTypes["ves.io.schema.token.Object"] = []svcfw.NamespaceType{svcfw.SystemNSType}
@@ -6580,21 +7002,181 @@ func init() {
 
 	MDR.PvtCRUDServiceRegistry.AllowedInNSTypes["ves.io.schema.uztna.application.discovered.Object"] = []svcfw.NamespaceType{svcfw.SystemNSType}
 
+	MDR.PubCRUDServiceRegistry.AllowedInNSTypes["ves.io.schema.uztna.application.uztna_application.Object"] = nil
+
+	MDR.RPCOneofDefaultChoiceFieldsRegistry["ves.io.schema.uztna.application.uztna_application.API.Create"] = []svcfw.OneofDefaultChoiceField{
+		{
+			FieldPath: "ves.io.schema.uztna.application.uztna_application.CreateRequest.spec.protocol.protocol_choice.HTTP",
+			GoType:    reflect.TypeOf(ves_io_schema_uztna_application_uztna_application.Protocol_HTTP{}),
+		},
+	}
+
+	MDR.RPCOneofDefaultChoiceFieldsRegistry["ves.io.schema.uztna.application.uztna_application.API.Replace"] = []svcfw.OneofDefaultChoiceField{
+		{
+			FieldPath: "ves.io.schema.uztna.application.uztna_application.ReplaceRequest.spec.protocol.protocol_choice.HTTP",
+			GoType:    reflect.TypeOf(ves_io_schema_uztna_application_uztna_application.Protocol_HTTP{}),
+		},
+	}
+
+	MDR.PvtCRUDServiceRegistry.AllowedInNSTypes["ves.io.schema.uztna.application.uztna_application.Object"] = nil
+
+	MDR.RPCOneofDefaultChoiceFieldsRegistry["ves.io.schema.uztna.application.uztna_application.crudapi.API.Create"] = []svcfw.OneofDefaultChoiceField{
+		{
+			FieldPath: "ves.io.schema.uztna.application.uztna_application.crudapi.ObjectCreateReq.spec.gc_spec.protocol.protocol_choice.HTTP",
+			GoType:    reflect.TypeOf(ves_io_schema_uztna_application_uztna_application.Protocol_HTTP{}),
+		},
+	}
+
+	MDR.RPCOneofDefaultChoiceFieldsRegistry["ves.io.schema.uztna.application.uztna_application.crudapi.API.Replace"] = []svcfw.OneofDefaultChoiceField{
+		{
+			FieldPath: "ves.io.schema.uztna.application.uztna_application.crudapi.ObjectReplaceReq.spec.gc_spec.protocol.protocol_choice.HTTP",
+			GoType:    reflect.TypeOf(ves_io_schema_uztna_application_uztna_application.Protocol_HTTP{}),
+		},
+	}
+
+	MDR.PubCRUDServiceRegistry.AllowedInNSTypes["ves.io.schema.uztna.application.uztna_application_group.Object"] = nil
+
+	MDR.PvtCRUDServiceRegistry.AllowedInNSTypes["ves.io.schema.uztna.application.uztna_application_group.Object"] = nil
+
+	MDR.PubCRUDServiceRegistry.AllowedInNSTypes["ves.io.schema.uztna.application.uztna_application_tag.Object"] = nil
+
+	MDR.PvtCRUDServiceRegistry.AllowedInNSTypes["ves.io.schema.uztna.application.uztna_application_tag.Object"] = nil
+
+	MDR.PubCRUDServiceRegistry.AllowedInNSTypes["ves.io.schema.uztna.application.uztna_snat_pool.Object"] = nil
+
+	MDR.PvtCRUDServiceRegistry.AllowedInNSTypes["ves.io.schema.uztna.application.uztna_snat_pool.Object"] = nil
+
+	MDR.PubCRUDServiceRegistry.AllowedInNSTypes["ves.io.schema.uztna.uztna_app_vip_pool.Object"] = nil
+
+	MDR.PvtCRUDServiceRegistry.AllowedInNSTypes["ves.io.schema.uztna.uztna_app_vip_pool.Object"] = nil
+
 	MDR.PubCRUDServiceRegistry.AllowedInNSTypes["ves.io.schema.uztna.uztna_domain.Object"] = nil
 
 	MDR.PvtCRUDServiceRegistry.AllowedInNSTypes["ves.io.schema.uztna.uztna_domain.Object"] = nil
 
 	MDR.PubCRUDServiceRegistry.AllowedInNSTypes["ves.io.schema.uztna.uztna_flow.Object"] = nil
 
+	MDR.RPCOneofDefaultChoiceFieldsRegistry["ves.io.schema.uztna.uztna_flow.API.Create"] = []svcfw.OneofDefaultChoiceField{
+		{
+			FieldPath: "ves.io.schema.uztna.uztna_flow.CreateRequest.spec.flow_type.flow_type_choice.saml_message.idp.idp_security_property.auth_request_signed.no",
+			GoType:    reflect.TypeOf(ves_io_schema_uztna_uztna_flow.IdpSecurityProperty_No{}),
+		},
+		{
+			FieldPath: "ves.io.schema.uztna.uztna_flow.CreateRequest.spec.flow_type.flow_type_choice.saml_message.idp.idp_security_property.auth_request_signed.yes.sign_algo.rsa_sha256",
+			GoType:    reflect.TypeOf(ves_io_schema_uztna_uztna_flow.SignAlgorithm_RsaSha256{}),
+		},
+		{
+			FieldPath: "ves.io.schema.uztna.uztna_flow.CreateRequest.spec.flow_type.flow_type_choice.saml_message.idp.sso_service_binding.post",
+			GoType:    reflect.TypeOf(ves_io_schema_uztna_uztna_flow.IdentityProvider_Post{}),
+		},
+	}
+
+	MDR.RPCOneofDefaultChoiceFieldsRegistry["ves.io.schema.uztna.uztna_flow.API.Replace"] = []svcfw.OneofDefaultChoiceField{
+		{
+			FieldPath: "ves.io.schema.uztna.uztna_flow.ReplaceRequest.spec.flow_type.flow_type_choice.saml_message.idp.idp_security_property.auth_request_signed.no",
+			GoType:    reflect.TypeOf(ves_io_schema_uztna_uztna_flow.IdpSecurityProperty_No{}),
+		},
+		{
+			FieldPath: "ves.io.schema.uztna.uztna_flow.ReplaceRequest.spec.flow_type.flow_type_choice.saml_message.idp.idp_security_property.auth_request_signed.yes.sign_algo.rsa_sha256",
+			GoType:    reflect.TypeOf(ves_io_schema_uztna_uztna_flow.SignAlgorithm_RsaSha256{}),
+		},
+		{
+			FieldPath: "ves.io.schema.uztna.uztna_flow.ReplaceRequest.spec.flow_type.flow_type_choice.saml_message.idp.sso_service_binding.post",
+			GoType:    reflect.TypeOf(ves_io_schema_uztna_uztna_flow.IdentityProvider_Post{}),
+		},
+	}
+
 	MDR.PvtCRUDServiceRegistry.AllowedInNSTypes["ves.io.schema.uztna.uztna_flow.Object"] = nil
+
+	MDR.RPCOneofDefaultChoiceFieldsRegistry["ves.io.schema.uztna.uztna_flow.crudapi.API.Create"] = []svcfw.OneofDefaultChoiceField{
+		{
+			FieldPath: "ves.io.schema.uztna.uztna_flow.crudapi.ObjectCreateReq.spec.gc_spec.flow_type.flow_type_choice.saml_message.idp.idp_security_property.auth_request_signed.no",
+			GoType:    reflect.TypeOf(ves_io_schema_uztna_uztna_flow.IdpSecurityProperty_No{}),
+		},
+		{
+			FieldPath: "ves.io.schema.uztna.uztna_flow.crudapi.ObjectCreateReq.spec.gc_spec.flow_type.flow_type_choice.saml_message.idp.idp_security_property.auth_request_signed.yes.sign_algo.rsa_sha256",
+			GoType:    reflect.TypeOf(ves_io_schema_uztna_uztna_flow.SignAlgorithm_RsaSha256{}),
+		},
+		{
+			FieldPath: "ves.io.schema.uztna.uztna_flow.crudapi.ObjectCreateReq.spec.gc_spec.flow_type.flow_type_choice.saml_message.idp.sso_service_binding.post",
+			GoType:    reflect.TypeOf(ves_io_schema_uztna_uztna_flow.IdentityProvider_Post{}),
+		},
+	}
+
+	MDR.RPCOneofDefaultChoiceFieldsRegistry["ves.io.schema.uztna.uztna_flow.crudapi.API.Replace"] = []svcfw.OneofDefaultChoiceField{
+		{
+			FieldPath: "ves.io.schema.uztna.uztna_flow.crudapi.ObjectReplaceReq.spec.gc_spec.flow_type.flow_type_choice.saml_message.idp.idp_security_property.auth_request_signed.no",
+			GoType:    reflect.TypeOf(ves_io_schema_uztna_uztna_flow.IdpSecurityProperty_No{}),
+		},
+		{
+			FieldPath: "ves.io.schema.uztna.uztna_flow.crudapi.ObjectReplaceReq.spec.gc_spec.flow_type.flow_type_choice.saml_message.idp.idp_security_property.auth_request_signed.yes.sign_algo.rsa_sha256",
+			GoType:    reflect.TypeOf(ves_io_schema_uztna_uztna_flow.SignAlgorithm_RsaSha256{}),
+		},
+		{
+			FieldPath: "ves.io.schema.uztna.uztna_flow.crudapi.ObjectReplaceReq.spec.gc_spec.flow_type.flow_type_choice.saml_message.idp.sso_service_binding.post",
+			GoType:    reflect.TypeOf(ves_io_schema_uztna_uztna_flow.IdentityProvider_Post{}),
+		},
+	}
 
 	MDR.PubCRUDServiceRegistry.AllowedInNSTypes["ves.io.schema.uztna.uztna_gateway.Object"] = nil
 
 	MDR.PvtCRUDServiceRegistry.AllowedInNSTypes["ves.io.schema.uztna.uztna_gateway.Object"] = nil
 
+	MDR.PubCRUDServiceRegistry.AllowedInNSTypes["ves.io.schema.uztna.uztna_healthcheck.Object"] = nil
+
+	MDR.RPCOneofDefaultChoiceFieldsRegistry["ves.io.schema.uztna.uztna_healthcheck.API.Create"] = []svcfw.OneofDefaultChoiceField{
+		{
+			FieldPath: "ves.io.schema.uztna.uztna_healthcheck.CreateRequest.spec.health_check.http_health_check.host_header.host_header_choice.use_origin_server_name",
+			GoType:    reflect.TypeOf(ves_io_schema_uztna_uztna_healthcheck.Header_UseOriginServerName{}),
+		},
+		{
+			FieldPath: "ves.io.schema.uztna.uztna_healthcheck.CreateRequest.spec.health_check.https_health_check.host_header.host_header_choice.use_origin_server_name",
+			GoType:    reflect.TypeOf(ves_io_schema_uztna_uztna_healthcheck.Header_UseOriginServerName{}),
+		},
+	}
+
+	MDR.RPCOneofDefaultChoiceFieldsRegistry["ves.io.schema.uztna.uztna_healthcheck.API.Replace"] = []svcfw.OneofDefaultChoiceField{
+		{
+			FieldPath: "ves.io.schema.uztna.uztna_healthcheck.ReplaceRequest.spec.health_check.http_health_check.host_header.host_header_choice.use_origin_server_name",
+			GoType:    reflect.TypeOf(ves_io_schema_uztna_uztna_healthcheck.Header_UseOriginServerName{}),
+		},
+		{
+			FieldPath: "ves.io.schema.uztna.uztna_healthcheck.ReplaceRequest.spec.health_check.https_health_check.host_header.host_header_choice.use_origin_server_name",
+			GoType:    reflect.TypeOf(ves_io_schema_uztna_uztna_healthcheck.Header_UseOriginServerName{}),
+		},
+	}
+
+	MDR.PvtCRUDServiceRegistry.AllowedInNSTypes["ves.io.schema.uztna.uztna_healthcheck.Object"] = nil
+
+	MDR.RPCOneofDefaultChoiceFieldsRegistry["ves.io.schema.uztna.uztna_healthcheck.crudapi.API.Create"] = []svcfw.OneofDefaultChoiceField{
+		{
+			FieldPath: "ves.io.schema.uztna.uztna_healthcheck.crudapi.ObjectCreateReq.spec.gc_spec.health_check.http_health_check.host_header.host_header_choice.use_origin_server_name",
+			GoType:    reflect.TypeOf(ves_io_schema_uztna_uztna_healthcheck.Header_UseOriginServerName{}),
+		},
+		{
+			FieldPath: "ves.io.schema.uztna.uztna_healthcheck.crudapi.ObjectCreateReq.spec.gc_spec.health_check.https_health_check.host_header.host_header_choice.use_origin_server_name",
+			GoType:    reflect.TypeOf(ves_io_schema_uztna_uztna_healthcheck.Header_UseOriginServerName{}),
+		},
+	}
+
+	MDR.RPCOneofDefaultChoiceFieldsRegistry["ves.io.schema.uztna.uztna_healthcheck.crudapi.API.Replace"] = []svcfw.OneofDefaultChoiceField{
+		{
+			FieldPath: "ves.io.schema.uztna.uztna_healthcheck.crudapi.ObjectReplaceReq.spec.gc_spec.health_check.http_health_check.host_header.host_header_choice.use_origin_server_name",
+			GoType:    reflect.TypeOf(ves_io_schema_uztna_uztna_healthcheck.Header_UseOriginServerName{}),
+		},
+		{
+			FieldPath: "ves.io.schema.uztna.uztna_healthcheck.crudapi.ObjectReplaceReq.spec.gc_spec.health_check.https_health_check.host_header.host_header_choice.use_origin_server_name",
+			GoType:    reflect.TypeOf(ves_io_schema_uztna_uztna_healthcheck.Header_UseOriginServerName{}),
+		},
+	}
+
 	MDR.PubCRUDServiceRegistry.AllowedInNSTypes["ves.io.schema.uztna.uztna_leasepool.Object"] = nil
 
 	MDR.PvtCRUDServiceRegistry.AllowedInNSTypes["ves.io.schema.uztna.uztna_leasepool.Object"] = nil
+
+	MDR.PubCRUDServiceRegistry.AllowedInNSTypes["ves.io.schema.uztna.uztna_origin_pool.Object"] = nil
+
+	MDR.PvtCRUDServiceRegistry.AllowedInNSTypes["ves.io.schema.uztna.uztna_origin_pool.Object"] = nil
 
 	MDR.PubCRUDServiceRegistry.AllowedInNSTypes["ves.io.schema.uztna.uztna_policy_template.Object"] = nil
 
@@ -6641,6 +7223,38 @@ func init() {
 		{
 			FieldPath: "ves.io.schema.uztna.uztna_policy_template.crudapi.ObjectReplaceReq.spec.gc_spec.on_start_flow.template_type.deny_all",
 			GoType:    reflect.TypeOf(ves_io_schema_uztna_uztna_policy_template.TemplateType_DenyAll{}),
+		},
+	}
+
+	MDR.PubCRUDServiceRegistry.AllowedInNSTypes["ves.io.schema.uztna.views.uztna_application_view.Object"] = nil
+
+	MDR.RPCOneofDefaultChoiceFieldsRegistry["ves.io.schema.uztna.views.uztna_application_view.API.Create"] = []svcfw.OneofDefaultChoiceField{
+		{
+			FieldPath: "ves.io.schema.uztna.views.uztna_application_view.CreateRequest.spec.protocol.protocol_choice.HTTP",
+			GoType:    reflect.TypeOf(ves_io_schema_uztna_views_uztna_application_view.Protocol_HTTP{}),
+		},
+	}
+
+	MDR.RPCOneofDefaultChoiceFieldsRegistry["ves.io.schema.uztna.views.uztna_application_view.API.Replace"] = []svcfw.OneofDefaultChoiceField{
+		{
+			FieldPath: "ves.io.schema.uztna.views.uztna_application_view.ReplaceRequest.spec.protocol.protocol_choice.HTTP",
+			GoType:    reflect.TypeOf(ves_io_schema_uztna_views_uztna_application_view.Protocol_HTTP{}),
+		},
+	}
+
+	MDR.PvtCRUDServiceRegistry.AllowedInNSTypes["ves.io.schema.uztna.views.uztna_application_view.Object"] = nil
+
+	MDR.RPCOneofDefaultChoiceFieldsRegistry["ves.io.schema.uztna.views.uztna_application_view.crudapi.API.Create"] = []svcfw.OneofDefaultChoiceField{
+		{
+			FieldPath: "ves.io.schema.uztna.views.uztna_application_view.crudapi.ObjectCreateReq.spec.gc_spec.protocol.protocol_choice.HTTP",
+			GoType:    reflect.TypeOf(ves_io_schema_uztna_views_uztna_application_view.Protocol_HTTP{}),
+		},
+	}
+
+	MDR.RPCOneofDefaultChoiceFieldsRegistry["ves.io.schema.uztna.views.uztna_application_view.crudapi.API.Replace"] = []svcfw.OneofDefaultChoiceField{
+		{
+			FieldPath: "ves.io.schema.uztna.views.uztna_application_view.crudapi.ObjectReplaceReq.spec.gc_spec.protocol.protocol_choice.HTTP",
+			GoType:    reflect.TypeOf(ves_io_schema_uztna_views_uztna_application_view.Protocol_HTTP{}),
 		},
 	}
 
@@ -6742,7 +7356,7 @@ func init() {
 		},
 		{
 			FieldPath: "ves.io.schema.views.aws_tgw_site.CreateRequest.spec.aws_parameters.tgw_choice.new_tgw.asn_choice.system_generated",
-			GoType:    reflect.TypeOf(ves_io_schema_views_aws_tgw_site.TGWParamsType_SystemGenerated{}),
+			GoType:    reflect.TypeOf(ves_io_schema_views.TGWParamsType_SystemGenerated{}),
 		},
 		{
 			FieldPath: "ves.io.schema.views.aws_tgw_site.CreateRequest.spec.aws_parameters.tgw_cidr_choice.reserved_tgw_cidr",
@@ -6861,7 +7475,7 @@ func init() {
 		},
 		{
 			FieldPath: "ves.io.schema.views.aws_tgw_site.ReplaceRequest.spec.aws_parameters.tgw_choice.new_tgw.asn_choice.system_generated",
-			GoType:    reflect.TypeOf(ves_io_schema_views_aws_tgw_site.TGWParamsType_SystemGenerated{}),
+			GoType:    reflect.TypeOf(ves_io_schema_views.TGWParamsType_SystemGenerated{}),
 		},
 		{
 			FieldPath: "ves.io.schema.views.aws_tgw_site.ReplaceRequest.spec.aws_parameters.worker_nodes.no_worker_nodes",
@@ -6970,7 +7584,7 @@ func init() {
 		},
 		{
 			FieldPath: "ves.io.schema.views.aws_tgw_site.crudapi.ObjectCreateReq.spec.gc_spec.aws_parameters.tgw_choice.new_tgw.asn_choice.system_generated",
-			GoType:    reflect.TypeOf(ves_io_schema_views_aws_tgw_site.TGWParamsType_SystemGenerated{}),
+			GoType:    reflect.TypeOf(ves_io_schema_views.TGWParamsType_SystemGenerated{}),
 		},
 		{
 			FieldPath: "ves.io.schema.views.aws_tgw_site.crudapi.ObjectCreateReq.spec.gc_spec.aws_parameters.tgw_cidr_choice.reserved_tgw_cidr",
@@ -7089,7 +7703,7 @@ func init() {
 		},
 		{
 			FieldPath: "ves.io.schema.views.aws_tgw_site.crudapi.ObjectReplaceReq.spec.gc_spec.aws_parameters.tgw_choice.new_tgw.asn_choice.system_generated",
-			GoType:    reflect.TypeOf(ves_io_schema_views_aws_tgw_site.TGWParamsType_SystemGenerated{}),
+			GoType:    reflect.TypeOf(ves_io_schema_views.TGWParamsType_SystemGenerated{}),
 		},
 		{
 			FieldPath: "ves.io.schema.views.aws_tgw_site.crudapi.ObjectReplaceReq.spec.gc_spec.aws_parameters.tgw_cidr_choice.reserved_tgw_cidr",
@@ -7231,6 +7845,10 @@ func init() {
 		{
 			FieldPath: "ves.io.schema.views.aws_vpc_site.CreateRequest.spec.os.operating_system_version_choice.default_os_version",
 			GoType:    reflect.TypeOf(ves_io_schema_views.OperatingSystemType_DefaultOsVersion{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.aws_vpc_site.CreateRequest.spec.routing_type.f5_orchestrated_routing",
+			GoType:    reflect.TypeOf(ves_io_schema_views_aws_vpc_site.CreateSpecType_F5OrchestratedRouting{}),
 		},
 		{
 			FieldPath: "ves.io.schema.views.aws_vpc_site.CreateRequest.spec.security_group_choice.f5xc_security_group",
@@ -7545,6 +8163,10 @@ func init() {
 			GoType:    reflect.TypeOf(ves_io_schema_views.OperatingSystemType_DefaultOsVersion{}),
 		},
 		{
+			FieldPath: "ves.io.schema.views.aws_vpc_site.crudapi.ObjectCreateReq.spec.gc_spec.routing_type.f5_orchestrated_routing",
+			GoType:    reflect.TypeOf(ves_io_schema_views_aws_vpc_site.GlobalSpecType_F5OrchestratedRouting{}),
+		},
+		{
 			FieldPath: "ves.io.schema.views.aws_vpc_site.crudapi.ObjectCreateReq.spec.gc_spec.security_group_choice.f5xc_security_group",
 			GoType:    reflect.TypeOf(ves_io_schema_views_aws_vpc_site.GlobalSpecType_F5XcSecurityGroup{}),
 		},
@@ -7706,6 +8328,10 @@ func init() {
 		{
 			FieldPath: "ves.io.schema.views.aws_vpc_site.crudapi.ObjectReplaceReq.spec.gc_spec.os.operating_system_version_choice.default_os_version",
 			GoType:    reflect.TypeOf(ves_io_schema_views.OperatingSystemType_DefaultOsVersion{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.aws_vpc_site.crudapi.ObjectReplaceReq.spec.gc_spec.routing_type.f5_orchestrated_routing",
+			GoType:    reflect.TypeOf(ves_io_schema_views_aws_vpc_site.GlobalSpecType_F5OrchestratedRouting{}),
 		},
 		{
 			FieldPath: "ves.io.schema.views.aws_vpc_site.crudapi.ObjectReplaceReq.spec.gc_spec.security_group_choice.f5xc_security_group",
@@ -7901,6 +8527,10 @@ func init() {
 			GoType:    reflect.TypeOf(ves_io_schema_views_azure_vnet_site.VnetPeeringType_Auto{}),
 		},
 		{
+			FieldPath: "ves.io.schema.views.azure_vnet_site.CreateRequest.spec.site_type.ingress_egress_gw.hub_choice.hub.spoke_vnets.vnet.routing_type.f5_orchestrated_routing",
+			GoType:    reflect.TypeOf(ves_io_schema_views.AzureVnetType_F5OrchestratedRouting{}),
+		},
+		{
 			FieldPath: "ves.io.schema.views.azure_vnet_site.CreateRequest.spec.site_type.ingress_egress_gw.hub_choice.not_hub",
 			GoType:    reflect.TypeOf(ves_io_schema_views_azure_vnet_site.AzureVnetIngressEgressGwType_NotHub{}),
 		},
@@ -7975,6 +8605,10 @@ func init() {
 		{
 			FieldPath: "ves.io.schema.views.azure_vnet_site.CreateRequest.spec.site_type.ingress_egress_gw_ar.hub_choice.hub.spoke_vnets.routing_choice.auto",
 			GoType:    reflect.TypeOf(ves_io_schema_views_azure_vnet_site.VnetPeeringType_Auto{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.azure_vnet_site.CreateRequest.spec.site_type.ingress_egress_gw_ar.hub_choice.hub.spoke_vnets.vnet.routing_type.f5_orchestrated_routing",
+			GoType:    reflect.TypeOf(ves_io_schema_views.AzureVnetType_F5OrchestratedRouting{}),
 		},
 		{
 			FieldPath: "ves.io.schema.views.azure_vnet_site.CreateRequest.spec.site_type.ingress_egress_gw_ar.hub_choice.not_hub",
@@ -8129,6 +8763,10 @@ func init() {
 			GoType:    reflect.TypeOf(ves_io_schema_views.VolterraSoftwareType_DefaultSwVersion{}),
 		},
 		{
+			FieldPath: "ves.io.schema.views.azure_vnet_site.CreateRequest.spec.vnet.choice.existing_vnet.routing_type.f5_orchestrated_routing",
+			GoType:    reflect.TypeOf(ves_io_schema_views.AzureVnetType_F5OrchestratedRouting{}),
+		},
+		{
 			FieldPath: "ves.io.schema.views.azure_vnet_site.CreateRequest.spec.vnet.choice.new_vnet.name_choice.autogenerate",
 			GoType:    reflect.TypeOf(ves_io_schema_views.AzureVnetParamsType_Autogenerate{}),
 		},
@@ -8198,6 +8836,10 @@ func init() {
 		{
 			FieldPath: "ves.io.schema.views.azure_vnet_site.ReplaceRequest.spec.site_type.ingress_egress_gw.hub_choice.hub.spoke_vnets.routing_choice.auto",
 			GoType:    reflect.TypeOf(ves_io_schema_views_azure_vnet_site.VnetPeeringType_Auto{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.azure_vnet_site.ReplaceRequest.spec.site_type.ingress_egress_gw.hub_choice.hub.spoke_vnets.vnet.routing_type.f5_orchestrated_routing",
+			GoType:    reflect.TypeOf(ves_io_schema_views.AzureVnetType_F5OrchestratedRouting{}),
 		},
 		{
 			FieldPath: "ves.io.schema.views.azure_vnet_site.ReplaceRequest.spec.site_type.ingress_egress_gw.hub_choice.not_hub",
@@ -8270,6 +8912,10 @@ func init() {
 		{
 			FieldPath: "ves.io.schema.views.azure_vnet_site.ReplaceRequest.spec.site_type.ingress_egress_gw_ar.hub_choice.hub.spoke_vnets.routing_choice.auto",
 			GoType:    reflect.TypeOf(ves_io_schema_views_azure_vnet_site.VnetPeeringType_Auto{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.azure_vnet_site.ReplaceRequest.spec.site_type.ingress_egress_gw_ar.hub_choice.hub.spoke_vnets.vnet.routing_type.f5_orchestrated_routing",
+			GoType:    reflect.TypeOf(ves_io_schema_views.AzureVnetType_F5OrchestratedRouting{}),
 		},
 		{
 			FieldPath: "ves.io.schema.views.azure_vnet_site.ReplaceRequest.spec.site_type.ingress_egress_gw_ar.hub_choice.not_hub",
@@ -8372,6 +9018,10 @@ func init() {
 			GoType:    reflect.TypeOf(ves_io_schema_views_azure_vnet_site.AzureVnetVoltstackClusterARReplaceType_SmConnectionPublicIp{}),
 		},
 		{
+			FieldPath: "ves.io.schema.views.azure_vnet_site.ReplaceRequest.spec.vnet.choice.existing_vnet.routing_type.f5_orchestrated_routing",
+			GoType:    reflect.TypeOf(ves_io_schema_views.AzureVnetType_F5OrchestratedRouting{}),
+		},
+		{
 			FieldPath: "ves.io.schema.views.azure_vnet_site.ReplaceRequest.spec.vnet.choice.new_vnet.name_choice.autogenerate",
 			GoType:    reflect.TypeOf(ves_io_schema_views.AzureVnetParamsType_Autogenerate{}),
 		},
@@ -8381,12 +9031,23 @@ func init() {
 		},
 	}
 
+	MDR.RPCOneofDefaultChoiceFieldsRegistry["ves.io.schema.views.azure_vnet_site.CustomAPI.SetCloudSiteInfo"] = []svcfw.OneofDefaultChoiceField{
+		{
+			FieldPath: "ves.io.schema.views.azure_vnet_site.SetCloudSiteInfoRequest.azure_vnet_info.spoke_vnet_prefix_info.vnet.routing_type.f5_orchestrated_routing",
+			GoType:    reflect.TypeOf(ves_io_schema_views.AzureVnetType_F5OrchestratedRouting{}),
+		},
+	}
+
 	MDR.PvtCRUDServiceRegistry.AllowedInNSTypes["ves.io.schema.views.azure_vnet_site.Object"] = []svcfw.NamespaceType{svcfw.SystemNSType}
 
 	MDR.RPCOneofDefaultChoiceFieldsRegistry["ves.io.schema.views.azure_vnet_site.crudapi.API.Create"] = []svcfw.OneofDefaultChoiceField{
 		{
 			FieldPath: "ves.io.schema.views.azure_vnet_site.crudapi.ObjectCreateReq.spec.gc_spec.blocked_services_choice.block_all_services",
 			GoType:    reflect.TypeOf(ves_io_schema_views_azure_vnet_site.GlobalSpecType_BlockAllServices{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.azure_vnet_site.crudapi.ObjectCreateReq.spec.gc_spec.cloud_site_info.spoke_vnet_prefix_info.vnet.routing_type.f5_orchestrated_routing",
+			GoType:    reflect.TypeOf(ves_io_schema_views.AzureVnetType_F5OrchestratedRouting{}),
 		},
 		{
 			FieldPath: "ves.io.schema.views.azure_vnet_site.crudapi.ObjectCreateReq.spec.gc_spec.kubernetes_upgrade_drain.kubernetes_upgrade_drain_enable_choice.enable_upgrade_drain.vega_upgrade_mode_toggle_choice.disable_vega_upgrade_mode",
@@ -8451,6 +9112,10 @@ func init() {
 		{
 			FieldPath: "ves.io.schema.views.azure_vnet_site.crudapi.ObjectCreateReq.spec.gc_spec.site_type.ingress_egress_gw.hub_choice.hub.spoke_vnets.routing_choice.auto",
 			GoType:    reflect.TypeOf(ves_io_schema_views_azure_vnet_site.VnetPeeringType_Auto{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.azure_vnet_site.crudapi.ObjectCreateReq.spec.gc_spec.site_type.ingress_egress_gw.hub_choice.hub.spoke_vnets.vnet.routing_type.f5_orchestrated_routing",
+			GoType:    reflect.TypeOf(ves_io_schema_views.AzureVnetType_F5OrchestratedRouting{}),
 		},
 		{
 			FieldPath: "ves.io.schema.views.azure_vnet_site.crudapi.ObjectCreateReq.spec.gc_spec.site_type.ingress_egress_gw.hub_choice.not_hub",
@@ -8527,6 +9192,10 @@ func init() {
 		{
 			FieldPath: "ves.io.schema.views.azure_vnet_site.crudapi.ObjectCreateReq.spec.gc_spec.site_type.ingress_egress_gw_ar.hub_choice.hub.spoke_vnets.routing_choice.auto",
 			GoType:    reflect.TypeOf(ves_io_schema_views_azure_vnet_site.VnetPeeringType_Auto{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.azure_vnet_site.crudapi.ObjectCreateReq.spec.gc_spec.site_type.ingress_egress_gw_ar.hub_choice.hub.spoke_vnets.vnet.routing_type.f5_orchestrated_routing",
+			GoType:    reflect.TypeOf(ves_io_schema_views.AzureVnetType_F5OrchestratedRouting{}),
 		},
 		{
 			FieldPath: "ves.io.schema.views.azure_vnet_site.crudapi.ObjectCreateReq.spec.gc_spec.site_type.ingress_egress_gw_ar.hub_choice.not_hub",
@@ -8681,6 +9350,10 @@ func init() {
 			GoType:    reflect.TypeOf(ves_io_schema_views.VolterraSoftwareType_DefaultSwVersion{}),
 		},
 		{
+			FieldPath: "ves.io.schema.views.azure_vnet_site.crudapi.ObjectCreateReq.spec.gc_spec.vnet.choice.existing_vnet.routing_type.f5_orchestrated_routing",
+			GoType:    reflect.TypeOf(ves_io_schema_views.AzureVnetType_F5OrchestratedRouting{}),
+		},
+		{
 			FieldPath: "ves.io.schema.views.azure_vnet_site.crudapi.ObjectCreateReq.spec.gc_spec.vnet.choice.new_vnet.name_choice.autogenerate",
 			GoType:    reflect.TypeOf(ves_io_schema_views.AzureVnetParamsType_Autogenerate{}),
 		},
@@ -8694,6 +9367,10 @@ func init() {
 		{
 			FieldPath: "ves.io.schema.views.azure_vnet_site.crudapi.ObjectReplaceReq.spec.gc_spec.blocked_services_choice.block_all_services",
 			GoType:    reflect.TypeOf(ves_io_schema_views_azure_vnet_site.GlobalSpecType_BlockAllServices{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.azure_vnet_site.crudapi.ObjectReplaceReq.spec.gc_spec.cloud_site_info.spoke_vnet_prefix_info.vnet.routing_type.f5_orchestrated_routing",
+			GoType:    reflect.TypeOf(ves_io_schema_views.AzureVnetType_F5OrchestratedRouting{}),
 		},
 		{
 			FieldPath: "ves.io.schema.views.azure_vnet_site.crudapi.ObjectReplaceReq.spec.gc_spec.kubernetes_upgrade_drain.kubernetes_upgrade_drain_enable_choice.enable_upgrade_drain.vega_upgrade_mode_toggle_choice.disable_vega_upgrade_mode",
@@ -8758,6 +9435,10 @@ func init() {
 		{
 			FieldPath: "ves.io.schema.views.azure_vnet_site.crudapi.ObjectReplaceReq.spec.gc_spec.site_type.ingress_egress_gw.hub_choice.hub.spoke_vnets.routing_choice.auto",
 			GoType:    reflect.TypeOf(ves_io_schema_views_azure_vnet_site.VnetPeeringType_Auto{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.azure_vnet_site.crudapi.ObjectReplaceReq.spec.gc_spec.site_type.ingress_egress_gw.hub_choice.hub.spoke_vnets.vnet.routing_type.f5_orchestrated_routing",
+			GoType:    reflect.TypeOf(ves_io_schema_views.AzureVnetType_F5OrchestratedRouting{}),
 		},
 		{
 			FieldPath: "ves.io.schema.views.azure_vnet_site.crudapi.ObjectReplaceReq.spec.gc_spec.site_type.ingress_egress_gw.hub_choice.not_hub",
@@ -8834,6 +9515,10 @@ func init() {
 		{
 			FieldPath: "ves.io.schema.views.azure_vnet_site.crudapi.ObjectReplaceReq.spec.gc_spec.site_type.ingress_egress_gw_ar.hub_choice.hub.spoke_vnets.routing_choice.auto",
 			GoType:    reflect.TypeOf(ves_io_schema_views_azure_vnet_site.VnetPeeringType_Auto{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.azure_vnet_site.crudapi.ObjectReplaceReq.spec.gc_spec.site_type.ingress_egress_gw_ar.hub_choice.hub.spoke_vnets.vnet.routing_type.f5_orchestrated_routing",
+			GoType:    reflect.TypeOf(ves_io_schema_views.AzureVnetType_F5OrchestratedRouting{}),
 		},
 		{
 			FieldPath: "ves.io.schema.views.azure_vnet_site.crudapi.ObjectReplaceReq.spec.gc_spec.site_type.ingress_egress_gw_ar.hub_choice.not_hub",
@@ -8986,6 +9671,10 @@ func init() {
 		{
 			FieldPath: "ves.io.schema.views.azure_vnet_site.crudapi.ObjectReplaceReq.spec.gc_spec.sw.volterra_sw_version_choice.default_sw_version",
 			GoType:    reflect.TypeOf(ves_io_schema_views.VolterraSoftwareType_DefaultSwVersion{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.azure_vnet_site.crudapi.ObjectReplaceReq.spec.gc_spec.vnet.choice.existing_vnet.routing_type.f5_orchestrated_routing",
+			GoType:    reflect.TypeOf(ves_io_schema_views.AzureVnetType_F5OrchestratedRouting{}),
 		},
 		{
 			FieldPath: "ves.io.schema.views.azure_vnet_site.crudapi.ObjectReplaceReq.spec.gc_spec.vnet.choice.new_vnet.name_choice.autogenerate",
@@ -9173,6 +9862,319 @@ func init() {
 		},
 	}
 
+	MDR.PubCRUDServiceRegistry.AllowedInNSTypes["ves.io.schema.views.bigip_virtual_server.Object"] = nil
+
+	MDR.RPCOneofDefaultChoiceFieldsRegistry["ves.io.schema.views.bigip_virtual_server.API.Replace"] = []svcfw.OneofDefaultChoiceField{
+		{
+			FieldPath: "ves.io.schema.views.bigip_virtual_server.ReplaceRequest.spec.api_definition_choice.api_specification.validation_target_choice.validation_all_spec_endpoints.fall_through_mode.fall_through_mode_choice.fall_through_mode_allow",
+			GoType:    reflect.TypeOf(ves_io_schema_views_common_waf.OpenApiFallThroughMode_FallThroughModeAllow{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.bigip_virtual_server.ReplaceRequest.spec.api_definition_choice.api_specification.validation_target_choice.validation_all_spec_endpoints.fall_through_mode.fall_through_mode_choice.fall_through_mode_custom.open_api_validation_rules.action_choice.action_report",
+			GoType:    reflect.TypeOf(ves_io_schema_views_common_waf.FallThroughRule_ActionReport{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.bigip_virtual_server.ReplaceRequest.spec.api_definition_choice.api_specification.validation_target_choice.validation_all_spec_endpoints.settings.property_validation_settings_choice.property_validation_settings_custom.headers.additional_headers_choice.allow_additional_headers",
+			GoType:    reflect.TypeOf(ves_io_schema_views_common_waf.ValidationSettingForHeaders_AllowAdditionalHeaders{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.bigip_virtual_server.ReplaceRequest.spec.api_definition_choice.api_specification.validation_target_choice.validation_all_spec_endpoints.settings.property_validation_settings_choice.property_validation_settings_custom.queryParameters.additional_parameters_choice.allow_additional_parameters",
+			GoType:    reflect.TypeOf(ves_io_schema_views_common_waf.ValidationSettingForQueryParameters_AllowAdditionalParameters{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.bigip_virtual_server.ReplaceRequest.spec.api_definition_choice.api_specification.validation_target_choice.validation_all_spec_endpoints.validation_mode.response_validation_mode_choice.response_validation_mode_active.validation_enforcement_type.enforcement_report",
+			GoType:    reflect.TypeOf(ves_io_schema_views_common_waf.OpenApiValidationModeActiveResponse_EnforcementReport{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.bigip_virtual_server.ReplaceRequest.spec.api_definition_choice.api_specification.validation_target_choice.validation_all_spec_endpoints.validation_mode.response_validation_mode_choice.skip_response_validation",
+			GoType:    reflect.TypeOf(ves_io_schema_views_common_waf.OpenApiValidationMode_SkipResponseValidation{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.bigip_virtual_server.ReplaceRequest.spec.api_definition_choice.api_specification.validation_target_choice.validation_all_spec_endpoints.validation_mode.validation_mode_choice.validation_mode_active.validation_enforcement_type.enforcement_report",
+			GoType:    reflect.TypeOf(ves_io_schema_views_common_waf.OpenApiValidationModeActive_EnforcementReport{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.bigip_virtual_server.ReplaceRequest.spec.api_definition_choice.api_specification.validation_target_choice.validation_custom_list.fall_through_mode.fall_through_mode_choice.fall_through_mode_allow",
+			GoType:    reflect.TypeOf(ves_io_schema_views_common_waf.OpenApiFallThroughMode_FallThroughModeAllow{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.bigip_virtual_server.ReplaceRequest.spec.api_definition_choice.api_specification.validation_target_choice.validation_custom_list.fall_through_mode.fall_through_mode_choice.fall_through_mode_custom.open_api_validation_rules.action_choice.action_report",
+			GoType:    reflect.TypeOf(ves_io_schema_views_common_waf.FallThroughRule_ActionReport{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.bigip_virtual_server.ReplaceRequest.spec.api_definition_choice.api_specification.validation_target_choice.validation_custom_list.open_api_validation_rules.domain_choice.any_domain",
+			GoType:    reflect.TypeOf(ves_io_schema_views_common_waf.OpenApiValidationRule_AnyDomain{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.bigip_virtual_server.ReplaceRequest.spec.api_definition_choice.api_specification.validation_target_choice.validation_custom_list.open_api_validation_rules.validation_mode.response_validation_mode_choice.response_validation_mode_active.validation_enforcement_type.enforcement_report",
+			GoType:    reflect.TypeOf(ves_io_schema_views_common_waf.OpenApiValidationModeActiveResponse_EnforcementReport{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.bigip_virtual_server.ReplaceRequest.spec.api_definition_choice.api_specification.validation_target_choice.validation_custom_list.open_api_validation_rules.validation_mode.response_validation_mode_choice.skip_response_validation",
+			GoType:    reflect.TypeOf(ves_io_schema_views_common_waf.OpenApiValidationMode_SkipResponseValidation{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.bigip_virtual_server.ReplaceRequest.spec.api_definition_choice.api_specification.validation_target_choice.validation_custom_list.open_api_validation_rules.validation_mode.validation_mode_choice.validation_mode_active.validation_enforcement_type.enforcement_report",
+			GoType:    reflect.TypeOf(ves_io_schema_views_common_waf.OpenApiValidationModeActive_EnforcementReport{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.bigip_virtual_server.ReplaceRequest.spec.api_definition_choice.api_specification.validation_target_choice.validation_custom_list.settings.property_validation_settings_choice.property_validation_settings_custom.headers.additional_headers_choice.allow_additional_headers",
+			GoType:    reflect.TypeOf(ves_io_schema_views_common_waf.ValidationSettingForHeaders_AllowAdditionalHeaders{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.bigip_virtual_server.ReplaceRequest.spec.api_definition_choice.api_specification.validation_target_choice.validation_custom_list.settings.property_validation_settings_choice.property_validation_settings_custom.queryParameters.additional_parameters_choice.allow_additional_parameters",
+			GoType:    reflect.TypeOf(ves_io_schema_views_common_waf.ValidationSettingForQueryParameters_AllowAdditionalParameters{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.bigip_virtual_server.ReplaceRequest.spec.api_definition_choice.api_specification.validation_target_choice.validation_disabled",
+			GoType:    reflect.TypeOf(ves_io_schema_views_common_waf.APISpecificationSettings_ValidationDisabled{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.bigip_virtual_server.ReplaceRequest.spec.api_definition_choice.disable_api_definition",
+			GoType:    reflect.TypeOf(ves_io_schema_views_bigip_virtual_server.ReplaceSpecType_DisableApiDefinition{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.bigip_virtual_server.ReplaceRequest.spec.api_discovery_choice.disable_api_discovery",
+			GoType:    reflect.TypeOf(ves_io_schema_views_bigip_virtual_server.ReplaceSpecType_DisableApiDiscovery{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.bigip_virtual_server.ReplaceRequest.spec.api_discovery_choice.enable_api_discovery.api_crawler.api_crawler.disable_api_crawler",
+			GoType:    reflect.TypeOf(ves_io_schema_views_common_waf.ApiCrawler_DisableApiCrawler{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.bigip_virtual_server.ReplaceRequest.spec.api_discovery_choice.enable_api_discovery.api_discovery_settings_choice.default_api_auth_discovery",
+			GoType:    reflect.TypeOf(ves_io_schema_views_common_waf.ApiDiscoverySetting_DefaultApiAuthDiscovery{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.bigip_virtual_server.ReplaceRequest.spec.api_discovery_choice.enable_api_discovery.learn_from_redirect_traffic.disable_learn_from_redirect_traffic",
+			GoType:    reflect.TypeOf(ves_io_schema_views_common_waf.ApiDiscoverySetting_DisableLearnFromRedirectTraffic{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.bigip_virtual_server.ReplaceRequest.spec.api_discovery_choice.enable_api_discovery.sensitive_data_detection_rules.custom_sensitive_data_detection_rules.sensitive_data_detection_config.domain_choice.any_domain",
+			GoType:    reflect.TypeOf(ves_io_schema_app_type.CustomDataDetectionConfig_AnyDomain{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.bigip_virtual_server.ReplaceRequest.spec.api_discovery_choice.enable_api_discovery.sensitive_data_detection_rules.custom_sensitive_data_detection_rules.sensitive_data_detection_config.section_choice.all_sections",
+			GoType:    reflect.TypeOf(ves_io_schema_app_type.CustomDataDetectionConfig_AllSections{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.bigip_virtual_server.ReplaceRequest.spec.api_discovery_choice.enable_api_discovery.sensitive_data_detection_rules.custom_sensitive_data_detection_rules.sensitive_data_detection_config.target_choice.any_target",
+			GoType:    reflect.TypeOf(ves_io_schema_app_type.CustomDataDetectionConfig_AnyTarget{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.bigip_virtual_server.ReplaceRequest.spec.sensitive_data_policy_choice.default_sensitive_data_policy",
+			GoType:    reflect.TypeOf(ves_io_schema_views_bigip_virtual_server.ReplaceSpecType_DefaultSensitiveDataPolicy{}),
+		},
+	}
+
+	MDR.PvtCRUDServiceRegistry.AllowedInNSTypes["ves.io.schema.views.bigip_virtual_server.Object"] = nil
+
+	MDR.RPCOneofDefaultChoiceFieldsRegistry["ves.io.schema.views.bigip_virtual_server.crudapi.API.Create"] = []svcfw.OneofDefaultChoiceField{
+		{
+			FieldPath: "ves.io.schema.views.bigip_virtual_server.crudapi.ObjectCreateReq.spec.gc_spec.api_definition_choice.api_specification.validation_target_choice.validation_all_spec_endpoints.fall_through_mode.fall_through_mode_choice.fall_through_mode_allow",
+			GoType:    reflect.TypeOf(ves_io_schema_views_common_waf.OpenApiFallThroughMode_FallThroughModeAllow{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.bigip_virtual_server.crudapi.ObjectCreateReq.spec.gc_spec.api_definition_choice.api_specification.validation_target_choice.validation_all_spec_endpoints.fall_through_mode.fall_through_mode_choice.fall_through_mode_custom.open_api_validation_rules.action_choice.action_report",
+			GoType:    reflect.TypeOf(ves_io_schema_views_common_waf.FallThroughRule_ActionReport{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.bigip_virtual_server.crudapi.ObjectCreateReq.spec.gc_spec.api_definition_choice.api_specification.validation_target_choice.validation_all_spec_endpoints.settings.property_validation_settings_choice.property_validation_settings_custom.headers.additional_headers_choice.allow_additional_headers",
+			GoType:    reflect.TypeOf(ves_io_schema_views_common_waf.ValidationSettingForHeaders_AllowAdditionalHeaders{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.bigip_virtual_server.crudapi.ObjectCreateReq.spec.gc_spec.api_definition_choice.api_specification.validation_target_choice.validation_all_spec_endpoints.settings.property_validation_settings_choice.property_validation_settings_custom.queryParameters.additional_parameters_choice.allow_additional_parameters",
+			GoType:    reflect.TypeOf(ves_io_schema_views_common_waf.ValidationSettingForQueryParameters_AllowAdditionalParameters{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.bigip_virtual_server.crudapi.ObjectCreateReq.spec.gc_spec.api_definition_choice.api_specification.validation_target_choice.validation_all_spec_endpoints.validation_mode.response_validation_mode_choice.response_validation_mode_active.validation_enforcement_type.enforcement_report",
+			GoType:    reflect.TypeOf(ves_io_schema_views_common_waf.OpenApiValidationModeActiveResponse_EnforcementReport{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.bigip_virtual_server.crudapi.ObjectCreateReq.spec.gc_spec.api_definition_choice.api_specification.validation_target_choice.validation_all_spec_endpoints.validation_mode.response_validation_mode_choice.skip_response_validation",
+			GoType:    reflect.TypeOf(ves_io_schema_views_common_waf.OpenApiValidationMode_SkipResponseValidation{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.bigip_virtual_server.crudapi.ObjectCreateReq.spec.gc_spec.api_definition_choice.api_specification.validation_target_choice.validation_all_spec_endpoints.validation_mode.validation_mode_choice.validation_mode_active.validation_enforcement_type.enforcement_report",
+			GoType:    reflect.TypeOf(ves_io_schema_views_common_waf.OpenApiValidationModeActive_EnforcementReport{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.bigip_virtual_server.crudapi.ObjectCreateReq.spec.gc_spec.api_definition_choice.api_specification.validation_target_choice.validation_custom_list.fall_through_mode.fall_through_mode_choice.fall_through_mode_allow",
+			GoType:    reflect.TypeOf(ves_io_schema_views_common_waf.OpenApiFallThroughMode_FallThroughModeAllow{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.bigip_virtual_server.crudapi.ObjectCreateReq.spec.gc_spec.api_definition_choice.api_specification.validation_target_choice.validation_custom_list.fall_through_mode.fall_through_mode_choice.fall_through_mode_custom.open_api_validation_rules.action_choice.action_report",
+			GoType:    reflect.TypeOf(ves_io_schema_views_common_waf.FallThroughRule_ActionReport{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.bigip_virtual_server.crudapi.ObjectCreateReq.spec.gc_spec.api_definition_choice.api_specification.validation_target_choice.validation_custom_list.open_api_validation_rules.domain_choice.any_domain",
+			GoType:    reflect.TypeOf(ves_io_schema_views_common_waf.OpenApiValidationRule_AnyDomain{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.bigip_virtual_server.crudapi.ObjectCreateReq.spec.gc_spec.api_definition_choice.api_specification.validation_target_choice.validation_custom_list.open_api_validation_rules.validation_mode.response_validation_mode_choice.response_validation_mode_active.validation_enforcement_type.enforcement_report",
+			GoType:    reflect.TypeOf(ves_io_schema_views_common_waf.OpenApiValidationModeActiveResponse_EnforcementReport{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.bigip_virtual_server.crudapi.ObjectCreateReq.spec.gc_spec.api_definition_choice.api_specification.validation_target_choice.validation_custom_list.open_api_validation_rules.validation_mode.response_validation_mode_choice.skip_response_validation",
+			GoType:    reflect.TypeOf(ves_io_schema_views_common_waf.OpenApiValidationMode_SkipResponseValidation{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.bigip_virtual_server.crudapi.ObjectCreateReq.spec.gc_spec.api_definition_choice.api_specification.validation_target_choice.validation_custom_list.open_api_validation_rules.validation_mode.validation_mode_choice.validation_mode_active.validation_enforcement_type.enforcement_report",
+			GoType:    reflect.TypeOf(ves_io_schema_views_common_waf.OpenApiValidationModeActive_EnforcementReport{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.bigip_virtual_server.crudapi.ObjectCreateReq.spec.gc_spec.api_definition_choice.api_specification.validation_target_choice.validation_custom_list.settings.property_validation_settings_choice.property_validation_settings_custom.headers.additional_headers_choice.allow_additional_headers",
+			GoType:    reflect.TypeOf(ves_io_schema_views_common_waf.ValidationSettingForHeaders_AllowAdditionalHeaders{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.bigip_virtual_server.crudapi.ObjectCreateReq.spec.gc_spec.api_definition_choice.api_specification.validation_target_choice.validation_custom_list.settings.property_validation_settings_choice.property_validation_settings_custom.queryParameters.additional_parameters_choice.allow_additional_parameters",
+			GoType:    reflect.TypeOf(ves_io_schema_views_common_waf.ValidationSettingForQueryParameters_AllowAdditionalParameters{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.bigip_virtual_server.crudapi.ObjectCreateReq.spec.gc_spec.api_definition_choice.api_specification.validation_target_choice.validation_disabled",
+			GoType:    reflect.TypeOf(ves_io_schema_views_common_waf.APISpecificationSettings_ValidationDisabled{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.bigip_virtual_server.crudapi.ObjectCreateReq.spec.gc_spec.api_definition_choice.disable_api_definition",
+			GoType:    reflect.TypeOf(ves_io_schema_views_bigip_virtual_server.GlobalSpecType_DisableApiDefinition{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.bigip_virtual_server.crudapi.ObjectCreateReq.spec.gc_spec.api_discovery_choice.disable_api_discovery",
+			GoType:    reflect.TypeOf(ves_io_schema_views_bigip_virtual_server.GlobalSpecType_DisableApiDiscovery{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.bigip_virtual_server.crudapi.ObjectCreateReq.spec.gc_spec.api_discovery_choice.enable_api_discovery.api_crawler.api_crawler.disable_api_crawler",
+			GoType:    reflect.TypeOf(ves_io_schema_views_common_waf.ApiCrawler_DisableApiCrawler{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.bigip_virtual_server.crudapi.ObjectCreateReq.spec.gc_spec.api_discovery_choice.enable_api_discovery.api_discovery_settings_choice.default_api_auth_discovery",
+			GoType:    reflect.TypeOf(ves_io_schema_views_common_waf.ApiDiscoverySetting_DefaultApiAuthDiscovery{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.bigip_virtual_server.crudapi.ObjectCreateReq.spec.gc_spec.api_discovery_choice.enable_api_discovery.learn_from_redirect_traffic.disable_learn_from_redirect_traffic",
+			GoType:    reflect.TypeOf(ves_io_schema_views_common_waf.ApiDiscoverySetting_DisableLearnFromRedirectTraffic{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.bigip_virtual_server.crudapi.ObjectCreateReq.spec.gc_spec.api_discovery_choice.enable_api_discovery.sensitive_data_detection_rules.custom_sensitive_data_detection_rules.sensitive_data_detection_config.domain_choice.any_domain",
+			GoType:    reflect.TypeOf(ves_io_schema_app_type.CustomDataDetectionConfig_AnyDomain{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.bigip_virtual_server.crudapi.ObjectCreateReq.spec.gc_spec.api_discovery_choice.enable_api_discovery.sensitive_data_detection_rules.custom_sensitive_data_detection_rules.sensitive_data_detection_config.section_choice.all_sections",
+			GoType:    reflect.TypeOf(ves_io_schema_app_type.CustomDataDetectionConfig_AllSections{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.bigip_virtual_server.crudapi.ObjectCreateReq.spec.gc_spec.api_discovery_choice.enable_api_discovery.sensitive_data_detection_rules.custom_sensitive_data_detection_rules.sensitive_data_detection_config.target_choice.any_target",
+			GoType:    reflect.TypeOf(ves_io_schema_app_type.CustomDataDetectionConfig_AnyTarget{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.bigip_virtual_server.crudapi.ObjectCreateReq.spec.gc_spec.sensitive_data_policy_choice.default_sensitive_data_policy",
+			GoType:    reflect.TypeOf(ves_io_schema_views_bigip_virtual_server.GlobalSpecType_DefaultSensitiveDataPolicy{}),
+		},
+	}
+
+	MDR.RPCOneofDefaultChoiceFieldsRegistry["ves.io.schema.views.bigip_virtual_server.crudapi.API.Replace"] = []svcfw.OneofDefaultChoiceField{
+		{
+			FieldPath: "ves.io.schema.views.bigip_virtual_server.crudapi.ObjectReplaceReq.spec.gc_spec.api_definition_choice.api_specification.validation_target_choice.validation_all_spec_endpoints.fall_through_mode.fall_through_mode_choice.fall_through_mode_allow",
+			GoType:    reflect.TypeOf(ves_io_schema_views_common_waf.OpenApiFallThroughMode_FallThroughModeAllow{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.bigip_virtual_server.crudapi.ObjectReplaceReq.spec.gc_spec.api_definition_choice.api_specification.validation_target_choice.validation_all_spec_endpoints.fall_through_mode.fall_through_mode_choice.fall_through_mode_custom.open_api_validation_rules.action_choice.action_report",
+			GoType:    reflect.TypeOf(ves_io_schema_views_common_waf.FallThroughRule_ActionReport{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.bigip_virtual_server.crudapi.ObjectReplaceReq.spec.gc_spec.api_definition_choice.api_specification.validation_target_choice.validation_all_spec_endpoints.settings.property_validation_settings_choice.property_validation_settings_custom.headers.additional_headers_choice.allow_additional_headers",
+			GoType:    reflect.TypeOf(ves_io_schema_views_common_waf.ValidationSettingForHeaders_AllowAdditionalHeaders{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.bigip_virtual_server.crudapi.ObjectReplaceReq.spec.gc_spec.api_definition_choice.api_specification.validation_target_choice.validation_all_spec_endpoints.settings.property_validation_settings_choice.property_validation_settings_custom.queryParameters.additional_parameters_choice.allow_additional_parameters",
+			GoType:    reflect.TypeOf(ves_io_schema_views_common_waf.ValidationSettingForQueryParameters_AllowAdditionalParameters{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.bigip_virtual_server.crudapi.ObjectReplaceReq.spec.gc_spec.api_definition_choice.api_specification.validation_target_choice.validation_all_spec_endpoints.validation_mode.response_validation_mode_choice.response_validation_mode_active.validation_enforcement_type.enforcement_report",
+			GoType:    reflect.TypeOf(ves_io_schema_views_common_waf.OpenApiValidationModeActiveResponse_EnforcementReport{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.bigip_virtual_server.crudapi.ObjectReplaceReq.spec.gc_spec.api_definition_choice.api_specification.validation_target_choice.validation_all_spec_endpoints.validation_mode.response_validation_mode_choice.skip_response_validation",
+			GoType:    reflect.TypeOf(ves_io_schema_views_common_waf.OpenApiValidationMode_SkipResponseValidation{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.bigip_virtual_server.crudapi.ObjectReplaceReq.spec.gc_spec.api_definition_choice.api_specification.validation_target_choice.validation_all_spec_endpoints.validation_mode.validation_mode_choice.validation_mode_active.validation_enforcement_type.enforcement_report",
+			GoType:    reflect.TypeOf(ves_io_schema_views_common_waf.OpenApiValidationModeActive_EnforcementReport{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.bigip_virtual_server.crudapi.ObjectReplaceReq.spec.gc_spec.api_definition_choice.api_specification.validation_target_choice.validation_custom_list.fall_through_mode.fall_through_mode_choice.fall_through_mode_allow",
+			GoType:    reflect.TypeOf(ves_io_schema_views_common_waf.OpenApiFallThroughMode_FallThroughModeAllow{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.bigip_virtual_server.crudapi.ObjectReplaceReq.spec.gc_spec.api_definition_choice.api_specification.validation_target_choice.validation_custom_list.fall_through_mode.fall_through_mode_choice.fall_through_mode_custom.open_api_validation_rules.action_choice.action_report",
+			GoType:    reflect.TypeOf(ves_io_schema_views_common_waf.FallThroughRule_ActionReport{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.bigip_virtual_server.crudapi.ObjectReplaceReq.spec.gc_spec.api_definition_choice.api_specification.validation_target_choice.validation_custom_list.open_api_validation_rules.domain_choice.any_domain",
+			GoType:    reflect.TypeOf(ves_io_schema_views_common_waf.OpenApiValidationRule_AnyDomain{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.bigip_virtual_server.crudapi.ObjectReplaceReq.spec.gc_spec.api_definition_choice.api_specification.validation_target_choice.validation_custom_list.open_api_validation_rules.validation_mode.response_validation_mode_choice.response_validation_mode_active.validation_enforcement_type.enforcement_report",
+			GoType:    reflect.TypeOf(ves_io_schema_views_common_waf.OpenApiValidationModeActiveResponse_EnforcementReport{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.bigip_virtual_server.crudapi.ObjectReplaceReq.spec.gc_spec.api_definition_choice.api_specification.validation_target_choice.validation_custom_list.open_api_validation_rules.validation_mode.response_validation_mode_choice.skip_response_validation",
+			GoType:    reflect.TypeOf(ves_io_schema_views_common_waf.OpenApiValidationMode_SkipResponseValidation{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.bigip_virtual_server.crudapi.ObjectReplaceReq.spec.gc_spec.api_definition_choice.api_specification.validation_target_choice.validation_custom_list.open_api_validation_rules.validation_mode.validation_mode_choice.validation_mode_active.validation_enforcement_type.enforcement_report",
+			GoType:    reflect.TypeOf(ves_io_schema_views_common_waf.OpenApiValidationModeActive_EnforcementReport{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.bigip_virtual_server.crudapi.ObjectReplaceReq.spec.gc_spec.api_definition_choice.api_specification.validation_target_choice.validation_custom_list.settings.property_validation_settings_choice.property_validation_settings_custom.headers.additional_headers_choice.allow_additional_headers",
+			GoType:    reflect.TypeOf(ves_io_schema_views_common_waf.ValidationSettingForHeaders_AllowAdditionalHeaders{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.bigip_virtual_server.crudapi.ObjectReplaceReq.spec.gc_spec.api_definition_choice.api_specification.validation_target_choice.validation_custom_list.settings.property_validation_settings_choice.property_validation_settings_custom.queryParameters.additional_parameters_choice.allow_additional_parameters",
+			GoType:    reflect.TypeOf(ves_io_schema_views_common_waf.ValidationSettingForQueryParameters_AllowAdditionalParameters{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.bigip_virtual_server.crudapi.ObjectReplaceReq.spec.gc_spec.api_definition_choice.api_specification.validation_target_choice.validation_disabled",
+			GoType:    reflect.TypeOf(ves_io_schema_views_common_waf.APISpecificationSettings_ValidationDisabled{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.bigip_virtual_server.crudapi.ObjectReplaceReq.spec.gc_spec.api_definition_choice.disable_api_definition",
+			GoType:    reflect.TypeOf(ves_io_schema_views_bigip_virtual_server.GlobalSpecType_DisableApiDefinition{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.bigip_virtual_server.crudapi.ObjectReplaceReq.spec.gc_spec.api_discovery_choice.disable_api_discovery",
+			GoType:    reflect.TypeOf(ves_io_schema_views_bigip_virtual_server.GlobalSpecType_DisableApiDiscovery{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.bigip_virtual_server.crudapi.ObjectReplaceReq.spec.gc_spec.api_discovery_choice.enable_api_discovery.api_crawler.api_crawler.disable_api_crawler",
+			GoType:    reflect.TypeOf(ves_io_schema_views_common_waf.ApiCrawler_DisableApiCrawler{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.bigip_virtual_server.crudapi.ObjectReplaceReq.spec.gc_spec.api_discovery_choice.enable_api_discovery.api_discovery_settings_choice.default_api_auth_discovery",
+			GoType:    reflect.TypeOf(ves_io_schema_views_common_waf.ApiDiscoverySetting_DefaultApiAuthDiscovery{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.bigip_virtual_server.crudapi.ObjectReplaceReq.spec.gc_spec.api_discovery_choice.enable_api_discovery.learn_from_redirect_traffic.disable_learn_from_redirect_traffic",
+			GoType:    reflect.TypeOf(ves_io_schema_views_common_waf.ApiDiscoverySetting_DisableLearnFromRedirectTraffic{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.bigip_virtual_server.crudapi.ObjectReplaceReq.spec.gc_spec.api_discovery_choice.enable_api_discovery.sensitive_data_detection_rules.custom_sensitive_data_detection_rules.sensitive_data_detection_config.domain_choice.any_domain",
+			GoType:    reflect.TypeOf(ves_io_schema_app_type.CustomDataDetectionConfig_AnyDomain{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.bigip_virtual_server.crudapi.ObjectReplaceReq.spec.gc_spec.api_discovery_choice.enable_api_discovery.sensitive_data_detection_rules.custom_sensitive_data_detection_rules.sensitive_data_detection_config.section_choice.all_sections",
+			GoType:    reflect.TypeOf(ves_io_schema_app_type.CustomDataDetectionConfig_AllSections{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.bigip_virtual_server.crudapi.ObjectReplaceReq.spec.gc_spec.api_discovery_choice.enable_api_discovery.sensitive_data_detection_rules.custom_sensitive_data_detection_rules.sensitive_data_detection_config.target_choice.any_target",
+			GoType:    reflect.TypeOf(ves_io_schema_app_type.CustomDataDetectionConfig_AnyTarget{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.bigip_virtual_server.crudapi.ObjectReplaceReq.spec.gc_spec.sensitive_data_policy_choice.default_sensitive_data_policy",
+			GoType:    reflect.TypeOf(ves_io_schema_views_bigip_virtual_server.GlobalSpecType_DefaultSensitiveDataPolicy{}),
+		},
+	}
+
 	MDR.PubCRUDServiceRegistry.AllowedInNSTypes["ves.io.schema.views.bot_defense_app_infrastructure.Object"] = nil
 
 	MDR.PvtCRUDServiceRegistry.AllowedInNSTypes["ves.io.schema.views.bot_defense_app_infrastructure.Object"] = nil
@@ -9320,6 +10322,14 @@ func init() {
 			GoType:    reflect.TypeOf(ves_io_schema_views_cdn_loadbalancer.CreateSpecType_DisableApiDefinition{}),
 		},
 		{
+			FieldPath: "ves.io.schema.views.cdn_loadbalancer.CreateRequest.spec.api_discovery_choice.api_discovery_on_cache_miss.api_crawler.api_crawler.disable_api_crawler",
+			GoType:    reflect.TypeOf(ves_io_schema_views_common_waf.ApiCrawler_DisableApiCrawler{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.cdn_loadbalancer.CreateRequest.spec.api_discovery_choice.api_discovery_on_cache_miss.api_discovery_settings_choice.default_api_auth_discovery",
+			GoType:    reflect.TypeOf(ves_io_schema_views_common_waf.ApiDiscoverySetting_DefaultApiAuthDiscovery{}),
+		},
+		{
 			FieldPath: "ves.io.schema.views.cdn_loadbalancer.CreateRequest.spec.api_discovery_choice.api_discovery_on_cache_miss.learn_from_redirect_traffic.disable_learn_from_redirect_traffic",
 			GoType:    reflect.TypeOf(ves_io_schema_views_common_waf.ApiDiscoverySetting_DisableLearnFromRedirectTraffic{}),
 		},
@@ -9338,6 +10348,14 @@ func init() {
 		{
 			FieldPath: "ves.io.schema.views.cdn_loadbalancer.CreateRequest.spec.api_discovery_choice.disable_api_discovery",
 			GoType:    reflect.TypeOf(ves_io_schema_views_cdn_loadbalancer.CreateSpecType_DisableApiDiscovery{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.cdn_loadbalancer.CreateRequest.spec.api_discovery_choice.enable_api_discovery.api_crawler.api_crawler.disable_api_crawler",
+			GoType:    reflect.TypeOf(ves_io_schema_views_common_waf.ApiCrawler_DisableApiCrawler{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.cdn_loadbalancer.CreateRequest.spec.api_discovery_choice.enable_api_discovery.api_discovery_settings_choice.default_api_auth_discovery",
+			GoType:    reflect.TypeOf(ves_io_schema_views_common_waf.ApiDiscoverySetting_DefaultApiAuthDiscovery{}),
 		},
 		{
 			FieldPath: "ves.io.schema.views.cdn_loadbalancer.CreateRequest.spec.api_discovery_choice.enable_api_discovery.learn_from_redirect_traffic.disable_learn_from_redirect_traffic",
@@ -9388,8 +10406,8 @@ func init() {
 			GoType:    reflect.TypeOf(ves_io_schema_views_common_waf.APIGroupProtectionRule_AnyDomain{}),
 		},
 		{
-			FieldPath: "ves.io.schema.views.cdn_loadbalancer.CreateRequest.spec.bot_defense_choice.bot_defense.cors_support_choice.disable_cors_support",
-			GoType:    reflect.TypeOf(ves_io_schema_views_common_security.ShapeBotDefenseType_DisableCorsSupport{}),
+			FieldPath: "ves.io.schema.views.cdn_loadbalancer.CreateRequest.spec.bot_defense_choice.bot_defense.cors_support_choice.enable_cors_support",
+			GoType:    reflect.TypeOf(ves_io_schema_views_common_security.ShapeBotDefenseType_EnableCorsSupport{}),
 		},
 		{
 			FieldPath: "ves.io.schema.views.cdn_loadbalancer.CreateRequest.spec.bot_defense_choice.bot_defense.policy.java_script_choice.js_insert_all_pages_except.exclude_list.domain_matcher_choice.any_domain",
@@ -9684,6 +10702,14 @@ func init() {
 			GoType:    reflect.TypeOf(ves_io_schema_views_cdn_loadbalancer.ApiProtection_DisableApiDefinition{}),
 		},
 		{
+			FieldPath: "ves.io.schema.views.cdn_loadbalancer.CreateRequest.spec.more_option.security_options.api_protection.api_discovery_choice.api_discovery_on_cache_miss.api_crawler.api_crawler.disable_api_crawler",
+			GoType:    reflect.TypeOf(ves_io_schema_views_common_waf.ApiCrawler_DisableApiCrawler{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.cdn_loadbalancer.CreateRequest.spec.more_option.security_options.api_protection.api_discovery_choice.api_discovery_on_cache_miss.api_discovery_settings_choice.default_api_auth_discovery",
+			GoType:    reflect.TypeOf(ves_io_schema_views_common_waf.ApiDiscoverySetting_DefaultApiAuthDiscovery{}),
+		},
+		{
 			FieldPath: "ves.io.schema.views.cdn_loadbalancer.CreateRequest.spec.more_option.security_options.api_protection.api_discovery_choice.api_discovery_on_cache_miss.learn_from_redirect_traffic.disable_learn_from_redirect_traffic",
 			GoType:    reflect.TypeOf(ves_io_schema_views_common_waf.ApiDiscoverySetting_DisableLearnFromRedirectTraffic{}),
 		},
@@ -9702,6 +10728,14 @@ func init() {
 		{
 			FieldPath: "ves.io.schema.views.cdn_loadbalancer.CreateRequest.spec.more_option.security_options.api_protection.api_discovery_choice.disable_api_discovery",
 			GoType:    reflect.TypeOf(ves_io_schema_views_cdn_loadbalancer.ApiProtection_DisableApiDiscovery{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.cdn_loadbalancer.CreateRequest.spec.more_option.security_options.api_protection.api_discovery_choice.enable_api_discovery.api_crawler.api_crawler.disable_api_crawler",
+			GoType:    reflect.TypeOf(ves_io_schema_views_common_waf.ApiCrawler_DisableApiCrawler{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.cdn_loadbalancer.CreateRequest.spec.more_option.security_options.api_protection.api_discovery_choice.enable_api_discovery.api_discovery_settings_choice.default_api_auth_discovery",
+			GoType:    reflect.TypeOf(ves_io_schema_views_common_waf.ApiDiscoverySetting_DefaultApiAuthDiscovery{}),
 		},
 		{
 			FieldPath: "ves.io.schema.views.cdn_loadbalancer.CreateRequest.spec.more_option.security_options.api_protection.api_discovery_choice.enable_api_discovery.learn_from_redirect_traffic.disable_learn_from_redirect_traffic",
@@ -9996,8 +11030,8 @@ func init() {
 			GoType:    reflect.TypeOf(ves_io_schema_views_cdn_loadbalancer.CreateSpecType_DefaultSensitiveDataPolicy{}),
 		},
 		{
-			FieldPath: "ves.io.schema.views.cdn_loadbalancer.CreateRequest.spec.service_policy_choice.no_service_policies",
-			GoType:    reflect.TypeOf(ves_io_schema_views_cdn_loadbalancer.CreateSpecType_NoServicePolicies{}),
+			FieldPath: "ves.io.schema.views.cdn_loadbalancer.CreateRequest.spec.service_policy_choice.service_policies_from_namespace",
+			GoType:    reflect.TypeOf(ves_io_schema_views_cdn_loadbalancer.CreateSpecType_ServicePoliciesFromNamespace{}),
 		},
 		{
 			FieldPath: "ves.io.schema.views.cdn_loadbalancer.CreateRequest.spec.slow_ddos_mitigation_choice.system_default_timeouts",
@@ -10159,6 +11193,14 @@ func init() {
 			GoType:    reflect.TypeOf(ves_io_schema_views_cdn_loadbalancer.ReplaceSpecType_DisableApiDefinition{}),
 		},
 		{
+			FieldPath: "ves.io.schema.views.cdn_loadbalancer.ReplaceRequest.spec.api_discovery_choice.api_discovery_on_cache_miss.api_crawler.api_crawler.disable_api_crawler",
+			GoType:    reflect.TypeOf(ves_io_schema_views_common_waf.ApiCrawler_DisableApiCrawler{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.cdn_loadbalancer.ReplaceRequest.spec.api_discovery_choice.api_discovery_on_cache_miss.api_discovery_settings_choice.default_api_auth_discovery",
+			GoType:    reflect.TypeOf(ves_io_schema_views_common_waf.ApiDiscoverySetting_DefaultApiAuthDiscovery{}),
+		},
+		{
 			FieldPath: "ves.io.schema.views.cdn_loadbalancer.ReplaceRequest.spec.api_discovery_choice.api_discovery_on_cache_miss.learn_from_redirect_traffic.disable_learn_from_redirect_traffic",
 			GoType:    reflect.TypeOf(ves_io_schema_views_common_waf.ApiDiscoverySetting_DisableLearnFromRedirectTraffic{}),
 		},
@@ -10177,6 +11219,14 @@ func init() {
 		{
 			FieldPath: "ves.io.schema.views.cdn_loadbalancer.ReplaceRequest.spec.api_discovery_choice.disable_api_discovery",
 			GoType:    reflect.TypeOf(ves_io_schema_views_cdn_loadbalancer.ReplaceSpecType_DisableApiDiscovery{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.cdn_loadbalancer.ReplaceRequest.spec.api_discovery_choice.enable_api_discovery.api_crawler.api_crawler.disable_api_crawler",
+			GoType:    reflect.TypeOf(ves_io_schema_views_common_waf.ApiCrawler_DisableApiCrawler{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.cdn_loadbalancer.ReplaceRequest.spec.api_discovery_choice.enable_api_discovery.api_discovery_settings_choice.default_api_auth_discovery",
+			GoType:    reflect.TypeOf(ves_io_schema_views_common_waf.ApiDiscoverySetting_DefaultApiAuthDiscovery{}),
 		},
 		{
 			FieldPath: "ves.io.schema.views.cdn_loadbalancer.ReplaceRequest.spec.api_discovery_choice.enable_api_discovery.learn_from_redirect_traffic.disable_learn_from_redirect_traffic",
@@ -10227,8 +11277,8 @@ func init() {
 			GoType:    reflect.TypeOf(ves_io_schema_views_common_waf.APIGroupProtectionRule_AnyDomain{}),
 		},
 		{
-			FieldPath: "ves.io.schema.views.cdn_loadbalancer.ReplaceRequest.spec.bot_defense_choice.bot_defense.cors_support_choice.disable_cors_support",
-			GoType:    reflect.TypeOf(ves_io_schema_views_common_security.ShapeBotDefenseType_DisableCorsSupport{}),
+			FieldPath: "ves.io.schema.views.cdn_loadbalancer.ReplaceRequest.spec.bot_defense_choice.bot_defense.cors_support_choice.enable_cors_support",
+			GoType:    reflect.TypeOf(ves_io_schema_views_common_security.ShapeBotDefenseType_EnableCorsSupport{}),
 		},
 		{
 			FieldPath: "ves.io.schema.views.cdn_loadbalancer.ReplaceRequest.spec.bot_defense_choice.bot_defense.policy.java_script_choice.js_insert_all_pages_except.exclude_list.domain_matcher_choice.any_domain",
@@ -10523,6 +11573,14 @@ func init() {
 			GoType:    reflect.TypeOf(ves_io_schema_views_cdn_loadbalancer.ApiProtection_DisableApiDefinition{}),
 		},
 		{
+			FieldPath: "ves.io.schema.views.cdn_loadbalancer.ReplaceRequest.spec.more_option.security_options.api_protection.api_discovery_choice.api_discovery_on_cache_miss.api_crawler.api_crawler.disable_api_crawler",
+			GoType:    reflect.TypeOf(ves_io_schema_views_common_waf.ApiCrawler_DisableApiCrawler{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.cdn_loadbalancer.ReplaceRequest.spec.more_option.security_options.api_protection.api_discovery_choice.api_discovery_on_cache_miss.api_discovery_settings_choice.default_api_auth_discovery",
+			GoType:    reflect.TypeOf(ves_io_schema_views_common_waf.ApiDiscoverySetting_DefaultApiAuthDiscovery{}),
+		},
+		{
 			FieldPath: "ves.io.schema.views.cdn_loadbalancer.ReplaceRequest.spec.more_option.security_options.api_protection.api_discovery_choice.api_discovery_on_cache_miss.learn_from_redirect_traffic.disable_learn_from_redirect_traffic",
 			GoType:    reflect.TypeOf(ves_io_schema_views_common_waf.ApiDiscoverySetting_DisableLearnFromRedirectTraffic{}),
 		},
@@ -10541,6 +11599,14 @@ func init() {
 		{
 			FieldPath: "ves.io.schema.views.cdn_loadbalancer.ReplaceRequest.spec.more_option.security_options.api_protection.api_discovery_choice.disable_api_discovery",
 			GoType:    reflect.TypeOf(ves_io_schema_views_cdn_loadbalancer.ApiProtection_DisableApiDiscovery{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.cdn_loadbalancer.ReplaceRequest.spec.more_option.security_options.api_protection.api_discovery_choice.enable_api_discovery.api_crawler.api_crawler.disable_api_crawler",
+			GoType:    reflect.TypeOf(ves_io_schema_views_common_waf.ApiCrawler_DisableApiCrawler{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.cdn_loadbalancer.ReplaceRequest.spec.more_option.security_options.api_protection.api_discovery_choice.enable_api_discovery.api_discovery_settings_choice.default_api_auth_discovery",
+			GoType:    reflect.TypeOf(ves_io_schema_views_common_waf.ApiDiscoverySetting_DefaultApiAuthDiscovery{}),
 		},
 		{
 			FieldPath: "ves.io.schema.views.cdn_loadbalancer.ReplaceRequest.spec.more_option.security_options.api_protection.api_discovery_choice.enable_api_discovery.learn_from_redirect_traffic.disable_learn_from_redirect_traffic",
@@ -10835,8 +11901,8 @@ func init() {
 			GoType:    reflect.TypeOf(ves_io_schema_views_cdn_loadbalancer.ReplaceSpecType_DefaultSensitiveDataPolicy{}),
 		},
 		{
-			FieldPath: "ves.io.schema.views.cdn_loadbalancer.ReplaceRequest.spec.service_policy_choice.no_service_policies",
-			GoType:    reflect.TypeOf(ves_io_schema_views_cdn_loadbalancer.ReplaceSpecType_NoServicePolicies{}),
+			FieldPath: "ves.io.schema.views.cdn_loadbalancer.ReplaceRequest.spec.service_policy_choice.service_policies_from_namespace",
+			GoType:    reflect.TypeOf(ves_io_schema_views_cdn_loadbalancer.ReplaceSpecType_ServicePoliciesFromNamespace{}),
 		},
 		{
 			FieldPath: "ves.io.schema.views.cdn_loadbalancer.ReplaceRequest.spec.slow_ddos_mitigation_choice.system_default_timeouts",
@@ -11011,6 +12077,14 @@ func init() {
 			GoType:    reflect.TypeOf(ves_io_schema_views_cdn_loadbalancer.GlobalSpecType_DisableApiDefinition{}),
 		},
 		{
+			FieldPath: "ves.io.schema.views.cdn_loadbalancer.crudapi.ObjectCreateReq.spec.gc_spec.api_discovery_choice.api_discovery_on_cache_miss.api_crawler.api_crawler.disable_api_crawler",
+			GoType:    reflect.TypeOf(ves_io_schema_views_common_waf.ApiCrawler_DisableApiCrawler{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.cdn_loadbalancer.crudapi.ObjectCreateReq.spec.gc_spec.api_discovery_choice.api_discovery_on_cache_miss.api_discovery_settings_choice.default_api_auth_discovery",
+			GoType:    reflect.TypeOf(ves_io_schema_views_common_waf.ApiDiscoverySetting_DefaultApiAuthDiscovery{}),
+		},
+		{
 			FieldPath: "ves.io.schema.views.cdn_loadbalancer.crudapi.ObjectCreateReq.spec.gc_spec.api_discovery_choice.api_discovery_on_cache_miss.learn_from_redirect_traffic.disable_learn_from_redirect_traffic",
 			GoType:    reflect.TypeOf(ves_io_schema_views_common_waf.ApiDiscoverySetting_DisableLearnFromRedirectTraffic{}),
 		},
@@ -11029,6 +12103,14 @@ func init() {
 		{
 			FieldPath: "ves.io.schema.views.cdn_loadbalancer.crudapi.ObjectCreateReq.spec.gc_spec.api_discovery_choice.disable_api_discovery",
 			GoType:    reflect.TypeOf(ves_io_schema_views_cdn_loadbalancer.GlobalSpecType_DisableApiDiscovery{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.cdn_loadbalancer.crudapi.ObjectCreateReq.spec.gc_spec.api_discovery_choice.enable_api_discovery.api_crawler.api_crawler.disable_api_crawler",
+			GoType:    reflect.TypeOf(ves_io_schema_views_common_waf.ApiCrawler_DisableApiCrawler{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.cdn_loadbalancer.crudapi.ObjectCreateReq.spec.gc_spec.api_discovery_choice.enable_api_discovery.api_discovery_settings_choice.default_api_auth_discovery",
+			GoType:    reflect.TypeOf(ves_io_schema_views_common_waf.ApiDiscoverySetting_DefaultApiAuthDiscovery{}),
 		},
 		{
 			FieldPath: "ves.io.schema.views.cdn_loadbalancer.crudapi.ObjectCreateReq.spec.gc_spec.api_discovery_choice.enable_api_discovery.learn_from_redirect_traffic.disable_learn_from_redirect_traffic",
@@ -11079,8 +12161,8 @@ func init() {
 			GoType:    reflect.TypeOf(ves_io_schema_views_common_waf.APIGroupProtectionRule_AnyDomain{}),
 		},
 		{
-			FieldPath: "ves.io.schema.views.cdn_loadbalancer.crudapi.ObjectCreateReq.spec.gc_spec.bot_defense_choice.bot_defense.cors_support_choice.disable_cors_support",
-			GoType:    reflect.TypeOf(ves_io_schema_views_common_security.ShapeBotDefenseType_DisableCorsSupport{}),
+			FieldPath: "ves.io.schema.views.cdn_loadbalancer.crudapi.ObjectCreateReq.spec.gc_spec.bot_defense_choice.bot_defense.cors_support_choice.enable_cors_support",
+			GoType:    reflect.TypeOf(ves_io_schema_views_common_security.ShapeBotDefenseType_EnableCorsSupport{}),
 		},
 		{
 			FieldPath: "ves.io.schema.views.cdn_loadbalancer.crudapi.ObjectCreateReq.spec.gc_spec.bot_defense_choice.bot_defense.policy.java_script_choice.js_insert_all_pages_except.exclude_list.domain_matcher_choice.any_domain",
@@ -11375,6 +12457,14 @@ func init() {
 			GoType:    reflect.TypeOf(ves_io_schema_views_cdn_loadbalancer.ApiProtection_DisableApiDefinition{}),
 		},
 		{
+			FieldPath: "ves.io.schema.views.cdn_loadbalancer.crudapi.ObjectCreateReq.spec.gc_spec.more_option.security_options.api_protection.api_discovery_choice.api_discovery_on_cache_miss.api_crawler.api_crawler.disable_api_crawler",
+			GoType:    reflect.TypeOf(ves_io_schema_views_common_waf.ApiCrawler_DisableApiCrawler{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.cdn_loadbalancer.crudapi.ObjectCreateReq.spec.gc_spec.more_option.security_options.api_protection.api_discovery_choice.api_discovery_on_cache_miss.api_discovery_settings_choice.default_api_auth_discovery",
+			GoType:    reflect.TypeOf(ves_io_schema_views_common_waf.ApiDiscoverySetting_DefaultApiAuthDiscovery{}),
+		},
+		{
 			FieldPath: "ves.io.schema.views.cdn_loadbalancer.crudapi.ObjectCreateReq.spec.gc_spec.more_option.security_options.api_protection.api_discovery_choice.api_discovery_on_cache_miss.learn_from_redirect_traffic.disable_learn_from_redirect_traffic",
 			GoType:    reflect.TypeOf(ves_io_schema_views_common_waf.ApiDiscoverySetting_DisableLearnFromRedirectTraffic{}),
 		},
@@ -11393,6 +12483,14 @@ func init() {
 		{
 			FieldPath: "ves.io.schema.views.cdn_loadbalancer.crudapi.ObjectCreateReq.spec.gc_spec.more_option.security_options.api_protection.api_discovery_choice.disable_api_discovery",
 			GoType:    reflect.TypeOf(ves_io_schema_views_cdn_loadbalancer.ApiProtection_DisableApiDiscovery{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.cdn_loadbalancer.crudapi.ObjectCreateReq.spec.gc_spec.more_option.security_options.api_protection.api_discovery_choice.enable_api_discovery.api_crawler.api_crawler.disable_api_crawler",
+			GoType:    reflect.TypeOf(ves_io_schema_views_common_waf.ApiCrawler_DisableApiCrawler{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.cdn_loadbalancer.crudapi.ObjectCreateReq.spec.gc_spec.more_option.security_options.api_protection.api_discovery_choice.enable_api_discovery.api_discovery_settings_choice.default_api_auth_discovery",
+			GoType:    reflect.TypeOf(ves_io_schema_views_common_waf.ApiDiscoverySetting_DefaultApiAuthDiscovery{}),
 		},
 		{
 			FieldPath: "ves.io.schema.views.cdn_loadbalancer.crudapi.ObjectCreateReq.spec.gc_spec.more_option.security_options.api_protection.api_discovery_choice.enable_api_discovery.learn_from_redirect_traffic.disable_learn_from_redirect_traffic",
@@ -11687,8 +12785,8 @@ func init() {
 			GoType:    reflect.TypeOf(ves_io_schema_views_cdn_loadbalancer.GlobalSpecType_DefaultSensitiveDataPolicy{}),
 		},
 		{
-			FieldPath: "ves.io.schema.views.cdn_loadbalancer.crudapi.ObjectCreateReq.spec.gc_spec.service_policy_choice.no_service_policies",
-			GoType:    reflect.TypeOf(ves_io_schema_views_cdn_loadbalancer.GlobalSpecType_NoServicePolicies{}),
+			FieldPath: "ves.io.schema.views.cdn_loadbalancer.crudapi.ObjectCreateReq.spec.gc_spec.service_policy_choice.service_policies_from_namespace",
+			GoType:    reflect.TypeOf(ves_io_schema_views_cdn_loadbalancer.GlobalSpecType_ServicePoliciesFromNamespace{}),
 		},
 		{
 			FieldPath: "ves.io.schema.views.cdn_loadbalancer.crudapi.ObjectCreateReq.spec.gc_spec.slow_ddos_mitigation_choice.system_default_timeouts",
@@ -11850,6 +12948,14 @@ func init() {
 			GoType:    reflect.TypeOf(ves_io_schema_views_cdn_loadbalancer.GlobalSpecType_DisableApiDefinition{}),
 		},
 		{
+			FieldPath: "ves.io.schema.views.cdn_loadbalancer.crudapi.ObjectReplaceReq.spec.gc_spec.api_discovery_choice.api_discovery_on_cache_miss.api_crawler.api_crawler.disable_api_crawler",
+			GoType:    reflect.TypeOf(ves_io_schema_views_common_waf.ApiCrawler_DisableApiCrawler{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.cdn_loadbalancer.crudapi.ObjectReplaceReq.spec.gc_spec.api_discovery_choice.api_discovery_on_cache_miss.api_discovery_settings_choice.default_api_auth_discovery",
+			GoType:    reflect.TypeOf(ves_io_schema_views_common_waf.ApiDiscoverySetting_DefaultApiAuthDiscovery{}),
+		},
+		{
 			FieldPath: "ves.io.schema.views.cdn_loadbalancer.crudapi.ObjectReplaceReq.spec.gc_spec.api_discovery_choice.api_discovery_on_cache_miss.learn_from_redirect_traffic.disable_learn_from_redirect_traffic",
 			GoType:    reflect.TypeOf(ves_io_schema_views_common_waf.ApiDiscoverySetting_DisableLearnFromRedirectTraffic{}),
 		},
@@ -11868,6 +12974,14 @@ func init() {
 		{
 			FieldPath: "ves.io.schema.views.cdn_loadbalancer.crudapi.ObjectReplaceReq.spec.gc_spec.api_discovery_choice.disable_api_discovery",
 			GoType:    reflect.TypeOf(ves_io_schema_views_cdn_loadbalancer.GlobalSpecType_DisableApiDiscovery{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.cdn_loadbalancer.crudapi.ObjectReplaceReq.spec.gc_spec.api_discovery_choice.enable_api_discovery.api_crawler.api_crawler.disable_api_crawler",
+			GoType:    reflect.TypeOf(ves_io_schema_views_common_waf.ApiCrawler_DisableApiCrawler{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.cdn_loadbalancer.crudapi.ObjectReplaceReq.spec.gc_spec.api_discovery_choice.enable_api_discovery.api_discovery_settings_choice.default_api_auth_discovery",
+			GoType:    reflect.TypeOf(ves_io_schema_views_common_waf.ApiDiscoverySetting_DefaultApiAuthDiscovery{}),
 		},
 		{
 			FieldPath: "ves.io.schema.views.cdn_loadbalancer.crudapi.ObjectReplaceReq.spec.gc_spec.api_discovery_choice.enable_api_discovery.learn_from_redirect_traffic.disable_learn_from_redirect_traffic",
@@ -11918,8 +13032,8 @@ func init() {
 			GoType:    reflect.TypeOf(ves_io_schema_views_common_waf.APIGroupProtectionRule_AnyDomain{}),
 		},
 		{
-			FieldPath: "ves.io.schema.views.cdn_loadbalancer.crudapi.ObjectReplaceReq.spec.gc_spec.bot_defense_choice.bot_defense.cors_support_choice.disable_cors_support",
-			GoType:    reflect.TypeOf(ves_io_schema_views_common_security.ShapeBotDefenseType_DisableCorsSupport{}),
+			FieldPath: "ves.io.schema.views.cdn_loadbalancer.crudapi.ObjectReplaceReq.spec.gc_spec.bot_defense_choice.bot_defense.cors_support_choice.enable_cors_support",
+			GoType:    reflect.TypeOf(ves_io_schema_views_common_security.ShapeBotDefenseType_EnableCorsSupport{}),
 		},
 		{
 			FieldPath: "ves.io.schema.views.cdn_loadbalancer.crudapi.ObjectReplaceReq.spec.gc_spec.bot_defense_choice.bot_defense.policy.java_script_choice.js_insert_all_pages_except.exclude_list.domain_matcher_choice.any_domain",
@@ -12214,6 +13328,14 @@ func init() {
 			GoType:    reflect.TypeOf(ves_io_schema_views_cdn_loadbalancer.ApiProtection_DisableApiDefinition{}),
 		},
 		{
+			FieldPath: "ves.io.schema.views.cdn_loadbalancer.crudapi.ObjectReplaceReq.spec.gc_spec.more_option.security_options.api_protection.api_discovery_choice.api_discovery_on_cache_miss.api_crawler.api_crawler.disable_api_crawler",
+			GoType:    reflect.TypeOf(ves_io_schema_views_common_waf.ApiCrawler_DisableApiCrawler{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.cdn_loadbalancer.crudapi.ObjectReplaceReq.spec.gc_spec.more_option.security_options.api_protection.api_discovery_choice.api_discovery_on_cache_miss.api_discovery_settings_choice.default_api_auth_discovery",
+			GoType:    reflect.TypeOf(ves_io_schema_views_common_waf.ApiDiscoverySetting_DefaultApiAuthDiscovery{}),
+		},
+		{
 			FieldPath: "ves.io.schema.views.cdn_loadbalancer.crudapi.ObjectReplaceReq.spec.gc_spec.more_option.security_options.api_protection.api_discovery_choice.api_discovery_on_cache_miss.learn_from_redirect_traffic.disable_learn_from_redirect_traffic",
 			GoType:    reflect.TypeOf(ves_io_schema_views_common_waf.ApiDiscoverySetting_DisableLearnFromRedirectTraffic{}),
 		},
@@ -12232,6 +13354,14 @@ func init() {
 		{
 			FieldPath: "ves.io.schema.views.cdn_loadbalancer.crudapi.ObjectReplaceReq.spec.gc_spec.more_option.security_options.api_protection.api_discovery_choice.disable_api_discovery",
 			GoType:    reflect.TypeOf(ves_io_schema_views_cdn_loadbalancer.ApiProtection_DisableApiDiscovery{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.cdn_loadbalancer.crudapi.ObjectReplaceReq.spec.gc_spec.more_option.security_options.api_protection.api_discovery_choice.enable_api_discovery.api_crawler.api_crawler.disable_api_crawler",
+			GoType:    reflect.TypeOf(ves_io_schema_views_common_waf.ApiCrawler_DisableApiCrawler{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.cdn_loadbalancer.crudapi.ObjectReplaceReq.spec.gc_spec.more_option.security_options.api_protection.api_discovery_choice.enable_api_discovery.api_discovery_settings_choice.default_api_auth_discovery",
+			GoType:    reflect.TypeOf(ves_io_schema_views_common_waf.ApiDiscoverySetting_DefaultApiAuthDiscovery{}),
 		},
 		{
 			FieldPath: "ves.io.schema.views.cdn_loadbalancer.crudapi.ObjectReplaceReq.spec.gc_spec.more_option.security_options.api_protection.api_discovery_choice.enable_api_discovery.learn_from_redirect_traffic.disable_learn_from_redirect_traffic",
@@ -12526,8 +13656,8 @@ func init() {
 			GoType:    reflect.TypeOf(ves_io_schema_views_cdn_loadbalancer.GlobalSpecType_DefaultSensitiveDataPolicy{}),
 		},
 		{
-			FieldPath: "ves.io.schema.views.cdn_loadbalancer.crudapi.ObjectReplaceReq.spec.gc_spec.service_policy_choice.no_service_policies",
-			GoType:    reflect.TypeOf(ves_io_schema_views_cdn_loadbalancer.GlobalSpecType_NoServicePolicies{}),
+			FieldPath: "ves.io.schema.views.cdn_loadbalancer.crudapi.ObjectReplaceReq.spec.gc_spec.service_policy_choice.service_policies_from_namespace",
+			GoType:    reflect.TypeOf(ves_io_schema_views_cdn_loadbalancer.GlobalSpecType_ServicePoliciesFromNamespace{}),
 		},
 		{
 			FieldPath: "ves.io.schema.views.cdn_loadbalancer.crudapi.ObjectReplaceReq.spec.gc_spec.slow_ddos_mitigation_choice.system_default_timeouts",
@@ -13311,6 +14441,14 @@ func init() {
 			GoType:    reflect.TypeOf(ves_io_schema_views_http_loadbalancer.CreateSpecType_DisableApiDiscovery{}),
 		},
 		{
+			FieldPath: "ves.io.schema.views.http_loadbalancer.CreateRequest.spec.api_discovery_choice.enable_api_discovery.api_crawler.api_crawler.disable_api_crawler",
+			GoType:    reflect.TypeOf(ves_io_schema_views_common_waf.ApiCrawler_DisableApiCrawler{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.http_loadbalancer.CreateRequest.spec.api_discovery_choice.enable_api_discovery.api_discovery_settings_choice.default_api_auth_discovery",
+			GoType:    reflect.TypeOf(ves_io_schema_views_common_waf.ApiDiscoverySetting_DefaultApiAuthDiscovery{}),
+		},
+		{
 			FieldPath: "ves.io.schema.views.http_loadbalancer.CreateRequest.spec.api_discovery_choice.enable_api_discovery.learn_from_redirect_traffic.disable_learn_from_redirect_traffic",
 			GoType:    reflect.TypeOf(ves_io_schema_views_common_waf.ApiDiscoverySetting_DisableLearnFromRedirectTraffic{}),
 		},
@@ -13411,8 +14549,8 @@ func init() {
 			GoType:    reflect.TypeOf(ves_io_schema_views_common_waf.InlineRateLimiter_UseHttpLbUserId{}),
 		},
 		{
-			FieldPath: "ves.io.schema.views.http_loadbalancer.CreateRequest.spec.bot_defense_choice.bot_defense.cors_support_choice.disable_cors_support",
-			GoType:    reflect.TypeOf(ves_io_schema_views_common_security.ShapeBotDefenseType_DisableCorsSupport{}),
+			FieldPath: "ves.io.schema.views.http_loadbalancer.CreateRequest.spec.bot_defense_choice.bot_defense.cors_support_choice.enable_cors_support",
+			GoType:    reflect.TypeOf(ves_io_schema_views_common_security.ShapeBotDefenseType_EnableCorsSupport{}),
 		},
 		{
 			FieldPath: "ves.io.schema.views.http_loadbalancer.CreateRequest.spec.bot_defense_choice.bot_defense.policy.java_script_choice.js_insert_all_pages_except.exclude_list.domain_matcher_choice.any_domain",
@@ -13535,6 +14673,10 @@ func init() {
 			GoType:    reflect.TypeOf(ves_io_schema_views_http_loadbalancer.CreateSpecType_L7DdosActionDefault{}),
 		},
 		{
+			FieldPath: "ves.io.schema.views.http_loadbalancer.CreateRequest.spec.loadbalancer_type.https.coalescing_options.coalescing_choice.default_coalescing",
+			GoType:    reflect.TypeOf(ves_io_schema.TLSCoalescingOptions_DefaultCoalescing{}),
+		},
+		{
 			FieldPath: "ves.io.schema.views.http_loadbalancer.CreateRequest.spec.loadbalancer_type.https.header_transformation_type.header_transformation_choice.legacy_header_transformation",
 			GoType:    reflect.TypeOf(ves_io_schema.HeaderTransformationType_LegacyHeaderTransformation{}),
 		},
@@ -13567,6 +14709,10 @@ func init() {
 			GoType:    reflect.TypeOf(ves_io_schema_views.TlsConfig_DefaultSecurity{}),
 		},
 		{
+			FieldPath: "ves.io.schema.views.http_loadbalancer.CreateRequest.spec.loadbalancer_type.https_auto_cert.coalescing_options.coalescing_choice.default_coalescing",
+			GoType:    reflect.TypeOf(ves_io_schema.TLSCoalescingOptions_DefaultCoalescing{}),
+		},
+		{
 			FieldPath: "ves.io.schema.views.http_loadbalancer.CreateRequest.spec.loadbalancer_type.https_auto_cert.header_transformation_type.header_transformation_choice.legacy_header_transformation",
 			GoType:    reflect.TypeOf(ves_io_schema.HeaderTransformationType_LegacyHeaderTransformation{}),
 		},
@@ -13593,6 +14739,26 @@ func init() {
 		{
 			FieldPath: "ves.io.schema.views.http_loadbalancer.CreateRequest.spec.malicious_user_detection_choice.disable_malicious_user_detection",
 			GoType:    reflect.TypeOf(ves_io_schema_views_http_loadbalancer.CreateSpecType_DisableMaliciousUserDetection{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.http_loadbalancer.CreateRequest.spec.malware_protection.disable_malware_protection",
+			GoType:    reflect.TypeOf(ves_io_schema_views_http_loadbalancer.CreateSpecType_DisableMalwareProtection{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.http_loadbalancer.CreateRequest.spec.malware_protection.malware_protection_settings.malware_protection_rules.action.action_choice.block",
+			GoType:    reflect.TypeOf(ves_io_schema.Action_Block{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.http_loadbalancer.CreateRequest.spec.malware_protection.malware_protection_settings.malware_protection_rules.domain.domain_matcher.any_domain",
+			GoType:    reflect.TypeOf(ves_io_schema.DomainMatcherType_AnyDomain{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.http_loadbalancer.CreateRequest.spec.ml_config_choice.single_lb_app.api_discovery_choice.enable_discovery.api_crawler.api_crawler.disable_api_crawler",
+			GoType:    reflect.TypeOf(ves_io_schema_views_common_waf.ApiCrawler_DisableApiCrawler{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.http_loadbalancer.CreateRequest.spec.ml_config_choice.single_lb_app.api_discovery_choice.enable_discovery.api_discovery_settings_choice.default_api_auth_discovery",
+			GoType:    reflect.TypeOf(ves_io_schema_views_common_waf.ApiDiscoverySetting_DefaultApiAuthDiscovery{}),
 		},
 		{
 			FieldPath: "ves.io.schema.views.http_loadbalancer.CreateRequest.spec.ml_config_choice.single_lb_app.api_discovery_choice.enable_discovery.learn_from_redirect_traffic.disable_learn_from_redirect_traffic",
@@ -13811,6 +14977,10 @@ func init() {
 			GoType:    reflect.TypeOf(ves_io_schema_views_http_loadbalancer.RouteTypeSimple_AutoHostRewrite{}),
 		},
 		{
+			FieldPath: "ves.io.schema.views.http_loadbalancer.CreateRequest.spec.routes.choice.simple_route.query_params.query_params.retain_all_params",
+			GoType:    reflect.TypeOf(ves_io_schema_route.QueryParamsSimpleRoute_RetainAllParams{}),
+		},
+		{
 			FieldPath: "ves.io.schema.views.http_loadbalancer.CreateRequest.spec.sensitive_data_policy_choice.default_sensitive_data_policy",
 			GoType:    reflect.TypeOf(ves_io_schema_views_http_loadbalancer.CreateSpecType_DefaultSensitiveDataPolicy{}),
 		},
@@ -13926,6 +15096,14 @@ func init() {
 			GoType:    reflect.TypeOf(ves_io_schema_views_http_loadbalancer.ReplaceSpecType_DisableApiDiscovery{}),
 		},
 		{
+			FieldPath: "ves.io.schema.views.http_loadbalancer.ReplaceRequest.spec.api_discovery_choice.enable_api_discovery.api_crawler.api_crawler.disable_api_crawler",
+			GoType:    reflect.TypeOf(ves_io_schema_views_common_waf.ApiCrawler_DisableApiCrawler{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.http_loadbalancer.ReplaceRequest.spec.api_discovery_choice.enable_api_discovery.api_discovery_settings_choice.default_api_auth_discovery",
+			GoType:    reflect.TypeOf(ves_io_schema_views_common_waf.ApiDiscoverySetting_DefaultApiAuthDiscovery{}),
+		},
+		{
 			FieldPath: "ves.io.schema.views.http_loadbalancer.ReplaceRequest.spec.api_discovery_choice.enable_api_discovery.learn_from_redirect_traffic.disable_learn_from_redirect_traffic",
 			GoType:    reflect.TypeOf(ves_io_schema_views_common_waf.ApiDiscoverySetting_DisableLearnFromRedirectTraffic{}),
 		},
@@ -14026,8 +15204,8 @@ func init() {
 			GoType:    reflect.TypeOf(ves_io_schema_views_common_waf.InlineRateLimiter_UseHttpLbUserId{}),
 		},
 		{
-			FieldPath: "ves.io.schema.views.http_loadbalancer.ReplaceRequest.spec.bot_defense_choice.bot_defense.cors_support_choice.disable_cors_support",
-			GoType:    reflect.TypeOf(ves_io_schema_views_common_security.ShapeBotDefenseType_DisableCorsSupport{}),
+			FieldPath: "ves.io.schema.views.http_loadbalancer.ReplaceRequest.spec.bot_defense_choice.bot_defense.cors_support_choice.enable_cors_support",
+			GoType:    reflect.TypeOf(ves_io_schema_views_common_security.ShapeBotDefenseType_EnableCorsSupport{}),
 		},
 		{
 			FieldPath: "ves.io.schema.views.http_loadbalancer.ReplaceRequest.spec.bot_defense_choice.bot_defense.policy.java_script_choice.js_insert_all_pages_except.exclude_list.domain_matcher_choice.any_domain",
@@ -14150,6 +15328,10 @@ func init() {
 			GoType:    reflect.TypeOf(ves_io_schema_views_http_loadbalancer.ReplaceSpecType_L7DdosActionDefault{}),
 		},
 		{
+			FieldPath: "ves.io.schema.views.http_loadbalancer.ReplaceRequest.spec.loadbalancer_type.https.coalescing_options.coalescing_choice.default_coalescing",
+			GoType:    reflect.TypeOf(ves_io_schema.TLSCoalescingOptions_DefaultCoalescing{}),
+		},
+		{
 			FieldPath: "ves.io.schema.views.http_loadbalancer.ReplaceRequest.spec.loadbalancer_type.https.header_transformation_type.header_transformation_choice.legacy_header_transformation",
 			GoType:    reflect.TypeOf(ves_io_schema.HeaderTransformationType_LegacyHeaderTransformation{}),
 		},
@@ -14182,6 +15364,10 @@ func init() {
 			GoType:    reflect.TypeOf(ves_io_schema_views.TlsConfig_DefaultSecurity{}),
 		},
 		{
+			FieldPath: "ves.io.schema.views.http_loadbalancer.ReplaceRequest.spec.loadbalancer_type.https_auto_cert.coalescing_options.coalescing_choice.default_coalescing",
+			GoType:    reflect.TypeOf(ves_io_schema.TLSCoalescingOptions_DefaultCoalescing{}),
+		},
+		{
 			FieldPath: "ves.io.schema.views.http_loadbalancer.ReplaceRequest.spec.loadbalancer_type.https_auto_cert.header_transformation_type.header_transformation_choice.legacy_header_transformation",
 			GoType:    reflect.TypeOf(ves_io_schema.HeaderTransformationType_LegacyHeaderTransformation{}),
 		},
@@ -14208,6 +15394,26 @@ func init() {
 		{
 			FieldPath: "ves.io.schema.views.http_loadbalancer.ReplaceRequest.spec.malicious_user_detection_choice.disable_malicious_user_detection",
 			GoType:    reflect.TypeOf(ves_io_schema_views_http_loadbalancer.ReplaceSpecType_DisableMaliciousUserDetection{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.http_loadbalancer.ReplaceRequest.spec.malware_protection.disable_malware_protection",
+			GoType:    reflect.TypeOf(ves_io_schema_views_http_loadbalancer.ReplaceSpecType_DisableMalwareProtection{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.http_loadbalancer.ReplaceRequest.spec.malware_protection.malware_protection_settings.malware_protection_rules.action.action_choice.block",
+			GoType:    reflect.TypeOf(ves_io_schema.Action_Block{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.http_loadbalancer.ReplaceRequest.spec.malware_protection.malware_protection_settings.malware_protection_rules.domain.domain_matcher.any_domain",
+			GoType:    reflect.TypeOf(ves_io_schema.DomainMatcherType_AnyDomain{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.http_loadbalancer.ReplaceRequest.spec.ml_config_choice.single_lb_app.api_discovery_choice.enable_discovery.api_crawler.api_crawler.disable_api_crawler",
+			GoType:    reflect.TypeOf(ves_io_schema_views_common_waf.ApiCrawler_DisableApiCrawler{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.http_loadbalancer.ReplaceRequest.spec.ml_config_choice.single_lb_app.api_discovery_choice.enable_discovery.api_discovery_settings_choice.default_api_auth_discovery",
+			GoType:    reflect.TypeOf(ves_io_schema_views_common_waf.ApiDiscoverySetting_DefaultApiAuthDiscovery{}),
 		},
 		{
 			FieldPath: "ves.io.schema.views.http_loadbalancer.ReplaceRequest.spec.ml_config_choice.single_lb_app.api_discovery_choice.enable_discovery.learn_from_redirect_traffic.disable_learn_from_redirect_traffic",
@@ -14426,6 +15632,10 @@ func init() {
 			GoType:    reflect.TypeOf(ves_io_schema_views_http_loadbalancer.RouteTypeSimple_AutoHostRewrite{}),
 		},
 		{
+			FieldPath: "ves.io.schema.views.http_loadbalancer.ReplaceRequest.spec.routes.choice.simple_route.query_params.query_params.retain_all_params",
+			GoType:    reflect.TypeOf(ves_io_schema_route.QueryParamsSimpleRoute_RetainAllParams{}),
+		},
+		{
 			FieldPath: "ves.io.schema.views.http_loadbalancer.ReplaceRequest.spec.sensitive_data_policy_choice.default_sensitive_data_policy",
 			GoType:    reflect.TypeOf(ves_io_schema_views_http_loadbalancer.ReplaceSpecType_DefaultSensitiveDataPolicy{}),
 		},
@@ -14543,6 +15753,14 @@ func init() {
 			GoType:    reflect.TypeOf(ves_io_schema_views_http_loadbalancer.GlobalSpecType_DisableApiDiscovery{}),
 		},
 		{
+			FieldPath: "ves.io.schema.views.http_loadbalancer.crudapi.ObjectCreateReq.spec.gc_spec.api_discovery_choice.enable_api_discovery.api_crawler.api_crawler.disable_api_crawler",
+			GoType:    reflect.TypeOf(ves_io_schema_views_common_waf.ApiCrawler_DisableApiCrawler{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.http_loadbalancer.crudapi.ObjectCreateReq.spec.gc_spec.api_discovery_choice.enable_api_discovery.api_discovery_settings_choice.default_api_auth_discovery",
+			GoType:    reflect.TypeOf(ves_io_schema_views_common_waf.ApiDiscoverySetting_DefaultApiAuthDiscovery{}),
+		},
+		{
 			FieldPath: "ves.io.schema.views.http_loadbalancer.crudapi.ObjectCreateReq.spec.gc_spec.api_discovery_choice.enable_api_discovery.learn_from_redirect_traffic.disable_learn_from_redirect_traffic",
 			GoType:    reflect.TypeOf(ves_io_schema_views_common_waf.ApiDiscoverySetting_DisableLearnFromRedirectTraffic{}),
 		},
@@ -14643,8 +15861,8 @@ func init() {
 			GoType:    reflect.TypeOf(ves_io_schema_views_common_waf.InlineRateLimiter_UseHttpLbUserId{}),
 		},
 		{
-			FieldPath: "ves.io.schema.views.http_loadbalancer.crudapi.ObjectCreateReq.spec.gc_spec.bot_defense_choice.bot_defense.cors_support_choice.disable_cors_support",
-			GoType:    reflect.TypeOf(ves_io_schema_views_common_security.ShapeBotDefenseType_DisableCorsSupport{}),
+			FieldPath: "ves.io.schema.views.http_loadbalancer.crudapi.ObjectCreateReq.spec.gc_spec.bot_defense_choice.bot_defense.cors_support_choice.enable_cors_support",
+			GoType:    reflect.TypeOf(ves_io_schema_views_common_security.ShapeBotDefenseType_EnableCorsSupport{}),
 		},
 		{
 			FieldPath: "ves.io.schema.views.http_loadbalancer.crudapi.ObjectCreateReq.spec.gc_spec.bot_defense_choice.bot_defense.policy.java_script_choice.js_insert_all_pages_except.exclude_list.domain_matcher_choice.any_domain",
@@ -14767,6 +15985,10 @@ func init() {
 			GoType:    reflect.TypeOf(ves_io_schema_views_http_loadbalancer.GlobalSpecType_L7DdosActionDefault{}),
 		},
 		{
+			FieldPath: "ves.io.schema.views.http_loadbalancer.crudapi.ObjectCreateReq.spec.gc_spec.loadbalancer_type.https.coalescing_options.coalescing_choice.default_coalescing",
+			GoType:    reflect.TypeOf(ves_io_schema.TLSCoalescingOptions_DefaultCoalescing{}),
+		},
+		{
 			FieldPath: "ves.io.schema.views.http_loadbalancer.crudapi.ObjectCreateReq.spec.gc_spec.loadbalancer_type.https.header_transformation_type.header_transformation_choice.legacy_header_transformation",
 			GoType:    reflect.TypeOf(ves_io_schema.HeaderTransformationType_LegacyHeaderTransformation{}),
 		},
@@ -14799,6 +16021,10 @@ func init() {
 			GoType:    reflect.TypeOf(ves_io_schema_views.TlsConfig_DefaultSecurity{}),
 		},
 		{
+			FieldPath: "ves.io.schema.views.http_loadbalancer.crudapi.ObjectCreateReq.spec.gc_spec.loadbalancer_type.https_auto_cert.coalescing_options.coalescing_choice.default_coalescing",
+			GoType:    reflect.TypeOf(ves_io_schema.TLSCoalescingOptions_DefaultCoalescing{}),
+		},
+		{
 			FieldPath: "ves.io.schema.views.http_loadbalancer.crudapi.ObjectCreateReq.spec.gc_spec.loadbalancer_type.https_auto_cert.header_transformation_type.header_transformation_choice.legacy_header_transformation",
 			GoType:    reflect.TypeOf(ves_io_schema.HeaderTransformationType_LegacyHeaderTransformation{}),
 		},
@@ -14825,6 +16051,26 @@ func init() {
 		{
 			FieldPath: "ves.io.schema.views.http_loadbalancer.crudapi.ObjectCreateReq.spec.gc_spec.malicious_user_detection_choice.disable_malicious_user_detection",
 			GoType:    reflect.TypeOf(ves_io_schema_views_http_loadbalancer.GlobalSpecType_DisableMaliciousUserDetection{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.http_loadbalancer.crudapi.ObjectCreateReq.spec.gc_spec.malware_protection.disable_malware_protection",
+			GoType:    reflect.TypeOf(ves_io_schema_views_http_loadbalancer.GlobalSpecType_DisableMalwareProtection{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.http_loadbalancer.crudapi.ObjectCreateReq.spec.gc_spec.malware_protection.malware_protection_settings.malware_protection_rules.action.action_choice.block",
+			GoType:    reflect.TypeOf(ves_io_schema.Action_Block{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.http_loadbalancer.crudapi.ObjectCreateReq.spec.gc_spec.malware_protection.malware_protection_settings.malware_protection_rules.domain.domain_matcher.any_domain",
+			GoType:    reflect.TypeOf(ves_io_schema.DomainMatcherType_AnyDomain{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.http_loadbalancer.crudapi.ObjectCreateReq.spec.gc_spec.ml_config_choice.single_lb_app.api_discovery_choice.enable_discovery.api_crawler.api_crawler.disable_api_crawler",
+			GoType:    reflect.TypeOf(ves_io_schema_views_common_waf.ApiCrawler_DisableApiCrawler{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.http_loadbalancer.crudapi.ObjectCreateReq.spec.gc_spec.ml_config_choice.single_lb_app.api_discovery_choice.enable_discovery.api_discovery_settings_choice.default_api_auth_discovery",
+			GoType:    reflect.TypeOf(ves_io_schema_views_common_waf.ApiDiscoverySetting_DefaultApiAuthDiscovery{}),
 		},
 		{
 			FieldPath: "ves.io.schema.views.http_loadbalancer.crudapi.ObjectCreateReq.spec.gc_spec.ml_config_choice.single_lb_app.api_discovery_choice.enable_discovery.learn_from_redirect_traffic.disable_learn_from_redirect_traffic",
@@ -15043,6 +16289,10 @@ func init() {
 			GoType:    reflect.TypeOf(ves_io_schema_views_http_loadbalancer.RouteTypeSimple_AutoHostRewrite{}),
 		},
 		{
+			FieldPath: "ves.io.schema.views.http_loadbalancer.crudapi.ObjectCreateReq.spec.gc_spec.routes.choice.simple_route.query_params.query_params.retain_all_params",
+			GoType:    reflect.TypeOf(ves_io_schema_route.QueryParamsSimpleRoute_RetainAllParams{}),
+		},
+		{
 			FieldPath: "ves.io.schema.views.http_loadbalancer.crudapi.ObjectCreateReq.spec.gc_spec.sensitive_data_policy_choice.default_sensitive_data_policy",
 			GoType:    reflect.TypeOf(ves_io_schema_views_http_loadbalancer.GlobalSpecType_DefaultSensitiveDataPolicy{}),
 		},
@@ -15158,6 +16408,14 @@ func init() {
 			GoType:    reflect.TypeOf(ves_io_schema_views_http_loadbalancer.GlobalSpecType_DisableApiDiscovery{}),
 		},
 		{
+			FieldPath: "ves.io.schema.views.http_loadbalancer.crudapi.ObjectReplaceReq.spec.gc_spec.api_discovery_choice.enable_api_discovery.api_crawler.api_crawler.disable_api_crawler",
+			GoType:    reflect.TypeOf(ves_io_schema_views_common_waf.ApiCrawler_DisableApiCrawler{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.http_loadbalancer.crudapi.ObjectReplaceReq.spec.gc_spec.api_discovery_choice.enable_api_discovery.api_discovery_settings_choice.default_api_auth_discovery",
+			GoType:    reflect.TypeOf(ves_io_schema_views_common_waf.ApiDiscoverySetting_DefaultApiAuthDiscovery{}),
+		},
+		{
 			FieldPath: "ves.io.schema.views.http_loadbalancer.crudapi.ObjectReplaceReq.spec.gc_spec.api_discovery_choice.enable_api_discovery.learn_from_redirect_traffic.disable_learn_from_redirect_traffic",
 			GoType:    reflect.TypeOf(ves_io_schema_views_common_waf.ApiDiscoverySetting_DisableLearnFromRedirectTraffic{}),
 		},
@@ -15258,8 +16516,8 @@ func init() {
 			GoType:    reflect.TypeOf(ves_io_schema_views_common_waf.InlineRateLimiter_UseHttpLbUserId{}),
 		},
 		{
-			FieldPath: "ves.io.schema.views.http_loadbalancer.crudapi.ObjectReplaceReq.spec.gc_spec.bot_defense_choice.bot_defense.cors_support_choice.disable_cors_support",
-			GoType:    reflect.TypeOf(ves_io_schema_views_common_security.ShapeBotDefenseType_DisableCorsSupport{}),
+			FieldPath: "ves.io.schema.views.http_loadbalancer.crudapi.ObjectReplaceReq.spec.gc_spec.bot_defense_choice.bot_defense.cors_support_choice.enable_cors_support",
+			GoType:    reflect.TypeOf(ves_io_schema_views_common_security.ShapeBotDefenseType_EnableCorsSupport{}),
 		},
 		{
 			FieldPath: "ves.io.schema.views.http_loadbalancer.crudapi.ObjectReplaceReq.spec.gc_spec.bot_defense_choice.bot_defense.policy.java_script_choice.js_insert_all_pages_except.exclude_list.domain_matcher_choice.any_domain",
@@ -15382,6 +16640,10 @@ func init() {
 			GoType:    reflect.TypeOf(ves_io_schema_views_http_loadbalancer.GlobalSpecType_L7DdosActionDefault{}),
 		},
 		{
+			FieldPath: "ves.io.schema.views.http_loadbalancer.crudapi.ObjectReplaceReq.spec.gc_spec.loadbalancer_type.https.coalescing_options.coalescing_choice.default_coalescing",
+			GoType:    reflect.TypeOf(ves_io_schema.TLSCoalescingOptions_DefaultCoalescing{}),
+		},
+		{
 			FieldPath: "ves.io.schema.views.http_loadbalancer.crudapi.ObjectReplaceReq.spec.gc_spec.loadbalancer_type.https.header_transformation_type.header_transformation_choice.legacy_header_transformation",
 			GoType:    reflect.TypeOf(ves_io_schema.HeaderTransformationType_LegacyHeaderTransformation{}),
 		},
@@ -15414,6 +16676,10 @@ func init() {
 			GoType:    reflect.TypeOf(ves_io_schema_views.TlsConfig_DefaultSecurity{}),
 		},
 		{
+			FieldPath: "ves.io.schema.views.http_loadbalancer.crudapi.ObjectReplaceReq.spec.gc_spec.loadbalancer_type.https_auto_cert.coalescing_options.coalescing_choice.default_coalescing",
+			GoType:    reflect.TypeOf(ves_io_schema.TLSCoalescingOptions_DefaultCoalescing{}),
+		},
+		{
 			FieldPath: "ves.io.schema.views.http_loadbalancer.crudapi.ObjectReplaceReq.spec.gc_spec.loadbalancer_type.https_auto_cert.header_transformation_type.header_transformation_choice.legacy_header_transformation",
 			GoType:    reflect.TypeOf(ves_io_schema.HeaderTransformationType_LegacyHeaderTransformation{}),
 		},
@@ -15440,6 +16706,26 @@ func init() {
 		{
 			FieldPath: "ves.io.schema.views.http_loadbalancer.crudapi.ObjectReplaceReq.spec.gc_spec.malicious_user_detection_choice.disable_malicious_user_detection",
 			GoType:    reflect.TypeOf(ves_io_schema_views_http_loadbalancer.GlobalSpecType_DisableMaliciousUserDetection{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.http_loadbalancer.crudapi.ObjectReplaceReq.spec.gc_spec.malware_protection.disable_malware_protection",
+			GoType:    reflect.TypeOf(ves_io_schema_views_http_loadbalancer.GlobalSpecType_DisableMalwareProtection{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.http_loadbalancer.crudapi.ObjectReplaceReq.spec.gc_spec.malware_protection.malware_protection_settings.malware_protection_rules.action.action_choice.block",
+			GoType:    reflect.TypeOf(ves_io_schema.Action_Block{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.http_loadbalancer.crudapi.ObjectReplaceReq.spec.gc_spec.malware_protection.malware_protection_settings.malware_protection_rules.domain.domain_matcher.any_domain",
+			GoType:    reflect.TypeOf(ves_io_schema.DomainMatcherType_AnyDomain{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.http_loadbalancer.crudapi.ObjectReplaceReq.spec.gc_spec.ml_config_choice.single_lb_app.api_discovery_choice.enable_discovery.api_crawler.api_crawler.disable_api_crawler",
+			GoType:    reflect.TypeOf(ves_io_schema_views_common_waf.ApiCrawler_DisableApiCrawler{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.http_loadbalancer.crudapi.ObjectReplaceReq.spec.gc_spec.ml_config_choice.single_lb_app.api_discovery_choice.enable_discovery.api_discovery_settings_choice.default_api_auth_discovery",
+			GoType:    reflect.TypeOf(ves_io_schema_views_common_waf.ApiDiscoverySetting_DefaultApiAuthDiscovery{}),
 		},
 		{
 			FieldPath: "ves.io.schema.views.http_loadbalancer.crudapi.ObjectReplaceReq.spec.gc_spec.ml_config_choice.single_lb_app.api_discovery_choice.enable_discovery.learn_from_redirect_traffic.disable_learn_from_redirect_traffic",
@@ -15656,6 +16942,10 @@ func init() {
 		{
 			FieldPath: "ves.io.schema.views.http_loadbalancer.crudapi.ObjectReplaceReq.spec.gc_spec.routes.choice.simple_route.host_rewrite_params.auto_host_rewrite",
 			GoType:    reflect.TypeOf(ves_io_schema_views_http_loadbalancer.RouteTypeSimple_AutoHostRewrite{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.http_loadbalancer.crudapi.ObjectReplaceReq.spec.gc_spec.routes.choice.simple_route.query_params.query_params.retain_all_params",
+			GoType:    reflect.TypeOf(ves_io_schema_route.QueryParamsSimpleRoute_RetainAllParams{}),
 		},
 		{
 			FieldPath: "ves.io.schema.views.http_loadbalancer.crudapi.ObjectReplaceReq.spec.gc_spec.sensitive_data_policy_choice.default_sensitive_data_policy",
@@ -16845,6 +18135,10 @@ func init() {
 			GoType:    reflect.TypeOf(ves_io_schema_views.PerformanceEnhancementModeType_PerfModeL7Enhanced{}),
 		},
 		{
+			FieldPath: "ves.io.schema.views.securemesh_site_v2.CreateRequest.spec.provider_choice.aws.orchestration_choice.managed.service_vpc_choice.new_vpc.name_choice.autogenerate",
+			GoType:    reflect.TypeOf(ves_io_schema_views.AWSVPCParamsType_Autogenerate{}),
+		},
+		{
 			FieldPath: "ves.io.schema.views.securemesh_site_v2.CreateRequest.spec.provider_choice.aws.orchestration_choice.not_managed.node_list.interface_list.address_choice.dhcp_client",
 			GoType:    reflect.TypeOf(ves_io_schema_views_securemesh_site_v2.Interface_DhcpClient{}),
 		},
@@ -16985,6 +18279,34 @@ func init() {
 			GoType:    reflect.TypeOf(ves_io_schema_network_interface.IPV6LocalDnsAddress_FirstAddress{}),
 		},
 		{
+			FieldPath: "ves.io.schema.views.securemesh_site_v2.CreateRequest.spec.provider_choice.nutanix.orchestration_choice.not_managed.node_list.interface_list.address_choice.dhcp_client",
+			GoType:    reflect.TypeOf(ves_io_schema_views_securemesh_site_v2.Interface_DhcpClient{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site_v2.CreateRequest.spec.provider_choice.nutanix.orchestration_choice.not_managed.node_list.interface_list.address_choice.dhcp_server.dhcp_networks.dns_choice.same_as_dgw",
+			GoType:    reflect.TypeOf(ves_io_schema_network_interface.DHCPNetworkType_SameAsDgw{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site_v2.CreateRequest.spec.provider_choice.nutanix.orchestration_choice.not_managed.node_list.interface_list.address_choice.dhcp_server.dhcp_networks.gateway_choice.first_address",
+			GoType:    reflect.TypeOf(ves_io_schema_network_interface.DHCPNetworkType_FirstAddress{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site_v2.CreateRequest.spec.provider_choice.nutanix.orchestration_choice.not_managed.node_list.interface_list.address_choice.dhcp_server.interfaces_addressing_choice.automatic_from_start",
+			GoType:    reflect.TypeOf(ves_io_schema_network_interface.DHCPServerParametersType_AutomaticFromStart{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site_v2.CreateRequest.spec.provider_choice.nutanix.orchestration_choice.not_managed.node_list.interface_list.ipv6_address_choice.ipv6_auto_config.autoconfig_choice.host",
+			GoType:    reflect.TypeOf(ves_io_schema_network_interface.IPV6AutoConfigType_Host{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site_v2.CreateRequest.spec.provider_choice.nutanix.orchestration_choice.not_managed.node_list.interface_list.ipv6_address_choice.ipv6_auto_config.autoconfig_choice.router.address_choice.stateful.interfaces_addressing_choice.automatic_from_start",
+			GoType:    reflect.TypeOf(ves_io_schema_network_interface.DHCPIPV6StatefulServer_AutomaticFromStart{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site_v2.CreateRequest.spec.provider_choice.nutanix.orchestration_choice.not_managed.node_list.interface_list.ipv6_address_choice.ipv6_auto_config.autoconfig_choice.router.dns_config.dns_choice.local_dns.local_dns_choice.first_address",
+			GoType:    reflect.TypeOf(ves_io_schema_network_interface.IPV6LocalDnsAddress_FirstAddress{}),
+		},
+		{
 			FieldPath: "ves.io.schema.views.securemesh_site_v2.CreateRequest.spec.provider_choice.oci.orchestration_choice.not_managed.node_list.interface_list.address_choice.dhcp_client",
 			GoType:    reflect.TypeOf(ves_io_schema_views_securemesh_site_v2.Interface_DhcpClient{}),
 		},
@@ -17010,6 +18332,34 @@ func init() {
 		},
 		{
 			FieldPath: "ves.io.schema.views.securemesh_site_v2.CreateRequest.spec.provider_choice.oci.orchestration_choice.not_managed.node_list.interface_list.ipv6_address_choice.ipv6_auto_config.autoconfig_choice.router.dns_config.dns_choice.local_dns.local_dns_choice.first_address",
+			GoType:    reflect.TypeOf(ves_io_schema_network_interface.IPV6LocalDnsAddress_FirstAddress{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site_v2.CreateRequest.spec.provider_choice.openstack.orchestration_choice.not_managed.node_list.interface_list.address_choice.dhcp_client",
+			GoType:    reflect.TypeOf(ves_io_schema_views_securemesh_site_v2.Interface_DhcpClient{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site_v2.CreateRequest.spec.provider_choice.openstack.orchestration_choice.not_managed.node_list.interface_list.address_choice.dhcp_server.dhcp_networks.dns_choice.same_as_dgw",
+			GoType:    reflect.TypeOf(ves_io_schema_network_interface.DHCPNetworkType_SameAsDgw{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site_v2.CreateRequest.spec.provider_choice.openstack.orchestration_choice.not_managed.node_list.interface_list.address_choice.dhcp_server.dhcp_networks.gateway_choice.first_address",
+			GoType:    reflect.TypeOf(ves_io_schema_network_interface.DHCPNetworkType_FirstAddress{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site_v2.CreateRequest.spec.provider_choice.openstack.orchestration_choice.not_managed.node_list.interface_list.address_choice.dhcp_server.interfaces_addressing_choice.automatic_from_start",
+			GoType:    reflect.TypeOf(ves_io_schema_network_interface.DHCPServerParametersType_AutomaticFromStart{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site_v2.CreateRequest.spec.provider_choice.openstack.orchestration_choice.not_managed.node_list.interface_list.ipv6_address_choice.ipv6_auto_config.autoconfig_choice.host",
+			GoType:    reflect.TypeOf(ves_io_schema_network_interface.IPV6AutoConfigType_Host{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site_v2.CreateRequest.spec.provider_choice.openstack.orchestration_choice.not_managed.node_list.interface_list.ipv6_address_choice.ipv6_auto_config.autoconfig_choice.router.address_choice.stateful.interfaces_addressing_choice.automatic_from_start",
+			GoType:    reflect.TypeOf(ves_io_schema_network_interface.DHCPIPV6StatefulServer_AutomaticFromStart{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site_v2.CreateRequest.spec.provider_choice.openstack.orchestration_choice.not_managed.node_list.interface_list.ipv6_address_choice.ipv6_auto_config.autoconfig_choice.router.dns_config.dns_choice.local_dns.local_dns_choice.first_address",
 			GoType:    reflect.TypeOf(ves_io_schema_network_interface.IPV6LocalDnsAddress_FirstAddress{}),
 		},
 		{
@@ -17130,6 +18480,10 @@ func init() {
 		{
 			FieldPath: "ves.io.schema.views.securemesh_site_v2.ReplaceRequest.spec.performance_enhancement_mode.perf_mode_choice.perf_mode_l7_enhanced",
 			GoType:    reflect.TypeOf(ves_io_schema_views.PerformanceEnhancementModeType_PerfModeL7Enhanced{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site_v2.ReplaceRequest.spec.provider_choice.aws.orchestration_choice.managed.service_vpc_choice.new_vpc.name_choice.autogenerate",
+			GoType:    reflect.TypeOf(ves_io_schema_views.AWSVPCParamsType_Autogenerate{}),
 		},
 		{
 			FieldPath: "ves.io.schema.views.securemesh_site_v2.ReplaceRequest.spec.provider_choice.aws.orchestration_choice.not_managed.node_list.interface_list.address_choice.dhcp_client",
@@ -17272,6 +18626,34 @@ func init() {
 			GoType:    reflect.TypeOf(ves_io_schema_network_interface.IPV6LocalDnsAddress_FirstAddress{}),
 		},
 		{
+			FieldPath: "ves.io.schema.views.securemesh_site_v2.ReplaceRequest.spec.provider_choice.nutanix.orchestration_choice.not_managed.node_list.interface_list.address_choice.dhcp_client",
+			GoType:    reflect.TypeOf(ves_io_schema_views_securemesh_site_v2.Interface_DhcpClient{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site_v2.ReplaceRequest.spec.provider_choice.nutanix.orchestration_choice.not_managed.node_list.interface_list.address_choice.dhcp_server.dhcp_networks.dns_choice.same_as_dgw",
+			GoType:    reflect.TypeOf(ves_io_schema_network_interface.DHCPNetworkType_SameAsDgw{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site_v2.ReplaceRequest.spec.provider_choice.nutanix.orchestration_choice.not_managed.node_list.interface_list.address_choice.dhcp_server.dhcp_networks.gateway_choice.first_address",
+			GoType:    reflect.TypeOf(ves_io_schema_network_interface.DHCPNetworkType_FirstAddress{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site_v2.ReplaceRequest.spec.provider_choice.nutanix.orchestration_choice.not_managed.node_list.interface_list.address_choice.dhcp_server.interfaces_addressing_choice.automatic_from_start",
+			GoType:    reflect.TypeOf(ves_io_schema_network_interface.DHCPServerParametersType_AutomaticFromStart{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site_v2.ReplaceRequest.spec.provider_choice.nutanix.orchestration_choice.not_managed.node_list.interface_list.ipv6_address_choice.ipv6_auto_config.autoconfig_choice.host",
+			GoType:    reflect.TypeOf(ves_io_schema_network_interface.IPV6AutoConfigType_Host{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site_v2.ReplaceRequest.spec.provider_choice.nutanix.orchestration_choice.not_managed.node_list.interface_list.ipv6_address_choice.ipv6_auto_config.autoconfig_choice.router.address_choice.stateful.interfaces_addressing_choice.automatic_from_start",
+			GoType:    reflect.TypeOf(ves_io_schema_network_interface.DHCPIPV6StatefulServer_AutomaticFromStart{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site_v2.ReplaceRequest.spec.provider_choice.nutanix.orchestration_choice.not_managed.node_list.interface_list.ipv6_address_choice.ipv6_auto_config.autoconfig_choice.router.dns_config.dns_choice.local_dns.local_dns_choice.first_address",
+			GoType:    reflect.TypeOf(ves_io_schema_network_interface.IPV6LocalDnsAddress_FirstAddress{}),
+		},
+		{
 			FieldPath: "ves.io.schema.views.securemesh_site_v2.ReplaceRequest.spec.provider_choice.oci.orchestration_choice.not_managed.node_list.interface_list.address_choice.dhcp_client",
 			GoType:    reflect.TypeOf(ves_io_schema_views_securemesh_site_v2.Interface_DhcpClient{}),
 		},
@@ -17297,6 +18679,34 @@ func init() {
 		},
 		{
 			FieldPath: "ves.io.schema.views.securemesh_site_v2.ReplaceRequest.spec.provider_choice.oci.orchestration_choice.not_managed.node_list.interface_list.ipv6_address_choice.ipv6_auto_config.autoconfig_choice.router.dns_config.dns_choice.local_dns.local_dns_choice.first_address",
+			GoType:    reflect.TypeOf(ves_io_schema_network_interface.IPV6LocalDnsAddress_FirstAddress{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site_v2.ReplaceRequest.spec.provider_choice.openstack.orchestration_choice.not_managed.node_list.interface_list.address_choice.dhcp_client",
+			GoType:    reflect.TypeOf(ves_io_schema_views_securemesh_site_v2.Interface_DhcpClient{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site_v2.ReplaceRequest.spec.provider_choice.openstack.orchestration_choice.not_managed.node_list.interface_list.address_choice.dhcp_server.dhcp_networks.dns_choice.same_as_dgw",
+			GoType:    reflect.TypeOf(ves_io_schema_network_interface.DHCPNetworkType_SameAsDgw{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site_v2.ReplaceRequest.spec.provider_choice.openstack.orchestration_choice.not_managed.node_list.interface_list.address_choice.dhcp_server.dhcp_networks.gateway_choice.first_address",
+			GoType:    reflect.TypeOf(ves_io_schema_network_interface.DHCPNetworkType_FirstAddress{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site_v2.ReplaceRequest.spec.provider_choice.openstack.orchestration_choice.not_managed.node_list.interface_list.address_choice.dhcp_server.interfaces_addressing_choice.automatic_from_start",
+			GoType:    reflect.TypeOf(ves_io_schema_network_interface.DHCPServerParametersType_AutomaticFromStart{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site_v2.ReplaceRequest.spec.provider_choice.openstack.orchestration_choice.not_managed.node_list.interface_list.ipv6_address_choice.ipv6_auto_config.autoconfig_choice.host",
+			GoType:    reflect.TypeOf(ves_io_schema_network_interface.IPV6AutoConfigType_Host{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site_v2.ReplaceRequest.spec.provider_choice.openstack.orchestration_choice.not_managed.node_list.interface_list.ipv6_address_choice.ipv6_auto_config.autoconfig_choice.router.address_choice.stateful.interfaces_addressing_choice.automatic_from_start",
+			GoType:    reflect.TypeOf(ves_io_schema_network_interface.DHCPIPV6StatefulServer_AutomaticFromStart{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site_v2.ReplaceRequest.spec.provider_choice.openstack.orchestration_choice.not_managed.node_list.interface_list.ipv6_address_choice.ipv6_auto_config.autoconfig_choice.router.dns_config.dns_choice.local_dns.local_dns_choice.first_address",
 			GoType:    reflect.TypeOf(ves_io_schema_network_interface.IPV6LocalDnsAddress_FirstAddress{}),
 		},
 		{
@@ -17419,6 +18829,10 @@ func init() {
 		{
 			FieldPath: "ves.io.schema.views.securemesh_site_v2.crudapi.ObjectCreateReq.spec.gc_spec.performance_enhancement_mode.perf_mode_choice.perf_mode_l7_enhanced",
 			GoType:    reflect.TypeOf(ves_io_schema_views.PerformanceEnhancementModeType_PerfModeL7Enhanced{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site_v2.crudapi.ObjectCreateReq.spec.gc_spec.provider_choice.aws.orchestration_choice.managed.service_vpc_choice.new_vpc.name_choice.autogenerate",
+			GoType:    reflect.TypeOf(ves_io_schema_views.AWSVPCParamsType_Autogenerate{}),
 		},
 		{
 			FieldPath: "ves.io.schema.views.securemesh_site_v2.crudapi.ObjectCreateReq.spec.gc_spec.provider_choice.aws.orchestration_choice.not_managed.node_list.interface_list.address_choice.dhcp_client",
@@ -17561,6 +18975,34 @@ func init() {
 			GoType:    reflect.TypeOf(ves_io_schema_network_interface.IPV6LocalDnsAddress_FirstAddress{}),
 		},
 		{
+			FieldPath: "ves.io.schema.views.securemesh_site_v2.crudapi.ObjectCreateReq.spec.gc_spec.provider_choice.nutanix.orchestration_choice.not_managed.node_list.interface_list.address_choice.dhcp_client",
+			GoType:    reflect.TypeOf(ves_io_schema_views_securemesh_site_v2.Interface_DhcpClient{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site_v2.crudapi.ObjectCreateReq.spec.gc_spec.provider_choice.nutanix.orchestration_choice.not_managed.node_list.interface_list.address_choice.dhcp_server.dhcp_networks.dns_choice.same_as_dgw",
+			GoType:    reflect.TypeOf(ves_io_schema_network_interface.DHCPNetworkType_SameAsDgw{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site_v2.crudapi.ObjectCreateReq.spec.gc_spec.provider_choice.nutanix.orchestration_choice.not_managed.node_list.interface_list.address_choice.dhcp_server.dhcp_networks.gateway_choice.first_address",
+			GoType:    reflect.TypeOf(ves_io_schema_network_interface.DHCPNetworkType_FirstAddress{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site_v2.crudapi.ObjectCreateReq.spec.gc_spec.provider_choice.nutanix.orchestration_choice.not_managed.node_list.interface_list.address_choice.dhcp_server.interfaces_addressing_choice.automatic_from_start",
+			GoType:    reflect.TypeOf(ves_io_schema_network_interface.DHCPServerParametersType_AutomaticFromStart{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site_v2.crudapi.ObjectCreateReq.spec.gc_spec.provider_choice.nutanix.orchestration_choice.not_managed.node_list.interface_list.ipv6_address_choice.ipv6_auto_config.autoconfig_choice.host",
+			GoType:    reflect.TypeOf(ves_io_schema_network_interface.IPV6AutoConfigType_Host{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site_v2.crudapi.ObjectCreateReq.spec.gc_spec.provider_choice.nutanix.orchestration_choice.not_managed.node_list.interface_list.ipv6_address_choice.ipv6_auto_config.autoconfig_choice.router.address_choice.stateful.interfaces_addressing_choice.automatic_from_start",
+			GoType:    reflect.TypeOf(ves_io_schema_network_interface.DHCPIPV6StatefulServer_AutomaticFromStart{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site_v2.crudapi.ObjectCreateReq.spec.gc_spec.provider_choice.nutanix.orchestration_choice.not_managed.node_list.interface_list.ipv6_address_choice.ipv6_auto_config.autoconfig_choice.router.dns_config.dns_choice.local_dns.local_dns_choice.first_address",
+			GoType:    reflect.TypeOf(ves_io_schema_network_interface.IPV6LocalDnsAddress_FirstAddress{}),
+		},
+		{
 			FieldPath: "ves.io.schema.views.securemesh_site_v2.crudapi.ObjectCreateReq.spec.gc_spec.provider_choice.oci.orchestration_choice.not_managed.node_list.interface_list.address_choice.dhcp_client",
 			GoType:    reflect.TypeOf(ves_io_schema_views_securemesh_site_v2.Interface_DhcpClient{}),
 		},
@@ -17586,6 +19028,34 @@ func init() {
 		},
 		{
 			FieldPath: "ves.io.schema.views.securemesh_site_v2.crudapi.ObjectCreateReq.spec.gc_spec.provider_choice.oci.orchestration_choice.not_managed.node_list.interface_list.ipv6_address_choice.ipv6_auto_config.autoconfig_choice.router.dns_config.dns_choice.local_dns.local_dns_choice.first_address",
+			GoType:    reflect.TypeOf(ves_io_schema_network_interface.IPV6LocalDnsAddress_FirstAddress{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site_v2.crudapi.ObjectCreateReq.spec.gc_spec.provider_choice.openstack.orchestration_choice.not_managed.node_list.interface_list.address_choice.dhcp_client",
+			GoType:    reflect.TypeOf(ves_io_schema_views_securemesh_site_v2.Interface_DhcpClient{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site_v2.crudapi.ObjectCreateReq.spec.gc_spec.provider_choice.openstack.orchestration_choice.not_managed.node_list.interface_list.address_choice.dhcp_server.dhcp_networks.dns_choice.same_as_dgw",
+			GoType:    reflect.TypeOf(ves_io_schema_network_interface.DHCPNetworkType_SameAsDgw{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site_v2.crudapi.ObjectCreateReq.spec.gc_spec.provider_choice.openstack.orchestration_choice.not_managed.node_list.interface_list.address_choice.dhcp_server.dhcp_networks.gateway_choice.first_address",
+			GoType:    reflect.TypeOf(ves_io_schema_network_interface.DHCPNetworkType_FirstAddress{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site_v2.crudapi.ObjectCreateReq.spec.gc_spec.provider_choice.openstack.orchestration_choice.not_managed.node_list.interface_list.address_choice.dhcp_server.interfaces_addressing_choice.automatic_from_start",
+			GoType:    reflect.TypeOf(ves_io_schema_network_interface.DHCPServerParametersType_AutomaticFromStart{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site_v2.crudapi.ObjectCreateReq.spec.gc_spec.provider_choice.openstack.orchestration_choice.not_managed.node_list.interface_list.ipv6_address_choice.ipv6_auto_config.autoconfig_choice.host",
+			GoType:    reflect.TypeOf(ves_io_schema_network_interface.IPV6AutoConfigType_Host{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site_v2.crudapi.ObjectCreateReq.spec.gc_spec.provider_choice.openstack.orchestration_choice.not_managed.node_list.interface_list.ipv6_address_choice.ipv6_auto_config.autoconfig_choice.router.address_choice.stateful.interfaces_addressing_choice.automatic_from_start",
+			GoType:    reflect.TypeOf(ves_io_schema_network_interface.DHCPIPV6StatefulServer_AutomaticFromStart{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site_v2.crudapi.ObjectCreateReq.spec.gc_spec.provider_choice.openstack.orchestration_choice.not_managed.node_list.interface_list.ipv6_address_choice.ipv6_auto_config.autoconfig_choice.router.dns_config.dns_choice.local_dns.local_dns_choice.first_address",
 			GoType:    reflect.TypeOf(ves_io_schema_network_interface.IPV6LocalDnsAddress_FirstAddress{}),
 		},
 		{
@@ -17706,6 +19176,10 @@ func init() {
 		{
 			FieldPath: "ves.io.schema.views.securemesh_site_v2.crudapi.ObjectReplaceReq.spec.gc_spec.performance_enhancement_mode.perf_mode_choice.perf_mode_l7_enhanced",
 			GoType:    reflect.TypeOf(ves_io_schema_views.PerformanceEnhancementModeType_PerfModeL7Enhanced{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site_v2.crudapi.ObjectReplaceReq.spec.gc_spec.provider_choice.aws.orchestration_choice.managed.service_vpc_choice.new_vpc.name_choice.autogenerate",
+			GoType:    reflect.TypeOf(ves_io_schema_views.AWSVPCParamsType_Autogenerate{}),
 		},
 		{
 			FieldPath: "ves.io.schema.views.securemesh_site_v2.crudapi.ObjectReplaceReq.spec.gc_spec.provider_choice.aws.orchestration_choice.not_managed.node_list.interface_list.address_choice.dhcp_client",
@@ -17848,6 +19322,34 @@ func init() {
 			GoType:    reflect.TypeOf(ves_io_schema_network_interface.IPV6LocalDnsAddress_FirstAddress{}),
 		},
 		{
+			FieldPath: "ves.io.schema.views.securemesh_site_v2.crudapi.ObjectReplaceReq.spec.gc_spec.provider_choice.nutanix.orchestration_choice.not_managed.node_list.interface_list.address_choice.dhcp_client",
+			GoType:    reflect.TypeOf(ves_io_schema_views_securemesh_site_v2.Interface_DhcpClient{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site_v2.crudapi.ObjectReplaceReq.spec.gc_spec.provider_choice.nutanix.orchestration_choice.not_managed.node_list.interface_list.address_choice.dhcp_server.dhcp_networks.dns_choice.same_as_dgw",
+			GoType:    reflect.TypeOf(ves_io_schema_network_interface.DHCPNetworkType_SameAsDgw{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site_v2.crudapi.ObjectReplaceReq.spec.gc_spec.provider_choice.nutanix.orchestration_choice.not_managed.node_list.interface_list.address_choice.dhcp_server.dhcp_networks.gateway_choice.first_address",
+			GoType:    reflect.TypeOf(ves_io_schema_network_interface.DHCPNetworkType_FirstAddress{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site_v2.crudapi.ObjectReplaceReq.spec.gc_spec.provider_choice.nutanix.orchestration_choice.not_managed.node_list.interface_list.address_choice.dhcp_server.interfaces_addressing_choice.automatic_from_start",
+			GoType:    reflect.TypeOf(ves_io_schema_network_interface.DHCPServerParametersType_AutomaticFromStart{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site_v2.crudapi.ObjectReplaceReq.spec.gc_spec.provider_choice.nutanix.orchestration_choice.not_managed.node_list.interface_list.ipv6_address_choice.ipv6_auto_config.autoconfig_choice.host",
+			GoType:    reflect.TypeOf(ves_io_schema_network_interface.IPV6AutoConfigType_Host{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site_v2.crudapi.ObjectReplaceReq.spec.gc_spec.provider_choice.nutanix.orchestration_choice.not_managed.node_list.interface_list.ipv6_address_choice.ipv6_auto_config.autoconfig_choice.router.address_choice.stateful.interfaces_addressing_choice.automatic_from_start",
+			GoType:    reflect.TypeOf(ves_io_schema_network_interface.DHCPIPV6StatefulServer_AutomaticFromStart{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site_v2.crudapi.ObjectReplaceReq.spec.gc_spec.provider_choice.nutanix.orchestration_choice.not_managed.node_list.interface_list.ipv6_address_choice.ipv6_auto_config.autoconfig_choice.router.dns_config.dns_choice.local_dns.local_dns_choice.first_address",
+			GoType:    reflect.TypeOf(ves_io_schema_network_interface.IPV6LocalDnsAddress_FirstAddress{}),
+		},
+		{
 			FieldPath: "ves.io.schema.views.securemesh_site_v2.crudapi.ObjectReplaceReq.spec.gc_spec.provider_choice.oci.orchestration_choice.not_managed.node_list.interface_list.address_choice.dhcp_client",
 			GoType:    reflect.TypeOf(ves_io_schema_views_securemesh_site_v2.Interface_DhcpClient{}),
 		},
@@ -17873,6 +19375,34 @@ func init() {
 		},
 		{
 			FieldPath: "ves.io.schema.views.securemesh_site_v2.crudapi.ObjectReplaceReq.spec.gc_spec.provider_choice.oci.orchestration_choice.not_managed.node_list.interface_list.ipv6_address_choice.ipv6_auto_config.autoconfig_choice.router.dns_config.dns_choice.local_dns.local_dns_choice.first_address",
+			GoType:    reflect.TypeOf(ves_io_schema_network_interface.IPV6LocalDnsAddress_FirstAddress{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site_v2.crudapi.ObjectReplaceReq.spec.gc_spec.provider_choice.openstack.orchestration_choice.not_managed.node_list.interface_list.address_choice.dhcp_client",
+			GoType:    reflect.TypeOf(ves_io_schema_views_securemesh_site_v2.Interface_DhcpClient{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site_v2.crudapi.ObjectReplaceReq.spec.gc_spec.provider_choice.openstack.orchestration_choice.not_managed.node_list.interface_list.address_choice.dhcp_server.dhcp_networks.dns_choice.same_as_dgw",
+			GoType:    reflect.TypeOf(ves_io_schema_network_interface.DHCPNetworkType_SameAsDgw{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site_v2.crudapi.ObjectReplaceReq.spec.gc_spec.provider_choice.openstack.orchestration_choice.not_managed.node_list.interface_list.address_choice.dhcp_server.dhcp_networks.gateway_choice.first_address",
+			GoType:    reflect.TypeOf(ves_io_schema_network_interface.DHCPNetworkType_FirstAddress{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site_v2.crudapi.ObjectReplaceReq.spec.gc_spec.provider_choice.openstack.orchestration_choice.not_managed.node_list.interface_list.address_choice.dhcp_server.interfaces_addressing_choice.automatic_from_start",
+			GoType:    reflect.TypeOf(ves_io_schema_network_interface.DHCPServerParametersType_AutomaticFromStart{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site_v2.crudapi.ObjectReplaceReq.spec.gc_spec.provider_choice.openstack.orchestration_choice.not_managed.node_list.interface_list.ipv6_address_choice.ipv6_auto_config.autoconfig_choice.host",
+			GoType:    reflect.TypeOf(ves_io_schema_network_interface.IPV6AutoConfigType_Host{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site_v2.crudapi.ObjectReplaceReq.spec.gc_spec.provider_choice.openstack.orchestration_choice.not_managed.node_list.interface_list.ipv6_address_choice.ipv6_auto_config.autoconfig_choice.router.address_choice.stateful.interfaces_addressing_choice.automatic_from_start",
+			GoType:    reflect.TypeOf(ves_io_schema_network_interface.DHCPIPV6StatefulServer_AutomaticFromStart{}),
+		},
+		{
+			FieldPath: "ves.io.schema.views.securemesh_site_v2.crudapi.ObjectReplaceReq.spec.gc_spec.provider_choice.openstack.orchestration_choice.not_managed.node_list.interface_list.ipv6_address_choice.ipv6_auto_config.autoconfig_choice.router.dns_config.dns_choice.local_dns.local_dns_choice.first_address",
 			GoType:    reflect.TypeOf(ves_io_schema_network_interface.IPV6LocalDnsAddress_FirstAddress{}),
 		},
 		{
@@ -18221,8 +19751,8 @@ func init() {
 			GoType:    reflect.TypeOf(ves_io_schema_bgp.FamilyInet_Enable{}),
 		},
 		{
-			FieldPath: "ves.io.schema.views.voltstack_site.CreateRequest.spec.local_control_plane_choice.local_control_plane.bgp_config.peers.type_choice.external.family_inet_v6.enable_choice.enable",
-			GoType:    reflect.TypeOf(ves_io_schema_bgp.FamilyInet6_Enable{}),
+			FieldPath: "ves.io.schema.views.voltstack_site.CreateRequest.spec.local_control_plane_choice.local_control_plane.bgp_config.peers.type_choice.external.family_inet_v6.enable_choice.disable",
+			GoType:    reflect.TypeOf(ves_io_schema_bgp.FamilyInet6_Disable{}),
 		},
 		{
 			FieldPath: "ves.io.schema.views.voltstack_site.CreateRequest.spec.local_control_plane_choice.local_control_plane.bgp_config.peers.type_choice.internal.family_inet6vpn.enable_choice.enable",
@@ -18532,8 +20062,8 @@ func init() {
 			GoType:    reflect.TypeOf(ves_io_schema_bgp.FamilyInet_Enable{}),
 		},
 		{
-			FieldPath: "ves.io.schema.views.voltstack_site.ReplaceRequest.spec.local_control_plane_choice.local_control_plane.bgp_config.peers.type_choice.external.family_inet_v6.enable_choice.enable",
-			GoType:    reflect.TypeOf(ves_io_schema_bgp.FamilyInet6_Enable{}),
+			FieldPath: "ves.io.schema.views.voltstack_site.ReplaceRequest.spec.local_control_plane_choice.local_control_plane.bgp_config.peers.type_choice.external.family_inet_v6.enable_choice.disable",
+			GoType:    reflect.TypeOf(ves_io_schema_bgp.FamilyInet6_Disable{}),
 		},
 		{
 			FieldPath: "ves.io.schema.views.voltstack_site.ReplaceRequest.spec.local_control_plane_choice.local_control_plane.bgp_config.peers.type_choice.internal.family_inet6vpn.enable_choice.enable",
@@ -18845,8 +20375,8 @@ func init() {
 			GoType:    reflect.TypeOf(ves_io_schema_bgp.FamilyInet_Enable{}),
 		},
 		{
-			FieldPath: "ves.io.schema.views.voltstack_site.crudapi.ObjectCreateReq.spec.gc_spec.local_control_plane_choice.local_control_plane.bgp_config.peers.type_choice.external.family_inet_v6.enable_choice.enable",
-			GoType:    reflect.TypeOf(ves_io_schema_bgp.FamilyInet6_Enable{}),
+			FieldPath: "ves.io.schema.views.voltstack_site.crudapi.ObjectCreateReq.spec.gc_spec.local_control_plane_choice.local_control_plane.bgp_config.peers.type_choice.external.family_inet_v6.enable_choice.disable",
+			GoType:    reflect.TypeOf(ves_io_schema_bgp.FamilyInet6_Disable{}),
 		},
 		{
 			FieldPath: "ves.io.schema.views.voltstack_site.crudapi.ObjectCreateReq.spec.gc_spec.local_control_plane_choice.local_control_plane.bgp_config.peers.type_choice.internal.family_inet6vpn.enable_choice.enable",
@@ -19156,8 +20686,8 @@ func init() {
 			GoType:    reflect.TypeOf(ves_io_schema_bgp.FamilyInet_Enable{}),
 		},
 		{
-			FieldPath: "ves.io.schema.views.voltstack_site.crudapi.ObjectReplaceReq.spec.gc_spec.local_control_plane_choice.local_control_plane.bgp_config.peers.type_choice.external.family_inet_v6.enable_choice.enable",
-			GoType:    reflect.TypeOf(ves_io_schema_bgp.FamilyInet6_Enable{}),
+			FieldPath: "ves.io.schema.views.voltstack_site.crudapi.ObjectReplaceReq.spec.gc_spec.local_control_plane_choice.local_control_plane.bgp_config.peers.type_choice.external.family_inet_v6.enable_choice.disable",
+			GoType:    reflect.TypeOf(ves_io_schema_bgp.FamilyInet6_Disable{}),
 		},
 		{
 			FieldPath: "ves.io.schema.views.voltstack_site.crudapi.ObjectReplaceReq.spec.gc_spec.local_control_plane_choice.local_control_plane.bgp_config.peers.type_choice.internal.family_inet6vpn.enable_choice.enable",
@@ -19445,6 +20975,10 @@ func init() {
 			GoType:    reflect.TypeOf(ves_io_schema_virtual_host.CreateSpecType_NoChallenge{}),
 		},
 		{
+			FieldPath: "ves.io.schema.virtual_host.CreateRequest.spec.coalescing_options.coalescing_choice.default_coalescing",
+			GoType:    reflect.TypeOf(ves_io_schema.TLSCoalescingOptions_DefaultCoalescing{}),
+		},
+		{
 			FieldPath: "ves.io.schema.virtual_host.CreateRequest.spec.cookies_to_modify.cookie_tampering.disable_tampering_protection",
 			GoType:    reflect.TypeOf(ves_io_schema.CookieManipulationOptionType_DisableTamperingProtection{}),
 		},
@@ -19476,6 +21010,10 @@ func init() {
 			FieldPath: "ves.io.schema.virtual_host.CreateRequest.spec.tls_certificates_choice.tls_parameters.client_certificate_verify_choice.no_client_certificate",
 			GoType:    reflect.TypeOf(ves_io_schema.DownstreamTlsParamsType_NoClientCertificate{}),
 		},
+		{
+			FieldPath: "ves.io.schema.virtual_host.CreateRequest.spec.waf_type.ref_type.inherit_waf",
+			GoType:    reflect.TypeOf(ves_io_schema.WafType_InheritWaf{}),
+		},
 	}
 
 	MDR.RPCOneofDefaultChoiceFieldsRegistry["ves.io.schema.virtual_host.API.Replace"] = []svcfw.OneofDefaultChoiceField{
@@ -19486,6 +21024,10 @@ func init() {
 		{
 			FieldPath: "ves.io.schema.virtual_host.ReplaceRequest.spec.challenge_type.no_challenge",
 			GoType:    reflect.TypeOf(ves_io_schema_virtual_host.ReplaceSpecType_NoChallenge{}),
+		},
+		{
+			FieldPath: "ves.io.schema.virtual_host.ReplaceRequest.spec.coalescing_options.coalescing_choice.default_coalescing",
+			GoType:    reflect.TypeOf(ves_io_schema.TLSCoalescingOptions_DefaultCoalescing{}),
 		},
 		{
 			FieldPath: "ves.io.schema.virtual_host.ReplaceRequest.spec.cookies_to_modify.cookie_tampering.disable_tampering_protection",
@@ -19519,6 +21061,10 @@ func init() {
 			FieldPath: "ves.io.schema.virtual_host.ReplaceRequest.spec.tls_certificates_choice.tls_parameters.client_certificate_verify_choice.no_client_certificate",
 			GoType:    reflect.TypeOf(ves_io_schema.DownstreamTlsParamsType_NoClientCertificate{}),
 		},
+		{
+			FieldPath: "ves.io.schema.virtual_host.ReplaceRequest.spec.waf_type.ref_type.inherit_waf",
+			GoType:    reflect.TypeOf(ves_io_schema.WafType_InheritWaf{}),
+		},
 	}
 
 	MDR.PvtCRUDServiceRegistry.AllowedInNSTypes["ves.io.schema.virtual_host.Object"] = nil
@@ -19539,6 +21085,10 @@ func init() {
 		{
 			FieldPath: "ves.io.schema.virtual_host.crudapi.ObjectCreateReq.spec.gc_spec.challenge_type.policy_based_challenge.challenge_choice.no_challenge",
 			GoType:    reflect.TypeOf(ves_io_schema_virtual_host.PolicyBasedChallenge_NoChallenge{}),
+		},
+		{
+			FieldPath: "ves.io.schema.virtual_host.crudapi.ObjectCreateReq.spec.gc_spec.coalescing_options.coalescing_choice.default_coalescing",
+			GoType:    reflect.TypeOf(ves_io_schema.TLSCoalescingOptions_DefaultCoalescing{}),
 		},
 		{
 			FieldPath: "ves.io.schema.virtual_host.crudapi.ObjectCreateReq.spec.gc_spec.cookies_to_modify.cookie_tampering.disable_tampering_protection",
@@ -19588,6 +21138,10 @@ func init() {
 			FieldPath: "ves.io.schema.virtual_host.crudapi.ObjectCreateReq.spec.gc_spec.trust_client_ip_headers_choice.disable_trust_client_ip_headers",
 			GoType:    reflect.TypeOf(ves_io_schema_virtual_host.GlobalSpecType_DisableTrustClientIpHeaders{}),
 		},
+		{
+			FieldPath: "ves.io.schema.virtual_host.crudapi.ObjectCreateReq.spec.gc_spec.waf_type.ref_type.inherit_waf",
+			GoType:    reflect.TypeOf(ves_io_schema.WafType_InheritWaf{}),
+		},
 	}
 
 	MDR.RPCOneofDefaultChoiceFieldsRegistry["ves.io.schema.virtual_host.crudapi.API.Replace"] = []svcfw.OneofDefaultChoiceField{
@@ -19606,6 +21160,10 @@ func init() {
 		{
 			FieldPath: "ves.io.schema.virtual_host.crudapi.ObjectReplaceReq.spec.gc_spec.challenge_type.policy_based_challenge.challenge_choice.no_challenge",
 			GoType:    reflect.TypeOf(ves_io_schema_virtual_host.PolicyBasedChallenge_NoChallenge{}),
+		},
+		{
+			FieldPath: "ves.io.schema.virtual_host.crudapi.ObjectReplaceReq.spec.gc_spec.coalescing_options.coalescing_choice.default_coalescing",
+			GoType:    reflect.TypeOf(ves_io_schema.TLSCoalescingOptions_DefaultCoalescing{}),
 		},
 		{
 			FieldPath: "ves.io.schema.virtual_host.crudapi.ObjectReplaceReq.spec.gc_spec.cookies_to_modify.cookie_tampering.disable_tampering_protection",
@@ -19654,6 +21212,10 @@ func init() {
 		{
 			FieldPath: "ves.io.schema.virtual_host.crudapi.ObjectReplaceReq.spec.gc_spec.trust_client_ip_headers_choice.disable_trust_client_ip_headers",
 			GoType:    reflect.TypeOf(ves_io_schema_virtual_host.GlobalSpecType_DisableTrustClientIpHeaders{}),
+		},
+		{
+			FieldPath: "ves.io.schema.virtual_host.crudapi.ObjectReplaceReq.spec.gc_spec.waf_type.ref_type.inherit_waf",
+			GoType:    reflect.TypeOf(ves_io_schema.WafType_InheritWaf{}),
 		},
 	}
 
@@ -20080,6 +21642,54 @@ func RegisterGrpcAPI(api string, gSrv *grpc.Server, srv interface{}) error {
 		}
 		h(gSrv, s)
 
+	case "ves.io.schema.api_sec.api_crawler.API":
+		gh, _ := MDR.SvcRegisterHandlers[api]
+		h, ok := gh.(func(*grpc.Server, ves_io_schema_api_sec_api_crawler.APIServer))
+		if !ok {
+			return fmt.Errorf("gRPC API reg expected func(*grpc.Server, ves_io_schema_api_sec_api_crawler.APIServer), got %T", gh)
+		}
+		s, ok := srv.(ves_io_schema_api_sec_api_crawler.APIServer)
+		if !ok {
+			panic(fmt.Sprintf("%T does not satisfy interface ves_io_schema_api_sec_api_crawler.APIServer", srv))
+		}
+		h(gSrv, s)
+
+	case "ves.io.schema.api_sec.api_crawler.crudapi.API":
+		gh, _ := MDR.SvcRegisterHandlers[api]
+		h, ok := gh.(func(*grpc.Server, ves_io_schema_api_sec_api_crawler_crudapi.APIServer))
+		if !ok {
+			return fmt.Errorf("gRPC API reg expected func(*grpc.Server, ves_io_schema_api_sec_api_crawler_crudapi.APIServer), got %T", gh)
+		}
+		s, ok := srv.(ves_io_schema_api_sec_api_crawler_crudapi.APIServer)
+		if !ok {
+			panic(fmt.Sprintf("%T does not satisfy interface ves_io_schema_api_sec_api_crawler_crudapi.APIServer", srv))
+		}
+		h(gSrv, s)
+
+	case "ves.io.schema.api_sec.api_discovery.API":
+		gh, _ := MDR.SvcRegisterHandlers[api]
+		h, ok := gh.(func(*grpc.Server, ves_io_schema_api_sec_api_discovery.APIServer))
+		if !ok {
+			return fmt.Errorf("gRPC API reg expected func(*grpc.Server, ves_io_schema_api_sec_api_discovery.APIServer), got %T", gh)
+		}
+		s, ok := srv.(ves_io_schema_api_sec_api_discovery.APIServer)
+		if !ok {
+			panic(fmt.Sprintf("%T does not satisfy interface ves_io_schema_api_sec_api_discovery.APIServer", srv))
+		}
+		h(gSrv, s)
+
+	case "ves.io.schema.api_sec.api_discovery.crudapi.API":
+		gh, _ := MDR.SvcRegisterHandlers[api]
+		h, ok := gh.(func(*grpc.Server, ves_io_schema_api_sec_api_discovery_crudapi.APIServer))
+		if !ok {
+			return fmt.Errorf("gRPC API reg expected func(*grpc.Server, ves_io_schema_api_sec_api_discovery_crudapi.APIServer), got %T", gh)
+		}
+		s, ok := srv.(ves_io_schema_api_sec_api_discovery_crudapi.APIServer)
+		if !ok {
+			panic(fmt.Sprintf("%T does not satisfy interface ves_io_schema_api_sec_api_discovery_crudapi.APIServer", srv))
+		}
+		h(gSrv, s)
+
 	case "ves.io.schema.api_sec.code_base_integration.PrivateCustomAPI":
 		gh, _ := MDR.SvcRegisterHandlers[api]
 		h, ok := gh.(func(*grpc.Server, ves_io_schema_api_sec_code_base_integration.PrivateCustomAPIServer))
@@ -20113,6 +21723,18 @@ func RegisterGrpcAPI(api string, gSrv *grpc.Server, srv interface{}) error {
 		s, ok := srv.(ves_io_schema_api_sec_code_base_integration_crudapi.APIServer)
 		if !ok {
 			panic(fmt.Sprintf("%T does not satisfy interface ves_io_schema_api_sec_code_base_integration_crudapi.APIServer", srv))
+		}
+		h(gSrv, s)
+
+	case "ves.io.schema.api_sec.rule_suggestion.RuleSuggestionAPI":
+		gh, _ := MDR.SvcRegisterHandlers[api]
+		h, ok := gh.(func(*grpc.Server, ves_io_schema_api_sec_rule_suggestion.RuleSuggestionAPIServer))
+		if !ok {
+			return fmt.Errorf("gRPC API reg expected func(*grpc.Server, ves_io_schema_api_sec_rule_suggestion.RuleSuggestionAPIServer), got %T", gh)
+		}
+		s, ok := srv.(ves_io_schema_api_sec_rule_suggestion.RuleSuggestionAPIServer)
+		if !ok {
+			panic(fmt.Sprintf("%T does not satisfy interface ves_io_schema_api_sec_rule_suggestion.RuleSuggestionAPIServer", srv))
 		}
 		h(gSrv, s)
 
@@ -20257,6 +21879,18 @@ func RegisterGrpcAPI(api string, gSrv *grpc.Server, srv interface{}) error {
 		s, ok := srv.(ves_io_schema_bgp.APIServer)
 		if !ok {
 			panic(fmt.Sprintf("%T does not satisfy interface ves_io_schema_bgp.APIServer", srv))
+		}
+		h(gSrv, s)
+
+	case "ves.io.schema.bgp.CustomAPI":
+		gh, _ := MDR.SvcRegisterHandlers[api]
+		h, ok := gh.(func(*grpc.Server, ves_io_schema_bgp.CustomAPIServer))
+		if !ok {
+			return fmt.Errorf("gRPC API reg expected func(*grpc.Server, ves_io_schema_bgp.CustomAPIServer), got %T", gh)
+		}
+		s, ok := srv.(ves_io_schema_bgp.CustomAPIServer)
+		if !ok {
+			panic(fmt.Sprintf("%T does not satisfy interface ves_io_schema_bgp.CustomAPIServer", srv))
 		}
 		h(gSrv, s)
 
@@ -20548,6 +22182,30 @@ func RegisterGrpcAPI(api string, gSrv *grpc.Server, srv interface{}) error {
 		}
 		h(gSrv, s)
 
+	case "ves.io.schema.cloud_elastic_ip.API":
+		gh, _ := MDR.SvcRegisterHandlers[api]
+		h, ok := gh.(func(*grpc.Server, ves_io_schema_cloud_elastic_ip.APIServer))
+		if !ok {
+			return fmt.Errorf("gRPC API reg expected func(*grpc.Server, ves_io_schema_cloud_elastic_ip.APIServer), got %T", gh)
+		}
+		s, ok := srv.(ves_io_schema_cloud_elastic_ip.APIServer)
+		if !ok {
+			panic(fmt.Sprintf("%T does not satisfy interface ves_io_schema_cloud_elastic_ip.APIServer", srv))
+		}
+		h(gSrv, s)
+
+	case "ves.io.schema.cloud_elastic_ip.crudapi.API":
+		gh, _ := MDR.SvcRegisterHandlers[api]
+		h, ok := gh.(func(*grpc.Server, ves_io_schema_cloud_elastic_ip_crudapi.APIServer))
+		if !ok {
+			return fmt.Errorf("gRPC API reg expected func(*grpc.Server, ves_io_schema_cloud_elastic_ip_crudapi.APIServer), got %T", gh)
+		}
+		s, ok := srv.(ves_io_schema_cloud_elastic_ip_crudapi.APIServer)
+		if !ok {
+			panic(fmt.Sprintf("%T does not satisfy interface ves_io_schema_cloud_elastic_ip_crudapi.APIServer", srv))
+		}
+		h(gSrv, s)
+
 	case "ves.io.schema.cloud_link.API":
 		gh, _ := MDR.SvcRegisterHandlers[api]
 		h, ok := gh.(func(*grpc.Server, ves_io_schema_cloud_link.APIServer))
@@ -20593,6 +22251,30 @@ func RegisterGrpcAPI(api string, gSrv *grpc.Server, srv interface{}) error {
 		s, ok := srv.(ves_io_schema_cloud_re_region_crudapi.APIServer)
 		if !ok {
 			panic(fmt.Sprintf("%T does not satisfy interface ves_io_schema_cloud_re_region_crudapi.APIServer", srv))
+		}
+		h(gSrv, s)
+
+	case "ves.io.schema.cloud_transit_gateway.API":
+		gh, _ := MDR.SvcRegisterHandlers[api]
+		h, ok := gh.(func(*grpc.Server, ves_io_schema_cloud_transit_gateway.APIServer))
+		if !ok {
+			return fmt.Errorf("gRPC API reg expected func(*grpc.Server, ves_io_schema_cloud_transit_gateway.APIServer), got %T", gh)
+		}
+		s, ok := srv.(ves_io_schema_cloud_transit_gateway.APIServer)
+		if !ok {
+			panic(fmt.Sprintf("%T does not satisfy interface ves_io_schema_cloud_transit_gateway.APIServer", srv))
+		}
+		h(gSrv, s)
+
+	case "ves.io.schema.cloud_transit_gateway.crudapi.API":
+		gh, _ := MDR.SvcRegisterHandlers[api]
+		h, ok := gh.(func(*grpc.Server, ves_io_schema_cloud_transit_gateway_crudapi.APIServer))
+		if !ok {
+			return fmt.Errorf("gRPC API reg expected func(*grpc.Server, ves_io_schema_cloud_transit_gateway_crudapi.APIServer), got %T", gh)
+		}
+		s, ok := srv.(ves_io_schema_cloud_transit_gateway_crudapi.APIServer)
+		if !ok {
+			panic(fmt.Sprintf("%T does not satisfy interface ves_io_schema_cloud_transit_gateway_crudapi.APIServer", srv))
 		}
 		h(gSrv, s)
 
@@ -20833,6 +22515,18 @@ func RegisterGrpcAPI(api string, gSrv *grpc.Server, srv interface{}) error {
 		s, ok := srv.(ves_io_schema_discovered_service.APIServer)
 		if !ok {
 			panic(fmt.Sprintf("%T does not satisfy interface ves_io_schema_discovered_service.APIServer", srv))
+		}
+		h(gSrv, s)
+
+	case "ves.io.schema.discovered_service.CustomDataAPI":
+		gh, _ := MDR.SvcRegisterHandlers[api]
+		h, ok := gh.(func(*grpc.Server, ves_io_schema_discovered_service.CustomDataAPIServer))
+		if !ok {
+			return fmt.Errorf("gRPC API reg expected func(*grpc.Server, ves_io_schema_discovered_service.CustomDataAPIServer), got %T", gh)
+		}
+		s, ok := srv.(ves_io_schema_discovered_service.CustomDataAPIServer)
+		if !ok {
+			panic(fmt.Sprintf("%T does not satisfy interface ves_io_schema_discovered_service.CustomDataAPIServer", srv))
 		}
 		h(gSrv, s)
 
@@ -21988,6 +23682,30 @@ func RegisterGrpcAPI(api string, gSrv *grpc.Server, srv interface{}) error {
 		}
 		h(gSrv, s)
 
+	case "ves.io.schema.nat_policy.API":
+		gh, _ := MDR.SvcRegisterHandlers[api]
+		h, ok := gh.(func(*grpc.Server, ves_io_schema_nat_policy.APIServer))
+		if !ok {
+			return fmt.Errorf("gRPC API reg expected func(*grpc.Server, ves_io_schema_nat_policy.APIServer), got %T", gh)
+		}
+		s, ok := srv.(ves_io_schema_nat_policy.APIServer)
+		if !ok {
+			panic(fmt.Sprintf("%T does not satisfy interface ves_io_schema_nat_policy.APIServer", srv))
+		}
+		h(gSrv, s)
+
+	case "ves.io.schema.nat_policy.crudapi.API":
+		gh, _ := MDR.SvcRegisterHandlers[api]
+		h, ok := gh.(func(*grpc.Server, ves_io_schema_nat_policy_crudapi.APIServer))
+		if !ok {
+			return fmt.Errorf("gRPC API reg expected func(*grpc.Server, ves_io_schema_nat_policy_crudapi.APIServer), got %T", gh)
+		}
+		s, ok := srv.(ves_io_schema_nat_policy_crudapi.APIServer)
+		if !ok {
+			panic(fmt.Sprintf("%T does not satisfy interface ves_io_schema_nat_policy_crudapi.APIServer", srv))
+		}
+		h(gSrv, s)
+
 	case "ves.io.schema.network_connector.API":
 		gh, _ := MDR.SvcRegisterHandlers[api]
 		h, ok := gh.(func(*grpc.Server, ves_io_schema_network_connector.APIServer))
@@ -22936,6 +24654,18 @@ func RegisterGrpcAPI(api string, gSrv *grpc.Server, srv interface{}) error {
 		}
 		h(gSrv, s)
 
+	case "ves.io.schema.tenant.CustomAPIEywaprime":
+		gh, _ := MDR.SvcRegisterHandlers[api]
+		h, ok := gh.(func(*grpc.Server, ves_io_schema_tenant.CustomAPIEywaprimeServer))
+		if !ok {
+			return fmt.Errorf("gRPC API reg expected func(*grpc.Server, ves_io_schema_tenant.CustomAPIEywaprimeServer), got %T", gh)
+		}
+		s, ok := srv.(ves_io_schema_tenant.CustomAPIEywaprimeServer)
+		if !ok {
+			panic(fmt.Sprintf("%T does not satisfy interface ves_io_schema_tenant.CustomAPIEywaprimeServer", srv))
+		}
+		h(gSrv, s)
+
 	case "ves.io.schema.tenant.crudapi.API":
 		gh, _ := MDR.SvcRegisterHandlers[api]
 		h, ok := gh.(func(*grpc.Server, ves_io_schema_tenant_crudapi.APIServer))
@@ -22945,6 +24675,66 @@ func RegisterGrpcAPI(api string, gSrv *grpc.Server, srv interface{}) error {
 		s, ok := srv.(ves_io_schema_tenant_crudapi.APIServer)
 		if !ok {
 			panic(fmt.Sprintf("%T does not satisfy interface ves_io_schema_tenant_crudapi.APIServer", srv))
+		}
+		h(gSrv, s)
+
+	case "ves.io.schema.ticket_management.ticket.CustomPrivateAPI":
+		gh, _ := MDR.SvcRegisterHandlers[api]
+		h, ok := gh.(func(*grpc.Server, ves_io_schema_ticket_management_ticket.CustomPrivateAPIServer))
+		if !ok {
+			return fmt.Errorf("gRPC API reg expected func(*grpc.Server, ves_io_schema_ticket_management_ticket.CustomPrivateAPIServer), got %T", gh)
+		}
+		s, ok := srv.(ves_io_schema_ticket_management_ticket.CustomPrivateAPIServer)
+		if !ok {
+			panic(fmt.Sprintf("%T does not satisfy interface ves_io_schema_ticket_management_ticket.CustomPrivateAPIServer", srv))
+		}
+		h(gSrv, s)
+
+	case "ves.io.schema.ticket_management.ticket.crudapi.API":
+		gh, _ := MDR.SvcRegisterHandlers[api]
+		h, ok := gh.(func(*grpc.Server, ves_io_schema_ticket_management_ticket_crudapi.APIServer))
+		if !ok {
+			return fmt.Errorf("gRPC API reg expected func(*grpc.Server, ves_io_schema_ticket_management_ticket_crudapi.APIServer), got %T", gh)
+		}
+		s, ok := srv.(ves_io_schema_ticket_management_ticket_crudapi.APIServer)
+		if !ok {
+			panic(fmt.Sprintf("%T does not satisfy interface ves_io_schema_ticket_management_ticket_crudapi.APIServer", srv))
+		}
+		h(gSrv, s)
+
+	case "ves.io.schema.ticket_management.ticket_tracking_system.API":
+		gh, _ := MDR.SvcRegisterHandlers[api]
+		h, ok := gh.(func(*grpc.Server, ves_io_schema_ticket_management_ticket_tracking_system.APIServer))
+		if !ok {
+			return fmt.Errorf("gRPC API reg expected func(*grpc.Server, ves_io_schema_ticket_management_ticket_tracking_system.APIServer), got %T", gh)
+		}
+		s, ok := srv.(ves_io_schema_ticket_management_ticket_tracking_system.APIServer)
+		if !ok {
+			panic(fmt.Sprintf("%T does not satisfy interface ves_io_schema_ticket_management_ticket_tracking_system.APIServer", srv))
+		}
+		h(gSrv, s)
+
+	case "ves.io.schema.ticket_management.ticket_tracking_system.CustomAPI":
+		gh, _ := MDR.SvcRegisterHandlers[api]
+		h, ok := gh.(func(*grpc.Server, ves_io_schema_ticket_management_ticket_tracking_system.CustomAPIServer))
+		if !ok {
+			return fmt.Errorf("gRPC API reg expected func(*grpc.Server, ves_io_schema_ticket_management_ticket_tracking_system.CustomAPIServer), got %T", gh)
+		}
+		s, ok := srv.(ves_io_schema_ticket_management_ticket_tracking_system.CustomAPIServer)
+		if !ok {
+			panic(fmt.Sprintf("%T does not satisfy interface ves_io_schema_ticket_management_ticket_tracking_system.CustomAPIServer", srv))
+		}
+		h(gSrv, s)
+
+	case "ves.io.schema.ticket_management.ticket_tracking_system.crudapi.API":
+		gh, _ := MDR.SvcRegisterHandlers[api]
+		h, ok := gh.(func(*grpc.Server, ves_io_schema_ticket_management_ticket_tracking_system_crudapi.APIServer))
+		if !ok {
+			return fmt.Errorf("gRPC API reg expected func(*grpc.Server, ves_io_schema_ticket_management_ticket_tracking_system_crudapi.APIServer), got %T", gh)
+		}
+		s, ok := srv.(ves_io_schema_ticket_management_ticket_tracking_system_crudapi.APIServer)
+		if !ok {
+			panic(fmt.Sprintf("%T does not satisfy interface ves_io_schema_ticket_management_ticket_tracking_system_crudapi.APIServer", srv))
 		}
 		h(gSrv, s)
 
@@ -23368,6 +25158,138 @@ func RegisterGrpcAPI(api string, gSrv *grpc.Server, srv interface{}) error {
 		}
 		h(gSrv, s)
 
+	case "ves.io.schema.uztna.application.uztna_application.API":
+		gh, _ := MDR.SvcRegisterHandlers[api]
+		h, ok := gh.(func(*grpc.Server, ves_io_schema_uztna_application_uztna_application.APIServer))
+		if !ok {
+			return fmt.Errorf("gRPC API reg expected func(*grpc.Server, ves_io_schema_uztna_application_uztna_application.APIServer), got %T", gh)
+		}
+		s, ok := srv.(ves_io_schema_uztna_application_uztna_application.APIServer)
+		if !ok {
+			panic(fmt.Sprintf("%T does not satisfy interface ves_io_schema_uztna_application_uztna_application.APIServer", srv))
+		}
+		h(gSrv, s)
+
+	case "ves.io.schema.uztna.application.uztna_application.crudapi.API":
+		gh, _ := MDR.SvcRegisterHandlers[api]
+		h, ok := gh.(func(*grpc.Server, ves_io_schema_uztna_application_uztna_application_crudapi.APIServer))
+		if !ok {
+			return fmt.Errorf("gRPC API reg expected func(*grpc.Server, ves_io_schema_uztna_application_uztna_application_crudapi.APIServer), got %T", gh)
+		}
+		s, ok := srv.(ves_io_schema_uztna_application_uztna_application_crudapi.APIServer)
+		if !ok {
+			panic(fmt.Sprintf("%T does not satisfy interface ves_io_schema_uztna_application_uztna_application_crudapi.APIServer", srv))
+		}
+		h(gSrv, s)
+
+	case "ves.io.schema.uztna.application.uztna_application_group.API":
+		gh, _ := MDR.SvcRegisterHandlers[api]
+		h, ok := gh.(func(*grpc.Server, ves_io_schema_uztna_application_uztna_application_group.APIServer))
+		if !ok {
+			return fmt.Errorf("gRPC API reg expected func(*grpc.Server, ves_io_schema_uztna_application_uztna_application_group.APIServer), got %T", gh)
+		}
+		s, ok := srv.(ves_io_schema_uztna_application_uztna_application_group.APIServer)
+		if !ok {
+			panic(fmt.Sprintf("%T does not satisfy interface ves_io_schema_uztna_application_uztna_application_group.APIServer", srv))
+		}
+		h(gSrv, s)
+
+	case "ves.io.schema.uztna.application.uztna_application_group.crudapi.API":
+		gh, _ := MDR.SvcRegisterHandlers[api]
+		h, ok := gh.(func(*grpc.Server, ves_io_schema_uztna_application_uztna_application_group_crudapi.APIServer))
+		if !ok {
+			return fmt.Errorf("gRPC API reg expected func(*grpc.Server, ves_io_schema_uztna_application_uztna_application_group_crudapi.APIServer), got %T", gh)
+		}
+		s, ok := srv.(ves_io_schema_uztna_application_uztna_application_group_crudapi.APIServer)
+		if !ok {
+			panic(fmt.Sprintf("%T does not satisfy interface ves_io_schema_uztna_application_uztna_application_group_crudapi.APIServer", srv))
+		}
+		h(gSrv, s)
+
+	case "ves.io.schema.uztna.application.uztna_application_tag.API":
+		gh, _ := MDR.SvcRegisterHandlers[api]
+		h, ok := gh.(func(*grpc.Server, ves_io_schema_uztna_application_uztna_application_tag.APIServer))
+		if !ok {
+			return fmt.Errorf("gRPC API reg expected func(*grpc.Server, ves_io_schema_uztna_application_uztna_application_tag.APIServer), got %T", gh)
+		}
+		s, ok := srv.(ves_io_schema_uztna_application_uztna_application_tag.APIServer)
+		if !ok {
+			panic(fmt.Sprintf("%T does not satisfy interface ves_io_schema_uztna_application_uztna_application_tag.APIServer", srv))
+		}
+		h(gSrv, s)
+
+	case "ves.io.schema.uztna.application.uztna_application_tag.crudapi.API":
+		gh, _ := MDR.SvcRegisterHandlers[api]
+		h, ok := gh.(func(*grpc.Server, ves_io_schema_uztna_application_uztna_application_tag_crudapi.APIServer))
+		if !ok {
+			return fmt.Errorf("gRPC API reg expected func(*grpc.Server, ves_io_schema_uztna_application_uztna_application_tag_crudapi.APIServer), got %T", gh)
+		}
+		s, ok := srv.(ves_io_schema_uztna_application_uztna_application_tag_crudapi.APIServer)
+		if !ok {
+			panic(fmt.Sprintf("%T does not satisfy interface ves_io_schema_uztna_application_uztna_application_tag_crudapi.APIServer", srv))
+		}
+		h(gSrv, s)
+
+	case "ves.io.schema.uztna.application.uztna_snat_pool.API":
+		gh, _ := MDR.SvcRegisterHandlers[api]
+		h, ok := gh.(func(*grpc.Server, ves_io_schema_uztna_application_uztna_snat_pool.APIServer))
+		if !ok {
+			return fmt.Errorf("gRPC API reg expected func(*grpc.Server, ves_io_schema_uztna_application_uztna_snat_pool.APIServer), got %T", gh)
+		}
+		s, ok := srv.(ves_io_schema_uztna_application_uztna_snat_pool.APIServer)
+		if !ok {
+			panic(fmt.Sprintf("%T does not satisfy interface ves_io_schema_uztna_application_uztna_snat_pool.APIServer", srv))
+		}
+		h(gSrv, s)
+
+	case "ves.io.schema.uztna.application.uztna_snat_pool.crudapi.API":
+		gh, _ := MDR.SvcRegisterHandlers[api]
+		h, ok := gh.(func(*grpc.Server, ves_io_schema_uztna_application_uztna_snat_pool_crudapi.APIServer))
+		if !ok {
+			return fmt.Errorf("gRPC API reg expected func(*grpc.Server, ves_io_schema_uztna_application_uztna_snat_pool_crudapi.APIServer), got %T", gh)
+		}
+		s, ok := srv.(ves_io_schema_uztna_application_uztna_snat_pool_crudapi.APIServer)
+		if !ok {
+			panic(fmt.Sprintf("%T does not satisfy interface ves_io_schema_uztna_application_uztna_snat_pool_crudapi.APIServer", srv))
+		}
+		h(gSrv, s)
+
+	case "ves.io.schema.uztna.uztna_active_sessions.ActiveSessionsAPI":
+		gh, _ := MDR.SvcRegisterHandlers[api]
+		h, ok := gh.(func(*grpc.Server, ves_io_schema_uztna_uztna_active_sessions.ActiveSessionsAPIServer))
+		if !ok {
+			return fmt.Errorf("gRPC API reg expected func(*grpc.Server, ves_io_schema_uztna_uztna_active_sessions.ActiveSessionsAPIServer), got %T", gh)
+		}
+		s, ok := srv.(ves_io_schema_uztna_uztna_active_sessions.ActiveSessionsAPIServer)
+		if !ok {
+			panic(fmt.Sprintf("%T does not satisfy interface ves_io_schema_uztna_uztna_active_sessions.ActiveSessionsAPIServer", srv))
+		}
+		h(gSrv, s)
+
+	case "ves.io.schema.uztna.uztna_app_vip_pool.API":
+		gh, _ := MDR.SvcRegisterHandlers[api]
+		h, ok := gh.(func(*grpc.Server, ves_io_schema_uztna_uztna_app_vip_pool.APIServer))
+		if !ok {
+			return fmt.Errorf("gRPC API reg expected func(*grpc.Server, ves_io_schema_uztna_uztna_app_vip_pool.APIServer), got %T", gh)
+		}
+		s, ok := srv.(ves_io_schema_uztna_uztna_app_vip_pool.APIServer)
+		if !ok {
+			panic(fmt.Sprintf("%T does not satisfy interface ves_io_schema_uztna_uztna_app_vip_pool.APIServer", srv))
+		}
+		h(gSrv, s)
+
+	case "ves.io.schema.uztna.uztna_app_vip_pool.crudapi.API":
+		gh, _ := MDR.SvcRegisterHandlers[api]
+		h, ok := gh.(func(*grpc.Server, ves_io_schema_uztna_uztna_app_vip_pool_crudapi.APIServer))
+		if !ok {
+			return fmt.Errorf("gRPC API reg expected func(*grpc.Server, ves_io_schema_uztna_uztna_app_vip_pool_crudapi.APIServer), got %T", gh)
+		}
+		s, ok := srv.(ves_io_schema_uztna_uztna_app_vip_pool_crudapi.APIServer)
+		if !ok {
+			panic(fmt.Sprintf("%T does not satisfy interface ves_io_schema_uztna_uztna_app_vip_pool_crudapi.APIServer", srv))
+		}
+		h(gSrv, s)
+
 	case "ves.io.schema.uztna.uztna_domain.API":
 		gh, _ := MDR.SvcRegisterHandlers[api]
 		h, ok := gh.(func(*grpc.Server, ves_io_schema_uztna_uztna_domain.APIServer))
@@ -23440,6 +25362,30 @@ func RegisterGrpcAPI(api string, gSrv *grpc.Server, srv interface{}) error {
 		}
 		h(gSrv, s)
 
+	case "ves.io.schema.uztna.uztna_healthcheck.API":
+		gh, _ := MDR.SvcRegisterHandlers[api]
+		h, ok := gh.(func(*grpc.Server, ves_io_schema_uztna_uztna_healthcheck.APIServer))
+		if !ok {
+			return fmt.Errorf("gRPC API reg expected func(*grpc.Server, ves_io_schema_uztna_uztna_healthcheck.APIServer), got %T", gh)
+		}
+		s, ok := srv.(ves_io_schema_uztna_uztna_healthcheck.APIServer)
+		if !ok {
+			panic(fmt.Sprintf("%T does not satisfy interface ves_io_schema_uztna_uztna_healthcheck.APIServer", srv))
+		}
+		h(gSrv, s)
+
+	case "ves.io.schema.uztna.uztna_healthcheck.crudapi.API":
+		gh, _ := MDR.SvcRegisterHandlers[api]
+		h, ok := gh.(func(*grpc.Server, ves_io_schema_uztna_uztna_healthcheck_crudapi.APIServer))
+		if !ok {
+			return fmt.Errorf("gRPC API reg expected func(*grpc.Server, ves_io_schema_uztna_uztna_healthcheck_crudapi.APIServer), got %T", gh)
+		}
+		s, ok := srv.(ves_io_schema_uztna_uztna_healthcheck_crudapi.APIServer)
+		if !ok {
+			panic(fmt.Sprintf("%T does not satisfy interface ves_io_schema_uztna_uztna_healthcheck_crudapi.APIServer", srv))
+		}
+		h(gSrv, s)
+
 	case "ves.io.schema.uztna.uztna_leasepool.API":
 		gh, _ := MDR.SvcRegisterHandlers[api]
 		h, ok := gh.(func(*grpc.Server, ves_io_schema_uztna_uztna_leasepool.APIServer))
@@ -23464,6 +25410,30 @@ func RegisterGrpcAPI(api string, gSrv *grpc.Server, srv interface{}) error {
 		}
 		h(gSrv, s)
 
+	case "ves.io.schema.uztna.uztna_origin_pool.API":
+		gh, _ := MDR.SvcRegisterHandlers[api]
+		h, ok := gh.(func(*grpc.Server, ves_io_schema_uztna_uztna_origin_pool.APIServer))
+		if !ok {
+			return fmt.Errorf("gRPC API reg expected func(*grpc.Server, ves_io_schema_uztna_uztna_origin_pool.APIServer), got %T", gh)
+		}
+		s, ok := srv.(ves_io_schema_uztna_uztna_origin_pool.APIServer)
+		if !ok {
+			panic(fmt.Sprintf("%T does not satisfy interface ves_io_schema_uztna_uztna_origin_pool.APIServer", srv))
+		}
+		h(gSrv, s)
+
+	case "ves.io.schema.uztna.uztna_origin_pool.crudapi.API":
+		gh, _ := MDR.SvcRegisterHandlers[api]
+		h, ok := gh.(func(*grpc.Server, ves_io_schema_uztna_uztna_origin_pool_crudapi.APIServer))
+		if !ok {
+			return fmt.Errorf("gRPC API reg expected func(*grpc.Server, ves_io_schema_uztna_uztna_origin_pool_crudapi.APIServer), got %T", gh)
+		}
+		s, ok := srv.(ves_io_schema_uztna_uztna_origin_pool_crudapi.APIServer)
+		if !ok {
+			panic(fmt.Sprintf("%T does not satisfy interface ves_io_schema_uztna_uztna_origin_pool_crudapi.APIServer", srv))
+		}
+		h(gSrv, s)
+
 	case "ves.io.schema.uztna.uztna_policy_template.API":
 		gh, _ := MDR.SvcRegisterHandlers[api]
 		h, ok := gh.(func(*grpc.Server, ves_io_schema_uztna_uztna_policy_template.APIServer))
@@ -23485,6 +25455,42 @@ func RegisterGrpcAPI(api string, gSrv *grpc.Server, srv interface{}) error {
 		s, ok := srv.(ves_io_schema_uztna_uztna_policy_template_crudapi.APIServer)
 		if !ok {
 			panic(fmt.Sprintf("%T does not satisfy interface ves_io_schema_uztna_uztna_policy_template_crudapi.APIServer", srv))
+		}
+		h(gSrv, s)
+
+	case "ves.io.schema.uztna.views.uztna_application_view.CustomPrivateAPI":
+		gh, _ := MDR.SvcRegisterHandlers[api]
+		h, ok := gh.(func(*grpc.Server, ves_io_schema_uztna_views_uztna_application_view.CustomPrivateAPIServer))
+		if !ok {
+			return fmt.Errorf("gRPC API reg expected func(*grpc.Server, ves_io_schema_uztna_views_uztna_application_view.CustomPrivateAPIServer), got %T", gh)
+		}
+		s, ok := srv.(ves_io_schema_uztna_views_uztna_application_view.CustomPrivateAPIServer)
+		if !ok {
+			panic(fmt.Sprintf("%T does not satisfy interface ves_io_schema_uztna_views_uztna_application_view.CustomPrivateAPIServer", srv))
+		}
+		h(gSrv, s)
+
+	case "ves.io.schema.uztna.views.uztna_application_view.API":
+		gh, _ := MDR.SvcRegisterHandlers[api]
+		h, ok := gh.(func(*grpc.Server, ves_io_schema_uztna_views_uztna_application_view.APIServer))
+		if !ok {
+			return fmt.Errorf("gRPC API reg expected func(*grpc.Server, ves_io_schema_uztna_views_uztna_application_view.APIServer), got %T", gh)
+		}
+		s, ok := srv.(ves_io_schema_uztna_views_uztna_application_view.APIServer)
+		if !ok {
+			panic(fmt.Sprintf("%T does not satisfy interface ves_io_schema_uztna_views_uztna_application_view.APIServer", srv))
+		}
+		h(gSrv, s)
+
+	case "ves.io.schema.uztna.views.uztna_application_view.crudapi.API":
+		gh, _ := MDR.SvcRegisterHandlers[api]
+		h, ok := gh.(func(*grpc.Server, ves_io_schema_uztna_views_uztna_application_view_crudapi.APIServer))
+		if !ok {
+			return fmt.Errorf("gRPC API reg expected func(*grpc.Server, ves_io_schema_uztna_views_uztna_application_view_crudapi.APIServer), got %T", gh)
+		}
+		s, ok := srv.(ves_io_schema_uztna_views_uztna_application_view_crudapi.APIServer)
+		if !ok {
+			panic(fmt.Sprintf("%T does not satisfy interface ves_io_schema_uztna_views_uztna_application_view_crudapi.APIServer", srv))
 		}
 		h(gSrv, s)
 
@@ -23821,6 +25827,30 @@ func RegisterGrpcAPI(api string, gSrv *grpc.Server, srv interface{}) error {
 		s, ok := srv.(ves_io_schema_views_bigip_instance_site_crudapi.APIServer)
 		if !ok {
 			panic(fmt.Sprintf("%T does not satisfy interface ves_io_schema_views_bigip_instance_site_crudapi.APIServer", srv))
+		}
+		h(gSrv, s)
+
+	case "ves.io.schema.views.bigip_virtual_server.API":
+		gh, _ := MDR.SvcRegisterHandlers[api]
+		h, ok := gh.(func(*grpc.Server, ves_io_schema_views_bigip_virtual_server.APIServer))
+		if !ok {
+			return fmt.Errorf("gRPC API reg expected func(*grpc.Server, ves_io_schema_views_bigip_virtual_server.APIServer), got %T", gh)
+		}
+		s, ok := srv.(ves_io_schema_views_bigip_virtual_server.APIServer)
+		if !ok {
+			panic(fmt.Sprintf("%T does not satisfy interface ves_io_schema_views_bigip_virtual_server.APIServer", srv))
+		}
+		h(gSrv, s)
+
+	case "ves.io.schema.views.bigip_virtual_server.crudapi.API":
+		gh, _ := MDR.SvcRegisterHandlers[api]
+		h, ok := gh.(func(*grpc.Server, ves_io_schema_views_bigip_virtual_server_crudapi.APIServer))
+		if !ok {
+			return fmt.Errorf("gRPC API reg expected func(*grpc.Server, ves_io_schema_views_bigip_virtual_server_crudapi.APIServer), got %T", gh)
+		}
+		s, ok := srv.(ves_io_schema_views_bigip_virtual_server_crudapi.APIServer)
+		if !ok {
+			panic(fmt.Sprintf("%T does not satisfy interface ves_io_schema_views_bigip_virtual_server_crudapi.APIServer", srv))
 		}
 		h(gSrv, s)
 

@@ -198,6 +198,102 @@ func (v *ValidateAppEndpointType) MitigationValidationRuleHandler(rules map[stri
 	return validatorFn, nil
 }
 
+func (v *ValidateAppEndpointType) QueryParamsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for query_params")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_policy.QueryParameterMatcherType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ves_io_schema_policy.QueryParameterMatcherTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for query_params")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema_policy.QueryParameterMatcherType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema_policy.QueryParameterMatcherType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated query_params")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items query_params")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateAppEndpointType) HeadersValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for headers")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_policy.HeaderMatcherType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ves_io_schema_policy.HeaderMatcherTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for headers")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema_policy.HeaderMatcherType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema_policy.HeaderMatcherType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated headers")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items headers")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateAppEndpointType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*AppEndpointType)
 	if !ok {
@@ -357,6 +453,14 @@ func (v *ValidateAppEndpointType) Validate(ctx context.Context, pm interface{}, 
 
 	}
 
+	if fv, exists := v.FldValidators["headers"]; exists {
+		vOpts := append(opts, db.WithValidateField("headers"))
+		if err := fv(ctx, m.GetHeaders(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["http_methods"]; exists {
 		vOpts := append(opts, db.WithValidateField("http_methods"))
 		if err := fv(ctx, m.GetHttpMethods(), vOpts...); err != nil {
@@ -396,6 +500,14 @@ func (v *ValidateAppEndpointType) Validate(ctx context.Context, pm interface{}, 
 
 		vOpts := append(opts, db.WithValidateField("protocol"))
 		if err := fv(ctx, m.GetProtocol(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["query_params"]; exists {
+		vOpts := append(opts, db.WithValidateField("query_params"))
+		if err := fv(ctx, m.GetQueryParams(), vOpts...); err != nil {
 			return err
 		}
 
@@ -497,6 +609,28 @@ var DefaultAppEndpointTypeValidator = func() *ValidateAppEndpointType {
 		panic(errMsg)
 	}
 	v.FldValidators["mitigation"] = vFn
+
+	vrhQueryParams := v.QueryParamsValidationRuleHandler
+	rulesQueryParams := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "16",
+	}
+	vFn, err = vrhQueryParams(rulesQueryParams)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AppEndpointType.query_params: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["query_params"] = vFn
+
+	vrhHeaders := v.HeadersValidationRuleHandler
+	rulesHeaders := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "16",
+	}
+	vFn, err = vrhHeaders(rulesHeaders)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AppEndpointType.headers: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["headers"] = vFn
 
 	v.FldValidators["app_traffic_type_choice.web_mobile"] = WebMobileTrafficTypeValidator().Validate
 
@@ -2379,6 +2513,380 @@ var DefaultDDoSMitigationRuleValidator = func() *ValidateDDoSMitigationRule {
 
 func DDoSMitigationRuleValidator() db.Validator {
 	return DefaultDDoSMitigationRuleValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *MalwareProtectionPolicy) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *MalwareProtectionPolicy) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *MalwareProtectionPolicy) DeepCopy() *MalwareProtectionPolicy {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &MalwareProtectionPolicy{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *MalwareProtectionPolicy) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *MalwareProtectionPolicy) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return MalwareProtectionPolicyValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateMalwareProtectionPolicy struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateMalwareProtectionPolicy) MalwareProtectionRulesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for malware_protection_rules")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*MalwareProtectionRule, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := MalwareProtectionRuleValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for malware_protection_rules")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*MalwareProtectionRule)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*MalwareProtectionRule, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated malware_protection_rules")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items malware_protection_rules")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateMalwareProtectionPolicy) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*MalwareProtectionPolicy)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *MalwareProtectionPolicy got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["malware_protection_rules"]; exists {
+		vOpts := append(opts, db.WithValidateField("malware_protection_rules"))
+		if err := fv(ctx, m.GetMalwareProtectionRules(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultMalwareProtectionPolicyValidator = func() *ValidateMalwareProtectionPolicy {
+	v := &ValidateMalwareProtectionPolicy{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhMalwareProtectionRules := v.MalwareProtectionRulesValidationRuleHandler
+	rulesMalwareProtectionRules := map[string]string{
+		"ves.io.schema.rules.message.required":   "true",
+		"ves.io.schema.rules.repeated.max_items": "32",
+		"ves.io.schema.rules.repeated.min_items": "1",
+		"ves.io.schema.rules.repeated.unique":    "true",
+	}
+	vFn, err = vrhMalwareProtectionRules(rulesMalwareProtectionRules)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for MalwareProtectionPolicy.malware_protection_rules: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["malware_protection_rules"] = vFn
+
+	return v
+}()
+
+func MalwareProtectionPolicyValidator() db.Validator {
+	return DefaultMalwareProtectionPolicyValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *MalwareProtectionRule) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *MalwareProtectionRule) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *MalwareProtectionRule) DeepCopy() *MalwareProtectionRule {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &MalwareProtectionRule{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *MalwareProtectionRule) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *MalwareProtectionRule) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return MalwareProtectionRuleValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateMalwareProtectionRule struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateMalwareProtectionRule) MetadataValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for metadata")
+	}
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		if err := ves_io_schema.MessageMetaTypeValidator().Validate(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateMalwareProtectionRule) HttpMethodsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepEnumItemRules(rules)
+	var conv db.EnumConvFn
+	conv = func(v interface{}) int32 {
+		i := v.(ves_io_schema.HttpMethod)
+		return int32(i)
+	}
+	// ves_io_schema.HttpMethod_name is generated in .pb.go
+	itemValFn, err := db.NewEnumValidationRuleHandler(itemRules, ves_io_schema.HttpMethod_name, conv)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for http_methods")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []ves_io_schema.HttpMethod, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for http_methods")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]ves_io_schema.HttpMethod)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []ves_io_schema.HttpMethod, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal := fmt.Sprintf("%v", elem)
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated http_methods")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items http_methods")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateMalwareProtectionRule) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*MalwareProtectionRule)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *MalwareProtectionRule got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["action"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("action"))
+		if err := fv(ctx, m.GetAction(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["domain"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("domain"))
+		if err := fv(ctx, m.GetDomain(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["http_methods"]; exists {
+		vOpts := append(opts, db.WithValidateField("http_methods"))
+		if err := fv(ctx, m.GetHttpMethods(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["metadata"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("metadata"))
+		if err := fv(ctx, m.GetMetadata(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["path"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("path"))
+		if err := fv(ctx, m.GetPath(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["protocol"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("protocol"))
+		if err := fv(ctx, m.GetProtocol(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultMalwareProtectionRuleValidator = func() *ValidateMalwareProtectionRule {
+	v := &ValidateMalwareProtectionRule{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhMetadata := v.MetadataValidationRuleHandler
+	rulesMetadata := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhMetadata(rulesMetadata)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for MalwareProtectionRule.metadata: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["metadata"] = vFn
+
+	vrhHttpMethods := v.HttpMethodsValidationRuleHandler
+	rulesHttpMethods := map[string]string{
+		"ves.io.schema.rules.repeated.unique": "true",
+	}
+	vFn, err = vrhHttpMethods(rulesHttpMethods)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for MalwareProtectionRule.http_methods: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["http_methods"] = vFn
+
+	v.FldValidators["action"] = ves_io_schema.ActionValidator().Validate
+
+	v.FldValidators["domain"] = ves_io_schema.DomainMatcherTypeValidator().Validate
+
+	v.FldValidators["path"] = ves_io_schema.PathMatcherTypeValidator().Validate
+
+	return v
+}()
+
+func MalwareProtectionRuleValidator() db.Validator {
+	return DefaultMalwareProtectionRuleValidator
 }
 
 // augmented methods on protoc/std generated struct

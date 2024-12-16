@@ -399,15 +399,15 @@ func CertificateValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
-func (m *ProviderMetadata) ToJSON() (string, error) {
+func (m *IdentityProvider) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
 
-func (m *ProviderMetadata) ToYAML() (string, error) {
+func (m *IdentityProvider) ToYAML() (string, error) {
 	return codec.ToYAML(m)
 }
 
-func (m *ProviderMetadata) DeepCopy() *ProviderMetadata {
+func (m *IdentityProvider) DeepCopy() *IdentityProvider {
 	if m == nil {
 		return nil
 	}
@@ -415,7 +415,7 @@ func (m *ProviderMetadata) DeepCopy() *ProviderMetadata {
 	if err != nil {
 		return nil
 	}
-	c := &ProviderMetadata{}
+	c := &IdentityProvider{}
 	err = c.Unmarshal(ser)
 	if err != nil {
 		return nil
@@ -423,68 +423,187 @@ func (m *ProviderMetadata) DeepCopy() *ProviderMetadata {
 	return c
 }
 
-func (m *ProviderMetadata) DeepCopyProto() proto.Message {
+func (m *IdentityProvider) DeepCopyProto() proto.Message {
 	if m == nil {
 		return nil
 	}
 	return m.DeepCopy()
 }
 
-func (m *ProviderMetadata) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
-	return ProviderMetadataValidator().Validate(ctx, m, opts...)
+func (m *IdentityProvider) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return IdentityProviderValidator().Validate(ctx, m, opts...)
 }
 
-type ValidateProviderMetadata struct {
+func (m *IdentityProvider) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetIdpAssertVerificationCertDRefInfo()
+
+}
+
+// GetDRefInfo for the field's type
+func (m *IdentityProvider) GetIdpAssertVerificationCertDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetIdpAssertVerificationCert() == nil {
+		return nil, nil
+	}
+
+	drInfos, err := m.GetIdpAssertVerificationCert().GetDRefInfo()
+	if err != nil {
+		return nil, errors.Wrap(err, "GetIdpAssertVerificationCert().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "idp_assert_verification_cert." + dri.DRField
+	}
+	return drInfos, err
+
+}
+
+type ValidateIdentityProvider struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
-func (v *ValidateProviderMetadata) ServiceProviderMetadataValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+func (v *ValidateIdentityProvider) SsoServiceBindingValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for sso_service_binding")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateIdentityProvider) IssuerValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for service_provider_metadata")
+		return nil, errors.Wrap(err, "ValidationRuleHandler for issuer")
 	}
 
 	return validatorFn, nil
 }
 
-func (v *ValidateProviderMetadata) IdpProviderMetadataValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+func (v *ValidateIdentityProvider) SsoUrlValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for idp_provider_metadata")
+		return nil, errors.Wrap(err, "ValidationRuleHandler for sso_url")
 	}
 
 	return validatorFn, nil
 }
 
-func (v *ValidateProviderMetadata) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
-	m, ok := pm.(*ProviderMetadata)
+func (v *ValidateIdentityProvider) IdpSecurityPropertyValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for idp_security_property")
+	}
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		if err := IdpSecurityPropertyValidator().Validate(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateIdentityProvider) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*IdentityProvider)
 	if !ok {
 		switch t := pm.(type) {
 		case nil:
 			return nil
 		default:
-			return fmt.Errorf("Expected type *ProviderMetadata got type %s", t)
+			return fmt.Errorf("Expected type *IdentityProvider got type %s", t)
 		}
 	}
 	if m == nil {
 		return nil
 	}
 
-	if fv, exists := v.FldValidators["idp_provider_metadata"]; exists {
+	if fv, exists := v.FldValidators["idp_assert_verification_cert"]; exists {
 
-		vOpts := append(opts, db.WithValidateField("idp_provider_metadata"))
-		if err := fv(ctx, m.GetIdpProviderMetadata(), vOpts...); err != nil {
+		vOpts := append(opts, db.WithValidateField("idp_assert_verification_cert"))
+		if err := fv(ctx, m.GetIdpAssertVerificationCert(), vOpts...); err != nil {
 			return err
 		}
 
 	}
 
-	if fv, exists := v.FldValidators["service_provider_metadata"]; exists {
+	if fv, exists := v.FldValidators["idp_security_property"]; exists {
 
-		vOpts := append(opts, db.WithValidateField("service_provider_metadata"))
-		if err := fv(ctx, m.GetServiceProviderMetadata(), vOpts...); err != nil {
+		vOpts := append(opts, db.WithValidateField("idp_security_property"))
+		if err := fv(ctx, m.GetIdpSecurityProperty(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["issuer"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("issuer"))
+		if err := fv(ctx, m.GetIssuer(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("name"))
+		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["sso_service_binding"]; exists {
+		val := m.GetSsoServiceBinding()
+		vOpts := append(opts,
+			db.WithValidateField("sso_service_binding"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetSsoServiceBinding().(type) {
+	case *IdentityProvider_Post:
+		if fv, exists := v.FldValidators["sso_service_binding.post"]; exists {
+			val := m.GetSsoServiceBinding().(*IdentityProvider_Post).Post
+			vOpts := append(opts,
+				db.WithValidateField("sso_service_binding"),
+				db.WithValidateField("post"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *IdentityProvider_Redirect:
+		if fv, exists := v.FldValidators["sso_service_binding.redirect"]; exists {
+			val := m.GetSsoServiceBinding().(*IdentityProvider_Redirect).Redirect
+			vOpts := append(opts,
+				db.WithValidateField("sso_service_binding"),
+				db.WithValidateField("redirect"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["sso_url"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("sso_url"))
+		if err := fv(ctx, m.GetSsoUrl(), vOpts...); err != nil {
 			return err
 		}
 
@@ -494,8 +613,8 @@ func (v *ValidateProviderMetadata) Validate(ctx context.Context, pm interface{},
 }
 
 // Well-known symbol for default validator implementation
-var DefaultProviderMetadataValidator = func() *ValidateProviderMetadata {
-	v := &ValidateProviderMetadata{FldValidators: map[string]db.ValidatorFunc{}}
+var DefaultIdentityProviderValidator = func() *ValidateIdentityProvider {
+	v := &ValidateIdentityProvider{FldValidators: map[string]db.ValidatorFunc{}}
 
 	var (
 		err error
@@ -505,33 +624,193 @@ var DefaultProviderMetadataValidator = func() *ValidateProviderMetadata {
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
 
-	vrhServiceProviderMetadata := v.ServiceProviderMetadataValidationRuleHandler
-	rulesServiceProviderMetadata := map[string]string{
-		"ves.io.schema.rules.string.max_len": "1024",
+	vrhSsoServiceBinding := v.SsoServiceBindingValidationRuleHandler
+	rulesSsoServiceBinding := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
-	vFn, err = vrhServiceProviderMetadata(rulesServiceProviderMetadata)
+	vFn, err = vrhSsoServiceBinding(rulesSsoServiceBinding)
 	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for ProviderMetadata.service_provider_metadata: %s", err)
+		errMsg := fmt.Sprintf("ValidationRuleHandler for IdentityProvider.sso_service_binding: %s", err)
 		panic(errMsg)
 	}
-	v.FldValidators["service_provider_metadata"] = vFn
+	v.FldValidators["sso_service_binding"] = vFn
 
-	vrhIdpProviderMetadata := v.IdpProviderMetadataValidationRuleHandler
-	rulesIdpProviderMetadata := map[string]string{
-		"ves.io.schema.rules.string.max_len": "1024",
+	vrhIssuer := v.IssuerValidationRuleHandler
+	rulesIssuer := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.max_len":   "2048",
+		"ves.io.schema.rules.string.uri":       "true",
 	}
-	vFn, err = vrhIdpProviderMetadata(rulesIdpProviderMetadata)
+	vFn, err = vrhIssuer(rulesIssuer)
 	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for ProviderMetadata.idp_provider_metadata: %s", err)
+		errMsg := fmt.Sprintf("ValidationRuleHandler for IdentityProvider.issuer: %s", err)
 		panic(errMsg)
 	}
-	v.FldValidators["idp_provider_metadata"] = vFn
+	v.FldValidators["issuer"] = vFn
+
+	vrhSsoUrl := v.SsoUrlValidationRuleHandler
+	rulesSsoUrl := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.max_bytes": "1024",
+		"ves.io.schema.rules.string.uri_ref":   "true",
+	}
+	vFn, err = vrhSsoUrl(rulesSsoUrl)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for IdentityProvider.sso_url: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["sso_url"] = vFn
+
+	vrhIdpSecurityProperty := v.IdpSecurityPropertyValidationRuleHandler
+	rulesIdpSecurityProperty := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhIdpSecurityProperty(rulesIdpSecurityProperty)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for IdentityProvider.idp_security_property: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["idp_security_property"] = vFn
 
 	return v
 }()
 
-func ProviderMetadataValidator() db.Validator {
-	return DefaultProviderMetadataValidator
+func IdentityProviderValidator() db.Validator {
+	return DefaultIdentityProviderValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *IdpSecurityProperty) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *IdpSecurityProperty) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *IdpSecurityProperty) DeepCopy() *IdpSecurityProperty {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &IdpSecurityProperty{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *IdpSecurityProperty) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *IdpSecurityProperty) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return IdpSecurityPropertyValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateIdpSecurityProperty struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateIdpSecurityProperty) AuthRequestSignedValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for auth_request_signed")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateIdpSecurityProperty) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*IdpSecurityProperty)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *IdpSecurityProperty got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["auth_request_signed"]; exists {
+		val := m.GetAuthRequestSigned()
+		vOpts := append(opts,
+			db.WithValidateField("auth_request_signed"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetAuthRequestSigned().(type) {
+	case *IdpSecurityProperty_No:
+		if fv, exists := v.FldValidators["auth_request_signed.no"]; exists {
+			val := m.GetAuthRequestSigned().(*IdpSecurityProperty_No).No
+			vOpts := append(opts,
+				db.WithValidateField("auth_request_signed"),
+				db.WithValidateField("no"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *IdpSecurityProperty_Yes:
+		if fv, exists := v.FldValidators["auth_request_signed.yes"]; exists {
+			val := m.GetAuthRequestSigned().(*IdpSecurityProperty_Yes).Yes
+			vOpts := append(opts,
+				db.WithValidateField("auth_request_signed"),
+				db.WithValidateField("yes"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultIdpSecurityPropertyValidator = func() *ValidateIdpSecurityProperty {
+	v := &ValidateIdpSecurityProperty{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhAuthRequestSigned := v.AuthRequestSignedValidationRuleHandler
+	rulesAuthRequestSigned := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhAuthRequestSigned(rulesAuthRequestSigned)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for IdpSecurityProperty.auth_request_signed: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["auth_request_signed"] = vFn
+
+	v.FldValidators["auth_request_signed.yes"] = SignAlgorithmValidator().Validate
+
+	return v
+}()
+
+func IdpSecurityPropertyValidator() db.Validator {
+	return DefaultIdpSecurityPropertyValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -576,7 +855,38 @@ func (m *SAMLMessage) GetDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 	}
 
-	return m.GetServiceProviderPropertiesDRefInfo()
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetIdpDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetIdpDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetServiceProviderPropertiesDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetServiceProviderPropertiesDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	return drInfos, nil
+
+}
+
+// GetDRefInfo for the field's type
+func (m *SAMLMessage) GetIdpDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetIdp() == nil {
+		return nil, nil
+	}
+
+	drInfos, err := m.GetIdp().GetDRefInfo()
+	if err != nil {
+		return nil, errors.Wrap(err, "GetIdp().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "idp." + dri.DRField
+	}
+	return drInfos, err
 
 }
 
@@ -623,27 +933,6 @@ func (v *ValidateSAMLMessage) ServiceProviderPropertiesValidationRuleHandler(rul
 	return validatorFn, nil
 }
 
-func (v *ValidateSAMLMessage) ProviderMetadataValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "MessageValidationRuleHandler for provider_metadata")
-	}
-	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
-		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
-			return err
-		}
-
-		if err := ProviderMetadataValidator().Validate(ctx, val, opts...); err != nil {
-			return err
-		}
-
-		return nil
-	}
-
-	return validatorFn, nil
-}
-
 func (v *ValidateSAMLMessage) ApplicationTagValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
@@ -656,6 +945,27 @@ func (v *ValidateSAMLMessage) ApplicationTagValidationRuleHandler(rules map[stri
 		}
 
 		if err := ApplicationTaggingValidator().Validate(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateSAMLMessage) IdpValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for idp")
+	}
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		if err := IdentityProviderValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
 
@@ -688,10 +998,10 @@ func (v *ValidateSAMLMessage) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
-	if fv, exists := v.FldValidators["provider_metadata"]; exists {
+	if fv, exists := v.FldValidators["idp"]; exists {
 
-		vOpts := append(opts, db.WithValidateField("provider_metadata"))
-		if err := fv(ctx, m.GetProviderMetadata(), vOpts...); err != nil {
+		vOpts := append(opts, db.WithValidateField("idp"))
+		if err := fv(ctx, m.GetIdp(), vOpts...); err != nil {
 			return err
 		}
 
@@ -732,17 +1042,6 @@ var DefaultSAMLMessageValidator = func() *ValidateSAMLMessage {
 	}
 	v.FldValidators["service_provider_properties"] = vFn
 
-	vrhProviderMetadata := v.ProviderMetadataValidationRuleHandler
-	rulesProviderMetadata := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
-	}
-	vFn, err = vrhProviderMetadata(rulesProviderMetadata)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for SAMLMessage.provider_metadata: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["provider_metadata"] = vFn
-
 	vrhApplicationTag := v.ApplicationTagValidationRuleHandler
 	rulesApplicationTag := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
@@ -753,6 +1052,17 @@ var DefaultSAMLMessageValidator = func() *ValidateSAMLMessage {
 		panic(errMsg)
 	}
 	v.FldValidators["application_tag"] = vFn
+
+	vrhIdp := v.IdpValidationRuleHandler
+	rulesIdp := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhIdp(rulesIdp)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for SAMLMessage.idp: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["idp"] = vFn
 
 	return v
 }()
@@ -1101,6 +1411,160 @@ var DefaultServiceProviderPropertiesValidator = func() *ValidateServiceProviderP
 
 func ServiceProviderPropertiesValidator() db.Validator {
 	return DefaultServiceProviderPropertiesValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *SignAlgorithm) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *SignAlgorithm) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *SignAlgorithm) DeepCopy() *SignAlgorithm {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &SignAlgorithm{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *SignAlgorithm) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *SignAlgorithm) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return SignAlgorithmValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateSignAlgorithm struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateSignAlgorithm) SignAlgoValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for sign_algo")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateSignAlgorithm) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*SignAlgorithm)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *SignAlgorithm got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["sign_algo"]; exists {
+		val := m.GetSignAlgo()
+		vOpts := append(opts,
+			db.WithValidateField("sign_algo"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetSignAlgo().(type) {
+	case *SignAlgorithm_RsaSha1:
+		if fv, exists := v.FldValidators["sign_algo.rsa_sha1"]; exists {
+			val := m.GetSignAlgo().(*SignAlgorithm_RsaSha1).RsaSha1
+			vOpts := append(opts,
+				db.WithValidateField("sign_algo"),
+				db.WithValidateField("rsa_sha1"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *SignAlgorithm_RsaSha256:
+		if fv, exists := v.FldValidators["sign_algo.rsa_sha256"]; exists {
+			val := m.GetSignAlgo().(*SignAlgorithm_RsaSha256).RsaSha256
+			vOpts := append(opts,
+				db.WithValidateField("sign_algo"),
+				db.WithValidateField("rsa_sha256"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *SignAlgorithm_RsaSha384:
+		if fv, exists := v.FldValidators["sign_algo.rsa_sha384"]; exists {
+			val := m.GetSignAlgo().(*SignAlgorithm_RsaSha384).RsaSha384
+			vOpts := append(opts,
+				db.WithValidateField("sign_algo"),
+				db.WithValidateField("rsa_sha384"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *SignAlgorithm_RsaSha512:
+		if fv, exists := v.FldValidators["sign_algo.rsa_sha512"]; exists {
+			val := m.GetSignAlgo().(*SignAlgorithm_RsaSha512).RsaSha512
+			vOpts := append(opts,
+				db.WithValidateField("sign_algo"),
+				db.WithValidateField("rsa_sha512"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultSignAlgorithmValidator = func() *ValidateSignAlgorithm {
+	v := &ValidateSignAlgorithm{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhSignAlgo := v.SignAlgoValidationRuleHandler
+	rulesSignAlgo := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhSignAlgo(rulesSignAlgo)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for SignAlgorithm.sign_algo: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["sign_algo"] = vFn
+
+	return v
+}()
+
+func SignAlgorithmValidator() db.Validator {
+	return DefaultSignAlgorithmValidator
 }
 
 // augmented methods on protoc/std generated struct

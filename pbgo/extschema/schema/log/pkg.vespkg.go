@@ -28,6 +28,7 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.log.VK8SEventsAggregationRequest"] = VK8SEventsAggregationRequestValidator()
 	vr["ves.io.schema.log.VK8SEventsRequest"] = VK8SEventsRequestValidator()
 
+	vr["ves.io.schema.log.AvgAggregationData"] = AvgAggregationDataValidator()
 	vr["ves.io.schema.log.CardinalityAggregationData"] = CardinalityAggregationDataValidator()
 	vr["ves.io.schema.log.DateAggregationBucket"] = DateAggregationBucketValidator()
 	vr["ves.io.schema.log.DateAggregationData"] = DateAggregationDataValidator()
@@ -36,13 +37,22 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.log.FieldAggregationData"] = FieldAggregationDataValidator()
 	vr["ves.io.schema.log.FieldSubAggregationBucket"] = FieldSubAggregationBucketValidator()
 	vr["ves.io.schema.log.FieldSubAggregationData"] = FieldSubAggregationDataValidator()
+	vr["ves.io.schema.log.FieldSubFieldAggregationBucket"] = FieldSubFieldAggregationBucketValidator()
+	vr["ves.io.schema.log.FieldSubFieldAggregationData"] = FieldSubFieldAggregationDataValidator()
+	vr["ves.io.schema.log.FilterAggregationData"] = FilterAggregationDataValidator()
+	vr["ves.io.schema.log.FilterSubAggregationData"] = FilterSubAggregationDataValidator()
+	vr["ves.io.schema.log.FilterSubFieldAggregationBucket"] = FilterSubFieldAggregationBucketValidator()
 	vr["ves.io.schema.log.LogAggregationData"] = LogAggregationDataValidator()
+	vr["ves.io.schema.log.MaxAggregationData"] = MaxAggregationDataValidator()
 	vr["ves.io.schema.log.MetricsAggregationData"] = MetricsAggregationDataValidator()
+	vr["ves.io.schema.log.MinAggregationData"] = MinAggregationDataValidator()
 	vr["ves.io.schema.log.MultiFieldAggregationBucket"] = MultiFieldAggregationBucketValidator()
 	vr["ves.io.schema.log.MultiFieldAggregationData"] = MultiFieldAggregationDataValidator()
 	vr["ves.io.schema.log.MultiFieldSubAggregationData"] = MultiFieldSubAggregationDataValidator()
+	vr["ves.io.schema.log.MultiFilterAggregationData"] = MultiFilterAggregationDataValidator()
 	vr["ves.io.schema.log.OrderByData"] = OrderByDataValidator()
 	vr["ves.io.schema.log.PercentileAggregationData"] = PercentileAggregationDataValidator()
+	vr["ves.io.schema.log.TopHitsAggregationData"] = TopHitsAggregationDataValidator()
 
 }
 

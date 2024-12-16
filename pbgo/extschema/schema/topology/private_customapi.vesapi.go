@@ -772,7 +772,7 @@ var PrivateCustomAPISwaggerJSON string = `{
                     },
                     {
                         "name": "cloud_type",
-                        "description": "Cloud type\n\nProviderType unspecified\nAWS backend\nGCP backend\nAzure backend\nF5XC backend",
+                        "description": "Cloud type\n\nProviderType unspecified\nAWS backend\nGCP backend\nAzure backend\nF5XC backend\nVMware backend\nKVM backend\nOCI backend\nBaremetal backend\nF5 rSeries backend",
                         "in": "query",
                         "required": false,
                         "type": "string",
@@ -781,10 +781,15 @@ var PrivateCustomAPISwaggerJSON string = `{
                             "PROVIDER_TYPE_AWS",
                             "PROVIDER_TYPE_GCP",
                             "PROVIDER_TYPE_AZURE",
-                            "PROVIDER_TYPE_VOLTERRA"
+                            "PROVIDER_TYPE_VOLTERRA",
+                            "PROVIDER_TYPE_VMWARE",
+                            "PROVIDER_TYPE_KVM",
+                            "PROVIDER_TYPE_OCI",
+                            "PROVIDER_TYPE_BAREMETAL",
+                            "PROVIDER_TYPE_F5RSERIES"
                         ],
                         "default": "PROVIDER_TYPE_UNSPECIFIED",
-                        "x-displayname": "Volterra"
+                        "x-displayname": "F5 rSeries"
                     },
                     {
                         "name": "query_key",
@@ -880,7 +885,7 @@ var PrivateCustomAPISwaggerJSON string = `{
                     },
                     {
                         "name": "cloud_type",
-                        "description": "Cloud type\n\nProviderType unspecified\nAWS backend\nGCP backend\nAzure backend\nF5XC backend",
+                        "description": "Cloud type\n\nProviderType unspecified\nAWS backend\nGCP backend\nAzure backend\nF5XC backend\nVMware backend\nKVM backend\nOCI backend\nBaremetal backend\nF5 rSeries backend",
                         "in": "query",
                         "required": false,
                         "type": "string",
@@ -889,10 +894,15 @@ var PrivateCustomAPISwaggerJSON string = `{
                             "PROVIDER_TYPE_AWS",
                             "PROVIDER_TYPE_GCP",
                             "PROVIDER_TYPE_AZURE",
-                            "PROVIDER_TYPE_VOLTERRA"
+                            "PROVIDER_TYPE_VOLTERRA",
+                            "PROVIDER_TYPE_VMWARE",
+                            "PROVIDER_TYPE_KVM",
+                            "PROVIDER_TYPE_OCI",
+                            "PROVIDER_TYPE_BAREMETAL",
+                            "PROVIDER_TYPE_F5RSERIES"
                         ],
                         "default": "PROVIDER_TYPE_UNSPECIFIED",
-                        "x-displayname": "Volterra"
+                        "x-displayname": "F5 rSeries"
                     },
                     {
                         "name": "query_key",
@@ -996,7 +1006,7 @@ var PrivateCustomAPISwaggerJSON string = `{
                     },
                     {
                         "name": "cloud_type",
-                        "description": "Cloud type\n\nProviderType unspecified\nAWS backend\nGCP backend\nAzure backend\nF5XC backend",
+                        "description": "Cloud type\n\nProviderType unspecified\nAWS backend\nGCP backend\nAzure backend\nF5XC backend\nVMware backend\nKVM backend\nOCI backend\nBaremetal backend\nF5 rSeries backend",
                         "in": "query",
                         "required": false,
                         "type": "string",
@@ -1005,10 +1015,15 @@ var PrivateCustomAPISwaggerJSON string = `{
                             "PROVIDER_TYPE_AWS",
                             "PROVIDER_TYPE_GCP",
                             "PROVIDER_TYPE_AZURE",
-                            "PROVIDER_TYPE_VOLTERRA"
+                            "PROVIDER_TYPE_VOLTERRA",
+                            "PROVIDER_TYPE_VMWARE",
+                            "PROVIDER_TYPE_KVM",
+                            "PROVIDER_TYPE_OCI",
+                            "PROVIDER_TYPE_BAREMETAL",
+                            "PROVIDER_TYPE_F5RSERIES"
                         ],
                         "default": "PROVIDER_TYPE_UNSPECIFIED",
-                        "x-displayname": "Volterra"
+                        "x-displayname": "F5 rSeries"
                     },
                     {
                         "name": "query_key",
@@ -1105,7 +1120,7 @@ var PrivateCustomAPISwaggerJSON string = `{
                     },
                     {
                         "name": "cloud_type",
-                        "description": "Cloud type\n\nProviderType unspecified\nAWS backend\nGCP backend\nAzure backend\nF5XC backend",
+                        "description": "Cloud type\n\nProviderType unspecified\nAWS backend\nGCP backend\nAzure backend\nF5XC backend\nVMware backend\nKVM backend\nOCI backend\nBaremetal backend\nF5 rSeries backend",
                         "in": "query",
                         "required": false,
                         "type": "string",
@@ -1114,10 +1129,15 @@ var PrivateCustomAPISwaggerJSON string = `{
                             "PROVIDER_TYPE_AWS",
                             "PROVIDER_TYPE_GCP",
                             "PROVIDER_TYPE_AZURE",
-                            "PROVIDER_TYPE_VOLTERRA"
+                            "PROVIDER_TYPE_VOLTERRA",
+                            "PROVIDER_TYPE_VMWARE",
+                            "PROVIDER_TYPE_KVM",
+                            "PROVIDER_TYPE_OCI",
+                            "PROVIDER_TYPE_BAREMETAL",
+                            "PROVIDER_TYPE_F5RSERIES"
                         ],
                         "default": "PROVIDER_TYPE_UNSPECIFIED",
-                        "x-displayname": "Volterra"
+                        "x-displayname": "F5 rSeries"
                     },
                     {
                         "name": "query_key",
@@ -1222,7 +1242,7 @@ var PrivateCustomAPISwaggerJSON string = `{
                     },
                     {
                         "name": "cloud_type",
-                        "description": "Cloud type\n\nProviderType unspecified\nAWS backend\nGCP backend\nAzure backend\nF5XC backend",
+                        "description": "Cloud type\n\nProviderType unspecified\nAWS backend\nGCP backend\nAzure backend\nF5XC backend\nVMware backend\nKVM backend\nOCI backend\nBaremetal backend\nF5 rSeries backend",
                         "in": "query",
                         "required": false,
                         "type": "string",
@@ -1231,10 +1251,15 @@ var PrivateCustomAPISwaggerJSON string = `{
                             "PROVIDER_TYPE_AWS",
                             "PROVIDER_TYPE_GCP",
                             "PROVIDER_TYPE_AZURE",
-                            "PROVIDER_TYPE_VOLTERRA"
+                            "PROVIDER_TYPE_VOLTERRA",
+                            "PROVIDER_TYPE_VMWARE",
+                            "PROVIDER_TYPE_KVM",
+                            "PROVIDER_TYPE_OCI",
+                            "PROVIDER_TYPE_BAREMETAL",
+                            "PROVIDER_TYPE_F5RSERIES"
                         ],
                         "default": "PROVIDER_TYPE_UNSPECIFIED",
-                        "x-displayname": "Volterra"
+                        "x-displayname": "F5 rSeries"
                     },
                     {
                         "name": "query_key",
@@ -1330,7 +1355,7 @@ var PrivateCustomAPISwaggerJSON string = `{
                     },
                     {
                         "name": "cloud_type",
-                        "description": "Cloud type\n\nProviderType unspecified\nAWS backend\nGCP backend\nAzure backend\nF5XC backend",
+                        "description": "Cloud type\n\nProviderType unspecified\nAWS backend\nGCP backend\nAzure backend\nF5XC backend\nVMware backend\nKVM backend\nOCI backend\nBaremetal backend\nF5 rSeries backend",
                         "in": "query",
                         "required": false,
                         "type": "string",
@@ -1339,10 +1364,15 @@ var PrivateCustomAPISwaggerJSON string = `{
                             "PROVIDER_TYPE_AWS",
                             "PROVIDER_TYPE_GCP",
                             "PROVIDER_TYPE_AZURE",
-                            "PROVIDER_TYPE_VOLTERRA"
+                            "PROVIDER_TYPE_VOLTERRA",
+                            "PROVIDER_TYPE_VMWARE",
+                            "PROVIDER_TYPE_KVM",
+                            "PROVIDER_TYPE_OCI",
+                            "PROVIDER_TYPE_BAREMETAL",
+                            "PROVIDER_TYPE_F5RSERIES"
                         ],
                         "default": "PROVIDER_TYPE_UNSPECIFIED",
-                        "x-displayname": "Volterra"
+                        "x-displayname": "F5 rSeries"
                     },
                     {
                         "name": "query_key",
@@ -1446,7 +1476,7 @@ var PrivateCustomAPISwaggerJSON string = `{
                     },
                     {
                         "name": "cloud_type",
-                        "description": "Cloud type\n\nProviderType unspecified\nAWS backend\nGCP backend\nAzure backend\nF5XC backend",
+                        "description": "Cloud type\n\nProviderType unspecified\nAWS backend\nGCP backend\nAzure backend\nF5XC backend\nVMware backend\nKVM backend\nOCI backend\nBaremetal backend\nF5 rSeries backend",
                         "in": "query",
                         "required": false,
                         "type": "string",
@@ -1455,10 +1485,15 @@ var PrivateCustomAPISwaggerJSON string = `{
                             "PROVIDER_TYPE_AWS",
                             "PROVIDER_TYPE_GCP",
                             "PROVIDER_TYPE_AZURE",
-                            "PROVIDER_TYPE_VOLTERRA"
+                            "PROVIDER_TYPE_VOLTERRA",
+                            "PROVIDER_TYPE_VMWARE",
+                            "PROVIDER_TYPE_KVM",
+                            "PROVIDER_TYPE_OCI",
+                            "PROVIDER_TYPE_BAREMETAL",
+                            "PROVIDER_TYPE_F5RSERIES"
                         ],
                         "default": "PROVIDER_TYPE_UNSPECIFIED",
-                        "x-displayname": "Volterra"
+                        "x-displayname": "F5 rSeries"
                     },
                     {
                         "name": "query_key",
@@ -1555,7 +1590,7 @@ var PrivateCustomAPISwaggerJSON string = `{
                     },
                     {
                         "name": "cloud_type",
-                        "description": "Cloud type\n\nProviderType unspecified\nAWS backend\nGCP backend\nAzure backend\nF5XC backend",
+                        "description": "Cloud type\n\nProviderType unspecified\nAWS backend\nGCP backend\nAzure backend\nF5XC backend\nVMware backend\nKVM backend\nOCI backend\nBaremetal backend\nF5 rSeries backend",
                         "in": "query",
                         "required": false,
                         "type": "string",
@@ -1564,10 +1599,15 @@ var PrivateCustomAPISwaggerJSON string = `{
                             "PROVIDER_TYPE_AWS",
                             "PROVIDER_TYPE_GCP",
                             "PROVIDER_TYPE_AZURE",
-                            "PROVIDER_TYPE_VOLTERRA"
+                            "PROVIDER_TYPE_VOLTERRA",
+                            "PROVIDER_TYPE_VMWARE",
+                            "PROVIDER_TYPE_KVM",
+                            "PROVIDER_TYPE_OCI",
+                            "PROVIDER_TYPE_BAREMETAL",
+                            "PROVIDER_TYPE_F5RSERIES"
                         ],
                         "default": "PROVIDER_TYPE_UNSPECIFIED",
-                        "x-displayname": "Volterra"
+                        "x-displayname": "F5 rSeries"
                     },
                     {
                         "name": "query_key",
@@ -1676,14 +1716,19 @@ var PrivateCustomAPISwaggerJSON string = `{
         },
         "topologyProviderType": {
             "type": "string",
-            "description": "x-displayName: \"Provider Type\"\nprovider type\n\n - PROVIDER_TYPE_UNSPECIFIED: x-displayName: \"Unspecified\"\nProviderType unspecified\n - PROVIDER_TYPE_AWS: x-displayName: \"AWS\"\nAWS backend\n - PROVIDER_TYPE_GCP: x-displayName: \"GCP\"\nGCP backend\n - PROVIDER_TYPE_AZURE: x-displayName: \"Azure\"\nAzure backend\n - PROVIDER_TYPE_VOLTERRA: x-displayName: \"Volterra\"\nF5XC backend",
+            "description": "x-displayName: \"Provider Type\"\nprovider type\n\n - PROVIDER_TYPE_UNSPECIFIED: x-displayName: \"Unspecified\"\nProviderType unspecified\n - PROVIDER_TYPE_AWS: x-displayName: \"AWS\"\nAWS backend\n - PROVIDER_TYPE_GCP: x-displayName: \"GCP\"\nGCP backend\n - PROVIDER_TYPE_AZURE: x-displayName: \"Azure\"\nAzure backend\n - PROVIDER_TYPE_VOLTERRA: x-displayName: \"Volterra\"\nF5XC backend\n - PROVIDER_TYPE_VMWARE: x-displayName: \"VMware\"\nVMware backend\n - PROVIDER_TYPE_KVM: x-displayName: \"KVM\"\nKVM backend\n - PROVIDER_TYPE_OCI: x-displayName: \"OCI\"\nOCI backend\n - PROVIDER_TYPE_BAREMETAL: x-displayName: \"Baremetal\"\nBaremetal backend\n - PROVIDER_TYPE_F5RSERIES: x-displayName: \"F5 rSeries\"\nF5 rSeries backend",
             "title": "ProviderType",
             "enum": [
                 "PROVIDER_TYPE_UNSPECIFIED",
                 "PROVIDER_TYPE_AWS",
                 "PROVIDER_TYPE_GCP",
                 "PROVIDER_TYPE_AZURE",
-                "PROVIDER_TYPE_VOLTERRA"
+                "PROVIDER_TYPE_VOLTERRA",
+                "PROVIDER_TYPE_VMWARE",
+                "PROVIDER_TYPE_KVM",
+                "PROVIDER_TYPE_OCI",
+                "PROVIDER_TYPE_BAREMETAL",
+                "PROVIDER_TYPE_F5RSERIES"
             ],
             "default": "PROVIDER_TYPE_UNSPECIFIED"
         }

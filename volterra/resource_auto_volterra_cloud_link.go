@@ -64,14 +64,16 @@ func resourceVolterraCloudLink() *schema.Resource {
 
 			"aws": {
 
-				Type:     schema.TypeSet,
+				Type:     schema.TypeList,
+				MaxItems: 1,
 				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 
 						"aws_cred": {
 
-							Type:     schema.TypeSet,
+							Type:     schema.TypeList,
+							MaxItems: 1,
 							Required: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
@@ -94,7 +96,8 @@ func resourceVolterraCloudLink() *schema.Resource {
 
 						"byoc": {
 
-							Type:     schema.TypeSet,
+							Type:     schema.TypeList,
+							MaxItems: 1,
 							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
@@ -108,14 +111,16 @@ func resourceVolterraCloudLink() *schema.Resource {
 
 												"auth_key": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Required: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
 															"blindfold_secret_info_internal": {
 
-																Type:       schema.TypeSet,
+																Type:       schema.TypeList,
+																MaxItems:   1,
 																Optional:   true,
 																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
@@ -150,7 +155,8 @@ func resourceVolterraCloudLink() *schema.Resource {
 
 															"blindfold_secret_info": {
 
-																Type:     schema.TypeSet,
+																Type:     schema.TypeList,
+																MaxItems: 1,
 																Optional: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
@@ -175,7 +181,8 @@ func resourceVolterraCloudLink() *schema.Resource {
 
 															"clear_secret_info": {
 
-																Type:     schema.TypeSet,
+																Type:     schema.TypeList,
+																MaxItems: 1,
 																Optional: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
@@ -195,7 +202,8 @@ func resourceVolterraCloudLink() *schema.Resource {
 
 															"vault_secret_info": {
 
-																Type:       schema.TypeSet,
+																Type:       schema.TypeList,
+																MaxItems:   1,
 																Optional:   true,
 																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
@@ -236,7 +244,8 @@ func resourceVolterraCloudLink() *schema.Resource {
 
 															"wingman_secret_info": {
 
-																Type:       schema.TypeSet,
+																Type:       schema.TypeList,
+																MaxItems:   1,
 																Optional:   true,
 																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
@@ -266,7 +275,8 @@ func resourceVolterraCloudLink() *schema.Resource {
 
 												"coordinates": {
 
-													Type:       schema.TypeSet,
+													Type:       schema.TypeList,
+													MaxItems:   1,
 													Optional:   true,
 													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
@@ -295,7 +305,8 @@ func resourceVolterraCloudLink() *schema.Resource {
 
 												"ipv4": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Optional: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -315,7 +326,8 @@ func resourceVolterraCloudLink() *schema.Resource {
 
 												"ipv6": {
 
-													Type:       schema.TypeSet,
+													Type:       schema.TypeList,
+													MaxItems:   1,
 													Optional:   true,
 													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
@@ -331,7 +343,8 @@ func resourceVolterraCloudLink() *schema.Resource {
 
 												"metadata": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Required: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -397,7 +410,8 @@ func resourceVolterraCloudLink() *schema.Resource {
 
 						"f5xc_managed": {
 
-							Type:       schema.TypeSet,
+							Type:       schema.TypeList,
+							MaxItems:   1,
 							Optional:   true,
 							Deprecated: "This field is deprecated and will be removed in future release.",
 							Elem: &schema.Resource{
@@ -423,7 +437,8 @@ func resourceVolterraCloudLink() *schema.Resource {
 
 			"azure": {
 
-				Type:       schema.TypeSet,
+				Type:       schema.TypeList,
+				MaxItems:   1,
 				Optional:   true,
 				Deprecated: "This field is deprecated and will be removed in future release.",
 				Elem: &schema.Resource{
@@ -433,14 +448,16 @@ func resourceVolterraCloudLink() *schema.Resource {
 
 			"gcp": {
 
-				Type:     schema.TypeSet,
+				Type:     schema.TypeList,
+				MaxItems: 1,
 				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 
 						"byoc": {
 
-							Type:     schema.TypeSet,
+							Type:     schema.TypeList,
+							MaxItems: 1,
 							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
@@ -454,7 +471,8 @@ func resourceVolterraCloudLink() *schema.Resource {
 
 												"coordinates": {
 
-													Type:       schema.TypeSet,
+													Type:       schema.TypeList,
+													MaxItems:   1,
 													Optional:   true,
 													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
@@ -482,7 +500,8 @@ func resourceVolterraCloudLink() *schema.Resource {
 
 												"metadata": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Required: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -531,7 +550,8 @@ func resourceVolterraCloudLink() *schema.Resource {
 
 						"gcp_cred": {
 
-							Type:     schema.TypeSet,
+							Type:     schema.TypeList,
+							MaxItems: 1,
 							Required: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
@@ -563,7 +583,8 @@ func resourceVolterraCloudLink() *schema.Resource {
 
 			"enabled": {
 
-				Type:     schema.TypeSet,
+				Type:     schema.TypeList,
+				MaxItems: 1,
 				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
@@ -643,411 +664,437 @@ func resourceVolterraCloudLinkCreate(d *schema.ResourceData, meta interface{}) e
 		cloudProviderInt.Aws = &ves_io_schema_cloud_link.AWSType{}
 		createSpec.CloudProvider = cloudProviderInt
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
+			if set != nil {
+				cs := set.(map[string]interface{})
 
-			if v, ok := cs["aws_cred"]; ok && !isIntfNil(v) {
+				if v, ok := cs["aws_cred"]; ok && !isIntfNil(v) {
 
-				sl := v.(*schema.Set).List()
-				awsCredInt := &ves_io_schema_views.ObjectRefType{}
-				cloudProviderInt.Aws.AwsCred = awsCredInt
+					sl := v.([]interface{})
+					awsCredInt := &ves_io_schema_views.ObjectRefType{}
+					cloudProviderInt.Aws.AwsCred = awsCredInt
 
-				for _, set := range sl {
-					acMapToStrVal := set.(map[string]interface{})
-					if val, ok := acMapToStrVal["name"]; ok && !isIntfNil(v) {
-						awsCredInt.Name = val.(string)
+					for _, set := range sl {
+						if set != nil {
+							acMapToStrVal := set.(map[string]interface{})
+							if val, ok := acMapToStrVal["name"]; ok && !isIntfNil(v) {
+								awsCredInt.Name = val.(string)
+							}
+							if val, ok := acMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+								awsCredInt.Namespace = val.(string)
+							}
+
+							if val, ok := acMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+								awsCredInt.Tenant = val.(string)
+							}
+						}
 					}
-					if val, ok := acMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-						awsCredInt.Namespace = val.(string)
-					}
 
-					if val, ok := acMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-						awsCredInt.Tenant = val.(string)
-					}
 				}
 
-			}
+				cloudLinkTypeTypeFound := false
 
-			cloudLinkTypeTypeFound := false
+				if v, ok := cs["byoc"]; ok && !isIntfNil(v) && !cloudLinkTypeTypeFound {
 
-			if v, ok := cs["byoc"]; ok && !isIntfNil(v) && !cloudLinkTypeTypeFound {
+					cloudLinkTypeTypeFound = true
+					cloudLinkTypeInt := &ves_io_schema_cloud_link.AWSType_Byoc{}
+					cloudLinkTypeInt.Byoc = &ves_io_schema_cloud_link.AWSBYOCListType{}
+					cloudProviderInt.Aws.CloudLinkType = cloudLinkTypeInt
 
-				cloudLinkTypeTypeFound = true
-				cloudLinkTypeInt := &ves_io_schema_cloud_link.AWSType_Byoc{}
-				cloudLinkTypeInt.Byoc = &ves_io_schema_cloud_link.AWSBYOCListType{}
-				cloudProviderInt.Aws.CloudLinkType = cloudLinkTypeInt
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
 
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
+							if v, ok := cs["connections"]; ok && !isIntfNil(v) {
 
-					if v, ok := cs["connections"]; ok && !isIntfNil(v) {
+								sl := v.([]interface{})
+								connections := make([]*ves_io_schema_cloud_link.AWSBYOCType, len(sl))
+								cloudLinkTypeInt.Byoc.Connections = connections
+								for i, set := range sl {
+									if set != nil {
+										connections[i] = &ves_io_schema_cloud_link.AWSBYOCType{}
+										connectionsMapStrToI := set.(map[string]interface{})
 
-						sl := v.([]interface{})
-						connections := make([]*ves_io_schema_cloud_link.AWSBYOCType, len(sl))
-						cloudLinkTypeInt.Byoc.Connections = connections
-						for i, set := range sl {
-							connections[i] = &ves_io_schema_cloud_link.AWSBYOCType{}
-							connectionsMapStrToI := set.(map[string]interface{})
+										if v, ok := connectionsMapStrToI["auth_key"]; ok && !isIntfNil(v) {
 
-							if v, ok := connectionsMapStrToI["auth_key"]; ok && !isIntfNil(v) {
+											sl := v.([]interface{})
+											authKey := &ves_io_schema.SecretType{}
+											connections[i].AuthKey = authKey
+											for _, set := range sl {
+												if set != nil {
+													authKeyMapStrToI := set.(map[string]interface{})
 
-								sl := v.(*schema.Set).List()
-								authKey := &ves_io_schema.SecretType{}
-								connections[i].AuthKey = authKey
-								for _, set := range sl {
-									authKeyMapStrToI := set.(map[string]interface{})
+													if v, ok := authKeyMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
 
-									if v, ok := authKeyMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
+														sl := v.([]interface{})
+														blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
+														authKey.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
+														for _, set := range sl {
+															if set != nil {
+																blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
 
-										sl := v.(*schema.Set).List()
-										blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
-										authKey.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
-										for _, set := range sl {
-											blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
+																if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
+																	blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
+																}
 
-											if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
-												blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
-											}
+																if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
+																	blindfoldSecretInfoInternal.Location = w.(string)
+																}
 
-											if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
-												blindfoldSecretInfoInternal.Location = w.(string)
-											}
+																if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
+																	blindfoldSecretInfoInternal.StoreProvider = w.(string)
+																}
 
-											if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
-												blindfoldSecretInfoInternal.StoreProvider = w.(string)
+															}
+														}
+
+													}
+
+													if v, ok := authKeyMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
+
+														authKey.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+													}
+
+													secretInfoOneofTypeFound := false
+
+													if v, ok := authKeyMapStrToI["blindfold_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+														secretInfoOneofTypeFound = true
+														secretInfoOneofInt := &ves_io_schema.SecretType_BlindfoldSecretInfo{}
+														secretInfoOneofInt.BlindfoldSecretInfo = &ves_io_schema.BlindfoldSecretInfoType{}
+														authKey.SecretInfoOneof = secretInfoOneofInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["decryption_provider"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.BlindfoldSecretInfo.DecryptionProvider = v.(string)
+
+																}
+
+																if v, ok := cs["location"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.BlindfoldSecretInfo.Location = v.(string)
+
+																}
+
+																if v, ok := cs["store_provider"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.BlindfoldSecretInfo.StoreProvider = v.(string)
+
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := authKeyMapStrToI["clear_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+														secretInfoOneofTypeFound = true
+														secretInfoOneofInt := &ves_io_schema.SecretType_ClearSecretInfo{}
+														secretInfoOneofInt.ClearSecretInfo = &ves_io_schema.ClearSecretInfoType{}
+														authKey.SecretInfoOneof = secretInfoOneofInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.ClearSecretInfo.Provider = v.(string)
+
+																}
+
+																if v, ok := cs["url"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := authKeyMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+														secretInfoOneofTypeFound = true
+														secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
+														secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
+														authKey.SecretInfoOneof = secretInfoOneofInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["key"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
+																}
+
+																if v, ok := cs["location"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
+																}
+
+																if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
+																}
+
+																if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+																}
+
+																if v, ok := cs["version"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := authKeyMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+														secretInfoOneofTypeFound = true
+														secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
+														secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
+														authKey.SecretInfoOneof = secretInfoOneofInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
+
+																}
+
+															}
+														}
+
+													}
+
+												}
 											}
 
 										}
 
-									}
+										if w, ok := connectionsMapStrToI["bgp_asn"]; ok && !isIntfNil(w) {
+											connections[i].BgpAsn = uint32(w.(int))
+										}
 
-									if v, ok := authKeyMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
+										if w, ok := connectionsMapStrToI["connection_id"]; ok && !isIntfNil(w) {
+											connections[i].ConnectionId = w.(string)
+										}
 
-										authKey.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+										if v, ok := connectionsMapStrToI["coordinates"]; ok && !isIntfNil(v) {
 
-									}
+											sl := v.([]interface{})
+											coordinates := &ves_io_schema_site.Coordinates{}
+											connections[i].Coordinates = coordinates
+											for _, set := range sl {
+												if set != nil {
+													coordinatesMapStrToI := set.(map[string]interface{})
 
-									secretInfoOneofTypeFound := false
+													if w, ok := coordinatesMapStrToI["latitude"]; ok && !isIntfNil(w) {
+														coordinates.Latitude = float32(w.(float64))
+													}
 
-									if v, ok := authKeyMapStrToI["blindfold_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+													if w, ok := coordinatesMapStrToI["longitude"]; ok && !isIntfNil(w) {
+														coordinates.Longitude = float32(w.(float64))
+													}
 
-										secretInfoOneofTypeFound = true
-										secretInfoOneofInt := &ves_io_schema.SecretType_BlindfoldSecretInfo{}
-										secretInfoOneofInt.BlindfoldSecretInfo = &ves_io_schema.BlindfoldSecretInfoType{}
-										authKey.SecretInfoOneof = secretInfoOneofInt
-
-										sl := v.(*schema.Set).List()
-										for _, set := range sl {
-											cs := set.(map[string]interface{})
-
-											if v, ok := cs["decryption_provider"]; ok && !isIntfNil(v) {
-
-												secretInfoOneofInt.BlindfoldSecretInfo.DecryptionProvider = v.(string)
-
-											}
-
-											if v, ok := cs["location"]; ok && !isIntfNil(v) {
-
-												secretInfoOneofInt.BlindfoldSecretInfo.Location = v.(string)
-
-											}
-
-											if v, ok := cs["store_provider"]; ok && !isIntfNil(v) {
-
-												secretInfoOneofInt.BlindfoldSecretInfo.StoreProvider = v.(string)
-
+												}
 											}
 
 										}
 
-									}
+										if w, ok := connectionsMapStrToI["enable_sitelink"]; ok && !isIntfNil(w) {
+											connections[i].EnableSitelink = w.(bool)
+										}
 
-									if v, ok := authKeyMapStrToI["clear_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+										ipTypeTypeFound := false
 
-										secretInfoOneofTypeFound = true
-										secretInfoOneofInt := &ves_io_schema.SecretType_ClearSecretInfo{}
-										secretInfoOneofInt.ClearSecretInfo = &ves_io_schema.ClearSecretInfoType{}
-										authKey.SecretInfoOneof = secretInfoOneofInt
+										if v, ok := connectionsMapStrToI["ipv4"]; ok && !isIntfNil(v) && !ipTypeTypeFound {
 
-										sl := v.(*schema.Set).List()
-										for _, set := range sl {
-											cs := set.(map[string]interface{})
+											ipTypeTypeFound = true
+											ipTypeInt := &ves_io_schema_cloud_link.AWSBYOCType_Ipv4{}
+											ipTypeInt.Ipv4 = &ves_io_schema_cloud_link.Ipv4Type{}
+											connections[i].IpType = ipTypeInt
 
-											if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
 
-												secretInfoOneofInt.ClearSecretInfo.Provider = v.(string)
+													if v, ok := cs["aws_router_peer_address"]; ok && !isIntfNil(v) {
 
-											}
+														ipTypeInt.Ipv4.AwsRouterPeerAddress = v.(string)
 
-											if v, ok := cs["url"]; ok && !isIntfNil(v) {
+													}
 
-												secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+													if v, ok := cs["router_peer_address"]; ok && !isIntfNil(v) {
 
+														ipTypeInt.Ipv4.RouterPeerAddress = v.(string)
+
+													}
+
+												}
 											}
 
 										}
 
-									}
+										if _, ok := connectionsMapStrToI["ipv6"]; ok && !ipTypeTypeFound {
 
-									if v, ok := authKeyMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+											ipTypeTypeFound = true
+											ipTypeInt := &ves_io_schema_cloud_link.AWSBYOCType_Ipv6{}
+											ipTypeInt.Ipv6 = &ves_io_schema_cloud_link.Ipv6Type{}
+											connections[i].IpType = ipTypeInt
 
-										secretInfoOneofTypeFound = true
-										secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
-										secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
-										authKey.SecretInfoOneof = secretInfoOneofInt
+										}
 
-										sl := v.(*schema.Set).List()
-										for _, set := range sl {
-											cs := set.(map[string]interface{})
+										if w, ok := connectionsMapStrToI["jumbo_mtu"]; ok && !isIntfNil(w) {
+											connections[i].JumboMtu = w.(bool)
+										}
 
-											if v, ok := cs["key"]; ok && !isIntfNil(v) {
+										if v, ok := connectionsMapStrToI["metadata"]; ok && !isIntfNil(v) {
 
-												secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+											sl := v.([]interface{})
+											metadata := &ves_io_schema.MessageMetaType{}
+											connections[i].Metadata = metadata
+											for _, set := range sl {
+												if set != nil {
+													metadataMapStrToI := set.(map[string]interface{})
 
-											}
+													if w, ok := metadataMapStrToI["description"]; ok && !isIntfNil(w) {
+														metadata.Description = w.(string)
+													}
 
-											if v, ok := cs["location"]; ok && !isIntfNil(v) {
+													if w, ok := metadataMapStrToI["disable"]; ok && !isIntfNil(w) {
+														metadata.Disable = w.(bool)
+													}
 
-												secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+													if w, ok := metadataMapStrToI["name"]; ok && !isIntfNil(w) {
+														metadata.Name = w.(string)
+													}
 
-											}
-
-											if v, ok := cs["provider"]; ok && !isIntfNil(v) {
-
-												secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
-
-											}
-
-											if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
-
-												secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
-
-											}
-
-											if v, ok := cs["version"]; ok && !isIntfNil(v) {
-
-												secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
-
+												}
 											}
 
 										}
 
-									}
+										if w, ok := connectionsMapStrToI["region"]; ok && !isIntfNil(w) {
+											connections[i].Region = w.(string)
+										}
 
-									if v, ok := authKeyMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+										resourceNameChoiceTypeFound := false
 
-										secretInfoOneofTypeFound = true
-										secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
-										secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
-										authKey.SecretInfoOneof = secretInfoOneofInt
+										if v, ok := connectionsMapStrToI["system_generated_name"]; ok && !isIntfNil(v) && !resourceNameChoiceTypeFound {
 
-										sl := v.(*schema.Set).List()
-										for _, set := range sl {
-											cs := set.(map[string]interface{})
+											resourceNameChoiceTypeFound = true
 
-											if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-												secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
-
+											if v.(bool) {
+												resourceNameChoiceInt := &ves_io_schema_cloud_link.AWSBYOCType_SystemGeneratedName{}
+												resourceNameChoiceInt.SystemGeneratedName = &ves_io_schema.Empty{}
+												connections[i].ResourceNameChoice = resourceNameChoiceInt
 											}
 
 										}
 
-									}
+										if v, ok := connectionsMapStrToI["user_assigned_name"]; ok && !isIntfNil(v) && !resourceNameChoiceTypeFound {
 
+											resourceNameChoiceTypeFound = true
+											resourceNameChoiceInt := &ves_io_schema_cloud_link.AWSBYOCType_UserAssignedName{}
+
+											connections[i].ResourceNameChoice = resourceNameChoiceInt
+
+											resourceNameChoiceInt.UserAssignedName = v.(string)
+
+										}
+
+										if w, ok := connectionsMapStrToI["tags"]; ok && !isIntfNil(w) {
+											ms := map[string]string{}
+											for k, v := range w.(map[string]interface{}) {
+												ms[k] = v.(string)
+											}
+											connections[i].Tags = ms
+										}
+
+										if v, ok := connectionsMapStrToI["virtual_interface_type"]; ok && !isIntfNil(v) {
+
+											connections[i].VirtualInterfaceType = ves_io_schema_cloud_link.VirtualInterfaceType(ves_io_schema_cloud_link.VirtualInterfaceType_value[v.(string)])
+
+										}
+
+										if w, ok := connectionsMapStrToI["vlan"]; ok && !isIntfNil(w) {
+											connections[i].Vlan = uint32(w.(int))
+										}
+
+									}
 								}
 
-							}
-
-							if w, ok := connectionsMapStrToI["bgp_asn"]; ok && !isIntfNil(w) {
-								connections[i].BgpAsn = uint32(w.(int))
-							}
-
-							if w, ok := connectionsMapStrToI["connection_id"]; ok && !isIntfNil(w) {
-								connections[i].ConnectionId = w.(string)
-							}
-
-							if v, ok := connectionsMapStrToI["coordinates"]; ok && !isIntfNil(v) {
-
-								sl := v.(*schema.Set).List()
-								coordinates := &ves_io_schema_site.Coordinates{}
-								connections[i].Coordinates = coordinates
-								for _, set := range sl {
-									coordinatesMapStrToI := set.(map[string]interface{})
-
-									if w, ok := coordinatesMapStrToI["latitude"]; ok && !isIntfNil(w) {
-										coordinates.Latitude = float32(w.(float64))
-									}
-
-									if w, ok := coordinatesMapStrToI["longitude"]; ok && !isIntfNil(w) {
-										coordinates.Longitude = float32(w.(float64))
-									}
-
-								}
-
-							}
-
-							if w, ok := connectionsMapStrToI["enable_sitelink"]; ok && !isIntfNil(w) {
-								connections[i].EnableSitelink = w.(bool)
-							}
-
-							ipTypeTypeFound := false
-
-							if v, ok := connectionsMapStrToI["ipv4"]; ok && !isIntfNil(v) && !ipTypeTypeFound {
-
-								ipTypeTypeFound = true
-								ipTypeInt := &ves_io_schema_cloud_link.AWSBYOCType_Ipv4{}
-								ipTypeInt.Ipv4 = &ves_io_schema_cloud_link.Ipv4Type{}
-								connections[i].IpType = ipTypeInt
-
-								sl := v.(*schema.Set).List()
-								for _, set := range sl {
-									cs := set.(map[string]interface{})
-
-									if v, ok := cs["aws_router_peer_address"]; ok && !isIntfNil(v) {
-
-										ipTypeInt.Ipv4.AwsRouterPeerAddress = v.(string)
-
-									}
-
-									if v, ok := cs["router_peer_address"]; ok && !isIntfNil(v) {
-
-										ipTypeInt.Ipv4.RouterPeerAddress = v.(string)
-
-									}
-
-								}
-
-							}
-
-							if _, ok := connectionsMapStrToI["ipv6"]; ok && !ipTypeTypeFound {
-
-								ipTypeTypeFound = true
-								ipTypeInt := &ves_io_schema_cloud_link.AWSBYOCType_Ipv6{}
-								ipTypeInt.Ipv6 = &ves_io_schema_cloud_link.Ipv6Type{}
-								connections[i].IpType = ipTypeInt
-
-							}
-
-							if w, ok := connectionsMapStrToI["jumbo_mtu"]; ok && !isIntfNil(w) {
-								connections[i].JumboMtu = w.(bool)
-							}
-
-							if v, ok := connectionsMapStrToI["metadata"]; ok && !isIntfNil(v) {
-
-								sl := v.(*schema.Set).List()
-								metadata := &ves_io_schema.MessageMetaType{}
-								connections[i].Metadata = metadata
-								for _, set := range sl {
-									metadataMapStrToI := set.(map[string]interface{})
-
-									if w, ok := metadataMapStrToI["description"]; ok && !isIntfNil(w) {
-										metadata.Description = w.(string)
-									}
-
-									if w, ok := metadataMapStrToI["disable"]; ok && !isIntfNil(w) {
-										metadata.Disable = w.(bool)
-									}
-
-									if w, ok := metadataMapStrToI["name"]; ok && !isIntfNil(w) {
-										metadata.Name = w.(string)
-									}
-
-								}
-
-							}
-
-							if w, ok := connectionsMapStrToI["region"]; ok && !isIntfNil(w) {
-								connections[i].Region = w.(string)
-							}
-
-							resourceNameChoiceTypeFound := false
-
-							if v, ok := connectionsMapStrToI["system_generated_name"]; ok && !isIntfNil(v) && !resourceNameChoiceTypeFound {
-
-								resourceNameChoiceTypeFound = true
-
-								if v.(bool) {
-									resourceNameChoiceInt := &ves_io_schema_cloud_link.AWSBYOCType_SystemGeneratedName{}
-									resourceNameChoiceInt.SystemGeneratedName = &ves_io_schema.Empty{}
-									connections[i].ResourceNameChoice = resourceNameChoiceInt
-								}
-
-							}
-
-							if v, ok := connectionsMapStrToI["user_assigned_name"]; ok && !isIntfNil(v) && !resourceNameChoiceTypeFound {
-
-								resourceNameChoiceTypeFound = true
-								resourceNameChoiceInt := &ves_io_schema_cloud_link.AWSBYOCType_UserAssignedName{}
-
-								connections[i].ResourceNameChoice = resourceNameChoiceInt
-
-								resourceNameChoiceInt.UserAssignedName = v.(string)
-
-							}
-
-							if w, ok := connectionsMapStrToI["tags"]; ok && !isIntfNil(w) {
-								ms := map[string]string{}
-								for k, v := range w.(map[string]interface{}) {
-									ms[k] = v.(string)
-								}
-								connections[i].Tags = ms
-							}
-
-							if v, ok := connectionsMapStrToI["virtual_interface_type"]; ok && !isIntfNil(v) {
-
-								connections[i].VirtualInterfaceType = ves_io_schema_cloud_link.VirtualInterfaceType(ves_io_schema_cloud_link.VirtualInterfaceType_value[v.(string)])
-
-							}
-
-							if w, ok := connectionsMapStrToI["vlan"]; ok && !isIntfNil(w) {
-								connections[i].Vlan = uint32(w.(int))
 							}
 
 						}
-
 					}
 
 				}
 
-			}
+				if _, ok := cs["f5xc_managed"]; ok && !cloudLinkTypeTypeFound {
 
-			if _, ok := cs["f5xc_managed"]; ok && !cloudLinkTypeTypeFound {
+					cloudLinkTypeTypeFound = true
+					cloudLinkTypeInt := &ves_io_schema_cloud_link.AWSType_F5XcManaged{}
+					cloudLinkTypeInt.F5XcManaged = &ves_io_schema_cloud_link.AWSF5XCManagedType{}
+					cloudProviderInt.Aws.CloudLinkType = cloudLinkTypeInt
 
-				cloudLinkTypeTypeFound = true
-				cloudLinkTypeInt := &ves_io_schema_cloud_link.AWSType_F5XcManaged{}
-				cloudLinkTypeInt.F5XcManaged = &ves_io_schema_cloud_link.AWSF5XCManagedType{}
-				cloudProviderInt.Aws.CloudLinkType = cloudLinkTypeInt
+				}
 
-			}
+				directConnectGatewayAsnChoiceTypeFound := false
 
-			directConnectGatewayAsnChoiceTypeFound := false
+				if v, ok := cs["auto"]; ok && !isIntfNil(v) && !directConnectGatewayAsnChoiceTypeFound {
 
-			if v, ok := cs["auto"]; ok && !isIntfNil(v) && !directConnectGatewayAsnChoiceTypeFound {
+					directConnectGatewayAsnChoiceTypeFound = true
 
-				directConnectGatewayAsnChoiceTypeFound = true
+					if v.(bool) {
+						directConnectGatewayAsnChoiceInt := &ves_io_schema_cloud_link.AWSType_Auto{}
+						directConnectGatewayAsnChoiceInt.Auto = &ves_io_schema.Empty{}
+						cloudProviderInt.Aws.DirectConnectGatewayAsnChoice = directConnectGatewayAsnChoiceInt
+					}
 
-				if v.(bool) {
-					directConnectGatewayAsnChoiceInt := &ves_io_schema_cloud_link.AWSType_Auto{}
-					directConnectGatewayAsnChoiceInt.Auto = &ves_io_schema.Empty{}
+				}
+
+				if v, ok := cs["custom_asn"]; ok && !isIntfNil(v) && !directConnectGatewayAsnChoiceTypeFound {
+
+					directConnectGatewayAsnChoiceTypeFound = true
+					directConnectGatewayAsnChoiceInt := &ves_io_schema_cloud_link.AWSType_CustomAsn{}
+
 					cloudProviderInt.Aws.DirectConnectGatewayAsnChoice = directConnectGatewayAsnChoiceInt
+
+					directConnectGatewayAsnChoiceInt.CustomAsn = uint32(v.(int))
+
 				}
 
 			}
-
-			if v, ok := cs["custom_asn"]; ok && !isIntfNil(v) && !directConnectGatewayAsnChoiceTypeFound {
-
-				directConnectGatewayAsnChoiceTypeFound = true
-				directConnectGatewayAsnChoiceInt := &ves_io_schema_cloud_link.AWSType_CustomAsn{}
-
-				cloudProviderInt.Aws.DirectConnectGatewayAsnChoice = directConnectGatewayAsnChoiceInt
-
-				directConnectGatewayAsnChoiceInt.CustomAsn = uint32(v.(int))
-
-			}
-
 		}
 
 	}
@@ -1068,139 +1115,151 @@ func resourceVolterraCloudLinkCreate(d *schema.ResourceData, meta interface{}) e
 		cloudProviderInt.Gcp = &ves_io_schema_cloud_link.GCPType{}
 		createSpec.CloudProvider = cloudProviderInt
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
+			if set != nil {
+				cs := set.(map[string]interface{})
 
-			cloudLinkTypeTypeFound := false
+				cloudLinkTypeTypeFound := false
 
-			if v, ok := cs["byoc"]; ok && !isIntfNil(v) && !cloudLinkTypeTypeFound {
+				if v, ok := cs["byoc"]; ok && !isIntfNil(v) && !cloudLinkTypeTypeFound {
 
-				cloudLinkTypeTypeFound = true
-				cloudLinkTypeInt := &ves_io_schema_cloud_link.GCPType_Byoc{}
-				cloudLinkTypeInt.Byoc = &ves_io_schema_cloud_link.GCPBYOCListType{}
-				cloudProviderInt.Gcp.CloudLinkType = cloudLinkTypeInt
+					cloudLinkTypeTypeFound = true
+					cloudLinkTypeInt := &ves_io_schema_cloud_link.GCPType_Byoc{}
+					cloudLinkTypeInt.Byoc = &ves_io_schema_cloud_link.GCPBYOCListType{}
+					cloudProviderInt.Gcp.CloudLinkType = cloudLinkTypeInt
 
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
 
-					if v, ok := cs["connections"]; ok && !isIntfNil(v) {
+							if v, ok := cs["connections"]; ok && !isIntfNil(v) {
 
-						sl := v.([]interface{})
-						connections := make([]*ves_io_schema_cloud_link.GCPBYOCType, len(sl))
-						cloudLinkTypeInt.Byoc.Connections = connections
-						for i, set := range sl {
-							connections[i] = &ves_io_schema_cloud_link.GCPBYOCType{}
-							connectionsMapStrToI := set.(map[string]interface{})
+								sl := v.([]interface{})
+								connections := make([]*ves_io_schema_cloud_link.GCPBYOCType, len(sl))
+								cloudLinkTypeInt.Byoc.Connections = connections
+								for i, set := range sl {
+									if set != nil {
+										connections[i] = &ves_io_schema_cloud_link.GCPBYOCType{}
+										connectionsMapStrToI := set.(map[string]interface{})
 
-							if v, ok := connectionsMapStrToI["coordinates"]; ok && !isIntfNil(v) {
+										if v, ok := connectionsMapStrToI["coordinates"]; ok && !isIntfNil(v) {
 
-								sl := v.(*schema.Set).List()
-								coordinates := &ves_io_schema_site.Coordinates{}
-								connections[i].Coordinates = coordinates
-								for _, set := range sl {
-									coordinatesMapStrToI := set.(map[string]interface{})
+											sl := v.([]interface{})
+											coordinates := &ves_io_schema_site.Coordinates{}
+											connections[i].Coordinates = coordinates
+											for _, set := range sl {
+												if set != nil {
+													coordinatesMapStrToI := set.(map[string]interface{})
 
-									if w, ok := coordinatesMapStrToI["latitude"]; ok && !isIntfNil(w) {
-										coordinates.Latitude = float32(w.(float64))
+													if w, ok := coordinatesMapStrToI["latitude"]; ok && !isIntfNil(w) {
+														coordinates.Latitude = float32(w.(float64))
+													}
+
+													if w, ok := coordinatesMapStrToI["longitude"]; ok && !isIntfNil(w) {
+														coordinates.Longitude = float32(w.(float64))
+													}
+
+												}
+											}
+
+										}
+
+										if w, ok := connectionsMapStrToI["interconnect_attachment_name"]; ok && !isIntfNil(w) {
+											connections[i].InterconnectAttachmentName = w.(string)
+										}
+
+										if v, ok := connectionsMapStrToI["metadata"]; ok && !isIntfNil(v) {
+
+											sl := v.([]interface{})
+											metadata := &ves_io_schema.MessageMetaType{}
+											connections[i].Metadata = metadata
+											for _, set := range sl {
+												if set != nil {
+													metadataMapStrToI := set.(map[string]interface{})
+
+													if w, ok := metadataMapStrToI["description"]; ok && !isIntfNil(w) {
+														metadata.Description = w.(string)
+													}
+
+													if w, ok := metadataMapStrToI["disable"]; ok && !isIntfNil(w) {
+														metadata.Disable = w.(bool)
+													}
+
+													if w, ok := metadataMapStrToI["name"]; ok && !isIntfNil(w) {
+														metadata.Name = w.(string)
+													}
+
+												}
+											}
+
+										}
+
+										projectChoiceTypeFound := false
+
+										if v, ok := connectionsMapStrToI["project"]; ok && !isIntfNil(v) && !projectChoiceTypeFound {
+
+											projectChoiceTypeFound = true
+											projectChoiceInt := &ves_io_schema_cloud_link.GCPBYOCType_Project{}
+
+											connections[i].ProjectChoice = projectChoiceInt
+
+											projectChoiceInt.Project = v.(string)
+
+										}
+
+										if v, ok := connectionsMapStrToI["same_as_credential"]; ok && !isIntfNil(v) && !projectChoiceTypeFound {
+
+											projectChoiceTypeFound = true
+
+											if v.(bool) {
+												projectChoiceInt := &ves_io_schema_cloud_link.GCPBYOCType_SameAsCredential{}
+												projectChoiceInt.SameAsCredential = &ves_io_schema.Empty{}
+												connections[i].ProjectChoice = projectChoiceInt
+											}
+
+										}
+
+										if w, ok := connectionsMapStrToI["region"]; ok && !isIntfNil(w) {
+											connections[i].Region = w.(string)
+										}
+
 									}
-
-									if w, ok := coordinatesMapStrToI["longitude"]; ok && !isIntfNil(w) {
-										coordinates.Longitude = float32(w.(float64))
-									}
-
 								}
 
-							}
-
-							if w, ok := connectionsMapStrToI["interconnect_attachment_name"]; ok && !isIntfNil(w) {
-								connections[i].InterconnectAttachmentName = w.(string)
-							}
-
-							if v, ok := connectionsMapStrToI["metadata"]; ok && !isIntfNil(v) {
-
-								sl := v.(*schema.Set).List()
-								metadata := &ves_io_schema.MessageMetaType{}
-								connections[i].Metadata = metadata
-								for _, set := range sl {
-									metadataMapStrToI := set.(map[string]interface{})
-
-									if w, ok := metadataMapStrToI["description"]; ok && !isIntfNil(w) {
-										metadata.Description = w.(string)
-									}
-
-									if w, ok := metadataMapStrToI["disable"]; ok && !isIntfNil(w) {
-										metadata.Disable = w.(bool)
-									}
-
-									if w, ok := metadataMapStrToI["name"]; ok && !isIntfNil(w) {
-										metadata.Name = w.(string)
-									}
-
-								}
-
-							}
-
-							projectChoiceTypeFound := false
-
-							if v, ok := connectionsMapStrToI["project"]; ok && !isIntfNil(v) && !projectChoiceTypeFound {
-
-								projectChoiceTypeFound = true
-								projectChoiceInt := &ves_io_schema_cloud_link.GCPBYOCType_Project{}
-
-								connections[i].ProjectChoice = projectChoiceInt
-
-								projectChoiceInt.Project = v.(string)
-
-							}
-
-							if v, ok := connectionsMapStrToI["same_as_credential"]; ok && !isIntfNil(v) && !projectChoiceTypeFound {
-
-								projectChoiceTypeFound = true
-
-								if v.(bool) {
-									projectChoiceInt := &ves_io_schema_cloud_link.GCPBYOCType_SameAsCredential{}
-									projectChoiceInt.SameAsCredential = &ves_io_schema.Empty{}
-									connections[i].ProjectChoice = projectChoiceInt
-								}
-
-							}
-
-							if w, ok := connectionsMapStrToI["region"]; ok && !isIntfNil(w) {
-								connections[i].Region = w.(string)
 							}
 
 						}
+					}
 
+				}
+
+				if v, ok := cs["gcp_cred"]; ok && !isIntfNil(v) {
+
+					sl := v.([]interface{})
+					gcpCredInt := &ves_io_schema_views.ObjectRefType{}
+					cloudProviderInt.Gcp.GcpCred = gcpCredInt
+
+					for _, set := range sl {
+						if set != nil {
+							gcMapToStrVal := set.(map[string]interface{})
+							if val, ok := gcMapToStrVal["name"]; ok && !isIntfNil(v) {
+								gcpCredInt.Name = val.(string)
+							}
+							if val, ok := gcMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+								gcpCredInt.Namespace = val.(string)
+							}
+
+							if val, ok := gcMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+								gcpCredInt.Tenant = val.(string)
+							}
+						}
 					}
 
 				}
 
 			}
-
-			if v, ok := cs["gcp_cred"]; ok && !isIntfNil(v) {
-
-				sl := v.(*schema.Set).List()
-				gcpCredInt := &ves_io_schema_views.ObjectRefType{}
-				cloudProviderInt.Gcp.GcpCred = gcpCredInt
-
-				for _, set := range sl {
-					gcMapToStrVal := set.(map[string]interface{})
-					if val, ok := gcMapToStrVal["name"]; ok && !isIntfNil(v) {
-						gcpCredInt.Name = val.(string)
-					}
-					if val, ok := gcMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-						gcpCredInt.Namespace = val.(string)
-					}
-
-					if val, ok := gcMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-						gcpCredInt.Tenant = val.(string)
-					}
-				}
-
-			}
-
 		}
 
 	}
@@ -1228,16 +1287,18 @@ func resourceVolterraCloudLinkCreate(d *schema.ResourceData, meta interface{}) e
 		enableConnectionToReChoiceInt.Enabled = &ves_io_schema_views.CloudLinkADNType{}
 		createSpec.EnableConnectionToReChoice = enableConnectionToReChoiceInt
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
+			if set != nil {
+				cs := set.(map[string]interface{})
 
-			if v, ok := cs["cloudlink_network_name"]; ok && !isIntfNil(v) {
+				if v, ok := cs["cloudlink_network_name"]; ok && !isIntfNil(v) {
 
-				enableConnectionToReChoiceInt.Enabled.CloudlinkNetworkName = v.(string)
+					enableConnectionToReChoiceInt.Enabled.CloudlinkNetworkName = v.(string)
+
+				}
 
 			}
-
 		}
 
 	}
@@ -1350,411 +1411,437 @@ func resourceVolterraCloudLinkUpdate(d *schema.ResourceData, meta interface{}) e
 		cloudProviderInt.Aws = &ves_io_schema_cloud_link.AWSType{}
 		updateSpec.CloudProvider = cloudProviderInt
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
+			if set != nil {
+				cs := set.(map[string]interface{})
 
-			if v, ok := cs["aws_cred"]; ok && !isIntfNil(v) {
+				if v, ok := cs["aws_cred"]; ok && !isIntfNil(v) {
 
-				sl := v.(*schema.Set).List()
-				awsCredInt := &ves_io_schema_views.ObjectRefType{}
-				cloudProviderInt.Aws.AwsCred = awsCredInt
+					sl := v.([]interface{})
+					awsCredInt := &ves_io_schema_views.ObjectRefType{}
+					cloudProviderInt.Aws.AwsCred = awsCredInt
 
-				for _, set := range sl {
-					acMapToStrVal := set.(map[string]interface{})
-					if val, ok := acMapToStrVal["name"]; ok && !isIntfNil(v) {
-						awsCredInt.Name = val.(string)
+					for _, set := range sl {
+						if set != nil {
+							acMapToStrVal := set.(map[string]interface{})
+							if val, ok := acMapToStrVal["name"]; ok && !isIntfNil(v) {
+								awsCredInt.Name = val.(string)
+							}
+							if val, ok := acMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+								awsCredInt.Namespace = val.(string)
+							}
+
+							if val, ok := acMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+								awsCredInt.Tenant = val.(string)
+							}
+						}
 					}
-					if val, ok := acMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-						awsCredInt.Namespace = val.(string)
-					}
 
-					if val, ok := acMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-						awsCredInt.Tenant = val.(string)
-					}
 				}
 
-			}
+				cloudLinkTypeTypeFound := false
 
-			cloudLinkTypeTypeFound := false
+				if v, ok := cs["byoc"]; ok && !isIntfNil(v) && !cloudLinkTypeTypeFound {
 
-			if v, ok := cs["byoc"]; ok && !isIntfNil(v) && !cloudLinkTypeTypeFound {
+					cloudLinkTypeTypeFound = true
+					cloudLinkTypeInt := &ves_io_schema_cloud_link.AWSType_Byoc{}
+					cloudLinkTypeInt.Byoc = &ves_io_schema_cloud_link.AWSBYOCListType{}
+					cloudProviderInt.Aws.CloudLinkType = cloudLinkTypeInt
 
-				cloudLinkTypeTypeFound = true
-				cloudLinkTypeInt := &ves_io_schema_cloud_link.AWSType_Byoc{}
-				cloudLinkTypeInt.Byoc = &ves_io_schema_cloud_link.AWSBYOCListType{}
-				cloudProviderInt.Aws.CloudLinkType = cloudLinkTypeInt
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
 
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
+							if v, ok := cs["connections"]; ok && !isIntfNil(v) {
 
-					if v, ok := cs["connections"]; ok && !isIntfNil(v) {
+								sl := v.([]interface{})
+								connections := make([]*ves_io_schema_cloud_link.AWSBYOCType, len(sl))
+								cloudLinkTypeInt.Byoc.Connections = connections
+								for i, set := range sl {
+									if set != nil {
+										connections[i] = &ves_io_schema_cloud_link.AWSBYOCType{}
+										connectionsMapStrToI := set.(map[string]interface{})
 
-						sl := v.([]interface{})
-						connections := make([]*ves_io_schema_cloud_link.AWSBYOCType, len(sl))
-						cloudLinkTypeInt.Byoc.Connections = connections
-						for i, set := range sl {
-							connections[i] = &ves_io_schema_cloud_link.AWSBYOCType{}
-							connectionsMapStrToI := set.(map[string]interface{})
+										if v, ok := connectionsMapStrToI["auth_key"]; ok && !isIntfNil(v) {
 
-							if v, ok := connectionsMapStrToI["auth_key"]; ok && !isIntfNil(v) {
+											sl := v.([]interface{})
+											authKey := &ves_io_schema.SecretType{}
+											connections[i].AuthKey = authKey
+											for _, set := range sl {
+												if set != nil {
+													authKeyMapStrToI := set.(map[string]interface{})
 
-								sl := v.(*schema.Set).List()
-								authKey := &ves_io_schema.SecretType{}
-								connections[i].AuthKey = authKey
-								for _, set := range sl {
-									authKeyMapStrToI := set.(map[string]interface{})
+													if v, ok := authKeyMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
 
-									if v, ok := authKeyMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
+														sl := v.([]interface{})
+														blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
+														authKey.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
+														for _, set := range sl {
+															if set != nil {
+																blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
 
-										sl := v.(*schema.Set).List()
-										blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
-										authKey.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
-										for _, set := range sl {
-											blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
+																if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
+																	blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
+																}
 
-											if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
-												blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
-											}
+																if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
+																	blindfoldSecretInfoInternal.Location = w.(string)
+																}
 
-											if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
-												blindfoldSecretInfoInternal.Location = w.(string)
-											}
+																if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
+																	blindfoldSecretInfoInternal.StoreProvider = w.(string)
+																}
 
-											if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
-												blindfoldSecretInfoInternal.StoreProvider = w.(string)
+															}
+														}
+
+													}
+
+													if v, ok := authKeyMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
+
+														authKey.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+													}
+
+													secretInfoOneofTypeFound := false
+
+													if v, ok := authKeyMapStrToI["blindfold_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+														secretInfoOneofTypeFound = true
+														secretInfoOneofInt := &ves_io_schema.SecretType_BlindfoldSecretInfo{}
+														secretInfoOneofInt.BlindfoldSecretInfo = &ves_io_schema.BlindfoldSecretInfoType{}
+														authKey.SecretInfoOneof = secretInfoOneofInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["decryption_provider"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.BlindfoldSecretInfo.DecryptionProvider = v.(string)
+
+																}
+
+																if v, ok := cs["location"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.BlindfoldSecretInfo.Location = v.(string)
+
+																}
+
+																if v, ok := cs["store_provider"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.BlindfoldSecretInfo.StoreProvider = v.(string)
+
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := authKeyMapStrToI["clear_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+														secretInfoOneofTypeFound = true
+														secretInfoOneofInt := &ves_io_schema.SecretType_ClearSecretInfo{}
+														secretInfoOneofInt.ClearSecretInfo = &ves_io_schema.ClearSecretInfoType{}
+														authKey.SecretInfoOneof = secretInfoOneofInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.ClearSecretInfo.Provider = v.(string)
+
+																}
+
+																if v, ok := cs["url"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := authKeyMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+														secretInfoOneofTypeFound = true
+														secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
+														secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
+														authKey.SecretInfoOneof = secretInfoOneofInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["key"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
+																}
+
+																if v, ok := cs["location"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
+																}
+
+																if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
+																}
+
+																if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+																}
+
+																if v, ok := cs["version"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := authKeyMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+														secretInfoOneofTypeFound = true
+														secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
+														secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
+														authKey.SecretInfoOneof = secretInfoOneofInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
+
+																}
+
+															}
+														}
+
+													}
+
+												}
 											}
 
 										}
 
-									}
+										if w, ok := connectionsMapStrToI["bgp_asn"]; ok && !isIntfNil(w) {
+											connections[i].BgpAsn = uint32(w.(int))
+										}
 
-									if v, ok := authKeyMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
+										if w, ok := connectionsMapStrToI["connection_id"]; ok && !isIntfNil(w) {
+											connections[i].ConnectionId = w.(string)
+										}
 
-										authKey.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+										if v, ok := connectionsMapStrToI["coordinates"]; ok && !isIntfNil(v) {
 
-									}
+											sl := v.([]interface{})
+											coordinates := &ves_io_schema_site.Coordinates{}
+											connections[i].Coordinates = coordinates
+											for _, set := range sl {
+												if set != nil {
+													coordinatesMapStrToI := set.(map[string]interface{})
 
-									secretInfoOneofTypeFound := false
+													if w, ok := coordinatesMapStrToI["latitude"]; ok && !isIntfNil(w) {
+														coordinates.Latitude = float32(w.(float64))
+													}
 
-									if v, ok := authKeyMapStrToI["blindfold_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+													if w, ok := coordinatesMapStrToI["longitude"]; ok && !isIntfNil(w) {
+														coordinates.Longitude = float32(w.(float64))
+													}
 
-										secretInfoOneofTypeFound = true
-										secretInfoOneofInt := &ves_io_schema.SecretType_BlindfoldSecretInfo{}
-										secretInfoOneofInt.BlindfoldSecretInfo = &ves_io_schema.BlindfoldSecretInfoType{}
-										authKey.SecretInfoOneof = secretInfoOneofInt
-
-										sl := v.(*schema.Set).List()
-										for _, set := range sl {
-											cs := set.(map[string]interface{})
-
-											if v, ok := cs["decryption_provider"]; ok && !isIntfNil(v) {
-
-												secretInfoOneofInt.BlindfoldSecretInfo.DecryptionProvider = v.(string)
-
-											}
-
-											if v, ok := cs["location"]; ok && !isIntfNil(v) {
-
-												secretInfoOneofInt.BlindfoldSecretInfo.Location = v.(string)
-
-											}
-
-											if v, ok := cs["store_provider"]; ok && !isIntfNil(v) {
-
-												secretInfoOneofInt.BlindfoldSecretInfo.StoreProvider = v.(string)
-
+												}
 											}
 
 										}
 
-									}
+										if w, ok := connectionsMapStrToI["enable_sitelink"]; ok && !isIntfNil(w) {
+											connections[i].EnableSitelink = w.(bool)
+										}
 
-									if v, ok := authKeyMapStrToI["clear_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+										ipTypeTypeFound := false
 
-										secretInfoOneofTypeFound = true
-										secretInfoOneofInt := &ves_io_schema.SecretType_ClearSecretInfo{}
-										secretInfoOneofInt.ClearSecretInfo = &ves_io_schema.ClearSecretInfoType{}
-										authKey.SecretInfoOneof = secretInfoOneofInt
+										if v, ok := connectionsMapStrToI["ipv4"]; ok && !isIntfNil(v) && !ipTypeTypeFound {
 
-										sl := v.(*schema.Set).List()
-										for _, set := range sl {
-											cs := set.(map[string]interface{})
+											ipTypeTypeFound = true
+											ipTypeInt := &ves_io_schema_cloud_link.AWSBYOCType_Ipv4{}
+											ipTypeInt.Ipv4 = &ves_io_schema_cloud_link.Ipv4Type{}
+											connections[i].IpType = ipTypeInt
 
-											if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
 
-												secretInfoOneofInt.ClearSecretInfo.Provider = v.(string)
+													if v, ok := cs["aws_router_peer_address"]; ok && !isIntfNil(v) {
 
-											}
+														ipTypeInt.Ipv4.AwsRouterPeerAddress = v.(string)
 
-											if v, ok := cs["url"]; ok && !isIntfNil(v) {
+													}
 
-												secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+													if v, ok := cs["router_peer_address"]; ok && !isIntfNil(v) {
 
+														ipTypeInt.Ipv4.RouterPeerAddress = v.(string)
+
+													}
+
+												}
 											}
 
 										}
 
-									}
+										if _, ok := connectionsMapStrToI["ipv6"]; ok && !ipTypeTypeFound {
 
-									if v, ok := authKeyMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+											ipTypeTypeFound = true
+											ipTypeInt := &ves_io_schema_cloud_link.AWSBYOCType_Ipv6{}
+											ipTypeInt.Ipv6 = &ves_io_schema_cloud_link.Ipv6Type{}
+											connections[i].IpType = ipTypeInt
 
-										secretInfoOneofTypeFound = true
-										secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
-										secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
-										authKey.SecretInfoOneof = secretInfoOneofInt
+										}
 
-										sl := v.(*schema.Set).List()
-										for _, set := range sl {
-											cs := set.(map[string]interface{})
+										if w, ok := connectionsMapStrToI["jumbo_mtu"]; ok && !isIntfNil(w) {
+											connections[i].JumboMtu = w.(bool)
+										}
 
-											if v, ok := cs["key"]; ok && !isIntfNil(v) {
+										if v, ok := connectionsMapStrToI["metadata"]; ok && !isIntfNil(v) {
 
-												secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+											sl := v.([]interface{})
+											metadata := &ves_io_schema.MessageMetaType{}
+											connections[i].Metadata = metadata
+											for _, set := range sl {
+												if set != nil {
+													metadataMapStrToI := set.(map[string]interface{})
 
-											}
+													if w, ok := metadataMapStrToI["description"]; ok && !isIntfNil(w) {
+														metadata.Description = w.(string)
+													}
 
-											if v, ok := cs["location"]; ok && !isIntfNil(v) {
+													if w, ok := metadataMapStrToI["disable"]; ok && !isIntfNil(w) {
+														metadata.Disable = w.(bool)
+													}
 
-												secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+													if w, ok := metadataMapStrToI["name"]; ok && !isIntfNil(w) {
+														metadata.Name = w.(string)
+													}
 
-											}
-
-											if v, ok := cs["provider"]; ok && !isIntfNil(v) {
-
-												secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
-
-											}
-
-											if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
-
-												secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
-
-											}
-
-											if v, ok := cs["version"]; ok && !isIntfNil(v) {
-
-												secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
-
+												}
 											}
 
 										}
 
-									}
+										if w, ok := connectionsMapStrToI["region"]; ok && !isIntfNil(w) {
+											connections[i].Region = w.(string)
+										}
 
-									if v, ok := authKeyMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+										resourceNameChoiceTypeFound := false
 
-										secretInfoOneofTypeFound = true
-										secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
-										secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
-										authKey.SecretInfoOneof = secretInfoOneofInt
+										if v, ok := connectionsMapStrToI["system_generated_name"]; ok && !isIntfNil(v) && !resourceNameChoiceTypeFound {
 
-										sl := v.(*schema.Set).List()
-										for _, set := range sl {
-											cs := set.(map[string]interface{})
+											resourceNameChoiceTypeFound = true
 
-											if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-												secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
-
+											if v.(bool) {
+												resourceNameChoiceInt := &ves_io_schema_cloud_link.AWSBYOCType_SystemGeneratedName{}
+												resourceNameChoiceInt.SystemGeneratedName = &ves_io_schema.Empty{}
+												connections[i].ResourceNameChoice = resourceNameChoiceInt
 											}
 
 										}
 
-									}
+										if v, ok := connectionsMapStrToI["user_assigned_name"]; ok && !isIntfNil(v) && !resourceNameChoiceTypeFound {
 
+											resourceNameChoiceTypeFound = true
+											resourceNameChoiceInt := &ves_io_schema_cloud_link.AWSBYOCType_UserAssignedName{}
+
+											connections[i].ResourceNameChoice = resourceNameChoiceInt
+
+											resourceNameChoiceInt.UserAssignedName = v.(string)
+
+										}
+
+										if w, ok := connectionsMapStrToI["tags"]; ok && !isIntfNil(w) {
+											ms := map[string]string{}
+											for k, v := range w.(map[string]interface{}) {
+												ms[k] = v.(string)
+											}
+											connections[i].Tags = ms
+										}
+
+										if v, ok := connectionsMapStrToI["virtual_interface_type"]; ok && !isIntfNil(v) {
+
+											connections[i].VirtualInterfaceType = ves_io_schema_cloud_link.VirtualInterfaceType(ves_io_schema_cloud_link.VirtualInterfaceType_value[v.(string)])
+
+										}
+
+										if w, ok := connectionsMapStrToI["vlan"]; ok && !isIntfNil(w) {
+											connections[i].Vlan = uint32(w.(int))
+										}
+
+									}
 								}
 
-							}
-
-							if w, ok := connectionsMapStrToI["bgp_asn"]; ok && !isIntfNil(w) {
-								connections[i].BgpAsn = uint32(w.(int))
-							}
-
-							if w, ok := connectionsMapStrToI["connection_id"]; ok && !isIntfNil(w) {
-								connections[i].ConnectionId = w.(string)
-							}
-
-							if v, ok := connectionsMapStrToI["coordinates"]; ok && !isIntfNil(v) {
-
-								sl := v.(*schema.Set).List()
-								coordinates := &ves_io_schema_site.Coordinates{}
-								connections[i].Coordinates = coordinates
-								for _, set := range sl {
-									coordinatesMapStrToI := set.(map[string]interface{})
-
-									if w, ok := coordinatesMapStrToI["latitude"]; ok && !isIntfNil(w) {
-										coordinates.Latitude = float32(w.(float64))
-									}
-
-									if w, ok := coordinatesMapStrToI["longitude"]; ok && !isIntfNil(w) {
-										coordinates.Longitude = float32(w.(float64))
-									}
-
-								}
-
-							}
-
-							if w, ok := connectionsMapStrToI["enable_sitelink"]; ok && !isIntfNil(w) {
-								connections[i].EnableSitelink = w.(bool)
-							}
-
-							ipTypeTypeFound := false
-
-							if v, ok := connectionsMapStrToI["ipv4"]; ok && !isIntfNil(v) && !ipTypeTypeFound {
-
-								ipTypeTypeFound = true
-								ipTypeInt := &ves_io_schema_cloud_link.AWSBYOCType_Ipv4{}
-								ipTypeInt.Ipv4 = &ves_io_schema_cloud_link.Ipv4Type{}
-								connections[i].IpType = ipTypeInt
-
-								sl := v.(*schema.Set).List()
-								for _, set := range sl {
-									cs := set.(map[string]interface{})
-
-									if v, ok := cs["aws_router_peer_address"]; ok && !isIntfNil(v) {
-
-										ipTypeInt.Ipv4.AwsRouterPeerAddress = v.(string)
-
-									}
-
-									if v, ok := cs["router_peer_address"]; ok && !isIntfNil(v) {
-
-										ipTypeInt.Ipv4.RouterPeerAddress = v.(string)
-
-									}
-
-								}
-
-							}
-
-							if _, ok := connectionsMapStrToI["ipv6"]; ok && !ipTypeTypeFound {
-
-								ipTypeTypeFound = true
-								ipTypeInt := &ves_io_schema_cloud_link.AWSBYOCType_Ipv6{}
-								ipTypeInt.Ipv6 = &ves_io_schema_cloud_link.Ipv6Type{}
-								connections[i].IpType = ipTypeInt
-
-							}
-
-							if w, ok := connectionsMapStrToI["jumbo_mtu"]; ok && !isIntfNil(w) {
-								connections[i].JumboMtu = w.(bool)
-							}
-
-							if v, ok := connectionsMapStrToI["metadata"]; ok && !isIntfNil(v) {
-
-								sl := v.(*schema.Set).List()
-								metadata := &ves_io_schema.MessageMetaType{}
-								connections[i].Metadata = metadata
-								for _, set := range sl {
-									metadataMapStrToI := set.(map[string]interface{})
-
-									if w, ok := metadataMapStrToI["description"]; ok && !isIntfNil(w) {
-										metadata.Description = w.(string)
-									}
-
-									if w, ok := metadataMapStrToI["disable"]; ok && !isIntfNil(w) {
-										metadata.Disable = w.(bool)
-									}
-
-									if w, ok := metadataMapStrToI["name"]; ok && !isIntfNil(w) {
-										metadata.Name = w.(string)
-									}
-
-								}
-
-							}
-
-							if w, ok := connectionsMapStrToI["region"]; ok && !isIntfNil(w) {
-								connections[i].Region = w.(string)
-							}
-
-							resourceNameChoiceTypeFound := false
-
-							if v, ok := connectionsMapStrToI["system_generated_name"]; ok && !isIntfNil(v) && !resourceNameChoiceTypeFound {
-
-								resourceNameChoiceTypeFound = true
-
-								if v.(bool) {
-									resourceNameChoiceInt := &ves_io_schema_cloud_link.AWSBYOCType_SystemGeneratedName{}
-									resourceNameChoiceInt.SystemGeneratedName = &ves_io_schema.Empty{}
-									connections[i].ResourceNameChoice = resourceNameChoiceInt
-								}
-
-							}
-
-							if v, ok := connectionsMapStrToI["user_assigned_name"]; ok && !isIntfNil(v) && !resourceNameChoiceTypeFound {
-
-								resourceNameChoiceTypeFound = true
-								resourceNameChoiceInt := &ves_io_schema_cloud_link.AWSBYOCType_UserAssignedName{}
-
-								connections[i].ResourceNameChoice = resourceNameChoiceInt
-
-								resourceNameChoiceInt.UserAssignedName = v.(string)
-
-							}
-
-							if w, ok := connectionsMapStrToI["tags"]; ok && !isIntfNil(w) {
-								ms := map[string]string{}
-								for k, v := range w.(map[string]interface{}) {
-									ms[k] = v.(string)
-								}
-								connections[i].Tags = ms
-							}
-
-							if v, ok := connectionsMapStrToI["virtual_interface_type"]; ok && !isIntfNil(v) {
-
-								connections[i].VirtualInterfaceType = ves_io_schema_cloud_link.VirtualInterfaceType(ves_io_schema_cloud_link.VirtualInterfaceType_value[v.(string)])
-
-							}
-
-							if w, ok := connectionsMapStrToI["vlan"]; ok && !isIntfNil(w) {
-								connections[i].Vlan = uint32(w.(int))
 							}
 
 						}
-
 					}
 
 				}
 
-			}
+				if _, ok := cs["f5xc_managed"]; ok && !cloudLinkTypeTypeFound {
 
-			if _, ok := cs["f5xc_managed"]; ok && !cloudLinkTypeTypeFound {
+					cloudLinkTypeTypeFound = true
+					cloudLinkTypeInt := &ves_io_schema_cloud_link.AWSType_F5XcManaged{}
+					cloudLinkTypeInt.F5XcManaged = &ves_io_schema_cloud_link.AWSF5XCManagedType{}
+					cloudProviderInt.Aws.CloudLinkType = cloudLinkTypeInt
 
-				cloudLinkTypeTypeFound = true
-				cloudLinkTypeInt := &ves_io_schema_cloud_link.AWSType_F5XcManaged{}
-				cloudLinkTypeInt.F5XcManaged = &ves_io_schema_cloud_link.AWSF5XCManagedType{}
-				cloudProviderInt.Aws.CloudLinkType = cloudLinkTypeInt
+				}
 
-			}
+				directConnectGatewayAsnChoiceTypeFound := false
 
-			directConnectGatewayAsnChoiceTypeFound := false
+				if v, ok := cs["auto"]; ok && !isIntfNil(v) && !directConnectGatewayAsnChoiceTypeFound {
 
-			if v, ok := cs["auto"]; ok && !isIntfNil(v) && !directConnectGatewayAsnChoiceTypeFound {
+					directConnectGatewayAsnChoiceTypeFound = true
 
-				directConnectGatewayAsnChoiceTypeFound = true
+					if v.(bool) {
+						directConnectGatewayAsnChoiceInt := &ves_io_schema_cloud_link.AWSType_Auto{}
+						directConnectGatewayAsnChoiceInt.Auto = &ves_io_schema.Empty{}
+						cloudProviderInt.Aws.DirectConnectGatewayAsnChoice = directConnectGatewayAsnChoiceInt
+					}
 
-				if v.(bool) {
-					directConnectGatewayAsnChoiceInt := &ves_io_schema_cloud_link.AWSType_Auto{}
-					directConnectGatewayAsnChoiceInt.Auto = &ves_io_schema.Empty{}
+				}
+
+				if v, ok := cs["custom_asn"]; ok && !isIntfNil(v) && !directConnectGatewayAsnChoiceTypeFound {
+
+					directConnectGatewayAsnChoiceTypeFound = true
+					directConnectGatewayAsnChoiceInt := &ves_io_schema_cloud_link.AWSType_CustomAsn{}
+
 					cloudProviderInt.Aws.DirectConnectGatewayAsnChoice = directConnectGatewayAsnChoiceInt
+
+					directConnectGatewayAsnChoiceInt.CustomAsn = uint32(v.(int))
+
 				}
 
 			}
-
-			if v, ok := cs["custom_asn"]; ok && !isIntfNil(v) && !directConnectGatewayAsnChoiceTypeFound {
-
-				directConnectGatewayAsnChoiceTypeFound = true
-				directConnectGatewayAsnChoiceInt := &ves_io_schema_cloud_link.AWSType_CustomAsn{}
-
-				cloudProviderInt.Aws.DirectConnectGatewayAsnChoice = directConnectGatewayAsnChoiceInt
-
-				directConnectGatewayAsnChoiceInt.CustomAsn = uint32(v.(int))
-
-			}
-
 		}
 
 	}
@@ -1775,139 +1862,151 @@ func resourceVolterraCloudLinkUpdate(d *schema.ResourceData, meta interface{}) e
 		cloudProviderInt.Gcp = &ves_io_schema_cloud_link.GCPType{}
 		updateSpec.CloudProvider = cloudProviderInt
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
+			if set != nil {
+				cs := set.(map[string]interface{})
 
-			cloudLinkTypeTypeFound := false
+				cloudLinkTypeTypeFound := false
 
-			if v, ok := cs["byoc"]; ok && !isIntfNil(v) && !cloudLinkTypeTypeFound {
+				if v, ok := cs["byoc"]; ok && !isIntfNil(v) && !cloudLinkTypeTypeFound {
 
-				cloudLinkTypeTypeFound = true
-				cloudLinkTypeInt := &ves_io_schema_cloud_link.GCPType_Byoc{}
-				cloudLinkTypeInt.Byoc = &ves_io_schema_cloud_link.GCPBYOCListType{}
-				cloudProviderInt.Gcp.CloudLinkType = cloudLinkTypeInt
+					cloudLinkTypeTypeFound = true
+					cloudLinkTypeInt := &ves_io_schema_cloud_link.GCPType_Byoc{}
+					cloudLinkTypeInt.Byoc = &ves_io_schema_cloud_link.GCPBYOCListType{}
+					cloudProviderInt.Gcp.CloudLinkType = cloudLinkTypeInt
 
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
 
-					if v, ok := cs["connections"]; ok && !isIntfNil(v) {
+							if v, ok := cs["connections"]; ok && !isIntfNil(v) {
 
-						sl := v.([]interface{})
-						connections := make([]*ves_io_schema_cloud_link.GCPBYOCType, len(sl))
-						cloudLinkTypeInt.Byoc.Connections = connections
-						for i, set := range sl {
-							connections[i] = &ves_io_schema_cloud_link.GCPBYOCType{}
-							connectionsMapStrToI := set.(map[string]interface{})
+								sl := v.([]interface{})
+								connections := make([]*ves_io_schema_cloud_link.GCPBYOCType, len(sl))
+								cloudLinkTypeInt.Byoc.Connections = connections
+								for i, set := range sl {
+									if set != nil {
+										connections[i] = &ves_io_schema_cloud_link.GCPBYOCType{}
+										connectionsMapStrToI := set.(map[string]interface{})
 
-							if v, ok := connectionsMapStrToI["coordinates"]; ok && !isIntfNil(v) {
+										if v, ok := connectionsMapStrToI["coordinates"]; ok && !isIntfNil(v) {
 
-								sl := v.(*schema.Set).List()
-								coordinates := &ves_io_schema_site.Coordinates{}
-								connections[i].Coordinates = coordinates
-								for _, set := range sl {
-									coordinatesMapStrToI := set.(map[string]interface{})
+											sl := v.([]interface{})
+											coordinates := &ves_io_schema_site.Coordinates{}
+											connections[i].Coordinates = coordinates
+											for _, set := range sl {
+												if set != nil {
+													coordinatesMapStrToI := set.(map[string]interface{})
 
-									if w, ok := coordinatesMapStrToI["latitude"]; ok && !isIntfNil(w) {
-										coordinates.Latitude = float32(w.(float64))
+													if w, ok := coordinatesMapStrToI["latitude"]; ok && !isIntfNil(w) {
+														coordinates.Latitude = float32(w.(float64))
+													}
+
+													if w, ok := coordinatesMapStrToI["longitude"]; ok && !isIntfNil(w) {
+														coordinates.Longitude = float32(w.(float64))
+													}
+
+												}
+											}
+
+										}
+
+										if w, ok := connectionsMapStrToI["interconnect_attachment_name"]; ok && !isIntfNil(w) {
+											connections[i].InterconnectAttachmentName = w.(string)
+										}
+
+										if v, ok := connectionsMapStrToI["metadata"]; ok && !isIntfNil(v) {
+
+											sl := v.([]interface{})
+											metadata := &ves_io_schema.MessageMetaType{}
+											connections[i].Metadata = metadata
+											for _, set := range sl {
+												if set != nil {
+													metadataMapStrToI := set.(map[string]interface{})
+
+													if w, ok := metadataMapStrToI["description"]; ok && !isIntfNil(w) {
+														metadata.Description = w.(string)
+													}
+
+													if w, ok := metadataMapStrToI["disable"]; ok && !isIntfNil(w) {
+														metadata.Disable = w.(bool)
+													}
+
+													if w, ok := metadataMapStrToI["name"]; ok && !isIntfNil(w) {
+														metadata.Name = w.(string)
+													}
+
+												}
+											}
+
+										}
+
+										projectChoiceTypeFound := false
+
+										if v, ok := connectionsMapStrToI["project"]; ok && !isIntfNil(v) && !projectChoiceTypeFound {
+
+											projectChoiceTypeFound = true
+											projectChoiceInt := &ves_io_schema_cloud_link.GCPBYOCType_Project{}
+
+											connections[i].ProjectChoice = projectChoiceInt
+
+											projectChoiceInt.Project = v.(string)
+
+										}
+
+										if v, ok := connectionsMapStrToI["same_as_credential"]; ok && !isIntfNil(v) && !projectChoiceTypeFound {
+
+											projectChoiceTypeFound = true
+
+											if v.(bool) {
+												projectChoiceInt := &ves_io_schema_cloud_link.GCPBYOCType_SameAsCredential{}
+												projectChoiceInt.SameAsCredential = &ves_io_schema.Empty{}
+												connections[i].ProjectChoice = projectChoiceInt
+											}
+
+										}
+
+										if w, ok := connectionsMapStrToI["region"]; ok && !isIntfNil(w) {
+											connections[i].Region = w.(string)
+										}
+
 									}
-
-									if w, ok := coordinatesMapStrToI["longitude"]; ok && !isIntfNil(w) {
-										coordinates.Longitude = float32(w.(float64))
-									}
-
 								}
 
-							}
-
-							if w, ok := connectionsMapStrToI["interconnect_attachment_name"]; ok && !isIntfNil(w) {
-								connections[i].InterconnectAttachmentName = w.(string)
-							}
-
-							if v, ok := connectionsMapStrToI["metadata"]; ok && !isIntfNil(v) {
-
-								sl := v.(*schema.Set).List()
-								metadata := &ves_io_schema.MessageMetaType{}
-								connections[i].Metadata = metadata
-								for _, set := range sl {
-									metadataMapStrToI := set.(map[string]interface{})
-
-									if w, ok := metadataMapStrToI["description"]; ok && !isIntfNil(w) {
-										metadata.Description = w.(string)
-									}
-
-									if w, ok := metadataMapStrToI["disable"]; ok && !isIntfNil(w) {
-										metadata.Disable = w.(bool)
-									}
-
-									if w, ok := metadataMapStrToI["name"]; ok && !isIntfNil(w) {
-										metadata.Name = w.(string)
-									}
-
-								}
-
-							}
-
-							projectChoiceTypeFound := false
-
-							if v, ok := connectionsMapStrToI["project"]; ok && !isIntfNil(v) && !projectChoiceTypeFound {
-
-								projectChoiceTypeFound = true
-								projectChoiceInt := &ves_io_schema_cloud_link.GCPBYOCType_Project{}
-
-								connections[i].ProjectChoice = projectChoiceInt
-
-								projectChoiceInt.Project = v.(string)
-
-							}
-
-							if v, ok := connectionsMapStrToI["same_as_credential"]; ok && !isIntfNil(v) && !projectChoiceTypeFound {
-
-								projectChoiceTypeFound = true
-
-								if v.(bool) {
-									projectChoiceInt := &ves_io_schema_cloud_link.GCPBYOCType_SameAsCredential{}
-									projectChoiceInt.SameAsCredential = &ves_io_schema.Empty{}
-									connections[i].ProjectChoice = projectChoiceInt
-								}
-
-							}
-
-							if w, ok := connectionsMapStrToI["region"]; ok && !isIntfNil(w) {
-								connections[i].Region = w.(string)
 							}
 
 						}
+					}
 
+				}
+
+				if v, ok := cs["gcp_cred"]; ok && !isIntfNil(v) {
+
+					sl := v.([]interface{})
+					gcpCredInt := &ves_io_schema_views.ObjectRefType{}
+					cloudProviderInt.Gcp.GcpCred = gcpCredInt
+
+					for _, set := range sl {
+						if set != nil {
+							gcMapToStrVal := set.(map[string]interface{})
+							if val, ok := gcMapToStrVal["name"]; ok && !isIntfNil(v) {
+								gcpCredInt.Name = val.(string)
+							}
+							if val, ok := gcMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+								gcpCredInt.Namespace = val.(string)
+							}
+
+							if val, ok := gcMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+								gcpCredInt.Tenant = val.(string)
+							}
+						}
 					}
 
 				}
 
 			}
-
-			if v, ok := cs["gcp_cred"]; ok && !isIntfNil(v) {
-
-				sl := v.(*schema.Set).List()
-				gcpCredInt := &ves_io_schema_views.ObjectRefType{}
-				cloudProviderInt.Gcp.GcpCred = gcpCredInt
-
-				for _, set := range sl {
-					gcMapToStrVal := set.(map[string]interface{})
-					if val, ok := gcMapToStrVal["name"]; ok && !isIntfNil(v) {
-						gcpCredInt.Name = val.(string)
-					}
-					if val, ok := gcMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-						gcpCredInt.Namespace = val.(string)
-					}
-
-					if val, ok := gcMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-						gcpCredInt.Tenant = val.(string)
-					}
-				}
-
-			}
-
 		}
 
 	}
@@ -1933,16 +2032,18 @@ func resourceVolterraCloudLinkUpdate(d *schema.ResourceData, meta interface{}) e
 		enableConnectionToReChoiceInt.Enabled = &ves_io_schema_views.CloudLinkADNType{}
 		updateSpec.EnableConnectionToReChoice = enableConnectionToReChoiceInt
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
+			if set != nil {
+				cs := set.(map[string]interface{})
 
-			if v, ok := cs["cloudlink_network_name"]; ok && !isIntfNil(v) {
+				if v, ok := cs["cloudlink_network_name"]; ok && !isIntfNil(v) {
 
-				enableConnectionToReChoiceInt.Enabled.CloudlinkNetworkName = v.(string)
+					enableConnectionToReChoiceInt.Enabled.CloudlinkNetworkName = v.(string)
+
+				}
 
 			}
-
 		}
 
 	}

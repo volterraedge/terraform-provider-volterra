@@ -1989,6 +1989,241 @@ func RenewRequestValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *ReplaceServiceCredentialsRequest) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *ReplaceServiceCredentialsRequest) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *ReplaceServiceCredentialsRequest) DeepCopy() *ReplaceServiceCredentialsRequest {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &ReplaceServiceCredentialsRequest{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *ReplaceServiceCredentialsRequest) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *ReplaceServiceCredentialsRequest) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return ReplaceServiceCredentialsRequestValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateReplaceServiceCredentialsRequest struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateReplaceServiceCredentialsRequest) NameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for name")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateReplaceServiceCredentialsRequest) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*ReplaceServiceCredentialsRequest)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *ReplaceServiceCredentialsRequest got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("name"))
+		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["namespace"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("namespace"))
+		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["namespace_access"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("namespace_access"))
+		if err := fv(ctx, m.GetNamespaceAccess(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["user_group_names"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("user_group_names"))
+		for idx, item := range m.GetUserGroupNames() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultReplaceServiceCredentialsRequestValidator = func() *ValidateReplaceServiceCredentialsRequest {
+	v := &ValidateReplaceServiceCredentialsRequest{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhName := v.NameValidationRuleHandler
+	rulesName := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhName(rulesName)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceServiceCredentialsRequest.name: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["name"] = vFn
+
+	v.FldValidators["namespace_access"] = ves_io_schema.NamespaceAccessTypeValidator().Validate
+
+	return v
+}()
+
+func ReplaceServiceCredentialsRequestValidator() db.Validator {
+	return DefaultReplaceServiceCredentialsRequestValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *ReplaceServiceCredentialsResponse) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *ReplaceServiceCredentialsResponse) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *ReplaceServiceCredentialsResponse) DeepCopy() *ReplaceServiceCredentialsResponse {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &ReplaceServiceCredentialsResponse{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *ReplaceServiceCredentialsResponse) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *ReplaceServiceCredentialsResponse) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return ReplaceServiceCredentialsResponseValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateReplaceServiceCredentialsResponse struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateReplaceServiceCredentialsResponse) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*ReplaceServiceCredentialsResponse)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *ReplaceServiceCredentialsResponse got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["active"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("active"))
+		if err := fv(ctx, m.GetActive(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["expiration_timestamp"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("expiration_timestamp"))
+		if err := fv(ctx, m.GetExpirationTimestamp(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("name"))
+		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultReplaceServiceCredentialsResponseValidator = func() *ValidateReplaceServiceCredentialsResponse {
+	v := &ValidateReplaceServiceCredentialsResponse{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func ReplaceServiceCredentialsResponseValidator() db.Validator {
+	return DefaultReplaceServiceCredentialsResponseValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *ScimTokenRequest) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }

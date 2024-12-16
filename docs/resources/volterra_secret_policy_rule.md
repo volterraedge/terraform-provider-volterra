@@ -1,9 +1,9 @@
 ---
 
 page_title: "Volterra: secret_policy_rule"
-description: "The secret_policy_rule allows CRUD of Secret Policy Rule resource on Volterra SaaS"
 
----
+description: "The secret_policy_rule allows CRUD of Secret Policy Rule resource on Volterra SaaS"
+-------------------------------------------------------------------------------------------------
 
 Resource volterra_secret_policy_rule
 ====================================

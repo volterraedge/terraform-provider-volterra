@@ -147,6 +147,102 @@ func (v *ValidateCreateSpecType) Ipv6PrefixValidationRuleHandler(rules map[strin
 	return validatorFn, nil
 }
 
+func (v *ValidateCreateSpecType) Ipv4PrefixesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for ipv4_prefixes")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*Ipv4Prefix, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := Ipv4PrefixValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for ipv4_prefixes")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*Ipv4Prefix)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*Ipv4Prefix, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated ipv4_prefixes")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items ipv4_prefixes")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateCreateSpecType) Ipv6PrefixesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for ipv6_prefixes")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*Ipv6Prefix, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := Ipv6PrefixValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for ipv6_prefixes")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*Ipv6Prefix)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*Ipv6Prefix, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated ipv6_prefixes")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items ipv6_prefixes")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*CreateSpecType)
 	if !ok {
@@ -161,9 +257,25 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 		return nil
 	}
 
+	if fv, exists := v.FldValidators["ipv4_prefixes"]; exists {
+		vOpts := append(opts, db.WithValidateField("ipv4_prefixes"))
+		if err := fv(ctx, m.GetIpv4Prefixes(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["ipv6_prefix"]; exists {
 		vOpts := append(opts, db.WithValidateField("ipv6_prefix"))
 		if err := fv(ctx, m.GetIpv6Prefix(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["ipv6_prefixes"]; exists {
+		vOpts := append(opts, db.WithValidateField("ipv6_prefixes"))
+		if err := fv(ctx, m.GetIpv6Prefixes(), vOpts...); err != nil {
 			return err
 		}
 
@@ -219,6 +331,30 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["ipv6_prefix"] = vFn
+
+	vrhIpv4Prefixes := v.Ipv4PrefixesValidationRuleHandler
+	rulesIpv4Prefixes := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "1024",
+		"ves.io.schema.rules.repeated.unique":    "true",
+	}
+	vFn, err = vrhIpv4Prefixes(rulesIpv4Prefixes)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.ipv4_prefixes: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["ipv4_prefixes"] = vFn
+
+	vrhIpv6Prefixes := v.Ipv6PrefixesValidationRuleHandler
+	rulesIpv6Prefixes := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "1024",
+		"ves.io.schema.rules.repeated.unique":    "true",
+	}
+	vFn, err = vrhIpv6Prefixes(rulesIpv6Prefixes)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.ipv6_prefixes: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["ipv6_prefixes"] = vFn
 
 	return v
 }()
@@ -352,6 +488,102 @@ func (v *ValidateGetSpecType) Ipv6PrefixValidationRuleHandler(rules map[string]s
 	return validatorFn, nil
 }
 
+func (v *ValidateGetSpecType) Ipv4PrefixesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for ipv4_prefixes")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*Ipv4Prefix, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := Ipv4PrefixValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for ipv4_prefixes")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*Ipv4Prefix)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*Ipv4Prefix, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated ipv4_prefixes")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items ipv4_prefixes")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateGetSpecType) Ipv6PrefixesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for ipv6_prefixes")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*Ipv6Prefix, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := Ipv6PrefixValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for ipv6_prefixes")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*Ipv6Prefix)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*Ipv6Prefix, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated ipv6_prefixes")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items ipv6_prefixes")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*GetSpecType)
 	if !ok {
@@ -366,9 +598,25 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 		return nil
 	}
 
+	if fv, exists := v.FldValidators["ipv4_prefixes"]; exists {
+		vOpts := append(opts, db.WithValidateField("ipv4_prefixes"))
+		if err := fv(ctx, m.GetIpv4Prefixes(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["ipv6_prefix"]; exists {
 		vOpts := append(opts, db.WithValidateField("ipv6_prefix"))
 		if err := fv(ctx, m.GetIpv6Prefix(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["ipv6_prefixes"]; exists {
+		vOpts := append(opts, db.WithValidateField("ipv6_prefixes"))
+		if err := fv(ctx, m.GetIpv6Prefixes(), vOpts...); err != nil {
 			return err
 		}
 
@@ -424,6 +672,30 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["ipv6_prefix"] = vFn
+
+	vrhIpv4Prefixes := v.Ipv4PrefixesValidationRuleHandler
+	rulesIpv4Prefixes := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "1024",
+		"ves.io.schema.rules.repeated.unique":    "true",
+	}
+	vFn, err = vrhIpv4Prefixes(rulesIpv4Prefixes)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.ipv4_prefixes: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["ipv4_prefixes"] = vFn
+
+	vrhIpv6Prefixes := v.Ipv6PrefixesValidationRuleHandler
+	rulesIpv6Prefixes := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "1024",
+		"ves.io.schema.rules.repeated.unique":    "true",
+	}
+	vFn, err = vrhIpv6Prefixes(rulesIpv6Prefixes)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.ipv6_prefixes: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["ipv6_prefixes"] = vFn
 
 	return v
 }()
@@ -557,6 +829,102 @@ func (v *ValidateGlobalSpecType) Ipv6PrefixValidationRuleHandler(rules map[strin
 	return validatorFn, nil
 }
 
+func (v *ValidateGlobalSpecType) Ipv4PrefixesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for ipv4_prefixes")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*Ipv4Prefix, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := Ipv4PrefixValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for ipv4_prefixes")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*Ipv4Prefix)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*Ipv4Prefix, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated ipv4_prefixes")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items ipv4_prefixes")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateGlobalSpecType) Ipv6PrefixesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for ipv6_prefixes")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*Ipv6Prefix, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := Ipv6PrefixValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for ipv6_prefixes")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*Ipv6Prefix)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*Ipv6Prefix, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated ipv6_prefixes")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items ipv6_prefixes")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*GlobalSpecType)
 	if !ok {
@@ -571,9 +939,25 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 		return nil
 	}
 
+	if fv, exists := v.FldValidators["ipv4_prefixes"]; exists {
+		vOpts := append(opts, db.WithValidateField("ipv4_prefixes"))
+		if err := fv(ctx, m.GetIpv4Prefixes(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["ipv6_prefix"]; exists {
 		vOpts := append(opts, db.WithValidateField("ipv6_prefix"))
 		if err := fv(ctx, m.GetIpv6Prefix(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["ipv6_prefixes"]; exists {
+		vOpts := append(opts, db.WithValidateField("ipv6_prefixes"))
+		if err := fv(ctx, m.GetIpv6Prefixes(), vOpts...); err != nil {
 			return err
 		}
 
@@ -630,11 +1014,313 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	}
 	v.FldValidators["ipv6_prefix"] = vFn
 
+	vrhIpv4Prefixes := v.Ipv4PrefixesValidationRuleHandler
+	rulesIpv4Prefixes := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "1024",
+		"ves.io.schema.rules.repeated.unique":    "true",
+	}
+	vFn, err = vrhIpv4Prefixes(rulesIpv4Prefixes)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.ipv4_prefixes: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["ipv4_prefixes"] = vFn
+
+	vrhIpv6Prefixes := v.Ipv6PrefixesValidationRuleHandler
+	rulesIpv6Prefixes := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "1024",
+		"ves.io.schema.rules.repeated.unique":    "true",
+	}
+	vFn, err = vrhIpv6Prefixes(rulesIpv6Prefixes)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.ipv6_prefixes: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["ipv6_prefixes"] = vFn
+
 	return v
 }()
 
 func GlobalSpecTypeValidator() db.Validator {
 	return DefaultGlobalSpecTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *Ipv4Prefix) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *Ipv4Prefix) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *Ipv4Prefix) DeepCopy() *Ipv4Prefix {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &Ipv4Prefix{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *Ipv4Prefix) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *Ipv4Prefix) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return Ipv4PrefixValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateIpv4Prefix struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateIpv4Prefix) Ipv4PrefixValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for ipv4_prefix")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateIpv4Prefix) DescriptionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for description")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateIpv4Prefix) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*Ipv4Prefix)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *Ipv4Prefix got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["description"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("description"))
+		if err := fv(ctx, m.GetDescription(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["ipv4_prefix"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("ipv4_prefix"))
+		if err := fv(ctx, m.GetIpv4Prefix(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultIpv4PrefixValidator = func() *ValidateIpv4Prefix {
+	v := &ValidateIpv4Prefix{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhIpv4Prefix := v.Ipv4PrefixValidationRuleHandler
+	rulesIpv4Prefix := map[string]string{
+		"ves.io.schema.rules.message.required":   "true",
+		"ves.io.schema.rules.string.ipv4_prefix": "true",
+		"ves.io.schema.rules.string.not_empty":   "true",
+	}
+	vFn, err = vrhIpv4Prefix(rulesIpv4Prefix)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for Ipv4Prefix.ipv4_prefix: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["ipv4_prefix"] = vFn
+
+	vrhDescription := v.DescriptionValidationRuleHandler
+	rulesDescription := map[string]string{
+		"ves.io.schema.rules.string.max_bytes": "64",
+	}
+	vFn, err = vrhDescription(rulesDescription)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for Ipv4Prefix.description: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["description"] = vFn
+
+	return v
+}()
+
+func Ipv4PrefixValidator() db.Validator {
+	return DefaultIpv4PrefixValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *Ipv6Prefix) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *Ipv6Prefix) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *Ipv6Prefix) DeepCopy() *Ipv6Prefix {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &Ipv6Prefix{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *Ipv6Prefix) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *Ipv6Prefix) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return Ipv6PrefixValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateIpv6Prefix struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateIpv6Prefix) Ipv6PrefixValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for ipv6_prefix")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateIpv6Prefix) DescriptionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for description")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateIpv6Prefix) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*Ipv6Prefix)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *Ipv6Prefix got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["description"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("description"))
+		if err := fv(ctx, m.GetDescription(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["ipv6_prefix"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("ipv6_prefix"))
+		if err := fv(ctx, m.GetIpv6Prefix(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultIpv6PrefixValidator = func() *ValidateIpv6Prefix {
+	v := &ValidateIpv6Prefix{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhIpv6Prefix := v.Ipv6PrefixValidationRuleHandler
+	rulesIpv6Prefix := map[string]string{
+		"ves.io.schema.rules.message.required":   "true",
+		"ves.io.schema.rules.string.ipv6_prefix": "true",
+		"ves.io.schema.rules.string.not_empty":   "true",
+	}
+	vFn, err = vrhIpv6Prefix(rulesIpv6Prefix)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for Ipv6Prefix.ipv6_prefix: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["ipv6_prefix"] = vFn
+
+	vrhDescription := v.DescriptionValidationRuleHandler
+	rulesDescription := map[string]string{
+		"ves.io.schema.rules.string.max_bytes": "64",
+	}
+	vFn, err = vrhDescription(rulesDescription)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for Ipv6Prefix.description: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["description"] = vFn
+
+	return v
+}()
+
+func Ipv6PrefixValidator() db.Validator {
+	return DefaultIpv6PrefixValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -762,6 +1448,102 @@ func (v *ValidateReplaceSpecType) Ipv6PrefixValidationRuleHandler(rules map[stri
 	return validatorFn, nil
 }
 
+func (v *ValidateReplaceSpecType) Ipv4PrefixesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for ipv4_prefixes")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*Ipv4Prefix, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := Ipv4PrefixValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for ipv4_prefixes")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*Ipv4Prefix)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*Ipv4Prefix, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated ipv4_prefixes")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items ipv4_prefixes")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateReplaceSpecType) Ipv6PrefixesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for ipv6_prefixes")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*Ipv6Prefix, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := Ipv6PrefixValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for ipv6_prefixes")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*Ipv6Prefix)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*Ipv6Prefix, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated ipv6_prefixes")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items ipv6_prefixes")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*ReplaceSpecType)
 	if !ok {
@@ -776,9 +1558,25 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 		return nil
 	}
 
+	if fv, exists := v.FldValidators["ipv4_prefixes"]; exists {
+		vOpts := append(opts, db.WithValidateField("ipv4_prefixes"))
+		if err := fv(ctx, m.GetIpv4Prefixes(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["ipv6_prefix"]; exists {
 		vOpts := append(opts, db.WithValidateField("ipv6_prefix"))
 		if err := fv(ctx, m.GetIpv6Prefix(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["ipv6_prefixes"]; exists {
+		vOpts := append(opts, db.WithValidateField("ipv6_prefixes"))
+		if err := fv(ctx, m.GetIpv6Prefixes(), vOpts...); err != nil {
 			return err
 		}
 
@@ -835,6 +1633,30 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	}
 	v.FldValidators["ipv6_prefix"] = vFn
 
+	vrhIpv4Prefixes := v.Ipv4PrefixesValidationRuleHandler
+	rulesIpv4Prefixes := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "1024",
+		"ves.io.schema.rules.repeated.unique":    "true",
+	}
+	vFn, err = vrhIpv4Prefixes(rulesIpv4Prefixes)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.ipv4_prefixes: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["ipv4_prefixes"] = vFn
+
+	vrhIpv6Prefixes := v.Ipv6PrefixesValidationRuleHandler
+	rulesIpv6Prefixes := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "1024",
+		"ves.io.schema.rules.repeated.unique":    "true",
+	}
+	vFn, err = vrhIpv6Prefixes(rulesIpv6Prefixes)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.ipv6_prefixes: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["ipv6_prefixes"] = vFn
+
 	return v
 }()
 
@@ -846,7 +1668,9 @@ func (m *CreateSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool
 	if f == nil {
 		return
 	}
+	m.Ipv4Prefixes = f.GetIpv4Prefixes()
 	m.Ipv6Prefix = f.GetIpv6Prefix()
+	m.Ipv6Prefixes = f.GetIpv6Prefixes()
 	m.Prefix = f.GetPrefix()
 }
 
@@ -865,7 +1689,9 @@ func (m *CreateSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) 
 	}
 	_ = m1
 
+	f.Ipv4Prefixes = m1.Ipv4Prefixes
 	f.Ipv6Prefix = m1.Ipv6Prefix
+	f.Ipv6Prefixes = m1.Ipv6Prefixes
 	f.Prefix = m1.Prefix
 }
 
@@ -881,7 +1707,9 @@ func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	if f == nil {
 		return
 	}
+	m.Ipv4Prefixes = f.GetIpv4Prefixes()
 	m.Ipv6Prefix = f.GetIpv6Prefix()
+	m.Ipv6Prefixes = f.GetIpv6Prefixes()
 	m.Prefix = f.GetPrefix()
 }
 
@@ -900,7 +1728,9 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	}
 	_ = m1
 
+	f.Ipv4Prefixes = m1.Ipv4Prefixes
 	f.Ipv6Prefix = m1.Ipv6Prefix
+	f.Ipv6Prefixes = m1.Ipv6Prefixes
 	f.Prefix = m1.Prefix
 }
 
@@ -916,7 +1746,9 @@ func (m *ReplaceSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy boo
 	if f == nil {
 		return
 	}
+	m.Ipv4Prefixes = f.GetIpv4Prefixes()
 	m.Ipv6Prefix = f.GetIpv6Prefix()
+	m.Ipv6Prefixes = f.GetIpv6Prefixes()
 	m.Prefix = f.GetPrefix()
 }
 
@@ -935,7 +1767,9 @@ func (m *ReplaceSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool)
 	}
 	_ = m1
 
+	f.Ipv4Prefixes = m1.Ipv4Prefixes
 	f.Ipv6Prefix = m1.Ipv6Prefix
+	f.Ipv6Prefixes = m1.Ipv6Prefixes
 	f.Prefix = m1.Prefix
 }
 

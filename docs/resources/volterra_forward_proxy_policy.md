@@ -1,9 +1,9 @@
 ---
 
 page_title: "Volterra: forward_proxy_policy"
-description: "The forward_proxy_policy allows CRUD of Forward Proxy Policy resource on Volterra SaaS"
 
----
+description: "The forward_proxy_policy allows CRUD of Forward Proxy Policy resource on Volterra SaaS"
+-----------------------------------------------------------------------------------------------------
 
 Resource volterra_forward_proxy_policy
 ======================================
@@ -26,7 +26,35 @@ resource "volterra_forward_proxy_policy" "example" {
 
   // One of the arguments from this list "allow_all allow_list deny_list rule_list" must be set
 
-  allow_all = true
+  deny_list {
+    // One of the arguments from this list "default_action_allow default_action_deny default_action_next_policy" must be set
+
+    default_action_next_policy = true
+
+    dest_list {
+      ipv6_prefixes = ["2001::1/64"]
+
+      port_ranges = "80,443,8080-8191,9080"
+
+      prefixes = ["10.0.0.1/24"]
+    }
+
+    http_list {
+      // One of the arguments from this list "exact_value regex_value suffix_value" must be set
+
+      exact_value = "abc.zyz.com"
+
+      // One of the arguments from this list "any_path path_exact_value path_prefix_value path_regex_value" must be set
+
+      path_exact_value = "/abc/zyz"
+    }
+
+    tls_list {
+      // One of the arguments from this list "exact_value regex_value suffix_value" must be set
+
+      suffix_value = "xyz.com"
+    }
+  }
 }
 
 ```

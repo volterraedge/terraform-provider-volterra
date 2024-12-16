@@ -1,9 +1,9 @@
 ---
 
 page_title: "Volterra: dns_load_balancer"
-description: "The dns_load_balancer allows CRUD of Dns Load Balancer resource on Volterra SaaS"
 
----
+description: "The dns_load_balancer allows CRUD of Dns Load Balancer resource on Volterra SaaS"
+-----------------------------------------------------------------------------------------------
 
 Resource volterra_dns_load_balancer
 ===================================
@@ -25,16 +25,16 @@ resource "volterra_dns_load_balancer" "example" {
     rules {
       // One of the arguments from this list "nxdomain pool" must be set
 
-      nxdomain = true
+      pool {
+        name      = "test1"
+        namespace = "staging"
+        tenant    = "acmecorp"
+      }
 
       // One of the arguments from this list "asn_list asn_matcher geo_location_label_selector geo_location_set ip_prefix_list ip_prefix_set" must be set
 
-      asn_matcher {
-        asn_sets {
-          name      = "test1"
-          namespace = "staging"
-          tenant    = "acmecorp"
-        }
+      geo_location_label_selector {
+        expressions = ["region in (us-west1, us-west2),tier in (staging)"]
       }
       score = "50"
     }

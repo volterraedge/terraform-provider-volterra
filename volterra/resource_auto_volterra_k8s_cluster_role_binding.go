@@ -63,7 +63,8 @@ func resourceVolterraK8SClusterRoleBinding() *schema.Resource {
 
 			"k8s_cluster_role": {
 
-				Type:     schema.TypeSet,
+				Type:     schema.TypeList,
+				MaxItems: 1,
 				Required: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
@@ -99,7 +100,8 @@ func resourceVolterraK8SClusterRoleBinding() *schema.Resource {
 
 						"service_account": {
 
-							Type:     schema.TypeSet,
+							Type:     schema.TypeList,
+							MaxItems: 1,
 							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
@@ -185,21 +187,23 @@ func resourceVolterraK8SClusterRoleBindingCreate(d *schema.ResourceData, meta in
 	//k8s_cluster_role
 	if v, ok := d.GetOk("k8s_cluster_role"); ok && !isIntfNil(v) {
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		k8SClusterRoleInt := &ves_io_schema_views.ObjectRefType{}
 		createSpec.K8SClusterRole = k8SClusterRoleInt
 
 		for _, set := range sl {
-			kcrMapToStrVal := set.(map[string]interface{})
-			if val, ok := kcrMapToStrVal["name"]; ok && !isIntfNil(v) {
-				k8SClusterRoleInt.Name = val.(string)
-			}
-			if val, ok := kcrMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-				k8SClusterRoleInt.Namespace = val.(string)
-			}
+			if set != nil {
+				kcrMapToStrVal := set.(map[string]interface{})
+				if val, ok := kcrMapToStrVal["name"]; ok && !isIntfNil(v) {
+					k8SClusterRoleInt.Name = val.(string)
+				}
+				if val, ok := kcrMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+					k8SClusterRoleInt.Namespace = val.(string)
+				}
 
-			if val, ok := kcrMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-				k8SClusterRoleInt.Tenant = val.(string)
+				if val, ok := kcrMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+					k8SClusterRoleInt.Tenant = val.(string)
+				}
 			}
 		}
 
@@ -212,60 +216,64 @@ func resourceVolterraK8SClusterRoleBindingCreate(d *schema.ResourceData, meta in
 		subjects := make([]*ves_io_schema_k8s_cluster_role_binding.SubjectType, len(sl))
 		createSpec.Subjects = subjects
 		for i, set := range sl {
-			subjects[i] = &ves_io_schema_k8s_cluster_role_binding.SubjectType{}
-			subjectsMapStrToI := set.(map[string]interface{})
+			if set != nil {
+				subjects[i] = &ves_io_schema_k8s_cluster_role_binding.SubjectType{}
+				subjectsMapStrToI := set.(map[string]interface{})
 
-			subjectChoiceTypeFound := false
+				subjectChoiceTypeFound := false
 
-			if v, ok := subjectsMapStrToI["group"]; ok && !isIntfNil(v) && !subjectChoiceTypeFound {
+				if v, ok := subjectsMapStrToI["group"]; ok && !isIntfNil(v) && !subjectChoiceTypeFound {
 
-				subjectChoiceTypeFound = true
-				subjectChoiceInt := &ves_io_schema_k8s_cluster_role_binding.SubjectType_Group{}
+					subjectChoiceTypeFound = true
+					subjectChoiceInt := &ves_io_schema_k8s_cluster_role_binding.SubjectType_Group{}
 
-				subjects[i].SubjectChoice = subjectChoiceInt
+					subjects[i].SubjectChoice = subjectChoiceInt
 
-				subjectChoiceInt.Group = v.(string)
+					subjectChoiceInt.Group = v.(string)
 
-			}
+				}
 
-			if v, ok := subjectsMapStrToI["service_account"]; ok && !isIntfNil(v) && !subjectChoiceTypeFound {
+				if v, ok := subjectsMapStrToI["service_account"]; ok && !isIntfNil(v) && !subjectChoiceTypeFound {
 
-				subjectChoiceTypeFound = true
-				subjectChoiceInt := &ves_io_schema_k8s_cluster_role_binding.SubjectType_ServiceAccount{}
-				subjectChoiceInt.ServiceAccount = &ves_io_schema_k8s_cluster_role_binding.ServiceAccountType{}
-				subjects[i].SubjectChoice = subjectChoiceInt
+					subjectChoiceTypeFound = true
+					subjectChoiceInt := &ves_io_schema_k8s_cluster_role_binding.SubjectType_ServiceAccount{}
+					subjectChoiceInt.ServiceAccount = &ves_io_schema_k8s_cluster_role_binding.ServiceAccountType{}
+					subjects[i].SubjectChoice = subjectChoiceInt
 
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
 
-					if v, ok := cs["name"]; ok && !isIntfNil(v) {
+							if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
-						subjectChoiceInt.ServiceAccount.Name = v.(string)
+								subjectChoiceInt.ServiceAccount.Name = v.(string)
 
-					}
+							}
 
-					if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+							if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
 
-						subjectChoiceInt.ServiceAccount.Namespace = v.(string)
+								subjectChoiceInt.ServiceAccount.Namespace = v.(string)
 
+							}
+
+						}
 					}
 
 				}
 
+				if v, ok := subjectsMapStrToI["user"]; ok && !isIntfNil(v) && !subjectChoiceTypeFound {
+
+					subjectChoiceTypeFound = true
+					subjectChoiceInt := &ves_io_schema_k8s_cluster_role_binding.SubjectType_User{}
+
+					subjects[i].SubjectChoice = subjectChoiceInt
+
+					subjectChoiceInt.User = v.(string)
+
+				}
+
 			}
-
-			if v, ok := subjectsMapStrToI["user"]; ok && !isIntfNil(v) && !subjectChoiceTypeFound {
-
-				subjectChoiceTypeFound = true
-				subjectChoiceInt := &ves_io_schema_k8s_cluster_role_binding.SubjectType_User{}
-
-				subjects[i].SubjectChoice = subjectChoiceInt
-
-				subjectChoiceInt.User = v.(string)
-
-			}
-
 		}
 
 	}
@@ -371,21 +379,23 @@ func resourceVolterraK8SClusterRoleBindingUpdate(d *schema.ResourceData, meta in
 
 	if v, ok := d.GetOk("k8s_cluster_role"); ok && !isIntfNil(v) {
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		k8SClusterRoleInt := &ves_io_schema_views.ObjectRefType{}
 		updateSpec.K8SClusterRole = k8SClusterRoleInt
 
 		for _, set := range sl {
-			kcrMapToStrVal := set.(map[string]interface{})
-			if val, ok := kcrMapToStrVal["name"]; ok && !isIntfNil(v) {
-				k8SClusterRoleInt.Name = val.(string)
-			}
-			if val, ok := kcrMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-				k8SClusterRoleInt.Namespace = val.(string)
-			}
+			if set != nil {
+				kcrMapToStrVal := set.(map[string]interface{})
+				if val, ok := kcrMapToStrVal["name"]; ok && !isIntfNil(v) {
+					k8SClusterRoleInt.Name = val.(string)
+				}
+				if val, ok := kcrMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+					k8SClusterRoleInt.Namespace = val.(string)
+				}
 
-			if val, ok := kcrMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-				k8SClusterRoleInt.Tenant = val.(string)
+				if val, ok := kcrMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+					k8SClusterRoleInt.Tenant = val.(string)
+				}
 			}
 		}
 
@@ -397,60 +407,64 @@ func resourceVolterraK8SClusterRoleBindingUpdate(d *schema.ResourceData, meta in
 		subjects := make([]*ves_io_schema_k8s_cluster_role_binding.SubjectType, len(sl))
 		updateSpec.Subjects = subjects
 		for i, set := range sl {
-			subjects[i] = &ves_io_schema_k8s_cluster_role_binding.SubjectType{}
-			subjectsMapStrToI := set.(map[string]interface{})
+			if set != nil {
+				subjects[i] = &ves_io_schema_k8s_cluster_role_binding.SubjectType{}
+				subjectsMapStrToI := set.(map[string]interface{})
 
-			subjectChoiceTypeFound := false
+				subjectChoiceTypeFound := false
 
-			if v, ok := subjectsMapStrToI["group"]; ok && !isIntfNil(v) && !subjectChoiceTypeFound {
+				if v, ok := subjectsMapStrToI["group"]; ok && !isIntfNil(v) && !subjectChoiceTypeFound {
 
-				subjectChoiceTypeFound = true
-				subjectChoiceInt := &ves_io_schema_k8s_cluster_role_binding.SubjectType_Group{}
+					subjectChoiceTypeFound = true
+					subjectChoiceInt := &ves_io_schema_k8s_cluster_role_binding.SubjectType_Group{}
 
-				subjects[i].SubjectChoice = subjectChoiceInt
+					subjects[i].SubjectChoice = subjectChoiceInt
 
-				subjectChoiceInt.Group = v.(string)
+					subjectChoiceInt.Group = v.(string)
 
-			}
+				}
 
-			if v, ok := subjectsMapStrToI["service_account"]; ok && !isIntfNil(v) && !subjectChoiceTypeFound {
+				if v, ok := subjectsMapStrToI["service_account"]; ok && !isIntfNil(v) && !subjectChoiceTypeFound {
 
-				subjectChoiceTypeFound = true
-				subjectChoiceInt := &ves_io_schema_k8s_cluster_role_binding.SubjectType_ServiceAccount{}
-				subjectChoiceInt.ServiceAccount = &ves_io_schema_k8s_cluster_role_binding.ServiceAccountType{}
-				subjects[i].SubjectChoice = subjectChoiceInt
+					subjectChoiceTypeFound = true
+					subjectChoiceInt := &ves_io_schema_k8s_cluster_role_binding.SubjectType_ServiceAccount{}
+					subjectChoiceInt.ServiceAccount = &ves_io_schema_k8s_cluster_role_binding.ServiceAccountType{}
+					subjects[i].SubjectChoice = subjectChoiceInt
 
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
 
-					if v, ok := cs["name"]; ok && !isIntfNil(v) {
+							if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
-						subjectChoiceInt.ServiceAccount.Name = v.(string)
+								subjectChoiceInt.ServiceAccount.Name = v.(string)
 
-					}
+							}
 
-					if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+							if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
 
-						subjectChoiceInt.ServiceAccount.Namespace = v.(string)
+								subjectChoiceInt.ServiceAccount.Namespace = v.(string)
 
+							}
+
+						}
 					}
 
 				}
 
+				if v, ok := subjectsMapStrToI["user"]; ok && !isIntfNil(v) && !subjectChoiceTypeFound {
+
+					subjectChoiceTypeFound = true
+					subjectChoiceInt := &ves_io_schema_k8s_cluster_role_binding.SubjectType_User{}
+
+					subjects[i].SubjectChoice = subjectChoiceInt
+
+					subjectChoiceInt.User = v.(string)
+
+				}
+
 			}
-
-			if v, ok := subjectsMapStrToI["user"]; ok && !isIntfNil(v) && !subjectChoiceTypeFound {
-
-				subjectChoiceTypeFound = true
-				subjectChoiceInt := &ves_io_schema_k8s_cluster_role_binding.SubjectType_User{}
-
-				subjects[i].SubjectChoice = subjectChoiceInt
-
-				subjectChoiceInt.User = v.(string)
-
-			}
-
 		}
 
 	}

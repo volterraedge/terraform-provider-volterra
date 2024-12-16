@@ -3396,6 +3396,12 @@ var APISwaggerJSON string = `{
                     "format": "date-time",
                     "x-displayname": "Deletion Timestamp"
                 },
+                "direct_ref_hash": {
+                    "type": "string",
+                    "description": " A hash of the UIDs of  direct references on this object. This can be used to determine if \n this object hash has had references become resolved/unresolved",
+                    "title": "direct_ref_hash",
+                    "x-displayname": "Direct Reference Hash"
+                },
                 "finalizers": {
                     "type": "array",
                     "description": " Must be empty before the object is deleted from the registry. Each entry\n is an identifier for the responsible component that will remove the entry\n from the list. If the deletionTimestamp of the object is non-nil, entries\n in this list can only be removed.\n\nExample: - \"value\"-",
@@ -3887,7 +3893,7 @@ var APISwaggerJSON string = `{
         "ztnaLeasePoolMember": {
             "type": "object",
             "description": "x-displayName: \"Lease Pools Member\"\n\nThe lease pool member is pool member for per session policy.",
-            "title": "Ztna Policy LeasePoolsMembers",
+            "title": "Ztna Policy Lease Pools Members",
             "properties": {
                 "end_address": {
                     "description": "x-displayName: \"End Address\"\n\nEnd Address of Lease Pool member",

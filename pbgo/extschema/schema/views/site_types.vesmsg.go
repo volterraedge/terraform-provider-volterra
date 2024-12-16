@@ -3119,6 +3119,14 @@ type ValidateAzureVnetType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateAzureVnetType) RoutingTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for routing_type")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidateAzureVnetType) ResourceGroupValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
@@ -3162,6 +3170,42 @@ func (v *ValidateAzureVnetType) Validate(ctx context.Context, pm interface{}, op
 
 	}
 
+	if fv, exists := v.FldValidators["routing_type"]; exists {
+		val := m.GetRoutingType()
+		vOpts := append(opts,
+			db.WithValidateField("routing_type"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetRoutingType().(type) {
+	case *AzureVnetType_F5OrchestratedRouting:
+		if fv, exists := v.FldValidators["routing_type.f5_orchestrated_routing"]; exists {
+			val := m.GetRoutingType().(*AzureVnetType_F5OrchestratedRouting).F5OrchestratedRouting
+			vOpts := append(opts,
+				db.WithValidateField("routing_type"),
+				db.WithValidateField("f5_orchestrated_routing"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *AzureVnetType_ManualRouting:
+		if fv, exists := v.FldValidators["routing_type.manual_routing"]; exists {
+			val := m.GetRoutingType().(*AzureVnetType_ManualRouting).ManualRouting
+			vOpts := append(opts,
+				db.WithValidateField("routing_type"),
+				db.WithValidateField("manual_routing"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["vnet_name"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("vnet_name"))
@@ -3185,6 +3229,17 @@ var DefaultAzureVnetTypeValidator = func() *ValidateAzureVnetType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
+
+	vrhRoutingType := v.RoutingTypeValidationRuleHandler
+	rulesRoutingType := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhRoutingType(rulesRoutingType)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AzureVnetType.routing_type: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["routing_type"] = vFn
 
 	vrhResourceGroup := v.ResourceGroupValidationRuleHandler
 	rulesResourceGroup := map[string]string{

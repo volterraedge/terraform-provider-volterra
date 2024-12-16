@@ -1149,16 +1149,25 @@ func (s *APISrv) Create(ctx context.Context, req *CreateRequest) (*CreateRespons
 	}
 	reqMsgFQN := "ves.io.schema.views.azure_vnet_site.CreateRequest"
 	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.sf, reqMsgFQN, req)
+	var retErr error
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
 		}
+		userMsg := "The 'ves.io.schema.views.azure_vnet_site.API.Create' operation on 'azure_vnet_site'"
+		if retErr == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
 	obj := NewDBObject(nil)
 	req.ToObject(obj)
 	if conv, exists := s.sf.Config().MsgToObjConverters[reqMsgFQN]; exists {
 		if err := conv(req, obj); err != nil {
+			retErr = err
 			return nil, err
 		}
 	}
@@ -1167,16 +1176,19 @@ func (s *APISrv) Create(ctx context.Context, req *CreateRequest) (*CreateRespons
 	rsrcRsp, err := s.opts.RsrcHandler.CreateFn(ctx, rsrcReq, s.apiWrapper)
 	if err != nil {
 		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "CreateResource"))
+		retErr = err
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 	rsp, err := NewObjectCreateRsp(rsrcRsp.Entry)
 	if err != nil {
 		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "CreateResponse"))
+		retErr = err
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 	rspMsgFQN := "ves.io.schema.views.azure_vnet_site.CreateResponse"
 	if conv, exists := s.sf.Config().ObjToMsgConverters[rspMsgFQN]; exists {
 		if err := conv(rsrcRsp.Entry, rsp); err != nil {
+			retErr = err
 			return nil, err
 		}
 	}
@@ -1208,21 +1220,31 @@ func (s *APISrv) Replace(ctx context.Context, req *ReplaceRequest) (*ReplaceResp
 		}
 	}
 	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.sf, "ves.io.schema.views.azure_vnet_site.API.ReplaceRequest", req)
+	var retErr error
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
 		}
+		userMsg := "The 'ves.io.schema.views.azure_vnet_site.API.Replace' operation on 'azure_vnet_site'"
+		if retErr == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
 	rsrcReq := &server.ResourceReplaceRequest{RequestMsg: req}
 	rsrcRsp, err := s.opts.RsrcHandler.ReplaceFn(ctx, rsrcReq, s.apiWrapper)
 	if err != nil {
 		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "ReplaceResource"))
+		retErr = err
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 	rsp, err := NewObjectReplaceRsp(rsrcRsp.Entry)
 	if err != nil {
 		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "ReplaceResponse"))
+		retErr = err
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.sf, "ves.io.schema.views.azure_vnet_site.API.ReplaceResponse", rsp)...)
@@ -1341,10 +1363,18 @@ func (s *APISrv) Delete(ctx context.Context, req *DeleteRequest) (*google_protob
 		}
 	}
 	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.sf, "ves.io.schema.views.azure_vnet_site.API.DeleteRequest", req)
+	var retErr error
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
 		}
+		userMsg := "The 'ves.io.schema.views.azure_vnet_site.API.Delete' operation on 'azure_vnet_site'"
+		if retErr == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
 	tenant := server.TenantFromContext(ctx)
@@ -1354,6 +1384,7 @@ func (s *APISrv) Delete(ctx context.Context, req *DeleteRequest) (*google_protob
 	_, err := s.opts.RsrcHandler.DeleteFn(ctx, rsrcReq, s.apiWrapper)
 	if err != nil {
 		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "DeleteResource"))
+		retErr = err
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 	return &google_protobuf.Empty{}, nil
@@ -4302,9 +4333,14 @@ var APISwaggerJSON string = `{
                 },
                 "tags": {
                     "type": "object",
-                    "description": " Attachment Tags",
+                    "description": " Attachment Tags\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.max_len: 127\n  ves.io.schema.rules.map.max_pairs: 20\n  ves.io.schema.rules.map.values.string.max_len: 255\n",
                     "title": "Attachment Tags",
-                    "x-displayname": "Attachment Tags"
+                    "x-displayname": "Attachment Tags",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.map.keys.string.max_len": "127",
+                        "ves.io.schema.rules.map.max_pairs": "20",
+                        "ves.io.schema.rules.map.values.string.max_len": "255"
+                    }
                 },
                 "vnet_attachment_id": {
                     "type": "string",
@@ -6625,8 +6661,21 @@ var APISwaggerJSON string = `{
             "description": "Resource group and name of existing Azure Vnet",
             "title": "Azure Existing Vnet Type",
             "x-displayname": "Azure Existing Vnet Type",
+            "x-ves-oneof-field-routing_type": "[\"f5_orchestrated_routing\",\"manual_routing\"]",
             "x-ves-proto-message": "ves.io.schema.views.AzureVnetType",
             "properties": {
+                "f5_orchestrated_routing": {
+                    "description": "Exclusive with [manual_routing]\n F5 will orchestrate required routes for SLO Route Table towards Internet and SLI RT towards the CE.",
+                    "title": "F5 Orchestrated Routing",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "F5 Orchestrated Routing"
+                },
+                "manual_routing": {
+                    "description": "Exclusive with [f5_orchestrated_routing]\n  In this mode, F5 will not create nor alter any route tables or routes within the existing VPCs/Vnets providing better integration for existing environments. ",
+                    "title": "Manual Routing",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Manual Routing"
+                },
                 "resource_group": {
                     "type": "string",
                     "description": " Resource group of existing Vnet\n\nExample: - \"MyResourceGroup\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 64\n  ves.io.schema.rules.string.min_len: 1\n",
@@ -6857,13 +6906,13 @@ var APISwaggerJSON string = `{
                     "description": "Exclusive with [enable_upgrade_drain]\n",
                     "title": "Disable upgrade drain",
                     "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Disable Node by Node Upgrade"
+                    "x-displayname": "Disable"
                 },
                 "enable_upgrade_drain": {
                     "description": "Exclusive with [disable_upgrade_drain]\n",
                     "title": "Enable Node by Node Upgrade",
                     "$ref": "#/definitions/viewsKubernetesUpgradeDrainConfig",
-                    "x-displayname": "Enable Node by Node Upgrade"
+                    "x-displayname": "Enable"
                 }
             }
         },

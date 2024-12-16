@@ -649,6 +649,18 @@ func (v *ValidateAWSTGWStatusType) Validate(ctx context.Context, pm interface{},
 
 	}
 
+	if fv, exists := v.FldValidators["tgw_cidrs"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("tgw_cidrs"))
+		for idx, item := range m.GetTgwCidrs() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["tgw_creation_time"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("tgw_creation_time"))
@@ -1858,176 +1870,6 @@ func CreateSpecTypeValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
-func (m *ExistingTGWType) ToJSON() (string, error) {
-	return codec.ToJSON(m)
-}
-
-func (m *ExistingTGWType) ToYAML() (string, error) {
-	return codec.ToYAML(m)
-}
-
-func (m *ExistingTGWType) DeepCopy() *ExistingTGWType {
-	if m == nil {
-		return nil
-	}
-	ser, err := m.Marshal()
-	if err != nil {
-		return nil
-	}
-	c := &ExistingTGWType{}
-	err = c.Unmarshal(ser)
-	if err != nil {
-		return nil
-	}
-	return c
-}
-
-func (m *ExistingTGWType) DeepCopyProto() proto.Message {
-	if m == nil {
-		return nil
-	}
-	return m.DeepCopy()
-}
-
-func (m *ExistingTGWType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
-	return ExistingTGWTypeValidator().Validate(ctx, m, opts...)
-}
-
-type ValidateExistingTGWType struct {
-	FldValidators map[string]db.ValidatorFunc
-}
-
-func (v *ValidateExistingTGWType) TgwIdValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	validatorFn, err := db.NewStringValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for tgw_id")
-	}
-
-	return validatorFn, nil
-}
-
-func (v *ValidateExistingTGWType) TgwAsnValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for tgw_asn")
-	}
-
-	return validatorFn, nil
-}
-
-func (v *ValidateExistingTGWType) VolterraSiteAsnValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for volterra_site_asn")
-	}
-
-	return validatorFn, nil
-}
-
-func (v *ValidateExistingTGWType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
-	m, ok := pm.(*ExistingTGWType)
-	if !ok {
-		switch t := pm.(type) {
-		case nil:
-			return nil
-		default:
-			return fmt.Errorf("Expected type *ExistingTGWType got type %s", t)
-		}
-	}
-	if m == nil {
-		return nil
-	}
-
-	if fv, exists := v.FldValidators["tgw_asn"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("tgw_asn"))
-		if err := fv(ctx, m.GetTgwAsn(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
-	if fv, exists := v.FldValidators["tgw_id"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("tgw_id"))
-		if err := fv(ctx, m.GetTgwId(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
-	if fv, exists := v.FldValidators["volterra_site_asn"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("volterra_site_asn"))
-		if err := fv(ctx, m.GetVolterraSiteAsn(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
-	return nil
-}
-
-// Well-known symbol for default validator implementation
-var DefaultExistingTGWTypeValidator = func() *ValidateExistingTGWType {
-	v := &ValidateExistingTGWType{FldValidators: map[string]db.ValidatorFunc{}}
-
-	var (
-		err error
-		vFn db.ValidatorFunc
-	)
-	_, _ = err, vFn
-	vFnMap := map[string]db.ValidatorFunc{}
-	_ = vFnMap
-
-	vrhTgwId := v.TgwIdValidationRuleHandler
-	rulesTgwId := map[string]string{
-		"ves.io.schema.rules.string.max_len": "64",
-		"ves.io.schema.rules.string.pattern": "^(tgw-)([a-z0-9]{8}|[a-z0-9]{17})$",
-	}
-	vFn, err = vrhTgwId(rulesTgwId)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for ExistingTGWType.tgw_id: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["tgw_id"] = vFn
-
-	vrhTgwAsn := v.TgwAsnValidationRuleHandler
-	rulesTgwAsn := map[string]string{
-		"ves.io.schema.rules.uint32.gt":  "0",
-		"ves.io.schema.rules.uint32.lte": "65535",
-	}
-	vFn, err = vrhTgwAsn(rulesTgwAsn)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for ExistingTGWType.tgw_asn: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["tgw_asn"] = vFn
-
-	vrhVolterraSiteAsn := v.VolterraSiteAsnValidationRuleHandler
-	rulesVolterraSiteAsn := map[string]string{
-		"ves.io.schema.rules.uint32.gt":  "0",
-		"ves.io.schema.rules.uint32.lte": "65535",
-	}
-	vFn, err = vrhVolterraSiteAsn(rulesVolterraSiteAsn)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for ExistingTGWType.volterra_site_asn: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["volterra_site_asn"] = vFn
-
-	return v
-}()
-
-func ExistingTGWTypeValidator() db.Validator {
-	return DefaultExistingTGWTypeValidator
-}
-
-// augmented methods on protoc/std generated struct
-
 func (m *GetSpecType) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -2758,6 +2600,15 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 		vOpts := append(opts, db.WithValidateField("tgw_security"))
 		if err := fv(ctx, m.GetTgwSecurity(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["tunnel_type"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("tunnel_type"))
+		if err := fv(ctx, m.GetTunnelType(), vOpts...); err != nil {
 			return err
 		}
 
@@ -3816,6 +3667,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 		vOpts := append(opts, db.WithValidateField("tgw_security"))
 		if err := fv(ctx, m.GetTgwSecurity(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["tunnel_type"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("tunnel_type"))
+		if err := fv(ctx, m.GetTunnelType(), vOpts...); err != nil {
 			return err
 		}
 
@@ -5849,8 +5709,8 @@ var DefaultServicesVPCReplaceTypeValidator = func() *ValidateServicesVPCReplaceT
 
 	v.FldValidators["service_vpc_choice.new_vpc"] = ves_io_schema_views.AWSVPCParamsTypeValidator().Validate
 
-	v.FldValidators["tgw_choice.new_tgw"] = TGWParamsTypeValidator().Validate
-	v.FldValidators["tgw_choice.existing_tgw"] = ExistingTGWTypeValidator().Validate
+	v.FldValidators["tgw_choice.new_tgw"] = ves_io_schema_views.TGWParamsTypeValidator().Validate
+	v.FldValidators["tgw_choice.existing_tgw"] = ves_io_schema_views.ExistingTGWTypeValidator().Validate
 
 	return v
 }()
@@ -6688,8 +6548,8 @@ var DefaultServicesVPCTypeValidator = func() *ValidateServicesVPCType {
 
 	v.FldValidators["service_vpc_choice.new_vpc"] = ves_io_schema_views.AWSVPCParamsTypeValidator().Validate
 
-	v.FldValidators["tgw_choice.new_tgw"] = TGWParamsTypeValidator().Validate
-	v.FldValidators["tgw_choice.existing_tgw"] = ExistingTGWTypeValidator().Validate
+	v.FldValidators["tgw_choice.new_tgw"] = ves_io_schema_views.TGWParamsTypeValidator().Validate
+	v.FldValidators["tgw_choice.existing_tgw"] = ves_io_schema_views.ExistingTGWTypeValidator().Validate
 
 	v.FldValidators["tgw_cidr_choice.tgw_cidr"] = ves_io_schema_views.CloudSubnetParamTypeValidator().Validate
 
@@ -6700,279 +6560,6 @@ var DefaultServicesVPCTypeValidator = func() *ValidateServicesVPCType {
 
 func ServicesVPCTypeValidator() db.Validator {
 	return DefaultServicesVPCTypeValidator
-}
-
-// augmented methods on protoc/std generated struct
-
-func (m *TGWAssignedASNType) ToJSON() (string, error) {
-	return codec.ToJSON(m)
-}
-
-func (m *TGWAssignedASNType) ToYAML() (string, error) {
-	return codec.ToYAML(m)
-}
-
-func (m *TGWAssignedASNType) DeepCopy() *TGWAssignedASNType {
-	if m == nil {
-		return nil
-	}
-	ser, err := m.Marshal()
-	if err != nil {
-		return nil
-	}
-	c := &TGWAssignedASNType{}
-	err = c.Unmarshal(ser)
-	if err != nil {
-		return nil
-	}
-	return c
-}
-
-func (m *TGWAssignedASNType) DeepCopyProto() proto.Message {
-	if m == nil {
-		return nil
-	}
-	return m.DeepCopy()
-}
-
-func (m *TGWAssignedASNType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
-	return TGWAssignedASNTypeValidator().Validate(ctx, m, opts...)
-}
-
-type ValidateTGWAssignedASNType struct {
-	FldValidators map[string]db.ValidatorFunc
-}
-
-func (v *ValidateTGWAssignedASNType) TgwAsnValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for tgw_asn")
-	}
-
-	return validatorFn, nil
-}
-
-func (v *ValidateTGWAssignedASNType) VolterraSiteAsnValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for volterra_site_asn")
-	}
-
-	return validatorFn, nil
-}
-
-func (v *ValidateTGWAssignedASNType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
-	m, ok := pm.(*TGWAssignedASNType)
-	if !ok {
-		switch t := pm.(type) {
-		case nil:
-			return nil
-		default:
-			return fmt.Errorf("Expected type *TGWAssignedASNType got type %s", t)
-		}
-	}
-	if m == nil {
-		return nil
-	}
-
-	if fv, exists := v.FldValidators["tgw_asn"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("tgw_asn"))
-		if err := fv(ctx, m.GetTgwAsn(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
-	if fv, exists := v.FldValidators["volterra_site_asn"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("volterra_site_asn"))
-		if err := fv(ctx, m.GetVolterraSiteAsn(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
-	return nil
-}
-
-// Well-known symbol for default validator implementation
-var DefaultTGWAssignedASNTypeValidator = func() *ValidateTGWAssignedASNType {
-	v := &ValidateTGWAssignedASNType{FldValidators: map[string]db.ValidatorFunc{}}
-
-	var (
-		err error
-		vFn db.ValidatorFunc
-	)
-	_, _ = err, vFn
-	vFnMap := map[string]db.ValidatorFunc{}
-	_ = vFnMap
-
-	vrhTgwAsn := v.TgwAsnValidationRuleHandler
-	rulesTgwAsn := map[string]string{
-		"ves.io.schema.rules.uint32.gt":  "64512",
-		"ves.io.schema.rules.uint32.lte": "65534",
-	}
-	vFn, err = vrhTgwAsn(rulesTgwAsn)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for TGWAssignedASNType.tgw_asn: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["tgw_asn"] = vFn
-
-	vrhVolterraSiteAsn := v.VolterraSiteAsnValidationRuleHandler
-	rulesVolterraSiteAsn := map[string]string{
-		"ves.io.schema.rules.uint32.gt":  "0",
-		"ves.io.schema.rules.uint32.lte": "65535",
-	}
-	vFn, err = vrhVolterraSiteAsn(rulesVolterraSiteAsn)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for TGWAssignedASNType.volterra_site_asn: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["volterra_site_asn"] = vFn
-
-	return v
-}()
-
-func TGWAssignedASNTypeValidator() db.Validator {
-	return DefaultTGWAssignedASNTypeValidator
-}
-
-// augmented methods on protoc/std generated struct
-
-func (m *TGWParamsType) ToJSON() (string, error) {
-	return codec.ToJSON(m)
-}
-
-func (m *TGWParamsType) ToYAML() (string, error) {
-	return codec.ToYAML(m)
-}
-
-func (m *TGWParamsType) DeepCopy() *TGWParamsType {
-	if m == nil {
-		return nil
-	}
-	ser, err := m.Marshal()
-	if err != nil {
-		return nil
-	}
-	c := &TGWParamsType{}
-	err = c.Unmarshal(ser)
-	if err != nil {
-		return nil
-	}
-	return c
-}
-
-func (m *TGWParamsType) DeepCopyProto() proto.Message {
-	if m == nil {
-		return nil
-	}
-	return m.DeepCopy()
-}
-
-func (m *TGWParamsType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
-	return TGWParamsTypeValidator().Validate(ctx, m, opts...)
-}
-
-type ValidateTGWParamsType struct {
-	FldValidators map[string]db.ValidatorFunc
-}
-
-func (v *ValidateTGWParamsType) AsnChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for asn_choice")
-	}
-	return validatorFn, nil
-}
-
-func (v *ValidateTGWParamsType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
-	m, ok := pm.(*TGWParamsType)
-	if !ok {
-		switch t := pm.(type) {
-		case nil:
-			return nil
-		default:
-			return fmt.Errorf("Expected type *TGWParamsType got type %s", t)
-		}
-	}
-	if m == nil {
-		return nil
-	}
-
-	if fv, exists := v.FldValidators["asn_choice"]; exists {
-		val := m.GetAsnChoice()
-		vOpts := append(opts,
-			db.WithValidateField("asn_choice"),
-		)
-		if err := fv(ctx, val, vOpts...); err != nil {
-			return err
-		}
-	}
-
-	switch m.GetAsnChoice().(type) {
-	case *TGWParamsType_SystemGenerated:
-		if fv, exists := v.FldValidators["asn_choice.system_generated"]; exists {
-			val := m.GetAsnChoice().(*TGWParamsType_SystemGenerated).SystemGenerated
-			vOpts := append(opts,
-				db.WithValidateField("asn_choice"),
-				db.WithValidateField("system_generated"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *TGWParamsType_UserAssigned:
-		if fv, exists := v.FldValidators["asn_choice.user_assigned"]; exists {
-			val := m.GetAsnChoice().(*TGWParamsType_UserAssigned).UserAssigned
-			vOpts := append(opts,
-				db.WithValidateField("asn_choice"),
-				db.WithValidateField("user_assigned"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-
-	}
-
-	return nil
-}
-
-// Well-known symbol for default validator implementation
-var DefaultTGWParamsTypeValidator = func() *ValidateTGWParamsType {
-	v := &ValidateTGWParamsType{FldValidators: map[string]db.ValidatorFunc{}}
-
-	var (
-		err error
-		vFn db.ValidatorFunc
-	)
-	_, _ = err, vFn
-	vFnMap := map[string]db.ValidatorFunc{}
-	_ = vFnMap
-
-	vrhAsnChoice := v.AsnChoiceValidationRuleHandler
-	rulesAsnChoice := map[string]string{
-		"ves.io.schema.rules.message.required_oneof": "true",
-	}
-	vFn, err = vrhAsnChoice(rulesAsnChoice)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for TGWParamsType.asn_choice: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["asn_choice"] = vFn
-
-	v.FldValidators["asn_choice.user_assigned"] = TGWAssignedASNTypeValidator().Validate
-
-	return v
-}()
-
-func TGWParamsTypeValidator() db.Validator {
-	return DefaultTGWParamsTypeValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -8331,6 +7918,7 @@ func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	m.Tags = f.GetTags()
 	m.TgwInfo = f.GetTgwInfo()
 	m.TgwSecurity = f.GetTgwSecurity()
+	m.TunnelType = f.GetTunnelType()
 	m.Tunnels = f.GetTunnels()
 	m.UserModificationTimestamp = f.GetUserModificationTimestamp()
 	m.ValidationState = f.GetValidationState()
@@ -8374,6 +7962,7 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	f.Tags = m1.Tags
 	f.TgwInfo = m1.TgwInfo
 	f.TgwSecurity = m1.TgwSecurity
+	f.TunnelType = m1.TunnelType
 	f.Tunnels = m1.Tunnels
 	f.UserModificationTimestamp = m1.UserModificationTimestamp
 	f.ValidationState = m1.ValidationState

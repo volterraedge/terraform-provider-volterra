@@ -1149,16 +1149,25 @@ func (s *APISrv) Create(ctx context.Context, req *CreateRequest) (*CreateRespons
 	}
 	reqMsgFQN := "ves.io.schema.views.bigip_instance_site.CreateRequest"
 	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.sf, reqMsgFQN, req)
+	var retErr error
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
 		}
+		userMsg := "The 'ves.io.schema.views.bigip_instance_site.API.Create' operation on 'bigip_instance_site'"
+		if retErr == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
 	obj := NewDBObject(nil)
 	req.ToObject(obj)
 	if conv, exists := s.sf.Config().MsgToObjConverters[reqMsgFQN]; exists {
 		if err := conv(req, obj); err != nil {
+			retErr = err
 			return nil, err
 		}
 	}
@@ -1167,16 +1176,19 @@ func (s *APISrv) Create(ctx context.Context, req *CreateRequest) (*CreateRespons
 	rsrcRsp, err := s.opts.RsrcHandler.CreateFn(ctx, rsrcReq, s.apiWrapper)
 	if err != nil {
 		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "CreateResource"))
+		retErr = err
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 	rsp, err := NewObjectCreateRsp(rsrcRsp.Entry)
 	if err != nil {
 		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "CreateResponse"))
+		retErr = err
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 	rspMsgFQN := "ves.io.schema.views.bigip_instance_site.CreateResponse"
 	if conv, exists := s.sf.Config().ObjToMsgConverters[rspMsgFQN]; exists {
 		if err := conv(rsrcRsp.Entry, rsp); err != nil {
+			retErr = err
 			return nil, err
 		}
 	}
@@ -1208,21 +1220,31 @@ func (s *APISrv) Replace(ctx context.Context, req *ReplaceRequest) (*ReplaceResp
 		}
 	}
 	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.sf, "ves.io.schema.views.bigip_instance_site.API.ReplaceRequest", req)
+	var retErr error
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
 		}
+		userMsg := "The 'ves.io.schema.views.bigip_instance_site.API.Replace' operation on 'bigip_instance_site'"
+		if retErr == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
 	rsrcReq := &server.ResourceReplaceRequest{RequestMsg: req}
 	rsrcRsp, err := s.opts.RsrcHandler.ReplaceFn(ctx, rsrcReq, s.apiWrapper)
 	if err != nil {
 		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "ReplaceResource"))
+		retErr = err
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 	rsp, err := NewObjectReplaceRsp(rsrcRsp.Entry)
 	if err != nil {
 		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "ReplaceResponse"))
+		retErr = err
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.sf, "ves.io.schema.views.bigip_instance_site.API.ReplaceResponse", rsp)...)
@@ -1341,10 +1363,18 @@ func (s *APISrv) Delete(ctx context.Context, req *DeleteRequest) (*google_protob
 		}
 	}
 	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.sf, "ves.io.schema.views.bigip_instance_site.API.DeleteRequest", req)
+	var retErr error
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
 		}
+		userMsg := "The 'ves.io.schema.views.bigip_instance_site.API.Delete' operation on 'bigip_instance_site'"
+		if retErr == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
 	tenant := server.TenantFromContext(ctx)
@@ -1354,6 +1384,7 @@ func (s *APISrv) Delete(ctx context.Context, req *DeleteRequest) (*google_protob
 	_, err := s.opts.RsrcHandler.DeleteFn(ctx, rsrcReq, s.apiWrapper)
 	if err != nil {
 		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "DeleteResource"))
+		retErr = err
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 	return &google_protobuf.Empty{}, nil
@@ -2567,7 +2598,7 @@ var APISwaggerJSON string = `{
             "x-displayname": "Interface",
             "x-ves-oneof-field-address_choice": "[\"dhcp_client\",\"dhcp_server\",\"no_ipv4_address\",\"static_ip\"]",
             "x-ves-oneof-field-interface_choice": "[\"bond_interface\",\"ethernet_interface\",\"vlan_interface\"]",
-            "x-ves-oneof-field-ipv6_address_choice": "[\"no_ipv6_address\",\"static_ipv6_address\"]",
+            "x-ves-oneof-field-ipv6_address_choice": "[\"ipv6_auto_config\",\"no_ipv6_address\",\"static_ipv6_address\"]",
             "x-ves-oneof-field-monitoring_choice": "[\"monitor\",\"monitor_disabled\"]",
             "x-ves-oneof-field-site_to_site_connectivity_interface_choice": "[\"site_to_site_connectivity_interface_disabled\",\"site_to_site_connectivity_interface_enabled\"]",
             "x-ves-proto-message": "ves.io.schema.views.common_node.Interface",
@@ -2608,7 +2639,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Ethernet Interface"
                 },
                 "ipv6_auto_config": {
-                    "description": " Interface IPv6 address will be configured via Auto Configuration.",
+                    "description": "Exclusive with [no_ipv6_address static_ipv6_address]\n Interface IPv6 address will be configured via Auto Configuration.",
                     "title": "IPV6 Auto configuration",
                     "$ref": "#/definitions/network_interfaceIPV6AutoConfigType",
                     "x-displayname": "IPv6 via AutoConfiguration"
@@ -2664,7 +2695,7 @@ var APISwaggerJSON string = `{
                 "network_option": {
                     "description": " Select virtual network (VRF) for this interface.\n There are 2 kinds of VRFs, local VRFs which are local to the site and global VRFs which extend into multiple sites.\n A site can have 2 Local VRFs, Site Local Outside (SLO), which is required for every site and Site Local Inside (SLI) which is optional.\n Global VRFs are configured via Networking \u003e Segments. A site can have multple Network Segments (global VRFs).\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Select VRF",
-                    "$ref": "#/definitions/common_nodeNetworkSelectType",
+                    "$ref": "#/definitions/viewscommon_nodeNetworkSelectType",
                     "x-displayname": "Select VRF",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
@@ -2678,7 +2709,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Disabled"
                 },
                 "no_ipv6_address": {
-                    "description": "Exclusive with [static_ipv6_address]\n Interface does not have an IPv6 Address.",
+                    "description": "Exclusive with [ipv6_auto_config static_ipv6_address]\n Interface does not have an IPv6 Address.",
                     "title": "no_ipv6_address",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Disabled"
@@ -2714,7 +2745,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Static IP"
                 },
                 "static_ipv6_address": {
-                    "description": "Exclusive with [no_ipv6_address]\n Interface IPv6 address is configured statically.",
+                    "description": "Exclusive with [ipv6_auto_config no_ipv6_address]\n Interface IPv6 address is configured statically.",
                     "title": "Static IP",
                     "$ref": "#/definitions/network_interfaceStaticIPParametersType",
                     "x-displayname": "Static IPv6"
@@ -2724,34 +2755,6 @@ var APISwaggerJSON string = `{
                     "title": "VLAN Interface",
                     "$ref": "#/definitions/common_nodeVlanInterfaceType",
                     "x-displayname": "VLAN Interface"
-                }
-            }
-        },
-        "common_nodeNetworkSelectType": {
-            "type": "object",
-            "description": "x-required\nSelect virtual network (VRF) for this interface.\nThere are 2 kinds of VRFs, local VRFs which are local to the site and global VRFs which extend into multiple sites.\nA site can have 2 Local VRFs, Site Local Outside (SLO), which is required for every site and Site Local Inside (SLI) which is optional.\nGlobal VRFs are configured via Networking \u003e Segments. A site can have multple Network Segments (global VRFs).",
-            "title": "NetworkSelectType",
-            "x-displayname": "Network Select",
-            "x-ves-oneof-field-network_choice": "[\"segment_network\",\"site_local_inside_network\",\"site_local_network\"]",
-            "x-ves-proto-message": "ves.io.schema.views.common_node.NetworkSelectType",
-            "properties": {
-                "segment_network": {
-                    "description": "Exclusive with [site_local_inside_network site_local_network]\n",
-                    "title": "Segment",
-                    "$ref": "#/definitions/schemaviewsObjectRefType",
-                    "x-displayname": "Segment (Global VRF)"
-                },
-                "site_local_inside_network": {
-                    "description": "Exclusive with [segment_network site_local_network]\n",
-                    "title": "Site Local Network Inside",
-                    "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Site Local Inside (Local VRF)"
-                },
-                "site_local_network": {
-                    "description": "Exclusive with [segment_network site_local_inside_network]\n",
-                    "title": "Site Local Network",
-                    "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Site Local Outside (Local VRF)"
                 }
             }
         },
@@ -4363,6 +4366,34 @@ var APISwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.string.mac": "true"
                     }
+                }
+            }
+        },
+        "viewscommon_nodeNetworkSelectType": {
+            "type": "object",
+            "description": "x-required\nSelect virtual network (VRF) for this interface.\nThere are 2 kinds of VRFs, local VRFs which are local to the site and global VRFs which extend into multiple sites.\nA site can have 2 Local VRFs, Site Local Outside (SLO), which is required for every site and Site Local Inside (SLI) which is optional.\nGlobal VRFs are configured via Networking \u003e Segments. A site can have multple Network Segments (global VRFs).",
+            "title": "NetworkSelectType",
+            "x-displayname": "Network Select",
+            "x-ves-oneof-field-network_choice": "[\"segment_network\",\"site_local_inside_network\",\"site_local_network\"]",
+            "x-ves-proto-message": "ves.io.schema.views.common_node.NetworkSelectType",
+            "properties": {
+                "segment_network": {
+                    "description": "Exclusive with [site_local_inside_network site_local_network]\n",
+                    "title": "Segment",
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "Segment (Global VRF)"
+                },
+                "site_local_inside_network": {
+                    "description": "Exclusive with [segment_network site_local_network]\n",
+                    "title": "Site Local Network Inside",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Site Local Inside (Local VRF)"
+                },
+                "site_local_network": {
+                    "description": "Exclusive with [segment_network site_local_inside_network]\n",
+                    "title": "Site Local Network",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Site Local Outside (Local VRF)"
                 }
             }
         },

@@ -141,7 +141,8 @@ func resourceVolterraAppSetting() *schema.Resource {
 
 						"business_logic_markup_setting": {
 
-							Type:     schema.TypeSet,
+							Type:     schema.TypeList,
+							MaxItems: 1,
 							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
@@ -163,7 +164,8 @@ func resourceVolterraAppSetting() *schema.Resource {
 
 						"timeseries_analyses_setting": {
 
-							Type:     schema.TypeSet,
+							Type:     schema.TypeList,
+							MaxItems: 1,
 							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
@@ -198,7 +200,8 @@ func resourceVolterraAppSetting() *schema.Resource {
 
 						"user_behavior_analysis_setting": {
 
-							Type:     schema.TypeSet,
+							Type:     schema.TypeList,
+							MaxItems: 1,
 							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
@@ -223,7 +226,8 @@ func resourceVolterraAppSetting() *schema.Resource {
 
 									"enable_detection": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -237,7 +241,8 @@ func resourceVolterraAppSetting() *schema.Resource {
 
 												"bola_detection_manual": {
 
-													Type:       schema.TypeSet,
+													Type:       schema.TypeList,
+													MaxItems:   1,
 													Optional:   true,
 													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
@@ -321,7 +326,8 @@ func resourceVolterraAppSetting() *schema.Resource {
 
 												"include_failed_login_activity": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Optional: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -342,7 +348,8 @@ func resourceVolterraAppSetting() *schema.Resource {
 
 												"include_forbidden_activity": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Optional: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -376,7 +383,8 @@ func resourceVolterraAppSetting() *schema.Resource {
 
 												"include_non_existent_url_activity_automatic": {
 
-													Type:       schema.TypeSet,
+													Type:       schema.TypeList,
+													MaxItems:   1,
 													Optional:   true,
 													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
@@ -408,7 +416,8 @@ func resourceVolterraAppSetting() *schema.Resource {
 
 												"include_non_existent_url_activity_custom": {
 
-													Type:       schema.TypeSet,
+													Type:       schema.TypeList,
+													MaxItems:   1,
 													Optional:   true,
 													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
@@ -563,577 +572,599 @@ func resourceVolterraAppSettingCreate(d *schema.ResourceData, meta interface{}) 
 		appTypeSettings := make([]*ves_io_schema_app_setting.AppTypeSettings, len(sl))
 		createSpec.AppTypeSettings = appTypeSettings
 		for i, set := range sl {
-			appTypeSettings[i] = &ves_io_schema_app_setting.AppTypeSettings{}
-			appTypeSettingsMapStrToI := set.(map[string]interface{})
+			if set != nil {
+				appTypeSettings[i] = &ves_io_schema_app_setting.AppTypeSettings{}
+				appTypeSettingsMapStrToI := set.(map[string]interface{})
 
-			if v, ok := appTypeSettingsMapStrToI["app_type_ref"]; ok && !isIntfNil(v) {
+				if v, ok := appTypeSettingsMapStrToI["app_type_ref"]; ok && !isIntfNil(v) {
 
-				sl := v.([]interface{})
-				appTypeRefInt := make([]*ves_io_schema.ObjectRefType, len(sl))
-				appTypeSettings[i].AppTypeRef = appTypeRefInt
-				for i, ps := range sl {
+					sl := v.([]interface{})
+					appTypeRefInt := make([]*ves_io_schema.ObjectRefType, len(sl))
+					appTypeSettings[i].AppTypeRef = appTypeRefInt
+					for i, ps := range sl {
 
-					atrMapToStrVal := ps.(map[string]interface{})
-					appTypeRefInt[i] = &ves_io_schema.ObjectRefType{}
+						atrMapToStrVal := ps.(map[string]interface{})
+						appTypeRefInt[i] = &ves_io_schema.ObjectRefType{}
 
-					appTypeRefInt[i].Kind = "app_type"
+						appTypeRefInt[i].Kind = "app_type"
 
-					if v, ok := atrMapToStrVal["name"]; ok && !isIntfNil(v) {
-						appTypeRefInt[i].Name = v.(string)
-					}
-
-					if v, ok := atrMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-						appTypeRefInt[i].Namespace = v.(string)
-					}
-
-					if v, ok := atrMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-						appTypeRefInt[i].Tenant = v.(string)
-					}
-
-					if v, ok := atrMapToStrVal["uid"]; ok && !isIntfNil(v) {
-						appTypeRefInt[i].Uid = v.(string)
-					}
-
-				}
-
-			}
-
-			if v, ok := appTypeSettingsMapStrToI["business_logic_markup_setting"]; ok && !isIntfNil(v) {
-
-				sl := v.(*schema.Set).List()
-				businessLogicMarkupSetting := &ves_io_schema_app_setting.BusinessLogicMarkupSetting{}
-				appTypeSettings[i].BusinessLogicMarkupSetting = businessLogicMarkupSetting
-				for _, set := range sl {
-					businessLogicMarkupSettingMapStrToI := set.(map[string]interface{})
-
-					learnFromNamespaceTypeFound := false
-
-					if v, ok := businessLogicMarkupSettingMapStrToI["disable"]; ok && !isIntfNil(v) && !learnFromNamespaceTypeFound {
-
-						learnFromNamespaceTypeFound = true
-
-						if v.(bool) {
-							learnFromNamespaceInt := &ves_io_schema_app_setting.BusinessLogicMarkupSetting_Disable{}
-							learnFromNamespaceInt.Disable = &ves_io_schema.Empty{}
-							businessLogicMarkupSetting.LearnFromNamespace = learnFromNamespaceInt
+						if v, ok := atrMapToStrVal["name"]; ok && !isIntfNil(v) {
+							appTypeRefInt[i].Name = v.(string)
 						}
 
-					}
+						if v, ok := atrMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+							appTypeRefInt[i].Namespace = v.(string)
+						}
 
-					if v, ok := businessLogicMarkupSettingMapStrToI["enable"]; ok && !isIntfNil(v) && !learnFromNamespaceTypeFound {
+						if v, ok := atrMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+							appTypeRefInt[i].Tenant = v.(string)
+						}
 
-						learnFromNamespaceTypeFound = true
-
-						if v.(bool) {
-							learnFromNamespaceInt := &ves_io_schema_app_setting.BusinessLogicMarkupSetting_Enable{}
-							learnFromNamespaceInt.Enable = &ves_io_schema.Empty{}
-							businessLogicMarkupSetting.LearnFromNamespace = learnFromNamespaceInt
+						if v, ok := atrMapToStrVal["uid"]; ok && !isIntfNil(v) {
+							appTypeRefInt[i].Uid = v.(string)
 						}
 
 					}
 
 				}
 
-			}
+				if v, ok := appTypeSettingsMapStrToI["business_logic_markup_setting"]; ok && !isIntfNil(v) {
 
-			if v, ok := appTypeSettingsMapStrToI["timeseries_analyses_setting"]; ok && !isIntfNil(v) {
+					sl := v.([]interface{})
+					businessLogicMarkupSetting := &ves_io_schema_app_setting.BusinessLogicMarkupSetting{}
+					appTypeSettings[i].BusinessLogicMarkupSetting = businessLogicMarkupSetting
+					for _, set := range sl {
+						if set != nil {
+							businessLogicMarkupSettingMapStrToI := set.(map[string]interface{})
 
-				sl := v.(*schema.Set).List()
-				timeseriesAnalysesSetting := &ves_io_schema_app_setting.TimeseriesAnalysesSetting{}
-				appTypeSettings[i].TimeseriesAnalysesSetting = timeseriesAnalysesSetting
-				for _, set := range sl {
-					timeseriesAnalysesSettingMapStrToI := set.(map[string]interface{})
+							learnFromNamespaceTypeFound := false
 
-					if v, ok := timeseriesAnalysesSettingMapStrToI["metric_selectors"]; ok && !isIntfNil(v) {
+							if v, ok := businessLogicMarkupSettingMapStrToI["disable"]; ok && !isIntfNil(v) && !learnFromNamespaceTypeFound {
 
-						sl := v.([]interface{})
-						metricSelectors := make([]*ves_io_schema_app_setting.MetricSelector, len(sl))
-						timeseriesAnalysesSetting.MetricSelectors = metricSelectors
-						for i, set := range sl {
-							metricSelectors[i] = &ves_io_schema_app_setting.MetricSelector{}
-							metricSelectorsMapStrToI := set.(map[string]interface{})
+								learnFromNamespaceTypeFound = true
 
-							if v, ok := metricSelectorsMapStrToI["metric"]; ok && !isIntfNil(v) {
-
-								metricList := []ves_io_schema_app_setting.Metric{}
-								for _, j := range v.([]interface{}) {
-									metricList = append(metricList, ves_io_schema_app_setting.Metric(ves_io_schema_app_setting.Metric_value[j.(string)]))
+								if v.(bool) {
+									learnFromNamespaceInt := &ves_io_schema_app_setting.BusinessLogicMarkupSetting_Disable{}
+									learnFromNamespaceInt.Disable = &ves_io_schema.Empty{}
+									businessLogicMarkupSetting.LearnFromNamespace = learnFromNamespaceInt
 								}
-								metricSelectors[i].Metric = metricList
 
 							}
 
-							if v, ok := metricSelectorsMapStrToI["metrics_source"]; ok && !isIntfNil(v) {
+							if v, ok := businessLogicMarkupSettingMapStrToI["enable"]; ok && !isIntfNil(v) && !learnFromNamespaceTypeFound {
 
-								metricSelectors[i].MetricsSource = ves_io_schema_app_setting.MetricsSource(ves_io_schema_app_setting.MetricsSource_value[v.(string)])
+								learnFromNamespaceTypeFound = true
+
+								if v.(bool) {
+									learnFromNamespaceInt := &ves_io_schema_app_setting.BusinessLogicMarkupSetting_Enable{}
+									learnFromNamespaceInt.Enable = &ves_io_schema.Empty{}
+									businessLogicMarkupSetting.LearnFromNamespace = learnFromNamespaceInt
+								}
 
 							}
 
 						}
+					}
 
+				}
+
+				if v, ok := appTypeSettingsMapStrToI["timeseries_analyses_setting"]; ok && !isIntfNil(v) {
+
+					sl := v.([]interface{})
+					timeseriesAnalysesSetting := &ves_io_schema_app_setting.TimeseriesAnalysesSetting{}
+					appTypeSettings[i].TimeseriesAnalysesSetting = timeseriesAnalysesSetting
+					for _, set := range sl {
+						if set != nil {
+							timeseriesAnalysesSettingMapStrToI := set.(map[string]interface{})
+
+							if v, ok := timeseriesAnalysesSettingMapStrToI["metric_selectors"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								metricSelectors := make([]*ves_io_schema_app_setting.MetricSelector, len(sl))
+								timeseriesAnalysesSetting.MetricSelectors = metricSelectors
+								for i, set := range sl {
+									if set != nil {
+										metricSelectors[i] = &ves_io_schema_app_setting.MetricSelector{}
+										metricSelectorsMapStrToI := set.(map[string]interface{})
+
+										if v, ok := metricSelectorsMapStrToI["metric"]; ok && !isIntfNil(v) {
+
+											metricList := []ves_io_schema_app_setting.Metric{}
+											for _, j := range v.([]interface{}) {
+												metricList = append(metricList, ves_io_schema_app_setting.Metric(ves_io_schema_app_setting.Metric_value[j.(string)]))
+											}
+											metricSelectors[i].Metric = metricList
+
+										}
+
+										if v, ok := metricSelectorsMapStrToI["metrics_source"]; ok && !isIntfNil(v) {
+
+											metricSelectors[i].MetricsSource = ves_io_schema_app_setting.MetricsSource(ves_io_schema_app_setting.MetricsSource_value[v.(string)])
+
+										}
+
+									}
+								}
+
+							}
+
+						}
+					}
+
+				}
+
+				if v, ok := appTypeSettingsMapStrToI["user_behavior_analysis_setting"]; ok && !isIntfNil(v) {
+
+					sl := v.([]interface{})
+					userBehaviorAnalysisSetting := &ves_io_schema_app_setting.UserBehaviorAnalysisSetting{}
+					appTypeSettings[i].UserBehaviorAnalysisSetting = userBehaviorAnalysisSetting
+					for _, set := range sl {
+						if set != nil {
+							userBehaviorAnalysisSettingMapStrToI := set.(map[string]interface{})
+
+							learnFromNamespaceTypeFound := false
+
+							if v, ok := userBehaviorAnalysisSettingMapStrToI["disable_learning"]; ok && !isIntfNil(v) && !learnFromNamespaceTypeFound {
+
+								learnFromNamespaceTypeFound = true
+
+								if v.(bool) {
+									learnFromNamespaceInt := &ves_io_schema_app_setting.UserBehaviorAnalysisSetting_DisableLearning{}
+									learnFromNamespaceInt.DisableLearning = &ves_io_schema.Empty{}
+									userBehaviorAnalysisSetting.LearnFromNamespace = learnFromNamespaceInt
+								}
+
+							}
+
+							if v, ok := userBehaviorAnalysisSettingMapStrToI["enable_learning"]; ok && !isIntfNil(v) && !learnFromNamespaceTypeFound {
+
+								learnFromNamespaceTypeFound = true
+
+								if v.(bool) {
+									learnFromNamespaceInt := &ves_io_schema_app_setting.UserBehaviorAnalysisSetting_EnableLearning{}
+									learnFromNamespaceInt.EnableLearning = &ves_io_schema.Empty{}
+									userBehaviorAnalysisSetting.LearnFromNamespace = learnFromNamespaceInt
+								}
+
+							}
+
+							maliciousUserDetectionTypeFound := false
+
+							if v, ok := userBehaviorAnalysisSettingMapStrToI["disable_detection"]; ok && !isIntfNil(v) && !maliciousUserDetectionTypeFound {
+
+								maliciousUserDetectionTypeFound = true
+
+								if v.(bool) {
+									maliciousUserDetectionInt := &ves_io_schema_app_setting.UserBehaviorAnalysisSetting_DisableDetection{}
+									maliciousUserDetectionInt.DisableDetection = &ves_io_schema.Empty{}
+									userBehaviorAnalysisSetting.MaliciousUserDetection = maliciousUserDetectionInt
+								}
+
+							}
+
+							if v, ok := userBehaviorAnalysisSettingMapStrToI["enable_detection"]; ok && !isIntfNil(v) && !maliciousUserDetectionTypeFound {
+
+								maliciousUserDetectionTypeFound = true
+								maliciousUserDetectionInt := &ves_io_schema_app_setting.UserBehaviorAnalysisSetting_EnableDetection{}
+								maliciousUserDetectionInt.EnableDetection = &ves_io_schema_app_setting.MaliciousUserDetectionSetting{}
+								userBehaviorAnalysisSetting.MaliciousUserDetection = maliciousUserDetectionInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										bolaActivityChoiceTypeFound := false
+
+										if v, ok := cs["bola_detection_automatic"]; ok && !isIntfNil(v) && !bolaActivityChoiceTypeFound {
+
+											bolaActivityChoiceTypeFound = true
+
+											if v.(bool) {
+												bolaActivityChoiceInt := &ves_io_schema_app_setting.MaliciousUserDetectionSetting_BolaDetectionAutomatic{}
+												bolaActivityChoiceInt.BolaDetectionAutomatic = &ves_io_schema.Empty{}
+												maliciousUserDetectionInt.EnableDetection.BolaActivityChoice = bolaActivityChoiceInt
+											}
+
+										}
+
+										if v, ok := cs["bola_detection_manual"]; ok && !isIntfNil(v) && !bolaActivityChoiceTypeFound {
+
+											bolaActivityChoiceTypeFound = true
+											bolaActivityChoiceInt := &ves_io_schema_app_setting.MaliciousUserDetectionSetting_BolaDetectionManual{}
+											bolaActivityChoiceInt.BolaDetectionManual = &ves_io_schema_app_setting.BolaDetectionManualSettings{}
+											maliciousUserDetectionInt.EnableDetection.BolaActivityChoice = bolaActivityChoiceInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													thresholdLevelsTypeFound := false
+
+													if v, ok := cs["threshold_level_1"]; ok && !isIntfNil(v) && !thresholdLevelsTypeFound {
+
+														thresholdLevelsTypeFound = true
+
+														if v.(bool) {
+															thresholdLevelsInt := &ves_io_schema_app_setting.BolaDetectionManualSettings_ThresholdLevel_1{}
+															thresholdLevelsInt.ThresholdLevel_1 = &ves_io_schema.Empty{}
+															bolaActivityChoiceInt.BolaDetectionManual.ThresholdLevels = thresholdLevelsInt
+														}
+
+													}
+
+													if v, ok := cs["threshold_level_2"]; ok && !isIntfNil(v) && !thresholdLevelsTypeFound {
+
+														thresholdLevelsTypeFound = true
+
+														if v.(bool) {
+															thresholdLevelsInt := &ves_io_schema_app_setting.BolaDetectionManualSettings_ThresholdLevel_2{}
+															thresholdLevelsInt.ThresholdLevel_2 = &ves_io_schema.Empty{}
+															bolaActivityChoiceInt.BolaDetectionManual.ThresholdLevels = thresholdLevelsInt
+														}
+
+													}
+
+													if v, ok := cs["threshold_level_3"]; ok && !isIntfNil(v) && !thresholdLevelsTypeFound {
+
+														thresholdLevelsTypeFound = true
+
+														if v.(bool) {
+															thresholdLevelsInt := &ves_io_schema_app_setting.BolaDetectionManualSettings_ThresholdLevel_3{}
+															thresholdLevelsInt.ThresholdLevel_3 = &ves_io_schema.Empty{}
+															bolaActivityChoiceInt.BolaDetectionManual.ThresholdLevels = thresholdLevelsInt
+														}
+
+													}
+
+													if v, ok := cs["threshold_level_4"]; ok && !isIntfNil(v) && !thresholdLevelsTypeFound {
+
+														thresholdLevelsTypeFound = true
+
+														if v.(bool) {
+															thresholdLevelsInt := &ves_io_schema_app_setting.BolaDetectionManualSettings_ThresholdLevel_4{}
+															thresholdLevelsInt.ThresholdLevel_4 = &ves_io_schema.Empty{}
+															bolaActivityChoiceInt.BolaDetectionManual.ThresholdLevels = thresholdLevelsInt
+														}
+
+													}
+
+													if v, ok := cs["threshold_level_5"]; ok && !isIntfNil(v) && !thresholdLevelsTypeFound {
+
+														thresholdLevelsTypeFound = true
+
+														if v.(bool) {
+															thresholdLevelsInt := &ves_io_schema_app_setting.BolaDetectionManualSettings_ThresholdLevel_5{}
+															thresholdLevelsInt.ThresholdLevel_5 = &ves_io_schema.Empty{}
+															bolaActivityChoiceInt.BolaDetectionManual.ThresholdLevels = thresholdLevelsInt
+														}
+
+													}
+
+													if v, ok := cs["threshold_level_6"]; ok && !isIntfNil(v) && !thresholdLevelsTypeFound {
+
+														thresholdLevelsTypeFound = true
+
+														if v.(bool) {
+															thresholdLevelsInt := &ves_io_schema_app_setting.BolaDetectionManualSettings_ThresholdLevel_6{}
+															thresholdLevelsInt.ThresholdLevel_6 = &ves_io_schema.Empty{}
+															bolaActivityChoiceInt.BolaDetectionManual.ThresholdLevels = thresholdLevelsInt
+														}
+
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := cs["exclude_bola_detection"]; ok && !isIntfNil(v) && !bolaActivityChoiceTypeFound {
+
+											bolaActivityChoiceTypeFound = true
+
+											if v.(bool) {
+												bolaActivityChoiceInt := &ves_io_schema_app_setting.MaliciousUserDetectionSetting_ExcludeBolaDetection{}
+												bolaActivityChoiceInt.ExcludeBolaDetection = &ves_io_schema.Empty{}
+												maliciousUserDetectionInt.EnableDetection.BolaActivityChoice = bolaActivityChoiceInt
+											}
+
+										}
+
+										botDefenseActivityChoiceTypeFound := false
+
+										if v, ok := cs["exclude_bot_defense_activity"]; ok && !isIntfNil(v) && !botDefenseActivityChoiceTypeFound {
+
+											botDefenseActivityChoiceTypeFound = true
+
+											if v.(bool) {
+												botDefenseActivityChoiceInt := &ves_io_schema_app_setting.MaliciousUserDetectionSetting_ExcludeBotDefenseActivity{}
+												botDefenseActivityChoiceInt.ExcludeBotDefenseActivity = &ves_io_schema.Empty{}
+												maliciousUserDetectionInt.EnableDetection.BotDefenseActivityChoice = botDefenseActivityChoiceInt
+											}
+
+										}
+
+										if v, ok := cs["include_bot_defense_activity"]; ok && !isIntfNil(v) && !botDefenseActivityChoiceTypeFound {
+
+											botDefenseActivityChoiceTypeFound = true
+
+											if v.(bool) {
+												botDefenseActivityChoiceInt := &ves_io_schema_app_setting.MaliciousUserDetectionSetting_IncludeBotDefenseActivity{}
+												botDefenseActivityChoiceInt.IncludeBotDefenseActivity = &ves_io_schema.Empty{}
+												maliciousUserDetectionInt.EnableDetection.BotDefenseActivityChoice = botDefenseActivityChoiceInt
+											}
+
+										}
+
+										coolingOffPeriodSettingTypeFound := false
+
+										if v, ok := cs["cooling_off_period"]; ok && !isIntfNil(v) && !coolingOffPeriodSettingTypeFound {
+
+											coolingOffPeriodSettingTypeFound = true
+											coolingOffPeriodSettingInt := &ves_io_schema_app_setting.MaliciousUserDetectionSetting_CoolingOffPeriod{}
+
+											maliciousUserDetectionInt.EnableDetection.CoolingOffPeriodSetting = coolingOffPeriodSettingInt
+
+											coolingOffPeriodSettingInt.CoolingOffPeriod = uint32(v.(int))
+
+										}
+
+										failedLoginActivityChoiceTypeFound := false
+
+										if v, ok := cs["exclude_failed_login_activity"]; ok && !isIntfNil(v) && !failedLoginActivityChoiceTypeFound {
+
+											failedLoginActivityChoiceTypeFound = true
+
+											if v.(bool) {
+												failedLoginActivityChoiceInt := &ves_io_schema_app_setting.MaliciousUserDetectionSetting_ExcludeFailedLoginActivity{}
+												failedLoginActivityChoiceInt.ExcludeFailedLoginActivity = &ves_io_schema.Empty{}
+												maliciousUserDetectionInt.EnableDetection.FailedLoginActivityChoice = failedLoginActivityChoiceInt
+											}
+
+										}
+
+										if v, ok := cs["include_failed_login_activity"]; ok && !isIntfNil(v) && !failedLoginActivityChoiceTypeFound {
+
+											failedLoginActivityChoiceTypeFound = true
+											failedLoginActivityChoiceInt := &ves_io_schema_app_setting.MaliciousUserDetectionSetting_IncludeFailedLoginActivity{}
+											failedLoginActivityChoiceInt.IncludeFailedLoginActivity = &ves_io_schema_app_setting.FailedLoginActivitySetting{}
+											maliciousUserDetectionInt.EnableDetection.FailedLoginActivityChoice = failedLoginActivityChoiceInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["login_failures_threshold"]; ok && !isIntfNil(v) {
+
+														failedLoginActivityChoiceInt.IncludeFailedLoginActivity.LoginFailuresThreshold = uint32(v.(int))
+
+													}
+
+												}
+											}
+
+										}
+
+										forbiddenActivityChoiceTypeFound := false
+
+										if v, ok := cs["exclude_forbidden_activity"]; ok && !isIntfNil(v) && !forbiddenActivityChoiceTypeFound {
+
+											forbiddenActivityChoiceTypeFound = true
+
+											if v.(bool) {
+												forbiddenActivityChoiceInt := &ves_io_schema_app_setting.MaliciousUserDetectionSetting_ExcludeForbiddenActivity{}
+												forbiddenActivityChoiceInt.ExcludeForbiddenActivity = &ves_io_schema.Empty{}
+												maliciousUserDetectionInt.EnableDetection.ForbiddenActivityChoice = forbiddenActivityChoiceInt
+											}
+
+										}
+
+										if v, ok := cs["include_forbidden_activity"]; ok && !isIntfNil(v) && !forbiddenActivityChoiceTypeFound {
+
+											forbiddenActivityChoiceTypeFound = true
+											forbiddenActivityChoiceInt := &ves_io_schema_app_setting.MaliciousUserDetectionSetting_IncludeForbiddenActivity{}
+											forbiddenActivityChoiceInt.IncludeForbiddenActivity = &ves_io_schema_app_setting.ForbiddenActivitySetting{}
+											maliciousUserDetectionInt.EnableDetection.ForbiddenActivityChoice = forbiddenActivityChoiceInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["forbidden_requests_threshold"]; ok && !isIntfNil(v) {
+
+														forbiddenActivityChoiceInt.IncludeForbiddenActivity.ForbiddenRequestsThreshold = uint32(v.(int))
+
+													}
+
+												}
+											}
+
+										}
+
+										ipReputationChoiceTypeFound := false
+
+										if v, ok := cs["exclude_ip_reputation"]; ok && !isIntfNil(v) && !ipReputationChoiceTypeFound {
+
+											ipReputationChoiceTypeFound = true
+
+											if v.(bool) {
+												ipReputationChoiceInt := &ves_io_schema_app_setting.MaliciousUserDetectionSetting_ExcludeIpReputation{}
+												ipReputationChoiceInt.ExcludeIpReputation = &ves_io_schema.Empty{}
+												maliciousUserDetectionInt.EnableDetection.IpReputationChoice = ipReputationChoiceInt
+											}
+
+										}
+
+										if v, ok := cs["include_ip_reputation"]; ok && !isIntfNil(v) && !ipReputationChoiceTypeFound {
+
+											ipReputationChoiceTypeFound = true
+
+											if v.(bool) {
+												ipReputationChoiceInt := &ves_io_schema_app_setting.MaliciousUserDetectionSetting_IncludeIpReputation{}
+												ipReputationChoiceInt.IncludeIpReputation = &ves_io_schema.Empty{}
+												maliciousUserDetectionInt.EnableDetection.IpReputationChoice = ipReputationChoiceInt
+											}
+
+										}
+
+										nonExistentUrlActivityChoiceTypeFound := false
+
+										if v, ok := cs["exclude_non_existent_url_activity"]; ok && !isIntfNil(v) && !nonExistentUrlActivityChoiceTypeFound {
+
+											nonExistentUrlActivityChoiceTypeFound = true
+
+											if v.(bool) {
+												nonExistentUrlActivityChoiceInt := &ves_io_schema_app_setting.MaliciousUserDetectionSetting_ExcludeNonExistentUrlActivity{}
+												nonExistentUrlActivityChoiceInt.ExcludeNonExistentUrlActivity = &ves_io_schema.Empty{}
+												maliciousUserDetectionInt.EnableDetection.NonExistentUrlActivityChoice = nonExistentUrlActivityChoiceInt
+											}
+
+										}
+
+										if v, ok := cs["include_non_existent_url_activity_automatic"]; ok && !isIntfNil(v) && !nonExistentUrlActivityChoiceTypeFound {
+
+											nonExistentUrlActivityChoiceTypeFound = true
+											nonExistentUrlActivityChoiceInt := &ves_io_schema_app_setting.MaliciousUserDetectionSetting_IncludeNonExistentUrlActivityAutomatic{}
+											nonExistentUrlActivityChoiceInt.IncludeNonExistentUrlActivityAutomatic = &ves_io_schema_app_setting.NonexistentUrlAutomaticActivitySetting{}
+											maliciousUserDetectionInt.EnableDetection.NonExistentUrlActivityChoice = nonExistentUrlActivityChoiceInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													sensitivityTypeFound := false
+
+													if v, ok := cs["high"]; ok && !isIntfNil(v) && !sensitivityTypeFound {
+
+														sensitivityTypeFound = true
+
+														if v.(bool) {
+															sensitivityInt := &ves_io_schema_app_setting.NonexistentUrlAutomaticActivitySetting_High{}
+															sensitivityInt.High = &ves_io_schema.Empty{}
+															nonExistentUrlActivityChoiceInt.IncludeNonExistentUrlActivityAutomatic.Sensitivity = sensitivityInt
+														}
+
+													}
+
+													if v, ok := cs["low"]; ok && !isIntfNil(v) && !sensitivityTypeFound {
+
+														sensitivityTypeFound = true
+
+														if v.(bool) {
+															sensitivityInt := &ves_io_schema_app_setting.NonexistentUrlAutomaticActivitySetting_Low{}
+															sensitivityInt.Low = &ves_io_schema.Empty{}
+															nonExistentUrlActivityChoiceInt.IncludeNonExistentUrlActivityAutomatic.Sensitivity = sensitivityInt
+														}
+
+													}
+
+													if v, ok := cs["medium"]; ok && !isIntfNil(v) && !sensitivityTypeFound {
+
+														sensitivityTypeFound = true
+
+														if v.(bool) {
+															sensitivityInt := &ves_io_schema_app_setting.NonexistentUrlAutomaticActivitySetting_Medium{}
+															sensitivityInt.Medium = &ves_io_schema.Empty{}
+															nonExistentUrlActivityChoiceInt.IncludeNonExistentUrlActivityAutomatic.Sensitivity = sensitivityInt
+														}
+
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := cs["include_non_existent_url_activity_custom"]; ok && !isIntfNil(v) && !nonExistentUrlActivityChoiceTypeFound {
+
+											nonExistentUrlActivityChoiceTypeFound = true
+											nonExistentUrlActivityChoiceInt := &ves_io_schema_app_setting.MaliciousUserDetectionSetting_IncludeNonExistentUrlActivityCustom{}
+											nonExistentUrlActivityChoiceInt.IncludeNonExistentUrlActivityCustom = &ves_io_schema_app_setting.NonexistentUrlCustomActivitySetting{}
+											maliciousUserDetectionInt.EnableDetection.NonExistentUrlActivityChoice = nonExistentUrlActivityChoiceInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["nonexistent_requests_threshold"]; ok && !isIntfNil(v) {
+
+														nonExistentUrlActivityChoiceInt.IncludeNonExistentUrlActivityCustom.NonexistentRequestsThreshold = uint32(v.(int))
+
+													}
+
+												}
+											}
+
+										}
+
+										rateLimitChoiceTypeFound := false
+
+										if v, ok := cs["exclude_rate_limit"]; ok && !isIntfNil(v) && !rateLimitChoiceTypeFound {
+
+											rateLimitChoiceTypeFound = true
+
+											if v.(bool) {
+												rateLimitChoiceInt := &ves_io_schema_app_setting.MaliciousUserDetectionSetting_ExcludeRateLimit{}
+												rateLimitChoiceInt.ExcludeRateLimit = &ves_io_schema.Empty{}
+												maliciousUserDetectionInt.EnableDetection.RateLimitChoice = rateLimitChoiceInt
+											}
+
+										}
+
+										if v, ok := cs["include_rate_limit"]; ok && !isIntfNil(v) && !rateLimitChoiceTypeFound {
+
+											rateLimitChoiceTypeFound = true
+
+											if v.(bool) {
+												rateLimitChoiceInt := &ves_io_schema_app_setting.MaliciousUserDetectionSetting_IncludeRateLimit{}
+												rateLimitChoiceInt.IncludeRateLimit = &ves_io_schema.Empty{}
+												maliciousUserDetectionInt.EnableDetection.RateLimitChoice = rateLimitChoiceInt
+											}
+
+										}
+
+										wafActivityChoiceTypeFound := false
+
+										if v, ok := cs["exclude_waf_activity"]; ok && !isIntfNil(v) && !wafActivityChoiceTypeFound {
+
+											wafActivityChoiceTypeFound = true
+
+											if v.(bool) {
+												wafActivityChoiceInt := &ves_io_schema_app_setting.MaliciousUserDetectionSetting_ExcludeWafActivity{}
+												wafActivityChoiceInt.ExcludeWafActivity = &ves_io_schema.Empty{}
+												maliciousUserDetectionInt.EnableDetection.WafActivityChoice = wafActivityChoiceInt
+											}
+
+										}
+
+										if v, ok := cs["include_waf_activity"]; ok && !isIntfNil(v) && !wafActivityChoiceTypeFound {
+
+											wafActivityChoiceTypeFound = true
+
+											if v.(bool) {
+												wafActivityChoiceInt := &ves_io_schema_app_setting.MaliciousUserDetectionSetting_IncludeWafActivity{}
+												wafActivityChoiceInt.IncludeWafActivity = &ves_io_schema.Empty{}
+												maliciousUserDetectionInt.EnableDetection.WafActivityChoice = wafActivityChoiceInt
+											}
+
+										}
+
+									}
+								}
+
+							}
+
+						}
 					}
 
 				}
 
 			}
-
-			if v, ok := appTypeSettingsMapStrToI["user_behavior_analysis_setting"]; ok && !isIntfNil(v) {
-
-				sl := v.(*schema.Set).List()
-				userBehaviorAnalysisSetting := &ves_io_schema_app_setting.UserBehaviorAnalysisSetting{}
-				appTypeSettings[i].UserBehaviorAnalysisSetting = userBehaviorAnalysisSetting
-				for _, set := range sl {
-					userBehaviorAnalysisSettingMapStrToI := set.(map[string]interface{})
-
-					learnFromNamespaceTypeFound := false
-
-					if v, ok := userBehaviorAnalysisSettingMapStrToI["disable_learning"]; ok && !isIntfNil(v) && !learnFromNamespaceTypeFound {
-
-						learnFromNamespaceTypeFound = true
-
-						if v.(bool) {
-							learnFromNamespaceInt := &ves_io_schema_app_setting.UserBehaviorAnalysisSetting_DisableLearning{}
-							learnFromNamespaceInt.DisableLearning = &ves_io_schema.Empty{}
-							userBehaviorAnalysisSetting.LearnFromNamespace = learnFromNamespaceInt
-						}
-
-					}
-
-					if v, ok := userBehaviorAnalysisSettingMapStrToI["enable_learning"]; ok && !isIntfNil(v) && !learnFromNamespaceTypeFound {
-
-						learnFromNamespaceTypeFound = true
-
-						if v.(bool) {
-							learnFromNamespaceInt := &ves_io_schema_app_setting.UserBehaviorAnalysisSetting_EnableLearning{}
-							learnFromNamespaceInt.EnableLearning = &ves_io_schema.Empty{}
-							userBehaviorAnalysisSetting.LearnFromNamespace = learnFromNamespaceInt
-						}
-
-					}
-
-					maliciousUserDetectionTypeFound := false
-
-					if v, ok := userBehaviorAnalysisSettingMapStrToI["disable_detection"]; ok && !isIntfNil(v) && !maliciousUserDetectionTypeFound {
-
-						maliciousUserDetectionTypeFound = true
-
-						if v.(bool) {
-							maliciousUserDetectionInt := &ves_io_schema_app_setting.UserBehaviorAnalysisSetting_DisableDetection{}
-							maliciousUserDetectionInt.DisableDetection = &ves_io_schema.Empty{}
-							userBehaviorAnalysisSetting.MaliciousUserDetection = maliciousUserDetectionInt
-						}
-
-					}
-
-					if v, ok := userBehaviorAnalysisSettingMapStrToI["enable_detection"]; ok && !isIntfNil(v) && !maliciousUserDetectionTypeFound {
-
-						maliciousUserDetectionTypeFound = true
-						maliciousUserDetectionInt := &ves_io_schema_app_setting.UserBehaviorAnalysisSetting_EnableDetection{}
-						maliciousUserDetectionInt.EnableDetection = &ves_io_schema_app_setting.MaliciousUserDetectionSetting{}
-						userBehaviorAnalysisSetting.MaliciousUserDetection = maliciousUserDetectionInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							bolaActivityChoiceTypeFound := false
-
-							if v, ok := cs["bola_detection_automatic"]; ok && !isIntfNil(v) && !bolaActivityChoiceTypeFound {
-
-								bolaActivityChoiceTypeFound = true
-
-								if v.(bool) {
-									bolaActivityChoiceInt := &ves_io_schema_app_setting.MaliciousUserDetectionSetting_BolaDetectionAutomatic{}
-									bolaActivityChoiceInt.BolaDetectionAutomatic = &ves_io_schema.Empty{}
-									maliciousUserDetectionInt.EnableDetection.BolaActivityChoice = bolaActivityChoiceInt
-								}
-
-							}
-
-							if v, ok := cs["bola_detection_manual"]; ok && !isIntfNil(v) && !bolaActivityChoiceTypeFound {
-
-								bolaActivityChoiceTypeFound = true
-								bolaActivityChoiceInt := &ves_io_schema_app_setting.MaliciousUserDetectionSetting_BolaDetectionManual{}
-								bolaActivityChoiceInt.BolaDetectionManual = &ves_io_schema_app_setting.BolaDetectionManualSettings{}
-								maliciousUserDetectionInt.EnableDetection.BolaActivityChoice = bolaActivityChoiceInt
-
-								sl := v.(*schema.Set).List()
-								for _, set := range sl {
-									cs := set.(map[string]interface{})
-
-									thresholdLevelsTypeFound := false
-
-									if v, ok := cs["threshold_level_1"]; ok && !isIntfNil(v) && !thresholdLevelsTypeFound {
-
-										thresholdLevelsTypeFound = true
-
-										if v.(bool) {
-											thresholdLevelsInt := &ves_io_schema_app_setting.BolaDetectionManualSettings_ThresholdLevel_1{}
-											thresholdLevelsInt.ThresholdLevel_1 = &ves_io_schema.Empty{}
-											bolaActivityChoiceInt.BolaDetectionManual.ThresholdLevels = thresholdLevelsInt
-										}
-
-									}
-
-									if v, ok := cs["threshold_level_2"]; ok && !isIntfNil(v) && !thresholdLevelsTypeFound {
-
-										thresholdLevelsTypeFound = true
-
-										if v.(bool) {
-											thresholdLevelsInt := &ves_io_schema_app_setting.BolaDetectionManualSettings_ThresholdLevel_2{}
-											thresholdLevelsInt.ThresholdLevel_2 = &ves_io_schema.Empty{}
-											bolaActivityChoiceInt.BolaDetectionManual.ThresholdLevels = thresholdLevelsInt
-										}
-
-									}
-
-									if v, ok := cs["threshold_level_3"]; ok && !isIntfNil(v) && !thresholdLevelsTypeFound {
-
-										thresholdLevelsTypeFound = true
-
-										if v.(bool) {
-											thresholdLevelsInt := &ves_io_schema_app_setting.BolaDetectionManualSettings_ThresholdLevel_3{}
-											thresholdLevelsInt.ThresholdLevel_3 = &ves_io_schema.Empty{}
-											bolaActivityChoiceInt.BolaDetectionManual.ThresholdLevels = thresholdLevelsInt
-										}
-
-									}
-
-									if v, ok := cs["threshold_level_4"]; ok && !isIntfNil(v) && !thresholdLevelsTypeFound {
-
-										thresholdLevelsTypeFound = true
-
-										if v.(bool) {
-											thresholdLevelsInt := &ves_io_schema_app_setting.BolaDetectionManualSettings_ThresholdLevel_4{}
-											thresholdLevelsInt.ThresholdLevel_4 = &ves_io_schema.Empty{}
-											bolaActivityChoiceInt.BolaDetectionManual.ThresholdLevels = thresholdLevelsInt
-										}
-
-									}
-
-									if v, ok := cs["threshold_level_5"]; ok && !isIntfNil(v) && !thresholdLevelsTypeFound {
-
-										thresholdLevelsTypeFound = true
-
-										if v.(bool) {
-											thresholdLevelsInt := &ves_io_schema_app_setting.BolaDetectionManualSettings_ThresholdLevel_5{}
-											thresholdLevelsInt.ThresholdLevel_5 = &ves_io_schema.Empty{}
-											bolaActivityChoiceInt.BolaDetectionManual.ThresholdLevels = thresholdLevelsInt
-										}
-
-									}
-
-									if v, ok := cs["threshold_level_6"]; ok && !isIntfNil(v) && !thresholdLevelsTypeFound {
-
-										thresholdLevelsTypeFound = true
-
-										if v.(bool) {
-											thresholdLevelsInt := &ves_io_schema_app_setting.BolaDetectionManualSettings_ThresholdLevel_6{}
-											thresholdLevelsInt.ThresholdLevel_6 = &ves_io_schema.Empty{}
-											bolaActivityChoiceInt.BolaDetectionManual.ThresholdLevels = thresholdLevelsInt
-										}
-
-									}
-
-								}
-
-							}
-
-							if v, ok := cs["exclude_bola_detection"]; ok && !isIntfNil(v) && !bolaActivityChoiceTypeFound {
-
-								bolaActivityChoiceTypeFound = true
-
-								if v.(bool) {
-									bolaActivityChoiceInt := &ves_io_schema_app_setting.MaliciousUserDetectionSetting_ExcludeBolaDetection{}
-									bolaActivityChoiceInt.ExcludeBolaDetection = &ves_io_schema.Empty{}
-									maliciousUserDetectionInt.EnableDetection.BolaActivityChoice = bolaActivityChoiceInt
-								}
-
-							}
-
-							botDefenseActivityChoiceTypeFound := false
-
-							if v, ok := cs["exclude_bot_defense_activity"]; ok && !isIntfNil(v) && !botDefenseActivityChoiceTypeFound {
-
-								botDefenseActivityChoiceTypeFound = true
-
-								if v.(bool) {
-									botDefenseActivityChoiceInt := &ves_io_schema_app_setting.MaliciousUserDetectionSetting_ExcludeBotDefenseActivity{}
-									botDefenseActivityChoiceInt.ExcludeBotDefenseActivity = &ves_io_schema.Empty{}
-									maliciousUserDetectionInt.EnableDetection.BotDefenseActivityChoice = botDefenseActivityChoiceInt
-								}
-
-							}
-
-							if v, ok := cs["include_bot_defense_activity"]; ok && !isIntfNil(v) && !botDefenseActivityChoiceTypeFound {
-
-								botDefenseActivityChoiceTypeFound = true
-
-								if v.(bool) {
-									botDefenseActivityChoiceInt := &ves_io_schema_app_setting.MaliciousUserDetectionSetting_IncludeBotDefenseActivity{}
-									botDefenseActivityChoiceInt.IncludeBotDefenseActivity = &ves_io_schema.Empty{}
-									maliciousUserDetectionInt.EnableDetection.BotDefenseActivityChoice = botDefenseActivityChoiceInt
-								}
-
-							}
-
-							coolingOffPeriodSettingTypeFound := false
-
-							if v, ok := cs["cooling_off_period"]; ok && !isIntfNil(v) && !coolingOffPeriodSettingTypeFound {
-
-								coolingOffPeriodSettingTypeFound = true
-								coolingOffPeriodSettingInt := &ves_io_schema_app_setting.MaliciousUserDetectionSetting_CoolingOffPeriod{}
-
-								maliciousUserDetectionInt.EnableDetection.CoolingOffPeriodSetting = coolingOffPeriodSettingInt
-
-								coolingOffPeriodSettingInt.CoolingOffPeriod = uint32(v.(int))
-
-							}
-
-							failedLoginActivityChoiceTypeFound := false
-
-							if v, ok := cs["exclude_failed_login_activity"]; ok && !isIntfNil(v) && !failedLoginActivityChoiceTypeFound {
-
-								failedLoginActivityChoiceTypeFound = true
-
-								if v.(bool) {
-									failedLoginActivityChoiceInt := &ves_io_schema_app_setting.MaliciousUserDetectionSetting_ExcludeFailedLoginActivity{}
-									failedLoginActivityChoiceInt.ExcludeFailedLoginActivity = &ves_io_schema.Empty{}
-									maliciousUserDetectionInt.EnableDetection.FailedLoginActivityChoice = failedLoginActivityChoiceInt
-								}
-
-							}
-
-							if v, ok := cs["include_failed_login_activity"]; ok && !isIntfNil(v) && !failedLoginActivityChoiceTypeFound {
-
-								failedLoginActivityChoiceTypeFound = true
-								failedLoginActivityChoiceInt := &ves_io_schema_app_setting.MaliciousUserDetectionSetting_IncludeFailedLoginActivity{}
-								failedLoginActivityChoiceInt.IncludeFailedLoginActivity = &ves_io_schema_app_setting.FailedLoginActivitySetting{}
-								maliciousUserDetectionInt.EnableDetection.FailedLoginActivityChoice = failedLoginActivityChoiceInt
-
-								sl := v.(*schema.Set).List()
-								for _, set := range sl {
-									cs := set.(map[string]interface{})
-
-									if v, ok := cs["login_failures_threshold"]; ok && !isIntfNil(v) {
-
-										failedLoginActivityChoiceInt.IncludeFailedLoginActivity.LoginFailuresThreshold = uint32(v.(int))
-
-									}
-
-								}
-
-							}
-
-							forbiddenActivityChoiceTypeFound := false
-
-							if v, ok := cs["exclude_forbidden_activity"]; ok && !isIntfNil(v) && !forbiddenActivityChoiceTypeFound {
-
-								forbiddenActivityChoiceTypeFound = true
-
-								if v.(bool) {
-									forbiddenActivityChoiceInt := &ves_io_schema_app_setting.MaliciousUserDetectionSetting_ExcludeForbiddenActivity{}
-									forbiddenActivityChoiceInt.ExcludeForbiddenActivity = &ves_io_schema.Empty{}
-									maliciousUserDetectionInt.EnableDetection.ForbiddenActivityChoice = forbiddenActivityChoiceInt
-								}
-
-							}
-
-							if v, ok := cs["include_forbidden_activity"]; ok && !isIntfNil(v) && !forbiddenActivityChoiceTypeFound {
-
-								forbiddenActivityChoiceTypeFound = true
-								forbiddenActivityChoiceInt := &ves_io_schema_app_setting.MaliciousUserDetectionSetting_IncludeForbiddenActivity{}
-								forbiddenActivityChoiceInt.IncludeForbiddenActivity = &ves_io_schema_app_setting.ForbiddenActivitySetting{}
-								maliciousUserDetectionInt.EnableDetection.ForbiddenActivityChoice = forbiddenActivityChoiceInt
-
-								sl := v.(*schema.Set).List()
-								for _, set := range sl {
-									cs := set.(map[string]interface{})
-
-									if v, ok := cs["forbidden_requests_threshold"]; ok && !isIntfNil(v) {
-
-										forbiddenActivityChoiceInt.IncludeForbiddenActivity.ForbiddenRequestsThreshold = uint32(v.(int))
-
-									}
-
-								}
-
-							}
-
-							ipReputationChoiceTypeFound := false
-
-							if v, ok := cs["exclude_ip_reputation"]; ok && !isIntfNil(v) && !ipReputationChoiceTypeFound {
-
-								ipReputationChoiceTypeFound = true
-
-								if v.(bool) {
-									ipReputationChoiceInt := &ves_io_schema_app_setting.MaliciousUserDetectionSetting_ExcludeIpReputation{}
-									ipReputationChoiceInt.ExcludeIpReputation = &ves_io_schema.Empty{}
-									maliciousUserDetectionInt.EnableDetection.IpReputationChoice = ipReputationChoiceInt
-								}
-
-							}
-
-							if v, ok := cs["include_ip_reputation"]; ok && !isIntfNil(v) && !ipReputationChoiceTypeFound {
-
-								ipReputationChoiceTypeFound = true
-
-								if v.(bool) {
-									ipReputationChoiceInt := &ves_io_schema_app_setting.MaliciousUserDetectionSetting_IncludeIpReputation{}
-									ipReputationChoiceInt.IncludeIpReputation = &ves_io_schema.Empty{}
-									maliciousUserDetectionInt.EnableDetection.IpReputationChoice = ipReputationChoiceInt
-								}
-
-							}
-
-							nonExistentUrlActivityChoiceTypeFound := false
-
-							if v, ok := cs["exclude_non_existent_url_activity"]; ok && !isIntfNil(v) && !nonExistentUrlActivityChoiceTypeFound {
-
-								nonExistentUrlActivityChoiceTypeFound = true
-
-								if v.(bool) {
-									nonExistentUrlActivityChoiceInt := &ves_io_schema_app_setting.MaliciousUserDetectionSetting_ExcludeNonExistentUrlActivity{}
-									nonExistentUrlActivityChoiceInt.ExcludeNonExistentUrlActivity = &ves_io_schema.Empty{}
-									maliciousUserDetectionInt.EnableDetection.NonExistentUrlActivityChoice = nonExistentUrlActivityChoiceInt
-								}
-
-							}
-
-							if v, ok := cs["include_non_existent_url_activity_automatic"]; ok && !isIntfNil(v) && !nonExistentUrlActivityChoiceTypeFound {
-
-								nonExistentUrlActivityChoiceTypeFound = true
-								nonExistentUrlActivityChoiceInt := &ves_io_schema_app_setting.MaliciousUserDetectionSetting_IncludeNonExistentUrlActivityAutomatic{}
-								nonExistentUrlActivityChoiceInt.IncludeNonExistentUrlActivityAutomatic = &ves_io_schema_app_setting.NonexistentUrlAutomaticActivitySetting{}
-								maliciousUserDetectionInt.EnableDetection.NonExistentUrlActivityChoice = nonExistentUrlActivityChoiceInt
-
-								sl := v.(*schema.Set).List()
-								for _, set := range sl {
-									cs := set.(map[string]interface{})
-
-									sensitivityTypeFound := false
-
-									if v, ok := cs["high"]; ok && !isIntfNil(v) && !sensitivityTypeFound {
-
-										sensitivityTypeFound = true
-
-										if v.(bool) {
-											sensitivityInt := &ves_io_schema_app_setting.NonexistentUrlAutomaticActivitySetting_High{}
-											sensitivityInt.High = &ves_io_schema.Empty{}
-											nonExistentUrlActivityChoiceInt.IncludeNonExistentUrlActivityAutomatic.Sensitivity = sensitivityInt
-										}
-
-									}
-
-									if v, ok := cs["low"]; ok && !isIntfNil(v) && !sensitivityTypeFound {
-
-										sensitivityTypeFound = true
-
-										if v.(bool) {
-											sensitivityInt := &ves_io_schema_app_setting.NonexistentUrlAutomaticActivitySetting_Low{}
-											sensitivityInt.Low = &ves_io_schema.Empty{}
-											nonExistentUrlActivityChoiceInt.IncludeNonExistentUrlActivityAutomatic.Sensitivity = sensitivityInt
-										}
-
-									}
-
-									if v, ok := cs["medium"]; ok && !isIntfNil(v) && !sensitivityTypeFound {
-
-										sensitivityTypeFound = true
-
-										if v.(bool) {
-											sensitivityInt := &ves_io_schema_app_setting.NonexistentUrlAutomaticActivitySetting_Medium{}
-											sensitivityInt.Medium = &ves_io_schema.Empty{}
-											nonExistentUrlActivityChoiceInt.IncludeNonExistentUrlActivityAutomatic.Sensitivity = sensitivityInt
-										}
-
-									}
-
-								}
-
-							}
-
-							if v, ok := cs["include_non_existent_url_activity_custom"]; ok && !isIntfNil(v) && !nonExistentUrlActivityChoiceTypeFound {
-
-								nonExistentUrlActivityChoiceTypeFound = true
-								nonExistentUrlActivityChoiceInt := &ves_io_schema_app_setting.MaliciousUserDetectionSetting_IncludeNonExistentUrlActivityCustom{}
-								nonExistentUrlActivityChoiceInt.IncludeNonExistentUrlActivityCustom = &ves_io_schema_app_setting.NonexistentUrlCustomActivitySetting{}
-								maliciousUserDetectionInt.EnableDetection.NonExistentUrlActivityChoice = nonExistentUrlActivityChoiceInt
-
-								sl := v.(*schema.Set).List()
-								for _, set := range sl {
-									cs := set.(map[string]interface{})
-
-									if v, ok := cs["nonexistent_requests_threshold"]; ok && !isIntfNil(v) {
-
-										nonExistentUrlActivityChoiceInt.IncludeNonExistentUrlActivityCustom.NonexistentRequestsThreshold = uint32(v.(int))
-
-									}
-
-								}
-
-							}
-
-							rateLimitChoiceTypeFound := false
-
-							if v, ok := cs["exclude_rate_limit"]; ok && !isIntfNil(v) && !rateLimitChoiceTypeFound {
-
-								rateLimitChoiceTypeFound = true
-
-								if v.(bool) {
-									rateLimitChoiceInt := &ves_io_schema_app_setting.MaliciousUserDetectionSetting_ExcludeRateLimit{}
-									rateLimitChoiceInt.ExcludeRateLimit = &ves_io_schema.Empty{}
-									maliciousUserDetectionInt.EnableDetection.RateLimitChoice = rateLimitChoiceInt
-								}
-
-							}
-
-							if v, ok := cs["include_rate_limit"]; ok && !isIntfNil(v) && !rateLimitChoiceTypeFound {
-
-								rateLimitChoiceTypeFound = true
-
-								if v.(bool) {
-									rateLimitChoiceInt := &ves_io_schema_app_setting.MaliciousUserDetectionSetting_IncludeRateLimit{}
-									rateLimitChoiceInt.IncludeRateLimit = &ves_io_schema.Empty{}
-									maliciousUserDetectionInt.EnableDetection.RateLimitChoice = rateLimitChoiceInt
-								}
-
-							}
-
-							wafActivityChoiceTypeFound := false
-
-							if v, ok := cs["exclude_waf_activity"]; ok && !isIntfNil(v) && !wafActivityChoiceTypeFound {
-
-								wafActivityChoiceTypeFound = true
-
-								if v.(bool) {
-									wafActivityChoiceInt := &ves_io_schema_app_setting.MaliciousUserDetectionSetting_ExcludeWafActivity{}
-									wafActivityChoiceInt.ExcludeWafActivity = &ves_io_schema.Empty{}
-									maliciousUserDetectionInt.EnableDetection.WafActivityChoice = wafActivityChoiceInt
-								}
-
-							}
-
-							if v, ok := cs["include_waf_activity"]; ok && !isIntfNil(v) && !wafActivityChoiceTypeFound {
-
-								wafActivityChoiceTypeFound = true
-
-								if v.(bool) {
-									wafActivityChoiceInt := &ves_io_schema_app_setting.MaliciousUserDetectionSetting_IncludeWafActivity{}
-									wafActivityChoiceInt.IncludeWafActivity = &ves_io_schema.Empty{}
-									maliciousUserDetectionInt.EnableDetection.WafActivityChoice = wafActivityChoiceInt
-								}
-
-							}
-
-						}
-
-					}
-
-				}
-
-			}
-
 		}
 
 	}
@@ -1285,577 +1316,599 @@ func resourceVolterraAppSettingUpdate(d *schema.ResourceData, meta interface{}) 
 		appTypeSettings := make([]*ves_io_schema_app_setting.AppTypeSettings, len(sl))
 		updateSpec.AppTypeSettings = appTypeSettings
 		for i, set := range sl {
-			appTypeSettings[i] = &ves_io_schema_app_setting.AppTypeSettings{}
-			appTypeSettingsMapStrToI := set.(map[string]interface{})
+			if set != nil {
+				appTypeSettings[i] = &ves_io_schema_app_setting.AppTypeSettings{}
+				appTypeSettingsMapStrToI := set.(map[string]interface{})
 
-			if v, ok := appTypeSettingsMapStrToI["app_type_ref"]; ok && !isIntfNil(v) {
+				if v, ok := appTypeSettingsMapStrToI["app_type_ref"]; ok && !isIntfNil(v) {
 
-				sl := v.([]interface{})
-				appTypeRefInt := make([]*ves_io_schema.ObjectRefType, len(sl))
-				appTypeSettings[i].AppTypeRef = appTypeRefInt
-				for i, ps := range sl {
+					sl := v.([]interface{})
+					appTypeRefInt := make([]*ves_io_schema.ObjectRefType, len(sl))
+					appTypeSettings[i].AppTypeRef = appTypeRefInt
+					for i, ps := range sl {
 
-					atrMapToStrVal := ps.(map[string]interface{})
-					appTypeRefInt[i] = &ves_io_schema.ObjectRefType{}
+						atrMapToStrVal := ps.(map[string]interface{})
+						appTypeRefInt[i] = &ves_io_schema.ObjectRefType{}
 
-					appTypeRefInt[i].Kind = "app_type"
+						appTypeRefInt[i].Kind = "app_type"
 
-					if v, ok := atrMapToStrVal["name"]; ok && !isIntfNil(v) {
-						appTypeRefInt[i].Name = v.(string)
-					}
-
-					if v, ok := atrMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-						appTypeRefInt[i].Namespace = v.(string)
-					}
-
-					if v, ok := atrMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-						appTypeRefInt[i].Tenant = v.(string)
-					}
-
-					if v, ok := atrMapToStrVal["uid"]; ok && !isIntfNil(v) {
-						appTypeRefInt[i].Uid = v.(string)
-					}
-
-				}
-
-			}
-
-			if v, ok := appTypeSettingsMapStrToI["business_logic_markup_setting"]; ok && !isIntfNil(v) {
-
-				sl := v.(*schema.Set).List()
-				businessLogicMarkupSetting := &ves_io_schema_app_setting.BusinessLogicMarkupSetting{}
-				appTypeSettings[i].BusinessLogicMarkupSetting = businessLogicMarkupSetting
-				for _, set := range sl {
-					businessLogicMarkupSettingMapStrToI := set.(map[string]interface{})
-
-					learnFromNamespaceTypeFound := false
-
-					if v, ok := businessLogicMarkupSettingMapStrToI["disable"]; ok && !isIntfNil(v) && !learnFromNamespaceTypeFound {
-
-						learnFromNamespaceTypeFound = true
-
-						if v.(bool) {
-							learnFromNamespaceInt := &ves_io_schema_app_setting.BusinessLogicMarkupSetting_Disable{}
-							learnFromNamespaceInt.Disable = &ves_io_schema.Empty{}
-							businessLogicMarkupSetting.LearnFromNamespace = learnFromNamespaceInt
+						if v, ok := atrMapToStrVal["name"]; ok && !isIntfNil(v) {
+							appTypeRefInt[i].Name = v.(string)
 						}
 
-					}
+						if v, ok := atrMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+							appTypeRefInt[i].Namespace = v.(string)
+						}
 
-					if v, ok := businessLogicMarkupSettingMapStrToI["enable"]; ok && !isIntfNil(v) && !learnFromNamespaceTypeFound {
+						if v, ok := atrMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+							appTypeRefInt[i].Tenant = v.(string)
+						}
 
-						learnFromNamespaceTypeFound = true
-
-						if v.(bool) {
-							learnFromNamespaceInt := &ves_io_schema_app_setting.BusinessLogicMarkupSetting_Enable{}
-							learnFromNamespaceInt.Enable = &ves_io_schema.Empty{}
-							businessLogicMarkupSetting.LearnFromNamespace = learnFromNamespaceInt
+						if v, ok := atrMapToStrVal["uid"]; ok && !isIntfNil(v) {
+							appTypeRefInt[i].Uid = v.(string)
 						}
 
 					}
 
 				}
 
-			}
+				if v, ok := appTypeSettingsMapStrToI["business_logic_markup_setting"]; ok && !isIntfNil(v) {
 
-			if v, ok := appTypeSettingsMapStrToI["timeseries_analyses_setting"]; ok && !isIntfNil(v) {
+					sl := v.([]interface{})
+					businessLogicMarkupSetting := &ves_io_schema_app_setting.BusinessLogicMarkupSetting{}
+					appTypeSettings[i].BusinessLogicMarkupSetting = businessLogicMarkupSetting
+					for _, set := range sl {
+						if set != nil {
+							businessLogicMarkupSettingMapStrToI := set.(map[string]interface{})
 
-				sl := v.(*schema.Set).List()
-				timeseriesAnalysesSetting := &ves_io_schema_app_setting.TimeseriesAnalysesSetting{}
-				appTypeSettings[i].TimeseriesAnalysesSetting = timeseriesAnalysesSetting
-				for _, set := range sl {
-					timeseriesAnalysesSettingMapStrToI := set.(map[string]interface{})
+							learnFromNamespaceTypeFound := false
 
-					if v, ok := timeseriesAnalysesSettingMapStrToI["metric_selectors"]; ok && !isIntfNil(v) {
+							if v, ok := businessLogicMarkupSettingMapStrToI["disable"]; ok && !isIntfNil(v) && !learnFromNamespaceTypeFound {
 
-						sl := v.([]interface{})
-						metricSelectors := make([]*ves_io_schema_app_setting.MetricSelector, len(sl))
-						timeseriesAnalysesSetting.MetricSelectors = metricSelectors
-						for i, set := range sl {
-							metricSelectors[i] = &ves_io_schema_app_setting.MetricSelector{}
-							metricSelectorsMapStrToI := set.(map[string]interface{})
+								learnFromNamespaceTypeFound = true
 
-							if v, ok := metricSelectorsMapStrToI["metric"]; ok && !isIntfNil(v) {
-
-								metricList := []ves_io_schema_app_setting.Metric{}
-								for _, j := range v.([]interface{}) {
-									metricList = append(metricList, ves_io_schema_app_setting.Metric(ves_io_schema_app_setting.Metric_value[j.(string)]))
+								if v.(bool) {
+									learnFromNamespaceInt := &ves_io_schema_app_setting.BusinessLogicMarkupSetting_Disable{}
+									learnFromNamespaceInt.Disable = &ves_io_schema.Empty{}
+									businessLogicMarkupSetting.LearnFromNamespace = learnFromNamespaceInt
 								}
-								metricSelectors[i].Metric = metricList
 
 							}
 
-							if v, ok := metricSelectorsMapStrToI["metrics_source"]; ok && !isIntfNil(v) {
+							if v, ok := businessLogicMarkupSettingMapStrToI["enable"]; ok && !isIntfNil(v) && !learnFromNamespaceTypeFound {
 
-								metricSelectors[i].MetricsSource = ves_io_schema_app_setting.MetricsSource(ves_io_schema_app_setting.MetricsSource_value[v.(string)])
+								learnFromNamespaceTypeFound = true
+
+								if v.(bool) {
+									learnFromNamespaceInt := &ves_io_schema_app_setting.BusinessLogicMarkupSetting_Enable{}
+									learnFromNamespaceInt.Enable = &ves_io_schema.Empty{}
+									businessLogicMarkupSetting.LearnFromNamespace = learnFromNamespaceInt
+								}
 
 							}
 
 						}
+					}
 
+				}
+
+				if v, ok := appTypeSettingsMapStrToI["timeseries_analyses_setting"]; ok && !isIntfNil(v) {
+
+					sl := v.([]interface{})
+					timeseriesAnalysesSetting := &ves_io_schema_app_setting.TimeseriesAnalysesSetting{}
+					appTypeSettings[i].TimeseriesAnalysesSetting = timeseriesAnalysesSetting
+					for _, set := range sl {
+						if set != nil {
+							timeseriesAnalysesSettingMapStrToI := set.(map[string]interface{})
+
+							if v, ok := timeseriesAnalysesSettingMapStrToI["metric_selectors"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								metricSelectors := make([]*ves_io_schema_app_setting.MetricSelector, len(sl))
+								timeseriesAnalysesSetting.MetricSelectors = metricSelectors
+								for i, set := range sl {
+									if set != nil {
+										metricSelectors[i] = &ves_io_schema_app_setting.MetricSelector{}
+										metricSelectorsMapStrToI := set.(map[string]interface{})
+
+										if v, ok := metricSelectorsMapStrToI["metric"]; ok && !isIntfNil(v) {
+
+											metricList := []ves_io_schema_app_setting.Metric{}
+											for _, j := range v.([]interface{}) {
+												metricList = append(metricList, ves_io_schema_app_setting.Metric(ves_io_schema_app_setting.Metric_value[j.(string)]))
+											}
+											metricSelectors[i].Metric = metricList
+
+										}
+
+										if v, ok := metricSelectorsMapStrToI["metrics_source"]; ok && !isIntfNil(v) {
+
+											metricSelectors[i].MetricsSource = ves_io_schema_app_setting.MetricsSource(ves_io_schema_app_setting.MetricsSource_value[v.(string)])
+
+										}
+
+									}
+								}
+
+							}
+
+						}
+					}
+
+				}
+
+				if v, ok := appTypeSettingsMapStrToI["user_behavior_analysis_setting"]; ok && !isIntfNil(v) {
+
+					sl := v.([]interface{})
+					userBehaviorAnalysisSetting := &ves_io_schema_app_setting.UserBehaviorAnalysisSetting{}
+					appTypeSettings[i].UserBehaviorAnalysisSetting = userBehaviorAnalysisSetting
+					for _, set := range sl {
+						if set != nil {
+							userBehaviorAnalysisSettingMapStrToI := set.(map[string]interface{})
+
+							learnFromNamespaceTypeFound := false
+
+							if v, ok := userBehaviorAnalysisSettingMapStrToI["disable_learning"]; ok && !isIntfNil(v) && !learnFromNamespaceTypeFound {
+
+								learnFromNamespaceTypeFound = true
+
+								if v.(bool) {
+									learnFromNamespaceInt := &ves_io_schema_app_setting.UserBehaviorAnalysisSetting_DisableLearning{}
+									learnFromNamespaceInt.DisableLearning = &ves_io_schema.Empty{}
+									userBehaviorAnalysisSetting.LearnFromNamespace = learnFromNamespaceInt
+								}
+
+							}
+
+							if v, ok := userBehaviorAnalysisSettingMapStrToI["enable_learning"]; ok && !isIntfNil(v) && !learnFromNamespaceTypeFound {
+
+								learnFromNamespaceTypeFound = true
+
+								if v.(bool) {
+									learnFromNamespaceInt := &ves_io_schema_app_setting.UserBehaviorAnalysisSetting_EnableLearning{}
+									learnFromNamespaceInt.EnableLearning = &ves_io_schema.Empty{}
+									userBehaviorAnalysisSetting.LearnFromNamespace = learnFromNamespaceInt
+								}
+
+							}
+
+							maliciousUserDetectionTypeFound := false
+
+							if v, ok := userBehaviorAnalysisSettingMapStrToI["disable_detection"]; ok && !isIntfNil(v) && !maliciousUserDetectionTypeFound {
+
+								maliciousUserDetectionTypeFound = true
+
+								if v.(bool) {
+									maliciousUserDetectionInt := &ves_io_schema_app_setting.UserBehaviorAnalysisSetting_DisableDetection{}
+									maliciousUserDetectionInt.DisableDetection = &ves_io_schema.Empty{}
+									userBehaviorAnalysisSetting.MaliciousUserDetection = maliciousUserDetectionInt
+								}
+
+							}
+
+							if v, ok := userBehaviorAnalysisSettingMapStrToI["enable_detection"]; ok && !isIntfNil(v) && !maliciousUserDetectionTypeFound {
+
+								maliciousUserDetectionTypeFound = true
+								maliciousUserDetectionInt := &ves_io_schema_app_setting.UserBehaviorAnalysisSetting_EnableDetection{}
+								maliciousUserDetectionInt.EnableDetection = &ves_io_schema_app_setting.MaliciousUserDetectionSetting{}
+								userBehaviorAnalysisSetting.MaliciousUserDetection = maliciousUserDetectionInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										bolaActivityChoiceTypeFound := false
+
+										if v, ok := cs["bola_detection_automatic"]; ok && !isIntfNil(v) && !bolaActivityChoiceTypeFound {
+
+											bolaActivityChoiceTypeFound = true
+
+											if v.(bool) {
+												bolaActivityChoiceInt := &ves_io_schema_app_setting.MaliciousUserDetectionSetting_BolaDetectionAutomatic{}
+												bolaActivityChoiceInt.BolaDetectionAutomatic = &ves_io_schema.Empty{}
+												maliciousUserDetectionInt.EnableDetection.BolaActivityChoice = bolaActivityChoiceInt
+											}
+
+										}
+
+										if v, ok := cs["bola_detection_manual"]; ok && !isIntfNil(v) && !bolaActivityChoiceTypeFound {
+
+											bolaActivityChoiceTypeFound = true
+											bolaActivityChoiceInt := &ves_io_schema_app_setting.MaliciousUserDetectionSetting_BolaDetectionManual{}
+											bolaActivityChoiceInt.BolaDetectionManual = &ves_io_schema_app_setting.BolaDetectionManualSettings{}
+											maliciousUserDetectionInt.EnableDetection.BolaActivityChoice = bolaActivityChoiceInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													thresholdLevelsTypeFound := false
+
+													if v, ok := cs["threshold_level_1"]; ok && !isIntfNil(v) && !thresholdLevelsTypeFound {
+
+														thresholdLevelsTypeFound = true
+
+														if v.(bool) {
+															thresholdLevelsInt := &ves_io_schema_app_setting.BolaDetectionManualSettings_ThresholdLevel_1{}
+															thresholdLevelsInt.ThresholdLevel_1 = &ves_io_schema.Empty{}
+															bolaActivityChoiceInt.BolaDetectionManual.ThresholdLevels = thresholdLevelsInt
+														}
+
+													}
+
+													if v, ok := cs["threshold_level_2"]; ok && !isIntfNil(v) && !thresholdLevelsTypeFound {
+
+														thresholdLevelsTypeFound = true
+
+														if v.(bool) {
+															thresholdLevelsInt := &ves_io_schema_app_setting.BolaDetectionManualSettings_ThresholdLevel_2{}
+															thresholdLevelsInt.ThresholdLevel_2 = &ves_io_schema.Empty{}
+															bolaActivityChoiceInt.BolaDetectionManual.ThresholdLevels = thresholdLevelsInt
+														}
+
+													}
+
+													if v, ok := cs["threshold_level_3"]; ok && !isIntfNil(v) && !thresholdLevelsTypeFound {
+
+														thresholdLevelsTypeFound = true
+
+														if v.(bool) {
+															thresholdLevelsInt := &ves_io_schema_app_setting.BolaDetectionManualSettings_ThresholdLevel_3{}
+															thresholdLevelsInt.ThresholdLevel_3 = &ves_io_schema.Empty{}
+															bolaActivityChoiceInt.BolaDetectionManual.ThresholdLevels = thresholdLevelsInt
+														}
+
+													}
+
+													if v, ok := cs["threshold_level_4"]; ok && !isIntfNil(v) && !thresholdLevelsTypeFound {
+
+														thresholdLevelsTypeFound = true
+
+														if v.(bool) {
+															thresholdLevelsInt := &ves_io_schema_app_setting.BolaDetectionManualSettings_ThresholdLevel_4{}
+															thresholdLevelsInt.ThresholdLevel_4 = &ves_io_schema.Empty{}
+															bolaActivityChoiceInt.BolaDetectionManual.ThresholdLevels = thresholdLevelsInt
+														}
+
+													}
+
+													if v, ok := cs["threshold_level_5"]; ok && !isIntfNil(v) && !thresholdLevelsTypeFound {
+
+														thresholdLevelsTypeFound = true
+
+														if v.(bool) {
+															thresholdLevelsInt := &ves_io_schema_app_setting.BolaDetectionManualSettings_ThresholdLevel_5{}
+															thresholdLevelsInt.ThresholdLevel_5 = &ves_io_schema.Empty{}
+															bolaActivityChoiceInt.BolaDetectionManual.ThresholdLevels = thresholdLevelsInt
+														}
+
+													}
+
+													if v, ok := cs["threshold_level_6"]; ok && !isIntfNil(v) && !thresholdLevelsTypeFound {
+
+														thresholdLevelsTypeFound = true
+
+														if v.(bool) {
+															thresholdLevelsInt := &ves_io_schema_app_setting.BolaDetectionManualSettings_ThresholdLevel_6{}
+															thresholdLevelsInt.ThresholdLevel_6 = &ves_io_schema.Empty{}
+															bolaActivityChoiceInt.BolaDetectionManual.ThresholdLevels = thresholdLevelsInt
+														}
+
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := cs["exclude_bola_detection"]; ok && !isIntfNil(v) && !bolaActivityChoiceTypeFound {
+
+											bolaActivityChoiceTypeFound = true
+
+											if v.(bool) {
+												bolaActivityChoiceInt := &ves_io_schema_app_setting.MaliciousUserDetectionSetting_ExcludeBolaDetection{}
+												bolaActivityChoiceInt.ExcludeBolaDetection = &ves_io_schema.Empty{}
+												maliciousUserDetectionInt.EnableDetection.BolaActivityChoice = bolaActivityChoiceInt
+											}
+
+										}
+
+										botDefenseActivityChoiceTypeFound := false
+
+										if v, ok := cs["exclude_bot_defense_activity"]; ok && !isIntfNil(v) && !botDefenseActivityChoiceTypeFound {
+
+											botDefenseActivityChoiceTypeFound = true
+
+											if v.(bool) {
+												botDefenseActivityChoiceInt := &ves_io_schema_app_setting.MaliciousUserDetectionSetting_ExcludeBotDefenseActivity{}
+												botDefenseActivityChoiceInt.ExcludeBotDefenseActivity = &ves_io_schema.Empty{}
+												maliciousUserDetectionInt.EnableDetection.BotDefenseActivityChoice = botDefenseActivityChoiceInt
+											}
+
+										}
+
+										if v, ok := cs["include_bot_defense_activity"]; ok && !isIntfNil(v) && !botDefenseActivityChoiceTypeFound {
+
+											botDefenseActivityChoiceTypeFound = true
+
+											if v.(bool) {
+												botDefenseActivityChoiceInt := &ves_io_schema_app_setting.MaliciousUserDetectionSetting_IncludeBotDefenseActivity{}
+												botDefenseActivityChoiceInt.IncludeBotDefenseActivity = &ves_io_schema.Empty{}
+												maliciousUserDetectionInt.EnableDetection.BotDefenseActivityChoice = botDefenseActivityChoiceInt
+											}
+
+										}
+
+										coolingOffPeriodSettingTypeFound := false
+
+										if v, ok := cs["cooling_off_period"]; ok && !isIntfNil(v) && !coolingOffPeriodSettingTypeFound {
+
+											coolingOffPeriodSettingTypeFound = true
+											coolingOffPeriodSettingInt := &ves_io_schema_app_setting.MaliciousUserDetectionSetting_CoolingOffPeriod{}
+
+											maliciousUserDetectionInt.EnableDetection.CoolingOffPeriodSetting = coolingOffPeriodSettingInt
+
+											coolingOffPeriodSettingInt.CoolingOffPeriod = uint32(v.(int))
+
+										}
+
+										failedLoginActivityChoiceTypeFound := false
+
+										if v, ok := cs["exclude_failed_login_activity"]; ok && !isIntfNil(v) && !failedLoginActivityChoiceTypeFound {
+
+											failedLoginActivityChoiceTypeFound = true
+
+											if v.(bool) {
+												failedLoginActivityChoiceInt := &ves_io_schema_app_setting.MaliciousUserDetectionSetting_ExcludeFailedLoginActivity{}
+												failedLoginActivityChoiceInt.ExcludeFailedLoginActivity = &ves_io_schema.Empty{}
+												maliciousUserDetectionInt.EnableDetection.FailedLoginActivityChoice = failedLoginActivityChoiceInt
+											}
+
+										}
+
+										if v, ok := cs["include_failed_login_activity"]; ok && !isIntfNil(v) && !failedLoginActivityChoiceTypeFound {
+
+											failedLoginActivityChoiceTypeFound = true
+											failedLoginActivityChoiceInt := &ves_io_schema_app_setting.MaliciousUserDetectionSetting_IncludeFailedLoginActivity{}
+											failedLoginActivityChoiceInt.IncludeFailedLoginActivity = &ves_io_schema_app_setting.FailedLoginActivitySetting{}
+											maliciousUserDetectionInt.EnableDetection.FailedLoginActivityChoice = failedLoginActivityChoiceInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["login_failures_threshold"]; ok && !isIntfNil(v) {
+
+														failedLoginActivityChoiceInt.IncludeFailedLoginActivity.LoginFailuresThreshold = uint32(v.(int))
+
+													}
+
+												}
+											}
+
+										}
+
+										forbiddenActivityChoiceTypeFound := false
+
+										if v, ok := cs["exclude_forbidden_activity"]; ok && !isIntfNil(v) && !forbiddenActivityChoiceTypeFound {
+
+											forbiddenActivityChoiceTypeFound = true
+
+											if v.(bool) {
+												forbiddenActivityChoiceInt := &ves_io_schema_app_setting.MaliciousUserDetectionSetting_ExcludeForbiddenActivity{}
+												forbiddenActivityChoiceInt.ExcludeForbiddenActivity = &ves_io_schema.Empty{}
+												maliciousUserDetectionInt.EnableDetection.ForbiddenActivityChoice = forbiddenActivityChoiceInt
+											}
+
+										}
+
+										if v, ok := cs["include_forbidden_activity"]; ok && !isIntfNil(v) && !forbiddenActivityChoiceTypeFound {
+
+											forbiddenActivityChoiceTypeFound = true
+											forbiddenActivityChoiceInt := &ves_io_schema_app_setting.MaliciousUserDetectionSetting_IncludeForbiddenActivity{}
+											forbiddenActivityChoiceInt.IncludeForbiddenActivity = &ves_io_schema_app_setting.ForbiddenActivitySetting{}
+											maliciousUserDetectionInt.EnableDetection.ForbiddenActivityChoice = forbiddenActivityChoiceInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["forbidden_requests_threshold"]; ok && !isIntfNil(v) {
+
+														forbiddenActivityChoiceInt.IncludeForbiddenActivity.ForbiddenRequestsThreshold = uint32(v.(int))
+
+													}
+
+												}
+											}
+
+										}
+
+										ipReputationChoiceTypeFound := false
+
+										if v, ok := cs["exclude_ip_reputation"]; ok && !isIntfNil(v) && !ipReputationChoiceTypeFound {
+
+											ipReputationChoiceTypeFound = true
+
+											if v.(bool) {
+												ipReputationChoiceInt := &ves_io_schema_app_setting.MaliciousUserDetectionSetting_ExcludeIpReputation{}
+												ipReputationChoiceInt.ExcludeIpReputation = &ves_io_schema.Empty{}
+												maliciousUserDetectionInt.EnableDetection.IpReputationChoice = ipReputationChoiceInt
+											}
+
+										}
+
+										if v, ok := cs["include_ip_reputation"]; ok && !isIntfNil(v) && !ipReputationChoiceTypeFound {
+
+											ipReputationChoiceTypeFound = true
+
+											if v.(bool) {
+												ipReputationChoiceInt := &ves_io_schema_app_setting.MaliciousUserDetectionSetting_IncludeIpReputation{}
+												ipReputationChoiceInt.IncludeIpReputation = &ves_io_schema.Empty{}
+												maliciousUserDetectionInt.EnableDetection.IpReputationChoice = ipReputationChoiceInt
+											}
+
+										}
+
+										nonExistentUrlActivityChoiceTypeFound := false
+
+										if v, ok := cs["exclude_non_existent_url_activity"]; ok && !isIntfNil(v) && !nonExistentUrlActivityChoiceTypeFound {
+
+											nonExistentUrlActivityChoiceTypeFound = true
+
+											if v.(bool) {
+												nonExistentUrlActivityChoiceInt := &ves_io_schema_app_setting.MaliciousUserDetectionSetting_ExcludeNonExistentUrlActivity{}
+												nonExistentUrlActivityChoiceInt.ExcludeNonExistentUrlActivity = &ves_io_schema.Empty{}
+												maliciousUserDetectionInt.EnableDetection.NonExistentUrlActivityChoice = nonExistentUrlActivityChoiceInt
+											}
+
+										}
+
+										if v, ok := cs["include_non_existent_url_activity_automatic"]; ok && !isIntfNil(v) && !nonExistentUrlActivityChoiceTypeFound {
+
+											nonExistentUrlActivityChoiceTypeFound = true
+											nonExistentUrlActivityChoiceInt := &ves_io_schema_app_setting.MaliciousUserDetectionSetting_IncludeNonExistentUrlActivityAutomatic{}
+											nonExistentUrlActivityChoiceInt.IncludeNonExistentUrlActivityAutomatic = &ves_io_schema_app_setting.NonexistentUrlAutomaticActivitySetting{}
+											maliciousUserDetectionInt.EnableDetection.NonExistentUrlActivityChoice = nonExistentUrlActivityChoiceInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													sensitivityTypeFound := false
+
+													if v, ok := cs["high"]; ok && !isIntfNil(v) && !sensitivityTypeFound {
+
+														sensitivityTypeFound = true
+
+														if v.(bool) {
+															sensitivityInt := &ves_io_schema_app_setting.NonexistentUrlAutomaticActivitySetting_High{}
+															sensitivityInt.High = &ves_io_schema.Empty{}
+															nonExistentUrlActivityChoiceInt.IncludeNonExistentUrlActivityAutomatic.Sensitivity = sensitivityInt
+														}
+
+													}
+
+													if v, ok := cs["low"]; ok && !isIntfNil(v) && !sensitivityTypeFound {
+
+														sensitivityTypeFound = true
+
+														if v.(bool) {
+															sensitivityInt := &ves_io_schema_app_setting.NonexistentUrlAutomaticActivitySetting_Low{}
+															sensitivityInt.Low = &ves_io_schema.Empty{}
+															nonExistentUrlActivityChoiceInt.IncludeNonExistentUrlActivityAutomatic.Sensitivity = sensitivityInt
+														}
+
+													}
+
+													if v, ok := cs["medium"]; ok && !isIntfNil(v) && !sensitivityTypeFound {
+
+														sensitivityTypeFound = true
+
+														if v.(bool) {
+															sensitivityInt := &ves_io_schema_app_setting.NonexistentUrlAutomaticActivitySetting_Medium{}
+															sensitivityInt.Medium = &ves_io_schema.Empty{}
+															nonExistentUrlActivityChoiceInt.IncludeNonExistentUrlActivityAutomatic.Sensitivity = sensitivityInt
+														}
+
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := cs["include_non_existent_url_activity_custom"]; ok && !isIntfNil(v) && !nonExistentUrlActivityChoiceTypeFound {
+
+											nonExistentUrlActivityChoiceTypeFound = true
+											nonExistentUrlActivityChoiceInt := &ves_io_schema_app_setting.MaliciousUserDetectionSetting_IncludeNonExistentUrlActivityCustom{}
+											nonExistentUrlActivityChoiceInt.IncludeNonExistentUrlActivityCustom = &ves_io_schema_app_setting.NonexistentUrlCustomActivitySetting{}
+											maliciousUserDetectionInt.EnableDetection.NonExistentUrlActivityChoice = nonExistentUrlActivityChoiceInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["nonexistent_requests_threshold"]; ok && !isIntfNil(v) {
+
+														nonExistentUrlActivityChoiceInt.IncludeNonExistentUrlActivityCustom.NonexistentRequestsThreshold = uint32(v.(int))
+
+													}
+
+												}
+											}
+
+										}
+
+										rateLimitChoiceTypeFound := false
+
+										if v, ok := cs["exclude_rate_limit"]; ok && !isIntfNil(v) && !rateLimitChoiceTypeFound {
+
+											rateLimitChoiceTypeFound = true
+
+											if v.(bool) {
+												rateLimitChoiceInt := &ves_io_schema_app_setting.MaliciousUserDetectionSetting_ExcludeRateLimit{}
+												rateLimitChoiceInt.ExcludeRateLimit = &ves_io_schema.Empty{}
+												maliciousUserDetectionInt.EnableDetection.RateLimitChoice = rateLimitChoiceInt
+											}
+
+										}
+
+										if v, ok := cs["include_rate_limit"]; ok && !isIntfNil(v) && !rateLimitChoiceTypeFound {
+
+											rateLimitChoiceTypeFound = true
+
+											if v.(bool) {
+												rateLimitChoiceInt := &ves_io_schema_app_setting.MaliciousUserDetectionSetting_IncludeRateLimit{}
+												rateLimitChoiceInt.IncludeRateLimit = &ves_io_schema.Empty{}
+												maliciousUserDetectionInt.EnableDetection.RateLimitChoice = rateLimitChoiceInt
+											}
+
+										}
+
+										wafActivityChoiceTypeFound := false
+
+										if v, ok := cs["exclude_waf_activity"]; ok && !isIntfNil(v) && !wafActivityChoiceTypeFound {
+
+											wafActivityChoiceTypeFound = true
+
+											if v.(bool) {
+												wafActivityChoiceInt := &ves_io_schema_app_setting.MaliciousUserDetectionSetting_ExcludeWafActivity{}
+												wafActivityChoiceInt.ExcludeWafActivity = &ves_io_schema.Empty{}
+												maliciousUserDetectionInt.EnableDetection.WafActivityChoice = wafActivityChoiceInt
+											}
+
+										}
+
+										if v, ok := cs["include_waf_activity"]; ok && !isIntfNil(v) && !wafActivityChoiceTypeFound {
+
+											wafActivityChoiceTypeFound = true
+
+											if v.(bool) {
+												wafActivityChoiceInt := &ves_io_schema_app_setting.MaliciousUserDetectionSetting_IncludeWafActivity{}
+												wafActivityChoiceInt.IncludeWafActivity = &ves_io_schema.Empty{}
+												maliciousUserDetectionInt.EnableDetection.WafActivityChoice = wafActivityChoiceInt
+											}
+
+										}
+
+									}
+								}
+
+							}
+
+						}
 					}
 
 				}
 
 			}
-
-			if v, ok := appTypeSettingsMapStrToI["user_behavior_analysis_setting"]; ok && !isIntfNil(v) {
-
-				sl := v.(*schema.Set).List()
-				userBehaviorAnalysisSetting := &ves_io_schema_app_setting.UserBehaviorAnalysisSetting{}
-				appTypeSettings[i].UserBehaviorAnalysisSetting = userBehaviorAnalysisSetting
-				for _, set := range sl {
-					userBehaviorAnalysisSettingMapStrToI := set.(map[string]interface{})
-
-					learnFromNamespaceTypeFound := false
-
-					if v, ok := userBehaviorAnalysisSettingMapStrToI["disable_learning"]; ok && !isIntfNil(v) && !learnFromNamespaceTypeFound {
-
-						learnFromNamespaceTypeFound = true
-
-						if v.(bool) {
-							learnFromNamespaceInt := &ves_io_schema_app_setting.UserBehaviorAnalysisSetting_DisableLearning{}
-							learnFromNamespaceInt.DisableLearning = &ves_io_schema.Empty{}
-							userBehaviorAnalysisSetting.LearnFromNamespace = learnFromNamespaceInt
-						}
-
-					}
-
-					if v, ok := userBehaviorAnalysisSettingMapStrToI["enable_learning"]; ok && !isIntfNil(v) && !learnFromNamespaceTypeFound {
-
-						learnFromNamespaceTypeFound = true
-
-						if v.(bool) {
-							learnFromNamespaceInt := &ves_io_schema_app_setting.UserBehaviorAnalysisSetting_EnableLearning{}
-							learnFromNamespaceInt.EnableLearning = &ves_io_schema.Empty{}
-							userBehaviorAnalysisSetting.LearnFromNamespace = learnFromNamespaceInt
-						}
-
-					}
-
-					maliciousUserDetectionTypeFound := false
-
-					if v, ok := userBehaviorAnalysisSettingMapStrToI["disable_detection"]; ok && !isIntfNil(v) && !maliciousUserDetectionTypeFound {
-
-						maliciousUserDetectionTypeFound = true
-
-						if v.(bool) {
-							maliciousUserDetectionInt := &ves_io_schema_app_setting.UserBehaviorAnalysisSetting_DisableDetection{}
-							maliciousUserDetectionInt.DisableDetection = &ves_io_schema.Empty{}
-							userBehaviorAnalysisSetting.MaliciousUserDetection = maliciousUserDetectionInt
-						}
-
-					}
-
-					if v, ok := userBehaviorAnalysisSettingMapStrToI["enable_detection"]; ok && !isIntfNil(v) && !maliciousUserDetectionTypeFound {
-
-						maliciousUserDetectionTypeFound = true
-						maliciousUserDetectionInt := &ves_io_schema_app_setting.UserBehaviorAnalysisSetting_EnableDetection{}
-						maliciousUserDetectionInt.EnableDetection = &ves_io_schema_app_setting.MaliciousUserDetectionSetting{}
-						userBehaviorAnalysisSetting.MaliciousUserDetection = maliciousUserDetectionInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							bolaActivityChoiceTypeFound := false
-
-							if v, ok := cs["bola_detection_automatic"]; ok && !isIntfNil(v) && !bolaActivityChoiceTypeFound {
-
-								bolaActivityChoiceTypeFound = true
-
-								if v.(bool) {
-									bolaActivityChoiceInt := &ves_io_schema_app_setting.MaliciousUserDetectionSetting_BolaDetectionAutomatic{}
-									bolaActivityChoiceInt.BolaDetectionAutomatic = &ves_io_schema.Empty{}
-									maliciousUserDetectionInt.EnableDetection.BolaActivityChoice = bolaActivityChoiceInt
-								}
-
-							}
-
-							if v, ok := cs["bola_detection_manual"]; ok && !isIntfNil(v) && !bolaActivityChoiceTypeFound {
-
-								bolaActivityChoiceTypeFound = true
-								bolaActivityChoiceInt := &ves_io_schema_app_setting.MaliciousUserDetectionSetting_BolaDetectionManual{}
-								bolaActivityChoiceInt.BolaDetectionManual = &ves_io_schema_app_setting.BolaDetectionManualSettings{}
-								maliciousUserDetectionInt.EnableDetection.BolaActivityChoice = bolaActivityChoiceInt
-
-								sl := v.(*schema.Set).List()
-								for _, set := range sl {
-									cs := set.(map[string]interface{})
-
-									thresholdLevelsTypeFound := false
-
-									if v, ok := cs["threshold_level_1"]; ok && !isIntfNil(v) && !thresholdLevelsTypeFound {
-
-										thresholdLevelsTypeFound = true
-
-										if v.(bool) {
-											thresholdLevelsInt := &ves_io_schema_app_setting.BolaDetectionManualSettings_ThresholdLevel_1{}
-											thresholdLevelsInt.ThresholdLevel_1 = &ves_io_schema.Empty{}
-											bolaActivityChoiceInt.BolaDetectionManual.ThresholdLevels = thresholdLevelsInt
-										}
-
-									}
-
-									if v, ok := cs["threshold_level_2"]; ok && !isIntfNil(v) && !thresholdLevelsTypeFound {
-
-										thresholdLevelsTypeFound = true
-
-										if v.(bool) {
-											thresholdLevelsInt := &ves_io_schema_app_setting.BolaDetectionManualSettings_ThresholdLevel_2{}
-											thresholdLevelsInt.ThresholdLevel_2 = &ves_io_schema.Empty{}
-											bolaActivityChoiceInt.BolaDetectionManual.ThresholdLevels = thresholdLevelsInt
-										}
-
-									}
-
-									if v, ok := cs["threshold_level_3"]; ok && !isIntfNil(v) && !thresholdLevelsTypeFound {
-
-										thresholdLevelsTypeFound = true
-
-										if v.(bool) {
-											thresholdLevelsInt := &ves_io_schema_app_setting.BolaDetectionManualSettings_ThresholdLevel_3{}
-											thresholdLevelsInt.ThresholdLevel_3 = &ves_io_schema.Empty{}
-											bolaActivityChoiceInt.BolaDetectionManual.ThresholdLevels = thresholdLevelsInt
-										}
-
-									}
-
-									if v, ok := cs["threshold_level_4"]; ok && !isIntfNil(v) && !thresholdLevelsTypeFound {
-
-										thresholdLevelsTypeFound = true
-
-										if v.(bool) {
-											thresholdLevelsInt := &ves_io_schema_app_setting.BolaDetectionManualSettings_ThresholdLevel_4{}
-											thresholdLevelsInt.ThresholdLevel_4 = &ves_io_schema.Empty{}
-											bolaActivityChoiceInt.BolaDetectionManual.ThresholdLevels = thresholdLevelsInt
-										}
-
-									}
-
-									if v, ok := cs["threshold_level_5"]; ok && !isIntfNil(v) && !thresholdLevelsTypeFound {
-
-										thresholdLevelsTypeFound = true
-
-										if v.(bool) {
-											thresholdLevelsInt := &ves_io_schema_app_setting.BolaDetectionManualSettings_ThresholdLevel_5{}
-											thresholdLevelsInt.ThresholdLevel_5 = &ves_io_schema.Empty{}
-											bolaActivityChoiceInt.BolaDetectionManual.ThresholdLevels = thresholdLevelsInt
-										}
-
-									}
-
-									if v, ok := cs["threshold_level_6"]; ok && !isIntfNil(v) && !thresholdLevelsTypeFound {
-
-										thresholdLevelsTypeFound = true
-
-										if v.(bool) {
-											thresholdLevelsInt := &ves_io_schema_app_setting.BolaDetectionManualSettings_ThresholdLevel_6{}
-											thresholdLevelsInt.ThresholdLevel_6 = &ves_io_schema.Empty{}
-											bolaActivityChoiceInt.BolaDetectionManual.ThresholdLevels = thresholdLevelsInt
-										}
-
-									}
-
-								}
-
-							}
-
-							if v, ok := cs["exclude_bola_detection"]; ok && !isIntfNil(v) && !bolaActivityChoiceTypeFound {
-
-								bolaActivityChoiceTypeFound = true
-
-								if v.(bool) {
-									bolaActivityChoiceInt := &ves_io_schema_app_setting.MaliciousUserDetectionSetting_ExcludeBolaDetection{}
-									bolaActivityChoiceInt.ExcludeBolaDetection = &ves_io_schema.Empty{}
-									maliciousUserDetectionInt.EnableDetection.BolaActivityChoice = bolaActivityChoiceInt
-								}
-
-							}
-
-							botDefenseActivityChoiceTypeFound := false
-
-							if v, ok := cs["exclude_bot_defense_activity"]; ok && !isIntfNil(v) && !botDefenseActivityChoiceTypeFound {
-
-								botDefenseActivityChoiceTypeFound = true
-
-								if v.(bool) {
-									botDefenseActivityChoiceInt := &ves_io_schema_app_setting.MaliciousUserDetectionSetting_ExcludeBotDefenseActivity{}
-									botDefenseActivityChoiceInt.ExcludeBotDefenseActivity = &ves_io_schema.Empty{}
-									maliciousUserDetectionInt.EnableDetection.BotDefenseActivityChoice = botDefenseActivityChoiceInt
-								}
-
-							}
-
-							if v, ok := cs["include_bot_defense_activity"]; ok && !isIntfNil(v) && !botDefenseActivityChoiceTypeFound {
-
-								botDefenseActivityChoiceTypeFound = true
-
-								if v.(bool) {
-									botDefenseActivityChoiceInt := &ves_io_schema_app_setting.MaliciousUserDetectionSetting_IncludeBotDefenseActivity{}
-									botDefenseActivityChoiceInt.IncludeBotDefenseActivity = &ves_io_schema.Empty{}
-									maliciousUserDetectionInt.EnableDetection.BotDefenseActivityChoice = botDefenseActivityChoiceInt
-								}
-
-							}
-
-							coolingOffPeriodSettingTypeFound := false
-
-							if v, ok := cs["cooling_off_period"]; ok && !isIntfNil(v) && !coolingOffPeriodSettingTypeFound {
-
-								coolingOffPeriodSettingTypeFound = true
-								coolingOffPeriodSettingInt := &ves_io_schema_app_setting.MaliciousUserDetectionSetting_CoolingOffPeriod{}
-
-								maliciousUserDetectionInt.EnableDetection.CoolingOffPeriodSetting = coolingOffPeriodSettingInt
-
-								coolingOffPeriodSettingInt.CoolingOffPeriod = uint32(v.(int))
-
-							}
-
-							failedLoginActivityChoiceTypeFound := false
-
-							if v, ok := cs["exclude_failed_login_activity"]; ok && !isIntfNil(v) && !failedLoginActivityChoiceTypeFound {
-
-								failedLoginActivityChoiceTypeFound = true
-
-								if v.(bool) {
-									failedLoginActivityChoiceInt := &ves_io_schema_app_setting.MaliciousUserDetectionSetting_ExcludeFailedLoginActivity{}
-									failedLoginActivityChoiceInt.ExcludeFailedLoginActivity = &ves_io_schema.Empty{}
-									maliciousUserDetectionInt.EnableDetection.FailedLoginActivityChoice = failedLoginActivityChoiceInt
-								}
-
-							}
-
-							if v, ok := cs["include_failed_login_activity"]; ok && !isIntfNil(v) && !failedLoginActivityChoiceTypeFound {
-
-								failedLoginActivityChoiceTypeFound = true
-								failedLoginActivityChoiceInt := &ves_io_schema_app_setting.MaliciousUserDetectionSetting_IncludeFailedLoginActivity{}
-								failedLoginActivityChoiceInt.IncludeFailedLoginActivity = &ves_io_schema_app_setting.FailedLoginActivitySetting{}
-								maliciousUserDetectionInt.EnableDetection.FailedLoginActivityChoice = failedLoginActivityChoiceInt
-
-								sl := v.(*schema.Set).List()
-								for _, set := range sl {
-									cs := set.(map[string]interface{})
-
-									if v, ok := cs["login_failures_threshold"]; ok && !isIntfNil(v) {
-
-										failedLoginActivityChoiceInt.IncludeFailedLoginActivity.LoginFailuresThreshold = uint32(v.(int))
-
-									}
-
-								}
-
-							}
-
-							forbiddenActivityChoiceTypeFound := false
-
-							if v, ok := cs["exclude_forbidden_activity"]; ok && !isIntfNil(v) && !forbiddenActivityChoiceTypeFound {
-
-								forbiddenActivityChoiceTypeFound = true
-
-								if v.(bool) {
-									forbiddenActivityChoiceInt := &ves_io_schema_app_setting.MaliciousUserDetectionSetting_ExcludeForbiddenActivity{}
-									forbiddenActivityChoiceInt.ExcludeForbiddenActivity = &ves_io_schema.Empty{}
-									maliciousUserDetectionInt.EnableDetection.ForbiddenActivityChoice = forbiddenActivityChoiceInt
-								}
-
-							}
-
-							if v, ok := cs["include_forbidden_activity"]; ok && !isIntfNil(v) && !forbiddenActivityChoiceTypeFound {
-
-								forbiddenActivityChoiceTypeFound = true
-								forbiddenActivityChoiceInt := &ves_io_schema_app_setting.MaliciousUserDetectionSetting_IncludeForbiddenActivity{}
-								forbiddenActivityChoiceInt.IncludeForbiddenActivity = &ves_io_schema_app_setting.ForbiddenActivitySetting{}
-								maliciousUserDetectionInt.EnableDetection.ForbiddenActivityChoice = forbiddenActivityChoiceInt
-
-								sl := v.(*schema.Set).List()
-								for _, set := range sl {
-									cs := set.(map[string]interface{})
-
-									if v, ok := cs["forbidden_requests_threshold"]; ok && !isIntfNil(v) {
-
-										forbiddenActivityChoiceInt.IncludeForbiddenActivity.ForbiddenRequestsThreshold = uint32(v.(int))
-
-									}
-
-								}
-
-							}
-
-							ipReputationChoiceTypeFound := false
-
-							if v, ok := cs["exclude_ip_reputation"]; ok && !isIntfNil(v) && !ipReputationChoiceTypeFound {
-
-								ipReputationChoiceTypeFound = true
-
-								if v.(bool) {
-									ipReputationChoiceInt := &ves_io_schema_app_setting.MaliciousUserDetectionSetting_ExcludeIpReputation{}
-									ipReputationChoiceInt.ExcludeIpReputation = &ves_io_schema.Empty{}
-									maliciousUserDetectionInt.EnableDetection.IpReputationChoice = ipReputationChoiceInt
-								}
-
-							}
-
-							if v, ok := cs["include_ip_reputation"]; ok && !isIntfNil(v) && !ipReputationChoiceTypeFound {
-
-								ipReputationChoiceTypeFound = true
-
-								if v.(bool) {
-									ipReputationChoiceInt := &ves_io_schema_app_setting.MaliciousUserDetectionSetting_IncludeIpReputation{}
-									ipReputationChoiceInt.IncludeIpReputation = &ves_io_schema.Empty{}
-									maliciousUserDetectionInt.EnableDetection.IpReputationChoice = ipReputationChoiceInt
-								}
-
-							}
-
-							nonExistentUrlActivityChoiceTypeFound := false
-
-							if v, ok := cs["exclude_non_existent_url_activity"]; ok && !isIntfNil(v) && !nonExistentUrlActivityChoiceTypeFound {
-
-								nonExistentUrlActivityChoiceTypeFound = true
-
-								if v.(bool) {
-									nonExistentUrlActivityChoiceInt := &ves_io_schema_app_setting.MaliciousUserDetectionSetting_ExcludeNonExistentUrlActivity{}
-									nonExistentUrlActivityChoiceInt.ExcludeNonExistentUrlActivity = &ves_io_schema.Empty{}
-									maliciousUserDetectionInt.EnableDetection.NonExistentUrlActivityChoice = nonExistentUrlActivityChoiceInt
-								}
-
-							}
-
-							if v, ok := cs["include_non_existent_url_activity_automatic"]; ok && !isIntfNil(v) && !nonExistentUrlActivityChoiceTypeFound {
-
-								nonExistentUrlActivityChoiceTypeFound = true
-								nonExistentUrlActivityChoiceInt := &ves_io_schema_app_setting.MaliciousUserDetectionSetting_IncludeNonExistentUrlActivityAutomatic{}
-								nonExistentUrlActivityChoiceInt.IncludeNonExistentUrlActivityAutomatic = &ves_io_schema_app_setting.NonexistentUrlAutomaticActivitySetting{}
-								maliciousUserDetectionInt.EnableDetection.NonExistentUrlActivityChoice = nonExistentUrlActivityChoiceInt
-
-								sl := v.(*schema.Set).List()
-								for _, set := range sl {
-									cs := set.(map[string]interface{})
-
-									sensitivityTypeFound := false
-
-									if v, ok := cs["high"]; ok && !isIntfNil(v) && !sensitivityTypeFound {
-
-										sensitivityTypeFound = true
-
-										if v.(bool) {
-											sensitivityInt := &ves_io_schema_app_setting.NonexistentUrlAutomaticActivitySetting_High{}
-											sensitivityInt.High = &ves_io_schema.Empty{}
-											nonExistentUrlActivityChoiceInt.IncludeNonExistentUrlActivityAutomatic.Sensitivity = sensitivityInt
-										}
-
-									}
-
-									if v, ok := cs["low"]; ok && !isIntfNil(v) && !sensitivityTypeFound {
-
-										sensitivityTypeFound = true
-
-										if v.(bool) {
-											sensitivityInt := &ves_io_schema_app_setting.NonexistentUrlAutomaticActivitySetting_Low{}
-											sensitivityInt.Low = &ves_io_schema.Empty{}
-											nonExistentUrlActivityChoiceInt.IncludeNonExistentUrlActivityAutomatic.Sensitivity = sensitivityInt
-										}
-
-									}
-
-									if v, ok := cs["medium"]; ok && !isIntfNil(v) && !sensitivityTypeFound {
-
-										sensitivityTypeFound = true
-
-										if v.(bool) {
-											sensitivityInt := &ves_io_schema_app_setting.NonexistentUrlAutomaticActivitySetting_Medium{}
-											sensitivityInt.Medium = &ves_io_schema.Empty{}
-											nonExistentUrlActivityChoiceInt.IncludeNonExistentUrlActivityAutomatic.Sensitivity = sensitivityInt
-										}
-
-									}
-
-								}
-
-							}
-
-							if v, ok := cs["include_non_existent_url_activity_custom"]; ok && !isIntfNil(v) && !nonExistentUrlActivityChoiceTypeFound {
-
-								nonExistentUrlActivityChoiceTypeFound = true
-								nonExistentUrlActivityChoiceInt := &ves_io_schema_app_setting.MaliciousUserDetectionSetting_IncludeNonExistentUrlActivityCustom{}
-								nonExistentUrlActivityChoiceInt.IncludeNonExistentUrlActivityCustom = &ves_io_schema_app_setting.NonexistentUrlCustomActivitySetting{}
-								maliciousUserDetectionInt.EnableDetection.NonExistentUrlActivityChoice = nonExistentUrlActivityChoiceInt
-
-								sl := v.(*schema.Set).List()
-								for _, set := range sl {
-									cs := set.(map[string]interface{})
-
-									if v, ok := cs["nonexistent_requests_threshold"]; ok && !isIntfNil(v) {
-
-										nonExistentUrlActivityChoiceInt.IncludeNonExistentUrlActivityCustom.NonexistentRequestsThreshold = uint32(v.(int))
-
-									}
-
-								}
-
-							}
-
-							rateLimitChoiceTypeFound := false
-
-							if v, ok := cs["exclude_rate_limit"]; ok && !isIntfNil(v) && !rateLimitChoiceTypeFound {
-
-								rateLimitChoiceTypeFound = true
-
-								if v.(bool) {
-									rateLimitChoiceInt := &ves_io_schema_app_setting.MaliciousUserDetectionSetting_ExcludeRateLimit{}
-									rateLimitChoiceInt.ExcludeRateLimit = &ves_io_schema.Empty{}
-									maliciousUserDetectionInt.EnableDetection.RateLimitChoice = rateLimitChoiceInt
-								}
-
-							}
-
-							if v, ok := cs["include_rate_limit"]; ok && !isIntfNil(v) && !rateLimitChoiceTypeFound {
-
-								rateLimitChoiceTypeFound = true
-
-								if v.(bool) {
-									rateLimitChoiceInt := &ves_io_schema_app_setting.MaliciousUserDetectionSetting_IncludeRateLimit{}
-									rateLimitChoiceInt.IncludeRateLimit = &ves_io_schema.Empty{}
-									maliciousUserDetectionInt.EnableDetection.RateLimitChoice = rateLimitChoiceInt
-								}
-
-							}
-
-							wafActivityChoiceTypeFound := false
-
-							if v, ok := cs["exclude_waf_activity"]; ok && !isIntfNil(v) && !wafActivityChoiceTypeFound {
-
-								wafActivityChoiceTypeFound = true
-
-								if v.(bool) {
-									wafActivityChoiceInt := &ves_io_schema_app_setting.MaliciousUserDetectionSetting_ExcludeWafActivity{}
-									wafActivityChoiceInt.ExcludeWafActivity = &ves_io_schema.Empty{}
-									maliciousUserDetectionInt.EnableDetection.WafActivityChoice = wafActivityChoiceInt
-								}
-
-							}
-
-							if v, ok := cs["include_waf_activity"]; ok && !isIntfNil(v) && !wafActivityChoiceTypeFound {
-
-								wafActivityChoiceTypeFound = true
-
-								if v.(bool) {
-									wafActivityChoiceInt := &ves_io_schema_app_setting.MaliciousUserDetectionSetting_IncludeWafActivity{}
-									wafActivityChoiceInt.IncludeWafActivity = &ves_io_schema.Empty{}
-									maliciousUserDetectionInt.EnableDetection.WafActivityChoice = wafActivityChoiceInt
-								}
-
-							}
-
-						}
-
-					}
-
-				}
-
-			}
-
 		}
 
 	}

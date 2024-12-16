@@ -236,10 +236,10 @@ func (v *ValidateCreateSpecType) ServiceTypeValidationRuleHandler(rules map[stri
 	return validatorFn, nil
 }
 
-func (v *ValidateCreateSpecType) WaapActionChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+func (v *ValidateCreateSpecType) VisibilityActionChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for waap_action_choice")
+		return nil, errors.Wrap(err, "ValidationRuleHandler for visibility_action_choice")
 	}
 	return validatorFn, nil
 }
@@ -307,34 +307,34 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
-	if fv, exists := v.FldValidators["waap_action_choice"]; exists {
-		val := m.GetWaapActionChoice()
+	if fv, exists := v.FldValidators["visibility_action_choice"]; exists {
+		val := m.GetVisibilityActionChoice()
 		vOpts := append(opts,
-			db.WithValidateField("waap_action_choice"),
+			db.WithValidateField("visibility_action_choice"),
 		)
 		if err := fv(ctx, val, vOpts...); err != nil {
 			return err
 		}
 	}
 
-	switch m.GetWaapActionChoice().(type) {
-	case *CreateSpecType_WaapVisibilityEnabled:
-		if fv, exists := v.FldValidators["waap_action_choice.waap_visibility_enabled"]; exists {
-			val := m.GetWaapActionChoice().(*CreateSpecType_WaapVisibilityEnabled).WaapVisibilityEnabled
+	switch m.GetVisibilityActionChoice().(type) {
+	case *CreateSpecType_VisibilityEnabled:
+		if fv, exists := v.FldValidators["visibility_action_choice.visibility_enabled"]; exists {
+			val := m.GetVisibilityActionChoice().(*CreateSpecType_VisibilityEnabled).VisibilityEnabled
 			vOpts := append(opts,
-				db.WithValidateField("waap_action_choice"),
-				db.WithValidateField("waap_visibility_enabled"),
+				db.WithValidateField("visibility_action_choice"),
+				db.WithValidateField("visibility_enabled"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
 		}
-	case *CreateSpecType_WaapVisibilityDisabled:
-		if fv, exists := v.FldValidators["waap_action_choice.waap_visibility_disabled"]; exists {
-			val := m.GetWaapActionChoice().(*CreateSpecType_WaapVisibilityDisabled).WaapVisibilityDisabled
+	case *CreateSpecType_VisibilityDisabled:
+		if fv, exists := v.FldValidators["visibility_action_choice.visibility_disabled"]; exists {
+			val := m.GetVisibilityActionChoice().(*CreateSpecType_VisibilityDisabled).VisibilityDisabled
 			vOpts := append(opts,
-				db.WithValidateField("waap_action_choice"),
-				db.WithValidateField("waap_visibility_disabled"),
+				db.WithValidateField("visibility_action_choice"),
+				db.WithValidateField("visibility_disabled"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
@@ -369,16 +369,16 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	}
 	v.FldValidators["service_type"] = vFn
 
-	vrhWaapActionChoice := v.WaapActionChoiceValidationRuleHandler
-	rulesWaapActionChoice := map[string]string{
+	vrhVisibilityActionChoice := v.VisibilityActionChoiceValidationRuleHandler
+	rulesVisibilityActionChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
 	}
-	vFn, err = vrhWaapActionChoice(rulesWaapActionChoice)
+	vFn, err = vrhVisibilityActionChoice(rulesVisibilityActionChoice)
 	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.waap_action_choice: %s", err)
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.visibility_action_choice: %s", err)
 		panic(errMsg)
 	}
-	v.FldValidators["waap_action_choice"] = vFn
+	v.FldValidators["visibility_action_choice"] = vFn
 
 	v.FldValidators["service_type.virtual_server"] = VirtualServerValidator().Validate
 
@@ -604,10 +604,10 @@ func (v *ValidateGetSpecType) ServiceTypeValidationRuleHandler(rules map[string]
 	return validatorFn, nil
 }
 
-func (v *ValidateGetSpecType) WaapActionChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+func (v *ValidateGetSpecType) VisibilityActionChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for waap_action_choice")
+		return nil, errors.Wrap(err, "ValidationRuleHandler for visibility_action_choice")
 	}
 	return validatorFn, nil
 }
@@ -675,34 +675,34 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
-	if fv, exists := v.FldValidators["waap_action_choice"]; exists {
-		val := m.GetWaapActionChoice()
+	if fv, exists := v.FldValidators["visibility_action_choice"]; exists {
+		val := m.GetVisibilityActionChoice()
 		vOpts := append(opts,
-			db.WithValidateField("waap_action_choice"),
+			db.WithValidateField("visibility_action_choice"),
 		)
 		if err := fv(ctx, val, vOpts...); err != nil {
 			return err
 		}
 	}
 
-	switch m.GetWaapActionChoice().(type) {
-	case *GetSpecType_WaapVisibilityEnabled:
-		if fv, exists := v.FldValidators["waap_action_choice.waap_visibility_enabled"]; exists {
-			val := m.GetWaapActionChoice().(*GetSpecType_WaapVisibilityEnabled).WaapVisibilityEnabled
+	switch m.GetVisibilityActionChoice().(type) {
+	case *GetSpecType_VisibilityEnabled:
+		if fv, exists := v.FldValidators["visibility_action_choice.visibility_enabled"]; exists {
+			val := m.GetVisibilityActionChoice().(*GetSpecType_VisibilityEnabled).VisibilityEnabled
 			vOpts := append(opts,
-				db.WithValidateField("waap_action_choice"),
-				db.WithValidateField("waap_visibility_enabled"),
+				db.WithValidateField("visibility_action_choice"),
+				db.WithValidateField("visibility_enabled"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
 		}
-	case *GetSpecType_WaapVisibilityDisabled:
-		if fv, exists := v.FldValidators["waap_action_choice.waap_visibility_disabled"]; exists {
-			val := m.GetWaapActionChoice().(*GetSpecType_WaapVisibilityDisabled).WaapVisibilityDisabled
+	case *GetSpecType_VisibilityDisabled:
+		if fv, exists := v.FldValidators["visibility_action_choice.visibility_disabled"]; exists {
+			val := m.GetVisibilityActionChoice().(*GetSpecType_VisibilityDisabled).VisibilityDisabled
 			vOpts := append(opts,
-				db.WithValidateField("waap_action_choice"),
-				db.WithValidateField("waap_visibility_disabled"),
+				db.WithValidateField("visibility_action_choice"),
+				db.WithValidateField("visibility_disabled"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
@@ -737,16 +737,16 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	}
 	v.FldValidators["service_type"] = vFn
 
-	vrhWaapActionChoice := v.WaapActionChoiceValidationRuleHandler
-	rulesWaapActionChoice := map[string]string{
+	vrhVisibilityActionChoice := v.VisibilityActionChoiceValidationRuleHandler
+	rulesVisibilityActionChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
 	}
-	vFn, err = vrhWaapActionChoice(rulesWaapActionChoice)
+	vFn, err = vrhVisibilityActionChoice(rulesVisibilityActionChoice)
 	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.waap_action_choice: %s", err)
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.visibility_action_choice: %s", err)
 		panic(errMsg)
 	}
-	v.FldValidators["waap_action_choice"] = vFn
+	v.FldValidators["visibility_action_choice"] = vFn
 
 	v.FldValidators["service_type.virtual_server"] = VirtualServerValidator().Validate
 
@@ -810,6 +810,12 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
+	if fdrInfos, err := m.GetInternalVirtualHostDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetInternalVirtualHostDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
 	if fdrInfos, err := m.GetServiceTypeDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetServiceTypeDRefInfo() FAILED")
 	} else {
@@ -818,6 +824,12 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	if fdrInfos, err := m.GetTcpLoadBalancersDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetTcpLoadBalancersDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetViewInternalDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetViewInternalDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
@@ -876,6 +888,55 @@ func (m *GlobalSpecType) GetHttpLoadBalancersDBEntries(ctx context.Context, d db
 		if refdEnt != nil {
 			entries = append(entries, refdEnt)
 		}
+	}
+
+	return entries, nil
+}
+
+func (m *GlobalSpecType) GetInternalVirtualHostDRefInfo() ([]db.DRefInfo, error) {
+
+	vref := m.GetInternalVirtualHost()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("bigip_virtual_server.Object")
+	dri := db.DRefInfo{
+		RefdType:   "bigip_virtual_server.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "internal_virtual_host",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+
+}
+
+// GetInternalVirtualHostDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *GlobalSpecType) GetInternalVirtualHostDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "bigip_virtual_server.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: bigip_virtual_server")
+	}
+
+	vref := m.GetInternalVirtualHost()
+	if vref == nil {
+		return nil, nil
+	}
+	ref := &ves_io_schema.ObjectRefType{
+		Kind:      "bigip_virtual_server.Object",
+		Tenant:    vref.Tenant,
+		Namespace: vref.Namespace,
+		Name:      vref.Name,
+	}
+	refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+	if err != nil {
+		return nil, errors.Wrap(err, "Getting referred entry")
+	}
+	if refdEnt != nil {
+		entries = append(entries, refdEnt)
 	}
 
 	return entries, nil
@@ -960,6 +1021,55 @@ func (m *GlobalSpecType) GetTcpLoadBalancersDBEntries(ctx context.Context, d db.
 	return entries, nil
 }
 
+func (m *GlobalSpecType) GetViewInternalDRefInfo() ([]db.DRefInfo, error) {
+
+	vref := m.GetViewInternal()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("view_internal.Object")
+	dri := db.DRefInfo{
+		RefdType:   "view_internal.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "view_internal",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+
+}
+
+// GetViewInternalDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *GlobalSpecType) GetViewInternalDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "view_internal.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: view_internal")
+	}
+
+	vref := m.GetViewInternal()
+	if vref == nil {
+		return nil, nil
+	}
+	ref := &ves_io_schema.ObjectRefType{
+		Kind:      "view_internal.Object",
+		Tenant:    vref.Tenant,
+		Namespace: vref.Namespace,
+		Name:      vref.Name,
+	}
+	refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+	if err != nil {
+		return nil, errors.Wrap(err, "Getting referred entry")
+	}
+	if refdEnt != nil {
+		entries = append(entries, refdEnt)
+	}
+
+	return entries, nil
+}
+
 type ValidateGlobalSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
@@ -972,10 +1082,10 @@ func (v *ValidateGlobalSpecType) ServiceTypeValidationRuleHandler(rules map[stri
 	return validatorFn, nil
 }
 
-func (v *ValidateGlobalSpecType) WaapActionChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+func (v *ValidateGlobalSpecType) VisibilityActionChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for waap_action_choice")
+		return nil, errors.Wrap(err, "ValidationRuleHandler for visibility_action_choice")
 	}
 	return validatorFn, nil
 }
@@ -1002,6 +1112,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["internal_virtual_host"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("internal_virtual_host"))
+		if err := fv(ctx, m.GetInternalVirtualHost(), vOpts...); err != nil {
+			return err
 		}
 
 	}
@@ -1043,34 +1162,43 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
-	if fv, exists := v.FldValidators["waap_action_choice"]; exists {
-		val := m.GetWaapActionChoice()
+	if fv, exists := v.FldValidators["view_internal"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("view_internal"))
+		if err := fv(ctx, m.GetViewInternal(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["visibility_action_choice"]; exists {
+		val := m.GetVisibilityActionChoice()
 		vOpts := append(opts,
-			db.WithValidateField("waap_action_choice"),
+			db.WithValidateField("visibility_action_choice"),
 		)
 		if err := fv(ctx, val, vOpts...); err != nil {
 			return err
 		}
 	}
 
-	switch m.GetWaapActionChoice().(type) {
-	case *GlobalSpecType_WaapVisibilityEnabled:
-		if fv, exists := v.FldValidators["waap_action_choice.waap_visibility_enabled"]; exists {
-			val := m.GetWaapActionChoice().(*GlobalSpecType_WaapVisibilityEnabled).WaapVisibilityEnabled
+	switch m.GetVisibilityActionChoice().(type) {
+	case *GlobalSpecType_VisibilityEnabled:
+		if fv, exists := v.FldValidators["visibility_action_choice.visibility_enabled"]; exists {
+			val := m.GetVisibilityActionChoice().(*GlobalSpecType_VisibilityEnabled).VisibilityEnabled
 			vOpts := append(opts,
-				db.WithValidateField("waap_action_choice"),
-				db.WithValidateField("waap_visibility_enabled"),
+				db.WithValidateField("visibility_action_choice"),
+				db.WithValidateField("visibility_enabled"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
 		}
-	case *GlobalSpecType_WaapVisibilityDisabled:
-		if fv, exists := v.FldValidators["waap_action_choice.waap_visibility_disabled"]; exists {
-			val := m.GetWaapActionChoice().(*GlobalSpecType_WaapVisibilityDisabled).WaapVisibilityDisabled
+	case *GlobalSpecType_VisibilityDisabled:
+		if fv, exists := v.FldValidators["visibility_action_choice.visibility_disabled"]; exists {
+			val := m.GetVisibilityActionChoice().(*GlobalSpecType_VisibilityDisabled).VisibilityDisabled
 			vOpts := append(opts,
-				db.WithValidateField("waap_action_choice"),
-				db.WithValidateField("waap_visibility_disabled"),
+				db.WithValidateField("visibility_action_choice"),
+				db.WithValidateField("visibility_disabled"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
@@ -1105,22 +1233,26 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	}
 	v.FldValidators["service_type"] = vFn
 
-	vrhWaapActionChoice := v.WaapActionChoiceValidationRuleHandler
-	rulesWaapActionChoice := map[string]string{
+	vrhVisibilityActionChoice := v.VisibilityActionChoiceValidationRuleHandler
+	rulesVisibilityActionChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
 	}
-	vFn, err = vrhWaapActionChoice(rulesWaapActionChoice)
+	vFn, err = vrhVisibilityActionChoice(rulesVisibilityActionChoice)
 	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.waap_action_choice: %s", err)
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.visibility_action_choice: %s", err)
 		panic(errMsg)
 	}
-	v.FldValidators["waap_action_choice"] = vFn
+	v.FldValidators["visibility_action_choice"] = vFn
 
 	v.FldValidators["service_type.virtual_server"] = VirtualServerValidator().Validate
 
 	v.FldValidators["http_load_balancers"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	v.FldValidators["tcp_load_balancers"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
+
+	v.FldValidators["internal_virtual_host"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
+
+	v.FldValidators["view_internal"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	return v
 }()
@@ -1340,10 +1472,10 @@ func (v *ValidateReplaceSpecType) ServiceTypeValidationRuleHandler(rules map[str
 	return validatorFn, nil
 }
 
-func (v *ValidateReplaceSpecType) WaapActionChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+func (v *ValidateReplaceSpecType) VisibilityActionChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for waap_action_choice")
+		return nil, errors.Wrap(err, "ValidationRuleHandler for visibility_action_choice")
 	}
 	return validatorFn, nil
 }
@@ -1411,34 +1543,34 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 
 	}
 
-	if fv, exists := v.FldValidators["waap_action_choice"]; exists {
-		val := m.GetWaapActionChoice()
+	if fv, exists := v.FldValidators["visibility_action_choice"]; exists {
+		val := m.GetVisibilityActionChoice()
 		vOpts := append(opts,
-			db.WithValidateField("waap_action_choice"),
+			db.WithValidateField("visibility_action_choice"),
 		)
 		if err := fv(ctx, val, vOpts...); err != nil {
 			return err
 		}
 	}
 
-	switch m.GetWaapActionChoice().(type) {
-	case *ReplaceSpecType_WaapVisibilityEnabled:
-		if fv, exists := v.FldValidators["waap_action_choice.waap_visibility_enabled"]; exists {
-			val := m.GetWaapActionChoice().(*ReplaceSpecType_WaapVisibilityEnabled).WaapVisibilityEnabled
+	switch m.GetVisibilityActionChoice().(type) {
+	case *ReplaceSpecType_VisibilityEnabled:
+		if fv, exists := v.FldValidators["visibility_action_choice.visibility_enabled"]; exists {
+			val := m.GetVisibilityActionChoice().(*ReplaceSpecType_VisibilityEnabled).VisibilityEnabled
 			vOpts := append(opts,
-				db.WithValidateField("waap_action_choice"),
-				db.WithValidateField("waap_visibility_enabled"),
+				db.WithValidateField("visibility_action_choice"),
+				db.WithValidateField("visibility_enabled"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
 		}
-	case *ReplaceSpecType_WaapVisibilityDisabled:
-		if fv, exists := v.FldValidators["waap_action_choice.waap_visibility_disabled"]; exists {
-			val := m.GetWaapActionChoice().(*ReplaceSpecType_WaapVisibilityDisabled).WaapVisibilityDisabled
+	case *ReplaceSpecType_VisibilityDisabled:
+		if fv, exists := v.FldValidators["visibility_action_choice.visibility_disabled"]; exists {
+			val := m.GetVisibilityActionChoice().(*ReplaceSpecType_VisibilityDisabled).VisibilityDisabled
 			vOpts := append(opts,
-				db.WithValidateField("waap_action_choice"),
-				db.WithValidateField("waap_visibility_disabled"),
+				db.WithValidateField("visibility_action_choice"),
+				db.WithValidateField("visibility_disabled"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
@@ -1473,16 +1605,16 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	}
 	v.FldValidators["service_type"] = vFn
 
-	vrhWaapActionChoice := v.WaapActionChoiceValidationRuleHandler
-	rulesWaapActionChoice := map[string]string{
+	vrhVisibilityActionChoice := v.VisibilityActionChoiceValidationRuleHandler
+	rulesVisibilityActionChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
 	}
-	vFn, err = vrhWaapActionChoice(rulesWaapActionChoice)
+	vFn, err = vrhVisibilityActionChoice(rulesVisibilityActionChoice)
 	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.waap_action_choice: %s", err)
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.visibility_action_choice: %s", err)
 		panic(errMsg)
 	}
-	v.FldValidators["waap_action_choice"] = vFn
+	v.FldValidators["visibility_action_choice"] = vFn
 
 	v.FldValidators["service_type.virtual_server"] = VirtualServerValidator().Validate
 
@@ -1606,22 +1738,6 @@ func (v *ValidateVirtualServer) PartitionValidationRuleHandler(rules map[string]
 	return validatorFn, nil
 }
 
-func (v *ValidateVirtualServer) ProtocolValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	var conv db.EnumConvFn
-	conv = func(v interface{}) int32 {
-		i := v.(TransmissionProtocol)
-		return int32(i)
-	}
-	// TransmissionProtocol_name is generated in .pb.go
-	validatorFn, err := db.NewEnumValidationRuleHandler(rules, TransmissionProtocol_name, conv)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for protocol")
-	}
-
-	return validatorFn, nil
-}
-
 func (v *ValidateVirtualServer) PortValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
@@ -1658,6 +1774,62 @@ func (v *ValidateVirtualServer) CbipClusterValidationRuleHandler(rules map[strin
 	return validatorFn, nil
 }
 
+func (v *ValidateVirtualServer) BigipVersionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for bigip_version")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateVirtualServer) IpAddressValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for ip_address")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateVirtualServer) DescriptionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for description")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateVirtualServer) EnabledStateValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	var conv db.EnumConvFn
+	conv = func(v interface{}) int32 {
+		i := v.(VirtualServerEnabledState)
+		return int32(i)
+	}
+	// VirtualServerEnabledState_name is generated in .pb.go
+	validatorFn, err := db.NewEnumValidationRuleHandler(rules, VirtualServerEnabledState_name, conv)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for enabled_state")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateVirtualServer) MgmtIpValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for mgmt_ip")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateVirtualServer) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*VirtualServer)
 	if !ok {
@@ -1672,6 +1844,15 @@ func (v *ValidateVirtualServer) Validate(ctx context.Context, pm interface{}, op
 		return nil
 	}
 
+	if fv, exists := v.FldValidators["bigip_version"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("bigip_version"))
+		if err := fv(ctx, m.GetBigipVersion(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["cbip_cluster"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("cbip_cluster"))
@@ -1681,10 +1862,46 @@ func (v *ValidateVirtualServer) Validate(ctx context.Context, pm interface{}, op
 
 	}
 
+	if fv, exists := v.FldValidators["description"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("description"))
+		if err := fv(ctx, m.GetDescription(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["discovery_object"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("discovery_object"))
 		if err := fv(ctx, m.GetDiscoveryObject(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["enabled_state"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("enabled_state"))
+		if err := fv(ctx, m.GetEnabledState(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["ip_address"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("ip_address"))
+		if err := fv(ctx, m.GetIpAddress(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["mgmt_ip"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("mgmt_ip"))
+		if err := fv(ctx, m.GetMgmtIp(), vOpts...); err != nil {
 			return err
 		}
 
@@ -1753,17 +1970,6 @@ var DefaultVirtualServerValidator = func() *ValidateVirtualServer {
 	}
 	v.FldValidators["partition"] = vFn
 
-	vrhProtocol := v.ProtocolValidationRuleHandler
-	rulesProtocol := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
-	}
-	vFn, err = vrhProtocol(rulesProtocol)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for VirtualServer.protocol: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["protocol"] = vFn
-
 	vrhPort := v.PortValidationRuleHandler
 	rulesPort := map[string]string{
 		"ves.io.schema.rules.uint32.gte": "1",
@@ -1798,6 +2004,64 @@ var DefaultVirtualServerValidator = func() *ValidateVirtualServer {
 		panic(errMsg)
 	}
 	v.FldValidators["cbip_cluster"] = vFn
+
+	vrhBigipVersion := v.BigipVersionValidationRuleHandler
+	rulesBigipVersion := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.max_len":   "256",
+	}
+	vFn, err = vrhBigipVersion(rulesBigipVersion)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for VirtualServer.bigip_version: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["bigip_version"] = vFn
+
+	vrhIpAddress := v.IpAddressValidationRuleHandler
+	rulesIpAddress := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.ip":        "true",
+	}
+	vFn, err = vrhIpAddress(rulesIpAddress)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for VirtualServer.ip_address: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["ip_address"] = vFn
+
+	vrhDescription := v.DescriptionValidationRuleHandler
+	rulesDescription := map[string]string{
+		"ves.io.schema.rules.string.max_len": "1024",
+	}
+	vFn, err = vrhDescription(rulesDescription)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for VirtualServer.description: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["description"] = vFn
+
+	vrhEnabledState := v.EnabledStateValidationRuleHandler
+	rulesEnabledState := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhEnabledState(rulesEnabledState)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for VirtualServer.enabled_state: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["enabled_state"] = vFn
+
+	vrhMgmtIp := v.MgmtIpValidationRuleHandler
+	rulesMgmtIp := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.ip":        "true",
+	}
+	vFn, err = vrhMgmtIp(rulesMgmtIp)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for VirtualServer.mgmt_ip: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["mgmt_ip"] = vFn
 
 	v.FldValidators["discovery_object"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
@@ -1838,16 +2102,16 @@ func (r *CreateSpecType) GetServiceTypeFromGlobalSpecType(o *GlobalSpecType) err
 }
 
 // create setters in CreateSpecType from GlobalSpecType for oneof fields
-func (r *CreateSpecType) SetWaapActionChoiceToGlobalSpecType(o *GlobalSpecType) error {
-	switch of := r.WaapActionChoice.(type) {
+func (r *CreateSpecType) SetVisibilityActionChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.VisibilityActionChoice.(type) {
 	case nil:
-		o.WaapActionChoice = nil
+		o.VisibilityActionChoice = nil
 
-	case *CreateSpecType_WaapVisibilityDisabled:
-		o.WaapActionChoice = &GlobalSpecType_WaapVisibilityDisabled{WaapVisibilityDisabled: of.WaapVisibilityDisabled}
+	case *CreateSpecType_VisibilityDisabled:
+		o.VisibilityActionChoice = &GlobalSpecType_VisibilityDisabled{VisibilityDisabled: of.VisibilityDisabled}
 
-	case *CreateSpecType_WaapVisibilityEnabled:
-		o.WaapActionChoice = &GlobalSpecType_WaapVisibilityEnabled{WaapVisibilityEnabled: of.WaapVisibilityEnabled}
+	case *CreateSpecType_VisibilityEnabled:
+		o.VisibilityActionChoice = &GlobalSpecType_VisibilityEnabled{VisibilityEnabled: of.VisibilityEnabled}
 
 	default:
 		return fmt.Errorf("Unknown oneof field %T", of)
@@ -1855,16 +2119,16 @@ func (r *CreateSpecType) SetWaapActionChoiceToGlobalSpecType(o *GlobalSpecType) 
 	return nil
 }
 
-func (r *CreateSpecType) GetWaapActionChoiceFromGlobalSpecType(o *GlobalSpecType) error {
-	switch of := o.WaapActionChoice.(type) {
+func (r *CreateSpecType) GetVisibilityActionChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.VisibilityActionChoice.(type) {
 	case nil:
-		r.WaapActionChoice = nil
+		r.VisibilityActionChoice = nil
 
-	case *GlobalSpecType_WaapVisibilityDisabled:
-		r.WaapActionChoice = &CreateSpecType_WaapVisibilityDisabled{WaapVisibilityDisabled: of.WaapVisibilityDisabled}
+	case *GlobalSpecType_VisibilityDisabled:
+		r.VisibilityActionChoice = &CreateSpecType_VisibilityDisabled{VisibilityDisabled: of.VisibilityDisabled}
 
-	case *GlobalSpecType_WaapVisibilityEnabled:
-		r.WaapActionChoice = &CreateSpecType_WaapVisibilityEnabled{WaapVisibilityEnabled: of.WaapVisibilityEnabled}
+	case *GlobalSpecType_VisibilityEnabled:
+		r.VisibilityActionChoice = &CreateSpecType_VisibilityEnabled{VisibilityEnabled: of.VisibilityEnabled}
 
 	default:
 		return fmt.Errorf("Unknown oneof field %T", of)
@@ -1879,7 +2143,7 @@ func (m *CreateSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool
 	m.HttpLoadBalancers = f.GetHttpLoadBalancers()
 	m.GetServiceTypeFromGlobalSpecType(f)
 	m.TcpLoadBalancers = f.GetTcpLoadBalancers()
-	m.GetWaapActionChoiceFromGlobalSpecType(f)
+	m.GetVisibilityActionChoiceFromGlobalSpecType(f)
 }
 
 func (m *CreateSpecType) FromGlobalSpecType(f *GlobalSpecType) {
@@ -1900,7 +2164,7 @@ func (m *CreateSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) 
 	f.HttpLoadBalancers = m1.HttpLoadBalancers
 	m1.SetServiceTypeToGlobalSpecType(f)
 	f.TcpLoadBalancers = m1.TcpLoadBalancers
-	m1.SetWaapActionChoiceToGlobalSpecType(f)
+	m1.SetVisibilityActionChoiceToGlobalSpecType(f)
 }
 
 func (m *CreateSpecType) ToGlobalSpecType(f *GlobalSpecType) {
@@ -1941,16 +2205,16 @@ func (r *GetSpecType) GetServiceTypeFromGlobalSpecType(o *GlobalSpecType) error 
 }
 
 // create setters in GetSpecType from GlobalSpecType for oneof fields
-func (r *GetSpecType) SetWaapActionChoiceToGlobalSpecType(o *GlobalSpecType) error {
-	switch of := r.WaapActionChoice.(type) {
+func (r *GetSpecType) SetVisibilityActionChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.VisibilityActionChoice.(type) {
 	case nil:
-		o.WaapActionChoice = nil
+		o.VisibilityActionChoice = nil
 
-	case *GetSpecType_WaapVisibilityDisabled:
-		o.WaapActionChoice = &GlobalSpecType_WaapVisibilityDisabled{WaapVisibilityDisabled: of.WaapVisibilityDisabled}
+	case *GetSpecType_VisibilityDisabled:
+		o.VisibilityActionChoice = &GlobalSpecType_VisibilityDisabled{VisibilityDisabled: of.VisibilityDisabled}
 
-	case *GetSpecType_WaapVisibilityEnabled:
-		o.WaapActionChoice = &GlobalSpecType_WaapVisibilityEnabled{WaapVisibilityEnabled: of.WaapVisibilityEnabled}
+	case *GetSpecType_VisibilityEnabled:
+		o.VisibilityActionChoice = &GlobalSpecType_VisibilityEnabled{VisibilityEnabled: of.VisibilityEnabled}
 
 	default:
 		return fmt.Errorf("Unknown oneof field %T", of)
@@ -1958,16 +2222,16 @@ func (r *GetSpecType) SetWaapActionChoiceToGlobalSpecType(o *GlobalSpecType) err
 	return nil
 }
 
-func (r *GetSpecType) GetWaapActionChoiceFromGlobalSpecType(o *GlobalSpecType) error {
-	switch of := o.WaapActionChoice.(type) {
+func (r *GetSpecType) GetVisibilityActionChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.VisibilityActionChoice.(type) {
 	case nil:
-		r.WaapActionChoice = nil
+		r.VisibilityActionChoice = nil
 
-	case *GlobalSpecType_WaapVisibilityDisabled:
-		r.WaapActionChoice = &GetSpecType_WaapVisibilityDisabled{WaapVisibilityDisabled: of.WaapVisibilityDisabled}
+	case *GlobalSpecType_VisibilityDisabled:
+		r.VisibilityActionChoice = &GetSpecType_VisibilityDisabled{VisibilityDisabled: of.VisibilityDisabled}
 
-	case *GlobalSpecType_WaapVisibilityEnabled:
-		r.WaapActionChoice = &GetSpecType_WaapVisibilityEnabled{WaapVisibilityEnabled: of.WaapVisibilityEnabled}
+	case *GlobalSpecType_VisibilityEnabled:
+		r.VisibilityActionChoice = &GetSpecType_VisibilityEnabled{VisibilityEnabled: of.VisibilityEnabled}
 
 	default:
 		return fmt.Errorf("Unknown oneof field %T", of)
@@ -1982,7 +2246,7 @@ func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	m.HttpLoadBalancers = f.GetHttpLoadBalancers()
 	m.GetServiceTypeFromGlobalSpecType(f)
 	m.TcpLoadBalancers = f.GetTcpLoadBalancers()
-	m.GetWaapActionChoiceFromGlobalSpecType(f)
+	m.GetVisibilityActionChoiceFromGlobalSpecType(f)
 }
 
 func (m *GetSpecType) FromGlobalSpecType(f *GlobalSpecType) {
@@ -2003,7 +2267,7 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	f.HttpLoadBalancers = m1.HttpLoadBalancers
 	m1.SetServiceTypeToGlobalSpecType(f)
 	f.TcpLoadBalancers = m1.TcpLoadBalancers
-	m1.SetWaapActionChoiceToGlobalSpecType(f)
+	m1.SetVisibilityActionChoiceToGlobalSpecType(f)
 }
 
 func (m *GetSpecType) ToGlobalSpecType(f *GlobalSpecType) {
@@ -2044,16 +2308,16 @@ func (r *ReplaceSpecType) GetServiceTypeFromGlobalSpecType(o *GlobalSpecType) er
 }
 
 // create setters in ReplaceSpecType from GlobalSpecType for oneof fields
-func (r *ReplaceSpecType) SetWaapActionChoiceToGlobalSpecType(o *GlobalSpecType) error {
-	switch of := r.WaapActionChoice.(type) {
+func (r *ReplaceSpecType) SetVisibilityActionChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.VisibilityActionChoice.(type) {
 	case nil:
-		o.WaapActionChoice = nil
+		o.VisibilityActionChoice = nil
 
-	case *ReplaceSpecType_WaapVisibilityDisabled:
-		o.WaapActionChoice = &GlobalSpecType_WaapVisibilityDisabled{WaapVisibilityDisabled: of.WaapVisibilityDisabled}
+	case *ReplaceSpecType_VisibilityDisabled:
+		o.VisibilityActionChoice = &GlobalSpecType_VisibilityDisabled{VisibilityDisabled: of.VisibilityDisabled}
 
-	case *ReplaceSpecType_WaapVisibilityEnabled:
-		o.WaapActionChoice = &GlobalSpecType_WaapVisibilityEnabled{WaapVisibilityEnabled: of.WaapVisibilityEnabled}
+	case *ReplaceSpecType_VisibilityEnabled:
+		o.VisibilityActionChoice = &GlobalSpecType_VisibilityEnabled{VisibilityEnabled: of.VisibilityEnabled}
 
 	default:
 		return fmt.Errorf("Unknown oneof field %T", of)
@@ -2061,16 +2325,16 @@ func (r *ReplaceSpecType) SetWaapActionChoiceToGlobalSpecType(o *GlobalSpecType)
 	return nil
 }
 
-func (r *ReplaceSpecType) GetWaapActionChoiceFromGlobalSpecType(o *GlobalSpecType) error {
-	switch of := o.WaapActionChoice.(type) {
+func (r *ReplaceSpecType) GetVisibilityActionChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.VisibilityActionChoice.(type) {
 	case nil:
-		r.WaapActionChoice = nil
+		r.VisibilityActionChoice = nil
 
-	case *GlobalSpecType_WaapVisibilityDisabled:
-		r.WaapActionChoice = &ReplaceSpecType_WaapVisibilityDisabled{WaapVisibilityDisabled: of.WaapVisibilityDisabled}
+	case *GlobalSpecType_VisibilityDisabled:
+		r.VisibilityActionChoice = &ReplaceSpecType_VisibilityDisabled{VisibilityDisabled: of.VisibilityDisabled}
 
-	case *GlobalSpecType_WaapVisibilityEnabled:
-		r.WaapActionChoice = &ReplaceSpecType_WaapVisibilityEnabled{WaapVisibilityEnabled: of.WaapVisibilityEnabled}
+	case *GlobalSpecType_VisibilityEnabled:
+		r.VisibilityActionChoice = &ReplaceSpecType_VisibilityEnabled{VisibilityEnabled: of.VisibilityEnabled}
 
 	default:
 		return fmt.Errorf("Unknown oneof field %T", of)
@@ -2085,7 +2349,7 @@ func (m *ReplaceSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy boo
 	m.HttpLoadBalancers = f.GetHttpLoadBalancers()
 	m.GetServiceTypeFromGlobalSpecType(f)
 	m.TcpLoadBalancers = f.GetTcpLoadBalancers()
-	m.GetWaapActionChoiceFromGlobalSpecType(f)
+	m.GetVisibilityActionChoiceFromGlobalSpecType(f)
 }
 
 func (m *ReplaceSpecType) FromGlobalSpecType(f *GlobalSpecType) {
@@ -2106,7 +2370,7 @@ func (m *ReplaceSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool)
 	f.HttpLoadBalancers = m1.HttpLoadBalancers
 	m1.SetServiceTypeToGlobalSpecType(f)
 	f.TcpLoadBalancers = m1.TcpLoadBalancers
-	m1.SetWaapActionChoiceToGlobalSpecType(f)
+	m1.SetVisibilityActionChoiceToGlobalSpecType(f)
 }
 
 func (m *ReplaceSpecType) ToGlobalSpecType(f *GlobalSpecType) {

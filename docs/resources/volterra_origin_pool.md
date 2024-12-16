@@ -1,9 +1,9 @@
 ---
 
 page_title: "Volterra: origin_pool"
-description: "The origin_pool allows CRUD of Origin Pool resource on Volterra SaaS"
 
----
+description: "The origin_pool allows CRUD of Origin Pool resource on Volterra SaaS"
+-----------------------------------------------------------------------------------
 
 Resource volterra_origin_pool
 =============================
@@ -23,12 +23,10 @@ resource "volterra_origin_pool" "example" {
   loadbalancer_algorithm = ["loadbalancer_algorithm"]
 
   origin_servers {
-    // One of the arguments from this list "consul_service custom_endpoint_object k8s_service private_ip private_name public_ip public_name vn_private_ip vn_private_name" must be set
+    // One of the arguments from this list "cbip_service consul_service custom_endpoint_object k8s_service private_ip private_name public_ip public_name vn_private_ip vn_private_name" must be set
 
-    public_ip {
-      // One of the arguments from this list "ip ipv6" must be set
-
-      ip = "8.8.8.8"
+    cbip_service {
+      service_name = "cbip-vs1-dev"
     }
 
     labels = {
@@ -158,7 +156,9 @@ Advanced options configuration like timeouts, circuit breaker, subset load balan
 
 List of origin servers in this pool.
 
-###### One of the arguments from this list "consul_service, custom_endpoint_object, k8s_service, private_ip, private_name, public_ip, public_name, vn_private_ip, vn_private_name" must be set
+###### One of the arguments from this list "cbip_service, consul_service, custom_endpoint_object, k8s_service, private_ip, private_name, public_ip, public_name, vn_private_ip, vn_private_name" must be set
+
+`cbip_service` - (Optional) Specify origin server with cBIP service name. See [Choice Cbip Service ](#choice-cbip-service) below for details.
 
 `consul_service` - (Optional) Specify origin server with Hashi Corp Consul service name and site information. See [Choice Consul Service ](#choice-consul-service) below for details.
 
@@ -193,6 +193,12 @@ Settings to normalize the headers of upstream requests..
 `preserve_case_header_transformation` - (Optional) Preserves the original case of headers without any modifications. (`Bool`).
 
 `proper_case_header_transformation` - (Optional) For example, “content-type” becomes “Content-Type”, and “foo$b#$are” becomes “Foo$B#$Are” (`Bool`).
+
+### Choice Cbip Service
+
+Specify origin server with cBIP service name.
+
+`service_name` - (Required) Name of the discovered Classic BIG-IP virtual server to be used as origin. (`String`).
 
 ### Choice Consul Service
 

@@ -169,85 +169,87 @@ func resourceVolterraK8SPodSecurityAdmissionCreate(d *schema.ResourceData, meta 
 		podSecurityAdmissionSpecs := make([]*ves_io_schema_k8s_pod_security_admission.PodSecurityAdmissionSpec, len(sl))
 		createSpec.PodSecurityAdmissionSpecs = podSecurityAdmissionSpecs
 		for i, set := range sl {
-			podSecurityAdmissionSpecs[i] = &ves_io_schema_k8s_pod_security_admission.PodSecurityAdmissionSpec{}
-			podSecurityAdmissionSpecsMapStrToI := set.(map[string]interface{})
+			if set != nil {
+				podSecurityAdmissionSpecs[i] = &ves_io_schema_k8s_pod_security_admission.PodSecurityAdmissionSpec{}
+				podSecurityAdmissionSpecsMapStrToI := set.(map[string]interface{})
 
-			admissionModeChoiceTypeFound := false
+				admissionModeChoiceTypeFound := false
 
-			if v, ok := podSecurityAdmissionSpecsMapStrToI["audit"]; ok && !isIntfNil(v) && !admissionModeChoiceTypeFound {
+				if v, ok := podSecurityAdmissionSpecsMapStrToI["audit"]; ok && !isIntfNil(v) && !admissionModeChoiceTypeFound {
 
-				admissionModeChoiceTypeFound = true
+					admissionModeChoiceTypeFound = true
 
-				if v.(bool) {
-					admissionModeChoiceInt := &ves_io_schema_k8s_pod_security_admission.PodSecurityAdmissionSpec_Audit{}
-					admissionModeChoiceInt.Audit = &ves_io_schema.Empty{}
-					podSecurityAdmissionSpecs[i].AdmissionModeChoice = admissionModeChoiceInt
+					if v.(bool) {
+						admissionModeChoiceInt := &ves_io_schema_k8s_pod_security_admission.PodSecurityAdmissionSpec_Audit{}
+						admissionModeChoiceInt.Audit = &ves_io_schema.Empty{}
+						podSecurityAdmissionSpecs[i].AdmissionModeChoice = admissionModeChoiceInt
+					}
+
+				}
+
+				if v, ok := podSecurityAdmissionSpecsMapStrToI["enforce"]; ok && !isIntfNil(v) && !admissionModeChoiceTypeFound {
+
+					admissionModeChoiceTypeFound = true
+
+					if v.(bool) {
+						admissionModeChoiceInt := &ves_io_schema_k8s_pod_security_admission.PodSecurityAdmissionSpec_Enforce{}
+						admissionModeChoiceInt.Enforce = &ves_io_schema.Empty{}
+						podSecurityAdmissionSpecs[i].AdmissionModeChoice = admissionModeChoiceInt
+					}
+
+				}
+
+				if v, ok := podSecurityAdmissionSpecsMapStrToI["warn"]; ok && !isIntfNil(v) && !admissionModeChoiceTypeFound {
+
+					admissionModeChoiceTypeFound = true
+
+					if v.(bool) {
+						admissionModeChoiceInt := &ves_io_schema_k8s_pod_security_admission.PodSecurityAdmissionSpec_Warn{}
+						admissionModeChoiceInt.Warn = &ves_io_schema.Empty{}
+						podSecurityAdmissionSpecs[i].AdmissionModeChoice = admissionModeChoiceInt
+					}
+
+				}
+
+				policyTypeChoiceTypeFound := false
+
+				if v, ok := podSecurityAdmissionSpecsMapStrToI["baseline"]; ok && !isIntfNil(v) && !policyTypeChoiceTypeFound {
+
+					policyTypeChoiceTypeFound = true
+
+					if v.(bool) {
+						policyTypeChoiceInt := &ves_io_schema_k8s_pod_security_admission.PodSecurityAdmissionSpec_Baseline{}
+						policyTypeChoiceInt.Baseline = &ves_io_schema.Empty{}
+						podSecurityAdmissionSpecs[i].PolicyTypeChoice = policyTypeChoiceInt
+					}
+
+				}
+
+				if v, ok := podSecurityAdmissionSpecsMapStrToI["privileged"]; ok && !isIntfNil(v) && !policyTypeChoiceTypeFound {
+
+					policyTypeChoiceTypeFound = true
+
+					if v.(bool) {
+						policyTypeChoiceInt := &ves_io_schema_k8s_pod_security_admission.PodSecurityAdmissionSpec_Privileged{}
+						policyTypeChoiceInt.Privileged = &ves_io_schema.Empty{}
+						podSecurityAdmissionSpecs[i].PolicyTypeChoice = policyTypeChoiceInt
+					}
+
+				}
+
+				if v, ok := podSecurityAdmissionSpecsMapStrToI["restricted"]; ok && !isIntfNil(v) && !policyTypeChoiceTypeFound {
+
+					policyTypeChoiceTypeFound = true
+
+					if v.(bool) {
+						policyTypeChoiceInt := &ves_io_schema_k8s_pod_security_admission.PodSecurityAdmissionSpec_Restricted{}
+						policyTypeChoiceInt.Restricted = &ves_io_schema.Empty{}
+						podSecurityAdmissionSpecs[i].PolicyTypeChoice = policyTypeChoiceInt
+					}
+
 				}
 
 			}
-
-			if v, ok := podSecurityAdmissionSpecsMapStrToI["enforce"]; ok && !isIntfNil(v) && !admissionModeChoiceTypeFound {
-
-				admissionModeChoiceTypeFound = true
-
-				if v.(bool) {
-					admissionModeChoiceInt := &ves_io_schema_k8s_pod_security_admission.PodSecurityAdmissionSpec_Enforce{}
-					admissionModeChoiceInt.Enforce = &ves_io_schema.Empty{}
-					podSecurityAdmissionSpecs[i].AdmissionModeChoice = admissionModeChoiceInt
-				}
-
-			}
-
-			if v, ok := podSecurityAdmissionSpecsMapStrToI["warn"]; ok && !isIntfNil(v) && !admissionModeChoiceTypeFound {
-
-				admissionModeChoiceTypeFound = true
-
-				if v.(bool) {
-					admissionModeChoiceInt := &ves_io_schema_k8s_pod_security_admission.PodSecurityAdmissionSpec_Warn{}
-					admissionModeChoiceInt.Warn = &ves_io_schema.Empty{}
-					podSecurityAdmissionSpecs[i].AdmissionModeChoice = admissionModeChoiceInt
-				}
-
-			}
-
-			policyTypeChoiceTypeFound := false
-
-			if v, ok := podSecurityAdmissionSpecsMapStrToI["baseline"]; ok && !isIntfNil(v) && !policyTypeChoiceTypeFound {
-
-				policyTypeChoiceTypeFound = true
-
-				if v.(bool) {
-					policyTypeChoiceInt := &ves_io_schema_k8s_pod_security_admission.PodSecurityAdmissionSpec_Baseline{}
-					policyTypeChoiceInt.Baseline = &ves_io_schema.Empty{}
-					podSecurityAdmissionSpecs[i].PolicyTypeChoice = policyTypeChoiceInt
-				}
-
-			}
-
-			if v, ok := podSecurityAdmissionSpecsMapStrToI["privileged"]; ok && !isIntfNil(v) && !policyTypeChoiceTypeFound {
-
-				policyTypeChoiceTypeFound = true
-
-				if v.(bool) {
-					policyTypeChoiceInt := &ves_io_schema_k8s_pod_security_admission.PodSecurityAdmissionSpec_Privileged{}
-					policyTypeChoiceInt.Privileged = &ves_io_schema.Empty{}
-					podSecurityAdmissionSpecs[i].PolicyTypeChoice = policyTypeChoiceInt
-				}
-
-			}
-
-			if v, ok := podSecurityAdmissionSpecsMapStrToI["restricted"]; ok && !isIntfNil(v) && !policyTypeChoiceTypeFound {
-
-				policyTypeChoiceTypeFound = true
-
-				if v.(bool) {
-					policyTypeChoiceInt := &ves_io_schema_k8s_pod_security_admission.PodSecurityAdmissionSpec_Restricted{}
-					policyTypeChoiceInt.Restricted = &ves_io_schema.Empty{}
-					podSecurityAdmissionSpecs[i].PolicyTypeChoice = policyTypeChoiceInt
-				}
-
-			}
-
 		}
 
 	}
@@ -357,85 +359,87 @@ func resourceVolterraK8SPodSecurityAdmissionUpdate(d *schema.ResourceData, meta 
 		podSecurityAdmissionSpecs := make([]*ves_io_schema_k8s_pod_security_admission.PodSecurityAdmissionSpec, len(sl))
 		updateSpec.PodSecurityAdmissionSpecs = podSecurityAdmissionSpecs
 		for i, set := range sl {
-			podSecurityAdmissionSpecs[i] = &ves_io_schema_k8s_pod_security_admission.PodSecurityAdmissionSpec{}
-			podSecurityAdmissionSpecsMapStrToI := set.(map[string]interface{})
+			if set != nil {
+				podSecurityAdmissionSpecs[i] = &ves_io_schema_k8s_pod_security_admission.PodSecurityAdmissionSpec{}
+				podSecurityAdmissionSpecsMapStrToI := set.(map[string]interface{})
 
-			admissionModeChoiceTypeFound := false
+				admissionModeChoiceTypeFound := false
 
-			if v, ok := podSecurityAdmissionSpecsMapStrToI["audit"]; ok && !isIntfNil(v) && !admissionModeChoiceTypeFound {
+				if v, ok := podSecurityAdmissionSpecsMapStrToI["audit"]; ok && !isIntfNil(v) && !admissionModeChoiceTypeFound {
 
-				admissionModeChoiceTypeFound = true
+					admissionModeChoiceTypeFound = true
 
-				if v.(bool) {
-					admissionModeChoiceInt := &ves_io_schema_k8s_pod_security_admission.PodSecurityAdmissionSpec_Audit{}
-					admissionModeChoiceInt.Audit = &ves_io_schema.Empty{}
-					podSecurityAdmissionSpecs[i].AdmissionModeChoice = admissionModeChoiceInt
+					if v.(bool) {
+						admissionModeChoiceInt := &ves_io_schema_k8s_pod_security_admission.PodSecurityAdmissionSpec_Audit{}
+						admissionModeChoiceInt.Audit = &ves_io_schema.Empty{}
+						podSecurityAdmissionSpecs[i].AdmissionModeChoice = admissionModeChoiceInt
+					}
+
+				}
+
+				if v, ok := podSecurityAdmissionSpecsMapStrToI["enforce"]; ok && !isIntfNil(v) && !admissionModeChoiceTypeFound {
+
+					admissionModeChoiceTypeFound = true
+
+					if v.(bool) {
+						admissionModeChoiceInt := &ves_io_schema_k8s_pod_security_admission.PodSecurityAdmissionSpec_Enforce{}
+						admissionModeChoiceInt.Enforce = &ves_io_schema.Empty{}
+						podSecurityAdmissionSpecs[i].AdmissionModeChoice = admissionModeChoiceInt
+					}
+
+				}
+
+				if v, ok := podSecurityAdmissionSpecsMapStrToI["warn"]; ok && !isIntfNil(v) && !admissionModeChoiceTypeFound {
+
+					admissionModeChoiceTypeFound = true
+
+					if v.(bool) {
+						admissionModeChoiceInt := &ves_io_schema_k8s_pod_security_admission.PodSecurityAdmissionSpec_Warn{}
+						admissionModeChoiceInt.Warn = &ves_io_schema.Empty{}
+						podSecurityAdmissionSpecs[i].AdmissionModeChoice = admissionModeChoiceInt
+					}
+
+				}
+
+				policyTypeChoiceTypeFound := false
+
+				if v, ok := podSecurityAdmissionSpecsMapStrToI["baseline"]; ok && !isIntfNil(v) && !policyTypeChoiceTypeFound {
+
+					policyTypeChoiceTypeFound = true
+
+					if v.(bool) {
+						policyTypeChoiceInt := &ves_io_schema_k8s_pod_security_admission.PodSecurityAdmissionSpec_Baseline{}
+						policyTypeChoiceInt.Baseline = &ves_io_schema.Empty{}
+						podSecurityAdmissionSpecs[i].PolicyTypeChoice = policyTypeChoiceInt
+					}
+
+				}
+
+				if v, ok := podSecurityAdmissionSpecsMapStrToI["privileged"]; ok && !isIntfNil(v) && !policyTypeChoiceTypeFound {
+
+					policyTypeChoiceTypeFound = true
+
+					if v.(bool) {
+						policyTypeChoiceInt := &ves_io_schema_k8s_pod_security_admission.PodSecurityAdmissionSpec_Privileged{}
+						policyTypeChoiceInt.Privileged = &ves_io_schema.Empty{}
+						podSecurityAdmissionSpecs[i].PolicyTypeChoice = policyTypeChoiceInt
+					}
+
+				}
+
+				if v, ok := podSecurityAdmissionSpecsMapStrToI["restricted"]; ok && !isIntfNil(v) && !policyTypeChoiceTypeFound {
+
+					policyTypeChoiceTypeFound = true
+
+					if v.(bool) {
+						policyTypeChoiceInt := &ves_io_schema_k8s_pod_security_admission.PodSecurityAdmissionSpec_Restricted{}
+						policyTypeChoiceInt.Restricted = &ves_io_schema.Empty{}
+						podSecurityAdmissionSpecs[i].PolicyTypeChoice = policyTypeChoiceInt
+					}
+
 				}
 
 			}
-
-			if v, ok := podSecurityAdmissionSpecsMapStrToI["enforce"]; ok && !isIntfNil(v) && !admissionModeChoiceTypeFound {
-
-				admissionModeChoiceTypeFound = true
-
-				if v.(bool) {
-					admissionModeChoiceInt := &ves_io_schema_k8s_pod_security_admission.PodSecurityAdmissionSpec_Enforce{}
-					admissionModeChoiceInt.Enforce = &ves_io_schema.Empty{}
-					podSecurityAdmissionSpecs[i].AdmissionModeChoice = admissionModeChoiceInt
-				}
-
-			}
-
-			if v, ok := podSecurityAdmissionSpecsMapStrToI["warn"]; ok && !isIntfNil(v) && !admissionModeChoiceTypeFound {
-
-				admissionModeChoiceTypeFound = true
-
-				if v.(bool) {
-					admissionModeChoiceInt := &ves_io_schema_k8s_pod_security_admission.PodSecurityAdmissionSpec_Warn{}
-					admissionModeChoiceInt.Warn = &ves_io_schema.Empty{}
-					podSecurityAdmissionSpecs[i].AdmissionModeChoice = admissionModeChoiceInt
-				}
-
-			}
-
-			policyTypeChoiceTypeFound := false
-
-			if v, ok := podSecurityAdmissionSpecsMapStrToI["baseline"]; ok && !isIntfNil(v) && !policyTypeChoiceTypeFound {
-
-				policyTypeChoiceTypeFound = true
-
-				if v.(bool) {
-					policyTypeChoiceInt := &ves_io_schema_k8s_pod_security_admission.PodSecurityAdmissionSpec_Baseline{}
-					policyTypeChoiceInt.Baseline = &ves_io_schema.Empty{}
-					podSecurityAdmissionSpecs[i].PolicyTypeChoice = policyTypeChoiceInt
-				}
-
-			}
-
-			if v, ok := podSecurityAdmissionSpecsMapStrToI["privileged"]; ok && !isIntfNil(v) && !policyTypeChoiceTypeFound {
-
-				policyTypeChoiceTypeFound = true
-
-				if v.(bool) {
-					policyTypeChoiceInt := &ves_io_schema_k8s_pod_security_admission.PodSecurityAdmissionSpec_Privileged{}
-					policyTypeChoiceInt.Privileged = &ves_io_schema.Empty{}
-					podSecurityAdmissionSpecs[i].PolicyTypeChoice = policyTypeChoiceInt
-				}
-
-			}
-
-			if v, ok := podSecurityAdmissionSpecsMapStrToI["restricted"]; ok && !isIntfNil(v) && !policyTypeChoiceTypeFound {
-
-				policyTypeChoiceTypeFound = true
-
-				if v.(bool) {
-					policyTypeChoiceInt := &ves_io_schema_k8s_pod_security_admission.PodSecurityAdmissionSpec_Restricted{}
-					policyTypeChoiceInt.Restricted = &ves_io_schema.Empty{}
-					podSecurityAdmissionSpecs[i].PolicyTypeChoice = policyTypeChoiceInt
-				}
-
-			}
-
 		}
 
 	}

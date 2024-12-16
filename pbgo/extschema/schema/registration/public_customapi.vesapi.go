@@ -3481,7 +3481,7 @@ var CustomAPISwaggerJSON string = `{
         },
         "registrationProvider": {
             "type": "string",
-            "description": "Infrastructure provider enum for registration. It describes where is instance running.\n\nProvider was not detected\nAWS cloud instance\nGoogle cloud instance\nAzure cloud instance\nVMWare VM\nKVM VM\nOther provider, which was not identified by system.\nF5XC HW device.\nIBM Cloud instance.\nKubernetes cluster in AWS\nKubernetes cluster in GCP\nKubernetes cluster in Azure\nKubernetes cluster in Vmware\nKubernetes cluster in VMware\nKubernetes cluster in Other provider\nKubernetes cluster in Volterra\nKubernetes cluster in IBM Cloud\nF5OS HW device.",
+            "description": "Infrastructure provider enum for registration. It describes where is instance running.\n\nProvider was not detected\nAWS cloud instance\nGoogle cloud instance\nAzure cloud instance\nVMWare VM\nKVM VM\nOther provider, which was not identified by system.\nF5XC HW device.\nIBM Cloud instance.\nKubernetes cluster in AWS\nKubernetes cluster in GCP\nKubernetes cluster in Azure\nKubernetes cluster in Vmware\nKubernetes cluster in VMware\nKubernetes cluster in Other provider\nKubernetes cluster in Volterra\nKubernetes cluster in IBM Cloud\nF5OS HW device.\nRSeries Device\nOCI Cloud Instance\nNutanix instance\nOpenstack Instance",
             "title": "Infrastructure provider",
             "enum": [
                 "UNKNOWN",
@@ -3502,7 +3502,11 @@ var CustomAPISwaggerJSON string = `{
                 "OTHER_K8S",
                 "VOLTERRA_K8S",
                 "IBMCLOUD_K8S",
-                "F5OS"
+                "F5OS",
+                "RSERIES",
+                "OCI",
+                "NUTANIX",
+                "OPENSTACK"
             ],
             "default": "UNKNOWN",
             "x-displayname": "Infrastructure Provider",
@@ -4126,6 +4130,12 @@ var CustomAPISwaggerJSON string = `{
                     "title": "deletion_timestamp",
                     "format": "date-time",
                     "x-displayname": "Deletion Timestamp"
+                },
+                "direct_ref_hash": {
+                    "type": "string",
+                    "description": " A hash of the UIDs of  direct references on this object. This can be used to determine if \n this object hash has had references become resolved/unresolved",
+                    "title": "direct_ref_hash",
+                    "x-displayname": "Direct Reference Hash"
                 },
                 "finalizers": {
                     "type": "array",

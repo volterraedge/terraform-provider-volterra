@@ -63,7 +63,8 @@ func resourceVolterraVirtualK8S() *schema.Resource {
 
 			"default_flavor_ref": {
 
-				Type:     schema.TypeSet,
+				Type:     schema.TypeList,
+				MaxItems: 1,
 				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
@@ -183,21 +184,23 @@ func resourceVolterraVirtualK8SCreate(d *schema.ResourceData, meta interface{}) 
 	//default_flavor_ref
 	if v, ok := d.GetOk("default_flavor_ref"); ok && !isIntfNil(v) {
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		defaultFlavorRefInt := &ves_io_schema_views.ObjectRefType{}
 		createSpec.DefaultFlavorRef = defaultFlavorRefInt
 
 		for _, set := range sl {
-			dfrMapToStrVal := set.(map[string]interface{})
-			if val, ok := dfrMapToStrVal["name"]; ok && !isIntfNil(v) {
-				defaultFlavorRefInt.Name = val.(string)
-			}
-			if val, ok := dfrMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-				defaultFlavorRefInt.Namespace = val.(string)
-			}
+			if set != nil {
+				dfrMapToStrVal := set.(map[string]interface{})
+				if val, ok := dfrMapToStrVal["name"]; ok && !isIntfNil(v) {
+					defaultFlavorRefInt.Name = val.(string)
+				}
+				if val, ok := dfrMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+					defaultFlavorRefInt.Namespace = val.(string)
+				}
 
-			if val, ok := dfrMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-				defaultFlavorRefInt.Tenant = val.(string)
+				if val, ok := dfrMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+					defaultFlavorRefInt.Tenant = val.(string)
+				}
 			}
 		}
 
@@ -365,21 +368,23 @@ func resourceVolterraVirtualK8SUpdate(d *schema.ResourceData, meta interface{}) 
 
 	if v, ok := d.GetOk("default_flavor_ref"); ok && !isIntfNil(v) {
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		defaultFlavorRefInt := &ves_io_schema_views.ObjectRefType{}
 		updateSpec.DefaultFlavorRef = defaultFlavorRefInt
 
 		for _, set := range sl {
-			dfrMapToStrVal := set.(map[string]interface{})
-			if val, ok := dfrMapToStrVal["name"]; ok && !isIntfNil(v) {
-				defaultFlavorRefInt.Name = val.(string)
-			}
-			if val, ok := dfrMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-				defaultFlavorRefInt.Namespace = val.(string)
-			}
+			if set != nil {
+				dfrMapToStrVal := set.(map[string]interface{})
+				if val, ok := dfrMapToStrVal["name"]; ok && !isIntfNil(v) {
+					defaultFlavorRefInt.Name = val.(string)
+				}
+				if val, ok := dfrMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+					defaultFlavorRefInt.Namespace = val.(string)
+				}
 
-			if val, ok := dfrMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-				defaultFlavorRefInt.Tenant = val.(string)
+				if val, ok := dfrMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+					defaultFlavorRefInt.Tenant = val.(string)
+				}
 			}
 		}
 

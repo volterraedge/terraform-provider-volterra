@@ -62,7 +62,8 @@ func resourceVolterraMaliciousUserMitigation() *schema.Resource {
 
 			"mitigation_type": {
 
-				Type:     schema.TypeSet,
+				Type:     schema.TypeList,
+				MaxItems: 1,
 				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
@@ -76,7 +77,8 @@ func resourceVolterraMaliciousUserMitigation() *schema.Resource {
 
 									"mitigation_action": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -118,7 +120,8 @@ func resourceVolterraMaliciousUserMitigation() *schema.Resource {
 
 									"threat_level": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -209,149 +212,157 @@ func resourceVolterraMaliciousUserMitigationCreate(d *schema.ResourceData, meta 
 	//mitigation_type
 	if v, ok := d.GetOk("mitigation_type"); ok && !isIntfNil(v) {
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		mitigationType := &ves_io_schema_malicious_user_mitigation.MaliciousUserMitigationType{}
 		createSpec.MitigationType = mitigationType
 		for _, set := range sl {
-			mitigationTypeMapStrToI := set.(map[string]interface{})
+			if set != nil {
+				mitigationTypeMapStrToI := set.(map[string]interface{})
 
-			if v, ok := mitigationTypeMapStrToI["rules"]; ok && !isIntfNil(v) {
+				if v, ok := mitigationTypeMapStrToI["rules"]; ok && !isIntfNil(v) {
 
-				sl := v.([]interface{})
-				rules := make([]*ves_io_schema_malicious_user_mitigation.MaliciousUserMitigationRule, len(sl))
-				mitigationType.Rules = rules
-				for i, set := range sl {
-					rules[i] = &ves_io_schema_malicious_user_mitigation.MaliciousUserMitigationRule{}
-					rulesMapStrToI := set.(map[string]interface{})
+					sl := v.([]interface{})
+					rules := make([]*ves_io_schema_malicious_user_mitigation.MaliciousUserMitigationRule, len(sl))
+					mitigationType.Rules = rules
+					for i, set := range sl {
+						if set != nil {
+							rules[i] = &ves_io_schema_malicious_user_mitigation.MaliciousUserMitigationRule{}
+							rulesMapStrToI := set.(map[string]interface{})
 
-					if v, ok := rulesMapStrToI["mitigation_action"]; ok && !isIntfNil(v) {
+							if v, ok := rulesMapStrToI["mitigation_action"]; ok && !isIntfNil(v) {
 
-						sl := v.(*schema.Set).List()
-						mitigationAction := &ves_io_schema_malicious_user_mitigation.MaliciousUserMitigationAction{}
-						rules[i].MitigationAction = mitigationAction
-						for _, set := range sl {
-							mitigationActionMapStrToI := set.(map[string]interface{})
+								sl := v.([]interface{})
+								mitigationAction := &ves_io_schema_malicious_user_mitigation.MaliciousUserMitigationAction{}
+								rules[i].MitigationAction = mitigationAction
+								for _, set := range sl {
+									if set != nil {
+										mitigationActionMapStrToI := set.(map[string]interface{})
 
-							mitigationActionTypeFound := false
+										mitigationActionTypeFound := false
 
-							if v, ok := mitigationActionMapStrToI["alert_only"]; ok && !isIntfNil(v) && !mitigationActionTypeFound {
+										if v, ok := mitigationActionMapStrToI["alert_only"]; ok && !isIntfNil(v) && !mitigationActionTypeFound {
 
-								mitigationActionTypeFound = true
+											mitigationActionTypeFound = true
 
-								if v.(bool) {
-									mitigationActionInt := &ves_io_schema_malicious_user_mitigation.MaliciousUserMitigationAction_AlertOnly{}
-									mitigationActionInt.AlertOnly = &ves_io_schema.Empty{}
-									mitigationAction.MitigationAction = mitigationActionInt
+											if v.(bool) {
+												mitigationActionInt := &ves_io_schema_malicious_user_mitigation.MaliciousUserMitigationAction_AlertOnly{}
+												mitigationActionInt.AlertOnly = &ves_io_schema.Empty{}
+												mitigationAction.MitigationAction = mitigationActionInt
+											}
+
+										}
+
+										if v, ok := mitigationActionMapStrToI["block_temporarily"]; ok && !isIntfNil(v) && !mitigationActionTypeFound {
+
+											mitigationActionTypeFound = true
+
+											if v.(bool) {
+												mitigationActionInt := &ves_io_schema_malicious_user_mitigation.MaliciousUserMitigationAction_BlockTemporarily{}
+												mitigationActionInt.BlockTemporarily = &ves_io_schema.Empty{}
+												mitigationAction.MitigationAction = mitigationActionInt
+											}
+
+										}
+
+										if v, ok := mitigationActionMapStrToI["captcha_challenge"]; ok && !isIntfNil(v) && !mitigationActionTypeFound {
+
+											mitigationActionTypeFound = true
+
+											if v.(bool) {
+												mitigationActionInt := &ves_io_schema_malicious_user_mitigation.MaliciousUserMitigationAction_CaptchaChallenge{}
+												mitigationActionInt.CaptchaChallenge = &ves_io_schema.Empty{}
+												mitigationAction.MitigationAction = mitigationActionInt
+											}
+
+										}
+
+										if v, ok := mitigationActionMapStrToI["javascript_challenge"]; ok && !isIntfNil(v) && !mitigationActionTypeFound {
+
+											mitigationActionTypeFound = true
+
+											if v.(bool) {
+												mitigationActionInt := &ves_io_schema_malicious_user_mitigation.MaliciousUserMitigationAction_JavascriptChallenge{}
+												mitigationActionInt.JavascriptChallenge = &ves_io_schema.Empty{}
+												mitigationAction.MitigationAction = mitigationActionInt
+											}
+
+										}
+
+										if v, ok := mitigationActionMapStrToI["none"]; ok && !isIntfNil(v) && !mitigationActionTypeFound {
+
+											mitigationActionTypeFound = true
+
+											if v.(bool) {
+												mitigationActionInt := &ves_io_schema_malicious_user_mitigation.MaliciousUserMitigationAction_None{}
+												mitigationActionInt.None = &ves_io_schema.Empty{}
+												mitigationAction.MitigationAction = mitigationActionInt
+											}
+
+										}
+
+									}
 								}
 
 							}
 
-							if v, ok := mitigationActionMapStrToI["block_temporarily"]; ok && !isIntfNil(v) && !mitigationActionTypeFound {
+							if v, ok := rulesMapStrToI["threat_level"]; ok && !isIntfNil(v) {
 
-								mitigationActionTypeFound = true
+								sl := v.([]interface{})
+								threatLevel := &ves_io_schema_malicious_user_mitigation.MaliciousUserThreatLevel{}
+								rules[i].ThreatLevel = threatLevel
+								for _, set := range sl {
+									if set != nil {
+										threatLevelMapStrToI := set.(map[string]interface{})
 
-								if v.(bool) {
-									mitigationActionInt := &ves_io_schema_malicious_user_mitigation.MaliciousUserMitigationAction_BlockTemporarily{}
-									mitigationActionInt.BlockTemporarily = &ves_io_schema.Empty{}
-									mitigationAction.MitigationAction = mitigationActionInt
-								}
+										threatLevelTypeFound := false
 
-							}
+										if v, ok := threatLevelMapStrToI["high"]; ok && !isIntfNil(v) && !threatLevelTypeFound {
 
-							if v, ok := mitigationActionMapStrToI["captcha_challenge"]; ok && !isIntfNil(v) && !mitigationActionTypeFound {
+											threatLevelTypeFound = true
 
-								mitigationActionTypeFound = true
+											if v.(bool) {
+												threatLevelInt := &ves_io_schema_malicious_user_mitigation.MaliciousUserThreatLevel_High{}
+												threatLevelInt.High = &ves_io_schema.Empty{}
+												threatLevel.ThreatLevel = threatLevelInt
+											}
 
-								if v.(bool) {
-									mitigationActionInt := &ves_io_schema_malicious_user_mitigation.MaliciousUserMitigationAction_CaptchaChallenge{}
-									mitigationActionInt.CaptchaChallenge = &ves_io_schema.Empty{}
-									mitigationAction.MitigationAction = mitigationActionInt
-								}
+										}
 
-							}
+										if v, ok := threatLevelMapStrToI["low"]; ok && !isIntfNil(v) && !threatLevelTypeFound {
 
-							if v, ok := mitigationActionMapStrToI["javascript_challenge"]; ok && !isIntfNil(v) && !mitigationActionTypeFound {
+											threatLevelTypeFound = true
 
-								mitigationActionTypeFound = true
+											if v.(bool) {
+												threatLevelInt := &ves_io_schema_malicious_user_mitigation.MaliciousUserThreatLevel_Low{}
+												threatLevelInt.Low = &ves_io_schema.Empty{}
+												threatLevel.ThreatLevel = threatLevelInt
+											}
 
-								if v.(bool) {
-									mitigationActionInt := &ves_io_schema_malicious_user_mitigation.MaliciousUserMitigationAction_JavascriptChallenge{}
-									mitigationActionInt.JavascriptChallenge = &ves_io_schema.Empty{}
-									mitigationAction.MitigationAction = mitigationActionInt
-								}
+										}
 
-							}
+										if v, ok := threatLevelMapStrToI["medium"]; ok && !isIntfNil(v) && !threatLevelTypeFound {
 
-							if v, ok := mitigationActionMapStrToI["none"]; ok && !isIntfNil(v) && !mitigationActionTypeFound {
+											threatLevelTypeFound = true
 
-								mitigationActionTypeFound = true
+											if v.(bool) {
+												threatLevelInt := &ves_io_schema_malicious_user_mitigation.MaliciousUserThreatLevel_Medium{}
+												threatLevelInt.Medium = &ves_io_schema.Empty{}
+												threatLevel.ThreatLevel = threatLevelInt
+											}
 
-								if v.(bool) {
-									mitigationActionInt := &ves_io_schema_malicious_user_mitigation.MaliciousUserMitigationAction_None{}
-									mitigationActionInt.None = &ves_io_schema.Empty{}
-									mitigationAction.MitigationAction = mitigationActionInt
+										}
+
+									}
 								}
 
 							}
 
 						}
-
-					}
-
-					if v, ok := rulesMapStrToI["threat_level"]; ok && !isIntfNil(v) {
-
-						sl := v.(*schema.Set).List()
-						threatLevel := &ves_io_schema_malicious_user_mitigation.MaliciousUserThreatLevel{}
-						rules[i].ThreatLevel = threatLevel
-						for _, set := range sl {
-							threatLevelMapStrToI := set.(map[string]interface{})
-
-							threatLevelTypeFound := false
-
-							if v, ok := threatLevelMapStrToI["high"]; ok && !isIntfNil(v) && !threatLevelTypeFound {
-
-								threatLevelTypeFound = true
-
-								if v.(bool) {
-									threatLevelInt := &ves_io_schema_malicious_user_mitigation.MaliciousUserThreatLevel_High{}
-									threatLevelInt.High = &ves_io_schema.Empty{}
-									threatLevel.ThreatLevel = threatLevelInt
-								}
-
-							}
-
-							if v, ok := threatLevelMapStrToI["low"]; ok && !isIntfNil(v) && !threatLevelTypeFound {
-
-								threatLevelTypeFound = true
-
-								if v.(bool) {
-									threatLevelInt := &ves_io_schema_malicious_user_mitigation.MaliciousUserThreatLevel_Low{}
-									threatLevelInt.Low = &ves_io_schema.Empty{}
-									threatLevel.ThreatLevel = threatLevelInt
-								}
-
-							}
-
-							if v, ok := threatLevelMapStrToI["medium"]; ok && !isIntfNil(v) && !threatLevelTypeFound {
-
-								threatLevelTypeFound = true
-
-								if v.(bool) {
-									threatLevelInt := &ves_io_schema_malicious_user_mitigation.MaliciousUserThreatLevel_Medium{}
-									threatLevelInt.Medium = &ves_io_schema.Empty{}
-									threatLevel.ThreatLevel = threatLevelInt
-								}
-
-							}
-
-						}
-
 					}
 
 				}
 
 			}
-
 		}
 
 	}
@@ -457,149 +468,157 @@ func resourceVolterraMaliciousUserMitigationUpdate(d *schema.ResourceData, meta 
 
 	if v, ok := d.GetOk("mitigation_type"); ok && !isIntfNil(v) {
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		mitigationType := &ves_io_schema_malicious_user_mitigation.MaliciousUserMitigationType{}
 		updateSpec.MitigationType = mitigationType
 		for _, set := range sl {
-			mitigationTypeMapStrToI := set.(map[string]interface{})
+			if set != nil {
+				mitigationTypeMapStrToI := set.(map[string]interface{})
 
-			if v, ok := mitigationTypeMapStrToI["rules"]; ok && !isIntfNil(v) {
+				if v, ok := mitigationTypeMapStrToI["rules"]; ok && !isIntfNil(v) {
 
-				sl := v.([]interface{})
-				rules := make([]*ves_io_schema_malicious_user_mitigation.MaliciousUserMitigationRule, len(sl))
-				mitigationType.Rules = rules
-				for i, set := range sl {
-					rules[i] = &ves_io_schema_malicious_user_mitigation.MaliciousUserMitigationRule{}
-					rulesMapStrToI := set.(map[string]interface{})
+					sl := v.([]interface{})
+					rules := make([]*ves_io_schema_malicious_user_mitigation.MaliciousUserMitigationRule, len(sl))
+					mitigationType.Rules = rules
+					for i, set := range sl {
+						if set != nil {
+							rules[i] = &ves_io_schema_malicious_user_mitigation.MaliciousUserMitigationRule{}
+							rulesMapStrToI := set.(map[string]interface{})
 
-					if v, ok := rulesMapStrToI["mitigation_action"]; ok && !isIntfNil(v) {
+							if v, ok := rulesMapStrToI["mitigation_action"]; ok && !isIntfNil(v) {
 
-						sl := v.(*schema.Set).List()
-						mitigationAction := &ves_io_schema_malicious_user_mitigation.MaliciousUserMitigationAction{}
-						rules[i].MitigationAction = mitigationAction
-						for _, set := range sl {
-							mitigationActionMapStrToI := set.(map[string]interface{})
+								sl := v.([]interface{})
+								mitigationAction := &ves_io_schema_malicious_user_mitigation.MaliciousUserMitigationAction{}
+								rules[i].MitigationAction = mitigationAction
+								for _, set := range sl {
+									if set != nil {
+										mitigationActionMapStrToI := set.(map[string]interface{})
 
-							mitigationActionTypeFound := false
+										mitigationActionTypeFound := false
 
-							if v, ok := mitigationActionMapStrToI["alert_only"]; ok && !isIntfNil(v) && !mitigationActionTypeFound {
+										if v, ok := mitigationActionMapStrToI["alert_only"]; ok && !isIntfNil(v) && !mitigationActionTypeFound {
 
-								mitigationActionTypeFound = true
+											mitigationActionTypeFound = true
 
-								if v.(bool) {
-									mitigationActionInt := &ves_io_schema_malicious_user_mitigation.MaliciousUserMitigationAction_AlertOnly{}
-									mitigationActionInt.AlertOnly = &ves_io_schema.Empty{}
-									mitigationAction.MitigationAction = mitigationActionInt
+											if v.(bool) {
+												mitigationActionInt := &ves_io_schema_malicious_user_mitigation.MaliciousUserMitigationAction_AlertOnly{}
+												mitigationActionInt.AlertOnly = &ves_io_schema.Empty{}
+												mitigationAction.MitigationAction = mitigationActionInt
+											}
+
+										}
+
+										if v, ok := mitigationActionMapStrToI["block_temporarily"]; ok && !isIntfNil(v) && !mitigationActionTypeFound {
+
+											mitigationActionTypeFound = true
+
+											if v.(bool) {
+												mitigationActionInt := &ves_io_schema_malicious_user_mitigation.MaliciousUserMitigationAction_BlockTemporarily{}
+												mitigationActionInt.BlockTemporarily = &ves_io_schema.Empty{}
+												mitigationAction.MitigationAction = mitigationActionInt
+											}
+
+										}
+
+										if v, ok := mitigationActionMapStrToI["captcha_challenge"]; ok && !isIntfNil(v) && !mitigationActionTypeFound {
+
+											mitigationActionTypeFound = true
+
+											if v.(bool) {
+												mitigationActionInt := &ves_io_schema_malicious_user_mitigation.MaliciousUserMitigationAction_CaptchaChallenge{}
+												mitigationActionInt.CaptchaChallenge = &ves_io_schema.Empty{}
+												mitigationAction.MitigationAction = mitigationActionInt
+											}
+
+										}
+
+										if v, ok := mitigationActionMapStrToI["javascript_challenge"]; ok && !isIntfNil(v) && !mitigationActionTypeFound {
+
+											mitigationActionTypeFound = true
+
+											if v.(bool) {
+												mitigationActionInt := &ves_io_schema_malicious_user_mitigation.MaliciousUserMitigationAction_JavascriptChallenge{}
+												mitigationActionInt.JavascriptChallenge = &ves_io_schema.Empty{}
+												mitigationAction.MitigationAction = mitigationActionInt
+											}
+
+										}
+
+										if v, ok := mitigationActionMapStrToI["none"]; ok && !isIntfNil(v) && !mitigationActionTypeFound {
+
+											mitigationActionTypeFound = true
+
+											if v.(bool) {
+												mitigationActionInt := &ves_io_schema_malicious_user_mitigation.MaliciousUserMitigationAction_None{}
+												mitigationActionInt.None = &ves_io_schema.Empty{}
+												mitigationAction.MitigationAction = mitigationActionInt
+											}
+
+										}
+
+									}
 								}
 
 							}
 
-							if v, ok := mitigationActionMapStrToI["block_temporarily"]; ok && !isIntfNil(v) && !mitigationActionTypeFound {
+							if v, ok := rulesMapStrToI["threat_level"]; ok && !isIntfNil(v) {
 
-								mitigationActionTypeFound = true
+								sl := v.([]interface{})
+								threatLevel := &ves_io_schema_malicious_user_mitigation.MaliciousUserThreatLevel{}
+								rules[i].ThreatLevel = threatLevel
+								for _, set := range sl {
+									if set != nil {
+										threatLevelMapStrToI := set.(map[string]interface{})
 
-								if v.(bool) {
-									mitigationActionInt := &ves_io_schema_malicious_user_mitigation.MaliciousUserMitigationAction_BlockTemporarily{}
-									mitigationActionInt.BlockTemporarily = &ves_io_schema.Empty{}
-									mitigationAction.MitigationAction = mitigationActionInt
-								}
+										threatLevelTypeFound := false
 
-							}
+										if v, ok := threatLevelMapStrToI["high"]; ok && !isIntfNil(v) && !threatLevelTypeFound {
 
-							if v, ok := mitigationActionMapStrToI["captcha_challenge"]; ok && !isIntfNil(v) && !mitigationActionTypeFound {
+											threatLevelTypeFound = true
 
-								mitigationActionTypeFound = true
+											if v.(bool) {
+												threatLevelInt := &ves_io_schema_malicious_user_mitigation.MaliciousUserThreatLevel_High{}
+												threatLevelInt.High = &ves_io_schema.Empty{}
+												threatLevel.ThreatLevel = threatLevelInt
+											}
 
-								if v.(bool) {
-									mitigationActionInt := &ves_io_schema_malicious_user_mitigation.MaliciousUserMitigationAction_CaptchaChallenge{}
-									mitigationActionInt.CaptchaChallenge = &ves_io_schema.Empty{}
-									mitigationAction.MitigationAction = mitigationActionInt
-								}
+										}
 
-							}
+										if v, ok := threatLevelMapStrToI["low"]; ok && !isIntfNil(v) && !threatLevelTypeFound {
 
-							if v, ok := mitigationActionMapStrToI["javascript_challenge"]; ok && !isIntfNil(v) && !mitigationActionTypeFound {
+											threatLevelTypeFound = true
 
-								mitigationActionTypeFound = true
+											if v.(bool) {
+												threatLevelInt := &ves_io_schema_malicious_user_mitigation.MaliciousUserThreatLevel_Low{}
+												threatLevelInt.Low = &ves_io_schema.Empty{}
+												threatLevel.ThreatLevel = threatLevelInt
+											}
 
-								if v.(bool) {
-									mitigationActionInt := &ves_io_schema_malicious_user_mitigation.MaliciousUserMitigationAction_JavascriptChallenge{}
-									mitigationActionInt.JavascriptChallenge = &ves_io_schema.Empty{}
-									mitigationAction.MitigationAction = mitigationActionInt
-								}
+										}
 
-							}
+										if v, ok := threatLevelMapStrToI["medium"]; ok && !isIntfNil(v) && !threatLevelTypeFound {
 
-							if v, ok := mitigationActionMapStrToI["none"]; ok && !isIntfNil(v) && !mitigationActionTypeFound {
+											threatLevelTypeFound = true
 
-								mitigationActionTypeFound = true
+											if v.(bool) {
+												threatLevelInt := &ves_io_schema_malicious_user_mitigation.MaliciousUserThreatLevel_Medium{}
+												threatLevelInt.Medium = &ves_io_schema.Empty{}
+												threatLevel.ThreatLevel = threatLevelInt
+											}
 
-								if v.(bool) {
-									mitigationActionInt := &ves_io_schema_malicious_user_mitigation.MaliciousUserMitigationAction_None{}
-									mitigationActionInt.None = &ves_io_schema.Empty{}
-									mitigationAction.MitigationAction = mitigationActionInt
+										}
+
+									}
 								}
 
 							}
 
 						}
-
-					}
-
-					if v, ok := rulesMapStrToI["threat_level"]; ok && !isIntfNil(v) {
-
-						sl := v.(*schema.Set).List()
-						threatLevel := &ves_io_schema_malicious_user_mitigation.MaliciousUserThreatLevel{}
-						rules[i].ThreatLevel = threatLevel
-						for _, set := range sl {
-							threatLevelMapStrToI := set.(map[string]interface{})
-
-							threatLevelTypeFound := false
-
-							if v, ok := threatLevelMapStrToI["high"]; ok && !isIntfNil(v) && !threatLevelTypeFound {
-
-								threatLevelTypeFound = true
-
-								if v.(bool) {
-									threatLevelInt := &ves_io_schema_malicious_user_mitigation.MaliciousUserThreatLevel_High{}
-									threatLevelInt.High = &ves_io_schema.Empty{}
-									threatLevel.ThreatLevel = threatLevelInt
-								}
-
-							}
-
-							if v, ok := threatLevelMapStrToI["low"]; ok && !isIntfNil(v) && !threatLevelTypeFound {
-
-								threatLevelTypeFound = true
-
-								if v.(bool) {
-									threatLevelInt := &ves_io_schema_malicious_user_mitigation.MaliciousUserThreatLevel_Low{}
-									threatLevelInt.Low = &ves_io_schema.Empty{}
-									threatLevel.ThreatLevel = threatLevelInt
-								}
-
-							}
-
-							if v, ok := threatLevelMapStrToI["medium"]; ok && !isIntfNil(v) && !threatLevelTypeFound {
-
-								threatLevelTypeFound = true
-
-								if v.(bool) {
-									threatLevelInt := &ves_io_schema_malicious_user_mitigation.MaliciousUserThreatLevel_Medium{}
-									threatLevelInt.Medium = &ves_io_schema.Empty{}
-									threatLevel.ThreatLevel = threatLevelInt
-								}
-
-							}
-
-						}
-
 					}
 
 				}
 
 			}
-
 		}
 
 	}

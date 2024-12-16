@@ -1,9 +1,9 @@
 ---
 
 page_title: "Volterra: dns_zone"
-description: "The dns_zone allows CRUD of Dns Zone resource on Volterra SaaS"
 
----
+description: "The dns_zone allows CRUD of Dns Zone resource on Volterra SaaS"
+-----------------------------------------------------------------------------
 
 Resource volterra_dns_zone
 ==========================
@@ -22,64 +22,34 @@ resource "volterra_dns_zone" "example" {
 
   // One of the arguments from this list "primary secondary" must be set
 
-  primary {
-    allow_http_lb_managed_records = true
+  secondary {
+    primary_servers = ["8.8.8.8"]
 
-    default_rr_set_group {
-      description = "Comment"
+    tsig_key_algorithm = "tsig_key_algorithm"
 
-      ttl = "3600"
+    tsig_key_name = "value"
 
-      // One of the arguments from this list "a_record aaaa_record afsdb_record alias_record caa_record cds_record cert_record cname_record dlv_record ds_record eui48_record eui64_record lb_record loc_record mx_record naptr_record ns_record ptr_record srv_record sshfp_record tlsa_record txt_record" must be set
+    tsig_key_value {
+      blindfold_secret_info_internal {
+        decryption_provider = "value"
 
-      srv_record {
-        name = "www or mail or * or corp.web or *.b"
+        location = "string:///U2VjcmV0SW5mb3JtYXRpb24="
 
-        values {
-          port = "10"
-
-          priority = "10"
-
-          target = "my.example.com"
-
-          weight = "10"
-        }
-      }
-    }
-
-    dnssec_mode {
-      // One of the arguments from this list "disable enable" must be set
-
-      disable = true
-    }
-
-    rr_set_group {
-      metadata {
-        description = "Virtual Host for acmecorp website"
-
-        disable = true
-
-        name = "acmecorp-web"
+        store_provider = "value"
       }
 
-      rr_set {
-        description = "Comment"
+      secret_encoding_type = "secret_encoding_type"
 
-        ttl = "3600"
+      // One of the arguments from this list "blindfold_secret_info clear_secret_info vault_secret_info wingman_secret_info" must be set
 
-        // One of the arguments from this list "a_record aaaa_record afsdb_record alias_record caa_record cds_record cert_record cname_record dlv_record ds_record eui48_record eui64_record lb_record loc_record mx_record naptr_record ns_record ptr_record srv_record sshfp_record tlsa_record txt_record" must be set
+      blindfold_secret_info {
+        decryption_provider = "value"
 
-        alias_record {
-          name = "name"
+        location = "string:///U2VjcmV0SW5mb3JtYXRpb24="
 
-          value = "example.com"
-        }
+        store_provider = "value"
       }
     }
-
-    // One of the arguments from this list "default_soa_parameters soa_parameters" can be set
-
-    default_soa_parameters = true
   }
 }
 

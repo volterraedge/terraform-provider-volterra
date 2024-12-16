@@ -1,9 +1,9 @@
 ---
 
 page_title: "Volterra: data_type"
-description: "The data_type allows CRUD of Data Type resource on Volterra SaaS"
 
----
+description: "The data_type allows CRUD of Data Type resource on Volterra SaaS"
+-------------------------------------------------------------------------------
 
 Resource volterra_data_type
 ===========================

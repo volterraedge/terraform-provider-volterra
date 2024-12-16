@@ -1149,16 +1149,25 @@ func (s *APISrv) Create(ctx context.Context, req *CreateRequest) (*CreateRespons
 	}
 	reqMsgFQN := "ves.io.schema.global_log_receiver.CreateRequest"
 	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.sf, reqMsgFQN, req)
+	var retErr error
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
 		}
+		userMsg := "The 'ves.io.schema.global_log_receiver.API.Create' operation on 'global_log_receiver'"
+		if retErr == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
 	obj := NewDBObject(nil)
 	req.ToObject(obj)
 	if conv, exists := s.sf.Config().MsgToObjConverters[reqMsgFQN]; exists {
 		if err := conv(req, obj); err != nil {
+			retErr = err
 			return nil, err
 		}
 	}
@@ -1167,16 +1176,19 @@ func (s *APISrv) Create(ctx context.Context, req *CreateRequest) (*CreateRespons
 	rsrcRsp, err := s.opts.RsrcHandler.CreateFn(ctx, rsrcReq, s.apiWrapper)
 	if err != nil {
 		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "CreateResource"))
+		retErr = err
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 	rsp, err := NewObjectCreateRsp(rsrcRsp.Entry)
 	if err != nil {
 		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "CreateResponse"))
+		retErr = err
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 	rspMsgFQN := "ves.io.schema.global_log_receiver.CreateResponse"
 	if conv, exists := s.sf.Config().ObjToMsgConverters[rspMsgFQN]; exists {
 		if err := conv(rsrcRsp.Entry, rsp); err != nil {
+			retErr = err
 			return nil, err
 		}
 	}
@@ -1208,21 +1220,31 @@ func (s *APISrv) Replace(ctx context.Context, req *ReplaceRequest) (*ReplaceResp
 		}
 	}
 	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.sf, "ves.io.schema.global_log_receiver.API.ReplaceRequest", req)
+	var retErr error
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
 		}
+		userMsg := "The 'ves.io.schema.global_log_receiver.API.Replace' operation on 'global_log_receiver'"
+		if retErr == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
 	rsrcReq := &server.ResourceReplaceRequest{RequestMsg: req}
 	rsrcRsp, err := s.opts.RsrcHandler.ReplaceFn(ctx, rsrcReq, s.apiWrapper)
 	if err != nil {
 		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "ReplaceResource"))
+		retErr = err
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 	rsp, err := NewObjectReplaceRsp(rsrcRsp.Entry)
 	if err != nil {
 		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "ReplaceResponse"))
+		retErr = err
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.sf, "ves.io.schema.global_log_receiver.API.ReplaceResponse", rsp)...)
@@ -1341,10 +1363,18 @@ func (s *APISrv) Delete(ctx context.Context, req *DeleteRequest) (*google_protob
 		}
 	}
 	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.sf, "ves.io.schema.global_log_receiver.API.DeleteRequest", req)
+	var retErr error
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
 		}
+		userMsg := "The 'ves.io.schema.global_log_receiver.API.Delete' operation on 'global_log_receiver'"
+		if retErr == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
 	tenant := server.TenantFromContext(ctx)
@@ -1354,6 +1384,7 @@ func (s *APISrv) Delete(ctx context.Context, req *DeleteRequest) (*google_protob
 	_, err := s.opts.RsrcHandler.DeleteFn(ctx, rsrcReq, s.apiWrapper)
 	if err != nil {
 		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "DeleteResource"))
+		retErr = err
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 	return &google_protobuf.Empty{}, nil
@@ -2328,6 +2359,12 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.string.min_len": "3",
                         "ves.io.schema.rules.string.pattern": "^[A-Za-z0-9][A-Za-z0-9-]+[A-Za-z0-9]$"
                     }
+                },
+                "filename_options": {
+                    "description": " Filename Options allow customization of filename and folder paths for the blob",
+                    "title": "Filename Options",
+                    "$ref": "#/definitions/global_log_receiverFilenameOptionsType",
+                    "x-displayname": "Filename Options"
                 }
             }
         },
@@ -2454,17 +2491,23 @@ var APISwaggerJSON string = `{
             "description": "Compression Type",
             "title": "CompressionType",
             "x-displayname": "Compression Type",
-            "x-ves-oneof-field-compression_choice": "[\"compression_gzip\",\"compression_none\"]",
+            "x-ves-oneof-field-compression_choice": "[\"compression_default\",\"compression_gzip\",\"compression_none\"]",
             "x-ves-proto-message": "ves.io.schema.global_log_receiver.CompressionType",
             "properties": {
+                "compression_default": {
+                    "description": "Exclusive with [compression_gzip compression_none]\n Default Compression defaults to gzip for all endpoint types, except: HTTP, QRadar",
+                    "title": "Default Compression",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "default"
+                },
                 "compression_gzip": {
-                    "description": "Exclusive with [compression_none]\n Gzip Compression",
+                    "description": "Exclusive with [compression_default compression_none]\n Gzip Compression",
                     "title": "Gzip Compression",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "gzip"
                 },
                 "compression_none": {
-                    "description": "Exclusive with [compression_gzip]\n No Compression",
+                    "description": "Exclusive with [compression_default compression_gzip]\n No Compression",
                     "title": "No Compression",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "none"
@@ -2762,6 +2805,38 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "global_log_receiverFilenameOptionsType": {
+            "type": "object",
+            "description": "Filename Options allow customization of filename and folder paths used by a destination endpoint bucket or file",
+            "title": "Filename Options",
+            "x-displayname": "Filename Options",
+            "x-ves-oneof-field-folder": "[\"custom_folder\",\"log_type_folder\",\"no_folder\"]",
+            "x-ves-proto-message": "ves.io.schema.global_log_receiver.FilenameOptionsType",
+            "properties": {
+                "custom_folder": {
+                    "type": "string",
+                    "description": "Exclusive with [log_type_folder no_folder]\n Use your own folder name as the name of the folder in the endpoint bucket or file\n The folder name must match -/^[a-z_][a-z0-9\\\\-\\\\._]*$/i-\n\nExample: - \"logs\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.pattern: ^[A-Za-z_][A-Za-z0-9\\\\-\\\\._]*$\n",
+                    "title": "Custom Folder",
+                    "x-displayname": "Custom Folder",
+                    "x-ves-example": "logs",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.pattern": "^[A-Za-z_][A-Za-z0-9\\\\-\\\\._]*$"
+                    }
+                },
+                "log_type_folder": {
+                    "description": "Exclusive with [custom_folder no_folder]\n Use the name of the selected LogType as the name of the folder in the endpoint bucket or file\n depending on LogType selection, this will be one of: access, security, audit or dns",
+                    "title": "Log Type Folder",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Log Type Folder"
+                },
+                "no_folder": {
+                    "description": "Exclusive with [custom_folder log_type_folder]\n Do not use a folder path",
+                    "title": "No Folder",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "No Folder"
+                }
+            }
+        },
         "global_log_receiverGCPBucketConfig": {
             "type": "object",
             "description": "GCP Bucket Configuration for Global Log Receiver",
@@ -2796,6 +2871,12 @@ var APISwaggerJSON string = `{
                     "title": "Compression Options",
                     "$ref": "#/definitions/global_log_receiverCompressionType",
                     "x-displayname": "Compression Options"
+                },
+                "filename_options": {
+                    "description": " Filename Options allow customization of filename and folder paths for the bucket",
+                    "title": "Filename Options",
+                    "$ref": "#/definitions/global_log_receiverFilenameOptionsType",
+                    "x-displayname": "Filename Options"
                 },
                 "gcp_cred": {
                     "description": " Reference to GCP Cloud Credentials for access to the GCP bucket\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
@@ -3582,6 +3663,12 @@ var APISwaggerJSON string = `{
                     "title": "Compression Options",
                     "$ref": "#/definitions/global_log_receiverCompressionType",
                     "x-displayname": "Compression Options"
+                },
+                "filename_options": {
+                    "description": " Filename Options allow customization of filename and folder paths for the bucket",
+                    "title": "Filename Options",
+                    "$ref": "#/definitions/global_log_receiverFilenameOptionsType",
+                    "x-displayname": "Filename Options"
                 }
             }
         },
@@ -3607,7 +3694,7 @@ var APISwaggerJSON string = `{
                 },
                 "endpoint": {
                     "type": "string",
-                    "description": " Splunk HEC Logs Endpoint, example: -https://http-input-hec.splunkcloud.com-\n\nExample: - \"https://http-inputs-hec.splunkcloud.com\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.uri_ref: true\n",
+                    "description": " Splunk HEC Logs Endpoint, example: -https://http-input-hec.splunkcloud.com- (Note: must not contain -/services/collector-)\n\nExample: - \"https://http-inputs-hec.splunkcloud.com\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.uri_ref: true\n",
                     "title": "Splunk HEC Logs Endpoint",
                     "x-displayname": "Splunk HEC Logs Endpoint",
                     "x-ves-example": "https://http-inputs-hec.splunkcloud.com",

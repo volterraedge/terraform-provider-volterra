@@ -1,9 +1,9 @@
 ---
 
 page_title: "Volterra: network_policy_rule"
-description: "The network_policy_rule allows CRUD of Network Policy Rule resource on Volterra SaaS"
 
----
+description: "The network_policy_rule allows CRUD of Network Policy Rule resource on Volterra SaaS"
+---------------------------------------------------------------------------------------------------
 
 Resource volterra_network_policy_rule
 =====================================

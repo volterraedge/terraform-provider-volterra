@@ -44,6 +44,105 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
+// List Available API Definitions Request
+//
+// x-displayName: "List Available API Definitions Request"
+// Request form for List Available API Definitions
+type ListAvailableAPIDefinitionsReq struct {
+	// Namespace
+	//
+	// x-displayName: "Namespace"
+	// x-example: "shared"
+	// namespace is used to get available API Definitions for the given namespace.
+	Namespace string `protobuf:"bytes,1,opt,name=namespace,proto3" json:"namespace,omitempty"`
+}
+
+func (m *ListAvailableAPIDefinitionsReq) Reset()      { *m = ListAvailableAPIDefinitionsReq{} }
+func (*ListAvailableAPIDefinitionsReq) ProtoMessage() {}
+func (*ListAvailableAPIDefinitionsReq) Descriptor() ([]byte, []int) {
+	return fileDescriptor_0b4d35d1130750c6, []int{0}
+}
+func (m *ListAvailableAPIDefinitionsReq) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *ListAvailableAPIDefinitionsReq) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_ListAvailableAPIDefinitionsReq.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *ListAvailableAPIDefinitionsReq) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ListAvailableAPIDefinitionsReq.Merge(m, src)
+}
+func (m *ListAvailableAPIDefinitionsReq) XXX_Size() int {
+	return m.Size()
+}
+func (m *ListAvailableAPIDefinitionsReq) XXX_DiscardUnknown() {
+	xxx_messageInfo_ListAvailableAPIDefinitionsReq.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ListAvailableAPIDefinitionsReq proto.InternalMessageInfo
+
+func (m *ListAvailableAPIDefinitionsReq) GetNamespace() string {
+	if m != nil {
+		return m.Namespace
+	}
+	return ""
+}
+
+type ListAvailableAPIDefinitionsResp struct {
+	// Available API Definitions
+	//
+	// x-displayName: "Available API Definitions"
+	// The list of references to available API Definition objects.
+	AvailableApiDefinitions []*views.ObjectRefType `protobuf:"bytes,1,rep,name=available_api_definitions,json=availableApiDefinitions,proto3" json:"available_api_definitions,omitempty"`
+}
+
+func (m *ListAvailableAPIDefinitionsResp) Reset()      { *m = ListAvailableAPIDefinitionsResp{} }
+func (*ListAvailableAPIDefinitionsResp) ProtoMessage() {}
+func (*ListAvailableAPIDefinitionsResp) Descriptor() ([]byte, []int) {
+	return fileDescriptor_0b4d35d1130750c6, []int{1}
+}
+func (m *ListAvailableAPIDefinitionsResp) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *ListAvailableAPIDefinitionsResp) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_ListAvailableAPIDefinitionsResp.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *ListAvailableAPIDefinitionsResp) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ListAvailableAPIDefinitionsResp.Merge(m, src)
+}
+func (m *ListAvailableAPIDefinitionsResp) XXX_Size() int {
+	return m.Size()
+}
+func (m *ListAvailableAPIDefinitionsResp) XXX_DiscardUnknown() {
+	xxx_messageInfo_ListAvailableAPIDefinitionsResp.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ListAvailableAPIDefinitionsResp proto.InternalMessageInfo
+
+func (m *ListAvailableAPIDefinitionsResp) GetAvailableApiDefinitions() []*views.ObjectRefType {
+	if m != nil {
+		return m.AvailableApiDefinitions
+	}
+	return nil
+}
+
 // Get Referencing Loadbalancers Request
 //
 // x-displayName: "Get Referencing Loadbalancers"
@@ -66,7 +165,7 @@ type GetReferencingLoadbalancersReq struct {
 func (m *GetReferencingLoadbalancersReq) Reset()      { *m = GetReferencingLoadbalancersReq{} }
 func (*GetReferencingLoadbalancersReq) ProtoMessage() {}
 func (*GetReferencingLoadbalancersReq) Descriptor() ([]byte, []int) {
-	return fileDescriptor_0b4d35d1130750c6, []int{0}
+	return fileDescriptor_0b4d35d1130750c6, []int{2}
 }
 func (m *GetReferencingLoadbalancersReq) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -124,7 +223,7 @@ type GetReferencingLoadbalancersResp struct {
 func (m *GetReferencingLoadbalancersResp) Reset()      { *m = GetReferencingLoadbalancersResp{} }
 func (*GetReferencingLoadbalancersResp) ProtoMessage() {}
 func (*GetReferencingLoadbalancersResp) Descriptor() ([]byte, []int) {
-	return fileDescriptor_0b4d35d1130750c6, []int{1}
+	return fileDescriptor_0b4d35d1130750c6, []int{3}
 }
 func (m *GetReferencingLoadbalancersResp) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -160,6 +259,57 @@ func (m *GetReferencingLoadbalancersResp) GetHttpLoadbalancers() []*views.Object
 	return nil
 }
 
+// Get API Endpoints Schema Response
+//
+// x-displayName: "Get API Endpoints Schema Response"
+// Response shape for Get API Endpoints With Newly Discovered Schema
+type GetReferencingAllLoadbalancersResp struct {
+	// Loadbalancers
+	//
+	// x-displayName: "Loadbalancers"
+	// Loadbalancers referencing the API Definition.
+	Loadbalancers []*views.ObjectRefType `protobuf:"bytes,1,rep,name=loadbalancers,proto3" json:"loadbalancers,omitempty"`
+}
+
+func (m *GetReferencingAllLoadbalancersResp) Reset()      { *m = GetReferencingAllLoadbalancersResp{} }
+func (*GetReferencingAllLoadbalancersResp) ProtoMessage() {}
+func (*GetReferencingAllLoadbalancersResp) Descriptor() ([]byte, []int) {
+	return fileDescriptor_0b4d35d1130750c6, []int{4}
+}
+func (m *GetReferencingAllLoadbalancersResp) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *GetReferencingAllLoadbalancersResp) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_GetReferencingAllLoadbalancersResp.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *GetReferencingAllLoadbalancersResp) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetReferencingAllLoadbalancersResp.Merge(m, src)
+}
+func (m *GetReferencingAllLoadbalancersResp) XXX_Size() int {
+	return m.Size()
+}
+func (m *GetReferencingAllLoadbalancersResp) XXX_DiscardUnknown() {
+	xxx_messageInfo_GetReferencingAllLoadbalancersResp.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_GetReferencingAllLoadbalancersResp proto.InternalMessageInfo
+
+func (m *GetReferencingAllLoadbalancersResp) GetLoadbalancers() []*views.ObjectRefType {
+	if m != nil {
+		return m.Loadbalancers
+	}
+	return nil
+}
+
 // API Inventory Request
 //
 // x-displayName: "API Inventory Request"
@@ -188,7 +338,7 @@ type APInventoryReq struct {
 func (m *APInventoryReq) Reset()      { *m = APInventoryReq{} }
 func (*APInventoryReq) ProtoMessage() {}
 func (*APInventoryReq) Descriptor() ([]byte, []int) {
-	return fileDescriptor_0b4d35d1130750c6, []int{2}
+	return fileDescriptor_0b4d35d1130750c6, []int{5}
 }
 func (m *APInventoryReq) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -253,7 +403,7 @@ type APInventoryResp struct {
 func (m *APInventoryResp) Reset()      { *m = APInventoryResp{} }
 func (*APInventoryResp) ProtoMessage() {}
 func (*APInventoryResp) Descriptor() ([]byte, []int) {
-	return fileDescriptor_0b4d35d1130750c6, []int{3}
+	return fileDescriptor_0b4d35d1130750c6, []int{6}
 }
 func (m *APInventoryResp) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -290,10 +440,16 @@ func (m *APInventoryResp) GetUpdatedApiEndpoints() []*views.ApiOperation {
 }
 
 func init() {
+	proto.RegisterType((*ListAvailableAPIDefinitionsReq)(nil), "ves.io.schema.views.api_definition.ListAvailableAPIDefinitionsReq")
+	golang_proto.RegisterType((*ListAvailableAPIDefinitionsReq)(nil), "ves.io.schema.views.api_definition.ListAvailableAPIDefinitionsReq")
+	proto.RegisterType((*ListAvailableAPIDefinitionsResp)(nil), "ves.io.schema.views.api_definition.ListAvailableAPIDefinitionsResp")
+	golang_proto.RegisterType((*ListAvailableAPIDefinitionsResp)(nil), "ves.io.schema.views.api_definition.ListAvailableAPIDefinitionsResp")
 	proto.RegisterType((*GetReferencingLoadbalancersReq)(nil), "ves.io.schema.views.api_definition.GetReferencingLoadbalancersReq")
 	golang_proto.RegisterType((*GetReferencingLoadbalancersReq)(nil), "ves.io.schema.views.api_definition.GetReferencingLoadbalancersReq")
 	proto.RegisterType((*GetReferencingLoadbalancersResp)(nil), "ves.io.schema.views.api_definition.GetReferencingLoadbalancersResp")
 	golang_proto.RegisterType((*GetReferencingLoadbalancersResp)(nil), "ves.io.schema.views.api_definition.GetReferencingLoadbalancersResp")
+	proto.RegisterType((*GetReferencingAllLoadbalancersResp)(nil), "ves.io.schema.views.api_definition.GetReferencingAllLoadbalancersResp")
+	golang_proto.RegisterType((*GetReferencingAllLoadbalancersResp)(nil), "ves.io.schema.views.api_definition.GetReferencingAllLoadbalancersResp")
 	proto.RegisterType((*APInventoryReq)(nil), "ves.io.schema.views.api_definition.APInventoryReq")
 	golang_proto.RegisterType((*APInventoryReq)(nil), "ves.io.schema.views.api_definition.APInventoryReq")
 	proto.RegisterType((*APInventoryResp)(nil), "ves.io.schema.views.api_definition.APInventoryResp")
@@ -308,62 +464,126 @@ func init() {
 }
 
 var fileDescriptor_0b4d35d1130750c6 = []byte{
-	// 835 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xc4, 0x96, 0xcf, 0x6f, 0x1b, 0x45,
-	0x14, 0xc7, 0x3d, 0x9b, 0x0a, 0xe8, 0x36, 0x94, 0x76, 0x21, 0x92, 0x65, 0xa2, 0x6d, 0xd8, 0x53,
-	0x41, 0xec, 0xae, 0x94, 0xf2, 0x43, 0xe2, 0x84, 0x13, 0x95, 0xfe, 0xa0, 0xa5, 0xd6, 0x2a, 0x95,
-	0x10, 0x97, 0xd5, 0x78, 0xf7, 0x79, 0x3d, 0xc4, 0x3b, 0x33, 0xcc, 0xcc, 0x6e, 0x62, 0xa1, 0x48,
-	0x28, 0x07, 0x04, 0x3d, 0x54, 0x50, 0x2e, 0xfc, 0x09, 0x88, 0xbf, 0x00, 0x11, 0x0e, 0xb9, 0xd1,
-	0x13, 0x8a, 0xe0, 0xd2, 0x23, 0x59, 0x73, 0x80, 0x5b, 0xff, 0x04, 0xb4, 0x63, 0x3b, 0xd8, 0x8e,
-	0x09, 0xc6, 0x91, 0xda, 0xdb, 0x8c, 0xbf, 0x33, 0xdf, 0x79, 0xef, 0x33, 0xef, 0xad, 0xc7, 0x7c,
-	0x37, 0x07, 0xe9, 0x11, 0xe6, 0xcb, 0xa8, 0x0d, 0x29, 0xf6, 0x73, 0x02, 0x5b, 0xd2, 0xc7, 0x9c,
-	0x84, 0x31, 0xb4, 0x08, 0x25, 0x8a, 0x30, 0xea, 0xf3, 0xac, 0xd9, 0x21, 0x51, 0x18, 0x31, 0xda,
-	0x22, 0x49, 0x18, 0x65, 0x52, 0xb1, 0x14, 0x73, 0xe2, 0x71, 0xc1, 0x14, 0xb3, 0x9c, 0xbe, 0x83,
-	0xd7, 0x77, 0xf0, 0xb4, 0x83, 0x37, 0xee, 0x50, 0x73, 0x13, 0xa2, 0xda, 0x59, 0xd3, 0x8b, 0x58,
-	0xea, 0x27, 0x2c, 0x61, 0xbe, 0xde, 0xda, 0xcc, 0x5a, 0x7a, 0xa6, 0x27, 0x7a, 0xd4, 0xb7, 0xac,
-	0x2d, 0x27, 0x8c, 0x25, 0x1d, 0x28, 0xe3, 0xf0, 0x31, 0xa5, 0x4c, 0xe1, 0xd2, 0x45, 0x0e, 0xd4,
-	0x97, 0x07, 0xea, 0x91, 0x07, 0xa4, 0x5c, 0x75, 0x87, 0xe2, 0x78, 0x3e, 0x8c, 0x8f, 0xee, 0x5c,
-	0x9e, 0x48, 0x16, 0x77, 0x48, 0x8c, 0x15, 0x0c, 0x54, 0x67, 0x42, 0x05, 0x09, 0x34, 0x9f, 0x70,
-	0xf0, 0x66, 0xc0, 0xa5, 0xba, 0x1c, 0x86, 0xeb, 0x2f, 0x4d, 0x5b, 0x3f, 0xb2, 0xc0, 0x09, 0x4c,
-	0xfb, 0x1a, 0xa8, 0x00, 0x5a, 0x20, 0x80, 0x46, 0x84, 0x26, 0xb7, 0x18, 0x8e, 0x9b, 0xb8, 0x83,
-	0x69, 0x04, 0x42, 0x06, 0xf0, 0x89, 0xb5, 0x6c, 0x9e, 0xa5, 0x38, 0x05, 0xc9, 0x71, 0x04, 0x55,
-	0xb4, 0x82, 0x2e, 0x9f, 0x0d, 0xfe, 0xf9, 0xc1, 0xb2, 0xcc, 0x33, 0xe5, 0xa4, 0x6a, 0x68, 0x41,
-	0x8f, 0x9d, 0x7b, 0xc8, 0xbc, 0x74, 0xa2, 0xa9, 0xe4, 0x56, 0x62, 0x5a, 0x6d, 0xa5, 0x78, 0xd8,
-	0x19, 0x55, 0xaa, 0x68, 0x65, 0xe1, 0xf2, 0xb9, 0x55, 0xc7, 0x9b, 0x76, 0xa5, 0x77, 0x9a, 0x1f,
-	0x43, 0x54, 0x9a, 0x6e, 0x74, 0x39, 0xac, 0xbd, 0xf4, 0xfd, 0xce, 0xc5, 0x63, 0x06, 0x81, 0xfe,
-	0x69, 0xec, 0x30, 0xe7, 0x5b, 0x64, 0x9e, 0xaf, 0x37, 0x6e, 0xd0, 0x1c, 0xa8, 0x62, 0xa2, 0x3b,
-	0x57, 0x46, 0xd6, 0x86, 0xf9, 0x7c, 0x09, 0x19, 0x68, 0xcc, 0x19, 0xa1, 0x4a, 0x56, 0x17, 0x74,
-	0xa0, 0xaf, 0x4c, 0x0d, 0xb4, 0xce, 0xc9, 0x1d, 0x0e, 0x42, 0xd7, 0xcc, 0xda, 0xe2, 0x8f, 0x7f,
-	0xed, 0x2f, 0x3c, 0xfb, 0x00, 0x9d, 0x79, 0x0e, 0x5d, 0x88, 0x83, 0x45, 0xcc, 0xc9, 0xd5, 0xa1,
-	0x89, 0xd3, 0x36, 0x5f, 0x18, 0x8b, 0x4c, 0x72, 0xeb, 0xae, 0xb9, 0x94, 0xf1, 0xb2, 0x26, 0xe2,
-	0x70, 0xfc, 0x40, 0x34, 0xe3, 0x81, 0xc1, 0x8b, 0x83, 0xfd, 0xf5, 0x91, 0x93, 0x56, 0x7f, 0x3a,
-	0x67, 0x2e, 0x35, 0x74, 0x17, 0xad, 0xeb, 0x26, 0x5a, 0xd7, 0x3d, 0x54, 0x6f, 0xdc, 0xb0, 0xf6,
-	0x8c, 0xc9, 0xbb, 0xba, 0x3e, 0x89, 0xd0, 0x5a, 0xf3, 0xfe, 0xbb, 0xc5, 0xbc, 0x93, 0xab, 0xa8,
-	0xb6, 0x7e, 0x6a, 0x0f, 0xc9, 0x9d, 0xfb, 0xe8, 0xe1, 0x0f, 0x06, 0x2a, 0x7e, 0xae, 0xbe, 0xd5,
-	0x7a, 0x73, 0x3b, 0x72, 0xb7, 0x30, 0xe6, 0x2e, 0x8e, 0xf3, 0x72, 0x45, 0xec, 0xa6, 0x8c, 0x12,
-	0xc5, 0xc4, 0xeb, 0x2b, 0x39, 0x48, 0x97, 0x30, 0x97, 0x0b, 0xb6, 0xdd, 0x75, 0x25, 0x44, 0x99,
-	0x20, 0xaa, 0xeb, 0x0a, 0xc0, 0xf1, 0xee, 0x6f, 0x7f, 0x7c, 0x63, 0xdc, 0xb4, 0xae, 0x0f, 0xbe,
-	0x28, 0xfe, 0xd1, 0xa5, 0x4b, 0xff, 0xd3, 0xa3, 0xf1, 0xce, 0x44, 0x3f, 0x0d, 0xb4, 0x1d, 0xff,
-	0x78, 0xbd, 0x5a, 0x5f, 0x1a, 0xe6, 0xc5, 0xdb, 0x2c, 0x87, 0x0d, 0x36, 0x72, 0x91, 0xd6, 0xea,
-	0x2c, 0xb9, 0x8e, 0xd7, 0x64, 0xed, 0xca, 0xff, 0xde, 0x23, 0xb9, 0x73, 0xaf, 0x64, 0xf1, 0xc6,
-	0x14, 0x16, 0x99, 0x84, 0x7f, 0x05, 0xb1, 0x25, 0x88, 0x02, 0x4d, 0xe2, 0x96, 0x73, 0x6d, 0x3e,
-	0x12, 0x29, 0xcb, 0x21, 0x54, 0x2c, 0x24, 0xc3, 0x68, 0xde, 0x41, 0xaf, 0x59, 0x5f, 0x1b, 0xe6,
-	0x52, 0x00, 0xa5, 0xf4, 0x9e, 0xd0, 0xb5, 0xf5, 0xe4, 0x79, 0xdc, 0x3f, 0x1d, 0x8f, 0x86, 0xf3,
-	0xfe, 0x7c, 0x3c, 0x84, 0x4e, 0x3b, 0x6c, 0x09, 0x96, 0x8e, 0x33, 0xd9, 0x35, 0xcc, 0xc5, 0xdb,
-	0x58, 0x6c, 0xd6, 0xe5, 0x07, 0x8c, 0x96, 0xed, 0xf6, 0xc4, 0x50, 0x7c, 0x71, 0x3a, 0x14, 0x37,
-	0x9d, 0xab, 0x73, 0x96, 0x06, 0x16, 0x9b, 0x21, 0x96, 0x21, 0x65, 0xb4, 0xfc, 0x82, 0x95, 0x10,
-	0x3e, 0x37, 0xcc, 0xf3, 0x77, 0x69, 0xfa, 0x54, 0x30, 0x3c, 0xad, 0x0e, 0xc9, 0xe8, 0x71, 0x10,
-	0xb5, 0xb7, 0xf7, 0xf7, 0xd0, 0xc2, 0xaf, 0x7b, 0xe8, 0xd5, 0x19, 0x12, 0xe9, 0xff, 0xdb, 0xed,
-	0xfe, 0x52, 0x35, 0x2e, 0xa0, 0xb5, 0x07, 0xe8, 0xe0, 0xd0, 0xae, 0x3c, 0x3a, 0xb4, 0x2b, 0x8f,
-	0x0f, 0x6d, 0xf4, 0x59, 0x61, 0xa3, 0xef, 0x0a, 0x1b, 0x3d, 0x2c, 0x6c, 0x74, 0x50, 0xd8, 0xe8,
-	0xf7, 0xc2, 0x46, 0x7f, 0x16, 0x76, 0xe5, 0x71, 0x61, 0xa3, 0xaf, 0x7a, 0x76, 0x65, 0xbf, 0x67,
-	0xa3, 0x83, 0x9e, 0x5d, 0x79, 0xd4, 0xb3, 0x2b, 0x1f, 0x7d, 0x98, 0x30, 0xbe, 0x99, 0x78, 0x39,
-	0xeb, 0x28, 0x10, 0x02, 0x7b, 0x99, 0xf4, 0xf5, 0xa0, 0xc5, 0x44, 0x5a, 0xe6, 0x9d, 0x93, 0x18,
-	0x84, 0x3b, 0x94, 0x7d, 0xde, 0x4c, 0x98, 0x0f, 0xdb, 0x6a, 0xf0, 0x5e, 0x38, 0xe1, 0x99, 0xd1,
-	0x7c, 0x46, 0x3f, 0x20, 0xae, 0xfc, 0x1d, 0x00, 0x00, 0xff, 0xff, 0x4b, 0x86, 0xee, 0xf5, 0xc2,
-	0x09, 0x00, 0x00,
+	// 1013 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xc4, 0x97, 0x4f, 0x6f, 0x1b, 0xc5,
+	0x1b, 0xc7, 0x3d, 0x9b, 0xea, 0xf7, 0xa3, 0x43, 0x5a, 0xd2, 0x85, 0x08, 0x93, 0x44, 0x9b, 0xb0,
+	0xa7, 0x82, 0xf0, 0xae, 0x94, 0xf2, 0x47, 0x02, 0xf1, 0xc7, 0x09, 0x69, 0x93, 0x92, 0xd2, 0xc8,
+	0x4a, 0x24, 0xc4, 0x81, 0xd5, 0x78, 0x77, 0xbc, 0x1e, 0xe2, 0x9d, 0x19, 0x66, 0x66, 0x37, 0xb1,
+	0x50, 0x24, 0xc8, 0x01, 0xb5, 0x3d, 0x20, 0x28, 0x17, 0x5e, 0x02, 0xe2, 0xd6, 0x03, 0x52, 0x45,
+	0x2f, 0xb9, 0xb5, 0x12, 0x12, 0x8a, 0xe0, 0x52, 0x71, 0x40, 0xc4, 0xe1, 0x00, 0xb7, 0xbe, 0x04,
+	0xb4, 0x63, 0x3b, 0xf5, 0x3a, 0xc6, 0x71, 0x1c, 0xd4, 0xde, 0x66, 0xf7, 0x99, 0xf9, 0xce, 0xf3,
+	0x7c, 0x66, 0x9e, 0xaf, 0xbd, 0xf0, 0x9d, 0x04, 0x4b, 0x87, 0x30, 0x57, 0xfa, 0x55, 0x1c, 0x21,
+	0x37, 0x21, 0x78, 0x43, 0xba, 0x88, 0x13, 0x2f, 0xc0, 0x15, 0x42, 0x89, 0x22, 0x8c, 0xba, 0x3c,
+	0x2e, 0xd7, 0x88, 0xef, 0xf9, 0x8c, 0x56, 0x48, 0xe8, 0xf9, 0xb1, 0x54, 0x2c, 0x42, 0x9c, 0x38,
+	0x5c, 0x30, 0xc5, 0x4c, 0xbb, 0xa9, 0xe0, 0x34, 0x15, 0x1c, 0xad, 0xe0, 0x64, 0x15, 0x26, 0x0a,
+	0x21, 0x51, 0xd5, 0xb8, 0xec, 0xf8, 0x2c, 0x72, 0x43, 0x16, 0x32, 0x57, 0x2f, 0x2d, 0xc7, 0x15,
+	0xfd, 0xa4, 0x1f, 0xf4, 0xa8, 0x29, 0x39, 0x31, 0x15, 0x32, 0x16, 0xd6, 0x70, 0x9a, 0x87, 0x8b,
+	0x28, 0x65, 0x0a, 0xa5, 0x2a, 0xb2, 0x15, 0x9d, 0x6c, 0x45, 0x0f, 0x34, 0x70, 0xc4, 0x55, 0xbd,
+	0x1d, 0xcc, 0xd6, 0xc3, 0x78, 0xe7, 0xca, 0xa9, 0xae, 0x62, 0x51, 0x8d, 0x04, 0x48, 0xe1, 0x56,
+	0xd4, 0xee, 0x8a, 0x62, 0x89, 0x69, 0xd2, 0xa5, 0xe0, 0x0c, 0x80, 0x4b, 0xd5, 0x39, 0x6e, 0xcf,
+	0x9f, 0xee, 0x35, 0xbf, 0x63, 0x82, 0xfd, 0x16, 0xb4, 0x96, 0x89, 0x54, 0xc5, 0x04, 0x91, 0x1a,
+	0x2a, 0xd7, 0x70, 0x71, 0x65, 0xe9, 0xdd, 0x03, 0x29, 0x59, 0xc2, 0x9f, 0x98, 0x53, 0xf0, 0x34,
+	0x45, 0x11, 0x96, 0x1c, 0xf9, 0x38, 0x0f, 0x66, 0xc0, 0xf9, 0xd3, 0xa5, 0x87, 0x2f, 0xec, 0xcf,
+	0x01, 0x9c, 0xee, 0x2b, 0x20, 0xb9, 0xf9, 0x11, 0x7c, 0x0e, 0xb5, 0xc3, 0x5e, 0x36, 0x59, 0x99,
+	0x07, 0x33, 0x23, 0xe7, 0x9f, 0x9c, 0xb5, 0x9d, 0x5e, 0xa7, 0x78, 0xb5, 0xfc, 0x31, 0xf6, 0x55,
+	0x09, 0x57, 0x56, 0xeb, 0x1c, 0x97, 0x9e, 0x3d, 0x10, 0x29, 0x72, 0xd2, 0xb1, 0x87, 0x5d, 0x82,
+	0xd6, 0x25, 0x9c, 0x4e, 0xc3, 0x02, 0x53, 0x9f, 0xd0, 0x70, 0x99, 0xa1, 0xa0, 0x8c, 0x6a, 0x88,
+	0xfa, 0x58, 0x1c, 0x5d, 0x83, 0x69, 0xc2, 0x53, 0xe9, 0x43, 0xde, 0xd0, 0x01, 0x3d, 0xb6, 0x6f,
+	0x00, 0x38, 0xdd, 0x57, 0x54, 0x72, 0x33, 0x84, 0x66, 0x55, 0x29, 0xee, 0xd5, 0x3a, 0x23, 0x83,
+	0x17, 0x34, 0xf7, 0xcc, 0xf7, 0x5b, 0xe7, 0x0e, 0x09, 0x94, 0xf4, 0xab, 0xcc, 0x66, 0x36, 0x85,
+	0x76, 0x36, 0x97, 0x62, 0xad, 0x76, 0x38, 0x9d, 0x45, 0x78, 0x66, 0xc8, 0x4c, 0x4a, 0xd9, 0x85,
+	0xf6, 0xb7, 0x00, 0x9e, 0x2d, 0xae, 0x2c, 0xd1, 0x04, 0x53, 0xc5, 0x44, 0x7d, 0x28, 0x82, 0xe6,
+	0x2a, 0x3c, 0x93, 0x9e, 0x35, 0xa6, 0x01, 0x67, 0x84, 0x2a, 0x99, 0x1f, 0xd1, 0xe9, 0x3c, 0xdf,
+	0x33, 0x9d, 0x22, 0x27, 0x57, 0x39, 0x16, 0xba, 0xcf, 0xe6, 0x46, 0x7f, 0xfc, 0x7b, 0x67, 0xe4,
+	0xff, 0x37, 0xc1, 0xa9, 0x27, 0xc0, 0x58, 0x50, 0x1a, 0x45, 0x9c, 0x2c, 0xb4, 0x45, 0xec, 0x2a,
+	0x7c, 0x2a, 0x93, 0x99, 0xe4, 0xe6, 0x1a, 0x1c, 0x8f, 0x79, 0xda, 0x47, 0x81, 0x97, 0xdd, 0x10,
+	0x0c, 0xb8, 0x61, 0xe9, 0xe9, 0xd6, 0xfa, 0x62, 0xc7, 0x4e, 0xb3, 0x3f, 0x8d, 0xc1, 0xf1, 0x15,
+	0xed, 0x3c, 0xf3, 0xda, 0x78, 0xe6, 0xb5, 0xef, 0x14, 0x57, 0x96, 0xcc, 0x5b, 0x06, 0x9c, 0xec,
+	0x73, 0xe7, 0xcd, 0x39, 0xe7, 0x68, 0x4b, 0x72, 0xfa, 0x77, 0xdd, 0xc4, 0xfc, 0x89, 0x35, 0x24,
+	0xb7, 0xaf, 0x81, 0x7b, 0xb7, 0x0d, 0xd0, 0xb8, 0x9b, 0x7f, 0xa3, 0xf2, 0xca, 0xa6, 0x5f, 0x90,
+	0xd8, 0x8f, 0x05, 0x8e, 0xb0, 0xac, 0x16, 0xa4, 0x42, 0x34, 0x40, 0x22, 0x28, 0x44, 0x8c, 0x12,
+	0xc5, 0xc4, 0x4b, 0x09, 0x96, 0x05, 0xc2, 0x0a, 0x5c, 0xb0, 0xcd, 0x7a, 0x73, 0x22, 0x51, 0xf5,
+	0x82, 0xc0, 0x28, 0xd8, 0xfe, 0xf5, 0xcf, 0x6f, 0x8c, 0xb7, 0xcd, 0x37, 0x5b, 0x36, 0xec, 0x1e,
+	0x9c, 0xba, 0x74, 0x3f, 0x3d, 0x18, 0x6f, 0x75, 0x99, 0x90, 0xf4, 0x36, 0x88, 0xaa, 0xb2, 0x58,
+	0x79, 0xb2, 0x8a, 0x04, 0x0e, 0xcc, 0xdf, 0x8d, 0xee, 0x7e, 0x5a, 0xec, 0xbe, 0xe6, 0x83, 0x71,
+	0xeb, 0xdf, 0xe9, 0x83, 0x71, 0x3b, 0xa2, 0xb1, 0xed, 0x5b, 0x9a, 0xdb, 0x6f, 0xb7, 0x8d, 0xe9,
+	0x35, 0x89, 0x67, 0xfa, 0xcc, 0x6e, 0xdc, 0xcd, 0xbf, 0xaa, 0xd1, 0x6e, 0x20, 0xc4, 0x0b, 0x28,
+	0x48, 0xd2, 0xd7, 0x0f, 0xa1, 0xce, 0x1c, 0x41, 0xf5, 0xb2, 0xb9, 0x78, 0x3c, 0xaa, 0xcd, 0xd8,
+	0x96, 0x7b, 0xd8, 0x76, 0xcc, 0x1f, 0x0c, 0x38, 0xd9, 0x27, 0xd3, 0xff, 0x04, 0xee, 0xc5, 0xe3,
+	0x6b, 0xf4, 0x72, 0x2a, 0xfb, 0x7a, 0xfb, 0x5e, 0x9e, 0x04, 0xde, 0x82, 0x39, 0x3f, 0x1c, 0xbc,
+	0x2c, 0xb7, 0xeb, 0x06, 0x3c, 0x77, 0x85, 0x25, 0x78, 0x95, 0x75, 0xf8, 0x8a, 0x39, 0x3b, 0x48,
+	0xa5, 0x59, 0x8b, 0x9c, 0xb8, 0x70, 0xec, 0x35, 0x92, 0xdb, 0x37, 0x52, 0x0c, 0x2f, 0xf7, 0xc0,
+	0x10, 0x4b, 0xfc, 0xaf, 0x0c, 0x36, 0x04, 0x51, 0x58, 0x43, 0x58, 0xb6, 0x2f, 0x0d, 0x07, 0x21,
+	0x62, 0x09, 0xf6, 0x14, 0xf3, 0x48, 0x3b, 0x9b, 0xd7, 0xc1, 0x8b, 0xe6, 0xd7, 0x06, 0x1c, 0x2f,
+	0xe1, 0x34, 0x74, 0x51, 0x68, 0xab, 0x7b, 0xf4, 0x3c, 0xbe, 0x3c, 0x19, 0x8f, 0x15, 0xfb, 0xbd,
+	0xe1, 0x78, 0x08, 0x5d, 0xb6, 0x57, 0x11, 0x2c, 0xca, 0x32, 0xd9, 0x36, 0xe0, 0xe8, 0x15, 0x24,
+	0xd6, 0x8b, 0xf2, 0x7d, 0x46, 0x53, 0xf7, 0x7f, 0x64, 0x28, 0xae, 0x9d, 0x0c, 0xc5, 0x65, 0x7b,
+	0x61, 0xc8, 0xab, 0x81, 0xc4, 0xba, 0x87, 0xa4, 0x47, 0x19, 0x4d, 0x7f, 0x50, 0x53, 0x08, 0x5f,
+	0x18, 0xf0, 0xec, 0x1a, 0x8d, 0x1e, 0x0b, 0x86, 0xc7, 0xd5, 0x21, 0x31, 0x3d, 0x0c, 0x62, 0xe2,
+	0xb5, 0x9d, 0x3b, 0x60, 0xe4, 0x97, 0x3b, 0xe0, 0x85, 0x01, 0x0a, 0x69, 0xfe, 0xc5, 0xda, 0xfe,
+	0x39, 0x6f, 0x8c, 0x81, 0xb9, 0x9b, 0x60, 0x77, 0xcf, 0xca, 0xdd, 0xdf, 0xb3, 0x72, 0x0f, 0xf6,
+	0x2c, 0xf0, 0x59, 0xc3, 0x02, 0xdf, 0x35, 0x2c, 0x70, 0xaf, 0x61, 0x81, 0xdd, 0x86, 0x05, 0xfe,
+	0x68, 0x58, 0xe0, 0xaf, 0x86, 0x95, 0x7b, 0xd0, 0xb0, 0xc0, 0x57, 0xfb, 0x56, 0x6e, 0x67, 0xdf,
+	0x02, 0xbb, 0xfb, 0x56, 0xee, 0xfe, 0xbe, 0x95, 0xfb, 0xf0, 0x83, 0x90, 0xf1, 0xf5, 0xd0, 0x49,
+	0x58, 0x4d, 0x61, 0x21, 0x90, 0x13, 0x4b, 0x57, 0x0f, 0x2a, 0x4c, 0x44, 0x69, 0xdd, 0x09, 0x09,
+	0xb0, 0x28, 0xb4, 0xc3, 0x2e, 0x2f, 0x87, 0xcc, 0xc5, 0x9b, 0xaa, 0xf5, 0x97, 0xbf, 0xcf, 0x97,
+	0x42, 0xf9, 0x7f, 0xfa, 0x1b, 0xe0, 0xc2, 0x3f, 0x01, 0x00, 0x00, 0xff, 0xff, 0x57, 0xf8, 0x44,
+	0x86, 0x85, 0x0d, 0x00, 0x00,
 }
 
+func (this *ListAvailableAPIDefinitionsReq) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ListAvailableAPIDefinitionsReq)
+	if !ok {
+		that2, ok := that.(ListAvailableAPIDefinitionsReq)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Namespace != that1.Namespace {
+		return false
+	}
+	return true
+}
+func (this *ListAvailableAPIDefinitionsResp) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ListAvailableAPIDefinitionsResp)
+	if !ok {
+		that2, ok := that.(ListAvailableAPIDefinitionsResp)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if len(this.AvailableApiDefinitions) != len(that1.AvailableApiDefinitions) {
+		return false
+	}
+	for i := range this.AvailableApiDefinitions {
+		if !this.AvailableApiDefinitions[i].Equal(that1.AvailableApiDefinitions[i]) {
+			return false
+		}
+	}
+	return true
+}
 func (this *GetReferencingLoadbalancersReq) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -415,6 +635,35 @@ func (this *GetReferencingLoadbalancersResp) Equal(that interface{}) bool {
 	}
 	for i := range this.HttpLoadbalancers {
 		if !this.HttpLoadbalancers[i].Equal(that1.HttpLoadbalancers[i]) {
+			return false
+		}
+	}
+	return true
+}
+func (this *GetReferencingAllLoadbalancersResp) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GetReferencingAllLoadbalancersResp)
+	if !ok {
+		that2, ok := that.(GetReferencingAllLoadbalancersResp)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if len(this.Loadbalancers) != len(that1.Loadbalancers) {
+		return false
+	}
+	for i := range this.Loadbalancers {
+		if !this.Loadbalancers[i].Equal(that1.Loadbalancers[i]) {
 			return false
 		}
 	}
@@ -484,6 +733,28 @@ func (this *APInventoryResp) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *ListAvailableAPIDefinitionsReq) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 5)
+	s = append(s, "&api_definition.ListAvailableAPIDefinitionsReq{")
+	s = append(s, "Namespace: "+fmt.Sprintf("%#v", this.Namespace)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *ListAvailableAPIDefinitionsResp) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 5)
+	s = append(s, "&api_definition.ListAvailableAPIDefinitionsResp{")
+	if this.AvailableApiDefinitions != nil {
+		s = append(s, "AvailableApiDefinitions: "+fmt.Sprintf("%#v", this.AvailableApiDefinitions)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
 func (this *GetReferencingLoadbalancersReq) GoString() string {
 	if this == nil {
 		return "nil"
@@ -503,6 +774,18 @@ func (this *GetReferencingLoadbalancersResp) GoString() string {
 	s = append(s, "&api_definition.GetReferencingLoadbalancersResp{")
 	if this.HttpLoadbalancers != nil {
 		s = append(s, "HttpLoadbalancers: "+fmt.Sprintf("%#v", this.HttpLoadbalancers)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *GetReferencingAllLoadbalancersResp) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 5)
+	s = append(s, "&api_definition.GetReferencingAllLoadbalancersResp{")
+	if this.Loadbalancers != nil {
+		s = append(s, "Loadbalancers: "+fmt.Sprintf("%#v", this.Loadbalancers)+",\n")
 	}
 	s = append(s, "}")
 	return strings.Join(s, "")
@@ -554,11 +837,23 @@ const _ = grpc.SupportPackageIsVersion4
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
 type PublicConfigCustomAPIClient interface {
+	// List Available API Definitions
+	//
+	// x-displayName: "List Available API Definitions"
+	// List API definitions suitable for API Inventory management
+	// Get all API Definitions for specific namespace exclude shared namespace.
+	ListAvailableAPIDefinitions(ctx context.Context, in *ListAvailableAPIDefinitionsReq, opts ...grpc.CallOption) (*ListAvailableAPIDefinitionsResp, error)
 	// Get Referencing HTTP Loadbalancers
 	//
 	// x-displayName: "Get Referencing HTTP Loadbalancers"
 	// List Loadbalancer objects referenced by the API Definition (backrefrences).
+	// DEPRECATED. use GetReferencingLoadBalancers
 	GetReferencingHttpLoadbalancers(ctx context.Context, in *GetReferencingLoadbalancersReq, opts ...grpc.CallOption) (*GetReferencingLoadbalancersResp, error)
+	// Get Referencing Loadbalancers
+	//
+	// x-displayName: "Get Referencing Loadbalancers"
+	// List Loadbalancers referenced by the API Definition (backrefrences).
+	GetReferencingLoadbalancers(ctx context.Context, in *GetReferencingLoadbalancersReq, opts ...grpc.CallOption) (*GetReferencingAllLoadbalancersResp, error)
 	// Move To API Inventory
 	//
 	// x-displayName: "Move To API Inventory"
@@ -589,9 +884,27 @@ func NewPublicConfigCustomAPIClient(cc *grpc.ClientConn) PublicConfigCustomAPICl
 	return &publicConfigCustomAPIClient{cc}
 }
 
+func (c *publicConfigCustomAPIClient) ListAvailableAPIDefinitions(ctx context.Context, in *ListAvailableAPIDefinitionsReq, opts ...grpc.CallOption) (*ListAvailableAPIDefinitionsResp, error) {
+	out := new(ListAvailableAPIDefinitionsResp)
+	err := c.cc.Invoke(ctx, "/ves.io.schema.views.api_definition.PublicConfigCustomAPI/ListAvailableAPIDefinitions", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *publicConfigCustomAPIClient) GetReferencingHttpLoadbalancers(ctx context.Context, in *GetReferencingLoadbalancersReq, opts ...grpc.CallOption) (*GetReferencingLoadbalancersResp, error) {
 	out := new(GetReferencingLoadbalancersResp)
 	err := c.cc.Invoke(ctx, "/ves.io.schema.views.api_definition.PublicConfigCustomAPI/GetReferencingHttpLoadbalancers", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *publicConfigCustomAPIClient) GetReferencingLoadbalancers(ctx context.Context, in *GetReferencingLoadbalancersReq, opts ...grpc.CallOption) (*GetReferencingAllLoadbalancersResp, error) {
+	out := new(GetReferencingAllLoadbalancersResp)
+	err := c.cc.Invoke(ctx, "/ves.io.schema.views.api_definition.PublicConfigCustomAPI/GetReferencingLoadbalancers", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -636,11 +949,23 @@ func (c *publicConfigCustomAPIClient) UnmarkAsNonAPI(ctx context.Context, in *AP
 
 // PublicConfigCustomAPIServer is the server API for PublicConfigCustomAPI service.
 type PublicConfigCustomAPIServer interface {
+	// List Available API Definitions
+	//
+	// x-displayName: "List Available API Definitions"
+	// List API definitions suitable for API Inventory management
+	// Get all API Definitions for specific namespace exclude shared namespace.
+	ListAvailableAPIDefinitions(context.Context, *ListAvailableAPIDefinitionsReq) (*ListAvailableAPIDefinitionsResp, error)
 	// Get Referencing HTTP Loadbalancers
 	//
 	// x-displayName: "Get Referencing HTTP Loadbalancers"
 	// List Loadbalancer objects referenced by the API Definition (backrefrences).
+	// DEPRECATED. use GetReferencingLoadBalancers
 	GetReferencingHttpLoadbalancers(context.Context, *GetReferencingLoadbalancersReq) (*GetReferencingLoadbalancersResp, error)
+	// Get Referencing Loadbalancers
+	//
+	// x-displayName: "Get Referencing Loadbalancers"
+	// List Loadbalancers referenced by the API Definition (backrefrences).
+	GetReferencingLoadbalancers(context.Context, *GetReferencingLoadbalancersReq) (*GetReferencingAllLoadbalancersResp, error)
 	// Move To API Inventory
 	//
 	// x-displayName: "Move To API Inventory"
@@ -667,8 +992,14 @@ type PublicConfigCustomAPIServer interface {
 type UnimplementedPublicConfigCustomAPIServer struct {
 }
 
+func (*UnimplementedPublicConfigCustomAPIServer) ListAvailableAPIDefinitions(ctx context.Context, req *ListAvailableAPIDefinitionsReq) (*ListAvailableAPIDefinitionsResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListAvailableAPIDefinitions not implemented")
+}
 func (*UnimplementedPublicConfigCustomAPIServer) GetReferencingHttpLoadbalancers(ctx context.Context, req *GetReferencingLoadbalancersReq) (*GetReferencingLoadbalancersResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetReferencingHttpLoadbalancers not implemented")
+}
+func (*UnimplementedPublicConfigCustomAPIServer) GetReferencingLoadbalancers(ctx context.Context, req *GetReferencingLoadbalancersReq) (*GetReferencingAllLoadbalancersResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetReferencingLoadbalancers not implemented")
 }
 func (*UnimplementedPublicConfigCustomAPIServer) MoveToAPInventory(ctx context.Context, req *APInventoryReq) (*APInventoryResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method MoveToAPInventory not implemented")
@@ -687,6 +1018,24 @@ func RegisterPublicConfigCustomAPIServer(s *grpc.Server, srv PublicConfigCustomA
 	s.RegisterService(&_PublicConfigCustomAPI_serviceDesc, srv)
 }
 
+func _PublicConfigCustomAPI_ListAvailableAPIDefinitions_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListAvailableAPIDefinitionsReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PublicConfigCustomAPIServer).ListAvailableAPIDefinitions(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/ves.io.schema.views.api_definition.PublicConfigCustomAPI/ListAvailableAPIDefinitions",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PublicConfigCustomAPIServer).ListAvailableAPIDefinitions(ctx, req.(*ListAvailableAPIDefinitionsReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _PublicConfigCustomAPI_GetReferencingHttpLoadbalancers_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(GetReferencingLoadbalancersReq)
 	if err := dec(in); err != nil {
@@ -701,6 +1050,24 @@ func _PublicConfigCustomAPI_GetReferencingHttpLoadbalancers_Handler(srv interfac
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(PublicConfigCustomAPIServer).GetReferencingHttpLoadbalancers(ctx, req.(*GetReferencingLoadbalancersReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _PublicConfigCustomAPI_GetReferencingLoadbalancers_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetReferencingLoadbalancersReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PublicConfigCustomAPIServer).GetReferencingLoadbalancers(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/ves.io.schema.views.api_definition.PublicConfigCustomAPI/GetReferencingLoadbalancers",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PublicConfigCustomAPIServer).GetReferencingLoadbalancers(ctx, req.(*GetReferencingLoadbalancersReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -782,8 +1149,16 @@ var _PublicConfigCustomAPI_serviceDesc = grpc.ServiceDesc{
 	HandlerType: (*PublicConfigCustomAPIServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
+			MethodName: "ListAvailableAPIDefinitions",
+			Handler:    _PublicConfigCustomAPI_ListAvailableAPIDefinitions_Handler,
+		},
+		{
 			MethodName: "GetReferencingHttpLoadbalancers",
 			Handler:    _PublicConfigCustomAPI_GetReferencingHttpLoadbalancers_Handler,
+		},
+		{
+			MethodName: "GetReferencingLoadbalancers",
+			Handler:    _PublicConfigCustomAPI_GetReferencingLoadbalancers_Handler,
 		},
 		{
 			MethodName: "MoveToAPInventory",
@@ -804,6 +1179,73 @@ var _PublicConfigCustomAPI_serviceDesc = grpc.ServiceDesc{
 	},
 	Streams:  []grpc.StreamDesc{},
 	Metadata: "ves.io/schema/views/api_definition/public_config_customapi.proto",
+}
+
+func (m *ListAvailableAPIDefinitionsReq) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *ListAvailableAPIDefinitionsReq) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ListAvailableAPIDefinitionsReq) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Namespace) > 0 {
+		i -= len(m.Namespace)
+		copy(dAtA[i:], m.Namespace)
+		i = encodeVarintPublicConfigCustomapi(dAtA, i, uint64(len(m.Namespace)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *ListAvailableAPIDefinitionsResp) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *ListAvailableAPIDefinitionsResp) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ListAvailableAPIDefinitionsResp) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.AvailableApiDefinitions) > 0 {
+		for iNdEx := len(m.AvailableApiDefinitions) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.AvailableApiDefinitions[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintPublicConfigCustomapi(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0xa
+		}
+	}
+	return len(dAtA) - i, nil
 }
 
 func (m *GetReferencingLoadbalancersReq) Marshal() (dAtA []byte, err error) {
@@ -867,6 +1309,43 @@ func (m *GetReferencingLoadbalancersResp) MarshalToSizedBuffer(dAtA []byte) (int
 		for iNdEx := len(m.HttpLoadbalancers) - 1; iNdEx >= 0; iNdEx-- {
 			{
 				size, err := m.HttpLoadbalancers[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintPublicConfigCustomapi(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0xa
+		}
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *GetReferencingAllLoadbalancersResp) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *GetReferencingAllLoadbalancersResp) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetReferencingAllLoadbalancersResp) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Loadbalancers) > 0 {
+		for iNdEx := len(m.Loadbalancers) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Loadbalancers[iNdEx].MarshalToSizedBuffer(dAtA[:i])
 				if err != nil {
 					return 0, err
 				}
@@ -979,6 +1458,34 @@ func encodeVarintPublicConfigCustomapi(dAtA []byte, offset int, v uint64) int {
 	dAtA[offset] = uint8(v)
 	return base
 }
+func (m *ListAvailableAPIDefinitionsReq) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Namespace)
+	if l > 0 {
+		n += 1 + l + sovPublicConfigCustomapi(uint64(l))
+	}
+	return n
+}
+
+func (m *ListAvailableAPIDefinitionsResp) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if len(m.AvailableApiDefinitions) > 0 {
+		for _, e := range m.AvailableApiDefinitions {
+			l = e.Size()
+			n += 1 + l + sovPublicConfigCustomapi(uint64(l))
+		}
+	}
+	return n
+}
+
 func (m *GetReferencingLoadbalancersReq) Size() (n int) {
 	if m == nil {
 		return 0
@@ -1004,6 +1511,21 @@ func (m *GetReferencingLoadbalancersResp) Size() (n int) {
 	_ = l
 	if len(m.HttpLoadbalancers) > 0 {
 		for _, e := range m.HttpLoadbalancers {
+			l = e.Size()
+			n += 1 + l + sovPublicConfigCustomapi(uint64(l))
+		}
+	}
+	return n
+}
+
+func (m *GetReferencingAllLoadbalancersResp) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if len(m.Loadbalancers) > 0 {
+		for _, e := range m.Loadbalancers {
 			l = e.Size()
 			n += 1 + l + sovPublicConfigCustomapi(uint64(l))
 		}
@@ -1055,6 +1577,31 @@ func sovPublicConfigCustomapi(x uint64) (n int) {
 func sozPublicConfigCustomapi(x uint64) (n int) {
 	return sovPublicConfigCustomapi(uint64((x << 1) ^ uint64((int64(x) >> 63))))
 }
+func (this *ListAvailableAPIDefinitionsReq) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ListAvailableAPIDefinitionsReq{`,
+		`Namespace:` + fmt.Sprintf("%v", this.Namespace) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ListAvailableAPIDefinitionsResp) String() string {
+	if this == nil {
+		return "nil"
+	}
+	repeatedStringForAvailableApiDefinitions := "[]*ObjectRefType{"
+	for _, f := range this.AvailableApiDefinitions {
+		repeatedStringForAvailableApiDefinitions += strings.Replace(fmt.Sprintf("%v", f), "ObjectRefType", "views.ObjectRefType", 1) + ","
+	}
+	repeatedStringForAvailableApiDefinitions += "}"
+	s := strings.Join([]string{`&ListAvailableAPIDefinitionsResp{`,
+		`AvailableApiDefinitions:` + repeatedStringForAvailableApiDefinitions + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *GetReferencingLoadbalancersReq) String() string {
 	if this == nil {
 		return "nil"
@@ -1077,6 +1624,21 @@ func (this *GetReferencingLoadbalancersResp) String() string {
 	repeatedStringForHttpLoadbalancers += "}"
 	s := strings.Join([]string{`&GetReferencingLoadbalancersResp{`,
 		`HttpLoadbalancers:` + repeatedStringForHttpLoadbalancers + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GetReferencingAllLoadbalancersResp) String() string {
+	if this == nil {
+		return "nil"
+	}
+	repeatedStringForLoadbalancers := "[]*ObjectRefType{"
+	for _, f := range this.Loadbalancers {
+		repeatedStringForLoadbalancers += strings.Replace(fmt.Sprintf("%v", f), "ObjectRefType", "views.ObjectRefType", 1) + ","
+	}
+	repeatedStringForLoadbalancers += "}"
+	s := strings.Join([]string{`&GetReferencingAllLoadbalancersResp{`,
+		`Loadbalancers:` + repeatedStringForLoadbalancers + `,`,
 		`}`,
 	}, "")
 	return s
@@ -1120,6 +1682,178 @@ func valueToStringPublicConfigCustomapi(v interface{}) string {
 	}
 	pv := reflect.Indirect(rv).Interface()
 	return fmt.Sprintf("*%v", pv)
+}
+func (m *ListAvailableAPIDefinitionsReq) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowPublicConfigCustomapi
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: ListAvailableAPIDefinitionsReq: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: ListAvailableAPIDefinitionsReq: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Namespace", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicConfigCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicConfigCustomapi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicConfigCustomapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Namespace = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipPublicConfigCustomapi(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthPublicConfigCustomapi
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthPublicConfigCustomapi
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *ListAvailableAPIDefinitionsResp) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowPublicConfigCustomapi
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: ListAvailableAPIDefinitionsResp: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: ListAvailableAPIDefinitionsResp: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AvailableApiDefinitions", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicConfigCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthPublicConfigCustomapi
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicConfigCustomapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.AvailableApiDefinitions = append(m.AvailableApiDefinitions, &views.ObjectRefType{})
+			if err := m.AvailableApiDefinitions[len(m.AvailableApiDefinitions)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipPublicConfigCustomapi(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthPublicConfigCustomapi
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthPublicConfigCustomapi
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
 }
 func (m *GetReferencingLoadbalancersReq) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
@@ -1298,6 +2032,93 @@ func (m *GetReferencingLoadbalancersResp) Unmarshal(dAtA []byte) error {
 			}
 			m.HttpLoadbalancers = append(m.HttpLoadbalancers, &views.ObjectRefType{})
 			if err := m.HttpLoadbalancers[len(m.HttpLoadbalancers)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipPublicConfigCustomapi(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthPublicConfigCustomapi
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthPublicConfigCustomapi
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *GetReferencingAllLoadbalancersResp) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowPublicConfigCustomapi
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: GetReferencingAllLoadbalancersResp: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: GetReferencingAllLoadbalancersResp: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Loadbalancers", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicConfigCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthPublicConfigCustomapi
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicConfigCustomapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Loadbalancers = append(m.Loadbalancers, &views.ObjectRefType{})
+			if err := m.Loadbalancers[len(m.Loadbalancers)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex

@@ -133,7 +133,7 @@ func (Connectivity) EnumDescriptor() ([]byte, []int) {
 	return fileDescriptor_1f3dffd23827b659, []int{2}
 }
 
-// Ztna Policy LeasePoolsMembers
+// Ztna Policy Lease Pools Members
 //
 // x-displayName: "Lease Pools Member"
 //

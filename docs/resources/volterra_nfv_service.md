@@ -1,9 +1,9 @@
 ---
 
 page_title: "Volterra: nfv_service"
-description: "The nfv_service allows CRUD of Nfv Service resource on Volterra SaaS"
 
----
+description: "The nfv_service allows CRUD of Nfv Service resource on Volterra SaaS"
+-----------------------------------------------------------------------------------
 
 Resource volterra_nfv_service
 =============================
@@ -28,6 +28,13 @@ resource "volterra_nfv_service" "example" {
 
   f5_big_ip_aws_service {
     admin_password {
+      blindfold_secret_info_internal {
+        decryption_provider = "value"
+
+        location = "string:///U2VjcmV0SW5mb3JtYXRpb24="
+
+        store_provider = "value"
+      }
 
       secret_encoding_type = "secret_encoding_type"
 
@@ -55,30 +62,30 @@ resource "volterra_nfv_service" "example" {
 
       // One of the arguments from this list "custom_tcp_ports default_tcp_ports http_port https_port no_tcp_ports" must be set
 
-      custom_tcp_ports {
-        ports = ["100-200"]
-      }
+      default_tcp_ports = true
 
       // One of the arguments from this list "custom_udp_ports no_udp_ports" must be set
 
-      custom_udp_ports {
-        ports = ["100-200"]
-      }
+      no_udp_ports = true
     }
 
     // One of the arguments from this list "byol_image market_place_image" must be set
 
     market_place_image {
-      // One of the arguments from this list "awaf_pay_g200_mbps awaf_pay_g3_gbps AWAFPayG3Gbps" must be set
+      // One of the arguments from this list "AWAFPayG200Mbps AWAFPayG3Gbps BestPlusPayG200Mbps best_plus_payg_1gbps" must be set
 
-      awaf_pay_g200_mbps = true
+      AWAFPayG3Gbps = true
     }
     nodes {
       aws_az_name = "us-west-2a"
 
       // One of the arguments from this list "mgmt_subnet reserved_mgmt_subnet" must be set
 
-      reserved_mgmt_subnet = true
+      mgmt_subnet {
+        // One of the arguments from this list "existing_subnet_id subnet_param" must be set
+
+        existing_subnet_id = "subnet-12345678901234567"
+      }
       node_name = "node1"
 
       // One of the arguments from this list "automatic_prefix tunnel_prefix" must be set
@@ -619,11 +626,11 @@ Select the BIG-IP bring your own license image to be used for this service.
 
 Select the BIG-IP pay as you go image to be used for this service.
 
-###### One of the arguments from this list "awaf_pay_g200_mbps, awaf_pay_g3_gbps" must be set
+###### One of the arguments from this list "AWAFPayG200Mbps, AWAFPayG3Gbps, BestPlusPayG200Mbps, best_plus_payg_1gbps" must be set
 
-`awaf_pay_g200_mbps` - (Optional) F5 Advanced WAF with LTM, IPI, and Threat Campaigns (PAYG, 200Mbps) (`Bool`).
+`AWAFPayG200Mbps` - (Optional) F5 Advanced WAF with LTM, IPI, and Threat Campaigns (PAYG, 200Mbps) (`Bool`).
 
-`awaf_pay_g3_gbps` - (Optional) F5 Advanced WAF with LTM, IPI, and Threat Campaigns (PAYG, 3Gbps) (`Bool`).
+`AWAFPayG3Gbps` - (Optional) F5 Advanced WAF with LTM, IPI, and Threat Campaigns (PAYG, 3Gbps) (`Bool`).
 
 ### Inside Vip Choice Automatic Vip
 

@@ -63,7 +63,8 @@ func resourceVolterraNetworkFirewall() *schema.Resource {
 
 			"active_fast_acls": {
 
-				Type:     schema.TypeSet,
+				Type:     schema.TypeList,
+				MaxItems: 1,
 				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
@@ -102,7 +103,8 @@ func resourceVolterraNetworkFirewall() *schema.Resource {
 
 			"fast_acl_set": {
 
-				Type:       schema.TypeSet,
+				Type:       schema.TypeList,
+				MaxItems:   1,
 				Optional:   true,
 				Deprecated: "This field is deprecated and will be removed in future release.",
 				Elem: &schema.Resource{
@@ -129,7 +131,8 @@ func resourceVolterraNetworkFirewall() *schema.Resource {
 
 			"active_forward_proxy_policies": {
 
-				Type:     schema.TypeSet,
+				Type:     schema.TypeList,
+				MaxItems: 1,
 				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
@@ -168,7 +171,8 @@ func resourceVolterraNetworkFirewall() *schema.Resource {
 
 			"forward_proxy_policy_set": {
 
-				Type:       schema.TypeSet,
+				Type:       schema.TypeList,
+				MaxItems:   1,
 				Optional:   true,
 				Deprecated: "This field is deprecated and will be removed in future release.",
 				Elem: &schema.Resource{
@@ -195,7 +199,8 @@ func resourceVolterraNetworkFirewall() *schema.Resource {
 
 			"active_enhanced_firewall_policies": {
 
-				Type:     schema.TypeSet,
+				Type:     schema.TypeList,
+				MaxItems: 1,
 				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
@@ -228,7 +233,8 @@ func resourceVolterraNetworkFirewall() *schema.Resource {
 
 			"active_network_policies": {
 
-				Type:     schema.TypeSet,
+				Type:     schema.TypeList,
+				MaxItems: 1,
 				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
@@ -267,7 +273,8 @@ func resourceVolterraNetworkFirewall() *schema.Resource {
 
 			"network_policy_set": {
 
-				Type:       schema.TypeSet,
+				Type:       schema.TypeList,
+				MaxItems:   1,
 				Optional:   true,
 				Deprecated: "This field is deprecated and will be removed in future release.",
 				Elem: &schema.Resource{
@@ -359,36 +366,38 @@ func resourceVolterraNetworkFirewallCreate(d *schema.ResourceData, meta interfac
 		fastAclChoiceInt.ActiveFastAcls = &ves_io_schema_network_firewall.ActiveFastACLsType{}
 		createSpec.FastAclChoice = fastAclChoiceInt
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
+			if set != nil {
+				cs := set.(map[string]interface{})
 
-			if v, ok := cs["fast_acls"]; ok && !isIntfNil(v) {
+				if v, ok := cs["fast_acls"]; ok && !isIntfNil(v) {
 
-				sl := v.([]interface{})
-				fastAclsInt := make([]*ves_io_schema_views.ObjectRefType, len(sl))
-				fastAclChoiceInt.ActiveFastAcls.FastAcls = fastAclsInt
-				for i, ps := range sl {
+					sl := v.([]interface{})
+					fastAclsInt := make([]*ves_io_schema_views.ObjectRefType, len(sl))
+					fastAclChoiceInt.ActiveFastAcls.FastAcls = fastAclsInt
+					for i, ps := range sl {
 
-					faMapToStrVal := ps.(map[string]interface{})
-					fastAclsInt[i] = &ves_io_schema_views.ObjectRefType{}
+						faMapToStrVal := ps.(map[string]interface{})
+						fastAclsInt[i] = &ves_io_schema_views.ObjectRefType{}
 
-					if v, ok := faMapToStrVal["name"]; ok && !isIntfNil(v) {
-						fastAclsInt[i].Name = v.(string)
-					}
+						if v, ok := faMapToStrVal["name"]; ok && !isIntfNil(v) {
+							fastAclsInt[i].Name = v.(string)
+						}
 
-					if v, ok := faMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-						fastAclsInt[i].Namespace = v.(string)
-					}
+						if v, ok := faMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+							fastAclsInt[i].Namespace = v.(string)
+						}
 
-					if v, ok := faMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-						fastAclsInt[i].Tenant = v.(string)
+						if v, ok := faMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+							fastAclsInt[i].Tenant = v.(string)
+						}
+
 					}
 
 				}
 
 			}
-
 		}
 
 	}
@@ -412,28 +421,30 @@ func resourceVolterraNetworkFirewallCreate(d *schema.ResourceData, meta interfac
 		fastAclChoiceInt.FastAclSet = &ves_io_schema_views.ObjectRefType{}
 		createSpec.FastAclChoice = fastAclChoiceInt
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
+			if set != nil {
+				cs := set.(map[string]interface{})
 
-			if v, ok := cs["name"]; ok && !isIntfNil(v) {
+				if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
-				fastAclChoiceInt.FastAclSet.Name = v.(string)
+					fastAclChoiceInt.FastAclSet.Name = v.(string)
+
+				}
+
+				if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+					fastAclChoiceInt.FastAclSet.Namespace = v.(string)
+
+				}
+
+				if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+					fastAclChoiceInt.FastAclSet.Tenant = v.(string)
+
+				}
 
 			}
-
-			if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
-
-				fastAclChoiceInt.FastAclSet.Namespace = v.(string)
-
-			}
-
-			if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
-
-				fastAclChoiceInt.FastAclSet.Tenant = v.(string)
-
-			}
-
 		}
 
 	}
@@ -449,36 +460,38 @@ func resourceVolterraNetworkFirewallCreate(d *schema.ResourceData, meta interfac
 		forwardProxyPolicyChoiceInt.ActiveForwardProxyPolicies = &ves_io_schema_network_firewall.ActiveForwardProxyPoliciesType{}
 		createSpec.ForwardProxyPolicyChoice = forwardProxyPolicyChoiceInt
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
+			if set != nil {
+				cs := set.(map[string]interface{})
 
-			if v, ok := cs["forward_proxy_policies"]; ok && !isIntfNil(v) {
+				if v, ok := cs["forward_proxy_policies"]; ok && !isIntfNil(v) {
 
-				sl := v.([]interface{})
-				forwardProxyPoliciesInt := make([]*ves_io_schema_views.ObjectRefType, len(sl))
-				forwardProxyPolicyChoiceInt.ActiveForwardProxyPolicies.ForwardProxyPolicies = forwardProxyPoliciesInt
-				for i, ps := range sl {
+					sl := v.([]interface{})
+					forwardProxyPoliciesInt := make([]*ves_io_schema_views.ObjectRefType, len(sl))
+					forwardProxyPolicyChoiceInt.ActiveForwardProxyPolicies.ForwardProxyPolicies = forwardProxyPoliciesInt
+					for i, ps := range sl {
 
-					fppMapToStrVal := ps.(map[string]interface{})
-					forwardProxyPoliciesInt[i] = &ves_io_schema_views.ObjectRefType{}
+						fppMapToStrVal := ps.(map[string]interface{})
+						forwardProxyPoliciesInt[i] = &ves_io_schema_views.ObjectRefType{}
 
-					if v, ok := fppMapToStrVal["name"]; ok && !isIntfNil(v) {
-						forwardProxyPoliciesInt[i].Name = v.(string)
-					}
+						if v, ok := fppMapToStrVal["name"]; ok && !isIntfNil(v) {
+							forwardProxyPoliciesInt[i].Name = v.(string)
+						}
 
-					if v, ok := fppMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-						forwardProxyPoliciesInt[i].Namespace = v.(string)
-					}
+						if v, ok := fppMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+							forwardProxyPoliciesInt[i].Namespace = v.(string)
+						}
 
-					if v, ok := fppMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-						forwardProxyPoliciesInt[i].Tenant = v.(string)
+						if v, ok := fppMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+							forwardProxyPoliciesInt[i].Tenant = v.(string)
+						}
+
 					}
 
 				}
 
 			}
-
 		}
 
 	}
@@ -502,28 +515,30 @@ func resourceVolterraNetworkFirewallCreate(d *schema.ResourceData, meta interfac
 		forwardProxyPolicyChoiceInt.ForwardProxyPolicySet = &ves_io_schema_views.ObjectRefType{}
 		createSpec.ForwardProxyPolicyChoice = forwardProxyPolicyChoiceInt
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
+			if set != nil {
+				cs := set.(map[string]interface{})
 
-			if v, ok := cs["name"]; ok && !isIntfNil(v) {
+				if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
-				forwardProxyPolicyChoiceInt.ForwardProxyPolicySet.Name = v.(string)
+					forwardProxyPolicyChoiceInt.ForwardProxyPolicySet.Name = v.(string)
+
+				}
+
+				if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+					forwardProxyPolicyChoiceInt.ForwardProxyPolicySet.Namespace = v.(string)
+
+				}
+
+				if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+					forwardProxyPolicyChoiceInt.ForwardProxyPolicySet.Tenant = v.(string)
+
+				}
 
 			}
-
-			if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
-
-				forwardProxyPolicyChoiceInt.ForwardProxyPolicySet.Namespace = v.(string)
-
-			}
-
-			if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
-
-				forwardProxyPolicyChoiceInt.ForwardProxyPolicySet.Tenant = v.(string)
-
-			}
-
 		}
 
 	}
@@ -539,36 +554,38 @@ func resourceVolterraNetworkFirewallCreate(d *schema.ResourceData, meta interfac
 		networkPolicyChoiceInt.ActiveEnhancedFirewallPolicies = &ves_io_schema_network_firewall.ActiveEnhancedFirewallPoliciesType{}
 		createSpec.NetworkPolicyChoice = networkPolicyChoiceInt
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
+			if set != nil {
+				cs := set.(map[string]interface{})
 
-			if v, ok := cs["enhanced_firewall_policies"]; ok && !isIntfNil(v) {
+				if v, ok := cs["enhanced_firewall_policies"]; ok && !isIntfNil(v) {
 
-				sl := v.([]interface{})
-				enhancedFirewallPoliciesInt := make([]*ves_io_schema_views.ObjectRefType, len(sl))
-				networkPolicyChoiceInt.ActiveEnhancedFirewallPolicies.EnhancedFirewallPolicies = enhancedFirewallPoliciesInt
-				for i, ps := range sl {
+					sl := v.([]interface{})
+					enhancedFirewallPoliciesInt := make([]*ves_io_schema_views.ObjectRefType, len(sl))
+					networkPolicyChoiceInt.ActiveEnhancedFirewallPolicies.EnhancedFirewallPolicies = enhancedFirewallPoliciesInt
+					for i, ps := range sl {
 
-					efpMapToStrVal := ps.(map[string]interface{})
-					enhancedFirewallPoliciesInt[i] = &ves_io_schema_views.ObjectRefType{}
+						efpMapToStrVal := ps.(map[string]interface{})
+						enhancedFirewallPoliciesInt[i] = &ves_io_schema_views.ObjectRefType{}
 
-					if v, ok := efpMapToStrVal["name"]; ok && !isIntfNil(v) {
-						enhancedFirewallPoliciesInt[i].Name = v.(string)
-					}
+						if v, ok := efpMapToStrVal["name"]; ok && !isIntfNil(v) {
+							enhancedFirewallPoliciesInt[i].Name = v.(string)
+						}
 
-					if v, ok := efpMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-						enhancedFirewallPoliciesInt[i].Namespace = v.(string)
-					}
+						if v, ok := efpMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+							enhancedFirewallPoliciesInt[i].Namespace = v.(string)
+						}
 
-					if v, ok := efpMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-						enhancedFirewallPoliciesInt[i].Tenant = v.(string)
+						if v, ok := efpMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+							enhancedFirewallPoliciesInt[i].Tenant = v.(string)
+						}
+
 					}
 
 				}
 
 			}
-
 		}
 
 	}
@@ -580,36 +597,38 @@ func resourceVolterraNetworkFirewallCreate(d *schema.ResourceData, meta interfac
 		networkPolicyChoiceInt.ActiveNetworkPolicies = &ves_io_schema_network_firewall.ActiveNetworkPoliciesType{}
 		createSpec.NetworkPolicyChoice = networkPolicyChoiceInt
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
+			if set != nil {
+				cs := set.(map[string]interface{})
 
-			if v, ok := cs["network_policies"]; ok && !isIntfNil(v) {
+				if v, ok := cs["network_policies"]; ok && !isIntfNil(v) {
 
-				sl := v.([]interface{})
-				networkPoliciesInt := make([]*ves_io_schema_views.ObjectRefType, len(sl))
-				networkPolicyChoiceInt.ActiveNetworkPolicies.NetworkPolicies = networkPoliciesInt
-				for i, ps := range sl {
+					sl := v.([]interface{})
+					networkPoliciesInt := make([]*ves_io_schema_views.ObjectRefType, len(sl))
+					networkPolicyChoiceInt.ActiveNetworkPolicies.NetworkPolicies = networkPoliciesInt
+					for i, ps := range sl {
 
-					npMapToStrVal := ps.(map[string]interface{})
-					networkPoliciesInt[i] = &ves_io_schema_views.ObjectRefType{}
+						npMapToStrVal := ps.(map[string]interface{})
+						networkPoliciesInt[i] = &ves_io_schema_views.ObjectRefType{}
 
-					if v, ok := npMapToStrVal["name"]; ok && !isIntfNil(v) {
-						networkPoliciesInt[i].Name = v.(string)
-					}
+						if v, ok := npMapToStrVal["name"]; ok && !isIntfNil(v) {
+							networkPoliciesInt[i].Name = v.(string)
+						}
 
-					if v, ok := npMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-						networkPoliciesInt[i].Namespace = v.(string)
-					}
+						if v, ok := npMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+							networkPoliciesInt[i].Namespace = v.(string)
+						}
 
-					if v, ok := npMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-						networkPoliciesInt[i].Tenant = v.(string)
+						if v, ok := npMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+							networkPoliciesInt[i].Tenant = v.(string)
+						}
+
 					}
 
 				}
 
 			}
-
 		}
 
 	}
@@ -633,28 +652,30 @@ func resourceVolterraNetworkFirewallCreate(d *schema.ResourceData, meta interfac
 		networkPolicyChoiceInt.NetworkPolicySet = &ves_io_schema_views.ObjectRefType{}
 		createSpec.NetworkPolicyChoice = networkPolicyChoiceInt
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
+			if set != nil {
+				cs := set.(map[string]interface{})
 
-			if v, ok := cs["name"]; ok && !isIntfNil(v) {
+				if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
-				networkPolicyChoiceInt.NetworkPolicySet.Name = v.(string)
+					networkPolicyChoiceInt.NetworkPolicySet.Name = v.(string)
+
+				}
+
+				if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+					networkPolicyChoiceInt.NetworkPolicySet.Namespace = v.(string)
+
+				}
+
+				if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+					networkPolicyChoiceInt.NetworkPolicySet.Tenant = v.(string)
+
+				}
 
 			}
-
-			if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
-
-				networkPolicyChoiceInt.NetworkPolicySet.Namespace = v.(string)
-
-			}
-
-			if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
-
-				networkPolicyChoiceInt.NetworkPolicySet.Tenant = v.(string)
-
-			}
-
 		}
 
 	}
@@ -767,36 +788,38 @@ func resourceVolterraNetworkFirewallUpdate(d *schema.ResourceData, meta interfac
 		fastAclChoiceInt.ActiveFastAcls = &ves_io_schema_network_firewall.ActiveFastACLsType{}
 		updateSpec.FastAclChoice = fastAclChoiceInt
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
+			if set != nil {
+				cs := set.(map[string]interface{})
 
-			if v, ok := cs["fast_acls"]; ok && !isIntfNil(v) {
+				if v, ok := cs["fast_acls"]; ok && !isIntfNil(v) {
 
-				sl := v.([]interface{})
-				fastAclsInt := make([]*ves_io_schema_views.ObjectRefType, len(sl))
-				fastAclChoiceInt.ActiveFastAcls.FastAcls = fastAclsInt
-				for i, ps := range sl {
+					sl := v.([]interface{})
+					fastAclsInt := make([]*ves_io_schema_views.ObjectRefType, len(sl))
+					fastAclChoiceInt.ActiveFastAcls.FastAcls = fastAclsInt
+					for i, ps := range sl {
 
-					faMapToStrVal := ps.(map[string]interface{})
-					fastAclsInt[i] = &ves_io_schema_views.ObjectRefType{}
+						faMapToStrVal := ps.(map[string]interface{})
+						fastAclsInt[i] = &ves_io_schema_views.ObjectRefType{}
 
-					if v, ok := faMapToStrVal["name"]; ok && !isIntfNil(v) {
-						fastAclsInt[i].Name = v.(string)
-					}
+						if v, ok := faMapToStrVal["name"]; ok && !isIntfNil(v) {
+							fastAclsInt[i].Name = v.(string)
+						}
 
-					if v, ok := faMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-						fastAclsInt[i].Namespace = v.(string)
-					}
+						if v, ok := faMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+							fastAclsInt[i].Namespace = v.(string)
+						}
 
-					if v, ok := faMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-						fastAclsInt[i].Tenant = v.(string)
+						if v, ok := faMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+							fastAclsInt[i].Tenant = v.(string)
+						}
+
 					}
 
 				}
 
 			}
-
 		}
 
 	}
@@ -820,28 +843,30 @@ func resourceVolterraNetworkFirewallUpdate(d *schema.ResourceData, meta interfac
 		fastAclChoiceInt.FastAclSet = &ves_io_schema_views.ObjectRefType{}
 		updateSpec.FastAclChoice = fastAclChoiceInt
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
+			if set != nil {
+				cs := set.(map[string]interface{})
 
-			if v, ok := cs["name"]; ok && !isIntfNil(v) {
+				if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
-				fastAclChoiceInt.FastAclSet.Name = v.(string)
+					fastAclChoiceInt.FastAclSet.Name = v.(string)
+
+				}
+
+				if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+					fastAclChoiceInt.FastAclSet.Namespace = v.(string)
+
+				}
+
+				if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+					fastAclChoiceInt.FastAclSet.Tenant = v.(string)
+
+				}
 
 			}
-
-			if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
-
-				fastAclChoiceInt.FastAclSet.Namespace = v.(string)
-
-			}
-
-			if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
-
-				fastAclChoiceInt.FastAclSet.Tenant = v.(string)
-
-			}
-
 		}
 
 	}
@@ -855,36 +880,38 @@ func resourceVolterraNetworkFirewallUpdate(d *schema.ResourceData, meta interfac
 		forwardProxyPolicyChoiceInt.ActiveForwardProxyPolicies = &ves_io_schema_network_firewall.ActiveForwardProxyPoliciesType{}
 		updateSpec.ForwardProxyPolicyChoice = forwardProxyPolicyChoiceInt
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
+			if set != nil {
+				cs := set.(map[string]interface{})
 
-			if v, ok := cs["forward_proxy_policies"]; ok && !isIntfNil(v) {
+				if v, ok := cs["forward_proxy_policies"]; ok && !isIntfNil(v) {
 
-				sl := v.([]interface{})
-				forwardProxyPoliciesInt := make([]*ves_io_schema_views.ObjectRefType, len(sl))
-				forwardProxyPolicyChoiceInt.ActiveForwardProxyPolicies.ForwardProxyPolicies = forwardProxyPoliciesInt
-				for i, ps := range sl {
+					sl := v.([]interface{})
+					forwardProxyPoliciesInt := make([]*ves_io_schema_views.ObjectRefType, len(sl))
+					forwardProxyPolicyChoiceInt.ActiveForwardProxyPolicies.ForwardProxyPolicies = forwardProxyPoliciesInt
+					for i, ps := range sl {
 
-					fppMapToStrVal := ps.(map[string]interface{})
-					forwardProxyPoliciesInt[i] = &ves_io_schema_views.ObjectRefType{}
+						fppMapToStrVal := ps.(map[string]interface{})
+						forwardProxyPoliciesInt[i] = &ves_io_schema_views.ObjectRefType{}
 
-					if v, ok := fppMapToStrVal["name"]; ok && !isIntfNil(v) {
-						forwardProxyPoliciesInt[i].Name = v.(string)
-					}
+						if v, ok := fppMapToStrVal["name"]; ok && !isIntfNil(v) {
+							forwardProxyPoliciesInt[i].Name = v.(string)
+						}
 
-					if v, ok := fppMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-						forwardProxyPoliciesInt[i].Namespace = v.(string)
-					}
+						if v, ok := fppMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+							forwardProxyPoliciesInt[i].Namespace = v.(string)
+						}
 
-					if v, ok := fppMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-						forwardProxyPoliciesInt[i].Tenant = v.(string)
+						if v, ok := fppMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+							forwardProxyPoliciesInt[i].Tenant = v.(string)
+						}
+
 					}
 
 				}
 
 			}
-
 		}
 
 	}
@@ -908,28 +935,30 @@ func resourceVolterraNetworkFirewallUpdate(d *schema.ResourceData, meta interfac
 		forwardProxyPolicyChoiceInt.ForwardProxyPolicySet = &ves_io_schema_views.ObjectRefType{}
 		updateSpec.ForwardProxyPolicyChoice = forwardProxyPolicyChoiceInt
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
+			if set != nil {
+				cs := set.(map[string]interface{})
 
-			if v, ok := cs["name"]; ok && !isIntfNil(v) {
+				if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
-				forwardProxyPolicyChoiceInt.ForwardProxyPolicySet.Name = v.(string)
+					forwardProxyPolicyChoiceInt.ForwardProxyPolicySet.Name = v.(string)
+
+				}
+
+				if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+					forwardProxyPolicyChoiceInt.ForwardProxyPolicySet.Namespace = v.(string)
+
+				}
+
+				if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+					forwardProxyPolicyChoiceInt.ForwardProxyPolicySet.Tenant = v.(string)
+
+				}
 
 			}
-
-			if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
-
-				forwardProxyPolicyChoiceInt.ForwardProxyPolicySet.Namespace = v.(string)
-
-			}
-
-			if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
-
-				forwardProxyPolicyChoiceInt.ForwardProxyPolicySet.Tenant = v.(string)
-
-			}
-
 		}
 
 	}
@@ -943,36 +972,38 @@ func resourceVolterraNetworkFirewallUpdate(d *schema.ResourceData, meta interfac
 		networkPolicyChoiceInt.ActiveEnhancedFirewallPolicies = &ves_io_schema_network_firewall.ActiveEnhancedFirewallPoliciesType{}
 		updateSpec.NetworkPolicyChoice = networkPolicyChoiceInt
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
+			if set != nil {
+				cs := set.(map[string]interface{})
 
-			if v, ok := cs["enhanced_firewall_policies"]; ok && !isIntfNil(v) {
+				if v, ok := cs["enhanced_firewall_policies"]; ok && !isIntfNil(v) {
 
-				sl := v.([]interface{})
-				enhancedFirewallPoliciesInt := make([]*ves_io_schema_views.ObjectRefType, len(sl))
-				networkPolicyChoiceInt.ActiveEnhancedFirewallPolicies.EnhancedFirewallPolicies = enhancedFirewallPoliciesInt
-				for i, ps := range sl {
+					sl := v.([]interface{})
+					enhancedFirewallPoliciesInt := make([]*ves_io_schema_views.ObjectRefType, len(sl))
+					networkPolicyChoiceInt.ActiveEnhancedFirewallPolicies.EnhancedFirewallPolicies = enhancedFirewallPoliciesInt
+					for i, ps := range sl {
 
-					efpMapToStrVal := ps.(map[string]interface{})
-					enhancedFirewallPoliciesInt[i] = &ves_io_schema_views.ObjectRefType{}
+						efpMapToStrVal := ps.(map[string]interface{})
+						enhancedFirewallPoliciesInt[i] = &ves_io_schema_views.ObjectRefType{}
 
-					if v, ok := efpMapToStrVal["name"]; ok && !isIntfNil(v) {
-						enhancedFirewallPoliciesInt[i].Name = v.(string)
-					}
+						if v, ok := efpMapToStrVal["name"]; ok && !isIntfNil(v) {
+							enhancedFirewallPoliciesInt[i].Name = v.(string)
+						}
 
-					if v, ok := efpMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-						enhancedFirewallPoliciesInt[i].Namespace = v.(string)
-					}
+						if v, ok := efpMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+							enhancedFirewallPoliciesInt[i].Namespace = v.(string)
+						}
 
-					if v, ok := efpMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-						enhancedFirewallPoliciesInt[i].Tenant = v.(string)
+						if v, ok := efpMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+							enhancedFirewallPoliciesInt[i].Tenant = v.(string)
+						}
+
 					}
 
 				}
 
 			}
-
 		}
 
 	}
@@ -984,36 +1015,38 @@ func resourceVolterraNetworkFirewallUpdate(d *schema.ResourceData, meta interfac
 		networkPolicyChoiceInt.ActiveNetworkPolicies = &ves_io_schema_network_firewall.ActiveNetworkPoliciesType{}
 		updateSpec.NetworkPolicyChoice = networkPolicyChoiceInt
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
+			if set != nil {
+				cs := set.(map[string]interface{})
 
-			if v, ok := cs["network_policies"]; ok && !isIntfNil(v) {
+				if v, ok := cs["network_policies"]; ok && !isIntfNil(v) {
 
-				sl := v.([]interface{})
-				networkPoliciesInt := make([]*ves_io_schema_views.ObjectRefType, len(sl))
-				networkPolicyChoiceInt.ActiveNetworkPolicies.NetworkPolicies = networkPoliciesInt
-				for i, ps := range sl {
+					sl := v.([]interface{})
+					networkPoliciesInt := make([]*ves_io_schema_views.ObjectRefType, len(sl))
+					networkPolicyChoiceInt.ActiveNetworkPolicies.NetworkPolicies = networkPoliciesInt
+					for i, ps := range sl {
 
-					npMapToStrVal := ps.(map[string]interface{})
-					networkPoliciesInt[i] = &ves_io_schema_views.ObjectRefType{}
+						npMapToStrVal := ps.(map[string]interface{})
+						networkPoliciesInt[i] = &ves_io_schema_views.ObjectRefType{}
 
-					if v, ok := npMapToStrVal["name"]; ok && !isIntfNil(v) {
-						networkPoliciesInt[i].Name = v.(string)
-					}
+						if v, ok := npMapToStrVal["name"]; ok && !isIntfNil(v) {
+							networkPoliciesInt[i].Name = v.(string)
+						}
 
-					if v, ok := npMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-						networkPoliciesInt[i].Namespace = v.(string)
-					}
+						if v, ok := npMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+							networkPoliciesInt[i].Namespace = v.(string)
+						}
 
-					if v, ok := npMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-						networkPoliciesInt[i].Tenant = v.(string)
+						if v, ok := npMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+							networkPoliciesInt[i].Tenant = v.(string)
+						}
+
 					}
 
 				}
 
 			}
-
 		}
 
 	}
@@ -1037,28 +1070,30 @@ func resourceVolterraNetworkFirewallUpdate(d *schema.ResourceData, meta interfac
 		networkPolicyChoiceInt.NetworkPolicySet = &ves_io_schema_views.ObjectRefType{}
 		updateSpec.NetworkPolicyChoice = networkPolicyChoiceInt
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
+			if set != nil {
+				cs := set.(map[string]interface{})
 
-			if v, ok := cs["name"]; ok && !isIntfNil(v) {
+				if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
-				networkPolicyChoiceInt.NetworkPolicySet.Name = v.(string)
+					networkPolicyChoiceInt.NetworkPolicySet.Name = v.(string)
+
+				}
+
+				if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+					networkPolicyChoiceInt.NetworkPolicySet.Namespace = v.(string)
+
+				}
+
+				if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+					networkPolicyChoiceInt.NetworkPolicySet.Tenant = v.(string)
+
+				}
 
 			}
-
-			if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
-
-				networkPolicyChoiceInt.NetworkPolicySet.Namespace = v.(string)
-
-			}
-
-			if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
-
-				networkPolicyChoiceInt.NetworkPolicySet.Tenant = v.(string)
-
-			}
-
 		}
 
 	}

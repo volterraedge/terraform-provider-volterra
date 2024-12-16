@@ -510,12 +510,6 @@ func (m *GetResponse) GetDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
-	if fdrInfos, err := m.GetReplaceFormDRefInfo(); err != nil {
-		return nil, errors.Wrap(err, "GetReplaceFormDRefInfo() FAILED")
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
-	}
-
 	if fdrInfos, err := m.GetSpecDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetSpecDRefInfo() FAILED")
 	} else {
@@ -539,24 +533,6 @@ func (m *GetResponse) GetCreateFormDRefInfo() ([]db.DRefInfo, error) {
 	for i := range drInfos {
 		dri := &drInfos[i]
 		dri.DRField = "create_form." + dri.DRField
-	}
-	return drInfos, err
-
-}
-
-// GetDRefInfo for the field's type
-func (m *GetResponse) GetReplaceFormDRefInfo() ([]db.DRefInfo, error) {
-	if m.GetReplaceForm() == nil {
-		return nil, nil
-	}
-
-	drInfos, err := m.GetReplaceForm().GetDRefInfo()
-	if err != nil {
-		return nil, errors.Wrap(err, "GetReplaceForm().GetDRefInfo() FAILED")
-	}
-	for i := range drInfos {
-		dri := &drInfos[i]
-		dri.DRField = "replace_form." + dri.DRField
 	}
 	return drInfos, err
 
@@ -1231,33 +1207,6 @@ func (m *ReplaceRequest) DeepCopyProto() proto.Message {
 
 func (m *ReplaceRequest) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
 	return ReplaceRequestValidator().Validate(ctx, m, opts...)
-}
-
-func (m *ReplaceRequest) GetDRefInfo() ([]db.DRefInfo, error) {
-	if m == nil {
-		return nil, nil
-	}
-
-	return m.GetSpecDRefInfo()
-
-}
-
-// GetDRefInfo for the field's type
-func (m *ReplaceRequest) GetSpecDRefInfo() ([]db.DRefInfo, error) {
-	if m.GetSpec() == nil {
-		return nil, nil
-	}
-
-	drInfos, err := m.GetSpec().GetDRefInfo()
-	if err != nil {
-		return nil, errors.Wrap(err, "GetSpec().GetDRefInfo() FAILED")
-	}
-	for i := range drInfos {
-		dri := &drInfos[i]
-		dri.DRField = "spec." + dri.DRField
-	}
-	return drInfos, err
-
 }
 
 type ValidateReplaceRequest struct {

@@ -176,23 +176,25 @@ func resourceVolterraRateLimiterCreate(d *schema.ResourceData, meta interface{})
 		limits := make([]*ves_io_schema_rate_limiter.RateLimitValue, len(sl))
 		createSpec.Limits = limits
 		for i, set := range sl {
-			limits[i] = &ves_io_schema_rate_limiter.RateLimitValue{}
-			limitsMapStrToI := set.(map[string]interface{})
+			if set != nil {
+				limits[i] = &ves_io_schema_rate_limiter.RateLimitValue{}
+				limitsMapStrToI := set.(map[string]interface{})
 
-			if w, ok := limitsMapStrToI["burst_multiplier"]; ok && !isIntfNil(w) {
-				limits[i].BurstMultiplier = uint32(w.(int))
+				if w, ok := limitsMapStrToI["burst_multiplier"]; ok && !isIntfNil(w) {
+					limits[i].BurstMultiplier = uint32(w.(int))
+				}
+
+				if w, ok := limitsMapStrToI["total_number"]; ok && !isIntfNil(w) {
+					limits[i].TotalNumber = uint32(w.(int))
+				}
+
+				if v, ok := limitsMapStrToI["unit"]; ok && !isIntfNil(v) {
+
+					limits[i].Unit = ves_io_schema_rate_limiter.RateLimitPeriodUnit(ves_io_schema_rate_limiter.RateLimitPeriodUnit_value[v.(string)])
+
+				}
+
 			}
-
-			if w, ok := limitsMapStrToI["total_number"]; ok && !isIntfNil(w) {
-				limits[i].TotalNumber = uint32(w.(int))
-			}
-
-			if v, ok := limitsMapStrToI["unit"]; ok && !isIntfNil(v) {
-
-				limits[i].Unit = ves_io_schema_rate_limiter.RateLimitPeriodUnit(ves_io_schema_rate_limiter.RateLimitPeriodUnit_value[v.(string)])
-
-			}
-
 		}
 
 	}
@@ -335,23 +337,25 @@ func resourceVolterraRateLimiterUpdate(d *schema.ResourceData, meta interface{})
 		limits := make([]*ves_io_schema_rate_limiter.RateLimitValue, len(sl))
 		updateSpec.Limits = limits
 		for i, set := range sl {
-			limits[i] = &ves_io_schema_rate_limiter.RateLimitValue{}
-			limitsMapStrToI := set.(map[string]interface{})
+			if set != nil {
+				limits[i] = &ves_io_schema_rate_limiter.RateLimitValue{}
+				limitsMapStrToI := set.(map[string]interface{})
 
-			if w, ok := limitsMapStrToI["burst_multiplier"]; ok && !isIntfNil(w) {
-				limits[i].BurstMultiplier = uint32(w.(int))
+				if w, ok := limitsMapStrToI["burst_multiplier"]; ok && !isIntfNil(w) {
+					limits[i].BurstMultiplier = uint32(w.(int))
+				}
+
+				if w, ok := limitsMapStrToI["total_number"]; ok && !isIntfNil(w) {
+					limits[i].TotalNumber = uint32(w.(int))
+				}
+
+				if v, ok := limitsMapStrToI["unit"]; ok && !isIntfNil(v) {
+
+					limits[i].Unit = ves_io_schema_rate_limiter.RateLimitPeriodUnit(ves_io_schema_rate_limiter.RateLimitPeriodUnit_value[v.(string)])
+
+				}
+
 			}
-
-			if w, ok := limitsMapStrToI["total_number"]; ok && !isIntfNil(w) {
-				limits[i].TotalNumber = uint32(w.(int))
-			}
-
-			if v, ok := limitsMapStrToI["unit"]; ok && !isIntfNil(v) {
-
-				limits[i].Unit = ves_io_schema_rate_limiter.RateLimitPeriodUnit(ves_io_schema_rate_limiter.RateLimitPeriodUnit_value[v.(string)])
-
-			}
-
 		}
 
 	}

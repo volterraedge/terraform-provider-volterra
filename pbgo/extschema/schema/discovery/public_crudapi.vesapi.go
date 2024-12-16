@@ -1149,16 +1149,25 @@ func (s *APISrv) Create(ctx context.Context, req *CreateRequest) (*CreateRespons
 	}
 	reqMsgFQN := "ves.io.schema.discovery.CreateRequest"
 	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.sf, reqMsgFQN, req)
+	var retErr error
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
 		}
+		userMsg := "The 'ves.io.schema.discovery.API.Create' operation on 'discovery'"
+		if retErr == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
 	obj := NewDBObject(nil)
 	req.ToObject(obj)
 	if conv, exists := s.sf.Config().MsgToObjConverters[reqMsgFQN]; exists {
 		if err := conv(req, obj); err != nil {
+			retErr = err
 			return nil, err
 		}
 	}
@@ -1167,16 +1176,19 @@ func (s *APISrv) Create(ctx context.Context, req *CreateRequest) (*CreateRespons
 	rsrcRsp, err := s.opts.RsrcHandler.CreateFn(ctx, rsrcReq, s.apiWrapper)
 	if err != nil {
 		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "CreateResource"))
+		retErr = err
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 	rsp, err := NewObjectCreateRsp(rsrcRsp.Entry)
 	if err != nil {
 		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "CreateResponse"))
+		retErr = err
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 	rspMsgFQN := "ves.io.schema.discovery.CreateResponse"
 	if conv, exists := s.sf.Config().ObjToMsgConverters[rspMsgFQN]; exists {
 		if err := conv(rsrcRsp.Entry, rsp); err != nil {
+			retErr = err
 			return nil, err
 		}
 	}
@@ -1208,21 +1220,31 @@ func (s *APISrv) Replace(ctx context.Context, req *ReplaceRequest) (*ReplaceResp
 		}
 	}
 	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.sf, "ves.io.schema.discovery.API.ReplaceRequest", req)
+	var retErr error
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
 		}
+		userMsg := "The 'ves.io.schema.discovery.API.Replace' operation on 'discovery'"
+		if retErr == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
 	rsrcReq := &server.ResourceReplaceRequest{RequestMsg: req}
 	rsrcRsp, err := s.opts.RsrcHandler.ReplaceFn(ctx, rsrcReq, s.apiWrapper)
 	if err != nil {
 		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "ReplaceResource"))
+		retErr = err
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 	rsp, err := NewObjectReplaceRsp(rsrcRsp.Entry)
 	if err != nil {
 		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "ReplaceResponse"))
+		retErr = err
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.sf, "ves.io.schema.discovery.API.ReplaceResponse", rsp)...)
@@ -1341,10 +1363,18 @@ func (s *APISrv) Delete(ctx context.Context, req *DeleteRequest) (*google_protob
 		}
 	}
 	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.sf, "ves.io.schema.discovery.API.DeleteRequest", req)
+	var retErr error
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
 		}
+		userMsg := "The 'ves.io.schema.discovery.API.Delete' operation on 'discovery'"
+		if retErr == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
 	tenant := server.TenantFromContext(ctx)
@@ -1354,6 +1384,7 @@ func (s *APISrv) Delete(ctx context.Context, req *DeleteRequest) (*google_protob
 	_, err := s.opts.RsrcHandler.DeleteFn(ctx, rsrcReq, s.apiWrapper)
 	if err != nil {
 		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "DeleteResource"))
+		retErr = err
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 	return &google_protobuf.Empty{}, nil
@@ -2233,26 +2264,20 @@ var APISwaggerJSON string = `{
                         "$ref": "#/definitions/discoveryCBIPDeviceStatus"
                     },
                     "x-displayname": "Device Discovery Status"
-                },
-                "domain": {
-                    "type": "string",
-                    "description": " Domain name of the internal LB",
-                    "title": "Internal LB",
-                    "x-displayname": "LB domain"
                 }
             }
         },
         "discoveryCbipAdminCredentials": {
             "type": "object",
             "title": "Classic BIG-IP Admin Credentials",
-            "x-displayname": "Classic BIG-IP Admin Credentials",
+            "x-displayname": "Admin Credentials",
             "x-ves-proto-message": "ves.io.schema.discovery.CbipAdminCredentials",
             "properties": {
                 "password": {
                     "description": " Password used to log into an admin account on the BIG-IP device\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Classic BIG-IP Admin Password",
                     "$ref": "#/definitions/schemaSecretType",
-                    "x-displayname": "Classic BIG-IP Admin Password",
+                    "x-displayname": "Admin Password",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true"
@@ -2264,7 +2289,7 @@ var APISwaggerJSON string = `{
                     "title": "Classic BIG-IP Admin Username",
                     "minLength": 1,
                     "maxLength": 256,
-                    "x-displayname": "Classic BIG-IP Admin Username",
+                    "x-displayname": "Admin Username",
                     "x-ves-example": "admin",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
@@ -2279,7 +2304,7 @@ var APISwaggerJSON string = `{
             "type": "object",
             "description": "BIG-IP Root CA Certificate",
             "title": "BIG-IP Root CA Certificate",
-            "x-displayname": "BIG-IP Root CA Certificate",
+            "x-displayname": "Root CA Certificate",
             "x-ves-oneof-field-server_validation_choice": "[\"skip_server_verification\",\"trusted_ca\"]",
             "x-ves-proto-message": "ves.io.schema.discovery.CbipCertificateAuthority",
             "properties": {
@@ -2306,7 +2331,7 @@ var APISwaggerJSON string = `{
             "properties": {
                 "cbip_devices": {
                     "type": "array",
-                    "description": " List of Classic BIG-IP devices. Note Namespace Mapping is only available\n in Shared Configuration. Otherwise all devices are imported to current namespace.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 8\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " List of Classic BIG-IP devices.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 8\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "Classic BIG-IP Devices",
                     "maxItems": 8,
                     "items": {
@@ -2343,7 +2368,7 @@ var APISwaggerJSON string = `{
                     "description": "\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Classic BIG-IP Admin Credentials",
                     "$ref": "#/definitions/discoveryCbipAdminCredentials",
-                    "x-displayname": "Classic BIG-IP Admin Credentials",
+                    "x-displayname": "Admin Credentials",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true"
@@ -2353,7 +2378,7 @@ var APISwaggerJSON string = `{
                     "description": "\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Classic BIG-IP Root CA Certificate",
                     "$ref": "#/definitions/discoveryCbipCertificateAuthority",
-                    "x-displayname": "Classic BIG-IP Root CA Certificate",
+                    "x-displayname": "Root CA Certificate",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true"
@@ -2361,7 +2386,7 @@ var APISwaggerJSON string = `{
                 },
                 "cbip_mgmt_ip": {
                     "type": "string",
-                    "description": " IP Address of the Classic BIG-IP device\n\nExample: - \"10.1.1.1\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.ipv4: true\n",
+                    "description": " IP Address of the Classic BIG-IP device. Hostname is not supported.\n\nExample: - \"10.1.1.1\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.ipv4: true\n",
                     "title": "Management IP",
                     "x-displayname": "Management IP",
                     "x-ves-example": "10.1.1.1",
@@ -2372,19 +2397,19 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "default_all": {
-                    "description": "Exclusive with [namespace_mapping]\n All Partitions added to Shared Namespace",
-                    "title": "Default (All Partitions to Shared Namespace)",
+                    "description": "Exclusive with [namespace_mapping]\n If configuring in an App Namespace, discovered services across all BIG-IP partitions will be discovered in the current Namespace",
+                    "title": "Default (Automatic)",
                     "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "All Partitions to Shared Namespace"
+                    "x-displayname": "Automatic"
                 },
                 "namespace_mapping": {
-                    "description": "Exclusive with [default_all]\n Select which partition(s) should map to which XC namespace(s)",
-                    "title": "Custom Mapping",
+                    "description": "Exclusive with [default_all]\n Select the BIG-IP partitions from which services will be discovered. If configuring in Shared Configuration, services can be discovered in selected App Namespaces. If configuring in App Namespace services will be discovered in the current Namespace.",
+                    "title": "Custom",
                     "$ref": "#/definitions/discoveryNamespaceMapping",
-                    "x-displayname": "Custom Mapping"
+                    "x-displayname": "Custom"
                 },
                 "virtual_server_filter": {
-                    "description": " Filters to only discover certain BIG-IP Virtual Servers",
+                    "description": " Filters to discover only required BIG-IP Virtual Servers. The Virtual Server will be discovered only if it matches all criteria specified below. A blank criteria will be treated as match all.",
                     "title": "Virtual Server Filter",
                     "$ref": "#/definitions/discoveryVirtualServerFilter",
                     "x-displayname": "Virtual Server Filter"
@@ -3015,7 +3040,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Publish domain to VIP mapping"
                 },
                 "publish_fqdns": {
-                    "description": "Exclusive with [disable dns_delegation publish]\n Use this option to publish domain to VIP mapping when all domains are expected to be fully qualified i.e. they include the namesapce.",
+                    "description": "Exclusive with [disable dns_delegation publish]\n Use this option to publish domain to VIP mapping when all domains are expected to be fully qualified i.e. they include the namespace.",
                     "title": "publish_fqdns",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Publish Fully Qualified Domain to VIP mapping"
@@ -3146,14 +3171,14 @@ var APISwaggerJSON string = `{
         },
         "discoveryNamespaceMapping": {
             "type": "object",
-            "description": "Map BIG-IP partition(s) to an XC namespace. If not specified, all virtual  \nservers will be discovered under shared namespace.",
+            "description": "Select the mapping between BIG-IP partition from which services will be discovered and App Namespace to which the discovered services will be shared.",
             "title": "Namespace Mapping",
             "x-displayname": "Namespace Mapping",
             "x-ves-proto-message": "ves.io.schema.discovery.NamespaceMapping",
             "properties": {
                 "items": {
                     "type": "array",
-                    "description": " Map BIG-IP partition(s) to XC Namespaces\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 32\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " Map BIG-IP partition(s) to App Namespaces\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 32\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "Partition to Namespace Mapping",
                     "maxItems": 32,
                     "items": {
@@ -3169,7 +3194,7 @@ var APISwaggerJSON string = `{
         },
         "discoveryNamespaceMappingItem": {
             "type": "object",
-            "description": "Map BIG-IP partition(s) to an XC namespace. If not specified, all virtual  \nservers will be discovered under shared namespace.",
+            "description": "Map BIG-IP partition(s) to an App Namespace. If not specified, all virtual\nservers will be discovered under shared namespace.",
             "title": "Namespace Mapping Item",
             "x-displayname": "Namespace Mapping Item",
             "x-ves-proto-message": "ves.io.schema.discovery.NamespaceMappingItem",
@@ -3177,8 +3202,8 @@ var APISwaggerJSON string = `{
                 "namespace": {
                     "type": "string",
                     "description": " Select a namespace",
-                    "title": "XC Namespace",
-                    "x-displayname": "XC Namespace"
+                    "title": "App Namespace",
+                    "x-displayname": "App Namespace"
                 },
                 "partition_regex": {
                     "type": "string",
@@ -3554,10 +3579,10 @@ var APISwaggerJSON string = `{
         },
         "discoveryVirtualServerFilter": {
             "type": "object",
-            "description": "Filter to only discover certain BIG-IP Virtual Servers",
+            "description": "Filters to discover only required BIG-IP Virtual Servers. The Virtual Server will be discovered only if it matches all criteria specified below. A blank criteria will be treated as match all.",
             "title": "Virtual Server Filter",
             "x-displayname": "Virtual Server Filter",
-            "x-ves-oneof-field-discover_disabled_choice": "[\"enabled_only\",\"include_disabled\"]",
+            "x-ves-displayorder": "8,4,5,6,7",
             "x-ves-proto-message": "ves.io.schema.discovery.VirtualServerFilter",
             "properties": {
                 "description_regex": {
@@ -3571,16 +3596,11 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.string.regex": "true"
                     }
                 },
-                "enabled_only": {
-                    "description": "Exclusive with [include_disabled]\n Select to only discover enabled Virtual Servers",
-                    "title": "Discover Only Enabled Virtual Servers",
-                    "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Discover Only Enabled Virtual Servers"
-                },
-                "include_disabled": {
-                    "description": "Exclusive with [enabled_only]\n Select to discover disabled Virtual Servers",
+                "discover_disabled_virtual_servers": {
+                    "type": "boolean",
+                    "description": " When checked, disabled virtual servers will be included",
                     "title": "Discover Disabled Virtual Servers",
-                    "$ref": "#/definitions/ioschemaEmpty",
+                    "format": "boolean",
                     "x-displayname": "Discover Disabled Virtual Servers"
                 },
                 "name_regex": {
@@ -3596,7 +3616,7 @@ var APISwaggerJSON string = `{
                 },
                 "port_ranges": {
                     "type": "string",
-                    "description": " A string containing a comma separated list of port ranges.\n Each port range consists of a single port or two ports separated by \"-\".\n\nExample: - \"80,443,8080-8191,9080\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 512\n  ves.io.schema.rules.string.max_ports: 1024\n  ves.io.schema.rules.string.unique_port_range_list: true\n",
+                    "description": " A string containing a comma separated list of individual service ports or port ranges.\n Each port range consists of a single port or two ports separated by \"-\". For example, 8000-8191.\n Maximum number of ports allowed is 1024.\n\nExample: - \"80,443,8080-8191,9080\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 512\n  ves.io.schema.rules.string.max_ports: 1024\n  ves.io.schema.rules.string.unique_port_range_list: true\n",
                     "title": "Port_ranges",
                     "maxLength": 512,
                     "x-displayname": "Port Ranges",
@@ -3605,20 +3625,6 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.string.max_len": "512",
                         "ves.io.schema.rules.string.max_ports": "1024",
                         "ves.io.schema.rules.string.unique_port_range_list": "true"
-                    }
-                },
-                "protocols": {
-                    "type": "array",
-                    "description": " Filter by protocol(s)\n\nExample: - \"TCP\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.unique: true\n  ves.io.schema.rules.string.in: [\\\"HTTPS\\\",\\\"HTTP\\\",\\\"TCP\\\"]\n",
-                    "title": "protocols",
-                    "items": {
-                        "type": "string"
-                    },
-                    "x-displayname": "Protocol(s)",
-                    "x-ves-example": "TCP",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.unique": "true",
-                        "ves.io.schema.rules.string.in": "[\\\"HTTPS\\\",\\\"HTTP\\\",\\\"TCP\\\"]"
                     }
                 }
             }
@@ -3813,12 +3819,13 @@ var APISwaggerJSON string = `{
         },
         "schemaDiscoveryType": {
             "type": "string",
-            "description": "Specifies whether the discovery is from Kubernetes or Consul cluster\n\nInvalid Discovery mechanism\nDiscover from Kubernetes cluster\nDiscover from Consul service",
+            "description": "Specifies whether the discovery is from Kubernetes or Consul cluster\n\nInvalid Discovery mechanism\nDiscover from Kubernetes cluster\nDiscover from Consul service\nDiscover from Classic BIG-IP Clusters",
             "title": "DiscoveryType",
             "enum": [
                 "INVALID_DISCOVERY",
                 "K8S",
-                "CONSUL"
+                "CONSUL",
+                "CLASSIC_BIGIP"
             ],
             "default": "INVALID_DISCOVERY",
             "x-displayname": "Discovery Type",

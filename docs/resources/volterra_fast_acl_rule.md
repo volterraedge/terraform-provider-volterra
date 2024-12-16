@@ -1,9 +1,9 @@
 ---
 
 page_title: "Volterra: fast_acl_rule"
-description: "The fast_acl_rule allows CRUD of Fast Acl Rule resource on Volterra SaaS"
 
----
+description: "The fast_acl_rule allows CRUD of Fast Acl Rule resource on Volterra SaaS"
+---------------------------------------------------------------------------------------
 
 Resource volterra_fast_acl_rule
 ===============================
@@ -23,7 +23,13 @@ resource "volterra_fast_acl_rule" "example" {
   action {
     // One of the arguments from this list "policer_action protocol_policer_action simple_action" can be set
 
-    simple_action = "simple_action"
+    policer_action {
+      ref {
+        name      = "test1"
+        namespace = "staging"
+        tenant    = "acmecorp"
+      }
+    }
   }
 
   port {

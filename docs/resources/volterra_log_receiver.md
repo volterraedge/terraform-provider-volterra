@@ -1,9 +1,9 @@
 ---
 
 page_title: "Volterra: log_receiver"
-description: "The log_receiver allows CRUD of Log Receiver resource on Volterra SaaS"
 
----
+description: "The log_receiver allows CRUD of Log Receiver resource on Volterra SaaS"
+-------------------------------------------------------------------------------------
 
 Resource volterra_log_receiver
 ==============================
@@ -25,7 +25,7 @@ resource "volterra_log_receiver" "example" {
   syslog {
     // One of the arguments from this list "syslog_rfc3164 syslog_rfc5424" must be set
 
-    syslog_rfc5424 = "500"
+    syslog_rfc3164 = "500"
 
     // One of the arguments from this list "tcp_server tls_server udp_server" must be set
 

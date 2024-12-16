@@ -62,7 +62,8 @@ func resourceVolterraK8SClusterRole() *schema.Resource {
 
 			"k8s_cluster_role_selector": {
 
-				Type:     schema.TypeSet,
+				Type:     schema.TypeList,
+				MaxItems: 1,
 				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
@@ -82,7 +83,8 @@ func resourceVolterraK8SClusterRole() *schema.Resource {
 
 			"policy_rule_list": {
 
-				Type:     schema.TypeSet,
+				Type:     schema.TypeList,
+				MaxItems: 1,
 				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
@@ -96,7 +98,8 @@ func resourceVolterraK8SClusterRole() *schema.Resource {
 
 									"non_resource_url_list": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -126,7 +129,8 @@ func resourceVolterraK8SClusterRole() *schema.Resource {
 
 									"resource_list": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -253,20 +257,22 @@ func resourceVolterraK8SClusterRoleCreate(d *schema.ResourceData, meta interface
 		ruleChoiceInt.K8SClusterRoleSelector = &ves_io_schema.LabelSelectorType{}
 		createSpec.RuleChoice = ruleChoiceInt
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
+			if set != nil {
+				cs := set.(map[string]interface{})
 
-			if v, ok := cs["expressions"]; ok && !isIntfNil(v) {
+				if v, ok := cs["expressions"]; ok && !isIntfNil(v) {
 
-				ls := make([]string, len(v.([]interface{})))
-				for i, v := range v.([]interface{}) {
-					ls[i] = v.(string)
+					ls := make([]string, len(v.([]interface{})))
+					for i, v := range v.([]interface{}) {
+						ls[i] = v.(string)
+					}
+					ruleChoiceInt.K8SClusterRoleSelector.Expressions = ls
+
 				}
-				ruleChoiceInt.K8SClusterRoleSelector.Expressions = ls
 
 			}
-
 		}
 
 	}
@@ -278,115 +284,123 @@ func resourceVolterraK8SClusterRoleCreate(d *schema.ResourceData, meta interface
 		ruleChoiceInt.PolicyRuleList = &ves_io_schema_k8s_cluster_role.PolicyRuleListType{}
 		createSpec.RuleChoice = ruleChoiceInt
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
+			if set != nil {
+				cs := set.(map[string]interface{})
 
-			if v, ok := cs["policy_rule"]; ok && !isIntfNil(v) {
+				if v, ok := cs["policy_rule"]; ok && !isIntfNil(v) {
 
-				sl := v.([]interface{})
-				policyRule := make([]*ves_io_schema_k8s_cluster_role.PolicyRuleType, len(sl))
-				ruleChoiceInt.PolicyRuleList.PolicyRule = policyRule
-				for i, set := range sl {
-					policyRule[i] = &ves_io_schema_k8s_cluster_role.PolicyRuleType{}
-					policyRuleMapStrToI := set.(map[string]interface{})
+					sl := v.([]interface{})
+					policyRule := make([]*ves_io_schema_k8s_cluster_role.PolicyRuleType, len(sl))
+					ruleChoiceInt.PolicyRuleList.PolicyRule = policyRule
+					for i, set := range sl {
+						if set != nil {
+							policyRule[i] = &ves_io_schema_k8s_cluster_role.PolicyRuleType{}
+							policyRuleMapStrToI := set.(map[string]interface{})
 
-					resourceChoiceTypeFound := false
+							resourceChoiceTypeFound := false
 
-					if v, ok := policyRuleMapStrToI["non_resource_url_list"]; ok && !isIntfNil(v) && !resourceChoiceTypeFound {
+							if v, ok := policyRuleMapStrToI["non_resource_url_list"]; ok && !isIntfNil(v) && !resourceChoiceTypeFound {
 
-						resourceChoiceTypeFound = true
-						resourceChoiceInt := &ves_io_schema_k8s_cluster_role.PolicyRuleType_NonResourceUrlList{}
-						resourceChoiceInt.NonResourceUrlList = &ves_io_schema_k8s_cluster_role.NonResourceURLListType{}
-						policyRule[i].ResourceChoice = resourceChoiceInt
+								resourceChoiceTypeFound = true
+								resourceChoiceInt := &ves_io_schema_k8s_cluster_role.PolicyRuleType_NonResourceUrlList{}
+								resourceChoiceInt.NonResourceUrlList = &ves_io_schema_k8s_cluster_role.NonResourceURLListType{}
+								policyRule[i].ResourceChoice = resourceChoiceInt
 
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
 
-							if v, ok := cs["urls"]; ok && !isIntfNil(v) {
+										if v, ok := cs["urls"]; ok && !isIntfNil(v) {
 
-								ls := make([]string, len(v.([]interface{})))
-								for i, v := range v.([]interface{}) {
-									ls[i] = v.(string)
+											ls := make([]string, len(v.([]interface{})))
+											for i, v := range v.([]interface{}) {
+												ls[i] = v.(string)
+											}
+											resourceChoiceInt.NonResourceUrlList.Urls = ls
+
+										}
+
+										if v, ok := cs["verbs"]; ok && !isIntfNil(v) {
+
+											ls := make([]string, len(v.([]interface{})))
+											for i, v := range v.([]interface{}) {
+												ls[i] = v.(string)
+											}
+											resourceChoiceInt.NonResourceUrlList.Verbs = ls
+
+										}
+
+									}
 								}
-								resourceChoiceInt.NonResourceUrlList.Urls = ls
 
 							}
 
-							if v, ok := cs["verbs"]; ok && !isIntfNil(v) {
+							if v, ok := policyRuleMapStrToI["resource_list"]; ok && !isIntfNil(v) && !resourceChoiceTypeFound {
 
-								ls := make([]string, len(v.([]interface{})))
-								for i, v := range v.([]interface{}) {
-									ls[i] = v.(string)
+								resourceChoiceTypeFound = true
+								resourceChoiceInt := &ves_io_schema_k8s_cluster_role.PolicyRuleType_ResourceList{}
+								resourceChoiceInt.ResourceList = &ves_io_schema_k8s_cluster_role.ResourceListType{}
+								policyRule[i].ResourceChoice = resourceChoiceInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["api_groups"]; ok && !isIntfNil(v) {
+
+											ls := make([]string, len(v.([]interface{})))
+											for i, v := range v.([]interface{}) {
+												ls[i] = v.(string)
+											}
+											resourceChoiceInt.ResourceList.ApiGroups = ls
+
+										}
+
+										if v, ok := cs["resource_instances"]; ok && !isIntfNil(v) {
+
+											ls := make([]string, len(v.([]interface{})))
+											for i, v := range v.([]interface{}) {
+												ls[i] = v.(string)
+											}
+											resourceChoiceInt.ResourceList.ResourceInstances = ls
+
+										}
+
+										if v, ok := cs["resource_types"]; ok && !isIntfNil(v) {
+
+											ls := make([]string, len(v.([]interface{})))
+											for i, v := range v.([]interface{}) {
+												ls[i] = v.(string)
+											}
+											resourceChoiceInt.ResourceList.ResourceTypes = ls
+
+										}
+
+										if v, ok := cs["verbs"]; ok && !isIntfNil(v) {
+
+											ls := make([]string, len(v.([]interface{})))
+											for i, v := range v.([]interface{}) {
+												ls[i] = v.(string)
+											}
+											resourceChoiceInt.ResourceList.Verbs = ls
+
+										}
+
+									}
 								}
-								resourceChoiceInt.NonResourceUrlList.Verbs = ls
 
 							}
 
 						}
-
-					}
-
-					if v, ok := policyRuleMapStrToI["resource_list"]; ok && !isIntfNil(v) && !resourceChoiceTypeFound {
-
-						resourceChoiceTypeFound = true
-						resourceChoiceInt := &ves_io_schema_k8s_cluster_role.PolicyRuleType_ResourceList{}
-						resourceChoiceInt.ResourceList = &ves_io_schema_k8s_cluster_role.ResourceListType{}
-						policyRule[i].ResourceChoice = resourceChoiceInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["api_groups"]; ok && !isIntfNil(v) {
-
-								ls := make([]string, len(v.([]interface{})))
-								for i, v := range v.([]interface{}) {
-									ls[i] = v.(string)
-								}
-								resourceChoiceInt.ResourceList.ApiGroups = ls
-
-							}
-
-							if v, ok := cs["resource_instances"]; ok && !isIntfNil(v) {
-
-								ls := make([]string, len(v.([]interface{})))
-								for i, v := range v.([]interface{}) {
-									ls[i] = v.(string)
-								}
-								resourceChoiceInt.ResourceList.ResourceInstances = ls
-
-							}
-
-							if v, ok := cs["resource_types"]; ok && !isIntfNil(v) {
-
-								ls := make([]string, len(v.([]interface{})))
-								for i, v := range v.([]interface{}) {
-									ls[i] = v.(string)
-								}
-								resourceChoiceInt.ResourceList.ResourceTypes = ls
-
-							}
-
-							if v, ok := cs["verbs"]; ok && !isIntfNil(v) {
-
-								ls := make([]string, len(v.([]interface{})))
-								for i, v := range v.([]interface{}) {
-									ls[i] = v.(string)
-								}
-								resourceChoiceInt.ResourceList.Verbs = ls
-
-							}
-
-						}
-
 					}
 
 				}
 
 			}
-
 		}
 
 	}
@@ -510,20 +524,22 @@ func resourceVolterraK8SClusterRoleUpdate(d *schema.ResourceData, meta interface
 		ruleChoiceInt.K8SClusterRoleSelector = &ves_io_schema.LabelSelectorType{}
 		updateSpec.RuleChoice = ruleChoiceInt
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
+			if set != nil {
+				cs := set.(map[string]interface{})
 
-			if v, ok := cs["expressions"]; ok && !isIntfNil(v) {
+				if v, ok := cs["expressions"]; ok && !isIntfNil(v) {
 
-				ls := make([]string, len(v.([]interface{})))
-				for i, v := range v.([]interface{}) {
-					ls[i] = v.(string)
+					ls := make([]string, len(v.([]interface{})))
+					for i, v := range v.([]interface{}) {
+						ls[i] = v.(string)
+					}
+					ruleChoiceInt.K8SClusterRoleSelector.Expressions = ls
+
 				}
-				ruleChoiceInt.K8SClusterRoleSelector.Expressions = ls
 
 			}
-
 		}
 
 	}
@@ -535,115 +551,123 @@ func resourceVolterraK8SClusterRoleUpdate(d *schema.ResourceData, meta interface
 		ruleChoiceInt.PolicyRuleList = &ves_io_schema_k8s_cluster_role.PolicyRuleListType{}
 		updateSpec.RuleChoice = ruleChoiceInt
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
+			if set != nil {
+				cs := set.(map[string]interface{})
 
-			if v, ok := cs["policy_rule"]; ok && !isIntfNil(v) {
+				if v, ok := cs["policy_rule"]; ok && !isIntfNil(v) {
 
-				sl := v.([]interface{})
-				policyRule := make([]*ves_io_schema_k8s_cluster_role.PolicyRuleType, len(sl))
-				ruleChoiceInt.PolicyRuleList.PolicyRule = policyRule
-				for i, set := range sl {
-					policyRule[i] = &ves_io_schema_k8s_cluster_role.PolicyRuleType{}
-					policyRuleMapStrToI := set.(map[string]interface{})
+					sl := v.([]interface{})
+					policyRule := make([]*ves_io_schema_k8s_cluster_role.PolicyRuleType, len(sl))
+					ruleChoiceInt.PolicyRuleList.PolicyRule = policyRule
+					for i, set := range sl {
+						if set != nil {
+							policyRule[i] = &ves_io_schema_k8s_cluster_role.PolicyRuleType{}
+							policyRuleMapStrToI := set.(map[string]interface{})
 
-					resourceChoiceTypeFound := false
+							resourceChoiceTypeFound := false
 
-					if v, ok := policyRuleMapStrToI["non_resource_url_list"]; ok && !isIntfNil(v) && !resourceChoiceTypeFound {
+							if v, ok := policyRuleMapStrToI["non_resource_url_list"]; ok && !isIntfNil(v) && !resourceChoiceTypeFound {
 
-						resourceChoiceTypeFound = true
-						resourceChoiceInt := &ves_io_schema_k8s_cluster_role.PolicyRuleType_NonResourceUrlList{}
-						resourceChoiceInt.NonResourceUrlList = &ves_io_schema_k8s_cluster_role.NonResourceURLListType{}
-						policyRule[i].ResourceChoice = resourceChoiceInt
+								resourceChoiceTypeFound = true
+								resourceChoiceInt := &ves_io_schema_k8s_cluster_role.PolicyRuleType_NonResourceUrlList{}
+								resourceChoiceInt.NonResourceUrlList = &ves_io_schema_k8s_cluster_role.NonResourceURLListType{}
+								policyRule[i].ResourceChoice = resourceChoiceInt
 
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
 
-							if v, ok := cs["urls"]; ok && !isIntfNil(v) {
+										if v, ok := cs["urls"]; ok && !isIntfNil(v) {
 
-								ls := make([]string, len(v.([]interface{})))
-								for i, v := range v.([]interface{}) {
-									ls[i] = v.(string)
+											ls := make([]string, len(v.([]interface{})))
+											for i, v := range v.([]interface{}) {
+												ls[i] = v.(string)
+											}
+											resourceChoiceInt.NonResourceUrlList.Urls = ls
+
+										}
+
+										if v, ok := cs["verbs"]; ok && !isIntfNil(v) {
+
+											ls := make([]string, len(v.([]interface{})))
+											for i, v := range v.([]interface{}) {
+												ls[i] = v.(string)
+											}
+											resourceChoiceInt.NonResourceUrlList.Verbs = ls
+
+										}
+
+									}
 								}
-								resourceChoiceInt.NonResourceUrlList.Urls = ls
 
 							}
 
-							if v, ok := cs["verbs"]; ok && !isIntfNil(v) {
+							if v, ok := policyRuleMapStrToI["resource_list"]; ok && !isIntfNil(v) && !resourceChoiceTypeFound {
 
-								ls := make([]string, len(v.([]interface{})))
-								for i, v := range v.([]interface{}) {
-									ls[i] = v.(string)
+								resourceChoiceTypeFound = true
+								resourceChoiceInt := &ves_io_schema_k8s_cluster_role.PolicyRuleType_ResourceList{}
+								resourceChoiceInt.ResourceList = &ves_io_schema_k8s_cluster_role.ResourceListType{}
+								policyRule[i].ResourceChoice = resourceChoiceInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["api_groups"]; ok && !isIntfNil(v) {
+
+											ls := make([]string, len(v.([]interface{})))
+											for i, v := range v.([]interface{}) {
+												ls[i] = v.(string)
+											}
+											resourceChoiceInt.ResourceList.ApiGroups = ls
+
+										}
+
+										if v, ok := cs["resource_instances"]; ok && !isIntfNil(v) {
+
+											ls := make([]string, len(v.([]interface{})))
+											for i, v := range v.([]interface{}) {
+												ls[i] = v.(string)
+											}
+											resourceChoiceInt.ResourceList.ResourceInstances = ls
+
+										}
+
+										if v, ok := cs["resource_types"]; ok && !isIntfNil(v) {
+
+											ls := make([]string, len(v.([]interface{})))
+											for i, v := range v.([]interface{}) {
+												ls[i] = v.(string)
+											}
+											resourceChoiceInt.ResourceList.ResourceTypes = ls
+
+										}
+
+										if v, ok := cs["verbs"]; ok && !isIntfNil(v) {
+
+											ls := make([]string, len(v.([]interface{})))
+											for i, v := range v.([]interface{}) {
+												ls[i] = v.(string)
+											}
+											resourceChoiceInt.ResourceList.Verbs = ls
+
+										}
+
+									}
 								}
-								resourceChoiceInt.NonResourceUrlList.Verbs = ls
 
 							}
 
 						}
-
-					}
-
-					if v, ok := policyRuleMapStrToI["resource_list"]; ok && !isIntfNil(v) && !resourceChoiceTypeFound {
-
-						resourceChoiceTypeFound = true
-						resourceChoiceInt := &ves_io_schema_k8s_cluster_role.PolicyRuleType_ResourceList{}
-						resourceChoiceInt.ResourceList = &ves_io_schema_k8s_cluster_role.ResourceListType{}
-						policyRule[i].ResourceChoice = resourceChoiceInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["api_groups"]; ok && !isIntfNil(v) {
-
-								ls := make([]string, len(v.([]interface{})))
-								for i, v := range v.([]interface{}) {
-									ls[i] = v.(string)
-								}
-								resourceChoiceInt.ResourceList.ApiGroups = ls
-
-							}
-
-							if v, ok := cs["resource_instances"]; ok && !isIntfNil(v) {
-
-								ls := make([]string, len(v.([]interface{})))
-								for i, v := range v.([]interface{}) {
-									ls[i] = v.(string)
-								}
-								resourceChoiceInt.ResourceList.ResourceInstances = ls
-
-							}
-
-							if v, ok := cs["resource_types"]; ok && !isIntfNil(v) {
-
-								ls := make([]string, len(v.([]interface{})))
-								for i, v := range v.([]interface{}) {
-									ls[i] = v.(string)
-								}
-								resourceChoiceInt.ResourceList.ResourceTypes = ls
-
-							}
-
-							if v, ok := cs["verbs"]; ok && !isIntfNil(v) {
-
-								ls := make([]string, len(v.([]interface{})))
-								for i, v := range v.([]interface{}) {
-									ls[i] = v.(string)
-								}
-								resourceChoiceInt.ResourceList.Verbs = ls
-
-							}
-
-						}
-
 					}
 
 				}
 
 			}
-
 		}
 
 	}

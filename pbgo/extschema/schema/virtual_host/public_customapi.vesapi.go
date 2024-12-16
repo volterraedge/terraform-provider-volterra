@@ -34,6 +34,15 @@ type CustomAPIGrpcClient struct {
 	rpcFns map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error)
 }
 
+func (c *CustomAPIGrpcClient) doRPCAssignAPIDefinition(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
+	req := &AssignAPIDefinitionReq{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.virtual_host.AssignAPIDefinitionReq", yamlReq)
+	}
+	rsp, err := c.grpcClient.AssignAPIDefinition(ctx, req, opts...)
+	return rsp, err
+}
+
 func (c *CustomAPIGrpcClient) doRPCGetDnsInfo(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &GetDnsInfoRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -73,6 +82,8 @@ func NewCustomAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 		grpcClient: NewCustomAPIClient(cc),
 	}
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
+	rpcFns["AssignAPIDefinition"] = ccl.doRPCAssignAPIDefinition
+
 	rpcFns["GetDnsInfo"] = ccl.doRPCGetDnsInfo
 
 	ccl.rpcFns = rpcFns
@@ -86,6 +97,92 @@ type CustomAPIRestClient struct {
 	client  http.Client
 	// map of rpc name to its invocation
 	rpcFns map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error)
+}
+
+func (c *CustomAPIRestClient) doRPCAssignAPIDefinition(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
+	if callOpts.URI == "" {
+		return nil, fmt.Errorf("Error, URI should be specified, got empty")
+	}
+	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
+
+	yamlReq := callOpts.YAMLReq
+	req := &AssignAPIDefinitionReq{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.virtual_host.AssignAPIDefinitionReq: %s", yamlReq, err)
+	}
+
+	var hReq *http.Request
+	hm := strings.ToLower(callOpts.HTTPMethod)
+	switch hm {
+	case "post", "put":
+		jsn, err := codec.ToJSON(req, codec.ToWithUseProtoFieldName())
+		if err != nil {
+			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
+		}
+		var op string
+		if hm == "post" {
+			op = http.MethodPost
+		} else {
+			op = http.MethodPut
+		}
+		newReq, err := http.NewRequest(op, url, bytes.NewBuffer([]byte(jsn)))
+		if err != nil {
+			return nil, errors.Wrapf(err, "Creating new HTTP %s request for custom API", op)
+		}
+		hReq = newReq
+	case "get":
+		newReq, err := http.NewRequest(http.MethodGet, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP GET request for custom API")
+		}
+		hReq = newReq
+		q := hReq.URL.Query()
+		_ = q
+		q.Add("api_definition", fmt.Sprintf("%v", req.ApiDefinition))
+		q.Add("create_new", fmt.Sprintf("%v", req.CreateNew))
+		q.Add("name", fmt.Sprintf("%v", req.Name))
+		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
+
+		hReq.URL.RawQuery += q.Encode()
+	case "delete":
+		newReq, err := http.NewRequest(http.MethodDelete, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP DELETE request for custom API")
+		}
+		hReq = newReq
+	default:
+		return nil, fmt.Errorf("Error, invalid/empty HTTPMethod(%s) specified, should be POST|DELETE|GET", callOpts.HTTPMethod)
+	}
+	hReq = hReq.WithContext(ctx)
+	hReq.Header.Set("Content-Type", "application/json")
+	client.AddHdrsToReq(callOpts.Headers, hReq)
+
+	rsp, err := c.client.Do(hReq)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient")
+	}
+	defer rsp.Body.Close()
+
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
+		body, err := io.ReadAll(rsp.Body)
+		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
+	}
+
+	body, err := io.ReadAll(rsp.Body)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient read body")
+	}
+	pbRsp := &AssignAPIDefinitionResp{}
+	if err := codec.FromJSON(string(body), pbRsp); err != nil {
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.virtual_host.AssignAPIDefinitionResp", body)
+
+	}
+	if callOpts.OutCallResponse != nil {
+		callOpts.OutCallResponse.ProtoMsg = pbRsp
+		callOpts.OutCallResponse.JSON = string(body)
+	}
+	return pbRsp, nil
 }
 
 func (c *CustomAPIRestClient) doRPCGetDnsInfo(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
@@ -196,6 +293,8 @@ func NewCustomAPIRestClient(baseURL string, hc http.Client) server.CustomClient 
 	}
 
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
+	rpcFns["AssignAPIDefinition"] = ccl.doRPCAssignAPIDefinition
+
 	rpcFns["GetDnsInfo"] = ccl.doRPCGetDnsInfo
 
 	ccl.rpcFns = rpcFns
@@ -210,6 +309,10 @@ type customAPIInprocClient struct {
 	CustomAPIServer
 }
 
+func (c *customAPIInprocClient) AssignAPIDefinition(ctx context.Context, in *AssignAPIDefinitionReq, opts ...grpc.CallOption) (*AssignAPIDefinitionResp, error) {
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.virtual_host.CustomAPI.AssignAPIDefinition")
+	return c.CustomAPIServer.AssignAPIDefinition(ctx, in)
+}
 func (c *customAPIInprocClient) GetDnsInfo(ctx context.Context, in *GetDnsInfoRequest, opts ...grpc.CallOption) (*GetDnsInfoResponse, error) {
 	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.virtual_host.CustomAPI.GetDnsInfo")
 	return c.CustomAPIServer.GetDnsInfo(ctx, in)
@@ -236,6 +339,58 @@ type customAPISrv struct {
 	svc svcfw.Service
 }
 
+func (s *customAPISrv) AssignAPIDefinition(ctx context.Context, in *AssignAPIDefinitionReq) (*AssignAPIDefinitionResp, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.virtual_host.CustomAPI")
+	cah, ok := ah.(CustomAPIServer)
+	if !ok {
+		return nil, fmt.Errorf("ah %v is not of type *CustomAPIServer", ah)
+	}
+
+	var (
+		rsp *AssignAPIDefinitionResp
+		err error
+	)
+
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.virtual_host.AssignAPIDefinitionReq", in)
+	defer func() {
+		if len(bodyFields) > 0 {
+			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
+		}
+		userMsg := "The 'CustomAPI.AssignAPIDefinition' operation on 'virtual_host'"
+		if err == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
+	}()
+	if err := s.svc.CustomAPIProcessDRef(ctx, in); err != nil {
+		return nil, err
+	}
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.virtual_host.CustomAPI.AssignAPIDefinition"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
+	rsp, err = cah.AssignAPIDefinition(ctx, in)
+	if err != nil {
+		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
+	}
+
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.virtual_host.AssignAPIDefinitionResp", rsp)...)
+
+	return rsp, nil
+}
 func (s *customAPISrv) GetDnsInfo(ctx context.Context, in *GetDnsInfoRequest) (*GetDnsInfoResponse, error) {
 	ah := s.svc.GetAPIHandler("ves.io.schema.virtual_host.CustomAPI")
 	cah, ok := ah.(CustomAPIServer)
@@ -309,6 +464,106 @@ var CustomAPISwaggerJSON string = `{
     ],
     "tags": [],
     "paths": {
+        "/public/namespaces/{namespace}/virtual_hosts/{name}/api_definitions/assign": {
+            "post": {
+                "summary": "Assign API Definition",
+                "description": "Set a reference to the API Definition, with an option to create an empty one if not exists.",
+                "operationId": "ves.io.schema.virtual_host.CustomAPI.AssignAPIDefinition",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/virtual_hostAssignAPIDefinitionResp"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "namespace",
+                        "description": "Namespace\n\nx-example: \"shared\"\nNamespace of the Virtual Hosts",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "x-displayname": "Namespace"
+                    },
+                    {
+                        "name": "name",
+                        "description": "Name\n\nx-example: \"blogging-app\"\nName of the Virtual Hosts",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "x-displayname": "Name"
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/virtual_hostAssignAPIDefinitionReq"
+                        }
+                    }
+                ],
+                "tags": [
+                    "CustomAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-virtual_host-customapi-assignapidefinition"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.virtual_host.CustomAPI.AssignAPIDefinition"
+            },
+            "x-displayname": "Virtual Host Custom API",
+            "x-ves-proto-service": "ves.io.schema.virtual_host.CustomAPI",
+            "x-ves-proto-service-type": "CUSTOM_PUBLIC"
+        },
         "/public/namespaces/{namespace}/virtual_hosts/{name}/get-dns-info": {
             "get": {
                 "summary": "Get DNS Info",
@@ -447,6 +702,52 @@ var CustomAPISwaggerJSON string = `{
                 }
             }
         },
+        "schemaviewsObjectRefType": {
+            "type": "object",
+            "description": "This type establishes a direct reference from one object(the referrer) to another(the referred).\nSuch a reference is in form of tenant/namespace/name",
+            "title": "ObjectRefType",
+            "x-displayname": "Object reference",
+            "x-ves-proto-message": "ves.io.schema.views.ObjectRefType",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then name will hold the referred object's(e.g. route's) name.\n\nExample: - \"contacts-route\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_bytes: 128\n  ves.io.schema.rules.string.min_bytes: 1\n",
+                    "title": "name",
+                    "minLength": 1,
+                    "maxLength": 128,
+                    "x-displayname": "Name",
+                    "x-ves-example": "contacts-route",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_bytes": "128",
+                        "ves.io.schema.rules.string.min_bytes": "1"
+                    }
+                },
+                "namespace": {
+                    "type": "string",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then namespace will hold the referred object's(e.g. route's) namespace.\n\nExample: - \"ns1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 64\n",
+                    "title": "namespace",
+                    "maxLength": 64,
+                    "x-displayname": "Namespace",
+                    "x-ves-example": "ns1",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_bytes": "64"
+                    }
+                },
+                "tenant": {
+                    "type": "string",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then tenant will hold the referred object's(e.g. route's) tenant.\n\nExample: - \"acmecorp\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 64\n",
+                    "title": "tenant",
+                    "maxLength": 64,
+                    "x-displayname": "Tenant",
+                    "x-ves-example": "acmecorp",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_bytes": "64"
+                    }
+                }
+            }
+        },
         "schemavirtual_host_dns_infoGlobalSpecType": {
             "type": "object",
             "description": "Shape of the virtual host DNS info global specification",
@@ -480,6 +781,53 @@ var CustomAPISwaggerJSON string = `{
                     "x-displayname": "Virtual Host"
                 }
             }
+        },
+        "virtual_hostAssignAPIDefinitionReq": {
+            "type": "object",
+            "description": "Request form for Assign API Definition",
+            "title": "Assign API Definition Request",
+            "x-displayname": "Assign API Definition Request",
+            "x-ves-proto-message": "ves.io.schema.virtual_host.AssignAPIDefinitionReq",
+            "properties": {
+                "api_definition": {
+                    "description": " A reference to API Definition object.\n The referenced object may not exists.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "API Definition",
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "API Definition",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "create_new": {
+                    "type": "boolean",
+                    "description": " Create an empty API Definition object, if not exists",
+                    "title": "Create if not exists",
+                    "format": "boolean",
+                    "x-displayname": "Create New"
+                },
+                "name": {
+                    "type": "string",
+                    "description": " Name of the Virtual Hosts\n\nExample: - \"blogging-app\"-",
+                    "title": "Name",
+                    "x-displayname": "Name",
+                    "x-ves-example": "blogging-app"
+                },
+                "namespace": {
+                    "type": "string",
+                    "description": " Namespace of the Virtual Hosts\n\nExample: - \"shared\"-",
+                    "title": "Namespace",
+                    "x-displayname": "Namespace",
+                    "x-ves-example": "shared"
+                }
+            }
+        },
+        "virtual_hostAssignAPIDefinitionResp": {
+            "type": "object",
+            "description": "Response form for Assign API Definition",
+            "title": "Assign API Definition Response",
+            "x-displayname": "Assign API Definition Response",
+            "x-ves-proto-message": "ves.io.schema.virtual_host.AssignAPIDefinitionResp"
         },
         "virtual_hostGetDnsInfoResponse": {
             "type": "object",

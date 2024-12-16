@@ -63,7 +63,8 @@ func resourceVolterraBigipCentralmanagerSite() *schema.Resource {
 
 			"volterra_software": {
 
-				Type:     schema.TypeSet,
+				Type:     schema.TypeList,
+				MaxItems: 1,
 				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
@@ -142,37 +143,39 @@ func resourceVolterraBigipCentralmanagerSiteCreate(d *schema.ResourceData, meta 
 	//volterra_software
 	if v, ok := d.GetOk("volterra_software"); ok && !isIntfNil(v) {
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		volterraSoftware := &ves_io_schema_views.VolterraSoftwareType{}
 		createSpec.VolterraSoftware = volterraSoftware
 		for _, set := range sl {
-			volterraSoftwareMapStrToI := set.(map[string]interface{})
+			if set != nil {
+				volterraSoftwareMapStrToI := set.(map[string]interface{})
 
-			volterraSwVersionChoiceTypeFound := false
+				volterraSwVersionChoiceTypeFound := false
 
-			if v, ok := volterraSoftwareMapStrToI["default_sw_version"]; ok && !isIntfNil(v) && !volterraSwVersionChoiceTypeFound {
+				if v, ok := volterraSoftwareMapStrToI["default_sw_version"]; ok && !isIntfNil(v) && !volterraSwVersionChoiceTypeFound {
 
-				volterraSwVersionChoiceTypeFound = true
+					volterraSwVersionChoiceTypeFound = true
 
-				if v.(bool) {
-					volterraSwVersionChoiceInt := &ves_io_schema_views.VolterraSoftwareType_DefaultSwVersion{}
-					volterraSwVersionChoiceInt.DefaultSwVersion = &ves_io_schema.Empty{}
+					if v.(bool) {
+						volterraSwVersionChoiceInt := &ves_io_schema_views.VolterraSoftwareType_DefaultSwVersion{}
+						volterraSwVersionChoiceInt.DefaultSwVersion = &ves_io_schema.Empty{}
+						volterraSoftware.VolterraSwVersionChoice = volterraSwVersionChoiceInt
+					}
+
+				}
+
+				if v, ok := volterraSoftwareMapStrToI["volterra_software_version"]; ok && !isIntfNil(v) && !volterraSwVersionChoiceTypeFound {
+
+					volterraSwVersionChoiceTypeFound = true
+					volterraSwVersionChoiceInt := &ves_io_schema_views.VolterraSoftwareType_VolterraSoftwareVersion{}
+
 					volterraSoftware.VolterraSwVersionChoice = volterraSwVersionChoiceInt
+
+					volterraSwVersionChoiceInt.VolterraSoftwareVersion = v.(string)
+
 				}
 
 			}
-
-			if v, ok := volterraSoftwareMapStrToI["volterra_software_version"]; ok && !isIntfNil(v) && !volterraSwVersionChoiceTypeFound {
-
-				volterraSwVersionChoiceTypeFound = true
-				volterraSwVersionChoiceInt := &ves_io_schema_views.VolterraSoftwareType_VolterraSoftwareVersion{}
-
-				volterraSoftware.VolterraSwVersionChoice = volterraSwVersionChoiceInt
-
-				volterraSwVersionChoiceInt.VolterraSoftwareVersion = v.(string)
-
-			}
-
 		}
 
 	}
@@ -278,37 +281,39 @@ func resourceVolterraBigipCentralmanagerSiteUpdate(d *schema.ResourceData, meta 
 
 	if v, ok := d.GetOk("volterra_software"); ok && !isIntfNil(v) {
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		volterraSoftware := &ves_io_schema_views.VolterraSoftwareType{}
 		updateSpec.VolterraSoftware = volterraSoftware
 		for _, set := range sl {
-			volterraSoftwareMapStrToI := set.(map[string]interface{})
+			if set != nil {
+				volterraSoftwareMapStrToI := set.(map[string]interface{})
 
-			volterraSwVersionChoiceTypeFound := false
+				volterraSwVersionChoiceTypeFound := false
 
-			if v, ok := volterraSoftwareMapStrToI["default_sw_version"]; ok && !isIntfNil(v) && !volterraSwVersionChoiceTypeFound {
+				if v, ok := volterraSoftwareMapStrToI["default_sw_version"]; ok && !isIntfNil(v) && !volterraSwVersionChoiceTypeFound {
 
-				volterraSwVersionChoiceTypeFound = true
+					volterraSwVersionChoiceTypeFound = true
 
-				if v.(bool) {
-					volterraSwVersionChoiceInt := &ves_io_schema_views.VolterraSoftwareType_DefaultSwVersion{}
-					volterraSwVersionChoiceInt.DefaultSwVersion = &ves_io_schema.Empty{}
+					if v.(bool) {
+						volterraSwVersionChoiceInt := &ves_io_schema_views.VolterraSoftwareType_DefaultSwVersion{}
+						volterraSwVersionChoiceInt.DefaultSwVersion = &ves_io_schema.Empty{}
+						volterraSoftware.VolterraSwVersionChoice = volterraSwVersionChoiceInt
+					}
+
+				}
+
+				if v, ok := volterraSoftwareMapStrToI["volterra_software_version"]; ok && !isIntfNil(v) && !volterraSwVersionChoiceTypeFound {
+
+					volterraSwVersionChoiceTypeFound = true
+					volterraSwVersionChoiceInt := &ves_io_schema_views.VolterraSoftwareType_VolterraSoftwareVersion{}
+
 					volterraSoftware.VolterraSwVersionChoice = volterraSwVersionChoiceInt
+
+					volterraSwVersionChoiceInt.VolterraSoftwareVersion = v.(string)
+
 				}
 
 			}
-
-			if v, ok := volterraSoftwareMapStrToI["volterra_software_version"]; ok && !isIntfNil(v) && !volterraSwVersionChoiceTypeFound {
-
-				volterraSwVersionChoiceTypeFound = true
-				volterraSwVersionChoiceInt := &ves_io_schema_views.VolterraSoftwareType_VolterraSoftwareVersion{}
-
-				volterraSoftware.VolterraSwVersionChoice = volterraSwVersionChoiceInt
-
-				volterraSwVersionChoiceInt.VolterraSoftwareVersion = v.(string)
-
-			}
-
 		}
 
 	}

@@ -445,6 +445,18 @@ func (v *ValidateAPIEPInfo) Validate(ctx context.Context, pm interface{}, opts .
 
 	}
 
+	if fv, exists := v.FldValidators["sensitive_data_location"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("sensitive_data_location"))
+		for idx, item := range m.GetSensitiveDataLocation() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["sensitive_data_types"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("sensitive_data_types"))

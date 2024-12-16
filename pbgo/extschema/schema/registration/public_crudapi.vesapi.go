@@ -670,16 +670,25 @@ func (s *APISrv) Create(ctx context.Context, req *CreateRequest) (*CreateRespons
 	}
 	reqMsgFQN := "ves.io.schema.registration.CreateRequest"
 	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.sf, reqMsgFQN, req)
+	var retErr error
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
 		}
+		userMsg := "The 'ves.io.schema.registration.API.Create' operation on 'registration'"
+		if retErr == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
 	obj := NewDBObject(nil)
 	req.ToObject(obj)
 	if conv, exists := s.sf.Config().MsgToObjConverters[reqMsgFQN]; exists {
 		if err := conv(req, obj); err != nil {
+			retErr = err
 			return nil, err
 		}
 	}
@@ -688,16 +697,19 @@ func (s *APISrv) Create(ctx context.Context, req *CreateRequest) (*CreateRespons
 	rsrcRsp, err := s.opts.RsrcHandler.CreateFn(ctx, rsrcReq, s.apiWrapper)
 	if err != nil {
 		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "CreateResource"))
+		retErr = err
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 	rsp, err := NewObjectCreateRsp(rsrcRsp.Entry)
 	if err != nil {
 		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "CreateResponse"))
+		retErr = err
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 	rspMsgFQN := "ves.io.schema.registration.CreateResponse"
 	if conv, exists := s.sf.Config().ObjToMsgConverters[rspMsgFQN]; exists {
 		if err := conv(rsrcRsp.Entry, rsp); err != nil {
+			retErr = err
 			return nil, err
 		}
 	}
@@ -729,21 +741,31 @@ func (s *APISrv) Replace(ctx context.Context, req *ReplaceRequest) (*ReplaceResp
 		}
 	}
 	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.sf, "ves.io.schema.registration.API.ReplaceRequest", req)
+	var retErr error
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
 		}
+		userMsg := "The 'ves.io.schema.registration.API.Replace' operation on 'registration'"
+		if retErr == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
 	rsrcReq := &server.ResourceReplaceRequest{RequestMsg: req}
 	rsrcRsp, err := s.opts.RsrcHandler.ReplaceFn(ctx, rsrcReq, s.apiWrapper)
 	if err != nil {
 		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "ReplaceResource"))
+		retErr = err
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 	rsp, err := NewObjectReplaceRsp(rsrcRsp.Entry)
 	if err != nil {
 		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "ReplaceResponse"))
+		retErr = err
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.sf, "ves.io.schema.registration.API.ReplaceResponse", rsp)...)
@@ -1381,7 +1403,7 @@ var APISwaggerJSON string = `{
         },
         "registrationProvider": {
             "type": "string",
-            "description": "Infrastructure provider enum for registration. It describes where is instance running.\n\nProvider was not detected\nAWS cloud instance\nGoogle cloud instance\nAzure cloud instance\nVMWare VM\nKVM VM\nOther provider, which was not identified by system.\nF5XC HW device.\nIBM Cloud instance.\nKubernetes cluster in AWS\nKubernetes cluster in GCP\nKubernetes cluster in Azure\nKubernetes cluster in Vmware\nKubernetes cluster in VMware\nKubernetes cluster in Other provider\nKubernetes cluster in Volterra\nKubernetes cluster in IBM Cloud\nF5OS HW device.",
+            "description": "Infrastructure provider enum for registration. It describes where is instance running.\n\nProvider was not detected\nAWS cloud instance\nGoogle cloud instance\nAzure cloud instance\nVMWare VM\nKVM VM\nOther provider, which was not identified by system.\nF5XC HW device.\nIBM Cloud instance.\nKubernetes cluster in AWS\nKubernetes cluster in GCP\nKubernetes cluster in Azure\nKubernetes cluster in Vmware\nKubernetes cluster in VMware\nKubernetes cluster in Other provider\nKubernetes cluster in Volterra\nKubernetes cluster in IBM Cloud\nF5OS HW device.\nRSeries Device\nOCI Cloud Instance\nNutanix instance\nOpenstack Instance",
             "title": "Infrastructure provider",
             "enum": [
                 "UNKNOWN",
@@ -1402,7 +1424,11 @@ var APISwaggerJSON string = `{
                 "OTHER_K8S",
                 "VOLTERRA_K8S",
                 "IBMCLOUD_K8S",
-                "F5OS"
+                "F5OS",
+                "RSERIES",
+                "OCI",
+                "NUTANIX",
+                "OPENSTACK"
             ],
             "default": "UNKNOWN",
             "x-displayname": "Infrastructure Provider",

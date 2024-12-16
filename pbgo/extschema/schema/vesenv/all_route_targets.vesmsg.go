@@ -1475,6 +1475,50 @@ func (v *ValidateRouteTargetChoice) Validate(ctx context.Context, pm interface{}
 				return err
 			}
 		}
+	case *RouteTargetChoice_Rt_2018:
+		if fv, exists := v.FldValidators["choice.rt_2018"]; exists {
+			val := m.GetChoice().(*RouteTargetChoice_Rt_2018).Rt_2018
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("rt_2018"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *RouteTargetChoice_Rt_2019:
+		if fv, exists := v.FldValidators["choice.rt_2019"]; exists {
+			val := m.GetChoice().(*RouteTargetChoice_Rt_2019).Rt_2019
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("rt_2019"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *RouteTargetChoice_Rt_2020:
+		if fv, exists := v.FldValidators["choice.rt_2020"]; exists {
+			val := m.GetChoice().(*RouteTargetChoice_Rt_2020).Rt_2020
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("rt_2020"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *RouteTargetChoice_Rt_2021:
+		if fv, exists := v.FldValidators["choice.rt_2021"]; exists {
+			val := m.GetChoice().(*RouteTargetChoice_Rt_2021).Rt_2021
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("rt_2021"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 	case *RouteTargetChoice_Rt_65535:
 		if fv, exists := v.FldValidators["choice.rt_65535"]; exists {
 			val := m.GetChoice().(*RouteTargetChoice_Rt_65535).Rt_65535

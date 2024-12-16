@@ -69,7 +69,6 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.views.cdn_loadbalancer.AdvancedOptionsType"] = AdvancedOptionsTypeValidator()
 	vr["ves.io.schema.views.cdn_loadbalancer.ApiProtection"] = ApiProtectionValidator()
 	vr["ves.io.schema.views.cdn_loadbalancer.AuthenticationOptions"] = AuthenticationOptionsValidator()
-	vr["ves.io.schema.views.cdn_loadbalancer.BotProtection"] = BotProtectionValidator()
 	vr["ves.io.schema.views.cdn_loadbalancer.CDNCacheRule"] = CDNCacheRuleValidator()
 	vr["ves.io.schema.views.cdn_loadbalancer.CDNCacheRuleExpression"] = CDNCacheRuleExpressionValidator()
 	vr["ves.io.schema.views.cdn_loadbalancer.CDNCacheRuleExpressionList"] = CDNCacheRuleExpressionListValidator()
@@ -89,12 +88,10 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.views.cdn_loadbalancer.CacheTTLEnableProps"] = CacheTTLEnablePropsValidator()
 	vr["ves.io.schema.views.cdn_loadbalancer.CacheTTLOptionsType"] = CacheTTLOptionsTypeValidator()
 	vr["ves.io.schema.views.cdn_loadbalancer.CdnOriginPoolType"] = CdnOriginPoolTypeValidator()
-	vr["ves.io.schema.views.cdn_loadbalancer.ClientSideDefense"] = ClientSideDefenseValidator()
 	vr["ves.io.schema.views.cdn_loadbalancer.CommonSecurityControls"] = CommonSecurityControlsValidator()
 	vr["ves.io.schema.views.cdn_loadbalancer.CreateSpecType"] = CreateSpecTypeValidator()
 	vr["ves.io.schema.views.cdn_loadbalancer.DefaultCacheAction"] = DefaultCacheActionValidator()
 	vr["ves.io.schema.views.cdn_loadbalancer.DefaultCacheTTLProps"] = DefaultCacheTTLPropsValidator()
-	vr["ves.io.schema.views.cdn_loadbalancer.DoSProtection"] = DoSProtectionValidator()
 	vr["ves.io.schema.views.cdn_loadbalancer.GeoFilteringOptions"] = GeoFilteringOptionsValidator()
 	vr["ves.io.schema.views.cdn_loadbalancer.GetSpecType"] = GetSpecTypeValidator()
 	vr["ves.io.schema.views.cdn_loadbalancer.GlobalSpecType"] = GlobalSpecTypeValidator()
@@ -355,6 +352,10 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 	}
 
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.views.cdn_loadbalancer.API.Create"] = []string{
+		"spec.api_discovery_on_cache_miss.api_crawler.api_crawler_config.domains.#.simple_login.password.blindfold_secret_info_internal",
+		"spec.api_discovery_on_cache_miss.api_crawler.api_crawler_config.domains.#.simple_login.password.secret_encoding_type",
+		"spec.api_discovery_on_cache_miss.api_crawler.api_crawler_config.domains.#.simple_login.password.vault_secret_info",
+		"spec.api_discovery_on_cache_miss.api_crawler.api_crawler_config.domains.#.simple_login.password.wingman_secret_info",
 		"spec.api_discovery_on_cache_miss.sensitive_data_detection_rules",
 		"spec.api_protection_rules.api_endpoint_rules.#.metadata.disable",
 		"spec.api_protection_rules.api_groups_rules.#.metadata.disable",
@@ -388,6 +389,10 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.data_guard_rules.#.metadata.disable",
 		"spec.ddos_mitigation_rules.#.metadata.disable",
 		"spec.disable_bot_defense",
+		"spec.enable_api_discovery.api_crawler.api_crawler_config.domains.#.simple_login.password.blindfold_secret_info_internal",
+		"spec.enable_api_discovery.api_crawler.api_crawler_config.domains.#.simple_login.password.secret_encoding_type",
+		"spec.enable_api_discovery.api_crawler.api_crawler_config.domains.#.simple_login.password.vault_secret_info",
+		"spec.enable_api_discovery.api_crawler.api_crawler_config.domains.#.simple_login.password.wingman_secret_info",
 		"spec.enable_api_discovery.sensitive_data_detection_rules",
 		"spec.graphql_rules.#.graphql_settings.max_value_length",
 		"spec.graphql_rules.#.graphql_settings.policy_name",
@@ -412,6 +417,10 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.more_option.header_options.response_headers_to_add.#.secret_value.secret_encoding_type",
 		"spec.more_option.header_options.response_headers_to_add.#.secret_value.vault_secret_info",
 		"spec.more_option.header_options.response_headers_to_add.#.secret_value.wingman_secret_info",
+		"spec.more_option.security_options.api_protection.api_discovery_on_cache_miss.api_crawler.api_crawler_config.domains.#.simple_login.password.blindfold_secret_info_internal",
+		"spec.more_option.security_options.api_protection.api_discovery_on_cache_miss.api_crawler.api_crawler_config.domains.#.simple_login.password.secret_encoding_type",
+		"spec.more_option.security_options.api_protection.api_discovery_on_cache_miss.api_crawler.api_crawler_config.domains.#.simple_login.password.vault_secret_info",
+		"spec.more_option.security_options.api_protection.api_discovery_on_cache_miss.api_crawler.api_crawler_config.domains.#.simple_login.password.wingman_secret_info",
 		"spec.more_option.security_options.api_protection.api_discovery_on_cache_miss.sensitive_data_detection_rules",
 		"spec.more_option.security_options.api_protection.api_protection_rules.api_endpoint_rules.#.metadata.disable",
 		"spec.more_option.security_options.api_protection.api_protection_rules.api_groups_rules.#.metadata.disable",
@@ -429,6 +438,10 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.more_option.security_options.api_protection.api_specification_on_cache_miss.validation_custom_list.open_api_validation_rules.#.metadata.disable",
 		"spec.more_option.security_options.api_protection.api_specification_on_cache_miss.validation_custom_list.settings.fail_close",
 		"spec.more_option.security_options.api_protection.api_specification_on_cache_miss.validation_custom_list.settings.fail_open",
+		"spec.more_option.security_options.api_protection.enable_api_discovery.api_crawler.api_crawler_config.domains.#.simple_login.password.blindfold_secret_info_internal",
+		"spec.more_option.security_options.api_protection.enable_api_discovery.api_crawler.api_crawler_config.domains.#.simple_login.password.secret_encoding_type",
+		"spec.more_option.security_options.api_protection.enable_api_discovery.api_crawler.api_crawler_config.domains.#.simple_login.password.vault_secret_info",
+		"spec.more_option.security_options.api_protection.enable_api_discovery.api_crawler.api_crawler_config.domains.#.simple_login.password.wingman_secret_info",
 		"spec.more_option.security_options.api_protection.enable_api_discovery.sensitive_data_detection_rules",
 		"spec.more_option.security_options.api_protection.jwt_validation.auth_server_uri",
 		"spec.more_option.security_options.api_protection.jwt_validation.jwks",
@@ -1536,6 +1549,10 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 	}
 
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.views.cdn_loadbalancer.API.Replace"] = []string{
+		"spec.api_discovery_on_cache_miss.api_crawler.api_crawler_config.domains.#.simple_login.password.blindfold_secret_info_internal",
+		"spec.api_discovery_on_cache_miss.api_crawler.api_crawler_config.domains.#.simple_login.password.secret_encoding_type",
+		"spec.api_discovery_on_cache_miss.api_crawler.api_crawler_config.domains.#.simple_login.password.vault_secret_info",
+		"spec.api_discovery_on_cache_miss.api_crawler.api_crawler_config.domains.#.simple_login.password.wingman_secret_info",
 		"spec.api_discovery_on_cache_miss.sensitive_data_detection_rules",
 		"spec.api_protection_rules.api_endpoint_rules.#.metadata.disable",
 		"spec.api_protection_rules.api_groups_rules.#.metadata.disable",
@@ -1569,6 +1586,10 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.data_guard_rules.#.metadata.disable",
 		"spec.ddos_mitigation_rules.#.metadata.disable",
 		"spec.disable_bot_defense",
+		"spec.enable_api_discovery.api_crawler.api_crawler_config.domains.#.simple_login.password.blindfold_secret_info_internal",
+		"spec.enable_api_discovery.api_crawler.api_crawler_config.domains.#.simple_login.password.secret_encoding_type",
+		"spec.enable_api_discovery.api_crawler.api_crawler_config.domains.#.simple_login.password.vault_secret_info",
+		"spec.enable_api_discovery.api_crawler.api_crawler_config.domains.#.simple_login.password.wingman_secret_info",
 		"spec.enable_api_discovery.sensitive_data_detection_rules",
 		"spec.graphql_rules.#.graphql_settings.max_value_length",
 		"spec.graphql_rules.#.graphql_settings.policy_name",
@@ -1593,6 +1614,10 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.more_option.header_options.response_headers_to_add.#.secret_value.secret_encoding_type",
 		"spec.more_option.header_options.response_headers_to_add.#.secret_value.vault_secret_info",
 		"spec.more_option.header_options.response_headers_to_add.#.secret_value.wingman_secret_info",
+		"spec.more_option.security_options.api_protection.api_discovery_on_cache_miss.api_crawler.api_crawler_config.domains.#.simple_login.password.blindfold_secret_info_internal",
+		"spec.more_option.security_options.api_protection.api_discovery_on_cache_miss.api_crawler.api_crawler_config.domains.#.simple_login.password.secret_encoding_type",
+		"spec.more_option.security_options.api_protection.api_discovery_on_cache_miss.api_crawler.api_crawler_config.domains.#.simple_login.password.vault_secret_info",
+		"spec.more_option.security_options.api_protection.api_discovery_on_cache_miss.api_crawler.api_crawler_config.domains.#.simple_login.password.wingman_secret_info",
 		"spec.more_option.security_options.api_protection.api_discovery_on_cache_miss.sensitive_data_detection_rules",
 		"spec.more_option.security_options.api_protection.api_protection_rules.api_endpoint_rules.#.metadata.disable",
 		"spec.more_option.security_options.api_protection.api_protection_rules.api_groups_rules.#.metadata.disable",
@@ -1610,6 +1635,10 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.more_option.security_options.api_protection.api_specification_on_cache_miss.validation_custom_list.open_api_validation_rules.#.metadata.disable",
 		"spec.more_option.security_options.api_protection.api_specification_on_cache_miss.validation_custom_list.settings.fail_close",
 		"spec.more_option.security_options.api_protection.api_specification_on_cache_miss.validation_custom_list.settings.fail_open",
+		"spec.more_option.security_options.api_protection.enable_api_discovery.api_crawler.api_crawler_config.domains.#.simple_login.password.blindfold_secret_info_internal",
+		"spec.more_option.security_options.api_protection.enable_api_discovery.api_crawler.api_crawler_config.domains.#.simple_login.password.secret_encoding_type",
+		"spec.more_option.security_options.api_protection.enable_api_discovery.api_crawler.api_crawler_config.domains.#.simple_login.password.vault_secret_info",
+		"spec.more_option.security_options.api_protection.enable_api_discovery.api_crawler.api_crawler_config.domains.#.simple_login.password.wingman_secret_info",
 		"spec.more_option.security_options.api_protection.enable_api_discovery.sensitive_data_detection_rules",
 		"spec.more_option.security_options.api_protection.jwt_validation.auth_server_uri",
 		"spec.more_option.security_options.api_protection.jwt_validation.jwks",

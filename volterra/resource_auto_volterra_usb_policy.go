@@ -163,33 +163,35 @@ func resourceVolterraUsbPolicyCreate(d *schema.ResourceData, meta interface{}) e
 		allowedDevices := make([]*ves_io_schema_usb_policy.Rule, len(sl))
 		createSpec.AllowedDevices = allowedDevices
 		for i, set := range sl {
-			allowedDevices[i] = &ves_io_schema_usb_policy.Rule{}
-			allowedDevicesMapStrToI := set.(map[string]interface{})
+			if set != nil {
+				allowedDevices[i] = &ves_io_schema_usb_policy.Rule{}
+				allowedDevicesMapStrToI := set.(map[string]interface{})
 
-			if w, ok := allowedDevicesMapStrToI["b_device_class"]; ok && !isIntfNil(w) {
-				allowedDevices[i].BDeviceClass = w.(string)
+				if w, ok := allowedDevicesMapStrToI["b_device_class"]; ok && !isIntfNil(w) {
+					allowedDevices[i].BDeviceClass = w.(string)
+				}
+
+				if w, ok := allowedDevicesMapStrToI["b_device_protocol"]; ok && !isIntfNil(w) {
+					allowedDevices[i].BDeviceProtocol = w.(string)
+				}
+
+				if w, ok := allowedDevicesMapStrToI["b_device_sub_class"]; ok && !isIntfNil(w) {
+					allowedDevices[i].BDeviceSubClass = w.(string)
+				}
+
+				if w, ok := allowedDevicesMapStrToI["i_serial"]; ok && !isIntfNil(w) {
+					allowedDevices[i].ISerial = w.(string)
+				}
+
+				if w, ok := allowedDevicesMapStrToI["id_product"]; ok && !isIntfNil(w) {
+					allowedDevices[i].IdProduct = w.(string)
+				}
+
+				if w, ok := allowedDevicesMapStrToI["id_vendor"]; ok && !isIntfNil(w) {
+					allowedDevices[i].IdVendor = w.(string)
+				}
+
 			}
-
-			if w, ok := allowedDevicesMapStrToI["b_device_protocol"]; ok && !isIntfNil(w) {
-				allowedDevices[i].BDeviceProtocol = w.(string)
-			}
-
-			if w, ok := allowedDevicesMapStrToI["b_device_sub_class"]; ok && !isIntfNil(w) {
-				allowedDevices[i].BDeviceSubClass = w.(string)
-			}
-
-			if w, ok := allowedDevicesMapStrToI["i_serial"]; ok && !isIntfNil(w) {
-				allowedDevices[i].ISerial = w.(string)
-			}
-
-			if w, ok := allowedDevicesMapStrToI["id_product"]; ok && !isIntfNil(w) {
-				allowedDevices[i].IdProduct = w.(string)
-			}
-
-			if w, ok := allowedDevicesMapStrToI["id_vendor"]; ok && !isIntfNil(w) {
-				allowedDevices[i].IdVendor = w.(string)
-			}
-
 		}
 
 	}
@@ -299,33 +301,35 @@ func resourceVolterraUsbPolicyUpdate(d *schema.ResourceData, meta interface{}) e
 		allowedDevices := make([]*ves_io_schema_usb_policy.Rule, len(sl))
 		updateSpec.AllowedDevices = allowedDevices
 		for i, set := range sl {
-			allowedDevices[i] = &ves_io_schema_usb_policy.Rule{}
-			allowedDevicesMapStrToI := set.(map[string]interface{})
+			if set != nil {
+				allowedDevices[i] = &ves_io_schema_usb_policy.Rule{}
+				allowedDevicesMapStrToI := set.(map[string]interface{})
 
-			if w, ok := allowedDevicesMapStrToI["b_device_class"]; ok && !isIntfNil(w) {
-				allowedDevices[i].BDeviceClass = w.(string)
+				if w, ok := allowedDevicesMapStrToI["b_device_class"]; ok && !isIntfNil(w) {
+					allowedDevices[i].BDeviceClass = w.(string)
+				}
+
+				if w, ok := allowedDevicesMapStrToI["b_device_protocol"]; ok && !isIntfNil(w) {
+					allowedDevices[i].BDeviceProtocol = w.(string)
+				}
+
+				if w, ok := allowedDevicesMapStrToI["b_device_sub_class"]; ok && !isIntfNil(w) {
+					allowedDevices[i].BDeviceSubClass = w.(string)
+				}
+
+				if w, ok := allowedDevicesMapStrToI["i_serial"]; ok && !isIntfNil(w) {
+					allowedDevices[i].ISerial = w.(string)
+				}
+
+				if w, ok := allowedDevicesMapStrToI["id_product"]; ok && !isIntfNil(w) {
+					allowedDevices[i].IdProduct = w.(string)
+				}
+
+				if w, ok := allowedDevicesMapStrToI["id_vendor"]; ok && !isIntfNil(w) {
+					allowedDevices[i].IdVendor = w.(string)
+				}
+
 			}
-
-			if w, ok := allowedDevicesMapStrToI["b_device_protocol"]; ok && !isIntfNil(w) {
-				allowedDevices[i].BDeviceProtocol = w.(string)
-			}
-
-			if w, ok := allowedDevicesMapStrToI["b_device_sub_class"]; ok && !isIntfNil(w) {
-				allowedDevices[i].BDeviceSubClass = w.(string)
-			}
-
-			if w, ok := allowedDevicesMapStrToI["i_serial"]; ok && !isIntfNil(w) {
-				allowedDevices[i].ISerial = w.(string)
-			}
-
-			if w, ok := allowedDevicesMapStrToI["id_product"]; ok && !isIntfNil(w) {
-				allowedDevices[i].IdProduct = w.(string)
-			}
-
-			if w, ok := allowedDevicesMapStrToI["id_vendor"]; ok && !isIntfNil(w) {
-				allowedDevices[i].IdVendor = w.(string)
-			}
-
 		}
 
 	}

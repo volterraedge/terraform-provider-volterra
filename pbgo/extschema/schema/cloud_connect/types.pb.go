@@ -106,6 +106,11 @@ const (
 	// x-displayName: "Deleting"
 	// Cloud Connect vpc attachment is being deleted.
 	DELETING CloudConnectVPCStateType = 4
+	// Initiated
+	//
+	// x-displayName: "Initiated"
+	// Cloud Connect vpc attachment process has been initiated.
+	INITIATED CloudConnectVPCStateType = 5
 )
 
 var CloudConnectVPCStateType_name = map[int32]string{
@@ -114,6 +119,7 @@ var CloudConnectVPCStateType_name = map[int32]string{
 	2: "FAILED",
 	3: "DELETED",
 	4: "DELETING",
+	5: "INITIATED",
 }
 
 var CloudConnectVPCStateType_value = map[string]int32{
@@ -122,6 +128,7 @@ var CloudConnectVPCStateType_value = map[string]int32{
 	"FAILED":    2,
 	"DELETED":   3,
 	"DELETING":  4,
+	"INITIATED": 5,
 }
 
 func (CloudConnectVPCStateType) EnumDescriptor() ([]byte, []int) {
@@ -388,10 +395,10 @@ func (m *AWSREType) GetPeers() []*PeerType {
 	return nil
 }
 
-// Cloud Links
+// Peer
 //
-// x-displayName: "Cloud Links"
-// List of Cloud Link references to be attached
+// x-displayName: "Peer Nodes"
+// List of peer node and GRE tunnel configuration.
 type PeerType struct {
 	// TGW Address
 	//
@@ -1461,10 +1468,10 @@ func (m *ReplaceAWSREType) GetVpcAttachments() *AWSVPCAttachmentListType {
 // x-displayName: "AWS TGW Site Type"
 // Cloud Connect AWS TGW Site Type
 type AWSTGWSiteType struct {
-	// AWS TGW Site Reference
+	// Site Reference
 	//
-	// x-displayName: "AWS TGW Site Reference"
-	// AWS TGW Site Reference
+	// x-displayName: "Site Reference"
+	// Site Reference
 	// x-required
 	Site *views.ObjectRefType `protobuf:"bytes,1,opt,name=site,proto3" json:"site,omitempty"`
 	// Cloud Credential
@@ -1589,14 +1596,82 @@ func (m *ReplaceAWSTGWSiteType) GetVpcAttachments() *AWSVPCAttachmentListType {
 	return nil
 }
 
+// Replace Cloud Connect AWS TGW Site Type
+//
+// x-displayName: "AWS TGW Site Type"
+// Cloud Connect AWS TGW Site Type
+type CreateAWSTGWSiteType struct {
+	Site *views.ObjectRefType `protobuf:"bytes,1,opt,name=site,proto3" json:"site,omitempty"`
+	// Cloud Credential
+	//
+	// x-displayName: "Credential Reference"
+	// Reference to cloud credential to deploy resources
+	// x-required
+	Cred *views.ObjectRefType `protobuf:"bytes,2,opt,name=cred,proto3" json:"cred,omitempty"`
+	// Spoke VPCs
+	//
+	// x-displayName: "Spoke VPCs"
+	// Spoke VPCs to be attached to the AWS TGW Site
+	VpcAttachments *AWSVPCAttachmentListType `protobuf:"bytes,3,opt,name=vpc_attachments,json=vpcAttachments,proto3" json:"vpc_attachments,omitempty"`
+}
+
+func (m *CreateAWSTGWSiteType) Reset()      { *m = CreateAWSTGWSiteType{} }
+func (*CreateAWSTGWSiteType) ProtoMessage() {}
+func (*CreateAWSTGWSiteType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_245b6fb3a531fd11, []int{19}
+}
+func (m *CreateAWSTGWSiteType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *CreateAWSTGWSiteType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *CreateAWSTGWSiteType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CreateAWSTGWSiteType.Merge(m, src)
+}
+func (m *CreateAWSTGWSiteType) XXX_Size() int {
+	return m.Size()
+}
+func (m *CreateAWSTGWSiteType) XXX_DiscardUnknown() {
+	xxx_messageInfo_CreateAWSTGWSiteType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_CreateAWSTGWSiteType proto.InternalMessageInfo
+
+func (m *CreateAWSTGWSiteType) GetSite() *views.ObjectRefType {
+	if m != nil {
+		return m.Site
+	}
+	return nil
+}
+
+func (m *CreateAWSTGWSiteType) GetCred() *views.ObjectRefType {
+	if m != nil {
+		return m.Cred
+	}
+	return nil
+}
+
+func (m *CreateAWSTGWSiteType) GetVpcAttachments() *AWSVPCAttachmentListType {
+	if m != nil {
+		return m.VpcAttachments
+	}
+	return nil
+}
+
 // Cloud Connect Azure VNET Site Type
 //
 // x-displayName: "Azure VNET Site Type"
 // Cloud Connect Azure VNET Site Type
 type AzureVNETSiteType struct {
-	// Azure VNET Site Reference
+	// Site Reference
 	//
-	// x-displayName: "Azure VNET Site Reference"
+	// x-displayName: "Site Reference"
 	// Online Azure VNET Sites with Hub Configured
 	// x-required
 	Site *views.ObjectRefType `protobuf:"bytes,1,opt,name=site,proto3" json:"site,omitempty"`
@@ -1616,7 +1691,7 @@ type AzureVNETSiteType struct {
 func (m *AzureVNETSiteType) Reset()      { *m = AzureVNETSiteType{} }
 func (*AzureVNETSiteType) ProtoMessage() {}
 func (*AzureVNETSiteType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_245b6fb3a531fd11, []int{19}
+	return fileDescriptor_245b6fb3a531fd11, []int{20}
 }
 func (m *AzureVNETSiteType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1677,7 +1752,7 @@ type ReplaceAzureVNETSiteType struct {
 func (m *ReplaceAzureVNETSiteType) Reset()      { *m = ReplaceAzureVNETSiteType{} }
 func (*ReplaceAzureVNETSiteType) ProtoMessage() {}
 func (*ReplaceAzureVNETSiteType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_245b6fb3a531fd11, []int{20}
+	return fileDescriptor_245b6fb3a531fd11, []int{21}
 }
 func (m *ReplaceAzureVNETSiteType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1709,6 +1784,207 @@ func (m *ReplaceAzureVNETSiteType) GetVnetAttachments() *AzureVnetAttachmentList
 	return nil
 }
 
+// Cloud Transit Gateway Type
+//
+// x-displayName: "Cloud Transit Gateway Type"
+// Cloud Transit Gateway Type
+type AWSCloudTransitGatewayType struct {
+	// Cloud Transit Gateway
+	//
+	// x-displayName: "Cloud Transit Gateway"
+	// Cloud Transit Gateway Reference
+	// x-required
+	CloudTransitGateway *views.ObjectRefType `protobuf:"bytes,1,opt,name=cloud_transit_gateway,json=cloudTransitGateway,proto3" json:"cloud_transit_gateway,omitempty"`
+	// Cloud Credential
+	//
+	// x-displayName: "Credential Reference"
+	// Reference to cloud credential to deploy resources
+	// x-required
+	Cred *views.ObjectRefType `protobuf:"bytes,2,opt,name=cred,proto3" json:"cred,omitempty"`
+	// Spoke VPCs
+	//
+	// x-displayName: "Spoke VPCs"
+	// Spoke VPCs to be attached to the Cloud Transit Gateway
+	// x-required
+	VpcAttachments *AWSVPCAttachmentListType `protobuf:"bytes,3,opt,name=vpc_attachments,json=vpcAttachments,proto3" json:"vpc_attachments,omitempty"`
+	// Peers
+	//
+	// x-displayName: "Peers"
+	// Peers
+	Peers []*PeerType `protobuf:"bytes,5,rep,name=peers,proto3" json:"peers,omitempty"`
+}
+
+func (m *AWSCloudTransitGatewayType) Reset()      { *m = AWSCloudTransitGatewayType{} }
+func (*AWSCloudTransitGatewayType) ProtoMessage() {}
+func (*AWSCloudTransitGatewayType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_245b6fb3a531fd11, []int{22}
+}
+func (m *AWSCloudTransitGatewayType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *AWSCloudTransitGatewayType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *AWSCloudTransitGatewayType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AWSCloudTransitGatewayType.Merge(m, src)
+}
+func (m *AWSCloudTransitGatewayType) XXX_Size() int {
+	return m.Size()
+}
+func (m *AWSCloudTransitGatewayType) XXX_DiscardUnknown() {
+	xxx_messageInfo_AWSCloudTransitGatewayType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_AWSCloudTransitGatewayType proto.InternalMessageInfo
+
+func (m *AWSCloudTransitGatewayType) GetCloudTransitGateway() *views.ObjectRefType {
+	if m != nil {
+		return m.CloudTransitGateway
+	}
+	return nil
+}
+
+func (m *AWSCloudTransitGatewayType) GetCred() *views.ObjectRefType {
+	if m != nil {
+		return m.Cred
+	}
+	return nil
+}
+
+func (m *AWSCloudTransitGatewayType) GetVpcAttachments() *AWSVPCAttachmentListType {
+	if m != nil {
+		return m.VpcAttachments
+	}
+	return nil
+}
+
+func (m *AWSCloudTransitGatewayType) GetPeers() []*PeerType {
+	if m != nil {
+		return m.Peers
+	}
+	return nil
+}
+
+// Create AWS Cloud Transit Gateway Type
+//
+// x-displayName: "AWS Cloud Transit Gateway Type"
+// AWS Cloud Transit Gateway Type
+type CreateAWSCloudTransitGatewayType struct {
+	CloudTransitGateway *views.ObjectRefType `protobuf:"bytes,1,opt,name=cloud_transit_gateway,json=cloudTransitGateway,proto3" json:"cloud_transit_gateway,omitempty"`
+	// Cloud Credential
+	//
+	// x-displayName: "Credential Reference"
+	// Reference to cloud credential to deploy resources
+	// x-required
+	Cred *views.ObjectRefType `protobuf:"bytes,2,opt,name=cred,proto3" json:"cred,omitempty"`
+	// Spoke VPCs
+	//
+	// x-displayName: "Spoke VPCs"
+	// Spoke VPCs to be attached to the Cloud Transit Gateway
+	VpcAttachments *AWSVPCAttachmentListType `protobuf:"bytes,3,opt,name=vpc_attachments,json=vpcAttachments,proto3" json:"vpc_attachments,omitempty"`
+}
+
+func (m *CreateAWSCloudTransitGatewayType) Reset()      { *m = CreateAWSCloudTransitGatewayType{} }
+func (*CreateAWSCloudTransitGatewayType) ProtoMessage() {}
+func (*CreateAWSCloudTransitGatewayType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_245b6fb3a531fd11, []int{23}
+}
+func (m *CreateAWSCloudTransitGatewayType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *CreateAWSCloudTransitGatewayType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *CreateAWSCloudTransitGatewayType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CreateAWSCloudTransitGatewayType.Merge(m, src)
+}
+func (m *CreateAWSCloudTransitGatewayType) XXX_Size() int {
+	return m.Size()
+}
+func (m *CreateAWSCloudTransitGatewayType) XXX_DiscardUnknown() {
+	xxx_messageInfo_CreateAWSCloudTransitGatewayType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_CreateAWSCloudTransitGatewayType proto.InternalMessageInfo
+
+func (m *CreateAWSCloudTransitGatewayType) GetCloudTransitGateway() *views.ObjectRefType {
+	if m != nil {
+		return m.CloudTransitGateway
+	}
+	return nil
+}
+
+func (m *CreateAWSCloudTransitGatewayType) GetCred() *views.ObjectRefType {
+	if m != nil {
+		return m.Cred
+	}
+	return nil
+}
+
+func (m *CreateAWSCloudTransitGatewayType) GetVpcAttachments() *AWSVPCAttachmentListType {
+	if m != nil {
+		return m.VpcAttachments
+	}
+	return nil
+}
+
+// Replace Cloud Transit Gateway Type
+//
+// x-displayName: " Cloud Transit Gateway Type"
+// Cloud Transit Gateway Type
+type ReplaceAWSCloudTransitGatewayType struct {
+	// Spoke VPCs
+	//
+	// x-displayName: "Spoke VPCs"
+	// Spoke VPCs to be attached to the AWS TGW Site
+	VpcAttachments *AWSVPCAttachmentListType `protobuf:"bytes,3,opt,name=vpc_attachments,json=vpcAttachments,proto3" json:"vpc_attachments,omitempty"`
+}
+
+func (m *ReplaceAWSCloudTransitGatewayType) Reset()      { *m = ReplaceAWSCloudTransitGatewayType{} }
+func (*ReplaceAWSCloudTransitGatewayType) ProtoMessage() {}
+func (*ReplaceAWSCloudTransitGatewayType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_245b6fb3a531fd11, []int{24}
+}
+func (m *ReplaceAWSCloudTransitGatewayType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *ReplaceAWSCloudTransitGatewayType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *ReplaceAWSCloudTransitGatewayType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ReplaceAWSCloudTransitGatewayType.Merge(m, src)
+}
+func (m *ReplaceAWSCloudTransitGatewayType) XXX_Size() int {
+	return m.Size()
+}
+func (m *ReplaceAWSCloudTransitGatewayType) XXX_DiscardUnknown() {
+	xxx_messageInfo_ReplaceAWSCloudTransitGatewayType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ReplaceAWSCloudTransitGatewayType proto.InternalMessageInfo
+
+func (m *ReplaceAWSCloudTransitGatewayType) GetVpcAttachments() *AWSVPCAttachmentListType {
+	if m != nil {
+		return m.VpcAttachments
+	}
+	return nil
+}
+
 // Cloud Connect Status
 //
 // x-displayName: "Status"
@@ -1728,7 +2004,7 @@ type CloudConnectStatusType struct {
 func (m *CloudConnectStatusType) Reset()      { *m = CloudConnectStatusType{} }
 func (*CloudConnectStatusType) ProtoMessage() {}
 func (*CloudConnectStatusType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_245b6fb3a531fd11, []int{21}
+	return fileDescriptor_245b6fb3a531fd11, []int{25}
 }
 func (m *CloudConnectStatusType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1801,6 +2077,183 @@ func (*CloudConnectStatusType) XXX_OneofWrappers() []interface{} {
 	}
 }
 
+// Ver Status
+//
+// x-displayName: "VER Status"
+// Cloud Connect status reported by each VER instance on a node
+type VerStatusType struct {
+	// cidr_status
+	//
+	// x-displayName: "CIDR Status"
+	// overlapping cidr from the same network segment configured in different cloud connect objects across sites
+	CidrStatus []*CIDRConflictStatusType `protobuf:"bytes,1,rep,name=cidr_status,json=cidrStatus,proto3" json:"cidr_status,omitempty"`
+}
+
+func (m *VerStatusType) Reset()      { *m = VerStatusType{} }
+func (*VerStatusType) ProtoMessage() {}
+func (*VerStatusType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_245b6fb3a531fd11, []int{26}
+}
+func (m *VerStatusType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *VerStatusType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *VerStatusType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_VerStatusType.Merge(m, src)
+}
+func (m *VerStatusType) XXX_Size() int {
+	return m.Size()
+}
+func (m *VerStatusType) XXX_DiscardUnknown() {
+	xxx_messageInfo_VerStatusType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_VerStatusType proto.InternalMessageInfo
+
+func (m *VerStatusType) GetCidrStatus() []*CIDRConflictStatusType {
+	if m != nil {
+		return m.CidrStatus
+	}
+	return nil
+}
+
+// Conflicting CIDR status across sites
+//
+// x-displayName: "Overlapping CIDR"
+// Conflicting CIDR across sites in the same network segment
+type CIDRConflictStatusType struct {
+	// cidr
+	//
+	// x-displayName: "CIDR"
+	// overlapping cidr from the same network segment configured in different cloud connect objects across sites
+	Cidr string `protobuf:"bytes,1,opt,name=cidr,proto3" json:"cidr,omitempty"`
+	// Conflicting Site And Cloud Connect Object List
+	//
+	// x-displayName: "Site And Cloud Connect With Overlapping CIDR"
+	// list of sites and cloud connect objects with overlapping cidr in the same network segment
+	ConflictList []*CIDRConflictListType `protobuf:"bytes,2,rep,name=conflict_list,json=conflictList,proto3" json:"conflict_list,omitempty"`
+}
+
+func (m *CIDRConflictStatusType) Reset()      { *m = CIDRConflictStatusType{} }
+func (*CIDRConflictStatusType) ProtoMessage() {}
+func (*CIDRConflictStatusType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_245b6fb3a531fd11, []int{27}
+}
+func (m *CIDRConflictStatusType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *CIDRConflictStatusType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *CIDRConflictStatusType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CIDRConflictStatusType.Merge(m, src)
+}
+func (m *CIDRConflictStatusType) XXX_Size() int {
+	return m.Size()
+}
+func (m *CIDRConflictStatusType) XXX_DiscardUnknown() {
+	xxx_messageInfo_CIDRConflictStatusType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_CIDRConflictStatusType proto.InternalMessageInfo
+
+func (m *CIDRConflictStatusType) GetCidr() string {
+	if m != nil {
+		return m.Cidr
+	}
+	return ""
+}
+
+func (m *CIDRConflictStatusType) GetConflictList() []*CIDRConflictListType {
+	if m != nil {
+		return m.ConflictList
+	}
+	return nil
+}
+
+// Site And Cloud Connect Objects With Overlapping CIDR
+//
+// x-displayName: "List Of Sites And Cloud Connects"
+// list of sites and cloud connect objects with overlapping cidr in the same network segment
+type CIDRConflictListType struct {
+	// site_name
+	//
+	// x-displayName: "Site"
+	// name of the site with overlapping cidr from network segment
+	SiteName string `protobuf:"bytes,1,opt,name=site_name,json=siteName,proto3" json:"site_name,omitempty"`
+	// cloud_connect_name
+	//
+	// x-displayName: "Cloud Connect"
+	// name of the cloud connect with overlapping cidr from network segment
+	CloudConnectName string `protobuf:"bytes,2,opt,name=cloud_connect_name,json=cloudConnectName,proto3" json:"cloud_connect_name,omitempty"`
+	// overlapping_cidr
+	//
+	// x-displayName: "Overlapping CIDR"
+	// overlapping cidr from cloud connect
+	OverlappingCidr string `protobuf:"bytes,3,opt,name=overlapping_cidr,json=overlappingCidr,proto3" json:"overlapping_cidr,omitempty"`
+}
+
+func (m *CIDRConflictListType) Reset()      { *m = CIDRConflictListType{} }
+func (*CIDRConflictListType) ProtoMessage() {}
+func (*CIDRConflictListType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_245b6fb3a531fd11, []int{28}
+}
+func (m *CIDRConflictListType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *CIDRConflictListType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *CIDRConflictListType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CIDRConflictListType.Merge(m, src)
+}
+func (m *CIDRConflictListType) XXX_Size() int {
+	return m.Size()
+}
+func (m *CIDRConflictListType) XXX_DiscardUnknown() {
+	xxx_messageInfo_CIDRConflictListType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_CIDRConflictListType proto.InternalMessageInfo
+
+func (m *CIDRConflictListType) GetSiteName() string {
+	if m != nil {
+		return m.SiteName
+	}
+	return ""
+}
+
+func (m *CIDRConflictListType) GetCloudConnectName() string {
+	if m != nil {
+		return m.CloudConnectName
+	}
+	return ""
+}
+
+func (m *CIDRConflictListType) GetOverlappingCidr() string {
+	if m != nil {
+		return m.OverlappingCidr
+	}
+	return ""
+}
+
 // AWS VPC Attachment List Status Type
 //
 // x-displayName: "AWS VPC Attachment List Status Type"
@@ -1813,12 +2266,12 @@ type AWSAttachmentsListStatusType struct {
 	AttachmentStatus []*AWSAttachmentsStatusType `protobuf:"bytes,1,rep,name=attachment_status,json=attachmentStatus,proto3" json:"attachment_status,omitempty"`
 	// AWS Connect Attachment Status Type
 	//
-	// x-displayName: "AWS Connect Attachment Status Type"
-	// AWS Connect Attachment Status Typ
+	// x-displayName: "AWS Connect Attachment Status"
+	// AWS Connect Attachment Status Type
 	ConnectAttachmentStatus []*AWSConnectAttachmentStatusType `protobuf:"bytes,2,rep,name=connect_attachment_status,json=connectAttachmentStatus,proto3" json:"connect_attachment_status,omitempty"`
 	// AWS Transit Gateway Route Table Status Type
 	//
-	// x-displayName: "AWS Transit Gateway Route Table Status Type"
+	// x-displayName: "AWS Transit Gateway Route Table Status"
 	// AWS Transit Gateway Route Table Status Type
 	TgwRouteTableStatus []*AWSTGWRouteTableStatusType `protobuf:"bytes,3,rep,name=tgw_route_table_status,json=tgwRouteTableStatus,proto3" json:"tgw_route_table_status,omitempty"`
 }
@@ -1826,7 +2279,7 @@ type AWSAttachmentsListStatusType struct {
 func (m *AWSAttachmentsListStatusType) Reset()      { *m = AWSAttachmentsListStatusType{} }
 func (*AWSAttachmentsListStatusType) ProtoMessage() {}
 func (*AWSAttachmentsListStatusType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_245b6fb3a531fd11, []int{22}
+	return fileDescriptor_245b6fb3a531fd11, []int{29}
 }
 func (m *AWSAttachmentsListStatusType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1917,20 +2370,20 @@ type AWSAttachmentsStatusType struct {
 	// x-displayName: "Deployment State"
 	// VPC deployment state
 	VpcDeploymentState CloudConnectVPCStateType `protobuf:"varint,11,opt,name=vpc_deployment_state,json=vpcDeploymentState,proto3,enum=ves.io.schema.cloud_connect.CloudConnectVPCStateType" json:"vpc_deployment_state,omitempty"`
-	// Attachment Deployment Status
+	// Additional VPC attachment deployment status
 	//
-	// x-displayName: "Attachment Deployment Status"
-	// Attachment Deployment Status
+	// x-displayName: "VPC attachment deployment status"
+	// Additional VPC attachment deployment status
 	DeploymentStatus string `protobuf:"bytes,7,opt,name=deployment_status,json=deploymentStatus,proto3" json:"deployment_status,omitempty"`
 	// Association route table ID
 	//
-	// x-displayName: "Association route table ID"
+	// x-displayName: "Associated Transit Gateway route table ID"
 	// Association route table ID
 	AssociationRouteTableId string `protobuf:"bytes,13,opt,name=association_route_table_id,json=associationRouteTableId,proto3" json:"association_route_table_id,omitempty"`
 	// Association state
 	//
-	// x-displayName: "Association state"
-	// Association state
+	// x-displayName: "Transit Gateway route table association state"
+	// Transit Gateway route table association state
 	AssociationState string `protobuf:"bytes,14,opt,name=association_state,json=associationState,proto3" json:"association_state,omitempty"`
 	// Attachment Tags
 	//
@@ -1952,7 +2405,7 @@ type AWSAttachmentsStatusType struct {
 func (m *AWSAttachmentsStatusType) Reset()      { *m = AWSAttachmentsStatusType{} }
 func (*AWSAttachmentsStatusType) ProtoMessage() {}
 func (*AWSAttachmentsStatusType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_245b6fb3a531fd11, []int{23}
+	return fileDescriptor_245b6fb3a531fd11, []int{30}
 }
 func (m *AWSAttachmentsStatusType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -2105,11 +2558,16 @@ type AWSConnectAttachmentStatusType struct {
 	// x-displayName: "Connect protocol"
 	// Connect protocol
 	Protocol string `protobuf:"bytes,4,opt,name=protocol,proto3" json:"protocol,omitempty"`
-	// State
+	// Connect Attachment Deployment State
 	//
-	// x-displayName: "State"
-	// State
-	State string `protobuf:"bytes,5,opt,name=state,proto3" json:"state,omitempty"`
+	// x-displayName: "Connect Attachment Deployment State"
+	// Connect Attachment Deployment State
+	ConnectDeploymentState CloudConnectVPCStateType `protobuf:"varint,12,opt,name=connect_deployment_state,json=connectDeploymentState,proto3,enum=ves.io.schema.cloud_connect.CloudConnectVPCStateType" json:"connect_deployment_state,omitempty"`
+	// Deployment Status
+	//
+	// x-displayName: "Deployment Status"
+	// Additional information related to the connect attachment deployment.
+	DeploymentStatus string `protobuf:"bytes,13,opt,name=deployment_status,json=deploymentStatus,proto3" json:"deployment_status,omitempty"`
 	// Transport attachment ID
 	//
 	// x-displayName: "Transport attachment ID"
@@ -2122,8 +2580,8 @@ type AWSConnectAttachmentStatusType struct {
 	AssociationRouteTableId string `protobuf:"bytes,7,opt,name=association_route_table_id,json=associationRouteTableId,proto3" json:"association_route_table_id,omitempty"`
 	// Association state
 	//
-	// x-displayName: "Association state"
-	// Association state
+	// x-displayName: "Transit Gateway route table association state"
+	// Transit Gateway route table association state
 	AssociationState string `protobuf:"bytes,8,opt,name=association_state,json=associationState,proto3" json:"association_state,omitempty"`
 	// Attachment Tags
 	//
@@ -2140,7 +2598,7 @@ type AWSConnectAttachmentStatusType struct {
 func (m *AWSConnectAttachmentStatusType) Reset()      { *m = AWSConnectAttachmentStatusType{} }
 func (*AWSConnectAttachmentStatusType) ProtoMessage() {}
 func (*AWSConnectAttachmentStatusType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_245b6fb3a531fd11, []int{24}
+	return fileDescriptor_245b6fb3a531fd11, []int{31}
 }
 func (m *AWSConnectAttachmentStatusType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -2200,9 +2658,16 @@ func (m *AWSConnectAttachmentStatusType) GetProtocol() string {
 	return ""
 }
 
-func (m *AWSConnectAttachmentStatusType) GetState() string {
+func (m *AWSConnectAttachmentStatusType) GetConnectDeploymentState() CloudConnectVPCStateType {
 	if m != nil {
-		return m.State
+		return m.ConnectDeploymentState
+	}
+	return AVAILABLE
+}
+
+func (m *AWSConnectAttachmentStatusType) GetDeploymentStatus() string {
+	if m != nil {
+		return m.DeploymentStatus
 	}
 	return ""
 }
@@ -2262,52 +2727,27 @@ type AWSConnectPeerStatusType struct {
 	// x-displayName: "Connect attachment ID"
 	// Connect attachment ID
 	ConnectAttachmentId string `protobuf:"bytes,3,opt,name=connect_attachment_id,json=connectAttachmentId,proto3" json:"connect_attachment_id,omitempty"`
-	// State
+	// Connect Peer Attachment Deployment State
 	//
-	// x-displayName: "State"
-	// State
-	State string `protobuf:"bytes,4,opt,name=state,proto3" json:"state,omitempty"`
-	// Transit gateway GRE address
+	// x-displayName: "Connect Peer Attachment Deployment State"
+	// Connect Peer Attachment Deployment State
+	ConnectPeerDeploymentState CloudConnectVPCStateType `protobuf:"varint,13,opt,name=connect_peer_deployment_state,json=connectPeerDeploymentState,proto3,enum=ves.io.schema.cloud_connect.CloudConnectVPCStateType" json:"connect_peer_deployment_state,omitempty"`
+	// Deployment Status
 	//
-	// x-displayName: "Transit gateway GRE address"
-	// Transit gateway GRE address
-	TransitGatewayGreAddress string `protobuf:"bytes,5,opt,name=transit_gateway_gre_address,json=transitGatewayGreAddress,proto3" json:"transit_gateway_gre_address,omitempty"`
-	// Peer GRE address
+	// x-displayName: "Deployment Status"
+	// Additional information related to the connect peer attachment deployment.
+	DeploymentStatus string `protobuf:"bytes,14,opt,name=deployment_status,json=deploymentStatus,proto3" json:"deployment_status,omitempty"`
+	// Connect Peer Tags
 	//
-	// x-displayName: "Peer GRE address"
-	// Peer GRE address
-	PeerGreAddress string `protobuf:"bytes,6,opt,name=peer_gre_address,json=peerGreAddress,proto3" json:"peer_gre_address,omitempty"`
-	// BGP Inside CIDR blocks
-	//
-	// x-displayName: "BGP Inside CIDR blocks"
-	// BGP Inside CIDR blocks
-	BgpInsideCidrBlock string `protobuf:"bytes,7,opt,name=bgp_inside_cidr_block,json=bgpInsideCidrBlock,proto3" json:"bgp_inside_cidr_block,omitempty"`
-	// Peer ASN
-	//
-	// x-displayName: "Peer ASN"
-	// Peer ASN
-	PeerAsn string `protobuf:"bytes,8,opt,name=peer_asn,json=peerAsn,proto3" json:"peer_asn,omitempty"`
-	// Peer BGP address
-	//
-	// x-displayName: "Peer BGP address"
-	// Peer BGP address
-	PeerBgpAddress string `protobuf:"bytes,9,opt,name=peer_bgp_address,json=peerBgpAddress,proto3" json:"peer_bgp_address,omitempty"`
-	// Transit gateway BGP 1 address
-	//
-	// x-displayName: "Transit gateway BGP 1 address"
-	// Transit gateway BGP 1 address
-	TransitGatewayBgp_1Address string `protobuf:"bytes,10,opt,name=transit_gateway_bgp_1_address,json=transitGatewayBgp1Address,proto3" json:"transit_gateway_bgp_1_address,omitempty"`
-	// Transit gateway BGP 2 address
-	//
-	// x-displayName: "Transit gateway BGP 2 address"
-	// Transit gateway BGP 2 address
-	TransitGatewayBgp_2Address string `protobuf:"bytes,11,opt,name=transit_gateway_bgp_2_address,json=transitGatewayBgp2Address,proto3" json:"transit_gateway_bgp_2_address,omitempty"`
+	// x-displayName: "Connect Peer Tags"
+	// Connect Peer Tags
+	Tags map[string]string `protobuf:"bytes,15,rep,name=tags,proto3" json:"tags,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
 }
 
 func (m *AWSConnectPeerStatusType) Reset()      { *m = AWSConnectPeerStatusType{} }
 func (*AWSConnectPeerStatusType) ProtoMessage() {}
 func (*AWSConnectPeerStatusType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_245b6fb3a531fd11, []int{25}
+	return fileDescriptor_245b6fb3a531fd11, []int{32}
 }
 func (m *AWSConnectPeerStatusType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -2353,60 +2793,25 @@ func (m *AWSConnectPeerStatusType) GetConnectAttachmentId() string {
 	return ""
 }
 
-func (m *AWSConnectPeerStatusType) GetState() string {
+func (m *AWSConnectPeerStatusType) GetConnectPeerDeploymentState() CloudConnectVPCStateType {
 	if m != nil {
-		return m.State
+		return m.ConnectPeerDeploymentState
+	}
+	return AVAILABLE
+}
+
+func (m *AWSConnectPeerStatusType) GetDeploymentStatus() string {
+	if m != nil {
+		return m.DeploymentStatus
 	}
 	return ""
 }
 
-func (m *AWSConnectPeerStatusType) GetTransitGatewayGreAddress() string {
+func (m *AWSConnectPeerStatusType) GetTags() map[string]string {
 	if m != nil {
-		return m.TransitGatewayGreAddress
+		return m.Tags
 	}
-	return ""
-}
-
-func (m *AWSConnectPeerStatusType) GetPeerGreAddress() string {
-	if m != nil {
-		return m.PeerGreAddress
-	}
-	return ""
-}
-
-func (m *AWSConnectPeerStatusType) GetBgpInsideCidrBlock() string {
-	if m != nil {
-		return m.BgpInsideCidrBlock
-	}
-	return ""
-}
-
-func (m *AWSConnectPeerStatusType) GetPeerAsn() string {
-	if m != nil {
-		return m.PeerAsn
-	}
-	return ""
-}
-
-func (m *AWSConnectPeerStatusType) GetPeerBgpAddress() string {
-	if m != nil {
-		return m.PeerBgpAddress
-	}
-	return ""
-}
-
-func (m *AWSConnectPeerStatusType) GetTransitGatewayBgp_1Address() string {
-	if m != nil {
-		return m.TransitGatewayBgp_1Address
-	}
-	return ""
-}
-
-func (m *AWSConnectPeerStatusType) GetTransitGatewayBgp_2Address() string {
-	if m != nil {
-		return m.TransitGatewayBgp_2Address
-	}
-	return ""
+	return nil
 }
 
 // AWS Transit Gateway Route Table Status Type
@@ -2429,11 +2834,16 @@ type AWSTGWRouteTableStatusType struct {
 	// x-displayName: "Transit Gateway ID"
 	// Transit Gateway ID
 	TransitGatewayId string `protobuf:"bytes,2,opt,name=transit_gateway_id,json=transitGatewayId,proto3" json:"transit_gateway_id,omitempty"`
-	// State
+	// Transit Gateway Route Table deployment State
 	//
-	// x-displayName: "State"
-	// State
-	State string `protobuf:"bytes,3,opt,name=state,proto3" json:"state,omitempty"`
+	// x-displayName: "Transit Gateway Route Table deployment State"
+	// Transit Gateway Route Table deployment State
+	TgwRtDeploymentState CloudConnectVPCStateType `protobuf:"varint,8,opt,name=tgw_rt_deployment_state,json=tgwRtDeploymentState,proto3,enum=ves.io.schema.cloud_connect.CloudConnectVPCStateType" json:"tgw_rt_deployment_state,omitempty"`
+	// Deployment Status
+	//
+	// x-displayName: "Deployment Status"
+	// Additional information related to the TGW routing.
+	DeploymentStatus string `protobuf:"bytes,9,opt,name=deployment_status,json=deploymentStatus,proto3" json:"deployment_status,omitempty"`
 	// Attachment Tags
 	//
 	// x-displayName: "Attachment Tags"
@@ -2454,7 +2864,7 @@ type AWSTGWRouteTableStatusType struct {
 func (m *AWSTGWRouteTableStatusType) Reset()      { *m = AWSTGWRouteTableStatusType{} }
 func (*AWSTGWRouteTableStatusType) ProtoMessage() {}
 func (*AWSTGWRouteTableStatusType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_245b6fb3a531fd11, []int{26}
+	return fileDescriptor_245b6fb3a531fd11, []int{33}
 }
 func (m *AWSTGWRouteTableStatusType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -2500,9 +2910,16 @@ func (m *AWSTGWRouteTableStatusType) GetTransitGatewayId() string {
 	return ""
 }
 
-func (m *AWSTGWRouteTableStatusType) GetState() string {
+func (m *AWSTGWRouteTableStatusType) GetTgwRtDeploymentState() CloudConnectVPCStateType {
 	if m != nil {
-		return m.State
+		return m.TgwRtDeploymentState
+	}
+	return AVAILABLE
+}
+
+func (m *AWSTGWRouteTableStatusType) GetDeploymentStatus() string {
+	if m != nil {
+		return m.DeploymentStatus
 	}
 	return ""
 }
@@ -2548,17 +2965,22 @@ type AWSTGWResourceReference struct {
 	// x-displayName: "Resource ID"
 	// Resource ID
 	ResourceId string `protobuf:"bytes,3,opt,name=resource_id,json=resourceId,proto3" json:"resource_id,omitempty"`
-	// State
+	// Resource State
 	//
-	// x-displayName: "State"
-	// State
-	State string `protobuf:"bytes,4,opt,name=state,proto3" json:"state,omitempty"`
+	// x-displayName: "Resource State"
+	// Resource State
+	State CloudConnectVPCStateType `protobuf:"varint,5,opt,name=state,proto3,enum=ves.io.schema.cloud_connect.CloudConnectVPCStateType" json:"state,omitempty"`
+	// Deployment Status
+	//
+	// x-displayName: "Deployment Status"
+	// Additional information related to the TGW routing.
+	DeploymentStatus string `protobuf:"bytes,6,opt,name=deployment_status,json=deploymentStatus,proto3" json:"deployment_status,omitempty"`
 }
 
 func (m *AWSTGWResourceReference) Reset()      { *m = AWSTGWResourceReference{} }
 func (*AWSTGWResourceReference) ProtoMessage() {}
 func (*AWSTGWResourceReference) Descriptor() ([]byte, []int) {
-	return fileDescriptor_245b6fb3a531fd11, []int{27}
+	return fileDescriptor_245b6fb3a531fd11, []int{34}
 }
 func (m *AWSTGWResourceReference) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -2604,9 +3026,16 @@ func (m *AWSTGWResourceReference) GetResourceId() string {
 	return ""
 }
 
-func (m *AWSTGWResourceReference) GetState() string {
+func (m *AWSTGWResourceReference) GetState() CloudConnectVPCStateType {
 	if m != nil {
 		return m.State
+	}
+	return AVAILABLE
+}
+
+func (m *AWSTGWResourceReference) GetDeploymentStatus() string {
+	if m != nil {
+		return m.DeploymentStatus
 	}
 	return ""
 }
@@ -2651,7 +3080,7 @@ type SubnetStatusType struct {
 func (m *SubnetStatusType) Reset()      { *m = SubnetStatusType{} }
 func (*SubnetStatusType) ProtoMessage() {}
 func (*SubnetStatusType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_245b6fb3a531fd11, []int{28}
+	return fileDescriptor_245b6fb3a531fd11, []int{35}
 }
 func (m *SubnetStatusType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -2733,7 +3162,7 @@ type AzureAttachmentsListStatusType struct {
 func (m *AzureAttachmentsListStatusType) Reset()      { *m = AzureAttachmentsListStatusType{} }
 func (*AzureAttachmentsListStatusType) ProtoMessage() {}
 func (*AzureAttachmentsListStatusType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_245b6fb3a531fd11, []int{29}
+	return fileDescriptor_245b6fb3a531fd11, []int{36}
 }
 func (m *AzureAttachmentsListStatusType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -2843,7 +3272,7 @@ type AzureAttachmentsStatusType struct {
 func (m *AzureAttachmentsStatusType) Reset()      { *m = AzureAttachmentsStatusType{} }
 func (*AzureAttachmentsStatusType) ProtoMessage() {}
 func (*AzureAttachmentsStatusType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_245b6fb3a531fd11, []int{30}
+	return fileDescriptor_245b6fb3a531fd11, []int{37}
 }
 func (m *AzureAttachmentsStatusType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -2980,6 +3409,7 @@ type GlobalSpecType struct {
 	//	*GlobalSpecType_AwsRe
 	//	*GlobalSpecType_AwsTgwSite
 	//	*GlobalSpecType_AzureVnetSite
+	//	*GlobalSpecType_AwsCloudTransitGateway
 	Cloud isGlobalSpecType_Cloud `protobuf_oneof:"cloud"`
 	// Segment
 	//
@@ -3028,7 +3458,7 @@ type GlobalSpecType struct {
 func (m *GlobalSpecType) Reset()      { *m = GlobalSpecType{} }
 func (*GlobalSpecType) ProtoMessage() {}
 func (*GlobalSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_245b6fb3a531fd11, []int{31}
+	return fileDescriptor_245b6fb3a531fd11, []int{38}
 }
 func (m *GlobalSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -3075,6 +3505,9 @@ type GlobalSpecType_AwsTgwSite struct {
 type GlobalSpecType_AzureVnetSite struct {
 	AzureVnetSite *AzureVNETSiteType `protobuf:"bytes,19,opt,name=azure_vnet_site,json=azureVnetSite,proto3,oneof" json:"azure_vnet_site,omitempty"`
 }
+type GlobalSpecType_AwsCloudTransitGateway struct {
+	AwsCloudTransitGateway *AWSCloudTransitGatewayType `protobuf:"bytes,21,opt,name=aws_cloud_transit_gateway,json=awsCloudTransitGateway,proto3,oneof" json:"aws_cloud_transit_gateway,omitempty"`
+}
 type GlobalSpecType_Bandwidth_500Mbs struct {
 	Bandwidth_500Mbs *schema.Empty `protobuf:"bytes,9,opt,name=bandwidth_500mbs,json=bandwidth500mbs,proto3,oneof" json:"bandwidth_500mbs,omitempty"`
 }
@@ -3082,6 +3515,7 @@ type GlobalSpecType_Bandwidth_500Mbs struct {
 func (*GlobalSpecType_AwsRe) isGlobalSpecType_Cloud()                      {}
 func (*GlobalSpecType_AwsTgwSite) isGlobalSpecType_Cloud()                 {}
 func (*GlobalSpecType_AzureVnetSite) isGlobalSpecType_Cloud()              {}
+func (*GlobalSpecType_AwsCloudTransitGateway) isGlobalSpecType_Cloud()     {}
 func (*GlobalSpecType_Bandwidth_500Mbs) isGlobalSpecType_BandwidthOption() {}
 
 func (m *GlobalSpecType) GetCloud() isGlobalSpecType_Cloud {
@@ -3114,6 +3548,13 @@ func (m *GlobalSpecType) GetAwsTgwSite() *AWSTGWSiteType {
 func (m *GlobalSpecType) GetAzureVnetSite() *AzureVNETSiteType {
 	if x, ok := m.GetCloud().(*GlobalSpecType_AzureVnetSite); ok {
 		return x.AzureVnetSite
+	}
+	return nil
+}
+
+func (m *GlobalSpecType) GetAwsCloudTransitGateway() *AWSCloudTransitGatewayType {
+	if x, ok := m.GetCloud().(*GlobalSpecType_AwsCloudTransitGateway); ok {
+		return x.AwsCloudTransitGateway
 	}
 	return nil
 }
@@ -3180,6 +3621,7 @@ func (*GlobalSpecType) XXX_OneofWrappers() []interface{} {
 		(*GlobalSpecType_AwsRe)(nil),
 		(*GlobalSpecType_AwsTgwSite)(nil),
 		(*GlobalSpecType_AzureVnetSite)(nil),
+		(*GlobalSpecType_AwsCloudTransitGateway)(nil),
 		(*GlobalSpecType_Bandwidth_500Mbs)(nil),
 	}
 }
@@ -3193,6 +3635,7 @@ type CreateSpecType struct {
 	//	*CreateSpecType_AwsRe
 	//	*CreateSpecType_AwsTgwSite
 	//	*CreateSpecType_AzureVnetSite
+	//	*CreateSpecType_AwsCloudTransitGateway
 	Cloud   isCreateSpecType_Cloud `protobuf_oneof:"cloud"`
 	Segment *views.ObjectRefType   `protobuf:"bytes,13,opt,name=segment,proto3" json:"segment,omitempty"`
 }
@@ -3200,7 +3643,7 @@ type CreateSpecType struct {
 func (m *CreateSpecType) Reset()      { *m = CreateSpecType{} }
 func (*CreateSpecType) ProtoMessage() {}
 func (*CreateSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_245b6fb3a531fd11, []int{32}
+	return fileDescriptor_245b6fb3a531fd11, []int{39}
 }
 func (m *CreateSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -3236,15 +3679,19 @@ type CreateSpecType_AwsRe struct {
 	AwsRe *AWSREType `protobuf:"bytes,2,opt,name=aws_re,json=awsRe,proto3,oneof" json:"aws_re,omitempty"`
 }
 type CreateSpecType_AwsTgwSite struct {
-	AwsTgwSite *AWSTGWSiteType `protobuf:"bytes,7,opt,name=aws_tgw_site,json=awsTgwSite,proto3,oneof" json:"aws_tgw_site,omitempty"`
+	AwsTgwSite *CreateAWSTGWSiteType `protobuf:"bytes,7,opt,name=aws_tgw_site,json=awsTgwSite,proto3,oneof" json:"aws_tgw_site,omitempty"`
 }
 type CreateSpecType_AzureVnetSite struct {
 	AzureVnetSite *AzureVNETSiteType `protobuf:"bytes,19,opt,name=azure_vnet_site,json=azureVnetSite,proto3,oneof" json:"azure_vnet_site,omitempty"`
 }
+type CreateSpecType_AwsCloudTransitGateway struct {
+	AwsCloudTransitGateway *CreateAWSCloudTransitGatewayType `protobuf:"bytes,21,opt,name=aws_cloud_transit_gateway,json=awsCloudTransitGateway,proto3,oneof" json:"aws_cloud_transit_gateway,omitempty"`
+}
 
-func (*CreateSpecType_AwsRe) isCreateSpecType_Cloud()         {}
-func (*CreateSpecType_AwsTgwSite) isCreateSpecType_Cloud()    {}
-func (*CreateSpecType_AzureVnetSite) isCreateSpecType_Cloud() {}
+func (*CreateSpecType_AwsRe) isCreateSpecType_Cloud()                  {}
+func (*CreateSpecType_AwsTgwSite) isCreateSpecType_Cloud()             {}
+func (*CreateSpecType_AzureVnetSite) isCreateSpecType_Cloud()          {}
+func (*CreateSpecType_AwsCloudTransitGateway) isCreateSpecType_Cloud() {}
 
 func (m *CreateSpecType) GetCloud() isCreateSpecType_Cloud {
 	if m != nil {
@@ -3260,7 +3707,7 @@ func (m *CreateSpecType) GetAwsRe() *AWSREType {
 	return nil
 }
 
-func (m *CreateSpecType) GetAwsTgwSite() *AWSTGWSiteType {
+func (m *CreateSpecType) GetAwsTgwSite() *CreateAWSTGWSiteType {
 	if x, ok := m.GetCloud().(*CreateSpecType_AwsTgwSite); ok {
 		return x.AwsTgwSite
 	}
@@ -3270,6 +3717,13 @@ func (m *CreateSpecType) GetAwsTgwSite() *AWSTGWSiteType {
 func (m *CreateSpecType) GetAzureVnetSite() *AzureVNETSiteType {
 	if x, ok := m.GetCloud().(*CreateSpecType_AzureVnetSite); ok {
 		return x.AzureVnetSite
+	}
+	return nil
+}
+
+func (m *CreateSpecType) GetAwsCloudTransitGateway() *CreateAWSCloudTransitGatewayType {
+	if x, ok := m.GetCloud().(*CreateSpecType_AwsCloudTransitGateway); ok {
+		return x.AwsCloudTransitGateway
 	}
 	return nil
 }
@@ -3287,6 +3741,7 @@ func (*CreateSpecType) XXX_OneofWrappers() []interface{} {
 		(*CreateSpecType_AwsRe)(nil),
 		(*CreateSpecType_AwsTgwSite)(nil),
 		(*CreateSpecType_AzureVnetSite)(nil),
+		(*CreateSpecType_AwsCloudTransitGateway)(nil),
 	}
 }
 
@@ -3299,14 +3754,14 @@ type ReplaceSpecType struct {
 	//	*ReplaceSpecType_AwsRe
 	//	*ReplaceSpecType_AwsTgwSite
 	//	*ReplaceSpecType_AzureVnetSite
-	Cloud   isReplaceSpecType_Cloud `protobuf_oneof:"cloud"`
-	Segment *views.ObjectRefType    `protobuf:"bytes,13,opt,name=segment,proto3" json:"segment,omitempty"`
+	//	*ReplaceSpecType_AwsCloudTransitGateway
+	Cloud isReplaceSpecType_Cloud `protobuf_oneof:"cloud"`
 }
 
 func (m *ReplaceSpecType) Reset()      { *m = ReplaceSpecType{} }
 func (*ReplaceSpecType) ProtoMessage() {}
 func (*ReplaceSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_245b6fb3a531fd11, []int{33}
+	return fileDescriptor_245b6fb3a531fd11, []int{40}
 }
 func (m *ReplaceSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -3347,10 +3802,14 @@ type ReplaceSpecType_AwsTgwSite struct {
 type ReplaceSpecType_AzureVnetSite struct {
 	AzureVnetSite *ReplaceAzureVNETSiteType `protobuf:"bytes,19,opt,name=azure_vnet_site,json=azureVnetSite,proto3,oneof" json:"azure_vnet_site,omitempty"`
 }
+type ReplaceSpecType_AwsCloudTransitGateway struct {
+	AwsCloudTransitGateway *ReplaceAWSCloudTransitGatewayType `protobuf:"bytes,21,opt,name=aws_cloud_transit_gateway,json=awsCloudTransitGateway,proto3,oneof" json:"aws_cloud_transit_gateway,omitempty"`
+}
 
-func (*ReplaceSpecType_AwsRe) isReplaceSpecType_Cloud()         {}
-func (*ReplaceSpecType_AwsTgwSite) isReplaceSpecType_Cloud()    {}
-func (*ReplaceSpecType_AzureVnetSite) isReplaceSpecType_Cloud() {}
+func (*ReplaceSpecType_AwsRe) isReplaceSpecType_Cloud()                  {}
+func (*ReplaceSpecType_AwsTgwSite) isReplaceSpecType_Cloud()             {}
+func (*ReplaceSpecType_AzureVnetSite) isReplaceSpecType_Cloud()          {}
+func (*ReplaceSpecType_AwsCloudTransitGateway) isReplaceSpecType_Cloud() {}
 
 func (m *ReplaceSpecType) GetCloud() isReplaceSpecType_Cloud {
 	if m != nil {
@@ -3380,9 +3839,9 @@ func (m *ReplaceSpecType) GetAzureVnetSite() *ReplaceAzureVNETSiteType {
 	return nil
 }
 
-func (m *ReplaceSpecType) GetSegment() *views.ObjectRefType {
-	if m != nil {
-		return m.Segment
+func (m *ReplaceSpecType) GetAwsCloudTransitGateway() *ReplaceAWSCloudTransitGatewayType {
+	if x, ok := m.GetCloud().(*ReplaceSpecType_AwsCloudTransitGateway); ok {
+		return x.AwsCloudTransitGateway
 	}
 	return nil
 }
@@ -3393,6 +3852,7 @@ func (*ReplaceSpecType) XXX_OneofWrappers() []interface{} {
 		(*ReplaceSpecType_AwsRe)(nil),
 		(*ReplaceSpecType_AwsTgwSite)(nil),
 		(*ReplaceSpecType_AzureVnetSite)(nil),
+		(*ReplaceSpecType_AwsCloudTransitGateway)(nil),
 	}
 }
 
@@ -3405,6 +3865,7 @@ type GetSpecType struct {
 	//	*GetSpecType_AwsRe
 	//	*GetSpecType_AwsTgwSite
 	//	*GetSpecType_AzureVnetSite
+	//	*GetSpecType_AwsCloudTransitGateway
 	Cloud        isGetSpecType_Cloud  `protobuf_oneof:"cloud"`
 	Segment      *views.ObjectRefType `protobuf:"bytes,13,opt,name=segment,proto3" json:"segment,omitempty"`
 	State        CloudConnectState    `protobuf:"varint,15,opt,name=state,proto3,enum=ves.io.schema.cloud_connect.CloudConnectState" json:"state,omitempty"`
@@ -3415,7 +3876,7 @@ type GetSpecType struct {
 func (m *GetSpecType) Reset()      { *m = GetSpecType{} }
 func (*GetSpecType) ProtoMessage() {}
 func (*GetSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_245b6fb3a531fd11, []int{34}
+	return fileDescriptor_245b6fb3a531fd11, []int{41}
 }
 func (m *GetSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -3456,10 +3917,14 @@ type GetSpecType_AwsTgwSite struct {
 type GetSpecType_AzureVnetSite struct {
 	AzureVnetSite *AzureVNETSiteType `protobuf:"bytes,19,opt,name=azure_vnet_site,json=azureVnetSite,proto3,oneof" json:"azure_vnet_site,omitempty"`
 }
+type GetSpecType_AwsCloudTransitGateway struct {
+	AwsCloudTransitGateway *AWSCloudTransitGatewayType `protobuf:"bytes,21,opt,name=aws_cloud_transit_gateway,json=awsCloudTransitGateway,proto3,oneof" json:"aws_cloud_transit_gateway,omitempty"`
+}
 
-func (*GetSpecType_AwsRe) isGetSpecType_Cloud()         {}
-func (*GetSpecType_AwsTgwSite) isGetSpecType_Cloud()    {}
-func (*GetSpecType_AzureVnetSite) isGetSpecType_Cloud() {}
+func (*GetSpecType_AwsRe) isGetSpecType_Cloud()                  {}
+func (*GetSpecType_AwsTgwSite) isGetSpecType_Cloud()             {}
+func (*GetSpecType_AzureVnetSite) isGetSpecType_Cloud()          {}
+func (*GetSpecType_AwsCloudTransitGateway) isGetSpecType_Cloud() {}
 
 func (m *GetSpecType) GetCloud() isGetSpecType_Cloud {
 	if m != nil {
@@ -3485,6 +3950,13 @@ func (m *GetSpecType) GetAwsTgwSite() *AWSTGWSiteType {
 func (m *GetSpecType) GetAzureVnetSite() *AzureVNETSiteType {
 	if x, ok := m.GetCloud().(*GetSpecType_AzureVnetSite); ok {
 		return x.AzureVnetSite
+	}
+	return nil
+}
+
+func (m *GetSpecType) GetAwsCloudTransitGateway() *AWSCloudTransitGatewayType {
+	if x, ok := m.GetCloud().(*GetSpecType_AwsCloudTransitGateway); ok {
+		return x.AwsCloudTransitGateway
 	}
 	return nil
 }
@@ -3523,6 +3995,7 @@ func (*GetSpecType) XXX_OneofWrappers() []interface{} {
 		(*GetSpecType_AwsRe)(nil),
 		(*GetSpecType_AwsTgwSite)(nil),
 		(*GetSpecType_AzureVnetSite)(nil),
+		(*GetSpecType_AwsCloudTransitGateway)(nil),
 	}
 }
 
@@ -3554,7 +4027,7 @@ type LabelFilter struct {
 func (m *LabelFilter) Reset()      { *m = LabelFilter{} }
 func (*LabelFilter) ProtoMessage() {}
 func (*LabelFilter) Descriptor() ([]byte, []int) {
-	return fileDescriptor_245b6fb3a531fd11, []int{35}
+	return fileDescriptor_245b6fb3a531fd11, []int{42}
 }
 func (m *LabelFilter) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -3616,7 +4089,7 @@ type CustomerEdge struct {
 func (m *CustomerEdge) Reset()      { *m = CustomerEdge{} }
 func (*CustomerEdge) ProtoMessage() {}
 func (*CustomerEdge) Descriptor() ([]byte, []int) {
-	return fileDescriptor_245b6fb3a531fd11, []int{36}
+	return fileDescriptor_245b6fb3a531fd11, []int{43}
 }
 func (m *CustomerEdge) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -3673,7 +4146,7 @@ type MetricData struct {
 func (m *MetricData) Reset()      { *m = MetricData{} }
 func (*MetricData) ProtoMessage() {}
 func (*MetricData) Descriptor() ([]byte, []int) {
-	return fileDescriptor_245b6fb3a531fd11, []int{37}
+	return fileDescriptor_245b6fb3a531fd11, []int{44}
 }
 func (m *MetricData) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -3739,7 +4212,7 @@ type SegmentationData struct {
 func (m *SegmentationData) Reset()      { *m = SegmentationData{} }
 func (*SegmentationData) ProtoMessage() {}
 func (*SegmentationData) Descriptor() ([]byte, []int) {
-	return fileDescriptor_245b6fb3a531fd11, []int{38}
+	return fileDescriptor_245b6fb3a531fd11, []int{45}
 }
 func (m *SegmentationData) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -3798,7 +4271,7 @@ type EdgeData struct {
 func (m *EdgeData) Reset()      { *m = EdgeData{} }
 func (*EdgeData) ProtoMessage() {}
 func (*EdgeData) Descriptor() ([]byte, []int) {
-	return fileDescriptor_245b6fb3a531fd11, []int{39}
+	return fileDescriptor_245b6fb3a531fd11, []int{46}
 }
 func (m *EdgeData) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -3858,7 +4331,7 @@ type CloudConnectData struct {
 func (m *CloudConnectData) Reset()      { *m = CloudConnectData{} }
 func (*CloudConnectData) ProtoMessage() {}
 func (*CloudConnectData) Descriptor() ([]byte, []int) {
-	return fileDescriptor_245b6fb3a531fd11, []int{40}
+	return fileDescriptor_245b6fb3a531fd11, []int{47}
 }
 func (m *CloudConnectData) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -3950,12 +4423,26 @@ func init() {
 	golang_proto.RegisterType((*AWSTGWSiteType)(nil), "ves.io.schema.cloud_connect.AWSTGWSiteType")
 	proto.RegisterType((*ReplaceAWSTGWSiteType)(nil), "ves.io.schema.cloud_connect.ReplaceAWSTGWSiteType")
 	golang_proto.RegisterType((*ReplaceAWSTGWSiteType)(nil), "ves.io.schema.cloud_connect.ReplaceAWSTGWSiteType")
+	proto.RegisterType((*CreateAWSTGWSiteType)(nil), "ves.io.schema.cloud_connect.CreateAWSTGWSiteType")
+	golang_proto.RegisterType((*CreateAWSTGWSiteType)(nil), "ves.io.schema.cloud_connect.CreateAWSTGWSiteType")
 	proto.RegisterType((*AzureVNETSiteType)(nil), "ves.io.schema.cloud_connect.AzureVNETSiteType")
 	golang_proto.RegisterType((*AzureVNETSiteType)(nil), "ves.io.schema.cloud_connect.AzureVNETSiteType")
 	proto.RegisterType((*ReplaceAzureVNETSiteType)(nil), "ves.io.schema.cloud_connect.ReplaceAzureVNETSiteType")
 	golang_proto.RegisterType((*ReplaceAzureVNETSiteType)(nil), "ves.io.schema.cloud_connect.ReplaceAzureVNETSiteType")
+	proto.RegisterType((*AWSCloudTransitGatewayType)(nil), "ves.io.schema.cloud_connect.AWSCloudTransitGatewayType")
+	golang_proto.RegisterType((*AWSCloudTransitGatewayType)(nil), "ves.io.schema.cloud_connect.AWSCloudTransitGatewayType")
+	proto.RegisterType((*CreateAWSCloudTransitGatewayType)(nil), "ves.io.schema.cloud_connect.CreateAWSCloudTransitGatewayType")
+	golang_proto.RegisterType((*CreateAWSCloudTransitGatewayType)(nil), "ves.io.schema.cloud_connect.CreateAWSCloudTransitGatewayType")
+	proto.RegisterType((*ReplaceAWSCloudTransitGatewayType)(nil), "ves.io.schema.cloud_connect.ReplaceAWSCloudTransitGatewayType")
+	golang_proto.RegisterType((*ReplaceAWSCloudTransitGatewayType)(nil), "ves.io.schema.cloud_connect.ReplaceAWSCloudTransitGatewayType")
 	proto.RegisterType((*CloudConnectStatusType)(nil), "ves.io.schema.cloud_connect.CloudConnectStatusType")
 	golang_proto.RegisterType((*CloudConnectStatusType)(nil), "ves.io.schema.cloud_connect.CloudConnectStatusType")
+	proto.RegisterType((*VerStatusType)(nil), "ves.io.schema.cloud_connect.VerStatusType")
+	golang_proto.RegisterType((*VerStatusType)(nil), "ves.io.schema.cloud_connect.VerStatusType")
+	proto.RegisterType((*CIDRConflictStatusType)(nil), "ves.io.schema.cloud_connect.CIDRConflictStatusType")
+	golang_proto.RegisterType((*CIDRConflictStatusType)(nil), "ves.io.schema.cloud_connect.CIDRConflictStatusType")
+	proto.RegisterType((*CIDRConflictListType)(nil), "ves.io.schema.cloud_connect.CIDRConflictListType")
+	golang_proto.RegisterType((*CIDRConflictListType)(nil), "ves.io.schema.cloud_connect.CIDRConflictListType")
 	proto.RegisterType((*AWSAttachmentsListStatusType)(nil), "ves.io.schema.cloud_connect.AWSAttachmentsListStatusType")
 	golang_proto.RegisterType((*AWSAttachmentsListStatusType)(nil), "ves.io.schema.cloud_connect.AWSAttachmentsListStatusType")
 	proto.RegisterType((*AWSAttachmentsStatusType)(nil), "ves.io.schema.cloud_connect.AWSAttachmentsStatusType")
@@ -3968,6 +4455,8 @@ func init() {
 	golang_proto.RegisterMapType((map[string]string)(nil), "ves.io.schema.cloud_connect.AWSConnectAttachmentStatusType.TagsEntry")
 	proto.RegisterType((*AWSConnectPeerStatusType)(nil), "ves.io.schema.cloud_connect.AWSConnectPeerStatusType")
 	golang_proto.RegisterType((*AWSConnectPeerStatusType)(nil), "ves.io.schema.cloud_connect.AWSConnectPeerStatusType")
+	proto.RegisterMapType((map[string]string)(nil), "ves.io.schema.cloud_connect.AWSConnectPeerStatusType.TagsEntry")
+	golang_proto.RegisterMapType((map[string]string)(nil), "ves.io.schema.cloud_connect.AWSConnectPeerStatusType.TagsEntry")
 	proto.RegisterType((*AWSTGWRouteTableStatusType)(nil), "ves.io.schema.cloud_connect.AWSTGWRouteTableStatusType")
 	golang_proto.RegisterType((*AWSTGWRouteTableStatusType)(nil), "ves.io.schema.cloud_connect.AWSTGWRouteTableStatusType")
 	proto.RegisterMapType((map[string]string)(nil), "ves.io.schema.cloud_connect.AWSTGWRouteTableStatusType.TagsEntry")
@@ -4014,306 +4503,340 @@ func init() {
 }
 
 var fileDescriptor_245b6fb3a531fd11 = []byte{
-	// 4784 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x7c, 0x5b, 0x6c, 0x1b, 0xd9,
-	0x79, 0xb0, 0x0e, 0xef, 0xfc, 0x24, 0x51, 0xa3, 0x23, 0xc9, 0xa2, 0x65, 0xff, 0x34, 0x97, 0x6b,
-	0xef, 0xca, 0xb2, 0x44, 0xdb, 0x5a, 0xef, 0xda, 0xd6, 0x5e, 0x49, 0x89, 0x96, 0xe9, 0x5f, 0x2b,
-	0x29, 0x23, 0xda, 0xde, 0x8b, 0x6d, 0x66, 0x38, 0x3c, 0xa6, 0x27, 0xa6, 0x38, 0xc4, 0xcc, 0x90,
-	0xaa, 0x36, 0x51, 0xe3, 0x04, 0x48, 0x0a, 0x24, 0x2d, 0xba, 0xd8, 0x87, 0xa2, 0x48, 0xfa, 0xd0,
-	0xc7, 0xc0, 0xc5, 0xb6, 0x45, 0x81, 0x16, 0xe8, 0xd2, 0x28, 0x8c, 0x14, 0x29, 0x52, 0xa3, 0x0f,
-	0x46, 0xfb, 0xb2, 0x0f, 0x2d, 0x90, 0x95, 0x5f, 0x36, 0x0f, 0x05, 0x16, 0x01, 0x0a, 0x04, 0x7d,
-	0x2a, 0xce, 0x39, 0x33, 0xc3, 0x99, 0xe1, 0x45, 0x92, 0xed, 0x3e, 0x6c, 0x91, 0x27, 0x71, 0xe6,
-	0x7c, 0xb7, 0xf3, 0xdd, 0xce, 0x77, 0xbe, 0x73, 0x46, 0xf0, 0x72, 0x93, 0xe8, 0x69, 0x45, 0x3d,
-	0xad, 0xcb, 0x77, 0xc8, 0xa6, 0x74, 0x5a, 0xae, 0xaa, 0x8d, 0x72, 0x51, 0x56, 0x6b, 0x35, 0x22,
-	0x1b, 0xa7, 0x8d, 0xed, 0x3a, 0xd1, 0xd3, 0x75, 0x4d, 0x35, 0x54, 0x7c, 0x84, 0x03, 0xa6, 0x39,
-	0x60, 0xda, 0x05, 0x38, 0x35, 0x57, 0x51, 0x8c, 0x3b, 0x8d, 0x52, 0x5a, 0x56, 0x37, 0x4f, 0x57,
-	0xd4, 0x8a, 0x7a, 0x9a, 0xe1, 0x94, 0x1a, 0xb7, 0xd9, 0x13, 0x7b, 0x60, 0xbf, 0x38, 0xad, 0xa9,
-	0x63, 0x15, 0x55, 0xad, 0x54, 0x49, 0x1b, 0xca, 0x50, 0x36, 0x89, 0x6e, 0x48, 0x9b, 0x75, 0x13,
-	0xe0, 0x64, 0x37, 0xa9, 0x34, 0x52, 0xd4, 0x48, 0x45, 0x51, 0x6b, 0x4e, 0xb9, 0xa6, 0x8e, 0xb8,
-	0x41, 0xd5, 0xba, 0xa1, 0xa8, 0x35, 0x6b, 0x30, 0xe1, 0x1e, 0xd4, 0x15, 0x83, 0xb8, 0x90, 0x0f,
-	0xbb, 0xc7, 0x9d, 0x43, 0x47, 0xdd, 0x43, 0x4d, 0xa9, 0xaa, 0x94, 0x25, 0x83, 0x98, 0xa3, 0x49,
-	0xcf, 0xa8, 0x42, 0xb6, 0x8a, 0x6e, 0xd6, 0xc7, 0x3a, 0x21, 0x74, 0x27, 0x83, 0xd4, 0x8f, 0x02,
-	0x10, 0xcd, 0x5c, 0xdf, 0x10, 0x73, 0x85, 0xed, 0x3a, 0xc1, 0x12, 0x84, 0xf8, 0xe4, 0xe2, 0x28,
-	0x89, 0xa6, 0x07, 0xe7, 0x53, 0x69, 0xb7, 0xbe, 0x19, 0x7e, 0x7a, 0xad, 0xf4, 0x2d, 0x22, 0x1b,
-	0x22, 0xb9, 0x4d, 0x71, 0xb2, 0x27, 0xee, 0xef, 0x0c, 0x59, 0xaa, 0xa1, 0xa8, 0xf7, 0x1e, 0x20,
-	0xf4, 0xd9, 0x03, 0x14, 0x8b, 0xa0, 0x69, 0x74, 0x06, 0x2d, 0x84, 0x64, 0xb5, 0x76, 0x5b, 0xa9,
-	0x88, 0x26, 0x61, 0x7c, 0x0b, 0x02, 0xb2, 0x46, 0xca, 0x71, 0xdf, 0xbe, 0x19, 0xbc, 0x74, 0x7f,
-	0x67, 0xd4, 0x34, 0xb4, 0x46, 0xca, 0xa4, 0x66, 0x28, 0x52, 0x55, 0xef, 0xc2, 0x81, 0xd1, 0xc5,
-	0x65, 0x18, 0x69, 0xd6, 0xe5, 0xa2, 0x64, 0x18, 0x92, 0x7c, 0x67, 0x93, 0xd4, 0x0c, 0x3d, 0xee,
-	0x67, 0xac, 0x5e, 0x4d, 0xf7, 0xf1, 0x9d, 0x74, 0xe6, 0xfa, 0xc6, 0xb5, 0xf5, 0xc5, 0x8c, 0x8d,
-	0xb5, 0xa2, 0xe8, 0x06, 0xe3, 0x1e, 0xf8, 0xaa, 0x85, 0x90, 0x18, 0x6b, 0xd6, 0xe5, 0xf6, 0xa0,
-	0x8e, 0xaf, 0xc2, 0x20, 0xc7, 0xaf, 0x2a, 0xb5, 0xbb, 0x7a, 0x3c, 0xc0, 0x38, 0xa4, 0xfb, 0x72,
-	0x58, 0xa4, 0x4f, 0x2b, 0x4a, 0xed, 0xae, 0x87, 0x34, 0xc8, 0xd6, 0x80, 0x8e, 0x0f, 0x83, 0xdf,
-	0xa8, 0x6c, 0xc5, 0x83, 0x49, 0x34, 0x1d, 0xcd, 0x86, 0x3f, 0xdf, 0x41, 0x5f, 0x52, 0x08, 0xfa,
-	0x0e, 0x2f, 0x41, 0xb0, 0x4e, 0x88, 0xa6, 0xc7, 0xa3, 0x49, 0xff, 0xf4, 0xe0, 0xfc, 0x89, 0xbe,
-	0xbc, 0xd6, 0x09, 0xd1, 0x18, 0x0b, 0x9b, 0x06, 0x47, 0x5e, 0x80, 0xdf, 0xbc, 0x15, 0x3e, 0x3b,
-	0x3b, 0x3f, 0xfb, 0xca, 0xec, 0xb9, 0x2b, 0x81, 0x48, 0x48, 0x08, 0x5f, 0x09, 0x44, 0xc2, 0x42,
-	0xe4, 0x4a, 0x20, 0x12, 0x11, 0xa2, 0xa9, 0xbf, 0x42, 0x10, 0xb1, 0x50, 0xf1, 0x31, 0x18, 0x34,
-	0x2a, 0x5b, 0x45, 0xa9, 0x5c, 0xd6, 0x88, 0xae, 0x33, 0x87, 0x88, 0x8a, 0x60, 0x54, 0xb6, 0x32,
-	0xfc, 0x0d, 0x3e, 0x0c, 0x11, 0x4a, 0xb4, 0x28, 0xe9, 0x35, 0x66, 0x4d, 0xbf, 0x18, 0xa6, 0xcf,
-	0x19, 0xbd, 0x86, 0x5f, 0x87, 0x40, 0x4d, 0x2d, 0x13, 0x53, 0xf3, 0x2f, 0x77, 0x95, 0xd5, 0x0e,
-	0xa4, 0xf4, 0xaa, 0x5a, 0x26, 0x94, 0xa5, 0xc8, 0x90, 0xf0, 0x0c, 0x8c, 0x2a, 0x35, 0x5d, 0x29,
-	0x93, 0x62, 0x45, 0x23, 0x45, 0xbd, 0x51, 0xaa, 0x11, 0x83, 0x69, 0x38, 0x2a, 0x8e, 0xf0, 0x81,
-	0x65, 0x8d, 0x6c, 0xb0, 0xd7, 0xa9, 0xef, 0x21, 0x18, 0xed, 0x50, 0x2c, 0xae, 0x02, 0xb4, 0xad,
-	0x13, 0x47, 0x4c, 0x61, 0xfb, 0xf1, 0xb4, 0x93, 0xf7, 0x77, 0x1c, 0x88, 0x9d, 0x2e, 0xf6, 0xd9,
-	0xaf, 0x1f, 0xfa, 0x83, 0x9f, 0x20, 0x9f, 0x80, 0xc4, 0xa8, 0x6d, 0xb5, 0x54, 0x03, 0xe2, 0xbd,
-	0xbc, 0x07, 0xbf, 0x0f, 0x11, 0xea, 0x8d, 0x55, 0x45, 0x37, 0x4c, 0x39, 0xce, 0x1e, 0xc8, 0x0d,
-	0x99, 0x58, 0x83, 0x94, 0x6f, 0xe8, 0x13, 0xe4, 0x17, 0xee, 0x21, 0x31, 0xdc, 0xac, 0xcb, 0x94,
-	0x7c, 0xea, 0x9f, 0xc3, 0x30, 0xde, 0x0d, 0x1c, 0xcb, 0x10, 0xa2, 0x3c, 0x95, 0x32, 0xb7, 0x59,
-	0x76, 0xe5, 0xb7, 0x2d, 0x34, 0xf0, 0xd9, 0x03, 0x24, 0x44, 0xe8, 0x54, 0xf8, 0x04, 0xe7, 0xca,
-	0x92, 0x21, 0x51, 0xb2, 0x01, 0xcd, 0x17, 0x7f, 0x87, 0xfe, 0x78, 0x49, 0x3b, 0x3e, 0x9f, 0xba,
-	0x35, 0xdd, 0xac, 0xcb, 0x73, 0x27, 0xa7, 0x3f, 0x94, 0xe6, 0x3e, 0x3a, 0x33, 0x77, 0xf1, 0xe6,
-	0xb7, 0x2f, 0xec, 0x7c, 0xc7, 0xfe, 0x7d, 0xf6, 0xfc, 0xce, 0xc9, 0xe3, 0x62, 0xb0, 0x59, 0x97,
-	0xf3, 0x65, 0xfc, 0x26, 0xc4, 0x36, 0xa5, 0x5a, 0x43, 0xaa, 0x16, 0x35, 0xb5, 0x61, 0x28, 0xb5,
-	0x4a, 0x3c, 0xc4, 0x6c, 0x3d, 0xee, 0x99, 0x5e, 0x6e, 0xb3, 0x6e, 0x6c, 0x5f, 0x1e, 0x10, 0x87,
-	0x39, 0xb4, 0xc8, 0x81, 0xf1, 0x3a, 0x0c, 0x97, 0xc9, 0x6d, 0xa9, 0x51, 0x35, 0x18, 0x3e, 0x89,
-	0x47, 0x19, 0xf6, 0xc9, 0xbe, 0xca, 0x59, 0xe2, 0x18, 0x94, 0x06, 0xb9, 0x3c, 0x20, 0x0e, 0x95,
-	0x1d, 0xcf, 0xf8, 0x43, 0x88, 0xc9, 0x0d, 0xdd, 0x50, 0x37, 0x6d, 0x81, 0x80, 0x91, 0x9c, 0xdf,
-	0x4b, 0xdf, 0x0c, 0xbd, 0x20, 0x95, 0xaa, 0xc4, 0xb2, 0x1a, 0x15, 0x97, 0xd3, 0xb2, 0xc4, 0xfd,
-	0x16, 0x84, 0xaa, 0x52, 0x89, 0x54, 0xf5, 0xf8, 0x20, 0x33, 0xe2, 0x9b, 0x07, 0x36, 0x62, 0x7a,
-	0x85, 0xe1, 0xe7, 0x6a, 0x86, 0xb6, 0x9d, 0x1d, 0xfb, 0xc9, 0x03, 0x14, 0x00, 0x1f, 0x1a, 0xd8,
-	0xfd, 0xd5, 0x2f, 0xfc, 0xa1, 0x1f, 0x3d, 0x40, 0xbe, 0xc8, 0x80, 0x68, 0x72, 0x98, 0xba, 0x08,
-	0x83, 0x0e, 0x58, 0x2c, 0x80, 0xff, 0x2e, 0xd9, 0x36, 0xc3, 0x8f, 0xfe, 0xc4, 0xe3, 0x10, 0x6c,
-	0x4a, 0xd5, 0x06, 0x61, 0x41, 0x17, 0x15, 0xf9, 0xc3, 0x82, 0xef, 0x02, 0x5a, 0xf8, 0xd2, 0xf7,
-	0xa8, 0x85, 0x9e, 0xf8, 0x00, 0x43, 0xe8, 0xda, 0xfa, 0x62, 0x32, 0xbf, 0x34, 0x15, 0xb1, 0x7c,
-	0x01, 0xfe, 0xc5, 0x07, 0x31, 0x73, 0x3a, 0xc9, 0xc5, 0x3b, 0xaa, 0x22, 0x93, 0x99, 0xbf, 0xf7,
-	0xc1, 0xdf, 0xf9, 0x60, 0xce, 0x6b, 0xc9, 0xf9, 0x23, 0xab, 0x6a, 0x92, 0x59, 0x45, 0x4f, 0x6e,
-	0x29, 0xd5, 0x6a, 0xb2, 0x44, 0x92, 0x4a, 0x4d, 0x37, 0xa4, 0x6a, 0x95, 0x94, 0x61, 0x05, 0x12,
-	0x2e, 0xcb, 0xa5, 0xa5, 0x2a, 0xc7, 0x24, 0x45, 0x83, 0x2a, 0x51, 0x9f, 0x9f, 0x59, 0x6b, 0x12,
-	0x4d, 0x53, 0xca, 0x24, 0x69, 0x1a, 0x2c, 0xc9, 0x54, 0x9c, 0xbc, 0xad, 0x6a, 0x49, 0xa9, 0x5a,
-	0x4d, 0xb6, 0x15, 0xae, 0xc3, 0x5d, 0x78, 0xc5, 0x4d, 0x4d, 0x27, 0x55, 0x22, 0x1b, 0x4a, 0x93,
-	0xb8, 0x68, 0xa6, 0x1d, 0x0f, 0x45, 0xa5, 0x9c, 0x3a, 0x27, 0x04, 0x67, 0xce, 0xf4, 0x61, 0xb3,
-	0x61, 0x51, 0x71, 0x31, 0xbb, 0x02, 0x47, 0xdc, 0x2e, 0xe2, 0x24, 0xab, 0xa7, 0x4e, 0x09, 0xc1,
-	0x54, 0xcc, 0xcd, 0x68, 0x66, 0x72, 0x91, 0x21, 0x24, 0x17, 0xf3, 0x4b, 0xa2, 0xee, 0x20, 0x96,
-	0x9d, 0x86, 0x98, 0x49, 0xa4, 0x28, 0x33, 0x6d, 0xe2, 0x43, 0x0f, 0x5b, 0x28, 0xf4, 0xb8, 0x85,
-	0x82, 0xbb, 0x2d, 0x14, 0x7a, 0x6d, 0xf6, 0xe2, 0xec, 0xd9, 0x33, 0x7f, 0xfe, 0x00, 0xa1, 0x2b,
-	0x81, 0x88, 0x4f, 0xf0, 0x5f, 0x09, 0x44, 0xfc, 0x42, 0xe0, 0x4a, 0x20, 0x12, 0x10, 0x82, 0x57,
-	0x02, 0x91, 0xa0, 0x10, 0x72, 0x25, 0xde, 0x1d, 0x38, 0x92, 0xf9, 0xa8, 0xa1, 0x91, 0x6b, 0x35,
-	0x62, 0x74, 0xc9, 0x22, 0xb7, 0x20, 0xda, 0xac, 0x11, 0xc3, 0x99, 0x46, 0xce, 0xf5, 0xf7, 0x40,
-	0x46, 0x6c, 0x35, 0x57, 0xe8, 0x97, 0x49, 0x22, 0x94, 0x26, 0x4b, 0x25, 0x9f, 0x86, 0x61, 0xb2,
-	0x07, 0x0a, 0xbe, 0x02, 0x23, 0x7a, 0xa3, 0xa4, 0xcb, 0x9a, 0xc2, 0x0a, 0x8b, 0x76, 0x5a, 0x79,
-	0x61, 0xcf, 0xb4, 0x22, 0xc6, 0x9c, 0x98, 0xf9, 0x32, 0xfe, 0x0e, 0x84, 0xd9, 0x3c, 0x14, 0xbe,
-	0xfc, 0x47, 0xb3, 0x72, 0x3f, 0x1a, 0x41, 0xcd, 0x1f, 0xbf, 0xe7, 0xa3, 0xbf, 0xde, 0xd0, 0x16,
-	0xe6, 0x2f, 0xdc, 0xba, 0x71, 0xfa, 0xc3, 0xb9, 0x1b, 0x5b, 0x37, 0xd2, 0xc5, 0x1b, 0xd3, 0x37,
-	0x4e, 0xde, 0x3c, 0x75, 0xe3, 0x34, 0xcd, 0x4c, 0x99, 0xb9, 0x0f, 0x6e, 0x9a, 0x7f, 0xcf, 0xcc,
-	0x5d, 0x9c, 0xbb, 0xf9, 0xed, 0x33, 0xb3, 0xe7, 0x2f, 0xec, 0xb4, 0xdf, 0xdc, 0x3c, 0x2e, 0x86,
-	0x28, 0xcf, 0xae, 0x29, 0x2b, 0x70, 0x90, 0x94, 0x75, 0xb5, 0x7b, 0xca, 0x4a, 0xef, 0x6d, 0x88,
-	0xbe, 0x79, 0xab, 0xda, 0x91, 0xb7, 0x78, 0x22, 0x5d, 0xdc, 0x9b, 0x6e, 0xdb, 0x1d, 0xaf, 0x2b,
-	0xc6, 0x9d, 0x0d, 0x43, 0x32, 0x14, 0x99, 0xbd, 0xeb, 0x99, 0xc8, 0x16, 0x3e, 0xf6, 0x3f, 0x6a,
-	0xa1, 0x1f, 0xfb, 0xe1, 0x38, 0x8c, 0x6c, 0x38, 0x6c, 0x43, 0x53, 0xc5, 0x68, 0x87, 0xa1, 0x61,
-	0x1c, 0xc2, 0xd4, 0x23, 0xe8, 0x68, 0xd4, 0x36, 0xdd, 0xef, 0x32, 0xc9, 0xf3, 0xcd, 0x24, 0x27,
-	0x3a, 0x32, 0xc9, 0xd8, 0xc3, 0x16, 0x0a, 0x3c, 0x6e, 0x21, 0xff, 0x6e, 0x0b, 0xf9, 0xcf, 0xcd,
-	0xbe, 0x66, 0xa6, 0x11, 0x9e, 0x40, 0x82, 0x42, 0x28, 0xf5, 0x5f, 0x08, 0x46, 0x3b, 0x3c, 0x0b,
-	0xbf, 0x03, 0x82, 0x57, 0x83, 0x66, 0x19, 0xdf, 0xcb, 0xc3, 0x63, 0x52, 0xb5, 0xea, 0x98, 0x16,
-	0x26, 0x70, 0xa8, 0xbb, 0xd6, 0xcc, 0x48, 0x99, 0x3b, 0x88, 0x4f, 0xea, 0x97, 0x07, 0xc4, 0x71,
-	0x9b, 0x9c, 0xe3, 0x7d, 0xf6, 0x14, 0x8c, 0xbb, 0x4c, 0xe5, 0x9c, 0x37, 0xb2, 0xe6, 0x7d, 0x76,
-	0xf6, 0x5c, 0xc7, 0xbc, 0xef, 0xf9, 0x60, 0xe8, 0x39, 0x4f, 0x59, 0xdd, 0x63, 0xca, 0xe7, 0xf7,
-	0x5a, 0xe9, 0x9d, 0xf2, 0xe8, 0x6d, 0xca, 0xcf, 0x6b, 0xf2, 0xce, 0xb5, 0x83, 0xaa, 0xe0, 0x6f,
-	0x11, 0x8c, 0x65, 0xae, 0x6f, 0xf0, 0xf2, 0x37, 0xbf, 0x64, 0x2f, 0x11, 0x3f, 0x44, 0x00, 0xbc,
-	0x54, 0x2e, 0x2a, 0x65, 0x9d, 0x2d, 0x12, 0xd1, 0x6c, 0xe5, 0xb3, 0x07, 0x08, 0x9b, 0x25, 0xac,
-	0x27, 0xb9, 0xa6, 0x3f, 0x41, 0xa7, 0x52, 0x27, 0xb5, 0x97, 0xe7, 0x4f, 0xdc, 0x9a, 0xe6, 0x78,
-	0x7d, 0xcb, 0x3e, 0xbb, 0xf2, 0x0d, 0x58, 0xbf, 0x22, 0xc8, 0xfa, 0x15, 0x47, 0x62, 0x94, 0x93,
-	0xc8, 0x97, 0xf5, 0x85, 0x89, 0x9f, 0xb7, 0xd0, 0x28, 0x8c, 0x00, 0x70, 0x11, 0x93, 0xf9, 0x25,
-	0x1d, 0xa3, 0xb3, 0xa9, 0x9f, 0x21, 0x98, 0xe8, 0x5a, 0x6c, 0x61, 0x0d, 0x86, 0x3c, 0xf6, 0xf3,
-	0xef, 0x9d, 0x56, 0x9d, 0x94, 0xd8, 0xca, 0x76, 0xcc, 0x5e, 0xd9, 0x7e, 0x89, 0xba, 0x8a, 0x38,
-	0xa8, 0xb5, 0x8d, 0xb0, 0x70, 0xe4, 0xe7, 0x2d, 0x34, 0x09, 0x13, 0xed, 0x3c, 0x66, 0x7a, 0x03,
-	0x3a, 0x3b, 0x8d, 0x52, 0x7f, 0x86, 0x60, 0xaa, 0xb7, 0x61, 0xf1, 0xef, 0x83, 0x27, 0xb4, 0x4d,
-	0x65, 0xbf, 0x67, 0xae, 0x65, 0x3d, 0x14, 0xce, 0xc5, 0xe8, 0x56, 0x72, 0x6b, 0x46, 0xa9, 0x7f,
-	0xc9, 0x3d, 0xd4, 0x16, 0x3d, 0x5f, 0x4e, 0xfd, 0x05, 0x02, 0xc1, 0x1b, 0x6a, 0xf8, 0x4f, 0x50,
-	0x0f, 0xa9, 0xea, 0xfb, 0x95, 0xaa, 0xbd, 0xda, 0xbe, 0xa9, 0xbd, 0x3e, 0x7f, 0xb1, 0xe7, 0x6a,
-	0x4b, 0xe5, 0x72, 0x2c, 0xb8, 0xe9, 0xe2, 0xcd, 0x53, 0xed, 0xc7, 0xe2, 0x4d, 0xaf, 0xb4, 0xff,
-	0x84, 0xe0, 0xa5, 0xfd, 0x2d, 0x56, 0xf8, 0xbb, 0x5d, 0x1d, 0xe1, 0xf5, 0x67, 0x58, 0x07, 0x9f,
-	0xa7, 0x57, 0xfc, 0x9b, 0x0f, 0x12, 0xfd, 0xb9, 0xe1, 0x3f, 0xec, 0x66, 0x04, 0x5a, 0xe6, 0xdc,
-	0xde, 0xc3, 0x08, 0xff, 0x2b, 0xaa, 0xc7, 0x22, 0x0c, 0xeb, 0x4c, 0x3a, 0x9e, 0x68, 0xf4, 0x78,
-	0x95, 0x79, 0xc4, 0x1c, 0x65, 0x04, 0x9f, 0xa0, 0x70, 0x2a, 0xa8, 0xf9, 0x7f, 0x8b, 0x6c, 0x6d,
-	0x08, 0xf3, 0x5d, 0x35, 0x34, 0xa4, 0xb7, 0x67, 0xa8, 0x2f, 0xac, 0x3e, 0x6a, 0xa1, 0x2b, 0x70,
-	0x1c, 0x04, 0x97, 0x8a, 0x68, 0x81, 0x20, 0x78, 0xe7, 0x0e, 0x29, 0x18, 0xe6, 0xda, 0xe1, 0xab,
-	0x9d, 0x9e, 0x1d, 0xf5, 0x08, 0x24, 0x40, 0xea, 0x53, 0x1f, 0x8c, 0x76, 0x04, 0x33, 0x36, 0x7a,
-	0xe8, 0x71, 0xb5, 0xbf, 0x1e, 0x9f, 0x2d, 0xb0, 0xbe, 0x16, 0xfa, 0xba, 0x87, 0x40, 0x10, 0x49,
-	0xbd, 0x2a, 0xc9, 0xa4, 0xdd, 0xb5, 0xbb, 0xf5, 0x7c, 0x5b, 0x5e, 0xde, 0x66, 0xd7, 0xc2, 0xd0,
-	0xa3, 0xb7, 0xda, 0x3d, 0xc2, 0xd4, 0xf7, 0xfc, 0x10, 0xcb, 0x5c, 0xdf, 0x28, 0x2c, 0x5f, 0xdf,
-	0x50, 0x0c, 0x6e, 0xaf, 0x9b, 0x10, 0xd0, 0x15, 0x83, 0x1c, 0xb0, 0x69, 0x28, 0x6d, 0xe9, 0x45,
-	0xa3, 0xb2, 0x55, 0xa4, 0xa8, 0x3d, 0x9a, 0x86, 0x8c, 0xec, 0xff, 0x91, 0x96, 0xa1, 0xdd, 0xc0,
-	0x0b, 0x3e, 0x43, 0x03, 0x8f, 0xef, 0x20, 0x53, 0x1f, 0x23, 0x98, 0x68, 0xbb, 0x81, 0xd3, 0x14,
-	0xcf, 0x7d, 0x2e, 0x8f, 0xbb, 0xcc, 0x65, 0x61, 0xf4, 0xd1, 0x5b, 0x1e, 0x1f, 0x48, 0xb5, 0x7c,
-	0x66, 0x4d, 0x4a, 0x77, 0x0c, 0xb6, 0x38, 0xdf, 0x3c, 0xb0, 0x67, 0x4c, 0xdf, 0xdf, 0x19, 0x91,
-	0x28, 0x9d, 0x22, 0xdb, 0x6f, 0xec, 0xe9, 0x1c, 0x1b, 0x07, 0x76, 0x8e, 0x23, 0xdd, 0x9c, 0xc3,
-	0x52, 0x33, 0xf7, 0x08, 0x05, 0x04, 0xc6, 0xdd, 0xa9, 0xc6, 0x20, 0x63, 0x70, 0x61, 0x1f, 0xfb,
-	0xee, 0xae, 0x9b, 0x78, 0xd3, 0x2b, 0x46, 0x9a, 0xae, 0x51, 0xcb, 0xa0, 0x3f, 0x45, 0x10, 0xb7,
-	0x0c, 0xda, 0xa1, 0xc4, 0x6e, 0xd2, 0xf8, 0x9f, 0x55, 0x9a, 0xc7, 0xdd, 0xa4, 0x59, 0x18, 0x7f,
-	0xf4, 0x56, 0xa7, 0x15, 0x53, 0x7f, 0xe9, 0x83, 0x43, 0xac, 0xcb, 0xba, 0xc8, 0x29, 0xd3, 0x34,
-	0xd5, 0xd0, 0x99, 0x6c, 0x75, 0x38, 0xe4, 0x62, 0x5a, 0xa4, 0x51, 0xcd, 0x4c, 0xce, 0x0d, 0x72,
-	0x71, 0x2f, 0xb7, 0x73, 0x70, 0xa7, 0xc2, 0xb5, 0x49, 0x5f, 0x1e, 0x10, 0xc7, 0x64, 0x07, 0xd3,
-	0xcc, 0x96, 0x4e, 0x05, 0xc2, 0x4d, 0x88, 0x7b, 0x38, 0x32, 0x6f, 0x61, 0x3c, 0xb9, 0x56, 0xf6,
-	0x51, 0x32, 0xf4, 0xe3, 0x3a, 0xe1, 0xe2, 0x4a, 0xa1, 0x29, 0xdf, 0xec, 0x71, 0x2f, 0xdf, 0x32,
-	0xa9, 0x57, 0xd5, 0x6d, 0x4a, 0x03, 0x47, 0xa8, 0x36, 0xcd, 0x8a, 0x1d, 0x09, 0xbe, 0xd4, 0xaf,
-	0x7d, 0x70, 0xb4, 0xdf, 0xdc, 0x70, 0x09, 0x46, 0xdb, 0xd6, 0x2c, 0xea, 0x6c, 0xc0, 0x2c, 0x78,
-	0x5e, 0x3d, 0x80, 0xc6, 0xda, 0x14, 0x45, 0xa1, 0x4d, 0x8f, 0xbf, 0xc5, 0x5b, 0x70, 0xd8, 0x56,
-	0x51, 0x07, 0x2f, 0xdf, 0x7e, 0x8a, 0xab, 0xeb, 0x1b, 0x96, 0x16, 0x3c, 0xb4, 0x19, 0xc7, 0x49,
-	0xb9, 0xfb, 0x20, 0xae, 0xc2, 0x21, 0x9a, 0xd7, 0x9d, 0xcb, 0x9b, 0xc9, 0xd5, 0xcf, 0xb8, 0xee,
-	0xb9, 0xa7, 0x2a, 0x2c, 0x5f, 0x6f, 0x57, 0x04, 0x0e, 0x8e, 0x63, 0x46, 0x65, 0xcb, 0x3b, 0x90,
-	0xfa, 0xeb, 0x08, 0xeb, 0xbf, 0x77, 0xd5, 0x0a, 0x9e, 0x81, 0x51, 0x76, 0x88, 0xd1, 0x9e, 0xbf,
-	0xd5, 0x7b, 0x12, 0x47, 0x8c, 0xca, 0x56, 0x1b, 0x29, 0x5f, 0xc6, 0x69, 0x18, 0xf3, 0xc0, 0xd6,
-	0xa4, 0x4d, 0x12, 0x17, 0x18, 0xf4, 0xa8, 0x0b, 0x7a, 0x55, 0xda, 0x24, 0xf8, 0x6d, 0x18, 0x96,
-	0x35, 0x22, 0xb1, 0x66, 0x89, 0xa1, 0x6c, 0x5a, 0x49, 0x6e, 0x2a, 0xcd, 0xcf, 0x15, 0xd3, 0xd6,
-	0xb9, 0x62, 0xba, 0x60, 0x9d, 0x2b, 0x8a, 0x43, 0x16, 0x02, 0x7d, 0x85, 0x27, 0xec, 0x46, 0x7d,
-	0xc0, 0xec, 0xe4, 0xb2, 0xd6, 0xfa, 0x61, 0x7e, 0x66, 0xc0, 0x98, 0x8f, 0xb0, 0x81, 0x70, 0xb3,
-	0x2e, 0x33, 0x96, 0x49, 0x18, 0xa2, 0x43, 0xea, 0x56, 0x8d, 0x68, 0x14, 0x2f, 0xc8, 0x0f, 0x65,
-	0x9a, 0x75, 0x79, 0x8d, 0xbe, 0x6a, 0x23, 0xcb, 0x4a, 0x59, 0x8b, 0x0f, 0xd9, 0xc8, 0x8b, 0x4a,
-	0x59, 0xc3, 0x15, 0x18, 0xa7, 0x43, 0x6d, 0xb7, 0x65, 0x56, 0x21, 0xf1, 0xc1, 0x24, 0x9a, 0x8e,
-	0xed, 0xe1, 0x76, 0xce, 0xe8, 0xbf, 0xb6, 0xbe, 0x48, 0x35, 0xcc, 0x8f, 0x6c, 0x70, 0xb3, 0x2e,
-	0x2f, 0xd9, 0x14, 0xd9, 0x7b, 0x7c, 0x0a, 0x46, 0x3d, 0x4c, 0x1a, 0x7a, 0x3c, 0xcc, 0x84, 0x11,
-	0xca, 0x2e, 0xd8, 0x86, 0x8e, 0x5f, 0x87, 0x29, 0x49, 0xd7, 0x55, 0x59, 0xe1, 0x8a, 0xf4, 0xd4,
-	0x7d, 0xc3, 0x0c, 0x6b, 0xd2, 0x01, 0x21, 0x3a, 0x4b, 0xb6, 0x53, 0x30, 0xea, 0x44, 0xe6, 0xf3,
-	0x89, 0x71, 0x4e, 0x8e, 0x01, 0x2e, 0xd6, 0x06, 0x04, 0x0c, 0xa9, 0xa2, 0xc7, 0x23, 0xcc, 0x09,
-	0xdf, 0x7e, 0xaa, 0x30, 0x4b, 0x17, 0xa4, 0x0a, 0x6f, 0xcc, 0x8b, 0x8c, 0x18, 0x5e, 0x86, 0x30,
-	0xdf, 0xfb, 0xea, 0x71, 0x60, 0x74, 0xfb, 0xf7, 0x48, 0xf8, 0xa6, 0xd8, 0xe1, 0xd2, 0x16, 0x36,
-	0xbe, 0x09, 0x82, 0xdd, 0x1a, 0xb3, 0x0a, 0xd0, 0xe8, 0xd3, 0x9e, 0x60, 0xb0, 0x83, 0x32, 0x4e,
-	0x8b, 0xd7, 0x92, 0x53, 0xe7, 0x21, 0x6a, 0x8b, 0x7e, 0xa0, 0x33, 0x85, 0x5f, 0xa0, 0x47, 0x2d,
-	0xf4, 0x10, 0x75, 0x3d, 0x53, 0x38, 0x0e, 0xc3, 0x6d, 0x2d, 0xd1, 0xa1, 0xb1, 0x2e, 0xe1, 0x06,
-	0x18, 0x02, 0x8b, 0xf9, 0x25, 0x71, 0x0a, 0xda, 0xae, 0x09, 0x2f, 0xc2, 0x28, 0xa5, 0xc6, 0xbc,
-	0x36, 0x99, 0x91, 0x65, 0xb5, 0x51, 0x33, 0xa6, 0x62, 0x6e, 0xef, 0x86, 0x17, 0x20, 0xc8, 0x2c,
-	0x37, 0x15, 0xef, 0xee, 0xb9, 0x49, 0x04, 0xd3, 0x30, 0xda, 0xf6, 0xbe, 0x24, 0xd7, 0x2b, 0x95,
-	0xa2, 0xc3, 0xff, 0xec, 0x26, 0x4a, 0x48, 0x08, 0xa7, 0xfe, 0x26, 0x0c, 0x89, 0xfe, 0xc9, 0x0d,
-	0x67, 0xe0, 0xff, 0x19, 0x9a, 0x54, 0xd3, 0x15, 0xa3, 0x58, 0x91, 0x0c, 0xb2, 0x25, 0x6d, 0x7b,
-	0x92, 0x08, 0x57, 0xde, 0x94, 0x09, 0xb4, 0xcc, 0x61, 0x5c, 0xf9, 0x24, 0x07, 0xc7, 0xfa, 0x90,
-	0x60, 0xe1, 0x3d, 0xc8, 0x88, 0x1c, 0xed, 0x45, 0x84, 0xc5, 0xfc, 0x2c, 0x60, 0x2f, 0x19, 0x3b,
-	0x87, 0x09, 0x6e, 0x4c, 0x33, 0x89, 0x79, 0x99, 0xea, 0x35, 0xb6, 0x30, 0xd2, 0x24, 0xe6, 0x66,
-	0xa4, 0xd7, 0xf0, 0x14, 0x44, 0x58, 0x9e, 0x92, 0xd5, 0xaa, 0x99, 0x85, 0xec, 0x67, 0xea, 0x14,
-	0x3c, 0xa2, 0x78, 0x9a, 0xe1, 0x0f, 0xf8, 0x35, 0x98, 0x64, 0x64, 0xea, 0xaa, 0x66, 0x78, 0x74,
-	0x12, 0x62, 0x70, 0x13, 0xf6, 0xb0, 0x4b, 0x1d, 0xfd, 0x03, 0x3d, 0xfc, 0x14, 0x81, 0x1e, 0xe9,
-	0x11, 0xe8, 0xef, 0x9b, 0x81, 0xce, 0x4f, 0xca, 0x73, 0xcf, 0xb0, 0xc6, 0x75, 0x84, 0xfb, 0xff,
-	0xb7, 0x8a, 0x78, 0xd8, 0xdf, 0x5a, 0x6d, 0xd2, 0xa6, 0xe5, 0xbc, 0x23, 0xe8, 0x39, 0x8d, 0xa7,
-	0x8f, 0xc9, 0xdf, 0xd0, 0x98, 0xfc, 0x4f, 0x04, 0x67, 0xbc, 0xf1, 0x77, 0x6c, 0x0f, 0xaf, 0x85,
-	0x73, 0x30, 0x59, 0xb0, 0xac, 0x93, 0x94, 0x5c, 0xb8, 0x87, 0x7b, 0xda, 0x15, 0x66, 0x00, 0x17,
-	0x38, 0xd9, 0xa4, 0xe9, 0x3a, 0x14, 0x61, 0xbc, 0x9b, 0x63, 0xc2, 0x02, 0x4c, 0x65, 0xda, 0x06,
-	0xe1, 0xdd, 0xff, 0xa4, 0x61, 0xed, 0x7a, 0x8f, 0xf6, 0x73, 0x02, 0x38, 0x02, 0x82, 0x63, 0x3e,
-	0x3c, 0xf6, 0xc3, 0xa6, 0x13, 0xa6, 0x7e, 0x10, 0x60, 0xeb, 0x7c, 0x57, 0x8d, 0x62, 0x0c, 0x01,
-	0x16, 0x50, 0x5c, 0x7d, 0xec, 0x37, 0x7e, 0x09, 0x46, 0xac, 0xfa, 0x87, 0xdd, 0x53, 0xb0, 0xa3,
-	0x66, 0x58, 0x6e, 0xd3, 0xc8, 0x97, 0xf1, 0x3c, 0x4c, 0x74, 0xa9, 0x93, 0x94, 0xb2, 0x19, 0x34,
-	0x63, 0x1d, 0x65, 0x4e, 0xbe, 0xdc, 0x0e, 0x8d, 0x80, 0x33, 0x34, 0xde, 0x84, 0x23, 0x5e, 0x8d,
-	0x54, 0x34, 0x62, 0x5f, 0xa1, 0xe0, 0x61, 0x14, 0x77, 0x07, 0xe1, 0xb2, 0x46, 0xac, 0x0b, 0x15,
-	0xd3, 0x20, 0x30, 0x41, 0x9d, 0x38, 0x3c, 0xa4, 0x62, 0xf4, 0xbd, 0x03, 0xf2, 0x2c, 0x4c, 0x94,
-	0x2a, 0xf5, 0xa2, 0x79, 0x4d, 0x82, 0x66, 0xd4, 0x62, 0xa9, 0xaa, 0xca, 0x77, 0xcd, 0x30, 0xc2,
-	0xa5, 0x4a, 0x3d, 0xcf, 0xc6, 0xe8, 0xc2, 0x9f, 0xa5, 0x23, 0xae, 0xdb, 0x1a, 0x3c, 0x70, 0xec,
-	0xdb, 0x1a, 0x16, 0x5f, 0x4a, 0xd2, 0xe2, 0x1b, 0x6d, 0xf3, 0xcd, 0x56, 0xea, 0x16, 0xdf, 0x77,
-	0x3a, 0xfd, 0x8b, 0x22, 0x9d, 0xb5, 0xd1, 0x80, 0xa1, 0x1d, 0x76, 0x4f, 0x31, 0x5b, 0xa9, 0x9f,
-	0xdd, 0x83, 0xc2, 0xbc, 0x4d, 0x61, 0xb0, 0x07, 0x85, 0x79, 0x93, 0x42, 0xea, 0xb3, 0x20, 0x6b,
-	0xcf, 0xf6, 0xa8, 0x11, 0x71, 0x16, 0x12, 0x5e, 0x06, 0xdd, 0x7a, 0x49, 0xde, 0xcc, 0xed, 0xca,
-	0x36, 0x97, 0x20, 0xd9, 0x8f, 0x06, 0xf3, 0xb4, 0x70, 0xb7, 0xd4, 0xdd, 0xa6, 0xf2, 0x14, 0xa9,
-	0xdb, 0xf6, 0x29, 0xbf, 0xd3, 0xa7, 0xae, 0x9a, 0xc9, 0x2c, 0xc0, 0x12, 0x4e, 0xe6, 0x29, 0x4b,
-	0xe7, 0x8e, 0x44, 0xf6, 0x1e, 0x0c, 0x39, 0x02, 0xd1, 0x6a, 0x4a, 0x9c, 0xdb, 0x0f, 0x79, 0xa2,
-	0xab, 0x0d, 0x4d, 0x26, 0x22, 0xb9, 0x4d, 0x34, 0x52, 0x93, 0x89, 0xe8, 0xa2, 0x44, 0x29, 0xd7,
-	0x35, 0xb5, 0x2e, 0x55, 0x4c, 0xca, 0xa1, 0x67, 0xa1, 0xec, 0xa4, 0xf4, 0xf4, 0xf9, 0xf2, 0x0f,
-	0x68, 0xbe, 0xfc, 0x3e, 0x82, 0x2c, 0x24, 0xac, 0x3c, 0x66, 0xda, 0xc3, 0x9b, 0x9f, 0x92, 0x7b,
-	0x79, 0x0f, 0x08, 0x56, 0x51, 0x62, 0x25, 0xa6, 0x83, 0x64, 0xc7, 0xd4, 0x4f, 0x10, 0x4c, 0xf6,
-	0x98, 0x2c, 0x7e, 0x11, 0x86, 0xbb, 0x95, 0x18, 0x43, 0x92, 0x33, 0xf1, 0xbc, 0x08, 0xc3, 0x9a,
-	0x89, 0x59, 0x34, 0xb6, 0xeb, 0xd6, 0x64, 0x87, 0xac, 0x97, 0xd6, 0xd5, 0x2d, 0x1b, 0xc8, 0xce,
-	0x63, 0x60, 0xbd, 0xea, 0x95, 0xbe, 0x52, 0x4f, 0xfc, 0x20, 0x78, 0x0b, 0x54, 0x7c, 0x06, 0xc6,
-	0x6b, 0xc4, 0xd8, 0x52, 0xb5, 0xbb, 0x45, 0xa5, 0x66, 0x10, 0xed, 0xb6, 0x24, 0x3b, 0xa2, 0x08,
-	0x9b, 0x63, 0x79, 0x6b, 0x28, 0x5f, 0xc6, 0x27, 0x20, 0xd6, 0x86, 0x74, 0xc8, 0x38, 0x6c, 0xbf,
-	0xb5, 0x08, 0xd7, 0x35, 0xa5, 0x29, 0x19, 0xa4, 0xa8, 0xd4, 0x9b, 0xe7, 0xec, 0x04, 0xc0, 0xa5,
-	0xc5, 0xe6, 0x58, 0xbe, 0xde, 0x3c, 0x67, 0xe5, 0x0e, 0x5a, 0x04, 0x34, 0x25, 0xa5, 0x2a, 0x95,
-	0x94, 0xaa, 0x62, 0x6c, 0x17, 0x3f, 0x52, 0x6b, 0xd6, 0x0c, 0x04, 0xe7, 0xc0, 0x07, 0x6a, 0x8d,
-	0xe0, 0x23, 0x10, 0xb5, 0xcf, 0xc3, 0xcc, 0xcc, 0x1b, 0xb1, 0x4e, 0xa9, 0xf0, 0x21, 0x08, 0x99,
-	0xdb, 0x12, 0x9e, 0x5f, 0xcd, 0xa7, 0x85, 0x2f, 0xa8, 0xa3, 0xfc, 0x3b, 0x82, 0x34, 0x8c, 0xaf,
-	0xf2, 0x89, 0x25, 0xed, 0x99, 0x51, 0xa3, 0x1e, 0xea, 0xae, 0x0c, 0x48, 0x41, 0xac, 0x0d, 0x47,
-	0x67, 0x37, 0x25, 0x78, 0x95, 0x40, 0x69, 0xae, 0xf3, 0x39, 0x25, 0xf3, 0xeb, 0xd7, 0xce, 0x25,
-	0xcd, 0x59, 0x51, 0x9a, 0xdd, 0xf4, 0x40, 0x4b, 0xdb, 0x8c, 0x63, 0x52, 0x49, 0x3a, 0x2b, 0x5a,
-	0xda, 0x76, 0xa8, 0x00, 0xe2, 0x10, 0xb5, 0x0f, 0xdb, 0xa6, 0x06, 0x1d, 0xf3, 0xa6, 0x45, 0xbb,
-	0x59, 0x13, 0x47, 0xac, 0x19, 0xa7, 0x7e, 0x88, 0xcc, 0x83, 0x8c, 0xde, 0xdd, 0x89, 0x72, 0xef,
-	0xee, 0xc4, 0xf9, 0x03, 0xf5, 0x56, 0xfa, 0xf5, 0x27, 0x52, 0x7f, 0x0a, 0x30, 0xd5, 0x1b, 0x81,
-	0x26, 0x4f, 0x4f, 0xd7, 0xcb, 0x91, 0x3c, 0xdd, 0x7d, 0x2b, 0xbe, 0x88, 0xeb, 0x75, 0xf5, 0x2e,
-	0xbb, 0x2f, 0xe8, 0xba, 0xac, 0xc2, 0x77, 0xd0, 0x63, 0x6c, 0x70, 0xc3, 0x7d, 0x1d, 0x25, 0x05,
-	0xc3, 0x1c, 0xc7, 0xba, 0x94, 0xc2, 0x5d, 0x6f, 0x90, 0xbd, 0xbc, 0xc6, 0x3d, 0x25, 0x05, 0xc3,
-	0x77, 0x1a, 0x25, 0x0e, 0xc1, 0xf2, 0x3e, 0xf7, 0xb7, 0xc1, 0x3b, 0x8d, 0x12, 0x85, 0x60, 0x69,
-	0xfe, 0x55, 0x98, 0xb4, 0x61, 0xec, 0xb8, 0xab, 0x68, 0x6a, 0xa3, 0x6e, 0x36, 0x0f, 0xc6, 0x4d,
-	0x68, 0x2b, 0xe6, 0x97, 0xe9, 0x18, 0xbe, 0x00, 0x71, 0x8a, 0xc6, 0xb7, 0x3b, 0x4e, 0xb1, 0x6d,
-	0x87, 0x3d, 0x74, 0xa7, 0x51, 0x62, 0x5b, 0xa4, 0x0d, 0xd7, 0x28, 0x4d, 0x02, 0x74, 0x61, 0x56,
-	0x6a, 0x15, 0xb3, 0x12, 0xe6, 0x5e, 0x3c, 0x64, 0xbe, 0xe4, 0x55, 0xf0, 0x1c, 0xe0, 0xba, 0xa6,
-	0x36, 0x15, 0x9d, 0xe2, 0xd8, 0x90, 0x7c, 0xd9, 0x1a, 0x75, 0x8e, 0xf4, 0xd9, 0xb4, 0x47, 0x7a,
-	0x6c, 0xda, 0x67, 0x01, 0xdb, 0x02, 0x6c, 0xd7, 0xe4, 0x62, 0x95, 0x34, 0x49, 0xd5, 0xac, 0x19,
-	0x04, 0x4b, 0x8a, 0xed, 0x9a, 0xbc, 0x42, 0xdf, 0xdb, 0x4b, 0x18, 0xec, 0x67, 0x09, 0xeb, 0xe9,
-	0x10, 0xfd, 0xb6, 0xde, 0x83, 0xcf, 0xb4, 0xf5, 0xae, 0x75, 0xd9, 0x7a, 0x0f, 0x3d, 0xb7, 0x4b,
-	0x38, 0x1d, 0x7b, 0x71, 0x9a, 0x9a, 0x98, 0xaf, 0xb0, 0x26, 0x0d, 0xef, 0x56, 0xb0, 0xbb, 0x58,
-	0xb4, 0x58, 0x7b, 0xfa, 0x45, 0xee, 0x1f, 0xfd, 0x8f, 0x5a, 0xe8, 0x1f, 0xfc, 0x90, 0x84, 0xe1,
-	0x0d, 0xea, 0xc0, 0x49, 0xeb, 0xea, 0xce, 0x88, 0xc7, 0xcd, 0x61, 0x0e, 0x30, 0x87, 0x70, 0xba,
-	0xd5, 0xd4, 0x64, 0x8f, 0x08, 0xa2, 0x04, 0x2f, 0x37, 0x4a, 0x9c, 0x1c, 0xf5, 0x77, 0x4a, 0xd0,
-	0x15, 0x13, 0x74, 0x57, 0x61, 0x43, 0x58, 0x3e, 0x9e, 0x64, 0x4e, 0x4e, 0x77, 0x15, 0x3d, 0x62,
-	0x03, 0x5e, 0x81, 0x09, 0x1b, 0xcb, 0x25, 0xc9, 0x54, 0xef, 0xc0, 0x80, 0x13, 0xde, 0x2d, 0xcf,
-	0x78, 0xb7, 0x34, 0x41, 0x65, 0x5e, 0xe7, 0x6e, 0x68, 0x6e, 0x23, 0x46, 0x3c, 0x21, 0x43, 0x57,
-	0xed, 0x75, 0x47, 0x10, 0x98, 0x60, 0xe3, 0xdd, 0x82, 0x86, 0xc1, 0x5a, 0xd4, 0xb6, 0x6b, 0x72,
-	0x92, 0xb9, 0x35, 0x83, 0xed, 0x08, 0x82, 0xfd, 0x77, 0x24, 0x60, 0xcc, 0xec, 0x8b, 0x0c, 0x3a,
-	0xdc, 0xc1, 0xec, 0x1f, 0xff, 0x6b, 0x18, 0x62, 0xcb, 0x55, 0xb5, 0x24, 0x55, 0x37, 0xea, 0x44,
-	0x66, 0xe9, 0x30, 0x07, 0x21, 0x69, 0x4b, 0x2f, 0x6a, 0x56, 0x63, 0xfd, 0xa5, 0x3d, 0xbb, 0x42,
-	0x39, 0xde, 0xe8, 0xff, 0xb2, 0x85, 0xd0, 0xe5, 0x01, 0x31, 0x28, 0x6d, 0xe9, 0x22, 0xc1, 0x6b,
-	0xe0, 0x3a, 0x77, 0x63, 0xf9, 0x60, 0x70, 0xfe, 0xd4, 0x3e, 0xaa, 0x33, 0xeb, 0x34, 0xe0, 0xf2,
-	0x80, 0x08, 0xd2, 0x96, 0x5e, 0xa8, 0x6c, 0xb1, 0x76, 0xfc, 0x7b, 0xe0, 0x3d, 0xae, 0x89, 0x8f,
-	0xed, 0xf7, 0x62, 0x9c, 0xf3, 0x90, 0xe1, 0xf2, 0x80, 0x38, 0x2c, 0x59, 0x07, 0x16, 0x8c, 0xf2,
-	0x07, 0x10, 0xd6, 0x49, 0x85, 0x6a, 0x8c, 0xb5, 0x01, 0xf7, 0x77, 0xb8, 0x73, 0xf4, 0xfe, 0x8e,
-	0x85, 0xd5, 0xe5, 0xc8, 0xc8, 0x1a, 0xc2, 0x19, 0x10, 0x4a, 0x52, 0xad, 0xbc, 0xa5, 0x94, 0x8d,
-	0x3b, 0xc5, 0x57, 0xcf, 0x9c, 0xd9, 0x2c, 0x59, 0xdd, 0xb6, 0xee, 0x17, 0x87, 0x90, 0x38, 0x62,
-	0xc3, 0x73, 0x70, 0x9c, 0x85, 0x20, 0x9d, 0x2d, 0x4d, 0x15, 0x34, 0xf9, 0x1c, 0xf5, 0xe0, 0xb9,
-	0xc5, 0x8a, 0xdd, 0xdf, 0x61, 0xc7, 0x55, 0xf6, 0x69, 0x1e, 0x43, 0xc5, 0xdf, 0x84, 0x91, 0xa6,
-	0xa2, 0x19, 0x0d, 0xa9, 0x5a, 0x34, 0xeb, 0x8a, 0x78, 0x6c, 0x1f, 0xd4, 0x0e, 0xdf, 0xdf, 0xf1,
-	0xe2, 0x59, 0x84, 0x63, 0xe6, 0x7b, 0xb3, 0x7c, 0xc1, 0x4b, 0x56, 0xa5, 0x37, 0xc2, 0xba, 0xbc,
-	0xe9, 0x7d, 0x77, 0x79, 0x59, 0x3c, 0x58, 0x9b, 0x90, 0x93, 0x30, 0xac, 0xd6, 0x4a, 0xaa, 0xa4,
-	0x95, 0x49, 0xb9, 0xd8, 0xac, 0xcb, 0xf1, 0xd1, 0x24, 0x9a, 0x1e, 0xe6, 0xbe, 0x25, 0x0e, 0xd9,
-	0x43, 0xd7, 0xea, 0x32, 0x5e, 0x86, 0x41, 0x59, 0x55, 0xb5, 0xb2, 0x52, 0x93, 0xa8, 0x72, 0x30,
-	0x53, 0xea, 0x31, 0x0f, 0x5b, 0x3a, 0xfb, 0xf4, 0x62, 0x1b, 0xcc, 0xa4, 0xe4, 0xc4, 0xc4, 0x12,
-	0x0c, 0xb3, 0x0f, 0x5a, 0x58, 0x19, 0x55, 0x93, 0xaa, 0xf1, 0x2f, 0xc3, 0xfb, 0xf6, 0x82, 0xc9,
-	0xfb, 0x3b, 0x6e, 0x64, 0x4b, 0x3d, 0x43, 0xf4, 0x6d, 0xde, 0x7c, 0x99, 0x3d, 0x06, 0x41, 0xa6,
-	0x00, 0x76, 0x77, 0xd7, 0xf7, 0xb8, 0x85, 0xd0, 0x6e, 0x0b, 0x85, 0xe6, 0x67, 0xcf, 0xcf, 0x9e,
-	0xbd, 0x48, 0xc1, 0xb3, 0x2f, 0x38, 0xdd, 0x84, 0x7f, 0x59, 0x83, 0x87, 0x1f, 0xb6, 0x50, 0xf4,
-	0x71, 0x0b, 0x45, 0x76, 0x5b, 0x08, 0x5d, 0xe4, 0x01, 0x6b, 0x77, 0x17, 0x05, 0x61, 0xd4, 0x73,
-	0xc9, 0x97, 0x7f, 0x63, 0x11, 0x11, 0xa2, 0xa9, 0x1f, 0xf8, 0x21, 0xb6, 0xa8, 0x11, 0xc9, 0x20,
-	0x76, 0x50, 0xbf, 0xfd, 0x74, 0x41, 0xfd, 0xb5, 0x0c, 0xe7, 0x37, 0x9e, 0x22, 0x9c, 0xed, 0x80,
-	0x65, 0x27, 0xce, 0xee, 0x8c, 0x98, 0xc5, 0x96, 0xf5, 0xa2, 0xdf, 0xff, 0x6f, 0xc4, 0x7f, 0xee,
-	0xc7, 0x1a, 0xa9, 0x9f, 0xfa, 0x61, 0xc4, 0x3c, 0x6b, 0xb5, 0x0d, 0x71, 0xc9, 0x63, 0x88, 0xfe,
-	0xa5, 0x84, 0xf7, 0x06, 0x46, 0xdb, 0x1e, 0xd7, 0xba, 0xda, 0x63, 0x7e, 0x9f, 0xd4, 0x7a, 0x9b,
-	0xa5, 0xd8, 0xcb, 0x2c, 0xaf, 0xee, 0x8b, 0xf4, 0xd7, 0xc8, 0x3a, 0x0f, 0x02, 0x30, 0xb8, 0x4c,
-	0x8c, 0xdf, 0x85, 0xc8, 0x41, 0x8d, 0xf0, 0xf5, 0x4d, 0xf5, 0xcf, 0xd3, 0x7d, 0x7e, 0x8c, 0xcc,
-	0xcf, 0x67, 0x2e, 0x29, 0x55, 0x83, 0x68, 0xf8, 0x02, 0x04, 0xd9, 0x77, 0x35, 0xac, 0x86, 0x8e,
-	0x75, 0x28, 0xd4, 0xad, 0x14, 0x86, 0x28, 0x72, 0x04, 0x3c, 0x0b, 0x3e, 0xb5, 0xce, 0x9c, 0x2e,
-	0xd6, 0xb1, 0x1c, 0xbf, 0x4b, 0x0c, 0x4d, 0x91, 0x19, 0xf8, 0x5a, 0x5d, 0xf4, 0xa9, 0xf5, 0x76,
-	0x5d, 0xee, 0x77, 0xd4, 0xe5, 0xa9, 0x14, 0x0c, 0xf1, 0x6b, 0xdf, 0x44, 0xcb, 0x95, 0x2b, 0x5d,
-	0xdb, 0xd4, 0xa9, 0x4f, 0x11, 0x00, 0xa7, 0xb7, 0x24, 0x19, 0x12, 0x7e, 0x0b, 0x02, 0xac, 0x67,
-	0xc2, 0xe5, 0x9d, 0xe9, 0x2b, 0xef, 0x25, 0x85, 0x54, 0xcb, 0xfc, 0x86, 0xba, 0xaa, 0x89, 0x0c,
-	0x0f, 0x9f, 0x82, 0x40, 0xa3, 0xa6, 0x18, 0xa6, 0xe0, 0x93, 0x1e, 0xfc, 0xab, 0x35, 0x85, 0x6f,
-	0x4a, 0x18, 0x10, 0x9e, 0x87, 0x10, 0x13, 0xd4, 0x3a, 0x99, 0x9f, 0xea, 0x3a, 0xcf, 0x6b, 0x14,
-	0x44, 0x34, 0x21, 0x53, 0x7f, 0x84, 0x40, 0xd8, 0xe0, 0x2e, 0xc7, 0xfa, 0x72, 0x4c, 0xea, 0x37,
-	0x5c, 0x52, 0x4f, 0xf7, 0x95, 0xba, 0xa0, 0x49, 0xb7, 0x6f, 0x2b, 0x32, 0x17, 0x83, 0xc9, 0xfc,
-	0x3a, 0x04, 0xca, 0x92, 0x21, 0x99, 0x97, 0x12, 0x5e, 0xee, 0x8b, 0xdd, 0x56, 0x95, 0xc8, 0x90,
-	0x52, 0x1f, 0x23, 0x88, 0x50, 0xe5, 0x32, 0x39, 0x2e, 0x82, 0x4f, 0xb6, 0x0e, 0xe2, 0xfb, 0x7f,
-	0x4c, 0xe6, 0xb4, 0x8b, 0xe8, 0x93, 0x09, 0xce, 0x43, 0xc4, 0x8c, 0x24, 0xeb, 0x76, 0xc4, 0x1e,
-	0xfb, 0x49, 0x8f, 0x0e, 0x44, 0x1b, 0x3d, 0xf5, 0x1f, 0x08, 0x04, 0x67, 0x80, 0x31, 0xd1, 0xbe,
-	0x61, 0x7f, 0x43, 0xc6, 0x3b, 0x29, 0x17, 0xf7, 0x1d, 0x9f, 0x14, 0xdd, 0xf9, 0xfd, 0x98, 0xf5,
-	0xa9, 0xd8, 0x33, 0xe9, 0xed, 0x19, 0xbe, 0x33, 0x9b, 0x79, 0xc5, 0xfc, 0xe8, 0xd2, 0x99, 0x3f,
-	0x70, 0x04, 0x02, 0x4b, 0x6b, 0xd7, 0x57, 0x85, 0x01, 0x3c, 0x04, 0x91, 0xa5, 0xdc, 0xb2, 0x98,
-	0x59, 0xca, 0x2d, 0x09, 0x08, 0x87, 0xc0, 0x77, 0x75, 0x5d, 0xf0, 0xcd, 0xdc, 0x84, 0x78, 0xaf,
-	0x5b, 0x04, 0x78, 0x18, 0xa2, 0x99, 0x6b, 0x99, 0xfc, 0x4a, 0x26, 0xbb, 0x92, 0x13, 0x06, 0xf0,
-	0x20, 0x84, 0xd7, 0x73, 0xab, 0x4b, 0xf9, 0xd5, 0x65, 0x01, 0x61, 0x80, 0xd0, 0xa5, 0x4c, 0x7e,
-	0x25, 0xb7, 0x24, 0xf8, 0xe8, 0xc0, 0x52, 0x6e, 0x25, 0x57, 0xc8, 0x2d, 0x09, 0x7e, 0xce, 0x66,
-	0x25, 0x57, 0xa0, 0x60, 0x81, 0x99, 0xf3, 0x6e, 0xf2, 0x6c, 0x6f, 0x57, 0x36, 0x3f, 0x65, 0x0d,
-	0x83, 0x3f, 0x73, 0x7d, 0x43, 0x18, 0xc0, 0x51, 0x08, 0x66, 0x3e, 0xb8, 0x2a, 0xe6, 0x04, 0x44,
-	0xdf, 0x2d, 0x2f, 0x52, 0xb9, 0xf2, 0x10, 0x64, 0x7a, 0xc0, 0x31, 0x80, 0x95, 0x4c, 0x36, 0xb7,
-	0x52, 0x5c, 0x5d, 0x5b, 0xa5, 0x52, 0x4c, 0xc2, 0x18, 0x7f, 0x5e, 0xbc, 0xba, 0x51, 0x58, 0x7b,
-	0x37, 0x27, 0x16, 0x73, 0x4b, 0xcb, 0x14, 0xb5, 0x3d, 0xb0, 0xb2, 0x76, 0x75, 0xa9, 0xb8, 0xb8,
-	0xb6, 0xba, 0x9a, 0x5b, 0x2c, 0x08, 0xbe, 0x99, 0xef, 0xc2, 0xa0, 0xc3, 0xb9, 0xf1, 0x04, 0x8c,
-	0x16, 0xc4, 0xcc, 0xa5, 0x4b, 0xf9, 0xc5, 0x62, 0xe1, 0xfd, 0xf5, 0x9c, 0x45, 0x37, 0x01, 0x53,
-	0xae, 0xd7, 0xf9, 0xd5, 0x42, 0x4e, 0x2c, 0x6e, 0xe4, 0x96, 0xdf, 0xcd, 0xad, 0x16, 0x04, 0xd4,
-	0x6d, 0x5c, 0xcc, 0xd8, 0xe3, 0x3e, 0x7c, 0x18, 0x26, 0x3a, 0xf1, 0x57, 0x73, 0x05, 0xc1, 0x3f,
-	0xb3, 0x05, 0xc3, 0xae, 0x9c, 0x80, 0xc7, 0x41, 0x78, 0x37, 0x57, 0x10, 0x3d, 0x12, 0xc4, 0x61,
-	0xdc, 0xf9, 0x36, 0xbf, 0x5a, 0xcc, 0xbe, 0x5f, 0xc8, 0x6d, 0x08, 0x88, 0xd2, 0x76, 0x8e, 0xac,
-	0x5d, 0x2d, 0x98, 0x43, 0x3e, 0x7c, 0x04, 0x26, 0x9d, 0x43, 0x85, 0xb5, 0x42, 0x66, 0xc5, 0x1c,
-	0xf4, 0x67, 0xff, 0x18, 0x3d, 0xfe, 0x22, 0x31, 0xf0, 0xf9, 0x17, 0x89, 0x81, 0xaf, 0xbe, 0x48,
-	0xa0, 0x7b, 0xbb, 0x09, 0xf4, 0xb3, 0xdd, 0x04, 0xfa, 0xe5, 0x6e, 0x02, 0x3d, 0xde, 0x4d, 0xa0,
-	0xcf, 0x77, 0x13, 0xe8, 0x57, 0xbb, 0x09, 0xf4, 0xe5, 0x6e, 0x62, 0xe0, 0xab, 0xdd, 0x04, 0xfa,
-	0xf8, 0x49, 0x62, 0xe0, 0xe1, 0x93, 0x04, 0x7a, 0xfc, 0x24, 0x31, 0xf0, 0xf9, 0x93, 0xc4, 0xc0,
-	0x07, 0xdf, 0xa8, 0xa8, 0xf5, 0xbb, 0x95, 0x74, 0x53, 0xa5, 0x39, 0x5b, 0x93, 0xd2, 0x0d, 0xfd,
-	0x34, 0xfb, 0x71, 0x5b, 0xd5, 0x36, 0xe7, 0xea, 0xa6, 0x29, 0xe7, 0xac, 0xe1, 0xd3, 0xf5, 0x52,
-	0x45, 0x3d, 0x4d, 0x7e, 0xcf, 0xb0, 0x3e, 0xa8, 0xef, 0xf2, 0x5f, 0x03, 0x4a, 0x21, 0x76, 0x8c,
-	0xfd, 0xca, 0xff, 0x04, 0x00, 0x00, 0xff, 0xff, 0x19, 0xd5, 0x31, 0x72, 0x5b, 0x40, 0x00, 0x00,
+	// 5323 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x7c, 0x5d, 0x6c, 0x1b, 0xd9,
+	0x75, 0xbf, 0x2e, 0xbf, 0x44, 0x1e, 0x8a, 0xd4, 0xe8, 0xea, 0x8b, 0xa6, 0x1d, 0x9a, 0xcb, 0xd8,
+	0xbb, 0xb2, 0x2c, 0xd1, 0xb6, 0xd6, 0xbb, 0x5e, 0x6b, 0xb3, 0x4e, 0x28, 0x89, 0x96, 0xa9, 0xbf,
+	0x56, 0x72, 0x46, 0xb4, 0xad, 0x6c, 0xd6, 0xcb, 0x8c, 0x86, 0x63, 0x7a, 0x62, 0x8a, 0x43, 0xcc,
+	0x0c, 0xa9, 0x78, 0xf3, 0x57, 0xb3, 0x4d, 0xda, 0x04, 0x4d, 0x1a, 0x74, 0xb1, 0x28, 0x0a, 0x74,
+	0x9b, 0x87, 0x3e, 0xf4, 0x21, 0x70, 0x91, 0x3c, 0xa5, 0x45, 0xb3, 0x34, 0x0a, 0x23, 0xfd, 0x40,
+	0xe2, 0x36, 0x80, 0x81, 0xbe, 0x2c, 0xfa, 0x01, 0x64, 0xb5, 0x2f, 0xdb, 0x02, 0x05, 0x82, 0x02,
+	0x05, 0x82, 0xbe, 0xb4, 0xb8, 0xf7, 0xce, 0x0c, 0x67, 0x86, 0x43, 0x8a, 0xb2, 0x94, 0xa0, 0x29,
+	0xf6, 0x8d, 0x33, 0xf7, 0x9c, 0x73, 0xcf, 0x3d, 0xf7, 0x9c, 0xdf, 0x3d, 0xf7, 0xdc, 0x3b, 0x84,
+	0xe7, 0x9a, 0x92, 0x96, 0x95, 0x95, 0x73, 0x9a, 0x78, 0x57, 0xda, 0x16, 0xce, 0x89, 0x55, 0xa5,
+	0x51, 0x2e, 0x89, 0x4a, 0xad, 0x26, 0x89, 0xfa, 0x39, 0xfd, 0x7e, 0x5d, 0xd2, 0xb2, 0x75, 0x55,
+	0xd1, 0x15, 0x7c, 0x9c, 0x11, 0x66, 0x19, 0x61, 0xd6, 0x41, 0x98, 0x9c, 0xad, 0xc8, 0xfa, 0xdd,
+	0xc6, 0x56, 0x56, 0x54, 0xb6, 0xcf, 0x55, 0x94, 0x8a, 0x72, 0x8e, 0xf2, 0x6c, 0x35, 0xee, 0xd0,
+	0x27, 0xfa, 0x40, 0x7f, 0x31, 0x59, 0xc9, 0x93, 0x15, 0x45, 0xa9, 0x54, 0xa5, 0x36, 0x95, 0x2e,
+	0x6f, 0x4b, 0x9a, 0x2e, 0x6c, 0xd7, 0x0d, 0x82, 0x33, 0x5e, 0x5a, 0xa9, 0x52, 0x49, 0x95, 0x2a,
+	0xb2, 0x52, 0xb3, 0xeb, 0x95, 0x3c, 0xee, 0x24, 0x55, 0xea, 0xba, 0xac, 0xd4, 0xcc, 0xc6, 0x94,
+	0xb3, 0x51, 0x93, 0x75, 0xc9, 0xc1, 0x7c, 0xcc, 0xd9, 0x6e, 0x6f, 0x3a, 0xe1, 0x6c, 0x6a, 0x0a,
+	0x55, 0xb9, 0x2c, 0xe8, 0x92, 0xd1, 0x9a, 0x76, 0xb5, 0xca, 0xd2, 0x4e, 0xc9, 0xd9, 0xf5, 0xc9,
+	0x4e, 0x0a, 0xcd, 0xde, 0x41, 0xe6, 0x9b, 0x01, 0x88, 0xe4, 0x6e, 0x6d, 0xf0, 0xf9, 0xe2, 0xfd,
+	0xba, 0x84, 0x05, 0x08, 0xb1, 0xc1, 0x25, 0x50, 0x1a, 0x4d, 0x45, 0xe7, 0x32, 0x59, 0xa7, 0xbd,
+	0x29, 0x7f, 0x76, 0x7d, 0xeb, 0x8b, 0x92, 0xa8, 0xf3, 0xd2, 0x1d, 0xc2, 0xb3, 0x70, 0xfa, 0xc1,
+	0xee, 0x90, 0x69, 0x1a, 0xc2, 0xfa, 0xd6, 0x43, 0x84, 0xde, 0x7b, 0x88, 0xe2, 0x61, 0x34, 0x85,
+	0xce, 0xa3, 0xf9, 0x90, 0xa8, 0xd4, 0xee, 0xc8, 0x15, 0xde, 0x10, 0x8c, 0xdf, 0x80, 0x80, 0xa8,
+	0x4a, 0xe5, 0x84, 0xaf, 0xef, 0x0e, 0x9e, 0x7d, 0xb0, 0x3b, 0x62, 0x4c, 0xb4, 0x2a, 0x95, 0xa5,
+	0x9a, 0x2e, 0x0b, 0x55, 0xcd, 0xa3, 0x07, 0x2a, 0x17, 0x97, 0x61, 0xb8, 0x59, 0x17, 0x4b, 0x82,
+	0xae, 0x0b, 0xe2, 0xdd, 0x6d, 0xa9, 0xa6, 0x6b, 0x09, 0x3f, 0xed, 0xea, 0x85, 0x6c, 0x0f, 0xdf,
+	0xc9, 0xe6, 0x6e, 0x6d, 0xdc, 0xbc, 0xbe, 0x98, 0xb3, 0xb8, 0x56, 0x65, 0x4d, 0xa7, 0xbd, 0x07,
+	0x7e, 0xde, 0x42, 0x88, 0x8f, 0x37, 0xeb, 0x62, 0xbb, 0x51, 0xc3, 0x37, 0x20, 0xca, 0xf8, 0xab,
+	0x72, 0xed, 0x9e, 0x96, 0x08, 0xd0, 0x1e, 0xb2, 0x3d, 0x7b, 0x58, 0x24, 0x4f, 0xab, 0x72, 0xed,
+	0x9e, 0x4b, 0x34, 0x88, 0x66, 0x83, 0x86, 0x8f, 0x81, 0x5f, 0xaf, 0xec, 0x24, 0x82, 0x69, 0x34,
+	0x15, 0x59, 0x18, 0x7c, 0x7f, 0x17, 0x7d, 0x44, 0x28, 0xc8, 0x3b, 0xbc, 0x04, 0xc1, 0xba, 0x24,
+	0xa9, 0x5a, 0x22, 0x92, 0xf6, 0x4f, 0x45, 0xe7, 0x4e, 0xf7, 0xec, 0xeb, 0xba, 0x24, 0xa9, 0xb4,
+	0x0b, 0x4b, 0x06, 0x63, 0x9e, 0x87, 0xff, 0xb8, 0x32, 0x78, 0x61, 0x66, 0x6e, 0xe6, 0xf9, 0x99,
+	0x8b, 0x2b, 0x81, 0x70, 0x88, 0x1b, 0x5c, 0x09, 0x84, 0x07, 0xb9, 0xf0, 0x4a, 0x20, 0x1c, 0xe6,
+	0x22, 0x99, 0xbf, 0xf3, 0x41, 0xd8, 0x64, 0xc5, 0x27, 0x21, 0xaa, 0x57, 0x76, 0x4a, 0x42, 0xb9,
+	0xac, 0x4a, 0x9a, 0x46, 0x1d, 0x22, 0xc2, 0x83, 0x5e, 0xd9, 0xc9, 0xb1, 0x37, 0xf8, 0x18, 0x84,
+	0x89, 0xd0, 0x92, 0xa0, 0xd5, 0xe8, 0x6c, 0xfa, 0xf9, 0x41, 0xf2, 0x9c, 0xd3, 0x6a, 0xf8, 0x65,
+	0x08, 0xd4, 0x94, 0xb2, 0x64, 0x58, 0xfe, 0x39, 0x4f, 0x5d, 0xad, 0x40, 0xca, 0xae, 0x29, 0x65,
+	0x89, 0x74, 0xc9, 0x53, 0x26, 0x3c, 0x0d, 0x23, 0x72, 0x4d, 0x93, 0xcb, 0x52, 0xa9, 0xa2, 0x4a,
+	0x25, 0xad, 0xb1, 0x55, 0x93, 0x74, 0x6a, 0xe1, 0x08, 0x3f, 0xcc, 0x1a, 0x96, 0x55, 0x69, 0x83,
+	0xbe, 0x9e, 0xff, 0x43, 0xf4, 0xb8, 0x85, 0x7e, 0x1f, 0x41, 0x0a, 0xa2, 0xc5, 0xe5, 0x5b, 0x69,
+	0x43, 0xb5, 0x64, 0xcc, 0xa1, 0xfb, 0x26, 0x82, 0x69, 0x18, 0x29, 0x50, 0xd6, 0xf4, 0x32, 0x9f,
+	0x4f, 0x33, 0xe6, 0xe4, 0xa8, 0x47, 0x47, 0x9b, 0x08, 0x92, 0x10, 0x21, 0x1a, 0xa5, 0xd7, 0x84,
+	0x6d, 0x29, 0x19, 0x85, 0x08, 0x51, 0x2a, 0x5b, 0x13, 0xb6, 0x25, 0x2a, 0x67, 0x88, 0x18, 0xc8,
+	0xea, 0x28, 0x01, 0x13, 0xb4, 0xd9, 0xe8, 0x29, 0x2b, 0xd7, 0x9b, 0x17, 0xe9, 0xc3, 0x26, 0xca,
+	0xfc, 0x26, 0x82, 0x91, 0x8e, 0x49, 0xc7, 0x55, 0x80, 0xb6, 0xe7, 0x24, 0x10, 0x9d, 0xcc, 0x7e,
+	0xa2, 0xe0, 0xcc, 0x83, 0x5d, 0x1b, 0x63, 0xa7, 0xfb, 0xbf, 0xf7, 0xaf, 0x8f, 0xfc, 0xc1, 0x77,
+	0x90, 0x8f, 0x43, 0x7c, 0xc4, 0xf2, 0xa8, 0x4c, 0x03, 0x12, 0xdd, 0x3c, 0x1b, 0x7f, 0x0e, 0xc2,
+	0x24, 0x52, 0xaa, 0xb2, 0xa6, 0x1b, 0x7a, 0x5c, 0x38, 0x50, 0x88, 0x50, 0xb5, 0xa2, 0xa4, 0xdf,
+	0xd0, 0x3b, 0xc8, 0xcf, 0xbd, 0x85, 0xf8, 0xc1, 0x66, 0x5d, 0x24, 0xe2, 0x33, 0x3f, 0x19, 0x84,
+	0x31, 0x2f, 0x72, 0x2c, 0x42, 0x88, 0xf4, 0x29, 0x97, 0x99, 0x3f, 0x2d, 0xac, 0xfe, 0xa2, 0x85,
+	0x06, 0xde, 0x7b, 0x88, 0xb8, 0x30, 0x19, 0x0a, 0x1b, 0xe0, 0x6c, 0x59, 0xd0, 0x05, 0x22, 0x36,
+	0xa0, 0xfa, 0x12, 0x9f, 0x21, 0x3f, 0x9e, 0x55, 0x4f, 0xcd, 0x65, 0xde, 0x98, 0x6a, 0xd6, 0xc5,
+	0xd9, 0x33, 0x53, 0x9f, 0x17, 0x66, 0xdf, 0x3c, 0x3f, 0x7b, 0xf9, 0xf6, 0x97, 0x5f, 0xda, 0xfd,
+	0xff, 0xd6, 0xef, 0x0b, 0x97, 0x76, 0xcf, 0x9c, 0xe2, 0x83, 0xcd, 0xba, 0x58, 0x28, 0xe3, 0x57,
+	0x20, 0xbe, 0x2d, 0xd4, 0x1a, 0x42, 0xb5, 0xa4, 0x2a, 0x0d, 0x5d, 0xae, 0x55, 0x12, 0x21, 0xea,
+	0x87, 0x63, 0xae, 0xe1, 0xe5, 0xb7, 0xeb, 0xfa, 0xfd, 0x6b, 0x03, 0x7c, 0x8c, 0x51, 0xf3, 0x8c,
+	0x18, 0x5f, 0x87, 0x58, 0x59, 0xba, 0x23, 0x34, 0xaa, 0x3a, 0xe5, 0x97, 0x12, 0x11, 0xca, 0x7d,
+	0xa6, 0xa7, 0x71, 0x96, 0x18, 0x07, 0x91, 0x21, 0x5d, 0x1b, 0xe0, 0x87, 0xca, 0xb6, 0x67, 0xfc,
+	0x79, 0x88, 0x8b, 0x0d, 0x4d, 0x57, 0xb6, 0x2d, 0x85, 0x80, 0x8a, 0x9c, 0xdb, 0xcf, 0xde, 0x94,
+	0xbd, 0x28, 0x6c, 0x55, 0x25, 0x73, 0xd6, 0x88, 0xba, 0x4c, 0x96, 0xa9, 0xee, 0x17, 0x21, 0x54,
+	0x15, 0xb6, 0xa4, 0xaa, 0x96, 0x88, 0xd2, 0x49, 0x7c, 0xe5, 0xc0, 0x93, 0x98, 0x5d, 0xa5, 0xfc,
+	0xf9, 0x9a, 0xae, 0xde, 0x5f, 0x18, 0x7d, 0xf7, 0x21, 0x0a, 0x80, 0x0f, 0x0d, 0xec, 0xfd, 0xec,
+	0x6f, 0xfc, 0xa1, 0x6f, 0x3e, 0x44, 0xbe, 0xf0, 0x00, 0x6f, 0xf4, 0x90, 0xbc, 0x0c, 0x51, 0x1b,
+	0x2d, 0xe6, 0xc0, 0x7f, 0x4f, 0xba, 0x6f, 0x40, 0x03, 0xf9, 0x89, 0xc7, 0x20, 0xd8, 0x14, 0xaa,
+	0x0d, 0x89, 0x02, 0x42, 0x84, 0x67, 0x0f, 0xf3, 0xbe, 0x97, 0xd0, 0xfc, 0x47, 0xbe, 0xc7, 0x2d,
+	0xf4, 0xa1, 0x0f, 0x30, 0x84, 0x6e, 0x5e, 0x5f, 0x4c, 0x17, 0x96, 0x92, 0x61, 0xd3, 0x17, 0xe0,
+	0xef, 0x7d, 0x10, 0x37, 0x86, 0x93, 0x5e, 0xbc, 0xab, 0xc8, 0xa2, 0x34, 0xfd, 0x43, 0x1f, 0xfc,
+	0xb9, 0x0f, 0x66, 0xdd, 0x33, 0x39, 0x77, 0x7c, 0x4d, 0x49, 0xd3, 0x59, 0xd1, 0xd2, 0x3b, 0x72,
+	0xb5, 0x9a, 0xde, 0x92, 0xd2, 0x72, 0x4d, 0xd3, 0x85, 0x6a, 0x55, 0x2a, 0xc3, 0x2a, 0xa4, 0x1c,
+	0x33, 0x97, 0x15, 0xaa, 0x8c, 0x53, 0x2a, 0xe9, 0xc4, 0x88, 0xda, 0xdc, 0xf4, 0x7a, 0x53, 0x52,
+	0x55, 0x82, 0x03, 0xc6, 0x84, 0xa5, 0xa9, 0x89, 0xd3, 0x77, 0x14, 0x35, 0x2d, 0x54, 0xab, 0xe9,
+	0xb6, 0xc1, 0x35, 0xb8, 0x07, 0xcf, 0x3b, 0xa5, 0x69, 0x52, 0x55, 0x12, 0x75, 0xb9, 0x29, 0x39,
+	0x64, 0x66, 0x6d, 0x0f, 0x25, 0xb9, 0x9c, 0xb9, 0xc8, 0x05, 0xa7, 0xcf, 0xf7, 0xe8, 0x66, 0xc3,
+	0x94, 0xe2, 0xe8, 0x6c, 0x05, 0x8e, 0x3b, 0x5d, 0xc4, 0x2e, 0x56, 0xcb, 0x9c, 0xe5, 0x82, 0x99,
+	0xb8, 0xb3, 0xa3, 0xe9, 0xc9, 0x45, 0xca, 0x90, 0x5e, 0x2c, 0x2c, 0xf1, 0x9a, 0x4d, 0xd8, 0xc2,
+	0x14, 0xc4, 0x0d, 0x21, 0x25, 0x91, 0x5a, 0x13, 0x4f, 0x3c, 0x6a, 0xa1, 0xd0, 0x93, 0x16, 0x0a,
+	0xee, 0xb5, 0x50, 0xe8, 0xc5, 0x99, 0xcb, 0x33, 0x17, 0xce, 0xff, 0xf1, 0x43, 0x84, 0x56, 0x02,
+	0x61, 0x1f, 0xe7, 0x5f, 0x09, 0x84, 0xfd, 0x5c, 0x60, 0x25, 0x10, 0x0e, 0x70, 0xc1, 0x95, 0x40,
+	0x38, 0xc8, 0x85, 0x1c, 0x8b, 0xc2, 0x2e, 0x1c, 0xcf, 0xbd, 0xd9, 0x50, 0xa5, 0x9b, 0x35, 0x49,
+	0xf7, 0x40, 0x91, 0x37, 0x20, 0xd2, 0xac, 0x49, 0xba, 0x1d, 0x46, 0x2e, 0xf6, 0xf6, 0x40, 0x2a,
+	0x6c, 0x2d, 0x5f, 0xec, 0x85, 0x24, 0x61, 0x22, 0x93, 0x42, 0xc9, 0x0f, 0x06, 0x61, 0xb2, 0x0b,
+	0x0b, 0x5e, 0x81, 0x61, 0xad, 0xb1, 0xa5, 0x89, 0xaa, 0x4c, 0x93, 0x9e, 0x36, 0xac, 0x3c, 0xb3,
+	0x2f, 0xac, 0xf0, 0x71, 0x3b, 0x67, 0xa1, 0x8c, 0xbf, 0x8a, 0x60, 0x90, 0x0e, 0x44, 0x66, 0xb9,
+	0x49, 0x64, 0x41, 0xee, 0x25, 0x24, 0xa8, 0xfa, 0x13, 0x6f, 0xf9, 0xc8, 0xaf, 0x05, 0xf5, 0x33,
+	0x73, 0x57, 0xde, 0x78, 0xfd, 0xdc, 0xe7, 0x67, 0x5f, 0xdf, 0x79, 0x3d, 0x5b, 0x7a, 0x7d, 0xea,
+	0xf5, 0x33, 0xb7, 0xcf, 0xbe, 0x7e, 0x8e, 0x40, 0x53, 0x6e, 0xf6, 0x35, 0x82, 0x4e, 0xed, 0x9f,
+	0xb3, 0xa5, 0xec, 0xed, 0x2f, 0x9f, 0x9f, 0xb9, 0xf4, 0xd2, 0x6e, 0xfb, 0x5d, 0xe9, 0xf6, 0x29,
+	0x3e, 0x44, 0x7a, 0xf6, 0x44, 0xae, 0xc0, 0x41, 0x90, 0xeb, 0x86, 0x37, 0x72, 0x65, 0xf7, 0x9f,
+	0x8f, 0x9e, 0xf0, 0x55, 0xed, 0x80, 0x2f, 0x86, 0xa7, 0x8b, 0xfb, 0xcb, 0x6d, 0x7b, 0xe5, 0x2d,
+	0x59, 0xbf, 0xbb, 0xa1, 0x0b, 0xba, 0x2c, 0xd2, 0x77, 0x5d, 0xf1, 0x6c, 0xfe, 0x6d, 0xff, 0xe3,
+	0x16, 0xfa, 0x96, 0x1f, 0x4e, 0xc1, 0xf0, 0x86, 0x6d, 0x8a, 0x08, 0x62, 0x8c, 0x74, 0xcc, 0x37,
+	0x8c, 0xc1, 0x20, 0x71, 0x0c, 0xd2, 0x1a, 0xb1, 0x26, 0xf0, 0x63, 0x40, 0x39, 0x5a, 0x40, 0x39,
+	0xdd, 0x01, 0x28, 0xa3, 0x8f, 0x5a, 0x28, 0xf0, 0xa4, 0x85, 0xfc, 0x7b, 0x2d, 0xe4, 0xbf, 0x38,
+	0xf3, 0xa2, 0x81, 0x26, 0x0c, 0x47, 0x82, 0x5c, 0x28, 0xf3, 0x9f, 0x08, 0x46, 0x3a, 0x3c, 0x0b,
+	0x7f, 0x06, 0x38, 0xb7, 0x05, 0x8d, 0x9d, 0x46, 0x37, 0x0f, 0x8f, 0x0b, 0xd5, 0xaa, 0x6d, 0x58,
+	0x58, 0x82, 0x09, 0x6f, 0xab, 0x19, 0x91, 0x32, 0x7b, 0x10, 0x9f, 0xd4, 0xae, 0x0d, 0xf0, 0x63,
+	0x96, 0x38, 0xdb, 0xfb, 0x85, 0xb3, 0x30, 0xe6, 0x98, 0x2a, 0xfb, 0xb8, 0x91, 0x39, 0xee, 0x0b,
+	0x33, 0x17, 0x3b, 0xc6, 0xfd, 0x96, 0x0f, 0x86, 0x8e, 0x78, 0xc8, 0xca, 0x3e, 0x43, 0xbe, 0xb4,
+	0xdf, 0x82, 0x6f, 0xd7, 0x47, 0x6b, 0x4b, 0x3e, 0xaa, 0xc1, 0xdb, 0x97, 0x10, 0x62, 0x82, 0x3f,
+	0x43, 0x30, 0x9a, 0xbb, 0xb5, 0xc1, 0x92, 0xec, 0xc2, 0x92, 0xb5, 0x52, 0x7c, 0x1d, 0x01, 0xb0,
+	0x24, 0xbb, 0x24, 0x97, 0x35, 0xba, 0x56, 0x44, 0x16, 0x2a, 0xef, 0x3d, 0x44, 0xd8, 0xc8, 0x64,
+	0x5d, 0x10, 0x9b, 0x7d, 0x07, 0x9d, 0xcd, 0x9c, 0x51, 0x9f, 0x9b, 0x3b, 0xfd, 0xc6, 0x14, 0xe3,
+	0xeb, 0x99, 0xfd, 0x59, 0x09, 0x70, 0xc0, 0xfc, 0x15, 0x46, 0xe6, 0xaf, 0x04, 0xe2, 0x23, 0x4c,
+	0x44, 0xa1, 0xac, 0xcd, 0x8f, 0xff, 0xa8, 0x85, 0x46, 0x60, 0x18, 0x80, 0xa9, 0x98, 0x2e, 0x2c,
+	0x69, 0x18, 0x5d, 0xc8, 0x7c, 0x17, 0xc1, 0xb8, 0x67, 0xce, 0x85, 0x55, 0x18, 0x72, 0xcd, 0x9f,
+	0x7f, 0x7f, 0x58, 0xb5, 0x4b, 0xa2, 0x0b, 0xdc, 0x49, 0x6b, 0x81, 0xfb, 0x31, 0xf2, 0x54, 0x31,
+	0xaa, 0xb6, 0x27, 0x61, 0xfe, 0xf8, 0x8f, 0x5a, 0x68, 0x12, 0xc6, 0xdb, 0x38, 0x66, 0x78, 0x03,
+	0xba, 0x30, 0x85, 0x32, 0xdf, 0x41, 0x90, 0xec, 0x3e, 0xb1, 0xf8, 0x37, 0xc0, 0x15, 0xda, 0x86,
+	0xb1, 0x37, 0x8d, 0x15, 0xad, 0x8b, 0xc1, 0x99, 0x1a, 0x5e, 0x99, 0xb7, 0xaa, 0x6f, 0xf5, 0xce,
+	0xbc, 0x87, 0xda, 0xaa, 0x17, 0xca, 0x99, 0x3f, 0x45, 0xc0, 0xb9, 0x43, 0x0d, 0xff, 0x01, 0xea,
+	0xa2, 0x55, 0xbd, 0x5f, 0xad, 0xda, 0x6b, 0xee, 0x2b, 0xea, 0xcb, 0x73, 0x97, 0xfb, 0x5d, 0x73,
+	0xb3, 0xa5, 0xdb, 0x67, 0x9d, 0xcb, 0xad, 0x53, 0xdb, 0xbf, 0x45, 0xf0, 0x6c, 0x7f, 0x8b, 0x15,
+	0xfe, 0x8a, 0xa7, 0x23, 0xbc, 0x7c, 0x88, 0x75, 0xf0, 0x28, 0xbd, 0xe2, 0x1f, 0x7c, 0x90, 0xea,
+	0xdd, 0x1b, 0xfe, 0x5d, 0xaf, 0x49, 0x20, 0xc9, 0xce, 0x9d, 0x7d, 0x26, 0xe1, 0x97, 0x62, 0x7a,
+	0xcc, 0x43, 0x4c, 0xa3, 0xda, 0x31, 0xa0, 0xd1, 0x12, 0x55, 0xea, 0x11, 0xb3, 0xa4, 0x23, 0x78,
+	0x07, 0x0d, 0x66, 0x82, 0xaa, 0xff, 0x17, 0xc8, 0xb2, 0x06, 0x37, 0xe7, 0x69, 0xa1, 0x21, 0xad,
+	0x3d, 0x42, 0x6d, 0x7e, 0xed, 0x71, 0x0b, 0xad, 0xc0, 0x29, 0xe0, 0x1c, 0x26, 0x22, 0x09, 0x02,
+	0xe7, 0x1e, 0x3b, 0x64, 0x20, 0xc6, 0xac, 0xc3, 0x56, 0x3b, 0x6d, 0x61, 0xc4, 0xa5, 0x10, 0x07,
+	0x99, 0xef, 0xf9, 0x60, 0xa4, 0x23, 0x98, 0xb1, 0xde, 0xc5, 0x8e, 0x6b, 0xbd, 0xed, 0x78, 0xb8,
+	0xc0, 0xfa, 0xb5, 0xb0, 0xd7, 0x5b, 0x08, 0x38, 0x5e, 0xaa, 0x57, 0x05, 0x51, 0x6a, 0x17, 0x16,
+	0xdf, 0x38, 0xda, 0xaa, 0x9c, 0xbb, 0x1e, 0x37, 0x3f, 0xf4, 0xf8, 0x4a, 0xbb, 0x8c, 0x99, 0xf9,
+	0x85, 0x0f, 0xe2, 0xb9, 0x5b, 0x1b, 0xc5, 0xe5, 0x5b, 0x1b, 0xb2, 0xce, 0xe6, 0xeb, 0x36, 0x04,
+	0x34, 0x59, 0x97, 0x0e, 0x58, 0xd7, 0x14, 0x76, 0xb4, 0x92, 0x5e, 0xd9, 0x29, 0x11, 0xd6, 0x2e,
+	0x75, 0x4d, 0x2a, 0xf6, 0xff, 0x48, 0x55, 0xf3, 0x65, 0xb3, 0xc6, 0x18, 0x3c, 0x40, 0x8d, 0xd1,
+	0x28, 0x2d, 0xb2, 0xfd, 0x63, 0xe6, 0x6d, 0x04, 0xe3, 0xed, 0xd9, 0xb7, 0xcf, 0xc0, 0x91, 0x0f,
+	0xe1, 0x89, 0xc7, 0x10, 0xe6, 0x47, 0x1e, 0x5f, 0x71, 0x4d, 0x7d, 0xe6, 0x1f, 0x7d, 0x30, 0xb6,
+	0xa8, 0x4a, 0x82, 0x2e, 0x7d, 0xec, 0x13, 0x47, 0x61, 0x50, 0x7b, 0xa5, 0x20, 0xd3, 0xf2, 0x19,
+	0x79, 0x3e, 0xd9, 0x85, 0x59, 0x96, 0xfd, 0xc2, 0x81, 0x2d, 0x3b, 0xf5, 0x60, 0x77, 0x58, 0x20,
+	0x72, 0x4a, 0x74, 0x0f, 0xb7, 0xaf, 0x71, 0x37, 0x0e, 0x6c, 0xdc, 0xe3, 0x5e, 0xc6, 0x35, 0xcb,
+	0xe3, 0xcc, 0xa2, 0x32, 0x70, 0xb4, 0x77, 0xbb, 0x49, 0x83, 0xb4, 0x83, 0x97, 0xfa, 0x28, 0x69,
+	0x78, 0xd6, 0x47, 0x8c, 0x48, 0x1b, 0x6e, 0x3a, 0x5a, 0xcd, 0x68, 0xf9, 0x23, 0x04, 0x09, 0x33,
+	0x5a, 0x3a, 0x8c, 0xe8, 0xa5, 0x8d, 0xff, 0xb0, 0xda, 0x3c, 0xf1, 0xd2, 0x66, 0x7e, 0xec, 0xf1,
+	0x95, 0xce, 0x59, 0xcc, 0x7c, 0xdf, 0x4f, 0xb3, 0x4c, 0x5a, 0xc3, 0x2e, 0xaa, 0x42, 0x4d, 0x93,
+	0xf5, 0x65, 0x41, 0x97, 0x76, 0x84, 0xfb, 0x66, 0x3e, 0x3f, 0xce, 0x7a, 0xd6, 0x59, 0x63, 0xa9,
+	0xc2, 0x5a, 0x0f, 0x30, 0xed, 0xd9, 0x07, 0xbb, 0xde, 0x32, 0xba, 0x4c, 0xfe, 0xa8, 0xd8, 0xa9,
+	0xcc, 0xc7, 0xe0, 0x6b, 0xba, 0xd3, 0x77, 0xfc, 0x90, 0xb6, 0x90, 0xee, 0xe3, 0x69, 0xfb, 0x95,
+	0xe0, 0xe3, 0x27, 0x1e, 0x5f, 0xe9, 0x11, 0x24, 0x0e, 0xac, 0xfc, 0x2e, 0x82, 0x67, 0xda, 0x6b,
+	0x63, 0xb7, 0xf9, 0xf9, 0xdf, 0xa0, 0x76, 0xe6, 0xfb, 0x3e, 0x98, 0xa0, 0x6d, 0x8b, 0x4c, 0x3c,
+	0xc9, 0xfa, 0x1a, 0x1a, 0xd5, 0xaf, 0x0e, 0x13, 0x8e, 0x9e, 0x4b, 0x64, 0x41, 0xa4, 0x68, 0xcf,
+	0x26, 0xf2, 0xf2, 0x7e, 0x6a, 0xda, 0xd4, 0x20, 0x4a, 0xb6, 0x45, 0x5f, 0x1b, 0x30, 0x1c, 0xc5,
+	0xe8, 0x34, 0xb7, 0xa3, 0x11, 0x2c, 0xc2, 0x4d, 0x48, 0xb8, 0x7a, 0xa4, 0x0b, 0x05, 0xed, 0x93,
+	0x99, 0xa6, 0x8f, 0x1d, 0x58, 0xaf, 0x5e, 0xc7, 0x1d, 0xbd, 0x12, 0x6a, 0xd2, 0xef, 0xc2, 0x29,
+	0x77, 0xbf, 0x65, 0xa9, 0x5e, 0x55, 0xee, 0x13, 0x19, 0x38, 0x4c, 0xac, 0x6a, 0x14, 0x40, 0x10,
+	0xe7, 0xcb, 0x48, 0x10, 0xbb, 0x29, 0xa9, 0x36, 0x33, 0x15, 0x21, 0x2a, 0xca, 0x65, 0xb5, 0xa4,
+	0xd1, 0x57, 0xc6, 0x4e, 0xf1, 0xf9, 0xde, 0x27, 0xc4, 0x85, 0x25, 0x7e, 0x51, 0xa9, 0xdd, 0xa9,
+	0xca, 0x76, 0x83, 0xf3, 0x40, 0xe4, 0xb0, 0xe7, 0xcc, 0x03, 0x04, 0x13, 0xde, 0x64, 0x18, 0x43,
+	0x80, 0x10, 0x1a, 0xa7, 0x31, 0xf4, 0x37, 0xbe, 0x09, 0x31, 0xd1, 0xa0, 0x64, 0x05, 0x7a, 0x5f,
+	0x1f, 0xe7, 0x7c, 0x76, 0xf9, 0x56, 0xc2, 0x3d, 0x24, 0xda, 0xde, 0xcc, 0x9f, 0xfa, 0x51, 0x0b,
+	0xa5, 0x21, 0x05, 0x93, 0xeb, 0x4d, 0x49, 0xad, 0x0a, 0xf5, 0x3a, 0x2d, 0xb4, 0x16, 0x96, 0xf8,
+	0x34, 0x53, 0x08, 0xfb, 0x2f, 0xcc, 0xcc, 0x65, 0x7e, 0x9b, 0x24, 0x5e, 0x1e, 0xc2, 0xf0, 0x71,
+	0x88, 0x90, 0xc9, 0x2b, 0xd5, 0x84, 0x6d, 0xc9, 0xd0, 0x37, 0x4c, 0x5e, 0xac, 0x09, 0xdb, 0x12,
+	0x9e, 0x01, 0xec, 0xb4, 0x3a, 0xa5, 0x62, 0xe7, 0x49, 0x9c, 0x7d, 0xa2, 0x28, 0xf5, 0x19, 0xe0,
+	0x94, 0xb6, 0x0e, 0x25, 0x6a, 0x01, 0x3f, 0x3b, 0x2b, 0xb6, 0xbd, 0x5f, 0x94, 0xcb, 0xea, 0xfc,
+	0xce, 0xe3, 0x16, 0xd2, 0x20, 0x01, 0x11, 0x32, 0xb9, 0x69, 0xa2, 0x4c, 0x32, 0x6a, 0x53, 0x04,
+	0xa6, 0x01, 0x53, 0x97, 0x4f, 0x1b, 0xf2, 0x19, 0xc9, 0x98, 0x97, 0x3a, 0x70, 0x16, 0xc6, 0x3b,
+	0x86, 0x4e, 0xc9, 0x71, 0xa7, 0x3e, 0x99, 0xaf, 0xfa, 0xe1, 0x44, 0x2f, 0xbf, 0xc7, 0x5b, 0x30,
+	0xd2, 0x0e, 0x77, 0xa7, 0xc7, 0xbc, 0x70, 0x80, 0x68, 0xb2, 0xf9, 0x0c, 0xd7, 0x96, 0x67, 0xcc,
+	0xc8, 0xd7, 0x10, 0x1c, 0xb3, 0xe2, 0xa7, 0xa3, 0x33, 0x5f, 0x3f, 0x85, 0x8c, 0x5b, 0x1b, 0x66,
+	0x88, 0xb8, 0x84, 0x53, 0x9c, 0x01, 0xdb, 0x09, 0xf4, 0xa4, 0xe8, 0x4d, 0x88, 0xbf, 0x04, 0x13,
+	0x24, 0x77, 0xb6, 0x6f, 0x2b, 0x0d, 0x0d, 0xfc, 0x54, 0x83, 0x7d, 0x6b, 0x99, 0xc5, 0xe5, 0x5b,
+	0xed, 0x9d, 0xb8, 0x67, 0xef, 0x3e, 0x7e, 0x54, 0xaf, 0xec, 0xb8, 0x89, 0x32, 0xff, 0x1e, 0xa6,
+	0x47, 0xe1, 0x9e, 0xe6, 0xc2, 0xd3, 0x30, 0x42, 0xef, 0x0b, 0xb4, 0xed, 0x62, 0x9e, 0x02, 0xf1,
+	0xc3, 0x7a, 0x65, 0xa7, 0xcd, 0x54, 0x28, 0xe3, 0x2c, 0x8c, 0xba, 0x68, 0xa9, 0x83, 0x72, 0x94,
+	0x7a, 0xc4, 0x41, 0x4d, 0x3d, 0xf4, 0xd3, 0x10, 0x13, 0xc9, 0x9a, 0x2c, 0x2b, 0xb5, 0x92, 0x2e,
+	0x6f, 0x9b, 0x49, 0x71, 0x32, 0xcb, 0xae, 0x1f, 0x65, 0xcd, 0xeb, 0x47, 0xd9, 0xa2, 0x79, 0xfd,
+	0x88, 0x1f, 0x32, 0x19, 0xc8, 0x2b, 0x3c, 0x6e, 0x9d, 0x99, 0x07, 0x8c, 0x43, 0x55, 0x7a, 0xca,
+	0x7d, 0x8c, 0x1d, 0xdf, 0xd3, 0xce, 0x87, 0x69, 0xc3, 0x60, 0xb3, 0x2e, 0xd2, 0x2e, 0xd3, 0x30,
+	0x44, 0x9a, 0x94, 0x9d, 0x9a, 0xa4, 0x12, 0xbe, 0x20, 0xbb, 0xbb, 0xd1, 0xac, 0x8b, 0xeb, 0xe4,
+	0x55, 0x9b, 0x99, 0x86, 0xcb, 0x90, 0xc5, 0x4c, 0xc2, 0x04, 0x57, 0x60, 0x8c, 0x34, 0xb5, 0xb1,
+	0x8e, 0xce, 0x90, 0x94, 0x88, 0xa6, 0xd1, 0x54, 0x7c, 0x1f, 0x7f, 0xb4, 0x2f, 0x19, 0x37, 0xaf,
+	0x2f, 0x12, 0x0b, 0xb3, 0x9b, 0x1d, 0xb8, 0x59, 0x17, 0x97, 0x2c, 0x89, 0xf4, 0x3d, 0x3e, 0x0b,
+	0x23, 0xae, 0x4e, 0x1a, 0x5a, 0x62, 0x90, 0xc5, 0x79, 0xd9, 0x41, 0xdb, 0x20, 0xd9, 0x51, 0x52,
+	0xd0, 0x34, 0x45, 0x94, 0x99, 0x21, 0x5d, 0xb5, 0x97, 0x18, 0xe5, 0x9a, 0xb4, 0x51, 0xf0, 0xf6,
+	0xb2, 0xc9, 0x59, 0x18, 0xb1, 0x33, 0xb3, 0xf1, 0xc4, 0x59, 0x4f, 0xb6, 0x06, 0xa6, 0xd6, 0x37,
+	0x10, 0x04, 0x74, 0xa1, 0xa2, 0x25, 0xc2, 0xd4, 0x23, 0x3f, 0xfd, 0x54, 0x01, 0x98, 0x2d, 0x0a,
+	0x15, 0xe3, 0x40, 0x9d, 0xd6, 0x60, 0x22, 0xef, 0xa2, 0x50, 0x26, 0xa0, 0xfa, 0x12, 0x5f, 0xa1,
+	0x7e, 0xfa, 0x2e, 0xf2, 0x71, 0x63, 0xb4, 0x68, 0xf3, 0x2e, 0x1a, 0x9c, 0x0e, 0xaa, 0xfe, 0xc4,
+	0x7f, 0x23, 0xfb, 0x79, 0x3b, 0x55, 0x00, 0x2f, 0xc3, 0x20, 0x2b, 0x5a, 0x6b, 0x09, 0xa0, 0xba,
+	0xf4, 0x3e, 0xdc, 0x60, 0xd5, 0x6c, 0x1b, 0x08, 0x98, 0xdc, 0xf8, 0x36, 0x70, 0xd6, 0x99, 0x96,
+	0x59, 0x39, 0x8a, 0x3c, 0xed, 0x0d, 0x04, 0x7a, 0x09, 0x87, 0xc9, 0x62, 0x45, 0xa0, 0xe4, 0x25,
+	0x88, 0x58, 0xc3, 0x3d, 0xd0, 0x9d, 0x80, 0x9f, 0xa2, 0xc7, 0x2d, 0xf4, 0x63, 0x04, 0x63, 0x9d,
+	0x77, 0x02, 0x36, 0x11, 0x3c, 0x0b, 0xb1, 0xb6, 0x6d, 0x49, 0xe3, 0xa8, 0x47, 0x94, 0x6e, 0x12,
+	0xee, 0x00, 0xc1, 0xdf, 0x24, 0xb4, 0x7d, 0x7a, 0x13, 0xc1, 0x69, 0x18, 0x21, 0x32, 0xa9, 0xc3,
+	0xa7, 0x73, 0xa2, 0xa8, 0x34, 0x6a, 0x7a, 0x32, 0xee, 0x0c, 0x8c, 0x4d, 0x04, 0xcf, 0x40, 0x90,
+	0x4e, 0x7b, 0x32, 0xe1, 0xed, 0xf6, 0x69, 0x04, 0x53, 0x30, 0xd2, 0x76, 0x5d, 0x63, 0x81, 0x23,
+	0xba, 0x74, 0x38, 0xaf, 0x75, 0x0a, 0x12, 0xe2, 0x06, 0x33, 0x0f, 0x23, 0x90, 0xea, 0x8d, 0x98,
+	0x38, 0x07, 0x9f, 0x70, 0xa5, 0xcf, 0x2e, 0x04, 0x62, 0x46, 0x4c, 0xea, 0x8e, 0xfc, 0xcc, 0x01,
+	0x46, 0x79, 0x38, 0xd9, 0x43, 0x04, 0xc5, 0x86, 0x28, 0x15, 0x72, 0xa2, 0x9b, 0x10, 0x73, 0xcd,
+	0x75, 0x8b, 0xb1, 0x00, 0x90, 0x73, 0x72, 0x1a, 0x08, 0xe8, 0xee, 0x54, 0xab, 0x19, 0xcb, 0xee,
+	0x88, 0xab, 0x23, 0xad, 0x86, 0x93, 0x10, 0xa6, 0x20, 0x27, 0x2a, 0x55, 0x03, 0xc2, 0xac, 0x67,
+	0xac, 0x40, 0xa2, 0x33, 0xbb, 0x32, 0x22, 0x74, 0xe8, 0x30, 0x88, 0x33, 0x61, 0x50, 0xf4, 0x85,
+	0x3a, 0xb1, 0x2e, 0xa8, 0xf3, 0x22, 0x4c, 0xd2, 0xe1, 0xd4, 0x15, 0x55, 0x77, 0xcd, 0x4d, 0x88,
+	0xb2, 0x8c, 0x5b, 0xcd, 0x8e, 0x69, 0xe9, 0x8d, 0x56, 0x83, 0x4f, 0x81, 0x56, 0xe1, 0x2e, 0x68,
+	0xf5, 0x6d, 0x13, 0xad, 0xd8, 0xb5, 0xc0, 0xfc, 0x21, 0x56, 0xf0, 0x23, 0xc1, 0xac, 0xff, 0x67,
+	0xee, 0x62, 0xa1, 0xbf, 0xf4, 0xc5, 0xd0, 0x87, 0xec, 0x67, 0x6d, 0xc8, 0xc5, 0x64, 0x3c, 0x3d,
+	0xb0, 0xfc, 0xd0, 0xf7, 0xb8, 0x85, 0x7e, 0xe0, 0x83, 0x39, 0x37, 0x84, 0x9c, 0xdc, 0x27, 0xe4,
+	0x36, 0x11, 0xbc, 0x08, 0x93, 0x45, 0x73, 0x52, 0xd3, 0x82, 0x83, 0xfb, 0x58, 0x57, 0x77, 0xd8,
+	0x44, 0x30, 0x03, 0xd8, 0xd8, 0x48, 0xa5, 0x0d, 0xdf, 0x27, 0x2c, 0x63, 0x5e, 0x91, 0xb5, 0x89,
+	0xe0, 0x53, 0x90, 0xcc, 0xb5, 0xe7, 0x92, 0xdd, 0x40, 0x48, 0xeb, 0x66, 0xe5, 0xfd, 0x44, 0x2f,
+	0xff, 0xd9, 0x44, 0x70, 0x1e, 0x38, 0xdb, 0xb8, 0x18, 0x80, 0x9d, 0xe8, 0x1e, 0x49, 0x07, 0x04,
+	0x31, 0xb2, 0x57, 0xfd, 0x93, 0x00, 0x4d, 0x97, 0x3c, 0xa7, 0x87, 0x6c, 0x35, 0x6c, 0xa9, 0x3b,
+	0xfd, 0x8d, 0x9f, 0x85, 0x61, 0xb3, 0x7b, 0x7a, 0x2b, 0xd4, 0xc2, 0x8f, 0x98, 0xd8, 0x96, 0x51,
+	0x28, 0xe3, 0x39, 0x18, 0xf7, 0x48, 0x43, 0xe5, 0xb2, 0x01, 0x1f, 0xa3, 0x1d, 0x99, 0x63, 0xa1,
+	0x8c, 0xbf, 0x04, 0x9f, 0x70, 0xc8, 0xee, 0x40, 0x8a, 0xd8, 0x61, 0x90, 0x22, 0x69, 0x53, 0xb0,
+	0x2f, 0xb4, 0x88, 0x77, 0x41, 0x0b, 0x2b, 0x73, 0x18, 0xee, 0x2f, 0x73, 0xf0, 0x34, 0xee, 0x51,
+	0x44, 0xe1, 0x53, 0x07, 0x8e, 0xeb, 0x12, 0x98, 0xeb, 0x7e, 0xf0, 0x4a, 0x20, 0x1c, 0xe1, 0x60,
+	0x25, 0x10, 0x06, 0x2e, 0xba, 0x12, 0x08, 0x47, 0xb9, 0xa1, 0xcc, 0xc3, 0x41, 0x5a, 0x22, 0xec,
+	0x92, 0x95, 0xe3, 0x05, 0x48, 0xb9, 0xbd, 0xdf, 0xeb, 0xd4, 0xcc, 0xbd, 0xc4, 0x39, 0xe0, 0xf0,
+	0x2a, 0xa4, 0x7b, 0xc9, 0xa0, 0x8e, 0x38, 0xe8, 0xb5, 0xc6, 0xb5, 0xa5, 0x3c, 0xc5, 0x1a, 0x57,
+	0x85, 0x49, 0xba, 0x51, 0xf1, 0x58, 0x96, 0xc2, 0x87, 0x71, 0xb6, 0x31, 0xb2, 0x37, 0xe9, 0x6f,
+	0x51, 0x8a, 0x74, 0x71, 0xb3, 0xdf, 0x31, 0xdd, 0x2c, 0x40, 0xdd, 0x2c, 0xf7, 0x94, 0x5b, 0xa6,
+	0x23, 0x81, 0xfb, 0x4d, 0x18, 0xb2, 0x01, 0x95, 0x59, 0xbb, 0xbc, 0xd8, 0x8f, 0x4a, 0x92, 0xa6,
+	0x34, 0x54, 0x51, 0xe2, 0xa5, 0x3b, 0x92, 0x2a, 0xd5, 0x44, 0x89, 0x77, 0x48, 0x22, 0x92, 0xeb,
+	0xaa, 0x52, 0x17, 0x2a, 0x86, 0xe4, 0xd0, 0x61, 0x24, 0xdb, 0x25, 0x3d, 0xfd, 0xaa, 0xf2, 0x13,
+	0x92, 0xae, 0xfe, 0x35, 0x82, 0x25, 0x48, 0x99, 0x48, 0x6f, 0x78, 0x92, 0x1b, 0xbf, 0xd3, 0xfb,
+	0xf9, 0xfd, 0x81, 0xd7, 0x8b, 0x53, 0x66, 0x9e, 0x7a, 0xbc, 0xab, 0x63, 0x1e, 0x3c, 0x55, 0xcd,
+	0xfc, 0x96, 0x0f, 0x26, 0xbb, 0x18, 0x0d, 0x7f, 0x12, 0x62, 0x5e, 0xd9, 0xe8, 0x90, 0x60, 0x47,
+	0xe6, 0x4f, 0x42, 0x4c, 0x35, 0x38, 0x4b, 0xfa, 0xfd, 0xba, 0x69, 0xb4, 0x21, 0xf3, 0xa5, 0xf9,
+	0x25, 0x81, 0x45, 0x64, 0x01, 0x3d, 0x98, 0xaf, 0x0a, 0x65, 0x92, 0x34, 0xb0, 0xd0, 0x0a, 0x1e,
+	0x26, 0xb4, 0x98, 0x0c, 0xef, 0x58, 0x0a, 0x79, 0xc7, 0x92, 0x51, 0x37, 0xff, 0xd0, 0x0f, 0x9c,
+	0x7b, 0xf7, 0x84, 0xcf, 0xc3, 0x58, 0x4d, 0xd2, 0x77, 0x14, 0xf5, 0x5e, 0x49, 0xae, 0xe9, 0x92,
+	0x7a, 0x47, 0x10, 0x6d, 0x88, 0x85, 0x8d, 0xb6, 0x82, 0xd9, 0x54, 0x28, 0xe3, 0xd3, 0x10, 0x6f,
+	0x53, 0xda, 0xac, 0x11, 0xb3, 0xde, 0x9a, 0x82, 0xeb, 0xaa, 0xdc, 0x14, 0x74, 0xa9, 0x24, 0xd7,
+	0x9b, 0x17, 0xad, 0x2f, 0x2c, 0x98, 0x5d, 0xb0, 0xd1, 0x56, 0xa8, 0x37, 0x2f, 0x9a, 0x5f, 0x5a,
+	0x90, 0x8c, 0xb0, 0x29, 0xc8, 0x55, 0x61, 0x4b, 0xae, 0xca, 0xfa, 0xfd, 0xd2, 0x9b, 0x4a, 0x4d,
+	0x32, 0x32, 0x69, 0xce, 0xde, 0xf0, 0x9a, 0x52, 0x63, 0xc5, 0x35, 0xf3, 0x96, 0x95, 0xb1, 0xf3,
+	0x0f, 0x9b, 0x77, 0x9f, 0xf0, 0x04, 0x84, 0x1c, 0x16, 0x31, 0x9e, 0xe6, 0x3f, 0x20, 0xae, 0xfd,
+	0xcf, 0x08, 0xb2, 0x30, 0xb6, 0xc6, 0x06, 0x96, 0xb6, 0x46, 0x46, 0xdc, 0x72, 0xc2, 0xdb, 0x18,
+	0x90, 0x81, 0x78, 0x9b, 0x8e, 0x8c, 0x2e, 0xc9, 0xb9, 0x8d, 0x40, 0x64, 0x5e, 0x67, 0x63, 0x4a,
+	0x17, 0xae, 0xdf, 0xbc, 0x68, 0x7d, 0x3b, 0x31, 0xe1, 0x6d, 0x07, 0xe2, 0xc4, 0x39, 0xdb, 0xa0,
+	0xd2, 0x64, 0x54, 0xc4, 0x89, 0x3b, 0x4c, 0x40, 0x6b, 0x79, 0xe6, 0x15, 0x2e, 0x5a, 0xcb, 0x33,
+	0xc7, 0x0d, 0x18, 0x42, 0x86, 0xf7, 0x87, 0xcd, 0x11, 0x67, 0xbe, 0x8e, 0x8c, 0xeb, 0x31, 0xdd,
+	0x0b, 0x71, 0xe5, 0xee, 0x85, 0xb8, 0x4b, 0x07, 0x2a, 0x31, 0xf7, 0x2a, 0xc5, 0x65, 0x7e, 0x0a,
+	0x90, 0xec, 0xce, 0x40, 0x16, 0x2a, 0xd7, 0xb9, 0x9f, 0x6d, 0xa1, 0x72, 0x9e, 0xdc, 0xb1, 0x7c,
+	0x4a, 0xab, 0x2b, 0xf7, 0xe8, 0xf7, 0x2b, 0x8e, 0x9b, 0xd0, 0xac, 0x26, 0x34, 0x4a, 0x1b, 0x37,
+	0x9c, 0x77, 0x9d, 0x33, 0x10, 0x63, 0x3c, 0xe6, 0x85, 0x67, 0xe6, 0x7a, 0x51, 0xfa, 0xf2, 0x26,
+	0xf3, 0x94, 0x0c, 0xc4, 0xee, 0x36, 0xb6, 0x18, 0x05, 0x5d, 0x63, 0x99, 0xbf, 0x45, 0xef, 0x36,
+	0xb6, 0x08, 0x05, 0x5d, 0x52, 0x5f, 0x80, 0x49, 0x8b, 0xc6, 0x8a, 0xf0, 0x8a, 0xaa, 0x34, 0xea,
+	0x46, 0x39, 0x6c, 0xcc, 0xa0, 0x36, 0xd1, 0x65, 0x99, 0xb4, 0xe1, 0x97, 0x20, 0x41, 0xd8, 0xd8,
+	0x2e, 0xdc, 0xae, 0xb6, 0xe5, 0xb0, 0x13, 0x77, 0x1b, 0x5b, 0x74, 0xe7, 0xbe, 0xe1, 0x68, 0x25,
+	0x70, 0x43, 0x12, 0x40, 0xb9, 0x56, 0x31, 0xd6, 0x62, 0xe6, 0xc5, 0x43, 0xc6, 0x4b, 0xb6, 0x98,
+	0xce, 0x02, 0xae, 0xab, 0x4a, 0x53, 0xd6, 0x08, 0x8f, 0x45, 0xc9, 0x52, 0x84, 0x11, 0x7b, 0x4b,
+	0x8f, 0xb5, 0x37, 0xdc, 0x65, 0xed, 0x9d, 0x01, 0x6c, 0x29, 0x70, 0xbf, 0x26, 0x96, 0xaa, 0x52,
+	0x53, 0xaa, 0x9a, 0x2b, 0xb5, 0xa9, 0xc5, 0xfd, 0x9a, 0xb8, 0x4a, 0xde, 0xb7, 0x57, 0x6a, 0xe8,
+	0x67, 0xa5, 0xee, 0xea, 0x11, 0x47, 0x5d, 0x4c, 0x8a, 0x1e, 0xaa, 0x98, 0x54, 0xf3, 0x28, 0x26,
+	0x0d, 0x1d, 0xd9, 0x7d, 0xf0, 0x8e, 0xea, 0x12, 0xc1, 0x33, 0xea, 0x60, 0xb4, 0x56, 0xc9, 0x52,
+	0x6f, 0xfa, 0x75, 0xc0, 0xa2, 0x5c, 0x56, 0x9f, 0x7e, 0x2d, 0xff, 0x2b, 0xff, 0xe3, 0x16, 0xfa,
+	0x4b, 0x3f, 0xa4, 0x21, 0xb6, 0x41, 0xbc, 0x3e, 0x6d, 0xde, 0x22, 0x1f, 0x76, 0xc5, 0x06, 0xcc,
+	0x02, 0x66, 0x14, 0x76, 0x5f, 0x4c, 0x4e, 0x76, 0x09, 0x3b, 0x22, 0xf0, 0x5a, 0x63, 0x8b, 0x89,
+	0xa3, 0x5f, 0x90, 0x0d, 0xbb, 0x02, 0x09, 0x2e, 0xc2, 0xa4, 0x45, 0x61, 0x06, 0x46, 0x9a, 0x46,
+	0x06, 0xd9, 0x60, 0x76, 0x09, 0x28, 0x78, 0x1e, 0xc6, 0x2d, 0x2e, 0x87, 0x26, 0xc9, 0xee, 0xd1,
+	0x04, 0xa7, 0xdd, 0xfb, 0xdf, 0x31, 0x2f, 0x6c, 0x21, 0x3a, 0x5f, 0x67, 0xbe, 0x6b, 0xec, 0x25,
+	0x87, 0x5d, 0x71, 0x06, 0xd3, 0x80, 0xaf, 0xdb, 0x22, 0xc7, 0x20, 0x1b, 0xf3, 0x8a, 0x34, 0x4a,
+	0x6b, 0x4a, 0xbb, 0x5f, 0x13, 0xd3, 0x34, 0x16, 0x28, 0x6d, 0x47, 0xe4, 0xf4, 0x9f, 0xb0, 0xc0,
+	0xa8, 0x51, 0xe5, 0x8b, 0xda, 0xdc, 0xc1, 0x38, 0x7b, 0xfb, 0xa7, 0x30, 0xc4, 0x97, 0xab, 0xca,
+	0x96, 0x50, 0xdd, 0xa8, 0x4b, 0x22, 0xc5, 0xd0, 0x3c, 0x84, 0x84, 0x1d, 0xad, 0xa4, 0x9a, 0x87,
+	0x92, 0xcf, 0xee, 0x5b, 0xe7, 0xcc, 0xb3, 0xc3, 0xd2, 0x8f, 0x5a, 0x08, 0x5d, 0x1b, 0xe0, 0x83,
+	0xc2, 0x8e, 0xc6, 0x4b, 0x78, 0x1d, 0x1c, 0xd7, 0x7d, 0x28, 0x88, 0x44, 0xe7, 0xce, 0xf6, 0x91,
+	0x84, 0x9a, 0x97, 0x28, 0xae, 0x0d, 0xf0, 0x20, 0xec, 0x68, 0xc5, 0xca, 0x0e, 0x3d, 0xca, 0xdc,
+	0x04, 0xf7, 0x2d, 0x97, 0xc4, 0x68, 0xbf, 0xdf, 0x68, 0xd8, 0xef, 0x66, 0x5c, 0x1b, 0xe0, 0x63,
+	0x82, 0x79, 0xcf, 0x83, 0x4a, 0xfe, 0x1a, 0x82, 0x63, 0x44, 0x57, 0xef, 0xa3, 0xfd, 0xf1, 0xfe,
+	0x6e, 0x8a, 0x77, 0x39, 0x0e, 0x5e, 0x88, 0xfd, 0xdb, 0x2e, 0x94, 0xa5, 0x6d, 0xe5, 0xc2, 0x8c,
+	0x2e, 0x69, 0xfa, 0xb5, 0x01, 0x7e, 0x42, 0xd8, 0xd1, 0x3c, 0x88, 0xf1, 0x6b, 0x30, 0xa8, 0x49,
+	0x15, 0x32, 0x6f, 0x74, 0x4f, 0xde, 0xdf, 0xb1, 0xfe, 0x89, 0x07, 0xbb, 0x26, 0x97, 0xc7, 0x61,
+	0xbe, 0xd9, 0x84, 0x73, 0xc0, 0x6d, 0x09, 0xb5, 0xf2, 0x8e, 0x5c, 0xd6, 0xef, 0x96, 0x5e, 0x38,
+	0x7f, 0x7e, 0x7b, 0xcb, 0xac, 0x62, 0x7b, 0xdf, 0xa4, 0x47, 0xfc, 0xb0, 0x45, 0xcf, 0xc8, 0xf1,
+	0x02, 0x04, 0x89, 0xcd, 0x09, 0x60, 0x11, 0x08, 0x3c, 0xe1, 0xe2, 0x73, 0xaa, 0x15, 0x7f, 0xb0,
+	0x4b, 0xef, 0x1a, 0x59, 0x9f, 0xd0, 0x52, 0x56, 0xfc, 0x05, 0x18, 0x6e, 0xca, 0xaa, 0xde, 0x10,
+	0xaa, 0x25, 0x23, 0x25, 0x4a, 0xc4, 0xfb, 0x90, 0x76, 0xec, 0xc1, 0xae, 0x9b, 0xcf, 0x14, 0x1c,
+	0x37, 0xde, 0x1b, 0x99, 0x17, 0x5e, 0x32, 0xd3, 0xe1, 0x61, 0x9a, 0x0e, 0x67, 0xfb, 0x4e, 0x87,
+	0x69, 0x54, 0x9a, 0x79, 0xf0, 0x19, 0x88, 0x29, 0xb5, 0x2d, 0x45, 0x50, 0xcb, 0x52, 0xb9, 0xd4,
+	0xac, 0x8b, 0x89, 0x91, 0x34, 0x9a, 0x8a, 0x31, 0x0f, 0xe7, 0x87, 0xac, 0xa6, 0x9b, 0x75, 0x11,
+	0x2f, 0x43, 0x54, 0x54, 0x14, 0xb5, 0x2c, 0xd7, 0x04, 0x62, 0x1c, 0x4c, 0x8d, 0x7a, 0xd2, 0xd5,
+	0x2d, 0x19, 0x7d, 0x76, 0xb1, 0x4d, 0x66, 0x48, 0xb2, 0x73, 0x62, 0x01, 0x62, 0xf4, 0x23, 0x74,
+	0x9a, 0x01, 0xd6, 0x84, 0x6a, 0xe2, 0xa3, 0xc1, 0xbe, 0xbd, 0x60, 0xf2, 0xc1, 0xae, 0x93, 0xd9,
+	0x34, 0xcf, 0x10, 0x79, 0x5b, 0x30, 0x5e, 0x2e, 0x64, 0x20, 0x48, 0x0d, 0x80, 0x8f, 0x3d, 0x6a,
+	0x21, 0xdf, 0x93, 0x16, 0x42, 0x7b, 0x2d, 0x14, 0x99, 0x9b, 0xb9, 0x34, 0x73, 0xe1, 0xf2, 0xcc,
+	0xdc, 0x05, 0xc2, 0xb1, 0xf0, 0x8c, 0xdd, 0x53, 0xd8, 0x07, 0xf1, 0x38, 0xf6, 0xa8, 0x85, 0x22,
+	0x4f, 0x5a, 0x28, 0xbc, 0xd7, 0x42, 0xe8, 0x32, 0x43, 0x0e, 0xab, 0x60, 0xcf, 0x71, 0x23, 0x9e,
+	0xa5, 0x8f, 0x30, 0x17, 0xc9, 0x7c, 0x23, 0x00, 0x71, 0x76, 0xa9, 0xc6, 0x42, 0x97, 0x4f, 0x3f,
+	0x1d, 0xba, 0xb4, 0x71, 0xe5, 0x86, 0x27, 0xae, 0xec, 0x73, 0x2c, 0xef, 0x71, 0x85, 0xf1, 0x57,
+	0x86, 0x2e, 0x6f, 0xee, 0x0f, 0x2e, 0xaf, 0xf4, 0xa7, 0x7d, 0x17, 0x88, 0xe9, 0x81, 0x29, 0x9f,
+	0x7a, 0x0a, 0x4c, 0xb1, 0x50, 0x83, 0xde, 0x5f, 0x74, 0x2e, 0x0e, 0x0b, 0xd8, 0x74, 0xa1, 0xc8,
+	0x57, 0xff, 0x0b, 0xb1, 0x9f, 0xfd, 0xf8, 0x43, 0xe6, 0x67, 0x7e, 0x18, 0x36, 0xee, 0xef, 0x58,
+	0xae, 0x70, 0xd5, 0xe5, 0x0a, 0xbd, 0xb3, 0x2a, 0xf7, 0xbd, 0xe8, 0xb6, 0x47, 0xdc, 0xf4, 0xf4,
+	0x88, 0xb9, 0x3e, 0xa5, 0x75, 0x77, 0x89, 0x52, 0x37, 0x97, 0x78, 0xa1, 0x2f, 0xd1, 0xfb, 0x7b,
+	0xc6, 0x97, 0xf7, 0xf7, 0x8c, 0x2b, 0x7d, 0x8e, 0xe2, 0xc0, 0xae, 0x71, 0x84, 0x93, 0xbb, 0x12,
+	0x08, 0xc7, 0xb8, 0x78, 0xe6, 0x2f, 0x82, 0x10, 0x5d, 0x96, 0xf4, 0xa3, 0x8b, 0xf4, 0x5f, 0xa3,
+	0x0c, 0x42, 0xff, 0xe5, 0x25, 0x10, 0xbf, 0xac, 0xe8, 0xfe, 0xf5, 0x5d, 0x2a, 0x0f, 0xe3, 0xba,
+	0x63, 0xdc, 0xb8, 0x07, 0x3a, 0x7d, 0x0b, 0x19, 0x1f, 0xe7, 0x5f, 0x95, 0xab, 0xba, 0xa4, 0xe2,
+	0x97, 0x20, 0x48, 0xbf, 0xda, 0xa7, 0xfb, 0xa1, 0x78, 0x87, 0x59, 0x9d, 0xa6, 0xa1, 0x8c, 0x3c,
+	0x63, 0xc0, 0x33, 0xe0, 0x53, 0xea, 0xd4, 0xe1, 0xe3, 0x1d, 0x49, 0xcd, 0xab, 0x92, 0xae, 0xca,
+	0x22, 0x25, 0x5f, 0xaf, 0xf3, 0x3e, 0xa5, 0xde, 0xde, 0x63, 0xf9, 0x6d, 0x7b, 0xac, 0x4c, 0x06,
+	0x86, 0xd8, 0xd7, 0xa4, 0x92, 0x9a, 0x2f, 0x57, 0x3c, 0x8f, 0x8c, 0x32, 0xdf, 0x43, 0x00, 0x4c,
+	0xde, 0x92, 0xa0, 0x0b, 0xf8, 0x0a, 0x04, 0x68, 0xd1, 0x8c, 0xe9, 0x3b, 0xdd, 0x53, 0xdf, 0xab,
+	0xb2, 0x54, 0x2d, 0xb3, 0x0f, 0x5f, 0x15, 0x95, 0xa7, 0x7c, 0xf8, 0x2c, 0x04, 0x1a, 0x35, 0x59,
+	0x37, 0x14, 0x9f, 0x74, 0xf1, 0xdf, 0xa8, 0xc9, 0x6c, 0x83, 0x49, 0x89, 0xf0, 0x1c, 0x84, 0xa8,
+	0xa2, 0xe6, 0xc5, 0xa3, 0xa4, 0xe7, 0x38, 0x6f, 0x12, 0x12, 0xde, 0xa0, 0xcc, 0x7c, 0x1b, 0x01,
+	0xb7, 0xc1, 0x1c, 0x8f, 0x96, 0x92, 0xa9, 0xd6, 0x9f, 0x72, 0x68, 0x3d, 0xd5, 0x53, 0xeb, 0xa2,
+	0x2a, 0xdc, 0xb9, 0x23, 0x8b, 0x4c, 0x0d, 0xaa, 0xf3, 0xcb, 0x10, 0x28, 0x0b, 0xba, 0x60, 0xdc,
+	0xbf, 0x7a, 0xae, 0x27, 0x77, 0xdb, 0x54, 0x3c, 0x65, 0xca, 0xbc, 0x8d, 0x20, 0x4c, 0x8c, 0x4b,
+	0xf5, 0xb8, 0x0c, 0x3e, 0xd1, 0xbc, 0x5b, 0xd4, 0xfb, 0xaf, 0x2a, 0xec, 0xf3, 0xc2, 0xfb, 0x44,
+	0x09, 0x17, 0x20, 0x6c, 0xc4, 0x93, 0x79, 0x11, 0x6c, 0x9f, 0xda, 0x80, 0xcb, 0x06, 0xbc, 0xc5,
+	0x9e, 0xf9, 0x17, 0x04, 0x9c, 0x3d, 0xcc, 0xa8, 0x6a, 0x9f, 0xb5, 0xfe, 0xa1, 0x82, 0x95, 0xd2,
+	0x2e, 0xf7, 0x1d, 0xa5, 0x84, 0xdd, 0xfe, 0xef, 0x14, 0xe6, 0x1f, 0x51, 0x1c, 0xca, 0x6e, 0x87,
+	0xf8, 0x17, 0x8b, 0xe9, 0xe7, 0x8d, 0xbf, 0x74, 0xb1, 0xa3, 0x08, 0x0e, 0x43, 0x60, 0x69, 0xfd,
+	0xd6, 0x1a, 0x37, 0x80, 0x87, 0x20, 0xbc, 0x94, 0x5f, 0xe6, 0x73, 0x4b, 0xf9, 0x25, 0x0e, 0xe1,
+	0x10, 0xf8, 0x6e, 0x5c, 0xe7, 0x7c, 0xd3, 0x2a, 0x24, 0xba, 0x15, 0xad, 0x71, 0x0c, 0x22, 0xb9,
+	0x9b, 0xb9, 0xc2, 0x6a, 0x6e, 0x61, 0x35, 0xcf, 0x0d, 0xe0, 0x28, 0x0c, 0x5e, 0xcf, 0xaf, 0x2d,
+	0x15, 0xd6, 0x96, 0x39, 0x84, 0x01, 0x42, 0x57, 0x73, 0x85, 0xd5, 0xfc, 0x12, 0xe7, 0x23, 0x0d,
+	0x4b, 0xf9, 0xd5, 0x7c, 0x31, 0xbf, 0xc4, 0xf9, 0x59, 0x37, 0xab, 0xf9, 0x22, 0x21, 0x0b, 0x10,
+	0x11, 0x85, 0xb5, 0x42, 0xb1, 0x90, 0x23, 0x8d, 0xc1, 0x64, 0xe0, 0x51, 0x0b, 0x05, 0xa7, 0x2f,
+	0x39, 0xfb, 0xa4, 0x9b, 0xf7, 0xb2, 0xf1, 0xcf, 0x3e, 0x83, 0xe0, 0xcf, 0xdd, 0xda, 0xe0, 0x06,
+	0x70, 0x04, 0x82, 0xb9, 0xd7, 0x6e, 0xf0, 0x79, 0x0e, 0x91, 0x77, 0xcb, 0x8b, 0x44, 0xd9, 0x02,
+	0x04, 0xa9, 0x71, 0x70, 0x1c, 0x60, 0x35, 0xb7, 0x90, 0x5f, 0x2d, 0xad, 0xad, 0xaf, 0x11, 0xd5,
+	0x26, 0x61, 0x94, 0x3d, 0x2f, 0xde, 0xd8, 0x28, 0xae, 0xbf, 0x9a, 0xe7, 0x4b, 0xf9, 0xa5, 0x65,
+	0xc2, 0xda, 0x6e, 0x58, 0x5d, 0xbf, 0xb1, 0x54, 0x5a, 0x5c, 0x5f, 0x5b, 0xcb, 0x2f, 0x16, 0x39,
+	0xdf, 0xf4, 0x57, 0x20, 0x6a, 0xf3, 0x78, 0x3c, 0x0e, 0x23, 0x45, 0x3e, 0x77, 0xf5, 0x6a, 0x61,
+	0xb1, 0x54, 0xfc, 0xdc, 0xf5, 0xbc, 0x29, 0x37, 0x05, 0x49, 0xc7, 0xeb, 0xc2, 0x5a, 0x31, 0xcf,
+	0x97, 0x36, 0xf2, 0xcb, 0xaf, 0xe6, 0xd7, 0x8a, 0x1c, 0xf2, 0x6a, 0xe7, 0x73, 0x56, 0xbb, 0x0f,
+	0x1f, 0x83, 0xf1, 0x4e, 0xfe, 0xb5, 0x7c, 0x91, 0xf3, 0x4f, 0xef, 0x40, 0xcc, 0x01, 0x14, 0x78,
+	0x0c, 0xb8, 0x57, 0xf3, 0x45, 0xde, 0xa5, 0x41, 0x02, 0xc6, 0xec, 0x6f, 0x0b, 0x6b, 0xa5, 0x85,
+	0xcf, 0x15, 0xf3, 0x1b, 0x1c, 0x22, 0xb2, 0xed, 0x2d, 0xeb, 0x37, 0x8a, 0x46, 0x93, 0x0f, 0x1f,
+	0x87, 0x49, 0x7b, 0x53, 0x71, 0xbd, 0x98, 0x5b, 0x35, 0x1a, 0xfd, 0x0b, 0xbf, 0x87, 0x9e, 0x7c,
+	0x90, 0x1a, 0x78, 0xff, 0x83, 0xd4, 0xc0, 0xcf, 0x3f, 0x48, 0xa1, 0xb7, 0xf6, 0x52, 0xe8, 0xbb,
+	0x7b, 0x29, 0xf4, 0xe3, 0xbd, 0x14, 0x7a, 0xb2, 0x97, 0x42, 0xef, 0xef, 0xa5, 0xd0, 0xcf, 0xf6,
+	0x52, 0xe8, 0xa3, 0xbd, 0xd4, 0xc0, 0xcf, 0xf7, 0x52, 0xe8, 0xed, 0x0f, 0x53, 0x03, 0x8f, 0x3e,
+	0x4c, 0xa1, 0x27, 0x1f, 0xa6, 0x06, 0xde, 0xff, 0x30, 0x35, 0xf0, 0xda, 0x67, 0x2b, 0x4a, 0xfd,
+	0x5e, 0x25, 0xdb, 0x54, 0x08, 0x90, 0xab, 0x42, 0xb6, 0xa1, 0x9d, 0xa3, 0x3f, 0xee, 0x28, 0xea,
+	0xf6, 0x6c, 0xdd, 0x98, 0xca, 0x59, 0xb3, 0xf9, 0x5c, 0x7d, 0xab, 0xa2, 0x9c, 0x93, 0xbe, 0xa4,
+	0x9b, 0xff, 0x2f, 0xe6, 0xf1, 0x27, 0x6a, 0x5b, 0x21, 0x7a, 0xe3, 0xe6, 0xf9, 0xff, 0x09, 0x00,
+	0x00, 0xff, 0xff, 0xf9, 0x93, 0x74, 0x1b, 0x6a, 0x4d, 0x00, 0x00,
 }
 
 func (x CloudConnectState) String() string {
@@ -5194,6 +5717,36 @@ func (this *ReplaceAWSTGWSiteType) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *CreateAWSTGWSiteType) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CreateAWSTGWSiteType)
+	if !ok {
+		that2, ok := that.(CreateAWSTGWSiteType)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.Site.Equal(that1.Site) {
+		return false
+	}
+	if !this.Cred.Equal(that1.Cred) {
+		return false
+	}
+	if !this.VpcAttachments.Equal(that1.VpcAttachments) {
+		return false
+	}
+	return true
+}
 func (this *AzureVNETSiteType) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -5244,6 +5797,98 @@ func (this *ReplaceAzureVNETSiteType) Equal(that interface{}) bool {
 		return false
 	}
 	if !this.VnetAttachments.Equal(that1.VnetAttachments) {
+		return false
+	}
+	return true
+}
+func (this *AWSCloudTransitGatewayType) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*AWSCloudTransitGatewayType)
+	if !ok {
+		that2, ok := that.(AWSCloudTransitGatewayType)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.CloudTransitGateway.Equal(that1.CloudTransitGateway) {
+		return false
+	}
+	if !this.Cred.Equal(that1.Cred) {
+		return false
+	}
+	if !this.VpcAttachments.Equal(that1.VpcAttachments) {
+		return false
+	}
+	if len(this.Peers) != len(that1.Peers) {
+		return false
+	}
+	for i := range this.Peers {
+		if !this.Peers[i].Equal(that1.Peers[i]) {
+			return false
+		}
+	}
+	return true
+}
+func (this *CreateAWSCloudTransitGatewayType) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CreateAWSCloudTransitGatewayType)
+	if !ok {
+		that2, ok := that.(CreateAWSCloudTransitGatewayType)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.CloudTransitGateway.Equal(that1.CloudTransitGateway) {
+		return false
+	}
+	if !this.Cred.Equal(that1.Cred) {
+		return false
+	}
+	if !this.VpcAttachments.Equal(that1.VpcAttachments) {
+		return false
+	}
+	return true
+}
+func (this *ReplaceAWSCloudTransitGatewayType) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ReplaceAWSCloudTransitGatewayType)
+	if !ok {
+		that2, ok := that.(ReplaceAWSCloudTransitGatewayType)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.VpcAttachments.Equal(that1.VpcAttachments) {
 		return false
 	}
 	return true
@@ -5322,6 +5967,97 @@ func (this *CloudConnectStatusType_CloudConnectAzureSite) Equal(that interface{}
 		return false
 	}
 	if !this.CloudConnectAzureSite.Equal(that1.CloudConnectAzureSite) {
+		return false
+	}
+	return true
+}
+func (this *VerStatusType) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*VerStatusType)
+	if !ok {
+		that2, ok := that.(VerStatusType)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if len(this.CidrStatus) != len(that1.CidrStatus) {
+		return false
+	}
+	for i := range this.CidrStatus {
+		if !this.CidrStatus[i].Equal(that1.CidrStatus[i]) {
+			return false
+		}
+	}
+	return true
+}
+func (this *CIDRConflictStatusType) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CIDRConflictStatusType)
+	if !ok {
+		that2, ok := that.(CIDRConflictStatusType)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Cidr != that1.Cidr {
+		return false
+	}
+	if len(this.ConflictList) != len(that1.ConflictList) {
+		return false
+	}
+	for i := range this.ConflictList {
+		if !this.ConflictList[i].Equal(that1.ConflictList[i]) {
+			return false
+		}
+	}
+	return true
+}
+func (this *CIDRConflictListType) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CIDRConflictListType)
+	if !ok {
+		that2, ok := that.(CIDRConflictListType)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.SiteName != that1.SiteName {
+		return false
+	}
+	if this.CloudConnectName != that1.CloudConnectName {
+		return false
+	}
+	if this.OverlappingCidr != that1.OverlappingCidr {
 		return false
 	}
 	return true
@@ -5478,7 +6214,10 @@ func (this *AWSConnectAttachmentStatusType) Equal(that interface{}) bool {
 	if this.Protocol != that1.Protocol {
 		return false
 	}
-	if this.State != that1.State {
+	if this.ConnectDeploymentState != that1.ConnectDeploymentState {
+		return false
+	}
+	if this.DeploymentStatus != that1.DeploymentStatus {
 		return false
 	}
 	if this.TransportAttachmentId != that1.TransportAttachmentId {
@@ -5536,29 +6275,19 @@ func (this *AWSConnectPeerStatusType) Equal(that interface{}) bool {
 	if this.ConnectAttachmentId != that1.ConnectAttachmentId {
 		return false
 	}
-	if this.State != that1.State {
+	if this.ConnectPeerDeploymentState != that1.ConnectPeerDeploymentState {
 		return false
 	}
-	if this.TransitGatewayGreAddress != that1.TransitGatewayGreAddress {
+	if this.DeploymentStatus != that1.DeploymentStatus {
 		return false
 	}
-	if this.PeerGreAddress != that1.PeerGreAddress {
+	if len(this.Tags) != len(that1.Tags) {
 		return false
 	}
-	if this.BgpInsideCidrBlock != that1.BgpInsideCidrBlock {
-		return false
-	}
-	if this.PeerAsn != that1.PeerAsn {
-		return false
-	}
-	if this.PeerBgpAddress != that1.PeerBgpAddress {
-		return false
-	}
-	if this.TransitGatewayBgp_1Address != that1.TransitGatewayBgp_1Address {
-		return false
-	}
-	if this.TransitGatewayBgp_2Address != that1.TransitGatewayBgp_2Address {
-		return false
+	for i := range this.Tags {
+		if this.Tags[i] != that1.Tags[i] {
+			return false
+		}
 	}
 	return true
 }
@@ -5590,7 +6319,10 @@ func (this *AWSTGWRouteTableStatusType) Equal(that interface{}) bool {
 	if this.TransitGatewayId != that1.TransitGatewayId {
 		return false
 	}
-	if this.State != that1.State {
+	if this.TgwRtDeploymentState != that1.TgwRtDeploymentState {
+		return false
+	}
+	if this.DeploymentStatus != that1.DeploymentStatus {
 		return false
 	}
 	if len(this.Tags) != len(that1.Tags) {
@@ -5648,6 +6380,9 @@ func (this *AWSTGWResourceReference) Equal(that interface{}) bool {
 		return false
 	}
 	if this.State != that1.State {
+		return false
+	}
+	if this.DeploymentStatus != that1.DeploymentStatus {
 		return false
 	}
 	return true
@@ -5935,6 +6670,30 @@ func (this *GlobalSpecType_AzureVnetSite) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *GlobalSpecType_AwsCloudTransitGateway) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GlobalSpecType_AwsCloudTransitGateway)
+	if !ok {
+		that2, ok := that.(GlobalSpecType_AwsCloudTransitGateway)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.AwsCloudTransitGateway.Equal(that1.AwsCloudTransitGateway) {
+		return false
+	}
+	return true
+}
 func (this *GlobalSpecType_Bandwidth_500Mbs) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -6064,6 +6823,30 @@ func (this *CreateSpecType_AzureVnetSite) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *CreateSpecType_AwsCloudTransitGateway) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CreateSpecType_AwsCloudTransitGateway)
+	if !ok {
+		that2, ok := that.(CreateSpecType_AwsCloudTransitGateway)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.AwsCloudTransitGateway.Equal(that1.AwsCloudTransitGateway) {
+		return false
+	}
+	return true
+}
 func (this *ReplaceSpecType) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -6090,9 +6873,6 @@ func (this *ReplaceSpecType) Equal(that interface{}) bool {
 	} else if this.Cloud == nil {
 		return false
 	} else if !this.Cloud.Equal(that1.Cloud) {
-		return false
-	}
-	if !this.Segment.Equal(that1.Segment) {
 		return false
 	}
 	return true
@@ -6165,6 +6945,30 @@ func (this *ReplaceSpecType_AzureVnetSite) Equal(that interface{}) bool {
 		return false
 	}
 	if !this.AzureVnetSite.Equal(that1.AzureVnetSite) {
+		return false
+	}
+	return true
+}
+func (this *ReplaceSpecType_AwsCloudTransitGateway) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ReplaceSpecType_AwsCloudTransitGateway)
+	if !ok {
+		that2, ok := that.(ReplaceSpecType_AwsCloudTransitGateway)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.AwsCloudTransitGateway.Equal(that1.AwsCloudTransitGateway) {
 		return false
 	}
 	return true
@@ -6279,6 +7083,30 @@ func (this *GetSpecType_AzureVnetSite) Equal(that interface{}) bool {
 		return false
 	}
 	if !this.AzureVnetSite.Equal(that1.AzureVnetSite) {
+		return false
+	}
+	return true
+}
+func (this *GetSpecType_AwsCloudTransitGateway) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GetSpecType_AwsCloudTransitGateway)
+	if !ok {
+		that2, ok := that.(GetSpecType_AwsCloudTransitGateway)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.AwsCloudTransitGateway.Equal(that1.AwsCloudTransitGateway) {
 		return false
 	}
 	return true
@@ -6814,6 +7642,24 @@ func (this *ReplaceAWSTGWSiteType) GoString() string {
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
+func (this *CreateAWSTGWSiteType) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 7)
+	s = append(s, "&cloud_connect.CreateAWSTGWSiteType{")
+	if this.Site != nil {
+		s = append(s, "Site: "+fmt.Sprintf("%#v", this.Site)+",\n")
+	}
+	if this.Cred != nil {
+		s = append(s, "Cred: "+fmt.Sprintf("%#v", this.Cred)+",\n")
+	}
+	if this.VpcAttachments != nil {
+		s = append(s, "VpcAttachments: "+fmt.Sprintf("%#v", this.VpcAttachments)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
 func (this *AzureVNETSiteType) GoString() string {
 	if this == nil {
 		return "nil"
@@ -6840,6 +7686,57 @@ func (this *ReplaceAzureVNETSiteType) GoString() string {
 	s = append(s, "&cloud_connect.ReplaceAzureVNETSiteType{")
 	if this.VnetAttachments != nil {
 		s = append(s, "VnetAttachments: "+fmt.Sprintf("%#v", this.VnetAttachments)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *AWSCloudTransitGatewayType) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 8)
+	s = append(s, "&cloud_connect.AWSCloudTransitGatewayType{")
+	if this.CloudTransitGateway != nil {
+		s = append(s, "CloudTransitGateway: "+fmt.Sprintf("%#v", this.CloudTransitGateway)+",\n")
+	}
+	if this.Cred != nil {
+		s = append(s, "Cred: "+fmt.Sprintf("%#v", this.Cred)+",\n")
+	}
+	if this.VpcAttachments != nil {
+		s = append(s, "VpcAttachments: "+fmt.Sprintf("%#v", this.VpcAttachments)+",\n")
+	}
+	if this.Peers != nil {
+		s = append(s, "Peers: "+fmt.Sprintf("%#v", this.Peers)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *CreateAWSCloudTransitGatewayType) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 7)
+	s = append(s, "&cloud_connect.CreateAWSCloudTransitGatewayType{")
+	if this.CloudTransitGateway != nil {
+		s = append(s, "CloudTransitGateway: "+fmt.Sprintf("%#v", this.CloudTransitGateway)+",\n")
+	}
+	if this.Cred != nil {
+		s = append(s, "Cred: "+fmt.Sprintf("%#v", this.Cred)+",\n")
+	}
+	if this.VpcAttachments != nil {
+		s = append(s, "VpcAttachments: "+fmt.Sprintf("%#v", this.VpcAttachments)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *ReplaceAWSCloudTransitGatewayType) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 5)
+	s = append(s, "&cloud_connect.ReplaceAWSCloudTransitGatewayType{")
+	if this.VpcAttachments != nil {
+		s = append(s, "VpcAttachments: "+fmt.Sprintf("%#v", this.VpcAttachments)+",\n")
 	}
 	s = append(s, "}")
 	return strings.Join(s, "")
@@ -6871,6 +7768,43 @@ func (this *CloudConnectStatusType_CloudConnectAzureSite) GoString() string {
 	s := strings.Join([]string{`&cloud_connect.CloudConnectStatusType_CloudConnectAzureSite{` +
 		`CloudConnectAzureSite:` + fmt.Sprintf("%#v", this.CloudConnectAzureSite) + `}`}, ", ")
 	return s
+}
+func (this *VerStatusType) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 5)
+	s = append(s, "&cloud_connect.VerStatusType{")
+	if this.CidrStatus != nil {
+		s = append(s, "CidrStatus: "+fmt.Sprintf("%#v", this.CidrStatus)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *CIDRConflictStatusType) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 6)
+	s = append(s, "&cloud_connect.CIDRConflictStatusType{")
+	s = append(s, "Cidr: "+fmt.Sprintf("%#v", this.Cidr)+",\n")
+	if this.ConflictList != nil {
+		s = append(s, "ConflictList: "+fmt.Sprintf("%#v", this.ConflictList)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *CIDRConflictListType) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 7)
+	s = append(s, "&cloud_connect.CIDRConflictListType{")
+	s = append(s, "SiteName: "+fmt.Sprintf("%#v", this.SiteName)+",\n")
+	s = append(s, "CloudConnectName: "+fmt.Sprintf("%#v", this.CloudConnectName)+",\n")
+	s = append(s, "OverlappingCidr: "+fmt.Sprintf("%#v", this.OverlappingCidr)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
 }
 func (this *AWSAttachmentsListStatusType) GoString() string {
 	if this == nil {
@@ -6935,14 +7869,15 @@ func (this *AWSConnectAttachmentStatusType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 15)
+	s := make([]string, 0, 16)
 	s = append(s, "&cloud_connect.AWSConnectAttachmentStatusType{")
 	s = append(s, "TransitGatewayAttachmentId: "+fmt.Sprintf("%#v", this.TransitGatewayAttachmentId)+",\n")
 	s = append(s, "TransitGatewayAttachmentName: "+fmt.Sprintf("%#v", this.TransitGatewayAttachmentName)+",\n")
 	s = append(s, "TransitGatewayId: "+fmt.Sprintf("%#v", this.TransitGatewayId)+",\n")
 	s = append(s, "TransitGatewayAsn: "+fmt.Sprintf("%#v", this.TransitGatewayAsn)+",\n")
 	s = append(s, "Protocol: "+fmt.Sprintf("%#v", this.Protocol)+",\n")
-	s = append(s, "State: "+fmt.Sprintf("%#v", this.State)+",\n")
+	s = append(s, "ConnectDeploymentState: "+fmt.Sprintf("%#v", this.ConnectDeploymentState)+",\n")
+	s = append(s, "DeploymentStatus: "+fmt.Sprintf("%#v", this.DeploymentStatus)+",\n")
 	s = append(s, "TransportAttachmentId: "+fmt.Sprintf("%#v", this.TransportAttachmentId)+",\n")
 	s = append(s, "AssociationRouteTableId: "+fmt.Sprintf("%#v", this.AssociationRouteTableId)+",\n")
 	s = append(s, "AssociationState: "+fmt.Sprintf("%#v", this.AssociationState)+",\n")
@@ -6969,19 +7904,26 @@ func (this *AWSConnectPeerStatusType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 15)
+	s := make([]string, 0, 10)
 	s = append(s, "&cloud_connect.AWSConnectPeerStatusType{")
 	s = append(s, "Name: "+fmt.Sprintf("%#v", this.Name)+",\n")
 	s = append(s, "ConnectPeerId: "+fmt.Sprintf("%#v", this.ConnectPeerId)+",\n")
 	s = append(s, "ConnectAttachmentId: "+fmt.Sprintf("%#v", this.ConnectAttachmentId)+",\n")
-	s = append(s, "State: "+fmt.Sprintf("%#v", this.State)+",\n")
-	s = append(s, "TransitGatewayGreAddress: "+fmt.Sprintf("%#v", this.TransitGatewayGreAddress)+",\n")
-	s = append(s, "PeerGreAddress: "+fmt.Sprintf("%#v", this.PeerGreAddress)+",\n")
-	s = append(s, "BgpInsideCidrBlock: "+fmt.Sprintf("%#v", this.BgpInsideCidrBlock)+",\n")
-	s = append(s, "PeerAsn: "+fmt.Sprintf("%#v", this.PeerAsn)+",\n")
-	s = append(s, "PeerBgpAddress: "+fmt.Sprintf("%#v", this.PeerBgpAddress)+",\n")
-	s = append(s, "TransitGatewayBgp_1Address: "+fmt.Sprintf("%#v", this.TransitGatewayBgp_1Address)+",\n")
-	s = append(s, "TransitGatewayBgp_2Address: "+fmt.Sprintf("%#v", this.TransitGatewayBgp_2Address)+",\n")
+	s = append(s, "ConnectPeerDeploymentState: "+fmt.Sprintf("%#v", this.ConnectPeerDeploymentState)+",\n")
+	s = append(s, "DeploymentStatus: "+fmt.Sprintf("%#v", this.DeploymentStatus)+",\n")
+	keysForTags := make([]string, 0, len(this.Tags))
+	for k, _ := range this.Tags {
+		keysForTags = append(keysForTags, k)
+	}
+	github_com_gogo_protobuf_sortkeys.Strings(keysForTags)
+	mapStringForTags := "map[string]string{"
+	for _, k := range keysForTags {
+		mapStringForTags += fmt.Sprintf("%#v: %#v,", k, this.Tags[k])
+	}
+	mapStringForTags += "}"
+	if this.Tags != nil {
+		s = append(s, "Tags: "+mapStringForTags+",\n")
+	}
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
@@ -6989,12 +7931,13 @@ func (this *AWSTGWRouteTableStatusType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 11)
+	s := make([]string, 0, 12)
 	s = append(s, "&cloud_connect.AWSTGWRouteTableStatusType{")
 	s = append(s, "TransitGatewayRouteTableId: "+fmt.Sprintf("%#v", this.TransitGatewayRouteTableId)+",\n")
 	s = append(s, "TransitGatewayRouteTableName: "+fmt.Sprintf("%#v", this.TransitGatewayRouteTableName)+",\n")
 	s = append(s, "TransitGatewayId: "+fmt.Sprintf("%#v", this.TransitGatewayId)+",\n")
-	s = append(s, "State: "+fmt.Sprintf("%#v", this.State)+",\n")
+	s = append(s, "TgwRtDeploymentState: "+fmt.Sprintf("%#v", this.TgwRtDeploymentState)+",\n")
+	s = append(s, "DeploymentStatus: "+fmt.Sprintf("%#v", this.DeploymentStatus)+",\n")
 	keysForTags := make([]string, 0, len(this.Tags))
 	for k, _ := range this.Tags {
 		keysForTags = append(keysForTags, k)
@@ -7021,12 +7964,13 @@ func (this *AWSTGWResourceReference) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 8)
+	s := make([]string, 0, 9)
 	s = append(s, "&cloud_connect.AWSTGWResourceReference{")
 	s = append(s, "AttachmentId: "+fmt.Sprintf("%#v", this.AttachmentId)+",\n")
 	s = append(s, "ResourceType: "+fmt.Sprintf("%#v", this.ResourceType)+",\n")
 	s = append(s, "ResourceId: "+fmt.Sprintf("%#v", this.ResourceId)+",\n")
 	s = append(s, "State: "+fmt.Sprintf("%#v", this.State)+",\n")
+	s = append(s, "DeploymentStatus: "+fmt.Sprintf("%#v", this.DeploymentStatus)+",\n")
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
@@ -7100,7 +8044,7 @@ func (this *GlobalSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 15)
+	s := make([]string, 0, 16)
 	s = append(s, "&cloud_connect.GlobalSpecType{")
 	if this.Cloud != nil {
 		s = append(s, "Cloud: "+fmt.Sprintf("%#v", this.Cloud)+",\n")
@@ -7152,6 +8096,14 @@ func (this *GlobalSpecType_AzureVnetSite) GoString() string {
 		`AzureVnetSite:` + fmt.Sprintf("%#v", this.AzureVnetSite) + `}`}, ", ")
 	return s
 }
+func (this *GlobalSpecType_AwsCloudTransitGateway) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&cloud_connect.GlobalSpecType_AwsCloudTransitGateway{` +
+		`AwsCloudTransitGateway:` + fmt.Sprintf("%#v", this.AwsCloudTransitGateway) + `}`}, ", ")
+	return s
+}
 func (this *GlobalSpecType_Bandwidth_500Mbs) GoString() string {
 	if this == nil {
 		return "nil"
@@ -7164,7 +8116,7 @@ func (this *CreateSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 8)
+	s := make([]string, 0, 9)
 	s = append(s, "&cloud_connect.CreateSpecType{")
 	if this.Cloud != nil {
 		s = append(s, "Cloud: "+fmt.Sprintf("%#v", this.Cloud)+",\n")
@@ -7199,6 +8151,14 @@ func (this *CreateSpecType_AzureVnetSite) GoString() string {
 		`AzureVnetSite:` + fmt.Sprintf("%#v", this.AzureVnetSite) + `}`}, ", ")
 	return s
 }
+func (this *CreateSpecType_AwsCloudTransitGateway) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&cloud_connect.CreateSpecType_AwsCloudTransitGateway{` +
+		`AwsCloudTransitGateway:` + fmt.Sprintf("%#v", this.AwsCloudTransitGateway) + `}`}, ", ")
+	return s
+}
 func (this *ReplaceSpecType) GoString() string {
 	if this == nil {
 		return "nil"
@@ -7207,9 +8167,6 @@ func (this *ReplaceSpecType) GoString() string {
 	s = append(s, "&cloud_connect.ReplaceSpecType{")
 	if this.Cloud != nil {
 		s = append(s, "Cloud: "+fmt.Sprintf("%#v", this.Cloud)+",\n")
-	}
-	if this.Segment != nil {
-		s = append(s, "Segment: "+fmt.Sprintf("%#v", this.Segment)+",\n")
 	}
 	s = append(s, "}")
 	return strings.Join(s, "")
@@ -7238,11 +8195,19 @@ func (this *ReplaceSpecType_AzureVnetSite) GoString() string {
 		`AzureVnetSite:` + fmt.Sprintf("%#v", this.AzureVnetSite) + `}`}, ", ")
 	return s
 }
+func (this *ReplaceSpecType_AwsCloudTransitGateway) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&cloud_connect.ReplaceSpecType_AwsCloudTransitGateway{` +
+		`AwsCloudTransitGateway:` + fmt.Sprintf("%#v", this.AwsCloudTransitGateway) + `}`}, ", ")
+	return s
+}
 func (this *GetSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 11)
+	s := make([]string, 0, 12)
 	s = append(s, "&cloud_connect.GetSpecType{")
 	if this.Cloud != nil {
 		s = append(s, "Cloud: "+fmt.Sprintf("%#v", this.Cloud)+",\n")
@@ -7280,6 +8245,14 @@ func (this *GetSpecType_AzureVnetSite) GoString() string {
 	}
 	s := strings.Join([]string{`&cloud_connect.GetSpecType_AzureVnetSite{` +
 		`AzureVnetSite:` + fmt.Sprintf("%#v", this.AzureVnetSite) + `}`}, ", ")
+	return s
+}
+func (this *GetSpecType_AwsCloudTransitGateway) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&cloud_connect.GetSpecType_AwsCloudTransitGateway{` +
+		`AwsCloudTransitGateway:` + fmt.Sprintf("%#v", this.AwsCloudTransitGateway) + `}`}, ", ")
 	return s
 }
 func (this *LabelFilter) GoString() string {
@@ -8414,6 +9387,65 @@ func (m *ReplaceAWSTGWSiteType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
+func (m *CreateAWSTGWSiteType) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *CreateAWSTGWSiteType) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateAWSTGWSiteType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.VpcAttachments != nil {
+		{
+			size, err := m.VpcAttachments.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1a
+	}
+	if m.Cred != nil {
+		{
+			size, err := m.Cred.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x12
+	}
+	if m.Site != nil {
+		{
+			size, err := m.Site.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
 func (m *AzureVNETSiteType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -8508,6 +9540,173 @@ func (m *ReplaceAzureVNETSiteType) MarshalToSizedBuffer(dAtA []byte) (int, error
 	return len(dAtA) - i, nil
 }
 
+func (m *AWSCloudTransitGatewayType) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *AWSCloudTransitGatewayType) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *AWSCloudTransitGatewayType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Peers) > 0 {
+		for iNdEx := len(m.Peers) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Peers[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x2a
+		}
+	}
+	if m.VpcAttachments != nil {
+		{
+			size, err := m.VpcAttachments.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1a
+	}
+	if m.Cred != nil {
+		{
+			size, err := m.Cred.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x12
+	}
+	if m.CloudTransitGateway != nil {
+		{
+			size, err := m.CloudTransitGateway.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *CreateAWSCloudTransitGatewayType) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *CreateAWSCloudTransitGatewayType) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateAWSCloudTransitGatewayType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.VpcAttachments != nil {
+		{
+			size, err := m.VpcAttachments.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1a
+	}
+	if m.Cred != nil {
+		{
+			size, err := m.Cred.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x12
+	}
+	if m.CloudTransitGateway != nil {
+		{
+			size, err := m.CloudTransitGateway.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *ReplaceAWSCloudTransitGatewayType) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *ReplaceAWSCloudTransitGatewayType) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceAWSCloudTransitGatewayType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.VpcAttachments != nil {
+		{
+			size, err := m.VpcAttachments.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1a
+	}
+	return len(dAtA) - i, nil
+}
+
 func (m *CloudConnectStatusType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -8582,6 +9781,131 @@ func (m *CloudConnectStatusType_CloudConnectAzureSite) MarshalToSizedBuffer(dAtA
 	}
 	return len(dAtA) - i, nil
 }
+func (m *VerStatusType) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *VerStatusType) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *VerStatusType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.CidrStatus) > 0 {
+		for iNdEx := len(m.CidrStatus) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.CidrStatus[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0xa
+		}
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *CIDRConflictStatusType) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *CIDRConflictStatusType) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CIDRConflictStatusType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.ConflictList) > 0 {
+		for iNdEx := len(m.ConflictList) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.ConflictList[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x12
+		}
+	}
+	if len(m.Cidr) > 0 {
+		i -= len(m.Cidr)
+		copy(dAtA[i:], m.Cidr)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.Cidr)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *CIDRConflictListType) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *CIDRConflictListType) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CIDRConflictListType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.OverlappingCidr) > 0 {
+		i -= len(m.OverlappingCidr)
+		copy(dAtA[i:], m.OverlappingCidr)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.OverlappingCidr)))
+		i--
+		dAtA[i] = 0x1a
+	}
+	if len(m.CloudConnectName) > 0 {
+		i -= len(m.CloudConnectName)
+		copy(dAtA[i:], m.CloudConnectName)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.CloudConnectName)))
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.SiteName) > 0 {
+		i -= len(m.SiteName)
+		copy(dAtA[i:], m.SiteName)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.SiteName)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
 func (m *AWSAttachmentsListStatusType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -8822,6 +10146,18 @@ func (m *AWSConnectAttachmentStatusType) MarshalToSizedBuffer(dAtA []byte) (int,
 	_ = i
 	var l int
 	_ = l
+	if len(m.DeploymentStatus) > 0 {
+		i -= len(m.DeploymentStatus)
+		copy(dAtA[i:], m.DeploymentStatus)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.DeploymentStatus)))
+		i--
+		dAtA[i] = 0x6a
+	}
+	if m.ConnectDeploymentState != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.ConnectDeploymentState))
+		i--
+		dAtA[i] = 0x60
+	}
 	if len(m.TransitGatewayAttachmentName) > 0 {
 		i -= len(m.TransitGatewayAttachmentName)
 		copy(dAtA[i:], m.TransitGatewayAttachmentName)
@@ -8888,13 +10224,6 @@ func (m *AWSConnectAttachmentStatusType) MarshalToSizedBuffer(dAtA []byte) (int,
 		i--
 		dAtA[i] = 0x32
 	}
-	if len(m.State) > 0 {
-		i -= len(m.State)
-		copy(dAtA[i:], m.State)
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.State)))
-		i--
-		dAtA[i] = 0x2a
-	}
 	if len(m.Protocol) > 0 {
 		i -= len(m.Protocol)
 		copy(dAtA[i:], m.Protocol)
@@ -8946,61 +10275,41 @@ func (m *AWSConnectPeerStatusType) MarshalToSizedBuffer(dAtA []byte) (int, error
 	_ = i
 	var l int
 	_ = l
-	if len(m.TransitGatewayBgp_2Address) > 0 {
-		i -= len(m.TransitGatewayBgp_2Address)
-		copy(dAtA[i:], m.TransitGatewayBgp_2Address)
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.TransitGatewayBgp_2Address)))
-		i--
-		dAtA[i] = 0x5a
+	if len(m.Tags) > 0 {
+		keysForTags := make([]string, 0, len(m.Tags))
+		for k := range m.Tags {
+			keysForTags = append(keysForTags, string(k))
+		}
+		github_com_gogo_protobuf_sortkeys.Strings(keysForTags)
+		for iNdEx := len(keysForTags) - 1; iNdEx >= 0; iNdEx-- {
+			v := m.Tags[string(keysForTags[iNdEx])]
+			baseI := i
+			i -= len(v)
+			copy(dAtA[i:], v)
+			i = encodeVarintTypes(dAtA, i, uint64(len(v)))
+			i--
+			dAtA[i] = 0x12
+			i -= len(keysForTags[iNdEx])
+			copy(dAtA[i:], keysForTags[iNdEx])
+			i = encodeVarintTypes(dAtA, i, uint64(len(keysForTags[iNdEx])))
+			i--
+			dAtA[i] = 0xa
+			i = encodeVarintTypes(dAtA, i, uint64(baseI-i))
+			i--
+			dAtA[i] = 0x7a
+		}
 	}
-	if len(m.TransitGatewayBgp_1Address) > 0 {
-		i -= len(m.TransitGatewayBgp_1Address)
-		copy(dAtA[i:], m.TransitGatewayBgp_1Address)
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.TransitGatewayBgp_1Address)))
+	if len(m.DeploymentStatus) > 0 {
+		i -= len(m.DeploymentStatus)
+		copy(dAtA[i:], m.DeploymentStatus)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.DeploymentStatus)))
 		i--
-		dAtA[i] = 0x52
+		dAtA[i] = 0x72
 	}
-	if len(m.PeerBgpAddress) > 0 {
-		i -= len(m.PeerBgpAddress)
-		copy(dAtA[i:], m.PeerBgpAddress)
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.PeerBgpAddress)))
+	if m.ConnectPeerDeploymentState != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.ConnectPeerDeploymentState))
 		i--
-		dAtA[i] = 0x4a
-	}
-	if len(m.PeerAsn) > 0 {
-		i -= len(m.PeerAsn)
-		copy(dAtA[i:], m.PeerAsn)
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.PeerAsn)))
-		i--
-		dAtA[i] = 0x42
-	}
-	if len(m.BgpInsideCidrBlock) > 0 {
-		i -= len(m.BgpInsideCidrBlock)
-		copy(dAtA[i:], m.BgpInsideCidrBlock)
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.BgpInsideCidrBlock)))
-		i--
-		dAtA[i] = 0x3a
-	}
-	if len(m.PeerGreAddress) > 0 {
-		i -= len(m.PeerGreAddress)
-		copy(dAtA[i:], m.PeerGreAddress)
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.PeerGreAddress)))
-		i--
-		dAtA[i] = 0x32
-	}
-	if len(m.TransitGatewayGreAddress) > 0 {
-		i -= len(m.TransitGatewayGreAddress)
-		copy(dAtA[i:], m.TransitGatewayGreAddress)
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.TransitGatewayGreAddress)))
-		i--
-		dAtA[i] = 0x2a
-	}
-	if len(m.State) > 0 {
-		i -= len(m.State)
-		copy(dAtA[i:], m.State)
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.State)))
-		i--
-		dAtA[i] = 0x22
+		dAtA[i] = 0x68
 	}
 	if len(m.ConnectAttachmentId) > 0 {
 		i -= len(m.ConnectAttachmentId)
@@ -9046,6 +10355,18 @@ func (m *AWSTGWRouteTableStatusType) MarshalToSizedBuffer(dAtA []byte) (int, err
 	_ = i
 	var l int
 	_ = l
+	if len(m.DeploymentStatus) > 0 {
+		i -= len(m.DeploymentStatus)
+		copy(dAtA[i:], m.DeploymentStatus)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.DeploymentStatus)))
+		i--
+		dAtA[i] = 0x4a
+	}
+	if m.TgwRtDeploymentState != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.TgwRtDeploymentState))
+		i--
+		dAtA[i] = 0x40
+	}
 	if len(m.TransitGatewayRouteTableName) > 0 {
 		i -= len(m.TransitGatewayRouteTableName)
 		copy(dAtA[i:], m.TransitGatewayRouteTableName)
@@ -9105,13 +10426,6 @@ func (m *AWSTGWRouteTableStatusType) MarshalToSizedBuffer(dAtA []byte) (int, err
 			dAtA[i] = 0x22
 		}
 	}
-	if len(m.State) > 0 {
-		i -= len(m.State)
-		copy(dAtA[i:], m.State)
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.State)))
-		i--
-		dAtA[i] = 0x1a
-	}
 	if len(m.TransitGatewayId) > 0 {
 		i -= len(m.TransitGatewayId)
 		copy(dAtA[i:], m.TransitGatewayId)
@@ -9149,12 +10463,17 @@ func (m *AWSTGWResourceReference) MarshalToSizedBuffer(dAtA []byte) (int, error)
 	_ = i
 	var l int
 	_ = l
-	if len(m.State) > 0 {
-		i -= len(m.State)
-		copy(dAtA[i:], m.State)
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.State)))
+	if len(m.DeploymentStatus) > 0 {
+		i -= len(m.DeploymentStatus)
+		copy(dAtA[i:], m.DeploymentStatus)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.DeploymentStatus)))
 		i--
-		dAtA[i] = 0x22
+		dAtA[i] = 0x32
+	}
+	if m.State != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.State))
+		i--
+		dAtA[i] = 0x28
 	}
 	if len(m.ResourceId) > 0 {
 		i -= len(m.ResourceId)
@@ -9641,6 +10960,29 @@ func (m *GlobalSpecType_AzureVnetSite) MarshalToSizedBuffer(dAtA []byte) (int, e
 	}
 	return len(dAtA) - i, nil
 }
+func (m *GlobalSpecType_AwsCloudTransitGateway) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_AwsCloudTransitGateway) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.AwsCloudTransitGateway != nil {
+		{
+			size, err := m.AwsCloudTransitGateway.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xaa
+	}
+	return len(dAtA) - i, nil
+}
 func (m *CreateSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -9750,6 +11092,29 @@ func (m *CreateSpecType_AzureVnetSite) MarshalToSizedBuffer(dAtA []byte) (int, e
 	}
 	return len(dAtA) - i, nil
 }
+func (m *CreateSpecType_AwsCloudTransitGateway) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_AwsCloudTransitGateway) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.AwsCloudTransitGateway != nil {
+		{
+			size, err := m.AwsCloudTransitGateway.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xaa
+	}
+	return len(dAtA) - i, nil
+}
 func (m *ReplaceSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -9778,18 +11143,6 @@ func (m *ReplaceSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 				return 0, err
 			}
 		}
-	}
-	if m.Segment != nil {
-		{
-			size, err := m.Segment.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x6a
 	}
 	return len(dAtA) - i, nil
 }
@@ -9856,6 +11209,29 @@ func (m *ReplaceSpecType_AzureVnetSite) MarshalToSizedBuffer(dAtA []byte) (int, 
 		dAtA[i] = 0x1
 		i--
 		dAtA[i] = 0x9a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *ReplaceSpecType_AwsCloudTransitGateway) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_AwsCloudTransitGateway) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.AwsCloudTransitGateway != nil {
+		{
+			size, err := m.AwsCloudTransitGateway.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xaa
 	}
 	return len(dAtA) - i, nil
 }
@@ -9991,6 +11367,29 @@ func (m *GetSpecType_AzureVnetSite) MarshalToSizedBuffer(dAtA []byte) (int, erro
 		dAtA[i] = 0x1
 		i--
 		dAtA[i] = 0x9a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *GetSpecType_AwsCloudTransitGateway) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_AwsCloudTransitGateway) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.AwsCloudTransitGateway != nil {
+		{
+			size, err := m.AwsCloudTransitGateway.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xaa
 	}
 	return len(dAtA) - i, nil
 }
@@ -10732,6 +12131,27 @@ func (m *ReplaceAWSTGWSiteType) Size() (n int) {
 	return n
 }
 
+func (m *CreateAWSTGWSiteType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Site != nil {
+		l = m.Site.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.Cred != nil {
+		l = m.Cred.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.VpcAttachments != nil {
+		l = m.VpcAttachments.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+
 func (m *AzureVNETSiteType) Size() (n int) {
 	if m == nil {
 		return 0
@@ -10761,6 +12181,67 @@ func (m *ReplaceAzureVNETSiteType) Size() (n int) {
 	_ = l
 	if m.VnetAttachments != nil {
 		l = m.VnetAttachments.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+
+func (m *AWSCloudTransitGatewayType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.CloudTransitGateway != nil {
+		l = m.CloudTransitGateway.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.Cred != nil {
+		l = m.Cred.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.VpcAttachments != nil {
+		l = m.VpcAttachments.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if len(m.Peers) > 0 {
+		for _, e := range m.Peers {
+			l = e.Size()
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	return n
+}
+
+func (m *CreateAWSCloudTransitGatewayType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.CloudTransitGateway != nil {
+		l = m.CloudTransitGateway.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.Cred != nil {
+		l = m.Cred.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.VpcAttachments != nil {
+		l = m.VpcAttachments.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+
+func (m *ReplaceAWSCloudTransitGatewayType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.VpcAttachments != nil {
+		l = m.VpcAttachments.Size()
 		n += 1 + l + sovTypes(uint64(l))
 	}
 	return n
@@ -10802,6 +12283,61 @@ func (m *CloudConnectStatusType_CloudConnectAzureSite) Size() (n int) {
 	}
 	return n
 }
+func (m *VerStatusType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if len(m.CidrStatus) > 0 {
+		for _, e := range m.CidrStatus {
+			l = e.Size()
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	return n
+}
+
+func (m *CIDRConflictStatusType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Cidr)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if len(m.ConflictList) > 0 {
+		for _, e := range m.ConflictList {
+			l = e.Size()
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	return n
+}
+
+func (m *CIDRConflictListType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.SiteName)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	l = len(m.CloudConnectName)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	l = len(m.OverlappingCidr)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+
 func (m *AWSAttachmentsListStatusType) Size() (n int) {
 	if m == nil {
 		return 0
@@ -10921,10 +12457,6 @@ func (m *AWSConnectAttachmentStatusType) Size() (n int) {
 	if l > 0 {
 		n += 1 + l + sovTypes(uint64(l))
 	}
-	l = len(m.State)
-	if l > 0 {
-		n += 1 + l + sovTypes(uint64(l))
-	}
 	l = len(m.TransportAttachmentId)
 	if l > 0 {
 		n += 1 + l + sovTypes(uint64(l))
@@ -10955,6 +12487,13 @@ func (m *AWSConnectAttachmentStatusType) Size() (n int) {
 	if l > 0 {
 		n += 1 + l + sovTypes(uint64(l))
 	}
+	if m.ConnectDeploymentState != 0 {
+		n += 1 + sovTypes(uint64(m.ConnectDeploymentState))
+	}
+	l = len(m.DeploymentStatus)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
 	return n
 }
 
@@ -10976,37 +12515,20 @@ func (m *AWSConnectPeerStatusType) Size() (n int) {
 	if l > 0 {
 		n += 1 + l + sovTypes(uint64(l))
 	}
-	l = len(m.State)
+	if m.ConnectPeerDeploymentState != 0 {
+		n += 1 + sovTypes(uint64(m.ConnectPeerDeploymentState))
+	}
+	l = len(m.DeploymentStatus)
 	if l > 0 {
 		n += 1 + l + sovTypes(uint64(l))
 	}
-	l = len(m.TransitGatewayGreAddress)
-	if l > 0 {
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	l = len(m.PeerGreAddress)
-	if l > 0 {
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	l = len(m.BgpInsideCidrBlock)
-	if l > 0 {
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	l = len(m.PeerAsn)
-	if l > 0 {
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	l = len(m.PeerBgpAddress)
-	if l > 0 {
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	l = len(m.TransitGatewayBgp_1Address)
-	if l > 0 {
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	l = len(m.TransitGatewayBgp_2Address)
-	if l > 0 {
-		n += 1 + l + sovTypes(uint64(l))
+	if len(m.Tags) > 0 {
+		for k, v := range m.Tags {
+			_ = k
+			_ = v
+			mapEntrySize := 1 + len(k) + sovTypes(uint64(len(k))) + 1 + len(v) + sovTypes(uint64(len(v)))
+			n += mapEntrySize + 1 + sovTypes(uint64(mapEntrySize))
+		}
 	}
 	return n
 }
@@ -11022,10 +12544,6 @@ func (m *AWSTGWRouteTableStatusType) Size() (n int) {
 		n += 1 + l + sovTypes(uint64(l))
 	}
 	l = len(m.TransitGatewayId)
-	if l > 0 {
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	l = len(m.State)
 	if l > 0 {
 		n += 1 + l + sovTypes(uint64(l))
 	}
@@ -11053,6 +12571,13 @@ func (m *AWSTGWRouteTableStatusType) Size() (n int) {
 	if l > 0 {
 		n += 1 + l + sovTypes(uint64(l))
 	}
+	if m.TgwRtDeploymentState != 0 {
+		n += 1 + sovTypes(uint64(m.TgwRtDeploymentState))
+	}
+	l = len(m.DeploymentStatus)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
 	return n
 }
 
@@ -11074,7 +12599,10 @@ func (m *AWSTGWResourceReference) Size() (n int) {
 	if l > 0 {
 		n += 1 + l + sovTypes(uint64(l))
 	}
-	l = len(m.State)
+	if m.State != 0 {
+		n += 1 + sovTypes(uint64(m.State))
+	}
+	l = len(m.DeploymentStatus)
 	if l > 0 {
 		n += 1 + l + sovTypes(uint64(l))
 	}
@@ -11293,6 +12821,18 @@ func (m *GlobalSpecType_AzureVnetSite) Size() (n int) {
 	}
 	return n
 }
+func (m *GlobalSpecType_AwsCloudTransitGateway) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.AwsCloudTransitGateway != nil {
+		l = m.AwsCloudTransitGateway.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
 func (m *CreateSpecType) Size() (n int) {
 	if m == nil {
 		return 0
@@ -11345,6 +12885,18 @@ func (m *CreateSpecType_AzureVnetSite) Size() (n int) {
 	}
 	return n
 }
+func (m *CreateSpecType_AwsCloudTransitGateway) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.AwsCloudTransitGateway != nil {
+		l = m.AwsCloudTransitGateway.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
 func (m *ReplaceSpecType) Size() (n int) {
 	if m == nil {
 		return 0
@@ -11353,10 +12905,6 @@ func (m *ReplaceSpecType) Size() (n int) {
 	_ = l
 	if m.Cloud != nil {
 		n += m.Cloud.Size()
-	}
-	if m.Segment != nil {
-		l = m.Segment.Size()
-		n += 1 + l + sovTypes(uint64(l))
 	}
 	return n
 }
@@ -11393,6 +12941,18 @@ func (m *ReplaceSpecType_AzureVnetSite) Size() (n int) {
 	_ = l
 	if m.AzureVnetSite != nil {
 		l = m.AzureVnetSite.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *ReplaceSpecType_AwsCloudTransitGateway) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.AwsCloudTransitGateway != nil {
+		l = m.AwsCloudTransitGateway.Size()
 		n += 2 + l + sovTypes(uint64(l))
 	}
 	return n
@@ -11455,6 +13015,18 @@ func (m *GetSpecType_AzureVnetSite) Size() (n int) {
 	_ = l
 	if m.AzureVnetSite != nil {
 		l = m.AzureVnetSite.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *GetSpecType_AwsCloudTransitGateway) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.AwsCloudTransitGateway != nil {
+		l = m.AwsCloudTransitGateway.Size()
 		n += 2 + l + sovTypes(uint64(l))
 	}
 	return n
@@ -11930,6 +13502,18 @@ func (this *ReplaceAWSTGWSiteType) String() string {
 	}, "")
 	return s
 }
+func (this *CreateAWSTGWSiteType) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CreateAWSTGWSiteType{`,
+		`Site:` + strings.Replace(fmt.Sprintf("%v", this.Site), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
+		`Cred:` + strings.Replace(fmt.Sprintf("%v", this.Cred), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
+		`VpcAttachments:` + strings.Replace(this.VpcAttachments.String(), "AWSVPCAttachmentListType", "AWSVPCAttachmentListType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *AzureVNETSiteType) String() string {
 	if this == nil {
 		return "nil"
@@ -11948,6 +13532,46 @@ func (this *ReplaceAzureVNETSiteType) String() string {
 	}
 	s := strings.Join([]string{`&ReplaceAzureVNETSiteType{`,
 		`VnetAttachments:` + strings.Replace(this.VnetAttachments.String(), "AzureVnetAttachmentListType", "AzureVnetAttachmentListType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *AWSCloudTransitGatewayType) String() string {
+	if this == nil {
+		return "nil"
+	}
+	repeatedStringForPeers := "[]*PeerType{"
+	for _, f := range this.Peers {
+		repeatedStringForPeers += strings.Replace(f.String(), "PeerType", "PeerType", 1) + ","
+	}
+	repeatedStringForPeers += "}"
+	s := strings.Join([]string{`&AWSCloudTransitGatewayType{`,
+		`CloudTransitGateway:` + strings.Replace(fmt.Sprintf("%v", this.CloudTransitGateway), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
+		`Cred:` + strings.Replace(fmt.Sprintf("%v", this.Cred), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
+		`VpcAttachments:` + strings.Replace(this.VpcAttachments.String(), "AWSVPCAttachmentListType", "AWSVPCAttachmentListType", 1) + `,`,
+		`Peers:` + repeatedStringForPeers + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CreateAWSCloudTransitGatewayType) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CreateAWSCloudTransitGatewayType{`,
+		`CloudTransitGateway:` + strings.Replace(fmt.Sprintf("%v", this.CloudTransitGateway), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
+		`Cred:` + strings.Replace(fmt.Sprintf("%v", this.Cred), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
+		`VpcAttachments:` + strings.Replace(this.VpcAttachments.String(), "AWSVPCAttachmentListType", "AWSVPCAttachmentListType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ReplaceAWSCloudTransitGatewayType) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ReplaceAWSCloudTransitGatewayType{`,
+		`VpcAttachments:` + strings.Replace(this.VpcAttachments.String(), "AWSVPCAttachmentListType", "AWSVPCAttachmentListType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -11978,6 +13602,49 @@ func (this *CloudConnectStatusType_CloudConnectAzureSite) String() string {
 	}
 	s := strings.Join([]string{`&CloudConnectStatusType_CloudConnectAzureSite{`,
 		`CloudConnectAzureSite:` + strings.Replace(fmt.Sprintf("%v", this.CloudConnectAzureSite), "AzureAttachmentsListStatusType", "AzureAttachmentsListStatusType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *VerStatusType) String() string {
+	if this == nil {
+		return "nil"
+	}
+	repeatedStringForCidrStatus := "[]*CIDRConflictStatusType{"
+	for _, f := range this.CidrStatus {
+		repeatedStringForCidrStatus += strings.Replace(f.String(), "CIDRConflictStatusType", "CIDRConflictStatusType", 1) + ","
+	}
+	repeatedStringForCidrStatus += "}"
+	s := strings.Join([]string{`&VerStatusType{`,
+		`CidrStatus:` + repeatedStringForCidrStatus + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CIDRConflictStatusType) String() string {
+	if this == nil {
+		return "nil"
+	}
+	repeatedStringForConflictList := "[]*CIDRConflictListType{"
+	for _, f := range this.ConflictList {
+		repeatedStringForConflictList += strings.Replace(f.String(), "CIDRConflictListType", "CIDRConflictListType", 1) + ","
+	}
+	repeatedStringForConflictList += "}"
+	s := strings.Join([]string{`&CIDRConflictStatusType{`,
+		`Cidr:` + fmt.Sprintf("%v", this.Cidr) + `,`,
+		`ConflictList:` + repeatedStringForConflictList + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CIDRConflictListType) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CIDRConflictListType{`,
+		`SiteName:` + fmt.Sprintf("%v", this.SiteName) + `,`,
+		`CloudConnectName:` + fmt.Sprintf("%v", this.CloudConnectName) + `,`,
+		`OverlappingCidr:` + fmt.Sprintf("%v", this.OverlappingCidr) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -12071,13 +13738,14 @@ func (this *AWSConnectAttachmentStatusType) String() string {
 		`TransitGatewayId:` + fmt.Sprintf("%v", this.TransitGatewayId) + `,`,
 		`TransitGatewayAsn:` + fmt.Sprintf("%v", this.TransitGatewayAsn) + `,`,
 		`Protocol:` + fmt.Sprintf("%v", this.Protocol) + `,`,
-		`State:` + fmt.Sprintf("%v", this.State) + `,`,
 		`TransportAttachmentId:` + fmt.Sprintf("%v", this.TransportAttachmentId) + `,`,
 		`AssociationRouteTableId:` + fmt.Sprintf("%v", this.AssociationRouteTableId) + `,`,
 		`AssociationState:` + fmt.Sprintf("%v", this.AssociationState) + `,`,
 		`Tags:` + mapStringForTags + `,`,
 		`Peers:` + repeatedStringForPeers + `,`,
 		`TransitGatewayAttachmentName:` + fmt.Sprintf("%v", this.TransitGatewayAttachmentName) + `,`,
+		`ConnectDeploymentState:` + fmt.Sprintf("%v", this.ConnectDeploymentState) + `,`,
+		`DeploymentStatus:` + fmt.Sprintf("%v", this.DeploymentStatus) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -12086,18 +13754,23 @@ func (this *AWSConnectPeerStatusType) String() string {
 	if this == nil {
 		return "nil"
 	}
+	keysForTags := make([]string, 0, len(this.Tags))
+	for k, _ := range this.Tags {
+		keysForTags = append(keysForTags, k)
+	}
+	github_com_gogo_protobuf_sortkeys.Strings(keysForTags)
+	mapStringForTags := "map[string]string{"
+	for _, k := range keysForTags {
+		mapStringForTags += fmt.Sprintf("%v: %v,", k, this.Tags[k])
+	}
+	mapStringForTags += "}"
 	s := strings.Join([]string{`&AWSConnectPeerStatusType{`,
 		`Name:` + fmt.Sprintf("%v", this.Name) + `,`,
 		`ConnectPeerId:` + fmt.Sprintf("%v", this.ConnectPeerId) + `,`,
 		`ConnectAttachmentId:` + fmt.Sprintf("%v", this.ConnectAttachmentId) + `,`,
-		`State:` + fmt.Sprintf("%v", this.State) + `,`,
-		`TransitGatewayGreAddress:` + fmt.Sprintf("%v", this.TransitGatewayGreAddress) + `,`,
-		`PeerGreAddress:` + fmt.Sprintf("%v", this.PeerGreAddress) + `,`,
-		`BgpInsideCidrBlock:` + fmt.Sprintf("%v", this.BgpInsideCidrBlock) + `,`,
-		`PeerAsn:` + fmt.Sprintf("%v", this.PeerAsn) + `,`,
-		`PeerBgpAddress:` + fmt.Sprintf("%v", this.PeerBgpAddress) + `,`,
-		`TransitGatewayBgp_1Address:` + fmt.Sprintf("%v", this.TransitGatewayBgp_1Address) + `,`,
-		`TransitGatewayBgp_2Address:` + fmt.Sprintf("%v", this.TransitGatewayBgp_2Address) + `,`,
+		`ConnectPeerDeploymentState:` + fmt.Sprintf("%v", this.ConnectPeerDeploymentState) + `,`,
+		`DeploymentStatus:` + fmt.Sprintf("%v", this.DeploymentStatus) + `,`,
+		`Tags:` + mapStringForTags + `,`,
 		`}`,
 	}, "")
 	return s
@@ -12129,11 +13802,12 @@ func (this *AWSTGWRouteTableStatusType) String() string {
 	s := strings.Join([]string{`&AWSTGWRouteTableStatusType{`,
 		`TransitGatewayRouteTableId:` + fmt.Sprintf("%v", this.TransitGatewayRouteTableId) + `,`,
 		`TransitGatewayId:` + fmt.Sprintf("%v", this.TransitGatewayId) + `,`,
-		`State:` + fmt.Sprintf("%v", this.State) + `,`,
 		`Tags:` + mapStringForTags + `,`,
 		`Associations:` + repeatedStringForAssociations + `,`,
 		`Propagations:` + repeatedStringForPropagations + `,`,
 		`TransitGatewayRouteTableName:` + fmt.Sprintf("%v", this.TransitGatewayRouteTableName) + `,`,
+		`TgwRtDeploymentState:` + fmt.Sprintf("%v", this.TgwRtDeploymentState) + `,`,
+		`DeploymentStatus:` + fmt.Sprintf("%v", this.DeploymentStatus) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -12147,6 +13821,7 @@ func (this *AWSTGWResourceReference) String() string {
 		`ResourceType:` + fmt.Sprintf("%v", this.ResourceType) + `,`,
 		`ResourceId:` + fmt.Sprintf("%v", this.ResourceId) + `,`,
 		`State:` + fmt.Sprintf("%v", this.State) + `,`,
+		`DeploymentStatus:` + fmt.Sprintf("%v", this.DeploymentStatus) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -12287,6 +13962,16 @@ func (this *GlobalSpecType_AzureVnetSite) String() string {
 	}, "")
 	return s
 }
+func (this *GlobalSpecType_AwsCloudTransitGateway) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GlobalSpecType_AwsCloudTransitGateway{`,
+		`AwsCloudTransitGateway:` + strings.Replace(fmt.Sprintf("%v", this.AwsCloudTransitGateway), "AWSCloudTransitGatewayType", "AWSCloudTransitGatewayType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *CreateSpecType) String() string {
 	if this == nil {
 		return "nil"
@@ -12313,7 +13998,7 @@ func (this *CreateSpecType_AwsTgwSite) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&CreateSpecType_AwsTgwSite{`,
-		`AwsTgwSite:` + strings.Replace(fmt.Sprintf("%v", this.AwsTgwSite), "AWSTGWSiteType", "AWSTGWSiteType", 1) + `,`,
+		`AwsTgwSite:` + strings.Replace(fmt.Sprintf("%v", this.AwsTgwSite), "CreateAWSTGWSiteType", "CreateAWSTGWSiteType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -12328,13 +14013,22 @@ func (this *CreateSpecType_AzureVnetSite) String() string {
 	}, "")
 	return s
 }
+func (this *CreateSpecType_AwsCloudTransitGateway) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CreateSpecType_AwsCloudTransitGateway{`,
+		`AwsCloudTransitGateway:` + strings.Replace(fmt.Sprintf("%v", this.AwsCloudTransitGateway), "CreateAWSCloudTransitGatewayType", "CreateAWSCloudTransitGatewayType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *ReplaceSpecType) String() string {
 	if this == nil {
 		return "nil"
 	}
 	s := strings.Join([]string{`&ReplaceSpecType{`,
 		`Cloud:` + fmt.Sprintf("%v", this.Cloud) + `,`,
-		`Segment:` + strings.Replace(fmt.Sprintf("%v", this.Segment), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -12365,6 +14059,16 @@ func (this *ReplaceSpecType_AzureVnetSite) String() string {
 	}
 	s := strings.Join([]string{`&ReplaceSpecType_AzureVnetSite{`,
 		`AzureVnetSite:` + strings.Replace(fmt.Sprintf("%v", this.AzureVnetSite), "ReplaceAzureVNETSiteType", "ReplaceAzureVNETSiteType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ReplaceSpecType_AwsCloudTransitGateway) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ReplaceSpecType_AwsCloudTransitGateway{`,
+		`AwsCloudTransitGateway:` + strings.Replace(fmt.Sprintf("%v", this.AwsCloudTransitGateway), "ReplaceAWSCloudTransitGatewayType", "ReplaceAWSCloudTransitGatewayType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -12409,6 +14113,16 @@ func (this *GetSpecType_AzureVnetSite) String() string {
 	}
 	s := strings.Join([]string{`&GetSpecType_AzureVnetSite{`,
 		`AzureVnetSite:` + strings.Replace(fmt.Sprintf("%v", this.AzureVnetSite), "AzureVNETSiteType", "AzureVNETSiteType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GetSpecType_AwsCloudTransitGateway) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GetSpecType_AwsCloudTransitGateway{`,
+		`AwsCloudTransitGateway:` + strings.Replace(fmt.Sprintf("%v", this.AwsCloudTransitGateway), "AWSCloudTransitGatewayType", "AWSCloudTransitGatewayType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -15035,6 +16749,167 @@ func (m *ReplaceAWSTGWSiteType) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
+func (m *CreateAWSTGWSiteType) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: CreateAWSTGWSiteType: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: CreateAWSTGWSiteType: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Site", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Site == nil {
+				m.Site = &views.ObjectRefType{}
+			}
+			if err := m.Site.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Cred", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Cred == nil {
+				m.Cred = &views.ObjectRefType{}
+			}
+			if err := m.Cred.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field VpcAttachments", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.VpcAttachments == nil {
+				m.VpcAttachments = &AWSVPCAttachmentListType{}
+			}
+			if err := m.VpcAttachments.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
 func (m *AzureVNETSiteType) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
@@ -15285,6 +17160,451 @@ func (m *ReplaceAzureVNETSiteType) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
+func (m *AWSCloudTransitGatewayType) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: AWSCloudTransitGatewayType: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: AWSCloudTransitGatewayType: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field CloudTransitGateway", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.CloudTransitGateway == nil {
+				m.CloudTransitGateway = &views.ObjectRefType{}
+			}
+			if err := m.CloudTransitGateway.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Cred", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Cred == nil {
+				m.Cred = &views.ObjectRefType{}
+			}
+			if err := m.Cred.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field VpcAttachments", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.VpcAttachments == nil {
+				m.VpcAttachments = &AWSVPCAttachmentListType{}
+			}
+			if err := m.VpcAttachments.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Peers", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Peers = append(m.Peers, &PeerType{})
+			if err := m.Peers[len(m.Peers)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *CreateAWSCloudTransitGatewayType) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: CreateAWSCloudTransitGatewayType: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: CreateAWSCloudTransitGatewayType: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field CloudTransitGateway", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.CloudTransitGateway == nil {
+				m.CloudTransitGateway = &views.ObjectRefType{}
+			}
+			if err := m.CloudTransitGateway.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Cred", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Cred == nil {
+				m.Cred = &views.ObjectRefType{}
+			}
+			if err := m.Cred.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field VpcAttachments", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.VpcAttachments == nil {
+				m.VpcAttachments = &AWSVPCAttachmentListType{}
+			}
+			if err := m.VpcAttachments.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *ReplaceAWSCloudTransitGatewayType) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: ReplaceAWSCloudTransitGatewayType: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: ReplaceAWSCloudTransitGatewayType: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field VpcAttachments", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.VpcAttachments == nil {
+				m.VpcAttachments = &AWSVPCAttachmentListType{}
+			}
+			if err := m.VpcAttachments.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
 func (m *CloudConnectStatusType) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
@@ -15383,6 +17703,361 @@ func (m *CloudConnectStatusType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			m.CloudConnectDeployment = &CloudConnectStatusType_CloudConnectAzureSite{v}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *VerStatusType) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: VerStatusType: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: VerStatusType: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field CidrStatus", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.CidrStatus = append(m.CidrStatus, &CIDRConflictStatusType{})
+			if err := m.CidrStatus[len(m.CidrStatus)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *CIDRConflictStatusType) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: CIDRConflictStatusType: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: CIDRConflictStatusType: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Cidr", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Cidr = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ConflictList", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ConflictList = append(m.ConflictList, &CIDRConflictListType{})
+			if err := m.ConflictList[len(m.ConflictList)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *CIDRConflictListType) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: CIDRConflictListType: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: CIDRConflictListType: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field SiteName", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.SiteName = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field CloudConnectName", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.CloudConnectName = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field OverlappingCidr", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.OverlappingCidr = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
@@ -16313,38 +18988,6 @@ func (m *AWSConnectAttachmentStatusType) Unmarshal(dAtA []byte) error {
 			}
 			m.Protocol = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
-		case 5:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field State", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.State = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
 		case 6:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field TransportAttachmentId", wireType)
@@ -16634,6 +19277,57 @@ func (m *AWSConnectAttachmentStatusType) Unmarshal(dAtA []byte) error {
 			}
 			m.TransitGatewayAttachmentName = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
+		case 12:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ConnectDeploymentState", wireType)
+			}
+			m.ConnectDeploymentState = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.ConnectDeploymentState |= CloudConnectVPCStateType(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 13:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DeploymentStatus", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.DeploymentStatus = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTypes(dAtA[iNdEx:])
@@ -16783,9 +19477,28 @@ func (m *AWSConnectPeerStatusType) Unmarshal(dAtA []byte) error {
 			}
 			m.ConnectAttachmentId = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
-		case 4:
+		case 13:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ConnectPeerDeploymentState", wireType)
+			}
+			m.ConnectPeerDeploymentState = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.ConnectPeerDeploymentState |= CloudConnectVPCStateType(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 14:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field State", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field DeploymentStatus", wireType)
 			}
 			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
@@ -16813,13 +19526,13 @@ func (m *AWSConnectPeerStatusType) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.State = string(dAtA[iNdEx:postIndex])
+			m.DeploymentStatus = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
-		case 5:
+		case 15:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field TransitGatewayGreAddress", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field Tags", wireType)
 			}
-			var stringLen uint64
+			var msglen int
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
 					return ErrIntOverflowTypes
@@ -16829,215 +19542,118 @@ func (m *AWSConnectPeerStatusType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
 			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
+			if msglen < 0 {
 				return ErrInvalidLengthTypes
 			}
-			postIndex := iNdEx + intStringLen
+			postIndex := iNdEx + msglen
 			if postIndex < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.TransitGatewayGreAddress = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 6:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field PeerGreAddress", wireType)
+			if m.Tags == nil {
+				m.Tags = make(map[string]string)
 			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
+			var mapkey string
+			var mapvalue string
+			for iNdEx < postIndex {
+				entryPreIndex := iNdEx
+				var wire uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return ErrIntOverflowTypes
+					}
+					if iNdEx >= l {
+						return io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					wire |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
 				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.PeerGreAddress = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 7:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field BgpInsideCidrBlock", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.BgpInsideCidrBlock = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 8:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field PeerAsn", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.PeerAsn = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 9:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field PeerBgpAddress", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
+				fieldNum := int32(wire >> 3)
+				if fieldNum == 1 {
+					var stringLenmapkey uint64
+					for shift := uint(0); ; shift += 7 {
+						if shift >= 64 {
+							return ErrIntOverflowTypes
+						}
+						if iNdEx >= l {
+							return io.ErrUnexpectedEOF
+						}
+						b := dAtA[iNdEx]
+						iNdEx++
+						stringLenmapkey |= uint64(b&0x7F) << shift
+						if b < 0x80 {
+							break
+						}
+					}
+					intStringLenmapkey := int(stringLenmapkey)
+					if intStringLenmapkey < 0 {
+						return ErrInvalidLengthTypes
+					}
+					postStringIndexmapkey := iNdEx + intStringLenmapkey
+					if postStringIndexmapkey < 0 {
+						return ErrInvalidLengthTypes
+					}
+					if postStringIndexmapkey > l {
+						return io.ErrUnexpectedEOF
+					}
+					mapkey = string(dAtA[iNdEx:postStringIndexmapkey])
+					iNdEx = postStringIndexmapkey
+				} else if fieldNum == 2 {
+					var stringLenmapvalue uint64
+					for shift := uint(0); ; shift += 7 {
+						if shift >= 64 {
+							return ErrIntOverflowTypes
+						}
+						if iNdEx >= l {
+							return io.ErrUnexpectedEOF
+						}
+						b := dAtA[iNdEx]
+						iNdEx++
+						stringLenmapvalue |= uint64(b&0x7F) << shift
+						if b < 0x80 {
+							break
+						}
+					}
+					intStringLenmapvalue := int(stringLenmapvalue)
+					if intStringLenmapvalue < 0 {
+						return ErrInvalidLengthTypes
+					}
+					postStringIndexmapvalue := iNdEx + intStringLenmapvalue
+					if postStringIndexmapvalue < 0 {
+						return ErrInvalidLengthTypes
+					}
+					if postStringIndexmapvalue > l {
+						return io.ErrUnexpectedEOF
+					}
+					mapvalue = string(dAtA[iNdEx:postStringIndexmapvalue])
+					iNdEx = postStringIndexmapvalue
+				} else {
+					iNdEx = entryPreIndex
+					skippy, err := skipTypes(dAtA[iNdEx:])
+					if err != nil {
+						return err
+					}
+					if skippy < 0 {
+						return ErrInvalidLengthTypes
+					}
+					if (iNdEx + skippy) > postIndex {
+						return io.ErrUnexpectedEOF
+					}
+					iNdEx += skippy
 				}
 			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.PeerBgpAddress = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 10:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field TransitGatewayBgp_1Address", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.TransitGatewayBgp_1Address = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 11:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field TransitGatewayBgp_2Address", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.TransitGatewayBgp_2Address = string(dAtA[iNdEx:postIndex])
+			m.Tags[mapkey] = mapvalue
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
@@ -17155,38 +19771,6 @@ func (m *AWSTGWRouteTableStatusType) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			m.TransitGatewayId = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field State", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.State = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		case 4:
 			if wireType != 2 {
@@ -17415,6 +19999,57 @@ func (m *AWSTGWRouteTableStatusType) Unmarshal(dAtA []byte) error {
 			}
 			m.TransitGatewayRouteTableName = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
+		case 8:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field TgwRtDeploymentState", wireType)
+			}
+			m.TgwRtDeploymentState = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.TgwRtDeploymentState |= CloudConnectVPCStateType(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 9:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DeploymentStatus", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.DeploymentStatus = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTypes(dAtA[iNdEx:])
@@ -17564,9 +20199,28 @@ func (m *AWSTGWResourceReference) Unmarshal(dAtA []byte) error {
 			}
 			m.ResourceId = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
-		case 4:
-			if wireType != 2 {
+		case 5:
+			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field State", wireType)
+			}
+			m.State = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.State |= CloudConnectVPCStateType(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 6:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DeploymentStatus", wireType)
 			}
 			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
@@ -17594,7 +20248,7 @@ func (m *AWSTGWResourceReference) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.State = string(dAtA[iNdEx:postIndex])
+			m.DeploymentStatus = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
@@ -18901,6 +21555,41 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 			}
 			m.Cloud = &GlobalSpecType_AzureVnetSite{v}
 			iNdEx = postIndex
+		case 21:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AwsCloudTransitGateway", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &AWSCloudTransitGatewayType{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.Cloud = &GlobalSpecType_AwsCloudTransitGateway{v}
+			iNdEx = postIndex
 		case 1000:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field ViewInternal", wireType)
@@ -19054,7 +21743,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &AWSTGWSiteType{}
+			v := &CreateAWSTGWSiteType{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -19130,6 +21819,41 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			m.Cloud = &CreateSpecType_AzureVnetSite{v}
+			iNdEx = postIndex
+		case 21:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AwsCloudTransitGateway", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &CreateAWSCloudTransitGatewayType{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.Cloud = &CreateSpecType_AwsCloudTransitGateway{v}
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
@@ -19254,42 +21978,6 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 			}
 			m.Cloud = &ReplaceSpecType_AwsTgwSite{v}
 			iNdEx = postIndex
-		case 13:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Segment", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Segment == nil {
-				m.Segment = &views.ObjectRefType{}
-			}
-			if err := m.Segment.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
 		case 19:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field AzureVnetSite", wireType)
@@ -19324,6 +22012,41 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			m.Cloud = &ReplaceSpecType_AzureVnetSite{v}
+			iNdEx = postIndex
+		case 21:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AwsCloudTransitGateway", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &ReplaceAWSCloudTransitGatewayType{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.Cloud = &ReplaceSpecType_AwsCloudTransitGateway{v}
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
@@ -19592,6 +22315,41 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			m.Cloud = &GetSpecType_AzureVnetSite{v}
+			iNdEx = postIndex
+		case 21:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AwsCloudTransitGateway", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &AWSCloudTransitGatewayType{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.Cloud = &GetSpecType_AwsCloudTransitGateway{v}
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex

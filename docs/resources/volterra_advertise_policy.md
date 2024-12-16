@@ -1,9 +1,9 @@
 ---
 
 page_title: "Volterra: advertise_policy"
-description: "The advertise_policy allows CRUD of Advertise Policy resource on Volterra SaaS"
 
----
+description: "The advertise_policy allows CRUD of Advertise Policy resource on Volterra SaaS"
+---------------------------------------------------------------------------------------------
 
 Resource volterra_advertise_policy
 ==================================

@@ -3861,6 +3861,24 @@ func (v *ValidateSimpleRule) Validate(ctx context.Context, pm interface{}, opts 
 
 	}
 
+	if fv, exists := v.FldValidators["malware_protection_action"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("malware_protection_action"))
+		if err := fv(ctx, m.GetMalwareProtectionAction(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["malware_protection_settings"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("malware_protection_settings"))
+		if err := fv(ctx, m.GetMalwareProtectionSettings(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["metric_name_label"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("metric_name_label"))
@@ -4255,6 +4273,10 @@ var DefaultSimpleRuleValidator = func() *ValidateSimpleRule {
 	v.FldValidators["response_masking_config"] = ves_io_schema_policy.MaskingConfigValidator().Validate
 
 	v.FldValidators["ja4_tls_fingerprint"] = ves_io_schema_policy.JA4TlsFingerprintMatcherTypeValidator().Validate
+
+	v.FldValidators["malware_protection_action"] = ves_io_schema_policy.ModifyActionValidator().Validate
+
+	v.FldValidators["malware_protection_settings"] = ves_io_schema_policy.MalwareProtectionSettingsValidator().Validate
 
 	return v
 }()

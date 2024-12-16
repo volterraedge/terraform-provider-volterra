@@ -1,9 +1,9 @@
 ---
 
 page_title: "Volterra: apm"
-description: "The apm allows CRUD of Apm resource on Volterra SaaS"
 
----
+description: "The apm allows CRUD of Apm resource on Volterra SaaS"
+-------------------------------------------------------------------
 
 Resource volterra_apm
 =====================
@@ -25,46 +25,11 @@ resource "volterra_apm" "example" {
   https_management {
     // One of the arguments from this list "advertise_on_internet advertise_on_internet_default_vip advertise_on_sli_vip advertise_on_slo_internet_vip advertise_on_slo_sli advertise_on_slo_vip disable_local do_not_advertise_on_internet" must be set
 
-    advertise_on_slo_internet_vip {
-      // One of the arguments from this list "no_mtls use_mtls" must be set
-
-      no_mtls = true
-
-      tls_certificates {
-        certificate_url = "value"
-
-        description = "Certificate used in production environment"
-
-        // One of the arguments from this list "custom_hash_algorithms disable_ocsp_stapling use_system_defaults" can be set
-
-        use_system_defaults {}
-        private_key {
-          blindfold_secret_info_internal {
-            decryption_provider = "value"
-
-            location = "string:///U2VjcmV0SW5mb3JtYXRpb24="
-
-            store_provider = "value"
-          }
-
-          secret_encoding_type = "secret_encoding_type"
-
-          // One of the arguments from this list "blindfold_secret_info clear_secret_info vault_secret_info wingman_secret_info" must be set
-
-          blindfold_secret_info {
-            decryption_provider = "value"
-
-            location = "string:///U2VjcmV0SW5mb3JtYXRpb24="
-
-            store_provider = "value"
-          }
-        }
-      }
-
-      tls_config {
-        // One of the arguments from this list "custom_security default_security low_security medium_security" must be set
-
-        default_security = true
+    advertise_on_internet {
+      public_ip {
+        name      = "test1"
+        namespace = "staging"
+        tenant    = "acmecorp"
       }
     }
 
@@ -72,13 +37,7 @@ resource "volterra_apm" "example" {
 
     // One of the arguments from this list "advertise_on_public advertise_on_public_default_vip do_not_advertise" can be set
 
-    advertise_on_public {
-      public_ip {
-        name      = "test1"
-        namespace = "staging"
-        tenant    = "acmecorp"
-      }
-    }
+    do_not_advertise = true
 
     // One of the arguments from this list "default_https_port https_port" must be set
 
@@ -102,10 +61,16 @@ resource "volterra_apm" "example" {
 
         // One of the arguments from this list "blindfold_secret_info clear_secret_info vault_secret_info wingman_secret_info" must be set
 
-        clear_secret_info {
-          provider = "box-provider"
+        vault_secret_info {
+          key = "key_pem"
 
-          url = "string:///U2VjcmV0SW5mb3JtYXRpb24="
+          location = "v1/data/vhost_key"
+
+          provider = "vault-vh-provider"
+
+          secret_encoding = "secret_encoding"
+
+          version = "1"
         }
       }
 
@@ -122,7 +87,7 @@ resource "volterra_apm" "example" {
       endpoint_service {
         // One of the arguments from this list "advertise_on_slo_ip advertise_on_slo_ip_external disable_advertise_on_slo_ip" must be set
 
-        disable_advertise_on_slo_ip = true
+        advertise_on_slo_ip = true
 
         // One of the arguments from this list "automatic_vip configured_vip" must be set
 
@@ -130,9 +95,7 @@ resource "volterra_apm" "example" {
 
         // One of the arguments from this list "custom_tcp_ports default_tcp_ports http_port https_port no_tcp_ports" must be set
 
-        custom_tcp_ports {
-          ports = ["100-200"]
-        }
+        https_port = true
 
         // One of the arguments from this list "custom_udp_ports no_udp_ports" must be set
 
@@ -144,11 +107,7 @@ resource "volterra_apm" "example" {
 
         // One of the arguments from this list "mgmt_subnet reserved_mgmt_subnet" must be set
 
-        mgmt_subnet {
-          // One of the arguments from this list "existing_subnet_id subnet_param" must be set
-
-          existing_subnet_id = "subnet-12345678901234567"
-        }
+        reserved_mgmt_subnet = true
         node_name = "node1"
 
         // One of the arguments from this list "automatic_prefix tunnel_prefix" must be set

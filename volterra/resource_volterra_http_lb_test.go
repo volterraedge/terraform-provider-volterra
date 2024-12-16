@@ -310,6 +310,7 @@ func testConfigHTTPLB(name, namespace, existLbName, existNsName string, timeout 
           disable_api_discovery            = true      
           disable_malicious_user_detection = true
           disable_trust_client_ip_headers  = true
+		  disable_malware_protection       = true
 		  l7_ddos_action_default           = true
 		  namespace = volterra_namespace.app.name
 		  labels = {
@@ -522,6 +523,7 @@ func testConfigHTTPLBWithAutoCert(name, namespace, existLbName, existNsName stri
 		  disable_threat_mesh              = true
 		  disable_api_definition           = true
           disable_api_discovery            = true       
+		  disable_malware_protection       = true       
           disable_malicious_user_detection = true
           disable_trust_client_ip_headers  = true
 		  l7_ddos_action_default           = true

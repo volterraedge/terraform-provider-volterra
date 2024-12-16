@@ -1,9 +1,9 @@
 ---
 
 page_title: "Volterra: code_base_integration"
-description: "The code_base_integration allows CRUD of Code Base Integration resource on Volterra SaaS"
 
----
+description: "The code_base_integration allows CRUD of Code Base Integration resource on Volterra SaaS"
+-------------------------------------------------------------------------------------------------------
 
 Resource volterra_code_base_integration
 =======================================

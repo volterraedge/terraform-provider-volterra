@@ -67,10 +67,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AddonServices: []string{"f5xc-ipv6-standard"},
 		},
 		{
-			FieldPath:     "ves.io.schema.ztna_application.CreateRequest.spec.proxy_advertisement.advertise_choice.advertise_custom.advertise_where.choice.virtual_network.v6_vip_choice.default_v6_vip",
-			AddonServices: []string{"f5xc-ipv6-standard"},
-		},
-		{
 			FieldPath:     "ves.io.schema.ztna_application.CreateRequest.spec.proxy_advertisement.advertise_choice.advertise_custom.advertise_where.choice.virtual_network.v6_vip_choice.specific_v6_vip",
 			AddonServices: []string{"f5xc-ipv6-standard"},
 		},
@@ -247,10 +243,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		},
 		{
 			FieldPath:     "ves.io.schema.ztna_application.ReplaceRequest.spec.proxy_advertisement.advertise_choice.advertise_custom.advertise_where.choice.site_segment.ipv6",
-			AddonServices: []string{"f5xc-ipv6-standard"},
-		},
-		{
-			FieldPath:     "ves.io.schema.ztna_application.ReplaceRequest.spec.proxy_advertisement.advertise_choice.advertise_custom.advertise_where.choice.virtual_network.v6_vip_choice.default_v6_vip",
 			AddonServices: []string{"f5xc-ipv6-standard"},
 		},
 		{

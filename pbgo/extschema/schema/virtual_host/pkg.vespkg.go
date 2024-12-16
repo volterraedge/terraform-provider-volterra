@@ -33,6 +33,8 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.virtual_host.ApiEndpointsStatsRsp"] = ApiEndpointsStatsRspValidator()
 	vr["ves.io.schema.virtual_host.GetAPICallSummaryReq"] = GetAPICallSummaryReqValidator()
 	vr["ves.io.schema.virtual_host.GetAPICallSummaryRsp"] = GetAPICallSummaryRspValidator()
+	vr["ves.io.schema.virtual_host.GetAPIEndpointsSchemaUpdatesReq"] = GetAPIEndpointsSchemaUpdatesReqValidator()
+	vr["ves.io.schema.virtual_host.GetAPIEndpointsSchemaUpdatesResp"] = GetAPIEndpointsSchemaUpdatesRespValidator()
 	vr["ves.io.schema.virtual_host.GetTopAPIEndpointsReq"] = GetTopAPIEndpointsReqValidator()
 	vr["ves.io.schema.virtual_host.GetTopAPIEndpointsRsp"] = GetTopAPIEndpointsRspValidator()
 	vr["ves.io.schema.virtual_host.GetTopSensitiveDataReq"] = GetTopSensitiveDataReqValidator()
@@ -43,6 +45,8 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.virtual_host.SensitiveDataCount"] = SensitiveDataCountValidator()
 	vr["ves.io.schema.virtual_host.SwaggerSpecReq"] = SwaggerSpecReqValidator()
 	vr["ves.io.schema.virtual_host.SwaggerSpecRsp"] = SwaggerSpecRspValidator()
+	vr["ves.io.schema.virtual_host.UpdateAPIEndpointsSchemasReq"] = UpdateAPIEndpointsSchemasReqValidator()
+	vr["ves.io.schema.virtual_host.UpdateAPIEndpointsSchemasResp"] = UpdateAPIEndpointsSchemasRespValidator()
 	vr["ves.io.schema.virtual_host.UpdateVulnerabilitiesStateReq"] = UpdateVulnerabilitiesStateReqValidator()
 	vr["ves.io.schema.virtual_host.UpdateVulnerabilitiesStateRsp"] = UpdateVulnerabilitiesStateRspValidator()
 	vr["ves.io.schema.virtual_host.VulnEvidence"] = VulnEvidenceValidator()
@@ -61,6 +65,8 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.virtual_host.ReplaceRequest"] = ReplaceRequestValidator()
 	vr["ves.io.schema.virtual_host.ReplaceResponse"] = ReplaceResponseValidator()
 
+	vr["ves.io.schema.virtual_host.AssignAPIDefinitionReq"] = AssignAPIDefinitionReqValidator()
+	vr["ves.io.schema.virtual_host.AssignAPIDefinitionResp"] = AssignAPIDefinitionRespValidator()
 	vr["ves.io.schema.virtual_host.GetDnsInfoRequest"] = GetDnsInfoRequestValidator()
 	vr["ves.io.schema.virtual_host.GetDnsInfoResponse"] = GetDnsInfoResponseValidator()
 

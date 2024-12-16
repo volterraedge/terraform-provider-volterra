@@ -1,9 +1,9 @@
 ---
 
 page_title: "Volterra: container_registry"
-description: "The container_registry allows CRUD of Container Registry resource on Volterra SaaS"
 
----
+description: "The container_registry allows CRUD of Container Registry resource on Volterra SaaS"
+-------------------------------------------------------------------------------------------------
 
 Resource volterra_container_registry
 ====================================

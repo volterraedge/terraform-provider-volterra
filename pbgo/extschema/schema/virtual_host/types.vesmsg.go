@@ -2553,6 +2553,15 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["coalescing_options"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("coalescing_options"))
+		if err := fv(ctx, m.GetCoalescingOptions(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["compression_params"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("compression_params"))
@@ -3239,6 +3248,8 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v.FldValidators["domain_cert_map"] = DomainCertificatesValidator().Validate
 
 	v.FldValidators["http_protocol_options"] = HttpProtocolOptionsValidator().Validate
+
+	v.FldValidators["coalescing_options"] = ves_io_schema.TLSCoalescingOptionsValidator().Validate
 
 	v.FldValidators["ztna_proxy_configurations"] = ZtnaProxyConfigurationValidator().Validate
 
@@ -5638,6 +5649,15 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
+	if fv, exists := v.FldValidators["coalescing_options"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("coalescing_options"))
+		if err := fv(ctx, m.GetCoalescingOptions(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["compression_params"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("compression_params"))
@@ -6380,6 +6400,8 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v.FldValidators["domain_cert_map"] = DomainCertificatesValidator().Validate
 
 	v.FldValidators["http_protocol_options"] = HttpProtocolOptionsValidator().Validate
+
+	v.FldValidators["coalescing_options"] = ves_io_schema.TLSCoalescingOptionsValidator().Validate
 
 	v.FldValidators["dns_info"] = ves_io_schema_virtual_host_dns_info.DnsInfoValidator().Validate
 
@@ -8641,6 +8663,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["coalescing_options"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("coalescing_options"))
+		if err := fv(ctx, m.GetCoalescingOptions(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["compression_params"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("compression_params"))
@@ -8898,6 +8929,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 		vOpts := append(opts, db.WithValidateField("dynamic_reverse_proxy"))
 		if err := fv(ctx, m.GetDynamicReverseProxy(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["enable_malware_protection"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("enable_malware_protection"))
+		if err := fv(ctx, m.GetEnableMalwareProtection(), vOpts...); err != nil {
 			return err
 		}
 
@@ -9744,6 +9784,8 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v.FldValidators["domain_cert_map"] = DomainCertificatesValidator().Validate
 
 	v.FldValidators["http_protocol_options"] = HttpProtocolOptionsValidator().Validate
+
+	v.FldValidators["coalescing_options"] = ves_io_schema.TLSCoalescingOptionsValidator().Validate
 
 	v.FldValidators["dns_info"] = ves_io_schema_virtual_host_dns_info.DnsInfoValidator().Validate
 
@@ -12001,6 +12043,15 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 
 	}
 
+	if fv, exists := v.FldValidators["coalescing_options"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("coalescing_options"))
+		if err := fv(ctx, m.GetCoalescingOptions(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["compression_params"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("compression_params"))
@@ -12687,6 +12738,8 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v.FldValidators["domain_cert_map"] = DomainCertificatesValidator().Validate
 
 	v.FldValidators["http_protocol_options"] = HttpProtocolOptionsValidator().Validate
+
+	v.FldValidators["coalescing_options"] = ves_io_schema.TLSCoalescingOptionsValidator().Validate
 
 	v.FldValidators["ztna_proxy_configurations"] = ZtnaProxyConfigurationValidator().Validate
 
@@ -14453,6 +14506,7 @@ func (m *CreateSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool
 	m.GetAuthenticationChoiceFromGlobalSpecType(f)
 	m.BufferPolicy = f.GetBufferPolicy()
 	m.GetChallengeTypeFromGlobalSpecType(f)
+	m.CoalescingOptions = f.GetCoalescingOptions()
 	m.CompressionParams = f.GetCompressionParams()
 	m.ConnectionIdleTimeout = f.GetConnectionIdleTimeout()
 	m.CookiesToModify = f.GetCookiesToModify()
@@ -14513,6 +14567,7 @@ func (m *CreateSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) 
 	m1.SetAuthenticationChoiceToGlobalSpecType(f)
 	f.BufferPolicy = m1.BufferPolicy
 	m1.SetChallengeTypeToGlobalSpecType(f)
+	f.CoalescingOptions = m1.CoalescingOptions
 	f.CompressionParams = m1.CompressionParams
 	f.ConnectionIdleTimeout = m1.ConnectionIdleTimeout
 	f.CookiesToModify = m1.CookiesToModify
@@ -14871,6 +14926,7 @@ func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	m.BufferPolicy = f.GetBufferPolicy()
 	m.CdnService = f.GetCdnService()
 	m.GetChallengeTypeFromGlobalSpecType(f)
+	m.CoalescingOptions = f.GetCoalescingOptions()
 	m.CompressionParams = f.GetCompressionParams()
 	m.ConnectionIdleTimeout = f.GetConnectionIdleTimeout()
 	m.CookiesToModify = f.GetCookiesToModify()
@@ -14939,6 +14995,7 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	f.BufferPolicy = m1.BufferPolicy
 	f.CdnService = m1.CdnService
 	m1.SetChallengeTypeToGlobalSpecType(f)
+	f.CoalescingOptions = m1.CoalescingOptions
 	f.CompressionParams = m1.CompressionParams
 	f.ConnectionIdleTimeout = m1.ConnectionIdleTimeout
 	f.CookiesToModify = m1.CookiesToModify
@@ -15264,6 +15321,7 @@ func (m *ReplaceSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy boo
 	m.GetAuthenticationChoiceFromGlobalSpecType(f)
 	m.BufferPolicy = f.GetBufferPolicy()
 	m.GetChallengeTypeFromGlobalSpecType(f)
+	m.CoalescingOptions = f.GetCoalescingOptions()
 	m.CompressionParams = f.GetCompressionParams()
 	m.ConnectionIdleTimeout = f.GetConnectionIdleTimeout()
 	m.CookiesToModify = f.GetCookiesToModify()
@@ -15324,6 +15382,7 @@ func (m *ReplaceSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool)
 	m1.SetAuthenticationChoiceToGlobalSpecType(f)
 	f.BufferPolicy = m1.BufferPolicy
 	m1.SetChallengeTypeToGlobalSpecType(f)
+	f.CoalescingOptions = m1.CoalescingOptions
 	f.CompressionParams = m1.CompressionParams
 	f.ConnectionIdleTimeout = m1.ConnectionIdleTimeout
 	f.CookiesToModify = m1.CookiesToModify

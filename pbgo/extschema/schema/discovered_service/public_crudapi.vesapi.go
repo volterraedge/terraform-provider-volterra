@@ -1090,7 +1090,6 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-discovered_service-api-list"
                 },
-                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.discovered_service.API.List"
             },
             "x-displayname": "Discovered Services",
@@ -1198,7 +1197,6 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-discovered_service-api-get"
                 },
-                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.discovered_service.API.Get"
             },
             "x-displayname": "Discovered Services",
@@ -1388,16 +1386,15 @@ var APISwaggerJSON string = `{
         },
         "discovered_serviceTransmissionProtocol": {
             "type": "string",
-            "description": "x-example: \"TCP\"\nProtocol on which the virtual-server will transmit data",
+            "description": "x-displayName: \"Transmission Protocol\"\nx-example: \"TCP\"\nProtocol on which the virtual-server will transmit data",
             "title": "TransmissionProtocol",
             "enum": [
+                "UNDEFINED",
                 "HTTP",
                 "HTTPS",
                 "TCP"
             ],
-            "default": "HTTP",
-            "x-displayname": "Transmission Protocol",
-            "x-ves-proto-enum": "ves.io.schema.discovered_service.TransmissionProtocol"
+            "default": "UNDEFINED"
         },
         "discovered_serviceVirtualServer": {
             "type": "object",
@@ -1406,6 +1403,18 @@ var APISwaggerJSON string = `{
             "x-displayname": "Virtual Server",
             "x-ves-proto-message": "ves.io.schema.discovered_service.VirtualServer",
             "properties": {
+                "bigip_version": {
+                    "type": "string",
+                    "description": " Version of the BIG-IP from where the service was discovered\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 256\n",
+                    "title": "BIG-IP version",
+                    "maxLength": 256,
+                    "x-displayname": "BIG-IP Version",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_len": "256"
+                    }
+                },
                 "cbip_cluster": {
                     "type": "string",
                     "description": " Name of CBIP Cluster.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 256\n",
@@ -1423,6 +1432,27 @@ var APISwaggerJSON string = `{
                     "title": "discovery_object",
                     "$ref": "#/definitions/schemaviewsObjectRefType",
                     "x-displayname": "Reference to Discovery Object"
+                },
+                "enabled_state": {
+                    "description": " Enabled State of virtual server.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Enabled State of virtual server",
+                    "$ref": "#/definitions/discovered_serviceVirtualServerEnabledState",
+                    "x-displayname": "Enabled State",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "ip_address": {
+                    "type": "string",
+                    "description": " IP address of the BIG-IP Virtual Server\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.ip: true\n",
+                    "title": "Virtual Server IP Address",
+                    "x-displayname": "Virtual Server IP",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.ip": "true"
+                    }
                 },
                 "partition": {
                     "type": "string",
@@ -1448,20 +1478,9 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.uint32.lte": "65535"
                     }
                 },
-                "protocol": {
-                    "description": " Protocol on which the virtual-server is exposed\n\nExample: - \"TCP\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
-                    "title": "Protocol",
-                    "$ref": "#/definitions/discovered_serviceTransmissionProtocol",
-                    "x-displayname": "Protocol",
-                    "x-ves-example": "TCP",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
-                },
                 "status": {
-                    "description": " Status of virtual server.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
-                    "title": "Status of virtual server",
+                    "description": " Availability Status of virtual server.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Availability Status of virtual server",
                     "$ref": "#/definitions/discovered_serviceVirtualServerStatus",
                     "x-displayname": "Status",
                     "x-ves-required": "true",
@@ -1471,17 +1490,33 @@ var APISwaggerJSON string = `{
                 }
             }
         },
-        "discovered_serviceVirtualServerStatus": {
+        "discovered_serviceVirtualServerEnabledState": {
             "type": "string",
-            "description": "Status of the virtual server.",
-            "title": "Status of the virtual server",
+            "description": "Enabled state of the virtual server.\n\n - NONE: NONE\n\nInvalid state.\n - ENABLED: ENABLED\n\nVirtual Server is enabled.\n - DISABLED: DISABLED\n\nVirtual Server is administratively disabled.",
+            "title": "Enabled state of the virtual server",
             "enum": [
-                "UP",
-                "DOWN",
+                "NONE",
+                "ENABLED",
                 "DISABLED"
             ],
-            "default": "UP",
-            "x-displayname": "Virtual Server Status",
+            "default": "NONE",
+            "x-displayname": "Virtual Server Enabled State",
+            "x-ves-proto-enum": "ves.io.schema.discovered_service.VirtualServerEnabledState"
+        },
+        "discovered_serviceVirtualServerStatus": {
+            "type": "string",
+            "description": "Availability Status of the virtual server.\n\n - UNSPECIFIED: UNSPECIFIED\n\nInvalid status.\n - AVAILABLE: AVAILABLE\n\nVirtual Server is available and serving traffic.\n - OFFLINE: OFFLINE\n\nVirtual Server is not serving traffic.\n - UNKNOWN: UNKNOWN\n\nVirtual Server availability is unknown. It can indicate that no service checks are enabled on the virtual server.\n - UNAVAILABLE: UNAVAILABLE\n\nVirtual Server is temporarily unavailable maybe due to hitting connection limit.\n - DELETED: DELETED\n\nVirtual Server has been deleted on the BIG-IP but is in use on Distributed Cloud.",
+            "title": "Availability Status of the virtual server",
+            "enum": [
+                "UNSPECIFIED",
+                "AVAILABLE",
+                "OFFLINE",
+                "UNKNOWN",
+                "UNAVAILABLE",
+                "DELETED"
+            ],
+            "default": "UNSPECIFIED",
+            "x-displayname": "Virtual Server Availability Status",
             "x-ves-proto-enum": "ves.io.schema.discovered_service.VirtualServerStatus"
         },
         "ioschemaEmpty": {
@@ -1871,7 +1906,7 @@ var APISwaggerJSON string = `{
             "title": "Get Discovered Service Object",
             "x-displayname": "Get Discovered Service Object",
             "x-ves-oneof-field-service_type": "[\"virtual_server\"]",
-            "x-ves-oneof-field-waap_action_choice": "[\"waap_visibility_disabled\",\"waap_visibility_enabled\"]",
+            "x-ves-oneof-field-visibility_action_choice": "[\"visibility_disabled\",\"visibility_enabled\"]",
             "x-ves-proto-message": "ves.io.schema.discovered_service.GetSpecType",
             "properties": {
                 "http_load_balancers": {
@@ -1895,15 +1930,15 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/discovered_serviceVirtualServer",
                     "x-displayname": "Virtual Server"
                 },
-                "waap_visibility_disabled": {
-                    "description": "Exclusive with [waap_visibility_enabled]\n Option for disabling WAAP Visibility for API Discovery",
+                "visibility_disabled": {
+                    "description": "Exclusive with [visibility_enabled]\n Option for disabling visibility across workspaces",
                     "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "WAAP Visibility Disabled"
+                    "x-displayname": "Visibility Disabled"
                 },
-                "waap_visibility_enabled": {
-                    "description": "Exclusive with [waap_visibility_disabled]\n Option for enabling WAAP Visibility for API Discovery",
+                "visibility_enabled": {
+                    "description": "Exclusive with [visibility_disabled]\n Option for enabling Visibility across workspaces",
                     "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "WAAP Visibility Enabled"
+                    "x-displayname": "Visibility Enabled"
                 }
             }
         },

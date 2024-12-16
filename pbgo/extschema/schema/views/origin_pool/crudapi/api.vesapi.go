@@ -3274,6 +3274,27 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "origin_poolOriginServerCBIPService": {
+            "type": "object",
+            "description": "Specify origin server with Classic BIG-IP Service (Virtual Server)",
+            "title": "OriginServerCBIPService",
+            "x-displayname": "Discovered Classic BIG-IP Service Name",
+            "x-ves-displayorder": "1",
+            "x-ves-proto-message": "ves.io.schema.views.origin_pool.OriginServerCBIPService",
+            "properties": {
+                "service_name": {
+                    "type": "string",
+                    "description": " Name of the discovered Classic BIG-IP virtual server to be used as origin.\n\nExample: - \"cbip-vs1-dev\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Service Name",
+                    "x-displayname": "Service Name",
+                    "x-ves-example": "cbip-vs1-dev",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                }
+            }
+        },
         "origin_poolOriginServerConsulService": {
             "type": "object",
             "description": "Specify origin server with Hashi Corp Consul service name and site information",
@@ -3590,23 +3611,29 @@ var APISwaggerJSON string = `{
             "description": "Various options to specify origin server",
             "title": "OriginServerType",
             "x-displayname": "Origin Server",
-            "x-ves-oneof-field-choice": "[\"consul_service\",\"custom_endpoint_object\",\"k8s_service\",\"private_ip\",\"private_name\",\"public_ip\",\"public_name\",\"vn_private_ip\",\"vn_private_name\"]",
+            "x-ves-oneof-field-choice": "[\"cbip_service\",\"consul_service\",\"custom_endpoint_object\",\"k8s_service\",\"private_ip\",\"private_name\",\"public_ip\",\"public_name\",\"vn_private_ip\",\"vn_private_name\"]",
             "x-ves-proto-message": "ves.io.schema.views.origin_pool.OriginServerType",
             "properties": {
+                "cbip_service": {
+                    "description": "Exclusive with [consul_service custom_endpoint_object k8s_service private_ip private_name public_ip public_name vn_private_ip vn_private_name]\n Specify origin server with cBIP service name",
+                    "title": "OriginServerCBIPService",
+                    "$ref": "#/definitions/origin_poolOriginServerCBIPService",
+                    "x-displayname": "cBIP Service Name of Origin Server"
+                },
                 "consul_service": {
-                    "description": "Exclusive with [custom_endpoint_object k8s_service private_ip private_name public_ip public_name vn_private_ip vn_private_name]\n Specify origin server with Hashi Corp Consul service name and site information",
+                    "description": "Exclusive with [cbip_service custom_endpoint_object k8s_service private_ip private_name public_ip public_name vn_private_ip vn_private_name]\n Specify origin server with Hashi Corp Consul service name and site information",
                     "title": "OriginServerConsulService",
                     "$ref": "#/definitions/origin_poolOriginServerConsulService",
                     "x-displayname": "Consul Service Name of Origin Server on given Sites"
                 },
                 "custom_endpoint_object": {
-                    "description": "Exclusive with [consul_service k8s_service private_ip private_name public_ip public_name vn_private_ip vn_private_name]\n Specify origin server with a reference to endpoint object",
+                    "description": "Exclusive with [cbip_service consul_service k8s_service private_ip private_name public_ip public_name vn_private_ip vn_private_name]\n Specify origin server with a reference to endpoint object",
                     "title": "OriginServerCustomEndpoint",
                     "$ref": "#/definitions/origin_poolOriginServerCustomEndpoint",
                     "x-displayname": "Custom Endpoint Object for Origin Server"
                 },
                 "k8s_service": {
-                    "description": "Exclusive with [consul_service custom_endpoint_object private_ip private_name public_ip public_name vn_private_ip vn_private_name]\n Specify origin server with K8s service name and site information",
+                    "description": "Exclusive with [cbip_service consul_service custom_endpoint_object private_ip private_name public_ip public_name vn_private_ip vn_private_name]\n Specify origin server with K8s service name and site information",
                     "title": "OriginServerK8SService",
                     "$ref": "#/definitions/origin_poolOriginServerK8SService",
                     "x-displayname": "K8s Service Name of Origin Server on given Sites"
@@ -3619,37 +3646,37 @@ var APISwaggerJSON string = `{
                     "x-ves-example": "value"
                 },
                 "private_ip": {
-                    "description": "Exclusive with [consul_service custom_endpoint_object k8s_service private_name public_ip public_name vn_private_ip vn_private_name]\n Specify origin server with private or public IP address and site information",
+                    "description": "Exclusive with [cbip_service consul_service custom_endpoint_object k8s_service private_name public_ip public_name vn_private_ip vn_private_name]\n Specify origin server with private or public IP address and site information",
                     "title": "OriginServerPrivateIP",
                     "$ref": "#/definitions/origin_poolOriginServerPrivateIP",
                     "x-displayname": "IP address of Origin Server on given Sites"
                 },
                 "private_name": {
-                    "description": "Exclusive with [consul_service custom_endpoint_object k8s_service private_ip public_ip public_name vn_private_ip vn_private_name]\n Specify origin server with private or public DNS name and site information",
+                    "description": "Exclusive with [cbip_service consul_service custom_endpoint_object k8s_service private_ip public_ip public_name vn_private_ip vn_private_name]\n Specify origin server with private or public DNS name and site information",
                     "title": "OriginServerPrivateName",
                     "$ref": "#/definitions/origin_poolOriginServerPrivateName",
                     "x-displayname": "DNS Name of Origin Server on given Sites"
                 },
                 "public_ip": {
-                    "description": "Exclusive with [consul_service custom_endpoint_object k8s_service private_ip private_name public_name vn_private_ip vn_private_name]\n Specify origin server with public IP",
+                    "description": "Exclusive with [cbip_service consul_service custom_endpoint_object k8s_service private_ip private_name public_name vn_private_ip vn_private_name]\n Specify origin server with public IP",
                     "title": "OriginServerPublicIP",
                     "$ref": "#/definitions/origin_poolOriginServerPublicIP",
                     "x-displayname": "Public IP of Origin Server"
                 },
                 "public_name": {
-                    "description": "Exclusive with [consul_service custom_endpoint_object k8s_service private_ip private_name public_ip vn_private_ip vn_private_name]\n Specify origin server with public DNS name",
+                    "description": "Exclusive with [cbip_service consul_service custom_endpoint_object k8s_service private_ip private_name public_ip vn_private_ip vn_private_name]\n Specify origin server with public DNS name",
                     "title": "OriginServerPublicName",
                     "$ref": "#/definitions/origin_poolOriginServerPublicName",
                     "x-displayname": "Public DNS Name of Origin Server"
                 },
                 "vn_private_ip": {
-                    "description": "Exclusive with [consul_service custom_endpoint_object k8s_service private_ip private_name public_ip public_name vn_private_name]\n Specify origin server IP address on virtual network other than inside or outside network",
+                    "description": "Exclusive with [cbip_service consul_service custom_endpoint_object k8s_service private_ip private_name public_ip public_name vn_private_name]\n Specify origin server IP address on virtual network other than inside or outside network",
                     "title": "OriginServerVirtualNetworkIP",
                     "$ref": "#/definitions/origin_poolOriginServerVirtualNetworkIP",
                     "x-displayname": "IP address on Virtual Network"
                 },
                 "vn_private_name": {
-                    "description": "Exclusive with [consul_service custom_endpoint_object k8s_service private_ip private_name public_ip public_name vn_private_ip]\n Specify origin server name on virtual network other than inside or outside network",
+                    "description": "Exclusive with [cbip_service consul_service custom_endpoint_object k8s_service private_ip private_name public_ip public_name vn_private_ip]\n Specify origin server name on virtual network other than inside or outside network",
                     "title": "OriginServerVirtualNetworkName",
                     "$ref": "#/definitions/origin_poolOriginServerVirtualNetworkName",
                     "x-displayname": "Name on Virtual Network"
@@ -4353,6 +4380,12 @@ var APISwaggerJSON string = `{
                     "format": "date-time",
                     "x-displayname": "Deletion Timestamp"
                 },
+                "direct_ref_hash": {
+                    "type": "string",
+                    "description": " A hash of the UIDs of  direct references on this object. This can be used to determine if \n this object hash has had references become resolved/unresolved",
+                    "title": "direct_ref_hash",
+                    "x-displayname": "Direct Reference Hash"
+                },
                 "finalizers": {
                     "type": "array",
                     "description": " Must be empty before the object is deleted from the registry. Each entry\n is an identifier for the responsible component that will remove the entry\n from the list. If the deletionTimestamp of the object is non-nil, entries\n in this list can only be removed.\n\nExample: - \"value\"-",
@@ -4770,7 +4803,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Other Settings"
                 },
                 "automatic_port": {
-                    "description": "Exclusive with [lb_port port]\n\n Automatic selection of port for endpoint\n\n For Consul service discovery, port will be discovered as part of service discovery.\n For other origin server types, port will be automatically set as 443 if TLS is enabled at Origin Pool and 80 if TLS is disabled",
+                    "description": "Exclusive with [lb_port port]\n\n Automatic selection of port for endpoint\n\n For Consul and Classic BIG-IP service discovery, port will be discovered as part of service discovery.\n For other origin server types, port will be automatically set as 443 if TLS is enabled at Origin Pool and 80 if TLS is disabled",
                     "title": "Automatic selection of endpoint port",
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "Automatic port"

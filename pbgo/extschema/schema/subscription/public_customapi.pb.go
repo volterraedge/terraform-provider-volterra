@@ -59,7 +59,9 @@ type SubscribeRequest struct {
 	//	*SubscribeRequest_F5XcWaapAdvanced
 	//	*SubscribeRequest_F5XcSiteManagementStandard
 	//	*SubscribeRequest_F5XcWebAppScanningStandard
-	//	*SubscribeRequest_F5XcUniversalZtnaStandard
+	//	*SubscribeRequest_F5XcContentDeliveryNetworkStandard
+	//	*SubscribeRequest_F5XcSyntheticMonitoringStandard
+	//	*SubscribeRequest_F5XcBigipUtilitiesStandard
 	AddonChoice isSubscribeRequest_AddonChoice `protobuf_oneof:"addon_choice"`
 }
 
@@ -119,18 +121,26 @@ type SubscribeRequest_F5XcSiteManagementStandard struct {
 type SubscribeRequest_F5XcWebAppScanningStandard struct {
 	F5XcWebAppScanningStandard *schema.Empty `protobuf:"bytes,8,opt,name=f5xc_web_app_scanning_standard,json=f5xcWebAppScanningStandard,proto3,oneof" json:"f5xc_web_app_scanning_standard,omitempty"`
 }
-type SubscribeRequest_F5XcUniversalZtnaStandard struct {
-	F5XcUniversalZtnaStandard *schema.Empty `protobuf:"bytes,9,opt,name=f5xc_universal_ztna_standard,json=f5xcUniversalZtnaStandard,proto3,oneof" json:"f5xc_universal_ztna_standard,omitempty"`
+type SubscribeRequest_F5XcContentDeliveryNetworkStandard struct {
+	F5XcContentDeliveryNetworkStandard *schema.Empty `protobuf:"bytes,10,opt,name=f5xc_content_delivery_network_standard,json=f5xcContentDeliveryNetworkStandard,proto3,oneof" json:"f5xc_content_delivery_network_standard,omitempty"`
+}
+type SubscribeRequest_F5XcSyntheticMonitoringStandard struct {
+	F5XcSyntheticMonitoringStandard *schema.Empty `protobuf:"bytes,11,opt,name=f5xc_synthetic_monitoring_standard,json=f5xcSyntheticMonitoringStandard,proto3,oneof" json:"f5xc_synthetic_monitoring_standard,omitempty"`
+}
+type SubscribeRequest_F5XcBigipUtilitiesStandard struct {
+	F5XcBigipUtilitiesStandard *schema.Empty `protobuf:"bytes,12,opt,name=f5xc_bigip_utilities_standard,json=f5xcBigipUtilitiesStandard,proto3,oneof" json:"f5xc_bigip_utilities_standard,omitempty"`
 }
 
-func (*SubscribeRequest_F5XcSecuremeshStandard) isSubscribeRequest_AddonChoice()     {}
-func (*SubscribeRequest_F5XcSecuremeshAdvanced) isSubscribeRequest_AddonChoice()     {}
-func (*SubscribeRequest_F5XcAppstackStandard) isSubscribeRequest_AddonChoice()       {}
-func (*SubscribeRequest_F5XcWaapStandard) isSubscribeRequest_AddonChoice()           {}
-func (*SubscribeRequest_F5XcWaapAdvanced) isSubscribeRequest_AddonChoice()           {}
-func (*SubscribeRequest_F5XcSiteManagementStandard) isSubscribeRequest_AddonChoice() {}
-func (*SubscribeRequest_F5XcWebAppScanningStandard) isSubscribeRequest_AddonChoice() {}
-func (*SubscribeRequest_F5XcUniversalZtnaStandard) isSubscribeRequest_AddonChoice()  {}
+func (*SubscribeRequest_F5XcSecuremeshStandard) isSubscribeRequest_AddonChoice()             {}
+func (*SubscribeRequest_F5XcSecuremeshAdvanced) isSubscribeRequest_AddonChoice()             {}
+func (*SubscribeRequest_F5XcAppstackStandard) isSubscribeRequest_AddonChoice()               {}
+func (*SubscribeRequest_F5XcWaapStandard) isSubscribeRequest_AddonChoice()                   {}
+func (*SubscribeRequest_F5XcWaapAdvanced) isSubscribeRequest_AddonChoice()                   {}
+func (*SubscribeRequest_F5XcSiteManagementStandard) isSubscribeRequest_AddonChoice()         {}
+func (*SubscribeRequest_F5XcWebAppScanningStandard) isSubscribeRequest_AddonChoice()         {}
+func (*SubscribeRequest_F5XcContentDeliveryNetworkStandard) isSubscribeRequest_AddonChoice() {}
+func (*SubscribeRequest_F5XcSyntheticMonitoringStandard) isSubscribeRequest_AddonChoice()    {}
+func (*SubscribeRequest_F5XcBigipUtilitiesStandard) isSubscribeRequest_AddonChoice()         {}
 
 func (m *SubscribeRequest) GetAddonChoice() isSubscribeRequest_AddonChoice {
 	if m != nil {
@@ -188,9 +198,23 @@ func (m *SubscribeRequest) GetF5XcWebAppScanningStandard() *schema.Empty {
 	return nil
 }
 
-func (m *SubscribeRequest) GetF5XcUniversalZtnaStandard() *schema.Empty {
-	if x, ok := m.GetAddonChoice().(*SubscribeRequest_F5XcUniversalZtnaStandard); ok {
-		return x.F5XcUniversalZtnaStandard
+func (m *SubscribeRequest) GetF5XcContentDeliveryNetworkStandard() *schema.Empty {
+	if x, ok := m.GetAddonChoice().(*SubscribeRequest_F5XcContentDeliveryNetworkStandard); ok {
+		return x.F5XcContentDeliveryNetworkStandard
+	}
+	return nil
+}
+
+func (m *SubscribeRequest) GetF5XcSyntheticMonitoringStandard() *schema.Empty {
+	if x, ok := m.GetAddonChoice().(*SubscribeRequest_F5XcSyntheticMonitoringStandard); ok {
+		return x.F5XcSyntheticMonitoringStandard
+	}
+	return nil
+}
+
+func (m *SubscribeRequest) GetF5XcBigipUtilitiesStandard() *schema.Empty {
+	if x, ok := m.GetAddonChoice().(*SubscribeRequest_F5XcBigipUtilitiesStandard); ok {
+		return x.F5XcBigipUtilitiesStandard
 	}
 	return nil
 }
@@ -205,7 +229,9 @@ func (*SubscribeRequest) XXX_OneofWrappers() []interface{} {
 		(*SubscribeRequest_F5XcWaapAdvanced)(nil),
 		(*SubscribeRequest_F5XcSiteManagementStandard)(nil),
 		(*SubscribeRequest_F5XcWebAppScanningStandard)(nil),
-		(*SubscribeRequest_F5XcUniversalZtnaStandard)(nil),
+		(*SubscribeRequest_F5XcContentDeliveryNetworkStandard)(nil),
+		(*SubscribeRequest_F5XcSyntheticMonitoringStandard)(nil),
+		(*SubscribeRequest_F5XcBigipUtilitiesStandard)(nil),
 	}
 }
 
@@ -263,7 +289,9 @@ type UnsubscribeRequest struct {
 	//	*UnsubscribeRequest_F5XcWaapAdvanced
 	//	*UnsubscribeRequest_F5XcSiteManagementStandard
 	//	*UnsubscribeRequest_F5XcWebAppScanningStandard
-	//	*UnsubscribeRequest_F5XcUniversalZtnaStandard
+	//	*UnsubscribeRequest_F5XcContentDeliveryNetworkStandard
+	//	*UnsubscribeRequest_F5XcSyntheticMonitoringStandard
+	//	*UnsubscribeRequest_F5XcBigipUtilitiesStandard
 	AddonChoice isUnsubscribeRequest_AddonChoice `protobuf_oneof:"addon_choice"`
 }
 
@@ -323,18 +351,26 @@ type UnsubscribeRequest_F5XcSiteManagementStandard struct {
 type UnsubscribeRequest_F5XcWebAppScanningStandard struct {
 	F5XcWebAppScanningStandard *schema.Empty `protobuf:"bytes,8,opt,name=f5xc_web_app_scanning_standard,json=f5xcWebAppScanningStandard,proto3,oneof" json:"f5xc_web_app_scanning_standard,omitempty"`
 }
-type UnsubscribeRequest_F5XcUniversalZtnaStandard struct {
-	F5XcUniversalZtnaStandard *schema.Empty `protobuf:"bytes,9,opt,name=f5xc_universal_ztna_standard,json=f5xcUniversalZtnaStandard,proto3,oneof" json:"f5xc_universal_ztna_standard,omitempty"`
+type UnsubscribeRequest_F5XcContentDeliveryNetworkStandard struct {
+	F5XcContentDeliveryNetworkStandard *schema.Empty `protobuf:"bytes,10,opt,name=f5xc_content_delivery_network_standard,json=f5xcContentDeliveryNetworkStandard,proto3,oneof" json:"f5xc_content_delivery_network_standard,omitempty"`
+}
+type UnsubscribeRequest_F5XcSyntheticMonitoringStandard struct {
+	F5XcSyntheticMonitoringStandard *schema.Empty `protobuf:"bytes,11,opt,name=f5xc_synthetic_monitoring_standard,json=f5xcSyntheticMonitoringStandard,proto3,oneof" json:"f5xc_synthetic_monitoring_standard,omitempty"`
+}
+type UnsubscribeRequest_F5XcBigipUtilitiesStandard struct {
+	F5XcBigipUtilitiesStandard *schema.Empty `protobuf:"bytes,12,opt,name=f5xc_bigip_utilities_standard,json=f5xcBigipUtilitiesStandard,proto3,oneof" json:"f5xc_bigip_utilities_standard,omitempty"`
 }
 
-func (*UnsubscribeRequest_F5XcSecuremeshStandard) isUnsubscribeRequest_AddonChoice()     {}
-func (*UnsubscribeRequest_F5XcSecuremeshAdvanced) isUnsubscribeRequest_AddonChoice()     {}
-func (*UnsubscribeRequest_F5XcAppstackStandard) isUnsubscribeRequest_AddonChoice()       {}
-func (*UnsubscribeRequest_F5XcWaapStandard) isUnsubscribeRequest_AddonChoice()           {}
-func (*UnsubscribeRequest_F5XcWaapAdvanced) isUnsubscribeRequest_AddonChoice()           {}
-func (*UnsubscribeRequest_F5XcSiteManagementStandard) isUnsubscribeRequest_AddonChoice() {}
-func (*UnsubscribeRequest_F5XcWebAppScanningStandard) isUnsubscribeRequest_AddonChoice() {}
-func (*UnsubscribeRequest_F5XcUniversalZtnaStandard) isUnsubscribeRequest_AddonChoice()  {}
+func (*UnsubscribeRequest_F5XcSecuremeshStandard) isUnsubscribeRequest_AddonChoice()             {}
+func (*UnsubscribeRequest_F5XcSecuremeshAdvanced) isUnsubscribeRequest_AddonChoice()             {}
+func (*UnsubscribeRequest_F5XcAppstackStandard) isUnsubscribeRequest_AddonChoice()               {}
+func (*UnsubscribeRequest_F5XcWaapStandard) isUnsubscribeRequest_AddonChoice()                   {}
+func (*UnsubscribeRequest_F5XcWaapAdvanced) isUnsubscribeRequest_AddonChoice()                   {}
+func (*UnsubscribeRequest_F5XcSiteManagementStandard) isUnsubscribeRequest_AddonChoice()         {}
+func (*UnsubscribeRequest_F5XcWebAppScanningStandard) isUnsubscribeRequest_AddonChoice()         {}
+func (*UnsubscribeRequest_F5XcContentDeliveryNetworkStandard) isUnsubscribeRequest_AddonChoice() {}
+func (*UnsubscribeRequest_F5XcSyntheticMonitoringStandard) isUnsubscribeRequest_AddonChoice()    {}
+func (*UnsubscribeRequest_F5XcBigipUtilitiesStandard) isUnsubscribeRequest_AddonChoice()         {}
 
 func (m *UnsubscribeRequest) GetAddonChoice() isUnsubscribeRequest_AddonChoice {
 	if m != nil {
@@ -392,9 +428,23 @@ func (m *UnsubscribeRequest) GetF5XcWebAppScanningStandard() *schema.Empty {
 	return nil
 }
 
-func (m *UnsubscribeRequest) GetF5XcUniversalZtnaStandard() *schema.Empty {
-	if x, ok := m.GetAddonChoice().(*UnsubscribeRequest_F5XcUniversalZtnaStandard); ok {
-		return x.F5XcUniversalZtnaStandard
+func (m *UnsubscribeRequest) GetF5XcContentDeliveryNetworkStandard() *schema.Empty {
+	if x, ok := m.GetAddonChoice().(*UnsubscribeRequest_F5XcContentDeliveryNetworkStandard); ok {
+		return x.F5XcContentDeliveryNetworkStandard
+	}
+	return nil
+}
+
+func (m *UnsubscribeRequest) GetF5XcSyntheticMonitoringStandard() *schema.Empty {
+	if x, ok := m.GetAddonChoice().(*UnsubscribeRequest_F5XcSyntheticMonitoringStandard); ok {
+		return x.F5XcSyntheticMonitoringStandard
+	}
+	return nil
+}
+
+func (m *UnsubscribeRequest) GetF5XcBigipUtilitiesStandard() *schema.Empty {
+	if x, ok := m.GetAddonChoice().(*UnsubscribeRequest_F5XcBigipUtilitiesStandard); ok {
+		return x.F5XcBigipUtilitiesStandard
 	}
 	return nil
 }
@@ -409,7 +459,9 @@ func (*UnsubscribeRequest) XXX_OneofWrappers() []interface{} {
 		(*UnsubscribeRequest_F5XcWaapAdvanced)(nil),
 		(*UnsubscribeRequest_F5XcSiteManagementStandard)(nil),
 		(*UnsubscribeRequest_F5XcWebAppScanningStandard)(nil),
-		(*UnsubscribeRequest_F5XcUniversalZtnaStandard)(nil),
+		(*UnsubscribeRequest_F5XcContentDeliveryNetworkStandard)(nil),
+		(*UnsubscribeRequest_F5XcSyntheticMonitoringStandard)(nil),
+		(*UnsubscribeRequest_F5XcBigipUtilitiesStandard)(nil),
 	}
 }
 
@@ -467,53 +519,58 @@ func init() {
 }
 
 var fileDescriptor_ad9451d9fdee72c4 = []byte{
-	// 730 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x96, 0x3f, 0x4f, 0x14, 0x4f,
-	0x18, 0xc7, 0x6f, 0x8e, 0x3f, 0x3f, 0x18, 0x28, 0xf8, 0x2d, 0x68, 0x8e, 0x13, 0x47, 0x72, 0x95,
-	0xff, 0x6e, 0x47, 0x31, 0x36, 0x76, 0x87, 0x68, 0xd4, 0x68, 0x42, 0xb8, 0x10, 0x22, 0xcd, 0x66,
-	0x76, 0x77, 0xd8, 0x9b, 0x70, 0x3b, 0x33, 0xee, 0xcc, 0x1e, 0x60, 0xa5, 0xbc, 0x00, 0x63, 0xe2,
-	0x9b, 0xb0, 0xb2, 0xb4, 0xa1, 0x21, 0x36, 0x5a, 0x99, 0x4b, 0x6c, 0x28, 0x65, 0xcf, 0x82, 0x92,
-	0x97, 0x60, 0x6e, 0x6f, 0x6f, 0xef, 0x0f, 0x78, 0x60, 0x69, 0x42, 0xb7, 0x9b, 0xef, 0xf3, 0xfd,
-	0xe4, 0xfb, 0x3c, 0x79, 0x76, 0x67, 0xe0, 0xdd, 0x1a, 0x55, 0x26, 0x13, 0x58, 0x39, 0x15, 0xea,
-	0x13, 0xac, 0x42, 0x5b, 0x39, 0x01, 0x93, 0x9a, 0x09, 0x8e, 0x65, 0x68, 0x57, 0x99, 0x63, 0x39,
-	0xa1, 0xd2, 0xc2, 0x27, 0x92, 0x99, 0x32, 0x10, 0x5a, 0x18, 0xf9, 0x96, 0xc5, 0x6c, 0x59, 0xcc,
-	0x6e, 0x4b, 0xbe, 0xe8, 0x31, 0x5d, 0x09, 0x6d, 0xd3, 0x11, 0x3e, 0xf6, 0x84, 0x27, 0x70, 0x6c,
-	0xb1, 0xc3, 0x8d, 0xf8, 0x2d, 0x7e, 0x89, 0x9f, 0x5a, 0xa8, 0xfc, 0x9c, 0x27, 0x84, 0x57, 0xa5,
-	0x98, 0x48, 0x86, 0x09, 0xe7, 0x42, 0x93, 0x26, 0x45, 0x25, 0xea, 0x95, 0xde, 0x6c, 0x42, 0x76,
-	0x8b, 0xb3, 0xbd, 0xa2, 0xde, 0x91, 0xb4, 0x2d, 0xcd, 0xf5, 0x4a, 0x35, 0x52, 0x65, 0x2e, 0xd1,
-	0x34, 0x51, 0x0b, 0x7d, 0x2a, 0x55, 0x94, 0xd7, 0xfa, 0xe0, 0xf3, 0x7d, 0x35, 0x8c, 0x6e, 0x59,
-	0xbd, 0x15, 0xd7, 0x4e, 0x56, 0xa8, 0xee, 0x10, 0x85, 0xfd, 0x11, 0x38, 0x55, 0x6e, 0x8d, 0xc6,
-	0xa6, 0x2b, 0xf4, 0x55, 0x48, 0x95, 0x36, 0x96, 0x61, 0x6e, 0xe3, 0xfe, 0xb6, 0x63, 0x29, 0xea,
-	0x84, 0x01, 0xf5, 0xa9, 0xaa, 0x58, 0x4a, 0x13, 0xee, 0x92, 0xc0, 0xcd, 0x65, 0xe7, 0xc1, 0xf5,
-	0x89, 0x85, 0x19, 0xb3, 0x77, 0xba, 0x8f, 0x7c, 0xa9, 0x77, 0x9e, 0x64, 0x56, 0x2e, 0x37, 0x7d,
-	0xe5, 0xd4, 0x56, 0x4e, 0x5c, 0xa7, 0x11, 0x89, 0x5b, 0x23, 0xdc, 0xa1, 0x6e, 0x6e, 0xe8, 0x6f,
-	0x88, 0xa5, 0xc4, 0x65, 0x3c, 0x87, 0xb1, 0x62, 0x11, 0x29, 0x95, 0x26, 0xce, 0x66, 0x27, 0xe1,
-	0xf0, 0x40, 0xde, 0x4c, 0xd3, 0x55, 0x4a, 0x4c, 0x69, 0xbe, 0x25, 0x68, 0xc4, 0xb4, 0x2d, 0x42,
-	0x64, 0x87, 0x34, 0x32, 0x90, 0x34, 0xd5, 0x74, 0xac, 0x11, 0x22, 0x4f, 0xa7, 0xa4, 0xfd, 0x8d,
-	0x9e, 0x8f, 0x92, 0x76, 0xf6, 0x12, 0x5e, 0x6d, 0xcd, 0x8a, 0x69, 0x6a, 0xf9, 0x84, 0x13, 0x8f,
-	0xfa, 0x94, 0xeb, 0x4e, 0xac, 0xff, 0x06, 0x02, 0xf3, 0xf1, 0xc0, 0x98, 0xa6, 0x2f, 0x52, 0x6b,
-	0x1a, 0x70, 0x1d, 0xa2, 0x56, 0x40, 0x6a, 0x37, 0x07, 0x67, 0x29, 0x87, 0x70, 0xce, 0xb8, 0xd7,
-	0x61, 0x8f, 0x9d, 0xcd, 0x5e, 0xa3, 0x76, 0x49, 0xca, 0x72, 0x62, 0x4d, 0xd9, 0x6b, 0x70, 0x2e,
-	0x66, 0x87, 0x9c, 0xd5, 0x68, 0xa0, 0x48, 0xd5, 0x7a, 0xad, 0x39, 0xe9, 0x90, 0xc7, 0x07, 0x92,
-	0x67, 0x9b, 0xde, 0xd5, 0xb6, 0x75, 0x5d, 0x73, 0xd2, 0x06, 0x2f, 0xe6, 0xe0, 0x24, 0x71, 0x5d,
-	0xc1, 0x2d, 0xa7, 0x22, 0x98, 0x43, 0x8d, 0xb1, 0xfa, 0x1e, 0x00, 0x47, 0x7b, 0x00, 0x3c, 0x1b,
-	0x1e, 0x03, 0x53, 0xd9, 0xc2, 0x34, 0xfc, 0xbf, 0x6b, 0x83, 0x95, 0x14, 0x5c, 0xd1, 0xc2, 0x97,
-	0x11, 0x68, 0xac, 0x72, 0x75, 0xb1, 0xd9, 0x17, 0x9b, 0xfd, 0xef, 0x6e, 0xf6, 0x25, 0x38, 0xdd,
-	0xb3, 0xc3, 0xad, 0xdd, 0x5e, 0x78, 0x3b, 0x04, 0xc7, 0x1f, 0xc6, 0xa7, 0x5d, 0x69, 0xf9, 0xa9,
-	0xf1, 0x09, 0xc0, 0xf1, 0x74, 0xff, 0x8d, 0xdb, 0xe6, 0x9f, 0x8f, 0x3d, 0xb3, 0xff, 0x47, 0x9f,
-	0x2f, 0x9e, 0xb3, 0x3a, 0xf9, 0xa8, 0x96, 0xa2, 0xaf, 0xb9, 0xc9, 0x66, 0x3b, 0x45, 0x9b, 0x55,
-	0xab, 0x8c, 0x7b, 0xbb, 0x3f, 0x7e, 0x7d, 0xc8, 0x9a, 0x85, 0x1b, 0xc9, 0x19, 0x8c, 0x39, 0xf1,
-	0xa9, 0x92, 0xc4, 0xa1, 0x0a, 0xab, 0x1d, 0xa5, 0xa9, 0x8f, 0xe3, 0xfe, 0x70, 0xda, 0xc3, 0x03,
-	0x70, 0xd3, 0xf8, 0x0c, 0xe0, 0x44, 0x57, 0x5b, 0x86, 0x39, 0x28, 0xc4, 0xc9, 0x6f, 0x38, 0x8f,
-	0xcf, 0x5d, 0x9f, 0xc4, 0x7e, 0x7c, 0x6a, 0xec, 0x3b, 0x85, 0x5b, 0x67, 0xc5, 0x0e, 0x79, 0x77,
-	0xf0, 0x3c, 0xdc, 0xdf, 0x03, 0x43, 0xbb, 0xdf, 0x73, 0xd9, 0x0a, 0x58, 0x7c, 0x07, 0xea, 0x87,
-	0x28, 0x73, 0x70, 0x88, 0x32, 0xc7, 0x87, 0x08, 0xbc, 0x89, 0x10, 0xf8, 0x18, 0x21, 0xf0, 0x2d,
-	0x42, 0xa0, 0x1e, 0x21, 0x70, 0x10, 0x21, 0xf0, 0x33, 0x42, 0xe0, 0x28, 0x42, 0x99, 0xe3, 0x08,
-	0x81, 0xf7, 0x0d, 0x94, 0xd9, 0x6f, 0x20, 0x50, 0x6f, 0xa0, 0xcc, 0x41, 0x03, 0x65, 0xd6, 0x97,
-	0x3d, 0x21, 0x37, 0x3d, 0xb3, 0x26, 0xaa, 0x9a, 0x06, 0x01, 0x31, 0x43, 0x85, 0xe3, 0x87, 0x0d,
-	0x11, 0xf8, 0x45, 0x19, 0x88, 0x1a, 0x73, 0x69, 0x50, 0x6c, 0xcb, 0x58, 0xda, 0x9e, 0xc0, 0x74,
-	0x5b, 0xb7, 0xaf, 0x3f, 0x27, 0x6f, 0x41, 0xf6, 0x68, 0x7c, 0x9e, 0xdf, 0xfb, 0x1d, 0x00, 0x00,
-	0xff, 0xff, 0xac, 0xa4, 0x1b, 0xec, 0x2a, 0x09, 0x00, 0x00,
+	// 810 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x96, 0xbf, 0x6f, 0x1c, 0x45,
+	0x14, 0xc7, 0x6f, 0x6c, 0x13, 0x9f, 0xc7, 0x2e, 0x8e, 0x4d, 0x40, 0xc7, 0x11, 0x26, 0xd1, 0x16,
+	0x88, 0x5f, 0xb7, 0x0b, 0x41, 0x34, 0x74, 0xe7, 0x18, 0x04, 0x11, 0x41, 0x56, 0x4e, 0x51, 0x44,
+	0x9a, 0xd5, 0xec, 0xec, 0xf3, 0xde, 0x90, 0xdd, 0x99, 0x61, 0x67, 0xf6, 0x9c, 0xeb, 0x20, 0x7f,
+	0x00, 0x42, 0xa2, 0x42, 0xfc, 0x03, 0x54, 0x94, 0x34, 0x6e, 0xd2, 0x41, 0x85, 0x4e, 0xa2, 0x71,
+	0x89, 0xf7, 0x28, 0x52, 0xe6, 0x4f, 0x40, 0xfb, 0xe3, 0xf6, 0x7e, 0xd8, 0x9c, 0x4d, 0x97, 0xc2,
+	0xdd, 0xae, 0xde, 0xfb, 0x7e, 0xe6, 0xfb, 0xde, 0xea, 0xcd, 0x3e, 0xfc, 0xc1, 0x10, 0xb4, 0xc3,
+	0xa5, 0xab, 0xd9, 0x00, 0x62, 0xea, 0xea, 0xd4, 0xd7, 0x2c, 0xe1, 0xca, 0x70, 0x29, 0x5c, 0x95,
+	0xfa, 0x11, 0x67, 0x1e, 0x4b, 0xb5, 0x91, 0x31, 0x55, 0xdc, 0x51, 0x89, 0x34, 0xd2, 0xea, 0x94,
+	0x12, 0xa7, 0x94, 0x38, 0xf3, 0x92, 0x4e, 0x37, 0xe4, 0x66, 0x90, 0xfa, 0x0e, 0x93, 0xb1, 0x1b,
+	0xca, 0x50, 0xba, 0x85, 0xc4, 0x4f, 0x0f, 0x8a, 0xb7, 0xe2, 0xa5, 0x78, 0x2a, 0x51, 0x9d, 0xeb,
+	0xa1, 0x94, 0x61, 0x04, 0x2e, 0x55, 0xdc, 0xa5, 0x42, 0x48, 0x43, 0x73, 0x8a, 0xae, 0xa2, 0xaf,
+	0x2f, 0x7a, 0x93, 0x6a, 0x3e, 0xf8, 0xda, 0x62, 0xd0, 0x8c, 0x14, 0x4c, 0x43, 0xd7, 0x17, 0x43,
+	0x43, 0x1a, 0xf1, 0x80, 0x1a, 0xa8, 0xa2, 0xf6, 0x52, 0x14, 0x34, 0x88, 0xe1, 0x12, 0xfc, 0xe6,
+	0x52, 0x0e, 0x87, 0x43, 0x6f, 0x31, 0xe3, 0xc6, 0xe9, 0x0c, 0x3d, 0x6f, 0xc2, 0xfe, 0x69, 0x13,
+	0xb7, 0xfa, 0x65, 0x6b, 0x7c, 0xb8, 0x07, 0xdf, 0xa4, 0xa0, 0x8d, 0xb5, 0x8f, 0xdb, 0x07, 0x1f,
+	0x3d, 0x66, 0x9e, 0x06, 0x96, 0x26, 0x10, 0x83, 0x1e, 0x78, 0xda, 0x50, 0x11, 0xd0, 0x24, 0x68,
+	0xaf, 0xdd, 0x44, 0x6f, 0x6d, 0xdf, 0xba, 0xe6, 0x2c, 0x76, 0xf7, 0x93, 0x58, 0x99, 0xd1, 0x67,
+	0x8d, 0x7b, 0xaf, 0xe6, 0xba, 0x7e, 0x2d, 0xeb, 0x57, 0xaa, 0xb3, 0x88, 0x34, 0x18, 0x52, 0xc1,
+	0x20, 0x68, 0xaf, 0xff, 0x1f, 0x62, 0xaf, 0x52, 0x59, 0x5f, 0xe0, 0x22, 0xe2, 0x51, 0xa5, 0xb4,
+	0xa1, 0xec, 0xd1, 0xcc, 0xe1, 0xc6, 0x4a, 0xde, 0xb5, 0x5c, 0xd5, 0xab, 0x44, 0xb5, 0xbf, 0x3d,
+	0x6c, 0x15, 0xb4, 0x43, 0x4a, 0xd5, 0x8c, 0xf4, 0xd2, 0x4a, 0x52, 0x2b, 0x57, 0x3c, 0xa0, 0x54,
+	0x9d, 0x4d, 0xa9, 0xeb, 0xbb, 0x72, 0x31, 0x4a, 0x5d, 0xd9, 0x57, 0xf8, 0x8d, 0xb2, 0x57, 0xdc,
+	0x80, 0x17, 0x53, 0x41, 0x43, 0x88, 0x41, 0x98, 0x99, 0xad, 0xcd, 0x95, 0xc0, 0x4e, 0xd1, 0x30,
+	0x6e, 0xe0, 0x6e, 0x2d, 0xad, 0x0d, 0x3e, 0xc4, 0xa4, 0x34, 0x08, 0x7e, 0xde, 0x38, 0x4f, 0x33,
+	0x2a, 0x04, 0x17, 0xe1, 0x8c, 0xdd, 0x3c, 0x9f, 0xfd, 0x00, 0xfc, 0x9e, 0x52, 0xfd, 0x4a, 0x5a,
+	0xb3, 0xbf, 0xc6, 0x6f, 0x16, 0x6c, 0x26, 0x85, 0xc9, 0xed, 0x06, 0x10, 0xf1, 0x21, 0x24, 0x23,
+	0x4f, 0x80, 0x39, 0x94, 0xc9, 0xdc, 0x07, 0xc2, 0x2b, 0xcf, 0xb0, 0x73, 0xca, 0xed, 0x12, 0xb2,
+	0x57, 0x31, 0xbe, 0x2c, 0x11, 0xf5, 0x59, 0x0c, 0xdb, 0x65, 0x8b, 0x46, 0xc2, 0x0c, 0xc0, 0x70,
+	0xe6, 0xc5, 0x52, 0x70, 0x23, 0x93, 0x85, 0x5a, 0xb6, 0x57, 0x9e, 0x73, 0xa3, 0xe8, 0xd3, 0x14,
+	0x70, 0xb7, 0xd6, 0xd7, 0x87, 0x4c, 0xbf, 0x83, 0xcf, 0x43, 0xae, 0xbc, 0xd4, 0xf0, 0x88, 0x1b,
+	0x0e, 0x7a, 0xc6, 0xdf, 0x39, 0xbf, 0x57, 0xbb, 0xb9, 0xf6, 0xfe, 0x54, 0x3a, 0x45, 0xef, 0xb6,
+	0xf1, 0x0e, 0x0d, 0x02, 0x29, 0x3c, 0x36, 0x90, 0x9c, 0x81, 0xd5, 0x1c, 0x1f, 0x21, 0xf4, 0xec,
+	0x08, 0xa1, 0x3b, 0x1b, 0x4d, 0xd4, 0x5a, 0xbb, 0xb3, 0xd1, 0xdc, 0x6a, 0x61, 0xfb, 0x2a, 0x7e,
+	0x79, 0x6e, 0x34, 0xb5, 0x92, 0x42, 0x83, 0xfd, 0xf3, 0x26, 0xb6, 0xee, 0x0b, 0x7d, 0x39, 0xb2,
+	0x97, 0x23, 0x7b, 0x39, 0xb2, 0x2f, 0xdc, 0xc8, 0xbe, 0x82, 0xaf, 0x2e, 0x0c, 0x67, 0x39, 0xb4,
+	0xb7, 0xbe, 0x5b, 0xc7, 0x5b, 0xb7, 0x8b, 0xfd, 0xa4, 0xb7, 0xff, 0xb9, 0xf5, 0x2b, 0xc2, 0x5b,
+	0xf5, 0x60, 0x5b, 0xef, 0x39, 0xff, 0xbd, 0xa8, 0x38, 0xcb, 0xbf, 0xe6, 0x4e, 0xf7, 0x82, 0xd9,
+	0xd5, 0x6d, 0xb1, 0x97, 0xfd, 0xde, 0xde, 0xc9, 0xab, 0xea, 0xfa, 0x3c, 0x8a, 0xb8, 0x08, 0x9f,
+	0xfc, 0xf5, 0xcf, 0x8f, 0x6b, 0x8e, 0xfd, 0x76, 0xb5, 0x35, 0xb9, 0x82, 0xc6, 0xa0, 0x15, 0x65,
+	0xa0, 0x5d, 0x3d, 0xd2, 0x06, 0x62, 0xb7, 0xa8, 0xd2, 0xad, 0x6b, 0xf8, 0x18, 0xbd, 0x63, 0xfd,
+	0x86, 0xf0, 0xf6, 0x5c, 0x59, 0x96, 0xb3, 0xca, 0xc4, 0xe9, 0xcb, 0xa9, 0xe3, 0x5e, 0x38, 0xbf,
+	0xb2, 0xfd, 0xe9, 0x99, 0xb6, 0xdf, 0xb7, 0xdf, 0x3d, 0xcf, 0x76, 0x2a, 0xe6, 0x8d, 0x77, 0xf0,
+	0xd3, 0x23, 0xb4, 0xfe, 0xe4, 0xcf, 0xf6, 0xda, 0x00, 0xed, 0x7e, 0x8f, 0xc6, 0x27, 0xa4, 0x71,
+	0x7c, 0x42, 0x1a, 0xcf, 0x4f, 0x08, 0xfa, 0x36, 0x23, 0xe8, 0x97, 0x8c, 0xa0, 0x3f, 0x32, 0x82,
+	0xc6, 0x19, 0x41, 0xc7, 0x19, 0x41, 0x7f, 0x67, 0x04, 0x3d, 0xcb, 0x48, 0xe3, 0x79, 0x46, 0xd0,
+	0x0f, 0x13, 0xd2, 0x78, 0x3a, 0x21, 0x68, 0x3c, 0x21, 0x8d, 0xe3, 0x09, 0x69, 0x3c, 0xdc, 0x0f,
+	0xa5, 0x7a, 0x14, 0x3a, 0x43, 0x19, 0x19, 0x48, 0x12, 0xea, 0xa4, 0xda, 0x2d, 0x1e, 0x0e, 0x64,
+	0x12, 0x77, 0x55, 0x22, 0x87, 0x3c, 0x80, 0xa4, 0x3b, 0x0d, 0xbb, 0xca, 0x0f, 0xa5, 0x0b, 0x8f,
+	0xcd, 0x74, 0x61, 0x3d, 0xbd, 0xb7, 0xfa, 0x57, 0x8a, 0x0d, 0xec, 0xc3, 0x7f, 0x03, 0x00, 0x00,
+	0xff, 0xff, 0x90, 0x9f, 0xde, 0x11, 0xdc, 0x0a, 0x00, 0x00,
 }
 
 func (this *SubscribeRequest) Equal(that interface{}) bool {
@@ -714,14 +771,14 @@ func (this *SubscribeRequest_F5XcWebAppScanningStandard) Equal(that interface{})
 	}
 	return true
 }
-func (this *SubscribeRequest_F5XcUniversalZtnaStandard) Equal(that interface{}) bool {
+func (this *SubscribeRequest_F5XcContentDeliveryNetworkStandard) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
 	}
 
-	that1, ok := that.(*SubscribeRequest_F5XcUniversalZtnaStandard)
+	that1, ok := that.(*SubscribeRequest_F5XcContentDeliveryNetworkStandard)
 	if !ok {
-		that2, ok := that.(SubscribeRequest_F5XcUniversalZtnaStandard)
+		that2, ok := that.(SubscribeRequest_F5XcContentDeliveryNetworkStandard)
 		if ok {
 			that1 = &that2
 		} else {
@@ -733,7 +790,55 @@ func (this *SubscribeRequest_F5XcUniversalZtnaStandard) Equal(that interface{}) 
 	} else if this == nil {
 		return false
 	}
-	if !this.F5XcUniversalZtnaStandard.Equal(that1.F5XcUniversalZtnaStandard) {
+	if !this.F5XcContentDeliveryNetworkStandard.Equal(that1.F5XcContentDeliveryNetworkStandard) {
+		return false
+	}
+	return true
+}
+func (this *SubscribeRequest_F5XcSyntheticMonitoringStandard) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*SubscribeRequest_F5XcSyntheticMonitoringStandard)
+	if !ok {
+		that2, ok := that.(SubscribeRequest_F5XcSyntheticMonitoringStandard)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.F5XcSyntheticMonitoringStandard.Equal(that1.F5XcSyntheticMonitoringStandard) {
+		return false
+	}
+	return true
+}
+func (this *SubscribeRequest_F5XcBigipUtilitiesStandard) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*SubscribeRequest_F5XcBigipUtilitiesStandard)
+	if !ok {
+		that2, ok := that.(SubscribeRequest_F5XcBigipUtilitiesStandard)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.F5XcBigipUtilitiesStandard.Equal(that1.F5XcBigipUtilitiesStandard) {
 		return false
 	}
 	return true
@@ -957,14 +1062,14 @@ func (this *UnsubscribeRequest_F5XcWebAppScanningStandard) Equal(that interface{
 	}
 	return true
 }
-func (this *UnsubscribeRequest_F5XcUniversalZtnaStandard) Equal(that interface{}) bool {
+func (this *UnsubscribeRequest_F5XcContentDeliveryNetworkStandard) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
 	}
 
-	that1, ok := that.(*UnsubscribeRequest_F5XcUniversalZtnaStandard)
+	that1, ok := that.(*UnsubscribeRequest_F5XcContentDeliveryNetworkStandard)
 	if !ok {
-		that2, ok := that.(UnsubscribeRequest_F5XcUniversalZtnaStandard)
+		that2, ok := that.(UnsubscribeRequest_F5XcContentDeliveryNetworkStandard)
 		if ok {
 			that1 = &that2
 		} else {
@@ -976,7 +1081,55 @@ func (this *UnsubscribeRequest_F5XcUniversalZtnaStandard) Equal(that interface{}
 	} else if this == nil {
 		return false
 	}
-	if !this.F5XcUniversalZtnaStandard.Equal(that1.F5XcUniversalZtnaStandard) {
+	if !this.F5XcContentDeliveryNetworkStandard.Equal(that1.F5XcContentDeliveryNetworkStandard) {
+		return false
+	}
+	return true
+}
+func (this *UnsubscribeRequest_F5XcSyntheticMonitoringStandard) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*UnsubscribeRequest_F5XcSyntheticMonitoringStandard)
+	if !ok {
+		that2, ok := that.(UnsubscribeRequest_F5XcSyntheticMonitoringStandard)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.F5XcSyntheticMonitoringStandard.Equal(that1.F5XcSyntheticMonitoringStandard) {
+		return false
+	}
+	return true
+}
+func (this *UnsubscribeRequest_F5XcBigipUtilitiesStandard) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*UnsubscribeRequest_F5XcBigipUtilitiesStandard)
+	if !ok {
+		that2, ok := that.(UnsubscribeRequest_F5XcBigipUtilitiesStandard)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.F5XcBigipUtilitiesStandard.Equal(that1.F5XcBigipUtilitiesStandard) {
 		return false
 	}
 	return true
@@ -1006,7 +1159,7 @@ func (this *SubscribeRequest) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 12)
+	s := make([]string, 0, 14)
 	s = append(s, "&subscription.SubscribeRequest{")
 	if this.AddonChoice != nil {
 		s = append(s, "AddonChoice: "+fmt.Sprintf("%#v", this.AddonChoice)+",\n")
@@ -1070,12 +1223,28 @@ func (this *SubscribeRequest_F5XcWebAppScanningStandard) GoString() string {
 		`F5XcWebAppScanningStandard:` + fmt.Sprintf("%#v", this.F5XcWebAppScanningStandard) + `}`}, ", ")
 	return s
 }
-func (this *SubscribeRequest_F5XcUniversalZtnaStandard) GoString() string {
+func (this *SubscribeRequest_F5XcContentDeliveryNetworkStandard) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&subscription.SubscribeRequest_F5XcUniversalZtnaStandard{` +
-		`F5XcUniversalZtnaStandard:` + fmt.Sprintf("%#v", this.F5XcUniversalZtnaStandard) + `}`}, ", ")
+	s := strings.Join([]string{`&subscription.SubscribeRequest_F5XcContentDeliveryNetworkStandard{` +
+		`F5XcContentDeliveryNetworkStandard:` + fmt.Sprintf("%#v", this.F5XcContentDeliveryNetworkStandard) + `}`}, ", ")
+	return s
+}
+func (this *SubscribeRequest_F5XcSyntheticMonitoringStandard) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&subscription.SubscribeRequest_F5XcSyntheticMonitoringStandard{` +
+		`F5XcSyntheticMonitoringStandard:` + fmt.Sprintf("%#v", this.F5XcSyntheticMonitoringStandard) + `}`}, ", ")
+	return s
+}
+func (this *SubscribeRequest_F5XcBigipUtilitiesStandard) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&subscription.SubscribeRequest_F5XcBigipUtilitiesStandard{` +
+		`F5XcBigipUtilitiesStandard:` + fmt.Sprintf("%#v", this.F5XcBigipUtilitiesStandard) + `}`}, ", ")
 	return s
 }
 func (this *SubscribeResponse) GoString() string {
@@ -1091,7 +1260,7 @@ func (this *UnsubscribeRequest) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 12)
+	s := make([]string, 0, 14)
 	s = append(s, "&subscription.UnsubscribeRequest{")
 	if this.AddonChoice != nil {
 		s = append(s, "AddonChoice: "+fmt.Sprintf("%#v", this.AddonChoice)+",\n")
@@ -1155,12 +1324,28 @@ func (this *UnsubscribeRequest_F5XcWebAppScanningStandard) GoString() string {
 		`F5XcWebAppScanningStandard:` + fmt.Sprintf("%#v", this.F5XcWebAppScanningStandard) + `}`}, ", ")
 	return s
 }
-func (this *UnsubscribeRequest_F5XcUniversalZtnaStandard) GoString() string {
+func (this *UnsubscribeRequest_F5XcContentDeliveryNetworkStandard) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&subscription.UnsubscribeRequest_F5XcUniversalZtnaStandard{` +
-		`F5XcUniversalZtnaStandard:` + fmt.Sprintf("%#v", this.F5XcUniversalZtnaStandard) + `}`}, ", ")
+	s := strings.Join([]string{`&subscription.UnsubscribeRequest_F5XcContentDeliveryNetworkStandard{` +
+		`F5XcContentDeliveryNetworkStandard:` + fmt.Sprintf("%#v", this.F5XcContentDeliveryNetworkStandard) + `}`}, ", ")
+	return s
+}
+func (this *UnsubscribeRequest_F5XcSyntheticMonitoringStandard) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&subscription.UnsubscribeRequest_F5XcSyntheticMonitoringStandard{` +
+		`F5XcSyntheticMonitoringStandard:` + fmt.Sprintf("%#v", this.F5XcSyntheticMonitoringStandard) + `}`}, ", ")
+	return s
+}
+func (this *UnsubscribeRequest_F5XcBigipUtilitiesStandard) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&subscription.UnsubscribeRequest_F5XcBigipUtilitiesStandard{` +
+		`F5XcBigipUtilitiesStandard:` + fmt.Sprintf("%#v", this.F5XcBigipUtilitiesStandard) + `}`}, ", ")
 	return s
 }
 func (this *UnsubscribeResponse) GoString() string {
@@ -1492,16 +1677,16 @@ func (m *SubscribeRequest_F5XcWebAppScanningStandard) MarshalToSizedBuffer(dAtA 
 	}
 	return len(dAtA) - i, nil
 }
-func (m *SubscribeRequest_F5XcUniversalZtnaStandard) MarshalTo(dAtA []byte) (int, error) {
+func (m *SubscribeRequest_F5XcContentDeliveryNetworkStandard) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *SubscribeRequest_F5XcUniversalZtnaStandard) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *SubscribeRequest_F5XcContentDeliveryNetworkStandard) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
-	if m.F5XcUniversalZtnaStandard != nil {
+	if m.F5XcContentDeliveryNetworkStandard != nil {
 		{
-			size, err := m.F5XcUniversalZtnaStandard.MarshalToSizedBuffer(dAtA[:i])
+			size, err := m.F5XcContentDeliveryNetworkStandard.MarshalToSizedBuffer(dAtA[:i])
 			if err != nil {
 				return 0, err
 			}
@@ -1509,7 +1694,49 @@ func (m *SubscribeRequest_F5XcUniversalZtnaStandard) MarshalToSizedBuffer(dAtA [
 			i = encodeVarintPublicCustomapi(dAtA, i, uint64(size))
 		}
 		i--
-		dAtA[i] = 0x4a
+		dAtA[i] = 0x52
+	}
+	return len(dAtA) - i, nil
+}
+func (m *SubscribeRequest_F5XcSyntheticMonitoringStandard) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *SubscribeRequest_F5XcSyntheticMonitoringStandard) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.F5XcSyntheticMonitoringStandard != nil {
+		{
+			size, err := m.F5XcSyntheticMonitoringStandard.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintPublicCustomapi(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x5a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *SubscribeRequest_F5XcBigipUtilitiesStandard) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *SubscribeRequest_F5XcBigipUtilitiesStandard) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.F5XcBigipUtilitiesStandard != nil {
+		{
+			size, err := m.F5XcBigipUtilitiesStandard.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintPublicCustomapi(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x62
 	}
 	return len(dAtA) - i, nil
 }
@@ -1715,16 +1942,16 @@ func (m *UnsubscribeRequest_F5XcWebAppScanningStandard) MarshalToSizedBuffer(dAt
 	}
 	return len(dAtA) - i, nil
 }
-func (m *UnsubscribeRequest_F5XcUniversalZtnaStandard) MarshalTo(dAtA []byte) (int, error) {
+func (m *UnsubscribeRequest_F5XcContentDeliveryNetworkStandard) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *UnsubscribeRequest_F5XcUniversalZtnaStandard) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *UnsubscribeRequest_F5XcContentDeliveryNetworkStandard) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
-	if m.F5XcUniversalZtnaStandard != nil {
+	if m.F5XcContentDeliveryNetworkStandard != nil {
 		{
-			size, err := m.F5XcUniversalZtnaStandard.MarshalToSizedBuffer(dAtA[:i])
+			size, err := m.F5XcContentDeliveryNetworkStandard.MarshalToSizedBuffer(dAtA[:i])
 			if err != nil {
 				return 0, err
 			}
@@ -1732,7 +1959,49 @@ func (m *UnsubscribeRequest_F5XcUniversalZtnaStandard) MarshalToSizedBuffer(dAtA
 			i = encodeVarintPublicCustomapi(dAtA, i, uint64(size))
 		}
 		i--
-		dAtA[i] = 0x4a
+		dAtA[i] = 0x52
+	}
+	return len(dAtA) - i, nil
+}
+func (m *UnsubscribeRequest_F5XcSyntheticMonitoringStandard) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *UnsubscribeRequest_F5XcSyntheticMonitoringStandard) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.F5XcSyntheticMonitoringStandard != nil {
+		{
+			size, err := m.F5XcSyntheticMonitoringStandard.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintPublicCustomapi(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x5a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *UnsubscribeRequest_F5XcBigipUtilitiesStandard) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *UnsubscribeRequest_F5XcBigipUtilitiesStandard) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.F5XcBigipUtilitiesStandard != nil {
+		{
+			size, err := m.F5XcBigipUtilitiesStandard.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintPublicCustomapi(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x62
 	}
 	return len(dAtA) - i, nil
 }
@@ -1866,14 +2135,38 @@ func (m *SubscribeRequest_F5XcWebAppScanningStandard) Size() (n int) {
 	}
 	return n
 }
-func (m *SubscribeRequest_F5XcUniversalZtnaStandard) Size() (n int) {
+func (m *SubscribeRequest_F5XcContentDeliveryNetworkStandard) Size() (n int) {
 	if m == nil {
 		return 0
 	}
 	var l int
 	_ = l
-	if m.F5XcUniversalZtnaStandard != nil {
-		l = m.F5XcUniversalZtnaStandard.Size()
+	if m.F5XcContentDeliveryNetworkStandard != nil {
+		l = m.F5XcContentDeliveryNetworkStandard.Size()
+		n += 1 + l + sovPublicCustomapi(uint64(l))
+	}
+	return n
+}
+func (m *SubscribeRequest_F5XcSyntheticMonitoringStandard) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.F5XcSyntheticMonitoringStandard != nil {
+		l = m.F5XcSyntheticMonitoringStandard.Size()
+		n += 1 + l + sovPublicCustomapi(uint64(l))
+	}
+	return n
+}
+func (m *SubscribeRequest_F5XcBigipUtilitiesStandard) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.F5XcBigipUtilitiesStandard != nil {
+		l = m.F5XcBigipUtilitiesStandard.Size()
 		n += 1 + l + sovPublicCustomapi(uint64(l))
 	}
 	return n
@@ -1983,14 +2276,38 @@ func (m *UnsubscribeRequest_F5XcWebAppScanningStandard) Size() (n int) {
 	}
 	return n
 }
-func (m *UnsubscribeRequest_F5XcUniversalZtnaStandard) Size() (n int) {
+func (m *UnsubscribeRequest_F5XcContentDeliveryNetworkStandard) Size() (n int) {
 	if m == nil {
 		return 0
 	}
 	var l int
 	_ = l
-	if m.F5XcUniversalZtnaStandard != nil {
-		l = m.F5XcUniversalZtnaStandard.Size()
+	if m.F5XcContentDeliveryNetworkStandard != nil {
+		l = m.F5XcContentDeliveryNetworkStandard.Size()
+		n += 1 + l + sovPublicCustomapi(uint64(l))
+	}
+	return n
+}
+func (m *UnsubscribeRequest_F5XcSyntheticMonitoringStandard) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.F5XcSyntheticMonitoringStandard != nil {
+		l = m.F5XcSyntheticMonitoringStandard.Size()
+		n += 1 + l + sovPublicCustomapi(uint64(l))
+	}
+	return n
+}
+func (m *UnsubscribeRequest_F5XcBigipUtilitiesStandard) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.F5XcBigipUtilitiesStandard != nil {
+		l = m.F5XcBigipUtilitiesStandard.Size()
 		n += 1 + l + sovPublicCustomapi(uint64(l))
 	}
 	return n
@@ -2090,12 +2407,32 @@ func (this *SubscribeRequest_F5XcWebAppScanningStandard) String() string {
 	}, "")
 	return s
 }
-func (this *SubscribeRequest_F5XcUniversalZtnaStandard) String() string {
+func (this *SubscribeRequest_F5XcContentDeliveryNetworkStandard) String() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&SubscribeRequest_F5XcUniversalZtnaStandard{`,
-		`F5XcUniversalZtnaStandard:` + strings.Replace(fmt.Sprintf("%v", this.F5XcUniversalZtnaStandard), "Empty", "schema.Empty", 1) + `,`,
+	s := strings.Join([]string{`&SubscribeRequest_F5XcContentDeliveryNetworkStandard{`,
+		`F5XcContentDeliveryNetworkStandard:` + strings.Replace(fmt.Sprintf("%v", this.F5XcContentDeliveryNetworkStandard), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *SubscribeRequest_F5XcSyntheticMonitoringStandard) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&SubscribeRequest_F5XcSyntheticMonitoringStandard{`,
+		`F5XcSyntheticMonitoringStandard:` + strings.Replace(fmt.Sprintf("%v", this.F5XcSyntheticMonitoringStandard), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *SubscribeRequest_F5XcBigipUtilitiesStandard) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&SubscribeRequest_F5XcBigipUtilitiesStandard{`,
+		`F5XcBigipUtilitiesStandard:` + strings.Replace(fmt.Sprintf("%v", this.F5XcBigipUtilitiesStandard), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2189,12 +2526,32 @@ func (this *UnsubscribeRequest_F5XcWebAppScanningStandard) String() string {
 	}, "")
 	return s
 }
-func (this *UnsubscribeRequest_F5XcUniversalZtnaStandard) String() string {
+func (this *UnsubscribeRequest_F5XcContentDeliveryNetworkStandard) String() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&UnsubscribeRequest_F5XcUniversalZtnaStandard{`,
-		`F5XcUniversalZtnaStandard:` + strings.Replace(fmt.Sprintf("%v", this.F5XcUniversalZtnaStandard), "Empty", "schema.Empty", 1) + `,`,
+	s := strings.Join([]string{`&UnsubscribeRequest_F5XcContentDeliveryNetworkStandard{`,
+		`F5XcContentDeliveryNetworkStandard:` + strings.Replace(fmt.Sprintf("%v", this.F5XcContentDeliveryNetworkStandard), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *UnsubscribeRequest_F5XcSyntheticMonitoringStandard) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&UnsubscribeRequest_F5XcSyntheticMonitoringStandard{`,
+		`F5XcSyntheticMonitoringStandard:` + strings.Replace(fmt.Sprintf("%v", this.F5XcSyntheticMonitoringStandard), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *UnsubscribeRequest_F5XcBigipUtilitiesStandard) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&UnsubscribeRequest_F5XcBigipUtilitiesStandard{`,
+		`F5XcBigipUtilitiesStandard:` + strings.Replace(fmt.Sprintf("%v", this.F5XcBigipUtilitiesStandard), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2490,9 +2847,9 @@ func (m *SubscribeRequest) Unmarshal(dAtA []byte) error {
 			}
 			m.AddonChoice = &SubscribeRequest_F5XcWebAppScanningStandard{v}
 			iNdEx = postIndex
-		case 9:
+		case 10:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field F5XcUniversalZtnaStandard", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field F5XcContentDeliveryNetworkStandard", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -2523,7 +2880,77 @@ func (m *SubscribeRequest) Unmarshal(dAtA []byte) error {
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
-			m.AddonChoice = &SubscribeRequest_F5XcUniversalZtnaStandard{v}
+			m.AddonChoice = &SubscribeRequest_F5XcContentDeliveryNetworkStandard{v}
+			iNdEx = postIndex
+		case 11:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field F5XcSyntheticMonitoringStandard", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.AddonChoice = &SubscribeRequest_F5XcSyntheticMonitoringStandard{v}
+			iNdEx = postIndex
+		case 12:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field F5XcBigipUtilitiesStandard", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.AddonChoice = &SubscribeRequest_F5XcBigipUtilitiesStandard{v}
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
@@ -2876,9 +3303,9 @@ func (m *UnsubscribeRequest) Unmarshal(dAtA []byte) error {
 			}
 			m.AddonChoice = &UnsubscribeRequest_F5XcWebAppScanningStandard{v}
 			iNdEx = postIndex
-		case 9:
+		case 10:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field F5XcUniversalZtnaStandard", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field F5XcContentDeliveryNetworkStandard", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -2909,7 +3336,77 @@ func (m *UnsubscribeRequest) Unmarshal(dAtA []byte) error {
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
-			m.AddonChoice = &UnsubscribeRequest_F5XcUniversalZtnaStandard{v}
+			m.AddonChoice = &UnsubscribeRequest_F5XcContentDeliveryNetworkStandard{v}
+			iNdEx = postIndex
+		case 11:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field F5XcSyntheticMonitoringStandard", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.AddonChoice = &UnsubscribeRequest_F5XcSyntheticMonitoringStandard{v}
+			iNdEx = postIndex
+		case 12:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field F5XcBigipUtilitiesStandard", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.AddonChoice = &UnsubscribeRequest_F5XcBigipUtilitiesStandard{v}
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex

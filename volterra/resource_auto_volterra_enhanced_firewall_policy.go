@@ -72,7 +72,8 @@ func resourceVolterraEnhancedFirewallPolicy() *schema.Resource {
 
 			"allowed_destinations": {
 
-				Type:     schema.TypeSet,
+				Type:     schema.TypeList,
+				MaxItems: 1,
 				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
@@ -102,7 +103,8 @@ func resourceVolterraEnhancedFirewallPolicy() *schema.Resource {
 
 			"allowed_sources": {
 
-				Type:     schema.TypeSet,
+				Type:     schema.TypeList,
+				MaxItems: 1,
 				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
@@ -132,7 +134,8 @@ func resourceVolterraEnhancedFirewallPolicy() *schema.Resource {
 
 			"denied_destinations": {
 
-				Type:     schema.TypeSet,
+				Type:     schema.TypeList,
+				MaxItems: 1,
 				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
@@ -162,7 +165,8 @@ func resourceVolterraEnhancedFirewallPolicy() *schema.Resource {
 
 			"denied_sources": {
 
-				Type:     schema.TypeSet,
+				Type:     schema.TypeList,
+				MaxItems: 1,
 				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
@@ -198,7 +202,8 @@ func resourceVolterraEnhancedFirewallPolicy() *schema.Resource {
 
 			"rule_list": {
 
-				Type:     schema.TypeSet,
+				Type:     schema.TypeList,
+				MaxItems: 1,
 				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
@@ -224,14 +229,16 @@ func resourceVolterraEnhancedFirewallPolicy() *schema.Resource {
 
 									"insert_service": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
 												"nfv_service": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Required: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -257,7 +264,8 @@ func resourceVolterraEnhancedFirewallPolicy() *schema.Resource {
 
 									"advanced_action": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -290,7 +298,8 @@ func resourceVolterraEnhancedFirewallPolicy() *schema.Resource {
 
 									"destination_aws_subnet_ids": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -310,7 +319,8 @@ func resourceVolterraEnhancedFirewallPolicy() *schema.Resource {
 
 									"destination_aws_vpc_ids": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -330,7 +340,8 @@ func resourceVolterraEnhancedFirewallPolicy() *schema.Resource {
 
 									"destination_ip_prefix_set": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -368,7 +379,8 @@ func resourceVolterraEnhancedFirewallPolicy() *schema.Resource {
 
 									"destination_label_selector": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -395,7 +407,8 @@ func resourceVolterraEnhancedFirewallPolicy() *schema.Resource {
 
 									"destination_prefix_list": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -437,7 +450,8 @@ func resourceVolterraEnhancedFirewallPolicy() *schema.Resource {
 
 									"label_matcher": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -457,7 +471,8 @@ func resourceVolterraEnhancedFirewallPolicy() *schema.Resource {
 
 									"metadata": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -501,7 +516,8 @@ func resourceVolterraEnhancedFirewallPolicy() *schema.Resource {
 
 									"source_aws_subnet_ids": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -521,7 +537,8 @@ func resourceVolterraEnhancedFirewallPolicy() *schema.Resource {
 
 									"source_aws_vpc_ids": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -541,7 +558,8 @@ func resourceVolterraEnhancedFirewallPolicy() *schema.Resource {
 
 									"source_ip_prefix_set": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -579,7 +597,8 @@ func resourceVolterraEnhancedFirewallPolicy() *schema.Resource {
 
 									"source_label_selector": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -606,7 +625,8 @@ func resourceVolterraEnhancedFirewallPolicy() *schema.Resource {
 
 									"source_prefix_list": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -654,7 +674,8 @@ func resourceVolterraEnhancedFirewallPolicy() *schema.Resource {
 
 									"applications": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -674,7 +695,8 @@ func resourceVolterraEnhancedFirewallPolicy() *schema.Resource {
 
 									"protocol_port_range": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -705,7 +727,8 @@ func resourceVolterraEnhancedFirewallPolicy() *schema.Resource {
 
 			"segment_policy": {
 
-				Type:     schema.TypeSet,
+				Type:     schema.TypeList,
+				MaxItems: 1,
 				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
@@ -718,7 +741,8 @@ func resourceVolterraEnhancedFirewallPolicy() *schema.Resource {
 
 						"dst_segments": {
 
-							Type:     schema.TypeSet,
+							Type:     schema.TypeList,
+							MaxItems: 1,
 							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
@@ -768,7 +792,8 @@ func resourceVolterraEnhancedFirewallPolicy() *schema.Resource {
 
 						"src_segments": {
 
-							Type:     schema.TypeSet,
+							Type:     schema.TypeList,
+							MaxItems: 1,
 							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
@@ -886,30 +911,32 @@ func resourceVolterraEnhancedFirewallPolicyCreate(d *schema.ResourceData, meta i
 		ruleChoiceInt.AllowedDestinations = &ves_io_schema.PrefixListType{}
 		createSpec.RuleChoice = ruleChoiceInt
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
+			if set != nil {
+				cs := set.(map[string]interface{})
 
-			if v, ok := cs["ipv6_prefix"]; ok && !isIntfNil(v) {
+				if v, ok := cs["ipv6_prefix"]; ok && !isIntfNil(v) {
 
-				ls := make([]string, len(v.([]interface{})))
-				for i, v := range v.([]interface{}) {
-					ls[i] = v.(string)
+					ls := make([]string, len(v.([]interface{})))
+					for i, v := range v.([]interface{}) {
+						ls[i] = v.(string)
+					}
+					ruleChoiceInt.AllowedDestinations.Ipv6Prefix = ls
+
 				}
-				ruleChoiceInt.AllowedDestinations.Ipv6Prefix = ls
+
+				if v, ok := cs["prefix"]; ok && !isIntfNil(v) {
+
+					ls := make([]string, len(v.([]interface{})))
+					for i, v := range v.([]interface{}) {
+						ls[i] = v.(string)
+					}
+					ruleChoiceInt.AllowedDestinations.Prefix = ls
+
+				}
 
 			}
-
-			if v, ok := cs["prefix"]; ok && !isIntfNil(v) {
-
-				ls := make([]string, len(v.([]interface{})))
-				for i, v := range v.([]interface{}) {
-					ls[i] = v.(string)
-				}
-				ruleChoiceInt.AllowedDestinations.Prefix = ls
-
-			}
-
 		}
 
 	}
@@ -921,30 +948,32 @@ func resourceVolterraEnhancedFirewallPolicyCreate(d *schema.ResourceData, meta i
 		ruleChoiceInt.AllowedSources = &ves_io_schema.PrefixListType{}
 		createSpec.RuleChoice = ruleChoiceInt
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
+			if set != nil {
+				cs := set.(map[string]interface{})
 
-			if v, ok := cs["ipv6_prefix"]; ok && !isIntfNil(v) {
+				if v, ok := cs["ipv6_prefix"]; ok && !isIntfNil(v) {
 
-				ls := make([]string, len(v.([]interface{})))
-				for i, v := range v.([]interface{}) {
-					ls[i] = v.(string)
+					ls := make([]string, len(v.([]interface{})))
+					for i, v := range v.([]interface{}) {
+						ls[i] = v.(string)
+					}
+					ruleChoiceInt.AllowedSources.Ipv6Prefix = ls
+
 				}
-				ruleChoiceInt.AllowedSources.Ipv6Prefix = ls
+
+				if v, ok := cs["prefix"]; ok && !isIntfNil(v) {
+
+					ls := make([]string, len(v.([]interface{})))
+					for i, v := range v.([]interface{}) {
+						ls[i] = v.(string)
+					}
+					ruleChoiceInt.AllowedSources.Prefix = ls
+
+				}
 
 			}
-
-			if v, ok := cs["prefix"]; ok && !isIntfNil(v) {
-
-				ls := make([]string, len(v.([]interface{})))
-				for i, v := range v.([]interface{}) {
-					ls[i] = v.(string)
-				}
-				ruleChoiceInt.AllowedSources.Prefix = ls
-
-			}
-
 		}
 
 	}
@@ -956,30 +985,32 @@ func resourceVolterraEnhancedFirewallPolicyCreate(d *schema.ResourceData, meta i
 		ruleChoiceInt.DeniedDestinations = &ves_io_schema.PrefixListType{}
 		createSpec.RuleChoice = ruleChoiceInt
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
+			if set != nil {
+				cs := set.(map[string]interface{})
 
-			if v, ok := cs["ipv6_prefix"]; ok && !isIntfNil(v) {
+				if v, ok := cs["ipv6_prefix"]; ok && !isIntfNil(v) {
 
-				ls := make([]string, len(v.([]interface{})))
-				for i, v := range v.([]interface{}) {
-					ls[i] = v.(string)
+					ls := make([]string, len(v.([]interface{})))
+					for i, v := range v.([]interface{}) {
+						ls[i] = v.(string)
+					}
+					ruleChoiceInt.DeniedDestinations.Ipv6Prefix = ls
+
 				}
-				ruleChoiceInt.DeniedDestinations.Ipv6Prefix = ls
+
+				if v, ok := cs["prefix"]; ok && !isIntfNil(v) {
+
+					ls := make([]string, len(v.([]interface{})))
+					for i, v := range v.([]interface{}) {
+						ls[i] = v.(string)
+					}
+					ruleChoiceInt.DeniedDestinations.Prefix = ls
+
+				}
 
 			}
-
-			if v, ok := cs["prefix"]; ok && !isIntfNil(v) {
-
-				ls := make([]string, len(v.([]interface{})))
-				for i, v := range v.([]interface{}) {
-					ls[i] = v.(string)
-				}
-				ruleChoiceInt.DeniedDestinations.Prefix = ls
-
-			}
-
 		}
 
 	}
@@ -991,30 +1022,32 @@ func resourceVolterraEnhancedFirewallPolicyCreate(d *schema.ResourceData, meta i
 		ruleChoiceInt.DeniedSources = &ves_io_schema.PrefixListType{}
 		createSpec.RuleChoice = ruleChoiceInt
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
+			if set != nil {
+				cs := set.(map[string]interface{})
 
-			if v, ok := cs["ipv6_prefix"]; ok && !isIntfNil(v) {
+				if v, ok := cs["ipv6_prefix"]; ok && !isIntfNil(v) {
 
-				ls := make([]string, len(v.([]interface{})))
-				for i, v := range v.([]interface{}) {
-					ls[i] = v.(string)
+					ls := make([]string, len(v.([]interface{})))
+					for i, v := range v.([]interface{}) {
+						ls[i] = v.(string)
+					}
+					ruleChoiceInt.DeniedSources.Ipv6Prefix = ls
+
 				}
-				ruleChoiceInt.DeniedSources.Ipv6Prefix = ls
+
+				if v, ok := cs["prefix"]; ok && !isIntfNil(v) {
+
+					ls := make([]string, len(v.([]interface{})))
+					for i, v := range v.([]interface{}) {
+						ls[i] = v.(string)
+					}
+					ruleChoiceInt.DeniedSources.Prefix = ls
+
+				}
 
 			}
-
-			if v, ok := cs["prefix"]; ok && !isIntfNil(v) {
-
-				ls := make([]string, len(v.([]interface{})))
-				for i, v := range v.([]interface{}) {
-					ls[i] = v.(string)
-				}
-				ruleChoiceInt.DeniedSources.Prefix = ls
-
-			}
-
 		}
 
 	}
@@ -1038,678 +1071,716 @@ func resourceVolterraEnhancedFirewallPolicyCreate(d *schema.ResourceData, meta i
 		ruleChoiceInt.RuleList = &ves_io_schema_enhanced_firewall_policy.EnhancedFirewallPolicyRuleListType{}
 		createSpec.RuleChoice = ruleChoiceInt
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
+			if set != nil {
+				cs := set.(map[string]interface{})
 
-			if v, ok := cs["rules"]; ok && !isIntfNil(v) {
+				if v, ok := cs["rules"]; ok && !isIntfNil(v) {
 
-				sl := v.([]interface{})
-				rules := make([]*ves_io_schema_enhanced_firewall_policy.EnhancedFirewallPolicyRuleType, len(sl))
-				ruleChoiceInt.RuleList.Rules = rules
-				for i, set := range sl {
-					rules[i] = &ves_io_schema_enhanced_firewall_policy.EnhancedFirewallPolicyRuleType{}
-					rulesMapStrToI := set.(map[string]interface{})
+					sl := v.([]interface{})
+					rules := make([]*ves_io_schema_enhanced_firewall_policy.EnhancedFirewallPolicyRuleType, len(sl))
+					ruleChoiceInt.RuleList.Rules = rules
+					for i, set := range sl {
+						if set != nil {
+							rules[i] = &ves_io_schema_enhanced_firewall_policy.EnhancedFirewallPolicyRuleType{}
+							rulesMapStrToI := set.(map[string]interface{})
 
-					actionChoiceTypeFound := false
+							actionChoiceTypeFound := false
 
-					if v, ok := rulesMapStrToI["allow"]; ok && !isIntfNil(v) && !actionChoiceTypeFound {
+							if v, ok := rulesMapStrToI["allow"]; ok && !isIntfNil(v) && !actionChoiceTypeFound {
 
-						actionChoiceTypeFound = true
+								actionChoiceTypeFound = true
 
-						if v.(bool) {
-							actionChoiceInt := &ves_io_schema_enhanced_firewall_policy.EnhancedFirewallPolicyRuleType_Allow{}
-							actionChoiceInt.Allow = &ves_io_schema.Empty{}
-							rules[i].ActionChoice = actionChoiceInt
-						}
+								if v.(bool) {
+									actionChoiceInt := &ves_io_schema_enhanced_firewall_policy.EnhancedFirewallPolicyRuleType_Allow{}
+									actionChoiceInt.Allow = &ves_io_schema.Empty{}
+									rules[i].ActionChoice = actionChoiceInt
+								}
 
-					}
+							}
 
-					if v, ok := rulesMapStrToI["deny"]; ok && !isIntfNil(v) && !actionChoiceTypeFound {
+							if v, ok := rulesMapStrToI["deny"]; ok && !isIntfNil(v) && !actionChoiceTypeFound {
 
-						actionChoiceTypeFound = true
+								actionChoiceTypeFound = true
 
-						if v.(bool) {
-							actionChoiceInt := &ves_io_schema_enhanced_firewall_policy.EnhancedFirewallPolicyRuleType_Deny{}
-							actionChoiceInt.Deny = &ves_io_schema.Empty{}
-							rules[i].ActionChoice = actionChoiceInt
-						}
+								if v.(bool) {
+									actionChoiceInt := &ves_io_schema_enhanced_firewall_policy.EnhancedFirewallPolicyRuleType_Deny{}
+									actionChoiceInt.Deny = &ves_io_schema.Empty{}
+									rules[i].ActionChoice = actionChoiceInt
+								}
 
-					}
+							}
 
-					if v, ok := rulesMapStrToI["insert_service"]; ok && !isIntfNil(v) && !actionChoiceTypeFound {
+							if v, ok := rulesMapStrToI["insert_service"]; ok && !isIntfNil(v) && !actionChoiceTypeFound {
 
-						actionChoiceTypeFound = true
-						actionChoiceInt := &ves_io_schema_enhanced_firewall_policy.EnhancedFirewallPolicyRuleType_InsertService{}
-						actionChoiceInt.InsertService = &ves_io_schema_enhanced_firewall_policy.ServiceActionType{}
-						rules[i].ActionChoice = actionChoiceInt
+								actionChoiceTypeFound = true
+								actionChoiceInt := &ves_io_schema_enhanced_firewall_policy.EnhancedFirewallPolicyRuleType_InsertService{}
+								actionChoiceInt.InsertService = &ves_io_schema_enhanced_firewall_policy.ServiceActionType{}
+								rules[i].ActionChoice = actionChoiceInt
 
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["nfv_service"]; ok && !isIntfNil(v) {
-
-								sl := v.(*schema.Set).List()
-								nfvServiceInt := &ves_io_schema_views.ObjectRefType{}
-								actionChoiceInt.InsertService.NfvService = nfvServiceInt
-
+								sl := v.([]interface{})
 								for _, set := range sl {
-									nsMapToStrVal := set.(map[string]interface{})
-									if val, ok := nsMapToStrVal["name"]; ok && !isIntfNil(v) {
-										nfvServiceInt.Name = val.(string)
-									}
-									if val, ok := nsMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-										nfvServiceInt.Namespace = val.(string)
-									}
+									if set != nil {
+										cs := set.(map[string]interface{})
 
-									if val, ok := nsMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-										nfvServiceInt.Tenant = val.(string)
+										if v, ok := cs["nfv_service"]; ok && !isIntfNil(v) {
+
+											sl := v.([]interface{})
+											nfvServiceInt := &ves_io_schema_views.ObjectRefType{}
+											actionChoiceInt.InsertService.NfvService = nfvServiceInt
+
+											for _, set := range sl {
+												if set != nil {
+													nsMapToStrVal := set.(map[string]interface{})
+													if val, ok := nsMapToStrVal["name"]; ok && !isIntfNil(v) {
+														nfvServiceInt.Name = val.(string)
+													}
+													if val, ok := nsMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+														nfvServiceInt.Namespace = val.(string)
+													}
+
+													if val, ok := nsMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+														nfvServiceInt.Tenant = val.(string)
+													}
+												}
+											}
+
+										}
+
 									}
 								}
 
 							}
 
-						}
-
-					}
-
-					if v, ok := rulesMapStrToI["advanced_action"]; ok && !isIntfNil(v) {
-
-						sl := v.(*schema.Set).List()
-						advancedAction := &ves_io_schema_network_policy_rule.NetworkPolicyRuleAdvancedAction{}
-						rules[i].AdvancedAction = advancedAction
-						for _, set := range sl {
-							advancedActionMapStrToI := set.(map[string]interface{})
-
-							if v, ok := advancedActionMapStrToI["action"]; ok && !isIntfNil(v) {
-
-								advancedAction.Action = ves_io_schema_network_policy_rule.LogAction(ves_io_schema_network_policy_rule.LogAction_value[v.(string)])
-
-							}
-
-						}
-
-					}
-
-					destinationChoiceTypeFound := false
-
-					if v, ok := rulesMapStrToI["all_destinations"]; ok && !isIntfNil(v) && !destinationChoiceTypeFound {
-
-						destinationChoiceTypeFound = true
-
-						if v.(bool) {
-							destinationChoiceInt := &ves_io_schema_enhanced_firewall_policy.EnhancedFirewallPolicyRuleType_AllDestinations{}
-							destinationChoiceInt.AllDestinations = &ves_io_schema.Empty{}
-							rules[i].DestinationChoice = destinationChoiceInt
-						}
-
-					}
-
-					if v, ok := rulesMapStrToI["all_sli_vips"]; ok && !isIntfNil(v) && !destinationChoiceTypeFound {
-
-						destinationChoiceTypeFound = true
-
-						if v.(bool) {
-							destinationChoiceInt := &ves_io_schema_enhanced_firewall_policy.EnhancedFirewallPolicyRuleType_AllSliVips{}
-							destinationChoiceInt.AllSliVips = &ves_io_schema.Empty{}
-							rules[i].DestinationChoice = destinationChoiceInt
-						}
-
-					}
-
-					if v, ok := rulesMapStrToI["all_slo_vips"]; ok && !isIntfNil(v) && !destinationChoiceTypeFound {
-
-						destinationChoiceTypeFound = true
-
-						if v.(bool) {
-							destinationChoiceInt := &ves_io_schema_enhanced_firewall_policy.EnhancedFirewallPolicyRuleType_AllSloVips{}
-							destinationChoiceInt.AllSloVips = &ves_io_schema.Empty{}
-							rules[i].DestinationChoice = destinationChoiceInt
-						}
-
-					}
-
-					if v, ok := rulesMapStrToI["destination_aws_subnet_ids"]; ok && !isIntfNil(v) && !destinationChoiceTypeFound {
-
-						destinationChoiceTypeFound = true
-						destinationChoiceInt := &ves_io_schema_enhanced_firewall_policy.EnhancedFirewallPolicyRuleType_DestinationAwsSubnetIds{}
-						destinationChoiceInt.DestinationAwsSubnetIds = &ves_io_schema.AwsSubnetList{}
-						rules[i].DestinationChoice = destinationChoiceInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["subnet_id"]; ok && !isIntfNil(v) {
-
-								ls := make([]string, len(v.([]interface{})))
-								for i, v := range v.([]interface{}) {
-									ls[i] = v.(string)
-								}
-								destinationChoiceInt.DestinationAwsSubnetIds.SubnetId = ls
-
-							}
-
-						}
-
-					}
-
-					if v, ok := rulesMapStrToI["destination_aws_vpc_ids"]; ok && !isIntfNil(v) && !destinationChoiceTypeFound {
-
-						destinationChoiceTypeFound = true
-						destinationChoiceInt := &ves_io_schema_enhanced_firewall_policy.EnhancedFirewallPolicyRuleType_DestinationAwsVpcIds{}
-						destinationChoiceInt.DestinationAwsVpcIds = &ves_io_schema.AwsVpcList{}
-						rules[i].DestinationChoice = destinationChoiceInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["vpc_id"]; ok && !isIntfNil(v) {
-
-								ls := make([]string, len(v.([]interface{})))
-								for i, v := range v.([]interface{}) {
-									ls[i] = v.(string)
-								}
-								destinationChoiceInt.DestinationAwsVpcIds.VpcId = ls
-
-							}
-
-						}
-
-					}
-
-					if v, ok := rulesMapStrToI["destination_ip_prefix_set"]; ok && !isIntfNil(v) && !destinationChoiceTypeFound {
-
-						destinationChoiceTypeFound = true
-						destinationChoiceInt := &ves_io_schema_enhanced_firewall_policy.EnhancedFirewallPolicyRuleType_DestinationIpPrefixSet{}
-						destinationChoiceInt.DestinationIpPrefixSet = &ves_io_schema.IpPrefixSetRefType{}
-						rules[i].DestinationChoice = destinationChoiceInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["ref"]; ok && !isIntfNil(v) {
+							if v, ok := rulesMapStrToI["advanced_action"]; ok && !isIntfNil(v) {
 
 								sl := v.([]interface{})
-								refInt := make([]*ves_io_schema.ObjectRefType, len(sl))
-								destinationChoiceInt.DestinationIpPrefixSet.Ref = refInt
-								for i, ps := range sl {
+								advancedAction := &ves_io_schema_network_policy_rule.NetworkPolicyRuleAdvancedAction{}
+								rules[i].AdvancedAction = advancedAction
+								for _, set := range sl {
+									if set != nil {
+										advancedActionMapStrToI := set.(map[string]interface{})
 
-									rMapToStrVal := ps.(map[string]interface{})
-									refInt[i] = &ves_io_schema.ObjectRefType{}
+										if v, ok := advancedActionMapStrToI["action"]; ok && !isIntfNil(v) {
 
-									refInt[i].Kind = "ip_prefix_set"
+											advancedAction.Action = ves_io_schema_network_policy_rule.LogAction(ves_io_schema_network_policy_rule.LogAction_value[v.(string)])
 
-									if v, ok := rMapToStrVal["name"]; ok && !isIntfNil(v) {
-										refInt[i].Name = v.(string)
+										}
+
 									}
-
-									if v, ok := rMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-										refInt[i].Namespace = v.(string)
-									}
-
-									if v, ok := rMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-										refInt[i].Tenant = v.(string)
-									}
-
-									if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
-										refInt[i].Uid = v.(string)
-									}
-
 								}
 
 							}
 
-						}
+							destinationChoiceTypeFound := false
 
-					}
+							if v, ok := rulesMapStrToI["all_destinations"]; ok && !isIntfNil(v) && !destinationChoiceTypeFound {
 
-					if v, ok := rulesMapStrToI["destination_label_selector"]; ok && !isIntfNil(v) && !destinationChoiceTypeFound {
+								destinationChoiceTypeFound = true
 
-						destinationChoiceTypeFound = true
-						destinationChoiceInt := &ves_io_schema_enhanced_firewall_policy.EnhancedFirewallPolicyRuleType_DestinationLabelSelector{}
-						destinationChoiceInt.DestinationLabelSelector = &ves_io_schema.LabelSelectorType{}
-						rules[i].DestinationChoice = destinationChoiceInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["expressions"]; ok && !isIntfNil(v) {
-
-								ls := make([]string, len(v.([]interface{})))
-								for i, v := range v.([]interface{}) {
-									ls[i] = v.(string)
+								if v.(bool) {
+									destinationChoiceInt := &ves_io_schema_enhanced_firewall_policy.EnhancedFirewallPolicyRuleType_AllDestinations{}
+									destinationChoiceInt.AllDestinations = &ves_io_schema.Empty{}
+									rules[i].DestinationChoice = destinationChoiceInt
 								}
-								destinationChoiceInt.DestinationLabelSelector.Expressions = ls
 
 							}
 
-						}
+							if v, ok := rulesMapStrToI["all_sli_vips"]; ok && !isIntfNil(v) && !destinationChoiceTypeFound {
 
-					}
+								destinationChoiceTypeFound = true
 
-					if v, ok := rulesMapStrToI["destination_namespace"]; ok && !isIntfNil(v) && !destinationChoiceTypeFound {
-
-						destinationChoiceTypeFound = true
-						destinationChoiceInt := &ves_io_schema_enhanced_firewall_policy.EnhancedFirewallPolicyRuleType_DestinationNamespace{}
-
-						rules[i].DestinationChoice = destinationChoiceInt
-
-						destinationChoiceInt.DestinationNamespace = v.(string)
-
-					}
-
-					if v, ok := rulesMapStrToI["destination_prefix_list"]; ok && !isIntfNil(v) && !destinationChoiceTypeFound {
-
-						destinationChoiceTypeFound = true
-						destinationChoiceInt := &ves_io_schema_enhanced_firewall_policy.EnhancedFirewallPolicyRuleType_DestinationPrefixList{}
-						destinationChoiceInt.DestinationPrefixList = &ves_io_schema_views.PrefixStringListType{}
-						rules[i].DestinationChoice = destinationChoiceInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["ipv6_prefixes"]; ok && !isIntfNil(v) {
-
-								ls := make([]string, len(v.([]interface{})))
-								for i, v := range v.([]interface{}) {
-									ls[i] = v.(string)
+								if v.(bool) {
+									destinationChoiceInt := &ves_io_schema_enhanced_firewall_policy.EnhancedFirewallPolicyRuleType_AllSliVips{}
+									destinationChoiceInt.AllSliVips = &ves_io_schema.Empty{}
+									rules[i].DestinationChoice = destinationChoiceInt
 								}
-								destinationChoiceInt.DestinationPrefixList.Ipv6Prefixes = ls
 
 							}
 
-							if v, ok := cs["prefixes"]; ok && !isIntfNil(v) {
+							if v, ok := rulesMapStrToI["all_slo_vips"]; ok && !isIntfNil(v) && !destinationChoiceTypeFound {
 
-								ls := make([]string, len(v.([]interface{})))
-								for i, v := range v.([]interface{}) {
-									ls[i] = v.(string)
+								destinationChoiceTypeFound = true
+
+								if v.(bool) {
+									destinationChoiceInt := &ves_io_schema_enhanced_firewall_policy.EnhancedFirewallPolicyRuleType_AllSloVips{}
+									destinationChoiceInt.AllSloVips = &ves_io_schema.Empty{}
+									rules[i].DestinationChoice = destinationChoiceInt
 								}
-								destinationChoiceInt.DestinationPrefixList.Prefixes = ls
 
 							}
 
-						}
+							if v, ok := rulesMapStrToI["destination_aws_subnet_ids"]; ok && !isIntfNil(v) && !destinationChoiceTypeFound {
 
-					}
-
-					if v, ok := rulesMapStrToI["inside_destinations"]; ok && !isIntfNil(v) && !destinationChoiceTypeFound {
-
-						destinationChoiceTypeFound = true
-
-						if v.(bool) {
-							destinationChoiceInt := &ves_io_schema_enhanced_firewall_policy.EnhancedFirewallPolicyRuleType_InsideDestinations{}
-							destinationChoiceInt.InsideDestinations = &ves_io_schema.Empty{}
-							rules[i].DestinationChoice = destinationChoiceInt
-						}
-
-					}
-
-					if v, ok := rulesMapStrToI["outside_destinations"]; ok && !isIntfNil(v) && !destinationChoiceTypeFound {
-
-						destinationChoiceTypeFound = true
-
-						if v.(bool) {
-							destinationChoiceInt := &ves_io_schema_enhanced_firewall_policy.EnhancedFirewallPolicyRuleType_OutsideDestinations{}
-							destinationChoiceInt.OutsideDestinations = &ves_io_schema.Empty{}
-							rules[i].DestinationChoice = destinationChoiceInt
-						}
-
-					}
-
-					if v, ok := rulesMapStrToI["label_matcher"]; ok && !isIntfNil(v) {
-
-						sl := v.(*schema.Set).List()
-						labelMatcher := &ves_io_schema.LabelMatcherType{}
-						rules[i].LabelMatcher = labelMatcher
-						for _, set := range sl {
-							labelMatcherMapStrToI := set.(map[string]interface{})
-
-							if w, ok := labelMatcherMapStrToI["keys"]; ok && !isIntfNil(w) {
-								ls := make([]string, len(w.([]interface{})))
-								for i, v := range w.([]interface{}) {
-									ls[i] = v.(string)
-								}
-								labelMatcher.Keys = ls
-							}
-
-						}
-
-					}
-
-					if v, ok := rulesMapStrToI["metadata"]; ok && !isIntfNil(v) {
-
-						sl := v.(*schema.Set).List()
-						metadata := &ves_io_schema.MessageMetaType{}
-						rules[i].Metadata = metadata
-						for _, set := range sl {
-							metadataMapStrToI := set.(map[string]interface{})
-
-							if w, ok := metadataMapStrToI["description"]; ok && !isIntfNil(w) {
-								metadata.Description = w.(string)
-							}
-
-							if w, ok := metadataMapStrToI["disable"]; ok && !isIntfNil(w) {
-								metadata.Disable = w.(bool)
-							}
-
-							if w, ok := metadataMapStrToI["name"]; ok && !isIntfNil(w) {
-								metadata.Name = w.(string)
-							}
-
-						}
-
-					}
-
-					sourceChoiceTypeFound := false
-
-					if v, ok := rulesMapStrToI["all_sources"]; ok && !isIntfNil(v) && !sourceChoiceTypeFound {
-
-						sourceChoiceTypeFound = true
-
-						if v.(bool) {
-							sourceChoiceInt := &ves_io_schema_enhanced_firewall_policy.EnhancedFirewallPolicyRuleType_AllSources{}
-							sourceChoiceInt.AllSources = &ves_io_schema.Empty{}
-							rules[i].SourceChoice = sourceChoiceInt
-						}
-
-					}
-
-					if v, ok := rulesMapStrToI["inside_sources"]; ok && !isIntfNil(v) && !sourceChoiceTypeFound {
-
-						sourceChoiceTypeFound = true
-
-						if v.(bool) {
-							sourceChoiceInt := &ves_io_schema_enhanced_firewall_policy.EnhancedFirewallPolicyRuleType_InsideSources{}
-							sourceChoiceInt.InsideSources = &ves_io_schema.Empty{}
-							rules[i].SourceChoice = sourceChoiceInt
-						}
-
-					}
-
-					if v, ok := rulesMapStrToI["outside_sources"]; ok && !isIntfNil(v) && !sourceChoiceTypeFound {
-
-						sourceChoiceTypeFound = true
-
-						if v.(bool) {
-							sourceChoiceInt := &ves_io_schema_enhanced_firewall_policy.EnhancedFirewallPolicyRuleType_OutsideSources{}
-							sourceChoiceInt.OutsideSources = &ves_io_schema.Empty{}
-							rules[i].SourceChoice = sourceChoiceInt
-						}
-
-					}
-
-					if v, ok := rulesMapStrToI["source_aws_subnet_ids"]; ok && !isIntfNil(v) && !sourceChoiceTypeFound {
-
-						sourceChoiceTypeFound = true
-						sourceChoiceInt := &ves_io_schema_enhanced_firewall_policy.EnhancedFirewallPolicyRuleType_SourceAwsSubnetIds{}
-						sourceChoiceInt.SourceAwsSubnetIds = &ves_io_schema.AwsSubnetList{}
-						rules[i].SourceChoice = sourceChoiceInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["subnet_id"]; ok && !isIntfNil(v) {
-
-								ls := make([]string, len(v.([]interface{})))
-								for i, v := range v.([]interface{}) {
-									ls[i] = v.(string)
-								}
-								sourceChoiceInt.SourceAwsSubnetIds.SubnetId = ls
-
-							}
-
-						}
-
-					}
-
-					if v, ok := rulesMapStrToI["source_aws_vpc_ids"]; ok && !isIntfNil(v) && !sourceChoiceTypeFound {
-
-						sourceChoiceTypeFound = true
-						sourceChoiceInt := &ves_io_schema_enhanced_firewall_policy.EnhancedFirewallPolicyRuleType_SourceAwsVpcIds{}
-						sourceChoiceInt.SourceAwsVpcIds = &ves_io_schema.AwsVpcList{}
-						rules[i].SourceChoice = sourceChoiceInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["vpc_id"]; ok && !isIntfNil(v) {
-
-								ls := make([]string, len(v.([]interface{})))
-								for i, v := range v.([]interface{}) {
-									ls[i] = v.(string)
-								}
-								sourceChoiceInt.SourceAwsVpcIds.VpcId = ls
-
-							}
-
-						}
-
-					}
-
-					if v, ok := rulesMapStrToI["source_ip_prefix_set"]; ok && !isIntfNil(v) && !sourceChoiceTypeFound {
-
-						sourceChoiceTypeFound = true
-						sourceChoiceInt := &ves_io_schema_enhanced_firewall_policy.EnhancedFirewallPolicyRuleType_SourceIpPrefixSet{}
-						sourceChoiceInt.SourceIpPrefixSet = &ves_io_schema.IpPrefixSetRefType{}
-						rules[i].SourceChoice = sourceChoiceInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["ref"]; ok && !isIntfNil(v) {
+								destinationChoiceTypeFound = true
+								destinationChoiceInt := &ves_io_schema_enhanced_firewall_policy.EnhancedFirewallPolicyRuleType_DestinationAwsSubnetIds{}
+								destinationChoiceInt.DestinationAwsSubnetIds = &ves_io_schema.AwsSubnetList{}
+								rules[i].DestinationChoice = destinationChoiceInt
 
 								sl := v.([]interface{})
-								refInt := make([]*ves_io_schema.ObjectRefType, len(sl))
-								sourceChoiceInt.SourceIpPrefixSet.Ref = refInt
-								for i, ps := range sl {
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
 
-									rMapToStrVal := ps.(map[string]interface{})
-									refInt[i] = &ves_io_schema.ObjectRefType{}
+										if v, ok := cs["subnet_id"]; ok && !isIntfNil(v) {
 
-									refInt[i].Kind = "ip_prefix_set"
+											ls := make([]string, len(v.([]interface{})))
+											for i, v := range v.([]interface{}) {
+												ls[i] = v.(string)
+											}
+											destinationChoiceInt.DestinationAwsSubnetIds.SubnetId = ls
 
-									if v, ok := rMapToStrVal["name"]; ok && !isIntfNil(v) {
-										refInt[i].Name = v.(string)
+										}
+
 									}
+								}
 
-									if v, ok := rMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-										refInt[i].Namespace = v.(string)
+							}
+
+							if v, ok := rulesMapStrToI["destination_aws_vpc_ids"]; ok && !isIntfNil(v) && !destinationChoiceTypeFound {
+
+								destinationChoiceTypeFound = true
+								destinationChoiceInt := &ves_io_schema_enhanced_firewall_policy.EnhancedFirewallPolicyRuleType_DestinationAwsVpcIds{}
+								destinationChoiceInt.DestinationAwsVpcIds = &ves_io_schema.AwsVpcList{}
+								rules[i].DestinationChoice = destinationChoiceInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["vpc_id"]; ok && !isIntfNil(v) {
+
+											ls := make([]string, len(v.([]interface{})))
+											for i, v := range v.([]interface{}) {
+												ls[i] = v.(string)
+											}
+											destinationChoiceInt.DestinationAwsVpcIds.VpcId = ls
+
+										}
+
 									}
+								}
 
-									if v, ok := rMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-										refInt[i].Tenant = v.(string)
+							}
+
+							if v, ok := rulesMapStrToI["destination_ip_prefix_set"]; ok && !isIntfNil(v) && !destinationChoiceTypeFound {
+
+								destinationChoiceTypeFound = true
+								destinationChoiceInt := &ves_io_schema_enhanced_firewall_policy.EnhancedFirewallPolicyRuleType_DestinationIpPrefixSet{}
+								destinationChoiceInt.DestinationIpPrefixSet = &ves_io_schema.IpPrefixSetRefType{}
+								rules[i].DestinationChoice = destinationChoiceInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["ref"]; ok && !isIntfNil(v) {
+
+											sl := v.([]interface{})
+											refInt := make([]*ves_io_schema.ObjectRefType, len(sl))
+											destinationChoiceInt.DestinationIpPrefixSet.Ref = refInt
+											for i, ps := range sl {
+
+												rMapToStrVal := ps.(map[string]interface{})
+												refInt[i] = &ves_io_schema.ObjectRefType{}
+
+												refInt[i].Kind = "ip_prefix_set"
+
+												if v, ok := rMapToStrVal["name"]; ok && !isIntfNil(v) {
+													refInt[i].Name = v.(string)
+												}
+
+												if v, ok := rMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+													refInt[i].Namespace = v.(string)
+												}
+
+												if v, ok := rMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+													refInt[i].Tenant = v.(string)
+												}
+
+												if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
+													refInt[i].Uid = v.(string)
+												}
+
+											}
+
+										}
+
 									}
+								}
 
-									if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
-										refInt[i].Uid = v.(string)
+							}
+
+							if v, ok := rulesMapStrToI["destination_label_selector"]; ok && !isIntfNil(v) && !destinationChoiceTypeFound {
+
+								destinationChoiceTypeFound = true
+								destinationChoiceInt := &ves_io_schema_enhanced_firewall_policy.EnhancedFirewallPolicyRuleType_DestinationLabelSelector{}
+								destinationChoiceInt.DestinationLabelSelector = &ves_io_schema.LabelSelectorType{}
+								rules[i].DestinationChoice = destinationChoiceInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["expressions"]; ok && !isIntfNil(v) {
+
+											ls := make([]string, len(v.([]interface{})))
+											for i, v := range v.([]interface{}) {
+												ls[i] = v.(string)
+											}
+											destinationChoiceInt.DestinationLabelSelector.Expressions = ls
+
+										}
+
 									}
+								}
 
+							}
+
+							if v, ok := rulesMapStrToI["destination_namespace"]; ok && !isIntfNil(v) && !destinationChoiceTypeFound {
+
+								destinationChoiceTypeFound = true
+								destinationChoiceInt := &ves_io_schema_enhanced_firewall_policy.EnhancedFirewallPolicyRuleType_DestinationNamespace{}
+
+								rules[i].DestinationChoice = destinationChoiceInt
+
+								destinationChoiceInt.DestinationNamespace = v.(string)
+
+							}
+
+							if v, ok := rulesMapStrToI["destination_prefix_list"]; ok && !isIntfNil(v) && !destinationChoiceTypeFound {
+
+								destinationChoiceTypeFound = true
+								destinationChoiceInt := &ves_io_schema_enhanced_firewall_policy.EnhancedFirewallPolicyRuleType_DestinationPrefixList{}
+								destinationChoiceInt.DestinationPrefixList = &ves_io_schema_views.PrefixStringListType{}
+								rules[i].DestinationChoice = destinationChoiceInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["ipv6_prefixes"]; ok && !isIntfNil(v) {
+
+											ls := make([]string, len(v.([]interface{})))
+											for i, v := range v.([]interface{}) {
+												ls[i] = v.(string)
+											}
+											destinationChoiceInt.DestinationPrefixList.Ipv6Prefixes = ls
+
+										}
+
+										if v, ok := cs["prefixes"]; ok && !isIntfNil(v) {
+
+											ls := make([]string, len(v.([]interface{})))
+											for i, v := range v.([]interface{}) {
+												ls[i] = v.(string)
+											}
+											destinationChoiceInt.DestinationPrefixList.Prefixes = ls
+
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := rulesMapStrToI["inside_destinations"]; ok && !isIntfNil(v) && !destinationChoiceTypeFound {
+
+								destinationChoiceTypeFound = true
+
+								if v.(bool) {
+									destinationChoiceInt := &ves_io_schema_enhanced_firewall_policy.EnhancedFirewallPolicyRuleType_InsideDestinations{}
+									destinationChoiceInt.InsideDestinations = &ves_io_schema.Empty{}
+									rules[i].DestinationChoice = destinationChoiceInt
+								}
+
+							}
+
+							if v, ok := rulesMapStrToI["outside_destinations"]; ok && !isIntfNil(v) && !destinationChoiceTypeFound {
+
+								destinationChoiceTypeFound = true
+
+								if v.(bool) {
+									destinationChoiceInt := &ves_io_schema_enhanced_firewall_policy.EnhancedFirewallPolicyRuleType_OutsideDestinations{}
+									destinationChoiceInt.OutsideDestinations = &ves_io_schema.Empty{}
+									rules[i].DestinationChoice = destinationChoiceInt
+								}
+
+							}
+
+							if v, ok := rulesMapStrToI["label_matcher"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								labelMatcher := &ves_io_schema.LabelMatcherType{}
+								rules[i].LabelMatcher = labelMatcher
+								for _, set := range sl {
+									if set != nil {
+										labelMatcherMapStrToI := set.(map[string]interface{})
+
+										if w, ok := labelMatcherMapStrToI["keys"]; ok && !isIntfNil(w) {
+											ls := make([]string, len(w.([]interface{})))
+											for i, v := range w.([]interface{}) {
+												ls[i] = v.(string)
+											}
+											labelMatcher.Keys = ls
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := rulesMapStrToI["metadata"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								metadata := &ves_io_schema.MessageMetaType{}
+								rules[i].Metadata = metadata
+								for _, set := range sl {
+									if set != nil {
+										metadataMapStrToI := set.(map[string]interface{})
+
+										if w, ok := metadataMapStrToI["description"]; ok && !isIntfNil(w) {
+											metadata.Description = w.(string)
+										}
+
+										if w, ok := metadataMapStrToI["disable"]; ok && !isIntfNil(w) {
+											metadata.Disable = w.(bool)
+										}
+
+										if w, ok := metadataMapStrToI["name"]; ok && !isIntfNil(w) {
+											metadata.Name = w.(string)
+										}
+
+									}
+								}
+
+							}
+
+							sourceChoiceTypeFound := false
+
+							if v, ok := rulesMapStrToI["all_sources"]; ok && !isIntfNil(v) && !sourceChoiceTypeFound {
+
+								sourceChoiceTypeFound = true
+
+								if v.(bool) {
+									sourceChoiceInt := &ves_io_schema_enhanced_firewall_policy.EnhancedFirewallPolicyRuleType_AllSources{}
+									sourceChoiceInt.AllSources = &ves_io_schema.Empty{}
+									rules[i].SourceChoice = sourceChoiceInt
+								}
+
+							}
+
+							if v, ok := rulesMapStrToI["inside_sources"]; ok && !isIntfNil(v) && !sourceChoiceTypeFound {
+
+								sourceChoiceTypeFound = true
+
+								if v.(bool) {
+									sourceChoiceInt := &ves_io_schema_enhanced_firewall_policy.EnhancedFirewallPolicyRuleType_InsideSources{}
+									sourceChoiceInt.InsideSources = &ves_io_schema.Empty{}
+									rules[i].SourceChoice = sourceChoiceInt
+								}
+
+							}
+
+							if v, ok := rulesMapStrToI["outside_sources"]; ok && !isIntfNil(v) && !sourceChoiceTypeFound {
+
+								sourceChoiceTypeFound = true
+
+								if v.(bool) {
+									sourceChoiceInt := &ves_io_schema_enhanced_firewall_policy.EnhancedFirewallPolicyRuleType_OutsideSources{}
+									sourceChoiceInt.OutsideSources = &ves_io_schema.Empty{}
+									rules[i].SourceChoice = sourceChoiceInt
+								}
+
+							}
+
+							if v, ok := rulesMapStrToI["source_aws_subnet_ids"]; ok && !isIntfNil(v) && !sourceChoiceTypeFound {
+
+								sourceChoiceTypeFound = true
+								sourceChoiceInt := &ves_io_schema_enhanced_firewall_policy.EnhancedFirewallPolicyRuleType_SourceAwsSubnetIds{}
+								sourceChoiceInt.SourceAwsSubnetIds = &ves_io_schema.AwsSubnetList{}
+								rules[i].SourceChoice = sourceChoiceInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["subnet_id"]; ok && !isIntfNil(v) {
+
+											ls := make([]string, len(v.([]interface{})))
+											for i, v := range v.([]interface{}) {
+												ls[i] = v.(string)
+											}
+											sourceChoiceInt.SourceAwsSubnetIds.SubnetId = ls
+
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := rulesMapStrToI["source_aws_vpc_ids"]; ok && !isIntfNil(v) && !sourceChoiceTypeFound {
+
+								sourceChoiceTypeFound = true
+								sourceChoiceInt := &ves_io_schema_enhanced_firewall_policy.EnhancedFirewallPolicyRuleType_SourceAwsVpcIds{}
+								sourceChoiceInt.SourceAwsVpcIds = &ves_io_schema.AwsVpcList{}
+								rules[i].SourceChoice = sourceChoiceInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["vpc_id"]; ok && !isIntfNil(v) {
+
+											ls := make([]string, len(v.([]interface{})))
+											for i, v := range v.([]interface{}) {
+												ls[i] = v.(string)
+											}
+											sourceChoiceInt.SourceAwsVpcIds.VpcId = ls
+
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := rulesMapStrToI["source_ip_prefix_set"]; ok && !isIntfNil(v) && !sourceChoiceTypeFound {
+
+								sourceChoiceTypeFound = true
+								sourceChoiceInt := &ves_io_schema_enhanced_firewall_policy.EnhancedFirewallPolicyRuleType_SourceIpPrefixSet{}
+								sourceChoiceInt.SourceIpPrefixSet = &ves_io_schema.IpPrefixSetRefType{}
+								rules[i].SourceChoice = sourceChoiceInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["ref"]; ok && !isIntfNil(v) {
+
+											sl := v.([]interface{})
+											refInt := make([]*ves_io_schema.ObjectRefType, len(sl))
+											sourceChoiceInt.SourceIpPrefixSet.Ref = refInt
+											for i, ps := range sl {
+
+												rMapToStrVal := ps.(map[string]interface{})
+												refInt[i] = &ves_io_schema.ObjectRefType{}
+
+												refInt[i].Kind = "ip_prefix_set"
+
+												if v, ok := rMapToStrVal["name"]; ok && !isIntfNil(v) {
+													refInt[i].Name = v.(string)
+												}
+
+												if v, ok := rMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+													refInt[i].Namespace = v.(string)
+												}
+
+												if v, ok := rMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+													refInt[i].Tenant = v.(string)
+												}
+
+												if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
+													refInt[i].Uid = v.(string)
+												}
+
+											}
+
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := rulesMapStrToI["source_label_selector"]; ok && !isIntfNil(v) && !sourceChoiceTypeFound {
+
+								sourceChoiceTypeFound = true
+								sourceChoiceInt := &ves_io_schema_enhanced_firewall_policy.EnhancedFirewallPolicyRuleType_SourceLabelSelector{}
+								sourceChoiceInt.SourceLabelSelector = &ves_io_schema.LabelSelectorType{}
+								rules[i].SourceChoice = sourceChoiceInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["expressions"]; ok && !isIntfNil(v) {
+
+											ls := make([]string, len(v.([]interface{})))
+											for i, v := range v.([]interface{}) {
+												ls[i] = v.(string)
+											}
+											sourceChoiceInt.SourceLabelSelector.Expressions = ls
+
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := rulesMapStrToI["source_namespace"]; ok && !isIntfNil(v) && !sourceChoiceTypeFound {
+
+								sourceChoiceTypeFound = true
+								sourceChoiceInt := &ves_io_schema_enhanced_firewall_policy.EnhancedFirewallPolicyRuleType_SourceNamespace{}
+
+								rules[i].SourceChoice = sourceChoiceInt
+
+								sourceChoiceInt.SourceNamespace = v.(string)
+
+							}
+
+							if v, ok := rulesMapStrToI["source_prefix_list"]; ok && !isIntfNil(v) && !sourceChoiceTypeFound {
+
+								sourceChoiceTypeFound = true
+								sourceChoiceInt := &ves_io_schema_enhanced_firewall_policy.EnhancedFirewallPolicyRuleType_SourcePrefixList{}
+								sourceChoiceInt.SourcePrefixList = &ves_io_schema_views.PrefixStringListType{}
+								rules[i].SourceChoice = sourceChoiceInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["ipv6_prefixes"]; ok && !isIntfNil(v) {
+
+											ls := make([]string, len(v.([]interface{})))
+											for i, v := range v.([]interface{}) {
+												ls[i] = v.(string)
+											}
+											sourceChoiceInt.SourcePrefixList.Ipv6Prefixes = ls
+
+										}
+
+										if v, ok := cs["prefixes"]; ok && !isIntfNil(v) {
+
+											ls := make([]string, len(v.([]interface{})))
+											for i, v := range v.([]interface{}) {
+												ls[i] = v.(string)
+											}
+											sourceChoiceInt.SourcePrefixList.Prefixes = ls
+
+										}
+
+									}
+								}
+
+							}
+
+							trafficChoiceTypeFound := false
+
+							if v, ok := rulesMapStrToI["all_tcp_traffic"]; ok && !isIntfNil(v) && !trafficChoiceTypeFound {
+
+								trafficChoiceTypeFound = true
+
+								if v.(bool) {
+									trafficChoiceInt := &ves_io_schema_enhanced_firewall_policy.EnhancedFirewallPolicyRuleType_AllTcpTraffic{}
+									trafficChoiceInt.AllTcpTraffic = &ves_io_schema.Empty{}
+									rules[i].TrafficChoice = trafficChoiceInt
+								}
+
+							}
+
+							if v, ok := rulesMapStrToI["all_traffic"]; ok && !isIntfNil(v) && !trafficChoiceTypeFound {
+
+								trafficChoiceTypeFound = true
+
+								if v.(bool) {
+									trafficChoiceInt := &ves_io_schema_enhanced_firewall_policy.EnhancedFirewallPolicyRuleType_AllTraffic{}
+									trafficChoiceInt.AllTraffic = &ves_io_schema.Empty{}
+									rules[i].TrafficChoice = trafficChoiceInt
+								}
+
+							}
+
+							if v, ok := rulesMapStrToI["all_udp_traffic"]; ok && !isIntfNil(v) && !trafficChoiceTypeFound {
+
+								trafficChoiceTypeFound = true
+
+								if v.(bool) {
+									trafficChoiceInt := &ves_io_schema_enhanced_firewall_policy.EnhancedFirewallPolicyRuleType_AllUdpTraffic{}
+									trafficChoiceInt.AllUdpTraffic = &ves_io_schema.Empty{}
+									rules[i].TrafficChoice = trafficChoiceInt
+								}
+
+							}
+
+							if v, ok := rulesMapStrToI["applications"]; ok && !isIntfNil(v) && !trafficChoiceTypeFound {
+
+								trafficChoiceTypeFound = true
+								trafficChoiceInt := &ves_io_schema_enhanced_firewall_policy.EnhancedFirewallPolicyRuleType_Applications{}
+								trafficChoiceInt.Applications = &ves_io_schema_network_policy.ApplicationsType{}
+								rules[i].TrafficChoice = trafficChoiceInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["applications"]; ok && !isIntfNil(v) {
+
+											applicationsList := []ves_io_schema_network_policy.ApplicationEnumType{}
+											for _, j := range v.([]interface{}) {
+												applicationsList = append(applicationsList, ves_io_schema_network_policy.ApplicationEnumType(ves_io_schema_network_policy.ApplicationEnumType_value[j.(string)]))
+											}
+											trafficChoiceInt.Applications.Applications = applicationsList
+
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := rulesMapStrToI["protocol_port_range"]; ok && !isIntfNil(v) && !trafficChoiceTypeFound {
+
+								trafficChoiceTypeFound = true
+								trafficChoiceInt := &ves_io_schema_enhanced_firewall_policy.EnhancedFirewallPolicyRuleType_ProtocolPortRange{}
+								trafficChoiceInt.ProtocolPortRange = &ves_io_schema_network_policy.ProtocolPortType{}
+								rules[i].TrafficChoice = trafficChoiceInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["port_ranges"]; ok && !isIntfNil(v) {
+
+											ls := make([]string, len(v.([]interface{})))
+											for i, v := range v.([]interface{}) {
+												ls[i] = v.(string)
+											}
+											trafficChoiceInt.ProtocolPortRange.PortRanges = ls
+
+										}
+
+										if v, ok := cs["protocol"]; ok && !isIntfNil(v) {
+
+											trafficChoiceInt.ProtocolPortRange.Protocol = v.(string)
+
+										}
+
+									}
 								}
 
 							}
 
 						}
-
-					}
-
-					if v, ok := rulesMapStrToI["source_label_selector"]; ok && !isIntfNil(v) && !sourceChoiceTypeFound {
-
-						sourceChoiceTypeFound = true
-						sourceChoiceInt := &ves_io_schema_enhanced_firewall_policy.EnhancedFirewallPolicyRuleType_SourceLabelSelector{}
-						sourceChoiceInt.SourceLabelSelector = &ves_io_schema.LabelSelectorType{}
-						rules[i].SourceChoice = sourceChoiceInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["expressions"]; ok && !isIntfNil(v) {
-
-								ls := make([]string, len(v.([]interface{})))
-								for i, v := range v.([]interface{}) {
-									ls[i] = v.(string)
-								}
-								sourceChoiceInt.SourceLabelSelector.Expressions = ls
-
-							}
-
-						}
-
-					}
-
-					if v, ok := rulesMapStrToI["source_namespace"]; ok && !isIntfNil(v) && !sourceChoiceTypeFound {
-
-						sourceChoiceTypeFound = true
-						sourceChoiceInt := &ves_io_schema_enhanced_firewall_policy.EnhancedFirewallPolicyRuleType_SourceNamespace{}
-
-						rules[i].SourceChoice = sourceChoiceInt
-
-						sourceChoiceInt.SourceNamespace = v.(string)
-
-					}
-
-					if v, ok := rulesMapStrToI["source_prefix_list"]; ok && !isIntfNil(v) && !sourceChoiceTypeFound {
-
-						sourceChoiceTypeFound = true
-						sourceChoiceInt := &ves_io_schema_enhanced_firewall_policy.EnhancedFirewallPolicyRuleType_SourcePrefixList{}
-						sourceChoiceInt.SourcePrefixList = &ves_io_schema_views.PrefixStringListType{}
-						rules[i].SourceChoice = sourceChoiceInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["ipv6_prefixes"]; ok && !isIntfNil(v) {
-
-								ls := make([]string, len(v.([]interface{})))
-								for i, v := range v.([]interface{}) {
-									ls[i] = v.(string)
-								}
-								sourceChoiceInt.SourcePrefixList.Ipv6Prefixes = ls
-
-							}
-
-							if v, ok := cs["prefixes"]; ok && !isIntfNil(v) {
-
-								ls := make([]string, len(v.([]interface{})))
-								for i, v := range v.([]interface{}) {
-									ls[i] = v.(string)
-								}
-								sourceChoiceInt.SourcePrefixList.Prefixes = ls
-
-							}
-
-						}
-
-					}
-
-					trafficChoiceTypeFound := false
-
-					if v, ok := rulesMapStrToI["all_tcp_traffic"]; ok && !isIntfNil(v) && !trafficChoiceTypeFound {
-
-						trafficChoiceTypeFound = true
-
-						if v.(bool) {
-							trafficChoiceInt := &ves_io_schema_enhanced_firewall_policy.EnhancedFirewallPolicyRuleType_AllTcpTraffic{}
-							trafficChoiceInt.AllTcpTraffic = &ves_io_schema.Empty{}
-							rules[i].TrafficChoice = trafficChoiceInt
-						}
-
-					}
-
-					if v, ok := rulesMapStrToI["all_traffic"]; ok && !isIntfNil(v) && !trafficChoiceTypeFound {
-
-						trafficChoiceTypeFound = true
-
-						if v.(bool) {
-							trafficChoiceInt := &ves_io_schema_enhanced_firewall_policy.EnhancedFirewallPolicyRuleType_AllTraffic{}
-							trafficChoiceInt.AllTraffic = &ves_io_schema.Empty{}
-							rules[i].TrafficChoice = trafficChoiceInt
-						}
-
-					}
-
-					if v, ok := rulesMapStrToI["all_udp_traffic"]; ok && !isIntfNil(v) && !trafficChoiceTypeFound {
-
-						trafficChoiceTypeFound = true
-
-						if v.(bool) {
-							trafficChoiceInt := &ves_io_schema_enhanced_firewall_policy.EnhancedFirewallPolicyRuleType_AllUdpTraffic{}
-							trafficChoiceInt.AllUdpTraffic = &ves_io_schema.Empty{}
-							rules[i].TrafficChoice = trafficChoiceInt
-						}
-
-					}
-
-					if v, ok := rulesMapStrToI["applications"]; ok && !isIntfNil(v) && !trafficChoiceTypeFound {
-
-						trafficChoiceTypeFound = true
-						trafficChoiceInt := &ves_io_schema_enhanced_firewall_policy.EnhancedFirewallPolicyRuleType_Applications{}
-						trafficChoiceInt.Applications = &ves_io_schema_network_policy.ApplicationsType{}
-						rules[i].TrafficChoice = trafficChoiceInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["applications"]; ok && !isIntfNil(v) {
-
-								applicationsList := []ves_io_schema_network_policy.ApplicationEnumType{}
-								for _, j := range v.([]interface{}) {
-									applicationsList = append(applicationsList, ves_io_schema_network_policy.ApplicationEnumType(ves_io_schema_network_policy.ApplicationEnumType_value[j.(string)]))
-								}
-								trafficChoiceInt.Applications.Applications = applicationsList
-
-							}
-
-						}
-
-					}
-
-					if v, ok := rulesMapStrToI["protocol_port_range"]; ok && !isIntfNil(v) && !trafficChoiceTypeFound {
-
-						trafficChoiceTypeFound = true
-						trafficChoiceInt := &ves_io_schema_enhanced_firewall_policy.EnhancedFirewallPolicyRuleType_ProtocolPortRange{}
-						trafficChoiceInt.ProtocolPortRange = &ves_io_schema_network_policy.ProtocolPortType{}
-						rules[i].TrafficChoice = trafficChoiceInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["port_ranges"]; ok && !isIntfNil(v) {
-
-								ls := make([]string, len(v.([]interface{})))
-								for i, v := range v.([]interface{}) {
-									ls[i] = v.(string)
-								}
-								trafficChoiceInt.ProtocolPortRange.PortRanges = ls
-
-							}
-
-							if v, ok := cs["protocol"]; ok && !isIntfNil(v) {
-
-								trafficChoiceInt.ProtocolPortRange.Protocol = v.(string)
-
-							}
-
-						}
-
 					}
 
 				}
 
 			}
-
 		}
 
 	}
@@ -1717,134 +1788,140 @@ func resourceVolterraEnhancedFirewallPolicyCreate(d *schema.ResourceData, meta i
 	//segment_policy
 	if v, ok := d.GetOk("segment_policy"); ok && !isIntfNil(v) {
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		segmentPolicy := &ves_io_schema_policy.SegmentPolicyType{}
 		createSpec.SegmentPolicy = segmentPolicy
 		for _, set := range sl {
-			segmentPolicyMapStrToI := set.(map[string]interface{})
+			if set != nil {
+				segmentPolicyMapStrToI := set.(map[string]interface{})
 
-			dstSegmentChoiceTypeFound := false
+				dstSegmentChoiceTypeFound := false
 
-			if v, ok := segmentPolicyMapStrToI["dst_any"]; ok && !isIntfNil(v) && !dstSegmentChoiceTypeFound {
+				if v, ok := segmentPolicyMapStrToI["dst_any"]; ok && !isIntfNil(v) && !dstSegmentChoiceTypeFound {
 
-				dstSegmentChoiceTypeFound = true
+					dstSegmentChoiceTypeFound = true
 
-				if v.(bool) {
-					dstSegmentChoiceInt := &ves_io_schema_policy.SegmentPolicyType_DstAny{}
-					dstSegmentChoiceInt.DstAny = &ves_io_schema.Empty{}
-					segmentPolicy.DstSegmentChoice = dstSegmentChoiceInt
-				}
-
-			}
-
-			if v, ok := segmentPolicyMapStrToI["dst_segments"]; ok && !isIntfNil(v) && !dstSegmentChoiceTypeFound {
-
-				dstSegmentChoiceTypeFound = true
-				dstSegmentChoiceInt := &ves_io_schema_policy.SegmentPolicyType_DstSegments{}
-				dstSegmentChoiceInt.DstSegments = &ves_io_schema_views.SegmentRefList{}
-				segmentPolicy.DstSegmentChoice = dstSegmentChoiceInt
-
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
-
-					if v, ok := cs["segments"]; ok && !isIntfNil(v) {
-
-						sl := v.([]interface{})
-						segmentsInt := make([]*ves_io_schema_views.ObjectRefType, len(sl))
-						dstSegmentChoiceInt.DstSegments.Segments = segmentsInt
-						for i, ps := range sl {
-
-							sMapToStrVal := ps.(map[string]interface{})
-							segmentsInt[i] = &ves_io_schema_views.ObjectRefType{}
-
-							if v, ok := sMapToStrVal["name"]; ok && !isIntfNil(v) {
-								segmentsInt[i].Name = v.(string)
-							}
-
-							if v, ok := sMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-								segmentsInt[i].Namespace = v.(string)
-							}
-
-							if v, ok := sMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-								segmentsInt[i].Tenant = v.(string)
-							}
-
-						}
-
+					if v.(bool) {
+						dstSegmentChoiceInt := &ves_io_schema_policy.SegmentPolicyType_DstAny{}
+						dstSegmentChoiceInt.DstAny = &ves_io_schema.Empty{}
+						segmentPolicy.DstSegmentChoice = dstSegmentChoiceInt
 					}
 
 				}
 
-			}
+				if v, ok := segmentPolicyMapStrToI["dst_segments"]; ok && !isIntfNil(v) && !dstSegmentChoiceTypeFound {
 
-			if v, ok := segmentPolicyMapStrToI["intra_segment"]; ok && !isIntfNil(v) && !dstSegmentChoiceTypeFound {
-
-				dstSegmentChoiceTypeFound = true
-
-				if v.(bool) {
-					dstSegmentChoiceInt := &ves_io_schema_policy.SegmentPolicyType_IntraSegment{}
-					dstSegmentChoiceInt.IntraSegment = &ves_io_schema.Empty{}
+					dstSegmentChoiceTypeFound = true
+					dstSegmentChoiceInt := &ves_io_schema_policy.SegmentPolicyType_DstSegments{}
+					dstSegmentChoiceInt.DstSegments = &ves_io_schema_views.SegmentRefList{}
 					segmentPolicy.DstSegmentChoice = dstSegmentChoiceInt
+
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["segments"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								segmentsInt := make([]*ves_io_schema_views.ObjectRefType, len(sl))
+								dstSegmentChoiceInt.DstSegments.Segments = segmentsInt
+								for i, ps := range sl {
+
+									sMapToStrVal := ps.(map[string]interface{})
+									segmentsInt[i] = &ves_io_schema_views.ObjectRefType{}
+
+									if v, ok := sMapToStrVal["name"]; ok && !isIntfNil(v) {
+										segmentsInt[i].Name = v.(string)
+									}
+
+									if v, ok := sMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+										segmentsInt[i].Namespace = v.(string)
+									}
+
+									if v, ok := sMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+										segmentsInt[i].Tenant = v.(string)
+									}
+
+								}
+
+							}
+
+						}
+					}
+
 				}
 
-			}
+				if v, ok := segmentPolicyMapStrToI["intra_segment"]; ok && !isIntfNil(v) && !dstSegmentChoiceTypeFound {
 
-			srcSegmentChoiceTypeFound := false
+					dstSegmentChoiceTypeFound = true
 
-			if v, ok := segmentPolicyMapStrToI["src_any"]; ok && !isIntfNil(v) && !srcSegmentChoiceTypeFound {
+					if v.(bool) {
+						dstSegmentChoiceInt := &ves_io_schema_policy.SegmentPolicyType_IntraSegment{}
+						dstSegmentChoiceInt.IntraSegment = &ves_io_schema.Empty{}
+						segmentPolicy.DstSegmentChoice = dstSegmentChoiceInt
+					}
 
-				srcSegmentChoiceTypeFound = true
+				}
 
-				if v.(bool) {
-					srcSegmentChoiceInt := &ves_io_schema_policy.SegmentPolicyType_SrcAny{}
-					srcSegmentChoiceInt.SrcAny = &ves_io_schema.Empty{}
+				srcSegmentChoiceTypeFound := false
+
+				if v, ok := segmentPolicyMapStrToI["src_any"]; ok && !isIntfNil(v) && !srcSegmentChoiceTypeFound {
+
+					srcSegmentChoiceTypeFound = true
+
+					if v.(bool) {
+						srcSegmentChoiceInt := &ves_io_schema_policy.SegmentPolicyType_SrcAny{}
+						srcSegmentChoiceInt.SrcAny = &ves_io_schema.Empty{}
+						segmentPolicy.SrcSegmentChoice = srcSegmentChoiceInt
+					}
+
+				}
+
+				if v, ok := segmentPolicyMapStrToI["src_segments"]; ok && !isIntfNil(v) && !srcSegmentChoiceTypeFound {
+
+					srcSegmentChoiceTypeFound = true
+					srcSegmentChoiceInt := &ves_io_schema_policy.SegmentPolicyType_SrcSegments{}
+					srcSegmentChoiceInt.SrcSegments = &ves_io_schema_views.SegmentRefList{}
 					segmentPolicy.SrcSegmentChoice = srcSegmentChoiceInt
-				}
 
-			}
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
 
-			if v, ok := segmentPolicyMapStrToI["src_segments"]; ok && !isIntfNil(v) && !srcSegmentChoiceTypeFound {
+							if v, ok := cs["segments"]; ok && !isIntfNil(v) {
 
-				srcSegmentChoiceTypeFound = true
-				srcSegmentChoiceInt := &ves_io_schema_policy.SegmentPolicyType_SrcSegments{}
-				srcSegmentChoiceInt.SrcSegments = &ves_io_schema_views.SegmentRefList{}
-				segmentPolicy.SrcSegmentChoice = srcSegmentChoiceInt
+								sl := v.([]interface{})
+								segmentsInt := make([]*ves_io_schema_views.ObjectRefType, len(sl))
+								srcSegmentChoiceInt.SrcSegments.Segments = segmentsInt
+								for i, ps := range sl {
 
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
+									sMapToStrVal := ps.(map[string]interface{})
+									segmentsInt[i] = &ves_io_schema_views.ObjectRefType{}
 
-					if v, ok := cs["segments"]; ok && !isIntfNil(v) {
+									if v, ok := sMapToStrVal["name"]; ok && !isIntfNil(v) {
+										segmentsInt[i].Name = v.(string)
+									}
 
-						sl := v.([]interface{})
-						segmentsInt := make([]*ves_io_schema_views.ObjectRefType, len(sl))
-						srcSegmentChoiceInt.SrcSegments.Segments = segmentsInt
-						for i, ps := range sl {
+									if v, ok := sMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+										segmentsInt[i].Namespace = v.(string)
+									}
 
-							sMapToStrVal := ps.(map[string]interface{})
-							segmentsInt[i] = &ves_io_schema_views.ObjectRefType{}
+									if v, ok := sMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+										segmentsInt[i].Tenant = v.(string)
+									}
 
-							if v, ok := sMapToStrVal["name"]; ok && !isIntfNil(v) {
-								segmentsInt[i].Name = v.(string)
-							}
+								}
 
-							if v, ok := sMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-								segmentsInt[i].Namespace = v.(string)
-							}
-
-							if v, ok := sMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-								segmentsInt[i].Tenant = v.(string)
 							}
 
 						}
-
 					}
 
 				}
 
 			}
-
 		}
 
 	}
@@ -1969,30 +2046,32 @@ func resourceVolterraEnhancedFirewallPolicyUpdate(d *schema.ResourceData, meta i
 		ruleChoiceInt.AllowedDestinations = &ves_io_schema.PrefixListType{}
 		updateSpec.RuleChoice = ruleChoiceInt
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
+			if set != nil {
+				cs := set.(map[string]interface{})
 
-			if v, ok := cs["ipv6_prefix"]; ok && !isIntfNil(v) {
+				if v, ok := cs["ipv6_prefix"]; ok && !isIntfNil(v) {
 
-				ls := make([]string, len(v.([]interface{})))
-				for i, v := range v.([]interface{}) {
-					ls[i] = v.(string)
+					ls := make([]string, len(v.([]interface{})))
+					for i, v := range v.([]interface{}) {
+						ls[i] = v.(string)
+					}
+					ruleChoiceInt.AllowedDestinations.Ipv6Prefix = ls
+
 				}
-				ruleChoiceInt.AllowedDestinations.Ipv6Prefix = ls
+
+				if v, ok := cs["prefix"]; ok && !isIntfNil(v) {
+
+					ls := make([]string, len(v.([]interface{})))
+					for i, v := range v.([]interface{}) {
+						ls[i] = v.(string)
+					}
+					ruleChoiceInt.AllowedDestinations.Prefix = ls
+
+				}
 
 			}
-
-			if v, ok := cs["prefix"]; ok && !isIntfNil(v) {
-
-				ls := make([]string, len(v.([]interface{})))
-				for i, v := range v.([]interface{}) {
-					ls[i] = v.(string)
-				}
-				ruleChoiceInt.AllowedDestinations.Prefix = ls
-
-			}
-
 		}
 
 	}
@@ -2004,30 +2083,32 @@ func resourceVolterraEnhancedFirewallPolicyUpdate(d *schema.ResourceData, meta i
 		ruleChoiceInt.AllowedSources = &ves_io_schema.PrefixListType{}
 		updateSpec.RuleChoice = ruleChoiceInt
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
+			if set != nil {
+				cs := set.(map[string]interface{})
 
-			if v, ok := cs["ipv6_prefix"]; ok && !isIntfNil(v) {
+				if v, ok := cs["ipv6_prefix"]; ok && !isIntfNil(v) {
 
-				ls := make([]string, len(v.([]interface{})))
-				for i, v := range v.([]interface{}) {
-					ls[i] = v.(string)
+					ls := make([]string, len(v.([]interface{})))
+					for i, v := range v.([]interface{}) {
+						ls[i] = v.(string)
+					}
+					ruleChoiceInt.AllowedSources.Ipv6Prefix = ls
+
 				}
-				ruleChoiceInt.AllowedSources.Ipv6Prefix = ls
+
+				if v, ok := cs["prefix"]; ok && !isIntfNil(v) {
+
+					ls := make([]string, len(v.([]interface{})))
+					for i, v := range v.([]interface{}) {
+						ls[i] = v.(string)
+					}
+					ruleChoiceInt.AllowedSources.Prefix = ls
+
+				}
 
 			}
-
-			if v, ok := cs["prefix"]; ok && !isIntfNil(v) {
-
-				ls := make([]string, len(v.([]interface{})))
-				for i, v := range v.([]interface{}) {
-					ls[i] = v.(string)
-				}
-				ruleChoiceInt.AllowedSources.Prefix = ls
-
-			}
-
 		}
 
 	}
@@ -2039,30 +2120,32 @@ func resourceVolterraEnhancedFirewallPolicyUpdate(d *schema.ResourceData, meta i
 		ruleChoiceInt.DeniedDestinations = &ves_io_schema.PrefixListType{}
 		updateSpec.RuleChoice = ruleChoiceInt
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
+			if set != nil {
+				cs := set.(map[string]interface{})
 
-			if v, ok := cs["ipv6_prefix"]; ok && !isIntfNil(v) {
+				if v, ok := cs["ipv6_prefix"]; ok && !isIntfNil(v) {
 
-				ls := make([]string, len(v.([]interface{})))
-				for i, v := range v.([]interface{}) {
-					ls[i] = v.(string)
+					ls := make([]string, len(v.([]interface{})))
+					for i, v := range v.([]interface{}) {
+						ls[i] = v.(string)
+					}
+					ruleChoiceInt.DeniedDestinations.Ipv6Prefix = ls
+
 				}
-				ruleChoiceInt.DeniedDestinations.Ipv6Prefix = ls
+
+				if v, ok := cs["prefix"]; ok && !isIntfNil(v) {
+
+					ls := make([]string, len(v.([]interface{})))
+					for i, v := range v.([]interface{}) {
+						ls[i] = v.(string)
+					}
+					ruleChoiceInt.DeniedDestinations.Prefix = ls
+
+				}
 
 			}
-
-			if v, ok := cs["prefix"]; ok && !isIntfNil(v) {
-
-				ls := make([]string, len(v.([]interface{})))
-				for i, v := range v.([]interface{}) {
-					ls[i] = v.(string)
-				}
-				ruleChoiceInt.DeniedDestinations.Prefix = ls
-
-			}
-
 		}
 
 	}
@@ -2074,30 +2157,32 @@ func resourceVolterraEnhancedFirewallPolicyUpdate(d *schema.ResourceData, meta i
 		ruleChoiceInt.DeniedSources = &ves_io_schema.PrefixListType{}
 		updateSpec.RuleChoice = ruleChoiceInt
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
+			if set != nil {
+				cs := set.(map[string]interface{})
 
-			if v, ok := cs["ipv6_prefix"]; ok && !isIntfNil(v) {
+				if v, ok := cs["ipv6_prefix"]; ok && !isIntfNil(v) {
 
-				ls := make([]string, len(v.([]interface{})))
-				for i, v := range v.([]interface{}) {
-					ls[i] = v.(string)
+					ls := make([]string, len(v.([]interface{})))
+					for i, v := range v.([]interface{}) {
+						ls[i] = v.(string)
+					}
+					ruleChoiceInt.DeniedSources.Ipv6Prefix = ls
+
 				}
-				ruleChoiceInt.DeniedSources.Ipv6Prefix = ls
+
+				if v, ok := cs["prefix"]; ok && !isIntfNil(v) {
+
+					ls := make([]string, len(v.([]interface{})))
+					for i, v := range v.([]interface{}) {
+						ls[i] = v.(string)
+					}
+					ruleChoiceInt.DeniedSources.Prefix = ls
+
+				}
 
 			}
-
-			if v, ok := cs["prefix"]; ok && !isIntfNil(v) {
-
-				ls := make([]string, len(v.([]interface{})))
-				for i, v := range v.([]interface{}) {
-					ls[i] = v.(string)
-				}
-				ruleChoiceInt.DeniedSources.Prefix = ls
-
-			}
-
 		}
 
 	}
@@ -2121,812 +2206,856 @@ func resourceVolterraEnhancedFirewallPolicyUpdate(d *schema.ResourceData, meta i
 		ruleChoiceInt.RuleList = &ves_io_schema_enhanced_firewall_policy.EnhancedFirewallPolicyRuleListType{}
 		updateSpec.RuleChoice = ruleChoiceInt
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
+			if set != nil {
+				cs := set.(map[string]interface{})
 
-			if v, ok := cs["rules"]; ok && !isIntfNil(v) {
+				if v, ok := cs["rules"]; ok && !isIntfNil(v) {
 
-				sl := v.([]interface{})
-				rules := make([]*ves_io_schema_enhanced_firewall_policy.EnhancedFirewallPolicyRuleType, len(sl))
-				ruleChoiceInt.RuleList.Rules = rules
-				for i, set := range sl {
-					rules[i] = &ves_io_schema_enhanced_firewall_policy.EnhancedFirewallPolicyRuleType{}
-					rulesMapStrToI := set.(map[string]interface{})
+					sl := v.([]interface{})
+					rules := make([]*ves_io_schema_enhanced_firewall_policy.EnhancedFirewallPolicyRuleType, len(sl))
+					ruleChoiceInt.RuleList.Rules = rules
+					for i, set := range sl {
+						if set != nil {
+							rules[i] = &ves_io_schema_enhanced_firewall_policy.EnhancedFirewallPolicyRuleType{}
+							rulesMapStrToI := set.(map[string]interface{})
 
-					actionChoiceTypeFound := false
+							actionChoiceTypeFound := false
 
-					if v, ok := rulesMapStrToI["allow"]; ok && !isIntfNil(v) && !actionChoiceTypeFound {
+							if v, ok := rulesMapStrToI["allow"]; ok && !isIntfNil(v) && !actionChoiceTypeFound {
 
-						actionChoiceTypeFound = true
+								actionChoiceTypeFound = true
 
-						if v.(bool) {
-							actionChoiceInt := &ves_io_schema_enhanced_firewall_policy.EnhancedFirewallPolicyRuleType_Allow{}
-							actionChoiceInt.Allow = &ves_io_schema.Empty{}
-							rules[i].ActionChoice = actionChoiceInt
-						}
+								if v.(bool) {
+									actionChoiceInt := &ves_io_schema_enhanced_firewall_policy.EnhancedFirewallPolicyRuleType_Allow{}
+									actionChoiceInt.Allow = &ves_io_schema.Empty{}
+									rules[i].ActionChoice = actionChoiceInt
+								}
 
-					}
+							}
 
-					if v, ok := rulesMapStrToI["deny"]; ok && !isIntfNil(v) && !actionChoiceTypeFound {
+							if v, ok := rulesMapStrToI["deny"]; ok && !isIntfNil(v) && !actionChoiceTypeFound {
 
-						actionChoiceTypeFound = true
+								actionChoiceTypeFound = true
 
-						if v.(bool) {
-							actionChoiceInt := &ves_io_schema_enhanced_firewall_policy.EnhancedFirewallPolicyRuleType_Deny{}
-							actionChoiceInt.Deny = &ves_io_schema.Empty{}
-							rules[i].ActionChoice = actionChoiceInt
-						}
+								if v.(bool) {
+									actionChoiceInt := &ves_io_schema_enhanced_firewall_policy.EnhancedFirewallPolicyRuleType_Deny{}
+									actionChoiceInt.Deny = &ves_io_schema.Empty{}
+									rules[i].ActionChoice = actionChoiceInt
+								}
 
-					}
+							}
 
-					if v, ok := rulesMapStrToI["insert_service"]; ok && !isIntfNil(v) && !actionChoiceTypeFound {
+							if v, ok := rulesMapStrToI["insert_service"]; ok && !isIntfNil(v) && !actionChoiceTypeFound {
 
-						actionChoiceTypeFound = true
-						actionChoiceInt := &ves_io_schema_enhanced_firewall_policy.EnhancedFirewallPolicyRuleType_InsertService{}
-						actionChoiceInt.InsertService = &ves_io_schema_enhanced_firewall_policy.ServiceActionType{}
-						rules[i].ActionChoice = actionChoiceInt
+								actionChoiceTypeFound = true
+								actionChoiceInt := &ves_io_schema_enhanced_firewall_policy.EnhancedFirewallPolicyRuleType_InsertService{}
+								actionChoiceInt.InsertService = &ves_io_schema_enhanced_firewall_policy.ServiceActionType{}
+								rules[i].ActionChoice = actionChoiceInt
 
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["nfv_service"]; ok && !isIntfNil(v) {
-
-								sl := v.(*schema.Set).List()
-								nfvServiceInt := &ves_io_schema_views.ObjectRefType{}
-								actionChoiceInt.InsertService.NfvService = nfvServiceInt
-
+								sl := v.([]interface{})
 								for _, set := range sl {
-									nsMapToStrVal := set.(map[string]interface{})
-									if val, ok := nsMapToStrVal["name"]; ok && !isIntfNil(v) {
-										nfvServiceInt.Name = val.(string)
-									}
-									if val, ok := nsMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-										nfvServiceInt.Namespace = val.(string)
-									}
+									if set != nil {
+										cs := set.(map[string]interface{})
 
-									if val, ok := nsMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-										nfvServiceInt.Tenant = val.(string)
+										if v, ok := cs["nfv_service"]; ok && !isIntfNil(v) {
+
+											sl := v.([]interface{})
+											nfvServiceInt := &ves_io_schema_views.ObjectRefType{}
+											actionChoiceInt.InsertService.NfvService = nfvServiceInt
+
+											for _, set := range sl {
+												if set != nil {
+													nsMapToStrVal := set.(map[string]interface{})
+													if val, ok := nsMapToStrVal["name"]; ok && !isIntfNil(v) {
+														nfvServiceInt.Name = val.(string)
+													}
+													if val, ok := nsMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+														nfvServiceInt.Namespace = val.(string)
+													}
+
+													if val, ok := nsMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+														nfvServiceInt.Tenant = val.(string)
+													}
+												}
+											}
+
+										}
+
 									}
 								}
 
 							}
 
-						}
-
-					}
-
-					if v, ok := rulesMapStrToI["advanced_action"]; ok && !isIntfNil(v) {
-
-						sl := v.(*schema.Set).List()
-						advancedAction := &ves_io_schema_network_policy_rule.NetworkPolicyRuleAdvancedAction{}
-						rules[i].AdvancedAction = advancedAction
-						for _, set := range sl {
-							advancedActionMapStrToI := set.(map[string]interface{})
-
-							if v, ok := advancedActionMapStrToI["action"]; ok && !isIntfNil(v) {
-
-								advancedAction.Action = ves_io_schema_network_policy_rule.LogAction(ves_io_schema_network_policy_rule.LogAction_value[v.(string)])
-
-							}
-
-						}
-
-					}
-
-					destinationChoiceTypeFound := false
-
-					if v, ok := rulesMapStrToI["all_destinations"]; ok && !isIntfNil(v) && !destinationChoiceTypeFound {
-
-						destinationChoiceTypeFound = true
-
-						if v.(bool) {
-							destinationChoiceInt := &ves_io_schema_enhanced_firewall_policy.EnhancedFirewallPolicyRuleType_AllDestinations{}
-							destinationChoiceInt.AllDestinations = &ves_io_schema.Empty{}
-							rules[i].DestinationChoice = destinationChoiceInt
-						}
-
-					}
-
-					if v, ok := rulesMapStrToI["all_sli_vips"]; ok && !isIntfNil(v) && !destinationChoiceTypeFound {
-
-						destinationChoiceTypeFound = true
-
-						if v.(bool) {
-							destinationChoiceInt := &ves_io_schema_enhanced_firewall_policy.EnhancedFirewallPolicyRuleType_AllSliVips{}
-							destinationChoiceInt.AllSliVips = &ves_io_schema.Empty{}
-							rules[i].DestinationChoice = destinationChoiceInt
-						}
-
-					}
-
-					if v, ok := rulesMapStrToI["all_slo_vips"]; ok && !isIntfNil(v) && !destinationChoiceTypeFound {
-
-						destinationChoiceTypeFound = true
-
-						if v.(bool) {
-							destinationChoiceInt := &ves_io_schema_enhanced_firewall_policy.EnhancedFirewallPolicyRuleType_AllSloVips{}
-							destinationChoiceInt.AllSloVips = &ves_io_schema.Empty{}
-							rules[i].DestinationChoice = destinationChoiceInt
-						}
-
-					}
-
-					if v, ok := rulesMapStrToI["destination_aws_subnet_ids"]; ok && !isIntfNil(v) && !destinationChoiceTypeFound {
-
-						destinationChoiceTypeFound = true
-						destinationChoiceInt := &ves_io_schema_enhanced_firewall_policy.EnhancedFirewallPolicyRuleType_DestinationAwsSubnetIds{}
-						destinationChoiceInt.DestinationAwsSubnetIds = &ves_io_schema.AwsSubnetList{}
-						rules[i].DestinationChoice = destinationChoiceInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["subnet_id"]; ok && !isIntfNil(v) {
-
-								ls := make([]string, len(v.([]interface{})))
-								for i, v := range v.([]interface{}) {
-									ls[i] = v.(string)
-								}
-								destinationChoiceInt.DestinationAwsSubnetIds.SubnetId = ls
-
-							}
-
-						}
-
-					}
-
-					if v, ok := rulesMapStrToI["destination_aws_vpc_ids"]; ok && !isIntfNil(v) && !destinationChoiceTypeFound {
-
-						destinationChoiceTypeFound = true
-						destinationChoiceInt := &ves_io_schema_enhanced_firewall_policy.EnhancedFirewallPolicyRuleType_DestinationAwsVpcIds{}
-						destinationChoiceInt.DestinationAwsVpcIds = &ves_io_schema.AwsVpcList{}
-						rules[i].DestinationChoice = destinationChoiceInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["vpc_id"]; ok && !isIntfNil(v) {
-
-								ls := make([]string, len(v.([]interface{})))
-								for i, v := range v.([]interface{}) {
-									ls[i] = v.(string)
-								}
-								destinationChoiceInt.DestinationAwsVpcIds.VpcId = ls
-
-							}
-
-						}
-
-					}
-
-					if v, ok := rulesMapStrToI["destination_ip_prefix_set"]; ok && !isIntfNil(v) && !destinationChoiceTypeFound {
-
-						destinationChoiceTypeFound = true
-						destinationChoiceInt := &ves_io_schema_enhanced_firewall_policy.EnhancedFirewallPolicyRuleType_DestinationIpPrefixSet{}
-						destinationChoiceInt.DestinationIpPrefixSet = &ves_io_schema.IpPrefixSetRefType{}
-						rules[i].DestinationChoice = destinationChoiceInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["ref"]; ok && !isIntfNil(v) {
+							if v, ok := rulesMapStrToI["advanced_action"]; ok && !isIntfNil(v) {
 
 								sl := v.([]interface{})
-								refInt := make([]*ves_io_schema.ObjectRefType, len(sl))
-								destinationChoiceInt.DestinationIpPrefixSet.Ref = refInt
-								for i, ps := range sl {
+								advancedAction := &ves_io_schema_network_policy_rule.NetworkPolicyRuleAdvancedAction{}
+								rules[i].AdvancedAction = advancedAction
+								for _, set := range sl {
+									if set != nil {
+										advancedActionMapStrToI := set.(map[string]interface{})
 
-									rMapToStrVal := ps.(map[string]interface{})
-									refInt[i] = &ves_io_schema.ObjectRefType{}
+										if v, ok := advancedActionMapStrToI["action"]; ok && !isIntfNil(v) {
 
-									refInt[i].Kind = "ip_prefix_set"
+											advancedAction.Action = ves_io_schema_network_policy_rule.LogAction(ves_io_schema_network_policy_rule.LogAction_value[v.(string)])
 
-									if v, ok := rMapToStrVal["name"]; ok && !isIntfNil(v) {
-										refInt[i].Name = v.(string)
+										}
+
 									}
-
-									if v, ok := rMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-										refInt[i].Namespace = v.(string)
-									}
-
-									if v, ok := rMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-										refInt[i].Tenant = v.(string)
-									}
-
-									if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
-										refInt[i].Uid = v.(string)
-									}
-
 								}
 
 							}
 
-						}
+							destinationChoiceTypeFound := false
 
-					}
+							if v, ok := rulesMapStrToI["all_destinations"]; ok && !isIntfNil(v) && !destinationChoiceTypeFound {
 
-					if v, ok := rulesMapStrToI["destination_label_selector"]; ok && !isIntfNil(v) && !destinationChoiceTypeFound {
+								destinationChoiceTypeFound = true
 
-						destinationChoiceTypeFound = true
-						destinationChoiceInt := &ves_io_schema_enhanced_firewall_policy.EnhancedFirewallPolicyRuleType_DestinationLabelSelector{}
-						destinationChoiceInt.DestinationLabelSelector = &ves_io_schema.LabelSelectorType{}
-						rules[i].DestinationChoice = destinationChoiceInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["expressions"]; ok && !isIntfNil(v) {
-
-								ls := make([]string, len(v.([]interface{})))
-								for i, v := range v.([]interface{}) {
-									ls[i] = v.(string)
+								if v.(bool) {
+									destinationChoiceInt := &ves_io_schema_enhanced_firewall_policy.EnhancedFirewallPolicyRuleType_AllDestinations{}
+									destinationChoiceInt.AllDestinations = &ves_io_schema.Empty{}
+									rules[i].DestinationChoice = destinationChoiceInt
 								}
-								destinationChoiceInt.DestinationLabelSelector.Expressions = ls
 
 							}
 
-						}
+							if v, ok := rulesMapStrToI["all_sli_vips"]; ok && !isIntfNil(v) && !destinationChoiceTypeFound {
 
-					}
+								destinationChoiceTypeFound = true
 
-					if v, ok := rulesMapStrToI["destination_namespace"]; ok && !isIntfNil(v) && !destinationChoiceTypeFound {
-
-						destinationChoiceTypeFound = true
-						destinationChoiceInt := &ves_io_schema_enhanced_firewall_policy.EnhancedFirewallPolicyRuleType_DestinationNamespace{}
-
-						rules[i].DestinationChoice = destinationChoiceInt
-
-						destinationChoiceInt.DestinationNamespace = v.(string)
-
-					}
-
-					if v, ok := rulesMapStrToI["destination_prefix_list"]; ok && !isIntfNil(v) && !destinationChoiceTypeFound {
-
-						destinationChoiceTypeFound = true
-						destinationChoiceInt := &ves_io_schema_enhanced_firewall_policy.EnhancedFirewallPolicyRuleType_DestinationPrefixList{}
-						destinationChoiceInt.DestinationPrefixList = &ves_io_schema_views.PrefixStringListType{}
-						rules[i].DestinationChoice = destinationChoiceInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["ipv6_prefixes"]; ok && !isIntfNil(v) {
-
-								ls := make([]string, len(v.([]interface{})))
-								for i, v := range v.([]interface{}) {
-									ls[i] = v.(string)
+								if v.(bool) {
+									destinationChoiceInt := &ves_io_schema_enhanced_firewall_policy.EnhancedFirewallPolicyRuleType_AllSliVips{}
+									destinationChoiceInt.AllSliVips = &ves_io_schema.Empty{}
+									rules[i].DestinationChoice = destinationChoiceInt
 								}
-								destinationChoiceInt.DestinationPrefixList.Ipv6Prefixes = ls
 
 							}
 
-							if v, ok := cs["prefixes"]; ok && !isIntfNil(v) {
+							if v, ok := rulesMapStrToI["all_slo_vips"]; ok && !isIntfNil(v) && !destinationChoiceTypeFound {
 
-								ls := make([]string, len(v.([]interface{})))
-								for i, v := range v.([]interface{}) {
-									ls[i] = v.(string)
+								destinationChoiceTypeFound = true
+
+								if v.(bool) {
+									destinationChoiceInt := &ves_io_schema_enhanced_firewall_policy.EnhancedFirewallPolicyRuleType_AllSloVips{}
+									destinationChoiceInt.AllSloVips = &ves_io_schema.Empty{}
+									rules[i].DestinationChoice = destinationChoiceInt
 								}
-								destinationChoiceInt.DestinationPrefixList.Prefixes = ls
 
 							}
 
-						}
+							if v, ok := rulesMapStrToI["destination_aws_subnet_ids"]; ok && !isIntfNil(v) && !destinationChoiceTypeFound {
 
-					}
-
-					if v, ok := rulesMapStrToI["inside_destinations"]; ok && !isIntfNil(v) && !destinationChoiceTypeFound {
-
-						destinationChoiceTypeFound = true
-
-						if v.(bool) {
-							destinationChoiceInt := &ves_io_schema_enhanced_firewall_policy.EnhancedFirewallPolicyRuleType_InsideDestinations{}
-							destinationChoiceInt.InsideDestinations = &ves_io_schema.Empty{}
-							rules[i].DestinationChoice = destinationChoiceInt
-						}
-
-					}
-
-					if v, ok := rulesMapStrToI["outside_destinations"]; ok && !isIntfNil(v) && !destinationChoiceTypeFound {
-
-						destinationChoiceTypeFound = true
-
-						if v.(bool) {
-							destinationChoiceInt := &ves_io_schema_enhanced_firewall_policy.EnhancedFirewallPolicyRuleType_OutsideDestinations{}
-							destinationChoiceInt.OutsideDestinations = &ves_io_schema.Empty{}
-							rules[i].DestinationChoice = destinationChoiceInt
-						}
-
-					}
-
-					if v, ok := rulesMapStrToI["label_matcher"]; ok && !isIntfNil(v) {
-
-						sl := v.(*schema.Set).List()
-						labelMatcher := &ves_io_schema.LabelMatcherType{}
-						rules[i].LabelMatcher = labelMatcher
-						for _, set := range sl {
-							labelMatcherMapStrToI := set.(map[string]interface{})
-
-							if w, ok := labelMatcherMapStrToI["keys"]; ok && !isIntfNil(w) {
-								ls := make([]string, len(w.([]interface{})))
-								for i, v := range w.([]interface{}) {
-									ls[i] = v.(string)
-								}
-								labelMatcher.Keys = ls
-							}
-
-						}
-
-					}
-
-					if v, ok := rulesMapStrToI["metadata"]; ok && !isIntfNil(v) {
-
-						sl := v.(*schema.Set).List()
-						metadata := &ves_io_schema.MessageMetaType{}
-						rules[i].Metadata = metadata
-						for _, set := range sl {
-							metadataMapStrToI := set.(map[string]interface{})
-
-							if w, ok := metadataMapStrToI["description"]; ok && !isIntfNil(w) {
-								metadata.Description = w.(string)
-							}
-
-							if w, ok := metadataMapStrToI["disable"]; ok && !isIntfNil(w) {
-								metadata.Disable = w.(bool)
-							}
-
-							if w, ok := metadataMapStrToI["name"]; ok && !isIntfNil(w) {
-								metadata.Name = w.(string)
-							}
-
-						}
-
-					}
-
-					sourceChoiceTypeFound := false
-
-					if v, ok := rulesMapStrToI["all_sources"]; ok && !isIntfNil(v) && !sourceChoiceTypeFound {
-
-						sourceChoiceTypeFound = true
-
-						if v.(bool) {
-							sourceChoiceInt := &ves_io_schema_enhanced_firewall_policy.EnhancedFirewallPolicyRuleType_AllSources{}
-							sourceChoiceInt.AllSources = &ves_io_schema.Empty{}
-							rules[i].SourceChoice = sourceChoiceInt
-						}
-
-					}
-
-					if v, ok := rulesMapStrToI["inside_sources"]; ok && !isIntfNil(v) && !sourceChoiceTypeFound {
-
-						sourceChoiceTypeFound = true
-
-						if v.(bool) {
-							sourceChoiceInt := &ves_io_schema_enhanced_firewall_policy.EnhancedFirewallPolicyRuleType_InsideSources{}
-							sourceChoiceInt.InsideSources = &ves_io_schema.Empty{}
-							rules[i].SourceChoice = sourceChoiceInt
-						}
-
-					}
-
-					if v, ok := rulesMapStrToI["outside_sources"]; ok && !isIntfNil(v) && !sourceChoiceTypeFound {
-
-						sourceChoiceTypeFound = true
-
-						if v.(bool) {
-							sourceChoiceInt := &ves_io_schema_enhanced_firewall_policy.EnhancedFirewallPolicyRuleType_OutsideSources{}
-							sourceChoiceInt.OutsideSources = &ves_io_schema.Empty{}
-							rules[i].SourceChoice = sourceChoiceInt
-						}
-
-					}
-
-					if v, ok := rulesMapStrToI["source_aws_subnet_ids"]; ok && !isIntfNil(v) && !sourceChoiceTypeFound {
-
-						sourceChoiceTypeFound = true
-						sourceChoiceInt := &ves_io_schema_enhanced_firewall_policy.EnhancedFirewallPolicyRuleType_SourceAwsSubnetIds{}
-						sourceChoiceInt.SourceAwsSubnetIds = &ves_io_schema.AwsSubnetList{}
-						rules[i].SourceChoice = sourceChoiceInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["subnet_id"]; ok && !isIntfNil(v) {
-
-								ls := make([]string, len(v.([]interface{})))
-								for i, v := range v.([]interface{}) {
-									ls[i] = v.(string)
-								}
-								sourceChoiceInt.SourceAwsSubnetIds.SubnetId = ls
-
-							}
-
-						}
-
-					}
-
-					if v, ok := rulesMapStrToI["source_aws_vpc_ids"]; ok && !isIntfNil(v) && !sourceChoiceTypeFound {
-
-						sourceChoiceTypeFound = true
-						sourceChoiceInt := &ves_io_schema_enhanced_firewall_policy.EnhancedFirewallPolicyRuleType_SourceAwsVpcIds{}
-						sourceChoiceInt.SourceAwsVpcIds = &ves_io_schema.AwsVpcList{}
-						rules[i].SourceChoice = sourceChoiceInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["vpc_id"]; ok && !isIntfNil(v) {
-
-								ls := make([]string, len(v.([]interface{})))
-								for i, v := range v.([]interface{}) {
-									ls[i] = v.(string)
-								}
-								sourceChoiceInt.SourceAwsVpcIds.VpcId = ls
-
-							}
-
-						}
-
-					}
-
-					if v, ok := rulesMapStrToI["source_ip_prefix_set"]; ok && !isIntfNil(v) && !sourceChoiceTypeFound {
-
-						sourceChoiceTypeFound = true
-						sourceChoiceInt := &ves_io_schema_enhanced_firewall_policy.EnhancedFirewallPolicyRuleType_SourceIpPrefixSet{}
-						sourceChoiceInt.SourceIpPrefixSet = &ves_io_schema.IpPrefixSetRefType{}
-						rules[i].SourceChoice = sourceChoiceInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["ref"]; ok && !isIntfNil(v) {
+								destinationChoiceTypeFound = true
+								destinationChoiceInt := &ves_io_schema_enhanced_firewall_policy.EnhancedFirewallPolicyRuleType_DestinationAwsSubnetIds{}
+								destinationChoiceInt.DestinationAwsSubnetIds = &ves_io_schema.AwsSubnetList{}
+								rules[i].DestinationChoice = destinationChoiceInt
 
 								sl := v.([]interface{})
-								refInt := make([]*ves_io_schema.ObjectRefType, len(sl))
-								sourceChoiceInt.SourceIpPrefixSet.Ref = refInt
-								for i, ps := range sl {
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
 
-									rMapToStrVal := ps.(map[string]interface{})
-									refInt[i] = &ves_io_schema.ObjectRefType{}
+										if v, ok := cs["subnet_id"]; ok && !isIntfNil(v) {
 
-									refInt[i].Kind = "ip_prefix_set"
+											ls := make([]string, len(v.([]interface{})))
+											for i, v := range v.([]interface{}) {
+												ls[i] = v.(string)
+											}
+											destinationChoiceInt.DestinationAwsSubnetIds.SubnetId = ls
 
-									if v, ok := rMapToStrVal["name"]; ok && !isIntfNil(v) {
-										refInt[i].Name = v.(string)
+										}
+
 									}
+								}
 
-									if v, ok := rMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-										refInt[i].Namespace = v.(string)
+							}
+
+							if v, ok := rulesMapStrToI["destination_aws_vpc_ids"]; ok && !isIntfNil(v) && !destinationChoiceTypeFound {
+
+								destinationChoiceTypeFound = true
+								destinationChoiceInt := &ves_io_schema_enhanced_firewall_policy.EnhancedFirewallPolicyRuleType_DestinationAwsVpcIds{}
+								destinationChoiceInt.DestinationAwsVpcIds = &ves_io_schema.AwsVpcList{}
+								rules[i].DestinationChoice = destinationChoiceInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["vpc_id"]; ok && !isIntfNil(v) {
+
+											ls := make([]string, len(v.([]interface{})))
+											for i, v := range v.([]interface{}) {
+												ls[i] = v.(string)
+											}
+											destinationChoiceInt.DestinationAwsVpcIds.VpcId = ls
+
+										}
+
 									}
+								}
 
-									if v, ok := rMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-										refInt[i].Tenant = v.(string)
+							}
+
+							if v, ok := rulesMapStrToI["destination_ip_prefix_set"]; ok && !isIntfNil(v) && !destinationChoiceTypeFound {
+
+								destinationChoiceTypeFound = true
+								destinationChoiceInt := &ves_io_schema_enhanced_firewall_policy.EnhancedFirewallPolicyRuleType_DestinationIpPrefixSet{}
+								destinationChoiceInt.DestinationIpPrefixSet = &ves_io_schema.IpPrefixSetRefType{}
+								rules[i].DestinationChoice = destinationChoiceInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["ref"]; ok && !isIntfNil(v) {
+
+											sl := v.([]interface{})
+											refInt := make([]*ves_io_schema.ObjectRefType, len(sl))
+											destinationChoiceInt.DestinationIpPrefixSet.Ref = refInt
+											for i, ps := range sl {
+
+												rMapToStrVal := ps.(map[string]interface{})
+												refInt[i] = &ves_io_schema.ObjectRefType{}
+
+												refInt[i].Kind = "ip_prefix_set"
+
+												if v, ok := rMapToStrVal["name"]; ok && !isIntfNil(v) {
+													refInt[i].Name = v.(string)
+												}
+
+												if v, ok := rMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+													refInt[i].Namespace = v.(string)
+												}
+
+												if v, ok := rMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+													refInt[i].Tenant = v.(string)
+												}
+
+												if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
+													refInt[i].Uid = v.(string)
+												}
+
+											}
+
+										}
+
 									}
+								}
 
-									if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
-										refInt[i].Uid = v.(string)
+							}
+
+							if v, ok := rulesMapStrToI["destination_label_selector"]; ok && !isIntfNil(v) && !destinationChoiceTypeFound {
+
+								destinationChoiceTypeFound = true
+								destinationChoiceInt := &ves_io_schema_enhanced_firewall_policy.EnhancedFirewallPolicyRuleType_DestinationLabelSelector{}
+								destinationChoiceInt.DestinationLabelSelector = &ves_io_schema.LabelSelectorType{}
+								rules[i].DestinationChoice = destinationChoiceInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["expressions"]; ok && !isIntfNil(v) {
+
+											ls := make([]string, len(v.([]interface{})))
+											for i, v := range v.([]interface{}) {
+												ls[i] = v.(string)
+											}
+											destinationChoiceInt.DestinationLabelSelector.Expressions = ls
+
+										}
+
 									}
+								}
 
+							}
+
+							if v, ok := rulesMapStrToI["destination_namespace"]; ok && !isIntfNil(v) && !destinationChoiceTypeFound {
+
+								destinationChoiceTypeFound = true
+								destinationChoiceInt := &ves_io_schema_enhanced_firewall_policy.EnhancedFirewallPolicyRuleType_DestinationNamespace{}
+
+								rules[i].DestinationChoice = destinationChoiceInt
+
+								destinationChoiceInt.DestinationNamespace = v.(string)
+
+							}
+
+							if v, ok := rulesMapStrToI["destination_prefix_list"]; ok && !isIntfNil(v) && !destinationChoiceTypeFound {
+
+								destinationChoiceTypeFound = true
+								destinationChoiceInt := &ves_io_schema_enhanced_firewall_policy.EnhancedFirewallPolicyRuleType_DestinationPrefixList{}
+								destinationChoiceInt.DestinationPrefixList = &ves_io_schema_views.PrefixStringListType{}
+								rules[i].DestinationChoice = destinationChoiceInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["ipv6_prefixes"]; ok && !isIntfNil(v) {
+
+											ls := make([]string, len(v.([]interface{})))
+											for i, v := range v.([]interface{}) {
+												ls[i] = v.(string)
+											}
+											destinationChoiceInt.DestinationPrefixList.Ipv6Prefixes = ls
+
+										}
+
+										if v, ok := cs["prefixes"]; ok && !isIntfNil(v) {
+
+											ls := make([]string, len(v.([]interface{})))
+											for i, v := range v.([]interface{}) {
+												ls[i] = v.(string)
+											}
+											destinationChoiceInt.DestinationPrefixList.Prefixes = ls
+
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := rulesMapStrToI["inside_destinations"]; ok && !isIntfNil(v) && !destinationChoiceTypeFound {
+
+								destinationChoiceTypeFound = true
+
+								if v.(bool) {
+									destinationChoiceInt := &ves_io_schema_enhanced_firewall_policy.EnhancedFirewallPolicyRuleType_InsideDestinations{}
+									destinationChoiceInt.InsideDestinations = &ves_io_schema.Empty{}
+									rules[i].DestinationChoice = destinationChoiceInt
+								}
+
+							}
+
+							if v, ok := rulesMapStrToI["outside_destinations"]; ok && !isIntfNil(v) && !destinationChoiceTypeFound {
+
+								destinationChoiceTypeFound = true
+
+								if v.(bool) {
+									destinationChoiceInt := &ves_io_schema_enhanced_firewall_policy.EnhancedFirewallPolicyRuleType_OutsideDestinations{}
+									destinationChoiceInt.OutsideDestinations = &ves_io_schema.Empty{}
+									rules[i].DestinationChoice = destinationChoiceInt
+								}
+
+							}
+
+							if v, ok := rulesMapStrToI["label_matcher"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								labelMatcher := &ves_io_schema.LabelMatcherType{}
+								rules[i].LabelMatcher = labelMatcher
+								for _, set := range sl {
+									if set != nil {
+										labelMatcherMapStrToI := set.(map[string]interface{})
+
+										if w, ok := labelMatcherMapStrToI["keys"]; ok && !isIntfNil(w) {
+											ls := make([]string, len(w.([]interface{})))
+											for i, v := range w.([]interface{}) {
+												ls[i] = v.(string)
+											}
+											labelMatcher.Keys = ls
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := rulesMapStrToI["metadata"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								metadata := &ves_io_schema.MessageMetaType{}
+								rules[i].Metadata = metadata
+								for _, set := range sl {
+									if set != nil {
+										metadataMapStrToI := set.(map[string]interface{})
+
+										if w, ok := metadataMapStrToI["description"]; ok && !isIntfNil(w) {
+											metadata.Description = w.(string)
+										}
+
+										if w, ok := metadataMapStrToI["disable"]; ok && !isIntfNil(w) {
+											metadata.Disable = w.(bool)
+										}
+
+										if w, ok := metadataMapStrToI["name"]; ok && !isIntfNil(w) {
+											metadata.Name = w.(string)
+										}
+
+									}
+								}
+
+							}
+
+							sourceChoiceTypeFound := false
+
+							if v, ok := rulesMapStrToI["all_sources"]; ok && !isIntfNil(v) && !sourceChoiceTypeFound {
+
+								sourceChoiceTypeFound = true
+
+								if v.(bool) {
+									sourceChoiceInt := &ves_io_schema_enhanced_firewall_policy.EnhancedFirewallPolicyRuleType_AllSources{}
+									sourceChoiceInt.AllSources = &ves_io_schema.Empty{}
+									rules[i].SourceChoice = sourceChoiceInt
+								}
+
+							}
+
+							if v, ok := rulesMapStrToI["inside_sources"]; ok && !isIntfNil(v) && !sourceChoiceTypeFound {
+
+								sourceChoiceTypeFound = true
+
+								if v.(bool) {
+									sourceChoiceInt := &ves_io_schema_enhanced_firewall_policy.EnhancedFirewallPolicyRuleType_InsideSources{}
+									sourceChoiceInt.InsideSources = &ves_io_schema.Empty{}
+									rules[i].SourceChoice = sourceChoiceInt
+								}
+
+							}
+
+							if v, ok := rulesMapStrToI["outside_sources"]; ok && !isIntfNil(v) && !sourceChoiceTypeFound {
+
+								sourceChoiceTypeFound = true
+
+								if v.(bool) {
+									sourceChoiceInt := &ves_io_schema_enhanced_firewall_policy.EnhancedFirewallPolicyRuleType_OutsideSources{}
+									sourceChoiceInt.OutsideSources = &ves_io_schema.Empty{}
+									rules[i].SourceChoice = sourceChoiceInt
+								}
+
+							}
+
+							if v, ok := rulesMapStrToI["source_aws_subnet_ids"]; ok && !isIntfNil(v) && !sourceChoiceTypeFound {
+
+								sourceChoiceTypeFound = true
+								sourceChoiceInt := &ves_io_schema_enhanced_firewall_policy.EnhancedFirewallPolicyRuleType_SourceAwsSubnetIds{}
+								sourceChoiceInt.SourceAwsSubnetIds = &ves_io_schema.AwsSubnetList{}
+								rules[i].SourceChoice = sourceChoiceInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["subnet_id"]; ok && !isIntfNil(v) {
+
+											ls := make([]string, len(v.([]interface{})))
+											for i, v := range v.([]interface{}) {
+												ls[i] = v.(string)
+											}
+											sourceChoiceInt.SourceAwsSubnetIds.SubnetId = ls
+
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := rulesMapStrToI["source_aws_vpc_ids"]; ok && !isIntfNil(v) && !sourceChoiceTypeFound {
+
+								sourceChoiceTypeFound = true
+								sourceChoiceInt := &ves_io_schema_enhanced_firewall_policy.EnhancedFirewallPolicyRuleType_SourceAwsVpcIds{}
+								sourceChoiceInt.SourceAwsVpcIds = &ves_io_schema.AwsVpcList{}
+								rules[i].SourceChoice = sourceChoiceInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["vpc_id"]; ok && !isIntfNil(v) {
+
+											ls := make([]string, len(v.([]interface{})))
+											for i, v := range v.([]interface{}) {
+												ls[i] = v.(string)
+											}
+											sourceChoiceInt.SourceAwsVpcIds.VpcId = ls
+
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := rulesMapStrToI["source_ip_prefix_set"]; ok && !isIntfNil(v) && !sourceChoiceTypeFound {
+
+								sourceChoiceTypeFound = true
+								sourceChoiceInt := &ves_io_schema_enhanced_firewall_policy.EnhancedFirewallPolicyRuleType_SourceIpPrefixSet{}
+								sourceChoiceInt.SourceIpPrefixSet = &ves_io_schema.IpPrefixSetRefType{}
+								rules[i].SourceChoice = sourceChoiceInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["ref"]; ok && !isIntfNil(v) {
+
+											sl := v.([]interface{})
+											refInt := make([]*ves_io_schema.ObjectRefType, len(sl))
+											sourceChoiceInt.SourceIpPrefixSet.Ref = refInt
+											for i, ps := range sl {
+
+												rMapToStrVal := ps.(map[string]interface{})
+												refInt[i] = &ves_io_schema.ObjectRefType{}
+
+												refInt[i].Kind = "ip_prefix_set"
+
+												if v, ok := rMapToStrVal["name"]; ok && !isIntfNil(v) {
+													refInt[i].Name = v.(string)
+												}
+
+												if v, ok := rMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+													refInt[i].Namespace = v.(string)
+												}
+
+												if v, ok := rMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+													refInt[i].Tenant = v.(string)
+												}
+
+												if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
+													refInt[i].Uid = v.(string)
+												}
+
+											}
+
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := rulesMapStrToI["source_label_selector"]; ok && !isIntfNil(v) && !sourceChoiceTypeFound {
+
+								sourceChoiceTypeFound = true
+								sourceChoiceInt := &ves_io_schema_enhanced_firewall_policy.EnhancedFirewallPolicyRuleType_SourceLabelSelector{}
+								sourceChoiceInt.SourceLabelSelector = &ves_io_schema.LabelSelectorType{}
+								rules[i].SourceChoice = sourceChoiceInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["expressions"]; ok && !isIntfNil(v) {
+
+											ls := make([]string, len(v.([]interface{})))
+											for i, v := range v.([]interface{}) {
+												ls[i] = v.(string)
+											}
+											sourceChoiceInt.SourceLabelSelector.Expressions = ls
+
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := rulesMapStrToI["source_namespace"]; ok && !isIntfNil(v) && !sourceChoiceTypeFound {
+
+								sourceChoiceTypeFound = true
+								sourceChoiceInt := &ves_io_schema_enhanced_firewall_policy.EnhancedFirewallPolicyRuleType_SourceNamespace{}
+
+								rules[i].SourceChoice = sourceChoiceInt
+
+								sourceChoiceInt.SourceNamespace = v.(string)
+
+							}
+
+							if v, ok := rulesMapStrToI["source_prefix_list"]; ok && !isIntfNil(v) && !sourceChoiceTypeFound {
+
+								sourceChoiceTypeFound = true
+								sourceChoiceInt := &ves_io_schema_enhanced_firewall_policy.EnhancedFirewallPolicyRuleType_SourcePrefixList{}
+								sourceChoiceInt.SourcePrefixList = &ves_io_schema_views.PrefixStringListType{}
+								rules[i].SourceChoice = sourceChoiceInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["ipv6_prefixes"]; ok && !isIntfNil(v) {
+
+											ls := make([]string, len(v.([]interface{})))
+											for i, v := range v.([]interface{}) {
+												ls[i] = v.(string)
+											}
+											sourceChoiceInt.SourcePrefixList.Ipv6Prefixes = ls
+
+										}
+
+										if v, ok := cs["prefixes"]; ok && !isIntfNil(v) {
+
+											ls := make([]string, len(v.([]interface{})))
+											for i, v := range v.([]interface{}) {
+												ls[i] = v.(string)
+											}
+											sourceChoiceInt.SourcePrefixList.Prefixes = ls
+
+										}
+
+									}
+								}
+
+							}
+
+							trafficChoiceTypeFound := false
+
+							if v, ok := rulesMapStrToI["all_tcp_traffic"]; ok && !isIntfNil(v) && !trafficChoiceTypeFound {
+
+								trafficChoiceTypeFound = true
+
+								if v.(bool) {
+									trafficChoiceInt := &ves_io_schema_enhanced_firewall_policy.EnhancedFirewallPolicyRuleType_AllTcpTraffic{}
+									trafficChoiceInt.AllTcpTraffic = &ves_io_schema.Empty{}
+									rules[i].TrafficChoice = trafficChoiceInt
+								}
+
+							}
+
+							if v, ok := rulesMapStrToI["all_traffic"]; ok && !isIntfNil(v) && !trafficChoiceTypeFound {
+
+								trafficChoiceTypeFound = true
+
+								if v.(bool) {
+									trafficChoiceInt := &ves_io_schema_enhanced_firewall_policy.EnhancedFirewallPolicyRuleType_AllTraffic{}
+									trafficChoiceInt.AllTraffic = &ves_io_schema.Empty{}
+									rules[i].TrafficChoice = trafficChoiceInt
+								}
+
+							}
+
+							if v, ok := rulesMapStrToI["all_udp_traffic"]; ok && !isIntfNil(v) && !trafficChoiceTypeFound {
+
+								trafficChoiceTypeFound = true
+
+								if v.(bool) {
+									trafficChoiceInt := &ves_io_schema_enhanced_firewall_policy.EnhancedFirewallPolicyRuleType_AllUdpTraffic{}
+									trafficChoiceInt.AllUdpTraffic = &ves_io_schema.Empty{}
+									rules[i].TrafficChoice = trafficChoiceInt
+								}
+
+							}
+
+							if v, ok := rulesMapStrToI["applications"]; ok && !isIntfNil(v) && !trafficChoiceTypeFound {
+
+								trafficChoiceTypeFound = true
+								trafficChoiceInt := &ves_io_schema_enhanced_firewall_policy.EnhancedFirewallPolicyRuleType_Applications{}
+								trafficChoiceInt.Applications = &ves_io_schema_network_policy.ApplicationsType{}
+								rules[i].TrafficChoice = trafficChoiceInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["applications"]; ok && !isIntfNil(v) {
+
+											applicationsList := []ves_io_schema_network_policy.ApplicationEnumType{}
+											for _, j := range v.([]interface{}) {
+												applicationsList = append(applicationsList, ves_io_schema_network_policy.ApplicationEnumType(ves_io_schema_network_policy.ApplicationEnumType_value[j.(string)]))
+											}
+											trafficChoiceInt.Applications.Applications = applicationsList
+
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := rulesMapStrToI["protocol_port_range"]; ok && !isIntfNil(v) && !trafficChoiceTypeFound {
+
+								trafficChoiceTypeFound = true
+								trafficChoiceInt := &ves_io_schema_enhanced_firewall_policy.EnhancedFirewallPolicyRuleType_ProtocolPortRange{}
+								trafficChoiceInt.ProtocolPortRange = &ves_io_schema_network_policy.ProtocolPortType{}
+								rules[i].TrafficChoice = trafficChoiceInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["port_ranges"]; ok && !isIntfNil(v) {
+
+											ls := make([]string, len(v.([]interface{})))
+											for i, v := range v.([]interface{}) {
+												ls[i] = v.(string)
+											}
+											trafficChoiceInt.ProtocolPortRange.PortRanges = ls
+
+										}
+
+										if v, ok := cs["protocol"]; ok && !isIntfNil(v) {
+
+											trafficChoiceInt.ProtocolPortRange.Protocol = v.(string)
+
+										}
+
+									}
 								}
 
 							}
 
 						}
-
-					}
-
-					if v, ok := rulesMapStrToI["source_label_selector"]; ok && !isIntfNil(v) && !sourceChoiceTypeFound {
-
-						sourceChoiceTypeFound = true
-						sourceChoiceInt := &ves_io_schema_enhanced_firewall_policy.EnhancedFirewallPolicyRuleType_SourceLabelSelector{}
-						sourceChoiceInt.SourceLabelSelector = &ves_io_schema.LabelSelectorType{}
-						rules[i].SourceChoice = sourceChoiceInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["expressions"]; ok && !isIntfNil(v) {
-
-								ls := make([]string, len(v.([]interface{})))
-								for i, v := range v.([]interface{}) {
-									ls[i] = v.(string)
-								}
-								sourceChoiceInt.SourceLabelSelector.Expressions = ls
-
-							}
-
-						}
-
-					}
-
-					if v, ok := rulesMapStrToI["source_namespace"]; ok && !isIntfNil(v) && !sourceChoiceTypeFound {
-
-						sourceChoiceTypeFound = true
-						sourceChoiceInt := &ves_io_schema_enhanced_firewall_policy.EnhancedFirewallPolicyRuleType_SourceNamespace{}
-
-						rules[i].SourceChoice = sourceChoiceInt
-
-						sourceChoiceInt.SourceNamespace = v.(string)
-
-					}
-
-					if v, ok := rulesMapStrToI["source_prefix_list"]; ok && !isIntfNil(v) && !sourceChoiceTypeFound {
-
-						sourceChoiceTypeFound = true
-						sourceChoiceInt := &ves_io_schema_enhanced_firewall_policy.EnhancedFirewallPolicyRuleType_SourcePrefixList{}
-						sourceChoiceInt.SourcePrefixList = &ves_io_schema_views.PrefixStringListType{}
-						rules[i].SourceChoice = sourceChoiceInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["ipv6_prefixes"]; ok && !isIntfNil(v) {
-
-								ls := make([]string, len(v.([]interface{})))
-								for i, v := range v.([]interface{}) {
-									ls[i] = v.(string)
-								}
-								sourceChoiceInt.SourcePrefixList.Ipv6Prefixes = ls
-
-							}
-
-							if v, ok := cs["prefixes"]; ok && !isIntfNil(v) {
-
-								ls := make([]string, len(v.([]interface{})))
-								for i, v := range v.([]interface{}) {
-									ls[i] = v.(string)
-								}
-								sourceChoiceInt.SourcePrefixList.Prefixes = ls
-
-							}
-
-						}
-
-					}
-
-					trafficChoiceTypeFound := false
-
-					if v, ok := rulesMapStrToI["all_tcp_traffic"]; ok && !isIntfNil(v) && !trafficChoiceTypeFound {
-
-						trafficChoiceTypeFound = true
-
-						if v.(bool) {
-							trafficChoiceInt := &ves_io_schema_enhanced_firewall_policy.EnhancedFirewallPolicyRuleType_AllTcpTraffic{}
-							trafficChoiceInt.AllTcpTraffic = &ves_io_schema.Empty{}
-							rules[i].TrafficChoice = trafficChoiceInt
-						}
-
-					}
-
-					if v, ok := rulesMapStrToI["all_traffic"]; ok && !isIntfNil(v) && !trafficChoiceTypeFound {
-
-						trafficChoiceTypeFound = true
-
-						if v.(bool) {
-							trafficChoiceInt := &ves_io_schema_enhanced_firewall_policy.EnhancedFirewallPolicyRuleType_AllTraffic{}
-							trafficChoiceInt.AllTraffic = &ves_io_schema.Empty{}
-							rules[i].TrafficChoice = trafficChoiceInt
-						}
-
-					}
-
-					if v, ok := rulesMapStrToI["all_udp_traffic"]; ok && !isIntfNil(v) && !trafficChoiceTypeFound {
-
-						trafficChoiceTypeFound = true
-
-						if v.(bool) {
-							trafficChoiceInt := &ves_io_schema_enhanced_firewall_policy.EnhancedFirewallPolicyRuleType_AllUdpTraffic{}
-							trafficChoiceInt.AllUdpTraffic = &ves_io_schema.Empty{}
-							rules[i].TrafficChoice = trafficChoiceInt
-						}
-
-					}
-
-					if v, ok := rulesMapStrToI["applications"]; ok && !isIntfNil(v) && !trafficChoiceTypeFound {
-
-						trafficChoiceTypeFound = true
-						trafficChoiceInt := &ves_io_schema_enhanced_firewall_policy.EnhancedFirewallPolicyRuleType_Applications{}
-						trafficChoiceInt.Applications = &ves_io_schema_network_policy.ApplicationsType{}
-						rules[i].TrafficChoice = trafficChoiceInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["applications"]; ok && !isIntfNil(v) {
-
-								applicationsList := []ves_io_schema_network_policy.ApplicationEnumType{}
-								for _, j := range v.([]interface{}) {
-									applicationsList = append(applicationsList, ves_io_schema_network_policy.ApplicationEnumType(ves_io_schema_network_policy.ApplicationEnumType_value[j.(string)]))
-								}
-								trafficChoiceInt.Applications.Applications = applicationsList
-
-							}
-
-						}
-
-					}
-
-					if v, ok := rulesMapStrToI["protocol_port_range"]; ok && !isIntfNil(v) && !trafficChoiceTypeFound {
-
-						trafficChoiceTypeFound = true
-						trafficChoiceInt := &ves_io_schema_enhanced_firewall_policy.EnhancedFirewallPolicyRuleType_ProtocolPortRange{}
-						trafficChoiceInt.ProtocolPortRange = &ves_io_schema_network_policy.ProtocolPortType{}
-						rules[i].TrafficChoice = trafficChoiceInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["port_ranges"]; ok && !isIntfNil(v) {
-
-								ls := make([]string, len(v.([]interface{})))
-								for i, v := range v.([]interface{}) {
-									ls[i] = v.(string)
-								}
-								trafficChoiceInt.ProtocolPortRange.PortRanges = ls
-
-							}
-
-							if v, ok := cs["protocol"]; ok && !isIntfNil(v) {
-
-								trafficChoiceInt.ProtocolPortRange.Protocol = v.(string)
-
-							}
-
-						}
-
 					}
 
 				}
 
 			}
-
 		}
 
 	}
 
 	if v, ok := d.GetOk("segment_policy"); ok && !isIntfNil(v) {
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		segmentPolicy := &ves_io_schema_policy.SegmentPolicyType{}
 		updateSpec.SegmentPolicy = segmentPolicy
 		for _, set := range sl {
-			segmentPolicyMapStrToI := set.(map[string]interface{})
+			if set != nil {
+				segmentPolicyMapStrToI := set.(map[string]interface{})
 
-			dstSegmentChoiceTypeFound := false
+				dstSegmentChoiceTypeFound := false
 
-			if v, ok := segmentPolicyMapStrToI["dst_any"]; ok && !isIntfNil(v) && !dstSegmentChoiceTypeFound {
+				if v, ok := segmentPolicyMapStrToI["dst_any"]; ok && !isIntfNil(v) && !dstSegmentChoiceTypeFound {
 
-				dstSegmentChoiceTypeFound = true
+					dstSegmentChoiceTypeFound = true
 
-				if v.(bool) {
-					dstSegmentChoiceInt := &ves_io_schema_policy.SegmentPolicyType_DstAny{}
-					dstSegmentChoiceInt.DstAny = &ves_io_schema.Empty{}
-					segmentPolicy.DstSegmentChoice = dstSegmentChoiceInt
-				}
-
-			}
-
-			if v, ok := segmentPolicyMapStrToI["dst_segments"]; ok && !isIntfNil(v) && !dstSegmentChoiceTypeFound {
-
-				dstSegmentChoiceTypeFound = true
-				dstSegmentChoiceInt := &ves_io_schema_policy.SegmentPolicyType_DstSegments{}
-				dstSegmentChoiceInt.DstSegments = &ves_io_schema_views.SegmentRefList{}
-				segmentPolicy.DstSegmentChoice = dstSegmentChoiceInt
-
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
-
-					if v, ok := cs["segments"]; ok && !isIntfNil(v) {
-
-						sl := v.([]interface{})
-						segmentsInt := make([]*ves_io_schema_views.ObjectRefType, len(sl))
-						dstSegmentChoiceInt.DstSegments.Segments = segmentsInt
-						for i, ps := range sl {
-
-							sMapToStrVal := ps.(map[string]interface{})
-							segmentsInt[i] = &ves_io_schema_views.ObjectRefType{}
-
-							if v, ok := sMapToStrVal["name"]; ok && !isIntfNil(v) {
-								segmentsInt[i].Name = v.(string)
-							}
-
-							if v, ok := sMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-								segmentsInt[i].Namespace = v.(string)
-							}
-
-							if v, ok := sMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-								segmentsInt[i].Tenant = v.(string)
-							}
-
-						}
-
+					if v.(bool) {
+						dstSegmentChoiceInt := &ves_io_schema_policy.SegmentPolicyType_DstAny{}
+						dstSegmentChoiceInt.DstAny = &ves_io_schema.Empty{}
+						segmentPolicy.DstSegmentChoice = dstSegmentChoiceInt
 					}
 
 				}
 
-			}
+				if v, ok := segmentPolicyMapStrToI["dst_segments"]; ok && !isIntfNil(v) && !dstSegmentChoiceTypeFound {
 
-			if v, ok := segmentPolicyMapStrToI["intra_segment"]; ok && !isIntfNil(v) && !dstSegmentChoiceTypeFound {
-
-				dstSegmentChoiceTypeFound = true
-
-				if v.(bool) {
-					dstSegmentChoiceInt := &ves_io_schema_policy.SegmentPolicyType_IntraSegment{}
-					dstSegmentChoiceInt.IntraSegment = &ves_io_schema.Empty{}
+					dstSegmentChoiceTypeFound = true
+					dstSegmentChoiceInt := &ves_io_schema_policy.SegmentPolicyType_DstSegments{}
+					dstSegmentChoiceInt.DstSegments = &ves_io_schema_views.SegmentRefList{}
 					segmentPolicy.DstSegmentChoice = dstSegmentChoiceInt
+
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["segments"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								segmentsInt := make([]*ves_io_schema_views.ObjectRefType, len(sl))
+								dstSegmentChoiceInt.DstSegments.Segments = segmentsInt
+								for i, ps := range sl {
+
+									sMapToStrVal := ps.(map[string]interface{})
+									segmentsInt[i] = &ves_io_schema_views.ObjectRefType{}
+
+									if v, ok := sMapToStrVal["name"]; ok && !isIntfNil(v) {
+										segmentsInt[i].Name = v.(string)
+									}
+
+									if v, ok := sMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+										segmentsInt[i].Namespace = v.(string)
+									}
+
+									if v, ok := sMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+										segmentsInt[i].Tenant = v.(string)
+									}
+
+								}
+
+							}
+
+						}
+					}
+
 				}
 
-			}
+				if v, ok := segmentPolicyMapStrToI["intra_segment"]; ok && !isIntfNil(v) && !dstSegmentChoiceTypeFound {
 
-			srcSegmentChoiceTypeFound := false
+					dstSegmentChoiceTypeFound = true
 
-			if v, ok := segmentPolicyMapStrToI["src_any"]; ok && !isIntfNil(v) && !srcSegmentChoiceTypeFound {
+					if v.(bool) {
+						dstSegmentChoiceInt := &ves_io_schema_policy.SegmentPolicyType_IntraSegment{}
+						dstSegmentChoiceInt.IntraSegment = &ves_io_schema.Empty{}
+						segmentPolicy.DstSegmentChoice = dstSegmentChoiceInt
+					}
 
-				srcSegmentChoiceTypeFound = true
+				}
 
-				if v.(bool) {
-					srcSegmentChoiceInt := &ves_io_schema_policy.SegmentPolicyType_SrcAny{}
-					srcSegmentChoiceInt.SrcAny = &ves_io_schema.Empty{}
+				srcSegmentChoiceTypeFound := false
+
+				if v, ok := segmentPolicyMapStrToI["src_any"]; ok && !isIntfNil(v) && !srcSegmentChoiceTypeFound {
+
+					srcSegmentChoiceTypeFound = true
+
+					if v.(bool) {
+						srcSegmentChoiceInt := &ves_io_schema_policy.SegmentPolicyType_SrcAny{}
+						srcSegmentChoiceInt.SrcAny = &ves_io_schema.Empty{}
+						segmentPolicy.SrcSegmentChoice = srcSegmentChoiceInt
+					}
+
+				}
+
+				if v, ok := segmentPolicyMapStrToI["src_segments"]; ok && !isIntfNil(v) && !srcSegmentChoiceTypeFound {
+
+					srcSegmentChoiceTypeFound = true
+					srcSegmentChoiceInt := &ves_io_schema_policy.SegmentPolicyType_SrcSegments{}
+					srcSegmentChoiceInt.SrcSegments = &ves_io_schema_views.SegmentRefList{}
 					segmentPolicy.SrcSegmentChoice = srcSegmentChoiceInt
-				}
 
-			}
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
 
-			if v, ok := segmentPolicyMapStrToI["src_segments"]; ok && !isIntfNil(v) && !srcSegmentChoiceTypeFound {
+							if v, ok := cs["segments"]; ok && !isIntfNil(v) {
 
-				srcSegmentChoiceTypeFound = true
-				srcSegmentChoiceInt := &ves_io_schema_policy.SegmentPolicyType_SrcSegments{}
-				srcSegmentChoiceInt.SrcSegments = &ves_io_schema_views.SegmentRefList{}
-				segmentPolicy.SrcSegmentChoice = srcSegmentChoiceInt
+								sl := v.([]interface{})
+								segmentsInt := make([]*ves_io_schema_views.ObjectRefType, len(sl))
+								srcSegmentChoiceInt.SrcSegments.Segments = segmentsInt
+								for i, ps := range sl {
 
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
+									sMapToStrVal := ps.(map[string]interface{})
+									segmentsInt[i] = &ves_io_schema_views.ObjectRefType{}
 
-					if v, ok := cs["segments"]; ok && !isIntfNil(v) {
+									if v, ok := sMapToStrVal["name"]; ok && !isIntfNil(v) {
+										segmentsInt[i].Name = v.(string)
+									}
 
-						sl := v.([]interface{})
-						segmentsInt := make([]*ves_io_schema_views.ObjectRefType, len(sl))
-						srcSegmentChoiceInt.SrcSegments.Segments = segmentsInt
-						for i, ps := range sl {
+									if v, ok := sMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+										segmentsInt[i].Namespace = v.(string)
+									}
 
-							sMapToStrVal := ps.(map[string]interface{})
-							segmentsInt[i] = &ves_io_schema_views.ObjectRefType{}
+									if v, ok := sMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+										segmentsInt[i].Tenant = v.(string)
+									}
 
-							if v, ok := sMapToStrVal["name"]; ok && !isIntfNil(v) {
-								segmentsInt[i].Name = v.(string)
-							}
+								}
 
-							if v, ok := sMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-								segmentsInt[i].Namespace = v.(string)
-							}
-
-							if v, ok := sMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-								segmentsInt[i].Tenant = v.(string)
 							}
 
 						}
-
 					}
 
 				}
 
 			}
-
 		}
 
 	}

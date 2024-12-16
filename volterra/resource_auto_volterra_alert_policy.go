@@ -62,14 +62,16 @@ func resourceVolterraAlertPolicy() *schema.Resource {
 
 			"notification_parameters": {
 
-				Type:     schema.TypeSet,
+				Type:     schema.TypeList,
+				MaxItems: 1,
 				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 
 						"custom": {
 
-							Type:     schema.TypeSet,
+							Type:     schema.TypeList,
+							MaxItems: 1,
 							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
@@ -190,14 +192,16 @@ func resourceVolterraAlertPolicy() *schema.Resource {
 
 						"custom": {
 
-							Type:     schema.TypeSet,
+							Type:     schema.TypeList,
+							MaxItems: 1,
 							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
 									"alertlabel": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -207,7 +211,9 @@ func resourceVolterraAlertPolicy() *schema.Resource {
 													Required: true,
 												},
 												"value": {
-													Type:     schema.TypeSet,
+
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Required: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -232,7 +238,8 @@ func resourceVolterraAlertPolicy() *schema.Resource {
 
 									"alertname": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -254,7 +261,8 @@ func resourceVolterraAlertPolicy() *schema.Resource {
 
 									"group": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -276,7 +284,8 @@ func resourceVolterraAlertPolicy() *schema.Resource {
 
 									"severity": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -301,7 +310,8 @@ func resourceVolterraAlertPolicy() *schema.Resource {
 
 						"group": {
 
-							Type:     schema.TypeSet,
+							Type:     schema.TypeList,
+							MaxItems: 1,
 							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
@@ -321,7 +331,8 @@ func resourceVolterraAlertPolicy() *schema.Resource {
 
 						"severity": {
 
-							Type:     schema.TypeSet,
+							Type:     schema.TypeList,
+							MaxItems: 1,
 							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
@@ -341,14 +352,16 @@ func resourceVolterraAlertPolicy() *schema.Resource {
 
 						"notification_parameters": {
 
-							Type:     schema.TypeSet,
+							Type:     schema.TypeList,
+							MaxItems: 1,
 							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
 									"custom": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -464,87 +477,91 @@ func resourceVolterraAlertPolicyCreate(d *schema.ResourceData, meta interface{})
 	//notification_parameters
 	if v, ok := d.GetOk("notification_parameters"); ok && !isIntfNil(v) {
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		notificationParameters := &ves_io_schema_alert_policy.NotificationParameters{}
 		createSpec.NotificationParameters = notificationParameters
 		for _, set := range sl {
-			notificationParametersMapStrToI := set.(map[string]interface{})
+			if set != nil {
+				notificationParametersMapStrToI := set.(map[string]interface{})
 
-			groupByTypeFound := false
+				groupByTypeFound := false
 
-			if v, ok := notificationParametersMapStrToI["custom"]; ok && !isIntfNil(v) && !groupByTypeFound {
+				if v, ok := notificationParametersMapStrToI["custom"]; ok && !isIntfNil(v) && !groupByTypeFound {
 
-				groupByTypeFound = true
-				groupByInt := &ves_io_schema_alert_policy.NotificationParameters_Custom{}
-				groupByInt.Custom = &ves_io_schema_alert_policy.CustomGroupBy{}
-				notificationParameters.GroupBy = groupByInt
+					groupByTypeFound = true
+					groupByInt := &ves_io_schema_alert_policy.NotificationParameters_Custom{}
+					groupByInt.Custom = &ves_io_schema_alert_policy.CustomGroupBy{}
+					notificationParameters.GroupBy = groupByInt
 
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
 
-					if v, ok := cs["labels"]; ok && !isIntfNil(v) {
+							if v, ok := cs["labels"]; ok && !isIntfNil(v) {
 
-						ls := make([]string, len(v.([]interface{})))
-						for i, v := range v.([]interface{}) {
-							ls[i] = v.(string)
+								ls := make([]string, len(v.([]interface{})))
+								for i, v := range v.([]interface{}) {
+									ls[i] = v.(string)
+								}
+								groupByInt.Custom.Labels = ls
+
+							}
+
 						}
-						groupByInt.Custom.Labels = ls
-
 					}
 
 				}
 
-			}
+				if v, ok := notificationParametersMapStrToI["default"]; ok && !isIntfNil(v) && !groupByTypeFound {
 
-			if v, ok := notificationParametersMapStrToI["default"]; ok && !isIntfNil(v) && !groupByTypeFound {
+					groupByTypeFound = true
 
-				groupByTypeFound = true
+					if v.(bool) {
+						groupByInt := &ves_io_schema_alert_policy.NotificationParameters_Default{}
+						groupByInt.Default = &ves_io_schema.Empty{}
+						notificationParameters.GroupBy = groupByInt
+					}
 
-				if v.(bool) {
-					groupByInt := &ves_io_schema_alert_policy.NotificationParameters_Default{}
-					groupByInt.Default = &ves_io_schema.Empty{}
-					notificationParameters.GroupBy = groupByInt
+				}
+
+				if v, ok := notificationParametersMapStrToI["individual"]; ok && !isIntfNil(v) && !groupByTypeFound {
+
+					groupByTypeFound = true
+
+					if v.(bool) {
+						groupByInt := &ves_io_schema_alert_policy.NotificationParameters_Individual{}
+						groupByInt.Individual = &ves_io_schema.Empty{}
+						notificationParameters.GroupBy = groupByInt
+					}
+
+				}
+
+				if v, ok := notificationParametersMapStrToI["ves_io_group"]; ok && !isIntfNil(v) && !groupByTypeFound {
+
+					groupByTypeFound = true
+
+					if v.(bool) {
+						groupByInt := &ves_io_schema_alert_policy.NotificationParameters_VesIoGroup{}
+						groupByInt.VesIoGroup = &ves_io_schema.Empty{}
+						notificationParameters.GroupBy = groupByInt
+					}
+
+				}
+
+				if w, ok := notificationParametersMapStrToI["group_interval"]; ok && !isIntfNil(w) {
+					notificationParameters.GroupInterval = w.(string)
+				}
+
+				if w, ok := notificationParametersMapStrToI["group_wait"]; ok && !isIntfNil(w) {
+					notificationParameters.GroupWait = w.(string)
+				}
+
+				if w, ok := notificationParametersMapStrToI["repeat_interval"]; ok && !isIntfNil(w) {
+					notificationParameters.RepeatInterval = w.(string)
 				}
 
 			}
-
-			if v, ok := notificationParametersMapStrToI["individual"]; ok && !isIntfNil(v) && !groupByTypeFound {
-
-				groupByTypeFound = true
-
-				if v.(bool) {
-					groupByInt := &ves_io_schema_alert_policy.NotificationParameters_Individual{}
-					groupByInt.Individual = &ves_io_schema.Empty{}
-					notificationParameters.GroupBy = groupByInt
-				}
-
-			}
-
-			if v, ok := notificationParametersMapStrToI["ves_io_group"]; ok && !isIntfNil(v) && !groupByTypeFound {
-
-				groupByTypeFound = true
-
-				if v.(bool) {
-					groupByInt := &ves_io_schema_alert_policy.NotificationParameters_VesIoGroup{}
-					groupByInt.VesIoGroup = &ves_io_schema.Empty{}
-					notificationParameters.GroupBy = groupByInt
-				}
-
-			}
-
-			if w, ok := notificationParametersMapStrToI["group_interval"]; ok && !isIntfNil(w) {
-				notificationParameters.GroupInterval = w.(string)
-			}
-
-			if w, ok := notificationParametersMapStrToI["group_wait"]; ok && !isIntfNil(w) {
-				notificationParameters.GroupWait = w.(string)
-			}
-
-			if w, ok := notificationParametersMapStrToI["repeat_interval"]; ok && !isIntfNil(w) {
-				notificationParameters.RepeatInterval = w.(string)
-			}
-
 		}
 
 	}
@@ -589,380 +606,402 @@ func resourceVolterraAlertPolicyCreate(d *schema.ResourceData, meta interface{})
 		routes := make([]*ves_io_schema_alert_policy.Route, len(sl))
 		createSpec.Routes = routes
 		for i, set := range sl {
-			routes[i] = &ves_io_schema_alert_policy.Route{}
-			routesMapStrToI := set.(map[string]interface{})
+			if set != nil {
+				routes[i] = &ves_io_schema_alert_policy.Route{}
+				routesMapStrToI := set.(map[string]interface{})
 
-			actionTypeFound := false
+				actionTypeFound := false
 
-			if v, ok := routesMapStrToI["dont_send"]; ok && !isIntfNil(v) && !actionTypeFound {
+				if v, ok := routesMapStrToI["dont_send"]; ok && !isIntfNil(v) && !actionTypeFound {
 
-				actionTypeFound = true
+					actionTypeFound = true
 
-				if v.(bool) {
-					actionInt := &ves_io_schema_alert_policy.Route_DontSend{}
-					actionInt.DontSend = &ves_io_schema.Empty{}
-					routes[i].Action = actionInt
+					if v.(bool) {
+						actionInt := &ves_io_schema_alert_policy.Route_DontSend{}
+						actionInt.DontSend = &ves_io_schema.Empty{}
+						routes[i].Action = actionInt
+					}
+
 				}
 
-			}
+				if v, ok := routesMapStrToI["send"]; ok && !isIntfNil(v) && !actionTypeFound {
 
-			if v, ok := routesMapStrToI["send"]; ok && !isIntfNil(v) && !actionTypeFound {
+					actionTypeFound = true
 
-				actionTypeFound = true
+					if v.(bool) {
+						actionInt := &ves_io_schema_alert_policy.Route_Send{}
+						actionInt.Send = &ves_io_schema.Empty{}
+						routes[i].Action = actionInt
+					}
 
-				if v.(bool) {
-					actionInt := &ves_io_schema_alert_policy.Route_Send{}
-					actionInt.Send = &ves_io_schema.Empty{}
-					routes[i].Action = actionInt
 				}
 
-			}
+				matcherTypeFound := false
 
-			matcherTypeFound := false
+				if v, ok := routesMapStrToI["alertname"]; ok && !isIntfNil(v) && !matcherTypeFound {
 
-			if v, ok := routesMapStrToI["alertname"]; ok && !isIntfNil(v) && !matcherTypeFound {
+					matcherTypeFound = true
+					matcherInt := &ves_io_schema_alert_policy.Route_Alertname{}
 
-				matcherTypeFound = true
-				matcherInt := &ves_io_schema_alert_policy.Route_Alertname{}
-
-				routes[i].Matcher = matcherInt
-
-				matcherInt.Alertname = ves_io_schema_alert_policy.AlertName(ves_io_schema_alert_policy.AlertName_value[v.(string)])
-
-			}
-
-			if v, ok := routesMapStrToI["alertname_regex"]; ok && !isIntfNil(v) && !matcherTypeFound {
-
-				matcherTypeFound = true
-				matcherInt := &ves_io_schema_alert_policy.Route_AlertnameRegex{}
-
-				routes[i].Matcher = matcherInt
-
-				matcherInt.AlertnameRegex = v.(string)
-
-			}
-
-			if v, ok := routesMapStrToI["any"]; ok && !isIntfNil(v) && !matcherTypeFound {
-
-				matcherTypeFound = true
-
-				if v.(bool) {
-					matcherInt := &ves_io_schema_alert_policy.Route_Any{}
-					matcherInt.Any = &ves_io_schema.Empty{}
 					routes[i].Matcher = matcherInt
+
+					matcherInt.Alertname = ves_io_schema_alert_policy.AlertName(ves_io_schema_alert_policy.AlertName_value[v.(string)])
+
 				}
 
-			}
+				if v, ok := routesMapStrToI["alertname_regex"]; ok && !isIntfNil(v) && !matcherTypeFound {
 
-			if v, ok := routesMapStrToI["custom"]; ok && !isIntfNil(v) && !matcherTypeFound {
+					matcherTypeFound = true
+					matcherInt := &ves_io_schema_alert_policy.Route_AlertnameRegex{}
 
-				matcherTypeFound = true
-				matcherInt := &ves_io_schema_alert_policy.Route_Custom{}
-				matcherInt.Custom = &ves_io_schema_alert_policy.CustomMatcher{}
-				routes[i].Matcher = matcherInt
+					routes[i].Matcher = matcherInt
 
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
+					matcherInt.AlertnameRegex = v.(string)
 
-					if v, ok := cs["alertlabel"]; ok && !isIntfNil(v) {
+				}
 
-						sl := v.(*schema.Set).List()
-						alertlabel := make(map[string]*ves_io_schema_alert_policy.LabelMatcher)
-						matcherInt.Custom.Alertlabel = alertlabel
-						for _, set := range sl {
-							alertlabelMapStrToI := set.(map[string]interface{})
-							key, ok := alertlabelMapStrToI["name"]
-							if ok && !isIntfNil(key) {
-								alertlabel[key.(string)] = &ves_io_schema_alert_policy.LabelMatcher{}
-								val, _ := alertlabelMapStrToI["value"]
+				if v, ok := routesMapStrToI["any"]; ok && !isIntfNil(v) && !matcherTypeFound {
 
-								alertlabelVals := val.(*schema.Set).List()
-								for _, intVal := range alertlabelVals {
+					matcherTypeFound = true
 
-									alertlabelStaticMap := intVal.(map[string]interface{})
-
-									matcherTypeTypeFound := false
-
-									if v, ok := alertlabelStaticMap["exact_match"]; ok && !isIntfNil(v) && !matcherTypeTypeFound {
-
-										matcherTypeTypeFound = true
-										matcherTypeInt := &ves_io_schema_alert_policy.LabelMatcher_ExactMatch{}
-
-										alertlabel[key.(string)].MatcherType = matcherTypeInt
-
-										matcherTypeInt.ExactMatch = v.(string)
-
-									}
-
-									if v, ok := alertlabelStaticMap["regex_match"]; ok && !isIntfNil(v) && !matcherTypeTypeFound {
-
-										matcherTypeTypeFound = true
-										matcherTypeInt := &ves_io_schema_alert_policy.LabelMatcher_RegexMatch{}
-
-										alertlabel[key.(string)].MatcherType = matcherTypeInt
-
-										matcherTypeInt.RegexMatch = v.(string)
-
-									}
-
-									// break after one loop
-									break
-								}
-							}
-						}
-
-					}
-
-					if v, ok := cs["alertname"]; ok && !isIntfNil(v) {
-
-						sl := v.(*schema.Set).List()
-						alertname := &ves_io_schema_alert_policy.LabelMatcher{}
-						matcherInt.Custom.Alertname = alertname
-						for _, set := range sl {
-							alertnameMapStrToI := set.(map[string]interface{})
-
-							matcherTypeTypeFound := false
-
-							if v, ok := alertnameMapStrToI["exact_match"]; ok && !isIntfNil(v) && !matcherTypeTypeFound {
-
-								matcherTypeTypeFound = true
-								matcherTypeInt := &ves_io_schema_alert_policy.LabelMatcher_ExactMatch{}
-
-								alertname.MatcherType = matcherTypeInt
-
-								matcherTypeInt.ExactMatch = v.(string)
-
-							}
-
-							if v, ok := alertnameMapStrToI["regex_match"]; ok && !isIntfNil(v) && !matcherTypeTypeFound {
-
-								matcherTypeTypeFound = true
-								matcherTypeInt := &ves_io_schema_alert_policy.LabelMatcher_RegexMatch{}
-
-								alertname.MatcherType = matcherTypeInt
-
-								matcherTypeInt.RegexMatch = v.(string)
-
-							}
-
-						}
-
-					}
-
-					if v, ok := cs["group"]; ok && !isIntfNil(v) {
-
-						sl := v.(*schema.Set).List()
-						group := &ves_io_schema_alert_policy.LabelMatcher{}
-						matcherInt.Custom.Group = group
-						for _, set := range sl {
-							groupMapStrToI := set.(map[string]interface{})
-
-							matcherTypeTypeFound := false
-
-							if v, ok := groupMapStrToI["exact_match"]; ok && !isIntfNil(v) && !matcherTypeTypeFound {
-
-								matcherTypeTypeFound = true
-								matcherTypeInt := &ves_io_schema_alert_policy.LabelMatcher_ExactMatch{}
-
-								group.MatcherType = matcherTypeInt
-
-								matcherTypeInt.ExactMatch = v.(string)
-
-							}
-
-							if v, ok := groupMapStrToI["regex_match"]; ok && !isIntfNil(v) && !matcherTypeTypeFound {
-
-								matcherTypeTypeFound = true
-								matcherTypeInt := &ves_io_schema_alert_policy.LabelMatcher_RegexMatch{}
-
-								group.MatcherType = matcherTypeInt
-
-								matcherTypeInt.RegexMatch = v.(string)
-
-							}
-
-						}
-
-					}
-
-					if v, ok := cs["severity"]; ok && !isIntfNil(v) {
-
-						sl := v.(*schema.Set).List()
-						severity := &ves_io_schema_alert_policy.LabelMatcher{}
-						matcherInt.Custom.Severity = severity
-						for _, set := range sl {
-							severityMapStrToI := set.(map[string]interface{})
-
-							matcherTypeTypeFound := false
-
-							if v, ok := severityMapStrToI["exact_match"]; ok && !isIntfNil(v) && !matcherTypeTypeFound {
-
-								matcherTypeTypeFound = true
-								matcherTypeInt := &ves_io_schema_alert_policy.LabelMatcher_ExactMatch{}
-
-								severity.MatcherType = matcherTypeInt
-
-								matcherTypeInt.ExactMatch = v.(string)
-
-							}
-
-							if v, ok := severityMapStrToI["regex_match"]; ok && !isIntfNil(v) && !matcherTypeTypeFound {
-
-								matcherTypeTypeFound = true
-								matcherTypeInt := &ves_io_schema_alert_policy.LabelMatcher_RegexMatch{}
-
-								severity.MatcherType = matcherTypeInt
-
-								matcherTypeInt.RegexMatch = v.(string)
-
-							}
-
-						}
-
+					if v.(bool) {
+						matcherInt := &ves_io_schema_alert_policy.Route_Any{}
+						matcherInt.Any = &ves_io_schema.Empty{}
+						routes[i].Matcher = matcherInt
 					}
 
 				}
 
-			}
+				if v, ok := routesMapStrToI["custom"]; ok && !isIntfNil(v) && !matcherTypeFound {
 
-			if v, ok := routesMapStrToI["group"]; ok && !isIntfNil(v) && !matcherTypeFound {
+					matcherTypeFound = true
+					matcherInt := &ves_io_schema_alert_policy.Route_Custom{}
+					matcherInt.Custom = &ves_io_schema_alert_policy.CustomMatcher{}
+					routes[i].Matcher = matcherInt
 
-				matcherTypeFound = true
-				matcherInt := &ves_io_schema_alert_policy.Route_Group{}
-				matcherInt.Group = &ves_io_schema_alert_policy.GroupMatcher{}
-				routes[i].Matcher = matcherInt
-
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
-
-					if v, ok := cs["groups"]; ok && !isIntfNil(v) {
-
-						groupsList := []ves_io_schema_alert_policy.Group{}
-						for _, j := range v.([]interface{}) {
-							groupsList = append(groupsList, ves_io_schema_alert_policy.Group(ves_io_schema_alert_policy.Group_value[j.(string)]))
-						}
-						matcherInt.Group.Groups = groupsList
-
-					}
-
-				}
-
-			}
-
-			if v, ok := routesMapStrToI["severity"]; ok && !isIntfNil(v) && !matcherTypeFound {
-
-				matcherTypeFound = true
-				matcherInt := &ves_io_schema_alert_policy.Route_Severity{}
-				matcherInt.Severity = &ves_io_schema_alert_policy.SeverityMatcher{}
-				routes[i].Matcher = matcherInt
-
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
-
-					if v, ok := cs["severities"]; ok && !isIntfNil(v) {
-
-						severitiesList := []ves_io_schema_alert_policy.Severity{}
-						for _, j := range v.([]interface{}) {
-							severitiesList = append(severitiesList, ves_io_schema_alert_policy.Severity(ves_io_schema_alert_policy.Severity_value[j.(string)]))
-						}
-						matcherInt.Severity.Severities = severitiesList
-
-					}
-
-				}
-
-			}
-
-			if v, ok := routesMapStrToI["notification_parameters"]; ok && !isIntfNil(v) {
-
-				sl := v.(*schema.Set).List()
-				notificationParameters := &ves_io_schema_alert_policy.NotificationParameters{}
-				routes[i].NotificationParameters = notificationParameters
-				for _, set := range sl {
-					notificationParametersMapStrToI := set.(map[string]interface{})
-
-					groupByTypeFound := false
-
-					if v, ok := notificationParametersMapStrToI["custom"]; ok && !isIntfNil(v) && !groupByTypeFound {
-
-						groupByTypeFound = true
-						groupByInt := &ves_io_schema_alert_policy.NotificationParameters_Custom{}
-						groupByInt.Custom = &ves_io_schema_alert_policy.CustomGroupBy{}
-						notificationParameters.GroupBy = groupByInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
 							cs := set.(map[string]interface{})
 
-							if v, ok := cs["labels"]; ok && !isIntfNil(v) {
+							if v, ok := cs["alertlabel"]; ok && !isIntfNil(v) {
 
-								ls := make([]string, len(v.([]interface{})))
-								for i, v := range v.([]interface{}) {
-									ls[i] = v.(string)
+								sl := v.([]interface{})
+								alertlabel := make(map[string]*ves_io_schema_alert_policy.LabelMatcher)
+								matcherInt.Custom.Alertlabel = alertlabel
+								for _, set := range sl {
+									if set != nil {
+										alertlabelMapStrToI := set.(map[string]interface{})
+										key, ok := alertlabelMapStrToI["name"]
+										if ok && !isIntfNil(key) {
+											alertlabel[key.(string)] = &ves_io_schema_alert_policy.LabelMatcher{}
+											val, _ := alertlabelMapStrToI["value"]
+
+											alertlabelVals := val.([]interface{})
+											for _, intVal := range alertlabelVals {
+												if intVal != nil {
+
+													alertlabelStaticMap := intVal.(map[string]interface{})
+
+													matcherTypeTypeFound := false
+
+													if v, ok := alertlabelStaticMap["exact_match"]; ok && !isIntfNil(v) && !matcherTypeTypeFound {
+
+														matcherTypeTypeFound = true
+														matcherTypeInt := &ves_io_schema_alert_policy.LabelMatcher_ExactMatch{}
+
+														alertlabel[key.(string)].MatcherType = matcherTypeInt
+
+														matcherTypeInt.ExactMatch = v.(string)
+
+													}
+
+													if v, ok := alertlabelStaticMap["regex_match"]; ok && !isIntfNil(v) && !matcherTypeTypeFound {
+
+														matcherTypeTypeFound = true
+														matcherTypeInt := &ves_io_schema_alert_policy.LabelMatcher_RegexMatch{}
+
+														alertlabel[key.(string)].MatcherType = matcherTypeInt
+
+														matcherTypeInt.RegexMatch = v.(string)
+
+													}
+
+													// break after one loop
+													break
+												}
+											}
+										}
+									}
 								}
-								groupByInt.Custom.Labels = ls
+
+							}
+
+							if v, ok := cs["alertname"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								alertname := &ves_io_schema_alert_policy.LabelMatcher{}
+								matcherInt.Custom.Alertname = alertname
+								for _, set := range sl {
+									if set != nil {
+										alertnameMapStrToI := set.(map[string]interface{})
+
+										matcherTypeTypeFound := false
+
+										if v, ok := alertnameMapStrToI["exact_match"]; ok && !isIntfNil(v) && !matcherTypeTypeFound {
+
+											matcherTypeTypeFound = true
+											matcherTypeInt := &ves_io_schema_alert_policy.LabelMatcher_ExactMatch{}
+
+											alertname.MatcherType = matcherTypeInt
+
+											matcherTypeInt.ExactMatch = v.(string)
+
+										}
+
+										if v, ok := alertnameMapStrToI["regex_match"]; ok && !isIntfNil(v) && !matcherTypeTypeFound {
+
+											matcherTypeTypeFound = true
+											matcherTypeInt := &ves_io_schema_alert_policy.LabelMatcher_RegexMatch{}
+
+											alertname.MatcherType = matcherTypeInt
+
+											matcherTypeInt.RegexMatch = v.(string)
+
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := cs["group"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								group := &ves_io_schema_alert_policy.LabelMatcher{}
+								matcherInt.Custom.Group = group
+								for _, set := range sl {
+									if set != nil {
+										groupMapStrToI := set.(map[string]interface{})
+
+										matcherTypeTypeFound := false
+
+										if v, ok := groupMapStrToI["exact_match"]; ok && !isIntfNil(v) && !matcherTypeTypeFound {
+
+											matcherTypeTypeFound = true
+											matcherTypeInt := &ves_io_schema_alert_policy.LabelMatcher_ExactMatch{}
+
+											group.MatcherType = matcherTypeInt
+
+											matcherTypeInt.ExactMatch = v.(string)
+
+										}
+
+										if v, ok := groupMapStrToI["regex_match"]; ok && !isIntfNil(v) && !matcherTypeTypeFound {
+
+											matcherTypeTypeFound = true
+											matcherTypeInt := &ves_io_schema_alert_policy.LabelMatcher_RegexMatch{}
+
+											group.MatcherType = matcherTypeInt
+
+											matcherTypeInt.RegexMatch = v.(string)
+
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := cs["severity"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								severity := &ves_io_schema_alert_policy.LabelMatcher{}
+								matcherInt.Custom.Severity = severity
+								for _, set := range sl {
+									if set != nil {
+										severityMapStrToI := set.(map[string]interface{})
+
+										matcherTypeTypeFound := false
+
+										if v, ok := severityMapStrToI["exact_match"]; ok && !isIntfNil(v) && !matcherTypeTypeFound {
+
+											matcherTypeTypeFound = true
+											matcherTypeInt := &ves_io_schema_alert_policy.LabelMatcher_ExactMatch{}
+
+											severity.MatcherType = matcherTypeInt
+
+											matcherTypeInt.ExactMatch = v.(string)
+
+										}
+
+										if v, ok := severityMapStrToI["regex_match"]; ok && !isIntfNil(v) && !matcherTypeTypeFound {
+
+											matcherTypeTypeFound = true
+											matcherTypeInt := &ves_io_schema_alert_policy.LabelMatcher_RegexMatch{}
+
+											severity.MatcherType = matcherTypeInt
+
+											matcherTypeInt.RegexMatch = v.(string)
+
+										}
+
+									}
+								}
 
 							}
 
 						}
-
 					}
 
-					if v, ok := notificationParametersMapStrToI["default"]; ok && !isIntfNil(v) && !groupByTypeFound {
+				}
 
-						groupByTypeFound = true
+				if v, ok := routesMapStrToI["group"]; ok && !isIntfNil(v) && !matcherTypeFound {
 
-						if v.(bool) {
-							groupByInt := &ves_io_schema_alert_policy.NotificationParameters_Default{}
-							groupByInt.Default = &ves_io_schema.Empty{}
-							notificationParameters.GroupBy = groupByInt
+					matcherTypeFound = true
+					matcherInt := &ves_io_schema_alert_policy.Route_Group{}
+					matcherInt.Group = &ves_io_schema_alert_policy.GroupMatcher{}
+					routes[i].Matcher = matcherInt
+
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["groups"]; ok && !isIntfNil(v) {
+
+								groupsList := []ves_io_schema_alert_policy.Group{}
+								for _, j := range v.([]interface{}) {
+									groupsList = append(groupsList, ves_io_schema_alert_policy.Group(ves_io_schema_alert_policy.Group_value[j.(string)]))
+								}
+								matcherInt.Group.Groups = groupsList
+
+							}
+
 						}
-
 					}
 
-					if v, ok := notificationParametersMapStrToI["individual"]; ok && !isIntfNil(v) && !groupByTypeFound {
+				}
 
-						groupByTypeFound = true
+				if v, ok := routesMapStrToI["severity"]; ok && !isIntfNil(v) && !matcherTypeFound {
 
-						if v.(bool) {
-							groupByInt := &ves_io_schema_alert_policy.NotificationParameters_Individual{}
-							groupByInt.Individual = &ves_io_schema.Empty{}
-							notificationParameters.GroupBy = groupByInt
+					matcherTypeFound = true
+					matcherInt := &ves_io_schema_alert_policy.Route_Severity{}
+					matcherInt.Severity = &ves_io_schema_alert_policy.SeverityMatcher{}
+					routes[i].Matcher = matcherInt
+
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["severities"]; ok && !isIntfNil(v) {
+
+								severitiesList := []ves_io_schema_alert_policy.Severity{}
+								for _, j := range v.([]interface{}) {
+									severitiesList = append(severitiesList, ves_io_schema_alert_policy.Severity(ves_io_schema_alert_policy.Severity_value[j.(string)]))
+								}
+								matcherInt.Severity.Severities = severitiesList
+
+							}
+
 						}
-
 					}
 
-					if v, ok := notificationParametersMapStrToI["ves_io_group"]; ok && !isIntfNil(v) && !groupByTypeFound {
+				}
 
-						groupByTypeFound = true
+				if v, ok := routesMapStrToI["notification_parameters"]; ok && !isIntfNil(v) {
 
-						if v.(bool) {
-							groupByInt := &ves_io_schema_alert_policy.NotificationParameters_VesIoGroup{}
-							groupByInt.VesIoGroup = &ves_io_schema.Empty{}
-							notificationParameters.GroupBy = groupByInt
+					sl := v.([]interface{})
+					notificationParameters := &ves_io_schema_alert_policy.NotificationParameters{}
+					routes[i].NotificationParameters = notificationParameters
+					for _, set := range sl {
+						if set != nil {
+							notificationParametersMapStrToI := set.(map[string]interface{})
+
+							groupByTypeFound := false
+
+							if v, ok := notificationParametersMapStrToI["custom"]; ok && !isIntfNil(v) && !groupByTypeFound {
+
+								groupByTypeFound = true
+								groupByInt := &ves_io_schema_alert_policy.NotificationParameters_Custom{}
+								groupByInt.Custom = &ves_io_schema_alert_policy.CustomGroupBy{}
+								notificationParameters.GroupBy = groupByInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["labels"]; ok && !isIntfNil(v) {
+
+											ls := make([]string, len(v.([]interface{})))
+											for i, v := range v.([]interface{}) {
+												ls[i] = v.(string)
+											}
+											groupByInt.Custom.Labels = ls
+
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := notificationParametersMapStrToI["default"]; ok && !isIntfNil(v) && !groupByTypeFound {
+
+								groupByTypeFound = true
+
+								if v.(bool) {
+									groupByInt := &ves_io_schema_alert_policy.NotificationParameters_Default{}
+									groupByInt.Default = &ves_io_schema.Empty{}
+									notificationParameters.GroupBy = groupByInt
+								}
+
+							}
+
+							if v, ok := notificationParametersMapStrToI["individual"]; ok && !isIntfNil(v) && !groupByTypeFound {
+
+								groupByTypeFound = true
+
+								if v.(bool) {
+									groupByInt := &ves_io_schema_alert_policy.NotificationParameters_Individual{}
+									groupByInt.Individual = &ves_io_schema.Empty{}
+									notificationParameters.GroupBy = groupByInt
+								}
+
+							}
+
+							if v, ok := notificationParametersMapStrToI["ves_io_group"]; ok && !isIntfNil(v) && !groupByTypeFound {
+
+								groupByTypeFound = true
+
+								if v.(bool) {
+									groupByInt := &ves_io_schema_alert_policy.NotificationParameters_VesIoGroup{}
+									groupByInt.VesIoGroup = &ves_io_schema.Empty{}
+									notificationParameters.GroupBy = groupByInt
+								}
+
+							}
+
+							if w, ok := notificationParametersMapStrToI["group_interval"]; ok && !isIntfNil(w) {
+								notificationParameters.GroupInterval = w.(string)
+							}
+
+							if w, ok := notificationParametersMapStrToI["group_wait"]; ok && !isIntfNil(w) {
+								notificationParameters.GroupWait = w.(string)
+							}
+
+							if w, ok := notificationParametersMapStrToI["repeat_interval"]; ok && !isIntfNil(w) {
+								notificationParameters.RepeatInterval = w.(string)
+							}
+
 						}
-
-					}
-
-					if w, ok := notificationParametersMapStrToI["group_interval"]; ok && !isIntfNil(w) {
-						notificationParameters.GroupInterval = w.(string)
-					}
-
-					if w, ok := notificationParametersMapStrToI["group_wait"]; ok && !isIntfNil(w) {
-						notificationParameters.GroupWait = w.(string)
-					}
-
-					if w, ok := notificationParametersMapStrToI["repeat_interval"]; ok && !isIntfNil(w) {
-						notificationParameters.RepeatInterval = w.(string)
 					}
 
 				}
 
 			}
-
 		}
 
 	}
@@ -1068,87 +1107,91 @@ func resourceVolterraAlertPolicyUpdate(d *schema.ResourceData, meta interface{})
 
 	if v, ok := d.GetOk("notification_parameters"); ok && !isIntfNil(v) {
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		notificationParameters := &ves_io_schema_alert_policy.NotificationParameters{}
 		updateSpec.NotificationParameters = notificationParameters
 		for _, set := range sl {
-			notificationParametersMapStrToI := set.(map[string]interface{})
+			if set != nil {
+				notificationParametersMapStrToI := set.(map[string]interface{})
 
-			groupByTypeFound := false
+				groupByTypeFound := false
 
-			if v, ok := notificationParametersMapStrToI["custom"]; ok && !isIntfNil(v) && !groupByTypeFound {
+				if v, ok := notificationParametersMapStrToI["custom"]; ok && !isIntfNil(v) && !groupByTypeFound {
 
-				groupByTypeFound = true
-				groupByInt := &ves_io_schema_alert_policy.NotificationParameters_Custom{}
-				groupByInt.Custom = &ves_io_schema_alert_policy.CustomGroupBy{}
-				notificationParameters.GroupBy = groupByInt
+					groupByTypeFound = true
+					groupByInt := &ves_io_schema_alert_policy.NotificationParameters_Custom{}
+					groupByInt.Custom = &ves_io_schema_alert_policy.CustomGroupBy{}
+					notificationParameters.GroupBy = groupByInt
 
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
 
-					if v, ok := cs["labels"]; ok && !isIntfNil(v) {
+							if v, ok := cs["labels"]; ok && !isIntfNil(v) {
 
-						ls := make([]string, len(v.([]interface{})))
-						for i, v := range v.([]interface{}) {
-							ls[i] = v.(string)
+								ls := make([]string, len(v.([]interface{})))
+								for i, v := range v.([]interface{}) {
+									ls[i] = v.(string)
+								}
+								groupByInt.Custom.Labels = ls
+
+							}
+
 						}
-						groupByInt.Custom.Labels = ls
-
 					}
 
 				}
 
-			}
+				if v, ok := notificationParametersMapStrToI["default"]; ok && !isIntfNil(v) && !groupByTypeFound {
 
-			if v, ok := notificationParametersMapStrToI["default"]; ok && !isIntfNil(v) && !groupByTypeFound {
+					groupByTypeFound = true
 
-				groupByTypeFound = true
+					if v.(bool) {
+						groupByInt := &ves_io_schema_alert_policy.NotificationParameters_Default{}
+						groupByInt.Default = &ves_io_schema.Empty{}
+						notificationParameters.GroupBy = groupByInt
+					}
 
-				if v.(bool) {
-					groupByInt := &ves_io_schema_alert_policy.NotificationParameters_Default{}
-					groupByInt.Default = &ves_io_schema.Empty{}
-					notificationParameters.GroupBy = groupByInt
+				}
+
+				if v, ok := notificationParametersMapStrToI["individual"]; ok && !isIntfNil(v) && !groupByTypeFound {
+
+					groupByTypeFound = true
+
+					if v.(bool) {
+						groupByInt := &ves_io_schema_alert_policy.NotificationParameters_Individual{}
+						groupByInt.Individual = &ves_io_schema.Empty{}
+						notificationParameters.GroupBy = groupByInt
+					}
+
+				}
+
+				if v, ok := notificationParametersMapStrToI["ves_io_group"]; ok && !isIntfNil(v) && !groupByTypeFound {
+
+					groupByTypeFound = true
+
+					if v.(bool) {
+						groupByInt := &ves_io_schema_alert_policy.NotificationParameters_VesIoGroup{}
+						groupByInt.VesIoGroup = &ves_io_schema.Empty{}
+						notificationParameters.GroupBy = groupByInt
+					}
+
+				}
+
+				if w, ok := notificationParametersMapStrToI["group_interval"]; ok && !isIntfNil(w) {
+					notificationParameters.GroupInterval = w.(string)
+				}
+
+				if w, ok := notificationParametersMapStrToI["group_wait"]; ok && !isIntfNil(w) {
+					notificationParameters.GroupWait = w.(string)
+				}
+
+				if w, ok := notificationParametersMapStrToI["repeat_interval"]; ok && !isIntfNil(w) {
+					notificationParameters.RepeatInterval = w.(string)
 				}
 
 			}
-
-			if v, ok := notificationParametersMapStrToI["individual"]; ok && !isIntfNil(v) && !groupByTypeFound {
-
-				groupByTypeFound = true
-
-				if v.(bool) {
-					groupByInt := &ves_io_schema_alert_policy.NotificationParameters_Individual{}
-					groupByInt.Individual = &ves_io_schema.Empty{}
-					notificationParameters.GroupBy = groupByInt
-				}
-
-			}
-
-			if v, ok := notificationParametersMapStrToI["ves_io_group"]; ok && !isIntfNil(v) && !groupByTypeFound {
-
-				groupByTypeFound = true
-
-				if v.(bool) {
-					groupByInt := &ves_io_schema_alert_policy.NotificationParameters_VesIoGroup{}
-					groupByInt.VesIoGroup = &ves_io_schema.Empty{}
-					notificationParameters.GroupBy = groupByInt
-				}
-
-			}
-
-			if w, ok := notificationParametersMapStrToI["group_interval"]; ok && !isIntfNil(w) {
-				notificationParameters.GroupInterval = w.(string)
-			}
-
-			if w, ok := notificationParametersMapStrToI["group_wait"]; ok && !isIntfNil(w) {
-				notificationParameters.GroupWait = w.(string)
-			}
-
-			if w, ok := notificationParametersMapStrToI["repeat_interval"]; ok && !isIntfNil(w) {
-				notificationParameters.RepeatInterval = w.(string)
-			}
-
 		}
 
 	}
@@ -1191,380 +1234,402 @@ func resourceVolterraAlertPolicyUpdate(d *schema.ResourceData, meta interface{})
 		routes := make([]*ves_io_schema_alert_policy.Route, len(sl))
 		updateSpec.Routes = routes
 		for i, set := range sl {
-			routes[i] = &ves_io_schema_alert_policy.Route{}
-			routesMapStrToI := set.(map[string]interface{})
+			if set != nil {
+				routes[i] = &ves_io_schema_alert_policy.Route{}
+				routesMapStrToI := set.(map[string]interface{})
 
-			actionTypeFound := false
+				actionTypeFound := false
 
-			if v, ok := routesMapStrToI["dont_send"]; ok && !isIntfNil(v) && !actionTypeFound {
+				if v, ok := routesMapStrToI["dont_send"]; ok && !isIntfNil(v) && !actionTypeFound {
 
-				actionTypeFound = true
+					actionTypeFound = true
 
-				if v.(bool) {
-					actionInt := &ves_io_schema_alert_policy.Route_DontSend{}
-					actionInt.DontSend = &ves_io_schema.Empty{}
-					routes[i].Action = actionInt
+					if v.(bool) {
+						actionInt := &ves_io_schema_alert_policy.Route_DontSend{}
+						actionInt.DontSend = &ves_io_schema.Empty{}
+						routes[i].Action = actionInt
+					}
+
 				}
 
-			}
+				if v, ok := routesMapStrToI["send"]; ok && !isIntfNil(v) && !actionTypeFound {
 
-			if v, ok := routesMapStrToI["send"]; ok && !isIntfNil(v) && !actionTypeFound {
+					actionTypeFound = true
 
-				actionTypeFound = true
+					if v.(bool) {
+						actionInt := &ves_io_schema_alert_policy.Route_Send{}
+						actionInt.Send = &ves_io_schema.Empty{}
+						routes[i].Action = actionInt
+					}
 
-				if v.(bool) {
-					actionInt := &ves_io_schema_alert_policy.Route_Send{}
-					actionInt.Send = &ves_io_schema.Empty{}
-					routes[i].Action = actionInt
 				}
 
-			}
+				matcherTypeFound := false
 
-			matcherTypeFound := false
+				if v, ok := routesMapStrToI["alertname"]; ok && !isIntfNil(v) && !matcherTypeFound {
 
-			if v, ok := routesMapStrToI["alertname"]; ok && !isIntfNil(v) && !matcherTypeFound {
+					matcherTypeFound = true
+					matcherInt := &ves_io_schema_alert_policy.Route_Alertname{}
 
-				matcherTypeFound = true
-				matcherInt := &ves_io_schema_alert_policy.Route_Alertname{}
-
-				routes[i].Matcher = matcherInt
-
-				matcherInt.Alertname = ves_io_schema_alert_policy.AlertName(ves_io_schema_alert_policy.AlertName_value[v.(string)])
-
-			}
-
-			if v, ok := routesMapStrToI["alertname_regex"]; ok && !isIntfNil(v) && !matcherTypeFound {
-
-				matcherTypeFound = true
-				matcherInt := &ves_io_schema_alert_policy.Route_AlertnameRegex{}
-
-				routes[i].Matcher = matcherInt
-
-				matcherInt.AlertnameRegex = v.(string)
-
-			}
-
-			if v, ok := routesMapStrToI["any"]; ok && !isIntfNil(v) && !matcherTypeFound {
-
-				matcherTypeFound = true
-
-				if v.(bool) {
-					matcherInt := &ves_io_schema_alert_policy.Route_Any{}
-					matcherInt.Any = &ves_io_schema.Empty{}
 					routes[i].Matcher = matcherInt
+
+					matcherInt.Alertname = ves_io_schema_alert_policy.AlertName(ves_io_schema_alert_policy.AlertName_value[v.(string)])
+
 				}
 
-			}
+				if v, ok := routesMapStrToI["alertname_regex"]; ok && !isIntfNil(v) && !matcherTypeFound {
 
-			if v, ok := routesMapStrToI["custom"]; ok && !isIntfNil(v) && !matcherTypeFound {
+					matcherTypeFound = true
+					matcherInt := &ves_io_schema_alert_policy.Route_AlertnameRegex{}
 
-				matcherTypeFound = true
-				matcherInt := &ves_io_schema_alert_policy.Route_Custom{}
-				matcherInt.Custom = &ves_io_schema_alert_policy.CustomMatcher{}
-				routes[i].Matcher = matcherInt
+					routes[i].Matcher = matcherInt
 
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
+					matcherInt.AlertnameRegex = v.(string)
 
-					if v, ok := cs["alertlabel"]; ok && !isIntfNil(v) {
+				}
 
-						sl := v.(*schema.Set).List()
-						alertlabel := make(map[string]*ves_io_schema_alert_policy.LabelMatcher)
-						matcherInt.Custom.Alertlabel = alertlabel
-						for _, set := range sl {
-							alertlabelMapStrToI := set.(map[string]interface{})
-							key, ok := alertlabelMapStrToI["name"]
-							if ok && !isIntfNil(key) {
-								alertlabel[key.(string)] = &ves_io_schema_alert_policy.LabelMatcher{}
-								val, _ := alertlabelMapStrToI["value"]
+				if v, ok := routesMapStrToI["any"]; ok && !isIntfNil(v) && !matcherTypeFound {
 
-								alertlabelVals := val.(*schema.Set).List()
-								for _, intVal := range alertlabelVals {
+					matcherTypeFound = true
 
-									alertlabelStaticMap := intVal.(map[string]interface{})
-
-									matcherTypeTypeFound := false
-
-									if v, ok := alertlabelStaticMap["exact_match"]; ok && !isIntfNil(v) && !matcherTypeTypeFound {
-
-										matcherTypeTypeFound = true
-										matcherTypeInt := &ves_io_schema_alert_policy.LabelMatcher_ExactMatch{}
-
-										alertlabel[key.(string)].MatcherType = matcherTypeInt
-
-										matcherTypeInt.ExactMatch = v.(string)
-
-									}
-
-									if v, ok := alertlabelStaticMap["regex_match"]; ok && !isIntfNil(v) && !matcherTypeTypeFound {
-
-										matcherTypeTypeFound = true
-										matcherTypeInt := &ves_io_schema_alert_policy.LabelMatcher_RegexMatch{}
-
-										alertlabel[key.(string)].MatcherType = matcherTypeInt
-
-										matcherTypeInt.RegexMatch = v.(string)
-
-									}
-
-									// break after one loop
-									break
-								}
-							}
-						}
-
-					}
-
-					if v, ok := cs["alertname"]; ok && !isIntfNil(v) {
-
-						sl := v.(*schema.Set).List()
-						alertname := &ves_io_schema_alert_policy.LabelMatcher{}
-						matcherInt.Custom.Alertname = alertname
-						for _, set := range sl {
-							alertnameMapStrToI := set.(map[string]interface{})
-
-							matcherTypeTypeFound := false
-
-							if v, ok := alertnameMapStrToI["exact_match"]; ok && !isIntfNil(v) && !matcherTypeTypeFound {
-
-								matcherTypeTypeFound = true
-								matcherTypeInt := &ves_io_schema_alert_policy.LabelMatcher_ExactMatch{}
-
-								alertname.MatcherType = matcherTypeInt
-
-								matcherTypeInt.ExactMatch = v.(string)
-
-							}
-
-							if v, ok := alertnameMapStrToI["regex_match"]; ok && !isIntfNil(v) && !matcherTypeTypeFound {
-
-								matcherTypeTypeFound = true
-								matcherTypeInt := &ves_io_schema_alert_policy.LabelMatcher_RegexMatch{}
-
-								alertname.MatcherType = matcherTypeInt
-
-								matcherTypeInt.RegexMatch = v.(string)
-
-							}
-
-						}
-
-					}
-
-					if v, ok := cs["group"]; ok && !isIntfNil(v) {
-
-						sl := v.(*schema.Set).List()
-						group := &ves_io_schema_alert_policy.LabelMatcher{}
-						matcherInt.Custom.Group = group
-						for _, set := range sl {
-							groupMapStrToI := set.(map[string]interface{})
-
-							matcherTypeTypeFound := false
-
-							if v, ok := groupMapStrToI["exact_match"]; ok && !isIntfNil(v) && !matcherTypeTypeFound {
-
-								matcherTypeTypeFound = true
-								matcherTypeInt := &ves_io_schema_alert_policy.LabelMatcher_ExactMatch{}
-
-								group.MatcherType = matcherTypeInt
-
-								matcherTypeInt.ExactMatch = v.(string)
-
-							}
-
-							if v, ok := groupMapStrToI["regex_match"]; ok && !isIntfNil(v) && !matcherTypeTypeFound {
-
-								matcherTypeTypeFound = true
-								matcherTypeInt := &ves_io_schema_alert_policy.LabelMatcher_RegexMatch{}
-
-								group.MatcherType = matcherTypeInt
-
-								matcherTypeInt.RegexMatch = v.(string)
-
-							}
-
-						}
-
-					}
-
-					if v, ok := cs["severity"]; ok && !isIntfNil(v) {
-
-						sl := v.(*schema.Set).List()
-						severity := &ves_io_schema_alert_policy.LabelMatcher{}
-						matcherInt.Custom.Severity = severity
-						for _, set := range sl {
-							severityMapStrToI := set.(map[string]interface{})
-
-							matcherTypeTypeFound := false
-
-							if v, ok := severityMapStrToI["exact_match"]; ok && !isIntfNil(v) && !matcherTypeTypeFound {
-
-								matcherTypeTypeFound = true
-								matcherTypeInt := &ves_io_schema_alert_policy.LabelMatcher_ExactMatch{}
-
-								severity.MatcherType = matcherTypeInt
-
-								matcherTypeInt.ExactMatch = v.(string)
-
-							}
-
-							if v, ok := severityMapStrToI["regex_match"]; ok && !isIntfNil(v) && !matcherTypeTypeFound {
-
-								matcherTypeTypeFound = true
-								matcherTypeInt := &ves_io_schema_alert_policy.LabelMatcher_RegexMatch{}
-
-								severity.MatcherType = matcherTypeInt
-
-								matcherTypeInt.RegexMatch = v.(string)
-
-							}
-
-						}
-
+					if v.(bool) {
+						matcherInt := &ves_io_schema_alert_policy.Route_Any{}
+						matcherInt.Any = &ves_io_schema.Empty{}
+						routes[i].Matcher = matcherInt
 					}
 
 				}
 
-			}
+				if v, ok := routesMapStrToI["custom"]; ok && !isIntfNil(v) && !matcherTypeFound {
 
-			if v, ok := routesMapStrToI["group"]; ok && !isIntfNil(v) && !matcherTypeFound {
+					matcherTypeFound = true
+					matcherInt := &ves_io_schema_alert_policy.Route_Custom{}
+					matcherInt.Custom = &ves_io_schema_alert_policy.CustomMatcher{}
+					routes[i].Matcher = matcherInt
 
-				matcherTypeFound = true
-				matcherInt := &ves_io_schema_alert_policy.Route_Group{}
-				matcherInt.Group = &ves_io_schema_alert_policy.GroupMatcher{}
-				routes[i].Matcher = matcherInt
-
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
-
-					if v, ok := cs["groups"]; ok && !isIntfNil(v) {
-
-						groupsList := []ves_io_schema_alert_policy.Group{}
-						for _, j := range v.([]interface{}) {
-							groupsList = append(groupsList, ves_io_schema_alert_policy.Group(ves_io_schema_alert_policy.Group_value[j.(string)]))
-						}
-						matcherInt.Group.Groups = groupsList
-
-					}
-
-				}
-
-			}
-
-			if v, ok := routesMapStrToI["severity"]; ok && !isIntfNil(v) && !matcherTypeFound {
-
-				matcherTypeFound = true
-				matcherInt := &ves_io_schema_alert_policy.Route_Severity{}
-				matcherInt.Severity = &ves_io_schema_alert_policy.SeverityMatcher{}
-				routes[i].Matcher = matcherInt
-
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
-
-					if v, ok := cs["severities"]; ok && !isIntfNil(v) {
-
-						severitiesList := []ves_io_schema_alert_policy.Severity{}
-						for _, j := range v.([]interface{}) {
-							severitiesList = append(severitiesList, ves_io_schema_alert_policy.Severity(ves_io_schema_alert_policy.Severity_value[j.(string)]))
-						}
-						matcherInt.Severity.Severities = severitiesList
-
-					}
-
-				}
-
-			}
-
-			if v, ok := routesMapStrToI["notification_parameters"]; ok && !isIntfNil(v) {
-
-				sl := v.(*schema.Set).List()
-				notificationParameters := &ves_io_schema_alert_policy.NotificationParameters{}
-				routes[i].NotificationParameters = notificationParameters
-				for _, set := range sl {
-					notificationParametersMapStrToI := set.(map[string]interface{})
-
-					groupByTypeFound := false
-
-					if v, ok := notificationParametersMapStrToI["custom"]; ok && !isIntfNil(v) && !groupByTypeFound {
-
-						groupByTypeFound = true
-						groupByInt := &ves_io_schema_alert_policy.NotificationParameters_Custom{}
-						groupByInt.Custom = &ves_io_schema_alert_policy.CustomGroupBy{}
-						notificationParameters.GroupBy = groupByInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
 							cs := set.(map[string]interface{})
 
-							if v, ok := cs["labels"]; ok && !isIntfNil(v) {
+							if v, ok := cs["alertlabel"]; ok && !isIntfNil(v) {
 
-								ls := make([]string, len(v.([]interface{})))
-								for i, v := range v.([]interface{}) {
-									ls[i] = v.(string)
+								sl := v.([]interface{})
+								alertlabel := make(map[string]*ves_io_schema_alert_policy.LabelMatcher)
+								matcherInt.Custom.Alertlabel = alertlabel
+								for _, set := range sl {
+									if set != nil {
+										alertlabelMapStrToI := set.(map[string]interface{})
+										key, ok := alertlabelMapStrToI["name"]
+										if ok && !isIntfNil(key) {
+											alertlabel[key.(string)] = &ves_io_schema_alert_policy.LabelMatcher{}
+											val, _ := alertlabelMapStrToI["value"]
+
+											alertlabelVals := val.([]interface{})
+											for _, intVal := range alertlabelVals {
+												if intVal != nil {
+
+													alertlabelStaticMap := intVal.(map[string]interface{})
+
+													matcherTypeTypeFound := false
+
+													if v, ok := alertlabelStaticMap["exact_match"]; ok && !isIntfNil(v) && !matcherTypeTypeFound {
+
+														matcherTypeTypeFound = true
+														matcherTypeInt := &ves_io_schema_alert_policy.LabelMatcher_ExactMatch{}
+
+														alertlabel[key.(string)].MatcherType = matcherTypeInt
+
+														matcherTypeInt.ExactMatch = v.(string)
+
+													}
+
+													if v, ok := alertlabelStaticMap["regex_match"]; ok && !isIntfNil(v) && !matcherTypeTypeFound {
+
+														matcherTypeTypeFound = true
+														matcherTypeInt := &ves_io_schema_alert_policy.LabelMatcher_RegexMatch{}
+
+														alertlabel[key.(string)].MatcherType = matcherTypeInt
+
+														matcherTypeInt.RegexMatch = v.(string)
+
+													}
+
+													// break after one loop
+													break
+												}
+											}
+										}
+									}
 								}
-								groupByInt.Custom.Labels = ls
+
+							}
+
+							if v, ok := cs["alertname"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								alertname := &ves_io_schema_alert_policy.LabelMatcher{}
+								matcherInt.Custom.Alertname = alertname
+								for _, set := range sl {
+									if set != nil {
+										alertnameMapStrToI := set.(map[string]interface{})
+
+										matcherTypeTypeFound := false
+
+										if v, ok := alertnameMapStrToI["exact_match"]; ok && !isIntfNil(v) && !matcherTypeTypeFound {
+
+											matcherTypeTypeFound = true
+											matcherTypeInt := &ves_io_schema_alert_policy.LabelMatcher_ExactMatch{}
+
+											alertname.MatcherType = matcherTypeInt
+
+											matcherTypeInt.ExactMatch = v.(string)
+
+										}
+
+										if v, ok := alertnameMapStrToI["regex_match"]; ok && !isIntfNil(v) && !matcherTypeTypeFound {
+
+											matcherTypeTypeFound = true
+											matcherTypeInt := &ves_io_schema_alert_policy.LabelMatcher_RegexMatch{}
+
+											alertname.MatcherType = matcherTypeInt
+
+											matcherTypeInt.RegexMatch = v.(string)
+
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := cs["group"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								group := &ves_io_schema_alert_policy.LabelMatcher{}
+								matcherInt.Custom.Group = group
+								for _, set := range sl {
+									if set != nil {
+										groupMapStrToI := set.(map[string]interface{})
+
+										matcherTypeTypeFound := false
+
+										if v, ok := groupMapStrToI["exact_match"]; ok && !isIntfNil(v) && !matcherTypeTypeFound {
+
+											matcherTypeTypeFound = true
+											matcherTypeInt := &ves_io_schema_alert_policy.LabelMatcher_ExactMatch{}
+
+											group.MatcherType = matcherTypeInt
+
+											matcherTypeInt.ExactMatch = v.(string)
+
+										}
+
+										if v, ok := groupMapStrToI["regex_match"]; ok && !isIntfNil(v) && !matcherTypeTypeFound {
+
+											matcherTypeTypeFound = true
+											matcherTypeInt := &ves_io_schema_alert_policy.LabelMatcher_RegexMatch{}
+
+											group.MatcherType = matcherTypeInt
+
+											matcherTypeInt.RegexMatch = v.(string)
+
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := cs["severity"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								severity := &ves_io_schema_alert_policy.LabelMatcher{}
+								matcherInt.Custom.Severity = severity
+								for _, set := range sl {
+									if set != nil {
+										severityMapStrToI := set.(map[string]interface{})
+
+										matcherTypeTypeFound := false
+
+										if v, ok := severityMapStrToI["exact_match"]; ok && !isIntfNil(v) && !matcherTypeTypeFound {
+
+											matcherTypeTypeFound = true
+											matcherTypeInt := &ves_io_schema_alert_policy.LabelMatcher_ExactMatch{}
+
+											severity.MatcherType = matcherTypeInt
+
+											matcherTypeInt.ExactMatch = v.(string)
+
+										}
+
+										if v, ok := severityMapStrToI["regex_match"]; ok && !isIntfNil(v) && !matcherTypeTypeFound {
+
+											matcherTypeTypeFound = true
+											matcherTypeInt := &ves_io_schema_alert_policy.LabelMatcher_RegexMatch{}
+
+											severity.MatcherType = matcherTypeInt
+
+											matcherTypeInt.RegexMatch = v.(string)
+
+										}
+
+									}
+								}
 
 							}
 
 						}
-
 					}
 
-					if v, ok := notificationParametersMapStrToI["default"]; ok && !isIntfNil(v) && !groupByTypeFound {
+				}
 
-						groupByTypeFound = true
+				if v, ok := routesMapStrToI["group"]; ok && !isIntfNil(v) && !matcherTypeFound {
 
-						if v.(bool) {
-							groupByInt := &ves_io_schema_alert_policy.NotificationParameters_Default{}
-							groupByInt.Default = &ves_io_schema.Empty{}
-							notificationParameters.GroupBy = groupByInt
+					matcherTypeFound = true
+					matcherInt := &ves_io_schema_alert_policy.Route_Group{}
+					matcherInt.Group = &ves_io_schema_alert_policy.GroupMatcher{}
+					routes[i].Matcher = matcherInt
+
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["groups"]; ok && !isIntfNil(v) {
+
+								groupsList := []ves_io_schema_alert_policy.Group{}
+								for _, j := range v.([]interface{}) {
+									groupsList = append(groupsList, ves_io_schema_alert_policy.Group(ves_io_schema_alert_policy.Group_value[j.(string)]))
+								}
+								matcherInt.Group.Groups = groupsList
+
+							}
+
 						}
-
 					}
 
-					if v, ok := notificationParametersMapStrToI["individual"]; ok && !isIntfNil(v) && !groupByTypeFound {
+				}
 
-						groupByTypeFound = true
+				if v, ok := routesMapStrToI["severity"]; ok && !isIntfNil(v) && !matcherTypeFound {
 
-						if v.(bool) {
-							groupByInt := &ves_io_schema_alert_policy.NotificationParameters_Individual{}
-							groupByInt.Individual = &ves_io_schema.Empty{}
-							notificationParameters.GroupBy = groupByInt
+					matcherTypeFound = true
+					matcherInt := &ves_io_schema_alert_policy.Route_Severity{}
+					matcherInt.Severity = &ves_io_schema_alert_policy.SeverityMatcher{}
+					routes[i].Matcher = matcherInt
+
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["severities"]; ok && !isIntfNil(v) {
+
+								severitiesList := []ves_io_schema_alert_policy.Severity{}
+								for _, j := range v.([]interface{}) {
+									severitiesList = append(severitiesList, ves_io_schema_alert_policy.Severity(ves_io_schema_alert_policy.Severity_value[j.(string)]))
+								}
+								matcherInt.Severity.Severities = severitiesList
+
+							}
+
 						}
-
 					}
 
-					if v, ok := notificationParametersMapStrToI["ves_io_group"]; ok && !isIntfNil(v) && !groupByTypeFound {
+				}
 
-						groupByTypeFound = true
+				if v, ok := routesMapStrToI["notification_parameters"]; ok && !isIntfNil(v) {
 
-						if v.(bool) {
-							groupByInt := &ves_io_schema_alert_policy.NotificationParameters_VesIoGroup{}
-							groupByInt.VesIoGroup = &ves_io_schema.Empty{}
-							notificationParameters.GroupBy = groupByInt
+					sl := v.([]interface{})
+					notificationParameters := &ves_io_schema_alert_policy.NotificationParameters{}
+					routes[i].NotificationParameters = notificationParameters
+					for _, set := range sl {
+						if set != nil {
+							notificationParametersMapStrToI := set.(map[string]interface{})
+
+							groupByTypeFound := false
+
+							if v, ok := notificationParametersMapStrToI["custom"]; ok && !isIntfNil(v) && !groupByTypeFound {
+
+								groupByTypeFound = true
+								groupByInt := &ves_io_schema_alert_policy.NotificationParameters_Custom{}
+								groupByInt.Custom = &ves_io_schema_alert_policy.CustomGroupBy{}
+								notificationParameters.GroupBy = groupByInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["labels"]; ok && !isIntfNil(v) {
+
+											ls := make([]string, len(v.([]interface{})))
+											for i, v := range v.([]interface{}) {
+												ls[i] = v.(string)
+											}
+											groupByInt.Custom.Labels = ls
+
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := notificationParametersMapStrToI["default"]; ok && !isIntfNil(v) && !groupByTypeFound {
+
+								groupByTypeFound = true
+
+								if v.(bool) {
+									groupByInt := &ves_io_schema_alert_policy.NotificationParameters_Default{}
+									groupByInt.Default = &ves_io_schema.Empty{}
+									notificationParameters.GroupBy = groupByInt
+								}
+
+							}
+
+							if v, ok := notificationParametersMapStrToI["individual"]; ok && !isIntfNil(v) && !groupByTypeFound {
+
+								groupByTypeFound = true
+
+								if v.(bool) {
+									groupByInt := &ves_io_schema_alert_policy.NotificationParameters_Individual{}
+									groupByInt.Individual = &ves_io_schema.Empty{}
+									notificationParameters.GroupBy = groupByInt
+								}
+
+							}
+
+							if v, ok := notificationParametersMapStrToI["ves_io_group"]; ok && !isIntfNil(v) && !groupByTypeFound {
+
+								groupByTypeFound = true
+
+								if v.(bool) {
+									groupByInt := &ves_io_schema_alert_policy.NotificationParameters_VesIoGroup{}
+									groupByInt.VesIoGroup = &ves_io_schema.Empty{}
+									notificationParameters.GroupBy = groupByInt
+								}
+
+							}
+
+							if w, ok := notificationParametersMapStrToI["group_interval"]; ok && !isIntfNil(w) {
+								notificationParameters.GroupInterval = w.(string)
+							}
+
+							if w, ok := notificationParametersMapStrToI["group_wait"]; ok && !isIntfNil(w) {
+								notificationParameters.GroupWait = w.(string)
+							}
+
+							if w, ok := notificationParametersMapStrToI["repeat_interval"]; ok && !isIntfNil(w) {
+								notificationParameters.RepeatInterval = w.(string)
+							}
+
 						}
-
-					}
-
-					if w, ok := notificationParametersMapStrToI["group_interval"]; ok && !isIntfNil(w) {
-						notificationParameters.GroupInterval = w.(string)
-					}
-
-					if w, ok := notificationParametersMapStrToI["group_wait"]; ok && !isIntfNil(w) {
-						notificationParameters.GroupWait = w.(string)
-					}
-
-					if w, ok := notificationParametersMapStrToI["repeat_interval"]; ok && !isIntfNil(w) {
-						notificationParameters.RepeatInterval = w.(string)
 					}
 
 				}
 
 			}
-
 		}
 
 	}

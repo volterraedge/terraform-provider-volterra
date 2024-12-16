@@ -1,9 +1,9 @@
 ---
 
 page_title: "Volterra: tcp_loadbalancer"
-description: "The tcp_loadbalancer allows CRUD of Tcp Loadbalancer resource on Volterra SaaS"
 
----
+description: "The tcp_loadbalancer allows CRUD of Tcp Loadbalancer resource on Volterra SaaS"
+---------------------------------------------------------------------------------------------
 
 Resource volterra_tcp_loadbalancer
 ==================================
@@ -22,27 +22,7 @@ resource "volterra_tcp_loadbalancer" "example" {
 
   // One of the arguments from this list "advertise_custom advertise_on_public advertise_on_public_default_vip do_not_advertise" must be set
 
-  advertise_custom {
-    advertise_where {
-      // One of the arguments from this list "advertise_on_public cloud_edge_segment segment site site_segment virtual_network virtual_site virtual_site_segment virtual_site_with_vip vk8s_service" must be set
-
-      segment {
-        ipv4_vip = "ipv4_vip"
-
-        ipv6_vip = "ipv6_vip"
-
-        segment {
-          name      = "test1"
-          namespace = "staging"
-          tenant    = "acmecorp"
-        }
-      }
-
-      // One of the arguments from this list "port port_ranges use_default_port" must be set
-
-      use_default_port = true
-    }
-  }
+  do_not_advertise = true
 
   // One of the arguments from this list "do_not_retract_cluster retract_cluster" must be set
 
@@ -50,7 +30,7 @@ resource "volterra_tcp_loadbalancer" "example" {
 
   // One of the arguments from this list "hash_policy_choice_least_active hash_policy_choice_random hash_policy_choice_round_robin hash_policy_choice_source_ip_stickiness" must be set
 
-  hash_policy_choice_source_ip_stickiness = true
+  hash_policy_choice_least_active = true
 
   // One of the arguments from this list "tcp tls_tcp tls_tcp_auto_cert" must be set
 
@@ -66,7 +46,7 @@ resource "volterra_tcp_loadbalancer" "example" {
 
   // One of the arguments from this list "default_lb_with_sni no_sni sni" must be set
 
-  no_sni = true
+  sni = true
 }
 
 ```

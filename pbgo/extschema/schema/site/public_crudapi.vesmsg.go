@@ -130,6 +130,24 @@ func (m *GetResponse) ToYAML() (string, error) {
 	return codec.ToYAML(m)
 }
 
+// Redact squashes sensitive info in m (in-place)
+func (m *GetResponse) Redact(ctx context.Context) error {
+	// clear fields with confidential option set (at message or field level)
+	if m == nil {
+		return nil
+	}
+
+	if err := m.GetReplaceForm().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting GetResponse.replace_form")
+	}
+
+	if err := m.GetSpec().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting GetResponse.spec")
+	}
+
+	return nil
+}
+
 func (m *GetResponse) DeepCopy() *GetResponse {
 	if m == nil {
 		return nil
@@ -445,6 +463,22 @@ func (m *ListResponse) ToYAML() (string, error) {
 	return codec.ToYAML(m)
 }
 
+// Redact squashes sensitive info in m (in-place)
+func (m *ListResponse) Redact(ctx context.Context) error {
+	// clear fields with confidential option set (at message or field level)
+	if m == nil {
+		return nil
+	}
+
+	for idx, e := range m.GetItems() {
+		if err := e.Redact(ctx); err != nil {
+			return errors.Wrapf(err, "Redacting ListResponse.items idx %v", idx)
+		}
+	}
+
+	return nil
+}
+
 func (m *ListResponse) DeepCopy() *ListResponse {
 	if m == nil {
 		return nil
@@ -569,6 +603,20 @@ func (m *ListResponseItem) ToJSON() (string, error) {
 
 func (m *ListResponseItem) ToYAML() (string, error) {
 	return codec.ToYAML(m)
+}
+
+// Redact squashes sensitive info in m (in-place)
+func (m *ListResponseItem) Redact(ctx context.Context) error {
+	// clear fields with confidential option set (at message or field level)
+	if m == nil {
+		return nil
+	}
+
+	if err := m.GetGetSpec().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting ListResponseItem.get_spec")
+	}
+
+	return nil
 }
 
 func (m *ListResponseItem) DeepCopy() *ListResponseItem {
@@ -804,6 +852,20 @@ func (m *ReplaceRequest) ToJSON() (string, error) {
 
 func (m *ReplaceRequest) ToYAML() (string, error) {
 	return codec.ToYAML(m)
+}
+
+// Redact squashes sensitive info in m (in-place)
+func (m *ReplaceRequest) Redact(ctx context.Context) error {
+	// clear fields with confidential option set (at message or field level)
+	if m == nil {
+		return nil
+	}
+
+	if err := m.GetSpec().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting ReplaceRequest.spec")
+	}
+
+	return nil
 }
 
 func (m *ReplaceRequest) DeepCopy() *ReplaceRequest {

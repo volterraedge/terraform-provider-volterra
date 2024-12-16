@@ -67,7 +67,8 @@ func resourceVolterraNetworkPolicyRule() *schema.Resource {
 
 			"advanced_action": {
 
-				Type:     schema.TypeSet,
+				Type:     schema.TypeList,
+				MaxItems: 1,
 				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
@@ -82,7 +83,8 @@ func resourceVolterraNetworkPolicyRule() *schema.Resource {
 
 			"label_matcher": {
 
-				Type:     schema.TypeSet,
+				Type:     schema.TypeList,
+				MaxItems: 1,
 				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
@@ -117,7 +119,8 @@ func resourceVolterraNetworkPolicyRule() *schema.Resource {
 
 			"ip_prefix_set": {
 
-				Type:     schema.TypeSet,
+				Type:     schema.TypeList,
+				MaxItems: 1,
 				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
@@ -155,7 +158,8 @@ func resourceVolterraNetworkPolicyRule() *schema.Resource {
 
 			"prefix": {
 
-				Type:     schema.TypeSet,
+				Type:     schema.TypeList,
+				MaxItems: 1,
 				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
@@ -185,7 +189,8 @@ func resourceVolterraNetworkPolicyRule() *schema.Resource {
 
 			"prefix_selector": {
 
-				Type:     schema.TypeSet,
+				Type:     schema.TypeList,
+				MaxItems: 1,
 				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
@@ -269,18 +274,20 @@ func resourceVolterraNetworkPolicyRuleCreate(d *schema.ResourceData, meta interf
 	//advanced_action
 	if v, ok := d.GetOk("advanced_action"); ok && !isIntfNil(v) {
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		advancedAction := &ves_io_schema_network_policy_rule.NetworkPolicyRuleAdvancedAction{}
 		createSpec.AdvancedAction = advancedAction
 		for _, set := range sl {
-			advancedActionMapStrToI := set.(map[string]interface{})
+			if set != nil {
+				advancedActionMapStrToI := set.(map[string]interface{})
 
-			if v, ok := advancedActionMapStrToI["action"]; ok && !isIntfNil(v) {
+				if v, ok := advancedActionMapStrToI["action"]; ok && !isIntfNil(v) {
 
-				advancedAction.Action = ves_io_schema_network_policy_rule.LogAction(ves_io_schema_network_policy_rule.LogAction_value[v.(string)])
+					advancedAction.Action = ves_io_schema_network_policy_rule.LogAction(ves_io_schema_network_policy_rule.LogAction_value[v.(string)])
+
+				}
 
 			}
-
 		}
 
 	}
@@ -288,20 +295,22 @@ func resourceVolterraNetworkPolicyRuleCreate(d *schema.ResourceData, meta interf
 	//label_matcher
 	if v, ok := d.GetOk("label_matcher"); ok && !isIntfNil(v) {
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		labelMatcher := &ves_io_schema.LabelMatcherType{}
 		createSpec.LabelMatcher = labelMatcher
 		for _, set := range sl {
-			labelMatcherMapStrToI := set.(map[string]interface{})
+			if set != nil {
+				labelMatcherMapStrToI := set.(map[string]interface{})
 
-			if w, ok := labelMatcherMapStrToI["keys"]; ok && !isIntfNil(w) {
-				ls := make([]string, len(w.([]interface{})))
-				for i, v := range w.([]interface{}) {
-					ls[i] = v.(string)
+				if w, ok := labelMatcherMapStrToI["keys"]; ok && !isIntfNil(w) {
+					ls := make([]string, len(w.([]interface{})))
+					for i, v := range w.([]interface{}) {
+						ls[i] = v.(string)
+					}
+					labelMatcher.Keys = ls
 				}
-				labelMatcher.Keys = ls
-			}
 
+			}
 		}
 
 	}
@@ -336,42 +345,44 @@ func resourceVolterraNetworkPolicyRuleCreate(d *schema.ResourceData, meta interf
 		remoteEndpointInt.IpPrefixSet = &ves_io_schema.IpPrefixSetRefType{}
 		createSpec.RemoteEndpoint = remoteEndpointInt
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
+			if set != nil {
+				cs := set.(map[string]interface{})
 
-			if v, ok := cs["ref"]; ok && !isIntfNil(v) {
+				if v, ok := cs["ref"]; ok && !isIntfNil(v) {
 
-				sl := v.([]interface{})
-				refInt := make([]*ves_io_schema.ObjectRefType, len(sl))
-				remoteEndpointInt.IpPrefixSet.Ref = refInt
-				for i, ps := range sl {
+					sl := v.([]interface{})
+					refInt := make([]*ves_io_schema.ObjectRefType, len(sl))
+					remoteEndpointInt.IpPrefixSet.Ref = refInt
+					for i, ps := range sl {
 
-					rMapToStrVal := ps.(map[string]interface{})
-					refInt[i] = &ves_io_schema.ObjectRefType{}
+						rMapToStrVal := ps.(map[string]interface{})
+						refInt[i] = &ves_io_schema.ObjectRefType{}
 
-					refInt[i].Kind = "ip_prefix_set"
+						refInt[i].Kind = "ip_prefix_set"
 
-					if v, ok := rMapToStrVal["name"]; ok && !isIntfNil(v) {
-						refInt[i].Name = v.(string)
-					}
+						if v, ok := rMapToStrVal["name"]; ok && !isIntfNil(v) {
+							refInt[i].Name = v.(string)
+						}
 
-					if v, ok := rMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-						refInt[i].Namespace = v.(string)
-					}
+						if v, ok := rMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+							refInt[i].Namespace = v.(string)
+						}
 
-					if v, ok := rMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-						refInt[i].Tenant = v.(string)
-					}
+						if v, ok := rMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+							refInt[i].Tenant = v.(string)
+						}
 
-					if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
-						refInt[i].Uid = v.(string)
+						if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
+							refInt[i].Uid = v.(string)
+						}
+
 					}
 
 				}
 
 			}
-
 		}
 
 	}
@@ -383,30 +394,32 @@ func resourceVolterraNetworkPolicyRuleCreate(d *schema.ResourceData, meta interf
 		remoteEndpointInt.Prefix = &ves_io_schema.PrefixListType{}
 		createSpec.RemoteEndpoint = remoteEndpointInt
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
+			if set != nil {
+				cs := set.(map[string]interface{})
 
-			if v, ok := cs["ipv6_prefix"]; ok && !isIntfNil(v) {
+				if v, ok := cs["ipv6_prefix"]; ok && !isIntfNil(v) {
 
-				ls := make([]string, len(v.([]interface{})))
-				for i, v := range v.([]interface{}) {
-					ls[i] = v.(string)
+					ls := make([]string, len(v.([]interface{})))
+					for i, v := range v.([]interface{}) {
+						ls[i] = v.(string)
+					}
+					remoteEndpointInt.Prefix.Ipv6Prefix = ls
+
 				}
-				remoteEndpointInt.Prefix.Ipv6Prefix = ls
+
+				if v, ok := cs["prefix"]; ok && !isIntfNil(v) {
+
+					ls := make([]string, len(v.([]interface{})))
+					for i, v := range v.([]interface{}) {
+						ls[i] = v.(string)
+					}
+					remoteEndpointInt.Prefix.Prefix = ls
+
+				}
 
 			}
-
-			if v, ok := cs["prefix"]; ok && !isIntfNil(v) {
-
-				ls := make([]string, len(v.([]interface{})))
-				for i, v := range v.([]interface{}) {
-					ls[i] = v.(string)
-				}
-				remoteEndpointInt.Prefix.Prefix = ls
-
-			}
-
 		}
 
 	}
@@ -418,20 +431,22 @@ func resourceVolterraNetworkPolicyRuleCreate(d *schema.ResourceData, meta interf
 		remoteEndpointInt.PrefixSelector = &ves_io_schema.LabelSelectorType{}
 		createSpec.RemoteEndpoint = remoteEndpointInt
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
+			if set != nil {
+				cs := set.(map[string]interface{})
 
-			if v, ok := cs["expressions"]; ok && !isIntfNil(v) {
+				if v, ok := cs["expressions"]; ok && !isIntfNil(v) {
 
-				ls := make([]string, len(v.([]interface{})))
-				for i, v := range v.([]interface{}) {
-					ls[i] = v.(string)
+					ls := make([]string, len(v.([]interface{})))
+					for i, v := range v.([]interface{}) {
+						ls[i] = v.(string)
+					}
+					remoteEndpointInt.PrefixSelector.Expressions = ls
+
 				}
-				remoteEndpointInt.PrefixSelector.Expressions = ls
 
 			}
-
 		}
 
 	}
@@ -543,38 +558,42 @@ func resourceVolterraNetworkPolicyRuleUpdate(d *schema.ResourceData, meta interf
 
 	if v, ok := d.GetOk("advanced_action"); ok && !isIntfNil(v) {
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		advancedAction := &ves_io_schema_network_policy_rule.NetworkPolicyRuleAdvancedAction{}
 		updateSpec.AdvancedAction = advancedAction
 		for _, set := range sl {
-			advancedActionMapStrToI := set.(map[string]interface{})
+			if set != nil {
+				advancedActionMapStrToI := set.(map[string]interface{})
 
-			if v, ok := advancedActionMapStrToI["action"]; ok && !isIntfNil(v) {
+				if v, ok := advancedActionMapStrToI["action"]; ok && !isIntfNil(v) {
 
-				advancedAction.Action = ves_io_schema_network_policy_rule.LogAction(ves_io_schema_network_policy_rule.LogAction_value[v.(string)])
+					advancedAction.Action = ves_io_schema_network_policy_rule.LogAction(ves_io_schema_network_policy_rule.LogAction_value[v.(string)])
+
+				}
 
 			}
-
 		}
 
 	}
 
 	if v, ok := d.GetOk("label_matcher"); ok && !isIntfNil(v) {
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		labelMatcher := &ves_io_schema.LabelMatcherType{}
 		updateSpec.LabelMatcher = labelMatcher
 		for _, set := range sl {
-			labelMatcherMapStrToI := set.(map[string]interface{})
+			if set != nil {
+				labelMatcherMapStrToI := set.(map[string]interface{})
 
-			if w, ok := labelMatcherMapStrToI["keys"]; ok && !isIntfNil(w) {
-				ls := make([]string, len(w.([]interface{})))
-				for i, v := range w.([]interface{}) {
-					ls[i] = v.(string)
+				if w, ok := labelMatcherMapStrToI["keys"]; ok && !isIntfNil(w) {
+					ls := make([]string, len(w.([]interface{})))
+					for i, v := range w.([]interface{}) {
+						ls[i] = v.(string)
+					}
+					labelMatcher.Keys = ls
 				}
-				labelMatcher.Keys = ls
-			}
 
+			}
 		}
 
 	}
@@ -605,42 +624,44 @@ func resourceVolterraNetworkPolicyRuleUpdate(d *schema.ResourceData, meta interf
 		remoteEndpointInt.IpPrefixSet = &ves_io_schema.IpPrefixSetRefType{}
 		updateSpec.RemoteEndpoint = remoteEndpointInt
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
+			if set != nil {
+				cs := set.(map[string]interface{})
 
-			if v, ok := cs["ref"]; ok && !isIntfNil(v) {
+				if v, ok := cs["ref"]; ok && !isIntfNil(v) {
 
-				sl := v.([]interface{})
-				refInt := make([]*ves_io_schema.ObjectRefType, len(sl))
-				remoteEndpointInt.IpPrefixSet.Ref = refInt
-				for i, ps := range sl {
+					sl := v.([]interface{})
+					refInt := make([]*ves_io_schema.ObjectRefType, len(sl))
+					remoteEndpointInt.IpPrefixSet.Ref = refInt
+					for i, ps := range sl {
 
-					rMapToStrVal := ps.(map[string]interface{})
-					refInt[i] = &ves_io_schema.ObjectRefType{}
+						rMapToStrVal := ps.(map[string]interface{})
+						refInt[i] = &ves_io_schema.ObjectRefType{}
 
-					refInt[i].Kind = "ip_prefix_set"
+						refInt[i].Kind = "ip_prefix_set"
 
-					if v, ok := rMapToStrVal["name"]; ok && !isIntfNil(v) {
-						refInt[i].Name = v.(string)
-					}
+						if v, ok := rMapToStrVal["name"]; ok && !isIntfNil(v) {
+							refInt[i].Name = v.(string)
+						}
 
-					if v, ok := rMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-						refInt[i].Namespace = v.(string)
-					}
+						if v, ok := rMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+							refInt[i].Namespace = v.(string)
+						}
 
-					if v, ok := rMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-						refInt[i].Tenant = v.(string)
-					}
+						if v, ok := rMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+							refInt[i].Tenant = v.(string)
+						}
 
-					if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
-						refInt[i].Uid = v.(string)
+						if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
+							refInt[i].Uid = v.(string)
+						}
+
 					}
 
 				}
 
 			}
-
 		}
 
 	}
@@ -652,30 +673,32 @@ func resourceVolterraNetworkPolicyRuleUpdate(d *schema.ResourceData, meta interf
 		remoteEndpointInt.Prefix = &ves_io_schema.PrefixListType{}
 		updateSpec.RemoteEndpoint = remoteEndpointInt
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
+			if set != nil {
+				cs := set.(map[string]interface{})
 
-			if v, ok := cs["ipv6_prefix"]; ok && !isIntfNil(v) {
+				if v, ok := cs["ipv6_prefix"]; ok && !isIntfNil(v) {
 
-				ls := make([]string, len(v.([]interface{})))
-				for i, v := range v.([]interface{}) {
-					ls[i] = v.(string)
+					ls := make([]string, len(v.([]interface{})))
+					for i, v := range v.([]interface{}) {
+						ls[i] = v.(string)
+					}
+					remoteEndpointInt.Prefix.Ipv6Prefix = ls
+
 				}
-				remoteEndpointInt.Prefix.Ipv6Prefix = ls
+
+				if v, ok := cs["prefix"]; ok && !isIntfNil(v) {
+
+					ls := make([]string, len(v.([]interface{})))
+					for i, v := range v.([]interface{}) {
+						ls[i] = v.(string)
+					}
+					remoteEndpointInt.Prefix.Prefix = ls
+
+				}
 
 			}
-
-			if v, ok := cs["prefix"]; ok && !isIntfNil(v) {
-
-				ls := make([]string, len(v.([]interface{})))
-				for i, v := range v.([]interface{}) {
-					ls[i] = v.(string)
-				}
-				remoteEndpointInt.Prefix.Prefix = ls
-
-			}
-
 		}
 
 	}
@@ -687,20 +710,22 @@ func resourceVolterraNetworkPolicyRuleUpdate(d *schema.ResourceData, meta interf
 		remoteEndpointInt.PrefixSelector = &ves_io_schema.LabelSelectorType{}
 		updateSpec.RemoteEndpoint = remoteEndpointInt
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
+			if set != nil {
+				cs := set.(map[string]interface{})
 
-			if v, ok := cs["expressions"]; ok && !isIntfNil(v) {
+				if v, ok := cs["expressions"]; ok && !isIntfNil(v) {
 
-				ls := make([]string, len(v.([]interface{})))
-				for i, v := range v.([]interface{}) {
-					ls[i] = v.(string)
+					ls := make([]string, len(v.([]interface{})))
+					for i, v := range v.([]interface{}) {
+						ls[i] = v.(string)
+					}
+					remoteEndpointInt.PrefixSelector.Expressions = ls
+
 				}
-				remoteEndpointInt.PrefixSelector.Expressions = ls
 
 			}
-
 		}
 
 	}

@@ -3097,6 +3097,12 @@ var APISwaggerJSON string = `{
                     "format": "date-time",
                     "x-displayname": "Deletion Timestamp"
                 },
+                "direct_ref_hash": {
+                    "type": "string",
+                    "description": " A hash of the UIDs of  direct references on this object. This can be used to determine if \n this object hash has had references become resolved/unresolved",
+                    "title": "direct_ref_hash",
+                    "x-displayname": "Direct Reference Hash"
+                },
                 "finalizers": {
                     "type": "array",
                     "description": " Must be empty before the object is deleted from the registry. Each entry\n is an identifier for the responsible component that will remove the entry\n from the list. If the deletionTimestamp of the object is non-nil, entries\n in this list can only be removed.\n\nExample: - \"value\"-",
@@ -3242,7 +3248,8 @@ var APISwaggerJSON string = `{
             "enum": [
                 "INVALID",
                 "REGIONAL_EDGE",
-                "CUSTOMER_EDGE"
+                "CUSTOMER_EDGE",
+                "NGINX_ONE"
             ],
             "default": "INVALID",
             "x-displayname": "Site Type",
@@ -3518,14 +3525,19 @@ var APISwaggerJSON string = `{
         },
         "topologyProviderType": {
             "type": "string",
-            "description": "provider type\n\nProviderType unspecified\nAWS backend\nGCP backend\nAzure backend\nF5XC backend",
+            "description": "provider type\n\nProviderType unspecified\nAWS backend\nGCP backend\nAzure backend\nF5XC backend\nVMware backend\nKVM backend\nOCI backend\nBaremetal backend\nF5 rSeries backend",
             "title": "ProviderType",
             "enum": [
                 "PROVIDER_TYPE_UNSPECIFIED",
                 "PROVIDER_TYPE_AWS",
                 "PROVIDER_TYPE_GCP",
                 "PROVIDER_TYPE_AZURE",
-                "PROVIDER_TYPE_VOLTERRA"
+                "PROVIDER_TYPE_VOLTERRA",
+                "PROVIDER_TYPE_VMWARE",
+                "PROVIDER_TYPE_KVM",
+                "PROVIDER_TYPE_OCI",
+                "PROVIDER_TYPE_BAREMETAL",
+                "PROVIDER_TYPE_F5RSERIES"
             ],
             "default": "PROVIDER_TYPE_UNSPECIFIED",
             "x-displayname": "Provider Type",

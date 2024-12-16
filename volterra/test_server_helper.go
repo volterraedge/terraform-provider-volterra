@@ -8,6 +8,7 @@ import (
 	"testing"
 	"time"
 
+	"github.com/gogo/protobuf/types"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/acctest"
 
 	"gopkg.volterra.us/stdlib/client/vesapi"
@@ -84,8 +85,14 @@ var (
 )
 
 func getCreateResponseAPICredential(name string) {
+	timestamp := &types.Timestamp{
+		Seconds: time.Now().Unix(),
+		Nanos:   int32(time.Now().Nanosecond()),
+	}
+
 	rspCreateResponse = ves_io_schema_api_credential.CreateResponse{
-		Name: fmt.Sprintf("%s-%s", name, randomFunc()),
+		Name:                fmt.Sprintf("%s-%s", name, randomFunc()),
+		ExpirationTimestamp: timestamp,
 	}
 }
 
@@ -94,7 +101,19 @@ func (s *apiCredentialCustomAPIServer) Create(ctx context.Context, req *ves_io_s
 }
 
 func (s *apiCredentialCustomAPIServer) Get(ctx context.Context, req *ves_io_schema_api_credential.GetRequest) (*ves_io_schema_api_credential.GetResponse, error) {
-	return &ves_io_schema_api_credential.GetResponse{}, nil
+	timestamp := &types.Timestamp{
+		Seconds: time.Now().Unix(),
+		Nanos:   int32(time.Now().Nanosecond()),
+	}
+	return &ves_io_schema_api_credential.GetResponse{
+		Object: &ves_io_schema_api_credential.Object{
+			Spec: &ves_io_schema_api_credential.SpecType{
+				GcSpec: &ves_io_schema_api_credential.GlobalSpecType{
+					ExpirationTimestamp: timestamp,
+				},
+			},
+		},
+	}, nil
 }
 
 func (s *apiCredentialCustomAPIServer) List(ctx context.Context, req *ves_io_schema_api_credential.ListRequest) (*ves_io_schema_api_credential.ListResponse, error) {
@@ -149,6 +168,10 @@ func (s *apiCredentialCustomAPIServer) GetServiceCredentials(ctx context.Context
 	return &ves_io_schema_api_credential.GetServiceCredentialsResponse{}, nil
 }
 
+func (s *apiCredentialCustomAPIServer) ReplaceServiceCredentials(context.Context, *ves_io_schema_api_credential.ReplaceServiceCredentialsRequest) (*ves_io_schema_api_credential.ReplaceServiceCredentialsResponse, error) {
+	return &ves_io_schema_api_credential.ReplaceServiceCredentialsResponse{}, nil
+}
+
 var _ ves_io_schema_api_credential.CustomAPIServer = &apiCredentialCustomAPIServer{}
 
 // ves.io.schema.virtual_host.CustomAPI handling - start
@@ -165,6 +188,10 @@ func newVHCustomAPIServer(sf svcfw.Service) server.APIHandler {
 func (s *vhCustomAPIServer) GetDnsInfo(ctx context.Context,
 	req *ves_io_schema_vh.GetDnsInfoRequest) (*ves_io_schema_vh.GetDnsInfoResponse, error) {
 	return &ves_io_schema_vh.GetDnsInfoResponse{}, nil
+}
+
+func (s *vhCustomAPIServer) AssignAPIDefinition(context.Context, *ves_io_schema_vh.AssignAPIDefinitionReq) (*ves_io_schema_vh.AssignAPIDefinitionResp, error) {
+	return &ves_io_schema_vh.AssignAPIDefinitionResp{}, nil
 }
 
 var _ ves_io_schema_vh.CustomAPIServer = &vhCustomAPIServer{}

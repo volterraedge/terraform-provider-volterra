@@ -1163,6 +1163,15 @@ func (v *ValidateSuggestedItem) Validate(ctx context.Context, pm interface{}, op
 
 	}
 
+	if fv, exists := v.FldValidators["title"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("title"))
+		if err := fv(ctx, m.GetTitle(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["value"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("value"))

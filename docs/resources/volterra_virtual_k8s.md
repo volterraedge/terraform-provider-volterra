@@ -1,9 +1,9 @@
 ---
 
 page_title: "Volterra: virtual_k8s"
-description: "The virtual_k8s allows CRUD of Virtual K8s resource on Volterra SaaS"
 
----
+description: "The virtual_k8s allows CRUD of Virtual K8s resource on Volterra SaaS"
+-----------------------------------------------------------------------------------
 
 Resource volterra_virtual_k8s
 =============================

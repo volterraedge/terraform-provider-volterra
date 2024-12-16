@@ -4341,6 +4341,12 @@ var APISwaggerJSON string = `{
                     "format": "date-time",
                     "x-displayname": "Deletion Timestamp"
                 },
+                "direct_ref_hash": {
+                    "type": "string",
+                    "description": " A hash of the UIDs of  direct references on this object. This can be used to determine if \n this object hash has had references become resolved/unresolved",
+                    "title": "direct_ref_hash",
+                    "x-displayname": "Direct Reference Hash"
+                },
                 "finalizers": {
                     "type": "array",
                     "description": " Must be empty before the object is deleted from the registry. Each entry\n is an identifier for the responsible component that will remove the entry\n from the list. If the deletionTimestamp of the object is non-nil, entries\n in this list can only be removed.\n\nExample: - \"value\"-",
@@ -5740,13 +5746,13 @@ var APISwaggerJSON string = `{
                     "description": "Exclusive with [enable_upgrade_drain]\n",
                     "title": "Disable upgrade drain",
                     "$ref": "#/definitions/schemaEmpty",
-                    "x-displayname": "Disable Node by Node Upgrade"
+                    "x-displayname": "Disable"
                 },
                 "enable_upgrade_drain": {
                     "description": "Exclusive with [disable_upgrade_drain]\n",
                     "title": "Enable Node by Node Upgrade",
                     "$ref": "#/definitions/viewsKubernetesUpgradeDrainConfig",
-                    "x-displayname": "Enable Node by Node Upgrade"
+                    "x-displayname": "Enable"
                 }
             }
         },
@@ -6163,6 +6169,7 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-egress_gateway_choice": "[\"egress_gateway_default\",\"egress_nat_gw\",\"egress_virtual_private_gateway\"]",
             "x-ves-oneof-field-internet_vip_choice": "[\"disable_internet_vip\",\"enable_internet_vip\"]",
             "x-ves-oneof-field-logs_receiver_choice": "[\"log_receiver\",\"logs_streaming_disabled\"]",
+            "x-ves-oneof-field-routing_type": "[\"f5_orchestrated_routing\",\"manual_routing\"]",
             "x-ves-oneof-field-security_group_choice": "[\"custom_security_group\",\"f5xc_security_group\"]",
             "x-ves-oneof-field-site_type": "[\"ingress_egress_gw\",\"ingress_gw\",\"voltstack_cluster\"]",
             "x-ves-oneof-field-worker_nodes": "[\"no_worker_nodes\",\"nodes_per_az\",\"total_nodes\"]",
@@ -6310,6 +6317,12 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Error Description",
                     "x-ves-example": "value"
                 },
+                "f5_orchestrated_routing": {
+                    "description": "Exclusive with [manual_routing]\n F5 will orchestrate required routes for SLO Route Table towards Internet and SLI RT towards the CE.",
+                    "title": "F5 Orchestrated Routing",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "F5 Orchestrated Routing"
+                },
                 "f5xc_security_group": {
                     "description": "Exclusive with [custom_security_group]\n With this option, ingress and egress traffic will be controlled via f5xc created security group.",
                     "title": "Default F5XC Security Group",
@@ -6358,6 +6371,12 @@ var APISwaggerJSON string = `{
                     "title": "Disable Logs Receiver",
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "Disable Logs Streaming"
+                },
+                "manual_routing": {
+                    "description": "Exclusive with [f5_orchestrated_routing]\n  In this mode, F5 will not create nor alter any route tables or routes within the existing VPCs/Vnets providing better integration for existing environments. ",
+                    "title": "Manual Routing",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Manual Routing"
                 },
                 "no_worker_nodes": {
                     "description": "Exclusive with [nodes_per_az total_nodes]\n Worker nodes is set to zero",

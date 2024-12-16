@@ -1,9 +1,9 @@
 ---
 
 page_title: "Volterra: api_definition"
-description: "The api_definition allows CRUD of Api Definition resource on Volterra SaaS"
 
----
+description: "The api_definition allows CRUD of Api Definition resource on Volterra SaaS"
+-----------------------------------------------------------------------------------------
 
 Resource volterra_api_definition
 ================================

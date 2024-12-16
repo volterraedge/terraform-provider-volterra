@@ -1149,16 +1149,25 @@ func (s *APISrv) Create(ctx context.Context, req *CreateRequest) (*CreateRespons
 	}
 	reqMsgFQN := "ves.io.schema.views.aws_vpc_site.CreateRequest"
 	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.sf, reqMsgFQN, req)
+	var retErr error
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
 		}
+		userMsg := "The 'ves.io.schema.views.aws_vpc_site.API.Create' operation on 'aws_vpc_site'"
+		if retErr == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
 	obj := NewDBObject(nil)
 	req.ToObject(obj)
 	if conv, exists := s.sf.Config().MsgToObjConverters[reqMsgFQN]; exists {
 		if err := conv(req, obj); err != nil {
+			retErr = err
 			return nil, err
 		}
 	}
@@ -1167,16 +1176,19 @@ func (s *APISrv) Create(ctx context.Context, req *CreateRequest) (*CreateRespons
 	rsrcRsp, err := s.opts.RsrcHandler.CreateFn(ctx, rsrcReq, s.apiWrapper)
 	if err != nil {
 		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "CreateResource"))
+		retErr = err
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 	rsp, err := NewObjectCreateRsp(rsrcRsp.Entry)
 	if err != nil {
 		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "CreateResponse"))
+		retErr = err
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 	rspMsgFQN := "ves.io.schema.views.aws_vpc_site.CreateResponse"
 	if conv, exists := s.sf.Config().ObjToMsgConverters[rspMsgFQN]; exists {
 		if err := conv(rsrcRsp.Entry, rsp); err != nil {
+			retErr = err
 			return nil, err
 		}
 	}
@@ -1208,21 +1220,31 @@ func (s *APISrv) Replace(ctx context.Context, req *ReplaceRequest) (*ReplaceResp
 		}
 	}
 	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.sf, "ves.io.schema.views.aws_vpc_site.API.ReplaceRequest", req)
+	var retErr error
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
 		}
+		userMsg := "The 'ves.io.schema.views.aws_vpc_site.API.Replace' operation on 'aws_vpc_site'"
+		if retErr == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
 	rsrcReq := &server.ResourceReplaceRequest{RequestMsg: req}
 	rsrcRsp, err := s.opts.RsrcHandler.ReplaceFn(ctx, rsrcReq, s.apiWrapper)
 	if err != nil {
 		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "ReplaceResource"))
+		retErr = err
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 	rsp, err := NewObjectReplaceRsp(rsrcRsp.Entry)
 	if err != nil {
 		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "ReplaceResponse"))
+		retErr = err
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.sf, "ves.io.schema.views.aws_vpc_site.API.ReplaceResponse", rsp)...)
@@ -1341,10 +1363,18 @@ func (s *APISrv) Delete(ctx context.Context, req *DeleteRequest) (*google_protob
 		}
 	}
 	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.sf, "ves.io.schema.views.aws_vpc_site.API.DeleteRequest", req)
+	var retErr error
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
 		}
+		userMsg := "The 'ves.io.schema.views.aws_vpc_site.API.Delete' operation on 'aws_vpc_site'"
+		if retErr == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
 	tenant := server.TenantFromContext(ctx)
@@ -1354,6 +1384,7 @@ func (s *APISrv) Delete(ctx context.Context, req *DeleteRequest) (*google_protob
 	_, err := s.opts.RsrcHandler.DeleteFn(ctx, rsrcReq, s.apiWrapper)
 	if err != nil {
 		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "DeleteResource"))
+		retErr = err
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 	return &google_protobuf.Empty{}, nil
@@ -5796,13 +5827,13 @@ var APISwaggerJSON string = `{
                     "description": "Exclusive with [enable_upgrade_drain]\n",
                     "title": "Disable upgrade drain",
                     "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Disable Node by Node Upgrade"
+                    "x-displayname": "Disable"
                 },
                 "enable_upgrade_drain": {
                     "description": "Exclusive with [disable_upgrade_drain]\n",
                     "title": "Enable Node by Node Upgrade",
                     "$ref": "#/definitions/viewsKubernetesUpgradeDrainConfig",
-                    "x-displayname": "Enable Node by Node Upgrade"
+                    "x-displayname": "Enable"
                 }
             }
         },
@@ -6219,6 +6250,7 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-egress_gateway_choice": "[\"egress_gateway_default\",\"egress_nat_gw\",\"egress_virtual_private_gateway\"]",
             "x-ves-oneof-field-internet_vip_choice": "[\"disable_internet_vip\",\"enable_internet_vip\"]",
             "x-ves-oneof-field-logs_receiver_choice": "[\"log_receiver\",\"logs_streaming_disabled\"]",
+            "x-ves-oneof-field-routing_type": "[\"f5_orchestrated_routing\",\"manual_routing\"]",
             "x-ves-oneof-field-security_group_choice": "[\"custom_security_group\",\"f5xc_security_group\"]",
             "x-ves-oneof-field-site_type": "[\"ingress_egress_gw\",\"ingress_gw\",\"voltstack_cluster\"]",
             "x-ves-oneof-field-worker_nodes": "[\"no_worker_nodes\",\"nodes_per_az\",\"total_nodes\"]",
@@ -6330,6 +6362,11 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Enable VIP Advertisement to Internet on Site"
                 },
+                "f5_orchestrated_routing": {
+                    "description": "Exclusive with [manual_routing]\n F5 will orchestrate required routes for SLO Route Table towards Internet and SLI RT towards the CE.",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "F5 Orchestrated Routing"
+                },
                 "f5xc_security_group": {
                     "description": "Exclusive with [custom_security_group]\n With this option, ingress and egress traffic will be controlled via f5xc created security group.",
                     "$ref": "#/definitions/ioschemaEmpty",
@@ -6371,6 +6408,11 @@ var APISwaggerJSON string = `{
                     "description": "Exclusive with [log_receiver]\n Logs Streaming is disabled",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Disable Logs Streaming"
+                },
+                "manual_routing": {
+                    "description": "Exclusive with [f5_orchestrated_routing]\n  In this mode, F5 will not create nor alter any route tables or routes within the existing VPCs/Vnets providing better integration for existing environments. ",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Manual Routing"
                 },
                 "no_worker_nodes": {
                     "description": "Exclusive with [nodes_per_az total_nodes]\n Worker nodes is set to zero",
@@ -6469,6 +6511,7 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-egress_gateway_choice": "[\"egress_gateway_default\",\"egress_nat_gw\",\"egress_virtual_private_gateway\"]",
             "x-ves-oneof-field-internet_vip_choice": "[\"disable_internet_vip\",\"enable_internet_vip\"]",
             "x-ves-oneof-field-logs_receiver_choice": "[\"log_receiver\",\"logs_streaming_disabled\"]",
+            "x-ves-oneof-field-routing_type": "[\"f5_orchestrated_routing\",\"manual_routing\"]",
             "x-ves-oneof-field-security_group_choice": "[\"custom_security_group\",\"f5xc_security_group\"]",
             "x-ves-oneof-field-site_type": "[\"ingress_egress_gw\",\"ingress_gw\",\"voltstack_cluster\"]",
             "x-ves-oneof-field-worker_nodes": "[\"no_worker_nodes\",\"nodes_per_az\",\"total_nodes\"]",
@@ -6596,6 +6639,11 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Error Description",
                     "x-ves-example": "value"
                 },
+                "f5_orchestrated_routing": {
+                    "description": "Exclusive with [manual_routing]\n F5 will orchestrate required routes for SLO Route Table towards Internet and SLI RT towards the CE.",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "F5 Orchestrated Routing"
+                },
                 "f5xc_security_group": {
                     "description": "Exclusive with [custom_security_group]\n With this option, ingress and egress traffic will be controlled via f5xc created security group.",
                     "$ref": "#/definitions/ioschemaEmpty",
@@ -6637,6 +6685,11 @@ var APISwaggerJSON string = `{
                     "description": "Exclusive with [log_receiver]\n Logs Streaming is disabled",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Disable Logs Streaming"
+                },
+                "manual_routing": {
+                    "description": "Exclusive with [f5_orchestrated_routing]\n  In this mode, F5 will not create nor alter any route tables or routes within the existing VPCs/Vnets providing better integration for existing environments. ",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Manual Routing"
                 },
                 "no_worker_nodes": {
                     "description": "Exclusive with [nodes_per_az total_nodes]\n Worker nodes is set to zero",

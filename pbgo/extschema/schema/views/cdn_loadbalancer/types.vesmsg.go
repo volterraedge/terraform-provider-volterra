@@ -222,6 +222,14 @@ func (m *ApiProtection) Redact(ctx context.Context) error {
 		return errors.Wrapf(err, "Redacting ApiProtection.jwt_validation")
 	}
 
+	if err := m.GetEnableApiDiscovery().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting ApiProtection.enable_api_discovery")
+	}
+
+	if err := m.GetApiDiscoveryOnCacheMiss().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting ApiProtection.api_discovery_on_cache_miss")
+	}
+
 	return nil
 }
 
@@ -790,193 +798,6 @@ var DefaultAuthenticationOptionsValidator = func() *ValidateAuthenticationOption
 
 func AuthenticationOptionsValidator() db.Validator {
 	return DefaultAuthenticationOptionsValidator
-}
-
-// augmented methods on protoc/std generated struct
-
-func (m *BotProtection) ToJSON() (string, error) {
-	return codec.ToJSON(m)
-}
-
-func (m *BotProtection) ToYAML() (string, error) {
-	return codec.ToYAML(m)
-}
-
-func (m *BotProtection) DeepCopy() *BotProtection {
-	if m == nil {
-		return nil
-	}
-	ser, err := m.Marshal()
-	if err != nil {
-		return nil
-	}
-	c := &BotProtection{}
-	err = c.Unmarshal(ser)
-	if err != nil {
-		return nil
-	}
-	return c
-}
-
-func (m *BotProtection) DeepCopyProto() proto.Message {
-	if m == nil {
-		return nil
-	}
-	return m.DeepCopy()
-}
-
-func (m *BotProtection) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
-	return BotProtectionValidator().Validate(ctx, m, opts...)
-}
-
-func (m *BotProtection) GetDRefInfo() ([]db.DRefInfo, error) {
-	if m == nil {
-		return nil, nil
-	}
-
-	return m.GetBotDefenseChoiceDRefInfo()
-
-}
-
-// GetDRefInfo for the field's type
-func (m *BotProtection) GetBotDefenseChoiceDRefInfo() ([]db.DRefInfo, error) {
-	if m.GetBotDefenseChoice() == nil {
-		return nil, nil
-	}
-	switch m.GetBotDefenseChoice().(type) {
-	case *BotProtection_DisableBotDefense:
-
-		return nil, nil
-
-	case *BotProtection_BotDefense:
-
-		return nil, nil
-
-	case *BotProtection_BotDefenseAdvanced:
-
-		drInfos, err := m.GetBotDefenseAdvanced().GetDRefInfo()
-		if err != nil {
-			return nil, errors.Wrap(err, "GetBotDefenseAdvanced().GetDRefInfo() FAILED")
-		}
-		for i := range drInfos {
-			dri := &drInfos[i]
-			dri.DRField = "bot_defense_advanced." + dri.DRField
-		}
-		return drInfos, err
-
-	default:
-		return nil, nil
-	}
-
-}
-
-type ValidateBotProtection struct {
-	FldValidators map[string]db.ValidatorFunc
-}
-
-func (v *ValidateBotProtection) BotDefenseChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for bot_defense_choice")
-	}
-	return validatorFn, nil
-}
-
-func (v *ValidateBotProtection) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
-	m, ok := pm.(*BotProtection)
-	if !ok {
-		switch t := pm.(type) {
-		case nil:
-			return nil
-		default:
-			return fmt.Errorf("Expected type *BotProtection got type %s", t)
-		}
-	}
-	if m == nil {
-		return nil
-	}
-
-	if fv, exists := v.FldValidators["bot_defense_choice"]; exists {
-		val := m.GetBotDefenseChoice()
-		vOpts := append(opts,
-			db.WithValidateField("bot_defense_choice"),
-		)
-		if err := fv(ctx, val, vOpts...); err != nil {
-			return err
-		}
-	}
-
-	switch m.GetBotDefenseChoice().(type) {
-	case *BotProtection_DisableBotDefense:
-		if fv, exists := v.FldValidators["bot_defense_choice.disable_bot_defense"]; exists {
-			val := m.GetBotDefenseChoice().(*BotProtection_DisableBotDefense).DisableBotDefense
-			vOpts := append(opts,
-				db.WithValidateField("bot_defense_choice"),
-				db.WithValidateField("disable_bot_defense"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *BotProtection_BotDefense:
-		if fv, exists := v.FldValidators["bot_defense_choice.bot_defense"]; exists {
-			val := m.GetBotDefenseChoice().(*BotProtection_BotDefense).BotDefense
-			vOpts := append(opts,
-				db.WithValidateField("bot_defense_choice"),
-				db.WithValidateField("bot_defense"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *BotProtection_BotDefenseAdvanced:
-		if fv, exists := v.FldValidators["bot_defense_choice.bot_defense_advanced"]; exists {
-			val := m.GetBotDefenseChoice().(*BotProtection_BotDefenseAdvanced).BotDefenseAdvanced
-			vOpts := append(opts,
-				db.WithValidateField("bot_defense_choice"),
-				db.WithValidateField("bot_defense_advanced"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-
-	}
-
-	return nil
-}
-
-// Well-known symbol for default validator implementation
-var DefaultBotProtectionValidator = func() *ValidateBotProtection {
-	v := &ValidateBotProtection{FldValidators: map[string]db.ValidatorFunc{}}
-
-	var (
-		err error
-		vFn db.ValidatorFunc
-	)
-	_, _ = err, vFn
-	vFnMap := map[string]db.ValidatorFunc{}
-	_ = vFnMap
-
-	vrhBotDefenseChoice := v.BotDefenseChoiceValidationRuleHandler
-	rulesBotDefenseChoice := map[string]string{
-		"ves.io.schema.rules.message.required_oneof": "true",
-	}
-	vFn, err = vrhBotDefenseChoice(rulesBotDefenseChoice)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for BotProtection.bot_defense_choice: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["bot_defense_choice"] = vFn
-
-	v.FldValidators["bot_defense_choice.bot_defense"] = ves_io_schema_views_common_security.ShapeBotDefenseTypeValidator().Validate
-	v.FldValidators["bot_defense_choice.bot_defense_advanced"] = ves_io_schema_views_common_security.BotDefenseAdvancedTypeValidator().Validate
-
-	return v
-}()
-
-func BotProtectionValidator() db.Validator {
-	return DefaultBotProtectionValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -4078,140 +3899,6 @@ func CdnOriginPoolTypeValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
-func (m *ClientSideDefense) ToJSON() (string, error) {
-	return codec.ToJSON(m)
-}
-
-func (m *ClientSideDefense) ToYAML() (string, error) {
-	return codec.ToYAML(m)
-}
-
-func (m *ClientSideDefense) DeepCopy() *ClientSideDefense {
-	if m == nil {
-		return nil
-	}
-	ser, err := m.Marshal()
-	if err != nil {
-		return nil
-	}
-	c := &ClientSideDefense{}
-	err = c.Unmarshal(ser)
-	if err != nil {
-		return nil
-	}
-	return c
-}
-
-func (m *ClientSideDefense) DeepCopyProto() proto.Message {
-	if m == nil {
-		return nil
-	}
-	return m.DeepCopy()
-}
-
-func (m *ClientSideDefense) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
-	return ClientSideDefenseValidator().Validate(ctx, m, opts...)
-}
-
-type ValidateClientSideDefense struct {
-	FldValidators map[string]db.ValidatorFunc
-}
-
-func (v *ValidateClientSideDefense) ClientSideDefenseChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for client_side_defense_choice")
-	}
-	return validatorFn, nil
-}
-
-func (v *ValidateClientSideDefense) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
-	m, ok := pm.(*ClientSideDefense)
-	if !ok {
-		switch t := pm.(type) {
-		case nil:
-			return nil
-		default:
-			return fmt.Errorf("Expected type *ClientSideDefense got type %s", t)
-		}
-	}
-	if m == nil {
-		return nil
-	}
-
-	if fv, exists := v.FldValidators["client_side_defense_choice"]; exists {
-		val := m.GetClientSideDefenseChoice()
-		vOpts := append(opts,
-			db.WithValidateField("client_side_defense_choice"),
-		)
-		if err := fv(ctx, val, vOpts...); err != nil {
-			return err
-		}
-	}
-
-	switch m.GetClientSideDefenseChoice().(type) {
-	case *ClientSideDefense_DisableClientSideDefense:
-		if fv, exists := v.FldValidators["client_side_defense_choice.disable_client_side_defense"]; exists {
-			val := m.GetClientSideDefenseChoice().(*ClientSideDefense_DisableClientSideDefense).DisableClientSideDefense
-			vOpts := append(opts,
-				db.WithValidateField("client_side_defense_choice"),
-				db.WithValidateField("disable_client_side_defense"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *ClientSideDefense_ClientSideDefense:
-		if fv, exists := v.FldValidators["client_side_defense_choice.client_side_defense"]; exists {
-			val := m.GetClientSideDefenseChoice().(*ClientSideDefense_ClientSideDefense).ClientSideDefense
-			vOpts := append(opts,
-				db.WithValidateField("client_side_defense_choice"),
-				db.WithValidateField("client_side_defense"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-
-	}
-
-	return nil
-}
-
-// Well-known symbol for default validator implementation
-var DefaultClientSideDefenseValidator = func() *ValidateClientSideDefense {
-	v := &ValidateClientSideDefense{FldValidators: map[string]db.ValidatorFunc{}}
-
-	var (
-		err error
-		vFn db.ValidatorFunc
-	)
-	_, _ = err, vFn
-	vFnMap := map[string]db.ValidatorFunc{}
-	_ = vFnMap
-
-	vrhClientSideDefenseChoice := v.ClientSideDefenseChoiceValidationRuleHandler
-	rulesClientSideDefenseChoice := map[string]string{
-		"ves.io.schema.rules.message.required_oneof": "true",
-	}
-	vFn, err = vrhClientSideDefenseChoice(rulesClientSideDefenseChoice)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for ClientSideDefense.client_side_defense_choice: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["client_side_defense_choice"] = vFn
-
-	v.FldValidators["client_side_defense_choice.client_side_defense"] = ves_io_schema_views_common_security.ClientSideDefenseTypeValidator().Validate
-
-	return v
-}()
-
-func ClientSideDefenseValidator() db.Validator {
-	return DefaultClientSideDefenseValidator
-}
-
-// augmented methods on protoc/std generated struct
-
 func (m *CommonSecurityControls) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -5160,6 +4847,14 @@ func (m *CreateSpecType) Redact(ctx context.Context) error {
 
 	if err := m.GetJwtValidation().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting CreateSpecType.jwt_validation")
+	}
+
+	if err := m.GetEnableApiDiscovery().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting CreateSpecType.enable_api_discovery")
+	}
+
+	if err := m.GetApiDiscoveryOnCacheMiss().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting CreateSpecType.api_discovery_on_cache_miss")
 	}
 
 	return nil
@@ -7919,287 +7614,6 @@ func DefaultCacheTTLPropsValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
-func (m *DoSProtection) ToJSON() (string, error) {
-	return codec.ToJSON(m)
-}
-
-func (m *DoSProtection) ToYAML() (string, error) {
-	return codec.ToYAML(m)
-}
-
-func (m *DoSProtection) DeepCopy() *DoSProtection {
-	if m == nil {
-		return nil
-	}
-	ser, err := m.Marshal()
-	if err != nil {
-		return nil
-	}
-	c := &DoSProtection{}
-	err = c.Unmarshal(ser)
-	if err != nil {
-		return nil
-	}
-	return c
-}
-
-func (m *DoSProtection) DeepCopyProto() proto.Message {
-	if m == nil {
-		return nil
-	}
-	return m.DeepCopy()
-}
-
-func (m *DoSProtection) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
-	return DoSProtectionValidator().Validate(ctx, m, opts...)
-}
-
-type ValidateDoSProtection struct {
-	FldValidators map[string]db.ValidatorFunc
-}
-
-func (v *ValidateDoSProtection) L7DdosAutoMitigationActionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for l7_ddos_auto_mitigation_action")
-	}
-	return validatorFn, nil
-}
-
-func (v *ValidateDoSProtection) SlowDdosMitigationChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for slow_ddos_mitigation_choice")
-	}
-	return validatorFn, nil
-}
-
-func (v *ValidateDoSProtection) DdosMitigationRulesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	itemRules := db.GetRepMessageItemRules(rules)
-	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
-	if err != nil {
-		return nil, errors.Wrap(err, "Message ValidationRuleHandler for ddos_mitigation_rules")
-	}
-	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_views_common_security.DDoSMitigationRule, opts ...db.ValidateOpt) error {
-		for i, el := range elems {
-			if err := itemValFn(ctx, el, opts...); err != nil {
-				return errors.Wrap(err, fmt.Sprintf("element %d", i))
-			}
-			if err := ves_io_schema_views_common_security.DDoSMitigationRuleValidator().Validate(ctx, el, opts...); err != nil {
-				return errors.Wrap(err, fmt.Sprintf("element %d", i))
-			}
-		}
-		return nil
-	}
-	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for ddos_mitigation_rules")
-	}
-
-	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
-		elems, ok := val.([]*ves_io_schema_views_common_security.DDoSMitigationRule)
-		if !ok {
-			return fmt.Errorf("Repeated validation expected []*ves_io_schema_views_common_security.DDoSMitigationRule, got %T", val)
-		}
-		l := []string{}
-		for _, elem := range elems {
-			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
-			if err != nil {
-				return errors.Wrapf(err, "Converting %v to JSON", elem)
-			}
-			l = append(l, strVal)
-		}
-		if err := repValFn(ctx, l, opts...); err != nil {
-			return errors.Wrap(err, "repeated ddos_mitigation_rules")
-		}
-		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
-			return errors.Wrap(err, "items ddos_mitigation_rules")
-		}
-		return nil
-	}
-
-	return validatorFn, nil
-}
-
-func (v *ValidateDoSProtection) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
-	m, ok := pm.(*DoSProtection)
-	if !ok {
-		switch t := pm.(type) {
-		case nil:
-			return nil
-		default:
-			return fmt.Errorf("Expected type *DoSProtection got type %s", t)
-		}
-	}
-	if m == nil {
-		return nil
-	}
-
-	if fv, exists := v.FldValidators["ddos_mitigation_rules"]; exists {
-		vOpts := append(opts, db.WithValidateField("ddos_mitigation_rules"))
-		if err := fv(ctx, m.GetDdosMitigationRules(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
-	if fv, exists := v.FldValidators["l7_ddos_auto_mitigation_action"]; exists {
-		val := m.GetL7DdosAutoMitigationAction()
-		vOpts := append(opts,
-			db.WithValidateField("l7_ddos_auto_mitigation_action"),
-		)
-		if err := fv(ctx, val, vOpts...); err != nil {
-			return err
-		}
-	}
-
-	switch m.GetL7DdosAutoMitigationAction().(type) {
-	case *DoSProtection_L7DdosActionDefault:
-		if fv, exists := v.FldValidators["l7_ddos_auto_mitigation_action.l7_ddos_action_default"]; exists {
-			val := m.GetL7DdosAutoMitigationAction().(*DoSProtection_L7DdosActionDefault).L7DdosActionDefault
-			vOpts := append(opts,
-				db.WithValidateField("l7_ddos_auto_mitigation_action"),
-				db.WithValidateField("l7_ddos_action_default"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *DoSProtection_L7DdosActionBlock:
-		if fv, exists := v.FldValidators["l7_ddos_auto_mitigation_action.l7_ddos_action_block"]; exists {
-			val := m.GetL7DdosAutoMitigationAction().(*DoSProtection_L7DdosActionBlock).L7DdosActionBlock
-			vOpts := append(opts,
-				db.WithValidateField("l7_ddos_auto_mitigation_action"),
-				db.WithValidateField("l7_ddos_action_block"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *DoSProtection_L7DdosActionJsChallenge:
-		if fv, exists := v.FldValidators["l7_ddos_auto_mitigation_action.l7_ddos_action_js_challenge"]; exists {
-			val := m.GetL7DdosAutoMitigationAction().(*DoSProtection_L7DdosActionJsChallenge).L7DdosActionJsChallenge
-			vOpts := append(opts,
-				db.WithValidateField("l7_ddos_auto_mitigation_action"),
-				db.WithValidateField("l7_ddos_action_js_challenge"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *DoSProtection_L7DdosActionNone:
-		if fv, exists := v.FldValidators["l7_ddos_auto_mitigation_action.l7_ddos_action_none"]; exists {
-			val := m.GetL7DdosAutoMitigationAction().(*DoSProtection_L7DdosActionNone).L7DdosActionNone
-			vOpts := append(opts,
-				db.WithValidateField("l7_ddos_auto_mitigation_action"),
-				db.WithValidateField("l7_ddos_action_none"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-
-	}
-
-	if fv, exists := v.FldValidators["slow_ddos_mitigation_choice"]; exists {
-		val := m.GetSlowDdosMitigationChoice()
-		vOpts := append(opts,
-			db.WithValidateField("slow_ddos_mitigation_choice"),
-		)
-		if err := fv(ctx, val, vOpts...); err != nil {
-			return err
-		}
-	}
-
-	switch m.GetSlowDdosMitigationChoice().(type) {
-	case *DoSProtection_SystemDefaultTimeouts:
-		if fv, exists := v.FldValidators["slow_ddos_mitigation_choice.system_default_timeouts"]; exists {
-			val := m.GetSlowDdosMitigationChoice().(*DoSProtection_SystemDefaultTimeouts).SystemDefaultTimeouts
-			vOpts := append(opts,
-				db.WithValidateField("slow_ddos_mitigation_choice"),
-				db.WithValidateField("system_default_timeouts"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *DoSProtection_SlowDdosMitigation:
-		if fv, exists := v.FldValidators["slow_ddos_mitigation_choice.slow_ddos_mitigation"]; exists {
-			val := m.GetSlowDdosMitigationChoice().(*DoSProtection_SlowDdosMitigation).SlowDdosMitigation
-			vOpts := append(opts,
-				db.WithValidateField("slow_ddos_mitigation_choice"),
-				db.WithValidateField("slow_ddos_mitigation"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-
-	}
-
-	return nil
-}
-
-// Well-known symbol for default validator implementation
-var DefaultDoSProtectionValidator = func() *ValidateDoSProtection {
-	v := &ValidateDoSProtection{FldValidators: map[string]db.ValidatorFunc{}}
-
-	var (
-		err error
-		vFn db.ValidatorFunc
-	)
-	_, _ = err, vFn
-	vFnMap := map[string]db.ValidatorFunc{}
-	_ = vFnMap
-
-	vrhL7DdosAutoMitigationAction := v.L7DdosAutoMitigationActionValidationRuleHandler
-	rulesL7DdosAutoMitigationAction := map[string]string{
-		"ves.io.schema.rules.message.required_oneof": "true",
-	}
-	vFn, err = vrhL7DdosAutoMitigationAction(rulesL7DdosAutoMitigationAction)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for DoSProtection.l7_ddos_auto_mitigation_action: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["l7_ddos_auto_mitigation_action"] = vFn
-
-	vrhSlowDdosMitigationChoice := v.SlowDdosMitigationChoiceValidationRuleHandler
-	rulesSlowDdosMitigationChoice := map[string]string{
-		"ves.io.schema.rules.message.required_oneof": "true",
-	}
-	vFn, err = vrhSlowDdosMitigationChoice(rulesSlowDdosMitigationChoice)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for DoSProtection.slow_ddos_mitigation_choice: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["slow_ddos_mitigation_choice"] = vFn
-
-	vrhDdosMitigationRules := v.DdosMitigationRulesValidationRuleHandler
-	rulesDdosMitigationRules := map[string]string{
-		"ves.io.schema.rules.repeated.max_items":            "256",
-		"ves.io.schema.rules.repeated.unique_metadata_name": "true",
-	}
-	vFn, err = vrhDdosMitigationRules(rulesDdosMitigationRules)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for DoSProtection.ddos_mitigation_rules: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["ddos_mitigation_rules"] = vFn
-
-	v.FldValidators["l7_ddos_auto_mitigation_action.l7_ddos_action_js_challenge"] = ves_io_schema_virtual_host.JavascriptChallengeTypeValidator().Validate
-
-	v.FldValidators["slow_ddos_mitigation_choice.slow_ddos_mitigation"] = ves_io_schema_virtual_host.SlowDDoSMitigationValidator().Validate
-
-	return v
-}()
-
-func DoSProtectionValidator() db.Validator {
-	return DefaultDoSProtectionValidator
-}
-
-// augmented methods on protoc/std generated struct
-
 func (m *GeoFilteringOptions) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -8331,6 +7745,14 @@ func (m *GetSpecType) Redact(ctx context.Context) error {
 
 	if err := m.GetJwtValidation().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting GetSpecType.jwt_validation")
+	}
+
+	if err := m.GetEnableApiDiscovery().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting GetSpecType.enable_api_discovery")
+	}
+
+	if err := m.GetApiDiscoveryOnCacheMiss().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting GetSpecType.api_discovery_on_cache_miss")
 	}
 
 	return nil
@@ -10913,6 +10335,14 @@ func (m *GlobalSpecType) Redact(ctx context.Context) error {
 
 	if err := m.GetJwtValidation().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting GlobalSpecType.jwt_validation")
+	}
+
+	if err := m.GetEnableApiDiscovery().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting GlobalSpecType.enable_api_discovery")
+	}
+
+	if err := m.GetApiDiscoveryOnCacheMiss().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting GlobalSpecType.api_discovery_on_cache_miss")
 	}
 
 	return nil
@@ -15280,6 +14710,14 @@ func (m *ReplaceSpecType) Redact(ctx context.Context) error {
 
 	if err := m.GetJwtValidation().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting ReplaceSpecType.jwt_validation")
+	}
+
+	if err := m.GetEnableApiDiscovery().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting ReplaceSpecType.enable_api_discovery")
+	}
+
+	if err := m.GetApiDiscoveryOnCacheMiss().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting ReplaceSpecType.api_discovery_on_cache_miss")
 	}
 
 	return nil

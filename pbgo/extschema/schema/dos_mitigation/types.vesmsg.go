@@ -517,9 +517,9 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 
 	vrhIpPrefixes := v.IpPrefixesValidationRuleHandler
 	rulesIpPrefixes := map[string]string{
-		"ves.io.schema.rules.repeated.items.string.ipv4_prefix": "true",
-		"ves.io.schema.rules.repeated.max_items":                "1024",
-		"ves.io.schema.rules.repeated.unique":                   "true",
+		"ves.io.schema.rules.repeated.items.string.ip_prefix": "true",
+		"ves.io.schema.rules.repeated.max_items":              "1024",
+		"ves.io.schema.rules.repeated.unique":                 "true",
 	}
 	vFn, err = vrhIpPrefixes(rulesIpPrefixes)
 	if err != nil {
@@ -1440,9 +1440,9 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 
 	vrhIpPrefixes := v.IpPrefixesValidationRuleHandler
 	rulesIpPrefixes := map[string]string{
-		"ves.io.schema.rules.repeated.items.string.ipv4_prefix": "true",
-		"ves.io.schema.rules.repeated.max_items":                "1024",
-		"ves.io.schema.rules.repeated.unique":                   "true",
+		"ves.io.schema.rules.repeated.items.string.ip_prefix": "true",
+		"ves.io.schema.rules.repeated.max_items":              "1024",
+		"ves.io.schema.rules.repeated.unique":                 "true",
 	}
 	vFn, err = vrhIpPrefixes(rulesIpPrefixes)
 	if err != nil {
@@ -2061,9 +2061,9 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 	vrhIpPrefixes := v.IpPrefixesValidationRuleHandler
 	rulesIpPrefixes := map[string]string{
-		"ves.io.schema.rules.repeated.items.string.ipv4_prefix": "true",
-		"ves.io.schema.rules.repeated.max_items":                "1024",
-		"ves.io.schema.rules.repeated.unique":                   "true",
+		"ves.io.schema.rules.repeated.items.string.ip_prefix": "true",
+		"ves.io.schema.rules.repeated.max_items":              "1024",
+		"ves.io.schema.rules.repeated.unique":                 "true",
 	}
 	vFn, err = vrhIpPrefixes(rulesIpPrefixes)
 	if err != nil {
@@ -2627,9 +2627,9 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 
 	vrhIpPrefixes := v.IpPrefixesValidationRuleHandler
 	rulesIpPrefixes := map[string]string{
-		"ves.io.schema.rules.repeated.items.string.ipv4_prefix": "true",
-		"ves.io.schema.rules.repeated.max_items":                "1024",
-		"ves.io.schema.rules.repeated.unique":                   "true",
+		"ves.io.schema.rules.repeated.items.string.ip_prefix": "true",
+		"ves.io.schema.rules.repeated.max_items":              "1024",
+		"ves.io.schema.rules.repeated.unique":                 "true",
 	}
 	vFn, err = vrhIpPrefixes(rulesIpPrefixes)
 	if err != nil {

@@ -1149,16 +1149,25 @@ func (s *APISrv) Create(ctx context.Context, req *CreateRequest) (*CreateRespons
 	}
 	reqMsgFQN := "ves.io.schema.service_policy.CreateRequest"
 	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.sf, reqMsgFQN, req)
+	var retErr error
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
 		}
+		userMsg := "The 'ves.io.schema.service_policy.API.Create' operation on 'service_policy'"
+		if retErr == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
 	obj := NewDBObject(nil)
 	req.ToObject(obj)
 	if conv, exists := s.sf.Config().MsgToObjConverters[reqMsgFQN]; exists {
 		if err := conv(req, obj); err != nil {
+			retErr = err
 			return nil, err
 		}
 	}
@@ -1167,16 +1176,19 @@ func (s *APISrv) Create(ctx context.Context, req *CreateRequest) (*CreateRespons
 	rsrcRsp, err := s.opts.RsrcHandler.CreateFn(ctx, rsrcReq, s.apiWrapper)
 	if err != nil {
 		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "CreateResource"))
+		retErr = err
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 	rsp, err := NewObjectCreateRsp(rsrcRsp.Entry)
 	if err != nil {
 		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "CreateResponse"))
+		retErr = err
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 	rspMsgFQN := "ves.io.schema.service_policy.CreateResponse"
 	if conv, exists := s.sf.Config().ObjToMsgConverters[rspMsgFQN]; exists {
 		if err := conv(rsrcRsp.Entry, rsp); err != nil {
+			retErr = err
 			return nil, err
 		}
 	}
@@ -1208,21 +1220,31 @@ func (s *APISrv) Replace(ctx context.Context, req *ReplaceRequest) (*ReplaceResp
 		}
 	}
 	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.sf, "ves.io.schema.service_policy.API.ReplaceRequest", req)
+	var retErr error
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
 		}
+		userMsg := "The 'ves.io.schema.service_policy.API.Replace' operation on 'service_policy'"
+		if retErr == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
 	rsrcReq := &server.ResourceReplaceRequest{RequestMsg: req}
 	rsrcRsp, err := s.opts.RsrcHandler.ReplaceFn(ctx, rsrcReq, s.apiWrapper)
 	if err != nil {
 		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "ReplaceResource"))
+		retErr = err
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 	rsp, err := NewObjectReplaceRsp(rsrcRsp.Entry)
 	if err != nil {
 		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "ReplaceResponse"))
+		retErr = err
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.sf, "ves.io.schema.service_policy.API.ReplaceResponse", rsp)...)
@@ -1341,10 +1363,18 @@ func (s *APISrv) Delete(ctx context.Context, req *DeleteRequest) (*google_protob
 		}
 	}
 	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.sf, "ves.io.schema.service_policy.API.DeleteRequest", req)
+	var retErr error
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
 		}
+		userMsg := "The 'ves.io.schema.service_policy.API.Delete' operation on 'service_policy'"
+		if retErr == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
 	tenant := server.TenantFromContext(ctx)
@@ -1354,6 +1384,7 @@ func (s *APISrv) Delete(ctx context.Context, req *DeleteRequest) (*google_protob
 	_, err := s.opts.RsrcHandler.DeleteFn(ctx, rsrcReq, s.apiWrapper)
 	if err != nil {
 		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "DeleteResource"))
+		retErr = err
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 	return &google_protobuf.Empty{}, nil
@@ -3184,14 +3215,14 @@ var APISwaggerJSON string = `{
         },
         "policyJA4TlsFingerprintMatcherType": {
             "type": "object",
-            "description": "JA4 TLS fingerprints to be matched",
+            "description": "An extended version of JA3 that includes additional fields for more comprehensive fingerprinting of\nSSL/TLS clients and potentially has a different structure and length.",
             "title": "JA4TlsFingerprintMatcherType",
             "x-displayname": "JA4 TLS Fingerprint Matcher",
             "x-ves-proto-message": "ves.io.schema.policy.JA4TlsFingerprintMatcherType",
             "properties": {
                 "exact_values": {
                     "type": "array",
-                    "description": " A list of exact JA4 TLS fingerprint to match the input JA4 TLS fingerprint against\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 16\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " A list of exact JA4 TLS fingerprint to match the input JA4 TLS fingerprint against\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.len: 36\n  ves.io.schema.rules.repeated.max_items: 16\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "exact values",
                     "maxItems": 16,
                     "items": {
@@ -3199,6 +3230,7 @@ var APISwaggerJSON string = `{
                     },
                     "x-displayname": "Exact Values",
                     "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.items.string.len": "36",
                         "ves.io.schema.rules.repeated.max_items": "16",
                         "ves.io.schema.rules.repeated.unique": "true"
                     }
@@ -3277,6 +3309,18 @@ var APISwaggerJSON string = `{
             "default": "TLS_FINGERPRINT_NONE",
             "x-displayname": "TLS known fingerprint class",
             "x-ves-proto-enum": "ves.io.schema.policy.KnownTlsFingerprintClass"
+        },
+        "policyMalwareProtectionSettings": {
+            "type": "object",
+            "description": "x-displayName: \"Malware Protection Settings\"\nSettings for handling malware protection detection.",
+            "title": "Malware Protection Settings",
+            "properties": {
+                "action": {
+                    "description": "x-displayName: \"Action\"\nx-required\nAction to be taken when malware is detected",
+                    "title": "Action",
+                    "$ref": "#/definitions/schemaAction"
+                }
+            }
         },
         "policyMaskingConfig": {
             "type": "object",
@@ -4246,6 +4290,23 @@ var APISwaggerJSON string = `{
                 "RATE_LIMITER_MODE_SHARED"
             ],
             "default": "RATE_LIMITER_MODE_NOT_SHARED"
+        },
+        "schemaAction": {
+            "type": "object",
+            "description": "x-displayName: \"Action\"",
+            "title": "action",
+            "properties": {
+                "block": {
+                    "description": "x-displayName: \"Block\"\nBlock the request and report the issue",
+                    "title": "block",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "report": {
+                    "description": "x-displayName: \"Report\"\nAllow the request and report the issue",
+                    "title": "report",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                }
+            }
         },
         "schemaBotDefenseTransactionResultCondition": {
             "type": "object",
@@ -5713,7 +5774,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "List of IP Threat Categories"
                 },
                 "ja4_tls_fingerprint": {
-                    "description": "Exclusive with [tls_fingerprint_matcher]\n JA4 TLS fingerprints to be matched",
+                    "description": "Exclusive with [tls_fingerprint_matcher]\n An extended version of JA3 that includes additional fields for more comprehensive fingerprinting of\n SSL/TLS clients and potentially has a different structure and length.",
                     "title": "ja4 tls fingerprint",
                     "$ref": "#/definitions/policyJA4TlsFingerprintMatcherType",
                     "x-displayname": "JA4 TLS Fingerprint"
@@ -5782,7 +5843,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Configure Segments"
                 },
                 "tls_fingerprint_matcher": {
-                    "description": "Exclusive with [ja4_tls_fingerprint]\n JA3 TLS fingerprints to be matched",
+                    "description": "Exclusive with [ja4_tls_fingerprint]\n A method for uniquely identifying SSL/TLS clients by creating a 32-character MD5 hash based on the\n parameters of the Client Hello packet during the handshake.",
                     "title": "TLS JA3 fingerprint matcher",
                     "$ref": "#/definitions/policyTlsFingerprintMatcherType",
                     "x-displayname": "JA3 TLS Fingerprint"
@@ -6446,6 +6507,16 @@ var APISwaggerJSON string = `{
                     "description": "x-displayName: \"Label Matcher\"\nx-example: \"['environment', 'location', 'deployment']\"\nA list of label keys that identify the label values that need to be the same for the client and server. Note that the actual label values are not specified\nhere, just the label keys. This predicate facilitates reuse of rules and policies across multiple dimensions such as deployment, environment, and location.\nThe predicate evaluates to true if the values of the client and server labels for all the keys specified in the label matcher are equal. The values of any\nother labels do not matter.",
                     "title": "label matcher",
                     "$ref": "#/definitions/schemaLabelMatcherType"
+                },
+                "malware_protection_action": {
+                    "description": "x-displayName: \"Malware Protection Action\"\nSpecifies how Malware Protection is handled",
+                    "title": "Malware Protection Action",
+                    "$ref": "#/definitions/policyModifyAction"
+                },
+                "malware_protection_settings": {
+                    "description": "x-displayName: \"Malware Protection Settings\"\nMalware protection settings for this request",
+                    "title": "Malware Protection Settings",
+                    "$ref": "#/definitions/policyMalwareProtectionSettings"
                 },
                 "metric_name_label": {
                     "type": "string",

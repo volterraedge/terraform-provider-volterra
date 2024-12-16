@@ -1,9 +1,9 @@
 ---
 
 page_title: "Volterra: fleet"
-description: "The fleet allows CRUD of Fleet resource on Volterra SaaS"
 
----
+description: "The fleet allows CRUD of Fleet resource on Volterra SaaS"
+-----------------------------------------------------------------------
 
 Resource volterra_fleet
 =======================
@@ -53,7 +53,32 @@ resource "volterra_fleet" "example" {
 
   // One of the arguments from this list "default_storage_class storage_class_list" must be set
 
-  default_storage_class = true
+  storage_class_list {
+    storage_classes {
+      advanced_storage_parameters = {
+        "key1" = "value1"
+      }
+
+      allow_volume_expansion = true
+
+      default_storage_class = true
+
+      description = "Volume from my fast storage"
+
+      // One of the arguments from this list "custom_storage hpe_storage netapp_trident pure_service_orchestrator" must be set
+
+      pure_service_orchestrator {
+        backend = "block"
+
+        bandwidth_limit = "1G"
+
+        iops_limit = "3000"
+      }
+      reclaim_policy = "Delete"
+      storage_class_name = "premium"
+      storage_device = "DellEMC-isilon_F800-0"
+    }
+  }
 
   // One of the arguments from this list "no_storage_device storage_device_list" must be set
 
@@ -69,11 +94,7 @@ resource "volterra_fleet" "example" {
 
   // One of the arguments from this list "allow_all_usb deny_all_usb usb_policy" must be set
 
-  usb_policy {
-    name      = "test1"
-    namespace = "staging"
-    tenant    = "acmecorp"
-  }
+  deny_all_usb = true
 }
 
 ```
@@ -219,9 +240,9 @@ Enable Kubernetes Drain during OS or SW upgrade.
 
 ###### One of the arguments from this list "disable_upgrade_drain, enable_upgrade_drain" must be set
 
-`disable_upgrade_drain` - (Optional) x-displayName: "Disable Node by Node Upgrade" (`Bool`).
+`disable_upgrade_drain` - (Optional) x-displayName: "Disable" (`Bool`).
 
-`enable_upgrade_drain` - (Optional) x-displayName: "Enable Node by Node Upgrade". See [Kubernetes Upgrade Drain Enable Choice Enable Upgrade Drain ](#kubernetes-upgrade-drain-enable-choice-enable-upgrade-drain) below for details.
+`enable_upgrade_drain` - (Optional) x-displayName: "Enable". See [Kubernetes Upgrade Drain Enable Choice Enable Upgrade Drain ](#kubernetes-upgrade-drain-enable-choice-enable-upgrade-drain) below for details.
 
 ### Performance Enhancement Mode
 
@@ -725,11 +746,11 @@ Blindfold Secret Internal is used for the putting re-encrypted blindfold secret.
 
 ### Kubernetes Upgrade Drain Enable Choice Disable Upgrade Drain
 
-x-displayName: "Disable Node by Node Upgrade".
+x-displayName: "Disable".
 
 ### Kubernetes Upgrade Drain Enable Choice Enable Upgrade Drain
 
-x-displayName: "Enable Node by Node Upgrade".
+x-displayName: "Enable".
 
 ###### One of the arguments from this list "drain_max_unavailable_node_count, drain_max_unavailable_node_percentage" must be set
 

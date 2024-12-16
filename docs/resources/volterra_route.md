@@ -1,9 +1,9 @@
 ---
 
 page_title: "Volterra: route"
-description: "The route allows CRUD of Route resource on Volterra SaaS"
 
----
+description: "The route allows CRUD of Route resource on Volterra SaaS"
+-----------------------------------------------------------------------
 
 Resource volterra_route
 =======================
@@ -45,7 +45,7 @@ resource "volterra_route" "example" {
 
         // One of the arguments from this list "exact presence regex" can be set
 
-        exact = "application/json"
+        presence = true
       }
 
       http_method = "http_method"
@@ -59,7 +59,7 @@ resource "volterra_route" "example" {
       path {
         // One of the arguments from this list "path prefix regex" must be set
 
-        regex = "regex"
+        prefix = "/register/"
       }
 
       query_params {
@@ -78,7 +78,23 @@ resource "volterra_route" "example" {
 
       // One of the arguments from this list "secret_value value" must be set
 
-      value = "value"
+      secret_value {
+        blindfold_secret_info_internal {
+          decryption_provider = "value"
+
+          location = "string:///U2VjcmV0SW5mb3JtYXRpb24="
+
+          store_provider = "value"
+        }
+
+        secret_encoding_type = "secret_encoding_type"
+
+        // One of the arguments from this list "blindfold_secret_info clear_secret_info vault_secret_info wingman_secret_info" must be set
+
+        wingman_secret_info {
+          name = "ChargeBack-API-Key"
+        }
+      }
     }
 
     request_headers_to_remove = ["host"]
@@ -97,113 +113,10 @@ resource "volterra_route" "example" {
 
     // One of the arguments from this list "route_destination route_direct_response route_redirect" must be set
 
-    route_destination {
-      buffer_policy {
-        disabled = true
+    route_direct_response {
+      response_body = "OK"
 
-        max_request_bytes = "2048"
-
-        max_request_time = "30"
-      }
-
-      // One of the arguments from this list "do_not_retract_cluster retract_cluster" can be set
-
-      retract_cluster = true
-      cors_policy {
-        allow_credentials = true
-
-        allow_headers = "value"
-
-        allow_methods = "GET"
-
-        allow_origin = ["value"]
-
-        allow_origin_regex = ["value"]
-
-        disabled = true
-
-        expose_headers = "value"
-
-        max_age = "value"
-
-        maximum_age = "-1"
-      }
-      csrf_policy {
-        // One of the arguments from this list "all_load_balancer_domains custom_domain_list disabled" must be set
-
-        all_load_balancer_domains = true
-      }
-      destinations {
-        cluster {
-          name      = "test1"
-          namespace = "staging"
-          tenant    = "acmecorp"
-        }
-
-        endpoint_subsets = {
-          "key1" = "value1"
-        }
-
-        priority = "1"
-
-        weight = "10"
-      }
-      endpoint_subsets = {
-        "key1" = "value1"
-      }
-      hash_policy {
-        // One of the arguments from this list "cookie header_name source_ip" must be set
-
-        source_ip = true
-
-        terminal = true
-      }
-
-      // One of the arguments from this list "auto_host_rewrite host_rewrite" must be set
-
-      auto_host_rewrite = true
-      mirror_policy {
-        cluster {
-          name      = "test1"
-          namespace = "staging"
-          tenant    = "acmecorp"
-        }
-
-        percent {
-          denominator = "denominator"
-
-          numerator = "5"
-        }
-      }
-      priority = "priority"
-      retry_policy {
-        back_off {
-          base_interval = "5"
-
-          max_interval = "60"
-        }
-
-        num_retries = "3"
-
-        per_try_timeout = "1000"
-
-        retriable_status_codes = ["403"]
-
-        retry_condition = ["5xx"]
-
-        retry_on = "5xx"
-      }
-
-      // One of the arguments from this list "prefix_rewrite regex_rewrite" can be set
-
-      prefix_rewrite = "/"
-      spdy_config {
-        use_spdy = true
-      }
-      timeout = "2000"
-      web_socket_config {
-        use_websocket = true
-      }
+      response_code = "200"
     }
     service_policy {
       // One of the arguments from this list "context_extensions disable" can be set
@@ -212,15 +125,9 @@ resource "volterra_route" "example" {
     }
     skip_lb_override = true
     waf_type {
-      // One of the arguments from this list "app_firewall disable_waf inherit_waf" can be set
+      // One of the arguments from this list "app_firewall disable_waf inherit_waf" must be set
 
-      app_firewall {
-        app_firewall {
-          name      = "test1"
-          namespace = "staging"
-          tenant    = "acmecorp"
-        }
-      }
+      inherit_waf = true
     }
   }
 }
@@ -520,6 +427,8 @@ Send request to one of the destination from list of destinations.
 
 `priority` - (Optional) Also, circuit-breaker configuration at destination cluster is chosen based on the route priority. (`String`).
 
+`query_params` - (Optional) Handling of incoming query parameters in simple route.. See [Route Destination Query Params ](#route-destination-query-params) below for details.
+
 `retry_policy` - (Optional) Indicates that the route has a retry policy.. See [Route Destination Retry Policy ](#route-destination-retry-policy) below for details.
 
 ###### One of the arguments from this list "prefix_rewrite, regex_rewrite" can be set
@@ -650,6 +559,18 @@ useful for logging. For example, *cluster1* becomes *cluster1-shadow*..
 
 `percent` - (Optional) Percentage of requests to be mirrored. See [Mirror Policy Percent ](#mirror-policy-percent) below for details.
 
+### Route Destination Query Params
+
+Handling of incoming query parameters in simple route..
+
+###### One of the arguments from this list "remove_all_params, replace_params, retain_all_params" must be set
+
+`remove_all_params` - (Optional) x-displayName: "Remove All Parameters" (`Bool`).
+
+`replace_params` - (Optional) x-displayName: "Replace All Parameters" (`String`).
+
+`retain_all_params` - (Optional) x-displayName: "Retain All Parameters" (`Bool`).
+
 ### Route Destination Retry Policy
 
 Indicates that the route has a retry policy..
@@ -752,7 +673,7 @@ service policy configuration at route level which overrides configuration at vir
 
 waf_type specified at route level overrides waf configuration at VirtualHost level.
 
-###### One of the arguments from this list "app_firewall, disable_waf, inherit_waf" can be set
+###### One of the arguments from this list "app_firewall, disable_waf, inherit_waf" must be set
 
 `app_firewall` - (Optional) A direct reference to an Application Firewall configuration object. See [Ref Type App Firewall ](#ref-type-app-firewall) below for details.
 

@@ -1,9 +1,9 @@
 ---
 
 page_title: "Volterra: ip_prefix_set"
-description: "The ip_prefix_set allows CRUD of Ip Prefix Set resource on Volterra SaaS"
 
----
+description: "The ip_prefix_set allows CRUD of Ip Prefix Set resource on Volterra SaaS"
+---------------------------------------------------------------------------------------
 
 Resource volterra_ip_prefix_set
 ===============================
@@ -42,9 +42,29 @@ Argument Reference
 
 ### Spec Argument Reference
 
-`ipv6_prefix` - (Optional) An unordered list of IPv6 prefixes. (`List of String`).
+`ipv4_prefixes` - (Optional) list of IPv4 prefixes with description.. See [Ipv4 Prefixes ](#ipv4-prefixes) below for details.
 
-`prefix` - (Optional) An unordered list of IPv4 prefixes. (`List of String`).
+`ipv6_prefix` - (Optional) An unordered list of IPv6 prefixes. (`List of String`).(Deprecated)
+
+`ipv6_prefixes` - (Optional) list of IPv6 prefixes with description.. See [Ipv6 Prefixes ](#ipv6-prefixes) below for details.
+
+`prefix` - (Optional) An unordered list of IPv4 prefixes. (`List of String`).(Deprecated)
+
+### Ipv4 Prefixes
+
+list of IPv4 prefixes with description..
+
+`description` - (Optional) x-example: "blocked ip" (`String`).
+
+`ipv4_prefix` - (Required) x-example: "192.0.2.146/22" (`String`).
+
+### Ipv6 Prefixes
+
+list of IPv6 prefixes with description..
+
+`description` - (Optional) x-example: "blocked ip" (`String`).
+
+`ipv6_prefix` - (Required) x-example: "2001:db8:3c4d:15::/64" (`String`).
 
 Attribute Reference
 -------------------

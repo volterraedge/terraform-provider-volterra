@@ -485,6 +485,30 @@ func (o *DBObject) SetObjSystemMetadata(in sro.SystemMetadata) error {
 	return nil
 }
 
+func (e *DBObject) SetDirectRefHash(s string) {
+	m := e.GetSystemMetadata()
+	if m == nil {
+		m = &ves_io_schema.SystemObjectMetaType{}
+	}
+	m.DirectRefHash = s
+}
+
+func (e *DBObject) GetDirectRefHash() string {
+	m := e.GetSystemMetadata()
+	if m == nil {
+		return ""
+	}
+	return m.DirectRefHash
+}
+
+func (e *DBObject) GetModificationTimestamp() *google_protobuf.Timestamp {
+	m := e.GetSystemMetadata()
+	if m == nil {
+		return nil
+	}
+	return m.ModificationTimestamp
+}
+
 func (o *DBObject) GetObjSpec() sro.Spec {
 	if o.GetSpec() == nil {
 		return nil
@@ -1300,6 +1324,15 @@ func (v *ValidateStatusObject) Validate(ctx context.Context, pm interface{}, opt
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["ver_status"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("ver_status"))
+		if err := fv(ctx, e.GetVerStatus(), vOpts...); err != nil {
+			return err
 		}
 
 	}

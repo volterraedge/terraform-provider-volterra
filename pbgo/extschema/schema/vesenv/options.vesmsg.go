@@ -814,6 +814,17 @@ func (v *ValidateBFSecretChoice) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
+	case *BFSecretChoice_VesIoDiscoveryCbipDeviceAdminPasswordSecret:
+		if fv, exists := v.FldValidators["choice.ves_io_discovery_cbip_device_admin_password_secret"]; exists {
+			val := m.GetChoice().(*BFSecretChoice_VesIoDiscoveryCbipDeviceAdminPasswordSecret).VesIoDiscoveryCbipDeviceAdminPasswordSecret
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("ves_io_discovery_cbip_device_admin_password_secret"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
@@ -2075,6 +2086,17 @@ func (v *ValidateServiceSlugChoice) Validate(ctx context.Context, pm interface{}
 			vOpts := append(opts,
 				db.WithValidateField("choice"),
 				db.WithValidateField("discovery"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ServiceSlugChoice_Saas:
+		if fv, exists := v.FldValidators["choice.saas"]; exists {
+			val := m.GetChoice().(*ServiceSlugChoice_Saas).Saas
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("saas"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err

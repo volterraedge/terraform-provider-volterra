@@ -57,6 +57,8 @@ type GlobalSpecType struct {
 	//	*GlobalSpecType_Rseries
 	//	*GlobalSpecType_Baremetal
 	//	*GlobalSpecType_Oci
+	//	*GlobalSpecType_Openstack
+	//	*GlobalSpecType_Nutanix
 	ProviderChoice isGlobalSpecType_ProviderChoice `protobuf_oneof:"provider_choice"`
 	// Network Firewall
 	//
@@ -90,7 +92,7 @@ type GlobalSpecType struct {
 	//
 	// x-displayName: "Logs Streaming"
 	// x-required
-	// Select logs receiver for logs streaming. You can configure a log receiver from the 'Log Management' section.
+	// Select logs receiver to enable streaming load balancer request logs. You can configure a log receiver from the 'Log Management' section.
 	//
 	// Types that are valid to be assigned to LogsReceiverChoice:
 	//	*GlobalSpecType_LogsStreamingDisabled
@@ -103,7 +105,6 @@ type GlobalSpecType struct {
 	// Manage node local services. You can enable WebUI, SSH and DNS on the nodes of the site for local management and troubleshooting. By default, these services are enabled.
 	// You can choose to disable these services on the Site Local Outside (SLO) local VRF (which is used to connect the site to F5 Distributed Cloud for management)
 	// or on the Site Local Inside (SLI) local VRF (if configured on the site).
-	// It is recommended to disable node local services after the nodes register or after configuration/deugging is complete.
 	//
 	// Types that are valid to be assigned to BlockedServicesChoice:
 	//	*GlobalSpecType_BlockAllServices
@@ -203,6 +204,41 @@ type GlobalSpecType struct {
 	// x-displayName: "SiteState"
 	// State of the site deployment
 	SiteState site.SiteState `protobuf:"varint,52,opt,name=site_state,json=siteState,proto3,enum=ves.io.schema.site.SiteState" json:"site_state,omitempty"`
+	// Admin User Credentials
+	//
+	// x-displayName: "Admin User Credentials"
+	// Setup user credentials to manage access to nodes belonging to the site.
+	// When configured, 'admin' user will be setup and customers can access these nodes via
+	// either the node local WebUI or via SSH to access shell/CLI
+	AdminUserCredentials *views.AdminUserCredentialsType `protobuf:"bytes,53,opt,name=admin_user_credentials,json=adminUserCredentials,proto3" json:"admin_user_credentials,omitempty"`
+	// Proactive Monitoring
+	//
+	// x-displayName: "Proactive Monitoring"
+	// Enable proactive collection of debuglogs from this Customer Edge site to enable faster troubleshooting and issue resolution.
+	// When enabled, nodes of this Customer Edge site will be able to stream required service debug logs to F5 Distributed Cloud.
+	// When disabled, nodes of this Customer Edge site will not be able to send any debug logs and might cause delays in troubleshooting and issue resolution.
+	// It is recommended to have this setting enabled.
+	// Note: Only the relevant F5 Distributed Cloud software service logs will be transmitted. No customer sensitive data will be transmitted.
+	ProactiveMonitoring *views.ProactiveMonitoringChoice `protobuf:"bytes,56,opt,name=proactive_monitoring,json=proactiveMonitoring,proto3" json:"proactive_monitoring,omitempty"`
+	// Enterprise Proxy
+	//
+	// x-displayName: "Enterprise Proxy"
+	// Choose how the nodes in this Customer Edge site will communicate with F5 Distributed Cloud SaaS services.
+	// By default, all nodes will use the F5 Enterprise Proxy which is hosted on the F5 Global Network. This proxy will be used for node registration and upgrades.
+	// This proxy will not be used for the Regional Edge (RE) tunnels from this Customer Edge site.
+	// Customers can optionally choose to use an internal Enterprise Proxy.
+	// If customers choose to use the internal Enterprise Proxy, in addition to node registrations and upgrades, the Regional Edge (RE) tunnels can also be configured to use this internal Enterprise Proxy.
+	// Additionally, customers can configure their internal Enterprise Proxy to target the F5 Enterprise Proxy to handle domain resolution and network traffic for CE registrations and upgrades. Please refer to documentation for more details.
+	//
+	// Types that are valid to be assigned to EnterpriseProxyChoice:
+	//	*GlobalSpecType_F5Proxy
+	//	*GlobalSpecType_CustomProxy
+	EnterpriseProxyChoice isGlobalSpecType_EnterpriseProxyChoice `protobuf_oneof:"enterprise_proxy_choice"`
+	// DNS & NTP Servers
+	//
+	// x-displayName: "DNS & NTP Servers Settings"
+	// Specify DNS and NTP servers that will be used by the nodes in this Customer Edge site.
+	DnsNtpConfig *DNSNTPServerConfig `protobuf:"bytes,62,opt,name=dns_ntp_config,json=dnsNtpConfig,proto3" json:"dns_ntp_config,omitempty"`
 	// address
 	//
 	// x-displayName: "Geographical Address"
@@ -297,6 +333,12 @@ type isGlobalSpecType_NodeHaChoice interface {
 	MarshalTo([]byte) (int, error)
 	Size() int
 }
+type isGlobalSpecType_EnterpriseProxyChoice interface {
+	isGlobalSpecType_EnterpriseProxyChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
 
 type GlobalSpecType_Vmware struct {
 	Vmware *VMwareProviderType `protobuf:"bytes,2,opt,name=vmware,proto3,oneof" json:"vmware,omitempty"`
@@ -321,6 +363,12 @@ type GlobalSpecType_Baremetal struct {
 }
 type GlobalSpecType_Oci struct {
 	Oci *OCIProviderType `protobuf:"bytes,9,opt,name=oci,proto3,oneof" json:"oci,omitempty"`
+}
+type GlobalSpecType_Openstack struct {
+	Openstack *OpenstackProviderType `protobuf:"bytes,54,opt,name=openstack,proto3,oneof" json:"openstack,omitempty"`
+}
+type GlobalSpecType_Nutanix struct {
+	Nutanix *NutanixProviderType `protobuf:"bytes,55,opt,name=nutanix,proto3,oneof" json:"nutanix,omitempty"`
 }
 type GlobalSpecType_NoNetworkPolicy struct {
 	NoNetworkPolicy *schema.Empty `protobuf:"bytes,12,opt,name=no_network_policy,json=noNetworkPolicy,proto3,oneof" json:"no_network_policy,omitempty"`
@@ -367,6 +415,12 @@ type GlobalSpecType_DisableHa struct {
 type GlobalSpecType_EnableHa struct {
 	EnableHa *schema.Empty `protobuf:"bytes,51,opt,name=enable_ha,json=enableHa,proto3,oneof" json:"enable_ha,omitempty"`
 }
+type GlobalSpecType_F5Proxy struct {
+	F5Proxy *schema.Empty `protobuf:"bytes,60,opt,name=f5_proxy,json=f5Proxy,proto3,oneof" json:"f5_proxy,omitempty"`
+}
+type GlobalSpecType_CustomProxy struct {
+	CustomProxy *CustomProxy `protobuf:"bytes,61,opt,name=custom_proxy,json=customProxy,proto3,oneof" json:"custom_proxy,omitempty"`
+}
 
 func (*GlobalSpecType_Vmware) isGlobalSpecType_ProviderChoice()                              {}
 func (*GlobalSpecType_Kvm) isGlobalSpecType_ProviderChoice()                                 {}
@@ -376,6 +430,8 @@ func (*GlobalSpecType_Gcp) isGlobalSpecType_ProviderChoice()                    
 func (*GlobalSpecType_Rseries) isGlobalSpecType_ProviderChoice()                             {}
 func (*GlobalSpecType_Baremetal) isGlobalSpecType_ProviderChoice()                           {}
 func (*GlobalSpecType_Oci) isGlobalSpecType_ProviderChoice()                                 {}
+func (*GlobalSpecType_Openstack) isGlobalSpecType_ProviderChoice()                           {}
+func (*GlobalSpecType_Nutanix) isGlobalSpecType_ProviderChoice()                             {}
 func (*GlobalSpecType_NoNetworkPolicy) isGlobalSpecType_NetworkPolicyChoice()                {}
 func (*GlobalSpecType_ActiveEnhancedFirewallPolicies) isGlobalSpecType_NetworkPolicyChoice() {}
 func (*GlobalSpecType_NoForwardProxy) isGlobalSpecType_ForwardProxyChoice()                  {}
@@ -391,6 +447,8 @@ func (*GlobalSpecType_SiteMeshGroupOnSlo) isGlobalSpecType_S2SConnectivitySloCho
 func (*GlobalSpecType_DcClusterGroupSlo) isGlobalSpecType_S2SConnectivitySloChoice()         {}
 func (*GlobalSpecType_DisableHa) isGlobalSpecType_NodeHaChoice()                             {}
 func (*GlobalSpecType_EnableHa) isGlobalSpecType_NodeHaChoice()                              {}
+func (*GlobalSpecType_F5Proxy) isGlobalSpecType_EnterpriseProxyChoice()                      {}
+func (*GlobalSpecType_CustomProxy) isGlobalSpecType_EnterpriseProxyChoice()                  {}
 
 func (m *GlobalSpecType) GetProviderChoice() isGlobalSpecType_ProviderChoice {
 	if m != nil {
@@ -437,6 +495,12 @@ func (m *GlobalSpecType) GetS2SConnectivitySloChoice() isGlobalSpecType_S2SConne
 func (m *GlobalSpecType) GetNodeHaChoice() isGlobalSpecType_NodeHaChoice {
 	if m != nil {
 		return m.NodeHaChoice
+	}
+	return nil
+}
+func (m *GlobalSpecType) GetEnterpriseProxyChoice() isGlobalSpecType_EnterpriseProxyChoice {
+	if m != nil {
+		return m.EnterpriseProxyChoice
 	}
 	return nil
 }
@@ -493,6 +557,20 @@ func (m *GlobalSpecType) GetBaremetal() *BaremetalProviderType {
 func (m *GlobalSpecType) GetOci() *OCIProviderType {
 	if x, ok := m.GetProviderChoice().(*GlobalSpecType_Oci); ok {
 		return x.Oci
+	}
+	return nil
+}
+
+func (m *GlobalSpecType) GetOpenstack() *OpenstackProviderType {
+	if x, ok := m.GetProviderChoice().(*GlobalSpecType_Openstack); ok {
+		return x.Openstack
+	}
+	return nil
+}
+
+func (m *GlobalSpecType) GetNutanix() *NutanixProviderType {
+	if x, ok := m.GetProviderChoice().(*GlobalSpecType_Nutanix); ok {
+		return x.Nutanix
 	}
 	return nil
 }
@@ -686,6 +764,41 @@ func (m *GlobalSpecType) GetSiteState() site.SiteState {
 	return site.ONLINE
 }
 
+func (m *GlobalSpecType) GetAdminUserCredentials() *views.AdminUserCredentialsType {
+	if m != nil {
+		return m.AdminUserCredentials
+	}
+	return nil
+}
+
+func (m *GlobalSpecType) GetProactiveMonitoring() *views.ProactiveMonitoringChoice {
+	if m != nil {
+		return m.ProactiveMonitoring
+	}
+	return nil
+}
+
+func (m *GlobalSpecType) GetF5Proxy() *schema.Empty {
+	if x, ok := m.GetEnterpriseProxyChoice().(*GlobalSpecType_F5Proxy); ok {
+		return x.F5Proxy
+	}
+	return nil
+}
+
+func (m *GlobalSpecType) GetCustomProxy() *CustomProxy {
+	if x, ok := m.GetEnterpriseProxyChoice().(*GlobalSpecType_CustomProxy); ok {
+		return x.CustomProxy
+	}
+	return nil
+}
+
+func (m *GlobalSpecType) GetDnsNtpConfig() *DNSNTPServerConfig {
+	if m != nil {
+		return m.DnsNtpConfig
+	}
+	return nil
+}
+
 func (m *GlobalSpecType) GetAddress() string {
 	if m != nil {
 		return m.Address
@@ -718,6 +831,8 @@ func (*GlobalSpecType) XXX_OneofWrappers() []interface{} {
 		(*GlobalSpecType_Rseries)(nil),
 		(*GlobalSpecType_Baremetal)(nil),
 		(*GlobalSpecType_Oci)(nil),
+		(*GlobalSpecType_Openstack)(nil),
+		(*GlobalSpecType_Nutanix)(nil),
 		(*GlobalSpecType_NoNetworkPolicy)(nil),
 		(*GlobalSpecType_ActiveEnhancedFirewallPolicies)(nil),
 		(*GlobalSpecType_NoForwardProxy)(nil),
@@ -733,6 +848,383 @@ func (*GlobalSpecType) XXX_OneofWrappers() []interface{} {
 		(*GlobalSpecType_DcClusterGroupSlo)(nil),
 		(*GlobalSpecType_DisableHa)(nil),
 		(*GlobalSpecType_EnableHa)(nil),
+		(*GlobalSpecType_F5Proxy)(nil),
+		(*GlobalSpecType_CustomProxy)(nil),
+	}
+}
+
+// DNS & NTP Servers
+//
+// x-displayName: "DNS & NTP Servers Settings"
+// Specify DNS and NTP servers that will be used by the nodes in this Customer Edge site.
+type DNSNTPServerConfig struct {
+	// DNS Servers
+	//
+	// x-displayName: "DNS Servers"
+	// Specify DNS Servers that will be used for resolving domains required for registration and upgrades. By default, 8.8.8.8 and 8.8.4.4 DNS nameservers will be used.
+	//
+	// Types that are valid to be assigned to DnsServerChoice:
+	//	*DNSNTPServerConfig_F5DnsDefault
+	//	*DNSNTPServerConfig_CustomDns
+	DnsServerChoice isDNSNTPServerConfig_DnsServerChoice `protobuf_oneof:"dns_server_choice"`
+	// NTP Servers
+	//
+	// x-displayName: "NTP Servers"
+	// Specify NTP Servers that will be by the nodes of this Customer Edge site.
+	// By default, time.google.com is used during registration and once tunnels to REs are formed, NTP service hosted by F5 Distributed Cloud will be used.
+	// When custom is selected, NTP service hosted by F5 Distributed Cloud will not be used.
+	//
+	// Types that are valid to be assigned to NtpServerChoice:
+	//	*DNSNTPServerConfig_F5NtpDefault
+	//	*DNSNTPServerConfig_CustomNtp
+	NtpServerChoice isDNSNTPServerConfig_NtpServerChoice `protobuf_oneof:"ntp_server_choice"`
+}
+
+func (m *DNSNTPServerConfig) Reset()      { *m = DNSNTPServerConfig{} }
+func (*DNSNTPServerConfig) ProtoMessage() {}
+func (*DNSNTPServerConfig) Descriptor() ([]byte, []int) {
+	return fileDescriptor_6acf9f1f49f4d0ae, []int{1}
+}
+func (m *DNSNTPServerConfig) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *DNSNTPServerConfig) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *DNSNTPServerConfig) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_DNSNTPServerConfig.Merge(m, src)
+}
+func (m *DNSNTPServerConfig) XXX_Size() int {
+	return m.Size()
+}
+func (m *DNSNTPServerConfig) XXX_DiscardUnknown() {
+	xxx_messageInfo_DNSNTPServerConfig.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_DNSNTPServerConfig proto.InternalMessageInfo
+
+type isDNSNTPServerConfig_DnsServerChoice interface {
+	isDNSNTPServerConfig_DnsServerChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+type isDNSNTPServerConfig_NtpServerChoice interface {
+	isDNSNTPServerConfig_NtpServerChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+
+type DNSNTPServerConfig_F5DnsDefault struct {
+	F5DnsDefault *schema.Empty `protobuf:"bytes,4,opt,name=f5_dns_default,json=f5DnsDefault,proto3,oneof" json:"f5_dns_default,omitempty"`
+}
+type DNSNTPServerConfig_CustomDns struct {
+	CustomDns *CustomDNSSettings `protobuf:"bytes,5,opt,name=custom_dns,json=customDns,proto3,oneof" json:"custom_dns,omitempty"`
+}
+type DNSNTPServerConfig_F5NtpDefault struct {
+	F5NtpDefault *schema.Empty `protobuf:"bytes,7,opt,name=f5_ntp_default,json=f5NtpDefault,proto3,oneof" json:"f5_ntp_default,omitempty"`
+}
+type DNSNTPServerConfig_CustomNtp struct {
+	CustomNtp *CustomNTPSettings `protobuf:"bytes,8,opt,name=custom_ntp,json=customNtp,proto3,oneof" json:"custom_ntp,omitempty"`
+}
+
+func (*DNSNTPServerConfig_F5DnsDefault) isDNSNTPServerConfig_DnsServerChoice() {}
+func (*DNSNTPServerConfig_CustomDns) isDNSNTPServerConfig_DnsServerChoice()    {}
+func (*DNSNTPServerConfig_F5NtpDefault) isDNSNTPServerConfig_NtpServerChoice() {}
+func (*DNSNTPServerConfig_CustomNtp) isDNSNTPServerConfig_NtpServerChoice()    {}
+
+func (m *DNSNTPServerConfig) GetDnsServerChoice() isDNSNTPServerConfig_DnsServerChoice {
+	if m != nil {
+		return m.DnsServerChoice
+	}
+	return nil
+}
+func (m *DNSNTPServerConfig) GetNtpServerChoice() isDNSNTPServerConfig_NtpServerChoice {
+	if m != nil {
+		return m.NtpServerChoice
+	}
+	return nil
+}
+
+func (m *DNSNTPServerConfig) GetF5DnsDefault() *schema.Empty {
+	if x, ok := m.GetDnsServerChoice().(*DNSNTPServerConfig_F5DnsDefault); ok {
+		return x.F5DnsDefault
+	}
+	return nil
+}
+
+func (m *DNSNTPServerConfig) GetCustomDns() *CustomDNSSettings {
+	if x, ok := m.GetDnsServerChoice().(*DNSNTPServerConfig_CustomDns); ok {
+		return x.CustomDns
+	}
+	return nil
+}
+
+func (m *DNSNTPServerConfig) GetF5NtpDefault() *schema.Empty {
+	if x, ok := m.GetNtpServerChoice().(*DNSNTPServerConfig_F5NtpDefault); ok {
+		return x.F5NtpDefault
+	}
+	return nil
+}
+
+func (m *DNSNTPServerConfig) GetCustomNtp() *CustomNTPSettings {
+	if x, ok := m.GetNtpServerChoice().(*DNSNTPServerConfig_CustomNtp); ok {
+		return x.CustomNtp
+	}
+	return nil
+}
+
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*DNSNTPServerConfig) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
+		(*DNSNTPServerConfig_F5DnsDefault)(nil),
+		(*DNSNTPServerConfig_CustomDns)(nil),
+		(*DNSNTPServerConfig_F5NtpDefault)(nil),
+		(*DNSNTPServerConfig_CustomNtp)(nil),
+	}
+}
+
+// DNS Servers
+//
+// x-displayName: "DNS Servers"
+// DNS Servers
+type CustomDNSSettings struct {
+	// DNS Servers
+	//
+	// x-displayName: "DNS Servers"
+	// DNS Servers
+	DnsServers []string `protobuf:"bytes,1,rep,name=dns_servers,json=dnsServers,proto3" json:"dns_servers,omitempty"`
+}
+
+func (m *CustomDNSSettings) Reset()      { *m = CustomDNSSettings{} }
+func (*CustomDNSSettings) ProtoMessage() {}
+func (*CustomDNSSettings) Descriptor() ([]byte, []int) {
+	return fileDescriptor_6acf9f1f49f4d0ae, []int{2}
+}
+func (m *CustomDNSSettings) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *CustomDNSSettings) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *CustomDNSSettings) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CustomDNSSettings.Merge(m, src)
+}
+func (m *CustomDNSSettings) XXX_Size() int {
+	return m.Size()
+}
+func (m *CustomDNSSettings) XXX_DiscardUnknown() {
+	xxx_messageInfo_CustomDNSSettings.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_CustomDNSSettings proto.InternalMessageInfo
+
+func (m *CustomDNSSettings) GetDnsServers() []string {
+	if m != nil {
+		return m.DnsServers
+	}
+	return nil
+}
+
+// NTP Servers
+//
+// x-displayName: "NTP Servers"
+// NTP Servers
+type CustomNTPSettings struct {
+	// NTP Servers
+	//
+	// x-displayName: "NTP Servers"
+	// NTP Servers
+	NtpServers []string `protobuf:"bytes,1,rep,name=ntp_servers,json=ntpServers,proto3" json:"ntp_servers,omitempty"`
+}
+
+func (m *CustomNTPSettings) Reset()      { *m = CustomNTPSettings{} }
+func (*CustomNTPSettings) ProtoMessage() {}
+func (*CustomNTPSettings) Descriptor() ([]byte, []int) {
+	return fileDescriptor_6acf9f1f49f4d0ae, []int{3}
+}
+func (m *CustomNTPSettings) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *CustomNTPSettings) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *CustomNTPSettings) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CustomNTPSettings.Merge(m, src)
+}
+func (m *CustomNTPSettings) XXX_Size() int {
+	return m.Size()
+}
+func (m *CustomNTPSettings) XXX_DiscardUnknown() {
+	xxx_messageInfo_CustomNTPSettings.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_CustomNTPSettings proto.InternalMessageInfo
+
+func (m *CustomNTPSettings) GetNtpServers() []string {
+	if m != nil {
+		return m.NtpServers
+	}
+	return nil
+}
+
+// Custom Enterprise Proxy
+//
+// x-displayName: "Custom Enterprise Proxy"
+// Custom Enterprise Proxy
+type CustomProxy struct {
+	// Proxy IPv4 Address
+	//
+	// x-displayName: "Proxy IPv4 Address"
+	// x-example: "123.234.0.1"
+	// x-required
+	// Specify the IPv4 Address of the internal Enterprise Proxy
+	ProxyIpAddress string `protobuf:"bytes,1,opt,name=proxy_ip_address,json=proxyIpAddress,proto3" json:"proxy_ip_address,omitempty"`
+	// Proxy Port
+	//
+	// x-displayName: "Proxy Port"
+	// x-example: 443
+	// x-required
+	// Specify the Port of the internal Enterprise Proxy
+	ProxyPort uint32 `protobuf:"varint,2,opt,name=proxy_port,json=proxyPort,proto3" json:"proxy_port,omitempty"`
+	// Username
+	//
+	// x-displayName: "Username"
+	// If the internal Enterprise Proxy is using basic authentication, specify the username. This is an optional field.
+	Username string `protobuf:"bytes,3,opt,name=username,proto3" json:"username,omitempty"`
+	// Password
+	//
+	// x-displayName: "Password"
+	// If the internal Enterprise Proxy is using basic authentication, specify the password. This is an optional field.
+	// Note: To protect the password, it is recommended to blindfold it.
+	Password *schema.SecretType `protobuf:"bytes,4,opt,name=password,proto3" json:"password,omitempty"`
+	// Use for RE Tunnels
+	//
+	// x-displayName: "Use for RE Tunnels"
+	// Use this internal Enterprise Proxy for RE Tunnels.
+	// When enabled, the nodes in this Customer Edge site will go through this internal Enterprise Proxy to form tunnels with F5 Regional Edges (REs)
+	//
+	// Types that are valid to be assigned to UseForReTunnelChoice:
+	//	*CustomProxy_DisableReTunnel
+	//	*CustomProxy_EnableReTunnel
+	UseForReTunnelChoice isCustomProxy_UseForReTunnelChoice `protobuf_oneof:"use_for_re_tunnel_choice"`
+}
+
+func (m *CustomProxy) Reset()      { *m = CustomProxy{} }
+func (*CustomProxy) ProtoMessage() {}
+func (*CustomProxy) Descriptor() ([]byte, []int) {
+	return fileDescriptor_6acf9f1f49f4d0ae, []int{4}
+}
+func (m *CustomProxy) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *CustomProxy) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *CustomProxy) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CustomProxy.Merge(m, src)
+}
+func (m *CustomProxy) XXX_Size() int {
+	return m.Size()
+}
+func (m *CustomProxy) XXX_DiscardUnknown() {
+	xxx_messageInfo_CustomProxy.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_CustomProxy proto.InternalMessageInfo
+
+type isCustomProxy_UseForReTunnelChoice interface {
+	isCustomProxy_UseForReTunnelChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+
+type CustomProxy_DisableReTunnel struct {
+	DisableReTunnel *schema.Empty `protobuf:"bytes,6,opt,name=disable_re_tunnel,json=disableReTunnel,proto3,oneof" json:"disable_re_tunnel,omitempty"`
+}
+type CustomProxy_EnableReTunnel struct {
+	EnableReTunnel *schema.Empty `protobuf:"bytes,7,opt,name=enable_re_tunnel,json=enableReTunnel,proto3,oneof" json:"enable_re_tunnel,omitempty"`
+}
+
+func (*CustomProxy_DisableReTunnel) isCustomProxy_UseForReTunnelChoice() {}
+func (*CustomProxy_EnableReTunnel) isCustomProxy_UseForReTunnelChoice()  {}
+
+func (m *CustomProxy) GetUseForReTunnelChoice() isCustomProxy_UseForReTunnelChoice {
+	if m != nil {
+		return m.UseForReTunnelChoice
+	}
+	return nil
+}
+
+func (m *CustomProxy) GetProxyIpAddress() string {
+	if m != nil {
+		return m.ProxyIpAddress
+	}
+	return ""
+}
+
+func (m *CustomProxy) GetProxyPort() uint32 {
+	if m != nil {
+		return m.ProxyPort
+	}
+	return 0
+}
+
+func (m *CustomProxy) GetUsername() string {
+	if m != nil {
+		return m.Username
+	}
+	return ""
+}
+
+func (m *CustomProxy) GetPassword() *schema.SecretType {
+	if m != nil {
+		return m.Password
+	}
+	return nil
+}
+
+func (m *CustomProxy) GetDisableReTunnel() *schema.Empty {
+	if x, ok := m.GetUseForReTunnelChoice().(*CustomProxy_DisableReTunnel); ok {
+		return x.DisableReTunnel
+	}
+	return nil
+}
+
+func (m *CustomProxy) GetEnableReTunnel() *schema.Empty {
+	if x, ok := m.GetUseForReTunnelChoice().(*CustomProxy_EnableReTunnel); ok {
+		return x.EnableReTunnel
+	}
+	return nil
+}
+
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*CustomProxy) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
+		(*CustomProxy_DisableReTunnel)(nil),
+		(*CustomProxy_EnableReTunnel)(nil),
 	}
 }
 
@@ -757,7 +1249,7 @@ type LoadBalancingSettingsType struct {
 func (m *LoadBalancingSettingsType) Reset()      { *m = LoadBalancingSettingsType{} }
 func (*LoadBalancingSettingsType) ProtoMessage() {}
 func (*LoadBalancingSettingsType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_6acf9f1f49f4d0ae, []int{1}
+	return fileDescriptor_6acf9f1f49f4d0ae, []int{5}
 }
 func (m *LoadBalancingSettingsType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -810,7 +1302,7 @@ type SoftwareSettingsType struct {
 func (m *SoftwareSettingsType) Reset()      { *m = SoftwareSettingsType{} }
 func (*SoftwareSettingsType) ProtoMessage() {}
 func (*SoftwareSettingsType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_6acf9f1f49f4d0ae, []int{2}
+	return fileDescriptor_6acf9f1f49f4d0ae, []int{6}
 }
 func (m *SoftwareSettingsType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -864,7 +1356,7 @@ type UpgradeSettingsType struct {
 func (m *UpgradeSettingsType) Reset()      { *m = UpgradeSettingsType{} }
 func (*UpgradeSettingsType) ProtoMessage() {}
 func (*UpgradeSettingsType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_6acf9f1f49f4d0ae, []int{3}
+	return fileDescriptor_6acf9f1f49f4d0ae, []int{7}
 }
 func (m *UpgradeSettingsType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -929,7 +1421,7 @@ type Node struct {
 func (m *Node) Reset()      { *m = Node{} }
 func (*Node) ProtoMessage() {}
 func (*Node) Descriptor() ([]byte, []int) {
-	return fileDescriptor_6acf9f1f49f4d0ae, []int{4}
+	return fileDescriptor_6acf9f1f49f4d0ae, []int{8}
 }
 func (m *Node) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1012,7 +1504,7 @@ type SiteMeshGroupType struct {
 func (m *SiteMeshGroupType) Reset()      { *m = SiteMeshGroupType{} }
 func (*SiteMeshGroupType) ProtoMessage() {}
 func (*SiteMeshGroupType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_6acf9f1f49f4d0ae, []int{5}
+	return fileDescriptor_6acf9f1f49f4d0ae, []int{9}
 }
 func (m *SiteMeshGroupType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1140,7 +1632,7 @@ type VMwareProviderType struct {
 func (m *VMwareProviderType) Reset()      { *m = VMwareProviderType{} }
 func (*VMwareProviderType) ProtoMessage() {}
 func (*VMwareProviderType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_6acf9f1f49f4d0ae, []int{6}
+	return fileDescriptor_6acf9f1f49f4d0ae, []int{10}
 }
 func (m *VMwareProviderType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1220,7 +1712,7 @@ type KVMProviderType struct {
 func (m *KVMProviderType) Reset()      { *m = KVMProviderType{} }
 func (*KVMProviderType) ProtoMessage() {}
 func (*KVMProviderType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_6acf9f1f49f4d0ae, []int{7}
+	return fileDescriptor_6acf9f1f49f4d0ae, []int{11}
 }
 func (m *KVMProviderType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1294,13 +1786,14 @@ type AWSProviderType struct {
 	//
 	// Types that are valid to be assigned to OrchestrationChoice:
 	//	*AWSProviderType_NotManaged
+	//	*AWSProviderType_Managed
 	OrchestrationChoice isAWSProviderType_OrchestrationChoice `protobuf_oneof:"orchestration_choice"`
 }
 
 func (m *AWSProviderType) Reset()      { *m = AWSProviderType{} }
 func (*AWSProviderType) ProtoMessage() {}
 func (*AWSProviderType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_6acf9f1f49f4d0ae, []int{8}
+	return fileDescriptor_6acf9f1f49f4d0ae, []int{12}
 }
 func (m *AWSProviderType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1335,8 +1828,12 @@ type isAWSProviderType_OrchestrationChoice interface {
 type AWSProviderType_NotManaged struct {
 	NotManaged *NodeList `protobuf:"bytes,2,opt,name=not_managed,json=notManaged,proto3,oneof" json:"not_managed,omitempty"`
 }
+type AWSProviderType_Managed struct {
+	Managed *AWSManagedMode `protobuf:"bytes,3,opt,name=managed,proto3,oneof" json:"managed,omitempty"`
+}
 
 func (*AWSProviderType_NotManaged) isAWSProviderType_OrchestrationChoice() {}
+func (*AWSProviderType_Managed) isAWSProviderType_OrchestrationChoice()    {}
 
 func (m *AWSProviderType) GetOrchestrationChoice() isAWSProviderType_OrchestrationChoice {
 	if m != nil {
@@ -1352,10 +1849,18 @@ func (m *AWSProviderType) GetNotManaged() *NodeList {
 	return nil
 }
 
+func (m *AWSProviderType) GetManaged() *AWSManagedMode {
+	if x, ok := m.GetOrchestrationChoice().(*AWSProviderType_Managed); ok {
+		return x.Managed
+	}
+	return nil
+}
+
 // XXX_OneofWrappers is for the internal use of the proto package.
 func (*AWSProviderType) XXX_OneofWrappers() []interface{} {
 	return []interface{}{
 		(*AWSProviderType_NotManaged)(nil),
+		(*AWSProviderType_Managed)(nil),
 	}
 }
 
@@ -1380,7 +1885,7 @@ type AzureProviderType struct {
 func (m *AzureProviderType) Reset()      { *m = AzureProviderType{} }
 func (*AzureProviderType) ProtoMessage() {}
 func (*AzureProviderType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_6acf9f1f49f4d0ae, []int{9}
+	return fileDescriptor_6acf9f1f49f4d0ae, []int{13}
 }
 func (m *AzureProviderType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1460,7 +1965,7 @@ type GCPProviderType struct {
 func (m *GCPProviderType) Reset()      { *m = GCPProviderType{} }
 func (*GCPProviderType) ProtoMessage() {}
 func (*GCPProviderType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_6acf9f1f49f4d0ae, []int{10}
+	return fileDescriptor_6acf9f1f49f4d0ae, []int{14}
 }
 func (m *GCPProviderType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1540,7 +2045,7 @@ type BaremetalProviderType struct {
 func (m *BaremetalProviderType) Reset()      { *m = BaremetalProviderType{} }
 func (*BaremetalProviderType) ProtoMessage() {}
 func (*BaremetalProviderType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_6acf9f1f49f4d0ae, []int{11}
+	return fileDescriptor_6acf9f1f49f4d0ae, []int{15}
 }
 func (m *BaremetalProviderType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1620,7 +2125,7 @@ type OCIProviderType struct {
 func (m *OCIProviderType) Reset()      { *m = OCIProviderType{} }
 func (*OCIProviderType) ProtoMessage() {}
 func (*OCIProviderType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_6acf9f1f49f4d0ae, []int{12}
+	return fileDescriptor_6acf9f1f49f4d0ae, []int{16}
 }
 func (m *OCIProviderType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1700,7 +2205,7 @@ type RSeriesProviderType struct {
 func (m *RSeriesProviderType) Reset()      { *m = RSeriesProviderType{} }
 func (*RSeriesProviderType) ProtoMessage() {}
 func (*RSeriesProviderType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_6acf9f1f49f4d0ae, []int{13}
+	return fileDescriptor_6acf9f1f49f4d0ae, []int{17}
 }
 func (m *RSeriesProviderType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1759,6 +2264,166 @@ func (*RSeriesProviderType) XXX_OneofWrappers() []interface{} {
 	}
 }
 
+// Openstack Provider Type
+//
+// x-displayName: "Openstack Provider Type"
+// Openstack Provider Type
+type OpenstackProviderType struct {
+	// Orchestration Mode
+	//
+	// x-displayName: "Orchestration Mode"
+	// Select the orchestration mode for this site.
+	// Customers can either choose to use F5 Distributed Cloud's orchestration services to manage the lifecycle of nodes for this site,
+	// or, choose to manage the lifecycle of the nodes themselves via manual provisioning or using automation tools such as Terraform.
+	// At this time, Secure Mesh Site only supports the 'Not Managed by F5XC' mode.
+	//
+	// Types that are valid to be assigned to OrchestrationChoice:
+	//	*OpenstackProviderType_NotManaged
+	OrchestrationChoice isOpenstackProviderType_OrchestrationChoice `protobuf_oneof:"orchestration_choice"`
+}
+
+func (m *OpenstackProviderType) Reset()      { *m = OpenstackProviderType{} }
+func (*OpenstackProviderType) ProtoMessage() {}
+func (*OpenstackProviderType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_6acf9f1f49f4d0ae, []int{18}
+}
+func (m *OpenstackProviderType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *OpenstackProviderType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *OpenstackProviderType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_OpenstackProviderType.Merge(m, src)
+}
+func (m *OpenstackProviderType) XXX_Size() int {
+	return m.Size()
+}
+func (m *OpenstackProviderType) XXX_DiscardUnknown() {
+	xxx_messageInfo_OpenstackProviderType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_OpenstackProviderType proto.InternalMessageInfo
+
+type isOpenstackProviderType_OrchestrationChoice interface {
+	isOpenstackProviderType_OrchestrationChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+
+type OpenstackProviderType_NotManaged struct {
+	NotManaged *NodeList `protobuf:"bytes,2,opt,name=not_managed,json=notManaged,proto3,oneof" json:"not_managed,omitempty"`
+}
+
+func (*OpenstackProviderType_NotManaged) isOpenstackProviderType_OrchestrationChoice() {}
+
+func (m *OpenstackProviderType) GetOrchestrationChoice() isOpenstackProviderType_OrchestrationChoice {
+	if m != nil {
+		return m.OrchestrationChoice
+	}
+	return nil
+}
+
+func (m *OpenstackProviderType) GetNotManaged() *NodeList {
+	if x, ok := m.GetOrchestrationChoice().(*OpenstackProviderType_NotManaged); ok {
+		return x.NotManaged
+	}
+	return nil
+}
+
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*OpenstackProviderType) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
+		(*OpenstackProviderType_NotManaged)(nil),
+	}
+}
+
+// Nutanix Provider Type
+//
+// x-displayName: "Nutanix Provider Type"
+// Nutanix Provider Type
+type NutanixProviderType struct {
+	// Orchestration Mode
+	//
+	// x-displayName: "Orchestration Mode"
+	// Select the orchestration mode for this site.
+	// Customers can either choose to use F5 Distributed Cloud's orchestration services to manage the lifecycle of nodes for this site,
+	// or, choose to manage the lifecycle of the nodes themselves via manual provisioning or using automation tools such as Terraform.
+	// At this time, Secure Mesh Site only supports the 'Not Managed by F5XC' mode.
+	//
+	// Types that are valid to be assigned to OrchestrationChoice:
+	//	*NutanixProviderType_NotManaged
+	OrchestrationChoice isNutanixProviderType_OrchestrationChoice `protobuf_oneof:"orchestration_choice"`
+}
+
+func (m *NutanixProviderType) Reset()      { *m = NutanixProviderType{} }
+func (*NutanixProviderType) ProtoMessage() {}
+func (*NutanixProviderType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_6acf9f1f49f4d0ae, []int{19}
+}
+func (m *NutanixProviderType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *NutanixProviderType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *NutanixProviderType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_NutanixProviderType.Merge(m, src)
+}
+func (m *NutanixProviderType) XXX_Size() int {
+	return m.Size()
+}
+func (m *NutanixProviderType) XXX_DiscardUnknown() {
+	xxx_messageInfo_NutanixProviderType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_NutanixProviderType proto.InternalMessageInfo
+
+type isNutanixProviderType_OrchestrationChoice interface {
+	isNutanixProviderType_OrchestrationChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+
+type NutanixProviderType_NotManaged struct {
+	NotManaged *NodeList `protobuf:"bytes,2,opt,name=not_managed,json=notManaged,proto3,oneof" json:"not_managed,omitempty"`
+}
+
+func (*NutanixProviderType_NotManaged) isNutanixProviderType_OrchestrationChoice() {}
+
+func (m *NutanixProviderType) GetOrchestrationChoice() isNutanixProviderType_OrchestrationChoice {
+	if m != nil {
+		return m.OrchestrationChoice
+	}
+	return nil
+}
+
+func (m *NutanixProviderType) GetNotManaged() *NodeList {
+	if x, ok := m.GetOrchestrationChoice().(*NutanixProviderType_NotManaged); ok {
+		return x.NotManaged
+	}
+	return nil
+}
+
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*NutanixProviderType) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
+		(*NutanixProviderType_NotManaged)(nil),
+	}
+}
+
 // NodeList
 //
 // x-displayName: "List of Nodes"
@@ -1776,7 +2441,7 @@ type NodeList struct {
 func (m *NodeList) Reset()      { *m = NodeList{} }
 func (*NodeList) ProtoMessage() {}
 func (*NodeList) Descriptor() ([]byte, []int) {
-	return fileDescriptor_6acf9f1f49f4d0ae, []int{14}
+	return fileDescriptor_6acf9f1f49f4d0ae, []int{20}
 }
 func (m *NodeList) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1822,6 +2487,8 @@ type CreateSpecType struct {
 	//	*CreateSpecType_Rseries
 	//	*CreateSpecType_Baremetal
 	//	*CreateSpecType_Oci
+	//	*CreateSpecType_Openstack
+	//	*CreateSpecType_Nutanix
 	ProviderChoice isCreateSpecType_ProviderChoice `protobuf_oneof:"provider_choice"`
 	// Types that are valid to be assigned to NetworkPolicyChoice:
 	//	*CreateSpecType_NoNetworkPolicy
@@ -1860,13 +2527,20 @@ type CreateSpecType struct {
 	// Types that are valid to be assigned to NodeHaChoice:
 	//	*CreateSpecType_DisableHa
 	//	*CreateSpecType_EnableHa
-	NodeHaChoice isCreateSpecType_NodeHaChoice `protobuf_oneof:"node_ha_choice"`
+	NodeHaChoice         isCreateSpecType_NodeHaChoice    `protobuf_oneof:"node_ha_choice"`
+	AdminUserCredentials *views.AdminUserCredentialsType  `protobuf:"bytes,53,opt,name=admin_user_credentials,json=adminUserCredentials,proto3" json:"admin_user_credentials,omitempty"`
+	ProactiveMonitoring  *views.ProactiveMonitoringChoice `protobuf:"bytes,56,opt,name=proactive_monitoring,json=proactiveMonitoring,proto3" json:"proactive_monitoring,omitempty"`
+	// Types that are valid to be assigned to EnterpriseProxyChoice:
+	//	*CreateSpecType_F5Proxy
+	//	*CreateSpecType_CustomProxy
+	EnterpriseProxyChoice isCreateSpecType_EnterpriseProxyChoice `protobuf_oneof:"enterprise_proxy_choice"`
+	DnsNtpConfig          *DNSNTPServerConfig                    `protobuf:"bytes,62,opt,name=dns_ntp_config,json=dnsNtpConfig,proto3" json:"dns_ntp_config,omitempty"`
 }
 
 func (m *CreateSpecType) Reset()      { *m = CreateSpecType{} }
 func (*CreateSpecType) ProtoMessage() {}
 func (*CreateSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_6acf9f1f49f4d0ae, []int{15}
+	return fileDescriptor_6acf9f1f49f4d0ae, []int{21}
 }
 func (m *CreateSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1939,6 +2613,12 @@ type isCreateSpecType_NodeHaChoice interface {
 	MarshalTo([]byte) (int, error)
 	Size() int
 }
+type isCreateSpecType_EnterpriseProxyChoice interface {
+	isCreateSpecType_EnterpriseProxyChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
 
 type CreateSpecType_Vmware struct {
 	Vmware *VMwareProviderType `protobuf:"bytes,2,opt,name=vmware,proto3,oneof" json:"vmware,omitempty"`
@@ -1963,6 +2643,12 @@ type CreateSpecType_Baremetal struct {
 }
 type CreateSpecType_Oci struct {
 	Oci *OCIProviderType `protobuf:"bytes,9,opt,name=oci,proto3,oneof" json:"oci,omitempty"`
+}
+type CreateSpecType_Openstack struct {
+	Openstack *OpenstackProviderType `protobuf:"bytes,54,opt,name=openstack,proto3,oneof" json:"openstack,omitempty"`
+}
+type CreateSpecType_Nutanix struct {
+	Nutanix *NutanixProviderType `protobuf:"bytes,55,opt,name=nutanix,proto3,oneof" json:"nutanix,omitempty"`
 }
 type CreateSpecType_NoNetworkPolicy struct {
 	NoNetworkPolicy *schema.Empty `protobuf:"bytes,12,opt,name=no_network_policy,json=noNetworkPolicy,proto3,oneof" json:"no_network_policy,omitempty"`
@@ -2009,6 +2695,12 @@ type CreateSpecType_DisableHa struct {
 type CreateSpecType_EnableHa struct {
 	EnableHa *schema.Empty `protobuf:"bytes,51,opt,name=enable_ha,json=enableHa,proto3,oneof" json:"enable_ha,omitempty"`
 }
+type CreateSpecType_F5Proxy struct {
+	F5Proxy *schema.Empty `protobuf:"bytes,60,opt,name=f5_proxy,json=f5Proxy,proto3,oneof" json:"f5_proxy,omitempty"`
+}
+type CreateSpecType_CustomProxy struct {
+	CustomProxy *CustomProxy `protobuf:"bytes,61,opt,name=custom_proxy,json=customProxy,proto3,oneof" json:"custom_proxy,omitempty"`
+}
 
 func (*CreateSpecType_Vmware) isCreateSpecType_ProviderChoice()                              {}
 func (*CreateSpecType_Kvm) isCreateSpecType_ProviderChoice()                                 {}
@@ -2018,6 +2710,8 @@ func (*CreateSpecType_Gcp) isCreateSpecType_ProviderChoice()                    
 func (*CreateSpecType_Rseries) isCreateSpecType_ProviderChoice()                             {}
 func (*CreateSpecType_Baremetal) isCreateSpecType_ProviderChoice()                           {}
 func (*CreateSpecType_Oci) isCreateSpecType_ProviderChoice()                                 {}
+func (*CreateSpecType_Openstack) isCreateSpecType_ProviderChoice()                           {}
+func (*CreateSpecType_Nutanix) isCreateSpecType_ProviderChoice()                             {}
 func (*CreateSpecType_NoNetworkPolicy) isCreateSpecType_NetworkPolicyChoice()                {}
 func (*CreateSpecType_ActiveEnhancedFirewallPolicies) isCreateSpecType_NetworkPolicyChoice() {}
 func (*CreateSpecType_NoForwardProxy) isCreateSpecType_ForwardProxyChoice()                  {}
@@ -2033,6 +2727,8 @@ func (*CreateSpecType_SiteMeshGroupOnSlo) isCreateSpecType_S2SConnectivitySloCho
 func (*CreateSpecType_DcClusterGroupSlo) isCreateSpecType_S2SConnectivitySloChoice()         {}
 func (*CreateSpecType_DisableHa) isCreateSpecType_NodeHaChoice()                             {}
 func (*CreateSpecType_EnableHa) isCreateSpecType_NodeHaChoice()                              {}
+func (*CreateSpecType_F5Proxy) isCreateSpecType_EnterpriseProxyChoice()                      {}
+func (*CreateSpecType_CustomProxy) isCreateSpecType_EnterpriseProxyChoice()                  {}
 
 func (m *CreateSpecType) GetProviderChoice() isCreateSpecType_ProviderChoice {
 	if m != nil {
@@ -2079,6 +2775,12 @@ func (m *CreateSpecType) GetS2SConnectivitySloChoice() isCreateSpecType_S2SConne
 func (m *CreateSpecType) GetNodeHaChoice() isCreateSpecType_NodeHaChoice {
 	if m != nil {
 		return m.NodeHaChoice
+	}
+	return nil
+}
+func (m *CreateSpecType) GetEnterpriseProxyChoice() isCreateSpecType_EnterpriseProxyChoice {
+	if m != nil {
+		return m.EnterpriseProxyChoice
 	}
 	return nil
 }
@@ -2135,6 +2837,20 @@ func (m *CreateSpecType) GetBaremetal() *BaremetalProviderType {
 func (m *CreateSpecType) GetOci() *OCIProviderType {
 	if x, ok := m.GetProviderChoice().(*CreateSpecType_Oci); ok {
 		return x.Oci
+	}
+	return nil
+}
+
+func (m *CreateSpecType) GetOpenstack() *OpenstackProviderType {
+	if x, ok := m.GetProviderChoice().(*CreateSpecType_Openstack); ok {
+		return x.Openstack
+	}
+	return nil
+}
+
+func (m *CreateSpecType) GetNutanix() *NutanixProviderType {
+	if x, ok := m.GetProviderChoice().(*CreateSpecType_Nutanix); ok {
+		return x.Nutanix
 	}
 	return nil
 }
@@ -2307,6 +3023,41 @@ func (m *CreateSpecType) GetEnableHa() *schema.Empty {
 	return nil
 }
 
+func (m *CreateSpecType) GetAdminUserCredentials() *views.AdminUserCredentialsType {
+	if m != nil {
+		return m.AdminUserCredentials
+	}
+	return nil
+}
+
+func (m *CreateSpecType) GetProactiveMonitoring() *views.ProactiveMonitoringChoice {
+	if m != nil {
+		return m.ProactiveMonitoring
+	}
+	return nil
+}
+
+func (m *CreateSpecType) GetF5Proxy() *schema.Empty {
+	if x, ok := m.GetEnterpriseProxyChoice().(*CreateSpecType_F5Proxy); ok {
+		return x.F5Proxy
+	}
+	return nil
+}
+
+func (m *CreateSpecType) GetCustomProxy() *CustomProxy {
+	if x, ok := m.GetEnterpriseProxyChoice().(*CreateSpecType_CustomProxy); ok {
+		return x.CustomProxy
+	}
+	return nil
+}
+
+func (m *CreateSpecType) GetDnsNtpConfig() *DNSNTPServerConfig {
+	if m != nil {
+		return m.DnsNtpConfig
+	}
+	return nil
+}
+
 // XXX_OneofWrappers is for the internal use of the proto package.
 func (*CreateSpecType) XXX_OneofWrappers() []interface{} {
 	return []interface{}{
@@ -2318,6 +3069,8 @@ func (*CreateSpecType) XXX_OneofWrappers() []interface{} {
 		(*CreateSpecType_Rseries)(nil),
 		(*CreateSpecType_Baremetal)(nil),
 		(*CreateSpecType_Oci)(nil),
+		(*CreateSpecType_Openstack)(nil),
+		(*CreateSpecType_Nutanix)(nil),
 		(*CreateSpecType_NoNetworkPolicy)(nil),
 		(*CreateSpecType_ActiveEnhancedFirewallPolicies)(nil),
 		(*CreateSpecType_NoForwardProxy)(nil),
@@ -2333,6 +3086,8 @@ func (*CreateSpecType) XXX_OneofWrappers() []interface{} {
 		(*CreateSpecType_DcClusterGroupSlo)(nil),
 		(*CreateSpecType_DisableHa)(nil),
 		(*CreateSpecType_EnableHa)(nil),
+		(*CreateSpecType_F5Proxy)(nil),
+		(*CreateSpecType_CustomProxy)(nil),
 	}
 }
 
@@ -2350,6 +3105,8 @@ type ReplaceSpecType struct {
 	//	*ReplaceSpecType_Rseries
 	//	*ReplaceSpecType_Baremetal
 	//	*ReplaceSpecType_Oci
+	//	*ReplaceSpecType_Openstack
+	//	*ReplaceSpecType_Nutanix
 	ProviderChoice isReplaceSpecType_ProviderChoice `protobuf_oneof:"provider_choice"`
 	// Types that are valid to be assigned to NetworkPolicyChoice:
 	//	*ReplaceSpecType_NoNetworkPolicy
@@ -2388,13 +3145,20 @@ type ReplaceSpecType struct {
 	// Types that are valid to be assigned to NodeHaChoice:
 	//	*ReplaceSpecType_DisableHa
 	//	*ReplaceSpecType_EnableHa
-	NodeHaChoice isReplaceSpecType_NodeHaChoice `protobuf_oneof:"node_ha_choice"`
+	NodeHaChoice         isReplaceSpecType_NodeHaChoice   `protobuf_oneof:"node_ha_choice"`
+	AdminUserCredentials *views.AdminUserCredentialsType  `protobuf:"bytes,53,opt,name=admin_user_credentials,json=adminUserCredentials,proto3" json:"admin_user_credentials,omitempty"`
+	ProactiveMonitoring  *views.ProactiveMonitoringChoice `protobuf:"bytes,56,opt,name=proactive_monitoring,json=proactiveMonitoring,proto3" json:"proactive_monitoring,omitempty"`
+	// Types that are valid to be assigned to EnterpriseProxyChoice:
+	//	*ReplaceSpecType_F5Proxy
+	//	*ReplaceSpecType_CustomProxy
+	EnterpriseProxyChoice isReplaceSpecType_EnterpriseProxyChoice `protobuf_oneof:"enterprise_proxy_choice"`
+	DnsNtpConfig          *DNSNTPServerConfig                     `protobuf:"bytes,62,opt,name=dns_ntp_config,json=dnsNtpConfig,proto3" json:"dns_ntp_config,omitempty"`
 }
 
 func (m *ReplaceSpecType) Reset()      { *m = ReplaceSpecType{} }
 func (*ReplaceSpecType) ProtoMessage() {}
 func (*ReplaceSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_6acf9f1f49f4d0ae, []int{16}
+	return fileDescriptor_6acf9f1f49f4d0ae, []int{22}
 }
 func (m *ReplaceSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -2467,6 +3231,12 @@ type isReplaceSpecType_NodeHaChoice interface {
 	MarshalTo([]byte) (int, error)
 	Size() int
 }
+type isReplaceSpecType_EnterpriseProxyChoice interface {
+	isReplaceSpecType_EnterpriseProxyChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
 
 type ReplaceSpecType_Vmware struct {
 	Vmware *VMwareProviderType `protobuf:"bytes,2,opt,name=vmware,proto3,oneof" json:"vmware,omitempty"`
@@ -2491,6 +3261,12 @@ type ReplaceSpecType_Baremetal struct {
 }
 type ReplaceSpecType_Oci struct {
 	Oci *OCIProviderType `protobuf:"bytes,9,opt,name=oci,proto3,oneof" json:"oci,omitempty"`
+}
+type ReplaceSpecType_Openstack struct {
+	Openstack *OpenstackProviderType `protobuf:"bytes,54,opt,name=openstack,proto3,oneof" json:"openstack,omitempty"`
+}
+type ReplaceSpecType_Nutanix struct {
+	Nutanix *NutanixProviderType `protobuf:"bytes,55,opt,name=nutanix,proto3,oneof" json:"nutanix,omitempty"`
 }
 type ReplaceSpecType_NoNetworkPolicy struct {
 	NoNetworkPolicy *schema.Empty `protobuf:"bytes,12,opt,name=no_network_policy,json=noNetworkPolicy,proto3,oneof" json:"no_network_policy,omitempty"`
@@ -2537,6 +3313,12 @@ type ReplaceSpecType_DisableHa struct {
 type ReplaceSpecType_EnableHa struct {
 	EnableHa *schema.Empty `protobuf:"bytes,51,opt,name=enable_ha,json=enableHa,proto3,oneof" json:"enable_ha,omitempty"`
 }
+type ReplaceSpecType_F5Proxy struct {
+	F5Proxy *schema.Empty `protobuf:"bytes,60,opt,name=f5_proxy,json=f5Proxy,proto3,oneof" json:"f5_proxy,omitempty"`
+}
+type ReplaceSpecType_CustomProxy struct {
+	CustomProxy *CustomProxy `protobuf:"bytes,61,opt,name=custom_proxy,json=customProxy,proto3,oneof" json:"custom_proxy,omitempty"`
+}
 
 func (*ReplaceSpecType_Vmware) isReplaceSpecType_ProviderChoice()                              {}
 func (*ReplaceSpecType_Kvm) isReplaceSpecType_ProviderChoice()                                 {}
@@ -2546,6 +3328,8 @@ func (*ReplaceSpecType_Gcp) isReplaceSpecType_ProviderChoice()                  
 func (*ReplaceSpecType_Rseries) isReplaceSpecType_ProviderChoice()                             {}
 func (*ReplaceSpecType_Baremetal) isReplaceSpecType_ProviderChoice()                           {}
 func (*ReplaceSpecType_Oci) isReplaceSpecType_ProviderChoice()                                 {}
+func (*ReplaceSpecType_Openstack) isReplaceSpecType_ProviderChoice()                           {}
+func (*ReplaceSpecType_Nutanix) isReplaceSpecType_ProviderChoice()                             {}
 func (*ReplaceSpecType_NoNetworkPolicy) isReplaceSpecType_NetworkPolicyChoice()                {}
 func (*ReplaceSpecType_ActiveEnhancedFirewallPolicies) isReplaceSpecType_NetworkPolicyChoice() {}
 func (*ReplaceSpecType_NoForwardProxy) isReplaceSpecType_ForwardProxyChoice()                  {}
@@ -2561,6 +3345,8 @@ func (*ReplaceSpecType_SiteMeshGroupOnSlo) isReplaceSpecType_S2SConnectivitySloC
 func (*ReplaceSpecType_DcClusterGroupSlo) isReplaceSpecType_S2SConnectivitySloChoice()         {}
 func (*ReplaceSpecType_DisableHa) isReplaceSpecType_NodeHaChoice()                             {}
 func (*ReplaceSpecType_EnableHa) isReplaceSpecType_NodeHaChoice()                              {}
+func (*ReplaceSpecType_F5Proxy) isReplaceSpecType_EnterpriseProxyChoice()                      {}
+func (*ReplaceSpecType_CustomProxy) isReplaceSpecType_EnterpriseProxyChoice()                  {}
 
 func (m *ReplaceSpecType) GetProviderChoice() isReplaceSpecType_ProviderChoice {
 	if m != nil {
@@ -2607,6 +3393,12 @@ func (m *ReplaceSpecType) GetS2SConnectivitySloChoice() isReplaceSpecType_S2SCon
 func (m *ReplaceSpecType) GetNodeHaChoice() isReplaceSpecType_NodeHaChoice {
 	if m != nil {
 		return m.NodeHaChoice
+	}
+	return nil
+}
+func (m *ReplaceSpecType) GetEnterpriseProxyChoice() isReplaceSpecType_EnterpriseProxyChoice {
+	if m != nil {
+		return m.EnterpriseProxyChoice
 	}
 	return nil
 }
@@ -2663,6 +3455,20 @@ func (m *ReplaceSpecType) GetBaremetal() *BaremetalProviderType {
 func (m *ReplaceSpecType) GetOci() *OCIProviderType {
 	if x, ok := m.GetProviderChoice().(*ReplaceSpecType_Oci); ok {
 		return x.Oci
+	}
+	return nil
+}
+
+func (m *ReplaceSpecType) GetOpenstack() *OpenstackProviderType {
+	if x, ok := m.GetProviderChoice().(*ReplaceSpecType_Openstack); ok {
+		return x.Openstack
+	}
+	return nil
+}
+
+func (m *ReplaceSpecType) GetNutanix() *NutanixProviderType {
+	if x, ok := m.GetProviderChoice().(*ReplaceSpecType_Nutanix); ok {
+		return x.Nutanix
 	}
 	return nil
 }
@@ -2835,6 +3641,41 @@ func (m *ReplaceSpecType) GetEnableHa() *schema.Empty {
 	return nil
 }
 
+func (m *ReplaceSpecType) GetAdminUserCredentials() *views.AdminUserCredentialsType {
+	if m != nil {
+		return m.AdminUserCredentials
+	}
+	return nil
+}
+
+func (m *ReplaceSpecType) GetProactiveMonitoring() *views.ProactiveMonitoringChoice {
+	if m != nil {
+		return m.ProactiveMonitoring
+	}
+	return nil
+}
+
+func (m *ReplaceSpecType) GetF5Proxy() *schema.Empty {
+	if x, ok := m.GetEnterpriseProxyChoice().(*ReplaceSpecType_F5Proxy); ok {
+		return x.F5Proxy
+	}
+	return nil
+}
+
+func (m *ReplaceSpecType) GetCustomProxy() *CustomProxy {
+	if x, ok := m.GetEnterpriseProxyChoice().(*ReplaceSpecType_CustomProxy); ok {
+		return x.CustomProxy
+	}
+	return nil
+}
+
+func (m *ReplaceSpecType) GetDnsNtpConfig() *DNSNTPServerConfig {
+	if m != nil {
+		return m.DnsNtpConfig
+	}
+	return nil
+}
+
 // XXX_OneofWrappers is for the internal use of the proto package.
 func (*ReplaceSpecType) XXX_OneofWrappers() []interface{} {
 	return []interface{}{
@@ -2846,6 +3687,8 @@ func (*ReplaceSpecType) XXX_OneofWrappers() []interface{} {
 		(*ReplaceSpecType_Rseries)(nil),
 		(*ReplaceSpecType_Baremetal)(nil),
 		(*ReplaceSpecType_Oci)(nil),
+		(*ReplaceSpecType_Openstack)(nil),
+		(*ReplaceSpecType_Nutanix)(nil),
 		(*ReplaceSpecType_NoNetworkPolicy)(nil),
 		(*ReplaceSpecType_ActiveEnhancedFirewallPolicies)(nil),
 		(*ReplaceSpecType_NoForwardProxy)(nil),
@@ -2861,6 +3704,8 @@ func (*ReplaceSpecType) XXX_OneofWrappers() []interface{} {
 		(*ReplaceSpecType_DcClusterGroupSlo)(nil),
 		(*ReplaceSpecType_DisableHa)(nil),
 		(*ReplaceSpecType_EnableHa)(nil),
+		(*ReplaceSpecType_F5Proxy)(nil),
+		(*ReplaceSpecType_CustomProxy)(nil),
 	}
 }
 
@@ -2878,6 +3723,8 @@ type GetSpecType struct {
 	//	*GetSpecType_Rseries
 	//	*GetSpecType_Baremetal
 	//	*GetSpecType_Oci
+	//	*GetSpecType_Openstack
+	//	*GetSpecType_Nutanix
 	ProviderChoice isGetSpecType_ProviderChoice `protobuf_oneof:"provider_choice"`
 	// Types that are valid to be assigned to NetworkPolicyChoice:
 	//	*GetSpecType_NoNetworkPolicy
@@ -2918,14 +3765,21 @@ type GetSpecType struct {
 	// Types that are valid to be assigned to NodeHaChoice:
 	//	*GetSpecType_DisableHa
 	//	*GetSpecType_EnableHa
-	NodeHaChoice isGetSpecType_NodeHaChoice `protobuf_oneof:"node_ha_choice"`
-	SiteState    site.SiteState             `protobuf:"varint,52,opt,name=site_state,json=siteState,proto3,enum=ves.io.schema.site.SiteState" json:"site_state,omitempty"`
+	NodeHaChoice         isGetSpecType_NodeHaChoice       `protobuf_oneof:"node_ha_choice"`
+	SiteState            site.SiteState                   `protobuf:"varint,52,opt,name=site_state,json=siteState,proto3,enum=ves.io.schema.site.SiteState" json:"site_state,omitempty"`
+	AdminUserCredentials *views.AdminUserCredentialsType  `protobuf:"bytes,53,opt,name=admin_user_credentials,json=adminUserCredentials,proto3" json:"admin_user_credentials,omitempty"`
+	ProactiveMonitoring  *views.ProactiveMonitoringChoice `protobuf:"bytes,56,opt,name=proactive_monitoring,json=proactiveMonitoring,proto3" json:"proactive_monitoring,omitempty"`
+	// Types that are valid to be assigned to EnterpriseProxyChoice:
+	//	*GetSpecType_F5Proxy
+	//	*GetSpecType_CustomProxy
+	EnterpriseProxyChoice isGetSpecType_EnterpriseProxyChoice `protobuf_oneof:"enterprise_proxy_choice"`
+	DnsNtpConfig          *DNSNTPServerConfig                 `protobuf:"bytes,62,opt,name=dns_ntp_config,json=dnsNtpConfig,proto3" json:"dns_ntp_config,omitempty"`
 }
 
 func (m *GetSpecType) Reset()      { *m = GetSpecType{} }
 func (*GetSpecType) ProtoMessage() {}
 func (*GetSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_6acf9f1f49f4d0ae, []int{17}
+	return fileDescriptor_6acf9f1f49f4d0ae, []int{23}
 }
 func (m *GetSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -2998,6 +3852,12 @@ type isGetSpecType_NodeHaChoice interface {
 	MarshalTo([]byte) (int, error)
 	Size() int
 }
+type isGetSpecType_EnterpriseProxyChoice interface {
+	isGetSpecType_EnterpriseProxyChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
 
 type GetSpecType_Vmware struct {
 	Vmware *VMwareProviderType `protobuf:"bytes,2,opt,name=vmware,proto3,oneof" json:"vmware,omitempty"`
@@ -3022,6 +3882,12 @@ type GetSpecType_Baremetal struct {
 }
 type GetSpecType_Oci struct {
 	Oci *OCIProviderType `protobuf:"bytes,9,opt,name=oci,proto3,oneof" json:"oci,omitempty"`
+}
+type GetSpecType_Openstack struct {
+	Openstack *OpenstackProviderType `protobuf:"bytes,54,opt,name=openstack,proto3,oneof" json:"openstack,omitempty"`
+}
+type GetSpecType_Nutanix struct {
+	Nutanix *NutanixProviderType `protobuf:"bytes,55,opt,name=nutanix,proto3,oneof" json:"nutanix,omitempty"`
 }
 type GetSpecType_NoNetworkPolicy struct {
 	NoNetworkPolicy *schema.Empty `protobuf:"bytes,12,opt,name=no_network_policy,json=noNetworkPolicy,proto3,oneof" json:"no_network_policy,omitempty"`
@@ -3068,6 +3934,12 @@ type GetSpecType_DisableHa struct {
 type GetSpecType_EnableHa struct {
 	EnableHa *schema.Empty `protobuf:"bytes,51,opt,name=enable_ha,json=enableHa,proto3,oneof" json:"enable_ha,omitempty"`
 }
+type GetSpecType_F5Proxy struct {
+	F5Proxy *schema.Empty `protobuf:"bytes,60,opt,name=f5_proxy,json=f5Proxy,proto3,oneof" json:"f5_proxy,omitempty"`
+}
+type GetSpecType_CustomProxy struct {
+	CustomProxy *CustomProxy `protobuf:"bytes,61,opt,name=custom_proxy,json=customProxy,proto3,oneof" json:"custom_proxy,omitempty"`
+}
 
 func (*GetSpecType_Vmware) isGetSpecType_ProviderChoice()                              {}
 func (*GetSpecType_Kvm) isGetSpecType_ProviderChoice()                                 {}
@@ -3077,6 +3949,8 @@ func (*GetSpecType_Gcp) isGetSpecType_ProviderChoice()                          
 func (*GetSpecType_Rseries) isGetSpecType_ProviderChoice()                             {}
 func (*GetSpecType_Baremetal) isGetSpecType_ProviderChoice()                           {}
 func (*GetSpecType_Oci) isGetSpecType_ProviderChoice()                                 {}
+func (*GetSpecType_Openstack) isGetSpecType_ProviderChoice()                           {}
+func (*GetSpecType_Nutanix) isGetSpecType_ProviderChoice()                             {}
 func (*GetSpecType_NoNetworkPolicy) isGetSpecType_NetworkPolicyChoice()                {}
 func (*GetSpecType_ActiveEnhancedFirewallPolicies) isGetSpecType_NetworkPolicyChoice() {}
 func (*GetSpecType_NoForwardProxy) isGetSpecType_ForwardProxyChoice()                  {}
@@ -3092,6 +3966,8 @@ func (*GetSpecType_SiteMeshGroupOnSlo) isGetSpecType_S2SConnectivitySloChoice() 
 func (*GetSpecType_DcClusterGroupSlo) isGetSpecType_S2SConnectivitySloChoice()         {}
 func (*GetSpecType_DisableHa) isGetSpecType_NodeHaChoice()                             {}
 func (*GetSpecType_EnableHa) isGetSpecType_NodeHaChoice()                              {}
+func (*GetSpecType_F5Proxy) isGetSpecType_EnterpriseProxyChoice()                      {}
+func (*GetSpecType_CustomProxy) isGetSpecType_EnterpriseProxyChoice()                  {}
 
 func (m *GetSpecType) GetProviderChoice() isGetSpecType_ProviderChoice {
 	if m != nil {
@@ -3138,6 +4014,12 @@ func (m *GetSpecType) GetS2SConnectivitySloChoice() isGetSpecType_S2SConnectivit
 func (m *GetSpecType) GetNodeHaChoice() isGetSpecType_NodeHaChoice {
 	if m != nil {
 		return m.NodeHaChoice
+	}
+	return nil
+}
+func (m *GetSpecType) GetEnterpriseProxyChoice() isGetSpecType_EnterpriseProxyChoice {
+	if m != nil {
+		return m.EnterpriseProxyChoice
 	}
 	return nil
 }
@@ -3194,6 +4076,20 @@ func (m *GetSpecType) GetBaremetal() *BaremetalProviderType {
 func (m *GetSpecType) GetOci() *OCIProviderType {
 	if x, ok := m.GetProviderChoice().(*GetSpecType_Oci); ok {
 		return x.Oci
+	}
+	return nil
+}
+
+func (m *GetSpecType) GetOpenstack() *OpenstackProviderType {
+	if x, ok := m.GetProviderChoice().(*GetSpecType_Openstack); ok {
+		return x.Openstack
+	}
+	return nil
+}
+
+func (m *GetSpecType) GetNutanix() *NutanixProviderType {
+	if x, ok := m.GetProviderChoice().(*GetSpecType_Nutanix); ok {
+		return x.Nutanix
 	}
 	return nil
 }
@@ -3387,6 +4283,41 @@ func (m *GetSpecType) GetSiteState() site.SiteState {
 	return site.ONLINE
 }
 
+func (m *GetSpecType) GetAdminUserCredentials() *views.AdminUserCredentialsType {
+	if m != nil {
+		return m.AdminUserCredentials
+	}
+	return nil
+}
+
+func (m *GetSpecType) GetProactiveMonitoring() *views.ProactiveMonitoringChoice {
+	if m != nil {
+		return m.ProactiveMonitoring
+	}
+	return nil
+}
+
+func (m *GetSpecType) GetF5Proxy() *schema.Empty {
+	if x, ok := m.GetEnterpriseProxyChoice().(*GetSpecType_F5Proxy); ok {
+		return x.F5Proxy
+	}
+	return nil
+}
+
+func (m *GetSpecType) GetCustomProxy() *CustomProxy {
+	if x, ok := m.GetEnterpriseProxyChoice().(*GetSpecType_CustomProxy); ok {
+		return x.CustomProxy
+	}
+	return nil
+}
+
+func (m *GetSpecType) GetDnsNtpConfig() *DNSNTPServerConfig {
+	if m != nil {
+		return m.DnsNtpConfig
+	}
+	return nil
+}
+
 // XXX_OneofWrappers is for the internal use of the proto package.
 func (*GetSpecType) XXX_OneofWrappers() []interface{} {
 	return []interface{}{
@@ -3398,6 +4329,8 @@ func (*GetSpecType) XXX_OneofWrappers() []interface{} {
 		(*GetSpecType_Rseries)(nil),
 		(*GetSpecType_Baremetal)(nil),
 		(*GetSpecType_Oci)(nil),
+		(*GetSpecType_Openstack)(nil),
+		(*GetSpecType_Nutanix)(nil),
 		(*GetSpecType_NoNetworkPolicy)(nil),
 		(*GetSpecType_ActiveEnhancedFirewallPolicies)(nil),
 		(*GetSpecType_NoForwardProxy)(nil),
@@ -3413,6 +4346,8 @@ func (*GetSpecType) XXX_OneofWrappers() []interface{} {
 		(*GetSpecType_DcClusterGroupSlo)(nil),
 		(*GetSpecType_DisableHa)(nil),
 		(*GetSpecType_EnableHa)(nil),
+		(*GetSpecType_F5Proxy)(nil),
+		(*GetSpecType_CustomProxy)(nil),
 	}
 }
 
@@ -3480,7 +4415,7 @@ type Interface struct {
 	// There are 2 kinds of VRFs, local VRFs which are local to the site and global VRFs which extend into multiple sites.
 	// A site can have 2 Local VRFs, Site Local Outside (SLO), which is required for every site and Site Local Inside (SLI) which is optional.
 	// Global VRFs are configured via Networking > Segments. A site can have multple Network Segments (global VRFs).
-	NetworkOption *NetworkSelectType `protobuf:"bytes,12,opt,name=network_option,json=networkOption,proto3" json:"network_option,omitempty"`
+	NetworkOption *views.NetworkSelectType `protobuf:"bytes,12,opt,name=network_option,json=networkOption,proto3" json:"network_option,omitempty"`
 	// Select Link Quality Monitoring configuration
 	//
 	// x-displayName: "Link Quality Monitoring"
@@ -3536,7 +4471,7 @@ type Interface struct {
 func (m *Interface) Reset()      { *m = Interface{} }
 func (*Interface) ProtoMessage() {}
 func (*Interface) Descriptor() ([]byte, []int) {
-	return fileDescriptor_6acf9f1f49f4d0ae, []int{18}
+	return fileDescriptor_6acf9f1f49f4d0ae, []int{24}
 }
 func (m *Interface) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -3760,7 +4695,7 @@ func (m *Interface) GetMtu() uint32 {
 	return 0
 }
 
-func (m *Interface) GetNetworkOption() *NetworkSelectType {
+func (m *Interface) GetNetworkOption() *views.NetworkSelectType {
 	if m != nil {
 		return m.NetworkOption
 	}
@@ -3857,116 +4792,6 @@ func (*Interface) XXX_OneofWrappers() []interface{} {
 	}
 }
 
-// NetworkSelectType
-//
-// x-displayName: "Network Select"
-// x-required
-// Select virtual network (VRF) for this interface.
-// There are 2 kinds of VRFs, local VRFs which are local to the site and global VRFs which extend into multiple sites.
-// A site can have 2 Local VRFs, Site Local Outside (SLO), which is required for every site and Site Local Inside (SLI) which is optional.
-// Global VRFs are configured via Networking > Segments. A site can have multple Network Segments (global VRFs).
-type NetworkSelectType struct {
-	// Select VRF
-	//
-	// x-displayName: "Select VRF"
-	// Select virtual network (VRF) for this interface.
-	// There are 2 kinds of VRFs, local VRFs which are local to the site and global VRFs which extend into multiple sites.
-	// A site can have 2 Local VRFs, Site Local Outside (SLO), which is required for every site and Site Local Inside (SLI) which is optional.
-	// Global VRFs are configured via Networking > Segments. A site can have multple Network Segments (global VRFs).
-	//
-	// Types that are valid to be assigned to NetworkChoice:
-	//	*NetworkSelectType_SiteLocalNetwork
-	//	*NetworkSelectType_SiteLocalInsideNetwork
-	//	*NetworkSelectType_SegmentNetwork
-	NetworkChoice isNetworkSelectType_NetworkChoice `protobuf_oneof:"network_choice"`
-}
-
-func (m *NetworkSelectType) Reset()      { *m = NetworkSelectType{} }
-func (*NetworkSelectType) ProtoMessage() {}
-func (*NetworkSelectType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_6acf9f1f49f4d0ae, []int{19}
-}
-func (m *NetworkSelectType) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *NetworkSelectType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	b = b[:cap(b)]
-	n, err := m.MarshalToSizedBuffer(b)
-	if err != nil {
-		return nil, err
-	}
-	return b[:n], nil
-}
-func (m *NetworkSelectType) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_NetworkSelectType.Merge(m, src)
-}
-func (m *NetworkSelectType) XXX_Size() int {
-	return m.Size()
-}
-func (m *NetworkSelectType) XXX_DiscardUnknown() {
-	xxx_messageInfo_NetworkSelectType.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_NetworkSelectType proto.InternalMessageInfo
-
-type isNetworkSelectType_NetworkChoice interface {
-	isNetworkSelectType_NetworkChoice()
-	Equal(interface{}) bool
-	MarshalTo([]byte) (int, error)
-	Size() int
-}
-
-type NetworkSelectType_SiteLocalNetwork struct {
-	SiteLocalNetwork *schema.Empty `protobuf:"bytes,2,opt,name=site_local_network,json=siteLocalNetwork,proto3,oneof" json:"site_local_network,omitempty"`
-}
-type NetworkSelectType_SiteLocalInsideNetwork struct {
-	SiteLocalInsideNetwork *schema.Empty `protobuf:"bytes,3,opt,name=site_local_inside_network,json=siteLocalInsideNetwork,proto3,oneof" json:"site_local_inside_network,omitempty"`
-}
-type NetworkSelectType_SegmentNetwork struct {
-	SegmentNetwork *views.ObjectRefType `protobuf:"bytes,4,opt,name=segment_network,json=segmentNetwork,proto3,oneof" json:"segment_network,omitempty"`
-}
-
-func (*NetworkSelectType_SiteLocalNetwork) isNetworkSelectType_NetworkChoice()       {}
-func (*NetworkSelectType_SiteLocalInsideNetwork) isNetworkSelectType_NetworkChoice() {}
-func (*NetworkSelectType_SegmentNetwork) isNetworkSelectType_NetworkChoice()         {}
-
-func (m *NetworkSelectType) GetNetworkChoice() isNetworkSelectType_NetworkChoice {
-	if m != nil {
-		return m.NetworkChoice
-	}
-	return nil
-}
-
-func (m *NetworkSelectType) GetSiteLocalNetwork() *schema.Empty {
-	if x, ok := m.GetNetworkChoice().(*NetworkSelectType_SiteLocalNetwork); ok {
-		return x.SiteLocalNetwork
-	}
-	return nil
-}
-
-func (m *NetworkSelectType) GetSiteLocalInsideNetwork() *schema.Empty {
-	if x, ok := m.GetNetworkChoice().(*NetworkSelectType_SiteLocalInsideNetwork); ok {
-		return x.SiteLocalInsideNetwork
-	}
-	return nil
-}
-
-func (m *NetworkSelectType) GetSegmentNetwork() *views.ObjectRefType {
-	if x, ok := m.GetNetworkChoice().(*NetworkSelectType_SegmentNetwork); ok {
-		return x.SegmentNetwork
-	}
-	return nil
-}
-
-// XXX_OneofWrappers is for the internal use of the proto package.
-func (*NetworkSelectType) XXX_OneofWrappers() []interface{} {
-	return []interface{}{
-		(*NetworkSelectType_SiteLocalNetwork)(nil),
-		(*NetworkSelectType_SiteLocalInsideNetwork)(nil),
-		(*NetworkSelectType_SegmentNetwork)(nil),
-	}
-}
-
 // Ethernet Interface
 //
 // x-displayName: "Ethernet Interface"
@@ -3989,7 +4814,7 @@ type EthernetInterfaceType struct {
 func (m *EthernetInterfaceType) Reset()      { *m = EthernetInterfaceType{} }
 func (*EthernetInterfaceType) ProtoMessage() {}
 func (*EthernetInterfaceType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_6acf9f1f49f4d0ae, []int{20}
+	return fileDescriptor_6acf9f1f49f4d0ae, []int{25}
 }
 func (m *EthernetInterfaceType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -4049,7 +4874,7 @@ type VlanInterfaceType struct {
 func (m *VlanInterfaceType) Reset()      { *m = VlanInterfaceType{} }
 func (*VlanInterfaceType) ProtoMessage() {}
 func (*VlanInterfaceType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_6acf9f1f49f4d0ae, []int{21}
+	return fileDescriptor_6acf9f1f49f4d0ae, []int{26}
 }
 func (m *VlanInterfaceType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -4148,7 +4973,7 @@ type VirtualNetworkConfiguration struct {
 func (m *VirtualNetworkConfiguration) Reset()      { *m = VirtualNetworkConfiguration{} }
 func (*VirtualNetworkConfiguration) ProtoMessage() {}
 func (*VirtualNetworkConfiguration) Descriptor() ([]byte, []int) {
-	return fileDescriptor_6acf9f1f49f4d0ae, []int{22}
+	return fileDescriptor_6acf9f1f49f4d0ae, []int{27}
 }
 func (m *VirtualNetworkConfiguration) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -4307,7 +5132,7 @@ type StaticRoutesListType struct {
 func (m *StaticRoutesListType) Reset()      { *m = StaticRoutesListType{} }
 func (*StaticRoutesListType) ProtoMessage() {}
 func (*StaticRoutesListType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_6acf9f1f49f4d0ae, []int{23}
+	return fileDescriptor_6acf9f1f49f4d0ae, []int{28}
 }
 func (m *StaticRoutesListType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -4368,7 +5193,7 @@ type LocalVRFSettingType struct {
 func (m *LocalVRFSettingType) Reset()      { *m = LocalVRFSettingType{} }
 func (*LocalVRFSettingType) ProtoMessage() {}
 func (*LocalVRFSettingType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_6acf9f1f49f4d0ae, []int{24}
+	return fileDescriptor_6acf9f1f49f4d0ae, []int{29}
 }
 func (m *LocalVRFSettingType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -4478,6 +5303,14 @@ func (*LocalVRFSettingType) XXX_OneofWrappers() []interface{} {
 func init() {
 	proto.RegisterType((*GlobalSpecType)(nil), "ves.io.schema.views.securemesh_site_v2.GlobalSpecType")
 	golang_proto.RegisterType((*GlobalSpecType)(nil), "ves.io.schema.views.securemesh_site_v2.GlobalSpecType")
+	proto.RegisterType((*DNSNTPServerConfig)(nil), "ves.io.schema.views.securemesh_site_v2.DNSNTPServerConfig")
+	golang_proto.RegisterType((*DNSNTPServerConfig)(nil), "ves.io.schema.views.securemesh_site_v2.DNSNTPServerConfig")
+	proto.RegisterType((*CustomDNSSettings)(nil), "ves.io.schema.views.securemesh_site_v2.CustomDNSSettings")
+	golang_proto.RegisterType((*CustomDNSSettings)(nil), "ves.io.schema.views.securemesh_site_v2.CustomDNSSettings")
+	proto.RegisterType((*CustomNTPSettings)(nil), "ves.io.schema.views.securemesh_site_v2.CustomNTPSettings")
+	golang_proto.RegisterType((*CustomNTPSettings)(nil), "ves.io.schema.views.securemesh_site_v2.CustomNTPSettings")
+	proto.RegisterType((*CustomProxy)(nil), "ves.io.schema.views.securemesh_site_v2.CustomProxy")
+	golang_proto.RegisterType((*CustomProxy)(nil), "ves.io.schema.views.securemesh_site_v2.CustomProxy")
 	proto.RegisterType((*LoadBalancingSettingsType)(nil), "ves.io.schema.views.securemesh_site_v2.LoadBalancingSettingsType")
 	golang_proto.RegisterType((*LoadBalancingSettingsType)(nil), "ves.io.schema.views.securemesh_site_v2.LoadBalancingSettingsType")
 	proto.RegisterType((*SoftwareSettingsType)(nil), "ves.io.schema.views.securemesh_site_v2.SoftwareSettingsType")
@@ -4504,6 +5337,10 @@ func init() {
 	golang_proto.RegisterType((*OCIProviderType)(nil), "ves.io.schema.views.securemesh_site_v2.OCIProviderType")
 	proto.RegisterType((*RSeriesProviderType)(nil), "ves.io.schema.views.securemesh_site_v2.RSeriesProviderType")
 	golang_proto.RegisterType((*RSeriesProviderType)(nil), "ves.io.schema.views.securemesh_site_v2.RSeriesProviderType")
+	proto.RegisterType((*OpenstackProviderType)(nil), "ves.io.schema.views.securemesh_site_v2.OpenstackProviderType")
+	golang_proto.RegisterType((*OpenstackProviderType)(nil), "ves.io.schema.views.securemesh_site_v2.OpenstackProviderType")
+	proto.RegisterType((*NutanixProviderType)(nil), "ves.io.schema.views.securemesh_site_v2.NutanixProviderType")
+	golang_proto.RegisterType((*NutanixProviderType)(nil), "ves.io.schema.views.securemesh_site_v2.NutanixProviderType")
 	proto.RegisterType((*NodeList)(nil), "ves.io.schema.views.securemesh_site_v2.NodeList")
 	golang_proto.RegisterType((*NodeList)(nil), "ves.io.schema.views.securemesh_site_v2.NodeList")
 	proto.RegisterType((*CreateSpecType)(nil), "ves.io.schema.views.securemesh_site_v2.CreateSpecType")
@@ -4516,8 +5353,6 @@ func init() {
 	golang_proto.RegisterType((*Interface)(nil), "ves.io.schema.views.securemesh_site_v2.Interface")
 	proto.RegisterMapType((map[string]string)(nil), "ves.io.schema.views.securemesh_site_v2.Interface.LabelsEntry")
 	golang_proto.RegisterMapType((map[string]string)(nil), "ves.io.schema.views.securemesh_site_v2.Interface.LabelsEntry")
-	proto.RegisterType((*NetworkSelectType)(nil), "ves.io.schema.views.securemesh_site_v2.NetworkSelectType")
-	golang_proto.RegisterType((*NetworkSelectType)(nil), "ves.io.schema.views.securemesh_site_v2.NetworkSelectType")
 	proto.RegisterType((*EthernetInterfaceType)(nil), "ves.io.schema.views.securemesh_site_v2.EthernetInterfaceType")
 	golang_proto.RegisterType((*EthernetInterfaceType)(nil), "ves.io.schema.views.securemesh_site_v2.EthernetInterfaceType")
 	proto.RegisterType((*VlanInterfaceType)(nil), "ves.io.schema.views.securemesh_site_v2.VlanInterfaceType")
@@ -4540,302 +5375,337 @@ func init() {
 }
 
 var fileDescriptor_6acf9f1f49f4d0ae = []byte{
-	// 4707 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x7c, 0x5d, 0x6c, 0x1c, 0xd7,
-	0x75, 0x3f, 0xef, 0xee, 0x92, 0xdc, 0x3d, 0x14, 0x97, 0xcb, 0xcb, 0x0f, 0x0d, 0x29, 0x69, 0xb5,
-	0xa6, 0x15, 0x59, 0xa2, 0x46, 0x14, 0x77, 0x97, 0x1f, 0x92, 0x12, 0x3b, 0xd1, 0x50, 0xb4, 0x49,
-	0x5a, 0x1f, 0xf4, 0xac, 0x42, 0x27, 0x46, 0xfe, 0x99, 0xff, 0x70, 0xe7, 0x72, 0x39, 0xd6, 0xec,
-	0xdc, 0xed, 0xcc, 0xec, 0xd2, 0x6c, 0x2b, 0xc0, 0x10, 0xd0, 0x00, 0x31, 0x0a, 0x24, 0x35, 0x5a,
-	0x14, 0x30, 0x10, 0x34, 0x45, 0x81, 0xa0, 0x10, 0x0a, 0x34, 0x45, 0xfb, 0x50, 0x64, 0x15, 0x40,
-	0x30, 0x50, 0xa0, 0xc8, 0x13, 0xfb, 0x52, 0x04, 0xee, 0x4b, 0x4c, 0x03, 0xad, 0xdb, 0x27, 0x03,
-	0x7d, 0x29, 0xf4, 0xd0, 0x14, 0xf7, 0xce, 0xcc, 0xee, 0xec, 0x70, 0xb9, 0x22, 0x63, 0xa7, 0x90,
-	0xd1, 0x7d, 0x91, 0xc8, 0x7b, 0xcf, 0xf9, 0x9d, 0x73, 0xcf, 0xdc, 0x7b, 0xcf, 0x39, 0xf7, 0xf2,
-	0x5c, 0xc8, 0xd5, 0x88, 0x3d, 0xa3, 0xd3, 0x2b, 0x76, 0x71, 0x9b, 0x94, 0xd5, 0x2b, 0x35, 0x9d,
-	0xec, 0xd8, 0x57, 0x6c, 0x52, 0xac, 0x5a, 0xa4, 0x4c, 0xec, 0x6d, 0xc5, 0xd6, 0x1d, 0xa2, 0xd4,
-	0x72, 0x57, 0x9c, 0xdd, 0x0a, 0xb1, 0x67, 0x2a, 0x16, 0x75, 0x28, 0x3e, 0xef, 0xf2, 0xcc, 0xb8,
-	0x3c, 0x33, 0x9c, 0x67, 0xe6, 0x20, 0xcf, 0xe4, 0xe5, 0x92, 0xee, 0x6c, 0x57, 0x37, 0x67, 0x8a,
-	0xb4, 0x7c, 0xa5, 0x44, 0x4b, 0xf4, 0x0a, 0x67, 0xdf, 0xac, 0x6e, 0xf1, 0xdf, 0xf8, 0x2f, 0xfc,
-	0x27, 0x17, 0x76, 0xf2, 0x6c, 0xab, 0x2a, 0x5b, 0x06, 0x21, 0x4e, 0x50, 0xee, 0xe4, 0x74, 0x2b,
-	0x81, 0x49, 0x9c, 0x1d, 0x6a, 0xdd, 0x57, 0xb6, 0x74, 0x8b, 0xec, 0xa8, 0x86, 0xd1, 0x42, 0x7b,
-	0xa9, 0x3d, 0xad, 0x6e, 0x3a, 0xc4, 0xda, 0x52, 0x8b, 0xa4, 0x85, 0xf8, 0x54, 0x2b, 0x31, 0xad,
-	0x38, 0x3a, 0x35, 0xfd, 0xce, 0x74, 0x6b, 0x27, 0x1b, 0x5c, 0x0b, 0xf3, 0x44, 0x6b, 0x7f, 0xb0,
-	0xeb, 0x74, 0xc8, 0xb8, 0xaa, 0xa1, 0x6b, 0xaa, 0x43, 0xbc, 0xde, 0xcc, 0x41, 0xd3, 0x2b, 0xad,
-	0xa2, 0xcf, 0xb5, 0xfd, 0x38, 0xcc, 0xba, 0x41, 0x29, 0x67, 0xdb, 0x51, 0x05, 0x09, 0x2e, 0x86,
-	0x09, 0x2c, 0xa7, 0xaa, 0x1a, 0x8a, 0x67, 0x93, 0x20, 0xe9, 0xd4, 0x0f, 0xce, 0x42, 0xf2, 0x35,
-	0x83, 0x6e, 0xaa, 0x46, 0xa1, 0x42, 0x8a, 0xf7, 0x76, 0x2b, 0x04, 0xdf, 0x83, 0xbe, 0x5a, 0x79,
-	0x47, 0xb5, 0x88, 0x10, 0xc9, 0xa0, 0x0b, 0x03, 0xb9, 0xeb, 0x33, 0x47, 0xfb, 0xfc, 0x33, 0x1b,
-	0xb7, 0x19, 0xd7, 0xba, 0x45, 0x6b, 0xba, 0x46, 0x2c, 0x86, 0xb5, 0xd2, 0x23, 0x7b, 0x58, 0xf8,
-	0x75, 0x88, 0xde, 0xaf, 0x95, 0x85, 0x28, 0x87, 0x5c, 0x3c, 0x2a, 0xe4, 0xeb, 0x1b, 0xb7, 0x43,
-	0x78, 0x0c, 0x85, 0x81, 0xa9, 0x3b, 0xb6, 0x10, 0x3b, 0x1e, 0xd8, 0x8d, 0x37, 0x0b, 0x61, 0x30,
-	0x75, 0xc7, 0xc6, 0x6f, 0x40, 0xaf, 0xfa, 0xbb, 0x55, 0x8b, 0x08, 0xbd, 0x1c, 0xee, 0xda, 0x91,
-	0xe1, 0x18, 0x53, 0x08, 0xd0, 0x45, 0x62, 0xfa, 0x95, 0x8a, 0x15, 0xa1, 0xef, 0x78, 0xfa, 0xbd,
-	0xb6, 0xb4, 0x1e, 0xd6, 0xaf, 0x54, 0xac, 0xe0, 0x37, 0xa1, 0xdf, 0xb2, 0x89, 0xa5, 0x13, 0x5b,
-	0xe8, 0xe7, 0x80, 0x5f, 0x3d, 0x2a, 0xa0, 0x5c, 0xe0, 0x6c, 0x21, 0x50, 0x1f, 0x0d, 0xff, 0x3f,
-	0x48, 0x6c, 0xaa, 0x8c, 0xc5, 0x51, 0x0d, 0x21, 0xce, 0xa1, 0x5f, 0x3e, 0x2a, 0xb4, 0xe4, 0x33,
-	0x86, 0xc0, 0x9b, 0x88, 0xcc, 0x08, 0xb4, 0xa8, 0x0b, 0x89, 0xe3, 0x19, 0xe1, 0xee, 0xd2, 0x6a,
-	0xd8, 0x08, 0xb4, 0xa8, 0x63, 0x09, 0x86, 0x4d, 0xea, 0xcf, 0x60, 0xa5, 0x42, 0x0d, 0xbd, 0xb8,
-	0x2b, 0x9c, 0xe0, 0xd0, 0xa3, 0x21, 0xe8, 0xe5, 0x72, 0xc5, 0xd9, 0x5d, 0x41, 0xf2, 0x90, 0x49,
-	0xef, 0xb8, 0xf4, 0xeb, 0x9c, 0x1c, 0xff, 0x09, 0x82, 0x17, 0xd4, 0xa2, 0xa3, 0xd7, 0x88, 0x42,
-	0xcc, 0x6d, 0xd5, 0x2c, 0x12, 0xad, 0xb1, 0x97, 0xb8, 0x90, 0xcc, 0xc6, 0x83, 0x1c, 0x54, 0x0a,
-	0x81, 0x86, 0xf7, 0x9e, 0x99, 0x1b, 0x1c, 0x68, 0xd9, 0xc3, 0x79, 0xd5, 0x6b, 0x5e, 0xf7, 0x50,
-	0x98, 0xea, 0x52, 0xec, 0xa7, 0x8f, 0x11, 0x5a, 0x41, 0x72, 0x5a, 0xed, 0x48, 0x8b, 0xbf, 0x01,
-	0x29, 0x93, 0x2a, 0x5b, 0xd4, 0xda, 0x51, 0x2d, 0x4d, 0xa9, 0x58, 0xf4, 0x9d, 0x5d, 0x61, 0xa8,
-	0xc3, 0xd0, 0x22, 0x72, 0xd2, 0xa4, 0xaf, 0xba, 0xe4, 0xeb, 0x8c, 0x1a, 0x7f, 0x1f, 0xc1, 0x19,
-	0x6f, 0x64, 0x2d, 0x30, 0xcd, 0x51, 0xa5, 0x38, 0xde, 0x2b, 0x47, 0x1b, 0x55, 0x10, 0xbb, 0xcd,
-	0x88, 0x22, 0xf2, 0xa4, 0x7a, 0x28, 0x1d, 0xd6, 0x61, 0xd8, 0xa6, 0x5b, 0x0e, 0x5b, 0xf4, 0x8a,
-	0x4d, 0x1c, 0x47, 0x37, 0x4b, 0xb6, 0x30, 0xcc, 0xc5, 0x7f, 0xed, 0xa8, 0x93, 0xa0, 0xe0, 0x01,
-	0x14, 0x3c, 0x7e, 0x26, 0x5c, 0x4e, 0xd9, 0xa1, 0x56, 0xbc, 0x05, 0xa9, 0x6a, 0xa5, 0x64, 0xa9,
-	0x5a, 0x40, 0xd2, 0xe8, 0xf1, 0x96, 0xc8, 0x37, 0x5d, 0xfe, 0x16, 0x41, 0x43, 0xd5, 0xd6, 0x46,
-	0x7c, 0x07, 0x4e, 0x1a, 0xb4, 0x64, 0x2b, 0xb6, 0x63, 0x11, 0xb5, 0xac, 0x9b, 0x25, 0x45, 0xd3,
-	0x6d, 0x75, 0xd3, 0x20, 0x9a, 0x30, 0xde, 0xe1, 0x3b, 0x45, 0xe5, 0x31, 0xc6, 0x56, 0xf0, 0xb9,
-	0x6e, 0x7a, 0x4c, 0xf8, 0x5b, 0x70, 0xc2, 0xa0, 0x25, 0xc5, 0x22, 0x45, 0xa2, 0xd7, 0x88, 0x25,
-	0x9c, 0xe4, 0x20, 0x53, 0x6d, 0x75, 0xbe, 0xbb, 0xf9, 0x36, 0x29, 0x3a, 0x32, 0xd9, 0xe2, 0x1f,
-	0x60, 0xe8, 0xd1, 0x83, 0x16, 0xd6, 0x95, 0xa8, 0x3c, 0x60, 0xd0, 0x92, 0xec, 0xfd, 0x8a, 0x6f,
-	0x02, 0xde, 0x34, 0x68, 0xf1, 0xbe, 0xc2, 0xa6, 0xb4, 0x4d, 0xac, 0x9a, 0x5e, 0x24, 0xb6, 0x30,
-	0xd1, 0x41, 0xc9, 0x98, 0x9c, 0xe2, 0x1c, 0x37, 0x0c, 0xa3, 0xe0, 0xd1, 0x63, 0x05, 0xdc, 0x36,
-	0xa2, 0x35, 0x31, 0x26, 0x39, 0x86, 0x18, 0xc2, 0xe0, 0x3e, 0x7b, 0x46, 0x72, 0x89, 0x7d, 0xfe,
-	0x5b, 0xba, 0xed, 0x04, 0xa6, 0x4b, 0x4c, 0x1e, 0xda, 0x6c, 0x25, 0xc0, 0xbf, 0x07, 0xa7, 0x2b,
-	0xc4, 0xda, 0xa2, 0x56, 0x99, 0xad, 0x08, 0x7f, 0x35, 0x96, 0x89, 0xe9, 0x28, 0x65, 0xaa, 0x11,
-	0xe1, 0x14, 0x17, 0x96, 0x6f, 0x6b, 0x90, 0xf5, 0x26, 0xe3, 0x72, 0x93, 0xef, 0x36, 0xd5, 0x88,
-	0x2b, 0xf3, 0xb3, 0x3a, 0x42, 0xf2, 0x64, 0xe5, 0x50, 0x2a, 0x5c, 0x85, 0x49, 0xba, 0xb5, 0x65,
-	0xe8, 0x26, 0x51, 0xec, 0xaa, 0x55, 0xd3, 0x6b, 0xea, 0xa6, 0x6e, 0xe8, 0xce, 0xae, 0x2b, 0xfa,
-	0x34, 0x17, 0x9d, 0x6d, 0xff, 0x2d, 0x5c, 0xb6, 0x42, 0x90, 0x2b, 0x24, 0x58, 0xa0, 0x87, 0xd0,
-	0xe0, 0xaf, 0xc2, 0x88, 0x53, 0x35, 0x4d, 0x62, 0x28, 0x1a, 0x51, 0x35, 0xc5, 0xd1, 0xcb, 0x84,
-	0x56, 0x1d, 0xe1, 0x4c, 0x06, 0x5d, 0x18, 0x94, 0x06, 0x7e, 0xf6, 0xef, 0x4f, 0xa2, 0x7d, 0xd3,
-	0x31, 0xe1, 0xc7, 0xff, 0x0d, 0xf2, 0xb0, 0x4b, 0x77, 0x93, 0xa8, 0xda, 0x3d, 0x97, 0x0a, 0x6f,
-	0x43, 0xd2, 0xa0, 0xaa, 0xa6, 0x6c, 0xaa, 0x86, 0x6a, 0x16, 0x75, 0xb3, 0x24, 0xa4, 0xb9, 0x9e,
-	0x37, 0x8e, 0x3a, 0xcf, 0x6f, 0x51, 0x55, 0x93, 0x7c, 0xe6, 0x96, 0xd9, 0x3e, 0x68, 0x04, 0xbb,
-	0xf0, 0x6d, 0x38, 0x69, 0x52, 0xc5, 0xce, 0xd9, 0x4a, 0x91, 0x9a, 0x26, 0x61, 0xeb, 0x9c, 0xd9,
-	0xc6, 0x36, 0x74, 0xe1, 0x85, 0x0e, 0xd3, 0xa8, 0x57, 0x1e, 0x35, 0x69, 0x21, 0x67, 0x2f, 0x05,
-	0x98, 0x0a, 0x86, 0x8e, 0xdf, 0x86, 0x51, 0xad, 0xa8, 0x14, 0x8d, 0xaa, 0xed, 0x10, 0x4b, 0x29,
-	0x59, 0xb4, 0x5a, 0xe1, 0x58, 0x53, 0x47, 0x9e, 0xf2, 0x23, 0x8f, 0x1e, 0xa4, 0xc2, 0x10, 0x2b,
-	0xbd, 0xf2, 0xb0, 0x56, 0x5c, 0x72, 0x9b, 0x5e, 0x63, 0x2d, 0x4c, 0xd6, 0xa1, 0xaa, 0x53, 0xe1,
-	0x5c, 0x07, 0xd5, 0xfb, 0xda, 0xaa, 0x4e, 0x31, 0x85, 0x71, 0x6e, 0x3d, 0x6e, 0x47, 0x57, 0x73,
-	0x6a, 0x72, 0xb4, 0xaf, 0x1c, 0x2f, 0x50, 0x28, 0xe8, 0x0e, 0xb9, 0x4d, 0xec, 0x6d, 0xae, 0x28,
-	0x77, 0x6a, 0x7d, 0x32, 0xb6, 0x83, 0x8d, 0x77, 0x4d, 0x26, 0xb0, 0xbd, 0xad, 0xa8, 0x70, 0xfe,
-	0xf3, 0xd9, 0xaa, 0xef, 0xa0, 0xad, 0x28, 0xfe, 0x16, 0x24, 0x0c, 0x5a, 0x54, 0x0d, 0xa5, 0x66,
-	0x6d, 0x09, 0x97, 0x8e, 0xb7, 0x67, 0xde, 0x62, 0x8c, 0x1b, 0xf2, 0xab, 0xde, 0x34, 0xe2, 0xb3,
-	0x28, 0xce, 0xd1, 0x36, 0xac, 0x2d, 0xfc, 0x36, 0x0c, 0x78, 0xf3, 0x9c, 0xc5, 0x99, 0x82, 0x98,
-	0x41, 0x17, 0x92, 0xb9, 0x17, 0x43, 0xd8, 0xcc, 0x24, 0xf7, 0x28, 0xff, 0x97, 0xd3, 0x72, 0xed,
-	0xcf, 0x7d, 0x54, 0x47, 0x99, 0xc2, 0xea, 0xbd, 0x65, 0xe5, 0xde, 0x5d, 0xc5, 0xfd, 0xff, 0x9b,
-	0x77, 0xee, 0x2c, 0xdf, 0x52, 0x56, 0xd7, 0x0b, 0xcb, 0x4b, 0xca, 0x5d, 0x59, 0x29, 0x14, 0x6e,
-	0xc9, 0xe0, 0x34, 0x38, 0xf0, 0x6d, 0x48, 0x70, 0x2f, 0x63, 0x90, 0xa2, 0x23, 0x5c, 0xe6, 0xa3,
-	0x98, 0x6e, 0x3b, 0x0a, 0x99, 0x94, 0x74, 0x6a, 0xaa, 0xc6, 0xb2, 0x56, 0x22, 0x05, 0x4e, 0xae,
-	0x53, 0xd3, 0x5b, 0xb2, 0x71, 0xcb, 0x6b, 0xc2, 0x6b, 0x30, 0x51, 0xa3, 0x86, 0x43, 0x2c, 0x4b,
-	0x55, 0x1a, 0x3e, 0xac, 0x46, 0x2c, 0x5b, 0xa7, 0xa6, 0x70, 0x25, 0x83, 0x2e, 0x24, 0xa4, 0xe4,
-	0x7f, 0xd5, 0x51, 0x0f, 0x5b, 0xac, 0xbd, 0x56, 0x54, 0x78, 0x37, 0x22, 0x9f, 0xf4, 0x19, 0x7c,
-	0x97, 0xb5, 0xe1, 0x92, 0xe3, 0x15, 0x10, 0x68, 0x85, 0x58, 0x2a, 0xb3, 0x90, 0x62, 0xef, 0xda,
-	0x0e, 0x29, 0x37, 0xa0, 0x66, 0xdb, 0x42, 0x8d, 0x37, 0xe8, 0x0b, 0x9c, 0xdc, 0x47, 0x9a, 0x07,
-	0xf0, 0xdc, 0x8d, 0xb2, 0xad, 0x0a, 0xb9, 0x0e, 0x33, 0xb9, 0x5f, 0x4e, 0x78, 0x94, 0x2b, 0x2a,
-	0xce, 0x43, 0x82, 0x98, 0x3e, 0x57, 0xbe, 0x23, 0x57, 0xdc, 0x25, 0x5c, 0x51, 0xf1, 0xd7, 0x00,
-	0xf8, 0x57, 0xb6, 0x1d, 0xd5, 0x21, 0xc2, 0x1c, 0xff, 0x76, 0x67, 0x42, 0x5c, 0x8c, 0x80, 0x7f,
-	0xc0, 0x02, 0x23, 0x92, 0x13, 0xb6, 0xff, 0x23, 0xbe, 0x08, 0xfd, 0xaa, 0xa6, 0x59, 0xc4, 0xb6,
-	0x85, 0x7f, 0xed, 0x77, 0xc7, 0xf8, 0x69, 0x1d, 0xa1, 0xc6, 0x18, 0x63, 0xb2, 0xdf, 0x8f, 0x57,
-	0x60, 0xa0, 0x48, 0xa9, 0xa5, 0xe9, 0xa6, 0xea, 0x10, 0x5b, 0xf8, 0x37, 0x37, 0xb2, 0x3d, 0xdb,
-	0x4e, 0xd4, 0x52, 0x93, 0x4e, 0x8a, 0x31, 0x3c, 0x39, 0xc8, 0x8a, 0xbf, 0x0b, 0x83, 0x3c, 0x93,
-	0xe2, 0x99, 0x9e, 0xa9, 0x1a, 0xc2, 0xa7, 0xfd, 0x47, 0x5e, 0x2f, 0xa3, 0x8f, 0x1e, 0xb4, 0x32,
-	0x73, 0xf8, 0x13, 0xac, 0x69, 0xd5, 0x6b, 0xb9, 0xfe, 0xcf, 0xe8, 0xc3, 0x3a, 0xfa, 0x27, 0x04,
-	0x29, 0x88, 0xfb, 0x81, 0x29, 0x8e, 0x65, 0xc5, 0xb9, 0x6b, 0x90, 0x86, 0x41, 0x7f, 0x5e, 0x65,
-	0xd8, 0xc4, 0xc2, 0x03, 0x73, 0xf3, 0xe2, 0xdc, 0x9c, 0x98, 0xbb, 0x26, 0xe6, 0xae, 0xce, 0x22,
-	0x98, 0x84, 0x21, 0x66, 0xa6, 0x8c, 0x17, 0x85, 0xb2, 0xdd, 0xb5, 0x77, 0x2e, 0x2f, 0xe6, 0x67,
-	0x67, 0x11, 0x9c, 0x83, 0x09, 0xde, 0x77, 0x8f, 0x66, 0xf8, 0xff, 0xc1, 0xcd, 0x07, 0xf7, 0xe6,
-	0xe7, 0xc5, 0x7c, 0x6e, 0x16, 0xc1, 0x29, 0x48, 0x79, 0xcc, 0x99, 0x02, 0x5b, 0x87, 0xbc, 0x33,
-	0x9b, 0x15, 0xb3, 0x73, 0xb3, 0x08, 0x4e, 0xc3, 0xa8, 0xef, 0x50, 0x33, 0xe7, 0x33, 0x32, 0xb1,
-	0x69, 0xd5, 0x62, 0xce, 0x35, 0x92, 0x5b, 0x9c, 0x45, 0x90, 0xf1, 0x84, 0xdf, 0x56, 0x4d, 0xb5,
-	0xc4, 0x9d, 0x1f, 0x1e, 0xc8, 0x2e, 0x8a, 0xb9, 0x59, 0x31, 0x97, 0x15, 0x73, 0x73, 0xb3, 0x48,
-	0x3a, 0x0b, 0x43, 0x15, 0x6f, 0x40, 0x4a, 0x71, 0x9b, 0xea, 0x45, 0x82, 0x4f, 0x3c, 0xa9, 0xa3,
-	0xc8, 0x5e, 0x1d, 0x21, 0x66, 0x07, 0x69, 0x1a, 0xc6, 0x5a, 0x03, 0x6e, 0x9f, 0x6c, 0xf8, 0x49,
-	0x1d, 0x9d, 0xd8, 0xab, 0xa3, 0x81, 0xfd, 0x3a, 0xea, 0xcd, 0xe6, 0xc4, 0x6c, 0x5e, 0xba, 0x08,
-	0xa3, 0xad, 0x91, 0x67, 0x80, 0x74, 0x68, 0xaf, 0x8e, 0x92, 0x9c, 0x74, 0x5e, 0xcc, 0x2e, 0x30,
-	0x52, 0x1e, 0x4d, 0xf9, 0x31, 0x4c, 0x90, 0x74, 0x7c, 0xaf, 0x8e, 0xc6, 0x18, 0x69, 0x2e, 0x27,
-	0xe6, 0xf2, 0x92, 0x08, 0x27, 0xc3, 0x81, 0x48, 0x90, 0x7a, 0x62, 0xaf, 0x8e, 0x04, 0x4e, 0x3d,
-	0x2f, 0xe6, 0x16, 0xa4, 0x59, 0x38, 0xd5, 0xce, 0x6f, 0x05, 0x39, 0x5e, 0xd8, 0xab, 0xa3, 0x0c,
-	0xe3, 0xc8, 0xe7, 0xc5, 0xfc, 0x9c, 0x94, 0x6f, 0xcb, 0x41, 0x7d, 0x8e, 0xd1, 0x27, 0x75, 0x74,
-	0x6e, 0xaf, 0x8e, 0x5e, 0xdc, 0xaf, 0xa3, 0x78, 0x7e, 0x41, 0xcc, 0x2f, 0x8a, 0xf9, 0xab, 0xd2,
-	0x4b, 0x90, 0x34, 0xa9, 0xc6, 0x96, 0x95, 0x4f, 0x37, 0xf6, 0xa4, 0x8e, 0x72, 0x7b, 0x75, 0x94,
-	0x65, 0xc8, 0xf3, 0xb3, 0xe2, 0x7c, 0x96, 0xd9, 0x6f, 0x2d, 0x16, 0x47, 0xa9, 0xc8, 0x5a, 0x2c,
-	0x3e, 0x90, 0x3a, 0xb1, 0x16, 0x8b, 0x27, 0x53, 0x43, 0x6b, 0xb1, 0xf8, 0x58, 0x6a, 0x7c, 0x2d,
-	0x16, 0x17, 0x52, 0x13, 0x6b, 0xb1, 0x78, 0x26, 0xf5, 0xc2, 0x5a, 0x2c, 0xfe, 0x62, 0xea, 0xdc,
-	0x5a, 0x2c, 0x3e, 0x9d, 0xba, 0xb4, 0x16, 0x8b, 0x67, 0x53, 0xb9, 0xa9, 0xdf, 0x81, 0x89, 0x43,
-	0x9d, 0x35, 0xbe, 0xc7, 0x26, 0x7b, 0x45, 0xa9, 0x59, 0x56, 0xc5, 0x0d, 0x57, 0x10, 0x5f, 0xa2,
-	0x93, 0xa1, 0xb9, 0xbe, 0xa1, 0x57, 0x36, 0x2c, 0xab, 0xe2, 0xce, 0xf1, 0x8f, 0xea, 0x28, 0xb5,
-	0xb1, 0xba, 0xae, 0x6c, 0xc8, 0xf2, 0xba, 0x72, 0x73, 0xb5, 0x70, 0x43, 0xba, 0xb5, 0x2c, 0x0f,
-	0xd4, 0x5c, 0x12, 0x16, 0x9a, 0x4c, 0xfd, 0x29, 0x82, 0xd1, 0x76, 0x21, 0x37, 0xfe, 0x3a, 0x44,
-	0xec, 0x1d, 0x2e, 0x63, 0x20, 0x77, 0xb1, 0xed, 0x7a, 0xda, 0x08, 0x6d, 0x7f, 0x81, 0x50, 0x28,
-	0x62, 0xef, 0xe0, 0x57, 0x20, 0x42, 0x6d, 0xef, 0x1c, 0xe1, 0x42, 0xfb, 0x05, 0xd9, 0xba, 0xe9,
-	0x05, 0xf9, 0xa9, 0x3d, 0xf5, 0x10, 0xc1, 0x48, 0x9b, 0x10, 0x1d, 0xdf, 0x07, 0xe1, 0x7e, 0x75,
-	0x93, 0x58, 0x26, 0x71, 0x88, 0xad, 0xf8, 0x49, 0x80, 0x66, 0xa9, 0xba, 0xe9, 0x65, 0x00, 0x97,
-	0xda, 0x4a, 0x7b, 0xbd, 0xc1, 0xe4, 0xa1, 0xde, 0x64, 0x2c, 0x9e, 0xc0, 0xf1, 0xfb, 0x6d, 0x7b,
-	0xa7, 0x9e, 0x46, 0x20, 0x76, 0x87, 0x85, 0x70, 0xb3, 0x10, 0xe3, 0x3e, 0x0d, 0xf1, 0xbd, 0xed,
-	0xf4, 0x0f, 0x7f, 0xee, 0xee, 0x6d, 0x23, 0xd6, 0xb0, 0xdc, 0xbf, 0x44, 0x4d, 0xc7, 0xa2, 0x86,
-	0xdc, 0xf7, 0x26, 0xb5, 0xee, 0x13, 0x4b, 0xe6, 0x94, 0x78, 0x1a, 0xe2, 0xdb, 0xd4, 0x76, 0x4c,
-	0xb5, 0x4c, 0xf8, 0xd1, 0x47, 0x42, 0x4a, 0xfa, 0x5c, 0xde, 0xae, 0xdf, 0xe8, 0xc7, 0x97, 0x20,
-	0x51, 0xa9, 0x6e, 0x1a, 0x7a, 0x51, 0xd1, 0xdd, 0xa3, 0x83, 0x36, 0xc4, 0x2e, 0xc1, 0x6a, 0x05,
-	0x53, 0x48, 0x36, 0x8e, 0xb6, 0x14, 0x43, 0xb7, 0x1d, 0xa1, 0x3f, 0x13, 0x3d, 0x34, 0x70, 0x6d,
-	0xe3, 0xc4, 0x57, 0x7d, 0x6e, 0x69, 0x8c, 0xc7, 0x9e, 0xef, 0xa3, 0x68, 0xea, 0x5d, 0x57, 0xd6,
-	0xfb, 0x28, 0x22, 0x20, 0x79, 0xb0, 0x81, 0xcf, 0xe2, 0xf9, 0xeb, 0xb5, 0x0f, 0xeb, 0x48, 0x84,
-	0x09, 0x48, 0x31, 0x4b, 0x64, 0x56, 0x4d, 0x1e, 0x5d, 0x33, 0x2f, 0x8a, 0x7b, 0xf3, 0x62, 0x56,
-	0x5c, 0x80, 0x21, 0x80, 0x06, 0xa6, 0x8d, 0xd1, 0xe2, 0x2f, 0xea, 0x48, 0x82, 0x71, 0x88, 0xaf,
-	0x78, 0xe3, 0x9b, 0x84, 0xa6, 0x2d, 0x20, 0x09, 0x31, 0xf6, 0x1d, 0x27, 0xfb, 0x5c, 0x8b, 0x82,
-	0x00, 0x89, 0x75, 0x3e, 0xb4, 0xcc, 0xea, 0xfa, 0xe4, 0x40, 0xc0, 0x10, 0x53, 0xf5, 0x28, 0x0c,
-	0x1f, 0x08, 0xa0, 0x58, 0xa8, 0x67, 0x97, 0x1b, 0xeb, 0x96, 0x9a, 0x4a, 0xd3, 0x72, 0x91, 0x0e,
-	0xae, 0xae, 0x47, 0x1e, 0xb5, 0xcb, 0x4b, 0x0d, 0xae, 0x75, 0xdf, 0x9a, 0xaf, 0xc1, 0x68, 0x08,
-	0xae, 0xe6, 0x30, 0xac, 0x68, 0x47, 0xac, 0xe1, 0x16, 0xac, 0x9a, 0xb3, 0x5a, 0xc1, 0x4b, 0x80,
-	0x59, 0x08, 0xda, 0x1a, 0x36, 0x7a, 0x07, 0x4b, 0x1d, 0xce, 0x29, 0x5a, 0x06, 0x88, 0xff, 0x3f,
-	0x0c, 0x85, 0x11, 0xfa, 0x8e, 0xec, 0xd2, 0xf0, 0xa3, 0x07, 0x61, 0xee, 0x15, 0x24, 0x0f, 0xb6,
-	0x84, 0x9b, 0x92, 0x08, 0x13, 0xe1, 0xd0, 0x56, 0xaf, 0xf8, 0xbb, 0xd9, 0x90, 0xef, 0x04, 0xf6,
-	0xeb, 0x28, 0x9a, 0x13, 0xf3, 0xd2, 0xe5, 0x83, 0x81, 0xb0, 0x47, 0x3a, 0xf2, 0xa4, 0x8e, 0x7a,
-	0xf7, 0xea, 0x28, 0xc6, 0x48, 0xe7, 0xc5, 0x85, 0xcf, 0x82, 0xdb, 0x5e, 0x2c, 0xd5, 0x3b, 0xf5,
-	0x63, 0x04, 0xf8, 0xe0, 0xb1, 0x20, 0xfe, 0x36, 0x0c, 0x98, 0xd4, 0x51, 0xca, 0xdc, 0x37, 0x69,
-	0xde, 0x27, 0x9b, 0x3d, 0xea, 0xd4, 0x65, 0x33, 0x90, 0xcd, 0x49, 0x77, 0xd9, 0xae, 0xf4, 0xc8,
-	0x60, 0x52, 0xc7, 0xf5, 0x73, 0x1a, 0xf3, 0x2e, 0xd4, 0x2a, 0x6e, 0x13, 0xdb, 0xb1, 0xf8, 0xf4,
-	0x0c, 0xee, 0xfe, 0xfe, 0xa8, 0x50, 0xae, 0xb9, 0x3f, 0x4f, 0xfd, 0x08, 0xc1, 0x50, 0xe8, 0x98,
-	0xf1, 0xb9, 0xd3, 0x2f, 0x74, 0x72, 0xf9, 0x5c, 0xe9, 0xf7, 0x67, 0x08, 0x86, 0x0f, 0x1c, 0x85,
-	0x3e, 0x77, 0x16, 0x0c, 0x9d, 0xad, 0x3e, 0x57, 0xfa, 0xfd, 0x05, 0x82, 0xb1, 0xb6, 0xe7, 0xa9,
-	0xcf, 0x9d, 0x15, 0x43, 0x87, 0xb3, 0xcf, 0x95, 0x7e, 0x7f, 0x8e, 0x60, 0xa4, 0xcd, 0x81, 0xf7,
-	0x73, 0xa5, 0xe3, 0xdf, 0x46, 0x20, 0xee, 0x23, 0xe2, 0x9f, 0x44, 0x20, 0xc1, 0x03, 0x49, 0xee,
-	0xbe, 0x11, 0x77, 0xdf, 0xe2, 0x71, 0xf4, 0x92, 0x3e, 0x42, 0x6d, 0x5d, 0xf7, 0xfe, 0xaf, 0xfe,
-	0x21, 0xfa, 0x77, 0xe8, 0xfd, 0xc7, 0xe8, 0xaf, 0xd1, 0xd4, 0x5f, 0xa1, 0x7b, 0xdb, 0xc4, 0x22,
-	0x19, 0xd5, 0x22, 0x19, 0x93, 0x66, 0x18, 0x9b, 0x9d, 0x51, 0x35, 0x8d, 0x68, 0x99, 0x5d, 0xe2,
-	0xcc, 0xf0, 0x86, 0xcc, 0x16, 0xb5, 0x32, 0xce, 0x36, 0x71, 0x73, 0x0c, 0x92, 0x61, 0x7e, 0xc2,
-	0xcd, 0x4a, 0x18, 0x97, 0x4b, 0x5c, 0xd3, 0xd5, 0x0c, 0x79, 0xc7, 0x4d, 0x89, 0x32, 0x7e, 0xda,
-	0x90, 0x29, 0x37, 0x92, 0x8b, 0x4c, 0x91, 0x9a, 0x36, 0x35, 0x18, 0xb8, 0xa9, 0x65, 0x76, 0x74,
-	0xc3, 0xc8, 0xa8, 0x55, 0x87, 0xb2, 0x10, 0xa1, 0xa8, 0x1a, 0xc6, 0x6e, 0x46, 0xad, 0x54, 0x88,
-	0x6a, 0x65, 0xb8, 0x32, 0x3b, 0xdb, 0xc4, 0x64, 0x02, 0x77, 0xb9, 0x00, 0x4d, 0xb7, 0x8b, 0xb4,
-	0x46, 0x2c, 0xa2, 0xcd, 0x30, 0xcd, 0xfb, 0xde, 0x7f, 0xcc, 0xe3, 0x8f, 0xb8, 0xe9, 0x19, 0x6a,
-	0xea, 0xa7, 0x93, 0x90, 0x5c, 0xb2, 0x88, 0xea, 0x90, 0xee, 0x1d, 0x55, 0xf7, 0x8e, 0xaa, 0x7b,
-	0x47, 0xd5, 0xbd, 0xa3, 0xea, 0xde, 0x51, 0x75, 0xef, 0xa8, 0xba, 0x77, 0x54, 0x5f, 0xfc, 0x1d,
-	0xd5, 0x4c, 0x87, 0x3b, 0xaa, 0xee, 0xb5, 0x54, 0xf7, 0x5a, 0xea, 0x4b, 0x7c, 0x2d, 0x75, 0xf3,
-	0x37, 0xbd, 0x96, 0xfa, 0x6d, 0x5e, 0x38, 0xfd, 0x2f, 0x5e, 0xed, 0x5c, 0x1f, 0xfe, 0xc5, 0x2b,
-	0xa1, 0xbf, 0xf4, 0x92, 0xce, 0x1f, 0xbc, 0x01, 0x18, 0x79, 0xf8, 0x14, 0x85, 0x1b, 0xa5, 0xdc,
-	0x61, 0x17, 0x01, 0x13, 0x0f, 0x9f, 0xa2, 0xf6, 0x5d, 0xd2, 0xec, 0x21, 0x17, 0x02, 0xc2, 0xc3,
-	0xa7, 0xa8, 0x6d, 0x0f, 0xe3, 0x68, 0x7b, 0x2f, 0xc0, 0x39, 0xda, 0xf5, 0x48, 0x0b, 0x87, 0x5f,
-	0x0f, 0x9c, 0x7a, 0xf8, 0x14, 0x1d, 0xd6, 0x29, 0xbd, 0xd2, 0xf9, 0xa2, 0xe0, 0xec, 0xc3, 0xa7,
-	0xa8, 0x13, 0xc1, 0x21, 0xfc, 0xf4, 0x59, 0xfc, 0x3e, 0x81, 0x74, 0xee, 0xc0, 0x0d, 0x02, 0x7e,
-	0xf8, 0x14, 0x85, 0xda, 0x7e, 0xb3, 0xeb, 0x83, 0xb5, 0x58, 0x7c, 0x2e, 0x35, 0x3f, 0xf5, 0x37,
-	0x93, 0x30, 0x24, 0x93, 0x8a, 0xa1, 0x16, 0xbb, 0x39, 0x53, 0x37, 0x67, 0xea, 0xe6, 0x4c, 0xdd,
-	0x9c, 0xa9, 0x9b, 0x33, 0x75, 0x73, 0xa6, 0x6e, 0xce, 0xd4, 0xcd, 0x99, 0xba, 0x39, 0x53, 0x37,
-	0x67, 0xea, 0xe6, 0x4c, 0xdd, 0x9c, 0xa9, 0x9b, 0x33, 0x85, 0x73, 0xa6, 0x7f, 0x39, 0x05, 0x03,
-	0xaf, 0x11, 0xa7, 0x9b, 0x2f, 0x75, 0xf3, 0xa5, 0x6e, 0xbe, 0xd4, 0xcd, 0x97, 0xba, 0xf9, 0x52,
-	0x37, 0x5f, 0xea, 0xe6, 0x4b, 0xdd, 0x7c, 0xa9, 0x9b, 0x2f, 0x75, 0xf3, 0xa5, 0x2f, 0x73, 0xbe,
-	0x74, 0xfd, 0x99, 0x45, 0x4d, 0x87, 0x17, 0x31, 0x5d, 0x7d, 0x56, 0x11, 0xd3, 0x97, 0xbf, 0x68,
-	0xa9, 0x9b, 0xe3, 0xfd, 0x9f, 0xc8, 0xf1, 0xa6, 0xfe, 0x68, 0x1c, 0x12, 0x8d, 0xfa, 0x04, 0x2c,
-	0xc2, 0x80, 0x46, 0xec, 0xa2, 0xa5, 0xf3, 0xe7, 0x37, 0xbc, 0x82, 0x0e, 0x08, 0x54, 0x5a, 0x04,
-	0xbb, 0xf1, 0x1f, 0x23, 0xe8, 0x33, 0xd4, 0x4d, 0x62, 0xd8, 0x42, 0x84, 0xff, 0x99, 0xe6, 0xcb,
-	0xc7, 0xae, 0xb2, 0x98, 0xb9, 0xc5, 0xf9, 0x97, 0x4d, 0xc7, 0xda, 0x95, 0x5e, 0xfe, 0xe0, 0x31,
-	0x8a, 0x41, 0xc4, 0xad, 0xfe, 0x1b, 0xf8, 0x00, 0xc5, 0xa7, 0xfa, 0xac, 0x58, 0x0a, 0x09, 0xdf,
-	0xe0, 0x0a, 0x7c, 0x80, 0x22, 0xa9, 0x94, 0xdf, 0x33, 0xed, 0xf5, 0xf0, 0xbf, 0x8c, 0x7c, 0xef,
-	0x31, 0x8a, 0xc4, 0x7b, 0x64, 0x4f, 0x17, 0x6c, 0x02, 0x26, 0xce, 0x36, 0xaf, 0x58, 0x69, 0xbe,
-	0x73, 0xe2, 0x25, 0x83, 0x47, 0xd6, 0x70, 0xd9, 0x43, 0x68, 0x68, 0xea, 0x65, 0x1b, 0xc3, 0x24,
-	0xdc, 0x81, 0x37, 0x21, 0x59, 0x33, 0x54, 0x33, 0x20, 0xeb, 0x98, 0x99, 0xe2, 0x86, 0xa1, 0x9a,
-	0x61, 0x39, 0x83, 0xb5, 0x60, 0x23, 0x7e, 0x03, 0x92, 0x9b, 0xd4, 0xd4, 0x02, 0x32, 0xfa, 0xda,
-	0x16, 0x0f, 0xb9, 0x01, 0xd7, 0xab, 0xec, 0x5f, 0x89, 0x9a, 0xda, 0x4d, 0xc2, 0x26, 0xb2, 0x0f,
-	0xc9, 0x10, 0x9a, 0x90, 0x8b, 0x30, 0xa0, 0x6d, 0x17, 0x2b, 0x4a, 0xd1, 0xd0, 0x89, 0xe9, 0x78,
-	0x09, 0xde, 0x61, 0xc9, 0x12, 0x30, 0xd2, 0x25, 0x4e, 0x89, 0xdf, 0x82, 0x04, 0xdb, 0x52, 0xdc,
-	0xb2, 0x92, 0x44, 0x5b, 0x47, 0x71, 0xe0, 0x99, 0x99, 0x99, 0x02, 0xe7, 0x58, 0xad, 0xac, 0xab,
-	0x96, 0x5a, 0x26, 0x0e, 0xb1, 0xec, 0x3b, 0x5e, 0x64, 0xb4, 0x82, 0xe4, 0xb8, 0xed, 0xf5, 0xe2,
-	0xef, 0x78, 0x4a, 0xb1, 0x25, 0x48, 0x2c, 0x2f, 0xd0, 0xbb, 0xf6, 0x4c, 0xf4, 0x9b, 0x2b, 0x4b,
-	0xeb, 0x05, 0xce, 0xd2, 0xc4, 0xf7, 0xb0, 0xb9, 0xe6, 0x6e, 0x1f, 0x7e, 0x05, 0x86, 0x4c, 0xaa,
-	0xe8, 0x95, 0xda, 0x9c, 0xe2, 0x17, 0x64, 0x66, 0x3a, 0x0e, 0x7b, 0xd0, 0xa4, 0xab, 0x95, 0xda,
-	0xdc, 0x0d, 0xaf, 0x3a, 0x33, 0x0d, 0x31, 0x5e, 0xb2, 0x04, 0x07, 0xd6, 0x05, 0x6f, 0xc7, 0x33,
-	0x10, 0x2d, 0x3b, 0x55, 0x61, 0x80, 0xd7, 0xae, 0x9f, 0xfe, 0xa8, 0x8e, 0x62, 0xd9, 0xf9, 0xd9,
-	0x59, 0x46, 0x36, 0x34, 0x3d, 0x28, 0x0d, 0xcc, 0x8a, 0xf3, 0xd9, 0xdc, 0xe5, 0xec, 0x42, 0xfe,
-	0xea, 0x9c, 0xcc, 0x08, 0xf1, 0x16, 0x24, 0xfd, 0xb1, 0xb8, 0x0f, 0xde, 0x78, 0x29, 0xeb, 0x91,
-	0x67, 0x8e, 0x97, 0xc0, 0xba, 0x2e, 0xad, 0x19, 0x53, 0xcb, 0x83, 0x1e, 0xec, 0x5d, 0x77, 0xa1,
-	0xde, 0x80, 0x54, 0x99, 0x9a, 0xba, 0x43, 0xad, 0x66, 0x66, 0x32, 0xdc, 0x31, 0x83, 0x1c, 0xf2,
-	0xe8, 0x1b, 0x39, 0xc9, 0x37, 0xa1, 0xdf, 0x6b, 0x12, 0xf0, 0x11, 0x3f, 0xca, 0x2d, 0xdd, 0xbc,
-	0xff, 0x46, 0x55, 0x75, 0x23, 0x5c, 0xce, 0xba, 0x44, 0xcd, 0x2d, 0xbd, 0xb4, 0x12, 0x91, 0x7d,
-	0x2c, 0x7c, 0x1e, 0xe2, 0x15, 0x4b, 0xa7, 0x96, 0xee, 0xec, 0x0a, 0x23, 0xdc, 0x6c, 0xae, 0x55,
-	0xa7, 0xa3, 0xc2, 0xaf, 0x91, 0xdc, 0xe8, 0xc3, 0x55, 0x10, 0xdd, 0xf7, 0x7e, 0xbc, 0x2a, 0xa2,
-	0x96, 0xad, 0xb2, 0x59, 0xf1, 0xd5, 0x18, 0xdd, 0x58, 0xc7, 0xbc, 0xeb, 0x25, 0xbb, 0x11, 0x6c,
-	0x04, 0x43, 0xbc, 0xc6, 0xda, 0x68, 0x8c, 0xda, 0x86, 0x4b, 0x47, 0x11, 0xeb, 0xba, 0xdc, 0x67,
-	0x65, 0x7b, 0xe7, 0x9f, 0x21, 0x75, 0xd9, 0x45, 0xc1, 0x2f, 0x02, 0xe8, 0xb6, 0x52, 0xb1, 0xf4,
-	0xb2, 0x6a, 0xed, 0xf2, 0xe4, 0x2f, 0xee, 0x15, 0xf8, 0x26, 0x74, 0x7b, 0xdd, 0x6d, 0xc6, 0x17,
-	0x61, 0x50, 0xb7, 0x95, 0xe6, 0x1f, 0x9a, 0xf3, 0x04, 0xcc, 0xa7, 0x3b, 0xa1, 0xdb, 0x81, 0xfa,
-	0xd6, 0xc6, 0xac, 0x5f, 0x68, 0xcc, 0xfa, 0x33, 0x1d, 0x33, 0x3e, 0x77, 0xd6, 0x2f, 0xf8, 0xb3,
-	0x5e, 0x87, 0x91, 0xc6, 0x7a, 0x0f, 0x60, 0xa4, 0xdb, 0x1e, 0xdc, 0x1c, 0xba, 0xf2, 0xd7, 0x43,
-	0x2b, 0x33, 0x26, 0x0f, 0xfb, 0xab, 0xbe, 0x29, 0xea, 0x0f, 0x11, 0xa4, 0x5c, 0x21, 0x55, 0x87,
-	0x32, 0x6b, 0x6f, 0xe9, 0x25, 0xe1, 0x6c, 0xdb, 0x6c, 0xef, 0xa0, 0xa0, 0xd5, 0xf5, 0x8d, 0x85,
-	0x1b, 0x55, 0x87, 0xba, 0xb3, 0x8c, 0xaf, 0x86, 0x4b, 0xff, 0xf1, 0xe0, 0x82, 0x46, 0xca, 0x34,
-	0x2b, 0x3a, 0xc4, 0x76, 0xc4, 0xa2, 0xe5, 0x88, 0xb6, 0xa3, 0x96, 0x74, 0xb3, 0x24, 0xb2, 0x98,
-	0x6f, 0x53, 0x35, 0xef, 0x2b, 0x65, 0x52, 0x14, 0x2b, 0x16, 0xd5, 0x56, 0x62, 0x72, 0x92, 0xc9,
-	0x6e, 0x42, 0x4c, 0x5e, 0x83, 0x81, 0x80, 0x7f, 0xc2, 0x29, 0x88, 0xde, 0x27, 0xbb, 0xae, 0x57,
-	0x94, 0xd9, 0x8f, 0x78, 0x14, 0x7a, 0x6b, 0xaa, 0x51, 0x75, 0x8f, 0x42, 0x13, 0xb2, 0xfb, 0xcb,
-	0xf5, 0xc8, 0x55, 0x74, 0xfd, 0x0f, 0x7a, 0x3f, 0xac, 0x23, 0x0b, 0x30, 0xc4, 0x6f, 0x13, 0x47,
-	0xd5, 0x54, 0x47, 0xc5, 0x7d, 0xd9, 0x59, 0x31, 0x2b, 0xe6, 0x60, 0x02, 0x46, 0xdd, 0x7d, 0x39,
-	0xe3, 0x8a, 0xa9, 0xba, 0x55, 0x12, 0x18, 0xe5, 0x41, 0x80, 0xd4, 0xea, 0x7a, 0xa8, 0x39, 0xb6,
-	0x28, 0xe6, 0xae, 0xc2, 0x4b, 0x80, 0x1b, 0x13, 0x25, 0xd3, 0x38, 0x79, 0x18, 0xce, 0xe6, 0xc4,
-	0x6c, 0x56, 0xcc, 0x2e, 0x88, 0xd9, 0x6b, 0xbc, 0x86, 0x39, 0xff, 0x8b, 0x3a, 0x7a, 0x2f, 0x06,
-	0x49, 0x88, 0xdd, 0x51, 0xcb, 0xbc, 0x8e, 0x90, 0xd7, 0x15, 0xbe, 0xe5, 0xd6, 0x15, 0x4e, 0xcb,
-	0xb0, 0x0e, 0xe9, 0x76, 0xee, 0x31, 0x17, 0xf7, 0x1d, 0x1e, 0x8c, 0x87, 0xdd, 0x59, 0x2e, 0xb6,
-	0x71, 0xeb, 0xc6, 0x1d, 0xd6, 0xde, 0xea, 0x82, 0x72, 0x31, 0xe6, 0x62, 0xe0, 0xdb, 0xd0, 0xe7,
-	0x0e, 0x67, 0xfa, 0x2e, 0xdc, 0x86, 0x53, 0x30, 0x71, 0x10, 0x7d, 0x46, 0xe3, 0x04, 0x70, 0x12,
-	0xc6, 0x5a, 0xa1, 0xfd, 0x8e, 0x31, 0x18, 0x69, 0xc5, 0x9e, 0xe1, 0x6a, 0xdf, 0x86, 0xe8, 0xed,
-	0x1b, 0x4b, 0xd3, 0xaf, 0xc2, 0x4d, 0x10, 0x60, 0xbc, 0x0d, 0x6e, 0x59, 0x2d, 0xc2, 0xc8, 0x01,
-	0x7d, 0xd1, 0x65, 0xd6, 0x18, 0x52, 0x16, 0x5d, 0x06, 0x19, 0xf8, 0x48, 0xa6, 0xd7, 0x60, 0x85,
-	0xe1, 0x85, 0x54, 0x71, 0x7f, 0xd5, 0xe0, 0x64, 0x5b, 0xfb, 0x1c, 0x86, 0xf9, 0x23, 0x04, 0x43,
-	0x1b, 0xee, 0x43, 0x62, 0x7e, 0x41, 0xfb, 0xf4, 0xf7, 0x11, 0x7c, 0x0f, 0xc1, 0x05, 0x78, 0xa1,
-	0x75, 0x73, 0xe7, 0xc1, 0xb6, 0xe2, 0xe6, 0x58, 0x5e, 0x4f, 0x2e, 0x5a, 0xb8, 0x75, 0x17, 0xae,
-	0xc0, 0x85, 0xc3, 0x29, 0x75, 0xd3, 0xd6, 0x35, 0x12, 0x64, 0x58, 0x85, 0x8b, 0x90, 0x0e, 0x33,
-	0x90, 0x12, 0x3f, 0x1e, 0xf1, 0xc9, 0xfa, 0x0b, 0x6e, 0x83, 0x74, 0x11, 0x52, 0xcd, 0x7d, 0x2a,
-	0x50, 0x97, 0x1d, 0xdb, 0xab, 0xa3, 0xe8, 0x7e, 0x1d, 0xf5, 0xce, 0x89, 0xf3, 0xe2, 0x02, 0xaf,
-	0x6b, 0x7f, 0x09, 0x92, 0xde, 0xda, 0x0e, 0x12, 0xc6, 0xf7, 0xea, 0xa8, 0x7f, 0xbf, 0x8e, 0x12,
-	0x57, 0xc5, 0x6b, 0x62, 0x6e, 0x51, 0xcc, 0xe7, 0xa4, 0xf3, 0x30, 0xec, 0xed, 0xdf, 0x2c, 0xff,
-	0x09, 0x14, 0xf7, 0x0c, 0xef, 0xd5, 0x51, 0x8a, 0x57, 0xb4, 0x2f, 0x8a, 0xd9, 0xab, 0xd2, 0xd7,
-	0x61, 0xfa, 0x28, 0xbb, 0x67, 0x00, 0x60, 0x6c, 0xaf, 0x8e, 0x46, 0x79, 0xe5, 0x7a, 0x56, 0xcc,
-	0xe5, 0xa4, 0x37, 0x61, 0x24, 0xb8, 0xe5, 0xf8, 0x94, 0xdf, 0x78, 0x52, 0x47, 0x67, 0xf6, 0xea,
-	0xe8, 0xf4, 0x7e, 0x1d, 0xc5, 0x73, 0xd7, 0xc4, 0xfc, 0xac, 0x98, 0xcf, 0xbe, 0xf7, 0x14, 0x1d,
-	0x79, 0xa9, 0xaf, 0xc5, 0xe2, 0xd1, 0x54, 0x6c, 0x2d, 0x16, 0xef, 0x4f, 0xc5, 0xd7, 0x62, 0xf1,
-	0x54, 0x6a, 0x78, 0x2d, 0x16, 0x1f, 0x4d, 0x8d, 0xad, 0xc5, 0xe2, 0xa7, 0x53, 0x67, 0xa6, 0x7e,
-	0x15, 0x81, 0xe1, 0x03, 0x9e, 0x15, 0xdf, 0x04, 0x7c, 0xf0, 0x03, 0x3e, 0xa3, 0xac, 0x36, 0xc5,
-	0x38, 0x78, 0x72, 0xec, 0xe1, 0xe1, 0x37, 0xbc, 0x12, 0xd3, 0x76, 0x1f, 0xf7, 0x19, 0x75, 0xb5,
-	0xe3, 0x0d, 0xb0, 0x55, 0xce, 0xe6, 0x43, 0x7e, 0x0f, 0xc1, 0x50, 0xe8, 0xfb, 0x7b, 0xd1, 0xee,
-	0x51, 0x0e, 0x08, 0x16, 0x1f, 0x3d, 0xe8, 0xf7, 0xb8, 0x1f, 0x3d, 0x46, 0x27, 0xa7, 0x4f, 0x04,
-	0xad, 0x35, 0xdd, 0xbf, 0x45, 0x34, 0x4b, 0x2d, 0x57, 0x7e, 0xf6, 0x18, 0x25, 0xe3, 0xe8, 0x02,
-	0x9a, 0x45, 0xd7, 0xfb, 0xdc, 0x6d, 0x79, 0xa5, 0x47, 0x4e, 0x7a, 0x7c, 0x9e, 0x22, 0xd2, 0x8b,
-	0xcd, 0x70, 0xa6, 0x4d, 0xc5, 0x57, 0x6f, 0x4e, 0xcc, 0x8b, 0x73, 0x5e, 0xc5, 0xd7, 0xef, 0xc3,
-	0x58, 0xdb, 0x08, 0x1b, 0xbf, 0x0c, 0x7d, 0xee, 0x9e, 0xe0, 0x25, 0x1f, 0x5f, 0xe1, 0xaf, 0x81,
-	0x30, 0xe9, 0x91, 0x59, 0x74, 0x3d, 0x6e, 0x91, 0x92, 0x6e, 0x3b, 0xc4, 0xf2, 0x0b, 0xc0, 0xbd,
-	0x34, 0x40, 0xf6, 0x98, 0xf0, 0x39, 0x88, 0x96, 0xd5, 0xa2, 0xbb, 0x1d, 0x4b, 0x98, 0xf1, 0x06,
-	0x4a, 0xc5, 0xff, 0x1e, 0x21, 0x99, 0x75, 0x4f, 0xed, 0xc2, 0xf0, 0x81, 0x98, 0xfb, 0xf3, 0x4a,
-	0xfe, 0x0a, 0xf4, 0x7b, 0x3b, 0x08, 0x97, 0x3e, 0x28, 0x9d, 0x60, 0x54, 0xfd, 0xd3, 0xbd, 0xc2,
-	0xaf, 0xcf, 0x5e, 0x40, 0x72, 0x1f, 0x8f, 0xe7, 0xb5, 0xa9, 0xff, 0x8c, 0xc3, 0x29, 0x6f, 0xbf,
-	0xf0, 0xcc, 0xd6, 0xba, 0xdb, 0xff, 0xa4, 0x99, 0x53, 0xb9, 0xa5, 0x6f, 0x77, 0x8f, 0x9c, 0x45,
-	0x1c, 0x8e, 0xfa, 0xdb, 0xc8, 0xb2, 0x4e, 0x41, 0xb4, 0xa6, 0xbb, 0x35, 0xdc, 0x09, 0x29, 0xc1,
-	0x38, 0x62, 0x56, 0xe4, 0x1d, 0x24, 0xb3, 0x56, 0xbc, 0x09, 0x7d, 0xfc, 0x3d, 0x86, 0x05, 0x1e,
-	0x66, 0x26, 0xa4, 0xd7, 0x8f, 0xe1, 0x87, 0xdf, 0xfb, 0x39, 0xc2, 0x5b, 0xf3, 0xef, 0x14, 0x2f,
-	0xb3, 0xa5, 0x7f, 0xd9, 0x76, 0x54, 0x53, 0x53, 0x2d, 0xcd, 0xfb, 0x84, 0xef, 0x22, 0x24, 0xf7,
-	0xd6, 0xf4, 0xca, 0xc6, 0x02, 0xbe, 0x08, 0xc0, 0x9c, 0x84, 0x97, 0x29, 0xf4, 0x85, 0xf5, 0x08,
-	0x74, 0xe2, 0x0a, 0x0c, 0x36, 0x7f, 0x63, 0x5a, 0xe1, 0x2f, 0x5e, 0xab, 0x13, 0x4d, 0x09, 0x1b,
-	0x0b, 0xde, 0x9d, 0x8d, 0x17, 0x36, 0x59, 0xb4, 0xea, 0x10, 0xbb, 0x63, 0x86, 0xd5, 0x23, 0x27,
-	0x4d, 0xea, 0x46, 0x4a, 0x32, 0xa7, 0xc6, 0x45, 0x18, 0x6c, 0x65, 0x4f, 0x1c, 0xf3, 0x8e, 0x24,
-	0x00, 0xe6, 0x9f, 0xb8, 0xaf, 0xf4, 0xc8, 0x27, 0xec, 0xa0, 0x90, 0x65, 0x18, 0x31, 0xa9, 0x52,
-	0x5b, 0x08, 0x69, 0x3a, 0xd4, 0x31, 0x29, 0x4a, 0x99, 0x74, 0x63, 0xa1, 0x45, 0x57, 0x15, 0x52,
-	0x1e, 0x40, 0x6d, 0xc1, 0xc7, 0x70, 0x6f, 0x94, 0xe6, 0x0f, 0xa8, 0xdb, 0xf2, 0xe6, 0xa6, 0xa7,
-	0xe5, 0xc6, 0x42, 0x48, 0x4f, 0x24, 0x27, 0xed, 0x96, 0x9e, 0xcf, 0x13, 0x8a, 0x7d, 0xf7, 0xc3,
-	0x3a, 0x7a, 0x0b, 0xc6, 0x9a, 0x6f, 0xc6, 0x34, 0x22, 0x32, 0x94, 0x85, 0x31, 0x18, 0x74, 0x75,
-	0xc8, 0x78, 0x63, 0x89, 0x2d, 0x8a, 0xd9, 0x39, 0x16, 0xec, 0xdc, 0xa2, 0xaa, 0x96, 0x69, 0x9e,
-	0x82, 0xc7, 0xe6, 0xc5, 0xec, 0x22, 0x60, 0x80, 0x9b, 0x77, 0x0a, 0x19, 0x2f, 0x9f, 0x8c, 0x2d,
-	0x30, 0x37, 0x77, 0xbe, 0x11, 0x1f, 0xf3, 0xa1, 0x07, 0xdf, 0x0b, 0xf0, 0x9d, 0x67, 0xf4, 0xaa,
-	0x78, 0x4d, 0x2a, 0xc3, 0x78, 0xc8, 0x4a, 0x3e, 0x69, 0xe1, 0xc0, 0x6b, 0x30, 0xef, 0x3f, 0x6e,
-	0x37, 0xdd, 0x8e, 0xe9, 0xe3, 0x5c, 0xef, 0x96, 0x4c, 0x0d, 0x4d, 0xfd, 0x00, 0xc1, 0x68, 0xbb,
-	0x09, 0x81, 0x77, 0xc2, 0xb3, 0xcc, 0xdd, 0x74, 0x72, 0x47, 0xfa, 0x6c, 0x1c, 0x6b, 0x43, 0x27,
-	0x3b, 0xdc, 0x91, 0xa4, 0xfd, 0x4a, 0x5b, 0x77, 0xff, 0x60, 0x3f, 0xc5, 0x83, 0x0f, 0x67, 0xb4,
-	0xcc, 0xbc, 0xa9, 0xc7, 0x51, 0x18, 0x69, 0x73, 0x6a, 0x8c, 0x5f, 0x86, 0xa4, 0x46, 0xb6, 0xd4,
-	0xaa, 0xe1, 0xf8, 0xe1, 0x7f, 0x67, 0x0f, 0x3b, 0xe8, 0x51, 0xbb, 0xfb, 0x1d, 0x7e, 0x1b, 0x80,
-	0x1f, 0x9c, 0xb9, 0xac, 0xae, 0x3f, 0x5d, 0xfa, 0x02, 0x76, 0x50, 0x89, 0xc5, 0x4b, 0x68, 0xa5,
-	0x47, 0x4e, 0xd8, 0x86, 0x97, 0x1d, 0xb0, 0x80, 0xc0, 0x57, 0x95, 0x1f, 0xf6, 0xb9, 0x32, 0x3b,
-	0x3f, 0x6a, 0x91, 0xf2, 0x38, 0x0a, 0x86, 0x1e, 0xd4, 0xb8, 0xc1, 0xdd, 0xf7, 0x45, 0x6b, 0x8c,
-	0x98, 0xc6, 0x9e, 0x2c, 0xe9, 0x8c, 0x67, 0x9d, 0x43, 0x1e, 0xb4, 0x38, 0xe3, 0xa9, 0xd2, 0xec,
-	0x0e, 0x3e, 0x62, 0x11, 0x7c, 0xc0, 0x42, 0xfa, 0x00, 0xed, 0x7d, 0x9c, 0xee, 0xf9, 0xe5, 0xc7,
-	0xe9, 0x9e, 0xcf, 0x3e, 0x4e, 0xa3, 0x77, 0xf7, 0xd3, 0xe8, 0x2f, 0xf7, 0xd3, 0xe8, 0x1f, 0xf7,
-	0xd3, 0x68, 0x6f, 0x3f, 0x8d, 0x7e, 0xb9, 0x9f, 0x46, 0xbf, 0xda, 0x4f, 0xa3, 0x4f, 0xf7, 0xd3,
-	0x3d, 0x9f, 0xed, 0xa7, 0xd1, 0x0f, 0x3f, 0x49, 0xf7, 0x3c, 0xf9, 0x24, 0x8d, 0xf6, 0x3e, 0x49,
-	0xf7, 0xfc, 0xf2, 0x93, 0x74, 0xcf, 0x5b, 0xdf, 0x29, 0xd1, 0xca, 0xfd, 0xd2, 0x8c, 0x7f, 0xbe,
-	0x3e, 0x53, 0xb5, 0xaf, 0xf0, 0x1f, 0xb6, 0xa8, 0x55, 0xbe, 0xec, 0x1f, 0x27, 0x5f, 0xf6, 0xbb,
-	0xaf, 0x54, 0x36, 0x4b, 0xf4, 0x0a, 0x79, 0xc7, 0xf1, 0x9f, 0x1e, 0xee, 0xfc, 0x46, 0xf3, 0x66,
-	0x1f, 0x7f, 0xc3, 0x37, 0xff, 0x3f, 0x01, 0x00, 0x00, 0xff, 0xff, 0x29, 0x94, 0x17, 0xd4, 0xd4,
-	0x59, 0x00, 0x00,
+	// 5277 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x5d, 0x61, 0x6c, 0x1b, 0xc9,
+	0x75, 0xd6, 0x90, 0x94, 0x44, 0x3e, 0x59, 0x14, 0x35, 0x92, 0xec, 0x95, 0x6c, 0xcb, 0x3c, 0x9d,
+	0xcf, 0x67, 0xeb, 0xd6, 0xb2, 0x48, 0x8a, 0x92, 0xed, 0xf3, 0x5d, 0xe2, 0x95, 0x7c, 0x27, 0xe9,
+	0x6c, 0x59, 0x59, 0xfa, 0x94, 0xe4, 0xd0, 0x66, 0xb3, 0xe2, 0x8e, 0xa8, 0x3d, 0x2d, 0x77, 0xb6,
+	0xbb, 0x4b, 0xea, 0xd4, 0xd6, 0xe8, 0xc1, 0xe8, 0x9f, 0xe6, 0x47, 0x1b, 0x1c, 0x5a, 0x14, 0x38,
+	0xa0, 0x6d, 0x8a, 0x02, 0x41, 0x71, 0x28, 0xd0, 0x02, 0xed, 0x8f, 0xa2, 0x74, 0x00, 0xe3, 0x80,
+	0x02, 0x45, 0x7e, 0xe9, 0x67, 0x70, 0x40, 0x83, 0x44, 0x57, 0xb4, 0xd7, 0xfc, 0x0a, 0x50, 0xa0,
+	0x2d, 0xfc, 0x23, 0x57, 0xcc, 0xec, 0x2e, 0xb9, 0xa4, 0x28, 0x5a, 0x4a, 0x2e, 0xa9, 0x03, 0xf0,
+	0x8f, 0xcd, 0x9d, 0x79, 0xef, 0x9b, 0x37, 0x33, 0x6f, 0x66, 0xde, 0x7b, 0x3b, 0xfb, 0x04, 0xd9,
+	0x2a, 0x71, 0x66, 0x74, 0x7a, 0xcd, 0x29, 0x6e, 0x93, 0xb2, 0x7a, 0xad, 0xaa, 0x93, 0x5d, 0xe7,
+	0x9a, 0x43, 0x8a, 0x15, 0x9b, 0x94, 0x89, 0xb3, 0xad, 0x38, 0xba, 0x4b, 0x94, 0x6a, 0xf6, 0x9a,
+	0xbb, 0x67, 0x11, 0x67, 0xc6, 0xb2, 0xa9, 0x4b, 0xf1, 0x25, 0x8f, 0x67, 0xc6, 0xe3, 0x99, 0xe1,
+	0x3c, 0x33, 0x87, 0x79, 0x26, 0xae, 0x96, 0x74, 0x77, 0xbb, 0xb2, 0x39, 0x53, 0xa4, 0xe5, 0x6b,
+	0x25, 0x5a, 0xa2, 0xd7, 0x38, 0xfb, 0x66, 0x65, 0x8b, 0x3f, 0xf1, 0x07, 0xfe, 0xcb, 0x83, 0x9d,
+	0xb8, 0xd0, 0x2c, 0xca, 0x96, 0x41, 0x88, 0x1b, 0x6e, 0x77, 0x62, 0xba, 0x99, 0xc0, 0x24, 0xee,
+	0x2e, 0xb5, 0x77, 0x94, 0x2d, 0xdd, 0x26, 0xbb, 0xaa, 0x61, 0x34, 0xd1, 0xbe, 0xd2, 0x9e, 0x56,
+	0x37, 0x5d, 0x62, 0x6f, 0xa9, 0x45, 0xd2, 0x44, 0x7c, 0xb6, 0x99, 0x98, 0x5a, 0xae, 0x4e, 0xcd,
+	0xa0, 0x72, 0xb2, 0xb9, 0x92, 0x75, 0xae, 0x89, 0x79, 0xbc, 0xb9, 0x3e, 0x5c, 0x75, 0xae, 0x65,
+	0x70, 0x55, 0x43, 0xd7, 0x54, 0x97, 0xf8, 0xb5, 0xe9, 0xc3, 0x43, 0xaf, 0x34, 0x37, 0x3d, 0x7f,
+	0xcc, 0xc9, 0x51, 0x77, 0x1d, 0x25, 0xdc, 0xee, 0xc5, 0xb6, 0x7c, 0x8c, 0x38, 0x4c, 0x75, 0xa1,
+	0x1d, 0x55, 0x98, 0xe0, 0x4a, 0x2b, 0x81, 0xed, 0x56, 0x54, 0x43, 0xf1, 0xc7, 0x32, 0x4c, 0x3a,
+	0xf5, 0xc3, 0x8b, 0x90, 0x7c, 0xd3, 0xa0, 0x9b, 0xaa, 0x51, 0xb0, 0x48, 0xf1, 0xc1, 0x9e, 0x45,
+	0xf0, 0x03, 0xe8, 0xab, 0x96, 0x77, 0x55, 0x9b, 0x08, 0x91, 0x34, 0xba, 0x3c, 0x90, 0xbd, 0x39,
+	0x73, 0x3c, 0xb5, 0x99, 0xd9, 0xb8, 0xc7, 0xb8, 0xd6, 0x6d, 0x5a, 0xd5, 0x35, 0x62, 0x33, 0xac,
+	0xe5, 0x1e, 0xd9, 0xc7, 0xc2, 0x6f, 0x41, 0x74, 0xa7, 0x5a, 0x16, 0xa2, 0x1c, 0x72, 0xe1, 0xb8,
+	0x90, 0x6f, 0x6d, 0xdc, 0x6b, 0xc1, 0x63, 0x28, 0x0c, 0x4c, 0xdd, 0x75, 0x84, 0xd8, 0xc9, 0xc0,
+	0x6e, 0x7f, 0xb5, 0xd0, 0x0a, 0xa6, 0xee, 0x3a, 0xf8, 0x2b, 0xd0, 0xab, 0xfe, 0x76, 0xc5, 0x26,
+	0x42, 0x2f, 0x87, 0xbb, 0x71, 0x6c, 0x38, 0xc6, 0xd4, 0x02, 0xe8, 0x21, 0x31, 0xf9, 0x4a, 0x45,
+	0x4b, 0xe8, 0x3b, 0x99, 0x7c, 0x6f, 0x2e, 0xae, 0xb7, 0xca, 0x57, 0x2a, 0x5a, 0xf8, 0xab, 0xd0,
+	0x6f, 0x3b, 0xc4, 0xd6, 0x89, 0x23, 0xf4, 0x73, 0xc0, 0x57, 0x8f, 0x0b, 0x28, 0x17, 0x38, 0x5b,
+	0x0b, 0x68, 0x80, 0x86, 0x8b, 0x90, 0xd8, 0x54, 0x19, 0x8b, 0xab, 0x1a, 0x42, 0x9c, 0x43, 0xbf,
+	0x76, 0x5c, 0x68, 0x29, 0x60, 0x0c, 0x83, 0x4b, 0xb1, 0xcf, 0x6a, 0x08, 0x2d, 0xf7, 0xc8, 0x0d,
+	0x5c, 0x36, 0x14, 0xb4, 0xa8, 0x0b, 0x89, 0x93, 0x0d, 0xc5, 0xfd, 0xc5, 0x95, 0xd6, 0xa1, 0xa0,
+	0x45, 0x1d, 0xff, 0x26, 0x24, 0xa8, 0x45, 0x4c, 0xc7, 0x55, 0x8b, 0x3b, 0xc2, 0xfc, 0xc9, 0x24,
+	0xbe, 0x1f, 0x30, 0xb6, 0x00, 0x37, 0x10, 0xd9, 0x48, 0x9b, 0x15, 0x57, 0x35, 0xf5, 0xf7, 0x84,
+	0x85, 0x93, 0x8d, 0xf4, 0x9a, 0xc7, 0xd6, 0x3a, 0xd2, 0x3e, 0x1a, 0x96, 0x60, 0xd8, 0xa4, 0xc1,
+	0xfa, 0x53, 0x2c, 0x6a, 0xe8, 0xc5, 0x3d, 0xe1, 0x14, 0x6f, 0x62, 0xb4, 0xa5, 0x89, 0x3b, 0x65,
+	0xcb, 0xdd, 0x5b, 0x46, 0xf2, 0x90, 0x49, 0xd7, 0x3c, 0xfa, 0x75, 0x4e, 0x8e, 0xff, 0x04, 0xc1,
+	0x0b, 0x6a, 0xd1, 0xd5, 0xab, 0x44, 0x21, 0xe6, 0xb6, 0x6a, 0x16, 0x89, 0x56, 0xdf, 0x41, 0x3d,
+	0x48, 0xa6, 0x21, 0x83, 0x1c, 0x54, 0x6a, 0x01, 0x6d, 0xdd, 0x71, 0x67, 0x6e, 0x73, 0xa0, 0x3b,
+	0x3e, 0xce, 0x1b, 0x7e, 0xf1, 0xba, 0x8f, 0xe2, 0xcd, 0xe5, 0xdf, 0x3d, 0x46, 0x68, 0x19, 0xc9,
+	0x93, 0x6a, 0x47, 0x5a, 0xfc, 0x65, 0x48, 0x99, 0x54, 0xd9, 0xa2, 0xf6, 0xae, 0x6a, 0x6b, 0x8a,
+	0x65, 0xd3, 0xf7, 0xf6, 0x84, 0xa1, 0x0e, 0x5d, 0x8b, 0xc8, 0x49, 0x93, 0xbe, 0xe1, 0x91, 0xaf,
+	0x33, 0x6a, 0xfc, 0x07, 0x08, 0xce, 0xfb, 0x3d, 0x6b, 0x82, 0x69, 0xf4, 0x2a, 0xc5, 0xf1, 0x5e,
+	0x3f, 0x5e, 0xaf, 0xc2, 0xd8, 0x6d, 0x7a, 0x14, 0x91, 0x27, 0xd4, 0x23, 0xe9, 0xb0, 0x0e, 0xc3,
+	0x0e, 0xdd, 0x72, 0xd9, 0x96, 0xa5, 0x38, 0xc4, 0x75, 0x75, 0xb3, 0xe4, 0x08, 0xc3, 0xbc, 0xf9,
+	0x5b, 0xc7, 0x55, 0x86, 0x82, 0x0f, 0x50, 0xf0, 0xf9, 0x59, 0xe3, 0x72, 0xca, 0x69, 0x29, 0xc5,
+	0x5b, 0x90, 0xaa, 0x58, 0x25, 0x5b, 0xd5, 0x42, 0x2d, 0x8d, 0x9e, 0x4c, 0xed, 0xde, 0xf6, 0xf8,
+	0x9b, 0x1a, 0x1a, 0xaa, 0x34, 0x17, 0xe2, 0x35, 0x38, 0x63, 0xd0, 0x92, 0xa3, 0x38, 0xae, 0x4d,
+	0xd4, 0xb2, 0x6e, 0x96, 0x14, 0x4d, 0x77, 0xd4, 0x4d, 0x83, 0x68, 0xc2, 0xe9, 0x0e, 0xf3, 0x14,
+	0x95, 0xc7, 0x18, 0x5b, 0x21, 0xe0, 0x5a, 0xf2, 0x99, 0xf0, 0xd7, 0xe0, 0x94, 0x41, 0x4b, 0x8a,
+	0x4d, 0x8a, 0x44, 0xaf, 0x12, 0x5b, 0x38, 0xc3, 0x41, 0xa6, 0xda, 0xca, 0x7c, 0x7f, 0xf3, 0x5d,
+	0x52, 0x74, 0x65, 0xb2, 0xc5, 0x27, 0x60, 0xe8, 0xa3, 0x87, 0x4d, 0xac, 0xcb, 0x51, 0x79, 0xc0,
+	0xa0, 0x25, 0xd9, 0x7f, 0xc4, 0x4b, 0x80, 0x37, 0x0d, 0x5a, 0xdc, 0x51, 0x98, 0x4a, 0x3b, 0xc4,
+	0xae, 0xea, 0x45, 0xe2, 0x08, 0xe3, 0x1d, 0x84, 0x8c, 0xc9, 0x29, 0xce, 0x71, 0xdb, 0x30, 0x0a,
+	0x3e, 0x3d, 0x56, 0xc0, 0x2b, 0x23, 0x5a, 0x03, 0x63, 0x82, 0x63, 0x88, 0x2d, 0x18, 0xdc, 0x52,
+	0x99, 0x91, 0x3c, 0xe2, 0x80, 0xff, 0xae, 0xee, 0xb8, 0x21, 0x75, 0x89, 0xc9, 0x43, 0x9b, 0xcd,
+	0x04, 0xf8, 0x77, 0xe0, 0x9c, 0x45, 0xec, 0x2d, 0x6a, 0x97, 0xd9, 0x8a, 0x08, 0x56, 0x63, 0x99,
+	0x98, 0xae, 0x52, 0xa6, 0x1a, 0x11, 0xce, 0xf2, 0xc6, 0x72, 0x6d, 0x07, 0x64, 0xbd, 0xc1, 0x78,
+	0xa7, 0xc1, 0x77, 0x8f, 0x6a, 0xc4, 0x6b, 0xf3, 0xa7, 0x35, 0x84, 0xe4, 0x09, 0xeb, 0x48, 0x2a,
+	0x5c, 0x81, 0x09, 0xba, 0xb5, 0x65, 0xe8, 0x26, 0x51, 0x9c, 0x8a, 0x5d, 0xd5, 0xab, 0xea, 0xa6,
+	0x6e, 0xe8, 0xee, 0x9e, 0xd7, 0xf4, 0x39, 0xde, 0x74, 0xa6, 0xfd, 0x5c, 0x78, 0x6c, 0x85, 0x30,
+	0x57, 0x4b, 0xc3, 0x02, 0x3d, 0x82, 0x06, 0xbf, 0x0a, 0x23, 0x6e, 0xc5, 0x34, 0x89, 0xa1, 0x68,
+	0x44, 0xd5, 0x14, 0x57, 0x2f, 0x13, 0x5a, 0x71, 0x85, 0xf3, 0x69, 0x74, 0x79, 0x50, 0x1a, 0xf8,
+	0xa7, 0xff, 0x7c, 0x12, 0xed, 0x9b, 0x8e, 0x09, 0xdf, 0xf9, 0x19, 0xc8, 0xc3, 0x1e, 0xdd, 0x12,
+	0x51, 0xb5, 0x07, 0x1e, 0x15, 0xde, 0x86, 0xa4, 0x41, 0x55, 0x4d, 0xd9, 0x54, 0x0d, 0xd5, 0x2c,
+	0xea, 0x66, 0x49, 0x98, 0xe4, 0x72, 0xde, 0x3e, 0xae, 0x9e, 0xdf, 0xa5, 0xaa, 0x26, 0x05, 0xcc,
+	0x4d, 0xda, 0x3e, 0x68, 0x84, 0xab, 0xf0, 0x3d, 0x38, 0x63, 0x52, 0xc5, 0xc9, 0x3a, 0x4a, 0x91,
+	0x9a, 0x26, 0x61, 0xeb, 0x9c, 0x8d, 0x8d, 0x63, 0xe8, 0xc2, 0x0b, 0x1d, 0xd4, 0xa8, 0x57, 0x1e,
+	0x35, 0x69, 0x21, 0xeb, 0x2c, 0x86, 0x98, 0x0a, 0x86, 0x8e, 0xdf, 0x85, 0x51, 0xad, 0xa8, 0x14,
+	0x8d, 0x8a, 0xe3, 0x12, 0x5b, 0x29, 0xd9, 0xb4, 0x62, 0x71, 0xac, 0xa9, 0x63, 0xab, 0xfc, 0xc8,
+	0x47, 0x0f, 0x53, 0xad, 0x10, 0xcb, 0xbd, 0xf2, 0xb0, 0x56, 0x5c, 0xf4, 0x8a, 0xde, 0x64, 0x25,
+	0xac, 0xad, 0x23, 0x45, 0xa7, 0xc2, 0xc5, 0x0e, 0xa2, 0xf7, 0xb5, 0x15, 0x9d, 0x62, 0x0a, 0xa7,
+	0xf9, 0xe8, 0xf1, 0x71, 0xf4, 0x24, 0xa7, 0x26, 0x47, 0x7b, 0xe9, 0x64, 0x66, 0x4e, 0x41, 0x77,
+	0xc9, 0x3d, 0xe2, 0x6c, 0x73, 0x41, 0xf9, 0xc1, 0xd6, 0x27, 0x63, 0x27, 0x5c, 0x78, 0xdf, 0x64,
+	0x0d, 0xb6, 0x1f, 0x2b, 0x2a, 0x5c, 0xfa, 0xc5, 0xc6, 0xaa, 0xef, 0xf0, 0x58, 0x51, 0xfc, 0x35,
+	0x48, 0x18, 0xb4, 0xa8, 0x1a, 0x4a, 0xd5, 0xde, 0x12, 0x5e, 0x39, 0xd9, 0x9e, 0x79, 0x97, 0x31,
+	0x6e, 0xc8, 0x6f, 0xf8, 0x6a, 0xc4, 0xb5, 0x28, 0xce, 0xd1, 0x36, 0xec, 0x2d, 0xfc, 0x2e, 0x0c,
+	0xf8, 0x7a, 0xce, 0xac, 0x64, 0x41, 0x4c, 0xa3, 0xcb, 0xc9, 0xec, 0x8b, 0x2d, 0xd8, 0x6c, 0x48,
+	0x1e, 0x50, 0xfe, 0x2f, 0xa7, 0xe5, 0xd2, 0x5f, 0xfc, 0xa4, 0x86, 0xd2, 0x85, 0x95, 0x07, 0x77,
+	0x94, 0x07, 0xf7, 0x15, 0xef, 0xff, 0xb7, 0xd7, 0xd6, 0xee, 0xdc, 0x55, 0x56, 0xd6, 0x0b, 0x77,
+	0x16, 0x95, 0xfb, 0xb2, 0x52, 0x28, 0xdc, 0x95, 0xc1, 0xad, 0x73, 0xe0, 0x7b, 0x90, 0xe0, 0xa7,
+	0x8c, 0x41, 0x8a, 0xae, 0x70, 0x95, 0xf7, 0x62, 0xba, 0x6d, 0x2f, 0x64, 0x52, 0xd2, 0xa9, 0xa9,
+	0x1a, 0x77, 0xb4, 0x12, 0x29, 0x70, 0x72, 0x9d, 0x9a, 0xfe, 0x92, 0x8d, 0xdb, 0x7e, 0x11, 0x5e,
+	0x85, 0xf1, 0x2a, 0x35, 0x5c, 0x62, 0xdb, 0xaa, 0x52, 0x3f, 0xc3, 0xaa, 0xc4, 0x76, 0x74, 0x6a,
+	0x0a, 0xd7, 0xd2, 0xe8, 0x72, 0x42, 0x4a, 0xfe, 0x6f, 0x0d, 0xf5, 0xb0, 0xc5, 0xda, 0x6b, 0x47,
+	0x85, 0xf7, 0x23, 0xf2, 0x99, 0x80, 0x21, 0x38, 0xb2, 0x36, 0x3c, 0x72, 0xbc, 0x0c, 0x02, 0xb5,
+	0x88, 0xad, 0xb2, 0x11, 0x52, 0x9c, 0x3d, 0xc7, 0x25, 0xe5, 0x3a, 0xd4, 0x6c, 0x5b, 0xa8, 0xd3,
+	0x75, 0xfa, 0x02, 0x27, 0x0f, 0x90, 0xf2, 0x00, 0xfe, 0x71, 0xa3, 0x6c, 0xab, 0x42, 0xb6, 0x83,
+	0x26, 0xf7, 0xcb, 0x09, 0x9f, 0x72, 0x59, 0xc5, 0x39, 0x48, 0x10, 0x33, 0xe0, 0xca, 0x75, 0xe4,
+	0x8a, 0x7b, 0x84, 0xcb, 0x2a, 0xbe, 0x05, 0xc0, 0x67, 0xd9, 0x71, 0x55, 0x97, 0x08, 0x73, 0x7c,
+	0xee, 0xce, 0xb7, 0x70, 0x31, 0x02, 0x3e, 0x81, 0x05, 0x46, 0x24, 0x27, 0x9c, 0xe0, 0x27, 0x2e,
+	0xc2, 0x69, 0x55, 0x2b, 0xeb, 0xa6, 0x52, 0x71, 0x88, 0xad, 0x14, 0x6d, 0xa2, 0x11, 0xd3, 0xd5,
+	0x55, 0xc3, 0x11, 0xf2, 0xbc, 0xfd, 0xab, 0x6d, 0xe7, 0xe6, 0x36, 0x63, 0x79, 0xdb, 0x21, 0xf6,
+	0x62, 0x83, 0x81, 0xeb, 0xd4, 0xa8, 0xda, 0xa6, 0x06, 0xef, 0xc0, 0xa8, 0x65, 0x53, 0xdf, 0xda,
+	0x29, 0x53, 0x53, 0x77, 0xa9, 0xcd, 0x36, 0xc4, 0xeb, 0xbc, 0x89, 0x99, 0xf6, 0x67, 0x46, 0xc0,
+	0x70, 0xaf, 0x4e, 0xbf, 0xb8, 0x4d, 0xf5, 0x22, 0x91, 0xe2, 0x4f, 0x6a, 0x08, 0x71, 0x35, 0x18,
+	0xb1, 0x0e, 0x13, 0xe1, 0x0c, 0xc4, 0xb7, 0xf2, 0xbe, 0x49, 0x76, 0xab, 0xc3, 0x18, 0xc6, 0xe5,
+	0xfe, 0xad, 0xbc, 0x67, 0x8b, 0x7d, 0x0d, 0x4e, 0x15, 0x2b, 0x8e, 0x4b, 0xcb, 0x3e, 0xdb, 0x6b,
+	0x1d, 0xce, 0xb2, 0x36, 0x8b, 0x6b, 0x91, 0xf3, 0x72, 0xa8, 0xe5, 0xb8, 0x3c, 0x50, 0x6c, 0x3c,
+	0xe2, 0x6f, 0x42, 0x52, 0x33, 0x1d, 0xc5, 0x74, 0x2d, 0xb6, 0xc1, 0x6d, 0xe9, 0x25, 0xe1, 0xf5,
+	0x93, 0xb9, 0x97, 0x4b, 0x6b, 0x85, 0xb5, 0x07, 0xeb, 0xec, 0x14, 0x26, 0xf6, 0x22, 0x47, 0x90,
+	0x4f, 0x69, 0xa6, 0xb3, 0xe6, 0x5a, 0xde, 0x13, 0xbe, 0x02, 0xfd, 0xaa, 0xa6, 0xd9, 0xc4, 0x71,
+	0x84, 0x7f, 0xef, 0xf7, 0x94, 0x94, 0xf9, 0x23, 0x75, 0x25, 0x8d, 0xc9, 0x41, 0x3d, 0x5e, 0x86,
+	0x81, 0x22, 0xa5, 0xb6, 0xa6, 0x9b, 0xaa, 0x4b, 0x1c, 0xe1, 0x3f, 0x3c, 0xc7, 0xea, 0x42, 0x3b,
+	0x5d, 0x59, 0x6c, 0xd0, 0x79, 0xfe, 0x8d, 0x1c, 0x66, 0xc5, 0xdf, 0x80, 0x41, 0x1e, 0x00, 0xe0,
+	0x01, 0x0a, 0x53, 0x35, 0x84, 0xcf, 0xfa, 0x8f, 0xbd, 0xe1, 0x8d, 0x7e, 0xf4, 0xb0, 0x99, 0x99,
+	0xc3, 0x9f, 0x62, 0x45, 0x2b, 0x7e, 0xc9, 0xcd, 0x03, 0xf4, 0x71, 0x0d, 0xfd, 0x2b, 0x82, 0x14,
+	0xc4, 0x03, 0xef, 0x02, 0xc7, 0x32, 0xe2, 0xdc, 0x0d, 0x98, 0x84, 0xc1, 0x60, 0x63, 0x48, 0xb3,
+	0x9d, 0x01, 0x0f, 0xcc, 0xe5, 0xc5, 0xb9, 0x39, 0x31, 0x7b, 0x43, 0xcc, 0x5e, 0x9f, 0x45, 0x30,
+	0x01, 0x43, 0x4c, 0xcf, 0xd3, 0xbe, 0x1b, 0xc1, 0x14, 0xa2, 0x77, 0x2e, 0x27, 0xe6, 0x66, 0x67,
+	0x11, 0x5c, 0x84, 0x71, 0x5e, 0xf7, 0x80, 0xa6, 0xf9, 0xff, 0xe1, 0xd3, 0x03, 0xf7, 0xe6, 0xf2,
+	0x62, 0x2e, 0x3b, 0x8b, 0xe0, 0x2c, 0xa4, 0x7c, 0xe6, 0x74, 0x81, 0xcd, 0x07, 0xaf, 0xcc, 0x64,
+	0xc4, 0xcc, 0xdc, 0x2c, 0x82, 0x73, 0x30, 0x1a, 0x58, 0x44, 0xe9, 0x4b, 0x69, 0x99, 0x38, 0xb4,
+	0x62, 0x33, 0xeb, 0x28, 0x92, 0x5d, 0x98, 0x45, 0x20, 0xfa, 0x8d, 0xdf, 0x53, 0x4d, 0xb5, 0xc4,
+	0xad, 0x17, 0x7c, 0x26, 0xb3, 0x20, 0x66, 0x67, 0xc5, 0x7c, 0x4e, 0xcc, 0xce, 0x89, 0xd9, 0x8c,
+	0x98, 0x9f, 0x17, 0xf3, 0x37, 0xc4, 0xf9, 0xec, 0x2c, 0x92, 0xae, 0xc3, 0x90, 0xe5, 0x77, 0x4e,
+	0x29, 0x72, 0xd5, 0xc6, 0x2f, 0x3d, 0xa9, 0xa1, 0xc8, 0x7e, 0x0d, 0xa1, 0x83, 0x1a, 0x1a, 0x5b,
+	0x10, 0xb3, 0xe2, 0x9c, 0x98, 0x17, 0xe7, 0xc5, 0x1b, 0x62, 0x3e, 0x2f, 0xe6, 0xe7, 0xc4, 0xeb,
+	0x62, 0x8e, 0x0d, 0x96, 0x34, 0x0d, 0x63, 0xcd, 0x6e, 0x55, 0xc0, 0x3f, 0xfc, 0xa4, 0x86, 0x4e,
+	0xed, 0xd7, 0xd0, 0xc0, 0x41, 0x0d, 0xf5, 0x66, 0xb2, 0x62, 0x26, 0x27, 0x5d, 0x81, 0xd1, 0x66,
+	0xff, 0x22, 0x44, 0x3a, 0xb4, 0x5f, 0x43, 0x49, 0x4e, 0x9a, 0x17, 0x33, 0xf3, 0x8c, 0x94, 0xdb,
+	0xcc, 0x81, 0xa5, 0x1a, 0x26, 0x3d, 0xbd, 0x5f, 0x43, 0x63, 0x8c, 0x34, 0x9b, 0x15, 0xb3, 0x39,
+	0x49, 0x84, 0x33, 0xad, 0xe6, 0x66, 0x98, 0x7a, 0x7c, 0xbf, 0x86, 0x04, 0x4e, 0x9d, 0x17, 0xb3,
+	0xf3, 0xd2, 0x2c, 0x9c, 0x6d, 0x67, 0x9d, 0x84, 0x39, 0x5e, 0xd8, 0xaf, 0xa1, 0x34, 0xe3, 0xc8,
+	0xe5, 0xc4, 0xdc, 0x9c, 0x94, 0x6b, 0xcb, 0x41, 0x03, 0x8e, 0xd1, 0x27, 0x35, 0x74, 0x71, 0xbf,
+	0x86, 0x5e, 0x3c, 0xa8, 0xa1, 0x78, 0x6e, 0x5e, 0xcc, 0x2d, 0x88, 0xb9, 0xeb, 0xd2, 0xcb, 0x90,
+	0x34, 0xa9, 0xc6, 0x36, 0xcf, 0x80, 0x6e, 0xec, 0x49, 0x0d, 0x65, 0xf7, 0x6b, 0x28, 0xc3, 0x90,
+	0xf3, 0xb3, 0x62, 0x3e, 0xc3, 0xc7, 0xef, 0x45, 0x38, 0x43, 0x98, 0xaa, 0x59, 0xb6, 0xee, 0x90,
+	0xe6, 0x61, 0x61, 0x9b, 0xcb, 0xad, 0xfd, 0x1a, 0x7a, 0x75, 0x35, 0x16, 0x47, 0xa9, 0xc8, 0x6a,
+	0x2c, 0x3e, 0x90, 0x3a, 0xb5, 0x1a, 0x8b, 0x27, 0x53, 0x43, 0xab, 0xb1, 0xf8, 0x58, 0xea, 0xf4,
+	0x6a, 0x2c, 0x2e, 0xa4, 0xc6, 0x57, 0x63, 0xf1, 0x74, 0xea, 0x85, 0xd5, 0x58, 0xfc, 0xc5, 0xd4,
+	0xc5, 0xd5, 0x58, 0x7c, 0x3a, 0xf5, 0xca, 0x6a, 0x2c, 0x9e, 0x49, 0x65, 0x57, 0x63, 0xf1, 0x57,
+	0x53, 0xb7, 0xa6, 0xfe, 0x3c, 0x0a, 0xf8, 0xf0, 0xca, 0xc5, 0xb7, 0x20, 0xb9, 0x95, 0x57, 0xd8,
+	0x86, 0xa0, 0x91, 0x2d, 0xb5, 0x62, 0xb8, 0x7e, 0x30, 0xa7, 0xfd, 0x06, 0xd5, 0x23, 0x9f, 0xda,
+	0xca, 0x2f, 0x99, 0xce, 0x92, 0x47, 0x8b, 0xdf, 0x01, 0xf0, 0x77, 0x29, 0xcd, 0x74, 0x4e, 0x1a,
+	0xb7, 0xf1, 0xf6, 0xa8, 0xa5, 0xb5, 0x42, 0x60, 0x48, 0x2e, 0xf7, 0xc8, 0x09, 0x0f, 0x6e, 0xc9,
+	0x74, 0x7c, 0xc9, 0xd8, 0x36, 0x15, 0x48, 0xd6, 0xdf, 0xd1, 0x51, 0x3f, 0xb5, 0x95, 0x5f, 0x73,
+	0xad, 0xc3, 0x92, 0x99, 0xae, 0xe5, 0x07, 0x55, 0x4e, 0x28, 0x19, 0x1f, 0x2a, 0x5f, 0x32, 0x14,
+	0x48, 0xb6, 0xe6, 0x5a, 0xd2, 0x79, 0x18, 0x66, 0x03, 0xe6, 0xf0, 0x71, 0x0c, 0xcf, 0x52, 0x6c,
+	0xbf, 0x86, 0xa2, 0xac, 0x9a, 0x49, 0x7d, 0xb8, 0xba, 0x7f, 0xbf, 0x86, 0xfa, 0xea, 0x93, 0x18,
+	0x49, 0x45, 0x57, 0x63, 0xf1, 0x68, 0x2a, 0xb6, 0x1a, 0x8b, 0xf7, 0xa5, 0xfa, 0xa7, 0x56, 0x61,
+	0xf8, 0xd0, 0x88, 0xe0, 0x3c, 0x0c, 0x34, 0x9a, 0x72, 0x04, 0x94, 0x8e, 0x5e, 0x4e, 0x48, 0xa3,
+	0x7c, 0x27, 0xfd, 0x00, 0x45, 0x52, 0x5f, 0x0e, 0x7e, 0x09, 0x48, 0x06, 0xcd, 0x74, 0xbc, 0xa9,
+	0x75, 0x1a, 0x58, 0xa1, 0x3e, 0x30, 0xac, 0x86, 0x5c, 0xcf, 0xc0, 0x32, 0x5d, 0x2b, 0xc0, 0xfa,
+	0x59, 0x04, 0x06, 0x42, 0xc7, 0x09, 0x5e, 0x80, 0x94, 0xa7, 0x9e, 0xba, 0xa5, 0x04, 0xdb, 0x3c,
+	0xe2, 0xbb, 0xfc, 0x60, 0x60, 0x8a, 0xc4, 0xec, 0xc8, 0x7b, 0x48, 0x4e, 0x72, 0xb2, 0x15, 0xeb,
+	0xb6, 0xbf, 0xd7, 0x67, 0x00, 0x82, 0x70, 0x82, 0xed, 0xf2, 0x98, 0xe6, 0xa0, 0x84, 0x3f, 0xa9,
+	0xa1, 0xe8, 0xdc, 0x5c, 0x2e, 0x70, 0x5c, 0x3e, 0xff, 0x3c, 0x2a, 0x27, 0x2c, 0x2f, 0x12, 0x60,
+	0xbb, 0x78, 0x02, 0xe2, 0xcc, 0x08, 0x30, 0xd5, 0x32, 0xe1, 0x11, 0xcb, 0x84, 0x5c, 0x7f, 0xc6,
+	0x79, 0x88, 0x5b, 0xaa, 0xe3, 0xec, 0x52, 0x5b, 0xf3, 0x75, 0x76, 0xbc, 0xd5, 0x3c, 0x24, 0x45,
+	0x9b, 0xb8, 0x9e, 0x61, 0x19, 0x90, 0x62, 0x09, 0x86, 0x03, 0x3b, 0xc8, 0x26, 0x8a, 0x67, 0x05,
+	0xfa, 0x01, 0xc2, 0xa3, 0x74, 0x7e, 0xc8, 0x67, 0x90, 0x7d, 0x33, 0x13, 0x7f, 0x19, 0x52, 0xbe,
+	0x51, 0xd4, 0x80, 0xe8, 0xef, 0x08, 0x91, 0xf4, 0xe8, 0x03, 0x04, 0xe9, 0x22, 0x08, 0x15, 0x87,
+	0x87, 0x59, 0x1a, 0x10, 0x61, 0x55, 0xe9, 0xdb, 0xaf, 0xa1, 0xde, 0xd5, 0x58, 0xbc, 0x37, 0xd5,
+	0x37, 0xf5, 0x5b, 0x30, 0x7e, 0xa4, 0xdf, 0x85, 0x1f, 0xb0, 0x63, 0xcf, 0x52, 0xaa, 0xb6, 0x6d,
+	0x79, 0x9e, 0x27, 0xe2, 0xd6, 0xd6, 0x44, 0x8b, 0x1c, 0x1b, 0xba, 0xb5, 0x61, 0xdb, 0x96, 0x77,
+	0xda, 0x7d, 0x52, 0x43, 0xa9, 0x8d, 0x95, 0x75, 0x65, 0x43, 0x96, 0xd7, 0x95, 0xa5, 0x95, 0xc2,
+	0x6d, 0xe9, 0xee, 0x1d, 0x79, 0xa0, 0xea, 0x91, 0x30, 0x2f, 0x73, 0xea, 0x4f, 0x11, 0x8c, 0xb6,
+	0x8b, 0x9e, 0xe0, 0x2f, 0x41, 0xc4, 0xd9, 0xe5, 0x6d, 0x0c, 0x64, 0xaf, 0xb4, 0x5d, 0x4e, 0x1b,
+	0x2d, 0x96, 0x6c, 0xc8, 0xab, 0x8d, 0x38, 0xbb, 0xf8, 0x75, 0x88, 0x50, 0xc7, 0x0f, 0x68, 0x5f,
+	0x6e, 0x7f, 0x34, 0x37, 0xdb, 0xaf, 0x61, 0x7e, 0xea, 0x4c, 0x3d, 0x42, 0x30, 0xd2, 0x26, 0xda,
+	0x82, 0x77, 0x40, 0xd8, 0xa9, 0x6c, 0x12, 0xdb, 0x24, 0x2e, 0x71, 0x94, 0x20, 0x9e, 0xa3, 0xd9,
+	0xaa, 0x6e, 0xfa, 0xc1, 0x9c, 0x57, 0xda, 0xb6, 0xf6, 0x56, 0x9d, 0xc9, 0x47, 0x5d, 0x62, 0x2c,
+	0x7e, 0x83, 0xa7, 0x77, 0xda, 0xd6, 0x4e, 0xfd, 0x77, 0x04, 0x62, 0x6b, 0xcc, 0x1b, 0x9f, 0x85,
+	0x18, 0x77, 0x4f, 0x3c, 0xfd, 0x3f, 0xf7, 0xed, 0xef, 0x79, 0x56, 0xce, 0x88, 0x3d, 0x2c, 0xf7,
+	0x2f, 0x52, 0xd3, 0xb5, 0xa9, 0x21, 0xf7, 0x7d, 0x95, 0xda, 0x3b, 0xc4, 0x96, 0x39, 0x25, 0x9e,
+	0x86, 0xf8, 0x36, 0x75, 0xdc, 0x86, 0x46, 0x4b, 0xc9, 0x80, 0xcb, 0x37, 0xe0, 0xeb, 0xf5, 0xf8,
+	0x65, 0x48, 0x58, 0x95, 0x4d, 0x43, 0x2f, 0x2a, 0xba, 0x17, 0xc3, 0x4e, 0x48, 0x10, 0x26, 0xf4,
+	0x2a, 0x57, 0x2c, 0x4c, 0x21, 0x59, 0x7f, 0x2f, 0xa3, 0x18, 0xba, 0xc3, 0xb6, 0xca, 0xe8, 0x91,
+	0xf1, 0x87, 0x36, 0x1b, 0xde, 0x4a, 0xc0, 0x2d, 0x8d, 0xf1, 0x95, 0xf8, 0x01, 0x8a, 0xa6, 0xde,
+	0x47, 0xa1, 0x0d, 0x61, 0xb0, 0x8e, 0x7f, 0x57, 0x77, 0xdc, 0x9b, 0xd5, 0x8f, 0x6b, 0x48, 0x84,
+	0x71, 0x48, 0xb1, 0x51, 0x48, 0xaf, 0x98, 0x3c, 0x48, 0xc2, 0x9c, 0x21, 0xdc, 0x9b, 0x13, 0x33,
+	0xe2, 0x3c, 0x0c, 0x01, 0xd4, 0x31, 0x1d, 0x8c, 0x16, 0xbe, 0x5f, 0x43, 0x12, 0x9c, 0x86, 0xf8,
+	0xb2, 0xdf, 0xb7, 0x09, 0x68, 0x8c, 0x03, 0x24, 0x21, 0xc6, 0xe6, 0x70, 0xa2, 0xcf, 0x1b, 0x4d,
+	0x10, 0x20, 0xb1, 0xce, 0xbb, 0x96, 0x5e, 0x59, 0x9f, 0x18, 0x08, 0x0d, 0xc2, 0x54, 0x2d, 0x0a,
+	0xc3, 0x87, 0xfc, 0x60, 0xe6, 0xb1, 0x3b, 0xe5, 0xfa, 0xc1, 0x4c, 0x4d, 0xa5, 0x31, 0x6a, 0x91,
+	0x8e, 0xab, 0x72, 0xd4, 0x29, 0x2f, 0xd6, 0xb9, 0xd6, 0x83, 0xd1, 0x7c, 0x13, 0x46, 0x5b, 0xe0,
+	0xaa, 0x2e, 0xc3, 0x8a, 0x76, 0xc4, 0x1a, 0x6e, 0xc2, 0xaa, 0xba, 0x2b, 0x16, 0x5e, 0x04, 0x6c,
+	0x52, 0xa5, 0xc5, 0xfb, 0xf7, 0x4f, 0xc9, 0x0e, 0xe1, 0xe6, 0xa6, 0x0e, 0xe2, 0x6f, 0xc2, 0x50,
+	0x2b, 0x42, 0xdf, 0xb1, 0x0d, 0x5b, 0xfc, 0xd1, 0xc3, 0x56, 0xee, 0x65, 0x24, 0x0f, 0x36, 0x45,
+	0x0d, 0x24, 0x11, 0xc6, 0x5b, 0x23, 0x14, 0xba, 0x15, 0x6c, 0x46, 0x43, 0x21, 0xf3, 0x2f, 0x9a,
+	0x15, 0x73, 0xd2, 0xd5, 0xc3, 0xf1, 0x0c, 0x9f, 0x74, 0xe4, 0x49, 0x0d, 0xf5, 0xee, 0xd7, 0x50,
+	0x8c, 0x91, 0xe6, 0xc5, 0x79, 0xb6, 0x84, 0xea, 0xa7, 0x5d, 0x2c, 0xd5, 0x3b, 0xf5, 0x1d, 0x04,
+	0xf8, 0xf0, 0xbb, 0x29, 0xfc, 0x75, 0x18, 0x30, 0xa9, 0xab, 0x94, 0xb9, 0x85, 0xaa, 0xf9, 0x53,
+	0x36, 0x7b, 0xec, 0x88, 0x3f, 0xd5, 0xb8, 0x4e, 0x7a, 0x4b, 0x76, 0xb9, 0x47, 0x06, 0x93, 0xba,
+	0x9e, 0xb5, 0xab, 0x31, 0xf3, 0x91, 0xda, 0xc5, 0x6d, 0xe2, 0xb8, 0x36, 0x57, 0xcf, 0xb0, 0x79,
+	0x17, 0xf4, 0x0a, 0x65, 0x3f, 0xab, 0x0b, 0x3a, 0xf5, 0x67, 0x08, 0x86, 0x5a, 0xde, 0x75, 0x3d,
+	0x57, 0xf2, 0xfd, 0x7e, 0x04, 0x86, 0x5a, 0x5e, 0x9f, 0xfd, 0x12, 0xe5, 0xc3, 0x04, 0xfa, 0x03,
+	0x58, 0x4f, 0xfb, 0xe7, 0x4f, 0xf0, 0x8e, 0xcf, 0x07, 0x61, 0x07, 0x8a, 0x34, 0xfc, 0x93, 0x87,
+	0xa0, 0x91, 0x32, 0xcd, 0x88, 0x2e, 0x71, 0xdc, 0x7d, 0xaf, 0xa5, 0x00, 0xfb, 0xe4, 0xc3, 0xf0,
+	0x17, 0x08, 0x86, 0x0f, 0xbd, 0xf6, 0x7b, 0xee, 0x14, 0xa9, 0xe5, 0x3d, 0xe2, 0x73, 0x25, 0xdf,
+	0x5f, 0x21, 0x18, 0x6b, 0xfb, 0xee, 0xf0, 0xb9, 0x1b, 0xc5, 0x96, 0x57, 0x90, 0xcf, 0x95, 0x7c,
+	0x7f, 0x89, 0x60, 0xa4, 0xcd, 0xcb, 0xdd, 0xe7, 0x6e, 0xa6, 0xdb, 0xbe, 0x73, 0x7d, 0xee, 0x46,
+	0xb2, 0xcd, 0xcb, 0xdb, 0xe7, 0x4a, 0xc6, 0xbf, 0x8f, 0x40, 0x3c, 0x40, 0xc4, 0xdf, 0x8d, 0x40,
+	0x82, 0xbb, 0xf6, 0xdc, 0xde, 0x42, 0xdc, 0xde, 0x12, 0x4f, 0x22, 0x97, 0xf4, 0x09, 0x6a, 0x6b,
+	0x6b, 0x1d, 0xfc, 0xe8, 0x9f, 0xa3, 0xff, 0x80, 0x3e, 0x78, 0x8c, 0xfe, 0x16, 0x4d, 0xfd, 0x0d,
+	0x7a, 0xb0, 0x4d, 0x6c, 0x92, 0x56, 0x6d, 0x92, 0x36, 0x69, 0x9a, 0xb1, 0x39, 0x69, 0x55, 0xd3,
+	0x88, 0x96, 0xde, 0x23, 0xee, 0x0c, 0x2f, 0x48, 0x6f, 0x51, 0x3b, 0xed, 0x6e, 0x13, 0x2f, 0x34,
+	0x44, 0xd2, 0xec, 0x60, 0xf7, 0x82, 0x49, 0x8c, 0xcb, 0x23, 0xae, 0xea, 0x6a, 0x9a, 0xbc, 0xe7,
+	0x45, 0xb2, 0xd2, 0x41, 0x84, 0x27, 0x5d, 0xae, 0xc7, 0x84, 0xd2, 0x45, 0x6a, 0x3a, 0xd4, 0x60,
+	0xe0, 0xa6, 0x96, 0xde, 0xd5, 0x0d, 0x23, 0xad, 0x56, 0x5c, 0xca, 0x6c, 0xba, 0xa2, 0x6a, 0x18,
+	0x7b, 0x69, 0xd5, 0xb2, 0x88, 0x6a, 0xa7, 0xb9, 0x30, 0xbb, 0xdb, 0xc4, 0x64, 0x0d, 0xee, 0xf1,
+	0x06, 0x34, 0xdd, 0x29, 0xd2, 0x2a, 0xb1, 0x89, 0x36, 0xc3, 0x24, 0xef, 0xfb, 0xe0, 0x31, 0x37,
+	0x18, 0xe3, 0xa6, 0x3f, 0x50, 0x53, 0x9f, 0x5e, 0x80, 0xe4, 0xa2, 0x4d, 0x54, 0x97, 0x74, 0x6f,
+	0xb6, 0x74, 0x6f, 0xb6, 0x74, 0x6f, 0xb6, 0x74, 0x6f, 0xb6, 0x74, 0x6f, 0xb6, 0x74, 0x6f, 0xb6,
+	0x74, 0x6f, 0xb6, 0x74, 0x6f, 0xb6, 0x34, 0xdf, 0x6c, 0x99, 0xe9, 0x70, 0xb3, 0xa5, 0x7b, 0x99,
+	0xa5, 0x7b, 0x99, 0xe5, 0xd7, 0xf8, 0x32, 0xcb, 0xd2, 0xcf, 0x7b, 0x99, 0xe5, 0x97, 0x79, 0x4d,
+	0xe5, 0x57, 0x79, 0x21, 0xe4, 0x57, 0x72, 0xa5, 0x43, 0xfd, 0x22, 0xaf, 0x74, 0x74, 0x2f, 0x72,
+	0xe8, 0xa5, 0x9b, 0xc3, 0xdf, 0x7f, 0xbd, 0xe5, 0xa3, 0x04, 0xe9, 0xd2, 0xe1, 0x1b, 0x02, 0x23,
+	0x8f, 0x9e, 0xa2, 0xd6, 0x42, 0x29, 0x7b, 0xd4, 0x7d, 0x80, 0xf1, 0x47, 0x4f, 0x51, 0xfb, 0x2a,
+	0x69, 0xf6, 0x88, 0x7b, 0x01, 0xc2, 0xa3, 0xa7, 0xa8, 0x6d, 0x0d, 0xe3, 0x68, 0x7b, 0x3d, 0x80,
+	0x73, 0xb4, 0xab, 0x91, 0xe6, 0x8f, 0xbe, 0x25, 0x70, 0xf6, 0xd1, 0x53, 0x74, 0x54, 0xa5, 0xf4,
+	0x7a, 0xe7, 0xfb, 0x02, 0x17, 0x1e, 0x3d, 0x45, 0x9d, 0x08, 0x8e, 0xe0, 0xa7, 0xcf, 0xe2, 0x0f,
+	0x08, 0xa4, 0x8b, 0x87, 0x2e, 0x12, 0xe0, 0x47, 0x4f, 0x51, 0x4b, 0x19, 0xeb, 0xdd, 0x51, 0xb7,
+	0x08, 0x78, 0xef, 0x8e, 0xa8, 0xfc, 0xb9, 0x2f, 0x16, 0xcc, 0xa5, 0xf2, 0xfe, 0xf5, 0x82, 0x7f,
+	0xbb, 0x00, 0x43, 0x32, 0xb1, 0x0c, 0xb5, 0xd8, 0x75, 0xf3, 0xbb, 0x6e, 0x7e, 0xd7, 0xcd, 0xef,
+	0xba, 0xf9, 0x5d, 0x37, 0xbf, 0xeb, 0xe6, 0x77, 0xdd, 0xfc, 0xae, 0x9b, 0xdf, 0x75, 0xf3, 0xbb,
+	0x6e, 0x7e, 0xd7, 0xcd, 0xef, 0xba, 0xf9, 0x5d, 0x37, 0xbf, 0xeb, 0xe6, 0x77, 0xdd, 0xfc, 0x5f,
+	0x73, 0x37, 0xff, 0x0f, 0x5f, 0x80, 0x81, 0x37, 0x89, 0xdb, 0x75, 0xf1, 0xbb, 0x2e, 0x7e, 0xd7,
+	0xc5, 0xef, 0xba, 0xf8, 0x5d, 0x17, 0xbf, 0xeb, 0xe2, 0x77, 0x5d, 0xfc, 0xae, 0x8b, 0xdf, 0x75,
+	0xf1, 0xbb, 0x2e, 0x7e, 0xd7, 0xc5, 0xff, 0xff, 0x72, 0xf1, 0x6f, 0x3e, 0x33, 0xe1, 0xc4, 0xd1,
+	0x09, 0x26, 0xae, 0x3f, 0x2b, 0xc1, 0x44, 0x37, 0xa1, 0x44, 0x37, 0x2c, 0xd1, 0x0d, 0x4b, 0x74,
+	0xc3, 0x12, 0xcf, 0x61, 0x58, 0xe2, 0xd5, 0xd4, 0xad, 0xa9, 0x1f, 0x8e, 0x41, 0xa2, 0xfe, 0xa5,
+	0x29, 0x16, 0x61, 0x40, 0x23, 0x4e, 0xd1, 0xd6, 0x79, 0x16, 0x50, 0xff, 0xb3, 0xdc, 0xf0, 0x37,
+	0xb3, 0xe1, 0x6a, 0xfc, 0xc7, 0x08, 0xfa, 0x0c, 0x75, 0x93, 0x18, 0x8e, 0x10, 0xe1, 0xdf, 0x6f,
+	0xbc, 0x76, 0xe2, 0xef, 0x65, 0x67, 0xee, 0x72, 0xfe, 0x3b, 0xa6, 0x6b, 0xef, 0x49, 0xaf, 0x7d,
+	0xf8, 0x18, 0xc5, 0x20, 0xe2, 0x7d, 0x03, 0x3f, 0xf0, 0x21, 0x8a, 0x4f, 0xf5, 0xd9, 0xb1, 0x14,
+	0x12, 0xbc, 0x2f, 0xeb, 0x3f, 0x44, 0x91, 0x54, 0x2a, 0xa8, 0x99, 0xf6, 0x6b, 0xf8, 0x27, 0x13,
+	0xdf, 0x7a, 0x8c, 0x22, 0xf1, 0x1e, 0xd9, 0x97, 0x05, 0x9b, 0x80, 0x89, 0xbb, 0xcd, 0xbf, 0x3b,
+	0x6e, 0xa4, 0x5b, 0xf5, 0xe3, 0x17, 0xc7, 0x96, 0xf0, 0x8e, 0x8f, 0x50, 0x97, 0xd4, 0x77, 0x33,
+	0x87, 0x49, 0x6b, 0x05, 0xde, 0x84, 0x64, 0xd5, 0x50, 0xcd, 0x50, 0x5b, 0x27, 0x0c, 0x6e, 0x6c,
+	0x18, 0xaa, 0xd9, 0xda, 0xce, 0x60, 0x35, 0x5c, 0x88, 0xbf, 0x02, 0xc9, 0x4d, 0x6a, 0x6a, 0xa1,
+	0x36, 0xfa, 0xda, 0x7e, 0x02, 0xee, 0x59, 0xd9, 0x6f, 0xb0, 0x7f, 0x25, 0x6a, 0x6a, 0x4b, 0x84,
+	0x2d, 0x83, 0x00, 0x92, 0x21, 0x34, 0x20, 0x17, 0x60, 0x40, 0xdb, 0x2e, 0x5a, 0x4a, 0xd1, 0xd0,
+	0x89, 0xe9, 0xfa, 0x31, 0x89, 0xa3, 0x3c, 0x64, 0x60, 0xa4, 0x8b, 0x9c, 0x12, 0xbf, 0x03, 0x09,
+	0x76, 0x8e, 0x78, 0x1f, 0x08, 0x27, 0xda, 0x5a, 0x07, 0x87, 0xb2, 0xdd, 0xce, 0x14, 0x38, 0xc7,
+	0x8a, 0xb5, 0xae, 0xda, 0x6a, 0x99, 0xb8, 0xc4, 0x76, 0xd6, 0x7c, 0x73, 0x78, 0x19, 0xc9, 0x71,
+	0xc7, 0xaf, 0xc5, 0x9b, 0xbe, 0x50, 0x5e, 0x92, 0x05, 0xdf, 0xba, 0xbf, 0xf1, 0x4c, 0xf4, 0xa5,
+	0xe5, 0x45, 0x7f, 0x27, 0x6c, 0xe0, 0x87, 0x82, 0x24, 0xbe, 0xfc, 0x1e, 0x05, 0x7e, 0x1d, 0x86,
+	0x4c, 0xaa, 0xe8, 0x56, 0x75, 0xae, 0x9e, 0x7f, 0x21, 0xdd, 0xb1, 0xf3, 0x83, 0x26, 0x5d, 0xb1,
+	0xaa, 0x73, 0x41, 0x1e, 0x86, 0x49, 0x88, 0xf1, 0xcf, 0xcf, 0xe1, 0xd0, 0xea, 0xe0, 0xe5, 0x78,
+	0x06, 0xa2, 0x65, 0xb7, 0x22, 0x0c, 0xf0, 0x04, 0x0d, 0xe7, 0x3e, 0xa9, 0xa1, 0x58, 0x26, 0x3f,
+	0x3b, 0xcb, 0xc8, 0x86, 0xa6, 0x07, 0xa5, 0x81, 0x59, 0x31, 0x9f, 0xc9, 0x5e, 0xcd, 0xcc, 0xe7,
+	0xae, 0xcf, 0xc9, 0x8c, 0x10, 0x17, 0x20, 0x19, 0xf4, 0xc8, 0xcb, 0xbe, 0xeb, 0x47, 0x2b, 0x2e,
+	0xb5, 0xd5, 0x1f, 0x3f, 0x50, 0xe1, 0x99, 0x2e, 0x0d, 0xdf, 0x49, 0x1e, 0xf4, 0x31, 0xee, 0x7b,
+	0x6b, 0xf3, 0x36, 0xa4, 0xfc, 0x43, 0xb4, 0xe1, 0x81, 0x0e, 0x77, 0x8c, 0x14, 0x0c, 0xf9, 0xf4,
+	0x75, 0xdf, 0xf3, 0x6d, 0xe8, 0xf7, 0x8b, 0x04, 0x7c, 0xcc, 0x79, 0xb8, 0xab, 0x9b, 0x3b, 0x5f,
+	0xa9, 0xa8, 0x9e, 0x27, 0xc3, 0x59, 0xbd, 0xb3, 0x68, 0x39, 0x22, 0x07, 0x58, 0xf8, 0x12, 0xc4,
+	0x2d, 0x5b, 0xa7, 0xb6, 0xee, 0xee, 0x09, 0x23, 0x7c, 0x8c, 0xbc, 0x21, 0x9c, 0x8e, 0x0a, 0x9f,
+	0x23, 0xb9, 0x5e, 0x87, 0x2b, 0x20, 0x7a, 0x19, 0x83, 0xfd, 0x4f, 0xc0, 0x9b, 0xf6, 0xd6, 0xc6,
+	0xe7, 0xfa, 0xf5, 0xde, 0x8d, 0x75, 0xf4, 0xaf, 0x5f, 0x76, 0xea, 0x46, 0x65, 0xd8, 0x94, 0xaf,
+	0x2f, 0x87, 0x7a, 0xaf, 0x1d, 0x78, 0xe5, 0x38, 0xcd, 0x7a, 0xa6, 0xd5, 0xb3, 0xbc, 0xfa, 0x4b,
+	0xcf, 0x68, 0xf5, 0x8e, 0x87, 0x82, 0x5f, 0x04, 0xd0, 0x1d, 0xc5, 0xb2, 0xf5, 0xb2, 0x6a, 0xef,
+	0x71, 0x27, 0x3f, 0xee, 0xe7, 0x68, 0x4a, 0xe8, 0xce, 0xba, 0x57, 0x8c, 0xaf, 0xc0, 0xa0, 0xee,
+	0x28, 0x8d, 0x8f, 0xce, 0xb8, 0xa3, 0x1d, 0xd0, 0x9d, 0xd2, 0x9d, 0x50, 0x8a, 0xa2, 0xba, 0x8a,
+	0xcf, 0xd7, 0x55, 0xfc, 0x7c, 0x47, 0xcf, 0xde, 0x53, 0xf1, 0xf9, 0x40, 0xc5, 0x75, 0x18, 0xa9,
+	0x2f, 0xf1, 0x10, 0xc6, 0x64, 0xdb, 0xc0, 0xe2, 0x91, 0x8b, 0x7d, 0xbd, 0x79, 0x31, 0x2e, 0xc7,
+	0xe4, 0xe1, 0x60, 0xa1, 0x37, 0x9a, 0x52, 0x20, 0xe5, 0xb5, 0x51, 0x71, 0x69, 0x60, 0x09, 0x5d,
+	0x68, 0x6b, 0x65, 0x1d, 0x6e, 0x67, 0x65, 0x7d, 0x63, 0xfe, 0x76, 0xc5, 0xa5, 0x9e, 0x92, 0xf9,
+	0x6d, 0x24, 0x19, 0x5c, 0xa3, 0x74, 0xe2, 0x06, 0x0c, 0x84, 0x0e, 0x19, 0x9c, 0x82, 0xe8, 0x0e,
+	0xd9, 0xf3, 0x8e, 0x36, 0x99, 0xfd, 0xc4, 0xa3, 0xd0, 0x5b, 0x55, 0x8d, 0x8a, 0x17, 0x82, 0x4f,
+	0xc8, 0xde, 0xc3, 0xcd, 0xc8, 0x75, 0x74, 0xf3, 0x7f, 0x62, 0x1f, 0xd7, 0x10, 0x05, 0x0c, 0xf1,
+	0x7b, 0xc4, 0x55, 0x35, 0xd5, 0x55, 0x71, 0x5f, 0x66, 0x56, 0xcc, 0x88, 0x59, 0x18, 0x87, 0x51,
+	0x6f, 0x73, 0x4d, 0x7b, 0xcd, 0x54, 0xbc, 0x6f, 0x20, 0x31, 0xca, 0x81, 0x00, 0xa9, 0x95, 0xf5,
+	0x96, 0xe2, 0xd8, 0x82, 0x98, 0xbd, 0x0e, 0x17, 0x01, 0xd7, 0xa7, 0x3e, 0x5d, 0x8f, 0x19, 0x25,
+	0x33, 0x59, 0x31, 0x93, 0x11, 0x33, 0xf3, 0x62, 0xe6, 0x86, 0x98, 0x9d, 0xfd, 0x7e, 0x0d, 0x7d,
+	0x1e, 0x85, 0x24, 0xc4, 0xd6, 0xd4, 0x32, 0xcf, 0xe9, 0xc0, 0x73, 0x3c, 0xbc, 0xe3, 0xe5, 0x78,
+	0x98, 0x96, 0x61, 0x1d, 0x26, 0xdb, 0x1d, 0x70, 0xd9, 0x78, 0x70, 0x64, 0xc1, 0xe9, 0xd6, 0x03,
+	0x29, 0x1b, 0xdb, 0xb8, 0x7b, 0x7b, 0x8d, 0x95, 0x37, 0x1f, 0x22, 0xd9, 0x18, 0x3b, 0x24, 0xe0,
+	0xeb, 0xd0, 0xe7, 0xf5, 0x65, 0xfa, 0x3e, 0xdc, 0x83, 0xb3, 0x30, 0x7e, 0x18, 0x7d, 0x46, 0xe3,
+	0x04, 0x70, 0x06, 0xc6, 0x9a, 0xa1, 0x83, 0x8a, 0x31, 0x18, 0x69, 0xc6, 0x9e, 0xe1, 0x62, 0xdf,
+	0x83, 0xe8, 0xbd, 0xdb, 0x8b, 0xd3, 0x6f, 0xc0, 0x12, 0x08, 0x70, 0xba, 0x0d, 0x6e, 0x59, 0x2d,
+	0xc2, 0xc8, 0x21, 0x79, 0xd1, 0x55, 0x56, 0xd8, 0x22, 0x2c, 0xba, 0x0a, 0x32, 0xf0, 0x9e, 0x4c,
+	0xaf, 0xc2, 0x32, 0xc3, 0x6b, 0x11, 0xc5, 0x7b, 0xd4, 0xe0, 0x4c, 0xdb, 0xf1, 0x39, 0x0a, 0xf3,
+	0x03, 0x04, 0x43, 0x1b, 0x5e, 0x66, 0xf1, 0x20, 0xc5, 0xd8, 0xf4, 0xef, 0xc1, 0x43, 0xb8, 0x0c,
+	0x2f, 0x34, 0x6f, 0xcb, 0xdc, 0x43, 0x52, 0x3c, 0xc7, 0xd8, 0xaf, 0xc9, 0x46, 0x0b, 0x77, 0xef,
+	0xc3, 0x35, 0xb8, 0x7c, 0x34, 0xa5, 0x6e, 0x3a, 0xba, 0x46, 0xc2, 0x0c, 0x2b, 0x90, 0x86, 0xc9,
+	0x56, 0x06, 0x52, 0xe2, 0x31, 0x2d, 0xbf, 0x58, 0xba, 0x02, 0xa9, 0xc6, 0x5e, 0x13, 0xca, 0x7c,
+	0xc5, 0x33, 0x24, 0x1d, 0xd4, 0x50, 0x2f, 0xcf, 0x22, 0xc6, 0x33, 0x5f, 0xbd, 0x0c, 0x49, 0x7f,
+	0x7d, 0x86, 0x09, 0xe3, 0xfb, 0x35, 0xd4, 0x7f, 0x50, 0x43, 0x89, 0xeb, 0xe2, 0x0d, 0x31, 0xbb,
+	0x20, 0xe6, 0xb2, 0xd2, 0x25, 0x18, 0x6e, 0xf8, 0x55, 0xe1, 0x8f, 0x75, 0x87, 0xf7, 0x6b, 0x28,
+	0xc5, 0x73, 0x86, 0x2d, 0x88, 0x99, 0xeb, 0xd2, 0x97, 0x60, 0xfa, 0x38, 0x3b, 0x60, 0x08, 0x60,
+	0x6c, 0xbf, 0x86, 0x46, 0x79, 0x6e, 0xb0, 0x8c, 0x98, 0xcd, 0x4a, 0x65, 0x18, 0x09, 0x6f, 0x1b,
+	0x01, 0xe5, 0xc6, 0x93, 0x1a, 0x3a, 0xbf, 0x5f, 0x43, 0xe7, 0x0e, 0x6a, 0x28, 0x9e, 0xbd, 0x21,
+	0xe6, 0x66, 0xc5, 0x5c, 0xe6, 0x83, 0xc7, 0x08, 0x6f, 0xe5, 0xdf, 0x2b, 0x5e, 0x65, 0x1c, 0x57,
+	0x1d, 0x57, 0x35, 0x35, 0xd5, 0xd6, 0xbe, 0xf5, 0x14, 0x5d, 0x6e, 0xa4, 0x3b, 0x10, 0x8b, 0xb6,
+	0x2b, 0x3a, 0xae, 0x5a, 0xd2, 0xcd, 0x92, 0xc8, 0x1c, 0xf4, 0x4d, 0xd5, 0xdc, 0x51, 0xca, 0xa4,
+	0x28, 0x5a, 0x36, 0xd5, 0xea, 0x49, 0xa0, 0xfa, 0x53, 0xf1, 0xd5, 0x58, 0x3c, 0x95, 0x1a, 0x5e,
+	0x8d, 0xc5, 0x47, 0x53, 0x63, 0xab, 0xb1, 0xf8, 0xb9, 0xd4, 0xf9, 0xa9, 0xdf, 0x85, 0xb1, 0xb6,
+	0xb6, 0x1c, 0x7e, 0x0d, 0xfa, 0x3c, 0xdd, 0xf5, 0xcd, 0xdc, 0x97, 0x78, 0xf6, 0xa5, 0xc7, 0x28,
+	0x19, 0x8f, 0xcc, 0xa2, 0x9b, 0x71, 0x9b, 0x94, 0x74, 0xc7, 0x25, 0x76, 0x90, 0x5d, 0xc6, 0x37,
+	0x38, 0x65, 0x9f, 0x09, 0x5f, 0x84, 0x68, 0x59, 0x2d, 0x7a, 0x7b, 0x86, 0x84, 0x19, 0x6f, 0x28,
+	0x0f, 0xcd, 0x3f, 0x22, 0x24, 0xb3, 0xea, 0xa9, 0x3d, 0x18, 0x3e, 0x64, 0xdd, 0xfd, 0xa2, 0x2d,
+	0xbf, 0x04, 0xfd, 0xbe, 0xa6, 0xfb, 0x49, 0xa0, 0x4e, 0x31, 0xaa, 0xfe, 0xe9, 0x5e, 0xe1, 0xf3,
+	0x0b, 0x97, 0x91, 0xdc, 0xc7, 0x2d, 0x47, 0x6d, 0xea, 0xbf, 0xe2, 0x70, 0xd6, 0xd7, 0x6b, 0x5f,
+	0xad, 0x9b, 0xb7, 0xa4, 0xef, 0x36, 0xac, 0x77, 0xef, 0xeb, 0xeb, 0xfb, 0xc7, 0xb6, 0x57, 0x8f,
+	0x46, 0xfd, 0x65, 0xd8, 0xf3, 0x67, 0x21, 0x5a, 0xd5, 0xbd, 0xbc, 0x2f, 0x09, 0x29, 0xd1, 0xc8,
+	0x8f, 0xc5, 0x4a, 0xf1, 0x26, 0xf4, 0xf1, 0xfc, 0x4d, 0xf3, 0xdc, 0xba, 0x49, 0x48, 0x6f, 0xfd,
+	0xe4, 0xe1, 0xb1, 0x35, 0xe7, 0x5b, 0xdf, 0x6b, 0xa7, 0x7b, 0xfe, 0x14, 0xbe, 0x8f, 0x90, 0xdc,
+	0x5b, 0xd5, 0xad, 0x8d, 0x79, 0x7c, 0x05, 0x80, 0x6d, 0x66, 0xbe, 0x4d, 0xda, 0xd7, 0x2a, 0x47,
+	0xa8, 0x12, 0x5b, 0x30, 0xd8, 0x78, 0x62, 0x52, 0xe1, 0x2f, 0x5e, 0xaa, 0x53, 0x8d, 0x16, 0x36,
+	0xe6, 0xfd, 0x57, 0x42, 0xfe, 0x69, 0x6d, 0xd3, 0x8a, 0x4b, 0x9c, 0x8e, 0xb6, 0x7c, 0x8f, 0x9c,
+	0x34, 0xa9, 0x77, 0x40, 0xcb, 0x9c, 0x1a, 0x17, 0x61, 0xb0, 0x99, 0x3d, 0x71, 0xc2, 0x57, 0x30,
+	0x21, 0xb0, 0x20, 0xa0, 0xbf, 0xdc, 0x23, 0x9f, 0x72, 0xc2, 0x8d, 0xdc, 0x81, 0x11, 0x93, 0x2a,
+	0xd5, 0xf9, 0x16, 0x49, 0x87, 0x3a, 0x1a, 0xde, 0x29, 0x93, 0x6e, 0xcc, 0x37, 0xc9, 0xaa, 0x42,
+	0xca, 0x07, 0xa8, 0xce, 0x07, 0x18, 0xde, 0x0b, 0xab, 0xfc, 0x21, 0x71, 0x9b, 0xfe, 0x58, 0x84,
+	0x2f, 0xe5, 0xc6, 0x7c, 0x8b, 0x9c, 0x48, 0x4e, 0x3a, 0x4d, 0x35, 0xbf, 0x88, 0xbd, 0xf0, 0x8d,
+	0x8f, 0x6b, 0xe8, 0x1d, 0x18, 0x6b, 0x64, 0x9b, 0xac, 0x9b, 0x0d, 0x28, 0x03, 0x63, 0x30, 0xe8,
+	0xc9, 0x90, 0xf6, 0xfb, 0x12, 0x5b, 0x10, 0x33, 0x73, 0xec, 0x50, 0xbe, 0x4b, 0x55, 0x2d, 0xdd,
+	0x08, 0xb2, 0xc7, 0xf2, 0x62, 0x66, 0x01, 0x30, 0xc0, 0xd2, 0x5a, 0x21, 0xed, 0xfb, 0x2c, 0xb1,
+	0x79, 0xb6, 0x33, 0x5f, 0xaa, 0x9b, 0x65, 0xbc, 0xeb, 0xe1, 0x1c, 0x43, 0xc1, 0x7e, 0x1f, 0xbd,
+	0x2e, 0xde, 0x90, 0xca, 0x70, 0xba, 0x65, 0x94, 0x02, 0xd2, 0xc2, 0xa1, 0x14, 0x91, 0x5f, 0xc8,
+	0x06, 0xec, 0x6d, 0xbd, 0xc9, 0xd4, 0xd0, 0xd4, 0x1f, 0x21, 0x18, 0x6d, 0xa7, 0x10, 0x78, 0xb7,
+	0x55, 0xcb, 0xbc, 0x4d, 0x27, 0x7b, 0xac, 0x69, 0xe3, 0x58, 0x1b, 0x3a, 0xd9, 0xe5, 0x0e, 0xcf,
+	0x64, 0x3d, 0xe7, 0x5e, 0x2a, 0xf8, 0x15, 0x0f, 0x27, 0xdb, 0x6a, 0xd2, 0xbc, 0xa9, 0xc7, 0x51,
+	0x18, 0x69, 0x13, 0x94, 0xc6, 0xaf, 0x41, 0xd2, 0x4f, 0x8c, 0x18, 0x98, 0x9d, 0x9d, 0x93, 0x5d,
+	0x0d, 0xfa, 0xd4, 0x7e, 0xe2, 0xc7, 0x77, 0x01, 0x78, 0x80, 0xc7, 0x63, 0xf5, 0xae, 0x5a, 0x2c,
+	0x7e, 0x01, 0x3b, 0xa8, 0x14, 0xf3, 0xb3, 0xfb, 0x24, 0x1c, 0xc3, 0x37, 0x61, 0xf1, 0x12, 0xe0,
+	0x40, 0x54, 0x1e, 0x94, 0xf2, 0xda, 0xec, 0x9c, 0x08, 0x2b, 0xe5, 0x73, 0x14, 0x0c, 0x3d, 0x2c,
+	0x71, 0x9d, 0xbb, 0xef, 0x8b, 0x96, 0x18, 0x31, 0x89, 0xfd, 0xb6, 0xa4, 0xf3, 0xfe, 0xe8, 0x1c,
+	0x91, 0x04, 0xeb, 0xbc, 0x2f, 0x4a, 0xa3, 0x3a, 0x9c, 0xf8, 0x2a, 0x9c, 0xf4, 0x4a, 0xfa, 0x10,
+	0xed, 0xff, 0x78, 0xb2, 0xe7, 0x07, 0x3f, 0x9e, 0xec, 0xf9, 0xe9, 0x8f, 0x27, 0xd1, 0xfb, 0x07,
+	0x93, 0xe8, 0xaf, 0x0f, 0x26, 0xd1, 0xbf, 0x1c, 0x4c, 0xa2, 0xfd, 0x83, 0x49, 0xf4, 0x83, 0x83,
+	0x49, 0xf4, 0xa3, 0x83, 0x49, 0xf4, 0xd9, 0xc1, 0x64, 0xcf, 0x4f, 0x0f, 0x26, 0xd1, 0xb7, 0x3f,
+	0x9d, 0xec, 0x79, 0xf2, 0xe9, 0x24, 0xda, 0xff, 0x74, 0xb2, 0xe7, 0x07, 0x9f, 0x4e, 0xf6, 0xbc,
+	0xf3, 0x1b, 0x25, 0x6a, 0xed, 0x94, 0x66, 0x82, 0xf0, 0xfd, 0x4c, 0xc5, 0xb9, 0xc6, 0x7f, 0x6c,
+	0x51, 0xbb, 0x7c, 0x35, 0x08, 0x7b, 0x5e, 0x0d, 0xaa, 0xaf, 0x59, 0x9b, 0x25, 0x7a, 0x8d, 0xbc,
+	0xe7, 0x06, 0x7f, 0x6b, 0xa7, 0xf3, 0xdf, 0xbd, 0xd9, 0xec, 0xe3, 0x7f, 0x7c, 0x26, 0xf7, 0x7f,
+	0x01, 0x00, 0x00, 0xff, 0xff, 0x20, 0xb3, 0xb7, 0x16, 0xc5, 0x68, 0x00, 0x00,
 }
 
 func (this *GlobalSpecType) Equal(that interface{}) bool {
@@ -4963,6 +5833,24 @@ func (this *GlobalSpecType) Equal(that interface{}) bool {
 		return false
 	}
 	if this.SiteState != that1.SiteState {
+		return false
+	}
+	if !this.AdminUserCredentials.Equal(that1.AdminUserCredentials) {
+		return false
+	}
+	if !this.ProactiveMonitoring.Equal(that1.ProactiveMonitoring) {
+		return false
+	}
+	if that1.EnterpriseProxyChoice == nil {
+		if this.EnterpriseProxyChoice != nil {
+			return false
+		}
+	} else if this.EnterpriseProxyChoice == nil {
+		return false
+	} else if !this.EnterpriseProxyChoice.Equal(that1.EnterpriseProxyChoice) {
+		return false
+	}
+	if !this.DnsNtpConfig.Equal(that1.DnsNtpConfig) {
 		return false
 	}
 	if this.Address != that1.Address {
@@ -5164,6 +6052,54 @@ func (this *GlobalSpecType_Oci) Equal(that interface{}) bool {
 		return false
 	}
 	if !this.Oci.Equal(that1.Oci) {
+		return false
+	}
+	return true
+}
+func (this *GlobalSpecType_Openstack) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GlobalSpecType_Openstack)
+	if !ok {
+		that2, ok := that.(GlobalSpecType_Openstack)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.Openstack.Equal(that1.Openstack) {
+		return false
+	}
+	return true
+}
+func (this *GlobalSpecType_Nutanix) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GlobalSpecType_Nutanix)
+	if !ok {
+		that2, ok := that.(GlobalSpecType_Nutanix)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.Nutanix.Equal(that1.Nutanix) {
 		return false
 	}
 	return true
@@ -5524,6 +6460,337 @@ func (this *GlobalSpecType_EnableHa) Equal(that interface{}) bool {
 		return false
 	}
 	if !this.EnableHa.Equal(that1.EnableHa) {
+		return false
+	}
+	return true
+}
+func (this *GlobalSpecType_F5Proxy) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GlobalSpecType_F5Proxy)
+	if !ok {
+		that2, ok := that.(GlobalSpecType_F5Proxy)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.F5Proxy.Equal(that1.F5Proxy) {
+		return false
+	}
+	return true
+}
+func (this *GlobalSpecType_CustomProxy) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GlobalSpecType_CustomProxy)
+	if !ok {
+		that2, ok := that.(GlobalSpecType_CustomProxy)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.CustomProxy.Equal(that1.CustomProxy) {
+		return false
+	}
+	return true
+}
+func (this *DNSNTPServerConfig) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*DNSNTPServerConfig)
+	if !ok {
+		that2, ok := that.(DNSNTPServerConfig)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if that1.DnsServerChoice == nil {
+		if this.DnsServerChoice != nil {
+			return false
+		}
+	} else if this.DnsServerChoice == nil {
+		return false
+	} else if !this.DnsServerChoice.Equal(that1.DnsServerChoice) {
+		return false
+	}
+	if that1.NtpServerChoice == nil {
+		if this.NtpServerChoice != nil {
+			return false
+		}
+	} else if this.NtpServerChoice == nil {
+		return false
+	} else if !this.NtpServerChoice.Equal(that1.NtpServerChoice) {
+		return false
+	}
+	return true
+}
+func (this *DNSNTPServerConfig_F5DnsDefault) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*DNSNTPServerConfig_F5DnsDefault)
+	if !ok {
+		that2, ok := that.(DNSNTPServerConfig_F5DnsDefault)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.F5DnsDefault.Equal(that1.F5DnsDefault) {
+		return false
+	}
+	return true
+}
+func (this *DNSNTPServerConfig_CustomDns) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*DNSNTPServerConfig_CustomDns)
+	if !ok {
+		that2, ok := that.(DNSNTPServerConfig_CustomDns)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.CustomDns.Equal(that1.CustomDns) {
+		return false
+	}
+	return true
+}
+func (this *DNSNTPServerConfig_F5NtpDefault) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*DNSNTPServerConfig_F5NtpDefault)
+	if !ok {
+		that2, ok := that.(DNSNTPServerConfig_F5NtpDefault)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.F5NtpDefault.Equal(that1.F5NtpDefault) {
+		return false
+	}
+	return true
+}
+func (this *DNSNTPServerConfig_CustomNtp) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*DNSNTPServerConfig_CustomNtp)
+	if !ok {
+		that2, ok := that.(DNSNTPServerConfig_CustomNtp)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.CustomNtp.Equal(that1.CustomNtp) {
+		return false
+	}
+	return true
+}
+func (this *CustomDNSSettings) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CustomDNSSettings)
+	if !ok {
+		that2, ok := that.(CustomDNSSettings)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if len(this.DnsServers) != len(that1.DnsServers) {
+		return false
+	}
+	for i := range this.DnsServers {
+		if this.DnsServers[i] != that1.DnsServers[i] {
+			return false
+		}
+	}
+	return true
+}
+func (this *CustomNTPSettings) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CustomNTPSettings)
+	if !ok {
+		that2, ok := that.(CustomNTPSettings)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if len(this.NtpServers) != len(that1.NtpServers) {
+		return false
+	}
+	for i := range this.NtpServers {
+		if this.NtpServers[i] != that1.NtpServers[i] {
+			return false
+		}
+	}
+	return true
+}
+func (this *CustomProxy) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CustomProxy)
+	if !ok {
+		that2, ok := that.(CustomProxy)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.ProxyIpAddress != that1.ProxyIpAddress {
+		return false
+	}
+	if this.ProxyPort != that1.ProxyPort {
+		return false
+	}
+	if this.Username != that1.Username {
+		return false
+	}
+	if !this.Password.Equal(that1.Password) {
+		return false
+	}
+	if that1.UseForReTunnelChoice == nil {
+		if this.UseForReTunnelChoice != nil {
+			return false
+		}
+	} else if this.UseForReTunnelChoice == nil {
+		return false
+	} else if !this.UseForReTunnelChoice.Equal(that1.UseForReTunnelChoice) {
+		return false
+	}
+	return true
+}
+func (this *CustomProxy_DisableReTunnel) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CustomProxy_DisableReTunnel)
+	if !ok {
+		that2, ok := that.(CustomProxy_DisableReTunnel)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.DisableReTunnel.Equal(that1.DisableReTunnel) {
+		return false
+	}
+	return true
+}
+func (this *CustomProxy_EnableReTunnel) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CustomProxy_EnableReTunnel)
+	if !ok {
+		that2, ok := that.(CustomProxy_EnableReTunnel)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.EnableReTunnel.Equal(that1.EnableReTunnel) {
 		return false
 	}
 	return true
@@ -5938,6 +7205,30 @@ func (this *AWSProviderType_NotManaged) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *AWSProviderType_Managed) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*AWSProviderType_Managed)
+	if !ok {
+		that2, ok := that.(AWSProviderType_Managed)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.Managed.Equal(that1.Managed) {
+		return false
+	}
+	return true
+}
 func (this *AzureProviderType) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -6208,6 +7499,114 @@ func (this *RSeriesProviderType_NotManaged) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *OpenstackProviderType) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*OpenstackProviderType)
+	if !ok {
+		that2, ok := that.(OpenstackProviderType)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if that1.OrchestrationChoice == nil {
+		if this.OrchestrationChoice != nil {
+			return false
+		}
+	} else if this.OrchestrationChoice == nil {
+		return false
+	} else if !this.OrchestrationChoice.Equal(that1.OrchestrationChoice) {
+		return false
+	}
+	return true
+}
+func (this *OpenstackProviderType_NotManaged) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*OpenstackProviderType_NotManaged)
+	if !ok {
+		that2, ok := that.(OpenstackProviderType_NotManaged)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.NotManaged.Equal(that1.NotManaged) {
+		return false
+	}
+	return true
+}
+func (this *NutanixProviderType) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*NutanixProviderType)
+	if !ok {
+		that2, ok := that.(NutanixProviderType)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if that1.OrchestrationChoice == nil {
+		if this.OrchestrationChoice != nil {
+			return false
+		}
+	} else if this.OrchestrationChoice == nil {
+		return false
+	} else if !this.OrchestrationChoice.Equal(that1.OrchestrationChoice) {
+		return false
+	}
+	return true
+}
+func (this *NutanixProviderType_NotManaged) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*NutanixProviderType_NotManaged)
+	if !ok {
+		that2, ok := that.(NutanixProviderType_NotManaged)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.NotManaged.Equal(that1.NotManaged) {
+		return false
+	}
+	return true
+}
 func (this *NodeList) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -6353,6 +7752,24 @@ func (this *CreateSpecType) Equal(that interface{}) bool {
 	} else if this.NodeHaChoice == nil {
 		return false
 	} else if !this.NodeHaChoice.Equal(that1.NodeHaChoice) {
+		return false
+	}
+	if !this.AdminUserCredentials.Equal(that1.AdminUserCredentials) {
+		return false
+	}
+	if !this.ProactiveMonitoring.Equal(that1.ProactiveMonitoring) {
+		return false
+	}
+	if that1.EnterpriseProxyChoice == nil {
+		if this.EnterpriseProxyChoice != nil {
+			return false
+		}
+	} else if this.EnterpriseProxyChoice == nil {
+		return false
+	} else if !this.EnterpriseProxyChoice.Equal(that1.EnterpriseProxyChoice) {
+		return false
+	}
+	if !this.DnsNtpConfig.Equal(that1.DnsNtpConfig) {
 		return false
 	}
 	return true
@@ -6545,6 +7962,54 @@ func (this *CreateSpecType_Oci) Equal(that interface{}) bool {
 		return false
 	}
 	if !this.Oci.Equal(that1.Oci) {
+		return false
+	}
+	return true
+}
+func (this *CreateSpecType_Openstack) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CreateSpecType_Openstack)
+	if !ok {
+		that2, ok := that.(CreateSpecType_Openstack)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.Openstack.Equal(that1.Openstack) {
+		return false
+	}
+	return true
+}
+func (this *CreateSpecType_Nutanix) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CreateSpecType_Nutanix)
+	if !ok {
+		that2, ok := that.(CreateSpecType_Nutanix)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.Nutanix.Equal(that1.Nutanix) {
 		return false
 	}
 	return true
@@ -6909,6 +8374,54 @@ func (this *CreateSpecType_EnableHa) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *CreateSpecType_F5Proxy) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CreateSpecType_F5Proxy)
+	if !ok {
+		that2, ok := that.(CreateSpecType_F5Proxy)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.F5Proxy.Equal(that1.F5Proxy) {
+		return false
+	}
+	return true
+}
+func (this *CreateSpecType_CustomProxy) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CreateSpecType_CustomProxy)
+	if !ok {
+		that2, ok := that.(CreateSpecType_CustomProxy)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.CustomProxy.Equal(that1.CustomProxy) {
+		return false
+	}
+	return true
+}
 func (this *ReplaceSpecType) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -7025,6 +8538,24 @@ func (this *ReplaceSpecType) Equal(that interface{}) bool {
 	} else if this.NodeHaChoice == nil {
 		return false
 	} else if !this.NodeHaChoice.Equal(that1.NodeHaChoice) {
+		return false
+	}
+	if !this.AdminUserCredentials.Equal(that1.AdminUserCredentials) {
+		return false
+	}
+	if !this.ProactiveMonitoring.Equal(that1.ProactiveMonitoring) {
+		return false
+	}
+	if that1.EnterpriseProxyChoice == nil {
+		if this.EnterpriseProxyChoice != nil {
+			return false
+		}
+	} else if this.EnterpriseProxyChoice == nil {
+		return false
+	} else if !this.EnterpriseProxyChoice.Equal(that1.EnterpriseProxyChoice) {
+		return false
+	}
+	if !this.DnsNtpConfig.Equal(that1.DnsNtpConfig) {
 		return false
 	}
 	return true
@@ -7217,6 +8748,54 @@ func (this *ReplaceSpecType_Oci) Equal(that interface{}) bool {
 		return false
 	}
 	if !this.Oci.Equal(that1.Oci) {
+		return false
+	}
+	return true
+}
+func (this *ReplaceSpecType_Openstack) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ReplaceSpecType_Openstack)
+	if !ok {
+		that2, ok := that.(ReplaceSpecType_Openstack)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.Openstack.Equal(that1.Openstack) {
+		return false
+	}
+	return true
+}
+func (this *ReplaceSpecType_Nutanix) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ReplaceSpecType_Nutanix)
+	if !ok {
+		that2, ok := that.(ReplaceSpecType_Nutanix)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.Nutanix.Equal(that1.Nutanix) {
 		return false
 	}
 	return true
@@ -7581,6 +9160,54 @@ func (this *ReplaceSpecType_EnableHa) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *ReplaceSpecType_F5Proxy) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ReplaceSpecType_F5Proxy)
+	if !ok {
+		that2, ok := that.(ReplaceSpecType_F5Proxy)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.F5Proxy.Equal(that1.F5Proxy) {
+		return false
+	}
+	return true
+}
+func (this *ReplaceSpecType_CustomProxy) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ReplaceSpecType_CustomProxy)
+	if !ok {
+		that2, ok := that.(ReplaceSpecType_CustomProxy)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.CustomProxy.Equal(that1.CustomProxy) {
+		return false
+	}
+	return true
+}
 func (this *GetSpecType) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -7706,6 +9333,24 @@ func (this *GetSpecType) Equal(that interface{}) bool {
 		return false
 	}
 	if this.SiteState != that1.SiteState {
+		return false
+	}
+	if !this.AdminUserCredentials.Equal(that1.AdminUserCredentials) {
+		return false
+	}
+	if !this.ProactiveMonitoring.Equal(that1.ProactiveMonitoring) {
+		return false
+	}
+	if that1.EnterpriseProxyChoice == nil {
+		if this.EnterpriseProxyChoice != nil {
+			return false
+		}
+	} else if this.EnterpriseProxyChoice == nil {
+		return false
+	} else if !this.EnterpriseProxyChoice.Equal(that1.EnterpriseProxyChoice) {
+		return false
+	}
+	if !this.DnsNtpConfig.Equal(that1.DnsNtpConfig) {
 		return false
 	}
 	return true
@@ -7898,6 +9543,54 @@ func (this *GetSpecType_Oci) Equal(that interface{}) bool {
 		return false
 	}
 	if !this.Oci.Equal(that1.Oci) {
+		return false
+	}
+	return true
+}
+func (this *GetSpecType_Openstack) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GetSpecType_Openstack)
+	if !ok {
+		that2, ok := that.(GetSpecType_Openstack)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.Openstack.Equal(that1.Openstack) {
+		return false
+	}
+	return true
+}
+func (this *GetSpecType_Nutanix) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GetSpecType_Nutanix)
+	if !ok {
+		that2, ok := that.(GetSpecType_Nutanix)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.Nutanix.Equal(that1.Nutanix) {
 		return false
 	}
 	return true
@@ -8258,6 +9951,54 @@ func (this *GetSpecType_EnableHa) Equal(that interface{}) bool {
 		return false
 	}
 	if !this.EnableHa.Equal(that1.EnableHa) {
+		return false
+	}
+	return true
+}
+func (this *GetSpecType_F5Proxy) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GetSpecType_F5Proxy)
+	if !ok {
+		that2, ok := that.(GetSpecType_F5Proxy)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.F5Proxy.Equal(that1.F5Proxy) {
+		return false
+	}
+	return true
+}
+func (this *GetSpecType_CustomProxy) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GetSpecType_CustomProxy)
+	if !ok {
+		that2, ok := that.(GetSpecType_CustomProxy)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.CustomProxy.Equal(that1.CustomProxy) {
 		return false
 	}
 	return true
@@ -8693,108 +10434,6 @@ func (this *Interface_Ipv6AutoConfig) Equal(that interface{}) bool {
 	}
 	return true
 }
-func (this *NetworkSelectType) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*NetworkSelectType)
-	if !ok {
-		that2, ok := that.(NetworkSelectType)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if that1.NetworkChoice == nil {
-		if this.NetworkChoice != nil {
-			return false
-		}
-	} else if this.NetworkChoice == nil {
-		return false
-	} else if !this.NetworkChoice.Equal(that1.NetworkChoice) {
-		return false
-	}
-	return true
-}
-func (this *NetworkSelectType_SiteLocalNetwork) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*NetworkSelectType_SiteLocalNetwork)
-	if !ok {
-		that2, ok := that.(NetworkSelectType_SiteLocalNetwork)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.SiteLocalNetwork.Equal(that1.SiteLocalNetwork) {
-		return false
-	}
-	return true
-}
-func (this *NetworkSelectType_SiteLocalInsideNetwork) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*NetworkSelectType_SiteLocalInsideNetwork)
-	if !ok {
-		that2, ok := that.(NetworkSelectType_SiteLocalInsideNetwork)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.SiteLocalInsideNetwork.Equal(that1.SiteLocalInsideNetwork) {
-		return false
-	}
-	return true
-}
-func (this *NetworkSelectType_SegmentNetwork) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*NetworkSelectType_SegmentNetwork)
-	if !ok {
-		that2, ok := that.(NetworkSelectType_SegmentNetwork)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.SegmentNetwork.Equal(that1.SegmentNetwork) {
-		return false
-	}
-	return true
-}
 func (this *EthernetInterfaceType) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -9172,7 +10811,7 @@ func (this *GlobalSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 42)
+	s := make([]string, 0, 49)
 	s = append(s, "&securemesh_site_v2.GlobalSpecType{")
 	if this.ProviderChoice != nil {
 		s = append(s, "ProviderChoice: "+fmt.Sprintf("%#v", this.ProviderChoice)+",\n")
@@ -9224,6 +10863,18 @@ func (this *GlobalSpecType) GoString() string {
 		s = append(s, "NodeHaChoice: "+fmt.Sprintf("%#v", this.NodeHaChoice)+",\n")
 	}
 	s = append(s, "SiteState: "+fmt.Sprintf("%#v", this.SiteState)+",\n")
+	if this.AdminUserCredentials != nil {
+		s = append(s, "AdminUserCredentials: "+fmt.Sprintf("%#v", this.AdminUserCredentials)+",\n")
+	}
+	if this.ProactiveMonitoring != nil {
+		s = append(s, "ProactiveMonitoring: "+fmt.Sprintf("%#v", this.ProactiveMonitoring)+",\n")
+	}
+	if this.EnterpriseProxyChoice != nil {
+		s = append(s, "EnterpriseProxyChoice: "+fmt.Sprintf("%#v", this.EnterpriseProxyChoice)+",\n")
+	}
+	if this.DnsNtpConfig != nil {
+		s = append(s, "DnsNtpConfig: "+fmt.Sprintf("%#v", this.DnsNtpConfig)+",\n")
+	}
 	s = append(s, "Address: "+fmt.Sprintf("%#v", this.Address)+",\n")
 	if this.Coordinates != nil {
 		s = append(s, "Coordinates: "+fmt.Sprintf("%#v", this.Coordinates)+",\n")
@@ -9296,6 +10947,22 @@ func (this *GlobalSpecType_Oci) GoString() string {
 	}
 	s := strings.Join([]string{`&securemesh_site_v2.GlobalSpecType_Oci{` +
 		`Oci:` + fmt.Sprintf("%#v", this.Oci) + `}`}, ", ")
+	return s
+}
+func (this *GlobalSpecType_Openstack) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&securemesh_site_v2.GlobalSpecType_Openstack{` +
+		`Openstack:` + fmt.Sprintf("%#v", this.Openstack) + `}`}, ", ")
+	return s
+}
+func (this *GlobalSpecType_Nutanix) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&securemesh_site_v2.GlobalSpecType_Nutanix{` +
+		`Nutanix:` + fmt.Sprintf("%#v", this.Nutanix) + `}`}, ", ")
 	return s
 }
 func (this *GlobalSpecType_NoNetworkPolicy) GoString() string {
@@ -9416,6 +11083,123 @@ func (this *GlobalSpecType_EnableHa) GoString() string {
 	}
 	s := strings.Join([]string{`&securemesh_site_v2.GlobalSpecType_EnableHa{` +
 		`EnableHa:` + fmt.Sprintf("%#v", this.EnableHa) + `}`}, ", ")
+	return s
+}
+func (this *GlobalSpecType_F5Proxy) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&securemesh_site_v2.GlobalSpecType_F5Proxy{` +
+		`F5Proxy:` + fmt.Sprintf("%#v", this.F5Proxy) + `}`}, ", ")
+	return s
+}
+func (this *GlobalSpecType_CustomProxy) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&securemesh_site_v2.GlobalSpecType_CustomProxy{` +
+		`CustomProxy:` + fmt.Sprintf("%#v", this.CustomProxy) + `}`}, ", ")
+	return s
+}
+func (this *DNSNTPServerConfig) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 8)
+	s = append(s, "&securemesh_site_v2.DNSNTPServerConfig{")
+	if this.DnsServerChoice != nil {
+		s = append(s, "DnsServerChoice: "+fmt.Sprintf("%#v", this.DnsServerChoice)+",\n")
+	}
+	if this.NtpServerChoice != nil {
+		s = append(s, "NtpServerChoice: "+fmt.Sprintf("%#v", this.NtpServerChoice)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *DNSNTPServerConfig_F5DnsDefault) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&securemesh_site_v2.DNSNTPServerConfig_F5DnsDefault{` +
+		`F5DnsDefault:` + fmt.Sprintf("%#v", this.F5DnsDefault) + `}`}, ", ")
+	return s
+}
+func (this *DNSNTPServerConfig_CustomDns) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&securemesh_site_v2.DNSNTPServerConfig_CustomDns{` +
+		`CustomDns:` + fmt.Sprintf("%#v", this.CustomDns) + `}`}, ", ")
+	return s
+}
+func (this *DNSNTPServerConfig_F5NtpDefault) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&securemesh_site_v2.DNSNTPServerConfig_F5NtpDefault{` +
+		`F5NtpDefault:` + fmt.Sprintf("%#v", this.F5NtpDefault) + `}`}, ", ")
+	return s
+}
+func (this *DNSNTPServerConfig_CustomNtp) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&securemesh_site_v2.DNSNTPServerConfig_CustomNtp{` +
+		`CustomNtp:` + fmt.Sprintf("%#v", this.CustomNtp) + `}`}, ", ")
+	return s
+}
+func (this *CustomDNSSettings) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 5)
+	s = append(s, "&securemesh_site_v2.CustomDNSSettings{")
+	s = append(s, "DnsServers: "+fmt.Sprintf("%#v", this.DnsServers)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *CustomNTPSettings) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 5)
+	s = append(s, "&securemesh_site_v2.CustomNTPSettings{")
+	s = append(s, "NtpServers: "+fmt.Sprintf("%#v", this.NtpServers)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *CustomProxy) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 10)
+	s = append(s, "&securemesh_site_v2.CustomProxy{")
+	s = append(s, "ProxyIpAddress: "+fmt.Sprintf("%#v", this.ProxyIpAddress)+",\n")
+	s = append(s, "ProxyPort: "+fmt.Sprintf("%#v", this.ProxyPort)+",\n")
+	s = append(s, "Username: "+fmt.Sprintf("%#v", this.Username)+",\n")
+	if this.Password != nil {
+		s = append(s, "Password: "+fmt.Sprintf("%#v", this.Password)+",\n")
+	}
+	if this.UseForReTunnelChoice != nil {
+		s = append(s, "UseForReTunnelChoice: "+fmt.Sprintf("%#v", this.UseForReTunnelChoice)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *CustomProxy_DisableReTunnel) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&securemesh_site_v2.CustomProxy_DisableReTunnel{` +
+		`DisableReTunnel:` + fmt.Sprintf("%#v", this.DisableReTunnel) + `}`}, ", ")
+	return s
+}
+func (this *CustomProxy_EnableReTunnel) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&securemesh_site_v2.CustomProxy_EnableReTunnel{` +
+		`EnableReTunnel:` + fmt.Sprintf("%#v", this.EnableReTunnel) + `}`}, ", ")
 	return s
 }
 func (this *LoadBalancingSettingsType) GoString() string {
@@ -9561,7 +11345,7 @@ func (this *AWSProviderType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 5)
+	s := make([]string, 0, 6)
 	s = append(s, "&securemesh_site_v2.AWSProviderType{")
 	if this.OrchestrationChoice != nil {
 		s = append(s, "OrchestrationChoice: "+fmt.Sprintf("%#v", this.OrchestrationChoice)+",\n")
@@ -9575,6 +11359,14 @@ func (this *AWSProviderType_NotManaged) GoString() string {
 	}
 	s := strings.Join([]string{`&securemesh_site_v2.AWSProviderType_NotManaged{` +
 		`NotManaged:` + fmt.Sprintf("%#v", this.NotManaged) + `}`}, ", ")
+	return s
+}
+func (this *AWSProviderType_Managed) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&securemesh_site_v2.AWSProviderType_Managed{` +
+		`Managed:` + fmt.Sprintf("%#v", this.Managed) + `}`}, ", ")
 	return s
 }
 func (this *AzureProviderType) GoString() string {
@@ -9677,6 +11469,46 @@ func (this *RSeriesProviderType_NotManaged) GoString() string {
 		`NotManaged:` + fmt.Sprintf("%#v", this.NotManaged) + `}`}, ", ")
 	return s
 }
+func (this *OpenstackProviderType) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 5)
+	s = append(s, "&securemesh_site_v2.OpenstackProviderType{")
+	if this.OrchestrationChoice != nil {
+		s = append(s, "OrchestrationChoice: "+fmt.Sprintf("%#v", this.OrchestrationChoice)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *OpenstackProviderType_NotManaged) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&securemesh_site_v2.OpenstackProviderType_NotManaged{` +
+		`NotManaged:` + fmt.Sprintf("%#v", this.NotManaged) + `}`}, ", ")
+	return s
+}
+func (this *NutanixProviderType) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 5)
+	s = append(s, "&securemesh_site_v2.NutanixProviderType{")
+	if this.OrchestrationChoice != nil {
+		s = append(s, "OrchestrationChoice: "+fmt.Sprintf("%#v", this.OrchestrationChoice)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *NutanixProviderType_NotManaged) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&securemesh_site_v2.NutanixProviderType_NotManaged{` +
+		`NotManaged:` + fmt.Sprintf("%#v", this.NotManaged) + `}`}, ", ")
+	return s
+}
 func (this *NodeList) GoString() string {
 	if this == nil {
 		return "nil"
@@ -9693,7 +11525,7 @@ func (this *CreateSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 36)
+	s := make([]string, 0, 43)
 	s = append(s, "&securemesh_site_v2.CreateSpecType{")
 	if this.ProviderChoice != nil {
 		s = append(s, "ProviderChoice: "+fmt.Sprintf("%#v", this.ProviderChoice)+",\n")
@@ -9741,6 +11573,18 @@ func (this *CreateSpecType) GoString() string {
 	}
 	if this.NodeHaChoice != nil {
 		s = append(s, "NodeHaChoice: "+fmt.Sprintf("%#v", this.NodeHaChoice)+",\n")
+	}
+	if this.AdminUserCredentials != nil {
+		s = append(s, "AdminUserCredentials: "+fmt.Sprintf("%#v", this.AdminUserCredentials)+",\n")
+	}
+	if this.ProactiveMonitoring != nil {
+		s = append(s, "ProactiveMonitoring: "+fmt.Sprintf("%#v", this.ProactiveMonitoring)+",\n")
+	}
+	if this.EnterpriseProxyChoice != nil {
+		s = append(s, "EnterpriseProxyChoice: "+fmt.Sprintf("%#v", this.EnterpriseProxyChoice)+",\n")
+	}
+	if this.DnsNtpConfig != nil {
+		s = append(s, "DnsNtpConfig: "+fmt.Sprintf("%#v", this.DnsNtpConfig)+",\n")
 	}
 	s = append(s, "}")
 	return strings.Join(s, "")
@@ -9807,6 +11651,22 @@ func (this *CreateSpecType_Oci) GoString() string {
 	}
 	s := strings.Join([]string{`&securemesh_site_v2.CreateSpecType_Oci{` +
 		`Oci:` + fmt.Sprintf("%#v", this.Oci) + `}`}, ", ")
+	return s
+}
+func (this *CreateSpecType_Openstack) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&securemesh_site_v2.CreateSpecType_Openstack{` +
+		`Openstack:` + fmt.Sprintf("%#v", this.Openstack) + `}`}, ", ")
+	return s
+}
+func (this *CreateSpecType_Nutanix) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&securemesh_site_v2.CreateSpecType_Nutanix{` +
+		`Nutanix:` + fmt.Sprintf("%#v", this.Nutanix) + `}`}, ", ")
 	return s
 }
 func (this *CreateSpecType_NoNetworkPolicy) GoString() string {
@@ -9929,11 +11789,27 @@ func (this *CreateSpecType_EnableHa) GoString() string {
 		`EnableHa:` + fmt.Sprintf("%#v", this.EnableHa) + `}`}, ", ")
 	return s
 }
+func (this *CreateSpecType_F5Proxy) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&securemesh_site_v2.CreateSpecType_F5Proxy{` +
+		`F5Proxy:` + fmt.Sprintf("%#v", this.F5Proxy) + `}`}, ", ")
+	return s
+}
+func (this *CreateSpecType_CustomProxy) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&securemesh_site_v2.CreateSpecType_CustomProxy{` +
+		`CustomProxy:` + fmt.Sprintf("%#v", this.CustomProxy) + `}`}, ", ")
+	return s
+}
 func (this *ReplaceSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 36)
+	s := make([]string, 0, 43)
 	s = append(s, "&securemesh_site_v2.ReplaceSpecType{")
 	if this.ProviderChoice != nil {
 		s = append(s, "ProviderChoice: "+fmt.Sprintf("%#v", this.ProviderChoice)+",\n")
@@ -9981,6 +11857,18 @@ func (this *ReplaceSpecType) GoString() string {
 	}
 	if this.NodeHaChoice != nil {
 		s = append(s, "NodeHaChoice: "+fmt.Sprintf("%#v", this.NodeHaChoice)+",\n")
+	}
+	if this.AdminUserCredentials != nil {
+		s = append(s, "AdminUserCredentials: "+fmt.Sprintf("%#v", this.AdminUserCredentials)+",\n")
+	}
+	if this.ProactiveMonitoring != nil {
+		s = append(s, "ProactiveMonitoring: "+fmt.Sprintf("%#v", this.ProactiveMonitoring)+",\n")
+	}
+	if this.EnterpriseProxyChoice != nil {
+		s = append(s, "EnterpriseProxyChoice: "+fmt.Sprintf("%#v", this.EnterpriseProxyChoice)+",\n")
+	}
+	if this.DnsNtpConfig != nil {
+		s = append(s, "DnsNtpConfig: "+fmt.Sprintf("%#v", this.DnsNtpConfig)+",\n")
 	}
 	s = append(s, "}")
 	return strings.Join(s, "")
@@ -10047,6 +11935,22 @@ func (this *ReplaceSpecType_Oci) GoString() string {
 	}
 	s := strings.Join([]string{`&securemesh_site_v2.ReplaceSpecType_Oci{` +
 		`Oci:` + fmt.Sprintf("%#v", this.Oci) + `}`}, ", ")
+	return s
+}
+func (this *ReplaceSpecType_Openstack) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&securemesh_site_v2.ReplaceSpecType_Openstack{` +
+		`Openstack:` + fmt.Sprintf("%#v", this.Openstack) + `}`}, ", ")
+	return s
+}
+func (this *ReplaceSpecType_Nutanix) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&securemesh_site_v2.ReplaceSpecType_Nutanix{` +
+		`Nutanix:` + fmt.Sprintf("%#v", this.Nutanix) + `}`}, ", ")
 	return s
 }
 func (this *ReplaceSpecType_NoNetworkPolicy) GoString() string {
@@ -10169,11 +12073,27 @@ func (this *ReplaceSpecType_EnableHa) GoString() string {
 		`EnableHa:` + fmt.Sprintf("%#v", this.EnableHa) + `}`}, ", ")
 	return s
 }
+func (this *ReplaceSpecType_F5Proxy) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&securemesh_site_v2.ReplaceSpecType_F5Proxy{` +
+		`F5Proxy:` + fmt.Sprintf("%#v", this.F5Proxy) + `}`}, ", ")
+	return s
+}
+func (this *ReplaceSpecType_CustomProxy) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&securemesh_site_v2.ReplaceSpecType_CustomProxy{` +
+		`CustomProxy:` + fmt.Sprintf("%#v", this.CustomProxy) + `}`}, ", ")
+	return s
+}
 func (this *GetSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 39)
+	s := make([]string, 0, 46)
 	s = append(s, "&securemesh_site_v2.GetSpecType{")
 	if this.ProviderChoice != nil {
 		s = append(s, "ProviderChoice: "+fmt.Sprintf("%#v", this.ProviderChoice)+",\n")
@@ -10225,6 +12145,18 @@ func (this *GetSpecType) GoString() string {
 		s = append(s, "NodeHaChoice: "+fmt.Sprintf("%#v", this.NodeHaChoice)+",\n")
 	}
 	s = append(s, "SiteState: "+fmt.Sprintf("%#v", this.SiteState)+",\n")
+	if this.AdminUserCredentials != nil {
+		s = append(s, "AdminUserCredentials: "+fmt.Sprintf("%#v", this.AdminUserCredentials)+",\n")
+	}
+	if this.ProactiveMonitoring != nil {
+		s = append(s, "ProactiveMonitoring: "+fmt.Sprintf("%#v", this.ProactiveMonitoring)+",\n")
+	}
+	if this.EnterpriseProxyChoice != nil {
+		s = append(s, "EnterpriseProxyChoice: "+fmt.Sprintf("%#v", this.EnterpriseProxyChoice)+",\n")
+	}
+	if this.DnsNtpConfig != nil {
+		s = append(s, "DnsNtpConfig: "+fmt.Sprintf("%#v", this.DnsNtpConfig)+",\n")
+	}
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
@@ -10290,6 +12222,22 @@ func (this *GetSpecType_Oci) GoString() string {
 	}
 	s := strings.Join([]string{`&securemesh_site_v2.GetSpecType_Oci{` +
 		`Oci:` + fmt.Sprintf("%#v", this.Oci) + `}`}, ", ")
+	return s
+}
+func (this *GetSpecType_Openstack) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&securemesh_site_v2.GetSpecType_Openstack{` +
+		`Openstack:` + fmt.Sprintf("%#v", this.Openstack) + `}`}, ", ")
+	return s
+}
+func (this *GetSpecType_Nutanix) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&securemesh_site_v2.GetSpecType_Nutanix{` +
+		`Nutanix:` + fmt.Sprintf("%#v", this.Nutanix) + `}`}, ", ")
 	return s
 }
 func (this *GetSpecType_NoNetworkPolicy) GoString() string {
@@ -10410,6 +12358,22 @@ func (this *GetSpecType_EnableHa) GoString() string {
 	}
 	s := strings.Join([]string{`&securemesh_site_v2.GetSpecType_EnableHa{` +
 		`EnableHa:` + fmt.Sprintf("%#v", this.EnableHa) + `}`}, ", ")
+	return s
+}
+func (this *GetSpecType_F5Proxy) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&securemesh_site_v2.GetSpecType_F5Proxy{` +
+		`F5Proxy:` + fmt.Sprintf("%#v", this.F5Proxy) + `}`}, ", ")
+	return s
+}
+func (this *GetSpecType_CustomProxy) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&securemesh_site_v2.GetSpecType_CustomProxy{` +
+		`CustomProxy:` + fmt.Sprintf("%#v", this.CustomProxy) + `}`}, ", ")
 	return s
 }
 func (this *Interface) GoString() string {
@@ -10568,42 +12532,6 @@ func (this *Interface_Ipv6AutoConfig) GoString() string {
 	}
 	s := strings.Join([]string{`&securemesh_site_v2.Interface_Ipv6AutoConfig{` +
 		`Ipv6AutoConfig:` + fmt.Sprintf("%#v", this.Ipv6AutoConfig) + `}`}, ", ")
-	return s
-}
-func (this *NetworkSelectType) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := make([]string, 0, 7)
-	s = append(s, "&securemesh_site_v2.NetworkSelectType{")
-	if this.NetworkChoice != nil {
-		s = append(s, "NetworkChoice: "+fmt.Sprintf("%#v", this.NetworkChoice)+",\n")
-	}
-	s = append(s, "}")
-	return strings.Join(s, "")
-}
-func (this *NetworkSelectType_SiteLocalNetwork) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&securemesh_site_v2.NetworkSelectType_SiteLocalNetwork{` +
-		`SiteLocalNetwork:` + fmt.Sprintf("%#v", this.SiteLocalNetwork) + `}`}, ", ")
-	return s
-}
-func (this *NetworkSelectType_SiteLocalInsideNetwork) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&securemesh_site_v2.NetworkSelectType_SiteLocalInsideNetwork{` +
-		`SiteLocalInsideNetwork:` + fmt.Sprintf("%#v", this.SiteLocalInsideNetwork) + `}`}, ", ")
-	return s
-}
-func (this *NetworkSelectType_SegmentNetwork) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&securemesh_site_v2.NetworkSelectType_SegmentNetwork{` +
-		`SegmentNetwork:` + fmt.Sprintf("%#v", this.SegmentNetwork) + `}`}, ", ")
 	return s
 }
 func (this *EthernetInterfaceType) GoString() string {
@@ -10816,6 +12744,66 @@ func (m *GlobalSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i--
 		dAtA[i] = 0xb2
 	}
+	if m.DnsNtpConfig != nil {
+		{
+			size, err := m.DnsNtpConfig.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x3
+		i--
+		dAtA[i] = 0xf2
+	}
+	if m.EnterpriseProxyChoice != nil {
+		{
+			size := m.EnterpriseProxyChoice.Size()
+			i -= size
+			if _, err := m.EnterpriseProxyChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if m.ProactiveMonitoring != nil {
+		{
+			size, err := m.ProactiveMonitoring.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x3
+		i--
+		dAtA[i] = 0xc2
+	}
+	if m.ProviderChoice != nil {
+		{
+			size := m.ProviderChoice.Size()
+			i -= size
+			if _, err := m.ProviderChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if m.AdminUserCredentials != nil {
+		{
+			size, err := m.AdminUserCredentials.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x3
+		i--
+		dAtA[i] = 0xaa
+	}
 	if m.SiteState != 0 {
 		i = encodeVarintTypes(dAtA, i, uint64(m.SiteState))
 		i--
@@ -11012,15 +13000,6 @@ func (m *GlobalSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 			size := m.NetworkPolicyChoice.Size()
 			i -= size
 			if _, err := m.NetworkPolicyChoice.MarshalTo(dAtA[i:]); err != nil {
-				return 0, err
-			}
-		}
-	}
-	if m.ProviderChoice != nil {
-		{
-			size := m.ProviderChoice.Size()
-			i -= size
-			if _, err := m.ProviderChoice.MarshalTo(dAtA[i:]); err != nil {
 				return 0, err
 			}
 		}
@@ -11535,6 +13514,392 @@ func (m *GlobalSpecType_EnableHa) MarshalToSizedBuffer(dAtA []byte) (int, error)
 	}
 	return len(dAtA) - i, nil
 }
+func (m *GlobalSpecType_Openstack) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_Openstack) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.Openstack != nil {
+		{
+			size, err := m.Openstack.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x3
+		i--
+		dAtA[i] = 0xb2
+	}
+	return len(dAtA) - i, nil
+}
+func (m *GlobalSpecType_Nutanix) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_Nutanix) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.Nutanix != nil {
+		{
+			size, err := m.Nutanix.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x3
+		i--
+		dAtA[i] = 0xba
+	}
+	return len(dAtA) - i, nil
+}
+func (m *GlobalSpecType_F5Proxy) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_F5Proxy) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.F5Proxy != nil {
+		{
+			size, err := m.F5Proxy.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x3
+		i--
+		dAtA[i] = 0xe2
+	}
+	return len(dAtA) - i, nil
+}
+func (m *GlobalSpecType_CustomProxy) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_CustomProxy) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.CustomProxy != nil {
+		{
+			size, err := m.CustomProxy.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x3
+		i--
+		dAtA[i] = 0xea
+	}
+	return len(dAtA) - i, nil
+}
+func (m *DNSNTPServerConfig) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *DNSNTPServerConfig) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *DNSNTPServerConfig) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.NtpServerChoice != nil {
+		{
+			size := m.NtpServerChoice.Size()
+			i -= size
+			if _, err := m.NtpServerChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if m.DnsServerChoice != nil {
+		{
+			size := m.DnsServerChoice.Size()
+			i -= size
+			if _, err := m.DnsServerChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *DNSNTPServerConfig_F5DnsDefault) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *DNSNTPServerConfig_F5DnsDefault) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.F5DnsDefault != nil {
+		{
+			size, err := m.F5DnsDefault.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x22
+	}
+	return len(dAtA) - i, nil
+}
+func (m *DNSNTPServerConfig_CustomDns) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *DNSNTPServerConfig_CustomDns) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.CustomDns != nil {
+		{
+			size, err := m.CustomDns.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x2a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *DNSNTPServerConfig_F5NtpDefault) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *DNSNTPServerConfig_F5NtpDefault) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.F5NtpDefault != nil {
+		{
+			size, err := m.F5NtpDefault.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x3a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *DNSNTPServerConfig_CustomNtp) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *DNSNTPServerConfig_CustomNtp) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.CustomNtp != nil {
+		{
+			size, err := m.CustomNtp.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x42
+	}
+	return len(dAtA) - i, nil
+}
+func (m *CustomDNSSettings) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *CustomDNSSettings) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CustomDNSSettings) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.DnsServers) > 0 {
+		for iNdEx := len(m.DnsServers) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.DnsServers[iNdEx])
+			copy(dAtA[i:], m.DnsServers[iNdEx])
+			i = encodeVarintTypes(dAtA, i, uint64(len(m.DnsServers[iNdEx])))
+			i--
+			dAtA[i] = 0xa
+		}
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *CustomNTPSettings) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *CustomNTPSettings) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CustomNTPSettings) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.NtpServers) > 0 {
+		for iNdEx := len(m.NtpServers) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.NtpServers[iNdEx])
+			copy(dAtA[i:], m.NtpServers[iNdEx])
+			i = encodeVarintTypes(dAtA, i, uint64(len(m.NtpServers[iNdEx])))
+			i--
+			dAtA[i] = 0xa
+		}
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *CustomProxy) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *CustomProxy) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CustomProxy) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.UseForReTunnelChoice != nil {
+		{
+			size := m.UseForReTunnelChoice.Size()
+			i -= size
+			if _, err := m.UseForReTunnelChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if m.Password != nil {
+		{
+			size, err := m.Password.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x22
+	}
+	if len(m.Username) > 0 {
+		i -= len(m.Username)
+		copy(dAtA[i:], m.Username)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.Username)))
+		i--
+		dAtA[i] = 0x1a
+	}
+	if m.ProxyPort != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.ProxyPort))
+		i--
+		dAtA[i] = 0x10
+	}
+	if len(m.ProxyIpAddress) > 0 {
+		i -= len(m.ProxyIpAddress)
+		copy(dAtA[i:], m.ProxyIpAddress)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.ProxyIpAddress)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *CustomProxy_DisableReTunnel) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CustomProxy_DisableReTunnel) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.DisableReTunnel != nil {
+		{
+			size, err := m.DisableReTunnel.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x32
+	}
+	return len(dAtA) - i, nil
+}
+func (m *CustomProxy_EnableReTunnel) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CustomProxy_EnableReTunnel) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.EnableReTunnel != nil {
+		{
+			size, err := m.EnableReTunnel.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x3a
+	}
+	return len(dAtA) - i, nil
+}
 func (m *LoadBalancingSettingsType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -11989,6 +14354,27 @@ func (m *AWSProviderType_NotManaged) MarshalToSizedBuffer(dAtA []byte) (int, err
 	}
 	return len(dAtA) - i, nil
 }
+func (m *AWSProviderType_Managed) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *AWSProviderType_Managed) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.Managed != nil {
+		{
+			size, err := m.Managed.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1a
+	}
+	return len(dAtA) - i, nil
+}
 func (m *AzureProviderType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -12254,6 +14640,112 @@ func (m *RSeriesProviderType_NotManaged) MarshalToSizedBuffer(dAtA []byte) (int,
 	}
 	return len(dAtA) - i, nil
 }
+func (m *OpenstackProviderType) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *OpenstackProviderType) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *OpenstackProviderType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.OrchestrationChoice != nil {
+		{
+			size := m.OrchestrationChoice.Size()
+			i -= size
+			if _, err := m.OrchestrationChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *OpenstackProviderType_NotManaged) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *OpenstackProviderType_NotManaged) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.NotManaged != nil {
+		{
+			size, err := m.NotManaged.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x12
+	}
+	return len(dAtA) - i, nil
+}
+func (m *NutanixProviderType) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *NutanixProviderType) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *NutanixProviderType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.OrchestrationChoice != nil {
+		{
+			size := m.OrchestrationChoice.Size()
+			i -= size
+			if _, err := m.OrchestrationChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *NutanixProviderType_NotManaged) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *NutanixProviderType_NotManaged) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.NotManaged != nil {
+		{
+			size, err := m.NotManaged.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x12
+	}
+	return len(dAtA) - i, nil
+}
 func (m *NodeList) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -12311,6 +14803,66 @@ func (m *CreateSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if m.DnsNtpConfig != nil {
+		{
+			size, err := m.DnsNtpConfig.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x3
+		i--
+		dAtA[i] = 0xf2
+	}
+	if m.EnterpriseProxyChoice != nil {
+		{
+			size := m.EnterpriseProxyChoice.Size()
+			i -= size
+			if _, err := m.EnterpriseProxyChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if m.ProactiveMonitoring != nil {
+		{
+			size, err := m.ProactiveMonitoring.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x3
+		i--
+		dAtA[i] = 0xc2
+	}
+	if m.ProviderChoice != nil {
+		{
+			size := m.ProviderChoice.Size()
+			i -= size
+			if _, err := m.ProviderChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if m.AdminUserCredentials != nil {
+		{
+			size, err := m.AdminUserCredentials.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x3
+		i--
+		dAtA[i] = 0xaa
+	}
 	if m.NodeHaChoice != nil {
 		{
 			size := m.NodeHaChoice.Size()
@@ -12482,15 +15034,6 @@ func (m *CreateSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 			size := m.NetworkPolicyChoice.Size()
 			i -= size
 			if _, err := m.NetworkPolicyChoice.MarshalTo(dAtA[i:]); err != nil {
-				return 0, err
-			}
-		}
-	}
-	if m.ProviderChoice != nil {
-		{
-			size := m.ProviderChoice.Size()
-			i -= size
-			if _, err := m.ProviderChoice.MarshalTo(dAtA[i:]); err != nil {
 				return 0, err
 			}
 		}
@@ -13005,6 +15548,98 @@ func (m *CreateSpecType_EnableHa) MarshalToSizedBuffer(dAtA []byte) (int, error)
 	}
 	return len(dAtA) - i, nil
 }
+func (m *CreateSpecType_Openstack) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_Openstack) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.Openstack != nil {
+		{
+			size, err := m.Openstack.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x3
+		i--
+		dAtA[i] = 0xb2
+	}
+	return len(dAtA) - i, nil
+}
+func (m *CreateSpecType_Nutanix) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_Nutanix) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.Nutanix != nil {
+		{
+			size, err := m.Nutanix.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x3
+		i--
+		dAtA[i] = 0xba
+	}
+	return len(dAtA) - i, nil
+}
+func (m *CreateSpecType_F5Proxy) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_F5Proxy) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.F5Proxy != nil {
+		{
+			size, err := m.F5Proxy.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x3
+		i--
+		dAtA[i] = 0xe2
+	}
+	return len(dAtA) - i, nil
+}
+func (m *CreateSpecType_CustomProxy) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_CustomProxy) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.CustomProxy != nil {
+		{
+			size, err := m.CustomProxy.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x3
+		i--
+		dAtA[i] = 0xea
+	}
+	return len(dAtA) - i, nil
+}
 func (m *ReplaceSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -13025,6 +15660,66 @@ func (m *ReplaceSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if m.DnsNtpConfig != nil {
+		{
+			size, err := m.DnsNtpConfig.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x3
+		i--
+		dAtA[i] = 0xf2
+	}
+	if m.EnterpriseProxyChoice != nil {
+		{
+			size := m.EnterpriseProxyChoice.Size()
+			i -= size
+			if _, err := m.EnterpriseProxyChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if m.ProactiveMonitoring != nil {
+		{
+			size, err := m.ProactiveMonitoring.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x3
+		i--
+		dAtA[i] = 0xc2
+	}
+	if m.ProviderChoice != nil {
+		{
+			size := m.ProviderChoice.Size()
+			i -= size
+			if _, err := m.ProviderChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if m.AdminUserCredentials != nil {
+		{
+			size, err := m.AdminUserCredentials.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x3
+		i--
+		dAtA[i] = 0xaa
+	}
 	if m.NodeHaChoice != nil {
 		{
 			size := m.NodeHaChoice.Size()
@@ -13196,15 +15891,6 @@ func (m *ReplaceSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 			size := m.NetworkPolicyChoice.Size()
 			i -= size
 			if _, err := m.NetworkPolicyChoice.MarshalTo(dAtA[i:]); err != nil {
-				return 0, err
-			}
-		}
-	}
-	if m.ProviderChoice != nil {
-		{
-			size := m.ProviderChoice.Size()
-			i -= size
-			if _, err := m.ProviderChoice.MarshalTo(dAtA[i:]); err != nil {
 				return 0, err
 			}
 		}
@@ -13719,6 +16405,98 @@ func (m *ReplaceSpecType_EnableHa) MarshalToSizedBuffer(dAtA []byte) (int, error
 	}
 	return len(dAtA) - i, nil
 }
+func (m *ReplaceSpecType_Openstack) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_Openstack) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.Openstack != nil {
+		{
+			size, err := m.Openstack.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x3
+		i--
+		dAtA[i] = 0xb2
+	}
+	return len(dAtA) - i, nil
+}
+func (m *ReplaceSpecType_Nutanix) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_Nutanix) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.Nutanix != nil {
+		{
+			size, err := m.Nutanix.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x3
+		i--
+		dAtA[i] = 0xba
+	}
+	return len(dAtA) - i, nil
+}
+func (m *ReplaceSpecType_F5Proxy) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_F5Proxy) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.F5Proxy != nil {
+		{
+			size, err := m.F5Proxy.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x3
+		i--
+		dAtA[i] = 0xe2
+	}
+	return len(dAtA) - i, nil
+}
+func (m *ReplaceSpecType_CustomProxy) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_CustomProxy) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.CustomProxy != nil {
+		{
+			size, err := m.CustomProxy.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x3
+		i--
+		dAtA[i] = 0xea
+	}
+	return len(dAtA) - i, nil
+}
 func (m *GetSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -13739,6 +16517,66 @@ func (m *GetSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if m.DnsNtpConfig != nil {
+		{
+			size, err := m.DnsNtpConfig.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x3
+		i--
+		dAtA[i] = 0xf2
+	}
+	if m.EnterpriseProxyChoice != nil {
+		{
+			size := m.EnterpriseProxyChoice.Size()
+			i -= size
+			if _, err := m.EnterpriseProxyChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if m.ProactiveMonitoring != nil {
+		{
+			size, err := m.ProactiveMonitoring.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x3
+		i--
+		dAtA[i] = 0xc2
+	}
+	if m.ProviderChoice != nil {
+		{
+			size := m.ProviderChoice.Size()
+			i -= size
+			if _, err := m.ProviderChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if m.AdminUserCredentials != nil {
+		{
+			size, err := m.AdminUserCredentials.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x3
+		i--
+		dAtA[i] = 0xaa
+	}
 	if m.SiteState != 0 {
 		i = encodeVarintTypes(dAtA, i, uint64(m.SiteState))
 		i--
@@ -13935,15 +16773,6 @@ func (m *GetSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 			size := m.NetworkPolicyChoice.Size()
 			i -= size
 			if _, err := m.NetworkPolicyChoice.MarshalTo(dAtA[i:]); err != nil {
-				return 0, err
-			}
-		}
-	}
-	if m.ProviderChoice != nil {
-		{
-			size := m.ProviderChoice.Size()
-			i -= size
-			if _, err := m.ProviderChoice.MarshalTo(dAtA[i:]); err != nil {
 				return 0, err
 			}
 		}
@@ -14458,6 +17287,98 @@ func (m *GetSpecType_EnableHa) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	}
 	return len(dAtA) - i, nil
 }
+func (m *GetSpecType_Openstack) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_Openstack) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.Openstack != nil {
+		{
+			size, err := m.Openstack.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x3
+		i--
+		dAtA[i] = 0xb2
+	}
+	return len(dAtA) - i, nil
+}
+func (m *GetSpecType_Nutanix) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_Nutanix) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.Nutanix != nil {
+		{
+			size, err := m.Nutanix.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x3
+		i--
+		dAtA[i] = 0xba
+	}
+	return len(dAtA) - i, nil
+}
+func (m *GetSpecType_F5Proxy) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_F5Proxy) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.F5Proxy != nil {
+		{
+			size, err := m.F5Proxy.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x3
+		i--
+		dAtA[i] = 0xe2
+	}
+	return len(dAtA) - i, nil
+}
+func (m *GetSpecType_CustomProxy) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_CustomProxy) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.CustomProxy != nil {
+		{
+			size, err := m.CustomProxy.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x3
+		i--
+		dAtA[i] = 0xea
+	}
+	return len(dAtA) - i, nil
+}
 func (m *Interface) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -14921,101 +17842,6 @@ func (m *Interface_NoIpv4Address) MarshalToSizedBuffer(dAtA []byte) (int, error)
 		dAtA[i] = 0x2
 		i--
 		dAtA[i] = 0x82
-	}
-	return len(dAtA) - i, nil
-}
-func (m *NetworkSelectType) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *NetworkSelectType) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *NetworkSelectType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.NetworkChoice != nil {
-		{
-			size := m.NetworkChoice.Size()
-			i -= size
-			if _, err := m.NetworkChoice.MarshalTo(dAtA[i:]); err != nil {
-				return 0, err
-			}
-		}
-	}
-	return len(dAtA) - i, nil
-}
-
-func (m *NetworkSelectType_SiteLocalNetwork) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *NetworkSelectType_SiteLocalNetwork) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	if m.SiteLocalNetwork != nil {
-		{
-			size, err := m.SiteLocalNetwork.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x12
-	}
-	return len(dAtA) - i, nil
-}
-func (m *NetworkSelectType_SiteLocalInsideNetwork) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *NetworkSelectType_SiteLocalInsideNetwork) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	if m.SiteLocalInsideNetwork != nil {
-		{
-			size, err := m.SiteLocalInsideNetwork.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x1a
-	}
-	return len(dAtA) - i, nil
-}
-func (m *NetworkSelectType_SegmentNetwork) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *NetworkSelectType_SegmentNetwork) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	if m.SegmentNetwork != nil {
-		{
-			size, err := m.SegmentNetwork.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x22
 	}
 	return len(dAtA) - i, nil
 }
@@ -15522,6 +18348,21 @@ func (m *GlobalSpecType) Size() (n int) {
 	if m.SiteState != 0 {
 		n += 2 + sovTypes(uint64(m.SiteState))
 	}
+	if m.AdminUserCredentials != nil {
+		l = m.AdminUserCredentials.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	if m.ProactiveMonitoring != nil {
+		l = m.ProactiveMonitoring.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	if m.EnterpriseProxyChoice != nil {
+		n += m.EnterpriseProxyChoice.Size()
+	}
+	if m.DnsNtpConfig != nil {
+		l = m.DnsNtpConfig.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
 	l = len(m.Address)
 	if l > 0 {
 		n += 2 + l + sovTypes(uint64(l))
@@ -15813,6 +18654,198 @@ func (m *GlobalSpecType_EnableHa) Size() (n int) {
 	}
 	return n
 }
+func (m *GlobalSpecType_Openstack) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Openstack != nil {
+		l = m.Openstack.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *GlobalSpecType_Nutanix) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Nutanix != nil {
+		l = m.Nutanix.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *GlobalSpecType_F5Proxy) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.F5Proxy != nil {
+		l = m.F5Proxy.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *GlobalSpecType_CustomProxy) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.CustomProxy != nil {
+		l = m.CustomProxy.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *DNSNTPServerConfig) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.DnsServerChoice != nil {
+		n += m.DnsServerChoice.Size()
+	}
+	if m.NtpServerChoice != nil {
+		n += m.NtpServerChoice.Size()
+	}
+	return n
+}
+
+func (m *DNSNTPServerConfig_F5DnsDefault) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.F5DnsDefault != nil {
+		l = m.F5DnsDefault.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *DNSNTPServerConfig_CustomDns) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.CustomDns != nil {
+		l = m.CustomDns.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *DNSNTPServerConfig_F5NtpDefault) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.F5NtpDefault != nil {
+		l = m.F5NtpDefault.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *DNSNTPServerConfig_CustomNtp) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.CustomNtp != nil {
+		l = m.CustomNtp.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *CustomDNSSettings) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if len(m.DnsServers) > 0 {
+		for _, s := range m.DnsServers {
+			l = len(s)
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	return n
+}
+
+func (m *CustomNTPSettings) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if len(m.NtpServers) > 0 {
+		for _, s := range m.NtpServers {
+			l = len(s)
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	return n
+}
+
+func (m *CustomProxy) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.ProxyIpAddress)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.ProxyPort != 0 {
+		n += 1 + sovTypes(uint64(m.ProxyPort))
+	}
+	l = len(m.Username)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.Password != nil {
+		l = m.Password.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.UseForReTunnelChoice != nil {
+		n += m.UseForReTunnelChoice.Size()
+	}
+	return n
+}
+
+func (m *CustomProxy_DisableReTunnel) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.DisableReTunnel != nil {
+		l = m.DisableReTunnel.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *CustomProxy_EnableReTunnel) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.EnableReTunnel != nil {
+		l = m.EnableReTunnel.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
 func (m *LoadBalancingSettingsType) Size() (n int) {
 	if m == nil {
 		return 0
@@ -16017,6 +19050,18 @@ func (m *AWSProviderType_NotManaged) Size() (n int) {
 	}
 	return n
 }
+func (m *AWSProviderType_Managed) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Managed != nil {
+		l = m.Managed.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
 func (m *AzureProviderType) Size() (n int) {
 	if m == nil {
 		return 0
@@ -16137,6 +19182,54 @@ func (m *RSeriesProviderType_NotManaged) Size() (n int) {
 	}
 	return n
 }
+func (m *OpenstackProviderType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.OrchestrationChoice != nil {
+		n += m.OrchestrationChoice.Size()
+	}
+	return n
+}
+
+func (m *OpenstackProviderType_NotManaged) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.NotManaged != nil {
+		l = m.NotManaged.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *NutanixProviderType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.OrchestrationChoice != nil {
+		n += m.OrchestrationChoice.Size()
+	}
+	return n
+}
+
+func (m *NutanixProviderType_NotManaged) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.NotManaged != nil {
+		l = m.NotManaged.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
 func (m *NodeList) Size() (n int) {
 	if m == nil {
 		return 0
@@ -16215,6 +19308,21 @@ func (m *CreateSpecType) Size() (n int) {
 	}
 	if m.NodeHaChoice != nil {
 		n += m.NodeHaChoice.Size()
+	}
+	if m.AdminUserCredentials != nil {
+		l = m.AdminUserCredentials.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	if m.ProactiveMonitoring != nil {
+		l = m.ProactiveMonitoring.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	if m.EnterpriseProxyChoice != nil {
+		n += m.EnterpriseProxyChoice.Size()
+	}
+	if m.DnsNtpConfig != nil {
+		l = m.DnsNtpConfig.Size()
+		n += 2 + l + sovTypes(uint64(l))
 	}
 	return n
 }
@@ -16495,6 +19603,54 @@ func (m *CreateSpecType_EnableHa) Size() (n int) {
 	}
 	return n
 }
+func (m *CreateSpecType_Openstack) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Openstack != nil {
+		l = m.Openstack.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *CreateSpecType_Nutanix) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Nutanix != nil {
+		l = m.Nutanix.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *CreateSpecType_F5Proxy) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.F5Proxy != nil {
+		l = m.F5Proxy.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *CreateSpecType_CustomProxy) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.CustomProxy != nil {
+		l = m.CustomProxy.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
 func (m *ReplaceSpecType) Size() (n int) {
 	if m == nil {
 		return 0
@@ -16558,6 +19714,21 @@ func (m *ReplaceSpecType) Size() (n int) {
 	}
 	if m.NodeHaChoice != nil {
 		n += m.NodeHaChoice.Size()
+	}
+	if m.AdminUserCredentials != nil {
+		l = m.AdminUserCredentials.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	if m.ProactiveMonitoring != nil {
+		l = m.ProactiveMonitoring.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	if m.EnterpriseProxyChoice != nil {
+		n += m.EnterpriseProxyChoice.Size()
+	}
+	if m.DnsNtpConfig != nil {
+		l = m.DnsNtpConfig.Size()
+		n += 2 + l + sovTypes(uint64(l))
 	}
 	return n
 }
@@ -16838,6 +20009,54 @@ func (m *ReplaceSpecType_EnableHa) Size() (n int) {
 	}
 	return n
 }
+func (m *ReplaceSpecType_Openstack) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Openstack != nil {
+		l = m.Openstack.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *ReplaceSpecType_Nutanix) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Nutanix != nil {
+		l = m.Nutanix.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *ReplaceSpecType_F5Proxy) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.F5Proxy != nil {
+		l = m.F5Proxy.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *ReplaceSpecType_CustomProxy) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.CustomProxy != nil {
+		l = m.CustomProxy.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
 func (m *GetSpecType) Size() (n int) {
 	if m == nil {
 		return 0
@@ -16912,6 +20131,21 @@ func (m *GetSpecType) Size() (n int) {
 	}
 	if m.SiteState != 0 {
 		n += 2 + sovTypes(uint64(m.SiteState))
+	}
+	if m.AdminUserCredentials != nil {
+		l = m.AdminUserCredentials.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	if m.ProactiveMonitoring != nil {
+		l = m.ProactiveMonitoring.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	if m.EnterpriseProxyChoice != nil {
+		n += m.EnterpriseProxyChoice.Size()
+	}
+	if m.DnsNtpConfig != nil {
+		l = m.DnsNtpConfig.Size()
+		n += 2 + l + sovTypes(uint64(l))
 	}
 	return n
 }
@@ -17192,6 +20426,54 @@ func (m *GetSpecType_EnableHa) Size() (n int) {
 	}
 	return n
 }
+func (m *GetSpecType_Openstack) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Openstack != nil {
+		l = m.Openstack.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *GetSpecType_Nutanix) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Nutanix != nil {
+		l = m.Nutanix.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *GetSpecType_F5Proxy) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.F5Proxy != nil {
+		l = m.F5Proxy.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *GetSpecType_CustomProxy) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.CustomProxy != nil {
+		l = m.CustomProxy.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
 func (m *Interface) Size() (n int) {
 	if m == nil {
 		return 0
@@ -17413,54 +20695,6 @@ func (m *Interface_NoIpv4Address) Size() (n int) {
 	if m.NoIpv4Address != nil {
 		l = m.NoIpv4Address.Size()
 		n += 2 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *NetworkSelectType) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.NetworkChoice != nil {
-		n += m.NetworkChoice.Size()
-	}
-	return n
-}
-
-func (m *NetworkSelectType_SiteLocalNetwork) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.SiteLocalNetwork != nil {
-		l = m.SiteLocalNetwork.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *NetworkSelectType_SiteLocalInsideNetwork) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.SiteLocalInsideNetwork != nil {
-		l = m.SiteLocalInsideNetwork.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *NetworkSelectType_SegmentNetwork) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.SegmentNetwork != nil {
-		l = m.SegmentNetwork.Size()
-		n += 1 + l + sovTypes(uint64(l))
 	}
 	return n
 }
@@ -17694,6 +20928,10 @@ func (this *GlobalSpecType) String() string {
 		`OperatingSystemVersion:` + fmt.Sprintf("%v", this.OperatingSystemVersion) + `,`,
 		`NodeHaChoice:` + fmt.Sprintf("%v", this.NodeHaChoice) + `,`,
 		`SiteState:` + fmt.Sprintf("%v", this.SiteState) + `,`,
+		`AdminUserCredentials:` + strings.Replace(fmt.Sprintf("%v", this.AdminUserCredentials), "AdminUserCredentialsType", "views.AdminUserCredentialsType", 1) + `,`,
+		`ProactiveMonitoring:` + strings.Replace(fmt.Sprintf("%v", this.ProactiveMonitoring), "ProactiveMonitoringChoice", "views.ProactiveMonitoringChoice", 1) + `,`,
+		`EnterpriseProxyChoice:` + fmt.Sprintf("%v", this.EnterpriseProxyChoice) + `,`,
+		`DnsNtpConfig:` + strings.Replace(this.DnsNtpConfig.String(), "DNSNTPServerConfig", "DNSNTPServerConfig", 1) + `,`,
 		`Address:` + fmt.Sprintf("%v", this.Address) + `,`,
 		`Coordinates:` + strings.Replace(fmt.Sprintf("%v", this.Coordinates), "Coordinates", "site.Coordinates", 1) + `,`,
 		`ViewInternal:` + strings.Replace(fmt.Sprintf("%v", this.ViewInternal), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
@@ -17931,6 +21169,151 @@ func (this *GlobalSpecType_EnableHa) String() string {
 	}, "")
 	return s
 }
+func (this *GlobalSpecType_Openstack) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GlobalSpecType_Openstack{`,
+		`Openstack:` + strings.Replace(fmt.Sprintf("%v", this.Openstack), "OpenstackProviderType", "OpenstackProviderType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GlobalSpecType_Nutanix) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GlobalSpecType_Nutanix{`,
+		`Nutanix:` + strings.Replace(fmt.Sprintf("%v", this.Nutanix), "NutanixProviderType", "NutanixProviderType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GlobalSpecType_F5Proxy) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GlobalSpecType_F5Proxy{`,
+		`F5Proxy:` + strings.Replace(fmt.Sprintf("%v", this.F5Proxy), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GlobalSpecType_CustomProxy) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GlobalSpecType_CustomProxy{`,
+		`CustomProxy:` + strings.Replace(fmt.Sprintf("%v", this.CustomProxy), "CustomProxy", "CustomProxy", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *DNSNTPServerConfig) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&DNSNTPServerConfig{`,
+		`DnsServerChoice:` + fmt.Sprintf("%v", this.DnsServerChoice) + `,`,
+		`NtpServerChoice:` + fmt.Sprintf("%v", this.NtpServerChoice) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *DNSNTPServerConfig_F5DnsDefault) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&DNSNTPServerConfig_F5DnsDefault{`,
+		`F5DnsDefault:` + strings.Replace(fmt.Sprintf("%v", this.F5DnsDefault), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *DNSNTPServerConfig_CustomDns) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&DNSNTPServerConfig_CustomDns{`,
+		`CustomDns:` + strings.Replace(fmt.Sprintf("%v", this.CustomDns), "CustomDNSSettings", "CustomDNSSettings", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *DNSNTPServerConfig_F5NtpDefault) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&DNSNTPServerConfig_F5NtpDefault{`,
+		`F5NtpDefault:` + strings.Replace(fmt.Sprintf("%v", this.F5NtpDefault), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *DNSNTPServerConfig_CustomNtp) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&DNSNTPServerConfig_CustomNtp{`,
+		`CustomNtp:` + strings.Replace(fmt.Sprintf("%v", this.CustomNtp), "CustomNTPSettings", "CustomNTPSettings", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CustomDNSSettings) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CustomDNSSettings{`,
+		`DnsServers:` + fmt.Sprintf("%v", this.DnsServers) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CustomNTPSettings) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CustomNTPSettings{`,
+		`NtpServers:` + fmt.Sprintf("%v", this.NtpServers) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CustomProxy) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CustomProxy{`,
+		`ProxyIpAddress:` + fmt.Sprintf("%v", this.ProxyIpAddress) + `,`,
+		`ProxyPort:` + fmt.Sprintf("%v", this.ProxyPort) + `,`,
+		`Username:` + fmt.Sprintf("%v", this.Username) + `,`,
+		`Password:` + strings.Replace(fmt.Sprintf("%v", this.Password), "SecretType", "schema.SecretType", 1) + `,`,
+		`UseForReTunnelChoice:` + fmt.Sprintf("%v", this.UseForReTunnelChoice) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CustomProxy_DisableReTunnel) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CustomProxy_DisableReTunnel{`,
+		`DisableReTunnel:` + strings.Replace(fmt.Sprintf("%v", this.DisableReTunnel), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CustomProxy_EnableReTunnel) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CustomProxy_EnableReTunnel{`,
+		`EnableReTunnel:` + strings.Replace(fmt.Sprintf("%v", this.EnableReTunnel), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *LoadBalancingSettingsType) String() string {
 	if this == nil {
 		return "nil"
@@ -18091,6 +21474,16 @@ func (this *AWSProviderType_NotManaged) String() string {
 	}, "")
 	return s
 }
+func (this *AWSProviderType_Managed) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&AWSProviderType_Managed{`,
+		`Managed:` + strings.Replace(fmt.Sprintf("%v", this.Managed), "AWSManagedMode", "AWSManagedMode", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *AzureProviderType) String() string {
 	if this == nil {
 		return "nil"
@@ -18191,6 +21584,46 @@ func (this *RSeriesProviderType_NotManaged) String() string {
 	}, "")
 	return s
 }
+func (this *OpenstackProviderType) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&OpenstackProviderType{`,
+		`OrchestrationChoice:` + fmt.Sprintf("%v", this.OrchestrationChoice) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *OpenstackProviderType_NotManaged) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&OpenstackProviderType_NotManaged{`,
+		`NotManaged:` + strings.Replace(fmt.Sprintf("%v", this.NotManaged), "NodeList", "NodeList", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *NutanixProviderType) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&NutanixProviderType{`,
+		`OrchestrationChoice:` + fmt.Sprintf("%v", this.OrchestrationChoice) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *NutanixProviderType_NotManaged) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&NutanixProviderType_NotManaged{`,
+		`NotManaged:` + strings.Replace(fmt.Sprintf("%v", this.NotManaged), "NodeList", "NodeList", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *NodeList) String() string {
 	if this == nil {
 		return "nil"
@@ -18228,6 +21661,10 @@ func (this *CreateSpecType) String() string {
 		`TunnelType:` + fmt.Sprintf("%v", this.TunnelType) + `,`,
 		`ReSelect:` + strings.Replace(fmt.Sprintf("%v", this.ReSelect), "RegionalEdgeSelection", "views.RegionalEdgeSelection", 1) + `,`,
 		`NodeHaChoice:` + fmt.Sprintf("%v", this.NodeHaChoice) + `,`,
+		`AdminUserCredentials:` + strings.Replace(fmt.Sprintf("%v", this.AdminUserCredentials), "AdminUserCredentialsType", "views.AdminUserCredentialsType", 1) + `,`,
+		`ProactiveMonitoring:` + strings.Replace(fmt.Sprintf("%v", this.ProactiveMonitoring), "ProactiveMonitoringChoice", "views.ProactiveMonitoringChoice", 1) + `,`,
+		`EnterpriseProxyChoice:` + fmt.Sprintf("%v", this.EnterpriseProxyChoice) + `,`,
+		`DnsNtpConfig:` + strings.Replace(this.DnsNtpConfig.String(), "DNSNTPServerConfig", "DNSNTPServerConfig", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -18462,6 +21899,46 @@ func (this *CreateSpecType_EnableHa) String() string {
 	}, "")
 	return s
 }
+func (this *CreateSpecType_Openstack) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CreateSpecType_Openstack{`,
+		`Openstack:` + strings.Replace(fmt.Sprintf("%v", this.Openstack), "OpenstackProviderType", "OpenstackProviderType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CreateSpecType_Nutanix) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CreateSpecType_Nutanix{`,
+		`Nutanix:` + strings.Replace(fmt.Sprintf("%v", this.Nutanix), "NutanixProviderType", "NutanixProviderType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CreateSpecType_F5Proxy) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CreateSpecType_F5Proxy{`,
+		`F5Proxy:` + strings.Replace(fmt.Sprintf("%v", this.F5Proxy), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CreateSpecType_CustomProxy) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CreateSpecType_CustomProxy{`,
+		`CustomProxy:` + strings.Replace(fmt.Sprintf("%v", this.CustomProxy), "CustomProxy", "CustomProxy", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *ReplaceSpecType) String() string {
 	if this == nil {
 		return "nil"
@@ -18484,6 +21961,10 @@ func (this *ReplaceSpecType) String() string {
 		`TunnelType:` + fmt.Sprintf("%v", this.TunnelType) + `,`,
 		`ReSelect:` + strings.Replace(fmt.Sprintf("%v", this.ReSelect), "RegionalEdgeSelection", "views.RegionalEdgeSelection", 1) + `,`,
 		`NodeHaChoice:` + fmt.Sprintf("%v", this.NodeHaChoice) + `,`,
+		`AdminUserCredentials:` + strings.Replace(fmt.Sprintf("%v", this.AdminUserCredentials), "AdminUserCredentialsType", "views.AdminUserCredentialsType", 1) + `,`,
+		`ProactiveMonitoring:` + strings.Replace(fmt.Sprintf("%v", this.ProactiveMonitoring), "ProactiveMonitoringChoice", "views.ProactiveMonitoringChoice", 1) + `,`,
+		`EnterpriseProxyChoice:` + fmt.Sprintf("%v", this.EnterpriseProxyChoice) + `,`,
+		`DnsNtpConfig:` + strings.Replace(this.DnsNtpConfig.String(), "DNSNTPServerConfig", "DNSNTPServerConfig", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -18718,6 +22199,46 @@ func (this *ReplaceSpecType_EnableHa) String() string {
 	}, "")
 	return s
 }
+func (this *ReplaceSpecType_Openstack) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ReplaceSpecType_Openstack{`,
+		`Openstack:` + strings.Replace(fmt.Sprintf("%v", this.Openstack), "OpenstackProviderType", "OpenstackProviderType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ReplaceSpecType_Nutanix) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ReplaceSpecType_Nutanix{`,
+		`Nutanix:` + strings.Replace(fmt.Sprintf("%v", this.Nutanix), "NutanixProviderType", "NutanixProviderType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ReplaceSpecType_F5Proxy) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ReplaceSpecType_F5Proxy{`,
+		`F5Proxy:` + strings.Replace(fmt.Sprintf("%v", this.F5Proxy), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ReplaceSpecType_CustomProxy) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ReplaceSpecType_CustomProxy{`,
+		`CustomProxy:` + strings.Replace(fmt.Sprintf("%v", this.CustomProxy), "CustomProxy", "CustomProxy", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *GetSpecType) String() string {
 	if this == nil {
 		return "nil"
@@ -18743,6 +22264,10 @@ func (this *GetSpecType) String() string {
 		`OperatingSystemVersion:` + fmt.Sprintf("%v", this.OperatingSystemVersion) + `,`,
 		`NodeHaChoice:` + fmt.Sprintf("%v", this.NodeHaChoice) + `,`,
 		`SiteState:` + fmt.Sprintf("%v", this.SiteState) + `,`,
+		`AdminUserCredentials:` + strings.Replace(fmt.Sprintf("%v", this.AdminUserCredentials), "AdminUserCredentialsType", "views.AdminUserCredentialsType", 1) + `,`,
+		`ProactiveMonitoring:` + strings.Replace(fmt.Sprintf("%v", this.ProactiveMonitoring), "ProactiveMonitoringChoice", "views.ProactiveMonitoringChoice", 1) + `,`,
+		`EnterpriseProxyChoice:` + fmt.Sprintf("%v", this.EnterpriseProxyChoice) + `,`,
+		`DnsNtpConfig:` + strings.Replace(this.DnsNtpConfig.String(), "DNSNTPServerConfig", "DNSNTPServerConfig", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -18977,6 +22502,46 @@ func (this *GetSpecType_EnableHa) String() string {
 	}, "")
 	return s
 }
+func (this *GetSpecType_Openstack) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GetSpecType_Openstack{`,
+		`Openstack:` + strings.Replace(fmt.Sprintf("%v", this.Openstack), "OpenstackProviderType", "OpenstackProviderType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GetSpecType_Nutanix) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GetSpecType_Nutanix{`,
+		`Nutanix:` + strings.Replace(fmt.Sprintf("%v", this.Nutanix), "NutanixProviderType", "NutanixProviderType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GetSpecType_F5Proxy) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GetSpecType_F5Proxy{`,
+		`F5Proxy:` + strings.Replace(fmt.Sprintf("%v", this.F5Proxy), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GetSpecType_CustomProxy) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GetSpecType_CustomProxy{`,
+		`CustomProxy:` + strings.Replace(fmt.Sprintf("%v", this.CustomProxy), "CustomProxy", "CustomProxy", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *Interface) String() string {
 	if this == nil {
 		return "nil"
@@ -18998,7 +22563,7 @@ func (this *Interface) String() string {
 		`AddressChoice:` + fmt.Sprintf("%v", this.AddressChoice) + `,`,
 		`Name:` + fmt.Sprintf("%v", this.Name) + `,`,
 		`Mtu:` + fmt.Sprintf("%v", this.Mtu) + `,`,
-		`NetworkOption:` + strings.Replace(this.NetworkOption.String(), "NetworkSelectType", "NetworkSelectType", 1) + `,`,
+		`NetworkOption:` + strings.Replace(fmt.Sprintf("%v", this.NetworkOption), "NetworkSelectType", "views.NetworkSelectType", 1) + `,`,
 		`MonitoringChoice:` + fmt.Sprintf("%v", this.MonitoringChoice) + `,`,
 		`Priority:` + fmt.Sprintf("%v", this.Priority) + `,`,
 		`SiteToSiteConnectivityInterfaceChoice:` + fmt.Sprintf("%v", this.SiteToSiteConnectivityInterfaceChoice) + `,`,
@@ -19145,46 +22710,6 @@ func (this *Interface_NoIpv4Address) String() string {
 	}
 	s := strings.Join([]string{`&Interface_NoIpv4Address{`,
 		`NoIpv4Address:` + strings.Replace(fmt.Sprintf("%v", this.NoIpv4Address), "Empty", "schema.Empty", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *NetworkSelectType) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&NetworkSelectType{`,
-		`NetworkChoice:` + fmt.Sprintf("%v", this.NetworkChoice) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *NetworkSelectType_SiteLocalNetwork) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&NetworkSelectType_SiteLocalNetwork{`,
-		`SiteLocalNetwork:` + strings.Replace(fmt.Sprintf("%v", this.SiteLocalNetwork), "Empty", "schema.Empty", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *NetworkSelectType_SiteLocalInsideNetwork) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&NetworkSelectType_SiteLocalInsideNetwork{`,
-		`SiteLocalInsideNetwork:` + strings.Replace(fmt.Sprintf("%v", this.SiteLocalInsideNetwork), "Empty", "schema.Empty", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *NetworkSelectType_SegmentNetwork) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&NetworkSelectType_SegmentNetwork{`,
-		`SegmentNetwork:` + strings.Replace(fmt.Sprintf("%v", this.SegmentNetwork), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -20558,6 +24083,254 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 					break
 				}
 			}
+		case 53:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AdminUserCredentials", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.AdminUserCredentials == nil {
+				m.AdminUserCredentials = &views.AdminUserCredentialsType{}
+			}
+			if err := m.AdminUserCredentials.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 54:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Openstack", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &OpenstackProviderType{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ProviderChoice = &GlobalSpecType_Openstack{v}
+			iNdEx = postIndex
+		case 55:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Nutanix", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &NutanixProviderType{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ProviderChoice = &GlobalSpecType_Nutanix{v}
+			iNdEx = postIndex
+		case 56:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ProactiveMonitoring", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.ProactiveMonitoring == nil {
+				m.ProactiveMonitoring = &views.ProactiveMonitoringChoice{}
+			}
+			if err := m.ProactiveMonitoring.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 60:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field F5Proxy", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.EnterpriseProxyChoice = &GlobalSpecType_F5Proxy{v}
+			iNdEx = postIndex
+		case 61:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field CustomProxy", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &CustomProxy{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.EnterpriseProxyChoice = &GlobalSpecType_CustomProxy{v}
+			iNdEx = postIndex
+		case 62:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DnsNtpConfig", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.DnsNtpConfig == nil {
+				m.DnsNtpConfig = &DNSNTPServerConfig{}
+			}
+			if err := m.DnsNtpConfig.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
 		case 998:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Address", wireType)
@@ -20661,6 +24434,611 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 			if err := m.ViewInternal.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *DNSNTPServerConfig) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: DNSNTPServerConfig: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: DNSNTPServerConfig: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field F5DnsDefault", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.DnsServerChoice = &DNSNTPServerConfig_F5DnsDefault{v}
+			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field CustomDns", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &CustomDNSSettings{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.DnsServerChoice = &DNSNTPServerConfig_CustomDns{v}
+			iNdEx = postIndex
+		case 7:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field F5NtpDefault", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.NtpServerChoice = &DNSNTPServerConfig_F5NtpDefault{v}
+			iNdEx = postIndex
+		case 8:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field CustomNtp", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &CustomNTPSettings{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.NtpServerChoice = &DNSNTPServerConfig_CustomNtp{v}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *CustomDNSSettings) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: CustomDNSSettings: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: CustomDNSSettings: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DnsServers", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.DnsServers = append(m.DnsServers, string(dAtA[iNdEx:postIndex]))
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *CustomNTPSettings) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: CustomNTPSettings: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: CustomNTPSettings: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field NtpServers", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.NtpServers = append(m.NtpServers, string(dAtA[iNdEx:postIndex]))
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *CustomProxy) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: CustomProxy: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: CustomProxy: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ProxyIpAddress", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ProxyIpAddress = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ProxyPort", wireType)
+			}
+			m.ProxyPort = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.ProxyPort |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Username", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Username = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Password", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Password == nil {
+				m.Password = &schema.SecretType{}
+			}
+			if err := m.Password.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 6:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DisableReTunnel", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.UseForReTunnelChoice = &CustomProxy_DisableReTunnel{v}
+			iNdEx = postIndex
+		case 7:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field EnableReTunnel", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.UseForReTunnelChoice = &CustomProxy_EnableReTunnel{v}
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
@@ -21588,6 +25966,41 @@ func (m *AWSProviderType) Unmarshal(dAtA []byte) error {
 			}
 			m.OrchestrationChoice = &AWSProviderType_NotManaged{v}
 			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Managed", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &AWSManagedMode{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.OrchestrationChoice = &AWSProviderType_Managed{v}
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTypes(dAtA[iNdEx:])
@@ -22027,6 +26440,182 @@ func (m *RSeriesProviderType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			m.OrchestrationChoice = &RSeriesProviderType_NotManaged{v}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *OpenstackProviderType) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: OpenstackProviderType: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: OpenstackProviderType: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field NotManaged", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &NodeList{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.OrchestrationChoice = &OpenstackProviderType_NotManaged{v}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *NutanixProviderType) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: NutanixProviderType: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: NutanixProviderType: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field NotManaged", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &NodeList{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.OrchestrationChoice = &NutanixProviderType_NotManaged{v}
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
@@ -23263,6 +27852,254 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 			}
 			m.NodeHaChoice = &CreateSpecType_EnableHa{v}
 			iNdEx = postIndex
+		case 53:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AdminUserCredentials", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.AdminUserCredentials == nil {
+				m.AdminUserCredentials = &views.AdminUserCredentialsType{}
+			}
+			if err := m.AdminUserCredentials.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 54:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Openstack", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &OpenstackProviderType{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ProviderChoice = &CreateSpecType_Openstack{v}
+			iNdEx = postIndex
+		case 55:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Nutanix", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &NutanixProviderType{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ProviderChoice = &CreateSpecType_Nutanix{v}
+			iNdEx = postIndex
+		case 56:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ProactiveMonitoring", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.ProactiveMonitoring == nil {
+				m.ProactiveMonitoring = &views.ProactiveMonitoringChoice{}
+			}
+			if err := m.ProactiveMonitoring.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 60:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field F5Proxy", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.EnterpriseProxyChoice = &CreateSpecType_F5Proxy{v}
+			iNdEx = postIndex
+		case 61:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field CustomProxy", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &CustomProxy{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.EnterpriseProxyChoice = &CreateSpecType_CustomProxy{v}
+			iNdEx = postIndex
+		case 62:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DnsNtpConfig", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.DnsNtpConfig == nil {
+				m.DnsNtpConfig = &DNSNTPServerConfig{}
+			}
+			if err := m.DnsNtpConfig.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTypes(dAtA[iNdEx:])
@@ -24410,6 +29247,254 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			m.NodeHaChoice = &ReplaceSpecType_EnableHa{v}
+			iNdEx = postIndex
+		case 53:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AdminUserCredentials", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.AdminUserCredentials == nil {
+				m.AdminUserCredentials = &views.AdminUserCredentialsType{}
+			}
+			if err := m.AdminUserCredentials.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 54:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Openstack", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &OpenstackProviderType{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ProviderChoice = &ReplaceSpecType_Openstack{v}
+			iNdEx = postIndex
+		case 55:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Nutanix", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &NutanixProviderType{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ProviderChoice = &ReplaceSpecType_Nutanix{v}
+			iNdEx = postIndex
+		case 56:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ProactiveMonitoring", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.ProactiveMonitoring == nil {
+				m.ProactiveMonitoring = &views.ProactiveMonitoringChoice{}
+			}
+			if err := m.ProactiveMonitoring.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 60:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field F5Proxy", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.EnterpriseProxyChoice = &ReplaceSpecType_F5Proxy{v}
+			iNdEx = postIndex
+		case 61:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field CustomProxy", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &CustomProxy{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.EnterpriseProxyChoice = &ReplaceSpecType_CustomProxy{v}
+			iNdEx = postIndex
+		case 62:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DnsNtpConfig", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.DnsNtpConfig == nil {
+				m.DnsNtpConfig = &DNSNTPServerConfig{}
+			}
+			if err := m.DnsNtpConfig.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
@@ -25642,6 +30727,254 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 					break
 				}
 			}
+		case 53:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AdminUserCredentials", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.AdminUserCredentials == nil {
+				m.AdminUserCredentials = &views.AdminUserCredentialsType{}
+			}
+			if err := m.AdminUserCredentials.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 54:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Openstack", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &OpenstackProviderType{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ProviderChoice = &GetSpecType_Openstack{v}
+			iNdEx = postIndex
+		case 55:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Nutanix", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &NutanixProviderType{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ProviderChoice = &GetSpecType_Nutanix{v}
+			iNdEx = postIndex
+		case 56:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ProactiveMonitoring", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.ProactiveMonitoring == nil {
+				m.ProactiveMonitoring = &views.ProactiveMonitoringChoice{}
+			}
+			if err := m.ProactiveMonitoring.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 60:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field F5Proxy", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.EnterpriseProxyChoice = &GetSpecType_F5Proxy{v}
+			iNdEx = postIndex
+		case 61:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field CustomProxy", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &CustomProxy{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.EnterpriseProxyChoice = &GetSpecType_CustomProxy{v}
+			iNdEx = postIndex
+		case 62:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DnsNtpConfig", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.DnsNtpConfig == nil {
+				m.DnsNtpConfig = &DNSNTPServerConfig{}
+			}
+			if err := m.DnsNtpConfig.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTypes(dAtA[iNdEx:])
@@ -26110,7 +31443,7 @@ func (m *Interface) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			if m.NetworkOption == nil {
-				m.NetworkOption = &NetworkSelectType{}
+				m.NetworkOption = &views.NetworkSelectType{}
 			}
 			if err := m.NetworkOption.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -26489,164 +31822,6 @@ func (m *Interface) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			m.AddressChoice = &Interface_NoIpv4Address{v}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipTypes(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if (iNdEx + skippy) < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *NetworkSelectType) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowTypes
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: NetworkSelectType: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: NetworkSelectType: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field SiteLocalNetwork", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &schema.Empty{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.NetworkChoice = &NetworkSelectType_SiteLocalNetwork{v}
-			iNdEx = postIndex
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field SiteLocalInsideNetwork", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &schema.Empty{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.NetworkChoice = &NetworkSelectType_SiteLocalInsideNetwork{v}
-			iNdEx = postIndex
-		case 4:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field SegmentNetwork", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &views.ObjectRefType{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.NetworkChoice = &NetworkSelectType_SegmentNetwork{v}
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex

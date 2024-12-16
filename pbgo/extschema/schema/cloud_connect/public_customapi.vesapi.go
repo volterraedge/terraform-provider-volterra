@@ -250,12 +250,14 @@ func (c *CustomAPIRestClient) doRPCListMetrics(ctx context.Context, callOpts *se
 		hReq = newReq
 		q := hReq.URL.Query()
 		_ = q
+		q.Add("end_time", fmt.Sprintf("%v", req.EndTime))
 		for _, item := range req.FieldSelector {
 			q.Add("field_selector", fmt.Sprintf("%v", item))
 		}
 		for _, item := range req.LabelFilter {
 			q.Add("label_filter", fmt.Sprintf("%v", item))
 		}
+		q.Add("start_time", fmt.Sprintf("%v", req.StartTime))
 
 		hReq.URL.RawQuery += q.Encode()
 	case "delete":
@@ -1369,6 +1371,16 @@ var CustomAPISwaggerJSON string = `{
             "x-displayname": "List Metrics Request",
             "x-ves-proto-message": "ves.io.schema.cloud_connect.ListMetricsRequest",
             "properties": {
+                "end_time": {
+                    "type": "string",
+                    "description": "\n end time of metric collection from which data will be considered to fetch cloud connect data.\n Format: unix_timestamp|rfc 3339\n\n Optional: If not specified, then the end_time will be evaluated to start_time+10m\n           If start_time is not specified, then the end_time will be evaluated to \u003ccurrent time\u003e\n\nExample: - \"2019-09-24T12:30:11.733Z\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.query_time: true\n",
+                    "title": "end_time",
+                    "x-displayname": "End Time",
+                    "x-ves-example": "2019-09-24T12:30:11.733Z",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.query_time": "true"
+                    }
+                },
                 "field_selector": {
                     "type": "array",
                     "description": "\n Select fields to be returned in the response.\n field_selector is used to specify the fields to be returned in the response, thereby limiting the\n amount of data returned in the response.\n\n Note: Selecting many/all fields may impact the query latency.\n\n Optional: If not specified, only the following fields are returned in the response.\n METRIC_TYPE_IN_BYTES, METRIC_TYPE_OUT_BYTES\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.enum.defined_only: true\n  ves.io.schema.rules.repeated.unique: true\n",
@@ -1393,6 +1405,16 @@ var CustomAPISwaggerJSON string = `{
                     "x-displayname": "Label Filter",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.repeated.max_items": "100"
+                    }
+                },
+                "start_time": {
+                    "type": "string",
+                    "description": "\n start time of metric collection from which data will be considered to fetch cloud connect data.\n Format: unix_timestamp|rfc 3339\n\n Optional: If not specified, then the start_time will be evaluated to end_time-10m\n           If end_time is not specified, then the start_time will be evaluated to \u003ccurrent time\u003e-10m\n\nExample: - \"2019-09-23T12:30:11.733Z\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.query_time: true\n",
+                    "title": "start_time",
+                    "x-displayname": "Start Time",
+                    "x-ves-example": "2019-09-23T12:30:11.733Z",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.query_time": "true"
                     }
                 }
             }

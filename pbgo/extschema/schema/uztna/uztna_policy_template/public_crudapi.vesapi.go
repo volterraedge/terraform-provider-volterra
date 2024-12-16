@@ -1149,16 +1149,25 @@ func (s *APISrv) Create(ctx context.Context, req *CreateRequest) (*CreateRespons
 	}
 	reqMsgFQN := "ves.io.schema.uztna.uztna_policy_template.CreateRequest"
 	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.sf, reqMsgFQN, req)
+	var retErr error
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
 		}
+		userMsg := "The 'ves.io.schema.uztna.uztna_policy_template.API.Create' operation on 'uztna_policy_template'"
+		if retErr == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
 	obj := NewDBObject(nil)
 	req.ToObject(obj)
 	if conv, exists := s.sf.Config().MsgToObjConverters[reqMsgFQN]; exists {
 		if err := conv(req, obj); err != nil {
+			retErr = err
 			return nil, err
 		}
 	}
@@ -1167,16 +1176,19 @@ func (s *APISrv) Create(ctx context.Context, req *CreateRequest) (*CreateRespons
 	rsrcRsp, err := s.opts.RsrcHandler.CreateFn(ctx, rsrcReq, s.apiWrapper)
 	if err != nil {
 		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "CreateResource"))
+		retErr = err
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 	rsp, err := NewObjectCreateRsp(rsrcRsp.Entry)
 	if err != nil {
 		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "CreateResponse"))
+		retErr = err
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 	rspMsgFQN := "ves.io.schema.uztna.uztna_policy_template.CreateResponse"
 	if conv, exists := s.sf.Config().ObjToMsgConverters[rspMsgFQN]; exists {
 		if err := conv(rsrcRsp.Entry, rsp); err != nil {
+			retErr = err
 			return nil, err
 		}
 	}
@@ -1208,21 +1220,31 @@ func (s *APISrv) Replace(ctx context.Context, req *ReplaceRequest) (*ReplaceResp
 		}
 	}
 	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.sf, "ves.io.schema.uztna.uztna_policy_template.API.ReplaceRequest", req)
+	var retErr error
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
 		}
+		userMsg := "The 'ves.io.schema.uztna.uztna_policy_template.API.Replace' operation on 'uztna_policy_template'"
+		if retErr == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
 	rsrcReq := &server.ResourceReplaceRequest{RequestMsg: req}
 	rsrcRsp, err := s.opts.RsrcHandler.ReplaceFn(ctx, rsrcReq, s.apiWrapper)
 	if err != nil {
 		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "ReplaceResource"))
+		retErr = err
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 	rsp, err := NewObjectReplaceRsp(rsrcRsp.Entry)
 	if err != nil {
 		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "ReplaceResponse"))
+		retErr = err
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.sf, "ves.io.schema.uztna.uztna_policy_template.API.ReplaceResponse", rsp)...)
@@ -1341,10 +1363,18 @@ func (s *APISrv) Delete(ctx context.Context, req *DeleteRequest) (*google_protob
 		}
 	}
 	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.sf, "ves.io.schema.uztna.uztna_policy_template.API.DeleteRequest", req)
+	var retErr error
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
 		}
+		userMsg := "The 'ves.io.schema.uztna.uztna_policy_template.API.Delete' operation on 'uztna_policy_template'"
+		if retErr == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
 	tenant := server.TenantFromContext(ctx)
@@ -1354,6 +1384,7 @@ func (s *APISrv) Delete(ctx context.Context, req *DeleteRequest) (*google_protob
 	_, err := s.opts.RsrcHandler.DeleteFn(ctx, rsrcReq, s.apiWrapper)
 	if err != nil {
 		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "DeleteResource"))
+		retErr = err
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 	return &google_protobuf.Empty{}, nil
@@ -1766,7 +1797,6 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-uztna-uztna_policy_template-api-create"
                 },
-                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.uztna.uztna_policy_template.API.Create"
             },
             "x-displayname": "Policy Template",
@@ -1867,7 +1897,6 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-uztna-uztna_policy_template-api-replace"
                 },
-                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.uztna.uztna_policy_template.API.Replace"
             },
             "x-displayname": "Policy Template",
@@ -1984,7 +2013,6 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-uztna-uztna_policy_template-api-list"
                 },
-                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.uztna.uztna_policy_template.API.List"
             },
             "x-displayname": "Policy Template",
@@ -2095,7 +2123,6 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-uztna-uztna_policy_template-api-get"
                 },
-                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.uztna.uztna_policy_template.API.Get"
             },
             "delete": {
@@ -2189,7 +2216,6 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-uztna-uztna_policy_template-api-delete"
                 },
-                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.uztna.uztna_policy_template.API.Delete"
             },
             "x-displayname": "Policy Template",
@@ -2200,10 +2226,8 @@ var APISwaggerJSON string = `{
     "definitions": {
         "ioschemaEmpty": {
             "type": "object",
-            "description": "This can be used for messages where no values are needed",
-            "title": "Empty",
-            "x-displayname": "Empty",
-            "x-ves-proto-message": "ves.io.schema.Empty"
+            "description": "x-displayName: \"Empty\"\nThis can be used for messages where no values are needed",
+            "title": "Empty"
         },
         "ioschemaObjectRefType": {
             "type": "object",
@@ -2915,17 +2939,11 @@ var APISwaggerJSON string = `{
             "description": "\nSelect from SAML or ip geolocation or empty",
             "title": "Flows",
             "x-displayname": "Flows",
-            "x-ves-oneof-field-flow_type": "[\"allow_all\",\"geolocation_match\",\"saml_federation\"]",
+            "x-ves-oneof-field-flow_type": "[\"geolocation_match\",\"saml_federation\"]",
             "x-ves-proto-message": "ves.io.schema.uztna.uztna_policy_template.Flows",
             "properties": {
-                "allow_all": {
-                    "description": "Exclusive with [geolocation_match saml_federation]\n Allow All",
-                    "title": "Allow All",
-                    "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Allow All"
-                },
                 "geolocation_match": {
-                    "description": "Exclusive with [allow_all saml_federation]\n This option will allow to create or select\n flows of type Geolocation Match\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": "Exclusive with [saml_federation]\n This option will allow to create or select\n flows of type Geolocation Match\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Geolocation Match",
                     "$ref": "#/definitions/uztna_policy_templateGeoLocationMatch",
                     "x-displayname": "Geolocation Match",
@@ -2935,7 +2953,7 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "saml_federation": {
-                    "description": "Exclusive with [allow_all geolocation_match]\n This option will allow to create or select\n flows of type SAML Federation\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": "Exclusive with [geolocation_match]\n This option will allow to create or select\n flows of type SAML Federation\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "SAML Federation",
                     "$ref": "#/definitions/uztna_policy_templateSAMLFederation",
                     "x-displayname": "SAML Federation",
@@ -3296,17 +3314,11 @@ var APISwaggerJSON string = `{
             "description": "Select Template type",
             "title": "TemplateType",
             "x-displayname": "Template",
-            "x-ves-oneof-field-template_type": "[\"deny_all\",\"simple\"]",
+            "x-ves-oneof-field-template_type": "[\"simple\"]",
             "x-ves-proto-message": "ves.io.schema.uztna.uztna_policy_template.TemplateType",
             "properties": {
-                "deny_all": {
-                    "description": "Exclusive with [simple]\n\n Deny All will deny all the requests",
-                    "title": "Deny All",
-                    "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Deny All"
-                },
                 "simple": {
-                    "description": "Exclusive with [deny_all]\n\n This template ",
+                    "description": "Exclusive with []\n\n This template ",
                     "title": "Simple",
                     "$ref": "#/definitions/uztna_policy_templateSimpleTemplate",
                     "x-displayname": "Simple"
@@ -3320,15 +3332,6 @@ var APISwaggerJSON string = `{
             "x-displayname": "Create Specification",
             "x-ves-proto-message": "ves.io.schema.uztna.uztna_policy_template.CreateSpecType",
             "properties": {
-                "continuous_flow": {
-                    "description": " Continuous Flows provide a constant check of policy compliance \n and continuously validates the relevant flows assigned in on start\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
-                    "$ref": "#/definitions/uztna_policy_templateTemplateType",
-                    "x-displayname": "Continuous Flows",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
-                },
                 "on_start_flow": {
                     "description": " On Start Flows are evaluated continuously, in order, \n throughout the entirety of the session\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "$ref": "#/definitions/uztna_policy_templateTemplateType",
@@ -3347,15 +3350,6 @@ var APISwaggerJSON string = `{
             "x-displayname": "Get Specification",
             "x-ves-proto-message": "ves.io.schema.uztna.uztna_policy_template.GetSpecType",
             "properties": {
-                "continuous_flow": {
-                    "description": " Continuous Flows provide a constant check of policy compliance \n and continuously validates the relevant flows assigned in on start\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
-                    "$ref": "#/definitions/uztna_policy_templateTemplateType",
-                    "x-displayname": "Continuous Flows",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
-                },
                 "on_start_flow": {
                     "description": " On Start Flows are evaluated continuously, in order, \n throughout the entirety of the session\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "$ref": "#/definitions/uztna_policy_templateTemplateType",
@@ -3374,15 +3368,6 @@ var APISwaggerJSON string = `{
             "x-displayname": "Replace Specification",
             "x-ves-proto-message": "ves.io.schema.uztna.uztna_policy_template.ReplaceSpecType",
             "properties": {
-                "continuous_flow": {
-                    "description": " Continuous Flows provide a constant check of policy compliance \n and continuously validates the relevant flows assigned in on start\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
-                    "$ref": "#/definitions/uztna_policy_templateTemplateType",
-                    "x-displayname": "Continuous Flows",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
-                },
                 "on_start_flow": {
                     "description": " On Start Flows are evaluated continuously, in order, \n throughout the entirety of the session\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "$ref": "#/definitions/uztna_policy_templateTemplateType",

@@ -69,7 +69,8 @@ func resourceVolterraTcpLoadbalancer() *schema.Resource {
 
 			"advertise_custom": {
 
-				Type:     schema.TypeSet,
+				Type:     schema.TypeList,
+				MaxItems: 1,
 				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
@@ -83,14 +84,16 @@ func resourceVolterraTcpLoadbalancer() *schema.Resource {
 
 									"advertise_on_public": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
 												"public_ip": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Required: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -121,14 +124,16 @@ func resourceVolterraTcpLoadbalancer() *schema.Resource {
 
 									"cloud_edge_segment": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
 												"cloud_edge": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Required: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -166,7 +171,8 @@ func resourceVolterraTcpLoadbalancer() *schema.Resource {
 
 												"segment": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Required: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -197,7 +203,8 @@ func resourceVolterraTcpLoadbalancer() *schema.Resource {
 
 									"segment": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -214,7 +221,8 @@ func resourceVolterraTcpLoadbalancer() *schema.Resource {
 
 												"segment": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Required: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -245,7 +253,8 @@ func resourceVolterraTcpLoadbalancer() *schema.Resource {
 
 									"site": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -267,7 +276,8 @@ func resourceVolterraTcpLoadbalancer() *schema.Resource {
 
 												"site": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Required: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -298,7 +308,8 @@ func resourceVolterraTcpLoadbalancer() *schema.Resource {
 
 									"site_segment": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -315,7 +326,8 @@ func resourceVolterraTcpLoadbalancer() *schema.Resource {
 
 												"segment": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Required: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -343,7 +355,8 @@ func resourceVolterraTcpLoadbalancer() *schema.Resource {
 
 												"site": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Required: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -374,7 +387,8 @@ func resourceVolterraTcpLoadbalancer() *schema.Resource {
 
 									"virtual_network": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -405,7 +419,8 @@ func resourceVolterraTcpLoadbalancer() *schema.Resource {
 
 												"virtual_network": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Required: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -436,7 +451,8 @@ func resourceVolterraTcpLoadbalancer() *schema.Resource {
 
 									"virtual_site": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -448,7 +464,8 @@ func resourceVolterraTcpLoadbalancer() *schema.Resource {
 
 												"virtual_site": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Required: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -479,7 +496,8 @@ func resourceVolterraTcpLoadbalancer() *schema.Resource {
 
 									"virtual_site_segment": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -496,7 +514,8 @@ func resourceVolterraTcpLoadbalancer() *schema.Resource {
 
 												"segment": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Required: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -524,7 +543,8 @@ func resourceVolterraTcpLoadbalancer() *schema.Resource {
 
 												"virtual_site": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Required: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -555,7 +575,8 @@ func resourceVolterraTcpLoadbalancer() *schema.Resource {
 
 									"virtual_site_with_vip": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -577,7 +598,8 @@ func resourceVolterraTcpLoadbalancer() *schema.Resource {
 
 												"virtual_site": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Required: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -608,14 +630,16 @@ func resourceVolterraTcpLoadbalancer() *schema.Resource {
 
 									"vk8s_service": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
 												"site": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Optional: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -643,7 +667,8 @@ func resourceVolterraTcpLoadbalancer() *schema.Resource {
 
 												"virtual_site": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Optional: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -698,14 +723,16 @@ func resourceVolterraTcpLoadbalancer() *schema.Resource {
 
 			"advertise_on_public": {
 
-				Type:     schema.TypeSet,
+				Type:     schema.TypeList,
+				MaxItems: 1,
 				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 
 						"public_ip": {
 
-							Type:     schema.TypeSet,
+							Type:     schema.TypeList,
+							MaxItems: 1,
 							Required: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
@@ -810,14 +837,16 @@ func resourceVolterraTcpLoadbalancer() *schema.Resource {
 
 			"tls_tcp": {
 
-				Type:     schema.TypeSet,
+				Type:     schema.TypeList,
+				MaxItems: 1,
 				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 
 						"tls_cert_params": {
 
-							Type:     schema.TypeSet,
+							Type:     schema.TypeList,
+							MaxItems: 1,
 							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
@@ -858,7 +887,8 @@ func resourceVolterraTcpLoadbalancer() *schema.Resource {
 
 									"use_mtls": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -870,7 +900,8 @@ func resourceVolterraTcpLoadbalancer() *schema.Resource {
 
 												"crl": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Optional: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -904,7 +935,8 @@ func resourceVolterraTcpLoadbalancer() *schema.Resource {
 
 												"trusted_ca": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Optional: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -944,7 +976,8 @@ func resourceVolterraTcpLoadbalancer() *schema.Resource {
 
 												"xfcc_options": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Optional: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -967,14 +1000,16 @@ func resourceVolterraTcpLoadbalancer() *schema.Resource {
 
 									"tls_config": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
 												"custom_security": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Optional: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -1028,7 +1063,8 @@ func resourceVolterraTcpLoadbalancer() *schema.Resource {
 
 						"tls_parameters": {
 
-							Type:     schema.TypeSet,
+							Type:     schema.TypeList,
+							MaxItems: 1,
 							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
@@ -1041,7 +1077,8 @@ func resourceVolterraTcpLoadbalancer() *schema.Resource {
 
 									"use_mtls": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -1053,7 +1090,8 @@ func resourceVolterraTcpLoadbalancer() *schema.Resource {
 
 												"crl": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Optional: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -1087,7 +1125,8 @@ func resourceVolterraTcpLoadbalancer() *schema.Resource {
 
 												"trusted_ca": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Optional: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -1127,7 +1166,8 @@ func resourceVolterraTcpLoadbalancer() *schema.Resource {
 
 												"xfcc_options": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Optional: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -1167,7 +1207,8 @@ func resourceVolterraTcpLoadbalancer() *schema.Resource {
 
 												"custom_hash_algorithms": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Optional: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -1187,7 +1228,8 @@ func resourceVolterraTcpLoadbalancer() *schema.Resource {
 
 												"disable_ocsp_stapling": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Optional: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{},
@@ -1196,7 +1238,8 @@ func resourceVolterraTcpLoadbalancer() *schema.Resource {
 
 												"use_system_defaults": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Optional: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{},
@@ -1205,14 +1248,16 @@ func resourceVolterraTcpLoadbalancer() *schema.Resource {
 
 												"private_key": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Required: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
 															"blindfold_secret_info_internal": {
 
-																Type:       schema.TypeSet,
+																Type:       schema.TypeList,
+																MaxItems:   1,
 																Optional:   true,
 																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
@@ -1247,7 +1292,8 @@ func resourceVolterraTcpLoadbalancer() *schema.Resource {
 
 															"blindfold_secret_info": {
 
-																Type:     schema.TypeSet,
+																Type:     schema.TypeList,
+																MaxItems: 1,
 																Optional: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
@@ -1272,7 +1318,8 @@ func resourceVolterraTcpLoadbalancer() *schema.Resource {
 
 															"clear_secret_info": {
 
-																Type:     schema.TypeSet,
+																Type:     schema.TypeList,
+																MaxItems: 1,
 																Optional: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
@@ -1292,7 +1339,8 @@ func resourceVolterraTcpLoadbalancer() *schema.Resource {
 
 															"vault_secret_info": {
 
-																Type:       schema.TypeSet,
+																Type:       schema.TypeList,
+																MaxItems:   1,
 																Optional:   true,
 																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
@@ -1333,7 +1381,8 @@ func resourceVolterraTcpLoadbalancer() *schema.Resource {
 
 															"wingman_secret_info": {
 
-																Type:       schema.TypeSet,
+																Type:       schema.TypeList,
+																MaxItems:   1,
 																Optional:   true,
 																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
@@ -1356,14 +1405,16 @@ func resourceVolterraTcpLoadbalancer() *schema.Resource {
 
 									"tls_config": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
 												"custom_security": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Optional: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -1420,7 +1471,8 @@ func resourceVolterraTcpLoadbalancer() *schema.Resource {
 
 			"tls_tcp_auto_cert": {
 
-				Type:     schema.TypeSet,
+				Type:     schema.TypeList,
+				MaxItems: 1,
 				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
@@ -1433,7 +1485,8 @@ func resourceVolterraTcpLoadbalancer() *schema.Resource {
 
 						"use_mtls": {
 
-							Type:     schema.TypeSet,
+							Type:     schema.TypeList,
+							MaxItems: 1,
 							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
@@ -1445,7 +1498,8 @@ func resourceVolterraTcpLoadbalancer() *schema.Resource {
 
 									"crl": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -1479,7 +1533,8 @@ func resourceVolterraTcpLoadbalancer() *schema.Resource {
 
 									"trusted_ca": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -1519,7 +1574,8 @@ func resourceVolterraTcpLoadbalancer() *schema.Resource {
 
 									"xfcc_options": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -1542,14 +1598,16 @@ func resourceVolterraTcpLoadbalancer() *schema.Resource {
 
 						"tls_config": {
 
-							Type:     schema.TypeSet,
+							Type:     schema.TypeList,
+							MaxItems: 1,
 							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
 									"custom_security": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -1615,7 +1673,8 @@ func resourceVolterraTcpLoadbalancer() *schema.Resource {
 
 						"cluster": {
 
-							Type:     schema.TypeSet,
+							Type:     schema.TypeList,
+							MaxItems: 1,
 							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
@@ -1643,7 +1702,8 @@ func resourceVolterraTcpLoadbalancer() *schema.Resource {
 
 						"pool": {
 
-							Type:     schema.TypeSet,
+							Type:     schema.TypeList,
+							MaxItems: 1,
 							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
@@ -1696,7 +1756,8 @@ func resourceVolterraTcpLoadbalancer() *schema.Resource {
 
 			"active_service_policies": {
 
-				Type:     schema.TypeSet,
+				Type:     schema.TypeList,
+				MaxItems: 1,
 				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
@@ -1824,506 +1885,542 @@ func resourceVolterraTcpLoadbalancerCreate(d *schema.ResourceData, meta interfac
 		advertiseChoiceInt.AdvertiseCustom = &ves_io_schema_views.AdvertiseCustom{}
 		createSpec.AdvertiseChoice = advertiseChoiceInt
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
-
-			if v, ok := cs["advertise_where"]; ok && !isIntfNil(v) {
-
-				sl := v.([]interface{})
-				advertiseWhere := make([]*ves_io_schema_views.WhereType, len(sl))
-				advertiseChoiceInt.AdvertiseCustom.AdvertiseWhere = advertiseWhere
-				for i, set := range sl {
-					advertiseWhere[i] = &ves_io_schema_views.WhereType{}
-					advertiseWhereMapStrToI := set.(map[string]interface{})
-
-					choiceTypeFound := false
-
-					if v, ok := advertiseWhereMapStrToI["advertise_on_public"]; ok && !isIntfNil(v) && !choiceTypeFound {
-
-						choiceTypeFound = true
-						choiceInt := &ves_io_schema_views.WhereType_AdvertiseOnPublic{}
-						choiceInt.AdvertiseOnPublic = &ves_io_schema_views.AdvertisePublic{}
-						advertiseWhere[i].Choice = choiceInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["public_ip"]; ok && !isIntfNil(v) {
-
-								sl := v.(*schema.Set).List()
-								publicIp := &ves_io_schema_views.ObjectRefType{}
-								choiceInt.AdvertiseOnPublic.PublicIp = publicIp
-								for _, set := range sl {
-									publicIpMapStrToI := set.(map[string]interface{})
-
-									if w, ok := publicIpMapStrToI["name"]; ok && !isIntfNil(w) {
-										publicIp.Name = w.(string)
-									}
-
-									if w, ok := publicIpMapStrToI["namespace"]; ok && !isIntfNil(w) {
-										publicIp.Namespace = w.(string)
-									}
-
-									if w, ok := publicIpMapStrToI["tenant"]; ok && !isIntfNil(w) {
-										publicIp.Tenant = w.(string)
-									}
-
-								}
-
-							}
-
-						}
-
-					}
-
-					if v, ok := advertiseWhereMapStrToI["site"]; ok && !isIntfNil(v) && !choiceTypeFound {
-
-						choiceTypeFound = true
-						choiceInt := &ves_io_schema_views.WhereType_Site{}
-						choiceInt.Site = &ves_io_schema_views.WhereSite{}
-						advertiseWhere[i].Choice = choiceInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["ip"]; ok && !isIntfNil(v) {
-
-								choiceInt.Site.Ip = v.(string)
-
-							}
-
-							if v, ok := cs["ipv6"]; ok && !isIntfNil(v) {
-
-								choiceInt.Site.Ipv6 = v.(string)
-
-							}
-
-							if v, ok := cs["network"]; ok && !isIntfNil(v) {
-
-								choiceInt.Site.Network = ves_io_schema_views.SiteNetwork(ves_io_schema_views.SiteNetwork_value[v.(string)])
-
-							}
-
-							if v, ok := cs["site"]; ok && !isIntfNil(v) {
-
-								sl := v.(*schema.Set).List()
-								site := &ves_io_schema_views.ObjectRefType{}
-								choiceInt.Site.Site = site
-								for _, set := range sl {
-									siteMapStrToI := set.(map[string]interface{})
-
-									if w, ok := siteMapStrToI["name"]; ok && !isIntfNil(w) {
-										site.Name = w.(string)
-									}
-
-									if w, ok := siteMapStrToI["namespace"]; ok && !isIntfNil(w) {
-										site.Namespace = w.(string)
-									}
-
-									if w, ok := siteMapStrToI["tenant"]; ok && !isIntfNil(w) {
-										site.Tenant = w.(string)
-									}
-
-								}
-
-							}
-
-						}
-
-					}
-
-					if v, ok := advertiseWhereMapStrToI["site_segment"]; ok && !isIntfNil(v) && !choiceTypeFound {
-
-						choiceTypeFound = true
-						choiceInt := &ves_io_schema_views.WhereType_SiteSegment{}
-						choiceInt.SiteSegment = &ves_io_schema_views.WhereSiteSegment{}
-						advertiseWhere[i].Choice = choiceInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["ip"]; ok && !isIntfNil(v) {
-
-								choiceInt.SiteSegment.Ip = v.(string)
-
-							}
-
-							if v, ok := cs["ipv6"]; ok && !isIntfNil(v) {
-
-								choiceInt.SiteSegment.Ipv6 = v.(string)
-
-							}
-
-							if v, ok := cs["segment"]; ok && !isIntfNil(v) {
-
-								sl := v.(*schema.Set).List()
-								segment := &ves_io_schema_views.ObjectRefType{}
-								choiceInt.SiteSegment.Segment = segment
-								for _, set := range sl {
-									segmentMapStrToI := set.(map[string]interface{})
-
-									if w, ok := segmentMapStrToI["name"]; ok && !isIntfNil(w) {
-										segment.Name = w.(string)
-									}
-
-									if w, ok := segmentMapStrToI["namespace"]; ok && !isIntfNil(w) {
-										segment.Namespace = w.(string)
-									}
-
-									if w, ok := segmentMapStrToI["tenant"]; ok && !isIntfNil(w) {
-										segment.Tenant = w.(string)
-									}
-
-								}
-
-							}
-
-							if v, ok := cs["site"]; ok && !isIntfNil(v) {
-
-								sl := v.(*schema.Set).List()
-								site := &ves_io_schema_views.ObjectRefType{}
-								choiceInt.SiteSegment.Site = site
-								for _, set := range sl {
-									siteMapStrToI := set.(map[string]interface{})
-
-									if w, ok := siteMapStrToI["name"]; ok && !isIntfNil(w) {
-										site.Name = w.(string)
-									}
-
-									if w, ok := siteMapStrToI["namespace"]; ok && !isIntfNil(w) {
-										site.Namespace = w.(string)
-									}
-
-									if w, ok := siteMapStrToI["tenant"]; ok && !isIntfNil(w) {
-										site.Tenant = w.(string)
-									}
-
-								}
-
-							}
-
-						}
-
-					}
-
-					if v, ok := advertiseWhereMapStrToI["virtual_network"]; ok && !isIntfNil(v) && !choiceTypeFound {
-
-						choiceTypeFound = true
-						choiceInt := &ves_io_schema_views.WhereType_VirtualNetwork{}
-						choiceInt.VirtualNetwork = &ves_io_schema_views.WhereVirtualNetwork{}
-						advertiseWhere[i].Choice = choiceInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							v6VipChoiceTypeFound := false
-
-							if v, ok := cs["default_v6_vip"]; ok && !isIntfNil(v) && !v6VipChoiceTypeFound {
-
-								v6VipChoiceTypeFound = true
-
-								if v.(bool) {
-									v6VipChoiceInt := &ves_io_schema_views.WhereVirtualNetwork_DefaultV6Vip{}
-									v6VipChoiceInt.DefaultV6Vip = &ves_io_schema.Empty{}
-									choiceInt.VirtualNetwork.V6VipChoice = v6VipChoiceInt
-								}
-
-							}
-
-							if v, ok := cs["specific_v6_vip"]; ok && !isIntfNil(v) && !v6VipChoiceTypeFound {
-
-								v6VipChoiceTypeFound = true
-								v6VipChoiceInt := &ves_io_schema_views.WhereVirtualNetwork_SpecificV6Vip{}
-
-								choiceInt.VirtualNetwork.V6VipChoice = v6VipChoiceInt
-
-								v6VipChoiceInt.SpecificV6Vip = v.(string)
-
-							}
-
-							vipChoiceTypeFound := false
-
-							if v, ok := cs["default_vip"]; ok && !isIntfNil(v) && !vipChoiceTypeFound {
-
-								vipChoiceTypeFound = true
-
-								if v.(bool) {
-									vipChoiceInt := &ves_io_schema_views.WhereVirtualNetwork_DefaultVip{}
-									vipChoiceInt.DefaultVip = &ves_io_schema.Empty{}
-									choiceInt.VirtualNetwork.VipChoice = vipChoiceInt
-								}
-
-							}
-
-							if v, ok := cs["specific_vip"]; ok && !isIntfNil(v) && !vipChoiceTypeFound {
-
-								vipChoiceTypeFound = true
-								vipChoiceInt := &ves_io_schema_views.WhereVirtualNetwork_SpecificVip{}
-
-								choiceInt.VirtualNetwork.VipChoice = vipChoiceInt
-
-								vipChoiceInt.SpecificVip = v.(string)
-
-							}
-
-							if v, ok := cs["virtual_network"]; ok && !isIntfNil(v) {
-
-								sl := v.(*schema.Set).List()
-								virtualNetwork := &ves_io_schema_views.ObjectRefType{}
-								choiceInt.VirtualNetwork.VirtualNetwork = virtualNetwork
-								for _, set := range sl {
-									virtualNetworkMapStrToI := set.(map[string]interface{})
-
-									if w, ok := virtualNetworkMapStrToI["name"]; ok && !isIntfNil(w) {
-										virtualNetwork.Name = w.(string)
-									}
-
-									if w, ok := virtualNetworkMapStrToI["namespace"]; ok && !isIntfNil(w) {
-										virtualNetwork.Namespace = w.(string)
-									}
-
-									if w, ok := virtualNetworkMapStrToI["tenant"]; ok && !isIntfNil(w) {
-										virtualNetwork.Tenant = w.(string)
-									}
-
-								}
-
-							}
-
-						}
-
-					}
-
-					if v, ok := advertiseWhereMapStrToI["virtual_site"]; ok && !isIntfNil(v) && !choiceTypeFound {
-
-						choiceTypeFound = true
-						choiceInt := &ves_io_schema_views.WhereType_VirtualSite{}
-						choiceInt.VirtualSite = &ves_io_schema_views.WhereVirtualSite{}
-						advertiseWhere[i].Choice = choiceInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["network"]; ok && !isIntfNil(v) {
-
-								choiceInt.VirtualSite.Network = ves_io_schema_views.SiteNetwork(ves_io_schema_views.SiteNetwork_value[v.(string)])
-
-							}
-
-							if v, ok := cs["virtual_site"]; ok && !isIntfNil(v) {
-
-								sl := v.(*schema.Set).List()
-								virtualSite := &ves_io_schema_views.ObjectRefType{}
-								choiceInt.VirtualSite.VirtualSite = virtualSite
-								for _, set := range sl {
-									virtualSiteMapStrToI := set.(map[string]interface{})
-
-									if w, ok := virtualSiteMapStrToI["name"]; ok && !isIntfNil(w) {
-										virtualSite.Name = w.(string)
-									}
-
-									if w, ok := virtualSiteMapStrToI["namespace"]; ok && !isIntfNil(w) {
-										virtualSite.Namespace = w.(string)
-									}
-
-									if w, ok := virtualSiteMapStrToI["tenant"]; ok && !isIntfNil(w) {
-										virtualSite.Tenant = w.(string)
-									}
-
-								}
-
-							}
-
-						}
-
-					}
-
-					if v, ok := advertiseWhereMapStrToI["virtual_site_with_vip"]; ok && !isIntfNil(v) && !choiceTypeFound {
-
-						choiceTypeFound = true
-						choiceInt := &ves_io_schema_views.WhereType_VirtualSiteWithVip{}
-						choiceInt.VirtualSiteWithVip = &ves_io_schema_views.WhereVirtualSiteSpecifiedVIP{}
-						advertiseWhere[i].Choice = choiceInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["ip"]; ok && !isIntfNil(v) {
-
-								choiceInt.VirtualSiteWithVip.Ip = v.(string)
-
-							}
-
-							if v, ok := cs["ipv6"]; ok && !isIntfNil(v) {
-
-								choiceInt.VirtualSiteWithVip.Ipv6 = v.(string)
-
-							}
-
-							if v, ok := cs["network"]; ok && !isIntfNil(v) {
-
-								choiceInt.VirtualSiteWithVip.Network = ves_io_schema_views.SiteNetworkSpecifiedVIP(ves_io_schema_views.SiteNetworkSpecifiedVIP_value[v.(string)])
-
-							}
-
-							if v, ok := cs["virtual_site"]; ok && !isIntfNil(v) {
-
-								sl := v.(*schema.Set).List()
-								virtualSite := &ves_io_schema_views.ObjectRefType{}
-								choiceInt.VirtualSiteWithVip.VirtualSite = virtualSite
-								for _, set := range sl {
-									virtualSiteMapStrToI := set.(map[string]interface{})
-
-									if w, ok := virtualSiteMapStrToI["name"]; ok && !isIntfNil(w) {
-										virtualSite.Name = w.(string)
-									}
-
-									if w, ok := virtualSiteMapStrToI["namespace"]; ok && !isIntfNil(w) {
-										virtualSite.Namespace = w.(string)
-									}
-
-									if w, ok := virtualSiteMapStrToI["tenant"]; ok && !isIntfNil(w) {
-										virtualSite.Tenant = w.(string)
-									}
-
-								}
-
-							}
-
-						}
-
-					}
-
-					if v, ok := advertiseWhereMapStrToI["vk8s_service"]; ok && !isIntfNil(v) && !choiceTypeFound {
-
-						choiceTypeFound = true
-						choiceInt := &ves_io_schema_views.WhereType_Vk8SService{}
-						choiceInt.Vk8SService = &ves_io_schema_views.WhereVK8SService{}
-						advertiseWhere[i].Choice = choiceInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
+			if set != nil {
+				cs := set.(map[string]interface{})
+
+				if v, ok := cs["advertise_where"]; ok && !isIntfNil(v) {
+
+					sl := v.([]interface{})
+					advertiseWhere := make([]*ves_io_schema_views.WhereType, len(sl))
+					advertiseChoiceInt.AdvertiseCustom.AdvertiseWhere = advertiseWhere
+					for i, set := range sl {
+						if set != nil {
+							advertiseWhere[i] = &ves_io_schema_views.WhereType{}
+							advertiseWhereMapStrToI := set.(map[string]interface{})
 
 							choiceTypeFound := false
 
-							if v, ok := cs["site"]; ok && !isIntfNil(v) && !choiceTypeFound {
+							if v, ok := advertiseWhereMapStrToI["advertise_on_public"]; ok && !isIntfNil(v) && !choiceTypeFound {
 
 								choiceTypeFound = true
-								choiceIntNew := &ves_io_schema_views.WhereVK8SService_Site{}
-								choiceIntNew.Site = &ves_io_schema_views.ObjectRefType{}
-								choiceInt.Vk8SService.Choice = choiceIntNew
+								choiceInt := &ves_io_schema_views.WhereType_AdvertiseOnPublic{}
+								choiceInt.AdvertiseOnPublic = &ves_io_schema_views.AdvertisePublic{}
+								advertiseWhere[i].Choice = choiceInt
 
-								sl := v.(*schema.Set).List()
+								sl := v.([]interface{})
 								for _, set := range sl {
-									cs := set.(map[string]interface{})
+									if set != nil {
+										cs := set.(map[string]interface{})
 
-									if v, ok := cs["name"]; ok && !isIntfNil(v) {
+										if v, ok := cs["public_ip"]; ok && !isIntfNil(v) {
 
-										choiceIntNew.Site.Name = v.(string)
+											sl := v.([]interface{})
+											publicIp := &ves_io_schema_views.ObjectRefType{}
+											choiceInt.AdvertiseOnPublic.PublicIp = publicIp
+											for _, set := range sl {
+												if set != nil {
+													publicIpMapStrToI := set.(map[string]interface{})
+
+													if w, ok := publicIpMapStrToI["name"]; ok && !isIntfNil(w) {
+														publicIp.Name = w.(string)
+													}
+
+													if w, ok := publicIpMapStrToI["namespace"]; ok && !isIntfNil(w) {
+														publicIp.Namespace = w.(string)
+													}
+
+													if w, ok := publicIpMapStrToI["tenant"]; ok && !isIntfNil(w) {
+														publicIp.Tenant = w.(string)
+													}
+
+												}
+											}
+
+										}
 
 									}
-
-									if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
-
-										choiceIntNew.Site.Namespace = v.(string)
-
-									}
-
-									if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
-
-										choiceIntNew.Site.Tenant = v.(string)
-
-									}
-
 								}
 
 							}
 
-							if v, ok := cs["virtual_site"]; ok && !isIntfNil(v) && !choiceTypeFound {
+							if v, ok := advertiseWhereMapStrToI["site"]; ok && !isIntfNil(v) && !choiceTypeFound {
 
 								choiceTypeFound = true
-								choiceIntNew := &ves_io_schema_views.WhereVK8SService_VirtualSite{}
-								choiceIntNew.VirtualSite = &ves_io_schema_views.ObjectRefType{}
-								choiceInt.Vk8SService.Choice = choiceIntNew
+								choiceInt := &ves_io_schema_views.WhereType_Site{}
+								choiceInt.Site = &ves_io_schema_views.WhereSite{}
+								advertiseWhere[i].Choice = choiceInt
 
-								sl := v.(*schema.Set).List()
+								sl := v.([]interface{})
 								for _, set := range sl {
-									cs := set.(map[string]interface{})
+									if set != nil {
+										cs := set.(map[string]interface{})
 
-									if v, ok := cs["name"]; ok && !isIntfNil(v) {
+										if v, ok := cs["ip"]; ok && !isIntfNil(v) {
 
-										choiceIntNew.VirtualSite.Name = v.(string)
+											choiceInt.Site.Ip = v.(string)
+
+										}
+
+										if v, ok := cs["ipv6"]; ok && !isIntfNil(v) {
+
+											choiceInt.Site.Ipv6 = v.(string)
+
+										}
+
+										if v, ok := cs["network"]; ok && !isIntfNil(v) {
+
+											choiceInt.Site.Network = ves_io_schema_views.SiteNetwork(ves_io_schema_views.SiteNetwork_value[v.(string)])
+
+										}
+
+										if v, ok := cs["site"]; ok && !isIntfNil(v) {
+
+											sl := v.([]interface{})
+											site := &ves_io_schema_views.ObjectRefType{}
+											choiceInt.Site.Site = site
+											for _, set := range sl {
+												if set != nil {
+													siteMapStrToI := set.(map[string]interface{})
+
+													if w, ok := siteMapStrToI["name"]; ok && !isIntfNil(w) {
+														site.Name = w.(string)
+													}
+
+													if w, ok := siteMapStrToI["namespace"]; ok && !isIntfNil(w) {
+														site.Namespace = w.(string)
+													}
+
+													if w, ok := siteMapStrToI["tenant"]; ok && !isIntfNil(w) {
+														site.Tenant = w.(string)
+													}
+
+												}
+											}
+
+										}
 
 									}
+								}
 
-									if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+							}
 
-										choiceIntNew.VirtualSite.Namespace = v.(string)
+							if v, ok := advertiseWhereMapStrToI["site_segment"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+								choiceTypeFound = true
+								choiceInt := &ves_io_schema_views.WhereType_SiteSegment{}
+								choiceInt.SiteSegment = &ves_io_schema_views.WhereSiteSegment{}
+								advertiseWhere[i].Choice = choiceInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["ip"]; ok && !isIntfNil(v) {
+
+											choiceInt.SiteSegment.Ip = v.(string)
+
+										}
+
+										if v, ok := cs["ipv6"]; ok && !isIntfNil(v) {
+
+											choiceInt.SiteSegment.Ipv6 = v.(string)
+
+										}
+
+										if v, ok := cs["segment"]; ok && !isIntfNil(v) {
+
+											sl := v.([]interface{})
+											segment := &ves_io_schema_views.ObjectRefType{}
+											choiceInt.SiteSegment.Segment = segment
+											for _, set := range sl {
+												if set != nil {
+													segmentMapStrToI := set.(map[string]interface{})
+
+													if w, ok := segmentMapStrToI["name"]; ok && !isIntfNil(w) {
+														segment.Name = w.(string)
+													}
+
+													if w, ok := segmentMapStrToI["namespace"]; ok && !isIntfNil(w) {
+														segment.Namespace = w.(string)
+													}
+
+													if w, ok := segmentMapStrToI["tenant"]; ok && !isIntfNil(w) {
+														segment.Tenant = w.(string)
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := cs["site"]; ok && !isIntfNil(v) {
+
+											sl := v.([]interface{})
+											site := &ves_io_schema_views.ObjectRefType{}
+											choiceInt.SiteSegment.Site = site
+											for _, set := range sl {
+												if set != nil {
+													siteMapStrToI := set.(map[string]interface{})
+
+													if w, ok := siteMapStrToI["name"]; ok && !isIntfNil(w) {
+														site.Name = w.(string)
+													}
+
+													if w, ok := siteMapStrToI["namespace"]; ok && !isIntfNil(w) {
+														site.Namespace = w.(string)
+													}
+
+													if w, ok := siteMapStrToI["tenant"]; ok && !isIntfNil(w) {
+														site.Tenant = w.(string)
+													}
+
+												}
+											}
+
+										}
 
 									}
+								}
 
-									if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+							}
 
-										choiceIntNew.VirtualSite.Tenant = v.(string)
+							if v, ok := advertiseWhereMapStrToI["virtual_network"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+								choiceTypeFound = true
+								choiceInt := &ves_io_schema_views.WhereType_VirtualNetwork{}
+								choiceInt.VirtualNetwork = &ves_io_schema_views.WhereVirtualNetwork{}
+								advertiseWhere[i].Choice = choiceInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										v6VipChoiceTypeFound := false
+
+										if v, ok := cs["default_v6_vip"]; ok && !isIntfNil(v) && !v6VipChoiceTypeFound {
+
+											v6VipChoiceTypeFound = true
+
+											if v.(bool) {
+												v6VipChoiceInt := &ves_io_schema_views.WhereVirtualNetwork_DefaultV6Vip{}
+												v6VipChoiceInt.DefaultV6Vip = &ves_io_schema.Empty{}
+												choiceInt.VirtualNetwork.V6VipChoice = v6VipChoiceInt
+											}
+
+										}
+
+										if v, ok := cs["specific_v6_vip"]; ok && !isIntfNil(v) && !v6VipChoiceTypeFound {
+
+											v6VipChoiceTypeFound = true
+											v6VipChoiceInt := &ves_io_schema_views.WhereVirtualNetwork_SpecificV6Vip{}
+
+											choiceInt.VirtualNetwork.V6VipChoice = v6VipChoiceInt
+
+											v6VipChoiceInt.SpecificV6Vip = v.(string)
+
+										}
+
+										vipChoiceTypeFound := false
+
+										if v, ok := cs["default_vip"]; ok && !isIntfNil(v) && !vipChoiceTypeFound {
+
+											vipChoiceTypeFound = true
+
+											if v.(bool) {
+												vipChoiceInt := &ves_io_schema_views.WhereVirtualNetwork_DefaultVip{}
+												vipChoiceInt.DefaultVip = &ves_io_schema.Empty{}
+												choiceInt.VirtualNetwork.VipChoice = vipChoiceInt
+											}
+
+										}
+
+										if v, ok := cs["specific_vip"]; ok && !isIntfNil(v) && !vipChoiceTypeFound {
+
+											vipChoiceTypeFound = true
+											vipChoiceInt := &ves_io_schema_views.WhereVirtualNetwork_SpecificVip{}
+
+											choiceInt.VirtualNetwork.VipChoice = vipChoiceInt
+
+											vipChoiceInt.SpecificVip = v.(string)
+
+										}
+
+										if v, ok := cs["virtual_network"]; ok && !isIntfNil(v) {
+
+											sl := v.([]interface{})
+											virtualNetwork := &ves_io_schema_views.ObjectRefType{}
+											choiceInt.VirtualNetwork.VirtualNetwork = virtualNetwork
+											for _, set := range sl {
+												if set != nil {
+													virtualNetworkMapStrToI := set.(map[string]interface{})
+
+													if w, ok := virtualNetworkMapStrToI["name"]; ok && !isIntfNil(w) {
+														virtualNetwork.Name = w.(string)
+													}
+
+													if w, ok := virtualNetworkMapStrToI["namespace"]; ok && !isIntfNil(w) {
+														virtualNetwork.Namespace = w.(string)
+													}
+
+													if w, ok := virtualNetworkMapStrToI["tenant"]; ok && !isIntfNil(w) {
+														virtualNetwork.Tenant = w.(string)
+													}
+
+												}
+											}
+
+										}
 
 									}
+								}
 
+							}
+
+							if v, ok := advertiseWhereMapStrToI["virtual_site"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+								choiceTypeFound = true
+								choiceInt := &ves_io_schema_views.WhereType_VirtualSite{}
+								choiceInt.VirtualSite = &ves_io_schema_views.WhereVirtualSite{}
+								advertiseWhere[i].Choice = choiceInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["network"]; ok && !isIntfNil(v) {
+
+											choiceInt.VirtualSite.Network = ves_io_schema_views.SiteNetwork(ves_io_schema_views.SiteNetwork_value[v.(string)])
+
+										}
+
+										if v, ok := cs["virtual_site"]; ok && !isIntfNil(v) {
+
+											sl := v.([]interface{})
+											virtualSite := &ves_io_schema_views.ObjectRefType{}
+											choiceInt.VirtualSite.VirtualSite = virtualSite
+											for _, set := range sl {
+												if set != nil {
+													virtualSiteMapStrToI := set.(map[string]interface{})
+
+													if w, ok := virtualSiteMapStrToI["name"]; ok && !isIntfNil(w) {
+														virtualSite.Name = w.(string)
+													}
+
+													if w, ok := virtualSiteMapStrToI["namespace"]; ok && !isIntfNil(w) {
+														virtualSite.Namespace = w.(string)
+													}
+
+													if w, ok := virtualSiteMapStrToI["tenant"]; ok && !isIntfNil(w) {
+														virtualSite.Tenant = w.(string)
+													}
+
+												}
+											}
+
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := advertiseWhereMapStrToI["virtual_site_with_vip"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+								choiceTypeFound = true
+								choiceInt := &ves_io_schema_views.WhereType_VirtualSiteWithVip{}
+								choiceInt.VirtualSiteWithVip = &ves_io_schema_views.WhereVirtualSiteSpecifiedVIP{}
+								advertiseWhere[i].Choice = choiceInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["ip"]; ok && !isIntfNil(v) {
+
+											choiceInt.VirtualSiteWithVip.Ip = v.(string)
+
+										}
+
+										if v, ok := cs["ipv6"]; ok && !isIntfNil(v) {
+
+											choiceInt.VirtualSiteWithVip.Ipv6 = v.(string)
+
+										}
+
+										if v, ok := cs["network"]; ok && !isIntfNil(v) {
+
+											choiceInt.VirtualSiteWithVip.Network = ves_io_schema_views.SiteNetworkSpecifiedVIP(ves_io_schema_views.SiteNetworkSpecifiedVIP_value[v.(string)])
+
+										}
+
+										if v, ok := cs["virtual_site"]; ok && !isIntfNil(v) {
+
+											sl := v.([]interface{})
+											virtualSite := &ves_io_schema_views.ObjectRefType{}
+											choiceInt.VirtualSiteWithVip.VirtualSite = virtualSite
+											for _, set := range sl {
+												if set != nil {
+													virtualSiteMapStrToI := set.(map[string]interface{})
+
+													if w, ok := virtualSiteMapStrToI["name"]; ok && !isIntfNil(w) {
+														virtualSite.Name = w.(string)
+													}
+
+													if w, ok := virtualSiteMapStrToI["namespace"]; ok && !isIntfNil(w) {
+														virtualSite.Namespace = w.(string)
+													}
+
+													if w, ok := virtualSiteMapStrToI["tenant"]; ok && !isIntfNil(w) {
+														virtualSite.Tenant = w.(string)
+													}
+
+												}
+											}
+
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := advertiseWhereMapStrToI["vk8s_service"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+								choiceTypeFound = true
+								choiceInt := &ves_io_schema_views.WhereType_Vk8SService{}
+								choiceInt.Vk8SService = &ves_io_schema_views.WhereVK8SService{}
+								advertiseWhere[i].Choice = choiceInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										choiceTypeFound := false
+
+										if v, ok := cs["site"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+											choiceTypeFound = true
+											choiceIntNew := &ves_io_schema_views.WhereVK8SService_Site{}
+											choiceIntNew.Site = &ves_io_schema_views.ObjectRefType{}
+											choiceInt.Vk8SService.Choice = choiceIntNew
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+														choiceIntNew.Site.Name = v.(string)
+
+													}
+
+													if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+														choiceIntNew.Site.Namespace = v.(string)
+
+													}
+
+													if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+														choiceIntNew.Site.Tenant = v.(string)
+
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := cs["virtual_site"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+											choiceTypeFound = true
+											choiceIntNew := &ves_io_schema_views.WhereVK8SService_VirtualSite{}
+											choiceIntNew.VirtualSite = &ves_io_schema_views.ObjectRefType{}
+											choiceInt.Vk8SService.Choice = choiceIntNew
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+														choiceIntNew.VirtualSite.Name = v.(string)
+
+													}
+
+													if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+														choiceIntNew.VirtualSite.Namespace = v.(string)
+
+													}
+
+													if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+														choiceIntNew.VirtualSite.Tenant = v.(string)
+
+													}
+
+												}
+											}
+
+										}
+
+									}
+								}
+
+							}
+
+							portChoiceTypeFound := false
+
+							if v, ok := advertiseWhereMapStrToI["port"]; ok && !isIntfNil(v) && !portChoiceTypeFound {
+
+								portChoiceTypeFound = true
+								portChoiceInt := &ves_io_schema_views.WhereType_Port{}
+
+								advertiseWhere[i].PortChoice = portChoiceInt
+
+								portChoiceInt.Port = uint32(v.(int))
+
+							}
+
+							if v, ok := advertiseWhereMapStrToI["port_ranges"]; ok && !isIntfNil(v) && !portChoiceTypeFound {
+
+								portChoiceTypeFound = true
+								portChoiceInt := &ves_io_schema_views.WhereType_PortRanges{}
+
+								advertiseWhere[i].PortChoice = portChoiceInt
+
+								portChoiceInt.PortRanges = v.(string)
+
+							}
+
+							if v, ok := advertiseWhereMapStrToI["use_default_port"]; ok && !isIntfNil(v) && !portChoiceTypeFound {
+
+								portChoiceTypeFound = true
+
+								if v.(bool) {
+									portChoiceInt := &ves_io_schema_views.WhereType_UseDefaultPort{}
+									portChoiceInt.UseDefaultPort = &ves_io_schema.Empty{}
+									advertiseWhere[i].PortChoice = portChoiceInt
 								}
 
 							}
 
 						}
-
-					}
-
-					portChoiceTypeFound := false
-
-					if v, ok := advertiseWhereMapStrToI["port"]; ok && !isIntfNil(v) && !portChoiceTypeFound {
-
-						portChoiceTypeFound = true
-						portChoiceInt := &ves_io_schema_views.WhereType_Port{}
-
-						advertiseWhere[i].PortChoice = portChoiceInt
-
-						portChoiceInt.Port = uint32(v.(int))
-
-					}
-
-					if v, ok := advertiseWhereMapStrToI["port_ranges"]; ok && !isIntfNil(v) && !portChoiceTypeFound {
-
-						portChoiceTypeFound = true
-						portChoiceInt := &ves_io_schema_views.WhereType_PortRanges{}
-
-						advertiseWhere[i].PortChoice = portChoiceInt
-
-						portChoiceInt.PortRanges = v.(string)
-
-					}
-
-					if v, ok := advertiseWhereMapStrToI["use_default_port"]; ok && !isIntfNil(v) && !portChoiceTypeFound {
-
-						portChoiceTypeFound = true
-
-						if v.(bool) {
-							portChoiceInt := &ves_io_schema_views.WhereType_UseDefaultPort{}
-							portChoiceInt.UseDefaultPort = &ves_io_schema.Empty{}
-							advertiseWhere[i].PortChoice = portChoiceInt
-						}
-
 					}
 
 				}
 
 			}
-
 		}
 
 	}
@@ -2335,34 +2432,38 @@ func resourceVolterraTcpLoadbalancerCreate(d *schema.ResourceData, meta interfac
 		advertiseChoiceInt.AdvertiseOnPublic = &ves_io_schema_views.AdvertisePublic{}
 		createSpec.AdvertiseChoice = advertiseChoiceInt
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
+			if set != nil {
+				cs := set.(map[string]interface{})
 
-			if v, ok := cs["public_ip"]; ok && !isIntfNil(v) {
+				if v, ok := cs["public_ip"]; ok && !isIntfNil(v) {
 
-				sl := v.(*schema.Set).List()
-				publicIp := &ves_io_schema_views.ObjectRefType{}
-				advertiseChoiceInt.AdvertiseOnPublic.PublicIp = publicIp
-				for _, set := range sl {
-					publicIpMapStrToI := set.(map[string]interface{})
+					sl := v.([]interface{})
+					publicIp := &ves_io_schema_views.ObjectRefType{}
+					advertiseChoiceInt.AdvertiseOnPublic.PublicIp = publicIp
+					for _, set := range sl {
+						if set != nil {
+							publicIpMapStrToI := set.(map[string]interface{})
 
-					if w, ok := publicIpMapStrToI["name"]; ok && !isIntfNil(w) {
-						publicIp.Name = w.(string)
-					}
+							if w, ok := publicIpMapStrToI["name"]; ok && !isIntfNil(w) {
+								publicIp.Name = w.(string)
+							}
 
-					if w, ok := publicIpMapStrToI["namespace"]; ok && !isIntfNil(w) {
-						publicIp.Namespace = w.(string)
-					}
+							if w, ok := publicIpMapStrToI["namespace"]; ok && !isIntfNil(w) {
+								publicIp.Namespace = w.(string)
+							}
 
-					if w, ok := publicIpMapStrToI["tenant"]; ok && !isIntfNil(w) {
-						publicIp.Tenant = w.(string)
+							if w, ok := publicIpMapStrToI["tenant"]; ok && !isIntfNil(w) {
+								publicIp.Tenant = w.(string)
+							}
+
+						}
 					}
 
 				}
 
 			}
-
 		}
 
 	}
@@ -2521,812 +2622,858 @@ func resourceVolterraTcpLoadbalancerCreate(d *schema.ResourceData, meta interfac
 		loadbalancerTypeInt.TlsTcp = &ves_io_schema_views_tcp_loadbalancer.ProxyTypeTLSTCP{}
 		createSpec.LoadbalancerType = loadbalancerTypeInt
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
+			if set != nil {
+				cs := set.(map[string]interface{})
 
-			tlsCertificatesChoiceTypeFound := false
+				tlsCertificatesChoiceTypeFound := false
 
-			if v, ok := cs["tls_cert_params"]; ok && !isIntfNil(v) && !tlsCertificatesChoiceTypeFound {
+				if v, ok := cs["tls_cert_params"]; ok && !isIntfNil(v) && !tlsCertificatesChoiceTypeFound {
 
-				tlsCertificatesChoiceTypeFound = true
-				tlsCertificatesChoiceInt := &ves_io_schema_views_tcp_loadbalancer.ProxyTypeTLSTCP_TlsCertParams{}
-				tlsCertificatesChoiceInt.TlsCertParams = &ves_io_schema_views.DownstreamTLSCertsParams{}
-				loadbalancerTypeInt.TlsTcp.TlsCertificatesChoice = tlsCertificatesChoiceInt
+					tlsCertificatesChoiceTypeFound = true
+					tlsCertificatesChoiceInt := &ves_io_schema_views_tcp_loadbalancer.ProxyTypeTLSTCP_TlsCertParams{}
+					tlsCertificatesChoiceInt.TlsCertParams = &ves_io_schema_views.DownstreamTLSCertsParams{}
+					loadbalancerTypeInt.TlsTcp.TlsCertificatesChoice = tlsCertificatesChoiceInt
 
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
-
-					if v, ok := cs["certificates"]; ok && !isIntfNil(v) {
-
-						sl := v.([]interface{})
-						certificatesInt := make([]*ves_io_schema_views.ObjectRefType, len(sl))
-						tlsCertificatesChoiceInt.TlsCertParams.Certificates = certificatesInt
-						for i, ps := range sl {
-
-							cMapToStrVal := ps.(map[string]interface{})
-							certificatesInt[i] = &ves_io_schema_views.ObjectRefType{}
-
-							if v, ok := cMapToStrVal["name"]; ok && !isIntfNil(v) {
-								certificatesInt[i].Name = v.(string)
-							}
-
-							if v, ok := cMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-								certificatesInt[i].Namespace = v.(string)
-							}
-
-							if v, ok := cMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-								certificatesInt[i].Tenant = v.(string)
-							}
-
-						}
-
-					}
-
-					mtlsChoiceTypeFound := false
-
-					if v, ok := cs["no_mtls"]; ok && !isIntfNil(v) && !mtlsChoiceTypeFound {
-
-						mtlsChoiceTypeFound = true
-
-						if v.(bool) {
-							mtlsChoiceInt := &ves_io_schema_views.DownstreamTLSCertsParams_NoMtls{}
-							mtlsChoiceInt.NoMtls = &ves_io_schema.Empty{}
-							tlsCertificatesChoiceInt.TlsCertParams.MtlsChoice = mtlsChoiceInt
-						}
-
-					}
-
-					if v, ok := cs["use_mtls"]; ok && !isIntfNil(v) && !mtlsChoiceTypeFound {
-
-						mtlsChoiceTypeFound = true
-						mtlsChoiceInt := &ves_io_schema_views.DownstreamTLSCertsParams_UseMtls{}
-						mtlsChoiceInt.UseMtls = &ves_io_schema_views.DownstreamTlsValidationContext{}
-						tlsCertificatesChoiceInt.TlsCertParams.MtlsChoice = mtlsChoiceInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
 							cs := set.(map[string]interface{})
 
-							if v, ok := cs["client_certificate_optional"]; ok && !isIntfNil(v) {
+							if v, ok := cs["certificates"]; ok && !isIntfNil(v) {
 
-								mtlsChoiceInt.UseMtls.ClientCertificateOptional = v.(bool)
+								sl := v.([]interface{})
+								certificatesInt := make([]*ves_io_schema_views.ObjectRefType, len(sl))
+								tlsCertificatesChoiceInt.TlsCertParams.Certificates = certificatesInt
+								for i, ps := range sl {
 
-							}
+									cMapToStrVal := ps.(map[string]interface{})
+									certificatesInt[i] = &ves_io_schema_views.ObjectRefType{}
 
-							crlChoiceTypeFound := false
-
-							if v, ok := cs["crl"]; ok && !isIntfNil(v) && !crlChoiceTypeFound {
-
-								crlChoiceTypeFound = true
-								crlChoiceInt := &ves_io_schema_views.DownstreamTlsValidationContext_Crl{}
-								crlChoiceInt.Crl = &ves_io_schema_views.ObjectRefType{}
-								mtlsChoiceInt.UseMtls.CrlChoice = crlChoiceInt
-
-								sl := v.(*schema.Set).List()
-								for _, set := range sl {
-									cs := set.(map[string]interface{})
-
-									if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-										crlChoiceInt.Crl.Name = v.(string)
-
+									if v, ok := cMapToStrVal["name"]; ok && !isIntfNil(v) {
+										certificatesInt[i].Name = v.(string)
 									}
 
-									if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
-
-										crlChoiceInt.Crl.Namespace = v.(string)
-
+									if v, ok := cMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+										certificatesInt[i].Namespace = v.(string)
 									}
 
-									if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
-
-										crlChoiceInt.Crl.Tenant = v.(string)
-
+									if v, ok := cMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+										certificatesInt[i].Tenant = v.(string)
 									}
 
 								}
 
 							}
 
-							if v, ok := cs["no_crl"]; ok && !isIntfNil(v) && !crlChoiceTypeFound {
+							mtlsChoiceTypeFound := false
 
-								crlChoiceTypeFound = true
+							if v, ok := cs["no_mtls"]; ok && !isIntfNil(v) && !mtlsChoiceTypeFound {
+
+								mtlsChoiceTypeFound = true
 
 								if v.(bool) {
-									crlChoiceInt := &ves_io_schema_views.DownstreamTlsValidationContext_NoCrl{}
-									crlChoiceInt.NoCrl = &ves_io_schema.Empty{}
-									mtlsChoiceInt.UseMtls.CrlChoice = crlChoiceInt
+									mtlsChoiceInt := &ves_io_schema_views.DownstreamTLSCertsParams_NoMtls{}
+									mtlsChoiceInt.NoMtls = &ves_io_schema.Empty{}
+									tlsCertificatesChoiceInt.TlsCertParams.MtlsChoice = mtlsChoiceInt
 								}
 
 							}
 
-							trustedCaChoiceTypeFound := false
+							if v, ok := cs["use_mtls"]; ok && !isIntfNil(v) && !mtlsChoiceTypeFound {
 
-							if v, ok := cs["trusted_ca"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
+								mtlsChoiceTypeFound = true
+								mtlsChoiceInt := &ves_io_schema_views.DownstreamTLSCertsParams_UseMtls{}
+								mtlsChoiceInt.UseMtls = &ves_io_schema_views.DownstreamTlsValidationContext{}
+								tlsCertificatesChoiceInt.TlsCertParams.MtlsChoice = mtlsChoiceInt
 
-								trustedCaChoiceTypeFound = true
-								trustedCaChoiceInt := &ves_io_schema_views.DownstreamTlsValidationContext_TrustedCa{}
-								trustedCaChoiceInt.TrustedCa = &ves_io_schema_views.ObjectRefType{}
-								mtlsChoiceInt.UseMtls.TrustedCaChoice = trustedCaChoiceInt
-
-								sl := v.(*schema.Set).List()
+								sl := v.([]interface{})
 								for _, set := range sl {
-									cs := set.(map[string]interface{})
+									if set != nil {
+										cs := set.(map[string]interface{})
 
-									if v, ok := cs["name"]; ok && !isIntfNil(v) {
+										if v, ok := cs["client_certificate_optional"]; ok && !isIntfNil(v) {
 
-										trustedCaChoiceInt.TrustedCa.Name = v.(string)
+											mtlsChoiceInt.UseMtls.ClientCertificateOptional = v.(bool)
 
-									}
-
-									if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
-
-										trustedCaChoiceInt.TrustedCa.Namespace = v.(string)
-
-									}
-
-									if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
-
-										trustedCaChoiceInt.TrustedCa.Tenant = v.(string)
-
-									}
-
-								}
-
-							}
-
-							if v, ok := cs["trusted_ca_url"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
-
-								trustedCaChoiceTypeFound = true
-								trustedCaChoiceInt := &ves_io_schema_views.DownstreamTlsValidationContext_TrustedCaUrl{}
-
-								mtlsChoiceInt.UseMtls.TrustedCaChoice = trustedCaChoiceInt
-
-								trustedCaChoiceInt.TrustedCaUrl = v.(string)
-
-							}
-
-							xfccHeaderTypeFound := false
-
-							if v, ok := cs["xfcc_disabled"]; ok && !isIntfNil(v) && !xfccHeaderTypeFound {
-
-								xfccHeaderTypeFound = true
-
-								if v.(bool) {
-									xfccHeaderInt := &ves_io_schema_views.DownstreamTlsValidationContext_XfccDisabled{}
-									xfccHeaderInt.XfccDisabled = &ves_io_schema.Empty{}
-									mtlsChoiceInt.UseMtls.XfccHeader = xfccHeaderInt
-								}
-
-							}
-
-							if v, ok := cs["xfcc_options"]; ok && !isIntfNil(v) && !xfccHeaderTypeFound {
-
-								xfccHeaderTypeFound = true
-								xfccHeaderInt := &ves_io_schema_views.DownstreamTlsValidationContext_XfccOptions{}
-								xfccHeaderInt.XfccOptions = &ves_io_schema_views.XfccHeaderKeys{}
-								mtlsChoiceInt.UseMtls.XfccHeader = xfccHeaderInt
-
-								sl := v.(*schema.Set).List()
-								for _, set := range sl {
-									cs := set.(map[string]interface{})
-
-									if v, ok := cs["xfcc_header_elements"]; ok && !isIntfNil(v) {
-
-										xfcc_header_elementsList := []ves_io_schema.XfccElement{}
-										for _, j := range v.([]interface{}) {
-											xfcc_header_elementsList = append(xfcc_header_elementsList, ves_io_schema.XfccElement(ves_io_schema.XfccElement_value[j.(string)]))
 										}
-										xfccHeaderInt.XfccOptions.XfccHeaderElements = xfcc_header_elementsList
+
+										crlChoiceTypeFound := false
+
+										if v, ok := cs["crl"]; ok && !isIntfNil(v) && !crlChoiceTypeFound {
+
+											crlChoiceTypeFound = true
+											crlChoiceInt := &ves_io_schema_views.DownstreamTlsValidationContext_Crl{}
+											crlChoiceInt.Crl = &ves_io_schema_views.ObjectRefType{}
+											mtlsChoiceInt.UseMtls.CrlChoice = crlChoiceInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+														crlChoiceInt.Crl.Name = v.(string)
+
+													}
+
+													if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+														crlChoiceInt.Crl.Namespace = v.(string)
+
+													}
+
+													if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+														crlChoiceInt.Crl.Tenant = v.(string)
+
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := cs["no_crl"]; ok && !isIntfNil(v) && !crlChoiceTypeFound {
+
+											crlChoiceTypeFound = true
+
+											if v.(bool) {
+												crlChoiceInt := &ves_io_schema_views.DownstreamTlsValidationContext_NoCrl{}
+												crlChoiceInt.NoCrl = &ves_io_schema.Empty{}
+												mtlsChoiceInt.UseMtls.CrlChoice = crlChoiceInt
+											}
+
+										}
+
+										trustedCaChoiceTypeFound := false
+
+										if v, ok := cs["trusted_ca"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
+
+											trustedCaChoiceTypeFound = true
+											trustedCaChoiceInt := &ves_io_schema_views.DownstreamTlsValidationContext_TrustedCa{}
+											trustedCaChoiceInt.TrustedCa = &ves_io_schema_views.ObjectRefType{}
+											mtlsChoiceInt.UseMtls.TrustedCaChoice = trustedCaChoiceInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+														trustedCaChoiceInt.TrustedCa.Name = v.(string)
+
+													}
+
+													if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+														trustedCaChoiceInt.TrustedCa.Namespace = v.(string)
+
+													}
+
+													if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+														trustedCaChoiceInt.TrustedCa.Tenant = v.(string)
+
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := cs["trusted_ca_url"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
+
+											trustedCaChoiceTypeFound = true
+											trustedCaChoiceInt := &ves_io_schema_views.DownstreamTlsValidationContext_TrustedCaUrl{}
+
+											mtlsChoiceInt.UseMtls.TrustedCaChoice = trustedCaChoiceInt
+
+											trustedCaChoiceInt.TrustedCaUrl = v.(string)
+
+										}
+
+										xfccHeaderTypeFound := false
+
+										if v, ok := cs["xfcc_disabled"]; ok && !isIntfNil(v) && !xfccHeaderTypeFound {
+
+											xfccHeaderTypeFound = true
+
+											if v.(bool) {
+												xfccHeaderInt := &ves_io_schema_views.DownstreamTlsValidationContext_XfccDisabled{}
+												xfccHeaderInt.XfccDisabled = &ves_io_schema.Empty{}
+												mtlsChoiceInt.UseMtls.XfccHeader = xfccHeaderInt
+											}
+
+										}
+
+										if v, ok := cs["xfcc_options"]; ok && !isIntfNil(v) && !xfccHeaderTypeFound {
+
+											xfccHeaderTypeFound = true
+											xfccHeaderInt := &ves_io_schema_views.DownstreamTlsValidationContext_XfccOptions{}
+											xfccHeaderInt.XfccOptions = &ves_io_schema_views.XfccHeaderKeys{}
+											mtlsChoiceInt.UseMtls.XfccHeader = xfccHeaderInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["xfcc_header_elements"]; ok && !isIntfNil(v) {
+
+														xfcc_header_elementsList := []ves_io_schema.XfccElement{}
+														for _, j := range v.([]interface{}) {
+															xfcc_header_elementsList = append(xfcc_header_elementsList, ves_io_schema.XfccElement(ves_io_schema.XfccElement_value[j.(string)]))
+														}
+														xfccHeaderInt.XfccOptions.XfccHeaderElements = xfcc_header_elementsList
+
+													}
+
+												}
+											}
+
+										}
 
 									}
+								}
 
+							}
+
+							if v, ok := cs["tls_config"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								tlsConfig := &ves_io_schema_views.TlsConfig{}
+								tlsCertificatesChoiceInt.TlsCertParams.TlsConfig = tlsConfig
+								for _, set := range sl {
+									if set != nil {
+										tlsConfigMapStrToI := set.(map[string]interface{})
+
+										choiceTypeFound := false
+
+										if v, ok := tlsConfigMapStrToI["custom_security"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+											choiceTypeFound = true
+											choiceInt := &ves_io_schema_views.TlsConfig_CustomSecurity{}
+											choiceInt.CustomSecurity = &ves_io_schema_views.CustomCiphers{}
+											tlsConfig.Choice = choiceInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["cipher_suites"]; ok && !isIntfNil(v) {
+
+														ls := make([]string, len(v.([]interface{})))
+														for i, v := range v.([]interface{}) {
+															ls[i] = v.(string)
+														}
+														choiceInt.CustomSecurity.CipherSuites = ls
+
+													}
+
+													if v, ok := cs["max_version"]; ok && !isIntfNil(v) {
+
+														choiceInt.CustomSecurity.MaxVersion = ves_io_schema.TlsProtocol(ves_io_schema.TlsProtocol_value[v.(string)])
+
+													}
+
+													if v, ok := cs["min_version"]; ok && !isIntfNil(v) {
+
+														choiceInt.CustomSecurity.MinVersion = ves_io_schema.TlsProtocol(ves_io_schema.TlsProtocol_value[v.(string)])
+
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := tlsConfigMapStrToI["default_security"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+											choiceTypeFound = true
+
+											if v.(bool) {
+												choiceInt := &ves_io_schema_views.TlsConfig_DefaultSecurity{}
+												choiceInt.DefaultSecurity = &ves_io_schema.Empty{}
+												tlsConfig.Choice = choiceInt
+											}
+
+										}
+
+										if v, ok := tlsConfigMapStrToI["low_security"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+											choiceTypeFound = true
+
+											if v.(bool) {
+												choiceInt := &ves_io_schema_views.TlsConfig_LowSecurity{}
+												choiceInt.LowSecurity = &ves_io_schema.Empty{}
+												tlsConfig.Choice = choiceInt
+											}
+
+										}
+
+										if v, ok := tlsConfigMapStrToI["medium_security"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+											choiceTypeFound = true
+
+											if v.(bool) {
+												choiceInt := &ves_io_schema_views.TlsConfig_MediumSecurity{}
+												choiceInt.MediumSecurity = &ves_io_schema.Empty{}
+												tlsConfig.Choice = choiceInt
+											}
+
+										}
+
+									}
 								}
 
 							}
 
 						}
-
 					}
 
-					if v, ok := cs["tls_config"]; ok && !isIntfNil(v) {
+				}
 
-						sl := v.(*schema.Set).List()
-						tlsConfig := &ves_io_schema_views.TlsConfig{}
-						tlsCertificatesChoiceInt.TlsCertParams.TlsConfig = tlsConfig
-						for _, set := range sl {
-							tlsConfigMapStrToI := set.(map[string]interface{})
+				if v, ok := cs["tls_parameters"]; ok && !isIntfNil(v) && !tlsCertificatesChoiceTypeFound {
 
-							choiceTypeFound := false
+					tlsCertificatesChoiceTypeFound = true
+					tlsCertificatesChoiceInt := &ves_io_schema_views_tcp_loadbalancer.ProxyTypeTLSTCP_TlsParameters{}
+					tlsCertificatesChoiceInt.TlsParameters = &ves_io_schema_views.DownstreamTlsParamsType{}
+					loadbalancerTypeInt.TlsTcp.TlsCertificatesChoice = tlsCertificatesChoiceInt
 
-							if v, ok := tlsConfigMapStrToI["custom_security"]; ok && !isIntfNil(v) && !choiceTypeFound {
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
 
-								choiceTypeFound = true
-								choiceInt := &ves_io_schema_views.TlsConfig_CustomSecurity{}
-								choiceInt.CustomSecurity = &ves_io_schema_views.CustomCiphers{}
-								tlsConfig.Choice = choiceInt
+							mtlsChoiceTypeFound := false
 
-								sl := v.(*schema.Set).List()
+							if v, ok := cs["no_mtls"]; ok && !isIntfNil(v) && !mtlsChoiceTypeFound {
+
+								mtlsChoiceTypeFound = true
+
+								if v.(bool) {
+									mtlsChoiceInt := &ves_io_schema_views.DownstreamTlsParamsType_NoMtls{}
+									mtlsChoiceInt.NoMtls = &ves_io_schema.Empty{}
+									tlsCertificatesChoiceInt.TlsParameters.MtlsChoice = mtlsChoiceInt
+								}
+
+							}
+
+							if v, ok := cs["use_mtls"]; ok && !isIntfNil(v) && !mtlsChoiceTypeFound {
+
+								mtlsChoiceTypeFound = true
+								mtlsChoiceInt := &ves_io_schema_views.DownstreamTlsParamsType_UseMtls{}
+								mtlsChoiceInt.UseMtls = &ves_io_schema_views.DownstreamTlsValidationContext{}
+								tlsCertificatesChoiceInt.TlsParameters.MtlsChoice = mtlsChoiceInt
+
+								sl := v.([]interface{})
 								for _, set := range sl {
-									cs := set.(map[string]interface{})
+									if set != nil {
+										cs := set.(map[string]interface{})
 
-									if v, ok := cs["cipher_suites"]; ok && !isIntfNil(v) {
+										if v, ok := cs["client_certificate_optional"]; ok && !isIntfNil(v) {
 
-										ls := make([]string, len(v.([]interface{})))
-										for i, v := range v.([]interface{}) {
-											ls[i] = v.(string)
+											mtlsChoiceInt.UseMtls.ClientCertificateOptional = v.(bool)
+
 										}
-										choiceInt.CustomSecurity.CipherSuites = ls
+
+										crlChoiceTypeFound := false
+
+										if v, ok := cs["crl"]; ok && !isIntfNil(v) && !crlChoiceTypeFound {
+
+											crlChoiceTypeFound = true
+											crlChoiceInt := &ves_io_schema_views.DownstreamTlsValidationContext_Crl{}
+											crlChoiceInt.Crl = &ves_io_schema_views.ObjectRefType{}
+											mtlsChoiceInt.UseMtls.CrlChoice = crlChoiceInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+														crlChoiceInt.Crl.Name = v.(string)
+
+													}
+
+													if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+														crlChoiceInt.Crl.Namespace = v.(string)
+
+													}
+
+													if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+														crlChoiceInt.Crl.Tenant = v.(string)
+
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := cs["no_crl"]; ok && !isIntfNil(v) && !crlChoiceTypeFound {
+
+											crlChoiceTypeFound = true
+
+											if v.(bool) {
+												crlChoiceInt := &ves_io_schema_views.DownstreamTlsValidationContext_NoCrl{}
+												crlChoiceInt.NoCrl = &ves_io_schema.Empty{}
+												mtlsChoiceInt.UseMtls.CrlChoice = crlChoiceInt
+											}
+
+										}
+
+										trustedCaChoiceTypeFound := false
+
+										if v, ok := cs["trusted_ca"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
+
+											trustedCaChoiceTypeFound = true
+											trustedCaChoiceInt := &ves_io_schema_views.DownstreamTlsValidationContext_TrustedCa{}
+											trustedCaChoiceInt.TrustedCa = &ves_io_schema_views.ObjectRefType{}
+											mtlsChoiceInt.UseMtls.TrustedCaChoice = trustedCaChoiceInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+														trustedCaChoiceInt.TrustedCa.Name = v.(string)
+
+													}
+
+													if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+														trustedCaChoiceInt.TrustedCa.Namespace = v.(string)
+
+													}
+
+													if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+														trustedCaChoiceInt.TrustedCa.Tenant = v.(string)
+
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := cs["trusted_ca_url"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
+
+											trustedCaChoiceTypeFound = true
+											trustedCaChoiceInt := &ves_io_schema_views.DownstreamTlsValidationContext_TrustedCaUrl{}
+
+											mtlsChoiceInt.UseMtls.TrustedCaChoice = trustedCaChoiceInt
+
+											trustedCaChoiceInt.TrustedCaUrl = v.(string)
+
+										}
+
+										xfccHeaderTypeFound := false
+
+										if v, ok := cs["xfcc_disabled"]; ok && !isIntfNil(v) && !xfccHeaderTypeFound {
+
+											xfccHeaderTypeFound = true
+
+											if v.(bool) {
+												xfccHeaderInt := &ves_io_schema_views.DownstreamTlsValidationContext_XfccDisabled{}
+												xfccHeaderInt.XfccDisabled = &ves_io_schema.Empty{}
+												mtlsChoiceInt.UseMtls.XfccHeader = xfccHeaderInt
+											}
+
+										}
+
+										if v, ok := cs["xfcc_options"]; ok && !isIntfNil(v) && !xfccHeaderTypeFound {
+
+											xfccHeaderTypeFound = true
+											xfccHeaderInt := &ves_io_schema_views.DownstreamTlsValidationContext_XfccOptions{}
+											xfccHeaderInt.XfccOptions = &ves_io_schema_views.XfccHeaderKeys{}
+											mtlsChoiceInt.UseMtls.XfccHeader = xfccHeaderInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["xfcc_header_elements"]; ok && !isIntfNil(v) {
+
+														xfcc_header_elementsList := []ves_io_schema.XfccElement{}
+														for _, j := range v.([]interface{}) {
+															xfcc_header_elementsList = append(xfcc_header_elementsList, ves_io_schema.XfccElement(ves_io_schema.XfccElement_value[j.(string)]))
+														}
+														xfccHeaderInt.XfccOptions.XfccHeaderElements = xfcc_header_elementsList
+
+													}
+
+												}
+											}
+
+										}
 
 									}
-
-									if v, ok := cs["max_version"]; ok && !isIntfNil(v) {
-
-										choiceInt.CustomSecurity.MaxVersion = ves_io_schema.TlsProtocol(ves_io_schema.TlsProtocol_value[v.(string)])
-
-									}
-
-									if v, ok := cs["min_version"]; ok && !isIntfNil(v) {
-
-										choiceInt.CustomSecurity.MinVersion = ves_io_schema.TlsProtocol(ves_io_schema.TlsProtocol_value[v.(string)])
-
-									}
-
 								}
 
 							}
 
-							if v, ok := tlsConfigMapStrToI["default_security"]; ok && !isIntfNil(v) && !choiceTypeFound {
+							if v, ok := cs["tls_certificates"]; ok && !isIntfNil(v) {
 
-								choiceTypeFound = true
+								sl := v.([]interface{})
+								tlsCertificates := make([]*ves_io_schema.TlsCertificateType, len(sl))
+								tlsCertificatesChoiceInt.TlsParameters.TlsCertificates = tlsCertificates
+								for i, set := range sl {
+									if set != nil {
+										tlsCertificates[i] = &ves_io_schema.TlsCertificateType{}
+										tlsCertificatesMapStrToI := set.(map[string]interface{})
 
-								if v.(bool) {
-									choiceInt := &ves_io_schema_views.TlsConfig_DefaultSecurity{}
-									choiceInt.DefaultSecurity = &ves_io_schema.Empty{}
-									tlsConfig.Choice = choiceInt
+										if w, ok := tlsCertificatesMapStrToI["certificate_url"]; ok && !isIntfNil(w) {
+											tlsCertificates[i].CertificateUrl = w.(string)
+										}
+
+										if w, ok := tlsCertificatesMapStrToI["description"]; ok && !isIntfNil(w) {
+											tlsCertificates[i].Description = w.(string)
+										}
+
+										ocspStaplingChoiceTypeFound := false
+
+										if v, ok := tlsCertificatesMapStrToI["custom_hash_algorithms"]; ok && !isIntfNil(v) && !ocspStaplingChoiceTypeFound {
+
+											ocspStaplingChoiceTypeFound = true
+											ocspStaplingChoiceInt := &ves_io_schema.TlsCertificateType_CustomHashAlgorithms{}
+											ocspStaplingChoiceInt.CustomHashAlgorithms = &ves_io_schema.HashAlgorithms{}
+											tlsCertificates[i].OcspStaplingChoice = ocspStaplingChoiceInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["hash_algorithms"]; ok && !isIntfNil(v) {
+
+														hash_algorithmsList := []ves_io_schema.HashAlgorithm{}
+														for _, j := range v.([]interface{}) {
+															hash_algorithmsList = append(hash_algorithmsList, ves_io_schema.HashAlgorithm(ves_io_schema.HashAlgorithm_value[j.(string)]))
+														}
+														ocspStaplingChoiceInt.CustomHashAlgorithms.HashAlgorithms = hash_algorithmsList
+
+													}
+
+												}
+											}
+
+										}
+
+										if _, ok := tlsCertificatesMapStrToI["disable_ocsp_stapling"]; ok && !ocspStaplingChoiceTypeFound {
+
+											ocspStaplingChoiceTypeFound = true
+											ocspStaplingChoiceInt := &ves_io_schema.TlsCertificateType_DisableOcspStapling{}
+											ocspStaplingChoiceInt.DisableOcspStapling = &ves_io_schema.Empty{}
+											tlsCertificates[i].OcspStaplingChoice = ocspStaplingChoiceInt
+
+										}
+
+										if _, ok := tlsCertificatesMapStrToI["use_system_defaults"]; ok && !ocspStaplingChoiceTypeFound {
+
+											ocspStaplingChoiceTypeFound = true
+											ocspStaplingChoiceInt := &ves_io_schema.TlsCertificateType_UseSystemDefaults{}
+											ocspStaplingChoiceInt.UseSystemDefaults = &ves_io_schema.Empty{}
+											tlsCertificates[i].OcspStaplingChoice = ocspStaplingChoiceInt
+
+										}
+
+										if v, ok := tlsCertificatesMapStrToI["private_key"]; ok && !isIntfNil(v) {
+
+											sl := v.([]interface{})
+											privateKey := &ves_io_schema.SecretType{}
+											tlsCertificates[i].PrivateKey = privateKey
+											for _, set := range sl {
+												if set != nil {
+													privateKeyMapStrToI := set.(map[string]interface{})
+
+													if v, ok := privateKeyMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
+
+														sl := v.([]interface{})
+														blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
+														privateKey.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
+														for _, set := range sl {
+															if set != nil {
+																blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
+
+																if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
+																	blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
+																}
+
+																if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
+																	blindfoldSecretInfoInternal.Location = w.(string)
+																}
+
+																if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
+																	blindfoldSecretInfoInternal.StoreProvider = w.(string)
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := privateKeyMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
+
+														privateKey.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+													}
+
+													secretInfoOneofTypeFound := false
+
+													if v, ok := privateKeyMapStrToI["blindfold_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+														secretInfoOneofTypeFound = true
+														secretInfoOneofInt := &ves_io_schema.SecretType_BlindfoldSecretInfo{}
+														secretInfoOneofInt.BlindfoldSecretInfo = &ves_io_schema.BlindfoldSecretInfoType{}
+														privateKey.SecretInfoOneof = secretInfoOneofInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["decryption_provider"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.BlindfoldSecretInfo.DecryptionProvider = v.(string)
+
+																}
+
+																if v, ok := cs["location"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.BlindfoldSecretInfo.Location = v.(string)
+
+																}
+
+																if v, ok := cs["store_provider"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.BlindfoldSecretInfo.StoreProvider = v.(string)
+
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := privateKeyMapStrToI["clear_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+														secretInfoOneofTypeFound = true
+														secretInfoOneofInt := &ves_io_schema.SecretType_ClearSecretInfo{}
+														secretInfoOneofInt.ClearSecretInfo = &ves_io_schema.ClearSecretInfoType{}
+														privateKey.SecretInfoOneof = secretInfoOneofInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.ClearSecretInfo.Provider = v.(string)
+
+																}
+
+																if v, ok := cs["url"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := privateKeyMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+														secretInfoOneofTypeFound = true
+														secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
+														secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
+														privateKey.SecretInfoOneof = secretInfoOneofInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["key"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
+																}
+
+																if v, ok := cs["location"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
+																}
+
+																if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
+																}
+
+																if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+																}
+
+																if v, ok := cs["version"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := privateKeyMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+														secretInfoOneofTypeFound = true
+														secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
+														secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
+														privateKey.SecretInfoOneof = secretInfoOneofInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
+
+																}
+
+															}
+														}
+
+													}
+
+												}
+											}
+
+										}
+
+									}
 								}
 
 							}
 
-							if v, ok := tlsConfigMapStrToI["low_security"]; ok && !isIntfNil(v) && !choiceTypeFound {
+							if v, ok := cs["tls_config"]; ok && !isIntfNil(v) {
 
-								choiceTypeFound = true
+								sl := v.([]interface{})
+								tlsConfig := &ves_io_schema_views.TlsConfig{}
+								tlsCertificatesChoiceInt.TlsParameters.TlsConfig = tlsConfig
+								for _, set := range sl {
+									if set != nil {
+										tlsConfigMapStrToI := set.(map[string]interface{})
 
-								if v.(bool) {
-									choiceInt := &ves_io_schema_views.TlsConfig_LowSecurity{}
-									choiceInt.LowSecurity = &ves_io_schema.Empty{}
-									tlsConfig.Choice = choiceInt
-								}
+										choiceTypeFound := false
 
-							}
+										if v, ok := tlsConfigMapStrToI["custom_security"]; ok && !isIntfNil(v) && !choiceTypeFound {
 
-							if v, ok := tlsConfigMapStrToI["medium_security"]; ok && !isIntfNil(v) && !choiceTypeFound {
+											choiceTypeFound = true
+											choiceInt := &ves_io_schema_views.TlsConfig_CustomSecurity{}
+											choiceInt.CustomSecurity = &ves_io_schema_views.CustomCiphers{}
+											tlsConfig.Choice = choiceInt
 
-								choiceTypeFound = true
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
 
-								if v.(bool) {
-									choiceInt := &ves_io_schema_views.TlsConfig_MediumSecurity{}
-									choiceInt.MediumSecurity = &ves_io_schema.Empty{}
-									tlsConfig.Choice = choiceInt
+													if v, ok := cs["cipher_suites"]; ok && !isIntfNil(v) {
+
+														ls := make([]string, len(v.([]interface{})))
+														for i, v := range v.([]interface{}) {
+															ls[i] = v.(string)
+														}
+														choiceInt.CustomSecurity.CipherSuites = ls
+
+													}
+
+													if v, ok := cs["max_version"]; ok && !isIntfNil(v) {
+
+														choiceInt.CustomSecurity.MaxVersion = ves_io_schema.TlsProtocol(ves_io_schema.TlsProtocol_value[v.(string)])
+
+													}
+
+													if v, ok := cs["min_version"]; ok && !isIntfNil(v) {
+
+														choiceInt.CustomSecurity.MinVersion = ves_io_schema.TlsProtocol(ves_io_schema.TlsProtocol_value[v.(string)])
+
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := tlsConfigMapStrToI["default_security"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+											choiceTypeFound = true
+
+											if v.(bool) {
+												choiceInt := &ves_io_schema_views.TlsConfig_DefaultSecurity{}
+												choiceInt.DefaultSecurity = &ves_io_schema.Empty{}
+												tlsConfig.Choice = choiceInt
+											}
+
+										}
+
+										if v, ok := tlsConfigMapStrToI["low_security"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+											choiceTypeFound = true
+
+											if v.(bool) {
+												choiceInt := &ves_io_schema_views.TlsConfig_LowSecurity{}
+												choiceInt.LowSecurity = &ves_io_schema.Empty{}
+												tlsConfig.Choice = choiceInt
+											}
+
+										}
+
+										if v, ok := tlsConfigMapStrToI["medium_security"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+											choiceTypeFound = true
+
+											if v.(bool) {
+												choiceInt := &ves_io_schema_views.TlsConfig_MediumSecurity{}
+												choiceInt.MediumSecurity = &ves_io_schema.Empty{}
+												tlsConfig.Choice = choiceInt
+											}
+
+										}
+
+									}
 								}
 
 							}
 
 						}
-
 					}
 
 				}
 
 			}
-
-			if v, ok := cs["tls_parameters"]; ok && !isIntfNil(v) && !tlsCertificatesChoiceTypeFound {
-
-				tlsCertificatesChoiceTypeFound = true
-				tlsCertificatesChoiceInt := &ves_io_schema_views_tcp_loadbalancer.ProxyTypeTLSTCP_TlsParameters{}
-				tlsCertificatesChoiceInt.TlsParameters = &ves_io_schema_views.DownstreamTlsParamsType{}
-				loadbalancerTypeInt.TlsTcp.TlsCertificatesChoice = tlsCertificatesChoiceInt
-
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
-
-					mtlsChoiceTypeFound := false
-
-					if v, ok := cs["no_mtls"]; ok && !isIntfNil(v) && !mtlsChoiceTypeFound {
-
-						mtlsChoiceTypeFound = true
-
-						if v.(bool) {
-							mtlsChoiceInt := &ves_io_schema_views.DownstreamTlsParamsType_NoMtls{}
-							mtlsChoiceInt.NoMtls = &ves_io_schema.Empty{}
-							tlsCertificatesChoiceInt.TlsParameters.MtlsChoice = mtlsChoiceInt
-						}
-
-					}
-
-					if v, ok := cs["use_mtls"]; ok && !isIntfNil(v) && !mtlsChoiceTypeFound {
-
-						mtlsChoiceTypeFound = true
-						mtlsChoiceInt := &ves_io_schema_views.DownstreamTlsParamsType_UseMtls{}
-						mtlsChoiceInt.UseMtls = &ves_io_schema_views.DownstreamTlsValidationContext{}
-						tlsCertificatesChoiceInt.TlsParameters.MtlsChoice = mtlsChoiceInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["client_certificate_optional"]; ok && !isIntfNil(v) {
-
-								mtlsChoiceInt.UseMtls.ClientCertificateOptional = v.(bool)
-
-							}
-
-							crlChoiceTypeFound := false
-
-							if v, ok := cs["crl"]; ok && !isIntfNil(v) && !crlChoiceTypeFound {
-
-								crlChoiceTypeFound = true
-								crlChoiceInt := &ves_io_schema_views.DownstreamTlsValidationContext_Crl{}
-								crlChoiceInt.Crl = &ves_io_schema_views.ObjectRefType{}
-								mtlsChoiceInt.UseMtls.CrlChoice = crlChoiceInt
-
-								sl := v.(*schema.Set).List()
-								for _, set := range sl {
-									cs := set.(map[string]interface{})
-
-									if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-										crlChoiceInt.Crl.Name = v.(string)
-
-									}
-
-									if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
-
-										crlChoiceInt.Crl.Namespace = v.(string)
-
-									}
-
-									if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
-
-										crlChoiceInt.Crl.Tenant = v.(string)
-
-									}
-
-								}
-
-							}
-
-							if v, ok := cs["no_crl"]; ok && !isIntfNil(v) && !crlChoiceTypeFound {
-
-								crlChoiceTypeFound = true
-
-								if v.(bool) {
-									crlChoiceInt := &ves_io_schema_views.DownstreamTlsValidationContext_NoCrl{}
-									crlChoiceInt.NoCrl = &ves_io_schema.Empty{}
-									mtlsChoiceInt.UseMtls.CrlChoice = crlChoiceInt
-								}
-
-							}
-
-							trustedCaChoiceTypeFound := false
-
-							if v, ok := cs["trusted_ca"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
-
-								trustedCaChoiceTypeFound = true
-								trustedCaChoiceInt := &ves_io_schema_views.DownstreamTlsValidationContext_TrustedCa{}
-								trustedCaChoiceInt.TrustedCa = &ves_io_schema_views.ObjectRefType{}
-								mtlsChoiceInt.UseMtls.TrustedCaChoice = trustedCaChoiceInt
-
-								sl := v.(*schema.Set).List()
-								for _, set := range sl {
-									cs := set.(map[string]interface{})
-
-									if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-										trustedCaChoiceInt.TrustedCa.Name = v.(string)
-
-									}
-
-									if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
-
-										trustedCaChoiceInt.TrustedCa.Namespace = v.(string)
-
-									}
-
-									if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
-
-										trustedCaChoiceInt.TrustedCa.Tenant = v.(string)
-
-									}
-
-								}
-
-							}
-
-							if v, ok := cs["trusted_ca_url"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
-
-								trustedCaChoiceTypeFound = true
-								trustedCaChoiceInt := &ves_io_schema_views.DownstreamTlsValidationContext_TrustedCaUrl{}
-
-								mtlsChoiceInt.UseMtls.TrustedCaChoice = trustedCaChoiceInt
-
-								trustedCaChoiceInt.TrustedCaUrl = v.(string)
-
-							}
-
-							xfccHeaderTypeFound := false
-
-							if v, ok := cs["xfcc_disabled"]; ok && !isIntfNil(v) && !xfccHeaderTypeFound {
-
-								xfccHeaderTypeFound = true
-
-								if v.(bool) {
-									xfccHeaderInt := &ves_io_schema_views.DownstreamTlsValidationContext_XfccDisabled{}
-									xfccHeaderInt.XfccDisabled = &ves_io_schema.Empty{}
-									mtlsChoiceInt.UseMtls.XfccHeader = xfccHeaderInt
-								}
-
-							}
-
-							if v, ok := cs["xfcc_options"]; ok && !isIntfNil(v) && !xfccHeaderTypeFound {
-
-								xfccHeaderTypeFound = true
-								xfccHeaderInt := &ves_io_schema_views.DownstreamTlsValidationContext_XfccOptions{}
-								xfccHeaderInt.XfccOptions = &ves_io_schema_views.XfccHeaderKeys{}
-								mtlsChoiceInt.UseMtls.XfccHeader = xfccHeaderInt
-
-								sl := v.(*schema.Set).List()
-								for _, set := range sl {
-									cs := set.(map[string]interface{})
-
-									if v, ok := cs["xfcc_header_elements"]; ok && !isIntfNil(v) {
-
-										xfcc_header_elementsList := []ves_io_schema.XfccElement{}
-										for _, j := range v.([]interface{}) {
-											xfcc_header_elementsList = append(xfcc_header_elementsList, ves_io_schema.XfccElement(ves_io_schema.XfccElement_value[j.(string)]))
-										}
-										xfccHeaderInt.XfccOptions.XfccHeaderElements = xfcc_header_elementsList
-
-									}
-
-								}
-
-							}
-
-						}
-
-					}
-
-					if v, ok := cs["tls_certificates"]; ok && !isIntfNil(v) {
-
-						sl := v.([]interface{})
-						tlsCertificates := make([]*ves_io_schema.TlsCertificateType, len(sl))
-						tlsCertificatesChoiceInt.TlsParameters.TlsCertificates = tlsCertificates
-						for i, set := range sl {
-							tlsCertificates[i] = &ves_io_schema.TlsCertificateType{}
-							tlsCertificatesMapStrToI := set.(map[string]interface{})
-
-							if w, ok := tlsCertificatesMapStrToI["certificate_url"]; ok && !isIntfNil(w) {
-								tlsCertificates[i].CertificateUrl = w.(string)
-							}
-
-							if w, ok := tlsCertificatesMapStrToI["description"]; ok && !isIntfNil(w) {
-								tlsCertificates[i].Description = w.(string)
-							}
-
-							ocspStaplingChoiceTypeFound := false
-
-							if v, ok := tlsCertificatesMapStrToI["custom_hash_algorithms"]; ok && !isIntfNil(v) && !ocspStaplingChoiceTypeFound {
-
-								ocspStaplingChoiceTypeFound = true
-								ocspStaplingChoiceInt := &ves_io_schema.TlsCertificateType_CustomHashAlgorithms{}
-								ocspStaplingChoiceInt.CustomHashAlgorithms = &ves_io_schema.HashAlgorithms{}
-								tlsCertificates[i].OcspStaplingChoice = ocspStaplingChoiceInt
-
-								sl := v.(*schema.Set).List()
-								for _, set := range sl {
-									cs := set.(map[string]interface{})
-
-									if v, ok := cs["hash_algorithms"]; ok && !isIntfNil(v) {
-
-										hash_algorithmsList := []ves_io_schema.HashAlgorithm{}
-										for _, j := range v.([]interface{}) {
-											hash_algorithmsList = append(hash_algorithmsList, ves_io_schema.HashAlgorithm(ves_io_schema.HashAlgorithm_value[j.(string)]))
-										}
-										ocspStaplingChoiceInt.CustomHashAlgorithms.HashAlgorithms = hash_algorithmsList
-
-									}
-
-								}
-
-							}
-
-							if _, ok := tlsCertificatesMapStrToI["disable_ocsp_stapling"]; ok && !ocspStaplingChoiceTypeFound {
-
-								ocspStaplingChoiceTypeFound = true
-								ocspStaplingChoiceInt := &ves_io_schema.TlsCertificateType_DisableOcspStapling{}
-								ocspStaplingChoiceInt.DisableOcspStapling = &ves_io_schema.Empty{}
-								tlsCertificates[i].OcspStaplingChoice = ocspStaplingChoiceInt
-
-							}
-
-							if _, ok := tlsCertificatesMapStrToI["use_system_defaults"]; ok && !ocspStaplingChoiceTypeFound {
-
-								ocspStaplingChoiceTypeFound = true
-								ocspStaplingChoiceInt := &ves_io_schema.TlsCertificateType_UseSystemDefaults{}
-								ocspStaplingChoiceInt.UseSystemDefaults = &ves_io_schema.Empty{}
-								tlsCertificates[i].OcspStaplingChoice = ocspStaplingChoiceInt
-
-							}
-
-							if v, ok := tlsCertificatesMapStrToI["private_key"]; ok && !isIntfNil(v) {
-
-								sl := v.(*schema.Set).List()
-								privateKey := &ves_io_schema.SecretType{}
-								tlsCertificates[i].PrivateKey = privateKey
-								for _, set := range sl {
-									privateKeyMapStrToI := set.(map[string]interface{})
-
-									if v, ok := privateKeyMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
-
-										sl := v.(*schema.Set).List()
-										blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
-										privateKey.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
-										for _, set := range sl {
-											blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
-
-											if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
-												blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
-											}
-
-											if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
-												blindfoldSecretInfoInternal.Location = w.(string)
-											}
-
-											if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
-												blindfoldSecretInfoInternal.StoreProvider = w.(string)
-											}
-
-										}
-
-									}
-
-									if v, ok := privateKeyMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
-
-										privateKey.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
-
-									}
-
-									secretInfoOneofTypeFound := false
-
-									if v, ok := privateKeyMapStrToI["blindfold_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
-
-										secretInfoOneofTypeFound = true
-										secretInfoOneofInt := &ves_io_schema.SecretType_BlindfoldSecretInfo{}
-										secretInfoOneofInt.BlindfoldSecretInfo = &ves_io_schema.BlindfoldSecretInfoType{}
-										privateKey.SecretInfoOneof = secretInfoOneofInt
-
-										sl := v.(*schema.Set).List()
-										for _, set := range sl {
-											cs := set.(map[string]interface{})
-
-											if v, ok := cs["decryption_provider"]; ok && !isIntfNil(v) {
-
-												secretInfoOneofInt.BlindfoldSecretInfo.DecryptionProvider = v.(string)
-
-											}
-
-											if v, ok := cs["location"]; ok && !isIntfNil(v) {
-
-												secretInfoOneofInt.BlindfoldSecretInfo.Location = v.(string)
-
-											}
-
-											if v, ok := cs["store_provider"]; ok && !isIntfNil(v) {
-
-												secretInfoOneofInt.BlindfoldSecretInfo.StoreProvider = v.(string)
-
-											}
-
-										}
-
-									}
-
-									if v, ok := privateKeyMapStrToI["clear_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
-
-										secretInfoOneofTypeFound = true
-										secretInfoOneofInt := &ves_io_schema.SecretType_ClearSecretInfo{}
-										secretInfoOneofInt.ClearSecretInfo = &ves_io_schema.ClearSecretInfoType{}
-										privateKey.SecretInfoOneof = secretInfoOneofInt
-
-										sl := v.(*schema.Set).List()
-										for _, set := range sl {
-											cs := set.(map[string]interface{})
-
-											if v, ok := cs["provider"]; ok && !isIntfNil(v) {
-
-												secretInfoOneofInt.ClearSecretInfo.Provider = v.(string)
-
-											}
-
-											if v, ok := cs["url"]; ok && !isIntfNil(v) {
-
-												secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
-
-											}
-
-										}
-
-									}
-
-									if v, ok := privateKeyMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
-
-										secretInfoOneofTypeFound = true
-										secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
-										secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
-										privateKey.SecretInfoOneof = secretInfoOneofInt
-
-										sl := v.(*schema.Set).List()
-										for _, set := range sl {
-											cs := set.(map[string]interface{})
-
-											if v, ok := cs["key"]; ok && !isIntfNil(v) {
-
-												secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
-
-											}
-
-											if v, ok := cs["location"]; ok && !isIntfNil(v) {
-
-												secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
-
-											}
-
-											if v, ok := cs["provider"]; ok && !isIntfNil(v) {
-
-												secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
-
-											}
-
-											if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
-
-												secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
-
-											}
-
-											if v, ok := cs["version"]; ok && !isIntfNil(v) {
-
-												secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
-
-											}
-
-										}
-
-									}
-
-									if v, ok := privateKeyMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
-
-										secretInfoOneofTypeFound = true
-										secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
-										secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
-										privateKey.SecretInfoOneof = secretInfoOneofInt
-
-										sl := v.(*schema.Set).List()
-										for _, set := range sl {
-											cs := set.(map[string]interface{})
-
-											if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-												secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
-
-											}
-
-										}
-
-									}
-
-								}
-
-							}
-
-						}
-
-					}
-
-					if v, ok := cs["tls_config"]; ok && !isIntfNil(v) {
-
-						sl := v.(*schema.Set).List()
-						tlsConfig := &ves_io_schema_views.TlsConfig{}
-						tlsCertificatesChoiceInt.TlsParameters.TlsConfig = tlsConfig
-						for _, set := range sl {
-							tlsConfigMapStrToI := set.(map[string]interface{})
-
-							choiceTypeFound := false
-
-							if v, ok := tlsConfigMapStrToI["custom_security"]; ok && !isIntfNil(v) && !choiceTypeFound {
-
-								choiceTypeFound = true
-								choiceInt := &ves_io_schema_views.TlsConfig_CustomSecurity{}
-								choiceInt.CustomSecurity = &ves_io_schema_views.CustomCiphers{}
-								tlsConfig.Choice = choiceInt
-
-								sl := v.(*schema.Set).List()
-								for _, set := range sl {
-									cs := set.(map[string]interface{})
-
-									if v, ok := cs["cipher_suites"]; ok && !isIntfNil(v) {
-
-										ls := make([]string, len(v.([]interface{})))
-										for i, v := range v.([]interface{}) {
-											ls[i] = v.(string)
-										}
-										choiceInt.CustomSecurity.CipherSuites = ls
-
-									}
-
-									if v, ok := cs["max_version"]; ok && !isIntfNil(v) {
-
-										choiceInt.CustomSecurity.MaxVersion = ves_io_schema.TlsProtocol(ves_io_schema.TlsProtocol_value[v.(string)])
-
-									}
-
-									if v, ok := cs["min_version"]; ok && !isIntfNil(v) {
-
-										choiceInt.CustomSecurity.MinVersion = ves_io_schema.TlsProtocol(ves_io_schema.TlsProtocol_value[v.(string)])
-
-									}
-
-								}
-
-							}
-
-							if v, ok := tlsConfigMapStrToI["default_security"]; ok && !isIntfNil(v) && !choiceTypeFound {
-
-								choiceTypeFound = true
-
-								if v.(bool) {
-									choiceInt := &ves_io_schema_views.TlsConfig_DefaultSecurity{}
-									choiceInt.DefaultSecurity = &ves_io_schema.Empty{}
-									tlsConfig.Choice = choiceInt
-								}
-
-							}
-
-							if v, ok := tlsConfigMapStrToI["low_security"]; ok && !isIntfNil(v) && !choiceTypeFound {
-
-								choiceTypeFound = true
-
-								if v.(bool) {
-									choiceInt := &ves_io_schema_views.TlsConfig_LowSecurity{}
-									choiceInt.LowSecurity = &ves_io_schema.Empty{}
-									tlsConfig.Choice = choiceInt
-								}
-
-							}
-
-							if v, ok := tlsConfigMapStrToI["medium_security"]; ok && !isIntfNil(v) && !choiceTypeFound {
-
-								choiceTypeFound = true
-
-								if v.(bool) {
-									choiceInt := &ves_io_schema_views.TlsConfig_MediumSecurity{}
-									choiceInt.MediumSecurity = &ves_io_schema.Empty{}
-									tlsConfig.Choice = choiceInt
-								}
-
-							}
-
-						}
-
-					}
-
-				}
-
-			}
-
 		}
 
 	}
@@ -3338,264 +3485,278 @@ func resourceVolterraTcpLoadbalancerCreate(d *schema.ResourceData, meta interfac
 		loadbalancerTypeInt.TlsTcpAutoCert = &ves_io_schema_views_tcp_loadbalancer.ProxyTypeTLSTCPAutoCerts{}
 		createSpec.LoadbalancerType = loadbalancerTypeInt
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
+			if set != nil {
+				cs := set.(map[string]interface{})
 
-			mtlsChoiceTypeFound := false
+				mtlsChoiceTypeFound := false
 
-			if v, ok := cs["no_mtls"]; ok && !isIntfNil(v) && !mtlsChoiceTypeFound {
+				if v, ok := cs["no_mtls"]; ok && !isIntfNil(v) && !mtlsChoiceTypeFound {
 
-				mtlsChoiceTypeFound = true
+					mtlsChoiceTypeFound = true
 
-				if v.(bool) {
-					mtlsChoiceInt := &ves_io_schema_views_tcp_loadbalancer.ProxyTypeTLSTCPAutoCerts_NoMtls{}
-					mtlsChoiceInt.NoMtls = &ves_io_schema.Empty{}
+					if v.(bool) {
+						mtlsChoiceInt := &ves_io_schema_views_tcp_loadbalancer.ProxyTypeTLSTCPAutoCerts_NoMtls{}
+						mtlsChoiceInt.NoMtls = &ves_io_schema.Empty{}
+						loadbalancerTypeInt.TlsTcpAutoCert.MtlsChoice = mtlsChoiceInt
+					}
+
+				}
+
+				if v, ok := cs["use_mtls"]; ok && !isIntfNil(v) && !mtlsChoiceTypeFound {
+
+					mtlsChoiceTypeFound = true
+					mtlsChoiceInt := &ves_io_schema_views_tcp_loadbalancer.ProxyTypeTLSTCPAutoCerts_UseMtls{}
+					mtlsChoiceInt.UseMtls = &ves_io_schema_views.DownstreamTlsValidationContext{}
 					loadbalancerTypeInt.TlsTcpAutoCert.MtlsChoice = mtlsChoiceInt
-				}
 
-			}
-
-			if v, ok := cs["use_mtls"]; ok && !isIntfNil(v) && !mtlsChoiceTypeFound {
-
-				mtlsChoiceTypeFound = true
-				mtlsChoiceInt := &ves_io_schema_views_tcp_loadbalancer.ProxyTypeTLSTCPAutoCerts_UseMtls{}
-				mtlsChoiceInt.UseMtls = &ves_io_schema_views.DownstreamTlsValidationContext{}
-				loadbalancerTypeInt.TlsTcpAutoCert.MtlsChoice = mtlsChoiceInt
-
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
-
-					if v, ok := cs["client_certificate_optional"]; ok && !isIntfNil(v) {
-
-						mtlsChoiceInt.UseMtls.ClientCertificateOptional = v.(bool)
-
-					}
-
-					crlChoiceTypeFound := false
-
-					if v, ok := cs["crl"]; ok && !isIntfNil(v) && !crlChoiceTypeFound {
-
-						crlChoiceTypeFound = true
-						crlChoiceInt := &ves_io_schema_views.DownstreamTlsValidationContext_Crl{}
-						crlChoiceInt.Crl = &ves_io_schema_views.ObjectRefType{}
-						mtlsChoiceInt.UseMtls.CrlChoice = crlChoiceInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
 							cs := set.(map[string]interface{})
 
-							if v, ok := cs["name"]; ok && !isIntfNil(v) {
+							if v, ok := cs["client_certificate_optional"]; ok && !isIntfNil(v) {
 
-								crlChoiceInt.Crl.Name = v.(string)
-
-							}
-
-							if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
-
-								crlChoiceInt.Crl.Namespace = v.(string)
+								mtlsChoiceInt.UseMtls.ClientCertificateOptional = v.(bool)
 
 							}
 
-							if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+							crlChoiceTypeFound := false
 
-								crlChoiceInt.Crl.Tenant = v.(string)
+							if v, ok := cs["crl"]; ok && !isIntfNil(v) && !crlChoiceTypeFound {
 
-							}
+								crlChoiceTypeFound = true
+								crlChoiceInt := &ves_io_schema_views.DownstreamTlsValidationContext_Crl{}
+								crlChoiceInt.Crl = &ves_io_schema_views.ObjectRefType{}
+								mtlsChoiceInt.UseMtls.CrlChoice = crlChoiceInt
 
-						}
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
 
-					}
+										if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
-					if v, ok := cs["no_crl"]; ok && !isIntfNil(v) && !crlChoiceTypeFound {
+											crlChoiceInt.Crl.Name = v.(string)
 
-						crlChoiceTypeFound = true
+										}
 
-						if v.(bool) {
-							crlChoiceInt := &ves_io_schema_views.DownstreamTlsValidationContext_NoCrl{}
-							crlChoiceInt.NoCrl = &ves_io_schema.Empty{}
-							mtlsChoiceInt.UseMtls.CrlChoice = crlChoiceInt
-						}
+										if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
 
-					}
+											crlChoiceInt.Crl.Namespace = v.(string)
 
-					trustedCaChoiceTypeFound := false
+										}
 
-					if v, ok := cs["trusted_ca"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
+										if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
 
-						trustedCaChoiceTypeFound = true
-						trustedCaChoiceInt := &ves_io_schema_views.DownstreamTlsValidationContext_TrustedCa{}
-						trustedCaChoiceInt.TrustedCa = &ves_io_schema_views.ObjectRefType{}
-						mtlsChoiceInt.UseMtls.TrustedCaChoice = trustedCaChoiceInt
+											crlChoiceInt.Crl.Tenant = v.(string)
 
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
+										}
 
-							if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-								trustedCaChoiceInt.TrustedCa.Name = v.(string)
-
-							}
-
-							if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
-
-								trustedCaChoiceInt.TrustedCa.Namespace = v.(string)
-
-							}
-
-							if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
-
-								trustedCaChoiceInt.TrustedCa.Tenant = v.(string)
-
-							}
-
-						}
-
-					}
-
-					if v, ok := cs["trusted_ca_url"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
-
-						trustedCaChoiceTypeFound = true
-						trustedCaChoiceInt := &ves_io_schema_views.DownstreamTlsValidationContext_TrustedCaUrl{}
-
-						mtlsChoiceInt.UseMtls.TrustedCaChoice = trustedCaChoiceInt
-
-						trustedCaChoiceInt.TrustedCaUrl = v.(string)
-
-					}
-
-					xfccHeaderTypeFound := false
-
-					if v, ok := cs["xfcc_disabled"]; ok && !isIntfNil(v) && !xfccHeaderTypeFound {
-
-						xfccHeaderTypeFound = true
-
-						if v.(bool) {
-							xfccHeaderInt := &ves_io_schema_views.DownstreamTlsValidationContext_XfccDisabled{}
-							xfccHeaderInt.XfccDisabled = &ves_io_schema.Empty{}
-							mtlsChoiceInt.UseMtls.XfccHeader = xfccHeaderInt
-						}
-
-					}
-
-					if v, ok := cs["xfcc_options"]; ok && !isIntfNil(v) && !xfccHeaderTypeFound {
-
-						xfccHeaderTypeFound = true
-						xfccHeaderInt := &ves_io_schema_views.DownstreamTlsValidationContext_XfccOptions{}
-						xfccHeaderInt.XfccOptions = &ves_io_schema_views.XfccHeaderKeys{}
-						mtlsChoiceInt.UseMtls.XfccHeader = xfccHeaderInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["xfcc_header_elements"]; ok && !isIntfNil(v) {
-
-								xfcc_header_elementsList := []ves_io_schema.XfccElement{}
-								for _, j := range v.([]interface{}) {
-									xfcc_header_elementsList = append(xfcc_header_elementsList, ves_io_schema.XfccElement(ves_io_schema.XfccElement_value[j.(string)]))
+									}
 								}
-								xfccHeaderInt.XfccOptions.XfccHeaderElements = xfcc_header_elementsList
 
 							}
 
-						}
+							if v, ok := cs["no_crl"]; ok && !isIntfNil(v) && !crlChoiceTypeFound {
 
-					}
+								crlChoiceTypeFound = true
 
-				}
-
-			}
-
-			if v, ok := cs["tls_config"]; ok && !isIntfNil(v) {
-
-				sl := v.(*schema.Set).List()
-				tlsConfig := &ves_io_schema_views.TlsConfig{}
-				loadbalancerTypeInt.TlsTcpAutoCert.TlsConfig = tlsConfig
-				for _, set := range sl {
-					tlsConfigMapStrToI := set.(map[string]interface{})
-
-					choiceTypeFound := false
-
-					if v, ok := tlsConfigMapStrToI["custom_security"]; ok && !isIntfNil(v) && !choiceTypeFound {
-
-						choiceTypeFound = true
-						choiceInt := &ves_io_schema_views.TlsConfig_CustomSecurity{}
-						choiceInt.CustomSecurity = &ves_io_schema_views.CustomCiphers{}
-						tlsConfig.Choice = choiceInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["cipher_suites"]; ok && !isIntfNil(v) {
-
-								ls := make([]string, len(v.([]interface{})))
-								for i, v := range v.([]interface{}) {
-									ls[i] = v.(string)
+								if v.(bool) {
+									crlChoiceInt := &ves_io_schema_views.DownstreamTlsValidationContext_NoCrl{}
+									crlChoiceInt.NoCrl = &ves_io_schema.Empty{}
+									mtlsChoiceInt.UseMtls.CrlChoice = crlChoiceInt
 								}
-								choiceInt.CustomSecurity.CipherSuites = ls
 
 							}
 
-							if v, ok := cs["max_version"]; ok && !isIntfNil(v) {
+							trustedCaChoiceTypeFound := false
 
-								choiceInt.CustomSecurity.MaxVersion = ves_io_schema.TlsProtocol(ves_io_schema.TlsProtocol_value[v.(string)])
+							if v, ok := cs["trusted_ca"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
+
+								trustedCaChoiceTypeFound = true
+								trustedCaChoiceInt := &ves_io_schema_views.DownstreamTlsValidationContext_TrustedCa{}
+								trustedCaChoiceInt.TrustedCa = &ves_io_schema_views.ObjectRefType{}
+								mtlsChoiceInt.UseMtls.TrustedCaChoice = trustedCaChoiceInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+											trustedCaChoiceInt.TrustedCa.Name = v.(string)
+
+										}
+
+										if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+											trustedCaChoiceInt.TrustedCa.Namespace = v.(string)
+
+										}
+
+										if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+											trustedCaChoiceInt.TrustedCa.Tenant = v.(string)
+
+										}
+
+									}
+								}
 
 							}
 
-							if v, ok := cs["min_version"]; ok && !isIntfNil(v) {
+							if v, ok := cs["trusted_ca_url"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
 
-								choiceInt.CustomSecurity.MinVersion = ves_io_schema.TlsProtocol(ves_io_schema.TlsProtocol_value[v.(string)])
+								trustedCaChoiceTypeFound = true
+								trustedCaChoiceInt := &ves_io_schema_views.DownstreamTlsValidationContext_TrustedCaUrl{}
+
+								mtlsChoiceInt.UseMtls.TrustedCaChoice = trustedCaChoiceInt
+
+								trustedCaChoiceInt.TrustedCaUrl = v.(string)
+
+							}
+
+							xfccHeaderTypeFound := false
+
+							if v, ok := cs["xfcc_disabled"]; ok && !isIntfNil(v) && !xfccHeaderTypeFound {
+
+								xfccHeaderTypeFound = true
+
+								if v.(bool) {
+									xfccHeaderInt := &ves_io_schema_views.DownstreamTlsValidationContext_XfccDisabled{}
+									xfccHeaderInt.XfccDisabled = &ves_io_schema.Empty{}
+									mtlsChoiceInt.UseMtls.XfccHeader = xfccHeaderInt
+								}
+
+							}
+
+							if v, ok := cs["xfcc_options"]; ok && !isIntfNil(v) && !xfccHeaderTypeFound {
+
+								xfccHeaderTypeFound = true
+								xfccHeaderInt := &ves_io_schema_views.DownstreamTlsValidationContext_XfccOptions{}
+								xfccHeaderInt.XfccOptions = &ves_io_schema_views.XfccHeaderKeys{}
+								mtlsChoiceInt.UseMtls.XfccHeader = xfccHeaderInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["xfcc_header_elements"]; ok && !isIntfNil(v) {
+
+											xfcc_header_elementsList := []ves_io_schema.XfccElement{}
+											for _, j := range v.([]interface{}) {
+												xfcc_header_elementsList = append(xfcc_header_elementsList, ves_io_schema.XfccElement(ves_io_schema.XfccElement_value[j.(string)]))
+											}
+											xfccHeaderInt.XfccOptions.XfccHeaderElements = xfcc_header_elementsList
+
+										}
+
+									}
+								}
 
 							}
 
 						}
-
 					}
 
-					if v, ok := tlsConfigMapStrToI["default_security"]; ok && !isIntfNil(v) && !choiceTypeFound {
+				}
 
-						choiceTypeFound = true
+				if v, ok := cs["tls_config"]; ok && !isIntfNil(v) {
 
-						if v.(bool) {
-							choiceInt := &ves_io_schema_views.TlsConfig_DefaultSecurity{}
-							choiceInt.DefaultSecurity = &ves_io_schema.Empty{}
-							tlsConfig.Choice = choiceInt
+					sl := v.([]interface{})
+					tlsConfig := &ves_io_schema_views.TlsConfig{}
+					loadbalancerTypeInt.TlsTcpAutoCert.TlsConfig = tlsConfig
+					for _, set := range sl {
+						if set != nil {
+							tlsConfigMapStrToI := set.(map[string]interface{})
+
+							choiceTypeFound := false
+
+							if v, ok := tlsConfigMapStrToI["custom_security"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+								choiceTypeFound = true
+								choiceInt := &ves_io_schema_views.TlsConfig_CustomSecurity{}
+								choiceInt.CustomSecurity = &ves_io_schema_views.CustomCiphers{}
+								tlsConfig.Choice = choiceInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["cipher_suites"]; ok && !isIntfNil(v) {
+
+											ls := make([]string, len(v.([]interface{})))
+											for i, v := range v.([]interface{}) {
+												ls[i] = v.(string)
+											}
+											choiceInt.CustomSecurity.CipherSuites = ls
+
+										}
+
+										if v, ok := cs["max_version"]; ok && !isIntfNil(v) {
+
+											choiceInt.CustomSecurity.MaxVersion = ves_io_schema.TlsProtocol(ves_io_schema.TlsProtocol_value[v.(string)])
+
+										}
+
+										if v, ok := cs["min_version"]; ok && !isIntfNil(v) {
+
+											choiceInt.CustomSecurity.MinVersion = ves_io_schema.TlsProtocol(ves_io_schema.TlsProtocol_value[v.(string)])
+
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := tlsConfigMapStrToI["default_security"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+								choiceTypeFound = true
+
+								if v.(bool) {
+									choiceInt := &ves_io_schema_views.TlsConfig_DefaultSecurity{}
+									choiceInt.DefaultSecurity = &ves_io_schema.Empty{}
+									tlsConfig.Choice = choiceInt
+								}
+
+							}
+
+							if v, ok := tlsConfigMapStrToI["low_security"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+								choiceTypeFound = true
+
+								if v.(bool) {
+									choiceInt := &ves_io_schema_views.TlsConfig_LowSecurity{}
+									choiceInt.LowSecurity = &ves_io_schema.Empty{}
+									tlsConfig.Choice = choiceInt
+								}
+
+							}
+
+							if v, ok := tlsConfigMapStrToI["medium_security"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+								choiceTypeFound = true
+
+								if v.(bool) {
+									choiceInt := &ves_io_schema_views.TlsConfig_MediumSecurity{}
+									choiceInt.MediumSecurity = &ves_io_schema.Empty{}
+									tlsConfig.Choice = choiceInt
+								}
+
+							}
+
 						}
-
-					}
-
-					if v, ok := tlsConfigMapStrToI["low_security"]; ok && !isIntfNil(v) && !choiceTypeFound {
-
-						choiceTypeFound = true
-
-						if v.(bool) {
-							choiceInt := &ves_io_schema_views.TlsConfig_LowSecurity{}
-							choiceInt.LowSecurity = &ves_io_schema.Empty{}
-							tlsConfig.Choice = choiceInt
-						}
-
-					}
-
-					if v, ok := tlsConfigMapStrToI["medium_security"]; ok && !isIntfNil(v) && !choiceTypeFound {
-
-						choiceTypeFound = true
-
-						if v.(bool) {
-							choiceInt := &ves_io_schema_views.TlsConfig_MediumSecurity{}
-							choiceInt.MediumSecurity = &ves_io_schema.Empty{}
-							tlsConfig.Choice = choiceInt
-						}
-
 					}
 
 				}
 
 			}
-
 		}
 
 	}
@@ -3607,93 +3768,99 @@ func resourceVolterraTcpLoadbalancerCreate(d *schema.ResourceData, meta interfac
 		originPoolsWeights := make([]*ves_io_schema_views.OriginPoolWithWeight, len(sl))
 		createSpec.OriginPoolsWeights = originPoolsWeights
 		for i, set := range sl {
-			originPoolsWeights[i] = &ves_io_schema_views.OriginPoolWithWeight{}
-			originPoolsWeightsMapStrToI := set.(map[string]interface{})
+			if set != nil {
+				originPoolsWeights[i] = &ves_io_schema_views.OriginPoolWithWeight{}
+				originPoolsWeightsMapStrToI := set.(map[string]interface{})
 
-			if w, ok := originPoolsWeightsMapStrToI["endpoint_subsets"]; ok && !isIntfNil(w) {
-				ms := map[string]string{}
-				for k, v := range w.(map[string]interface{}) {
-					ms[k] = v.(string)
-				}
-				originPoolsWeights[i].EndpointSubsets = ms
-			}
-
-			poolChoiceTypeFound := false
-
-			if v, ok := originPoolsWeightsMapStrToI["cluster"]; ok && !isIntfNil(v) && !poolChoiceTypeFound {
-
-				poolChoiceTypeFound = true
-				poolChoiceInt := &ves_io_schema_views.OriginPoolWithWeight_Cluster{}
-				poolChoiceInt.Cluster = &ves_io_schema_views.ObjectRefType{}
-				originPoolsWeights[i].PoolChoice = poolChoiceInt
-
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
-
-					if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-						poolChoiceInt.Cluster.Name = v.(string)
-
+				if w, ok := originPoolsWeightsMapStrToI["endpoint_subsets"]; ok && !isIntfNil(w) {
+					ms := map[string]string{}
+					for k, v := range w.(map[string]interface{}) {
+						ms[k] = v.(string)
 					}
-
-					if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
-
-						poolChoiceInt.Cluster.Namespace = v.(string)
-
-					}
-
-					if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
-
-						poolChoiceInt.Cluster.Tenant = v.(string)
-
-					}
-
+					originPoolsWeights[i].EndpointSubsets = ms
 				}
 
-			}
+				poolChoiceTypeFound := false
 
-			if v, ok := originPoolsWeightsMapStrToI["pool"]; ok && !isIntfNil(v) && !poolChoiceTypeFound {
+				if v, ok := originPoolsWeightsMapStrToI["cluster"]; ok && !isIntfNil(v) && !poolChoiceTypeFound {
 
-				poolChoiceTypeFound = true
-				poolChoiceInt := &ves_io_schema_views.OriginPoolWithWeight_Pool{}
-				poolChoiceInt.Pool = &ves_io_schema_views.ObjectRefType{}
-				originPoolsWeights[i].PoolChoice = poolChoiceInt
+					poolChoiceTypeFound = true
+					poolChoiceInt := &ves_io_schema_views.OriginPoolWithWeight_Cluster{}
+					poolChoiceInt.Cluster = &ves_io_schema_views.ObjectRefType{}
+					originPoolsWeights[i].PoolChoice = poolChoiceInt
 
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
 
-					if v, ok := cs["name"]; ok && !isIntfNil(v) {
+							if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
-						poolChoiceInt.Pool.Name = v.(string)
+								poolChoiceInt.Cluster.Name = v.(string)
 
-					}
+							}
 
-					if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+							if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
 
-						poolChoiceInt.Pool.Namespace = v.(string)
+								poolChoiceInt.Cluster.Namespace = v.(string)
 
-					}
+							}
 
-					if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+							if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
 
-						poolChoiceInt.Pool.Tenant = v.(string)
+								poolChoiceInt.Cluster.Tenant = v.(string)
 
+							}
+
+						}
 					}
 
 				}
 
-			}
+				if v, ok := originPoolsWeightsMapStrToI["pool"]; ok && !isIntfNil(v) && !poolChoiceTypeFound {
 
-			if w, ok := originPoolsWeightsMapStrToI["priority"]; ok && !isIntfNil(w) {
-				originPoolsWeights[i].Priority = uint32(w.(int))
-			}
+					poolChoiceTypeFound = true
+					poolChoiceInt := &ves_io_schema_views.OriginPoolWithWeight_Pool{}
+					poolChoiceInt.Pool = &ves_io_schema_views.ObjectRefType{}
+					originPoolsWeights[i].PoolChoice = poolChoiceInt
 
-			if w, ok := originPoolsWeightsMapStrToI["weight"]; ok && !isIntfNil(w) {
-				originPoolsWeights[i].Weight = uint32(w.(int))
-			}
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
 
+							if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+								poolChoiceInt.Pool.Name = v.(string)
+
+							}
+
+							if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+								poolChoiceInt.Pool.Namespace = v.(string)
+
+							}
+
+							if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+								poolChoiceInt.Pool.Tenant = v.(string)
+
+							}
+
+						}
+					}
+
+				}
+
+				if w, ok := originPoolsWeightsMapStrToI["priority"]; ok && !isIntfNil(w) {
+					originPoolsWeights[i].Priority = uint32(w.(int))
+				}
+
+				if w, ok := originPoolsWeightsMapStrToI["weight"]; ok && !isIntfNil(w) {
+					originPoolsWeights[i].Weight = uint32(w.(int))
+				}
+
+			}
 		}
 
 	}
@@ -3735,36 +3902,38 @@ func resourceVolterraTcpLoadbalancerCreate(d *schema.ResourceData, meta interfac
 		servicePolicyChoiceInt.ActiveServicePolicies = &ves_io_schema_views_tcp_loadbalancer.ServicePolicyList{}
 		createSpec.ServicePolicyChoice = servicePolicyChoiceInt
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
+			if set != nil {
+				cs := set.(map[string]interface{})
 
-			if v, ok := cs["policies"]; ok && !isIntfNil(v) {
+				if v, ok := cs["policies"]; ok && !isIntfNil(v) {
 
-				sl := v.([]interface{})
-				policiesInt := make([]*ves_io_schema_views.ObjectRefType, len(sl))
-				servicePolicyChoiceInt.ActiveServicePolicies.Policies = policiesInt
-				for i, ps := range sl {
+					sl := v.([]interface{})
+					policiesInt := make([]*ves_io_schema_views.ObjectRefType, len(sl))
+					servicePolicyChoiceInt.ActiveServicePolicies.Policies = policiesInt
+					for i, ps := range sl {
 
-					pMapToStrVal := ps.(map[string]interface{})
-					policiesInt[i] = &ves_io_schema_views.ObjectRefType{}
+						pMapToStrVal := ps.(map[string]interface{})
+						policiesInt[i] = &ves_io_schema_views.ObjectRefType{}
 
-					if v, ok := pMapToStrVal["name"]; ok && !isIntfNil(v) {
-						policiesInt[i].Name = v.(string)
-					}
+						if v, ok := pMapToStrVal["name"]; ok && !isIntfNil(v) {
+							policiesInt[i].Name = v.(string)
+						}
 
-					if v, ok := pMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-						policiesInt[i].Namespace = v.(string)
-					}
+						if v, ok := pMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+							policiesInt[i].Namespace = v.(string)
+						}
 
-					if v, ok := pMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-						policiesInt[i].Tenant = v.(string)
+						if v, ok := pMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+							policiesInt[i].Tenant = v.(string)
+						}
+
 					}
 
 				}
 
 			}
-
 		}
 
 	}
@@ -3946,506 +4115,542 @@ func resourceVolterraTcpLoadbalancerUpdate(d *schema.ResourceData, meta interfac
 		advertiseChoiceInt.AdvertiseCustom = &ves_io_schema_views.AdvertiseCustom{}
 		updateSpec.AdvertiseChoice = advertiseChoiceInt
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
-
-			if v, ok := cs["advertise_where"]; ok && !isIntfNil(v) {
-
-				sl := v.([]interface{})
-				advertiseWhere := make([]*ves_io_schema_views.WhereType, len(sl))
-				advertiseChoiceInt.AdvertiseCustom.AdvertiseWhere = advertiseWhere
-				for i, set := range sl {
-					advertiseWhere[i] = &ves_io_schema_views.WhereType{}
-					advertiseWhereMapStrToI := set.(map[string]interface{})
-
-					choiceTypeFound := false
-
-					if v, ok := advertiseWhereMapStrToI["advertise_on_public"]; ok && !isIntfNil(v) && !choiceTypeFound {
-
-						choiceTypeFound = true
-						choiceInt := &ves_io_schema_views.WhereType_AdvertiseOnPublic{}
-						choiceInt.AdvertiseOnPublic = &ves_io_schema_views.AdvertisePublic{}
-						advertiseWhere[i].Choice = choiceInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["public_ip"]; ok && !isIntfNil(v) {
-
-								sl := v.(*schema.Set).List()
-								publicIp := &ves_io_schema_views.ObjectRefType{}
-								choiceInt.AdvertiseOnPublic.PublicIp = publicIp
-								for _, set := range sl {
-									publicIpMapStrToI := set.(map[string]interface{})
-
-									if w, ok := publicIpMapStrToI["name"]; ok && !isIntfNil(w) {
-										publicIp.Name = w.(string)
-									}
-
-									if w, ok := publicIpMapStrToI["namespace"]; ok && !isIntfNil(w) {
-										publicIp.Namespace = w.(string)
-									}
-
-									if w, ok := publicIpMapStrToI["tenant"]; ok && !isIntfNil(w) {
-										publicIp.Tenant = w.(string)
-									}
-
-								}
-
-							}
-
-						}
-
-					}
-
-					if v, ok := advertiseWhereMapStrToI["site"]; ok && !isIntfNil(v) && !choiceTypeFound {
-
-						choiceTypeFound = true
-						choiceInt := &ves_io_schema_views.WhereType_Site{}
-						choiceInt.Site = &ves_io_schema_views.WhereSite{}
-						advertiseWhere[i].Choice = choiceInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["ip"]; ok && !isIntfNil(v) {
-
-								choiceInt.Site.Ip = v.(string)
-
-							}
-
-							if v, ok := cs["ipv6"]; ok && !isIntfNil(v) {
-
-								choiceInt.Site.Ipv6 = v.(string)
-
-							}
-
-							if v, ok := cs["network"]; ok && !isIntfNil(v) {
-
-								choiceInt.Site.Network = ves_io_schema_views.SiteNetwork(ves_io_schema_views.SiteNetwork_value[v.(string)])
-
-							}
-
-							if v, ok := cs["site"]; ok && !isIntfNil(v) {
-
-								sl := v.(*schema.Set).List()
-								site := &ves_io_schema_views.ObjectRefType{}
-								choiceInt.Site.Site = site
-								for _, set := range sl {
-									siteMapStrToI := set.(map[string]interface{})
-
-									if w, ok := siteMapStrToI["name"]; ok && !isIntfNil(w) {
-										site.Name = w.(string)
-									}
-
-									if w, ok := siteMapStrToI["namespace"]; ok && !isIntfNil(w) {
-										site.Namespace = w.(string)
-									}
-
-									if w, ok := siteMapStrToI["tenant"]; ok && !isIntfNil(w) {
-										site.Tenant = w.(string)
-									}
-
-								}
-
-							}
-
-						}
-
-					}
-
-					if v, ok := advertiseWhereMapStrToI["site_segment"]; ok && !isIntfNil(v) && !choiceTypeFound {
-
-						choiceTypeFound = true
-						choiceInt := &ves_io_schema_views.WhereType_SiteSegment{}
-						choiceInt.SiteSegment = &ves_io_schema_views.WhereSiteSegment{}
-						advertiseWhere[i].Choice = choiceInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["ip"]; ok && !isIntfNil(v) {
-
-								choiceInt.SiteSegment.Ip = v.(string)
-
-							}
-
-							if v, ok := cs["ipv6"]; ok && !isIntfNil(v) {
-
-								choiceInt.SiteSegment.Ipv6 = v.(string)
-
-							}
-
-							if v, ok := cs["segment"]; ok && !isIntfNil(v) {
-
-								sl := v.(*schema.Set).List()
-								segment := &ves_io_schema_views.ObjectRefType{}
-								choiceInt.SiteSegment.Segment = segment
-								for _, set := range sl {
-									segmentMapStrToI := set.(map[string]interface{})
-
-									if w, ok := segmentMapStrToI["name"]; ok && !isIntfNil(w) {
-										segment.Name = w.(string)
-									}
-
-									if w, ok := segmentMapStrToI["namespace"]; ok && !isIntfNil(w) {
-										segment.Namespace = w.(string)
-									}
-
-									if w, ok := segmentMapStrToI["tenant"]; ok && !isIntfNil(w) {
-										segment.Tenant = w.(string)
-									}
-
-								}
-
-							}
-
-							if v, ok := cs["site"]; ok && !isIntfNil(v) {
-
-								sl := v.(*schema.Set).List()
-								site := &ves_io_schema_views.ObjectRefType{}
-								choiceInt.SiteSegment.Site = site
-								for _, set := range sl {
-									siteMapStrToI := set.(map[string]interface{})
-
-									if w, ok := siteMapStrToI["name"]; ok && !isIntfNil(w) {
-										site.Name = w.(string)
-									}
-
-									if w, ok := siteMapStrToI["namespace"]; ok && !isIntfNil(w) {
-										site.Namespace = w.(string)
-									}
-
-									if w, ok := siteMapStrToI["tenant"]; ok && !isIntfNil(w) {
-										site.Tenant = w.(string)
-									}
-
-								}
-
-							}
-
-						}
-
-					}
-
-					if v, ok := advertiseWhereMapStrToI["virtual_network"]; ok && !isIntfNil(v) && !choiceTypeFound {
-
-						choiceTypeFound = true
-						choiceInt := &ves_io_schema_views.WhereType_VirtualNetwork{}
-						choiceInt.VirtualNetwork = &ves_io_schema_views.WhereVirtualNetwork{}
-						advertiseWhere[i].Choice = choiceInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							v6VipChoiceTypeFound := false
-
-							if v, ok := cs["default_v6_vip"]; ok && !isIntfNil(v) && !v6VipChoiceTypeFound {
-
-								v6VipChoiceTypeFound = true
-
-								if v.(bool) {
-									v6VipChoiceInt := &ves_io_schema_views.WhereVirtualNetwork_DefaultV6Vip{}
-									v6VipChoiceInt.DefaultV6Vip = &ves_io_schema.Empty{}
-									choiceInt.VirtualNetwork.V6VipChoice = v6VipChoiceInt
-								}
-
-							}
-
-							if v, ok := cs["specific_v6_vip"]; ok && !isIntfNil(v) && !v6VipChoiceTypeFound {
-
-								v6VipChoiceTypeFound = true
-								v6VipChoiceInt := &ves_io_schema_views.WhereVirtualNetwork_SpecificV6Vip{}
-
-								choiceInt.VirtualNetwork.V6VipChoice = v6VipChoiceInt
-
-								v6VipChoiceInt.SpecificV6Vip = v.(string)
-
-							}
-
-							vipChoiceTypeFound := false
-
-							if v, ok := cs["default_vip"]; ok && !isIntfNil(v) && !vipChoiceTypeFound {
-
-								vipChoiceTypeFound = true
-
-								if v.(bool) {
-									vipChoiceInt := &ves_io_schema_views.WhereVirtualNetwork_DefaultVip{}
-									vipChoiceInt.DefaultVip = &ves_io_schema.Empty{}
-									choiceInt.VirtualNetwork.VipChoice = vipChoiceInt
-								}
-
-							}
-
-							if v, ok := cs["specific_vip"]; ok && !isIntfNil(v) && !vipChoiceTypeFound {
-
-								vipChoiceTypeFound = true
-								vipChoiceInt := &ves_io_schema_views.WhereVirtualNetwork_SpecificVip{}
-
-								choiceInt.VirtualNetwork.VipChoice = vipChoiceInt
-
-								vipChoiceInt.SpecificVip = v.(string)
-
-							}
-
-							if v, ok := cs["virtual_network"]; ok && !isIntfNil(v) {
-
-								sl := v.(*schema.Set).List()
-								virtualNetwork := &ves_io_schema_views.ObjectRefType{}
-								choiceInt.VirtualNetwork.VirtualNetwork = virtualNetwork
-								for _, set := range sl {
-									virtualNetworkMapStrToI := set.(map[string]interface{})
-
-									if w, ok := virtualNetworkMapStrToI["name"]; ok && !isIntfNil(w) {
-										virtualNetwork.Name = w.(string)
-									}
-
-									if w, ok := virtualNetworkMapStrToI["namespace"]; ok && !isIntfNil(w) {
-										virtualNetwork.Namespace = w.(string)
-									}
-
-									if w, ok := virtualNetworkMapStrToI["tenant"]; ok && !isIntfNil(w) {
-										virtualNetwork.Tenant = w.(string)
-									}
-
-								}
-
-							}
-
-						}
-
-					}
-
-					if v, ok := advertiseWhereMapStrToI["virtual_site"]; ok && !isIntfNil(v) && !choiceTypeFound {
-
-						choiceTypeFound = true
-						choiceInt := &ves_io_schema_views.WhereType_VirtualSite{}
-						choiceInt.VirtualSite = &ves_io_schema_views.WhereVirtualSite{}
-						advertiseWhere[i].Choice = choiceInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["network"]; ok && !isIntfNil(v) {
-
-								choiceInt.VirtualSite.Network = ves_io_schema_views.SiteNetwork(ves_io_schema_views.SiteNetwork_value[v.(string)])
-
-							}
-
-							if v, ok := cs["virtual_site"]; ok && !isIntfNil(v) {
-
-								sl := v.(*schema.Set).List()
-								virtualSite := &ves_io_schema_views.ObjectRefType{}
-								choiceInt.VirtualSite.VirtualSite = virtualSite
-								for _, set := range sl {
-									virtualSiteMapStrToI := set.(map[string]interface{})
-
-									if w, ok := virtualSiteMapStrToI["name"]; ok && !isIntfNil(w) {
-										virtualSite.Name = w.(string)
-									}
-
-									if w, ok := virtualSiteMapStrToI["namespace"]; ok && !isIntfNil(w) {
-										virtualSite.Namespace = w.(string)
-									}
-
-									if w, ok := virtualSiteMapStrToI["tenant"]; ok && !isIntfNil(w) {
-										virtualSite.Tenant = w.(string)
-									}
-
-								}
-
-							}
-
-						}
-
-					}
-
-					if v, ok := advertiseWhereMapStrToI["virtual_site_with_vip"]; ok && !isIntfNil(v) && !choiceTypeFound {
-
-						choiceTypeFound = true
-						choiceInt := &ves_io_schema_views.WhereType_VirtualSiteWithVip{}
-						choiceInt.VirtualSiteWithVip = &ves_io_schema_views.WhereVirtualSiteSpecifiedVIP{}
-						advertiseWhere[i].Choice = choiceInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["ip"]; ok && !isIntfNil(v) {
-
-								choiceInt.VirtualSiteWithVip.Ip = v.(string)
-
-							}
-
-							if v, ok := cs["ipv6"]; ok && !isIntfNil(v) {
-
-								choiceInt.VirtualSiteWithVip.Ipv6 = v.(string)
-
-							}
-
-							if v, ok := cs["network"]; ok && !isIntfNil(v) {
-
-								choiceInt.VirtualSiteWithVip.Network = ves_io_schema_views.SiteNetworkSpecifiedVIP(ves_io_schema_views.SiteNetworkSpecifiedVIP_value[v.(string)])
-
-							}
-
-							if v, ok := cs["virtual_site"]; ok && !isIntfNil(v) {
-
-								sl := v.(*schema.Set).List()
-								virtualSite := &ves_io_schema_views.ObjectRefType{}
-								choiceInt.VirtualSiteWithVip.VirtualSite = virtualSite
-								for _, set := range sl {
-									virtualSiteMapStrToI := set.(map[string]interface{})
-
-									if w, ok := virtualSiteMapStrToI["name"]; ok && !isIntfNil(w) {
-										virtualSite.Name = w.(string)
-									}
-
-									if w, ok := virtualSiteMapStrToI["namespace"]; ok && !isIntfNil(w) {
-										virtualSite.Namespace = w.(string)
-									}
-
-									if w, ok := virtualSiteMapStrToI["tenant"]; ok && !isIntfNil(w) {
-										virtualSite.Tenant = w.(string)
-									}
-
-								}
-
-							}
-
-						}
-
-					}
-
-					if v, ok := advertiseWhereMapStrToI["vk8s_service"]; ok && !isIntfNil(v) && !choiceTypeFound {
-
-						choiceTypeFound = true
-						choiceInt := &ves_io_schema_views.WhereType_Vk8SService{}
-						choiceInt.Vk8SService = &ves_io_schema_views.WhereVK8SService{}
-						advertiseWhere[i].Choice = choiceInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
+			if set != nil {
+				cs := set.(map[string]interface{})
+
+				if v, ok := cs["advertise_where"]; ok && !isIntfNil(v) {
+
+					sl := v.([]interface{})
+					advertiseWhere := make([]*ves_io_schema_views.WhereType, len(sl))
+					advertiseChoiceInt.AdvertiseCustom.AdvertiseWhere = advertiseWhere
+					for i, set := range sl {
+						if set != nil {
+							advertiseWhere[i] = &ves_io_schema_views.WhereType{}
+							advertiseWhereMapStrToI := set.(map[string]interface{})
 
 							choiceTypeFound := false
 
-							if v, ok := cs["site"]; ok && !isIntfNil(v) && !choiceTypeFound {
+							if v, ok := advertiseWhereMapStrToI["advertise_on_public"]; ok && !isIntfNil(v) && !choiceTypeFound {
 
 								choiceTypeFound = true
-								choiceIntNew := &ves_io_schema_views.WhereVK8SService_Site{}
-								choiceIntNew.Site = &ves_io_schema_views.ObjectRefType{}
-								choiceInt.Vk8SService.Choice = choiceIntNew
+								choiceInt := &ves_io_schema_views.WhereType_AdvertiseOnPublic{}
+								choiceInt.AdvertiseOnPublic = &ves_io_schema_views.AdvertisePublic{}
+								advertiseWhere[i].Choice = choiceInt
 
-								sl := v.(*schema.Set).List()
+								sl := v.([]interface{})
 								for _, set := range sl {
-									cs := set.(map[string]interface{})
+									if set != nil {
+										cs := set.(map[string]interface{})
 
-									if v, ok := cs["name"]; ok && !isIntfNil(v) {
+										if v, ok := cs["public_ip"]; ok && !isIntfNil(v) {
 
-										choiceIntNew.Site.Name = v.(string)
+											sl := v.([]interface{})
+											publicIp := &ves_io_schema_views.ObjectRefType{}
+											choiceInt.AdvertiseOnPublic.PublicIp = publicIp
+											for _, set := range sl {
+												if set != nil {
+													publicIpMapStrToI := set.(map[string]interface{})
+
+													if w, ok := publicIpMapStrToI["name"]; ok && !isIntfNil(w) {
+														publicIp.Name = w.(string)
+													}
+
+													if w, ok := publicIpMapStrToI["namespace"]; ok && !isIntfNil(w) {
+														publicIp.Namespace = w.(string)
+													}
+
+													if w, ok := publicIpMapStrToI["tenant"]; ok && !isIntfNil(w) {
+														publicIp.Tenant = w.(string)
+													}
+
+												}
+											}
+
+										}
 
 									}
-
-									if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
-
-										choiceIntNew.Site.Namespace = v.(string)
-
-									}
-
-									if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
-
-										choiceIntNew.Site.Tenant = v.(string)
-
-									}
-
 								}
 
 							}
 
-							if v, ok := cs["virtual_site"]; ok && !isIntfNil(v) && !choiceTypeFound {
+							if v, ok := advertiseWhereMapStrToI["site"]; ok && !isIntfNil(v) && !choiceTypeFound {
 
 								choiceTypeFound = true
-								choiceIntNew := &ves_io_schema_views.WhereVK8SService_VirtualSite{}
-								choiceIntNew.VirtualSite = &ves_io_schema_views.ObjectRefType{}
-								choiceInt.Vk8SService.Choice = choiceIntNew
+								choiceInt := &ves_io_schema_views.WhereType_Site{}
+								choiceInt.Site = &ves_io_schema_views.WhereSite{}
+								advertiseWhere[i].Choice = choiceInt
 
-								sl := v.(*schema.Set).List()
+								sl := v.([]interface{})
 								for _, set := range sl {
-									cs := set.(map[string]interface{})
+									if set != nil {
+										cs := set.(map[string]interface{})
 
-									if v, ok := cs["name"]; ok && !isIntfNil(v) {
+										if v, ok := cs["ip"]; ok && !isIntfNil(v) {
 
-										choiceIntNew.VirtualSite.Name = v.(string)
+											choiceInt.Site.Ip = v.(string)
+
+										}
+
+										if v, ok := cs["ipv6"]; ok && !isIntfNil(v) {
+
+											choiceInt.Site.Ipv6 = v.(string)
+
+										}
+
+										if v, ok := cs["network"]; ok && !isIntfNil(v) {
+
+											choiceInt.Site.Network = ves_io_schema_views.SiteNetwork(ves_io_schema_views.SiteNetwork_value[v.(string)])
+
+										}
+
+										if v, ok := cs["site"]; ok && !isIntfNil(v) {
+
+											sl := v.([]interface{})
+											site := &ves_io_schema_views.ObjectRefType{}
+											choiceInt.Site.Site = site
+											for _, set := range sl {
+												if set != nil {
+													siteMapStrToI := set.(map[string]interface{})
+
+													if w, ok := siteMapStrToI["name"]; ok && !isIntfNil(w) {
+														site.Name = w.(string)
+													}
+
+													if w, ok := siteMapStrToI["namespace"]; ok && !isIntfNil(w) {
+														site.Namespace = w.(string)
+													}
+
+													if w, ok := siteMapStrToI["tenant"]; ok && !isIntfNil(w) {
+														site.Tenant = w.(string)
+													}
+
+												}
+											}
+
+										}
 
 									}
+								}
 
-									if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+							}
 
-										choiceIntNew.VirtualSite.Namespace = v.(string)
+							if v, ok := advertiseWhereMapStrToI["site_segment"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+								choiceTypeFound = true
+								choiceInt := &ves_io_schema_views.WhereType_SiteSegment{}
+								choiceInt.SiteSegment = &ves_io_schema_views.WhereSiteSegment{}
+								advertiseWhere[i].Choice = choiceInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["ip"]; ok && !isIntfNil(v) {
+
+											choiceInt.SiteSegment.Ip = v.(string)
+
+										}
+
+										if v, ok := cs["ipv6"]; ok && !isIntfNil(v) {
+
+											choiceInt.SiteSegment.Ipv6 = v.(string)
+
+										}
+
+										if v, ok := cs["segment"]; ok && !isIntfNil(v) {
+
+											sl := v.([]interface{})
+											segment := &ves_io_schema_views.ObjectRefType{}
+											choiceInt.SiteSegment.Segment = segment
+											for _, set := range sl {
+												if set != nil {
+													segmentMapStrToI := set.(map[string]interface{})
+
+													if w, ok := segmentMapStrToI["name"]; ok && !isIntfNil(w) {
+														segment.Name = w.(string)
+													}
+
+													if w, ok := segmentMapStrToI["namespace"]; ok && !isIntfNil(w) {
+														segment.Namespace = w.(string)
+													}
+
+													if w, ok := segmentMapStrToI["tenant"]; ok && !isIntfNil(w) {
+														segment.Tenant = w.(string)
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := cs["site"]; ok && !isIntfNil(v) {
+
+											sl := v.([]interface{})
+											site := &ves_io_schema_views.ObjectRefType{}
+											choiceInt.SiteSegment.Site = site
+											for _, set := range sl {
+												if set != nil {
+													siteMapStrToI := set.(map[string]interface{})
+
+													if w, ok := siteMapStrToI["name"]; ok && !isIntfNil(w) {
+														site.Name = w.(string)
+													}
+
+													if w, ok := siteMapStrToI["namespace"]; ok && !isIntfNil(w) {
+														site.Namespace = w.(string)
+													}
+
+													if w, ok := siteMapStrToI["tenant"]; ok && !isIntfNil(w) {
+														site.Tenant = w.(string)
+													}
+
+												}
+											}
+
+										}
 
 									}
+								}
 
-									if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+							}
 
-										choiceIntNew.VirtualSite.Tenant = v.(string)
+							if v, ok := advertiseWhereMapStrToI["virtual_network"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+								choiceTypeFound = true
+								choiceInt := &ves_io_schema_views.WhereType_VirtualNetwork{}
+								choiceInt.VirtualNetwork = &ves_io_schema_views.WhereVirtualNetwork{}
+								advertiseWhere[i].Choice = choiceInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										v6VipChoiceTypeFound := false
+
+										if v, ok := cs["default_v6_vip"]; ok && !isIntfNil(v) && !v6VipChoiceTypeFound {
+
+											v6VipChoiceTypeFound = true
+
+											if v.(bool) {
+												v6VipChoiceInt := &ves_io_schema_views.WhereVirtualNetwork_DefaultV6Vip{}
+												v6VipChoiceInt.DefaultV6Vip = &ves_io_schema.Empty{}
+												choiceInt.VirtualNetwork.V6VipChoice = v6VipChoiceInt
+											}
+
+										}
+
+										if v, ok := cs["specific_v6_vip"]; ok && !isIntfNil(v) && !v6VipChoiceTypeFound {
+
+											v6VipChoiceTypeFound = true
+											v6VipChoiceInt := &ves_io_schema_views.WhereVirtualNetwork_SpecificV6Vip{}
+
+											choiceInt.VirtualNetwork.V6VipChoice = v6VipChoiceInt
+
+											v6VipChoiceInt.SpecificV6Vip = v.(string)
+
+										}
+
+										vipChoiceTypeFound := false
+
+										if v, ok := cs["default_vip"]; ok && !isIntfNil(v) && !vipChoiceTypeFound {
+
+											vipChoiceTypeFound = true
+
+											if v.(bool) {
+												vipChoiceInt := &ves_io_schema_views.WhereVirtualNetwork_DefaultVip{}
+												vipChoiceInt.DefaultVip = &ves_io_schema.Empty{}
+												choiceInt.VirtualNetwork.VipChoice = vipChoiceInt
+											}
+
+										}
+
+										if v, ok := cs["specific_vip"]; ok && !isIntfNil(v) && !vipChoiceTypeFound {
+
+											vipChoiceTypeFound = true
+											vipChoiceInt := &ves_io_schema_views.WhereVirtualNetwork_SpecificVip{}
+
+											choiceInt.VirtualNetwork.VipChoice = vipChoiceInt
+
+											vipChoiceInt.SpecificVip = v.(string)
+
+										}
+
+										if v, ok := cs["virtual_network"]; ok && !isIntfNil(v) {
+
+											sl := v.([]interface{})
+											virtualNetwork := &ves_io_schema_views.ObjectRefType{}
+											choiceInt.VirtualNetwork.VirtualNetwork = virtualNetwork
+											for _, set := range sl {
+												if set != nil {
+													virtualNetworkMapStrToI := set.(map[string]interface{})
+
+													if w, ok := virtualNetworkMapStrToI["name"]; ok && !isIntfNil(w) {
+														virtualNetwork.Name = w.(string)
+													}
+
+													if w, ok := virtualNetworkMapStrToI["namespace"]; ok && !isIntfNil(w) {
+														virtualNetwork.Namespace = w.(string)
+													}
+
+													if w, ok := virtualNetworkMapStrToI["tenant"]; ok && !isIntfNil(w) {
+														virtualNetwork.Tenant = w.(string)
+													}
+
+												}
+											}
+
+										}
 
 									}
+								}
 
+							}
+
+							if v, ok := advertiseWhereMapStrToI["virtual_site"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+								choiceTypeFound = true
+								choiceInt := &ves_io_schema_views.WhereType_VirtualSite{}
+								choiceInt.VirtualSite = &ves_io_schema_views.WhereVirtualSite{}
+								advertiseWhere[i].Choice = choiceInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["network"]; ok && !isIntfNil(v) {
+
+											choiceInt.VirtualSite.Network = ves_io_schema_views.SiteNetwork(ves_io_schema_views.SiteNetwork_value[v.(string)])
+
+										}
+
+										if v, ok := cs["virtual_site"]; ok && !isIntfNil(v) {
+
+											sl := v.([]interface{})
+											virtualSite := &ves_io_schema_views.ObjectRefType{}
+											choiceInt.VirtualSite.VirtualSite = virtualSite
+											for _, set := range sl {
+												if set != nil {
+													virtualSiteMapStrToI := set.(map[string]interface{})
+
+													if w, ok := virtualSiteMapStrToI["name"]; ok && !isIntfNil(w) {
+														virtualSite.Name = w.(string)
+													}
+
+													if w, ok := virtualSiteMapStrToI["namespace"]; ok && !isIntfNil(w) {
+														virtualSite.Namespace = w.(string)
+													}
+
+													if w, ok := virtualSiteMapStrToI["tenant"]; ok && !isIntfNil(w) {
+														virtualSite.Tenant = w.(string)
+													}
+
+												}
+											}
+
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := advertiseWhereMapStrToI["virtual_site_with_vip"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+								choiceTypeFound = true
+								choiceInt := &ves_io_schema_views.WhereType_VirtualSiteWithVip{}
+								choiceInt.VirtualSiteWithVip = &ves_io_schema_views.WhereVirtualSiteSpecifiedVIP{}
+								advertiseWhere[i].Choice = choiceInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["ip"]; ok && !isIntfNil(v) {
+
+											choiceInt.VirtualSiteWithVip.Ip = v.(string)
+
+										}
+
+										if v, ok := cs["ipv6"]; ok && !isIntfNil(v) {
+
+											choiceInt.VirtualSiteWithVip.Ipv6 = v.(string)
+
+										}
+
+										if v, ok := cs["network"]; ok && !isIntfNil(v) {
+
+											choiceInt.VirtualSiteWithVip.Network = ves_io_schema_views.SiteNetworkSpecifiedVIP(ves_io_schema_views.SiteNetworkSpecifiedVIP_value[v.(string)])
+
+										}
+
+										if v, ok := cs["virtual_site"]; ok && !isIntfNil(v) {
+
+											sl := v.([]interface{})
+											virtualSite := &ves_io_schema_views.ObjectRefType{}
+											choiceInt.VirtualSiteWithVip.VirtualSite = virtualSite
+											for _, set := range sl {
+												if set != nil {
+													virtualSiteMapStrToI := set.(map[string]interface{})
+
+													if w, ok := virtualSiteMapStrToI["name"]; ok && !isIntfNil(w) {
+														virtualSite.Name = w.(string)
+													}
+
+													if w, ok := virtualSiteMapStrToI["namespace"]; ok && !isIntfNil(w) {
+														virtualSite.Namespace = w.(string)
+													}
+
+													if w, ok := virtualSiteMapStrToI["tenant"]; ok && !isIntfNil(w) {
+														virtualSite.Tenant = w.(string)
+													}
+
+												}
+											}
+
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := advertiseWhereMapStrToI["vk8s_service"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+								choiceTypeFound = true
+								choiceInt := &ves_io_schema_views.WhereType_Vk8SService{}
+								choiceInt.Vk8SService = &ves_io_schema_views.WhereVK8SService{}
+								advertiseWhere[i].Choice = choiceInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										choiceTypeFound := false
+
+										if v, ok := cs["site"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+											choiceTypeFound = true
+											choiceIntNew := &ves_io_schema_views.WhereVK8SService_Site{}
+											choiceIntNew.Site = &ves_io_schema_views.ObjectRefType{}
+											choiceInt.Vk8SService.Choice = choiceIntNew
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+														choiceIntNew.Site.Name = v.(string)
+
+													}
+
+													if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+														choiceIntNew.Site.Namespace = v.(string)
+
+													}
+
+													if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+														choiceIntNew.Site.Tenant = v.(string)
+
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := cs["virtual_site"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+											choiceTypeFound = true
+											choiceIntNew := &ves_io_schema_views.WhereVK8SService_VirtualSite{}
+											choiceIntNew.VirtualSite = &ves_io_schema_views.ObjectRefType{}
+											choiceInt.Vk8SService.Choice = choiceIntNew
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+														choiceIntNew.VirtualSite.Name = v.(string)
+
+													}
+
+													if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+														choiceIntNew.VirtualSite.Namespace = v.(string)
+
+													}
+
+													if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+														choiceIntNew.VirtualSite.Tenant = v.(string)
+
+													}
+
+												}
+											}
+
+										}
+
+									}
+								}
+
+							}
+
+							portChoiceTypeFound := false
+
+							if v, ok := advertiseWhereMapStrToI["port"]; ok && !isIntfNil(v) && !portChoiceTypeFound {
+
+								portChoiceTypeFound = true
+								portChoiceInt := &ves_io_schema_views.WhereType_Port{}
+
+								advertiseWhere[i].PortChoice = portChoiceInt
+
+								portChoiceInt.Port = uint32(v.(int))
+
+							}
+
+							if v, ok := advertiseWhereMapStrToI["port_ranges"]; ok && !isIntfNil(v) && !portChoiceTypeFound {
+
+								portChoiceTypeFound = true
+								portChoiceInt := &ves_io_schema_views.WhereType_PortRanges{}
+
+								advertiseWhere[i].PortChoice = portChoiceInt
+
+								portChoiceInt.PortRanges = v.(string)
+
+							}
+
+							if v, ok := advertiseWhereMapStrToI["use_default_port"]; ok && !isIntfNil(v) && !portChoiceTypeFound {
+
+								portChoiceTypeFound = true
+
+								if v.(bool) {
+									portChoiceInt := &ves_io_schema_views.WhereType_UseDefaultPort{}
+									portChoiceInt.UseDefaultPort = &ves_io_schema.Empty{}
+									advertiseWhere[i].PortChoice = portChoiceInt
 								}
 
 							}
 
 						}
-
-					}
-
-					portChoiceTypeFound := false
-
-					if v, ok := advertiseWhereMapStrToI["port"]; ok && !isIntfNil(v) && !portChoiceTypeFound {
-
-						portChoiceTypeFound = true
-						portChoiceInt := &ves_io_schema_views.WhereType_Port{}
-
-						advertiseWhere[i].PortChoice = portChoiceInt
-
-						portChoiceInt.Port = uint32(v.(int))
-
-					}
-
-					if v, ok := advertiseWhereMapStrToI["port_ranges"]; ok && !isIntfNil(v) && !portChoiceTypeFound {
-
-						portChoiceTypeFound = true
-						portChoiceInt := &ves_io_schema_views.WhereType_PortRanges{}
-
-						advertiseWhere[i].PortChoice = portChoiceInt
-
-						portChoiceInt.PortRanges = v.(string)
-
-					}
-
-					if v, ok := advertiseWhereMapStrToI["use_default_port"]; ok && !isIntfNil(v) && !portChoiceTypeFound {
-
-						portChoiceTypeFound = true
-
-						if v.(bool) {
-							portChoiceInt := &ves_io_schema_views.WhereType_UseDefaultPort{}
-							portChoiceInt.UseDefaultPort = &ves_io_schema.Empty{}
-							advertiseWhere[i].PortChoice = portChoiceInt
-						}
-
 					}
 
 				}
 
 			}
-
 		}
 
 	}
@@ -4457,34 +4662,38 @@ func resourceVolterraTcpLoadbalancerUpdate(d *schema.ResourceData, meta interfac
 		advertiseChoiceInt.AdvertiseOnPublic = &ves_io_schema_views.AdvertisePublic{}
 		updateSpec.AdvertiseChoice = advertiseChoiceInt
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
+			if set != nil {
+				cs := set.(map[string]interface{})
 
-			if v, ok := cs["public_ip"]; ok && !isIntfNil(v) {
+				if v, ok := cs["public_ip"]; ok && !isIntfNil(v) {
 
-				sl := v.(*schema.Set).List()
-				publicIp := &ves_io_schema_views.ObjectRefType{}
-				advertiseChoiceInt.AdvertiseOnPublic.PublicIp = publicIp
-				for _, set := range sl {
-					publicIpMapStrToI := set.(map[string]interface{})
+					sl := v.([]interface{})
+					publicIp := &ves_io_schema_views.ObjectRefType{}
+					advertiseChoiceInt.AdvertiseOnPublic.PublicIp = publicIp
+					for _, set := range sl {
+						if set != nil {
+							publicIpMapStrToI := set.(map[string]interface{})
 
-					if w, ok := publicIpMapStrToI["name"]; ok && !isIntfNil(w) {
-						publicIp.Name = w.(string)
-					}
+							if w, ok := publicIpMapStrToI["name"]; ok && !isIntfNil(w) {
+								publicIp.Name = w.(string)
+							}
 
-					if w, ok := publicIpMapStrToI["namespace"]; ok && !isIntfNil(w) {
-						publicIp.Namespace = w.(string)
-					}
+							if w, ok := publicIpMapStrToI["namespace"]; ok && !isIntfNil(w) {
+								publicIp.Namespace = w.(string)
+							}
 
-					if w, ok := publicIpMapStrToI["tenant"]; ok && !isIntfNil(w) {
-						publicIp.Tenant = w.(string)
+							if w, ok := publicIpMapStrToI["tenant"]; ok && !isIntfNil(w) {
+								publicIp.Tenant = w.(string)
+							}
+
+						}
 					}
 
 				}
 
 			}
-
 		}
 
 	}
@@ -4634,812 +4843,858 @@ func resourceVolterraTcpLoadbalancerUpdate(d *schema.ResourceData, meta interfac
 		loadbalancerTypeInt.TlsTcp = &ves_io_schema_views_tcp_loadbalancer.ProxyTypeTLSTCP{}
 		updateSpec.LoadbalancerType = loadbalancerTypeInt
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
+			if set != nil {
+				cs := set.(map[string]interface{})
 
-			tlsCertificatesChoiceTypeFound := false
+				tlsCertificatesChoiceTypeFound := false
 
-			if v, ok := cs["tls_cert_params"]; ok && !isIntfNil(v) && !tlsCertificatesChoiceTypeFound {
+				if v, ok := cs["tls_cert_params"]; ok && !isIntfNil(v) && !tlsCertificatesChoiceTypeFound {
 
-				tlsCertificatesChoiceTypeFound = true
-				tlsCertificatesChoiceInt := &ves_io_schema_views_tcp_loadbalancer.ProxyTypeTLSTCP_TlsCertParams{}
-				tlsCertificatesChoiceInt.TlsCertParams = &ves_io_schema_views.DownstreamTLSCertsParams{}
-				loadbalancerTypeInt.TlsTcp.TlsCertificatesChoice = tlsCertificatesChoiceInt
+					tlsCertificatesChoiceTypeFound = true
+					tlsCertificatesChoiceInt := &ves_io_schema_views_tcp_loadbalancer.ProxyTypeTLSTCP_TlsCertParams{}
+					tlsCertificatesChoiceInt.TlsCertParams = &ves_io_schema_views.DownstreamTLSCertsParams{}
+					loadbalancerTypeInt.TlsTcp.TlsCertificatesChoice = tlsCertificatesChoiceInt
 
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
-
-					if v, ok := cs["certificates"]; ok && !isIntfNil(v) {
-
-						sl := v.([]interface{})
-						certificatesInt := make([]*ves_io_schema_views.ObjectRefType, len(sl))
-						tlsCertificatesChoiceInt.TlsCertParams.Certificates = certificatesInt
-						for i, ps := range sl {
-
-							cMapToStrVal := ps.(map[string]interface{})
-							certificatesInt[i] = &ves_io_schema_views.ObjectRefType{}
-
-							if v, ok := cMapToStrVal["name"]; ok && !isIntfNil(v) {
-								certificatesInt[i].Name = v.(string)
-							}
-
-							if v, ok := cMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-								certificatesInt[i].Namespace = v.(string)
-							}
-
-							if v, ok := cMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-								certificatesInt[i].Tenant = v.(string)
-							}
-
-						}
-
-					}
-
-					mtlsChoiceTypeFound := false
-
-					if v, ok := cs["no_mtls"]; ok && !isIntfNil(v) && !mtlsChoiceTypeFound {
-
-						mtlsChoiceTypeFound = true
-
-						if v.(bool) {
-							mtlsChoiceInt := &ves_io_schema_views.DownstreamTLSCertsParams_NoMtls{}
-							mtlsChoiceInt.NoMtls = &ves_io_schema.Empty{}
-							tlsCertificatesChoiceInt.TlsCertParams.MtlsChoice = mtlsChoiceInt
-						}
-
-					}
-
-					if v, ok := cs["use_mtls"]; ok && !isIntfNil(v) && !mtlsChoiceTypeFound {
-
-						mtlsChoiceTypeFound = true
-						mtlsChoiceInt := &ves_io_schema_views.DownstreamTLSCertsParams_UseMtls{}
-						mtlsChoiceInt.UseMtls = &ves_io_schema_views.DownstreamTlsValidationContext{}
-						tlsCertificatesChoiceInt.TlsCertParams.MtlsChoice = mtlsChoiceInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
 							cs := set.(map[string]interface{})
 
-							if v, ok := cs["client_certificate_optional"]; ok && !isIntfNil(v) {
+							if v, ok := cs["certificates"]; ok && !isIntfNil(v) {
 
-								mtlsChoiceInt.UseMtls.ClientCertificateOptional = v.(bool)
+								sl := v.([]interface{})
+								certificatesInt := make([]*ves_io_schema_views.ObjectRefType, len(sl))
+								tlsCertificatesChoiceInt.TlsCertParams.Certificates = certificatesInt
+								for i, ps := range sl {
 
-							}
+									cMapToStrVal := ps.(map[string]interface{})
+									certificatesInt[i] = &ves_io_schema_views.ObjectRefType{}
 
-							crlChoiceTypeFound := false
-
-							if v, ok := cs["crl"]; ok && !isIntfNil(v) && !crlChoiceTypeFound {
-
-								crlChoiceTypeFound = true
-								crlChoiceInt := &ves_io_schema_views.DownstreamTlsValidationContext_Crl{}
-								crlChoiceInt.Crl = &ves_io_schema_views.ObjectRefType{}
-								mtlsChoiceInt.UseMtls.CrlChoice = crlChoiceInt
-
-								sl := v.(*schema.Set).List()
-								for _, set := range sl {
-									cs := set.(map[string]interface{})
-
-									if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-										crlChoiceInt.Crl.Name = v.(string)
-
+									if v, ok := cMapToStrVal["name"]; ok && !isIntfNil(v) {
+										certificatesInt[i].Name = v.(string)
 									}
 
-									if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
-
-										crlChoiceInt.Crl.Namespace = v.(string)
-
+									if v, ok := cMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+										certificatesInt[i].Namespace = v.(string)
 									}
 
-									if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
-
-										crlChoiceInt.Crl.Tenant = v.(string)
-
+									if v, ok := cMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+										certificatesInt[i].Tenant = v.(string)
 									}
 
 								}
 
 							}
 
-							if v, ok := cs["no_crl"]; ok && !isIntfNil(v) && !crlChoiceTypeFound {
+							mtlsChoiceTypeFound := false
 
-								crlChoiceTypeFound = true
+							if v, ok := cs["no_mtls"]; ok && !isIntfNil(v) && !mtlsChoiceTypeFound {
+
+								mtlsChoiceTypeFound = true
 
 								if v.(bool) {
-									crlChoiceInt := &ves_io_schema_views.DownstreamTlsValidationContext_NoCrl{}
-									crlChoiceInt.NoCrl = &ves_io_schema.Empty{}
-									mtlsChoiceInt.UseMtls.CrlChoice = crlChoiceInt
+									mtlsChoiceInt := &ves_io_schema_views.DownstreamTLSCertsParams_NoMtls{}
+									mtlsChoiceInt.NoMtls = &ves_io_schema.Empty{}
+									tlsCertificatesChoiceInt.TlsCertParams.MtlsChoice = mtlsChoiceInt
 								}
 
 							}
 
-							trustedCaChoiceTypeFound := false
+							if v, ok := cs["use_mtls"]; ok && !isIntfNil(v) && !mtlsChoiceTypeFound {
 
-							if v, ok := cs["trusted_ca"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
+								mtlsChoiceTypeFound = true
+								mtlsChoiceInt := &ves_io_schema_views.DownstreamTLSCertsParams_UseMtls{}
+								mtlsChoiceInt.UseMtls = &ves_io_schema_views.DownstreamTlsValidationContext{}
+								tlsCertificatesChoiceInt.TlsCertParams.MtlsChoice = mtlsChoiceInt
 
-								trustedCaChoiceTypeFound = true
-								trustedCaChoiceInt := &ves_io_schema_views.DownstreamTlsValidationContext_TrustedCa{}
-								trustedCaChoiceInt.TrustedCa = &ves_io_schema_views.ObjectRefType{}
-								mtlsChoiceInt.UseMtls.TrustedCaChoice = trustedCaChoiceInt
-
-								sl := v.(*schema.Set).List()
+								sl := v.([]interface{})
 								for _, set := range sl {
-									cs := set.(map[string]interface{})
+									if set != nil {
+										cs := set.(map[string]interface{})
 
-									if v, ok := cs["name"]; ok && !isIntfNil(v) {
+										if v, ok := cs["client_certificate_optional"]; ok && !isIntfNil(v) {
 
-										trustedCaChoiceInt.TrustedCa.Name = v.(string)
+											mtlsChoiceInt.UseMtls.ClientCertificateOptional = v.(bool)
 
-									}
-
-									if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
-
-										trustedCaChoiceInt.TrustedCa.Namespace = v.(string)
-
-									}
-
-									if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
-
-										trustedCaChoiceInt.TrustedCa.Tenant = v.(string)
-
-									}
-
-								}
-
-							}
-
-							if v, ok := cs["trusted_ca_url"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
-
-								trustedCaChoiceTypeFound = true
-								trustedCaChoiceInt := &ves_io_schema_views.DownstreamTlsValidationContext_TrustedCaUrl{}
-
-								mtlsChoiceInt.UseMtls.TrustedCaChoice = trustedCaChoiceInt
-
-								trustedCaChoiceInt.TrustedCaUrl = v.(string)
-
-							}
-
-							xfccHeaderTypeFound := false
-
-							if v, ok := cs["xfcc_disabled"]; ok && !isIntfNil(v) && !xfccHeaderTypeFound {
-
-								xfccHeaderTypeFound = true
-
-								if v.(bool) {
-									xfccHeaderInt := &ves_io_schema_views.DownstreamTlsValidationContext_XfccDisabled{}
-									xfccHeaderInt.XfccDisabled = &ves_io_schema.Empty{}
-									mtlsChoiceInt.UseMtls.XfccHeader = xfccHeaderInt
-								}
-
-							}
-
-							if v, ok := cs["xfcc_options"]; ok && !isIntfNil(v) && !xfccHeaderTypeFound {
-
-								xfccHeaderTypeFound = true
-								xfccHeaderInt := &ves_io_schema_views.DownstreamTlsValidationContext_XfccOptions{}
-								xfccHeaderInt.XfccOptions = &ves_io_schema_views.XfccHeaderKeys{}
-								mtlsChoiceInt.UseMtls.XfccHeader = xfccHeaderInt
-
-								sl := v.(*schema.Set).List()
-								for _, set := range sl {
-									cs := set.(map[string]interface{})
-
-									if v, ok := cs["xfcc_header_elements"]; ok && !isIntfNil(v) {
-
-										xfcc_header_elementsList := []ves_io_schema.XfccElement{}
-										for _, j := range v.([]interface{}) {
-											xfcc_header_elementsList = append(xfcc_header_elementsList, ves_io_schema.XfccElement(ves_io_schema.XfccElement_value[j.(string)]))
 										}
-										xfccHeaderInt.XfccOptions.XfccHeaderElements = xfcc_header_elementsList
+
+										crlChoiceTypeFound := false
+
+										if v, ok := cs["crl"]; ok && !isIntfNil(v) && !crlChoiceTypeFound {
+
+											crlChoiceTypeFound = true
+											crlChoiceInt := &ves_io_schema_views.DownstreamTlsValidationContext_Crl{}
+											crlChoiceInt.Crl = &ves_io_schema_views.ObjectRefType{}
+											mtlsChoiceInt.UseMtls.CrlChoice = crlChoiceInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+														crlChoiceInt.Crl.Name = v.(string)
+
+													}
+
+													if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+														crlChoiceInt.Crl.Namespace = v.(string)
+
+													}
+
+													if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+														crlChoiceInt.Crl.Tenant = v.(string)
+
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := cs["no_crl"]; ok && !isIntfNil(v) && !crlChoiceTypeFound {
+
+											crlChoiceTypeFound = true
+
+											if v.(bool) {
+												crlChoiceInt := &ves_io_schema_views.DownstreamTlsValidationContext_NoCrl{}
+												crlChoiceInt.NoCrl = &ves_io_schema.Empty{}
+												mtlsChoiceInt.UseMtls.CrlChoice = crlChoiceInt
+											}
+
+										}
+
+										trustedCaChoiceTypeFound := false
+
+										if v, ok := cs["trusted_ca"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
+
+											trustedCaChoiceTypeFound = true
+											trustedCaChoiceInt := &ves_io_schema_views.DownstreamTlsValidationContext_TrustedCa{}
+											trustedCaChoiceInt.TrustedCa = &ves_io_schema_views.ObjectRefType{}
+											mtlsChoiceInt.UseMtls.TrustedCaChoice = trustedCaChoiceInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+														trustedCaChoiceInt.TrustedCa.Name = v.(string)
+
+													}
+
+													if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+														trustedCaChoiceInt.TrustedCa.Namespace = v.(string)
+
+													}
+
+													if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+														trustedCaChoiceInt.TrustedCa.Tenant = v.(string)
+
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := cs["trusted_ca_url"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
+
+											trustedCaChoiceTypeFound = true
+											trustedCaChoiceInt := &ves_io_schema_views.DownstreamTlsValidationContext_TrustedCaUrl{}
+
+											mtlsChoiceInt.UseMtls.TrustedCaChoice = trustedCaChoiceInt
+
+											trustedCaChoiceInt.TrustedCaUrl = v.(string)
+
+										}
+
+										xfccHeaderTypeFound := false
+
+										if v, ok := cs["xfcc_disabled"]; ok && !isIntfNil(v) && !xfccHeaderTypeFound {
+
+											xfccHeaderTypeFound = true
+
+											if v.(bool) {
+												xfccHeaderInt := &ves_io_schema_views.DownstreamTlsValidationContext_XfccDisabled{}
+												xfccHeaderInt.XfccDisabled = &ves_io_schema.Empty{}
+												mtlsChoiceInt.UseMtls.XfccHeader = xfccHeaderInt
+											}
+
+										}
+
+										if v, ok := cs["xfcc_options"]; ok && !isIntfNil(v) && !xfccHeaderTypeFound {
+
+											xfccHeaderTypeFound = true
+											xfccHeaderInt := &ves_io_schema_views.DownstreamTlsValidationContext_XfccOptions{}
+											xfccHeaderInt.XfccOptions = &ves_io_schema_views.XfccHeaderKeys{}
+											mtlsChoiceInt.UseMtls.XfccHeader = xfccHeaderInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["xfcc_header_elements"]; ok && !isIntfNil(v) {
+
+														xfcc_header_elementsList := []ves_io_schema.XfccElement{}
+														for _, j := range v.([]interface{}) {
+															xfcc_header_elementsList = append(xfcc_header_elementsList, ves_io_schema.XfccElement(ves_io_schema.XfccElement_value[j.(string)]))
+														}
+														xfccHeaderInt.XfccOptions.XfccHeaderElements = xfcc_header_elementsList
+
+													}
+
+												}
+											}
+
+										}
 
 									}
+								}
 
+							}
+
+							if v, ok := cs["tls_config"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								tlsConfig := &ves_io_schema_views.TlsConfig{}
+								tlsCertificatesChoiceInt.TlsCertParams.TlsConfig = tlsConfig
+								for _, set := range sl {
+									if set != nil {
+										tlsConfigMapStrToI := set.(map[string]interface{})
+
+										choiceTypeFound := false
+
+										if v, ok := tlsConfigMapStrToI["custom_security"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+											choiceTypeFound = true
+											choiceInt := &ves_io_schema_views.TlsConfig_CustomSecurity{}
+											choiceInt.CustomSecurity = &ves_io_schema_views.CustomCiphers{}
+											tlsConfig.Choice = choiceInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["cipher_suites"]; ok && !isIntfNil(v) {
+
+														ls := make([]string, len(v.([]interface{})))
+														for i, v := range v.([]interface{}) {
+															ls[i] = v.(string)
+														}
+														choiceInt.CustomSecurity.CipherSuites = ls
+
+													}
+
+													if v, ok := cs["max_version"]; ok && !isIntfNil(v) {
+
+														choiceInt.CustomSecurity.MaxVersion = ves_io_schema.TlsProtocol(ves_io_schema.TlsProtocol_value[v.(string)])
+
+													}
+
+													if v, ok := cs["min_version"]; ok && !isIntfNil(v) {
+
+														choiceInt.CustomSecurity.MinVersion = ves_io_schema.TlsProtocol(ves_io_schema.TlsProtocol_value[v.(string)])
+
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := tlsConfigMapStrToI["default_security"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+											choiceTypeFound = true
+
+											if v.(bool) {
+												choiceInt := &ves_io_schema_views.TlsConfig_DefaultSecurity{}
+												choiceInt.DefaultSecurity = &ves_io_schema.Empty{}
+												tlsConfig.Choice = choiceInt
+											}
+
+										}
+
+										if v, ok := tlsConfigMapStrToI["low_security"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+											choiceTypeFound = true
+
+											if v.(bool) {
+												choiceInt := &ves_io_schema_views.TlsConfig_LowSecurity{}
+												choiceInt.LowSecurity = &ves_io_schema.Empty{}
+												tlsConfig.Choice = choiceInt
+											}
+
+										}
+
+										if v, ok := tlsConfigMapStrToI["medium_security"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+											choiceTypeFound = true
+
+											if v.(bool) {
+												choiceInt := &ves_io_schema_views.TlsConfig_MediumSecurity{}
+												choiceInt.MediumSecurity = &ves_io_schema.Empty{}
+												tlsConfig.Choice = choiceInt
+											}
+
+										}
+
+									}
 								}
 
 							}
 
 						}
-
 					}
 
-					if v, ok := cs["tls_config"]; ok && !isIntfNil(v) {
+				}
 
-						sl := v.(*schema.Set).List()
-						tlsConfig := &ves_io_schema_views.TlsConfig{}
-						tlsCertificatesChoiceInt.TlsCertParams.TlsConfig = tlsConfig
-						for _, set := range sl {
-							tlsConfigMapStrToI := set.(map[string]interface{})
+				if v, ok := cs["tls_parameters"]; ok && !isIntfNil(v) && !tlsCertificatesChoiceTypeFound {
 
-							choiceTypeFound := false
+					tlsCertificatesChoiceTypeFound = true
+					tlsCertificatesChoiceInt := &ves_io_schema_views_tcp_loadbalancer.ProxyTypeTLSTCP_TlsParameters{}
+					tlsCertificatesChoiceInt.TlsParameters = &ves_io_schema_views.DownstreamTlsParamsType{}
+					loadbalancerTypeInt.TlsTcp.TlsCertificatesChoice = tlsCertificatesChoiceInt
 
-							if v, ok := tlsConfigMapStrToI["custom_security"]; ok && !isIntfNil(v) && !choiceTypeFound {
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
 
-								choiceTypeFound = true
-								choiceInt := &ves_io_schema_views.TlsConfig_CustomSecurity{}
-								choiceInt.CustomSecurity = &ves_io_schema_views.CustomCiphers{}
-								tlsConfig.Choice = choiceInt
+							mtlsChoiceTypeFound := false
 
-								sl := v.(*schema.Set).List()
+							if v, ok := cs["no_mtls"]; ok && !isIntfNil(v) && !mtlsChoiceTypeFound {
+
+								mtlsChoiceTypeFound = true
+
+								if v.(bool) {
+									mtlsChoiceInt := &ves_io_schema_views.DownstreamTlsParamsType_NoMtls{}
+									mtlsChoiceInt.NoMtls = &ves_io_schema.Empty{}
+									tlsCertificatesChoiceInt.TlsParameters.MtlsChoice = mtlsChoiceInt
+								}
+
+							}
+
+							if v, ok := cs["use_mtls"]; ok && !isIntfNil(v) && !mtlsChoiceTypeFound {
+
+								mtlsChoiceTypeFound = true
+								mtlsChoiceInt := &ves_io_schema_views.DownstreamTlsParamsType_UseMtls{}
+								mtlsChoiceInt.UseMtls = &ves_io_schema_views.DownstreamTlsValidationContext{}
+								tlsCertificatesChoiceInt.TlsParameters.MtlsChoice = mtlsChoiceInt
+
+								sl := v.([]interface{})
 								for _, set := range sl {
-									cs := set.(map[string]interface{})
+									if set != nil {
+										cs := set.(map[string]interface{})
 
-									if v, ok := cs["cipher_suites"]; ok && !isIntfNil(v) {
+										if v, ok := cs["client_certificate_optional"]; ok && !isIntfNil(v) {
 
-										ls := make([]string, len(v.([]interface{})))
-										for i, v := range v.([]interface{}) {
-											ls[i] = v.(string)
+											mtlsChoiceInt.UseMtls.ClientCertificateOptional = v.(bool)
+
 										}
-										choiceInt.CustomSecurity.CipherSuites = ls
+
+										crlChoiceTypeFound := false
+
+										if v, ok := cs["crl"]; ok && !isIntfNil(v) && !crlChoiceTypeFound {
+
+											crlChoiceTypeFound = true
+											crlChoiceInt := &ves_io_schema_views.DownstreamTlsValidationContext_Crl{}
+											crlChoiceInt.Crl = &ves_io_schema_views.ObjectRefType{}
+											mtlsChoiceInt.UseMtls.CrlChoice = crlChoiceInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+														crlChoiceInt.Crl.Name = v.(string)
+
+													}
+
+													if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+														crlChoiceInt.Crl.Namespace = v.(string)
+
+													}
+
+													if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+														crlChoiceInt.Crl.Tenant = v.(string)
+
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := cs["no_crl"]; ok && !isIntfNil(v) && !crlChoiceTypeFound {
+
+											crlChoiceTypeFound = true
+
+											if v.(bool) {
+												crlChoiceInt := &ves_io_schema_views.DownstreamTlsValidationContext_NoCrl{}
+												crlChoiceInt.NoCrl = &ves_io_schema.Empty{}
+												mtlsChoiceInt.UseMtls.CrlChoice = crlChoiceInt
+											}
+
+										}
+
+										trustedCaChoiceTypeFound := false
+
+										if v, ok := cs["trusted_ca"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
+
+											trustedCaChoiceTypeFound = true
+											trustedCaChoiceInt := &ves_io_schema_views.DownstreamTlsValidationContext_TrustedCa{}
+											trustedCaChoiceInt.TrustedCa = &ves_io_schema_views.ObjectRefType{}
+											mtlsChoiceInt.UseMtls.TrustedCaChoice = trustedCaChoiceInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+														trustedCaChoiceInt.TrustedCa.Name = v.(string)
+
+													}
+
+													if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+														trustedCaChoiceInt.TrustedCa.Namespace = v.(string)
+
+													}
+
+													if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+														trustedCaChoiceInt.TrustedCa.Tenant = v.(string)
+
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := cs["trusted_ca_url"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
+
+											trustedCaChoiceTypeFound = true
+											trustedCaChoiceInt := &ves_io_schema_views.DownstreamTlsValidationContext_TrustedCaUrl{}
+
+											mtlsChoiceInt.UseMtls.TrustedCaChoice = trustedCaChoiceInt
+
+											trustedCaChoiceInt.TrustedCaUrl = v.(string)
+
+										}
+
+										xfccHeaderTypeFound := false
+
+										if v, ok := cs["xfcc_disabled"]; ok && !isIntfNil(v) && !xfccHeaderTypeFound {
+
+											xfccHeaderTypeFound = true
+
+											if v.(bool) {
+												xfccHeaderInt := &ves_io_schema_views.DownstreamTlsValidationContext_XfccDisabled{}
+												xfccHeaderInt.XfccDisabled = &ves_io_schema.Empty{}
+												mtlsChoiceInt.UseMtls.XfccHeader = xfccHeaderInt
+											}
+
+										}
+
+										if v, ok := cs["xfcc_options"]; ok && !isIntfNil(v) && !xfccHeaderTypeFound {
+
+											xfccHeaderTypeFound = true
+											xfccHeaderInt := &ves_io_schema_views.DownstreamTlsValidationContext_XfccOptions{}
+											xfccHeaderInt.XfccOptions = &ves_io_schema_views.XfccHeaderKeys{}
+											mtlsChoiceInt.UseMtls.XfccHeader = xfccHeaderInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["xfcc_header_elements"]; ok && !isIntfNil(v) {
+
+														xfcc_header_elementsList := []ves_io_schema.XfccElement{}
+														for _, j := range v.([]interface{}) {
+															xfcc_header_elementsList = append(xfcc_header_elementsList, ves_io_schema.XfccElement(ves_io_schema.XfccElement_value[j.(string)]))
+														}
+														xfccHeaderInt.XfccOptions.XfccHeaderElements = xfcc_header_elementsList
+
+													}
+
+												}
+											}
+
+										}
 
 									}
-
-									if v, ok := cs["max_version"]; ok && !isIntfNil(v) {
-
-										choiceInt.CustomSecurity.MaxVersion = ves_io_schema.TlsProtocol(ves_io_schema.TlsProtocol_value[v.(string)])
-
-									}
-
-									if v, ok := cs["min_version"]; ok && !isIntfNil(v) {
-
-										choiceInt.CustomSecurity.MinVersion = ves_io_schema.TlsProtocol(ves_io_schema.TlsProtocol_value[v.(string)])
-
-									}
-
 								}
 
 							}
 
-							if v, ok := tlsConfigMapStrToI["default_security"]; ok && !isIntfNil(v) && !choiceTypeFound {
+							if v, ok := cs["tls_certificates"]; ok && !isIntfNil(v) {
 
-								choiceTypeFound = true
+								sl := v.([]interface{})
+								tlsCertificates := make([]*ves_io_schema.TlsCertificateType, len(sl))
+								tlsCertificatesChoiceInt.TlsParameters.TlsCertificates = tlsCertificates
+								for i, set := range sl {
+									if set != nil {
+										tlsCertificates[i] = &ves_io_schema.TlsCertificateType{}
+										tlsCertificatesMapStrToI := set.(map[string]interface{})
 
-								if v.(bool) {
-									choiceInt := &ves_io_schema_views.TlsConfig_DefaultSecurity{}
-									choiceInt.DefaultSecurity = &ves_io_schema.Empty{}
-									tlsConfig.Choice = choiceInt
+										if w, ok := tlsCertificatesMapStrToI["certificate_url"]; ok && !isIntfNil(w) {
+											tlsCertificates[i].CertificateUrl = w.(string)
+										}
+
+										if w, ok := tlsCertificatesMapStrToI["description"]; ok && !isIntfNil(w) {
+											tlsCertificates[i].Description = w.(string)
+										}
+
+										ocspStaplingChoiceTypeFound := false
+
+										if v, ok := tlsCertificatesMapStrToI["custom_hash_algorithms"]; ok && !isIntfNil(v) && !ocspStaplingChoiceTypeFound {
+
+											ocspStaplingChoiceTypeFound = true
+											ocspStaplingChoiceInt := &ves_io_schema.TlsCertificateType_CustomHashAlgorithms{}
+											ocspStaplingChoiceInt.CustomHashAlgorithms = &ves_io_schema.HashAlgorithms{}
+											tlsCertificates[i].OcspStaplingChoice = ocspStaplingChoiceInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["hash_algorithms"]; ok && !isIntfNil(v) {
+
+														hash_algorithmsList := []ves_io_schema.HashAlgorithm{}
+														for _, j := range v.([]interface{}) {
+															hash_algorithmsList = append(hash_algorithmsList, ves_io_schema.HashAlgorithm(ves_io_schema.HashAlgorithm_value[j.(string)]))
+														}
+														ocspStaplingChoiceInt.CustomHashAlgorithms.HashAlgorithms = hash_algorithmsList
+
+													}
+
+												}
+											}
+
+										}
+
+										if _, ok := tlsCertificatesMapStrToI["disable_ocsp_stapling"]; ok && !ocspStaplingChoiceTypeFound {
+
+											ocspStaplingChoiceTypeFound = true
+											ocspStaplingChoiceInt := &ves_io_schema.TlsCertificateType_DisableOcspStapling{}
+											ocspStaplingChoiceInt.DisableOcspStapling = &ves_io_schema.Empty{}
+											tlsCertificates[i].OcspStaplingChoice = ocspStaplingChoiceInt
+
+										}
+
+										if _, ok := tlsCertificatesMapStrToI["use_system_defaults"]; ok && !ocspStaplingChoiceTypeFound {
+
+											ocspStaplingChoiceTypeFound = true
+											ocspStaplingChoiceInt := &ves_io_schema.TlsCertificateType_UseSystemDefaults{}
+											ocspStaplingChoiceInt.UseSystemDefaults = &ves_io_schema.Empty{}
+											tlsCertificates[i].OcspStaplingChoice = ocspStaplingChoiceInt
+
+										}
+
+										if v, ok := tlsCertificatesMapStrToI["private_key"]; ok && !isIntfNil(v) {
+
+											sl := v.([]interface{})
+											privateKey := &ves_io_schema.SecretType{}
+											tlsCertificates[i].PrivateKey = privateKey
+											for _, set := range sl {
+												if set != nil {
+													privateKeyMapStrToI := set.(map[string]interface{})
+
+													if v, ok := privateKeyMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
+
+														sl := v.([]interface{})
+														blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
+														privateKey.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
+														for _, set := range sl {
+															if set != nil {
+																blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
+
+																if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
+																	blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
+																}
+
+																if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
+																	blindfoldSecretInfoInternal.Location = w.(string)
+																}
+
+																if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
+																	blindfoldSecretInfoInternal.StoreProvider = w.(string)
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := privateKeyMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
+
+														privateKey.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+													}
+
+													secretInfoOneofTypeFound := false
+
+													if v, ok := privateKeyMapStrToI["blindfold_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+														secretInfoOneofTypeFound = true
+														secretInfoOneofInt := &ves_io_schema.SecretType_BlindfoldSecretInfo{}
+														secretInfoOneofInt.BlindfoldSecretInfo = &ves_io_schema.BlindfoldSecretInfoType{}
+														privateKey.SecretInfoOneof = secretInfoOneofInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["decryption_provider"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.BlindfoldSecretInfo.DecryptionProvider = v.(string)
+
+																}
+
+																if v, ok := cs["location"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.BlindfoldSecretInfo.Location = v.(string)
+
+																}
+
+																if v, ok := cs["store_provider"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.BlindfoldSecretInfo.StoreProvider = v.(string)
+
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := privateKeyMapStrToI["clear_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+														secretInfoOneofTypeFound = true
+														secretInfoOneofInt := &ves_io_schema.SecretType_ClearSecretInfo{}
+														secretInfoOneofInt.ClearSecretInfo = &ves_io_schema.ClearSecretInfoType{}
+														privateKey.SecretInfoOneof = secretInfoOneofInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.ClearSecretInfo.Provider = v.(string)
+
+																}
+
+																if v, ok := cs["url"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := privateKeyMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+														secretInfoOneofTypeFound = true
+														secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
+														secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
+														privateKey.SecretInfoOneof = secretInfoOneofInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["key"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
+																}
+
+																if v, ok := cs["location"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
+																}
+
+																if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
+																}
+
+																if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+																}
+
+																if v, ok := cs["version"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := privateKeyMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+														secretInfoOneofTypeFound = true
+														secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
+														secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
+														privateKey.SecretInfoOneof = secretInfoOneofInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
+
+																}
+
+															}
+														}
+
+													}
+
+												}
+											}
+
+										}
+
+									}
 								}
 
 							}
 
-							if v, ok := tlsConfigMapStrToI["low_security"]; ok && !isIntfNil(v) && !choiceTypeFound {
+							if v, ok := cs["tls_config"]; ok && !isIntfNil(v) {
 
-								choiceTypeFound = true
+								sl := v.([]interface{})
+								tlsConfig := &ves_io_schema_views.TlsConfig{}
+								tlsCertificatesChoiceInt.TlsParameters.TlsConfig = tlsConfig
+								for _, set := range sl {
+									if set != nil {
+										tlsConfigMapStrToI := set.(map[string]interface{})
 
-								if v.(bool) {
-									choiceInt := &ves_io_schema_views.TlsConfig_LowSecurity{}
-									choiceInt.LowSecurity = &ves_io_schema.Empty{}
-									tlsConfig.Choice = choiceInt
-								}
+										choiceTypeFound := false
 
-							}
+										if v, ok := tlsConfigMapStrToI["custom_security"]; ok && !isIntfNil(v) && !choiceTypeFound {
 
-							if v, ok := tlsConfigMapStrToI["medium_security"]; ok && !isIntfNil(v) && !choiceTypeFound {
+											choiceTypeFound = true
+											choiceInt := &ves_io_schema_views.TlsConfig_CustomSecurity{}
+											choiceInt.CustomSecurity = &ves_io_schema_views.CustomCiphers{}
+											tlsConfig.Choice = choiceInt
 
-								choiceTypeFound = true
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
 
-								if v.(bool) {
-									choiceInt := &ves_io_schema_views.TlsConfig_MediumSecurity{}
-									choiceInt.MediumSecurity = &ves_io_schema.Empty{}
-									tlsConfig.Choice = choiceInt
+													if v, ok := cs["cipher_suites"]; ok && !isIntfNil(v) {
+
+														ls := make([]string, len(v.([]interface{})))
+														for i, v := range v.([]interface{}) {
+															ls[i] = v.(string)
+														}
+														choiceInt.CustomSecurity.CipherSuites = ls
+
+													}
+
+													if v, ok := cs["max_version"]; ok && !isIntfNil(v) {
+
+														choiceInt.CustomSecurity.MaxVersion = ves_io_schema.TlsProtocol(ves_io_schema.TlsProtocol_value[v.(string)])
+
+													}
+
+													if v, ok := cs["min_version"]; ok && !isIntfNil(v) {
+
+														choiceInt.CustomSecurity.MinVersion = ves_io_schema.TlsProtocol(ves_io_schema.TlsProtocol_value[v.(string)])
+
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := tlsConfigMapStrToI["default_security"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+											choiceTypeFound = true
+
+											if v.(bool) {
+												choiceInt := &ves_io_schema_views.TlsConfig_DefaultSecurity{}
+												choiceInt.DefaultSecurity = &ves_io_schema.Empty{}
+												tlsConfig.Choice = choiceInt
+											}
+
+										}
+
+										if v, ok := tlsConfigMapStrToI["low_security"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+											choiceTypeFound = true
+
+											if v.(bool) {
+												choiceInt := &ves_io_schema_views.TlsConfig_LowSecurity{}
+												choiceInt.LowSecurity = &ves_io_schema.Empty{}
+												tlsConfig.Choice = choiceInt
+											}
+
+										}
+
+										if v, ok := tlsConfigMapStrToI["medium_security"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+											choiceTypeFound = true
+
+											if v.(bool) {
+												choiceInt := &ves_io_schema_views.TlsConfig_MediumSecurity{}
+												choiceInt.MediumSecurity = &ves_io_schema.Empty{}
+												tlsConfig.Choice = choiceInt
+											}
+
+										}
+
+									}
 								}
 
 							}
 
 						}
-
 					}
 
 				}
 
 			}
-
-			if v, ok := cs["tls_parameters"]; ok && !isIntfNil(v) && !tlsCertificatesChoiceTypeFound {
-
-				tlsCertificatesChoiceTypeFound = true
-				tlsCertificatesChoiceInt := &ves_io_schema_views_tcp_loadbalancer.ProxyTypeTLSTCP_TlsParameters{}
-				tlsCertificatesChoiceInt.TlsParameters = &ves_io_schema_views.DownstreamTlsParamsType{}
-				loadbalancerTypeInt.TlsTcp.TlsCertificatesChoice = tlsCertificatesChoiceInt
-
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
-
-					mtlsChoiceTypeFound := false
-
-					if v, ok := cs["no_mtls"]; ok && !isIntfNil(v) && !mtlsChoiceTypeFound {
-
-						mtlsChoiceTypeFound = true
-
-						if v.(bool) {
-							mtlsChoiceInt := &ves_io_schema_views.DownstreamTlsParamsType_NoMtls{}
-							mtlsChoiceInt.NoMtls = &ves_io_schema.Empty{}
-							tlsCertificatesChoiceInt.TlsParameters.MtlsChoice = mtlsChoiceInt
-						}
-
-					}
-
-					if v, ok := cs["use_mtls"]; ok && !isIntfNil(v) && !mtlsChoiceTypeFound {
-
-						mtlsChoiceTypeFound = true
-						mtlsChoiceInt := &ves_io_schema_views.DownstreamTlsParamsType_UseMtls{}
-						mtlsChoiceInt.UseMtls = &ves_io_schema_views.DownstreamTlsValidationContext{}
-						tlsCertificatesChoiceInt.TlsParameters.MtlsChoice = mtlsChoiceInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["client_certificate_optional"]; ok && !isIntfNil(v) {
-
-								mtlsChoiceInt.UseMtls.ClientCertificateOptional = v.(bool)
-
-							}
-
-							crlChoiceTypeFound := false
-
-							if v, ok := cs["crl"]; ok && !isIntfNil(v) && !crlChoiceTypeFound {
-
-								crlChoiceTypeFound = true
-								crlChoiceInt := &ves_io_schema_views.DownstreamTlsValidationContext_Crl{}
-								crlChoiceInt.Crl = &ves_io_schema_views.ObjectRefType{}
-								mtlsChoiceInt.UseMtls.CrlChoice = crlChoiceInt
-
-								sl := v.(*schema.Set).List()
-								for _, set := range sl {
-									cs := set.(map[string]interface{})
-
-									if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-										crlChoiceInt.Crl.Name = v.(string)
-
-									}
-
-									if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
-
-										crlChoiceInt.Crl.Namespace = v.(string)
-
-									}
-
-									if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
-
-										crlChoiceInt.Crl.Tenant = v.(string)
-
-									}
-
-								}
-
-							}
-
-							if v, ok := cs["no_crl"]; ok && !isIntfNil(v) && !crlChoiceTypeFound {
-
-								crlChoiceTypeFound = true
-
-								if v.(bool) {
-									crlChoiceInt := &ves_io_schema_views.DownstreamTlsValidationContext_NoCrl{}
-									crlChoiceInt.NoCrl = &ves_io_schema.Empty{}
-									mtlsChoiceInt.UseMtls.CrlChoice = crlChoiceInt
-								}
-
-							}
-
-							trustedCaChoiceTypeFound := false
-
-							if v, ok := cs["trusted_ca"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
-
-								trustedCaChoiceTypeFound = true
-								trustedCaChoiceInt := &ves_io_schema_views.DownstreamTlsValidationContext_TrustedCa{}
-								trustedCaChoiceInt.TrustedCa = &ves_io_schema_views.ObjectRefType{}
-								mtlsChoiceInt.UseMtls.TrustedCaChoice = trustedCaChoiceInt
-
-								sl := v.(*schema.Set).List()
-								for _, set := range sl {
-									cs := set.(map[string]interface{})
-
-									if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-										trustedCaChoiceInt.TrustedCa.Name = v.(string)
-
-									}
-
-									if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
-
-										trustedCaChoiceInt.TrustedCa.Namespace = v.(string)
-
-									}
-
-									if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
-
-										trustedCaChoiceInt.TrustedCa.Tenant = v.(string)
-
-									}
-
-								}
-
-							}
-
-							if v, ok := cs["trusted_ca_url"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
-
-								trustedCaChoiceTypeFound = true
-								trustedCaChoiceInt := &ves_io_schema_views.DownstreamTlsValidationContext_TrustedCaUrl{}
-
-								mtlsChoiceInt.UseMtls.TrustedCaChoice = trustedCaChoiceInt
-
-								trustedCaChoiceInt.TrustedCaUrl = v.(string)
-
-							}
-
-							xfccHeaderTypeFound := false
-
-							if v, ok := cs["xfcc_disabled"]; ok && !isIntfNil(v) && !xfccHeaderTypeFound {
-
-								xfccHeaderTypeFound = true
-
-								if v.(bool) {
-									xfccHeaderInt := &ves_io_schema_views.DownstreamTlsValidationContext_XfccDisabled{}
-									xfccHeaderInt.XfccDisabled = &ves_io_schema.Empty{}
-									mtlsChoiceInt.UseMtls.XfccHeader = xfccHeaderInt
-								}
-
-							}
-
-							if v, ok := cs["xfcc_options"]; ok && !isIntfNil(v) && !xfccHeaderTypeFound {
-
-								xfccHeaderTypeFound = true
-								xfccHeaderInt := &ves_io_schema_views.DownstreamTlsValidationContext_XfccOptions{}
-								xfccHeaderInt.XfccOptions = &ves_io_schema_views.XfccHeaderKeys{}
-								mtlsChoiceInt.UseMtls.XfccHeader = xfccHeaderInt
-
-								sl := v.(*schema.Set).List()
-								for _, set := range sl {
-									cs := set.(map[string]interface{})
-
-									if v, ok := cs["xfcc_header_elements"]; ok && !isIntfNil(v) {
-
-										xfcc_header_elementsList := []ves_io_schema.XfccElement{}
-										for _, j := range v.([]interface{}) {
-											xfcc_header_elementsList = append(xfcc_header_elementsList, ves_io_schema.XfccElement(ves_io_schema.XfccElement_value[j.(string)]))
-										}
-										xfccHeaderInt.XfccOptions.XfccHeaderElements = xfcc_header_elementsList
-
-									}
-
-								}
-
-							}
-
-						}
-
-					}
-
-					if v, ok := cs["tls_certificates"]; ok && !isIntfNil(v) {
-
-						sl := v.([]interface{})
-						tlsCertificates := make([]*ves_io_schema.TlsCertificateType, len(sl))
-						tlsCertificatesChoiceInt.TlsParameters.TlsCertificates = tlsCertificates
-						for i, set := range sl {
-							tlsCertificates[i] = &ves_io_schema.TlsCertificateType{}
-							tlsCertificatesMapStrToI := set.(map[string]interface{})
-
-							if w, ok := tlsCertificatesMapStrToI["certificate_url"]; ok && !isIntfNil(w) {
-								tlsCertificates[i].CertificateUrl = w.(string)
-							}
-
-							if w, ok := tlsCertificatesMapStrToI["description"]; ok && !isIntfNil(w) {
-								tlsCertificates[i].Description = w.(string)
-							}
-
-							ocspStaplingChoiceTypeFound := false
-
-							if v, ok := tlsCertificatesMapStrToI["custom_hash_algorithms"]; ok && !isIntfNil(v) && !ocspStaplingChoiceTypeFound {
-
-								ocspStaplingChoiceTypeFound = true
-								ocspStaplingChoiceInt := &ves_io_schema.TlsCertificateType_CustomHashAlgorithms{}
-								ocspStaplingChoiceInt.CustomHashAlgorithms = &ves_io_schema.HashAlgorithms{}
-								tlsCertificates[i].OcspStaplingChoice = ocspStaplingChoiceInt
-
-								sl := v.(*schema.Set).List()
-								for _, set := range sl {
-									cs := set.(map[string]interface{})
-
-									if v, ok := cs["hash_algorithms"]; ok && !isIntfNil(v) {
-
-										hash_algorithmsList := []ves_io_schema.HashAlgorithm{}
-										for _, j := range v.([]interface{}) {
-											hash_algorithmsList = append(hash_algorithmsList, ves_io_schema.HashAlgorithm(ves_io_schema.HashAlgorithm_value[j.(string)]))
-										}
-										ocspStaplingChoiceInt.CustomHashAlgorithms.HashAlgorithms = hash_algorithmsList
-
-									}
-
-								}
-
-							}
-
-							if _, ok := tlsCertificatesMapStrToI["disable_ocsp_stapling"]; ok && !ocspStaplingChoiceTypeFound {
-
-								ocspStaplingChoiceTypeFound = true
-								ocspStaplingChoiceInt := &ves_io_schema.TlsCertificateType_DisableOcspStapling{}
-								ocspStaplingChoiceInt.DisableOcspStapling = &ves_io_schema.Empty{}
-								tlsCertificates[i].OcspStaplingChoice = ocspStaplingChoiceInt
-
-							}
-
-							if _, ok := tlsCertificatesMapStrToI["use_system_defaults"]; ok && !ocspStaplingChoiceTypeFound {
-
-								ocspStaplingChoiceTypeFound = true
-								ocspStaplingChoiceInt := &ves_io_schema.TlsCertificateType_UseSystemDefaults{}
-								ocspStaplingChoiceInt.UseSystemDefaults = &ves_io_schema.Empty{}
-								tlsCertificates[i].OcspStaplingChoice = ocspStaplingChoiceInt
-
-							}
-
-							if v, ok := tlsCertificatesMapStrToI["private_key"]; ok && !isIntfNil(v) {
-
-								sl := v.(*schema.Set).List()
-								privateKey := &ves_io_schema.SecretType{}
-								tlsCertificates[i].PrivateKey = privateKey
-								for _, set := range sl {
-									privateKeyMapStrToI := set.(map[string]interface{})
-
-									if v, ok := privateKeyMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
-
-										sl := v.(*schema.Set).List()
-										blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
-										privateKey.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
-										for _, set := range sl {
-											blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
-
-											if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
-												blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
-											}
-
-											if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
-												blindfoldSecretInfoInternal.Location = w.(string)
-											}
-
-											if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
-												blindfoldSecretInfoInternal.StoreProvider = w.(string)
-											}
-
-										}
-
-									}
-
-									if v, ok := privateKeyMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
-
-										privateKey.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
-
-									}
-
-									secretInfoOneofTypeFound := false
-
-									if v, ok := privateKeyMapStrToI["blindfold_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
-
-										secretInfoOneofTypeFound = true
-										secretInfoOneofInt := &ves_io_schema.SecretType_BlindfoldSecretInfo{}
-										secretInfoOneofInt.BlindfoldSecretInfo = &ves_io_schema.BlindfoldSecretInfoType{}
-										privateKey.SecretInfoOneof = secretInfoOneofInt
-
-										sl := v.(*schema.Set).List()
-										for _, set := range sl {
-											cs := set.(map[string]interface{})
-
-											if v, ok := cs["decryption_provider"]; ok && !isIntfNil(v) {
-
-												secretInfoOneofInt.BlindfoldSecretInfo.DecryptionProvider = v.(string)
-
-											}
-
-											if v, ok := cs["location"]; ok && !isIntfNil(v) {
-
-												secretInfoOneofInt.BlindfoldSecretInfo.Location = v.(string)
-
-											}
-
-											if v, ok := cs["store_provider"]; ok && !isIntfNil(v) {
-
-												secretInfoOneofInt.BlindfoldSecretInfo.StoreProvider = v.(string)
-
-											}
-
-										}
-
-									}
-
-									if v, ok := privateKeyMapStrToI["clear_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
-
-										secretInfoOneofTypeFound = true
-										secretInfoOneofInt := &ves_io_schema.SecretType_ClearSecretInfo{}
-										secretInfoOneofInt.ClearSecretInfo = &ves_io_schema.ClearSecretInfoType{}
-										privateKey.SecretInfoOneof = secretInfoOneofInt
-
-										sl := v.(*schema.Set).List()
-										for _, set := range sl {
-											cs := set.(map[string]interface{})
-
-											if v, ok := cs["provider"]; ok && !isIntfNil(v) {
-
-												secretInfoOneofInt.ClearSecretInfo.Provider = v.(string)
-
-											}
-
-											if v, ok := cs["url"]; ok && !isIntfNil(v) {
-
-												secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
-
-											}
-
-										}
-
-									}
-
-									if v, ok := privateKeyMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
-
-										secretInfoOneofTypeFound = true
-										secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
-										secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
-										privateKey.SecretInfoOneof = secretInfoOneofInt
-
-										sl := v.(*schema.Set).List()
-										for _, set := range sl {
-											cs := set.(map[string]interface{})
-
-											if v, ok := cs["key"]; ok && !isIntfNil(v) {
-
-												secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
-
-											}
-
-											if v, ok := cs["location"]; ok && !isIntfNil(v) {
-
-												secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
-
-											}
-
-											if v, ok := cs["provider"]; ok && !isIntfNil(v) {
-
-												secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
-
-											}
-
-											if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
-
-												secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
-
-											}
-
-											if v, ok := cs["version"]; ok && !isIntfNil(v) {
-
-												secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
-
-											}
-
-										}
-
-									}
-
-									if v, ok := privateKeyMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
-
-										secretInfoOneofTypeFound = true
-										secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
-										secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
-										privateKey.SecretInfoOneof = secretInfoOneofInt
-
-										sl := v.(*schema.Set).List()
-										for _, set := range sl {
-											cs := set.(map[string]interface{})
-
-											if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-												secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
-
-											}
-
-										}
-
-									}
-
-								}
-
-							}
-
-						}
-
-					}
-
-					if v, ok := cs["tls_config"]; ok && !isIntfNil(v) {
-
-						sl := v.(*schema.Set).List()
-						tlsConfig := &ves_io_schema_views.TlsConfig{}
-						tlsCertificatesChoiceInt.TlsParameters.TlsConfig = tlsConfig
-						for _, set := range sl {
-							tlsConfigMapStrToI := set.(map[string]interface{})
-
-							choiceTypeFound := false
-
-							if v, ok := tlsConfigMapStrToI["custom_security"]; ok && !isIntfNil(v) && !choiceTypeFound {
-
-								choiceTypeFound = true
-								choiceInt := &ves_io_schema_views.TlsConfig_CustomSecurity{}
-								choiceInt.CustomSecurity = &ves_io_schema_views.CustomCiphers{}
-								tlsConfig.Choice = choiceInt
-
-								sl := v.(*schema.Set).List()
-								for _, set := range sl {
-									cs := set.(map[string]interface{})
-
-									if v, ok := cs["cipher_suites"]; ok && !isIntfNil(v) {
-
-										ls := make([]string, len(v.([]interface{})))
-										for i, v := range v.([]interface{}) {
-											ls[i] = v.(string)
-										}
-										choiceInt.CustomSecurity.CipherSuites = ls
-
-									}
-
-									if v, ok := cs["max_version"]; ok && !isIntfNil(v) {
-
-										choiceInt.CustomSecurity.MaxVersion = ves_io_schema.TlsProtocol(ves_io_schema.TlsProtocol_value[v.(string)])
-
-									}
-
-									if v, ok := cs["min_version"]; ok && !isIntfNil(v) {
-
-										choiceInt.CustomSecurity.MinVersion = ves_io_schema.TlsProtocol(ves_io_schema.TlsProtocol_value[v.(string)])
-
-									}
-
-								}
-
-							}
-
-							if v, ok := tlsConfigMapStrToI["default_security"]; ok && !isIntfNil(v) && !choiceTypeFound {
-
-								choiceTypeFound = true
-
-								if v.(bool) {
-									choiceInt := &ves_io_schema_views.TlsConfig_DefaultSecurity{}
-									choiceInt.DefaultSecurity = &ves_io_schema.Empty{}
-									tlsConfig.Choice = choiceInt
-								}
-
-							}
-
-							if v, ok := tlsConfigMapStrToI["low_security"]; ok && !isIntfNil(v) && !choiceTypeFound {
-
-								choiceTypeFound = true
-
-								if v.(bool) {
-									choiceInt := &ves_io_schema_views.TlsConfig_LowSecurity{}
-									choiceInt.LowSecurity = &ves_io_schema.Empty{}
-									tlsConfig.Choice = choiceInt
-								}
-
-							}
-
-							if v, ok := tlsConfigMapStrToI["medium_security"]; ok && !isIntfNil(v) && !choiceTypeFound {
-
-								choiceTypeFound = true
-
-								if v.(bool) {
-									choiceInt := &ves_io_schema_views.TlsConfig_MediumSecurity{}
-									choiceInt.MediumSecurity = &ves_io_schema.Empty{}
-									tlsConfig.Choice = choiceInt
-								}
-
-							}
-
-						}
-
-					}
-
-				}
-
-			}
-
 		}
 
 	}
@@ -5451,264 +5706,278 @@ func resourceVolterraTcpLoadbalancerUpdate(d *schema.ResourceData, meta interfac
 		loadbalancerTypeInt.TlsTcpAutoCert = &ves_io_schema_views_tcp_loadbalancer.ProxyTypeTLSTCPAutoCerts{}
 		updateSpec.LoadbalancerType = loadbalancerTypeInt
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
+			if set != nil {
+				cs := set.(map[string]interface{})
 
-			mtlsChoiceTypeFound := false
+				mtlsChoiceTypeFound := false
 
-			if v, ok := cs["no_mtls"]; ok && !isIntfNil(v) && !mtlsChoiceTypeFound {
+				if v, ok := cs["no_mtls"]; ok && !isIntfNil(v) && !mtlsChoiceTypeFound {
 
-				mtlsChoiceTypeFound = true
+					mtlsChoiceTypeFound = true
 
-				if v.(bool) {
-					mtlsChoiceInt := &ves_io_schema_views_tcp_loadbalancer.ProxyTypeTLSTCPAutoCerts_NoMtls{}
-					mtlsChoiceInt.NoMtls = &ves_io_schema.Empty{}
+					if v.(bool) {
+						mtlsChoiceInt := &ves_io_schema_views_tcp_loadbalancer.ProxyTypeTLSTCPAutoCerts_NoMtls{}
+						mtlsChoiceInt.NoMtls = &ves_io_schema.Empty{}
+						loadbalancerTypeInt.TlsTcpAutoCert.MtlsChoice = mtlsChoiceInt
+					}
+
+				}
+
+				if v, ok := cs["use_mtls"]; ok && !isIntfNil(v) && !mtlsChoiceTypeFound {
+
+					mtlsChoiceTypeFound = true
+					mtlsChoiceInt := &ves_io_schema_views_tcp_loadbalancer.ProxyTypeTLSTCPAutoCerts_UseMtls{}
+					mtlsChoiceInt.UseMtls = &ves_io_schema_views.DownstreamTlsValidationContext{}
 					loadbalancerTypeInt.TlsTcpAutoCert.MtlsChoice = mtlsChoiceInt
-				}
 
-			}
-
-			if v, ok := cs["use_mtls"]; ok && !isIntfNil(v) && !mtlsChoiceTypeFound {
-
-				mtlsChoiceTypeFound = true
-				mtlsChoiceInt := &ves_io_schema_views_tcp_loadbalancer.ProxyTypeTLSTCPAutoCerts_UseMtls{}
-				mtlsChoiceInt.UseMtls = &ves_io_schema_views.DownstreamTlsValidationContext{}
-				loadbalancerTypeInt.TlsTcpAutoCert.MtlsChoice = mtlsChoiceInt
-
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
-
-					if v, ok := cs["client_certificate_optional"]; ok && !isIntfNil(v) {
-
-						mtlsChoiceInt.UseMtls.ClientCertificateOptional = v.(bool)
-
-					}
-
-					crlChoiceTypeFound := false
-
-					if v, ok := cs["crl"]; ok && !isIntfNil(v) && !crlChoiceTypeFound {
-
-						crlChoiceTypeFound = true
-						crlChoiceInt := &ves_io_schema_views.DownstreamTlsValidationContext_Crl{}
-						crlChoiceInt.Crl = &ves_io_schema_views.ObjectRefType{}
-						mtlsChoiceInt.UseMtls.CrlChoice = crlChoiceInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
 							cs := set.(map[string]interface{})
 
-							if v, ok := cs["name"]; ok && !isIntfNil(v) {
+							if v, ok := cs["client_certificate_optional"]; ok && !isIntfNil(v) {
 
-								crlChoiceInt.Crl.Name = v.(string)
-
-							}
-
-							if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
-
-								crlChoiceInt.Crl.Namespace = v.(string)
+								mtlsChoiceInt.UseMtls.ClientCertificateOptional = v.(bool)
 
 							}
 
-							if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+							crlChoiceTypeFound := false
 
-								crlChoiceInt.Crl.Tenant = v.(string)
+							if v, ok := cs["crl"]; ok && !isIntfNil(v) && !crlChoiceTypeFound {
 
-							}
+								crlChoiceTypeFound = true
+								crlChoiceInt := &ves_io_schema_views.DownstreamTlsValidationContext_Crl{}
+								crlChoiceInt.Crl = &ves_io_schema_views.ObjectRefType{}
+								mtlsChoiceInt.UseMtls.CrlChoice = crlChoiceInt
 
-						}
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
 
-					}
+										if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
-					if v, ok := cs["no_crl"]; ok && !isIntfNil(v) && !crlChoiceTypeFound {
+											crlChoiceInt.Crl.Name = v.(string)
 
-						crlChoiceTypeFound = true
+										}
 
-						if v.(bool) {
-							crlChoiceInt := &ves_io_schema_views.DownstreamTlsValidationContext_NoCrl{}
-							crlChoiceInt.NoCrl = &ves_io_schema.Empty{}
-							mtlsChoiceInt.UseMtls.CrlChoice = crlChoiceInt
-						}
+										if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
 
-					}
+											crlChoiceInt.Crl.Namespace = v.(string)
 
-					trustedCaChoiceTypeFound := false
+										}
 
-					if v, ok := cs["trusted_ca"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
+										if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
 
-						trustedCaChoiceTypeFound = true
-						trustedCaChoiceInt := &ves_io_schema_views.DownstreamTlsValidationContext_TrustedCa{}
-						trustedCaChoiceInt.TrustedCa = &ves_io_schema_views.ObjectRefType{}
-						mtlsChoiceInt.UseMtls.TrustedCaChoice = trustedCaChoiceInt
+											crlChoiceInt.Crl.Tenant = v.(string)
 
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
+										}
 
-							if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-								trustedCaChoiceInt.TrustedCa.Name = v.(string)
-
-							}
-
-							if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
-
-								trustedCaChoiceInt.TrustedCa.Namespace = v.(string)
-
-							}
-
-							if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
-
-								trustedCaChoiceInt.TrustedCa.Tenant = v.(string)
-
-							}
-
-						}
-
-					}
-
-					if v, ok := cs["trusted_ca_url"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
-
-						trustedCaChoiceTypeFound = true
-						trustedCaChoiceInt := &ves_io_schema_views.DownstreamTlsValidationContext_TrustedCaUrl{}
-
-						mtlsChoiceInt.UseMtls.TrustedCaChoice = trustedCaChoiceInt
-
-						trustedCaChoiceInt.TrustedCaUrl = v.(string)
-
-					}
-
-					xfccHeaderTypeFound := false
-
-					if v, ok := cs["xfcc_disabled"]; ok && !isIntfNil(v) && !xfccHeaderTypeFound {
-
-						xfccHeaderTypeFound = true
-
-						if v.(bool) {
-							xfccHeaderInt := &ves_io_schema_views.DownstreamTlsValidationContext_XfccDisabled{}
-							xfccHeaderInt.XfccDisabled = &ves_io_schema.Empty{}
-							mtlsChoiceInt.UseMtls.XfccHeader = xfccHeaderInt
-						}
-
-					}
-
-					if v, ok := cs["xfcc_options"]; ok && !isIntfNil(v) && !xfccHeaderTypeFound {
-
-						xfccHeaderTypeFound = true
-						xfccHeaderInt := &ves_io_schema_views.DownstreamTlsValidationContext_XfccOptions{}
-						xfccHeaderInt.XfccOptions = &ves_io_schema_views.XfccHeaderKeys{}
-						mtlsChoiceInt.UseMtls.XfccHeader = xfccHeaderInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["xfcc_header_elements"]; ok && !isIntfNil(v) {
-
-								xfcc_header_elementsList := []ves_io_schema.XfccElement{}
-								for _, j := range v.([]interface{}) {
-									xfcc_header_elementsList = append(xfcc_header_elementsList, ves_io_schema.XfccElement(ves_io_schema.XfccElement_value[j.(string)]))
+									}
 								}
-								xfccHeaderInt.XfccOptions.XfccHeaderElements = xfcc_header_elementsList
 
 							}
 
-						}
+							if v, ok := cs["no_crl"]; ok && !isIntfNil(v) && !crlChoiceTypeFound {
 
-					}
+								crlChoiceTypeFound = true
 
-				}
-
-			}
-
-			if v, ok := cs["tls_config"]; ok && !isIntfNil(v) {
-
-				sl := v.(*schema.Set).List()
-				tlsConfig := &ves_io_schema_views.TlsConfig{}
-				loadbalancerTypeInt.TlsTcpAutoCert.TlsConfig = tlsConfig
-				for _, set := range sl {
-					tlsConfigMapStrToI := set.(map[string]interface{})
-
-					choiceTypeFound := false
-
-					if v, ok := tlsConfigMapStrToI["custom_security"]; ok && !isIntfNil(v) && !choiceTypeFound {
-
-						choiceTypeFound = true
-						choiceInt := &ves_io_schema_views.TlsConfig_CustomSecurity{}
-						choiceInt.CustomSecurity = &ves_io_schema_views.CustomCiphers{}
-						tlsConfig.Choice = choiceInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["cipher_suites"]; ok && !isIntfNil(v) {
-
-								ls := make([]string, len(v.([]interface{})))
-								for i, v := range v.([]interface{}) {
-									ls[i] = v.(string)
+								if v.(bool) {
+									crlChoiceInt := &ves_io_schema_views.DownstreamTlsValidationContext_NoCrl{}
+									crlChoiceInt.NoCrl = &ves_io_schema.Empty{}
+									mtlsChoiceInt.UseMtls.CrlChoice = crlChoiceInt
 								}
-								choiceInt.CustomSecurity.CipherSuites = ls
 
 							}
 
-							if v, ok := cs["max_version"]; ok && !isIntfNil(v) {
+							trustedCaChoiceTypeFound := false
 
-								choiceInt.CustomSecurity.MaxVersion = ves_io_schema.TlsProtocol(ves_io_schema.TlsProtocol_value[v.(string)])
+							if v, ok := cs["trusted_ca"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
+
+								trustedCaChoiceTypeFound = true
+								trustedCaChoiceInt := &ves_io_schema_views.DownstreamTlsValidationContext_TrustedCa{}
+								trustedCaChoiceInt.TrustedCa = &ves_io_schema_views.ObjectRefType{}
+								mtlsChoiceInt.UseMtls.TrustedCaChoice = trustedCaChoiceInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+											trustedCaChoiceInt.TrustedCa.Name = v.(string)
+
+										}
+
+										if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+											trustedCaChoiceInt.TrustedCa.Namespace = v.(string)
+
+										}
+
+										if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+											trustedCaChoiceInt.TrustedCa.Tenant = v.(string)
+
+										}
+
+									}
+								}
 
 							}
 
-							if v, ok := cs["min_version"]; ok && !isIntfNil(v) {
+							if v, ok := cs["trusted_ca_url"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
 
-								choiceInt.CustomSecurity.MinVersion = ves_io_schema.TlsProtocol(ves_io_schema.TlsProtocol_value[v.(string)])
+								trustedCaChoiceTypeFound = true
+								trustedCaChoiceInt := &ves_io_schema_views.DownstreamTlsValidationContext_TrustedCaUrl{}
+
+								mtlsChoiceInt.UseMtls.TrustedCaChoice = trustedCaChoiceInt
+
+								trustedCaChoiceInt.TrustedCaUrl = v.(string)
+
+							}
+
+							xfccHeaderTypeFound := false
+
+							if v, ok := cs["xfcc_disabled"]; ok && !isIntfNil(v) && !xfccHeaderTypeFound {
+
+								xfccHeaderTypeFound = true
+
+								if v.(bool) {
+									xfccHeaderInt := &ves_io_schema_views.DownstreamTlsValidationContext_XfccDisabled{}
+									xfccHeaderInt.XfccDisabled = &ves_io_schema.Empty{}
+									mtlsChoiceInt.UseMtls.XfccHeader = xfccHeaderInt
+								}
+
+							}
+
+							if v, ok := cs["xfcc_options"]; ok && !isIntfNil(v) && !xfccHeaderTypeFound {
+
+								xfccHeaderTypeFound = true
+								xfccHeaderInt := &ves_io_schema_views.DownstreamTlsValidationContext_XfccOptions{}
+								xfccHeaderInt.XfccOptions = &ves_io_schema_views.XfccHeaderKeys{}
+								mtlsChoiceInt.UseMtls.XfccHeader = xfccHeaderInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["xfcc_header_elements"]; ok && !isIntfNil(v) {
+
+											xfcc_header_elementsList := []ves_io_schema.XfccElement{}
+											for _, j := range v.([]interface{}) {
+												xfcc_header_elementsList = append(xfcc_header_elementsList, ves_io_schema.XfccElement(ves_io_schema.XfccElement_value[j.(string)]))
+											}
+											xfccHeaderInt.XfccOptions.XfccHeaderElements = xfcc_header_elementsList
+
+										}
+
+									}
+								}
 
 							}
 
 						}
-
 					}
 
-					if v, ok := tlsConfigMapStrToI["default_security"]; ok && !isIntfNil(v) && !choiceTypeFound {
+				}
 
-						choiceTypeFound = true
+				if v, ok := cs["tls_config"]; ok && !isIntfNil(v) {
 
-						if v.(bool) {
-							choiceInt := &ves_io_schema_views.TlsConfig_DefaultSecurity{}
-							choiceInt.DefaultSecurity = &ves_io_schema.Empty{}
-							tlsConfig.Choice = choiceInt
+					sl := v.([]interface{})
+					tlsConfig := &ves_io_schema_views.TlsConfig{}
+					loadbalancerTypeInt.TlsTcpAutoCert.TlsConfig = tlsConfig
+					for _, set := range sl {
+						if set != nil {
+							tlsConfigMapStrToI := set.(map[string]interface{})
+
+							choiceTypeFound := false
+
+							if v, ok := tlsConfigMapStrToI["custom_security"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+								choiceTypeFound = true
+								choiceInt := &ves_io_schema_views.TlsConfig_CustomSecurity{}
+								choiceInt.CustomSecurity = &ves_io_schema_views.CustomCiphers{}
+								tlsConfig.Choice = choiceInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["cipher_suites"]; ok && !isIntfNil(v) {
+
+											ls := make([]string, len(v.([]interface{})))
+											for i, v := range v.([]interface{}) {
+												ls[i] = v.(string)
+											}
+											choiceInt.CustomSecurity.CipherSuites = ls
+
+										}
+
+										if v, ok := cs["max_version"]; ok && !isIntfNil(v) {
+
+											choiceInt.CustomSecurity.MaxVersion = ves_io_schema.TlsProtocol(ves_io_schema.TlsProtocol_value[v.(string)])
+
+										}
+
+										if v, ok := cs["min_version"]; ok && !isIntfNil(v) {
+
+											choiceInt.CustomSecurity.MinVersion = ves_io_schema.TlsProtocol(ves_io_schema.TlsProtocol_value[v.(string)])
+
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := tlsConfigMapStrToI["default_security"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+								choiceTypeFound = true
+
+								if v.(bool) {
+									choiceInt := &ves_io_schema_views.TlsConfig_DefaultSecurity{}
+									choiceInt.DefaultSecurity = &ves_io_schema.Empty{}
+									tlsConfig.Choice = choiceInt
+								}
+
+							}
+
+							if v, ok := tlsConfigMapStrToI["low_security"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+								choiceTypeFound = true
+
+								if v.(bool) {
+									choiceInt := &ves_io_schema_views.TlsConfig_LowSecurity{}
+									choiceInt.LowSecurity = &ves_io_schema.Empty{}
+									tlsConfig.Choice = choiceInt
+								}
+
+							}
+
+							if v, ok := tlsConfigMapStrToI["medium_security"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+								choiceTypeFound = true
+
+								if v.(bool) {
+									choiceInt := &ves_io_schema_views.TlsConfig_MediumSecurity{}
+									choiceInt.MediumSecurity = &ves_io_schema.Empty{}
+									tlsConfig.Choice = choiceInt
+								}
+
+							}
+
 						}
-
-					}
-
-					if v, ok := tlsConfigMapStrToI["low_security"]; ok && !isIntfNil(v) && !choiceTypeFound {
-
-						choiceTypeFound = true
-
-						if v.(bool) {
-							choiceInt := &ves_io_schema_views.TlsConfig_LowSecurity{}
-							choiceInt.LowSecurity = &ves_io_schema.Empty{}
-							tlsConfig.Choice = choiceInt
-						}
-
-					}
-
-					if v, ok := tlsConfigMapStrToI["medium_security"]; ok && !isIntfNil(v) && !choiceTypeFound {
-
-						choiceTypeFound = true
-
-						if v.(bool) {
-							choiceInt := &ves_io_schema_views.TlsConfig_MediumSecurity{}
-							choiceInt.MediumSecurity = &ves_io_schema.Empty{}
-							tlsConfig.Choice = choiceInt
-						}
-
 					}
 
 				}
 
 			}
-
 		}
 
 	}
@@ -5745,93 +6014,99 @@ func resourceVolterraTcpLoadbalancerUpdate(d *schema.ResourceData, meta interfac
 		originPoolsWeights := make([]*ves_io_schema_views.OriginPoolWithWeight, len(sl))
 		updateSpec.OriginPoolsWeights = originPoolsWeights
 		for i, set := range sl {
-			originPoolsWeights[i] = &ves_io_schema_views.OriginPoolWithWeight{}
-			originPoolsWeightsMapStrToI := set.(map[string]interface{})
+			if set != nil {
+				originPoolsWeights[i] = &ves_io_schema_views.OriginPoolWithWeight{}
+				originPoolsWeightsMapStrToI := set.(map[string]interface{})
 
-			if w, ok := originPoolsWeightsMapStrToI["endpoint_subsets"]; ok && !isIntfNil(w) {
-				ms := map[string]string{}
-				for k, v := range w.(map[string]interface{}) {
-					ms[k] = v.(string)
-				}
-				originPoolsWeights[i].EndpointSubsets = ms
-			}
-
-			poolChoiceTypeFound := false
-
-			if v, ok := originPoolsWeightsMapStrToI["cluster"]; ok && !isIntfNil(v) && !poolChoiceTypeFound {
-
-				poolChoiceTypeFound = true
-				poolChoiceInt := &ves_io_schema_views.OriginPoolWithWeight_Cluster{}
-				poolChoiceInt.Cluster = &ves_io_schema_views.ObjectRefType{}
-				originPoolsWeights[i].PoolChoice = poolChoiceInt
-
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
-
-					if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-						poolChoiceInt.Cluster.Name = v.(string)
-
+				if w, ok := originPoolsWeightsMapStrToI["endpoint_subsets"]; ok && !isIntfNil(w) {
+					ms := map[string]string{}
+					for k, v := range w.(map[string]interface{}) {
+						ms[k] = v.(string)
 					}
-
-					if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
-
-						poolChoiceInt.Cluster.Namespace = v.(string)
-
-					}
-
-					if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
-
-						poolChoiceInt.Cluster.Tenant = v.(string)
-
-					}
-
+					originPoolsWeights[i].EndpointSubsets = ms
 				}
 
-			}
+				poolChoiceTypeFound := false
 
-			if v, ok := originPoolsWeightsMapStrToI["pool"]; ok && !isIntfNil(v) && !poolChoiceTypeFound {
+				if v, ok := originPoolsWeightsMapStrToI["cluster"]; ok && !isIntfNil(v) && !poolChoiceTypeFound {
 
-				poolChoiceTypeFound = true
-				poolChoiceInt := &ves_io_schema_views.OriginPoolWithWeight_Pool{}
-				poolChoiceInt.Pool = &ves_io_schema_views.ObjectRefType{}
-				originPoolsWeights[i].PoolChoice = poolChoiceInt
+					poolChoiceTypeFound = true
+					poolChoiceInt := &ves_io_schema_views.OriginPoolWithWeight_Cluster{}
+					poolChoiceInt.Cluster = &ves_io_schema_views.ObjectRefType{}
+					originPoolsWeights[i].PoolChoice = poolChoiceInt
 
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
 
-					if v, ok := cs["name"]; ok && !isIntfNil(v) {
+							if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
-						poolChoiceInt.Pool.Name = v.(string)
+								poolChoiceInt.Cluster.Name = v.(string)
 
-					}
+							}
 
-					if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+							if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
 
-						poolChoiceInt.Pool.Namespace = v.(string)
+								poolChoiceInt.Cluster.Namespace = v.(string)
 
-					}
+							}
 
-					if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+							if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
 
-						poolChoiceInt.Pool.Tenant = v.(string)
+								poolChoiceInt.Cluster.Tenant = v.(string)
 
+							}
+
+						}
 					}
 
 				}
 
-			}
+				if v, ok := originPoolsWeightsMapStrToI["pool"]; ok && !isIntfNil(v) && !poolChoiceTypeFound {
 
-			if w, ok := originPoolsWeightsMapStrToI["priority"]; ok && !isIntfNil(w) {
-				originPoolsWeights[i].Priority = uint32(w.(int))
-			}
+					poolChoiceTypeFound = true
+					poolChoiceInt := &ves_io_schema_views.OriginPoolWithWeight_Pool{}
+					poolChoiceInt.Pool = &ves_io_schema_views.ObjectRefType{}
+					originPoolsWeights[i].PoolChoice = poolChoiceInt
 
-			if w, ok := originPoolsWeightsMapStrToI["weight"]; ok && !isIntfNil(w) {
-				originPoolsWeights[i].Weight = uint32(w.(int))
-			}
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
 
+							if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+								poolChoiceInt.Pool.Name = v.(string)
+
+							}
+
+							if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+								poolChoiceInt.Pool.Namespace = v.(string)
+
+							}
+
+							if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+								poolChoiceInt.Pool.Tenant = v.(string)
+
+							}
+
+						}
+					}
+
+				}
+
+				if w, ok := originPoolsWeightsMapStrToI["priority"]; ok && !isIntfNil(w) {
+					originPoolsWeights[i].Priority = uint32(w.(int))
+				}
+
+				if w, ok := originPoolsWeightsMapStrToI["weight"]; ok && !isIntfNil(w) {
+					originPoolsWeights[i].Weight = uint32(w.(int))
+				}
+
+			}
 		}
 
 	}
@@ -5869,36 +6144,38 @@ func resourceVolterraTcpLoadbalancerUpdate(d *schema.ResourceData, meta interfac
 		servicePolicyChoiceInt.ActiveServicePolicies = &ves_io_schema_views_tcp_loadbalancer.ServicePolicyList{}
 		updateSpec.ServicePolicyChoice = servicePolicyChoiceInt
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
+			if set != nil {
+				cs := set.(map[string]interface{})
 
-			if v, ok := cs["policies"]; ok && !isIntfNil(v) {
+				if v, ok := cs["policies"]; ok && !isIntfNil(v) {
 
-				sl := v.([]interface{})
-				policiesInt := make([]*ves_io_schema_views.ObjectRefType, len(sl))
-				servicePolicyChoiceInt.ActiveServicePolicies.Policies = policiesInt
-				for i, ps := range sl {
+					sl := v.([]interface{})
+					policiesInt := make([]*ves_io_schema_views.ObjectRefType, len(sl))
+					servicePolicyChoiceInt.ActiveServicePolicies.Policies = policiesInt
+					for i, ps := range sl {
 
-					pMapToStrVal := ps.(map[string]interface{})
-					policiesInt[i] = &ves_io_schema_views.ObjectRefType{}
+						pMapToStrVal := ps.(map[string]interface{})
+						policiesInt[i] = &ves_io_schema_views.ObjectRefType{}
 
-					if v, ok := pMapToStrVal["name"]; ok && !isIntfNil(v) {
-						policiesInt[i].Name = v.(string)
-					}
+						if v, ok := pMapToStrVal["name"]; ok && !isIntfNil(v) {
+							policiesInt[i].Name = v.(string)
+						}
 
-					if v, ok := pMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-						policiesInt[i].Namespace = v.(string)
-					}
+						if v, ok := pMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+							policiesInt[i].Namespace = v.(string)
+						}
 
-					if v, ok := pMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-						policiesInt[i].Tenant = v.(string)
+						if v, ok := pMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+							policiesInt[i].Tenant = v.(string)
+						}
+
 					}
 
 				}
 
 			}
-
 		}
 
 	}

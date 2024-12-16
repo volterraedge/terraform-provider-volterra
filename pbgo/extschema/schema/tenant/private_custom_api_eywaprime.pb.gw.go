@@ -29,7 +29,7 @@ var _ = runtime.String
 var _ = utilities.NewDoubleArray
 
 func request_CustomPrivateAPIEywaprime_RestrictedDeactivateTenant_0(ctx context.Context, marshaler runtime.Marshaler, client CustomPrivateAPIEywaprimeClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq DeactivateTenantRequest
+	var protoReq PrivateDeactivateTenantRequest
 	var metadata runtime.ServerMetadata
 
 	newReader, berr := utilities.IOReaderFactory(req.Body)
@@ -46,7 +46,7 @@ func request_CustomPrivateAPIEywaprime_RestrictedDeactivateTenant_0(ctx context.
 }
 
 func local_request_CustomPrivateAPIEywaprime_RestrictedDeactivateTenant_0(ctx context.Context, marshaler runtime.Marshaler, server CustomPrivateAPIEywaprimeServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq DeactivateTenantRequest
+	var protoReq PrivateDeactivateTenantRequest
 	var metadata runtime.ServerMetadata
 
 	newReader, berr := utilities.IOReaderFactory(req.Body)
@@ -63,7 +63,7 @@ func local_request_CustomPrivateAPIEywaprime_RestrictedDeactivateTenant_0(ctx co
 }
 
 func request_CustomPrivateAPIEywaprime_DeactivateTenant_0(ctx context.Context, marshaler runtime.Marshaler, client CustomPrivateAPIEywaprimeClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq DeactivateTenantRequest
+	var protoReq PrivateDeactivateTenantRequest
 	var metadata runtime.ServerMetadata
 
 	newReader, berr := utilities.IOReaderFactory(req.Body)
@@ -80,7 +80,7 @@ func request_CustomPrivateAPIEywaprime_DeactivateTenant_0(ctx context.Context, m
 }
 
 func local_request_CustomPrivateAPIEywaprime_DeactivateTenant_0(ctx context.Context, marshaler runtime.Marshaler, server CustomPrivateAPIEywaprimeServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq DeactivateTenantRequest
+	var protoReq PrivateDeactivateTenantRequest
 	var metadata runtime.ServerMetadata
 
 	newReader, berr := utilities.IOReaderFactory(req.Body)

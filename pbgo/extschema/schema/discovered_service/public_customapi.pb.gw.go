@@ -28,8 +28,8 @@ var _ status.Status
 var _ = runtime.String
 var _ = utilities.NewDoubleArray
 
-func request_CustomAPI_EnableWAAP_0(ctx context.Context, marshaler runtime.Marshaler, client CustomAPIClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq EnableWAAPRequest
+func request_CustomAPI_EnableVisibility_0(ctx context.Context, marshaler runtime.Marshaler, client CustomAPIClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var protoReq EnableVisibilityRequest
 	var metadata runtime.ServerMetadata
 
 	newReader, berr := utilities.IOReaderFactory(req.Body)
@@ -69,13 +69,13 @@ func request_CustomAPI_EnableWAAP_0(ctx context.Context, marshaler runtime.Marsh
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "name", err)
 	}
 
-	msg, err := client.EnableWAAP(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
+	msg, err := client.EnableVisibility(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
 	return msg, metadata, err
 
 }
 
-func local_request_CustomAPI_EnableWAAP_0(ctx context.Context, marshaler runtime.Marshaler, server CustomAPIServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq EnableWAAPRequest
+func local_request_CustomAPI_EnableVisibility_0(ctx context.Context, marshaler runtime.Marshaler, server CustomAPIServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var protoReq EnableVisibilityRequest
 	var metadata runtime.ServerMetadata
 
 	newReader, berr := utilities.IOReaderFactory(req.Body)
@@ -115,13 +115,13 @@ func local_request_CustomAPI_EnableWAAP_0(ctx context.Context, marshaler runtime
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "name", err)
 	}
 
-	msg, err := server.EnableWAAP(ctx, &protoReq)
+	msg, err := server.EnableVisibility(ctx, &protoReq)
 	return msg, metadata, err
 
 }
 
-func request_CustomAPI_DisableWAAP_0(ctx context.Context, marshaler runtime.Marshaler, client CustomAPIClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq DisableWAAPRequest
+func request_CustomAPI_DisableVisibility_0(ctx context.Context, marshaler runtime.Marshaler, client CustomAPIClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var protoReq DisableVisibilityRequest
 	var metadata runtime.ServerMetadata
 
 	newReader, berr := utilities.IOReaderFactory(req.Body)
@@ -161,13 +161,13 @@ func request_CustomAPI_DisableWAAP_0(ctx context.Context, marshaler runtime.Mars
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "name", err)
 	}
 
-	msg, err := client.DisableWAAP(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
+	msg, err := client.DisableVisibility(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
 	return msg, metadata, err
 
 }
 
-func local_request_CustomAPI_DisableWAAP_0(ctx context.Context, marshaler runtime.Marshaler, server CustomAPIServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq DisableWAAPRequest
+func local_request_CustomAPI_DisableVisibility_0(ctx context.Context, marshaler runtime.Marshaler, server CustomAPIServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var protoReq DisableVisibilityRequest
 	var metadata runtime.ServerMetadata
 
 	newReader, berr := utilities.IOReaderFactory(req.Body)
@@ -207,7 +207,7 @@ func local_request_CustomAPI_DisableWAAP_0(ctx context.Context, marshaler runtim
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "name", err)
 	}
 
-	msg, err := server.DisableWAAP(ctx, &protoReq)
+	msg, err := server.DisableVisibility(ctx, &protoReq)
 	return msg, metadata, err
 
 }
@@ -396,6 +396,10 @@ func local_request_CustomAPI_CreateTCPLoadBalancer_0(ctx context.Context, marsha
 
 }
 
+var (
+	filter_CustomAPI_ListDiscoveredServices_0 = &utilities.DoubleArray{Encoding: map[string]int{"namespace": 0}, Base: []int{1, 1, 0}, Check: []int{0, 1, 2}}
+)
+
 func request_CustomAPI_ListDiscoveredServices_0(ctx context.Context, marshaler runtime.Marshaler, client CustomAPIClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq ListServicesRequest
 	var metadata runtime.ServerMetadata
@@ -418,15 +422,11 @@ func request_CustomAPI_ListDiscoveredServices_0(ctx context.Context, marshaler r
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "namespace", err)
 	}
 
-	val, ok = pathParams["discovered_service_type"]
-	if !ok {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "discovered_service_type")
+	if err := req.ParseForm(); err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
-
-	protoReq.DiscoveredServiceType, err = runtime.String(val)
-
-	if err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "discovered_service_type", err)
+	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_CustomAPI_ListDiscoveredServices_0); err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 
 	msg, err := client.ListDiscoveredServices(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
@@ -456,15 +456,8 @@ func local_request_CustomAPI_ListDiscoveredServices_0(ctx context.Context, marsh
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "namespace", err)
 	}
 
-	val, ok = pathParams["discovered_service_type"]
-	if !ok {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "discovered_service_type")
-	}
-
-	protoReq.DiscoveredServiceType, err = runtime.String(val)
-
-	if err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "discovered_service_type", err)
+	if err := runtime.PopulateQueryParameters(&protoReq, req.URL.Query(), filter_CustomAPI_ListDiscoveredServices_0); err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 
 	msg, err := server.ListDiscoveredServices(ctx, &protoReq)
@@ -477,7 +470,7 @@ func local_request_CustomAPI_ListDiscoveredServices_0(ctx context.Context, marsh
 // StreamingRPC :currently unsupported pending https://github.com/grpc/grpc-go/issues/906.
 func RegisterCustomAPIHandlerServer(ctx context.Context, mux *runtime.ServeMux, server CustomAPIServer) error {
 
-	mux.Handle("POST", pattern_CustomAPI_EnableWAAP_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("POST", pattern_CustomAPI_EnableVisibility_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
@@ -486,18 +479,18 @@ func RegisterCustomAPIHandlerServer(ctx context.Context, mux *runtime.ServeMux, 
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := local_request_CustomAPI_EnableWAAP_0(rctx, inboundMarshaler, server, req, pathParams)
+		resp, md, err := local_request_CustomAPI_EnableVisibility_0(rctx, inboundMarshaler, server, req, pathParams)
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
 
-		forward_CustomAPI_EnableWAAP_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_CustomAPI_EnableVisibility_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
-	mux.Handle("POST", pattern_CustomAPI_DisableWAAP_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("POST", pattern_CustomAPI_DisableVisibility_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
@@ -506,14 +499,14 @@ func RegisterCustomAPIHandlerServer(ctx context.Context, mux *runtime.ServeMux, 
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := local_request_CustomAPI_DisableWAAP_0(rctx, inboundMarshaler, server, req, pathParams)
+		resp, md, err := local_request_CustomAPI_DisableVisibility_0(rctx, inboundMarshaler, server, req, pathParams)
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
 
-		forward_CustomAPI_DisableWAAP_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_CustomAPI_DisableVisibility_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
@@ -618,7 +611,7 @@ func RegisterCustomAPIHandler(ctx context.Context, mux *runtime.ServeMux, conn *
 // "CustomAPIClient" to call the correct interceptors.
 func RegisterCustomAPIHandlerClient(ctx context.Context, mux *runtime.ServeMux, client CustomAPIClient) error {
 
-	mux.Handle("POST", pattern_CustomAPI_EnableWAAP_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("POST", pattern_CustomAPI_EnableVisibility_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
@@ -627,18 +620,18 @@ func RegisterCustomAPIHandlerClient(ctx context.Context, mux *runtime.ServeMux, 
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := request_CustomAPI_EnableWAAP_0(rctx, inboundMarshaler, client, req, pathParams)
+		resp, md, err := request_CustomAPI_EnableVisibility_0(rctx, inboundMarshaler, client, req, pathParams)
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
 
-		forward_CustomAPI_EnableWAAP_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_CustomAPI_EnableVisibility_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
-	mux.Handle("POST", pattern_CustomAPI_DisableWAAP_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("POST", pattern_CustomAPI_DisableVisibility_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
@@ -647,14 +640,14 @@ func RegisterCustomAPIHandlerClient(ctx context.Context, mux *runtime.ServeMux, 
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := request_CustomAPI_DisableWAAP_0(rctx, inboundMarshaler, client, req, pathParams)
+		resp, md, err := request_CustomAPI_DisableVisibility_0(rctx, inboundMarshaler, client, req, pathParams)
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
 
-		forward_CustomAPI_DisableWAAP_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_CustomAPI_DisableVisibility_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
@@ -722,21 +715,21 @@ func RegisterCustomAPIHandlerClient(ctx context.Context, mux *runtime.ServeMux, 
 }
 
 var (
-	pattern_CustomAPI_EnableWAAP_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2, 2, 3, 1, 0, 4, 1, 5, 4, 2, 5}, []string{"public", "namespaces", "namespace", "discovered_services", "name", "enable_waap"}, "", runtime.AssumeColonVerbOpt(false)))
+	pattern_CustomAPI_EnableVisibility_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2, 2, 3, 1, 0, 4, 1, 5, 4, 2, 5}, []string{"public", "namespaces", "namespace", "discovered_services", "name", "enable_visibility"}, "", runtime.AssumeColonVerbOpt(false)))
 
-	pattern_CustomAPI_DisableWAAP_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2, 2, 3, 1, 0, 4, 1, 5, 4, 2, 5}, []string{"public", "namespaces", "namespace", "discovered_services", "name", "disable_waap"}, "", runtime.AssumeColonVerbOpt(false)))
+	pattern_CustomAPI_DisableVisibility_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2, 2, 3, 1, 0, 4, 1, 5, 4, 2, 5}, []string{"public", "namespaces", "namespace", "discovered_services", "name", "disable_visibility"}, "", runtime.AssumeColonVerbOpt(false)))
 
 	pattern_CustomAPI_CreateHTTPLoadBalancer_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2, 2, 3, 1, 0, 4, 1, 5, 4, 2, 5}, []string{"public", "namespaces", "namespace", "discovered_services", "name", "create_http_load_balancer"}, "", runtime.AssumeColonVerbOpt(false)))
 
 	pattern_CustomAPI_CreateTCPLoadBalancer_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2, 2, 3, 1, 0, 4, 1, 5, 4, 2, 5}, []string{"public", "namespaces", "namespace", "discovered_services", "name", "create_tcp_load_balancer"}, "", runtime.AssumeColonVerbOpt(false)))
 
-	pattern_CustomAPI_ListDiscoveredServices_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2, 2, 3, 1, 0, 4, 1, 5, 4, 2, 5}, []string{"public", "namespaces", "namespace", "discovered_services", "discovered_service_type", "services"}, "", runtime.AssumeColonVerbOpt(false)))
+	pattern_CustomAPI_ListDiscoveredServices_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3, 2, 4}, []string{"public", "custom", "namespaces", "namespace", "discovered_services"}, "", runtime.AssumeColonVerbOpt(false)))
 )
 
 var (
-	forward_CustomAPI_EnableWAAP_0 = runtime.ForwardResponseMessage
+	forward_CustomAPI_EnableVisibility_0 = runtime.ForwardResponseMessage
 
-	forward_CustomAPI_DisableWAAP_0 = runtime.ForwardResponseMessage
+	forward_CustomAPI_DisableVisibility_0 = runtime.ForwardResponseMessage
 
 	forward_CustomAPI_CreateHTTPLoadBalancer_0 = runtime.ForwardResponseMessage
 

@@ -2886,6 +2886,113 @@ func OriginPoolSubsetsValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *OriginServerCBIPService) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *OriginServerCBIPService) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *OriginServerCBIPService) DeepCopy() *OriginServerCBIPService {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &OriginServerCBIPService{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *OriginServerCBIPService) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *OriginServerCBIPService) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return OriginServerCBIPServiceValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateOriginServerCBIPService struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateOriginServerCBIPService) ServiceNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for service_name")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateOriginServerCBIPService) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*OriginServerCBIPService)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *OriginServerCBIPService got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["service_name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("service_name"))
+		if err := fv(ctx, m.GetServiceName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultOriginServerCBIPServiceValidator = func() *ValidateOriginServerCBIPService {
+	v := &ValidateOriginServerCBIPService{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhServiceName := v.ServiceNameValidationRuleHandler
+	rulesServiceName := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhServiceName(rulesServiceName)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for OriginServerCBIPService.service_name: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["service_name"] = vFn
+
+	return v
+}()
+
+func OriginServerCBIPServiceValidator() db.Validator {
+	return DefaultOriginServerCBIPServiceValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *OriginServerConsulService) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -4805,6 +4912,10 @@ func (m *OriginServerType) GetChoiceDRefInfo() ([]db.DRefInfo, error) {
 		}
 		return drInfos, err
 
+	case *OriginServerType_CbipService:
+
+		return nil, nil
+
 	default:
 		return nil, nil
 	}
@@ -4947,6 +5058,17 @@ func (v *ValidateOriginServerType) Validate(ctx context.Context, pm interface{},
 				return err
 			}
 		}
+	case *OriginServerType_CbipService:
+		if fv, exists := v.FldValidators["choice.cbip_service"]; exists {
+			val := m.GetChoice().(*OriginServerType_CbipService).CbipService
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("cbip_service"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
@@ -4997,6 +5119,7 @@ var DefaultOriginServerTypeValidator = func() *ValidateOriginServerType {
 	v.FldValidators["choice.custom_endpoint_object"] = OriginServerCustomEndpointValidator().Validate
 	v.FldValidators["choice.vn_private_ip"] = OriginServerVirtualNetworkIPValidator().Validate
 	v.FldValidators["choice.vn_private_name"] = OriginServerVirtualNetworkNameValidator().Validate
+	v.FldValidators["choice.cbip_service"] = OriginServerCBIPServiceValidator().Validate
 
 	return v
 }()

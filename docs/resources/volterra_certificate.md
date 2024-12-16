@@ -1,9 +1,9 @@
 ---
 
 page_title: "Volterra: certificate"
-description: "The certificate allows CRUD of Certificate resource on Volterra SaaS"
 
----
+description: "The certificate allows CRUD of Certificate resource on Volterra SaaS"
+-----------------------------------------------------------------------------------
 
 Resource volterra_certificate
 =============================
@@ -34,12 +34,16 @@ resource "volterra_certificate" "example" {
 
     // One of the arguments from this list "blindfold_secret_info clear_secret_info vault_secret_info wingman_secret_info" must be set
 
-    blindfold_secret_info {
-      decryption_provider = "value"
+    vault_secret_info {
+      key = "key_pem"
 
-      location = "string:///U2VjcmV0SW5mb3JtYXRpb24="
+      location = "v1/data/vhost_key"
 
-      store_provider = "value"
+      provider = "vault-vh-provider"
+
+      secret_encoding = "secret_encoding"
+
+      version = "1"
     }
   }
 }

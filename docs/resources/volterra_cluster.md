@@ -1,9 +1,9 @@
 ---
 
 page_title: "Volterra: cluster"
-description: "The cluster allows CRUD of Cluster resource on Volterra SaaS"
 
----
+description: "The cluster allows CRUD of Cluster resource on Volterra SaaS"
+---------------------------------------------------------------------------
 
 Resource volterra_cluster
 =========================

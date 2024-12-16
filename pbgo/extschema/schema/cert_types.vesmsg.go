@@ -1339,6 +1339,138 @@ func HostAccessInfoTypeValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *TLSCoalescingOptions) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *TLSCoalescingOptions) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *TLSCoalescingOptions) DeepCopy() *TLSCoalescingOptions {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &TLSCoalescingOptions{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *TLSCoalescingOptions) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *TLSCoalescingOptions) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return TLSCoalescingOptionsValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateTLSCoalescingOptions struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateTLSCoalescingOptions) CoalescingChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for coalescing_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateTLSCoalescingOptions) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*TLSCoalescingOptions)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *TLSCoalescingOptions got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["coalescing_choice"]; exists {
+		val := m.GetCoalescingChoice()
+		vOpts := append(opts,
+			db.WithValidateField("coalescing_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetCoalescingChoice().(type) {
+	case *TLSCoalescingOptions_DefaultCoalescing:
+		if fv, exists := v.FldValidators["coalescing_choice.default_coalescing"]; exists {
+			val := m.GetCoalescingChoice().(*TLSCoalescingOptions_DefaultCoalescing).DefaultCoalescing
+			vOpts := append(opts,
+				db.WithValidateField("coalescing_choice"),
+				db.WithValidateField("default_coalescing"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *TLSCoalescingOptions_StrictCoalescing:
+		if fv, exists := v.FldValidators["coalescing_choice.strict_coalescing"]; exists {
+			val := m.GetCoalescingChoice().(*TLSCoalescingOptions_StrictCoalescing).StrictCoalescing
+			vOpts := append(opts,
+				db.WithValidateField("coalescing_choice"),
+				db.WithValidateField("strict_coalescing"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultTLSCoalescingOptionsValidator = func() *ValidateTLSCoalescingOptions {
+	v := &ValidateTLSCoalescingOptions{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhCoalescingChoice := v.CoalescingChoiceValidationRuleHandler
+	rulesCoalescingChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhCoalescingChoice(rulesCoalescingChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for TLSCoalescingOptions.coalescing_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["coalescing_choice"] = vFn
+
+	return v
+}()
+
+func TLSCoalescingOptionsValidator() db.Validator {
+	return DefaultTLSCoalescingOptionsValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *TlsParamsType) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }

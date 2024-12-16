@@ -90,7 +90,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AddonServices: []string{"f5xc-ipv6-standard"},
 		},
 		{
-			FieldPath:     "ves.io.schema.views.voltstack_site.CreateRequest.spec.local_control_plane_choice.local_control_plane.bgp_config.peers.type_choice.external.family_inet_v6",
+			FieldPath:     "ves.io.schema.views.voltstack_site.CreateRequest.spec.local_control_plane_choice.local_control_plane.bgp_config.peers.type_choice.external.family_inet_v6.enable_choice.enable",
 			AddonServices: []string{"f5xc-ipv6-standard"},
 		},
 		{
@@ -165,6 +165,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.custom_network_config.interface_list.interfaces.#.ethernet_interface.static_ip.fleet_static_ip",
 		"spec.custom_network_config.interface_list.interfaces.#.ethernet_interface.static_ipv6_address.fleet_static_ip",
 		"spec.custom_network_config.interface_list.interfaces.#.loopback_interface",
+		"spec.custom_network_config.interface_list.interfaces.#.tunnel_interface.cloud_connect.#",
 		"spec.custom_network_config.interface_list.interfaces.#.tunnel_interface.inside_network",
 		"spec.custom_network_config.interface_list.interfaces.#.tunnel_interface.static_ip.fleet_static_ip",
 		"spec.custom_storage_config.storage_device_list.storage_devices.#.hpe_storage.iscsi_chap_password.blindfold_secret_info_internal",
@@ -594,7 +595,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AddonServices: []string{"f5xc-ipv6-standard"},
 		},
 		{
-			FieldPath:     "ves.io.schema.views.voltstack_site.ReplaceRequest.spec.local_control_plane_choice.local_control_plane.bgp_config.peers.type_choice.external.family_inet_v6",
+			FieldPath:     "ves.io.schema.views.voltstack_site.ReplaceRequest.spec.local_control_plane_choice.local_control_plane.bgp_config.peers.type_choice.external.family_inet_v6.enable_choice.enable",
 			AddonServices: []string{"f5xc-ipv6-standard"},
 		},
 		{
@@ -664,6 +665,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.custom_network_config.interface_list.interfaces.#.ethernet_interface.static_ip.fleet_static_ip",
 		"spec.custom_network_config.interface_list.interfaces.#.ethernet_interface.static_ipv6_address.fleet_static_ip",
 		"spec.custom_network_config.interface_list.interfaces.#.loopback_interface",
+		"spec.custom_network_config.interface_list.interfaces.#.tunnel_interface.cloud_connect.#",
 		"spec.custom_network_config.interface_list.interfaces.#.tunnel_interface.inside_network",
 		"spec.custom_network_config.interface_list.interfaces.#.tunnel_interface.static_ip.fleet_static_ip",
 		"spec.custom_storage_config.storage_device_list.storage_devices.#.hpe_storage.iscsi_chap_password.blindfold_secret_info_internal",

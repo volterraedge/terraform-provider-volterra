@@ -239,12 +239,12 @@ func (v *ValidateDataplaneIdentifier) Validate(ctx context.Context, pm interface
 				return err
 			}
 		}
-	case *DataplaneIdentifier_ClusterObjectId:
-		if fv, exists := v.FldValidators["dataplane_id.cluster_object_id"]; exists {
-			val := m.GetDataplaneId().(*DataplaneIdentifier_ClusterObjectId).ClusterObjectId
+	case *DataplaneIdentifier_CsgObjectId:
+		if fv, exists := v.FldValidators["dataplane_id.csg_object_id"]; exists {
+			val := m.GetDataplaneId().(*DataplaneIdentifier_CsgObjectId).CsgObjectId
 			vOpts := append(opts,
 				db.WithValidateField("dataplane_id"),
-				db.WithValidateField("cluster_object_id"),
+				db.WithValidateField("csg_object_id"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err

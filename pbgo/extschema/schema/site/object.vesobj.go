@@ -108,6 +108,20 @@ func ListObject(ctx context.Context, lister db.EntryLister, opts ...db.ListEntri
 	return oList, errors.ErrOrNil(merr)
 }
 
+// Redact squashes sensitive info in o (in-place)
+func (o *Object) Redact(ctx context.Context) error {
+	// clear fields with confidential option set (at message or field level)
+	if o == nil {
+		return nil
+	}
+
+	if err := o.GetSpec().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting Object.spec")
+	}
+
+	return nil
+}
+
 func (o *Object) DeepCopy() *Object {
 	if o == nil {
 		return nil
@@ -482,6 +496,30 @@ func (o *DBObject) SetObjSystemMetadata(in sro.SystemMetadata) error {
 	}
 	o.SystemMetadata = m
 	return nil
+}
+
+func (e *DBObject) SetDirectRefHash(s string) {
+	m := e.GetSystemMetadata()
+	if m == nil {
+		m = &ves_io_schema.SystemObjectMetaType{}
+	}
+	m.DirectRefHash = s
+}
+
+func (e *DBObject) GetDirectRefHash() string {
+	m := e.GetSystemMetadata()
+	if m == nil {
+		return ""
+	}
+	return m.DirectRefHash
+}
+
+func (e *DBObject) GetModificationTimestamp() *google_protobuf.Timestamp {
+	m := e.GetSystemMetadata()
+	if m == nil {
+		return nil
+	}
+	return m.ModificationTimestamp
 }
 
 func (o *DBObject) GetObjSpec() sro.Spec {

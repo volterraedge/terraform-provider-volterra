@@ -3211,6 +3211,14 @@ var APISwaggerJSON string = `{
                     "title": "flow_label",
                     "$ref": "#/definitions/schemaBotDefenseFlowLabelCategoriesChoiceType"
                 },
+                "headers": {
+                    "type": "array",
+                    "description": "x-displayName: \"HTTP Headers\"\nA list of predicates for various HTTP headers that need to match. The criteria for matching each HTTP header are described in individual HeaderMatcherType\ninstances. The actual HTTP header values are extracted from the request API as a list of strings for each HTTP header type.\nNote that all specified header predicates must evaluate to true.",
+                    "title": "headers",
+                    "items": {
+                        "$ref": "#/definitions/schemapolicyHeaderMatcherType"
+                    }
+                },
                 "http_methods": {
                     "type": "array",
                     "description": "x-displayName: \"HTTP Methods\"\nx-required\nList of HTTP methods.",
@@ -3248,6 +3256,14 @@ var APISwaggerJSON string = `{
                     "description": "x-displayName: \"Protocol\"\nProtocol.",
                     "title": "Protocol",
                     "$ref": "#/definitions/common_securityURLScheme"
+                },
+                "query_params": {
+                    "type": "array",
+                    "description": "x-displayName: \"HTTP Query Parameters\"\nA list of predicates for all query parameters that need to be matched. The criteria for matching each query parameter are described in individual instances\nof QueryParameterMatcherType. The actual query parameter values are extracted from the request API as a list of strings for each query parameter name.\nNote that all specified query parameter predicates must evaluate to true.",
+                    "title": "query params",
+                    "items": {
+                        "$ref": "#/definitions/schemapolicyQueryParameterMatcherType"
+                    }
                 },
                 "undefined_flow_label": {
                     "description": "x-displayName: \"Undefined\"",
@@ -3564,7 +3580,7 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "ip_prefix_list": {
-                    "description": "Exclusive with [ddos_client_source]\n IPv4 prefix string.",
+                    "description": "Exclusive with [ddos_client_source]\n IP prefix string.",
                     "title": "ip source",
                     "$ref": "#/definitions/policyPrefixMatchList",
                     "x-displayname": "IP Source"
@@ -3578,6 +3594,89 @@ var APISwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true"
                     }
+                }
+            }
+        },
+        "common_securityMalwareProtectionPolicy": {
+            "type": "object",
+            "description": "Malware Protection protects Web Apps and APIs, from malicious file uploads by scanning files in real-time.",
+            "title": "MalwareProtectionPolicy",
+            "x-displayname": "Malware Protection Policy",
+            "x-ves-proto-message": "ves.io.schema.views.common_security.MalwareProtectionPolicy",
+            "properties": {
+                "malware_protection_rules": {
+                    "type": "array",
+                    "description": " Configure the match criteria to trigger Malware Protection Scan\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 32\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "rules",
+                    "minItems": 1,
+                    "maxItems": 32,
+                    "items": {
+                        "$ref": "#/definitions/common_securityMalwareProtectionRule"
+                    },
+                    "x-displayname": "Malware Detection Rules",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.max_items": "32",
+                        "ves.io.schema.rules.repeated.min_items": "1",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                }
+            }
+        },
+        "common_securityMalwareProtectionRule": {
+            "type": "object",
+            "description": "Configure the match criteria to trigger Malware Protection Scan",
+            "title": "MalwareProtectionRule",
+            "x-displayname": "Malware Protection Rules",
+            "x-ves-displayorder": "1,2,3,4,5,6",
+            "x-ves-proto-message": "ves.io.schema.views.common_security.MalwareProtectionRule",
+            "properties": {
+                "action": {
+                    "description": " Report will identify and log threats, whereas Block will both log and block threats",
+                    "title": "action",
+                    "$ref": "#/definitions/schemaAction",
+                    "x-displayname": "Action"
+                },
+                "domain": {
+                    "description": " Domain to be matched",
+                    "title": "Domain",
+                    "$ref": "#/definitions/schemaDomainMatcherType",
+                    "x-displayname": "Domain"
+                },
+                "http_methods": {
+                    "type": "array",
+                    "description": " Methods to be matched\n\nValidation Rules:\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "HTTP Methods",
+                    "items": {
+                        "$ref": "#/definitions/schemaHttpMethod"
+                    },
+                    "x-displayname": "HTTP Methods",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                },
+                "metadata": {
+                    "description": " Common attributes for the rule including name and description.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "metadata",
+                    "$ref": "#/definitions/schemaMessageMetaType",
+                    "x-displayname": "Metadata",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "path": {
+                    "description": " Path to be matched",
+                    "title": "Path",
+                    "$ref": "#/definitions/ioschemaPathMatcherType",
+                    "x-displayname": "Path"
+                },
+                "protocol": {
+                    "description": " Protocol to be matched",
+                    "title": "Protocol",
+                    "$ref": "#/definitions/schemaURLSchemeType",
+                    "x-displayname": "Protocol"
                 }
             }
         },
@@ -4442,6 +4541,51 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "common_wafApiCrawler": {
+            "type": "object",
+            "description": "Api Crawler message",
+            "title": "API Crawling",
+            "x-displayname": "API Crawling",
+            "x-ves-oneof-field-api_crawler": "[\"api_crawler_config\",\"disable_api_crawler\"]",
+            "x-ves-proto-message": "ves.io.schema.views.common_waf.ApiCrawler",
+            "properties": {
+                "api_crawler_config": {
+                    "description": "Exclusive with [disable_api_crawler]\n Select to activate the API Crawling",
+                    "title": "Crawler Enabled Condition",
+                    "$ref": "#/definitions/common_wafApiCrawlerConfiguration",
+                    "x-displayname": "Enable"
+                },
+                "disable_api_crawler": {
+                    "description": "Exclusive with [api_crawler_config]\n Select to turn off the API Crawling. No API Crawling actions will be performed.",
+                    "title": "Crawler Disable Condition",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Disable"
+                }
+            }
+        },
+        "common_wafApiCrawlerConfiguration": {
+            "type": "object",
+            "title": "Crawler Domains Configuration",
+            "x-displayname": "Crawler Configure",
+            "x-ves-proto-message": "ves.io.schema.views.common_waf.ApiCrawlerConfiguration",
+            "properties": {
+                "domains": {
+                    "type": "array",
+                    "description": " Enter domains and their credentials to allow authenticated API crawling. You can only include domains you own that are associated with this Load Balancer.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 32\n",
+                    "title": "Configured API Domains",
+                    "maxItems": 32,
+                    "items": {
+                        "$ref": "#/definitions/common_wafDomainConfiguration"
+                    },
+                    "x-displayname": "Domains to Crawl",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.max_items": "32"
+                    }
+                }
+            }
+        },
         "common_wafApiDefinitionList": {
             "type": "object",
             "description": "x-displayName: \"API Definition List\"\nList of api definitions.",
@@ -4453,6 +4597,25 @@ var APISwaggerJSON string = `{
                     "title": "API Definitions",
                     "items": {
                         "$ref": "#/definitions/schemaviewsObjectRefType"
+                    }
+                }
+            }
+        },
+        "common_wafApiDiscoveryAdvancedSettings": {
+            "type": "object",
+            "description": "API Discovery Advanced settings",
+            "title": "ApiDiscoveryAdvancedSettings",
+            "x-displayname": "API Discovery Advanced Settings",
+            "x-ves-proto-message": "ves.io.schema.views.common_waf.ApiDiscoveryAdvancedSettings",
+            "properties": {
+                "api_discovery_ref": {
+                    "description": " API Discovery Settings Object\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "API Discovery Settings Object",
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "API Discovery Settings Object",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
                     }
                 }
             }
@@ -4488,14 +4651,33 @@ var APISwaggerJSON string = `{
             "title": "API Discovery Setting",
             "x-displayname": "API Discovery Setting",
             "x-ves-displayorder": "1,6,5",
+            "x-ves-oneof-field-api_discovery_settings_choice": "[\"custom_api_auth_discovery\",\"default_api_auth_discovery\"]",
             "x-ves-oneof-field-learn_from_redirect_traffic": "[\"disable_learn_from_redirect_traffic\",\"enable_learn_from_redirect_traffic\"]",
             "x-ves-proto-message": "ves.io.schema.views.common_waf.ApiDiscoverySetting",
             "properties": {
+                "api_crawler": {
+                    "description": " Configure Discovered API Settings.",
+                    "title": "API Crawler",
+                    "$ref": "#/definitions/common_wafApiCrawler",
+                    "x-displayname": "API Crawling"
+                },
                 "api_discovery_from_code_scan": {
                     "description": " Select API code repositories to the load balancer to use them as a source for API endpoint discovery.",
                     "title": "Code Base Integration",
                     "$ref": "#/definitions/common_wafApiDiscoveryFromCodeScan",
                     "x-displayname": "API repositories"
+                },
+                "custom_api_auth_discovery": {
+                    "description": "Exclusive with [default_api_auth_discovery]\n Apply custom API discovery settings",
+                    "title": "Apply Specified Custom API Auth Discovery",
+                    "$ref": "#/definitions/common_wafApiDiscoveryAdvancedSettings",
+                    "x-displayname": "Custom"
+                },
+                "default_api_auth_discovery": {
+                    "description": "Exclusive with [custom_api_auth_discovery]\n Apply system default API discovery settings",
+                    "title": "default",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Default"
                 },
                 "disable_learn_from_redirect_traffic": {
                     "description": "Exclusive with [enable_learn_from_redirect_traffic]\n Disable learning API patterns from traffic with redirect response codes 3xx",
@@ -4842,7 +5024,8 @@ var APISwaggerJSON string = `{
                 "SKIP_PROCESSING_API_PROTECTION",
                 "SKIP_PROCESSING_OAS_VALIDATION",
                 "SKIP_PROCESSING_DDOS_PROTECTION",
-                "SKIP_PROCESSING_THREAT_MESH"
+                "SKIP_PROCESSING_THREAT_MESH",
+                "SKIP_PROCESSING_MALWARE_PROTECTION"
             ],
             "default": "SKIP_PROCESSING_WAF",
             "x-displayname": "Action",
@@ -4926,6 +5109,38 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.repeated.max_items": "4",
                         "ves.io.schema.rules.repeated.min_items": "1"
+                    }
+                }
+            }
+        },
+        "common_wafDomainConfiguration": {
+            "type": "object",
+            "description": "The DomainConfiguration message",
+            "title": "Configured API Domains",
+            "x-displayname": "Crawler Details",
+            "x-ves-proto-message": "ves.io.schema.views.common_waf.DomainConfiguration",
+            "properties": {
+                "domain": {
+                    "type": "string",
+                    "description": " Select the domain to execute API Crawling with given credentials.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 256\n  ves.io.schema.rules.string.vh_domain: true\n",
+                    "title": "Custom domain to crawl",
+                    "maxLength": 256,
+                    "x-displayname": "Domain",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_len": "256",
+                        "ves.io.schema.rules.string.vh_domain": "true"
+                    }
+                },
+                "simple_login": {
+                    "description": " Enter the username and password to assign credentials for the selected domain to crawl\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "The Domain credentials",
+                    "$ref": "#/definitions/common_wafSimpleLogin",
+                    "x-displayname": "Credentials",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
                     }
                 }
             }
@@ -5078,7 +5293,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.views.common_waf.InlineRateLimiter",
             "properties": {
                 "ref_user_id": {
-                    "description": "Exclusive with [use_http_lb_user_id]\n A reference to user_identification object.\n The rules in the user_identification object are evaluated to determine the user identifier to be rate limited.",
+                    "description": "Exclusive with [use_http_lb_user_id]\n A reference to user_identification object.\n The rules in the user_identification object are evaluated to determine the user identifier to be rate limited.\n If traffic cannot be identified by the rules in the user_identification object, by default it will be identified by the HTTP-LB User Identifier.",
                     "title": "ref_user_id",
                     "$ref": "#/definitions/schemaviewsObjectRefType",
                     "x-displayname": "User Identification Policy"
@@ -5700,7 +5915,7 @@ var APISwaggerJSON string = `{
             "title": "SimpleClientSrcRule",
             "x-displayname": "Client Rule",
             "x-ves-oneof-field-action_choice": "[\"bot_skip_processing\",\"skip_processing\",\"waf_skip_processing\"]",
-            "x-ves-oneof-field-client_source_choice": "[\"as_number\",\"http_header\",\"ip_prefix\",\"user_identifier\"]",
+            "x-ves-oneof-field-client_source_choice": "[\"as_number\",\"http_header\",\"ip_prefix\",\"ipv6_prefix\",\"user_identifier\"]",
             "x-ves-proto-message": "ves.io.schema.views.common_waf.SimpleClientSrcRule",
             "properties": {
                 "actions": {
@@ -5720,7 +5935,7 @@ var APISwaggerJSON string = `{
                 },
                 "as_number": {
                     "type": "integer",
-                    "description": "Exclusive with [http_header ip_prefix user_identifier]\n RFC 6793 defined 4-byte AS number\n\nExample: - \"4683\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 401308\n",
+                    "description": "Exclusive with [http_header ip_prefix ipv6_prefix user_identifier]\n RFC 6793 defined 4-byte AS number\n\nExample: - \"4683\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 401308\n",
                     "title": "as number",
                     "format": "int64",
                     "x-displayname": "AS Number",
@@ -5748,19 +5963,29 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "http_header": {
-                    "description": "Exclusive with [as_number ip_prefix user_identifier]\n Request header name and value pairs",
+                    "description": "Exclusive with [as_number ip_prefix ipv6_prefix user_identifier]\n Request header name and value pairs",
                     "title": "HTTP Header",
                     "$ref": "#/definitions/common_wafHttpHeaderMatcherList",
                     "x-displayname": "HTTP Headers"
                 },
                 "ip_prefix": {
                     "type": "string",
-                    "description": "Exclusive with [as_number http_header user_identifier]\n IPv4 prefix string.\n\nExample: - \"192.168.20.0/24\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv4_prefix: true\n",
+                    "description": "Exclusive with [as_number http_header ipv6_prefix user_identifier]\n IPv4 prefix string.\n\nExample: - \"192.168.20.0/24\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv4_prefix: true\n",
                     "title": "ip prefix",
-                    "x-displayname": "IP Prefix",
+                    "x-displayname": "IPv4 Prefix",
                     "x-ves-example": "192.168.20.0/24",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.string.ipv4_prefix": "true"
+                    }
+                },
+                "ipv6_prefix": {
+                    "type": "string",
+                    "description": "Exclusive with [as_number http_header ip_prefix user_identifier]\n IPv6 prefix string.\n\nExample: - \"2001::1/64\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6_prefix: true\n",
+                    "title": "ipv6 prefix",
+                    "x-displayname": "IPv6 Prefix",
+                    "x-ves-example": "2001::1/64",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.ipv6_prefix": "true"
                     }
                 },
                 "metadata": {
@@ -5781,7 +6006,7 @@ var APISwaggerJSON string = `{
                 },
                 "user_identifier": {
                     "type": "string",
-                    "description": "Exclusive with [as_number http_header ip_prefix]\n Identify user based on user identifier. User identifier value needs to be copied from security event.\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n",
+                    "description": "Exclusive with [as_number http_header ip_prefix ipv6_prefix]\n Identify user based on user identifier. User identifier value needs to be copied from security event.\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n",
                     "title": "user identifier",
                     "maxLength": 256,
                     "x-displayname": "User Identifier",
@@ -5794,6 +6019,38 @@ var APISwaggerJSON string = `{
                     "title": "Skip WAF Processing",
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "Skip WAF Processing"
+                }
+            }
+        },
+        "common_wafSimpleLogin": {
+            "type": "object",
+            "title": "Simple Login",
+            "x-displayname": "Simple Login",
+            "x-ves-proto-message": "ves.io.schema.views.common_waf.SimpleLogin",
+            "properties": {
+                "password": {
+                    "description": "\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 128\n",
+                    "title": "The custom domain password authentication",
+                    "$ref": "#/definitions/schemaSecretType",
+                    "maximum": 128,
+                    "x-displayname": "Password",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_len": "128"
+                    }
+                },
+                "user": {
+                    "type": "string",
+                    "description": "\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 64\n",
+                    "title": "The custom domain user authentication",
+                    "maxLength": 64,
+                    "x-displayname": "User",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_len": "64"
+                    }
                 }
             }
         },
@@ -6261,15 +6518,34 @@ var APISwaggerJSON string = `{
         },
         "http_loadbalancerBodySectionMaskingOptions": {
             "type": "object",
-            "description": "x-displayName: \"Body Section Masking Options\"\nOptions for HTTP Body Masking",
+            "description": "Options for HTTP Body Masking",
             "title": "Body Section Masking Options",
+            "x-displayname": "Body Section Masking Options",
+            "x-ves-proto-message": "ves.io.schema.views.http_loadbalancer.BodySectionMaskingOptions",
             "properties": {
                 "fields": {
                     "type": "array",
-                    "description": "x-displayName: \"Values\"\nx-required\nx-example: \"['user.email', 'credit_card']\"\nList of JSON Path field values. Use square brackets with an underscore [_] to indicate array elements, e.g., person.emails[_].",
+                    "description": " List of JSON Path field values. Use square brackets with an underscore [_] to indicate array elements, e.g., person.emails[_].\n\nExample: - \"['user.email', 'credit_card']\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.items.string.json_path: true\n  ves.io.schema.rules.repeated.items.string.max_bytes: 256\n  ves.io.schema.rules.repeated.items.string.min_bytes: 1\n  ves.io.schema.rules.repeated.items.string.not_empty: true\n  ves.io.schema.rules.repeated.max_items: 16\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "Field Values",
+                    "minItems": 1,
+                    "maxItems": 16,
                     "items": {
-                        "type": "string"
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 256
+                    },
+                    "x-displayname": "Values",
+                    "x-ves-example": "['user.email', 'credit_card']",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.items.string.json_path": "true",
+                        "ves.io.schema.rules.repeated.items.string.max_bytes": "256",
+                        "ves.io.schema.rules.repeated.items.string.min_bytes": "1",
+                        "ves.io.schema.rules.repeated.items.string.not_empty": "true",
+                        "ves.io.schema.rules.repeated.max_items": "16",
+                        "ves.io.schema.rules.repeated.min_items": "1",
+                        "ves.io.schema.rules.repeated.unique": "true"
                     }
                 }
             }
@@ -6395,6 +6671,12 @@ var APISwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.string.max_len": "8096"
                     }
+                },
+                "coalescing_options": {
+                    "description": " Options for coalescing TLS for multiple HTTPS Load Balancers",
+                    "title": "TLS Coalescing options",
+                    "$ref": "#/definitions/schemaTLSCoalescingOptions",
+                    "x-displayname": "TLS Coalescing Options"
                 },
                 "connection_idle_timeout": {
                     "type": "integer",
@@ -6535,6 +6817,12 @@ var APISwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.string.max_len": "8096"
                     }
+                },
+                "coalescing_options": {
+                    "description": " Options for coalescing TLS for multiple HTTPS Load Balancers",
+                    "title": "TLS Coalescing options",
+                    "$ref": "#/definitions/schemaTLSCoalescingOptions",
+                    "x-displayname": "TLS Coalescing Options"
                 },
                 "connection_idle_timeout": {
                     "type": "integer",
@@ -7051,7 +7339,7 @@ var APISwaggerJSON string = `{
             "description": "A simple route matches on path, incoming header, incoming port and/or HTTP method\nand forwards the matching traffic to the associated pools",
             "title": "RouteTypeSimple",
             "x-displayname": "Simple Route",
-            "x-ves-displayorder": "2,1,9,10,3,4,8",
+            "x-ves-displayorder": "2,1,9,10,3,4,11,8",
             "x-ves-oneof-field-host_rewrite_params": "[\"auto_host_rewrite\",\"disable_host_rewrite\",\"host_rewrite\"]",
             "x-ves-proto-message": "ves.io.schema.views.http_loadbalancer.RouteTypeSimple",
             "properties": {
@@ -7136,58 +7424,69 @@ var APISwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true"
                     }
+                },
+                "query_params": {
+                    "description": " Handling of incoming query parameters in simple route.",
+                    "title": "query_params",
+                    "$ref": "#/definitions/routeQueryParamsSimpleRoute",
+                    "x-displayname": "Query Parameters"
                 }
             }
         },
         "http_loadbalancerSensitiveDataDisclosureRules": {
             "type": "object",
-            "description": "x-displayName: \"Sensitive Data Exposure Rules\"\nSensitive Data Exposure Rules allows specifying rules to mask sensitive data fields in API responses",
+            "description": "Sensitive Data Exposure Rules allows specifying rules to mask sensitive data fields in API responses",
             "title": "Sensitive Data Exposure Rules",
+            "x-displayname": "Sensitive Data Exposure Rules",
+            "x-ves-proto-message": "ves.io.schema.views.http_loadbalancer.SensitiveDataDisclosureRules",
             "properties": {
                 "sensitive_data_types_in_response": {
                     "type": "array",
-                    "description": "x-displayName: \"Sensitive Data Exposure Rules\"\nSensitive Data Exposure Rules allows specifying rules to mask sensitive data fields in API responses",
+                    "description": " Sensitive Data Exposure Rules allows specifying rules to mask sensitive data fields in API responses \n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 100\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "Sensitive Data Exposure Rules",
+                    "maxItems": 100,
                     "items": {
                         "$ref": "#/definitions/http_loadbalancerSensitiveDataTypes"
+                    },
+                    "x-displayname": "Sensitive Data Exposure Rules",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "100",
+                        "ves.io.schema.rules.repeated.unique": "true"
                     }
                 }
             }
         },
         "http_loadbalancerSensitiveDataTypes": {
             "type": "object",
-            "description": "x-displayName: \"Sensitive Data Types\"\nSettings to mask sensitive data in request/response payload",
+            "description": "Settings to mask sensitive data in request/response payload",
             "title": "Sensitive Data Types",
+            "x-displayname": "Sensitive Data Types",
+            "x-ves-oneof-field-masking_mode_choice": "[\"mask\",\"report\"]",
+            "x-ves-oneof-field-type_condition_type_choice": "[\"api_endpoint\"]",
+            "x-ves-proto-message": "ves.io.schema.views.http_loadbalancer.SensitiveDataTypes",
             "properties": {
                 "api_endpoint": {
-                    "description": "x-displayName: \"API Endpoint\"\nThe API endpoint (Path + Method) which this validation applies to",
+                    "description": "Exclusive with []\n The API endpoint (Path + Method) which this validation applies to",
                     "title": "API Endpoint",
-                    "$ref": "#/definitions/common_wafApiEndpointDetails"
-                },
-                "api_group": {
-                    "type": "string",
-                    "description": "x-displayName: \"API Group\"\nx-example: \"oas-all-operations\"\nThe API group which this validation applies to",
-                    "title": "api_group"
-                },
-                "base_path": {
-                    "type": "string",
-                    "description": "x-displayName: \"Base Path\"\nx-example: \"/api/v1\"\nThe base path which this validation applies to",
-                    "title": "base path"
+                    "$ref": "#/definitions/common_wafApiEndpointDetails",
+                    "x-displayname": "API Endpoint"
                 },
                 "body": {
-                    "description": "x-displayName: \"JSON Path\"",
                     "title": "Body Section Masking Options",
-                    "$ref": "#/definitions/http_loadbalancerBodySectionMaskingOptions"
+                    "$ref": "#/definitions/http_loadbalancerBodySectionMaskingOptions",
+                    "x-displayname": "JSON Path"
                 },
                 "mask": {
-                    "description": "x-displayName: \"Mask Sensitive Data\"",
+                    "description": "Exclusive with [report]\n",
                     "title": "Masking",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Mask Sensitive Data"
                 },
                 "report": {
-                    "description": "x-displayName: \"Report Sensitive Data\"",
+                    "description": "Exclusive with [mask]\n",
                     "title": "Reporting",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Report Sensitive Data"
                 }
             }
         },
@@ -7681,6 +7980,27 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "origin_poolOriginServerCBIPService": {
+            "type": "object",
+            "description": "Specify origin server with Classic BIG-IP Service (Virtual Server)",
+            "title": "OriginServerCBIPService",
+            "x-displayname": "Discovered Classic BIG-IP Service Name",
+            "x-ves-displayorder": "1",
+            "x-ves-proto-message": "ves.io.schema.views.origin_pool.OriginServerCBIPService",
+            "properties": {
+                "service_name": {
+                    "type": "string",
+                    "description": " Name of the discovered Classic BIG-IP virtual server to be used as origin.\n\nExample: - \"cbip-vs1-dev\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Service Name",
+                    "x-displayname": "Service Name",
+                    "x-ves-example": "cbip-vs1-dev",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                }
+            }
+        },
         "origin_poolOriginServerConsulService": {
             "type": "object",
             "description": "Specify origin server with Hashi Corp Consul service name and site information",
@@ -7997,23 +8317,29 @@ var APISwaggerJSON string = `{
             "description": "Various options to specify origin server",
             "title": "OriginServerType",
             "x-displayname": "Origin Server",
-            "x-ves-oneof-field-choice": "[\"consul_service\",\"custom_endpoint_object\",\"k8s_service\",\"private_ip\",\"private_name\",\"public_ip\",\"public_name\",\"vn_private_ip\",\"vn_private_name\"]",
+            "x-ves-oneof-field-choice": "[\"cbip_service\",\"consul_service\",\"custom_endpoint_object\",\"k8s_service\",\"private_ip\",\"private_name\",\"public_ip\",\"public_name\",\"vn_private_ip\",\"vn_private_name\"]",
             "x-ves-proto-message": "ves.io.schema.views.origin_pool.OriginServerType",
             "properties": {
+                "cbip_service": {
+                    "description": "Exclusive with [consul_service custom_endpoint_object k8s_service private_ip private_name public_ip public_name vn_private_ip vn_private_name]\n Specify origin server with cBIP service name",
+                    "title": "OriginServerCBIPService",
+                    "$ref": "#/definitions/origin_poolOriginServerCBIPService",
+                    "x-displayname": "cBIP Service Name of Origin Server"
+                },
                 "consul_service": {
-                    "description": "Exclusive with [custom_endpoint_object k8s_service private_ip private_name public_ip public_name vn_private_ip vn_private_name]\n Specify origin server with Hashi Corp Consul service name and site information",
+                    "description": "Exclusive with [cbip_service custom_endpoint_object k8s_service private_ip private_name public_ip public_name vn_private_ip vn_private_name]\n Specify origin server with Hashi Corp Consul service name and site information",
                     "title": "OriginServerConsulService",
                     "$ref": "#/definitions/origin_poolOriginServerConsulService",
                     "x-displayname": "Consul Service Name of Origin Server on given Sites"
                 },
                 "custom_endpoint_object": {
-                    "description": "Exclusive with [consul_service k8s_service private_ip private_name public_ip public_name vn_private_ip vn_private_name]\n Specify origin server with a reference to endpoint object",
+                    "description": "Exclusive with [cbip_service consul_service k8s_service private_ip private_name public_ip public_name vn_private_ip vn_private_name]\n Specify origin server with a reference to endpoint object",
                     "title": "OriginServerCustomEndpoint",
                     "$ref": "#/definitions/origin_poolOriginServerCustomEndpoint",
                     "x-displayname": "Custom Endpoint Object for Origin Server"
                 },
                 "k8s_service": {
-                    "description": "Exclusive with [consul_service custom_endpoint_object private_ip private_name public_ip public_name vn_private_ip vn_private_name]\n Specify origin server with K8s service name and site information",
+                    "description": "Exclusive with [cbip_service consul_service custom_endpoint_object private_ip private_name public_ip public_name vn_private_ip vn_private_name]\n Specify origin server with K8s service name and site information",
                     "title": "OriginServerK8SService",
                     "$ref": "#/definitions/origin_poolOriginServerK8SService",
                     "x-displayname": "K8s Service Name of Origin Server on given Sites"
@@ -8026,37 +8352,37 @@ var APISwaggerJSON string = `{
                     "x-ves-example": "value"
                 },
                 "private_ip": {
-                    "description": "Exclusive with [consul_service custom_endpoint_object k8s_service private_name public_ip public_name vn_private_ip vn_private_name]\n Specify origin server with private or public IP address and site information",
+                    "description": "Exclusive with [cbip_service consul_service custom_endpoint_object k8s_service private_name public_ip public_name vn_private_ip vn_private_name]\n Specify origin server with private or public IP address and site information",
                     "title": "OriginServerPrivateIP",
                     "$ref": "#/definitions/origin_poolOriginServerPrivateIP",
                     "x-displayname": "IP address of Origin Server on given Sites"
                 },
                 "private_name": {
-                    "description": "Exclusive with [consul_service custom_endpoint_object k8s_service private_ip public_ip public_name vn_private_ip vn_private_name]\n Specify origin server with private or public DNS name and site information",
+                    "description": "Exclusive with [cbip_service consul_service custom_endpoint_object k8s_service private_ip public_ip public_name vn_private_ip vn_private_name]\n Specify origin server with private or public DNS name and site information",
                     "title": "OriginServerPrivateName",
                     "$ref": "#/definitions/origin_poolOriginServerPrivateName",
                     "x-displayname": "DNS Name of Origin Server on given Sites"
                 },
                 "public_ip": {
-                    "description": "Exclusive with [consul_service custom_endpoint_object k8s_service private_ip private_name public_name vn_private_ip vn_private_name]\n Specify origin server with public IP",
+                    "description": "Exclusive with [cbip_service consul_service custom_endpoint_object k8s_service private_ip private_name public_name vn_private_ip vn_private_name]\n Specify origin server with public IP",
                     "title": "OriginServerPublicIP",
                     "$ref": "#/definitions/origin_poolOriginServerPublicIP",
                     "x-displayname": "Public IP of Origin Server"
                 },
                 "public_name": {
-                    "description": "Exclusive with [consul_service custom_endpoint_object k8s_service private_ip private_name public_ip vn_private_ip vn_private_name]\n Specify origin server with public DNS name",
+                    "description": "Exclusive with [cbip_service consul_service custom_endpoint_object k8s_service private_ip private_name public_ip vn_private_ip vn_private_name]\n Specify origin server with public DNS name",
                     "title": "OriginServerPublicName",
                     "$ref": "#/definitions/origin_poolOriginServerPublicName",
                     "x-displayname": "Public DNS Name of Origin Server"
                 },
                 "vn_private_ip": {
-                    "description": "Exclusive with [consul_service custom_endpoint_object k8s_service private_ip private_name public_ip public_name vn_private_name]\n Specify origin server IP address on virtual network other than inside or outside network",
+                    "description": "Exclusive with [cbip_service consul_service custom_endpoint_object k8s_service private_ip private_name public_ip public_name vn_private_name]\n Specify origin server IP address on virtual network other than inside or outside network",
                     "title": "OriginServerVirtualNetworkIP",
                     "$ref": "#/definitions/origin_poolOriginServerVirtualNetworkIP",
                     "x-displayname": "IP address on Virtual Network"
                 },
                 "vn_private_name": {
-                    "description": "Exclusive with [consul_service custom_endpoint_object k8s_service private_ip private_name public_ip public_name vn_private_ip]\n Specify origin server name on virtual network other than inside or outside network",
+                    "description": "Exclusive with [cbip_service consul_service custom_endpoint_object k8s_service private_ip private_name public_ip public_name vn_private_ip]\n Specify origin server name on virtual network other than inside or outside network",
                     "title": "OriginServerVirtualNetworkName",
                     "$ref": "#/definitions/origin_poolOriginServerVirtualNetworkName",
                     "x-displayname": "Name on Virtual Network"
@@ -9274,7 +9600,7 @@ var APISwaggerJSON string = `{
         },
         "policyJA4TlsFingerprintMatcherType": {
             "type": "object",
-            "description": "x-displayName: \"JA4 TLS Fingerprint Matcher\"\nJA4 TLS fingerprints to be matched",
+            "description": "x-displayName: \"JA4 TLS Fingerprint Matcher\"\nAn extended version of JA3 that includes additional fields for more comprehensive fingerprinting of\nSSL/TLS clients and potentially has a different structure and length.",
             "title": "JA4TlsFingerprintMatcherType",
             "properties": {
                 "exact_values": {
@@ -10160,9 +10486,9 @@ var APISwaggerJSON string = `{
             "properties": {
                 "policies": {
                     "type": "array",
-                    "description": " Ordered list of rate limiter policies.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 64\n",
+                    "description": " Ordered list of rate limiter policies.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 16\n",
                     "title": "Rate Limiter Policies",
-                    "maxItems": 64,
+                    "maxItems": 16,
                     "items": {
                         "$ref": "#/definitions/schemaviewsObjectRefType"
                     },
@@ -10170,7 +10496,7 @@ var APISwaggerJSON string = `{
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.repeated.max_items": "64"
+                        "ves.io.schema.rules.repeated.max_items": "16"
                     }
                 }
             }
@@ -10376,6 +10702,40 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.repeated.max_items": "9",
                         "ves.io.schema.rules.repeated.unique": "true"
                     }
+                }
+            }
+        },
+        "routeQueryParamsSimpleRoute": {
+            "type": "object",
+            "description": "Handling of incoming query parameters in simple route.",
+            "title": "query_params",
+            "x-displayname": "Query Parameters",
+            "x-ves-oneof-field-query_params": "[\"remove_all_params\",\"replace_params\",\"retain_all_params\"]",
+            "x-ves-proto-message": "ves.io.schema.route.QueryParamsSimpleRoute",
+            "properties": {
+                "remove_all_params": {
+                    "description": "Exclusive with [replace_params retain_all_params]\n",
+                    "title": "Remove All Params",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Remove All Parameters"
+                },
+                "replace_params": {
+                    "type": "string",
+                    "description": "Exclusive with [remove_all_params retain_all_params]\n\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n  ves.io.schema.rules.string.min_len: 1\n",
+                    "title": "Replace All Params",
+                    "minLength": 1,
+                    "maxLength": 256,
+                    "x-displayname": "Replace All Parameters",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "256",
+                        "ves.io.schema.rules.string.min_len": "1"
+                    }
+                },
+                "retain_all_params": {
+                    "description": "Exclusive with [remove_all_params replace_params]\n",
+                    "title": "Retain All Params",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Retain All Parameters"
                 }
             }
         },
@@ -11334,6 +11694,28 @@ var APISwaggerJSON string = `{
             "x-displayname": "Denominator",
             "x-ves-proto-enum": "ves.io.schema.DenominatorType"
         },
+        "schemaDomainMatcherType": {
+            "type": "object",
+            "description": "Domain to be matched",
+            "title": "DomainMatcherType",
+            "x-displayname": "Domain to Match",
+            "x-ves-oneof-field-domain_matcher": "[\"any_domain\",\"domain\"]",
+            "x-ves-proto-message": "ves.io.schema.DomainMatcherType",
+            "properties": {
+                "any_domain": {
+                    "description": "Exclusive with [domain]\n",
+                    "title": "Any domain",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Any Domain"
+                },
+                "domain": {
+                    "description": "Exclusive with [any_domain]\n",
+                    "title": "Domain",
+                    "$ref": "#/definitions/schemaDomainType",
+                    "x-displayname": "Domain"
+                }
+            }
+        },
         "schemaDomainNameList": {
             "type": "object",
             "description": "List of domain names used for Host header matching",
@@ -12220,6 +12602,12 @@ var APISwaggerJSON string = `{
                     "format": "date-time",
                     "x-displayname": "Deletion Timestamp"
                 },
+                "direct_ref_hash": {
+                    "type": "string",
+                    "description": " A hash of the UIDs of  direct references on this object. This can be used to determine if \n this object hash has had references become resolved/unresolved",
+                    "title": "direct_ref_hash",
+                    "x-displayname": "Direct Reference Hash"
+                },
                 "finalizers": {
                     "type": "array",
                     "description": " Must be empty before the object is deleted from the registry. Each entry\n is an identifier for the responsible component that will remove the entry\n from the list. If the deletionTimestamp of the object is non-nil, entries\n in this list can only be removed.\n\nExample: - \"value\"-",
@@ -12321,6 +12709,28 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "schemaTLSCoalescingOptions": {
+            "type": "object",
+            "description": "TLS connection coalescing configuration (not compatible with mTLS)",
+            "title": "TLSCoalescingOptions",
+            "x-displayname": "TLS Coalescing Options",
+            "x-ves-oneof-field-coalescing_choice": "[\"default_coalescing\",\"strict_coalescing\"]",
+            "x-ves-proto-message": "ves.io.schema.TLSCoalescingOptions",
+            "properties": {
+                "default_coalescing": {
+                    "description": "Exclusive with [strict_coalescing]\n HTTPS Loadbalancers are coalesced even when they have different TLS version\n or Cipher suite configuration",
+                    "title": "Default Coalescing",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Default Coalescing"
+                },
+                "strict_coalescing": {
+                    "description": "Exclusive with [default_coalescing]\n HTTPS Loadbalancers are not coalesced when they have different TLS version\n and/or Cipher suite configuration",
+                    "title": "Strict Coalescing",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Strict Coalescing"
+                }
+            }
+        },
         "schemaTlsCertificateType": {
             "type": "object",
             "description": "Handle to fetch certificate and key",
@@ -12396,6 +12806,18 @@ var APISwaggerJSON string = `{
             "default": "TLS_AUTO",
             "x-displayname": "TLS Protocol",
             "x-ves-proto-enum": "ves.io.schema.TlsProtocol"
+        },
+        "schemaURLSchemeType": {
+            "type": "string",
+            "description": "SchemeType is used to indicate URL scheme\n\nhttp:// scheme\nhttps:// scheme",
+            "title": "URLSchemeType",
+            "enum": [
+                "HTTP",
+                "HTTPS"
+            ],
+            "default": "HTTP",
+            "x-displayname": "URL Scheme",
+            "x-ves-proto-enum": "ves.io.schema.URLSchemeType"
         },
         "schemaVaultSecretInfoType": {
             "type": "object",
@@ -12986,7 +13408,7 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "tls_fingerprint_matcher": {
-                    "description": "Exclusive with []\n JA3 TLS fingerprints to be matched",
+                    "description": "Exclusive with []\n A method for uniquely identifying SSL/TLS clients by creating a 32-character MD5 hash based on the\n parameters of the Client Hello packet during the handshake.",
                     "$ref": "#/definitions/policyTlsFingerprintMatcherType"
                 }
             }
@@ -14206,6 +14628,7 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-l7_ddos_auto_mitigation_action": "[\"l7_ddos_action_block\",\"l7_ddos_action_default\",\"l7_ddos_action_js_challenge\"]",
             "x-ves-oneof-field-loadbalancer_type": "[\"http\",\"https\",\"https_auto_cert\"]",
             "x-ves-oneof-field-malicious_user_detection_choice": "[\"disable_malicious_user_detection\",\"enable_malicious_user_detection\"]",
+            "x-ves-oneof-field-malware_protection": "[\"disable_malware_protection\",\"malware_protection_settings\"]",
             "x-ves-oneof-field-ml_config_choice": "[\"multi_lb_app\",\"single_lb_app\"]",
             "x-ves-oneof-field-origin_pool_choice": "[\"default_pool\",\"default_pool_list\"]",
             "x-ves-oneof-field-rate_limit_choice": "[\"api_rate_limit\",\"disable_rate_limit\",\"rate_limit\"]",
@@ -14432,6 +14855,12 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "Disable"
                 },
+                "disable_malware_protection": {
+                    "description": "Exclusive with [malware_protection_settings]\n",
+                    "title": "disable_malware_protection",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Disable"
+                },
                 "disable_rate_limit": {
                     "description": "Exclusive with [api_rate_limit rate_limit]\n Rate limiting is not currently enabled for this load balancer",
                     "title": "Disable Rate Limiting",
@@ -14625,6 +15054,12 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "Least Active Request"
                 },
+                "malware_protection_settings": {
+                    "description": "Exclusive with [disable_malware_protection]\n",
+                    "title": "malware_enable",
+                    "$ref": "#/definitions/common_securityMalwareProtectionPolicy",
+                    "x-displayname": "Enable"
+                },
                 "more_option": {
                     "description": " More options like header manipulation, compression etc.",
                     "title": "More Options",
@@ -14712,6 +15147,12 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.repeated.max_items": "256",
                         "ves.io.schema.rules.repeated.unique": "true"
                     }
+                },
+                "sensitive_data_disclosure_rules": {
+                    "description": " Sensitive Data Exposure Rules allows specifying rules to mask sensitive data fields in API responses",
+                    "title": "Sensitive Data Exposure Rules",
+                    "$ref": "#/definitions/http_loadbalancerSensitiveDataDisclosureRules",
+                    "x-displayname": "Sensitive Data Exposure Rules"
                 },
                 "sensitive_data_policy": {
                     "description": "Exclusive with [default_sensitive_data_policy]\n Apply custom sensitive data discovery",
@@ -14888,7 +15329,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Other Settings"
                 },
                 "automatic_port": {
-                    "description": "Exclusive with [lb_port port]\n\n Automatic selection of port for endpoint\n\n For Consul service discovery, port will be discovered as part of service discovery.\n For other origin server types, port will be automatically set as 443 if TLS is enabled at Origin Pool and 80 if TLS is disabled",
+                    "description": "Exclusive with [lb_port port]\n\n Automatic selection of port for endpoint\n\n For Consul and Classic BIG-IP service discovery, port will be discovered as part of service discovery.\n For other origin server types, port will be automatically set as 443 if TLS is enabled at Origin Pool and 80 if TLS is disabled",
                     "title": "Automatic selection of endpoint port",
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "Automatic port"

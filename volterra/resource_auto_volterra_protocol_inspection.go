@@ -68,7 +68,8 @@ func resourceVolterraProtocolInspection() *schema.Resource {
 
 			"enable_disable_compliance_checks": {
 
-				Type:     schema.TypeSet,
+				Type:     schema.TypeList,
+				MaxItems: 1,
 				Required: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
@@ -81,7 +82,8 @@ func resourceVolterraProtocolInspection() *schema.Resource {
 
 						"enable_compliance_checks": {
 
-							Type:     schema.TypeSet,
+							Type:     schema.TypeList,
+							MaxItems: 1,
 							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
@@ -107,7 +109,8 @@ func resourceVolterraProtocolInspection() *schema.Resource {
 
 			"enable_disable_signatures": {
 
-				Type:     schema.TypeSet,
+				Type:     schema.TypeList,
+				MaxItems: 1,
 				Required: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
@@ -193,59 +196,63 @@ func resourceVolterraProtocolInspectionCreate(d *schema.ResourceData, meta inter
 	//enable_disable_compliance_checks
 	if v, ok := d.GetOk("enable_disable_compliance_checks"); ok && !isIntfNil(v) {
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		enableDisableComplianceChecks := &ves_io_schema_protocol_inspection.EnableDisableComplianceChecks{}
 		createSpec.EnableDisableComplianceChecks = enableDisableComplianceChecks
 		for _, set := range sl {
-			enableDisableComplianceChecksMapStrToI := set.(map[string]interface{})
+			if set != nil {
+				enableDisableComplianceChecksMapStrToI := set.(map[string]interface{})
 
-			complianceCheckChoiceTypeFound := false
+				complianceCheckChoiceTypeFound := false
 
-			if v, ok := enableDisableComplianceChecksMapStrToI["disable_compliance_checks"]; ok && !isIntfNil(v) && !complianceCheckChoiceTypeFound {
+				if v, ok := enableDisableComplianceChecksMapStrToI["disable_compliance_checks"]; ok && !isIntfNil(v) && !complianceCheckChoiceTypeFound {
 
-				complianceCheckChoiceTypeFound = true
+					complianceCheckChoiceTypeFound = true
 
-				if v.(bool) {
-					complianceCheckChoiceInt := &ves_io_schema_protocol_inspection.EnableDisableComplianceChecks_DisableComplianceChecks{}
-					complianceCheckChoiceInt.DisableComplianceChecks = &ves_io_schema.Empty{}
+					if v.(bool) {
+						complianceCheckChoiceInt := &ves_io_schema_protocol_inspection.EnableDisableComplianceChecks_DisableComplianceChecks{}
+						complianceCheckChoiceInt.DisableComplianceChecks = &ves_io_schema.Empty{}
+						enableDisableComplianceChecks.ComplianceCheckChoice = complianceCheckChoiceInt
+					}
+
+				}
+
+				if v, ok := enableDisableComplianceChecksMapStrToI["enable_compliance_checks"]; ok && !isIntfNil(v) && !complianceCheckChoiceTypeFound {
+
+					complianceCheckChoiceTypeFound = true
+					complianceCheckChoiceInt := &ves_io_schema_protocol_inspection.EnableDisableComplianceChecks_EnableComplianceChecks{}
+					complianceCheckChoiceInt.EnableComplianceChecks = &ves_io_schema_views.ObjectRefType{}
 					enableDisableComplianceChecks.ComplianceCheckChoice = complianceCheckChoiceInt
-				}
 
-			}
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
 
-			if v, ok := enableDisableComplianceChecksMapStrToI["enable_compliance_checks"]; ok && !isIntfNil(v) && !complianceCheckChoiceTypeFound {
+							if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
-				complianceCheckChoiceTypeFound = true
-				complianceCheckChoiceInt := &ves_io_schema_protocol_inspection.EnableDisableComplianceChecks_EnableComplianceChecks{}
-				complianceCheckChoiceInt.EnableComplianceChecks = &ves_io_schema_views.ObjectRefType{}
-				enableDisableComplianceChecks.ComplianceCheckChoice = complianceCheckChoiceInt
+								complianceCheckChoiceInt.EnableComplianceChecks.Name = v.(string)
 
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
+							}
 
-					if v, ok := cs["name"]; ok && !isIntfNil(v) {
+							if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
 
-						complianceCheckChoiceInt.EnableComplianceChecks.Name = v.(string)
+								complianceCheckChoiceInt.EnableComplianceChecks.Namespace = v.(string)
 
-					}
+							}
 
-					if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+							if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
 
-						complianceCheckChoiceInt.EnableComplianceChecks.Namespace = v.(string)
+								complianceCheckChoiceInt.EnableComplianceChecks.Tenant = v.(string)
 
-					}
+							}
 
-					if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
-
-						complianceCheckChoiceInt.EnableComplianceChecks.Tenant = v.(string)
-
+						}
 					}
 
 				}
 
 			}
-
 		}
 
 	}
@@ -253,38 +260,40 @@ func resourceVolterraProtocolInspectionCreate(d *schema.ResourceData, meta inter
 	//enable_disable_signatures
 	if v, ok := d.GetOk("enable_disable_signatures"); ok && !isIntfNil(v) {
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		enableDisableSignatures := &ves_io_schema_protocol_inspection.EnableDisableSignatures{}
 		createSpec.EnableDisableSignatures = enableDisableSignatures
 		for _, set := range sl {
-			enableDisableSignaturesMapStrToI := set.(map[string]interface{})
+			if set != nil {
+				enableDisableSignaturesMapStrToI := set.(map[string]interface{})
 
-			signatureChoiceTypeFound := false
+				signatureChoiceTypeFound := false
 
-			if v, ok := enableDisableSignaturesMapStrToI["disable_signature"]; ok && !isIntfNil(v) && !signatureChoiceTypeFound {
+				if v, ok := enableDisableSignaturesMapStrToI["disable_signature"]; ok && !isIntfNil(v) && !signatureChoiceTypeFound {
 
-				signatureChoiceTypeFound = true
+					signatureChoiceTypeFound = true
 
-				if v.(bool) {
-					signatureChoiceInt := &ves_io_schema_protocol_inspection.EnableDisableSignatures_DisableSignature{}
-					signatureChoiceInt.DisableSignature = &ves_io_schema.Empty{}
-					enableDisableSignatures.SignatureChoice = signatureChoiceInt
+					if v.(bool) {
+						signatureChoiceInt := &ves_io_schema_protocol_inspection.EnableDisableSignatures_DisableSignature{}
+						signatureChoiceInt.DisableSignature = &ves_io_schema.Empty{}
+						enableDisableSignatures.SignatureChoice = signatureChoiceInt
+					}
+
+				}
+
+				if v, ok := enableDisableSignaturesMapStrToI["enable_signature"]; ok && !isIntfNil(v) && !signatureChoiceTypeFound {
+
+					signatureChoiceTypeFound = true
+
+					if v.(bool) {
+						signatureChoiceInt := &ves_io_schema_protocol_inspection.EnableDisableSignatures_EnableSignature{}
+						signatureChoiceInt.EnableSignature = &ves_io_schema.Empty{}
+						enableDisableSignatures.SignatureChoice = signatureChoiceInt
+					}
+
 				}
 
 			}
-
-			if v, ok := enableDisableSignaturesMapStrToI["enable_signature"]; ok && !isIntfNil(v) && !signatureChoiceTypeFound {
-
-				signatureChoiceTypeFound = true
-
-				if v.(bool) {
-					signatureChoiceInt := &ves_io_schema_protocol_inspection.EnableDisableSignatures_EnableSignature{}
-					signatureChoiceInt.EnableSignature = &ves_io_schema.Empty{}
-					enableDisableSignatures.SignatureChoice = signatureChoiceInt
-				}
-
-			}
-
 		}
 
 	}
@@ -396,97 +405,103 @@ func resourceVolterraProtocolInspectionUpdate(d *schema.ResourceData, meta inter
 
 	if v, ok := d.GetOk("enable_disable_compliance_checks"); ok && !isIntfNil(v) {
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		enableDisableComplianceChecks := &ves_io_schema_protocol_inspection.EnableDisableComplianceChecks{}
 		updateSpec.EnableDisableComplianceChecks = enableDisableComplianceChecks
 		for _, set := range sl {
-			enableDisableComplianceChecksMapStrToI := set.(map[string]interface{})
+			if set != nil {
+				enableDisableComplianceChecksMapStrToI := set.(map[string]interface{})
 
-			complianceCheckChoiceTypeFound := false
+				complianceCheckChoiceTypeFound := false
 
-			if v, ok := enableDisableComplianceChecksMapStrToI["disable_compliance_checks"]; ok && !isIntfNil(v) && !complianceCheckChoiceTypeFound {
+				if v, ok := enableDisableComplianceChecksMapStrToI["disable_compliance_checks"]; ok && !isIntfNil(v) && !complianceCheckChoiceTypeFound {
 
-				complianceCheckChoiceTypeFound = true
+					complianceCheckChoiceTypeFound = true
 
-				if v.(bool) {
-					complianceCheckChoiceInt := &ves_io_schema_protocol_inspection.EnableDisableComplianceChecks_DisableComplianceChecks{}
-					complianceCheckChoiceInt.DisableComplianceChecks = &ves_io_schema.Empty{}
+					if v.(bool) {
+						complianceCheckChoiceInt := &ves_io_schema_protocol_inspection.EnableDisableComplianceChecks_DisableComplianceChecks{}
+						complianceCheckChoiceInt.DisableComplianceChecks = &ves_io_schema.Empty{}
+						enableDisableComplianceChecks.ComplianceCheckChoice = complianceCheckChoiceInt
+					}
+
+				}
+
+				if v, ok := enableDisableComplianceChecksMapStrToI["enable_compliance_checks"]; ok && !isIntfNil(v) && !complianceCheckChoiceTypeFound {
+
+					complianceCheckChoiceTypeFound = true
+					complianceCheckChoiceInt := &ves_io_schema_protocol_inspection.EnableDisableComplianceChecks_EnableComplianceChecks{}
+					complianceCheckChoiceInt.EnableComplianceChecks = &ves_io_schema_views.ObjectRefType{}
 					enableDisableComplianceChecks.ComplianceCheckChoice = complianceCheckChoiceInt
-				}
 
-			}
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
 
-			if v, ok := enableDisableComplianceChecksMapStrToI["enable_compliance_checks"]; ok && !isIntfNil(v) && !complianceCheckChoiceTypeFound {
+							if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
-				complianceCheckChoiceTypeFound = true
-				complianceCheckChoiceInt := &ves_io_schema_protocol_inspection.EnableDisableComplianceChecks_EnableComplianceChecks{}
-				complianceCheckChoiceInt.EnableComplianceChecks = &ves_io_schema_views.ObjectRefType{}
-				enableDisableComplianceChecks.ComplianceCheckChoice = complianceCheckChoiceInt
+								complianceCheckChoiceInt.EnableComplianceChecks.Name = v.(string)
 
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
+							}
 
-					if v, ok := cs["name"]; ok && !isIntfNil(v) {
+							if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
 
-						complianceCheckChoiceInt.EnableComplianceChecks.Name = v.(string)
+								complianceCheckChoiceInt.EnableComplianceChecks.Namespace = v.(string)
 
-					}
+							}
 
-					if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+							if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
 
-						complianceCheckChoiceInt.EnableComplianceChecks.Namespace = v.(string)
+								complianceCheckChoiceInt.EnableComplianceChecks.Tenant = v.(string)
 
-					}
+							}
 
-					if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
-
-						complianceCheckChoiceInt.EnableComplianceChecks.Tenant = v.(string)
-
+						}
 					}
 
 				}
 
 			}
-
 		}
 
 	}
 
 	if v, ok := d.GetOk("enable_disable_signatures"); ok && !isIntfNil(v) {
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		enableDisableSignatures := &ves_io_schema_protocol_inspection.EnableDisableSignatures{}
 		updateSpec.EnableDisableSignatures = enableDisableSignatures
 		for _, set := range sl {
-			enableDisableSignaturesMapStrToI := set.(map[string]interface{})
+			if set != nil {
+				enableDisableSignaturesMapStrToI := set.(map[string]interface{})
 
-			signatureChoiceTypeFound := false
+				signatureChoiceTypeFound := false
 
-			if v, ok := enableDisableSignaturesMapStrToI["disable_signature"]; ok && !isIntfNil(v) && !signatureChoiceTypeFound {
+				if v, ok := enableDisableSignaturesMapStrToI["disable_signature"]; ok && !isIntfNil(v) && !signatureChoiceTypeFound {
 
-				signatureChoiceTypeFound = true
+					signatureChoiceTypeFound = true
 
-				if v.(bool) {
-					signatureChoiceInt := &ves_io_schema_protocol_inspection.EnableDisableSignatures_DisableSignature{}
-					signatureChoiceInt.DisableSignature = &ves_io_schema.Empty{}
-					enableDisableSignatures.SignatureChoice = signatureChoiceInt
+					if v.(bool) {
+						signatureChoiceInt := &ves_io_schema_protocol_inspection.EnableDisableSignatures_DisableSignature{}
+						signatureChoiceInt.DisableSignature = &ves_io_schema.Empty{}
+						enableDisableSignatures.SignatureChoice = signatureChoiceInt
+					}
+
+				}
+
+				if v, ok := enableDisableSignaturesMapStrToI["enable_signature"]; ok && !isIntfNil(v) && !signatureChoiceTypeFound {
+
+					signatureChoiceTypeFound = true
+
+					if v.(bool) {
+						signatureChoiceInt := &ves_io_schema_protocol_inspection.EnableDisableSignatures_EnableSignature{}
+						signatureChoiceInt.EnableSignature = &ves_io_schema.Empty{}
+						enableDisableSignatures.SignatureChoice = signatureChoiceInt
+					}
+
 				}
 
 			}
-
-			if v, ok := enableDisableSignaturesMapStrToI["enable_signature"]; ok && !isIntfNil(v) && !signatureChoiceTypeFound {
-
-				signatureChoiceTypeFound = true
-
-				if v.(bool) {
-					signatureChoiceInt := &ves_io_schema_protocol_inspection.EnableDisableSignatures_EnableSignature{}
-					signatureChoiceInt.EnableSignature = &ves_io_schema.Empty{}
-					enableDisableSignatures.SignatureChoice = signatureChoiceInt
-				}
-
-			}
-
 		}
 
 	}

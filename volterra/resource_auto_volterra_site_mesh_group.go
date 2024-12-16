@@ -96,7 +96,8 @@ func resourceVolterraSiteMeshGroup() *schema.Resource {
 
 			"full_mesh": {
 
-				Type:     schema.TypeSet,
+				Type:     schema.TypeList,
+				MaxItems: 1,
 				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
@@ -118,7 +119,8 @@ func resourceVolterraSiteMeshGroup() *schema.Resource {
 
 			"hub_mesh": {
 
-				Type:     schema.TypeSet,
+				Type:     schema.TypeList,
+				MaxItems: 1,
 				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
@@ -140,14 +142,16 @@ func resourceVolterraSiteMeshGroup() *schema.Resource {
 
 			"spoke_mesh": {
 
-				Type:     schema.TypeSet,
+				Type:     schema.TypeList,
+				MaxItems: 1,
 				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 
 						"hub_mesh_group": {
 
-							Type:     schema.TypeSet,
+							Type:     schema.TypeList,
+							MaxItems: 1,
 							Required: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
@@ -317,36 +321,38 @@ func resourceVolterraSiteMeshGroupCreate(d *schema.ResourceData, meta interface{
 		meshChoiceInt.FullMesh = &ves_io_schema_site_mesh_group.FullMeshGroupType{}
 		createSpec.MeshChoice = meshChoiceInt
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
+			if set != nil {
+				cs := set.(map[string]interface{})
 
-			fullMeshChoiceTypeFound := false
+				fullMeshChoiceTypeFound := false
 
-			if v, ok := cs["control_and_data_plane_mesh"]; ok && !isIntfNil(v) && !fullMeshChoiceTypeFound {
+				if v, ok := cs["control_and_data_plane_mesh"]; ok && !isIntfNil(v) && !fullMeshChoiceTypeFound {
 
-				fullMeshChoiceTypeFound = true
+					fullMeshChoiceTypeFound = true
 
-				if v.(bool) {
-					fullMeshChoiceInt := &ves_io_schema_site_mesh_group.FullMeshGroupType_ControlAndDataPlaneMesh{}
-					fullMeshChoiceInt.ControlAndDataPlaneMesh = &ves_io_schema.Empty{}
-					meshChoiceInt.FullMesh.FullMeshChoice = fullMeshChoiceInt
+					if v.(bool) {
+						fullMeshChoiceInt := &ves_io_schema_site_mesh_group.FullMeshGroupType_ControlAndDataPlaneMesh{}
+						fullMeshChoiceInt.ControlAndDataPlaneMesh = &ves_io_schema.Empty{}
+						meshChoiceInt.FullMesh.FullMeshChoice = fullMeshChoiceInt
+					}
+
+				}
+
+				if v, ok := cs["data_plane_mesh"]; ok && !isIntfNil(v) && !fullMeshChoiceTypeFound {
+
+					fullMeshChoiceTypeFound = true
+
+					if v.(bool) {
+						fullMeshChoiceInt := &ves_io_schema_site_mesh_group.FullMeshGroupType_DataPlaneMesh{}
+						fullMeshChoiceInt.DataPlaneMesh = &ves_io_schema.Empty{}
+						meshChoiceInt.FullMesh.FullMeshChoice = fullMeshChoiceInt
+					}
+
 				}
 
 			}
-
-			if v, ok := cs["data_plane_mesh"]; ok && !isIntfNil(v) && !fullMeshChoiceTypeFound {
-
-				fullMeshChoiceTypeFound = true
-
-				if v.(bool) {
-					fullMeshChoiceInt := &ves_io_schema_site_mesh_group.FullMeshGroupType_DataPlaneMesh{}
-					fullMeshChoiceInt.DataPlaneMesh = &ves_io_schema.Empty{}
-					meshChoiceInt.FullMesh.FullMeshChoice = fullMeshChoiceInt
-				}
-
-			}
-
 		}
 
 	}
@@ -358,10 +364,12 @@ func resourceVolterraSiteMeshGroupCreate(d *schema.ResourceData, meta interface{
 		meshChoiceInt.HubMesh = &ves_io_schema_site_mesh_group.HubFullMeshGroupType{}
 		createSpec.MeshChoice = meshChoiceInt
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		for _, set := range sl {
-			_ = set.(map[string]interface{})
+			if set != nil {
+				_ = set.(map[string]interface{})
 
+			}
 		}
 
 	}
@@ -373,32 +381,36 @@ func resourceVolterraSiteMeshGroupCreate(d *schema.ResourceData, meta interface{
 		meshChoiceInt.SpokeMesh = &ves_io_schema_site_mesh_group.SpokeMeshGroupType{}
 		createSpec.MeshChoice = meshChoiceInt
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
+			if set != nil {
+				cs := set.(map[string]interface{})
 
-			if v, ok := cs["hub_mesh_group"]; ok && !isIntfNil(v) {
+				if v, ok := cs["hub_mesh_group"]; ok && !isIntfNil(v) {
 
-				sl := v.(*schema.Set).List()
-				hubMeshGroupInt := &ves_io_schema_views.ObjectRefType{}
-				meshChoiceInt.SpokeMesh.HubMeshGroup = hubMeshGroupInt
+					sl := v.([]interface{})
+					hubMeshGroupInt := &ves_io_schema_views.ObjectRefType{}
+					meshChoiceInt.SpokeMesh.HubMeshGroup = hubMeshGroupInt
 
-				for _, set := range sl {
-					hmgMapToStrVal := set.(map[string]interface{})
-					if val, ok := hmgMapToStrVal["name"]; ok && !isIntfNil(v) {
-						hubMeshGroupInt.Name = val.(string)
+					for _, set := range sl {
+						if set != nil {
+							hmgMapToStrVal := set.(map[string]interface{})
+							if val, ok := hmgMapToStrVal["name"]; ok && !isIntfNil(v) {
+								hubMeshGroupInt.Name = val.(string)
+							}
+							if val, ok := hmgMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+								hubMeshGroupInt.Namespace = val.(string)
+							}
+
+							if val, ok := hmgMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+								hubMeshGroupInt.Tenant = val.(string)
+							}
+						}
 					}
-					if val, ok := hmgMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-						hubMeshGroupInt.Namespace = val.(string)
-					}
 
-					if val, ok := hmgMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-						hubMeshGroupInt.Tenant = val.(string)
-					}
 				}
 
 			}
-
 		}
 
 	}
@@ -583,36 +595,38 @@ func resourceVolterraSiteMeshGroupUpdate(d *schema.ResourceData, meta interface{
 		meshChoiceInt.FullMesh = &ves_io_schema_site_mesh_group.FullMeshGroupType{}
 		updateSpec.MeshChoice = meshChoiceInt
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
+			if set != nil {
+				cs := set.(map[string]interface{})
 
-			fullMeshChoiceTypeFound := false
+				fullMeshChoiceTypeFound := false
 
-			if v, ok := cs["control_and_data_plane_mesh"]; ok && !isIntfNil(v) && !fullMeshChoiceTypeFound {
+				if v, ok := cs["control_and_data_plane_mesh"]; ok && !isIntfNil(v) && !fullMeshChoiceTypeFound {
 
-				fullMeshChoiceTypeFound = true
+					fullMeshChoiceTypeFound = true
 
-				if v.(bool) {
-					fullMeshChoiceInt := &ves_io_schema_site_mesh_group.FullMeshGroupType_ControlAndDataPlaneMesh{}
-					fullMeshChoiceInt.ControlAndDataPlaneMesh = &ves_io_schema.Empty{}
-					meshChoiceInt.FullMesh.FullMeshChoice = fullMeshChoiceInt
+					if v.(bool) {
+						fullMeshChoiceInt := &ves_io_schema_site_mesh_group.FullMeshGroupType_ControlAndDataPlaneMesh{}
+						fullMeshChoiceInt.ControlAndDataPlaneMesh = &ves_io_schema.Empty{}
+						meshChoiceInt.FullMesh.FullMeshChoice = fullMeshChoiceInt
+					}
+
+				}
+
+				if v, ok := cs["data_plane_mesh"]; ok && !isIntfNil(v) && !fullMeshChoiceTypeFound {
+
+					fullMeshChoiceTypeFound = true
+
+					if v.(bool) {
+						fullMeshChoiceInt := &ves_io_schema_site_mesh_group.FullMeshGroupType_DataPlaneMesh{}
+						fullMeshChoiceInt.DataPlaneMesh = &ves_io_schema.Empty{}
+						meshChoiceInt.FullMesh.FullMeshChoice = fullMeshChoiceInt
+					}
+
 				}
 
 			}
-
-			if v, ok := cs["data_plane_mesh"]; ok && !isIntfNil(v) && !fullMeshChoiceTypeFound {
-
-				fullMeshChoiceTypeFound = true
-
-				if v.(bool) {
-					fullMeshChoiceInt := &ves_io_schema_site_mesh_group.FullMeshGroupType_DataPlaneMesh{}
-					fullMeshChoiceInt.DataPlaneMesh = &ves_io_schema.Empty{}
-					meshChoiceInt.FullMesh.FullMeshChoice = fullMeshChoiceInt
-				}
-
-			}
-
 		}
 
 	}
@@ -624,10 +638,12 @@ func resourceVolterraSiteMeshGroupUpdate(d *schema.ResourceData, meta interface{
 		meshChoiceInt.HubMesh = &ves_io_schema_site_mesh_group.HubFullMeshGroupType{}
 		updateSpec.MeshChoice = meshChoiceInt
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		for _, set := range sl {
-			_ = set.(map[string]interface{})
+			if set != nil {
+				_ = set.(map[string]interface{})
 
+			}
 		}
 
 	}
@@ -639,32 +655,36 @@ func resourceVolterraSiteMeshGroupUpdate(d *schema.ResourceData, meta interface{
 		meshChoiceInt.SpokeMesh = &ves_io_schema_site_mesh_group.SpokeMeshGroupType{}
 		updateSpec.MeshChoice = meshChoiceInt
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
+			if set != nil {
+				cs := set.(map[string]interface{})
 
-			if v, ok := cs["hub_mesh_group"]; ok && !isIntfNil(v) {
+				if v, ok := cs["hub_mesh_group"]; ok && !isIntfNil(v) {
 
-				sl := v.(*schema.Set).List()
-				hubMeshGroupInt := &ves_io_schema_views.ObjectRefType{}
-				meshChoiceInt.SpokeMesh.HubMeshGroup = hubMeshGroupInt
+					sl := v.([]interface{})
+					hubMeshGroupInt := &ves_io_schema_views.ObjectRefType{}
+					meshChoiceInt.SpokeMesh.HubMeshGroup = hubMeshGroupInt
 
-				for _, set := range sl {
-					hmgMapToStrVal := set.(map[string]interface{})
-					if val, ok := hmgMapToStrVal["name"]; ok && !isIntfNil(v) {
-						hubMeshGroupInt.Name = val.(string)
+					for _, set := range sl {
+						if set != nil {
+							hmgMapToStrVal := set.(map[string]interface{})
+							if val, ok := hmgMapToStrVal["name"]; ok && !isIntfNil(v) {
+								hubMeshGroupInt.Name = val.(string)
+							}
+							if val, ok := hmgMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+								hubMeshGroupInt.Namespace = val.(string)
+							}
+
+							if val, ok := hmgMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+								hubMeshGroupInt.Tenant = val.(string)
+							}
+						}
 					}
-					if val, ok := hmgMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-						hubMeshGroupInt.Namespace = val.(string)
-					}
 
-					if val, ok := hmgMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-						hubMeshGroupInt.Tenant = val.(string)
-					}
 				}
 
 			}
-
 		}
 
 	}

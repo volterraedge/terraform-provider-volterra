@@ -1,6 +1,7 @@
 ---
 
-page_title: "Volterra: volterra_registration_approval"
+page_title: "Volterra: volterra_registration_approval" 
+
 description: "The volterra_registration_approval helps approve registration request"
 
 ---

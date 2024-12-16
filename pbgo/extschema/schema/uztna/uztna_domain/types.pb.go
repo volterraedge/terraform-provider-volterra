@@ -26,23 +26,201 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
-// LeasePool
+// IPv4 Lease Pool
 //
-// x-displayName: "LeasePool"
-//
-// Lease Pool For UZTNA Domain
-type LeasePoolList struct {
-	// LeasePool
+// x-displayName: "IPv4 Lease Pool"
+// x-required
+// Select or create new IPv4 Lease Pool
+type IPv4Leasepool struct {
+	// IPv4 Lease Pool
 	//
-	// x-displayName: "LeasePool"
-	// Lease Pool for UZTNA Domain
-	UztnaLpool []*schema.ObjectRefType `protobuf:"bytes,1,rep,name=uztna_lpool,json=uztnaLpool,proto3" json:"uztna_lpool,omitempty"`
+	// x-displayName: "IPv4 Lease Pool"
+	// x-required
+	// Select or create new IPv4 Lease Pool
+	Ipv4Leasepool []*schema.ObjectRefType `protobuf:"bytes,2,rep,name=ipv4_leasepool,json=ipv4Leasepool,proto3" json:"ipv4_leasepool,omitempty"`
+}
+
+func (m *IPv4Leasepool) Reset()      { *m = IPv4Leasepool{} }
+func (*IPv4Leasepool) ProtoMessage() {}
+func (*IPv4Leasepool) Descriptor() ([]byte, []int) {
+	return fileDescriptor_4628a4276549e24f, []int{0}
+}
+func (m *IPv4Leasepool) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *IPv4Leasepool) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_IPv4Leasepool.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *IPv4Leasepool) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_IPv4Leasepool.Merge(m, src)
+}
+func (m *IPv4Leasepool) XXX_Size() int {
+	return m.Size()
+}
+func (m *IPv4Leasepool) XXX_DiscardUnknown() {
+	xxx_messageInfo_IPv4Leasepool.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_IPv4Leasepool proto.InternalMessageInfo
+
+func (m *IPv4Leasepool) GetIpv4Leasepool() []*schema.ObjectRefType {
+	if m != nil {
+		return m.Ipv4Leasepool
+	}
+	return nil
+}
+
+// IPv6 Lease Pool
+//
+// x-displayName: "IPv6 Lease Pool"
+// x-required
+// Select or create new IPv6 Lease Pool
+type IPv6Leasepool struct {
+	// IPv6 Lease Pool
+	//
+	// x-displayName: "IPv6 Lease Pool"
+	// x-required
+	// Select or create new IPv6 Lease Pools
+	Ipv6Leasepool []*schema.ObjectRefType `protobuf:"bytes,2,rep,name=ipv6_leasepool,json=ipv6Leasepool,proto3" json:"ipv6_leasepool,omitempty"`
+}
+
+func (m *IPv6Leasepool) Reset()      { *m = IPv6Leasepool{} }
+func (*IPv6Leasepool) ProtoMessage() {}
+func (*IPv6Leasepool) Descriptor() ([]byte, []int) {
+	return fileDescriptor_4628a4276549e24f, []int{1}
+}
+func (m *IPv6Leasepool) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *IPv6Leasepool) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_IPv6Leasepool.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *IPv6Leasepool) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_IPv6Leasepool.Merge(m, src)
+}
+func (m *IPv6Leasepool) XXX_Size() int {
+	return m.Size()
+}
+func (m *IPv6Leasepool) XXX_DiscardUnknown() {
+	xxx_messageInfo_IPv6Leasepool.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_IPv6Leasepool proto.InternalMessageInfo
+
+func (m *IPv6Leasepool) GetIpv6Leasepool() []*schema.ObjectRefType {
+	if m != nil {
+		return m.Ipv6Leasepool
+	}
+	return nil
+}
+
+// Dual Stack Lease Pool
+//
+// x-displayName: "Dual Stack Lease Pool"
+//
+// This is used to import or create new IPv4 and Ipv6 Lease Pools
+type DualStackLeasePool struct {
+	// IPv4 Lease Pool
+	//
+	// x-displayName: "IPv4 Lease Pool"
+	// x-required
+	// Select or create new IPv4 Lease Pools
+	Ipv4Leasepool *IPv4Leasepool `protobuf:"bytes,3,opt,name=ipv4_leasepool,json=ipv4Leasepool,proto3" json:"ipv4_leasepool,omitempty"`
+	// IPv6 Lease Pool
+	//
+	// x-displayName: "IPv6 Lease Pool"
+	// x-required
+	// Select or create new IPv4 Lease Pools
+	Ipv6Leasepool *IPv6Leasepool `protobuf:"bytes,4,opt,name=ipv6_leasepool,json=ipv6Leasepool,proto3" json:"ipv6_leasepool,omitempty"`
+}
+
+func (m *DualStackLeasePool) Reset()      { *m = DualStackLeasePool{} }
+func (*DualStackLeasePool) ProtoMessage() {}
+func (*DualStackLeasePool) Descriptor() ([]byte, []int) {
+	return fileDescriptor_4628a4276549e24f, []int{2}
+}
+func (m *DualStackLeasePool) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *DualStackLeasePool) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_DualStackLeasePool.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *DualStackLeasePool) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_DualStackLeasePool.Merge(m, src)
+}
+func (m *DualStackLeasePool) XXX_Size() int {
+	return m.Size()
+}
+func (m *DualStackLeasePool) XXX_DiscardUnknown() {
+	xxx_messageInfo_DualStackLeasePool.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_DualStackLeasePool proto.InternalMessageInfo
+
+func (m *DualStackLeasePool) GetIpv4Leasepool() *IPv4Leasepool {
+	if m != nil {
+		return m.Ipv4Leasepool
+	}
+	return nil
+}
+
+func (m *DualStackLeasePool) GetIpv6Leasepool() *IPv6Leasepool {
+	if m != nil {
+		return m.Ipv6Leasepool
+	}
+	return nil
+}
+
+// Lease Pools
+//
+// x-displayName: "Lease Pools"
+//
+// Lease Pool For UZTNA Domain View.
+type LeasePoolList struct {
+	// Lease Pool
+	//
+	// x-displayName: "Lease Pool"
+	// x-required
+	// Lease Pool for UZTNA Domain View
+	//
+	// Types that are valid to be assigned to IpaddressType:
+	//	*LeasePoolList_Ipv4Leasepool
+	//	*LeasePoolList_Ipv6Leasepool
+	//	*LeasePoolList_Ipv4Ipv6Leasepool
+	IpaddressType isLeasePoolList_IpaddressType `protobuf_oneof:"ipaddress_type"`
 }
 
 func (m *LeasePoolList) Reset()      { *m = LeasePoolList{} }
 func (*LeasePoolList) ProtoMessage() {}
 func (*LeasePoolList) Descriptor() ([]byte, []int) {
-	return fileDescriptor_4628a4276549e24f, []int{0}
+	return fileDescriptor_4628a4276549e24f, []int{3}
 }
 func (m *LeasePoolList) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -71,209 +249,313 @@ func (m *LeasePoolList) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_LeasePoolList proto.InternalMessageInfo
 
-func (m *LeasePoolList) GetUztnaLpool() []*schema.ObjectRefType {
-	if m != nil {
-		return m.UztnaLpool
-	}
-	return nil
-}
-
-// Perimeter RE Site
-//
-// x-displayName: "Perimeter RE Site"
-//
-// Selected Perimeter RE Sites
-type DomainPerimeterRE struct {
-	// Permitere RE Site
-	//
-	// x-displayName: "Perimeter RE Site"
-	// Selected Perimeter RE Site.
-	PerimeterReSite []*schema.ObjectRefType `protobuf:"bytes,1,rep,name=perimeter_re_site,json=perimeterReSite,proto3" json:"perimeter_re_site,omitempty"`
-}
-
-func (m *DomainPerimeterRE) Reset()      { *m = DomainPerimeterRE{} }
-func (*DomainPerimeterRE) ProtoMessage() {}
-func (*DomainPerimeterRE) Descriptor() ([]byte, []int) {
-	return fileDescriptor_4628a4276549e24f, []int{1}
-}
-func (m *DomainPerimeterRE) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *DomainPerimeterRE) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_DomainPerimeterRE.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
-}
-func (m *DomainPerimeterRE) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_DomainPerimeterRE.Merge(m, src)
-}
-func (m *DomainPerimeterRE) XXX_Size() int {
-	return m.Size()
-}
-func (m *DomainPerimeterRE) XXX_DiscardUnknown() {
-	xxx_messageInfo_DomainPerimeterRE.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_DomainPerimeterRE proto.InternalMessageInfo
-
-func (m *DomainPerimeterRE) GetPerimeterReSite() []*schema.ObjectRefType {
-	if m != nil {
-		return m.PerimeterReSite
-	}
-	return nil
-}
-
-// BigIP CE
-//
-// x-displayName: "BigIP CE"
-// Selected BigIP CE.
-type DomainSites struct {
-	// Available Big Ip Access List
-	//
-	// x-displayName: "Available Big IP CE"
-	// List of All avaliable Big IP CE List
-	UztnaGateway []*schema.ObjectRefType `protobuf:"bytes,1,rep,name=uztna_gateway,json=uztnaGateway,proto3" json:"uztna_gateway,omitempty"`
-}
-
-func (m *DomainSites) Reset()      { *m = DomainSites{} }
-func (*DomainSites) ProtoMessage() {}
-func (*DomainSites) Descriptor() ([]byte, []int) {
-	return fileDescriptor_4628a4276549e24f, []int{2}
-}
-func (m *DomainSites) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *DomainSites) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_DomainSites.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
-}
-func (m *DomainSites) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_DomainSites.Merge(m, src)
-}
-func (m *DomainSites) XXX_Size() int {
-	return m.Size()
-}
-func (m *DomainSites) XXX_DiscardUnknown() {
-	xxx_messageInfo_DomainSites.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_DomainSites proto.InternalMessageInfo
-
-func (m *DomainSites) GetUztnaGateway() []*schema.ObjectRefType {
-	if m != nil {
-		return m.UztnaGateway
-	}
-	return nil
-}
-
-// PerimeterREAdvertisement
-//
-// x-displayName: "PerimeterREAdvertisement"
-// Advertise on all perimeter RE or Some Selected
-// Perimter RE list
-type PerimeterREAdvertisement struct {
-	// Perimeter RE Advertisement
-	//
-	// x-displayName: "Perimeter RE Advertisement"
-	//
-	// Select either All perimeter RE or some of them.
-	//
-	// Types that are valid to be assigned to PerimterReChoice:
-	//	*PerimeterREAdvertisement_AllPerimeter
-	//	*PerimeterREAdvertisement_DomainReSites
-	PerimterReChoice isPerimeterREAdvertisement_PerimterReChoice `protobuf_oneof:"perimter_re_choice"`
-}
-
-func (m *PerimeterREAdvertisement) Reset()      { *m = PerimeterREAdvertisement{} }
-func (*PerimeterREAdvertisement) ProtoMessage() {}
-func (*PerimeterREAdvertisement) Descriptor() ([]byte, []int) {
-	return fileDescriptor_4628a4276549e24f, []int{3}
-}
-func (m *PerimeterREAdvertisement) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *PerimeterREAdvertisement) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_PerimeterREAdvertisement.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
-}
-func (m *PerimeterREAdvertisement) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_PerimeterREAdvertisement.Merge(m, src)
-}
-func (m *PerimeterREAdvertisement) XXX_Size() int {
-	return m.Size()
-}
-func (m *PerimeterREAdvertisement) XXX_DiscardUnknown() {
-	xxx_messageInfo_PerimeterREAdvertisement.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_PerimeterREAdvertisement proto.InternalMessageInfo
-
-type isPerimeterREAdvertisement_PerimterReChoice interface {
-	isPerimeterREAdvertisement_PerimterReChoice()
+type isLeasePoolList_IpaddressType interface {
+	isLeasePoolList_IpaddressType()
 	Equal(interface{}) bool
 	MarshalTo([]byte) (int, error)
 	Size() int
 }
 
-type PerimeterREAdvertisement_AllPerimeter struct {
-	AllPerimeter *schema.Empty `protobuf:"bytes,1,opt,name=all_perimeter,json=allPerimeter,proto3,oneof" json:"all_perimeter,omitempty"`
+type LeasePoolList_Ipv4Leasepool struct {
+	Ipv4Leasepool *IPv4Leasepool `protobuf:"bytes,2,opt,name=ipv4_leasepool,json=ipv4Leasepool,proto3,oneof" json:"ipv4_leasepool,omitempty"`
 }
-type PerimeterREAdvertisement_DomainReSites struct {
-	DomainReSites *DomainPerimeterRE `protobuf:"bytes,2,opt,name=domain_re_sites,json=domainReSites,proto3,oneof" json:"domain_re_sites,omitempty"`
+type LeasePoolList_Ipv6Leasepool struct {
+	Ipv6Leasepool *IPv6Leasepool `protobuf:"bytes,3,opt,name=ipv6_leasepool,json=ipv6Leasepool,proto3,oneof" json:"ipv6_leasepool,omitempty"`
+}
+type LeasePoolList_Ipv4Ipv6Leasepool struct {
+	Ipv4Ipv6Leasepool *DualStackLeasePool `protobuf:"bytes,4,opt,name=ipv4_ipv6_leasepool,json=ipv4Ipv6Leasepool,proto3,oneof" json:"ipv4_ipv6_leasepool,omitempty"`
 }
 
-func (*PerimeterREAdvertisement_AllPerimeter) isPerimeterREAdvertisement_PerimterReChoice()  {}
-func (*PerimeterREAdvertisement_DomainReSites) isPerimeterREAdvertisement_PerimterReChoice() {}
+func (*LeasePoolList_Ipv4Leasepool) isLeasePoolList_IpaddressType()     {}
+func (*LeasePoolList_Ipv6Leasepool) isLeasePoolList_IpaddressType()     {}
+func (*LeasePoolList_Ipv4Ipv6Leasepool) isLeasePoolList_IpaddressType() {}
 
-func (m *PerimeterREAdvertisement) GetPerimterReChoice() isPerimeterREAdvertisement_PerimterReChoice {
+func (m *LeasePoolList) GetIpaddressType() isLeasePoolList_IpaddressType {
 	if m != nil {
-		return m.PerimterReChoice
+		return m.IpaddressType
 	}
 	return nil
 }
 
-func (m *PerimeterREAdvertisement) GetAllPerimeter() *schema.Empty {
-	if x, ok := m.GetPerimterReChoice().(*PerimeterREAdvertisement_AllPerimeter); ok {
-		return x.AllPerimeter
+func (m *LeasePoolList) GetIpv4Leasepool() *IPv4Leasepool {
+	if x, ok := m.GetIpaddressType().(*LeasePoolList_Ipv4Leasepool); ok {
+		return x.Ipv4Leasepool
 	}
 	return nil
 }
 
-func (m *PerimeterREAdvertisement) GetDomainReSites() *DomainPerimeterRE {
-	if x, ok := m.GetPerimterReChoice().(*PerimeterREAdvertisement_DomainReSites); ok {
-		return x.DomainReSites
+func (m *LeasePoolList) GetIpv6Leasepool() *IPv6Leasepool {
+	if x, ok := m.GetIpaddressType().(*LeasePoolList_Ipv6Leasepool); ok {
+		return x.Ipv6Leasepool
+	}
+	return nil
+}
+
+func (m *LeasePoolList) GetIpv4Ipv6Leasepool() *DualStackLeasePool {
+	if x, ok := m.GetIpaddressType().(*LeasePoolList_Ipv4Ipv6Leasepool); ok {
+		return x.Ipv4Ipv6Leasepool
 	}
 	return nil
 }
 
 // XXX_OneofWrappers is for the internal use of the proto package.
-func (*PerimeterREAdvertisement) XXX_OneofWrappers() []interface{} {
+func (*LeasePoolList) XXX_OneofWrappers() []interface{} {
 	return []interface{}{
-		(*PerimeterREAdvertisement_AllPerimeter)(nil),
-		(*PerimeterREAdvertisement_DomainReSites)(nil),
+		(*LeasePoolList_Ipv4Leasepool)(nil),
+		(*LeasePoolList_Ipv6Leasepool)(nil),
+		(*LeasePoolList_Ipv4Ipv6Leasepool)(nil),
+	}
+}
+
+// ZTNA Policy
+//
+// x-displayName: "ZTNA Policy"
+type Policy struct {
+	// ZTNA Policy
+	//
+	// x-displayName: "ZTNA Policy"
+	//
+	// Select/Add ZTNA Policy to associate with this ZeroTrust Domain
+	Policy []*schema.ObjectRefType `protobuf:"bytes,1,rep,name=policy,proto3" json:"policy,omitempty"`
+}
+
+func (m *Policy) Reset()      { *m = Policy{} }
+func (*Policy) ProtoMessage() {}
+func (*Policy) Descriptor() ([]byte, []int) {
+	return fileDescriptor_4628a4276549e24f, []int{4}
+}
+func (m *Policy) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *Policy) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_Policy.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *Policy) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Policy.Merge(m, src)
+}
+func (m *Policy) XXX_Size() int {
+	return m.Size()
+}
+func (m *Policy) XXX_DiscardUnknown() {
+	xxx_messageInfo_Policy.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_Policy proto.InternalMessageInfo
+
+func (m *Policy) GetPolicy() []*schema.ObjectRefType {
+	if m != nil {
+		return m.Policy
+	}
+	return nil
+}
+
+// Application VIP Pool
+//
+// x-displayName: "Application VIP Pool"
+// This is used to select VIP Network and VIP Range from
+// the already created VIP Pool.
+type AppVIPPool struct {
+	// Selected VIP Pool for Application
+	//
+	// x-displayName: "Selected VIP Pools"
+	// Selected VIP Pools
+	AppVipPool []*schema.ObjectRefType `protobuf:"bytes,1,rep,name=app_vip_pool,json=appVipPool,proto3" json:"app_vip_pool,omitempty"`
+}
+
+func (m *AppVIPPool) Reset()      { *m = AppVIPPool{} }
+func (*AppVIPPool) ProtoMessage() {}
+func (*AppVIPPool) Descriptor() ([]byte, []int) {
+	return fileDescriptor_4628a4276549e24f, []int{5}
+}
+func (m *AppVIPPool) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *AppVIPPool) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_AppVIPPool.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *AppVIPPool) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AppVIPPool.Merge(m, src)
+}
+func (m *AppVIPPool) XXX_Size() int {
+	return m.Size()
+}
+func (m *AppVIPPool) XXX_DiscardUnknown() {
+	xxx_messageInfo_AppVIPPool.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_AppVIPPool proto.InternalMessageInfo
+
+func (m *AppVIPPool) GetAppVipPool() []*schema.ObjectRefType {
+	if m != nil {
+		return m.AppVipPool
+	}
+	return nil
+}
+
+// Cloud Gateway
+//
+// x-displayName: "Cloud Gateway"
+//
+// Selected Cloud Gateways
+type CloudGateways struct {
+	// Cloud Gateway
+	//
+	// x-displayName: "Cloud Gateway"
+	//
+	// Selected Cloud Gateway
+	CloudGateway []*schema.ObjectRefType `protobuf:"bytes,1,rep,name=cloud_gateway,json=cloudGateway,proto3" json:"cloud_gateway,omitempty"`
+}
+
+func (m *CloudGateways) Reset()      { *m = CloudGateways{} }
+func (*CloudGateways) ProtoMessage() {}
+func (*CloudGateways) Descriptor() ([]byte, []int) {
+	return fileDescriptor_4628a4276549e24f, []int{6}
+}
+func (m *CloudGateways) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *CloudGateways) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_CloudGateways.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *CloudGateways) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CloudGateways.Merge(m, src)
+}
+func (m *CloudGateways) XXX_Size() int {
+	return m.Size()
+}
+func (m *CloudGateways) XXX_DiscardUnknown() {
+	xxx_messageInfo_CloudGateways.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_CloudGateways proto.InternalMessageInfo
+
+func (m *CloudGateways) GetCloudGateway() []*schema.ObjectRefType {
+	if m != nil {
+		return m.CloudGateway
+	}
+	return nil
+}
+
+// Cloud Gateway Advertisement
+//
+// x-displayName: "Cloud Gateway Advertisement"
+//
+// Advertise on all Cloud Gateways or some selective
+type CloudGatewayAdvertisement struct {
+	// Cloud Gateway Advertisement
+	//
+	// x-displayName: "Cloud Gateways Advertisement"
+	//
+	// Select either All Cloud Gateway or some of them.
+	//
+	// Types that are valid to be assigned to CloudGatewayChoice:
+	//	*CloudGatewayAdvertisement_AllCloud
+	//	*CloudGatewayAdvertisement_ReSites
+	CloudGatewayChoice isCloudGatewayAdvertisement_CloudGatewayChoice `protobuf_oneof:"cloud_gateway_choice"`
+}
+
+func (m *CloudGatewayAdvertisement) Reset()      { *m = CloudGatewayAdvertisement{} }
+func (*CloudGatewayAdvertisement) ProtoMessage() {}
+func (*CloudGatewayAdvertisement) Descriptor() ([]byte, []int) {
+	return fileDescriptor_4628a4276549e24f, []int{7}
+}
+func (m *CloudGatewayAdvertisement) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *CloudGatewayAdvertisement) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_CloudGatewayAdvertisement.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *CloudGatewayAdvertisement) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CloudGatewayAdvertisement.Merge(m, src)
+}
+func (m *CloudGatewayAdvertisement) XXX_Size() int {
+	return m.Size()
+}
+func (m *CloudGatewayAdvertisement) XXX_DiscardUnknown() {
+	xxx_messageInfo_CloudGatewayAdvertisement.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_CloudGatewayAdvertisement proto.InternalMessageInfo
+
+type isCloudGatewayAdvertisement_CloudGatewayChoice interface {
+	isCloudGatewayAdvertisement_CloudGatewayChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+
+type CloudGatewayAdvertisement_AllCloud struct {
+	AllCloud *schema.Empty `protobuf:"bytes,5,opt,name=all_cloud,json=allCloud,proto3,oneof" json:"all_cloud,omitempty"`
+}
+type CloudGatewayAdvertisement_ReSites struct {
+	ReSites *CloudGateways `protobuf:"bytes,6,opt,name=re_sites,json=reSites,proto3,oneof" json:"re_sites,omitempty"`
+}
+
+func (*CloudGatewayAdvertisement_AllCloud) isCloudGatewayAdvertisement_CloudGatewayChoice() {}
+func (*CloudGatewayAdvertisement_ReSites) isCloudGatewayAdvertisement_CloudGatewayChoice()  {}
+
+func (m *CloudGatewayAdvertisement) GetCloudGatewayChoice() isCloudGatewayAdvertisement_CloudGatewayChoice {
+	if m != nil {
+		return m.CloudGatewayChoice
+	}
+	return nil
+}
+
+func (m *CloudGatewayAdvertisement) GetAllCloud() *schema.Empty {
+	if x, ok := m.GetCloudGatewayChoice().(*CloudGatewayAdvertisement_AllCloud); ok {
+		return x.AllCloud
+	}
+	return nil
+}
+
+func (m *CloudGatewayAdvertisement) GetReSites() *CloudGateways {
+	if x, ok := m.GetCloudGatewayChoice().(*CloudGatewayAdvertisement_ReSites); ok {
+		return x.ReSites
+	}
+	return nil
+}
+
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*CloudGatewayAdvertisement) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
+		(*CloudGatewayAdvertisement_AllCloud)(nil),
+		(*CloudGatewayAdvertisement_ReSites)(nil),
 	}
 }
 
@@ -292,21 +574,23 @@ func (*PerimeterREAdvertisement) XXX_OneofWrappers() []interface{} {
 type Gateways struct {
 	// PerimeterREAdvertisement
 	//
-	// x-displayName: "Perimeter RE"
-	// Select the Gateways (either Perimeter RE or BigIP CE).
-	PerimeterRe *PerimeterREAdvertisement `protobuf:"bytes,1,opt,name=perimeter_re,json=perimeterRe,proto3" json:"perimeter_re,omitempty"`
-	// BigIP CE List
+	// x-displayName: "Cloud Gateways"
 	//
-	// x-displayName: "Available BigIP Next CE"
-	// This is used to show all the available big ip ce.
-	// From the available bigip CE List select bigip CE .
-	BigipCe *DomainSites `protobuf:"bytes,2,opt,name=bigip_ce,json=bigipCe,proto3" json:"bigip_ce,omitempty"`
+	// List of all Cloud Gateways and Big-IP Edge Gateways
+	PerimeterRe *CloudGatewayAdvertisement `protobuf:"bytes,4,opt,name=perimeter_re,json=perimeterRe,proto3" json:"perimeter_re,omitempty"`
+	// BigIP Edge Gateways
+	//
+	// x-displayName: "BIG-IP Edge Gateways"
+	//
+	// This is used to show all the available Big-IP Edge Gateways.
+	// From the available Big-IP Edge Gateway List select Big-IP Edge Gateway.
+	BigipSite []*schema.ObjectRefType `protobuf:"bytes,3,rep,name=bigip_site,json=bigipSite,proto3" json:"bigip_site,omitempty"`
 }
 
 func (m *Gateways) Reset()      { *m = Gateways{} }
 func (*Gateways) ProtoMessage() {}
 func (*Gateways) Descriptor() ([]byte, []int) {
-	return fileDescriptor_4628a4276549e24f, []int{4}
+	return fileDescriptor_4628a4276549e24f, []int{8}
 }
 func (m *Gateways) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -335,16 +619,16 @@ func (m *Gateways) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_Gateways proto.InternalMessageInfo
 
-func (m *Gateways) GetPerimeterRe() *PerimeterREAdvertisement {
+func (m *Gateways) GetPerimeterRe() *CloudGatewayAdvertisement {
 	if m != nil {
 		return m.PerimeterRe
 	}
 	return nil
 }
 
-func (m *Gateways) GetBigipCe() *DomainSites {
+func (m *Gateways) GetBigipSite() []*schema.ObjectRefType {
 	if m != nil {
-		return m.BigipCe
+		return m.BigipSite
 	}
 	return nil
 }
@@ -364,7 +648,7 @@ type Certificate struct {
 func (m *Certificate) Reset()      { *m = Certificate{} }
 func (*Certificate) ProtoMessage() {}
 func (*Certificate) Descriptor() ([]byte, []int) {
-	return fileDescriptor_4628a4276549e24f, []int{5}
+	return fileDescriptor_4628a4276549e24f, []int{9}
 }
 func (m *Certificate) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -405,26 +689,24 @@ func (m *Certificate) GetCertificate() []*schema.ObjectRefType {
 // x-displayName: "ZeroTrust Domain Info Specification"
 // Shape of the view internal specification
 type GlobalSpecType struct {
-	// Leaspool
+	// Lease Pools
 	//
-	// x-displayName: "Leaspool object reference"
+	// x-displayName: "Lease Pools"
 	// x-required
-	// This is List of LeasePool Object created.From the List we can assign one LeasePool to one ZeroTrust Domain.
+	// The Lease Pool List assigned to the Zero Trust Domain.
 	LeasePool *LeasePoolList `protobuf:"bytes,1,opt,name=lease_pool,json=leasePool,proto3" json:"lease_pool,omitempty"`
 	// Gateways
 	//
 	// x-displayName: "Gateways"
 	// x-required
-	// List of all RE prime and Big Ip edge CE
+	// List of all Cloud Gateways and Big-IP Edge Gateways
 	Gateways *Gateways `protobuf:"bytes,2,opt,name=gateways,proto3" json:"gateways,omitempty"`
-	// Access URL
+	// Access FQDN
 	//
-	// x-displayName: "Access Url"
-	// x-example: "https://example.com/landing/page"
-	// x-example: "/not-found"
+	// x-displayName: "Access FQDN"
 	// x-required
-	// Url to access the gateways
-	AccessUrl string `protobuf:"bytes,3,opt,name=access_url,json=accessUrl,proto3" json:"access_url,omitempty"`
+	// FQDN to access the gateways
+	AccessFqdn string `protobuf:"bytes,11,opt,name=access_fqdn,json=accessFqdn,proto3" json:"access_fqdn,omitempty"`
 	// Certificate
 	//
 	// x-displayName: "Certificate"
@@ -432,25 +714,42 @@ type GlobalSpecType struct {
 	// A ZTNA ZeroTrust Domain being a TLS Gateway requires a Valid
 	// Certificate associated with the Access FQDN.
 	// The approach to attach a certificate and key to a
-	// Domain in XC is an establis
+	// Domain in XC is an established pattern and we would reuse the same.
 	Cert *Certificate `protobuf:"bytes,4,opt,name=cert,proto3" json:"cert,omitempty"`
-	// Profile Name
-	//
-	// x-displayName: "Ztna Profile"
-	// x-required
-	// Ztna Profile Name used to refer the ZTNA profile
-	ProfileName string `protobuf:"bytes,5,opt,name=profile_name,json=profileName,proto3" json:"profile_name,omitempty"`
 	// CDN CE gatway virtual host reference
 	//
 	// x-displayName: "CDN CE gateway virtual host reference"
 	// Internal reference to cdn ce api gateway VH
 	CdnCeVhApiGw []*schema.ObjectRefType `protobuf:"bytes,6,rep,name=cdn_ce_vh_api_gw,json=cdnCeVhApiGw,proto3" json:"cdn_ce_vh_api_gw,omitempty"`
+	// Selected VIP Pools
+	//
+	// x-displayName: "Application VIP Pools"
+	// Appliacation VIP Pools
+	AppVipPool *AppVIPPool `protobuf:"bytes,7,opt,name=app_vip_pool,json=appVipPool,proto3" json:"app_vip_pool,omitempty"`
+	// ZTNA Policy
+	//
+	// x-displayName: "ZTNA Policy"
+	// x-required
+	// This is used to import or create new ZTNA Policy
+	Policy *Policy `protobuf:"bytes,8,opt,name=policy,proto3" json:"policy,omitempty"`
+	// DNS VIP
+	//
+	// x-displayName: "VIP address for internal DNS proxy"
+	// x-required
+	//  VIP address for internal DNS proxy
+	VipDnsProxy *schema.IpAddressType `protobuf:"bytes,9,opt,name=vip_dns_proxy,json=vipDnsProxy,proto3" json:"vip_dns_proxy,omitempty"`
+	// APPLICATION VIP PREFIX
+	//
+	// x-displayName: "Application VIP Prefix"
+	// x-required
+	// Application VIP prefix holds array of subnet, under which Global ip allocator allocates ip on this range
+	AppVipSubnet []string `protobuf:"bytes,12,rep,name=app_vip_subnet,json=appVipSubnet,proto3" json:"app_vip_subnet,omitempty"`
 }
 
 func (m *GlobalSpecType) Reset()      { *m = GlobalSpecType{} }
 func (*GlobalSpecType) ProtoMessage() {}
 func (*GlobalSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_4628a4276549e24f, []int{6}
+	return fileDescriptor_4628a4276549e24f, []int{10}
 }
 func (m *GlobalSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -493,9 +792,9 @@ func (m *GlobalSpecType) GetGateways() *Gateways {
 	return nil
 }
 
-func (m *GlobalSpecType) GetAccessUrl() string {
+func (m *GlobalSpecType) GetAccessFqdn() string {
 	if m != nil {
-		return m.AccessUrl
+		return m.AccessFqdn
 	}
 	return ""
 }
@@ -507,16 +806,37 @@ func (m *GlobalSpecType) GetCert() *Certificate {
 	return nil
 }
 
-func (m *GlobalSpecType) GetProfileName() string {
-	if m != nil {
-		return m.ProfileName
-	}
-	return ""
-}
-
 func (m *GlobalSpecType) GetCdnCeVhApiGw() []*schema.ObjectRefType {
 	if m != nil {
 		return m.CdnCeVhApiGw
+	}
+	return nil
+}
+
+func (m *GlobalSpecType) GetAppVipPool() *AppVIPPool {
+	if m != nil {
+		return m.AppVipPool
+	}
+	return nil
+}
+
+func (m *GlobalSpecType) GetPolicy() *Policy {
+	if m != nil {
+		return m.Policy
+	}
+	return nil
+}
+
+func (m *GlobalSpecType) GetVipDnsProxy() *schema.IpAddressType {
+	if m != nil {
+		return m.VipDnsProxy
+	}
+	return nil
+}
+
+func (m *GlobalSpecType) GetAppVipSubnet() []string {
+	if m != nil {
+		return m.AppVipSubnet
 	}
 	return nil
 }
@@ -528,16 +848,19 @@ func (m *GlobalSpecType) GetCdnCeVhApiGw() []*schema.ObjectRefType {
 type CreateSpecType struct {
 	LeasePool    *LeasePoolList          `protobuf:"bytes,1,opt,name=lease_pool,json=leasePool,proto3" json:"lease_pool,omitempty"`
 	Gateways     *Gateways               `protobuf:"bytes,2,opt,name=gateways,proto3" json:"gateways,omitempty"`
-	AccessUrl    string                  `protobuf:"bytes,3,opt,name=access_url,json=accessUrl,proto3" json:"access_url,omitempty"`
+	AccessFqdn   string                  `protobuf:"bytes,11,opt,name=access_fqdn,json=accessFqdn,proto3" json:"access_fqdn,omitempty"`
 	Cert         *Certificate            `protobuf:"bytes,4,opt,name=cert,proto3" json:"cert,omitempty"`
-	ProfileName  string                  `protobuf:"bytes,5,opt,name=profile_name,json=profileName,proto3" json:"profile_name,omitempty"`
 	CdnCeVhApiGw []*schema.ObjectRefType `protobuf:"bytes,6,rep,name=cdn_ce_vh_api_gw,json=cdnCeVhApiGw,proto3" json:"cdn_ce_vh_api_gw,omitempty"`
+	AppVipPool   *AppVIPPool             `protobuf:"bytes,7,opt,name=app_vip_pool,json=appVipPool,proto3" json:"app_vip_pool,omitempty"`
+	Policy       *Policy                 `protobuf:"bytes,8,opt,name=policy,proto3" json:"policy,omitempty"`
+	VipDnsProxy  *schema.IpAddressType   `protobuf:"bytes,9,opt,name=vip_dns_proxy,json=vipDnsProxy,proto3" json:"vip_dns_proxy,omitempty"`
+	AppVipSubnet []string                `protobuf:"bytes,12,rep,name=app_vip_subnet,json=appVipSubnet,proto3" json:"app_vip_subnet,omitempty"`
 }
 
 func (m *CreateSpecType) Reset()      { *m = CreateSpecType{} }
 func (*CreateSpecType) ProtoMessage() {}
 func (*CreateSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_4628a4276549e24f, []int{7}
+	return fileDescriptor_4628a4276549e24f, []int{11}
 }
 func (m *CreateSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -580,9 +903,9 @@ func (m *CreateSpecType) GetGateways() *Gateways {
 	return nil
 }
 
-func (m *CreateSpecType) GetAccessUrl() string {
+func (m *CreateSpecType) GetAccessFqdn() string {
 	if m != nil {
-		return m.AccessUrl
+		return m.AccessFqdn
 	}
 	return ""
 }
@@ -594,16 +917,37 @@ func (m *CreateSpecType) GetCert() *Certificate {
 	return nil
 }
 
-func (m *CreateSpecType) GetProfileName() string {
-	if m != nil {
-		return m.ProfileName
-	}
-	return ""
-}
-
 func (m *CreateSpecType) GetCdnCeVhApiGw() []*schema.ObjectRefType {
 	if m != nil {
 		return m.CdnCeVhApiGw
+	}
+	return nil
+}
+
+func (m *CreateSpecType) GetAppVipPool() *AppVIPPool {
+	if m != nil {
+		return m.AppVipPool
+	}
+	return nil
+}
+
+func (m *CreateSpecType) GetPolicy() *Policy {
+	if m != nil {
+		return m.Policy
+	}
+	return nil
+}
+
+func (m *CreateSpecType) GetVipDnsProxy() *schema.IpAddressType {
+	if m != nil {
+		return m.VipDnsProxy
+	}
+	return nil
+}
+
+func (m *CreateSpecType) GetAppVipSubnet() []string {
+	if m != nil {
+		return m.AppVipSubnet
 	}
 	return nil
 }
@@ -615,16 +959,19 @@ func (m *CreateSpecType) GetCdnCeVhApiGw() []*schema.ObjectRefType {
 type ReplaceSpecType struct {
 	LeasePool    *LeasePoolList          `protobuf:"bytes,1,opt,name=lease_pool,json=leasePool,proto3" json:"lease_pool,omitempty"`
 	Gateways     *Gateways               `protobuf:"bytes,2,opt,name=gateways,proto3" json:"gateways,omitempty"`
-	AccessUrl    string                  `protobuf:"bytes,3,opt,name=access_url,json=accessUrl,proto3" json:"access_url,omitempty"`
+	AccessFqdn   string                  `protobuf:"bytes,11,opt,name=access_fqdn,json=accessFqdn,proto3" json:"access_fqdn,omitempty"`
 	Cert         *Certificate            `protobuf:"bytes,4,opt,name=cert,proto3" json:"cert,omitempty"`
-	ProfileName  string                  `protobuf:"bytes,5,opt,name=profile_name,json=profileName,proto3" json:"profile_name,omitempty"`
 	CdnCeVhApiGw []*schema.ObjectRefType `protobuf:"bytes,6,rep,name=cdn_ce_vh_api_gw,json=cdnCeVhApiGw,proto3" json:"cdn_ce_vh_api_gw,omitempty"`
+	AppVipPool   *AppVIPPool             `protobuf:"bytes,7,opt,name=app_vip_pool,json=appVipPool,proto3" json:"app_vip_pool,omitempty"`
+	Policy       *Policy                 `protobuf:"bytes,8,opt,name=policy,proto3" json:"policy,omitempty"`
+	VipDnsProxy  *schema.IpAddressType   `protobuf:"bytes,9,opt,name=vip_dns_proxy,json=vipDnsProxy,proto3" json:"vip_dns_proxy,omitempty"`
+	AppVipSubnet []string                `protobuf:"bytes,12,rep,name=app_vip_subnet,json=appVipSubnet,proto3" json:"app_vip_subnet,omitempty"`
 }
 
 func (m *ReplaceSpecType) Reset()      { *m = ReplaceSpecType{} }
 func (*ReplaceSpecType) ProtoMessage() {}
 func (*ReplaceSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_4628a4276549e24f, []int{8}
+	return fileDescriptor_4628a4276549e24f, []int{12}
 }
 func (m *ReplaceSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -667,9 +1014,9 @@ func (m *ReplaceSpecType) GetGateways() *Gateways {
 	return nil
 }
 
-func (m *ReplaceSpecType) GetAccessUrl() string {
+func (m *ReplaceSpecType) GetAccessFqdn() string {
 	if m != nil {
-		return m.AccessUrl
+		return m.AccessFqdn
 	}
 	return ""
 }
@@ -681,16 +1028,37 @@ func (m *ReplaceSpecType) GetCert() *Certificate {
 	return nil
 }
 
-func (m *ReplaceSpecType) GetProfileName() string {
-	if m != nil {
-		return m.ProfileName
-	}
-	return ""
-}
-
 func (m *ReplaceSpecType) GetCdnCeVhApiGw() []*schema.ObjectRefType {
 	if m != nil {
 		return m.CdnCeVhApiGw
+	}
+	return nil
+}
+
+func (m *ReplaceSpecType) GetAppVipPool() *AppVIPPool {
+	if m != nil {
+		return m.AppVipPool
+	}
+	return nil
+}
+
+func (m *ReplaceSpecType) GetPolicy() *Policy {
+	if m != nil {
+		return m.Policy
+	}
+	return nil
+}
+
+func (m *ReplaceSpecType) GetVipDnsProxy() *schema.IpAddressType {
+	if m != nil {
+		return m.VipDnsProxy
+	}
+	return nil
+}
+
+func (m *ReplaceSpecType) GetAppVipSubnet() []string {
+	if m != nil {
+		return m.AppVipSubnet
 	}
 	return nil
 }
@@ -702,16 +1070,19 @@ func (m *ReplaceSpecType) GetCdnCeVhApiGw() []*schema.ObjectRefType {
 type GetSpecType struct {
 	LeasePool    *LeasePoolList          `protobuf:"bytes,1,opt,name=lease_pool,json=leasePool,proto3" json:"lease_pool,omitempty"`
 	Gateways     *Gateways               `protobuf:"bytes,2,opt,name=gateways,proto3" json:"gateways,omitempty"`
-	AccessUrl    string                  `protobuf:"bytes,3,opt,name=access_url,json=accessUrl,proto3" json:"access_url,omitempty"`
+	AccessFqdn   string                  `protobuf:"bytes,11,opt,name=access_fqdn,json=accessFqdn,proto3" json:"access_fqdn,omitempty"`
 	Cert         *Certificate            `protobuf:"bytes,4,opt,name=cert,proto3" json:"cert,omitempty"`
-	ProfileName  string                  `protobuf:"bytes,5,opt,name=profile_name,json=profileName,proto3" json:"profile_name,omitempty"`
 	CdnCeVhApiGw []*schema.ObjectRefType `protobuf:"bytes,6,rep,name=cdn_ce_vh_api_gw,json=cdnCeVhApiGw,proto3" json:"cdn_ce_vh_api_gw,omitempty"`
+	AppVipPool   *AppVIPPool             `protobuf:"bytes,7,opt,name=app_vip_pool,json=appVipPool,proto3" json:"app_vip_pool,omitempty"`
+	Policy       *Policy                 `protobuf:"bytes,8,opt,name=policy,proto3" json:"policy,omitempty"`
+	VipDnsProxy  *schema.IpAddressType   `protobuf:"bytes,9,opt,name=vip_dns_proxy,json=vipDnsProxy,proto3" json:"vip_dns_proxy,omitempty"`
+	AppVipSubnet []string                `protobuf:"bytes,12,rep,name=app_vip_subnet,json=appVipSubnet,proto3" json:"app_vip_subnet,omitempty"`
 }
 
 func (m *GetSpecType) Reset()      { *m = GetSpecType{} }
 func (*GetSpecType) ProtoMessage() {}
 func (*GetSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_4628a4276549e24f, []int{9}
+	return fileDescriptor_4628a4276549e24f, []int{13}
 }
 func (m *GetSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -754,9 +1125,9 @@ func (m *GetSpecType) GetGateways() *Gateways {
 	return nil
 }
 
-func (m *GetSpecType) GetAccessUrl() string {
+func (m *GetSpecType) GetAccessFqdn() string {
 	if m != nil {
-		return m.AccessUrl
+		return m.AccessFqdn
 	}
 	return ""
 }
@@ -768,13 +1139,6 @@ func (m *GetSpecType) GetCert() *Certificate {
 	return nil
 }
 
-func (m *GetSpecType) GetProfileName() string {
-	if m != nil {
-		return m.ProfileName
-	}
-	return ""
-}
-
 func (m *GetSpecType) GetCdnCeVhApiGw() []*schema.ObjectRefType {
 	if m != nil {
 		return m.CdnCeVhApiGw
@@ -782,11 +1146,43 @@ func (m *GetSpecType) GetCdnCeVhApiGw() []*schema.ObjectRefType {
 	return nil
 }
 
+func (m *GetSpecType) GetAppVipPool() *AppVIPPool {
+	if m != nil {
+		return m.AppVipPool
+	}
+	return nil
+}
+
+func (m *GetSpecType) GetPolicy() *Policy {
+	if m != nil {
+		return m.Policy
+	}
+	return nil
+}
+
+func (m *GetSpecType) GetVipDnsProxy() *schema.IpAddressType {
+	if m != nil {
+		return m.VipDnsProxy
+	}
+	return nil
+}
+
+func (m *GetSpecType) GetAppVipSubnet() []string {
+	if m != nil {
+		return m.AppVipSubnet
+	}
+	return nil
+}
+
 func init() {
+	proto.RegisterType((*IPv4Leasepool)(nil), "ves.io.schema.uztna.uztna_domain.IPv4Leasepool")
+	proto.RegisterType((*IPv6Leasepool)(nil), "ves.io.schema.uztna.uztna_domain.IPv6Leasepool")
+	proto.RegisterType((*DualStackLeasePool)(nil), "ves.io.schema.uztna.uztna_domain.DualStackLeasePool")
 	proto.RegisterType((*LeasePoolList)(nil), "ves.io.schema.uztna.uztna_domain.LeasePoolList")
-	proto.RegisterType((*DomainPerimeterRE)(nil), "ves.io.schema.uztna.uztna_domain.DomainPerimeterRE")
-	proto.RegisterType((*DomainSites)(nil), "ves.io.schema.uztna.uztna_domain.DomainSites")
-	proto.RegisterType((*PerimeterREAdvertisement)(nil), "ves.io.schema.uztna.uztna_domain.PerimeterREAdvertisement")
+	proto.RegisterType((*Policy)(nil), "ves.io.schema.uztna.uztna_domain.Policy")
+	proto.RegisterType((*AppVIPPool)(nil), "ves.io.schema.uztna.uztna_domain.AppVIPPool")
+	proto.RegisterType((*CloudGateways)(nil), "ves.io.schema.uztna.uztna_domain.CloudGateways")
+	proto.RegisterType((*CloudGatewayAdvertisement)(nil), "ves.io.schema.uztna.uztna_domain.CloudGatewayAdvertisement")
 	proto.RegisterType((*Gateways)(nil), "ves.io.schema.uztna.uztna_domain.Gateways")
 	proto.RegisterType((*Certificate)(nil), "ves.io.schema.uztna.uztna_domain.Certificate")
 	proto.RegisterType((*GlobalSpecType)(nil), "ves.io.schema.uztna.uztna_domain.GlobalSpecType")
@@ -800,66 +1196,175 @@ func init() {
 }
 
 var fileDescriptor_4628a4276549e24f = []byte{
-	// 902 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x56, 0xcf, 0x6f, 0x1b, 0x45,
-	0x14, 0xf6, 0xd8, 0x4e, 0x71, 0xde, 0xda, 0x4d, 0xb2, 0xaa, 0xc4, 0x12, 0xca, 0xe2, 0xae, 0x38,
-	0x44, 0x55, 0xb3, 0x96, 0xd2, 0x5b, 0x90, 0x90, 0x92, 0x34, 0x24, 0x40, 0x54, 0xaa, 0x2d, 0x2d,
-	0x08, 0x14, 0xad, 0xc6, 0xeb, 0x67, 0x7b, 0xca, 0xd8, 0xb3, 0x9a, 0x9d, 0x38, 0x04, 0xc9, 0x92,
-	0x25, 0x24, 0xb8, 0x70, 0x40, 0xfc, 0x15, 0x28, 0x27, 0x24, 0x6e, 0x98, 0x43, 0x25, 0x2e, 0xa8,
-	0xa7, 0x1c, 0x73, 0x24, 0xce, 0xa5, 0xdc, 0x7a, 0xe4, 0x88, 0xf6, 0x87, 0xcd, 0x6e, 0x4c, 0x15,
-	0x0b, 0x21, 0x95, 0x43, 0x2f, 0x96, 0x67, 0xde, 0xfb, 0xde, 0x37, 0xef, 0xfb, 0xde, 0xac, 0x06,
-	0x6e, 0xf5, 0x30, 0xb0, 0x99, 0xa8, 0x05, 0x5e, 0x1b, 0x3b, 0xb4, 0x76, 0xf0, 0xa5, 0xea, 0x26,
-	0xbf, 0x6e, 0x43, 0x74, 0x28, 0xeb, 0xd6, 0xd4, 0x91, 0x8f, 0x81, 0xed, 0x4b, 0xa1, 0x84, 0x5e,
-	0x8d, 0xb3, 0xed, 0x38, 0xdb, 0x8e, 0xf2, 0xec, 0x74, 0xf6, 0xf2, 0xab, 0xd9, 0x7a, 0x5d, 0x54,
-	0x31, 0x74, 0xf9, 0xf5, 0x6c, 0x40, 0xf8, 0x8a, 0x89, 0x6e, 0x52, 0x77, 0xf9, 0xb5, 0x6c, 0x30,
-	0x45, 0xb9, 0x7c, 0x3d, 0x1b, 0xea, 0x51, 0xce, 0x1a, 0x54, 0x61, 0x12, 0xad, 0x5e, 0x88, 0x32,
-	0x3c, 0x74, 0xb3, 0xa5, 0xdf, 0x9c, 0xce, 0x08, 0xd2, 0x04, 0x96, 0x0f, 0x95, 0x3d, 0xa4, 0x01,
-	0xde, 0x13, 0x82, 0xef, 0xb1, 0x40, 0xe9, 0x2e, 0x68, 0x71, 0x4b, 0xdc, 0x17, 0x82, 0x1b, 0xa4,
-	0x5a, 0x58, 0xd1, 0xd6, 0xae, 0xdb, 0xd9, 0xd6, 0x3f, 0xac, 0x3f, 0x42, 0x4f, 0x39, 0xd8, 0xfc,
-	0xe8, 0xc8, 0xc7, 0xcd, 0xea, 0x71, 0x7f, 0x21, 0xc1, 0x84, 0xa5, 0x42, 0xdc, 0xe0, 0x17, 0x42,
-	0x7e, 0xfe, 0xe3, 0x71, 0x61, 0xee, 0x7b, 0x92, 0x5f, 0x24, 0x0e, 0x44, 0xe1, 0xbd, 0x30, 0x62,
-	0x3d, 0x82, 0xa5, 0x3b, 0x91, 0x5a, 0xf7, 0x50, 0xb2, 0x0e, 0x2a, 0x94, 0xce, 0xb6, 0xfe, 0x00,
-	0x96, 0xfc, 0xf1, 0xd2, 0x95, 0xe8, 0x06, 0x4c, 0xe1, 0x4c, 0xdc, 0xda, 0x71, 0xbf, 0x18, 0x26,
-	0x87, 0x84, 0xce, 0xc2, 0xa4, 0x86, 0x83, 0xf7, 0x99, 0x42, 0xab, 0x09, 0x5a, 0xcc, 0x15, 0xae,
-	0x02, 0xfd, 0x63, 0xa8, 0xc4, 0xe7, 0x6c, 0x51, 0x85, 0x87, 0xf4, 0x68, 0x26, 0x86, 0x6b, 0xc7,
-	0xfd, 0x2c, 0x2a, 0xa2, 0x2a, 0x47, 0x5b, 0x3b, 0xf1, 0x8e, 0xf5, 0x6b, 0x1e, 0x8c, 0x54, 0x3b,
-	0x1b, 0x8d, 0x1e, 0x4a, 0xc5, 0x02, 0xec, 0x60, 0x57, 0xe9, 0x6f, 0x43, 0x85, 0x72, 0xee, 0x4e,
-	0xce, 0x66, 0x90, 0x2a, 0x59, 0xd1, 0xd6, 0xae, 0x5d, 0x60, 0xdd, 0xee, 0xf8, 0xea, 0x68, 0x37,
-	0xe7, 0x94, 0x29, 0xe7, 0x93, 0x5a, 0xfa, 0x3e, 0x2c, 0xc4, 0xb3, 0x35, 0x56, 0x25, 0x30, 0xf2,
-	0x11, 0xfc, 0xb6, 0x7d, 0xd9, 0x34, 0xda, 0x53, 0x32, 0xef, 0xe6, 0x9c, 0x4a, 0x1c, 0x8b, 0xf5,
-	0x09, 0xd6, 0xe9, 0x93, 0x21, 0xd9, 0x87, 0xcf, 0xa0, 0x3c, 0xc9, 0xaa, 0x3a, 0xdb, 0x37, 0x3f,
-	0x80, 0xf7, 0xe0, 0xc6, 0x85, 0x53, 0xaf, 0x2d, 0x6e, 0x70, 0x5e, 0x4d, 0xa7, 0xc1, 0x5b, 0x53,
-	0x67, 0x5b, 0x9b, 0xb6, 0x76, 0xd3, 0x02, 0x3d, 0x2a, 0x92, 0x38, 0xeb, 0xb5, 0x05, 0xf3, 0x50,
-	0x2f, 0x3f, 0x1e, 0x12, 0x72, 0x32, 0x24, 0xc5, 0x3f, 0x87, 0x24, 0xff, 0x7e, 0xb1, 0x54, 0x5c,
-	0x9c, 0xb3, 0x7e, 0x22, 0x50, 0x4a, 0x14, 0x0d, 0xf4, 0x7d, 0x28, 0xa7, 0x27, 0x22, 0x11, 0x6d,
-	0xfd, 0xf2, 0xae, 0x9f, 0xe7, 0x83, 0xa3, 0xa5, 0xa6, 0x43, 0xdf, 0x85, 0x52, 0x9d, 0xb5, 0x98,
-	0xef, 0x7a, 0x98, 0x08, 0xba, 0x3a, 0xab, 0xa0, 0x91, 0x72, 0xce, 0x2b, 0x11, 0x7c, 0x0b, 0xad,
-	0x16, 0x68, 0x5b, 0x21, 0x4b, 0x93, 0x79, 0x54, 0xa1, 0xfe, 0x09, 0x68, 0xde, 0xdf, 0x4b, 0x23,
-	0x3f, 0xc3, 0x84, 0x19, 0xc7, 0xfd, 0x34, 0x26, 0x75, 0x6f, 0xd2, 0xdb, 0xd6, 0x8f, 0x05, 0xb8,
-	0xba, 0xc3, 0x45, 0x9d, 0xf2, 0xfb, 0x3e, 0x7a, 0x21, 0x52, 0xbf, 0x0b, 0x10, 0x5d, 0x39, 0x37,
-	0xb9, 0xab, 0x61, 0x1f, 0xb5, 0xcb, 0xfb, 0xc8, 0xdc, 0x78, 0x67, 0x9e, 0x8f, 0x97, 0xfa, 0xbb,
-	0x50, 0x4a, 0x86, 0x7c, 0x3c, 0x66, 0x37, 0x2f, 0xaf, 0x36, 0xb6, 0xcc, 0x99, 0x60, 0xf5, 0x5b,
-	0x00, 0xd4, 0xf3, 0x30, 0x08, 0xdc, 0x03, 0xc9, 0x8d, 0x42, 0x95, 0xac, 0xcc, 0x6f, 0x56, 0xc2,
-	0xbe, 0x4a, 0xf2, 0xca, 0xca, 0xa0, 0x34, 0x98, 0x23, 0xce, 0x7c, 0x9c, 0xf0, 0x40, 0x72, 0x7d,
-	0x03, 0x8a, 0x61, 0x9f, 0x46, 0x71, 0x56, 0x1f, 0x52, 0x7a, 0x3b, 0x11, 0x54, 0x5f, 0x85, 0xb2,
-	0x2f, 0x45, 0x93, 0x71, 0x74, 0xbb, 0xb4, 0x83, 0xc6, 0x5c, 0x44, 0x09, 0x91, 0x94, 0xb2, 0x60,
-	0x0c, 0x4a, 0x8e, 0x96, 0xc4, 0xef, 0xd2, 0x0e, 0xea, 0x4d, 0x58, 0xf4, 0x1a, 0x5d, 0xd7, 0x43,
-	0xb7, 0xd7, 0x76, 0xa9, 0xcf, 0xdc, 0xd6, 0xa1, 0x71, 0x65, 0xb6, 0x2f, 0x5d, 0xb9, 0xc7, 0xa4,
-	0x3a, 0xa0, 0xdc, 0x6d, 0x8b, 0x40, 0x9d, 0xf6, 0xc9, 0xd3, 0x61, 0xe6, 0x4b, 0x57, 0xf6, 0x1a,
-	0xdd, 0x2d, 0x7c, 0xd8, 0xde, 0xf0, 0xd9, 0xce, 0xa1, 0xf5, 0x75, 0x01, 0xae, 0x6e, 0x49, 0xa4,
-	0x0a, 0xff, 0xf7, 0x96, 0xbd, 0x31, 0x6d, 0xd9, 0x7f, 0xec, 0xd1, 0x8d, 0x7f, 0xf2, 0x28, 0xeb,
-	0xcb, 0x9d, 0x7f, 0xe7, 0x4b, 0x56, 0xf5, 0xf5, 0xa5, 0x27, 0xef, 0x5c, 0xb8, 0x28, 0xd6, 0x37,
-	0x05, 0x58, 0x70, 0xd0, 0xe7, 0xd4, 0x7b, 0xe9, 0xc4, 0x8b, 0x75, 0xe2, 0xab, 0x02, 0x68, 0x3b,
-	0xa8, 0x5e, 0xba, 0xf0, 0x22, 0x5d, 0xd8, 0xfc, 0x96, 0x9c, 0x9c, 0x99, 0xb9, 0xd3, 0x33, 0x33,
-	0xf7, 0xec, 0xcc, 0x24, 0x83, 0x91, 0x49, 0x7e, 0x18, 0x99, 0xe4, 0xb7, 0x91, 0x49, 0x4e, 0x46,
-	0x26, 0xf9, 0x7d, 0x64, 0x92, 0xa7, 0x23, 0x33, 0xf7, 0x6c, 0x64, 0x92, 0xef, 0xce, 0xcd, 0xdc,
-	0xc9, 0xb9, 0x99, 0x3b, 0x3d, 0x37, 0x73, 0x9f, 0x3e, 0x6c, 0x09, 0xff, 0xf3, 0x96, 0xdd, 0x13,
-	0x5c, 0xa1, 0x94, 0xd4, 0x3e, 0x08, 0x6a, 0xd1, 0x9f, 0xa6, 0x90, 0x9d, 0x55, 0x5f, 0x8a, 0x1e,
-	0x6b, 0xa0, 0x5c, 0x1d, 0x87, 0x6b, 0x7e, 0xbd, 0x25, 0x6a, 0xf8, 0x85, 0x4a, 0x5e, 0x9f, 0xcf,
-	0x7d, 0x65, 0xd7, 0xaf, 0x44, 0x8f, 0xd1, 0xdb, 0x7f, 0x05, 0x00, 0x00, 0xff, 0xff, 0x5f, 0x52,
-	0x4a, 0x2a, 0x90, 0x0b, 0x00, 0x00,
+	// 1294 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x58, 0xcf, 0x6b, 0x1b, 0x47,
+	0x14, 0xd6, 0x48, 0x2b, 0x79, 0xfd, 0x24, 0x39, 0xca, 0x36, 0x25, 0x8a, 0x1b, 0xd6, 0x42, 0xc9,
+	0xc1, 0x04, 0x47, 0x22, 0x8e, 0x71, 0x21, 0x85, 0x12, 0xc9, 0xae, 0x7f, 0xe1, 0xa6, 0x66, 0x9d,
+	0x9a, 0x10, 0x4a, 0xb6, 0xa3, 0xd5, 0x58, 0xde, 0x66, 0xa5, 0x9d, 0xec, 0x8e, 0xe5, 0xb8, 0x20,
+	0xf0, 0x1f, 0xd0, 0x43, 0xc9, 0x5f, 0x11, 0x74, 0xed, 0xa5, 0x54, 0x39, 0x98, 0x42, 0xa0, 0xe4,
+	0xa4, 0xa3, 0x8f, 0x89, 0x72, 0x49, 0x2f, 0x25, 0xed, 0xa9, 0xc7, 0xb2, 0xb3, 0x2b, 0x79, 0x77,
+	0xed, 0x62, 0xc5, 0x0d, 0xa1, 0x07, 0x5f, 0xc4, 0x6a, 0x66, 0xde, 0xf7, 0xcd, 0xf7, 0xde, 0xf7,
+	0xde, 0xc2, 0xc2, 0x54, 0x93, 0xd8, 0x05, 0xdd, 0x2c, 0xda, 0xda, 0x16, 0xa9, 0xe3, 0xe2, 0xf6,
+	0xf7, 0xac, 0xe1, 0xfd, 0xaa, 0x55, 0xb3, 0x8e, 0xf5, 0x46, 0x91, 0xed, 0x52, 0x62, 0x17, 0xa8,
+	0x65, 0x32, 0x53, 0xca, 0xb9, 0xa7, 0x0b, 0xee, 0xe9, 0x02, 0x3f, 0x57, 0xf0, 0x9f, 0x1e, 0xbf,
+	0x18, 0xc4, 0x6b, 0x10, 0xe6, 0x86, 0x8e, 0x7f, 0x12, 0xdc, 0x30, 0x29, 0xd3, 0xcd, 0x86, 0x87,
+	0x3b, 0x7e, 0x29, 0xb8, 0xe9, 0xa3, 0x1c, 0xbf, 0x1c, 0xdc, 0x6a, 0x62, 0x43, 0xaf, 0x62, 0x46,
+	0xbc, 0xdd, 0x5c, 0x68, 0x57, 0x27, 0x3b, 0x6a, 0x10, 0x7a, 0xe2, 0xe8, 0x09, 0xdb, 0x4f, 0x90,
+	0x7f, 0x0c, 0xe9, 0xe5, 0xb5, 0xe6, 0xcc, 0x2a, 0xc1, 0x36, 0xa1, 0xa6, 0x69, 0x48, 0x18, 0xc6,
+	0x74, 0xda, 0x9c, 0x51, 0x8d, 0xfe, 0x4a, 0x36, 0x9a, 0x8b, 0x4d, 0x26, 0xa7, 0x2f, 0x17, 0x82,
+	0xea, 0xbf, 0xaa, 0x7c, 0x47, 0x34, 0xa6, 0x90, 0xcd, 0xbb, 0xbb, 0x94, 0x94, 0x2f, 0xb7, 0x5b,
+	0xe7, 0xdc, 0x4c, 0x0c, 0xe2, 0x7e, 0xf9, 0x7d, 0x3f, 0x16, 0x7f, 0x82, 0xa2, 0x19, 0xa4, 0xa4,
+	0x1d, 0xc4, 0x01, 0xc5, 0x8a, 0x20, 0xa2, 0x4c, 0xd4, 0x63, 0x9e, 0x0d, 0x33, 0xcf, 0xbe, 0x77,
+	0xe6, 0xd9, 0x30, 0x73, 0x17, 0x81, 0x34, 0xbf, 0x8d, 0x8d, 0x75, 0x86, 0xb5, 0x87, 0x7c, 0x73,
+	0xcd, 0xe1, 0xdf, 0x38, 0xa2, 0x3c, 0x96, 0x43, 0x93, 0xc9, 0xe9, 0x62, 0xe1, 0xa4, 0xba, 0x17,
+	0x02, 0x29, 0x0c, 0xc9, 0xf5, 0x70, 0xfd, 0xba, 0x84, 0x77, 0xc0, 0x9d, 0x0d, 0xe2, 0x86, 0xc5,
+	0xac, 0x08, 0x62, 0x34, 0x13, 0xcb, 0xbf, 0x89, 0x42, 0x7a, 0xa0, 0x64, 0x55, 0xb7, 0x99, 0x74,
+	0xef, 0x98, 0x3a, 0x9e, 0x46, 0xcd, 0x52, 0x24, 0xac, 0xe7, 0xc1, 0x11, 0x3d, 0xb1, 0x53, 0xe9,
+	0x29, 0x0b, 0x6f, 0x3a, 0x08, 0x79, 0xf8, 0x3e, 0x1f, 0x18, 0xf0, 0x11, 0xbf, 0xf9, 0xb1, 0x49,
+	0x9b, 0x39, 0x99, 0xe4, 0x68, 0x69, 0x07, 0x4c, 0xe7, 0x1d, 0xe0, 0x65, 0x3f, 0x5b, 0xf9, 0x8a,
+	0xa3, 0x06, 0x57, 0xab, 0x16, 0xb1, 0x6d, 0xd5, 0xe9, 0x0c, 0xe9, 0xfc, 0x7e, 0x07, 0x45, 0xbb,
+	0x1d, 0x14, 0xef, 0x75, 0x50, 0x7c, 0x7a, 0xea, 0xe6, 0xd4, 0xcc, 0x20, 0xd5, 0xf1, 0x4c, 0x22,
+	0x5f, 0x81, 0xc4, 0x9a, 0x69, 0xe8, 0xda, 0xae, 0x74, 0x0f, 0x12, 0x94, 0x3f, 0x65, 0xd1, 0x10,
+	0x46, 0xcd, 0xb7, 0x5b, 0x1f, 0xbb, 0xf7, 0x74, 0x83, 0x54, 0x46, 0xea, 0xd4, 0xc0, 0x8c, 0xf8,
+	0xec, 0xea, 0xe1, 0xe5, 0xeb, 0x00, 0x25, 0x4a, 0x37, 0x96, 0xd7, 0xb8, 0x31, 0x55, 0x48, 0x61,
+	0x4a, 0xd5, 0xa6, 0x4e, 0x55, 0x9e, 0x89, 0x61, 0xd8, 0x26, 0xda, 0x2d, 0xc9, 0x65, 0xf3, 0x87,
+	0xfa, 0xa8, 0x00, 0x53, 0xba, 0xa1, 0x53, 0x87, 0x20, 0xaf, 0x42, 0x7a, 0xce, 0x30, 0xb7, 0xab,
+	0x8b, 0x98, 0x91, 0x1d, 0xbc, 0x6b, 0x4b, 0x77, 0x20, 0xad, 0x39, 0x0b, 0x6a, 0xcd, 0x5d, 0x19,
+	0x8a, 0x32, 0xd9, 0x6e, 0x09, 0xb6, 0xce, 0xc8, 0xde, 0x33, 0x84, 0x94, 0x94, 0xe6, 0x03, 0xcc,
+	0xff, 0x1c, 0x85, 0x4b, 0x7e, 0x86, 0x52, 0xb5, 0x49, 0x2c, 0xa6, 0xdb, 0xa4, 0x4e, 0x1a, 0x4c,
+	0xba, 0x09, 0xa3, 0xd8, 0x30, 0x54, 0x1e, 0x91, 0x8d, 0xf3, 0x32, 0x5f, 0x08, 0x31, 0x7d, 0x51,
+	0xa7, 0x6c, 0x77, 0x29, 0xa2, 0x88, 0xd8, 0x30, 0x38, 0x90, 0xb4, 0x0a, 0xa2, 0x45, 0x54, 0x87,
+	0xcf, 0xce, 0x26, 0x86, 0xf5, 0x5f, 0x40, 0xe5, 0x52, 0x44, 0x19, 0xb1, 0xc8, 0xba, 0x83, 0x70,
+	0xeb, 0xdb, 0x17, 0x1d, 0xf4, 0x0d, 0xdc, 0x87, 0x31, 0x7e, 0x22, 0xd7, 0x3f, 0x72, 0x6d, 0x09,
+	0x16, 0x60, 0xc2, 0x77, 0xbd, 0x69, 0xa9, 0x64, 0x18, 0xb9, 0xe0, 0x21, 0xb8, 0x72, 0x78, 0x95,
+	0xe9, 0x8b, 0xf3, 0x9c, 0x69, 0x43, 0x27, 0x3b, 0x01, 0xb2, 0xf2, 0x55, 0xb8, 0x10, 0x48, 0xa9,
+	0xaa, 0x6d, 0x99, 0xba, 0x46, 0xa4, 0xd4, 0x7e, 0x07, 0xc5, 0xbb, 0x1d, 0x24, 0xfc, 0xdd, 0x41,
+	0x51, 0x7f, 0x4f, 0xaf, 0x08, 0xa2, 0x90, 0x89, 0xe7, 0x9f, 0x23, 0x10, 0x07, 0x75, 0x79, 0x00,
+	0x29, 0x4a, 0x2c, 0xbd, 0x4e, 0x18, 0xb1, 0x54, 0x8b, 0x78, 0x3d, 0xf1, 0xd9, 0xbb, 0x09, 0x0f,
+	0x24, 0x5f, 0x49, 0x0e, 0x00, 0x15, 0x22, 0x7d, 0x09, 0x50, 0xd1, 0x6b, 0x3a, 0xe5, 0x62, 0xb2,
+	0xb1, 0x21, 0x8a, 0x9e, 0x69, 0xb7, 0xd2, 0x2e, 0x93, 0xa7, 0x4b, 0x19, 0xe5, 0x08, 0x4e, 0x5a,
+	0x03, 0x13, 0xaa, 0x06, 0xc9, 0x39, 0x87, 0x76, 0x53, 0xd7, 0x30, 0x23, 0xd2, 0x3d, 0x48, 0x6a,
+	0x87, 0x7f, 0x87, 0x9a, 0xf4, 0xd9, 0x76, 0xcb, 0x1f, 0xe3, 0xf3, 0xb2, 0x7f, 0x39, 0xff, 0x53,
+	0x02, 0xc6, 0x16, 0x0d, 0xb3, 0x82, 0x8d, 0x75, 0x4a, 0x34, 0x27, 0x52, 0xba, 0x03, 0xc0, 0xe7,
+	0x48, 0xbf, 0x7d, 0x86, 0x74, 0x4b, 0x60, 0xa0, 0x2a, 0xa3, 0xc6, 0xe0, 0x4d, 0xb1, 0x00, 0xa2,
+	0xa7, 0xd6, 0xf6, 0xa6, 0xea, 0xb5, 0x93, 0xd1, 0xfa, 0x45, 0x54, 0x06, 0xb1, 0x52, 0x01, 0x92,
+	0x58, 0xd3, 0x9c, 0xc1, 0xb3, 0xf9, 0xa8, 0xda, 0xc8, 0x26, 0x73, 0x68, 0x72, 0xb4, 0x9c, 0x76,
+	0x84, 0x89, 0x56, 0x62, 0x72, 0x4f, 0xdc, 0x8b, 0x3b, 0x7d, 0xca, 0x4f, 0x2c, 0x3c, 0xaa, 0x36,
+	0xa4, 0x12, 0x08, 0x8e, 0x52, 0xaf, 0xec, 0xd7, 0x87, 0x28, 0xfb, 0x61, 0x5e, 0x14, 0x1e, 0x2a,
+	0x6d, 0x42, 0x46, 0xab, 0x36, 0x54, 0x8d, 0xa8, 0xcd, 0x2d, 0x15, 0x53, 0x5d, 0xad, 0xed, 0x64,
+	0x13, 0x43, 0x24, 0x3f, 0xd7, 0x6e, 0xa5, 0x9a, 0xba, 0xc5, 0xb6, 0xb1, 0xa1, 0x6e, 0x99, 0x36,
+	0x3b, 0x68, 0x21, 0x67, 0xa6, 0xfa, 0x8a, 0x90, 0xd2, 0xaa, 0x8d, 0x39, 0xb2, 0xb1, 0x55, 0xa2,
+	0xfa, 0xe2, 0x8e, 0x74, 0x37, 0x34, 0xb3, 0x46, 0xf8, 0x95, 0xa7, 0x4e, 0xbe, 0xf2, 0xe1, 0xdc,
+	0x2b, 0x0b, 0xfb, 0x1d, 0x14, 0x18, 0x54, 0xd2, 0xed, 0xc1, 0xc4, 0x15, 0x39, 0xde, 0xe4, 0xc9,
+	0x78, 0xee, 0xac, 0xee, 0x4f, 0x56, 0x69, 0x19, 0xd2, 0xce, 0x9d, 0xaa, 0x0d, 0x5b, 0xa5, 0x96,
+	0xf9, 0x78, 0x37, 0x3b, 0xca, 0x81, 0xc2, 0xe2, 0x97, 0x69, 0xc9, 0x7d, 0x25, 0x70, 0xf1, 0x23,
+	0x9e, 0x5a, 0x25, 0xd9, 0xd4, 0xe9, 0x7c, 0xc3, 0x5e, 0x73, 0x22, 0xa5, 0x3a, 0x8c, 0xf5, 0x25,
+	0xda, 0xdb, 0x95, 0x06, 0x61, 0xd9, 0x54, 0x2e, 0x36, 0x39, 0x5a, 0x5e, 0x74, 0x92, 0x02, 0x4f,
+	0xd0, 0x48, 0x3e, 0x6e, 0xc5, 0x9e, 0xba, 0x39, 0xea, 0xff, 0x3d, 0xf0, 0xa5, 0x0c, 0xfa, 0x4f,
+	0xe2, 0x60, 0x2d, 0x8b, 0x7a, 0x2f, 0x9f, 0xc7, 0x12, 0x4f, 0x9e, 0xa1, 0x68, 0x26, 0xa2, 0xa4,
+	0x5c, 0xe5, 0xeb, 0x1c, 0xfc, 0xd6, 0xca, 0xaf, 0x1d, 0xb4, 0x00, 0xe7, 0x00, 0xb8, 0x2d, 0x73,
+	0x3c, 0x1f, 0xe8, 0x06, 0xa4, 0x7d, 0xe3, 0x01, 0x4d, 0x43, 0x06, 0xa0, 0xc4, 0x0d, 0x93, 0xfb,
+	0x5a, 0x59, 0x95, 0xa2, 0x37, 0x6e, 0x80, 0x14, 0x6c, 0xbc, 0xd8, 0xcc, 0xd4, 0xa7, 0x2b, 0x82,
+	0x18, 0xcb, 0x08, 0xee, 0xfb, 0x6c, 0x45, 0x10, 0x21, 0x93, 0xcc, 0xff, 0x29, 0xc0, 0xd8, 0x9c,
+	0x45, 0x30, 0x23, 0xff, 0xfb, 0xae, 0x99, 0x38, 0xa6, 0x6b, 0xde, 0x77, 0x9b, 0xcc, 0x9f, 0xae,
+	0x4d, 0x42, 0x4d, 0x70, 0xe7, 0xbf, 0x37, 0xc1, 0x7b, 0xb6, 0xff, 0xed, 0x53, 0xd8, 0x3f, 0xe8,
+	0xfa, 0xab, 0xc7, 0xbb, 0x3e, 0x64, 0xd6, 0xf3, 0x2f, 0x3e, 0x0f, 0x0d, 0xe1, 0x63, 0x3c, 0xf7,
+	0x97, 0x00, 0xe7, 0x14, 0x42, 0x0d, 0xac, 0x9d, 0x99, 0xee, 0xcc, 0x74, 0x1f, 0xc8, 0x74, 0x7f,
+	0x08, 0x90, 0x5c, 0x24, 0xec, 0xcc, 0x70, 0x67, 0x86, 0xfb, 0x20, 0x86, 0x2b, 0xff, 0x80, 0xba,
+	0xaf, 0xe4, 0xc8, 0xc1, 0x2b, 0x39, 0xf2, 0xf6, 0x95, 0x8c, 0xf6, 0x7a, 0x32, 0x7a, 0xda, 0x93,
+	0xd1, 0x6f, 0x3d, 0x19, 0x75, 0x7b, 0x32, 0x7a, 0xd9, 0x93, 0xd1, 0x9b, 0x9e, 0x1c, 0x79, 0xdb,
+	0x93, 0xd1, 0x8f, 0xaf, 0xe5, 0x48, 0xf7, 0xb5, 0x1c, 0x39, 0x78, 0x2d, 0x47, 0xee, 0x6f, 0xd4,
+	0x4c, 0xfa, 0xb0, 0x56, 0x68, 0x9a, 0x06, 0x23, 0x96, 0x85, 0x0b, 0xdb, 0x76, 0x91, 0x3f, 0x6c,
+	0x9a, 0x56, 0xfd, 0x3a, 0xb5, 0xcc, 0xa6, 0x5e, 0x25, 0xd6, 0xf5, 0xfe, 0x76, 0x91, 0x56, 0x6a,
+	0x66, 0x91, 0x3c, 0x66, 0xde, 0x87, 0x9e, 0x7f, 0xfd, 0xa0, 0x55, 0x49, 0xf0, 0xef, 0x3e, 0x37,
+	0xff, 0x09, 0x00, 0x00, 0xff, 0xff, 0x9d, 0x6d, 0xcd, 0x4a, 0xfb, 0x12, 0x00, 0x00,
 }
 
+func (this *IPv4Leasepool) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*IPv4Leasepool)
+	if !ok {
+		that2, ok := that.(IPv4Leasepool)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if len(this.Ipv4Leasepool) != len(that1.Ipv4Leasepool) {
+		return false
+	}
+	for i := range this.Ipv4Leasepool {
+		if !this.Ipv4Leasepool[i].Equal(that1.Ipv4Leasepool[i]) {
+			return false
+		}
+	}
+	return true
+}
+func (this *IPv6Leasepool) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*IPv6Leasepool)
+	if !ok {
+		that2, ok := that.(IPv6Leasepool)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if len(this.Ipv6Leasepool) != len(that1.Ipv6Leasepool) {
+		return false
+	}
+	for i := range this.Ipv6Leasepool {
+		if !this.Ipv6Leasepool[i].Equal(that1.Ipv6Leasepool[i]) {
+			return false
+		}
+	}
+	return true
+}
+func (this *DualStackLeasePool) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*DualStackLeasePool)
+	if !ok {
+		that2, ok := that.(DualStackLeasePool)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.Ipv4Leasepool.Equal(that1.Ipv4Leasepool) {
+		return false
+	}
+	if !this.Ipv6Leasepool.Equal(that1.Ipv6Leasepool) {
+		return false
+	}
+	return true
+}
 func (this *LeasePoolList) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -879,24 +1384,25 @@ func (this *LeasePoolList) Equal(that interface{}) bool {
 	} else if this == nil {
 		return false
 	}
-	if len(this.UztnaLpool) != len(that1.UztnaLpool) {
-		return false
-	}
-	for i := range this.UztnaLpool {
-		if !this.UztnaLpool[i].Equal(that1.UztnaLpool[i]) {
+	if that1.IpaddressType == nil {
+		if this.IpaddressType != nil {
 			return false
 		}
+	} else if this.IpaddressType == nil {
+		return false
+	} else if !this.IpaddressType.Equal(that1.IpaddressType) {
+		return false
 	}
 	return true
 }
-func (this *DomainPerimeterRE) Equal(that interface{}) bool {
+func (this *LeasePoolList_Ipv4Leasepool) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
 	}
 
-	that1, ok := that.(*DomainPerimeterRE)
+	that1, ok := that.(*LeasePoolList_Ipv4Leasepool)
 	if !ok {
-		that2, ok := that.(DomainPerimeterRE)
+		that2, ok := that.(LeasePoolList_Ipv4Leasepool)
 		if ok {
 			that1 = &that2
 		} else {
@@ -908,24 +1414,19 @@ func (this *DomainPerimeterRE) Equal(that interface{}) bool {
 	} else if this == nil {
 		return false
 	}
-	if len(this.PerimeterReSite) != len(that1.PerimeterReSite) {
+	if !this.Ipv4Leasepool.Equal(that1.Ipv4Leasepool) {
 		return false
-	}
-	for i := range this.PerimeterReSite {
-		if !this.PerimeterReSite[i].Equal(that1.PerimeterReSite[i]) {
-			return false
-		}
 	}
 	return true
 }
-func (this *DomainSites) Equal(that interface{}) bool {
+func (this *LeasePoolList_Ipv6Leasepool) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
 	}
 
-	that1, ok := that.(*DomainSites)
+	that1, ok := that.(*LeasePoolList_Ipv6Leasepool)
 	if !ok {
-		that2, ok := that.(DomainSites)
+		that2, ok := that.(LeasePoolList_Ipv6Leasepool)
 		if ok {
 			that1 = &that2
 		} else {
@@ -937,24 +1438,19 @@ func (this *DomainSites) Equal(that interface{}) bool {
 	} else if this == nil {
 		return false
 	}
-	if len(this.UztnaGateway) != len(that1.UztnaGateway) {
+	if !this.Ipv6Leasepool.Equal(that1.Ipv6Leasepool) {
 		return false
-	}
-	for i := range this.UztnaGateway {
-		if !this.UztnaGateway[i].Equal(that1.UztnaGateway[i]) {
-			return false
-		}
 	}
 	return true
 }
-func (this *PerimeterREAdvertisement) Equal(that interface{}) bool {
+func (this *LeasePoolList_Ipv4Ipv6Leasepool) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
 	}
 
-	that1, ok := that.(*PerimeterREAdvertisement)
+	that1, ok := that.(*LeasePoolList_Ipv4Ipv6Leasepool)
 	if !ok {
-		that2, ok := that.(PerimeterREAdvertisement)
+		that2, ok := that.(LeasePoolList_Ipv4Ipv6Leasepool)
 		if ok {
 			that1 = &that2
 		} else {
@@ -966,25 +1462,19 @@ func (this *PerimeterREAdvertisement) Equal(that interface{}) bool {
 	} else if this == nil {
 		return false
 	}
-	if that1.PerimterReChoice == nil {
-		if this.PerimterReChoice != nil {
-			return false
-		}
-	} else if this.PerimterReChoice == nil {
-		return false
-	} else if !this.PerimterReChoice.Equal(that1.PerimterReChoice) {
+	if !this.Ipv4Ipv6Leasepool.Equal(that1.Ipv4Ipv6Leasepool) {
 		return false
 	}
 	return true
 }
-func (this *PerimeterREAdvertisement_AllPerimeter) Equal(that interface{}) bool {
+func (this *Policy) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
 	}
 
-	that1, ok := that.(*PerimeterREAdvertisement_AllPerimeter)
+	that1, ok := that.(*Policy)
 	if !ok {
-		that2, ok := that.(PerimeterREAdvertisement_AllPerimeter)
+		that2, ok := that.(Policy)
 		if ok {
 			that1 = &that2
 		} else {
@@ -996,19 +1486,24 @@ func (this *PerimeterREAdvertisement_AllPerimeter) Equal(that interface{}) bool 
 	} else if this == nil {
 		return false
 	}
-	if !this.AllPerimeter.Equal(that1.AllPerimeter) {
+	if len(this.Policy) != len(that1.Policy) {
 		return false
+	}
+	for i := range this.Policy {
+		if !this.Policy[i].Equal(that1.Policy[i]) {
+			return false
+		}
 	}
 	return true
 }
-func (this *PerimeterREAdvertisement_DomainReSites) Equal(that interface{}) bool {
+func (this *AppVIPPool) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
 	}
 
-	that1, ok := that.(*PerimeterREAdvertisement_DomainReSites)
+	that1, ok := that.(*AppVIPPool)
 	if !ok {
-		that2, ok := that.(PerimeterREAdvertisement_DomainReSites)
+		that2, ok := that.(AppVIPPool)
 		if ok {
 			that1 = &that2
 		} else {
@@ -1020,7 +1515,119 @@ func (this *PerimeterREAdvertisement_DomainReSites) Equal(that interface{}) bool
 	} else if this == nil {
 		return false
 	}
-	if !this.DomainReSites.Equal(that1.DomainReSites) {
+	if len(this.AppVipPool) != len(that1.AppVipPool) {
+		return false
+	}
+	for i := range this.AppVipPool {
+		if !this.AppVipPool[i].Equal(that1.AppVipPool[i]) {
+			return false
+		}
+	}
+	return true
+}
+func (this *CloudGateways) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CloudGateways)
+	if !ok {
+		that2, ok := that.(CloudGateways)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if len(this.CloudGateway) != len(that1.CloudGateway) {
+		return false
+	}
+	for i := range this.CloudGateway {
+		if !this.CloudGateway[i].Equal(that1.CloudGateway[i]) {
+			return false
+		}
+	}
+	return true
+}
+func (this *CloudGatewayAdvertisement) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CloudGatewayAdvertisement)
+	if !ok {
+		that2, ok := that.(CloudGatewayAdvertisement)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if that1.CloudGatewayChoice == nil {
+		if this.CloudGatewayChoice != nil {
+			return false
+		}
+	} else if this.CloudGatewayChoice == nil {
+		return false
+	} else if !this.CloudGatewayChoice.Equal(that1.CloudGatewayChoice) {
+		return false
+	}
+	return true
+}
+func (this *CloudGatewayAdvertisement_AllCloud) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CloudGatewayAdvertisement_AllCloud)
+	if !ok {
+		that2, ok := that.(CloudGatewayAdvertisement_AllCloud)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.AllCloud.Equal(that1.AllCloud) {
+		return false
+	}
+	return true
+}
+func (this *CloudGatewayAdvertisement_ReSites) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CloudGatewayAdvertisement_ReSites)
+	if !ok {
+		that2, ok := that.(CloudGatewayAdvertisement_ReSites)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.ReSites.Equal(that1.ReSites) {
 		return false
 	}
 	return true
@@ -1047,8 +1654,13 @@ func (this *Gateways) Equal(that interface{}) bool {
 	if !this.PerimeterRe.Equal(that1.PerimeterRe) {
 		return false
 	}
-	if !this.BigipCe.Equal(that1.BigipCe) {
+	if len(this.BigipSite) != len(that1.BigipSite) {
 		return false
+	}
+	for i := range this.BigipSite {
+		if !this.BigipSite[i].Equal(that1.BigipSite[i]) {
+			return false
+		}
 	}
 	return true
 }
@@ -1106,13 +1718,10 @@ func (this *GlobalSpecType) Equal(that interface{}) bool {
 	if !this.Gateways.Equal(that1.Gateways) {
 		return false
 	}
-	if this.AccessUrl != that1.AccessUrl {
+	if this.AccessFqdn != that1.AccessFqdn {
 		return false
 	}
 	if !this.Cert.Equal(that1.Cert) {
-		return false
-	}
-	if this.ProfileName != that1.ProfileName {
 		return false
 	}
 	if len(this.CdnCeVhApiGw) != len(that1.CdnCeVhApiGw) {
@@ -1120,6 +1729,23 @@ func (this *GlobalSpecType) Equal(that interface{}) bool {
 	}
 	for i := range this.CdnCeVhApiGw {
 		if !this.CdnCeVhApiGw[i].Equal(that1.CdnCeVhApiGw[i]) {
+			return false
+		}
+	}
+	if !this.AppVipPool.Equal(that1.AppVipPool) {
+		return false
+	}
+	if !this.Policy.Equal(that1.Policy) {
+		return false
+	}
+	if !this.VipDnsProxy.Equal(that1.VipDnsProxy) {
+		return false
+	}
+	if len(this.AppVipSubnet) != len(that1.AppVipSubnet) {
+		return false
+	}
+	for i := range this.AppVipSubnet {
+		if this.AppVipSubnet[i] != that1.AppVipSubnet[i] {
 			return false
 		}
 	}
@@ -1150,13 +1776,10 @@ func (this *CreateSpecType) Equal(that interface{}) bool {
 	if !this.Gateways.Equal(that1.Gateways) {
 		return false
 	}
-	if this.AccessUrl != that1.AccessUrl {
+	if this.AccessFqdn != that1.AccessFqdn {
 		return false
 	}
 	if !this.Cert.Equal(that1.Cert) {
-		return false
-	}
-	if this.ProfileName != that1.ProfileName {
 		return false
 	}
 	if len(this.CdnCeVhApiGw) != len(that1.CdnCeVhApiGw) {
@@ -1164,6 +1787,23 @@ func (this *CreateSpecType) Equal(that interface{}) bool {
 	}
 	for i := range this.CdnCeVhApiGw {
 		if !this.CdnCeVhApiGw[i].Equal(that1.CdnCeVhApiGw[i]) {
+			return false
+		}
+	}
+	if !this.AppVipPool.Equal(that1.AppVipPool) {
+		return false
+	}
+	if !this.Policy.Equal(that1.Policy) {
+		return false
+	}
+	if !this.VipDnsProxy.Equal(that1.VipDnsProxy) {
+		return false
+	}
+	if len(this.AppVipSubnet) != len(that1.AppVipSubnet) {
+		return false
+	}
+	for i := range this.AppVipSubnet {
+		if this.AppVipSubnet[i] != that1.AppVipSubnet[i] {
 			return false
 		}
 	}
@@ -1194,13 +1834,10 @@ func (this *ReplaceSpecType) Equal(that interface{}) bool {
 	if !this.Gateways.Equal(that1.Gateways) {
 		return false
 	}
-	if this.AccessUrl != that1.AccessUrl {
+	if this.AccessFqdn != that1.AccessFqdn {
 		return false
 	}
 	if !this.Cert.Equal(that1.Cert) {
-		return false
-	}
-	if this.ProfileName != that1.ProfileName {
 		return false
 	}
 	if len(this.CdnCeVhApiGw) != len(that1.CdnCeVhApiGw) {
@@ -1208,6 +1845,23 @@ func (this *ReplaceSpecType) Equal(that interface{}) bool {
 	}
 	for i := range this.CdnCeVhApiGw {
 		if !this.CdnCeVhApiGw[i].Equal(that1.CdnCeVhApiGw[i]) {
+			return false
+		}
+	}
+	if !this.AppVipPool.Equal(that1.AppVipPool) {
+		return false
+	}
+	if !this.Policy.Equal(that1.Policy) {
+		return false
+	}
+	if !this.VipDnsProxy.Equal(that1.VipDnsProxy) {
+		return false
+	}
+	if len(this.AppVipSubnet) != len(that1.AppVipSubnet) {
+		return false
+	}
+	for i := range this.AppVipSubnet {
+		if this.AppVipSubnet[i] != that1.AppVipSubnet[i] {
 			return false
 		}
 	}
@@ -1238,13 +1892,10 @@ func (this *GetSpecType) Equal(that interface{}) bool {
 	if !this.Gateways.Equal(that1.Gateways) {
 		return false
 	}
-	if this.AccessUrl != that1.AccessUrl {
+	if this.AccessFqdn != that1.AccessFqdn {
 		return false
 	}
 	if !this.Cert.Equal(that1.Cert) {
-		return false
-	}
-	if this.ProfileName != that1.ProfileName {
 		return false
 	}
 	if len(this.CdnCeVhApiGw) != len(that1.CdnCeVhApiGw) {
@@ -1255,70 +1906,162 @@ func (this *GetSpecType) Equal(that interface{}) bool {
 			return false
 		}
 	}
+	if !this.AppVipPool.Equal(that1.AppVipPool) {
+		return false
+	}
+	if !this.Policy.Equal(that1.Policy) {
+		return false
+	}
+	if !this.VipDnsProxy.Equal(that1.VipDnsProxy) {
+		return false
+	}
+	if len(this.AppVipSubnet) != len(that1.AppVipSubnet) {
+		return false
+	}
+	for i := range this.AppVipSubnet {
+		if this.AppVipSubnet[i] != that1.AppVipSubnet[i] {
+			return false
+		}
+	}
 	return true
+}
+func (this *IPv4Leasepool) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 5)
+	s = append(s, "&uztna_domain.IPv4Leasepool{")
+	if this.Ipv4Leasepool != nil {
+		s = append(s, "Ipv4Leasepool: "+fmt.Sprintf("%#v", this.Ipv4Leasepool)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *IPv6Leasepool) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 5)
+	s = append(s, "&uztna_domain.IPv6Leasepool{")
+	if this.Ipv6Leasepool != nil {
+		s = append(s, "Ipv6Leasepool: "+fmt.Sprintf("%#v", this.Ipv6Leasepool)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *DualStackLeasePool) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 6)
+	s = append(s, "&uztna_domain.DualStackLeasePool{")
+	if this.Ipv4Leasepool != nil {
+		s = append(s, "Ipv4Leasepool: "+fmt.Sprintf("%#v", this.Ipv4Leasepool)+",\n")
+	}
+	if this.Ipv6Leasepool != nil {
+		s = append(s, "Ipv6Leasepool: "+fmt.Sprintf("%#v", this.Ipv6Leasepool)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
 }
 func (this *LeasePoolList) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 5)
+	s := make([]string, 0, 7)
 	s = append(s, "&uztna_domain.LeasePoolList{")
-	if this.UztnaLpool != nil {
-		s = append(s, "UztnaLpool: "+fmt.Sprintf("%#v", this.UztnaLpool)+",\n")
+	if this.IpaddressType != nil {
+		s = append(s, "IpaddressType: "+fmt.Sprintf("%#v", this.IpaddressType)+",\n")
 	}
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
-func (this *DomainPerimeterRE) GoString() string {
+func (this *LeasePoolList_Ipv4Leasepool) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&uztna_domain.LeasePoolList_Ipv4Leasepool{` +
+		`Ipv4Leasepool:` + fmt.Sprintf("%#v", this.Ipv4Leasepool) + `}`}, ", ")
+	return s
+}
+func (this *LeasePoolList_Ipv6Leasepool) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&uztna_domain.LeasePoolList_Ipv6Leasepool{` +
+		`Ipv6Leasepool:` + fmt.Sprintf("%#v", this.Ipv6Leasepool) + `}`}, ", ")
+	return s
+}
+func (this *LeasePoolList_Ipv4Ipv6Leasepool) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&uztna_domain.LeasePoolList_Ipv4Ipv6Leasepool{` +
+		`Ipv4Ipv6Leasepool:` + fmt.Sprintf("%#v", this.Ipv4Ipv6Leasepool) + `}`}, ", ")
+	return s
+}
+func (this *Policy) GoString() string {
 	if this == nil {
 		return "nil"
 	}
 	s := make([]string, 0, 5)
-	s = append(s, "&uztna_domain.DomainPerimeterRE{")
-	if this.PerimeterReSite != nil {
-		s = append(s, "PerimeterReSite: "+fmt.Sprintf("%#v", this.PerimeterReSite)+",\n")
+	s = append(s, "&uztna_domain.Policy{")
+	if this.Policy != nil {
+		s = append(s, "Policy: "+fmt.Sprintf("%#v", this.Policy)+",\n")
 	}
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
-func (this *DomainSites) GoString() string {
+func (this *AppVIPPool) GoString() string {
 	if this == nil {
 		return "nil"
 	}
 	s := make([]string, 0, 5)
-	s = append(s, "&uztna_domain.DomainSites{")
-	if this.UztnaGateway != nil {
-		s = append(s, "UztnaGateway: "+fmt.Sprintf("%#v", this.UztnaGateway)+",\n")
+	s = append(s, "&uztna_domain.AppVIPPool{")
+	if this.AppVipPool != nil {
+		s = append(s, "AppVipPool: "+fmt.Sprintf("%#v", this.AppVipPool)+",\n")
 	}
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
-func (this *PerimeterREAdvertisement) GoString() string {
+func (this *CloudGateways) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 5)
+	s = append(s, "&uztna_domain.CloudGateways{")
+	if this.CloudGateway != nil {
+		s = append(s, "CloudGateway: "+fmt.Sprintf("%#v", this.CloudGateway)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *CloudGatewayAdvertisement) GoString() string {
 	if this == nil {
 		return "nil"
 	}
 	s := make([]string, 0, 6)
-	s = append(s, "&uztna_domain.PerimeterREAdvertisement{")
-	if this.PerimterReChoice != nil {
-		s = append(s, "PerimterReChoice: "+fmt.Sprintf("%#v", this.PerimterReChoice)+",\n")
+	s = append(s, "&uztna_domain.CloudGatewayAdvertisement{")
+	if this.CloudGatewayChoice != nil {
+		s = append(s, "CloudGatewayChoice: "+fmt.Sprintf("%#v", this.CloudGatewayChoice)+",\n")
 	}
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
-func (this *PerimeterREAdvertisement_AllPerimeter) GoString() string {
+func (this *CloudGatewayAdvertisement_AllCloud) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&uztna_domain.PerimeterREAdvertisement_AllPerimeter{` +
-		`AllPerimeter:` + fmt.Sprintf("%#v", this.AllPerimeter) + `}`}, ", ")
+	s := strings.Join([]string{`&uztna_domain.CloudGatewayAdvertisement_AllCloud{` +
+		`AllCloud:` + fmt.Sprintf("%#v", this.AllCloud) + `}`}, ", ")
 	return s
 }
-func (this *PerimeterREAdvertisement_DomainReSites) GoString() string {
+func (this *CloudGatewayAdvertisement_ReSites) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&uztna_domain.PerimeterREAdvertisement_DomainReSites{` +
-		`DomainReSites:` + fmt.Sprintf("%#v", this.DomainReSites) + `}`}, ", ")
+	s := strings.Join([]string{`&uztna_domain.CloudGatewayAdvertisement_ReSites{` +
+		`ReSites:` + fmt.Sprintf("%#v", this.ReSites) + `}`}, ", ")
 	return s
 }
 func (this *Gateways) GoString() string {
@@ -1330,8 +2073,8 @@ func (this *Gateways) GoString() string {
 	if this.PerimeterRe != nil {
 		s = append(s, "PerimeterRe: "+fmt.Sprintf("%#v", this.PerimeterRe)+",\n")
 	}
-	if this.BigipCe != nil {
-		s = append(s, "BigipCe: "+fmt.Sprintf("%#v", this.BigipCe)+",\n")
+	if this.BigipSite != nil {
+		s = append(s, "BigipSite: "+fmt.Sprintf("%#v", this.BigipSite)+",\n")
 	}
 	s = append(s, "}")
 	return strings.Join(s, "")
@@ -1352,7 +2095,7 @@ func (this *GlobalSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 10)
+	s := make([]string, 0, 13)
 	s = append(s, "&uztna_domain.GlobalSpecType{")
 	if this.LeasePool != nil {
 		s = append(s, "LeasePool: "+fmt.Sprintf("%#v", this.LeasePool)+",\n")
@@ -1360,14 +2103,23 @@ func (this *GlobalSpecType) GoString() string {
 	if this.Gateways != nil {
 		s = append(s, "Gateways: "+fmt.Sprintf("%#v", this.Gateways)+",\n")
 	}
-	s = append(s, "AccessUrl: "+fmt.Sprintf("%#v", this.AccessUrl)+",\n")
+	s = append(s, "AccessFqdn: "+fmt.Sprintf("%#v", this.AccessFqdn)+",\n")
 	if this.Cert != nil {
 		s = append(s, "Cert: "+fmt.Sprintf("%#v", this.Cert)+",\n")
 	}
-	s = append(s, "ProfileName: "+fmt.Sprintf("%#v", this.ProfileName)+",\n")
 	if this.CdnCeVhApiGw != nil {
 		s = append(s, "CdnCeVhApiGw: "+fmt.Sprintf("%#v", this.CdnCeVhApiGw)+",\n")
 	}
+	if this.AppVipPool != nil {
+		s = append(s, "AppVipPool: "+fmt.Sprintf("%#v", this.AppVipPool)+",\n")
+	}
+	if this.Policy != nil {
+		s = append(s, "Policy: "+fmt.Sprintf("%#v", this.Policy)+",\n")
+	}
+	if this.VipDnsProxy != nil {
+		s = append(s, "VipDnsProxy: "+fmt.Sprintf("%#v", this.VipDnsProxy)+",\n")
+	}
+	s = append(s, "AppVipSubnet: "+fmt.Sprintf("%#v", this.AppVipSubnet)+",\n")
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
@@ -1375,7 +2127,7 @@ func (this *CreateSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 10)
+	s := make([]string, 0, 13)
 	s = append(s, "&uztna_domain.CreateSpecType{")
 	if this.LeasePool != nil {
 		s = append(s, "LeasePool: "+fmt.Sprintf("%#v", this.LeasePool)+",\n")
@@ -1383,14 +2135,23 @@ func (this *CreateSpecType) GoString() string {
 	if this.Gateways != nil {
 		s = append(s, "Gateways: "+fmt.Sprintf("%#v", this.Gateways)+",\n")
 	}
-	s = append(s, "AccessUrl: "+fmt.Sprintf("%#v", this.AccessUrl)+",\n")
+	s = append(s, "AccessFqdn: "+fmt.Sprintf("%#v", this.AccessFqdn)+",\n")
 	if this.Cert != nil {
 		s = append(s, "Cert: "+fmt.Sprintf("%#v", this.Cert)+",\n")
 	}
-	s = append(s, "ProfileName: "+fmt.Sprintf("%#v", this.ProfileName)+",\n")
 	if this.CdnCeVhApiGw != nil {
 		s = append(s, "CdnCeVhApiGw: "+fmt.Sprintf("%#v", this.CdnCeVhApiGw)+",\n")
 	}
+	if this.AppVipPool != nil {
+		s = append(s, "AppVipPool: "+fmt.Sprintf("%#v", this.AppVipPool)+",\n")
+	}
+	if this.Policy != nil {
+		s = append(s, "Policy: "+fmt.Sprintf("%#v", this.Policy)+",\n")
+	}
+	if this.VipDnsProxy != nil {
+		s = append(s, "VipDnsProxy: "+fmt.Sprintf("%#v", this.VipDnsProxy)+",\n")
+	}
+	s = append(s, "AppVipSubnet: "+fmt.Sprintf("%#v", this.AppVipSubnet)+",\n")
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
@@ -1398,7 +2159,7 @@ func (this *ReplaceSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 10)
+	s := make([]string, 0, 13)
 	s = append(s, "&uztna_domain.ReplaceSpecType{")
 	if this.LeasePool != nil {
 		s = append(s, "LeasePool: "+fmt.Sprintf("%#v", this.LeasePool)+",\n")
@@ -1406,14 +2167,23 @@ func (this *ReplaceSpecType) GoString() string {
 	if this.Gateways != nil {
 		s = append(s, "Gateways: "+fmt.Sprintf("%#v", this.Gateways)+",\n")
 	}
-	s = append(s, "AccessUrl: "+fmt.Sprintf("%#v", this.AccessUrl)+",\n")
+	s = append(s, "AccessFqdn: "+fmt.Sprintf("%#v", this.AccessFqdn)+",\n")
 	if this.Cert != nil {
 		s = append(s, "Cert: "+fmt.Sprintf("%#v", this.Cert)+",\n")
 	}
-	s = append(s, "ProfileName: "+fmt.Sprintf("%#v", this.ProfileName)+",\n")
 	if this.CdnCeVhApiGw != nil {
 		s = append(s, "CdnCeVhApiGw: "+fmt.Sprintf("%#v", this.CdnCeVhApiGw)+",\n")
 	}
+	if this.AppVipPool != nil {
+		s = append(s, "AppVipPool: "+fmt.Sprintf("%#v", this.AppVipPool)+",\n")
+	}
+	if this.Policy != nil {
+		s = append(s, "Policy: "+fmt.Sprintf("%#v", this.Policy)+",\n")
+	}
+	if this.VipDnsProxy != nil {
+		s = append(s, "VipDnsProxy: "+fmt.Sprintf("%#v", this.VipDnsProxy)+",\n")
+	}
+	s = append(s, "AppVipSubnet: "+fmt.Sprintf("%#v", this.AppVipSubnet)+",\n")
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
@@ -1421,7 +2191,7 @@ func (this *GetSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 10)
+	s := make([]string, 0, 13)
 	s = append(s, "&uztna_domain.GetSpecType{")
 	if this.LeasePool != nil {
 		s = append(s, "LeasePool: "+fmt.Sprintf("%#v", this.LeasePool)+",\n")
@@ -1429,14 +2199,23 @@ func (this *GetSpecType) GoString() string {
 	if this.Gateways != nil {
 		s = append(s, "Gateways: "+fmt.Sprintf("%#v", this.Gateways)+",\n")
 	}
-	s = append(s, "AccessUrl: "+fmt.Sprintf("%#v", this.AccessUrl)+",\n")
+	s = append(s, "AccessFqdn: "+fmt.Sprintf("%#v", this.AccessFqdn)+",\n")
 	if this.Cert != nil {
 		s = append(s, "Cert: "+fmt.Sprintf("%#v", this.Cert)+",\n")
 	}
-	s = append(s, "ProfileName: "+fmt.Sprintf("%#v", this.ProfileName)+",\n")
 	if this.CdnCeVhApiGw != nil {
 		s = append(s, "CdnCeVhApiGw: "+fmt.Sprintf("%#v", this.CdnCeVhApiGw)+",\n")
 	}
+	if this.AppVipPool != nil {
+		s = append(s, "AppVipPool: "+fmt.Sprintf("%#v", this.AppVipPool)+",\n")
+	}
+	if this.Policy != nil {
+		s = append(s, "Policy: "+fmt.Sprintf("%#v", this.Policy)+",\n")
+	}
+	if this.VipDnsProxy != nil {
+		s = append(s, "VipDnsProxy: "+fmt.Sprintf("%#v", this.VipDnsProxy)+",\n")
+	}
+	s = append(s, "AppVipSubnet: "+fmt.Sprintf("%#v", this.AppVipSubnet)+",\n")
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
@@ -1448,6 +2227,127 @@ func valueToGoStringTypes(v interface{}, typ string) string {
 	pv := reflect.Indirect(rv).Interface()
 	return fmt.Sprintf("func(v %v) *%v { return &v } ( %#v )", typ, typ, pv)
 }
+func (m *IPv4Leasepool) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *IPv4Leasepool) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *IPv4Leasepool) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Ipv4Leasepool) > 0 {
+		for iNdEx := len(m.Ipv4Leasepool) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Ipv4Leasepool[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x12
+		}
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *IPv6Leasepool) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *IPv6Leasepool) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *IPv6Leasepool) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Ipv6Leasepool) > 0 {
+		for iNdEx := len(m.Ipv6Leasepool) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Ipv6Leasepool[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x12
+		}
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *DualStackLeasePool) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *DualStackLeasePool) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *DualStackLeasePool) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.Ipv6Leasepool != nil {
+		{
+			size, err := m.Ipv6Leasepool.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x22
+	}
+	if m.Ipv4Leasepool != nil {
+		{
+			size, err := m.Ipv4Leasepool.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1a
+	}
+	return len(dAtA) - i, nil
+}
+
 func (m *LeasePoolList) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -1468,122 +2368,11 @@ func (m *LeasePoolList) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
-	if len(m.UztnaLpool) > 0 {
-		for iNdEx := len(m.UztnaLpool) - 1; iNdEx >= 0; iNdEx-- {
-			{
-				size, err := m.UztnaLpool[iNdEx].MarshalToSizedBuffer(dAtA[:i])
-				if err != nil {
-					return 0, err
-				}
-				i -= size
-				i = encodeVarintTypes(dAtA, i, uint64(size))
-			}
-			i--
-			dAtA[i] = 0xa
-		}
-	}
-	return len(dAtA) - i, nil
-}
-
-func (m *DomainPerimeterRE) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *DomainPerimeterRE) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *DomainPerimeterRE) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.PerimeterReSite) > 0 {
-		for iNdEx := len(m.PerimeterReSite) - 1; iNdEx >= 0; iNdEx-- {
-			{
-				size, err := m.PerimeterReSite[iNdEx].MarshalToSizedBuffer(dAtA[:i])
-				if err != nil {
-					return 0, err
-				}
-				i -= size
-				i = encodeVarintTypes(dAtA, i, uint64(size))
-			}
-			i--
-			dAtA[i] = 0xa
-		}
-	}
-	return len(dAtA) - i, nil
-}
-
-func (m *DomainSites) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *DomainSites) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *DomainSites) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.UztnaGateway) > 0 {
-		for iNdEx := len(m.UztnaGateway) - 1; iNdEx >= 0; iNdEx-- {
-			{
-				size, err := m.UztnaGateway[iNdEx].MarshalToSizedBuffer(dAtA[:i])
-				if err != nil {
-					return 0, err
-				}
-				i -= size
-				i = encodeVarintTypes(dAtA, i, uint64(size))
-			}
-			i--
-			dAtA[i] = 0xa
-		}
-	}
-	return len(dAtA) - i, nil
-}
-
-func (m *PerimeterREAdvertisement) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *PerimeterREAdvertisement) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *PerimeterREAdvertisement) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.PerimterReChoice != nil {
+	if m.IpaddressType != nil {
 		{
-			size := m.PerimterReChoice.Size()
+			size := m.IpaddressType.Size()
 			i -= size
-			if _, err := m.PerimterReChoice.MarshalTo(dAtA[i:]); err != nil {
+			if _, err := m.IpaddressType.MarshalTo(dAtA[i:]); err != nil {
 				return 0, err
 			}
 		}
@@ -1591,37 +2380,16 @@ func (m *PerimeterREAdvertisement) MarshalToSizedBuffer(dAtA []byte) (int, error
 	return len(dAtA) - i, nil
 }
 
-func (m *PerimeterREAdvertisement_AllPerimeter) MarshalTo(dAtA []byte) (int, error) {
+func (m *LeasePoolList_Ipv4Leasepool) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *PerimeterREAdvertisement_AllPerimeter) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *LeasePoolList_Ipv4Leasepool) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
-	if m.AllPerimeter != nil {
+	if m.Ipv4Leasepool != nil {
 		{
-			size, err := m.AllPerimeter.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
-}
-func (m *PerimeterREAdvertisement_DomainReSites) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *PerimeterREAdvertisement_DomainReSites) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	if m.DomainReSites != nil {
-		{
-			size, err := m.DomainReSites.MarshalToSizedBuffer(dAtA[:i])
+			size, err := m.Ipv4Leasepool.MarshalToSizedBuffer(dAtA[:i])
 			if err != nil {
 				return 0, err
 			}
@@ -1630,6 +2398,233 @@ func (m *PerimeterREAdvertisement_DomainReSites) MarshalToSizedBuffer(dAtA []byt
 		}
 		i--
 		dAtA[i] = 0x12
+	}
+	return len(dAtA) - i, nil
+}
+func (m *LeasePoolList_Ipv6Leasepool) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *LeasePoolList_Ipv6Leasepool) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.Ipv6Leasepool != nil {
+		{
+			size, err := m.Ipv6Leasepool.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *LeasePoolList_Ipv4Ipv6Leasepool) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *LeasePoolList_Ipv4Ipv6Leasepool) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.Ipv4Ipv6Leasepool != nil {
+		{
+			size, err := m.Ipv4Ipv6Leasepool.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x22
+	}
+	return len(dAtA) - i, nil
+}
+func (m *Policy) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *Policy) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *Policy) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Policy) > 0 {
+		for iNdEx := len(m.Policy) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Policy[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0xa
+		}
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *AppVIPPool) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *AppVIPPool) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *AppVIPPool) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.AppVipPool) > 0 {
+		for iNdEx := len(m.AppVipPool) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.AppVipPool[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0xa
+		}
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *CloudGateways) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *CloudGateways) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CloudGateways) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.CloudGateway) > 0 {
+		for iNdEx := len(m.CloudGateway) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.CloudGateway[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0xa
+		}
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *CloudGatewayAdvertisement) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *CloudGatewayAdvertisement) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CloudGatewayAdvertisement) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.CloudGatewayChoice != nil {
+		{
+			size := m.CloudGatewayChoice.Size()
+			i -= size
+			if _, err := m.CloudGatewayChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *CloudGatewayAdvertisement_AllCloud) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CloudGatewayAdvertisement_AllCloud) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.AllCloud != nil {
+		{
+			size, err := m.AllCloud.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x2a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *CloudGatewayAdvertisement_ReSites) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CloudGatewayAdvertisement_ReSites) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.ReSites != nil {
+		{
+			size, err := m.ReSites.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x32
 	}
 	return len(dAtA) - i, nil
 }
@@ -1653,18 +2648,6 @@ func (m *Gateways) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
-	if m.BigipCe != nil {
-		{
-			size, err := m.BigipCe.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x12
-	}
 	if m.PerimeterRe != nil {
 		{
 			size, err := m.PerimeterRe.MarshalToSizedBuffer(dAtA[:i])
@@ -1675,7 +2658,21 @@ func (m *Gateways) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
 		i--
-		dAtA[i] = 0xa
+		dAtA[i] = 0x22
+	}
+	if len(m.BigipSite) > 0 {
+		for iNdEx := len(m.BigipSite) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.BigipSite[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x1a
+		}
 	}
 	return len(dAtA) - i, nil
 }
@@ -1737,6 +2734,58 @@ func (m *GlobalSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if len(m.AppVipSubnet) > 0 {
+		for iNdEx := len(m.AppVipSubnet) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.AppVipSubnet[iNdEx])
+			copy(dAtA[i:], m.AppVipSubnet[iNdEx])
+			i = encodeVarintTypes(dAtA, i, uint64(len(m.AppVipSubnet[iNdEx])))
+			i--
+			dAtA[i] = 0x62
+		}
+	}
+	if len(m.AccessFqdn) > 0 {
+		i -= len(m.AccessFqdn)
+		copy(dAtA[i:], m.AccessFqdn)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.AccessFqdn)))
+		i--
+		dAtA[i] = 0x5a
+	}
+	if m.VipDnsProxy != nil {
+		{
+			size, err := m.VipDnsProxy.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x4a
+	}
+	if m.Policy != nil {
+		{
+			size, err := m.Policy.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x42
+	}
+	if m.AppVipPool != nil {
+		{
+			size, err := m.AppVipPool.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x3a
+	}
 	if len(m.CdnCeVhApiGw) > 0 {
 		for iNdEx := len(m.CdnCeVhApiGw) - 1; iNdEx >= 0; iNdEx-- {
 			{
@@ -1751,13 +2800,6 @@ func (m *GlobalSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 			dAtA[i] = 0x32
 		}
 	}
-	if len(m.ProfileName) > 0 {
-		i -= len(m.ProfileName)
-		copy(dAtA[i:], m.ProfileName)
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.ProfileName)))
-		i--
-		dAtA[i] = 0x2a
-	}
 	if m.Cert != nil {
 		{
 			size, err := m.Cert.MarshalToSizedBuffer(dAtA[:i])
@@ -1769,13 +2811,6 @@ func (m *GlobalSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		}
 		i--
 		dAtA[i] = 0x22
-	}
-	if len(m.AccessUrl) > 0 {
-		i -= len(m.AccessUrl)
-		copy(dAtA[i:], m.AccessUrl)
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.AccessUrl)))
-		i--
-		dAtA[i] = 0x1a
 	}
 	if m.Gateways != nil {
 		{
@@ -1824,6 +2859,58 @@ func (m *CreateSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if len(m.AppVipSubnet) > 0 {
+		for iNdEx := len(m.AppVipSubnet) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.AppVipSubnet[iNdEx])
+			copy(dAtA[i:], m.AppVipSubnet[iNdEx])
+			i = encodeVarintTypes(dAtA, i, uint64(len(m.AppVipSubnet[iNdEx])))
+			i--
+			dAtA[i] = 0x62
+		}
+	}
+	if len(m.AccessFqdn) > 0 {
+		i -= len(m.AccessFqdn)
+		copy(dAtA[i:], m.AccessFqdn)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.AccessFqdn)))
+		i--
+		dAtA[i] = 0x5a
+	}
+	if m.VipDnsProxy != nil {
+		{
+			size, err := m.VipDnsProxy.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x4a
+	}
+	if m.Policy != nil {
+		{
+			size, err := m.Policy.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x42
+	}
+	if m.AppVipPool != nil {
+		{
+			size, err := m.AppVipPool.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x3a
+	}
 	if len(m.CdnCeVhApiGw) > 0 {
 		for iNdEx := len(m.CdnCeVhApiGw) - 1; iNdEx >= 0; iNdEx-- {
 			{
@@ -1838,13 +2925,6 @@ func (m *CreateSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 			dAtA[i] = 0x32
 		}
 	}
-	if len(m.ProfileName) > 0 {
-		i -= len(m.ProfileName)
-		copy(dAtA[i:], m.ProfileName)
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.ProfileName)))
-		i--
-		dAtA[i] = 0x2a
-	}
 	if m.Cert != nil {
 		{
 			size, err := m.Cert.MarshalToSizedBuffer(dAtA[:i])
@@ -1856,13 +2936,6 @@ func (m *CreateSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		}
 		i--
 		dAtA[i] = 0x22
-	}
-	if len(m.AccessUrl) > 0 {
-		i -= len(m.AccessUrl)
-		copy(dAtA[i:], m.AccessUrl)
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.AccessUrl)))
-		i--
-		dAtA[i] = 0x1a
 	}
 	if m.Gateways != nil {
 		{
@@ -1911,6 +2984,58 @@ func (m *ReplaceSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if len(m.AppVipSubnet) > 0 {
+		for iNdEx := len(m.AppVipSubnet) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.AppVipSubnet[iNdEx])
+			copy(dAtA[i:], m.AppVipSubnet[iNdEx])
+			i = encodeVarintTypes(dAtA, i, uint64(len(m.AppVipSubnet[iNdEx])))
+			i--
+			dAtA[i] = 0x62
+		}
+	}
+	if len(m.AccessFqdn) > 0 {
+		i -= len(m.AccessFqdn)
+		copy(dAtA[i:], m.AccessFqdn)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.AccessFqdn)))
+		i--
+		dAtA[i] = 0x5a
+	}
+	if m.VipDnsProxy != nil {
+		{
+			size, err := m.VipDnsProxy.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x4a
+	}
+	if m.Policy != nil {
+		{
+			size, err := m.Policy.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x42
+	}
+	if m.AppVipPool != nil {
+		{
+			size, err := m.AppVipPool.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x3a
+	}
 	if len(m.CdnCeVhApiGw) > 0 {
 		for iNdEx := len(m.CdnCeVhApiGw) - 1; iNdEx >= 0; iNdEx-- {
 			{
@@ -1925,13 +3050,6 @@ func (m *ReplaceSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 			dAtA[i] = 0x32
 		}
 	}
-	if len(m.ProfileName) > 0 {
-		i -= len(m.ProfileName)
-		copy(dAtA[i:], m.ProfileName)
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.ProfileName)))
-		i--
-		dAtA[i] = 0x2a
-	}
 	if m.Cert != nil {
 		{
 			size, err := m.Cert.MarshalToSizedBuffer(dAtA[:i])
@@ -1943,13 +3061,6 @@ func (m *ReplaceSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		}
 		i--
 		dAtA[i] = 0x22
-	}
-	if len(m.AccessUrl) > 0 {
-		i -= len(m.AccessUrl)
-		copy(dAtA[i:], m.AccessUrl)
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.AccessUrl)))
-		i--
-		dAtA[i] = 0x1a
 	}
 	if m.Gateways != nil {
 		{
@@ -1998,6 +3109,58 @@ func (m *GetSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if len(m.AppVipSubnet) > 0 {
+		for iNdEx := len(m.AppVipSubnet) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.AppVipSubnet[iNdEx])
+			copy(dAtA[i:], m.AppVipSubnet[iNdEx])
+			i = encodeVarintTypes(dAtA, i, uint64(len(m.AppVipSubnet[iNdEx])))
+			i--
+			dAtA[i] = 0x62
+		}
+	}
+	if len(m.AccessFqdn) > 0 {
+		i -= len(m.AccessFqdn)
+		copy(dAtA[i:], m.AccessFqdn)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.AccessFqdn)))
+		i--
+		dAtA[i] = 0x5a
+	}
+	if m.VipDnsProxy != nil {
+		{
+			size, err := m.VipDnsProxy.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x4a
+	}
+	if m.Policy != nil {
+		{
+			size, err := m.Policy.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x42
+	}
+	if m.AppVipPool != nil {
+		{
+			size, err := m.AppVipPool.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x3a
+	}
 	if len(m.CdnCeVhApiGw) > 0 {
 		for iNdEx := len(m.CdnCeVhApiGw) - 1; iNdEx >= 0; iNdEx-- {
 			{
@@ -2012,13 +3175,6 @@ func (m *GetSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 			dAtA[i] = 0x32
 		}
 	}
-	if len(m.ProfileName) > 0 {
-		i -= len(m.ProfileName)
-		copy(dAtA[i:], m.ProfileName)
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.ProfileName)))
-		i--
-		dAtA[i] = 0x2a
-	}
 	if m.Cert != nil {
 		{
 			size, err := m.Cert.MarshalToSizedBuffer(dAtA[:i])
@@ -2030,13 +3186,6 @@ func (m *GetSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		}
 		i--
 		dAtA[i] = 0x22
-	}
-	if len(m.AccessUrl) > 0 {
-		i -= len(m.AccessUrl)
-		copy(dAtA[i:], m.AccessUrl)
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.AccessUrl)))
-		i--
-		dAtA[i] = 0x1a
 	}
 	if m.Gateways != nil {
 		{
@@ -2076,83 +3225,178 @@ func encodeVarintTypes(dAtA []byte, offset int, v uint64) int {
 	dAtA[offset] = uint8(v)
 	return base
 }
+func (m *IPv4Leasepool) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if len(m.Ipv4Leasepool) > 0 {
+		for _, e := range m.Ipv4Leasepool {
+			l = e.Size()
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	return n
+}
+
+func (m *IPv6Leasepool) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if len(m.Ipv6Leasepool) > 0 {
+		for _, e := range m.Ipv6Leasepool {
+			l = e.Size()
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	return n
+}
+
+func (m *DualStackLeasePool) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Ipv4Leasepool != nil {
+		l = m.Ipv4Leasepool.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.Ipv6Leasepool != nil {
+		l = m.Ipv6Leasepool.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+
 func (m *LeasePoolList) Size() (n int) {
 	if m == nil {
 		return 0
 	}
 	var l int
 	_ = l
-	if len(m.UztnaLpool) > 0 {
-		for _, e := range m.UztnaLpool {
-			l = e.Size()
-			n += 1 + l + sovTypes(uint64(l))
-		}
+	if m.IpaddressType != nil {
+		n += m.IpaddressType.Size()
 	}
 	return n
 }
 
-func (m *DomainPerimeterRE) Size() (n int) {
+func (m *LeasePoolList_Ipv4Leasepool) Size() (n int) {
 	if m == nil {
 		return 0
 	}
 	var l int
 	_ = l
-	if len(m.PerimeterReSite) > 0 {
-		for _, e := range m.PerimeterReSite {
-			l = e.Size()
-			n += 1 + l + sovTypes(uint64(l))
-		}
-	}
-	return n
-}
-
-func (m *DomainSites) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if len(m.UztnaGateway) > 0 {
-		for _, e := range m.UztnaGateway {
-			l = e.Size()
-			n += 1 + l + sovTypes(uint64(l))
-		}
-	}
-	return n
-}
-
-func (m *PerimeterREAdvertisement) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.PerimterReChoice != nil {
-		n += m.PerimterReChoice.Size()
-	}
-	return n
-}
-
-func (m *PerimeterREAdvertisement_AllPerimeter) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.AllPerimeter != nil {
-		l = m.AllPerimeter.Size()
+	if m.Ipv4Leasepool != nil {
+		l = m.Ipv4Leasepool.Size()
 		n += 1 + l + sovTypes(uint64(l))
 	}
 	return n
 }
-func (m *PerimeterREAdvertisement_DomainReSites) Size() (n int) {
+func (m *LeasePoolList_Ipv6Leasepool) Size() (n int) {
 	if m == nil {
 		return 0
 	}
 	var l int
 	_ = l
-	if m.DomainReSites != nil {
-		l = m.DomainReSites.Size()
+	if m.Ipv6Leasepool != nil {
+		l = m.Ipv6Leasepool.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *LeasePoolList_Ipv4Ipv6Leasepool) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Ipv4Ipv6Leasepool != nil {
+		l = m.Ipv4Ipv6Leasepool.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *Policy) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if len(m.Policy) > 0 {
+		for _, e := range m.Policy {
+			l = e.Size()
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	return n
+}
+
+func (m *AppVIPPool) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if len(m.AppVipPool) > 0 {
+		for _, e := range m.AppVipPool {
+			l = e.Size()
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	return n
+}
+
+func (m *CloudGateways) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if len(m.CloudGateway) > 0 {
+		for _, e := range m.CloudGateway {
+			l = e.Size()
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	return n
+}
+
+func (m *CloudGatewayAdvertisement) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.CloudGatewayChoice != nil {
+		n += m.CloudGatewayChoice.Size()
+	}
+	return n
+}
+
+func (m *CloudGatewayAdvertisement_AllCloud) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.AllCloud != nil {
+		l = m.AllCloud.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *CloudGatewayAdvertisement_ReSites) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.ReSites != nil {
+		l = m.ReSites.Size()
 		n += 1 + l + sovTypes(uint64(l))
 	}
 	return n
@@ -2163,12 +3407,14 @@ func (m *Gateways) Size() (n int) {
 	}
 	var l int
 	_ = l
+	if len(m.BigipSite) > 0 {
+		for _, e := range m.BigipSite {
+			l = e.Size()
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
 	if m.PerimeterRe != nil {
 		l = m.PerimeterRe.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	if m.BigipCe != nil {
-		l = m.BigipCe.Size()
 		n += 1 + l + sovTypes(uint64(l))
 	}
 	return n
@@ -2203,21 +3449,35 @@ func (m *GlobalSpecType) Size() (n int) {
 		l = m.Gateways.Size()
 		n += 1 + l + sovTypes(uint64(l))
 	}
-	l = len(m.AccessUrl)
-	if l > 0 {
-		n += 1 + l + sovTypes(uint64(l))
-	}
 	if m.Cert != nil {
 		l = m.Cert.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	l = len(m.ProfileName)
-	if l > 0 {
 		n += 1 + l + sovTypes(uint64(l))
 	}
 	if len(m.CdnCeVhApiGw) > 0 {
 		for _, e := range m.CdnCeVhApiGw {
 			l = e.Size()
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	if m.AppVipPool != nil {
+		l = m.AppVipPool.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.Policy != nil {
+		l = m.Policy.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.VipDnsProxy != nil {
+		l = m.VipDnsProxy.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	l = len(m.AccessFqdn)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if len(m.AppVipSubnet) > 0 {
+		for _, s := range m.AppVipSubnet {
+			l = len(s)
 			n += 1 + l + sovTypes(uint64(l))
 		}
 	}
@@ -2238,21 +3498,35 @@ func (m *CreateSpecType) Size() (n int) {
 		l = m.Gateways.Size()
 		n += 1 + l + sovTypes(uint64(l))
 	}
-	l = len(m.AccessUrl)
-	if l > 0 {
-		n += 1 + l + sovTypes(uint64(l))
-	}
 	if m.Cert != nil {
 		l = m.Cert.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	l = len(m.ProfileName)
-	if l > 0 {
 		n += 1 + l + sovTypes(uint64(l))
 	}
 	if len(m.CdnCeVhApiGw) > 0 {
 		for _, e := range m.CdnCeVhApiGw {
 			l = e.Size()
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	if m.AppVipPool != nil {
+		l = m.AppVipPool.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.Policy != nil {
+		l = m.Policy.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.VipDnsProxy != nil {
+		l = m.VipDnsProxy.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	l = len(m.AccessFqdn)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if len(m.AppVipSubnet) > 0 {
+		for _, s := range m.AppVipSubnet {
+			l = len(s)
 			n += 1 + l + sovTypes(uint64(l))
 		}
 	}
@@ -2273,21 +3547,35 @@ func (m *ReplaceSpecType) Size() (n int) {
 		l = m.Gateways.Size()
 		n += 1 + l + sovTypes(uint64(l))
 	}
-	l = len(m.AccessUrl)
-	if l > 0 {
-		n += 1 + l + sovTypes(uint64(l))
-	}
 	if m.Cert != nil {
 		l = m.Cert.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	l = len(m.ProfileName)
-	if l > 0 {
 		n += 1 + l + sovTypes(uint64(l))
 	}
 	if len(m.CdnCeVhApiGw) > 0 {
 		for _, e := range m.CdnCeVhApiGw {
 			l = e.Size()
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	if m.AppVipPool != nil {
+		l = m.AppVipPool.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.Policy != nil {
+		l = m.Policy.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.VipDnsProxy != nil {
+		l = m.VipDnsProxy.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	l = len(m.AccessFqdn)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if len(m.AppVipSubnet) > 0 {
+		for _, s := range m.AppVipSubnet {
+			l = len(s)
 			n += 1 + l + sovTypes(uint64(l))
 		}
 	}
@@ -2308,21 +3596,35 @@ func (m *GetSpecType) Size() (n int) {
 		l = m.Gateways.Size()
 		n += 1 + l + sovTypes(uint64(l))
 	}
-	l = len(m.AccessUrl)
-	if l > 0 {
-		n += 1 + l + sovTypes(uint64(l))
-	}
 	if m.Cert != nil {
 		l = m.Cert.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	l = len(m.ProfileName)
-	if l > 0 {
 		n += 1 + l + sovTypes(uint64(l))
 	}
 	if len(m.CdnCeVhApiGw) > 0 {
 		for _, e := range m.CdnCeVhApiGw {
 			l = e.Size()
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	if m.AppVipPool != nil {
+		l = m.AppVipPool.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.Policy != nil {
+		l = m.Policy.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.VipDnsProxy != nil {
+		l = m.VipDnsProxy.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	l = len(m.AccessFqdn)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if len(m.AppVipSubnet) > 0 {
+		for _, s := range m.AppVipSubnet {
+			l = len(s)
 			n += 1 + l + sovTypes(uint64(l))
 		}
 	}
@@ -2335,77 +3637,158 @@ func sovTypes(x uint64) (n int) {
 func sozTypes(x uint64) (n int) {
 	return sovTypes(uint64((x << 1) ^ uint64((int64(x) >> 63))))
 }
+func (this *IPv4Leasepool) String() string {
+	if this == nil {
+		return "nil"
+	}
+	repeatedStringForIpv4Leasepool := "[]*ObjectRefType{"
+	for _, f := range this.Ipv4Leasepool {
+		repeatedStringForIpv4Leasepool += strings.Replace(fmt.Sprintf("%v", f), "ObjectRefType", "schema.ObjectRefType", 1) + ","
+	}
+	repeatedStringForIpv4Leasepool += "}"
+	s := strings.Join([]string{`&IPv4Leasepool{`,
+		`Ipv4Leasepool:` + repeatedStringForIpv4Leasepool + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *IPv6Leasepool) String() string {
+	if this == nil {
+		return "nil"
+	}
+	repeatedStringForIpv6Leasepool := "[]*ObjectRefType{"
+	for _, f := range this.Ipv6Leasepool {
+		repeatedStringForIpv6Leasepool += strings.Replace(fmt.Sprintf("%v", f), "ObjectRefType", "schema.ObjectRefType", 1) + ","
+	}
+	repeatedStringForIpv6Leasepool += "}"
+	s := strings.Join([]string{`&IPv6Leasepool{`,
+		`Ipv6Leasepool:` + repeatedStringForIpv6Leasepool + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *DualStackLeasePool) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&DualStackLeasePool{`,
+		`Ipv4Leasepool:` + strings.Replace(this.Ipv4Leasepool.String(), "IPv4Leasepool", "IPv4Leasepool", 1) + `,`,
+		`Ipv6Leasepool:` + strings.Replace(this.Ipv6Leasepool.String(), "IPv6Leasepool", "IPv6Leasepool", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *LeasePoolList) String() string {
 	if this == nil {
 		return "nil"
 	}
-	repeatedStringForUztnaLpool := "[]*ObjectRefType{"
-	for _, f := range this.UztnaLpool {
-		repeatedStringForUztnaLpool += strings.Replace(fmt.Sprintf("%v", f), "ObjectRefType", "schema.ObjectRefType", 1) + ","
-	}
-	repeatedStringForUztnaLpool += "}"
 	s := strings.Join([]string{`&LeasePoolList{`,
-		`UztnaLpool:` + repeatedStringForUztnaLpool + `,`,
+		`IpaddressType:` + fmt.Sprintf("%v", this.IpaddressType) + `,`,
 		`}`,
 	}, "")
 	return s
 }
-func (this *DomainPerimeterRE) String() string {
+func (this *LeasePoolList_Ipv4Leasepool) String() string {
 	if this == nil {
 		return "nil"
 	}
-	repeatedStringForPerimeterReSite := "[]*ObjectRefType{"
-	for _, f := range this.PerimeterReSite {
-		repeatedStringForPerimeterReSite += strings.Replace(fmt.Sprintf("%v", f), "ObjectRefType", "schema.ObjectRefType", 1) + ","
-	}
-	repeatedStringForPerimeterReSite += "}"
-	s := strings.Join([]string{`&DomainPerimeterRE{`,
-		`PerimeterReSite:` + repeatedStringForPerimeterReSite + `,`,
+	s := strings.Join([]string{`&LeasePoolList_Ipv4Leasepool{`,
+		`Ipv4Leasepool:` + strings.Replace(fmt.Sprintf("%v", this.Ipv4Leasepool), "IPv4Leasepool", "IPv4Leasepool", 1) + `,`,
 		`}`,
 	}, "")
 	return s
 }
-func (this *DomainSites) String() string {
+func (this *LeasePoolList_Ipv6Leasepool) String() string {
 	if this == nil {
 		return "nil"
 	}
-	repeatedStringForUztnaGateway := "[]*ObjectRefType{"
-	for _, f := range this.UztnaGateway {
-		repeatedStringForUztnaGateway += strings.Replace(fmt.Sprintf("%v", f), "ObjectRefType", "schema.ObjectRefType", 1) + ","
-	}
-	repeatedStringForUztnaGateway += "}"
-	s := strings.Join([]string{`&DomainSites{`,
-		`UztnaGateway:` + repeatedStringForUztnaGateway + `,`,
+	s := strings.Join([]string{`&LeasePoolList_Ipv6Leasepool{`,
+		`Ipv6Leasepool:` + strings.Replace(fmt.Sprintf("%v", this.Ipv6Leasepool), "IPv6Leasepool", "IPv6Leasepool", 1) + `,`,
 		`}`,
 	}, "")
 	return s
 }
-func (this *PerimeterREAdvertisement) String() string {
+func (this *LeasePoolList_Ipv4Ipv6Leasepool) String() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&PerimeterREAdvertisement{`,
-		`PerimterReChoice:` + fmt.Sprintf("%v", this.PerimterReChoice) + `,`,
+	s := strings.Join([]string{`&LeasePoolList_Ipv4Ipv6Leasepool{`,
+		`Ipv4Ipv6Leasepool:` + strings.Replace(fmt.Sprintf("%v", this.Ipv4Ipv6Leasepool), "DualStackLeasePool", "DualStackLeasePool", 1) + `,`,
 		`}`,
 	}, "")
 	return s
 }
-func (this *PerimeterREAdvertisement_AllPerimeter) String() string {
+func (this *Policy) String() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&PerimeterREAdvertisement_AllPerimeter{`,
-		`AllPerimeter:` + strings.Replace(fmt.Sprintf("%v", this.AllPerimeter), "Empty", "schema.Empty", 1) + `,`,
+	repeatedStringForPolicy := "[]*ObjectRefType{"
+	for _, f := range this.Policy {
+		repeatedStringForPolicy += strings.Replace(fmt.Sprintf("%v", f), "ObjectRefType", "schema.ObjectRefType", 1) + ","
+	}
+	repeatedStringForPolicy += "}"
+	s := strings.Join([]string{`&Policy{`,
+		`Policy:` + repeatedStringForPolicy + `,`,
 		`}`,
 	}, "")
 	return s
 }
-func (this *PerimeterREAdvertisement_DomainReSites) String() string {
+func (this *AppVIPPool) String() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&PerimeterREAdvertisement_DomainReSites{`,
-		`DomainReSites:` + strings.Replace(fmt.Sprintf("%v", this.DomainReSites), "DomainPerimeterRE", "DomainPerimeterRE", 1) + `,`,
+	repeatedStringForAppVipPool := "[]*ObjectRefType{"
+	for _, f := range this.AppVipPool {
+		repeatedStringForAppVipPool += strings.Replace(fmt.Sprintf("%v", f), "ObjectRefType", "schema.ObjectRefType", 1) + ","
+	}
+	repeatedStringForAppVipPool += "}"
+	s := strings.Join([]string{`&AppVIPPool{`,
+		`AppVipPool:` + repeatedStringForAppVipPool + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CloudGateways) String() string {
+	if this == nil {
+		return "nil"
+	}
+	repeatedStringForCloudGateway := "[]*ObjectRefType{"
+	for _, f := range this.CloudGateway {
+		repeatedStringForCloudGateway += strings.Replace(fmt.Sprintf("%v", f), "ObjectRefType", "schema.ObjectRefType", 1) + ","
+	}
+	repeatedStringForCloudGateway += "}"
+	s := strings.Join([]string{`&CloudGateways{`,
+		`CloudGateway:` + repeatedStringForCloudGateway + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CloudGatewayAdvertisement) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CloudGatewayAdvertisement{`,
+		`CloudGatewayChoice:` + fmt.Sprintf("%v", this.CloudGatewayChoice) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CloudGatewayAdvertisement_AllCloud) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CloudGatewayAdvertisement_AllCloud{`,
+		`AllCloud:` + strings.Replace(fmt.Sprintf("%v", this.AllCloud), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CloudGatewayAdvertisement_ReSites) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CloudGatewayAdvertisement_ReSites{`,
+		`ReSites:` + strings.Replace(fmt.Sprintf("%v", this.ReSites), "CloudGateways", "CloudGateways", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2414,9 +3797,14 @@ func (this *Gateways) String() string {
 	if this == nil {
 		return "nil"
 	}
+	repeatedStringForBigipSite := "[]*ObjectRefType{"
+	for _, f := range this.BigipSite {
+		repeatedStringForBigipSite += strings.Replace(fmt.Sprintf("%v", f), "ObjectRefType", "schema.ObjectRefType", 1) + ","
+	}
+	repeatedStringForBigipSite += "}"
 	s := strings.Join([]string{`&Gateways{`,
-		`PerimeterRe:` + strings.Replace(this.PerimeterRe.String(), "PerimeterREAdvertisement", "PerimeterREAdvertisement", 1) + `,`,
-		`BigipCe:` + strings.Replace(this.BigipCe.String(), "DomainSites", "DomainSites", 1) + `,`,
+		`BigipSite:` + repeatedStringForBigipSite + `,`,
+		`PerimeterRe:` + strings.Replace(this.PerimeterRe.String(), "CloudGatewayAdvertisement", "CloudGatewayAdvertisement", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2448,10 +3836,13 @@ func (this *GlobalSpecType) String() string {
 	s := strings.Join([]string{`&GlobalSpecType{`,
 		`LeasePool:` + strings.Replace(this.LeasePool.String(), "LeasePoolList", "LeasePoolList", 1) + `,`,
 		`Gateways:` + strings.Replace(this.Gateways.String(), "Gateways", "Gateways", 1) + `,`,
-		`AccessUrl:` + fmt.Sprintf("%v", this.AccessUrl) + `,`,
 		`Cert:` + strings.Replace(this.Cert.String(), "Certificate", "Certificate", 1) + `,`,
-		`ProfileName:` + fmt.Sprintf("%v", this.ProfileName) + `,`,
 		`CdnCeVhApiGw:` + repeatedStringForCdnCeVhApiGw + `,`,
+		`AppVipPool:` + strings.Replace(this.AppVipPool.String(), "AppVIPPool", "AppVIPPool", 1) + `,`,
+		`Policy:` + strings.Replace(this.Policy.String(), "Policy", "Policy", 1) + `,`,
+		`VipDnsProxy:` + strings.Replace(fmt.Sprintf("%v", this.VipDnsProxy), "IpAddressType", "schema.IpAddressType", 1) + `,`,
+		`AccessFqdn:` + fmt.Sprintf("%v", this.AccessFqdn) + `,`,
+		`AppVipSubnet:` + fmt.Sprintf("%v", this.AppVipSubnet) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2468,10 +3859,13 @@ func (this *CreateSpecType) String() string {
 	s := strings.Join([]string{`&CreateSpecType{`,
 		`LeasePool:` + strings.Replace(this.LeasePool.String(), "LeasePoolList", "LeasePoolList", 1) + `,`,
 		`Gateways:` + strings.Replace(this.Gateways.String(), "Gateways", "Gateways", 1) + `,`,
-		`AccessUrl:` + fmt.Sprintf("%v", this.AccessUrl) + `,`,
 		`Cert:` + strings.Replace(this.Cert.String(), "Certificate", "Certificate", 1) + `,`,
-		`ProfileName:` + fmt.Sprintf("%v", this.ProfileName) + `,`,
 		`CdnCeVhApiGw:` + repeatedStringForCdnCeVhApiGw + `,`,
+		`AppVipPool:` + strings.Replace(this.AppVipPool.String(), "AppVIPPool", "AppVIPPool", 1) + `,`,
+		`Policy:` + strings.Replace(this.Policy.String(), "Policy", "Policy", 1) + `,`,
+		`VipDnsProxy:` + strings.Replace(fmt.Sprintf("%v", this.VipDnsProxy), "IpAddressType", "schema.IpAddressType", 1) + `,`,
+		`AccessFqdn:` + fmt.Sprintf("%v", this.AccessFqdn) + `,`,
+		`AppVipSubnet:` + fmt.Sprintf("%v", this.AppVipSubnet) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2488,10 +3882,13 @@ func (this *ReplaceSpecType) String() string {
 	s := strings.Join([]string{`&ReplaceSpecType{`,
 		`LeasePool:` + strings.Replace(this.LeasePool.String(), "LeasePoolList", "LeasePoolList", 1) + `,`,
 		`Gateways:` + strings.Replace(this.Gateways.String(), "Gateways", "Gateways", 1) + `,`,
-		`AccessUrl:` + fmt.Sprintf("%v", this.AccessUrl) + `,`,
 		`Cert:` + strings.Replace(this.Cert.String(), "Certificate", "Certificate", 1) + `,`,
-		`ProfileName:` + fmt.Sprintf("%v", this.ProfileName) + `,`,
 		`CdnCeVhApiGw:` + repeatedStringForCdnCeVhApiGw + `,`,
+		`AppVipPool:` + strings.Replace(this.AppVipPool.String(), "AppVIPPool", "AppVIPPool", 1) + `,`,
+		`Policy:` + strings.Replace(this.Policy.String(), "Policy", "Policy", 1) + `,`,
+		`VipDnsProxy:` + strings.Replace(fmt.Sprintf("%v", this.VipDnsProxy), "IpAddressType", "schema.IpAddressType", 1) + `,`,
+		`AccessFqdn:` + fmt.Sprintf("%v", this.AccessFqdn) + `,`,
+		`AppVipSubnet:` + fmt.Sprintf("%v", this.AppVipSubnet) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2508,10 +3905,13 @@ func (this *GetSpecType) String() string {
 	s := strings.Join([]string{`&GetSpecType{`,
 		`LeasePool:` + strings.Replace(this.LeasePool.String(), "LeasePoolList", "LeasePoolList", 1) + `,`,
 		`Gateways:` + strings.Replace(this.Gateways.String(), "Gateways", "Gateways", 1) + `,`,
-		`AccessUrl:` + fmt.Sprintf("%v", this.AccessUrl) + `,`,
 		`Cert:` + strings.Replace(this.Cert.String(), "Certificate", "Certificate", 1) + `,`,
-		`ProfileName:` + fmt.Sprintf("%v", this.ProfileName) + `,`,
 		`CdnCeVhApiGw:` + repeatedStringForCdnCeVhApiGw + `,`,
+		`AppVipPool:` + strings.Replace(this.AppVipPool.String(), "AppVIPPool", "AppVIPPool", 1) + `,`,
+		`Policy:` + strings.Replace(this.Policy.String(), "Policy", "Policy", 1) + `,`,
+		`VipDnsProxy:` + strings.Replace(fmt.Sprintf("%v", this.VipDnsProxy), "IpAddressType", "schema.IpAddressType", 1) + `,`,
+		`AccessFqdn:` + fmt.Sprintf("%v", this.AccessFqdn) + `,`,
+		`AppVipSubnet:` + fmt.Sprintf("%v", this.AppVipSubnet) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2523,6 +3923,305 @@ func valueToStringTypes(v interface{}) string {
 	}
 	pv := reflect.Indirect(rv).Interface()
 	return fmt.Sprintf("*%v", pv)
+}
+func (m *IPv4Leasepool) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: IPv4Leasepool: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: IPv4Leasepool: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Ipv4Leasepool", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Ipv4Leasepool = append(m.Ipv4Leasepool, &schema.ObjectRefType{})
+			if err := m.Ipv4Leasepool[len(m.Ipv4Leasepool)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *IPv6Leasepool) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: IPv6Leasepool: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: IPv6Leasepool: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Ipv6Leasepool", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Ipv6Leasepool = append(m.Ipv6Leasepool, &schema.ObjectRefType{})
+			if err := m.Ipv6Leasepool[len(m.Ipv6Leasepool)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *DualStackLeasePool) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: DualStackLeasePool: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: DualStackLeasePool: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Ipv4Leasepool", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Ipv4Leasepool == nil {
+				m.Ipv4Leasepool = &IPv4Leasepool{}
+			}
+			if err := m.Ipv4Leasepool.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Ipv6Leasepool", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Ipv6Leasepool == nil {
+				m.Ipv6Leasepool = &IPv6Leasepool{}
+			}
+			if err := m.Ipv6Leasepool.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
 }
 func (m *LeasePoolList) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
@@ -2553,9 +4252,9 @@ func (m *LeasePoolList) Unmarshal(dAtA []byte) error {
 			return fmt.Errorf("proto: LeasePoolList: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
-		case 1:
+		case 2:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field UztnaLpool", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field Ipv4Leasepool", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -2582,8 +4281,166 @@ func (m *LeasePoolList) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.UztnaLpool = append(m.UztnaLpool, &schema.ObjectRefType{})
-			if err := m.UztnaLpool[len(m.UztnaLpool)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+			v := &IPv4Leasepool{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.IpaddressType = &LeasePoolList_Ipv4Leasepool{v}
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Ipv6Leasepool", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &IPv6Leasepool{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.IpaddressType = &LeasePoolList_Ipv6Leasepool{v}
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Ipv4Ipv6Leasepool", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &DualStackLeasePool{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.IpaddressType = &LeasePoolList_Ipv4Ipv6Leasepool{v}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *Policy) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: Policy: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: Policy: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Policy", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Policy = append(m.Policy, &schema.ObjectRefType{})
+			if err := m.Policy[len(m.Policy)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
@@ -2611,7 +4468,7 @@ func (m *LeasePoolList) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *DomainPerimeterRE) Unmarshal(dAtA []byte) error {
+func (m *AppVIPPool) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -2634,15 +4491,15 @@ func (m *DomainPerimeterRE) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: DomainPerimeterRE: wiretype end group for non-group")
+			return fmt.Errorf("proto: AppVIPPool: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: DomainPerimeterRE: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: AppVIPPool: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field PerimeterReSite", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field AppVipPool", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -2669,8 +4526,8 @@ func (m *DomainPerimeterRE) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.PerimeterReSite = append(m.PerimeterReSite, &schema.ObjectRefType{})
-			if err := m.PerimeterReSite[len(m.PerimeterReSite)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+			m.AppVipPool = append(m.AppVipPool, &schema.ObjectRefType{})
+			if err := m.AppVipPool[len(m.AppVipPool)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
@@ -2698,7 +4555,7 @@ func (m *DomainPerimeterRE) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *DomainSites) Unmarshal(dAtA []byte) error {
+func (m *CloudGateways) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -2721,15 +4578,15 @@ func (m *DomainSites) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: DomainSites: wiretype end group for non-group")
+			return fmt.Errorf("proto: CloudGateways: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: DomainSites: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: CloudGateways: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field UztnaGateway", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field CloudGateway", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -2756,8 +4613,8 @@ func (m *DomainSites) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.UztnaGateway = append(m.UztnaGateway, &schema.ObjectRefType{})
-			if err := m.UztnaGateway[len(m.UztnaGateway)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+			m.CloudGateway = append(m.CloudGateway, &schema.ObjectRefType{})
+			if err := m.CloudGateway[len(m.CloudGateway)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
@@ -2785,7 +4642,7 @@ func (m *DomainSites) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *PerimeterREAdvertisement) Unmarshal(dAtA []byte) error {
+func (m *CloudGatewayAdvertisement) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -2808,15 +4665,15 @@ func (m *PerimeterREAdvertisement) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: PerimeterREAdvertisement: wiretype end group for non-group")
+			return fmt.Errorf("proto: CloudGatewayAdvertisement: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: PerimeterREAdvertisement: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: CloudGatewayAdvertisement: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
-		case 1:
+		case 5:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field AllPerimeter", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field AllCloud", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -2847,11 +4704,11 @@ func (m *PerimeterREAdvertisement) Unmarshal(dAtA []byte) error {
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
-			m.PerimterReChoice = &PerimeterREAdvertisement_AllPerimeter{v}
+			m.CloudGatewayChoice = &CloudGatewayAdvertisement_AllCloud{v}
 			iNdEx = postIndex
-		case 2:
+		case 6:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field DomainReSites", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field ReSites", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -2878,11 +4735,11 @@ func (m *PerimeterREAdvertisement) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &DomainPerimeterRE{}
+			v := &CloudGateways{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
-			m.PerimterReChoice = &PerimeterREAdvertisement_DomainReSites{v}
+			m.CloudGatewayChoice = &CloudGatewayAdvertisement_ReSites{v}
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
@@ -2937,7 +4794,41 @@ func (m *Gateways) Unmarshal(dAtA []byte) error {
 			return fmt.Errorf("proto: Gateways: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
-		case 1:
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field BigipSite", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.BigipSite = append(m.BigipSite, &schema.ObjectRefType{})
+			if err := m.BigipSite[len(m.BigipSite)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 4:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field PerimeterRe", wireType)
 			}
@@ -2967,45 +4858,9 @@ func (m *Gateways) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			if m.PerimeterRe == nil {
-				m.PerimeterRe = &PerimeterREAdvertisement{}
+				m.PerimeterRe = &CloudGatewayAdvertisement{}
 			}
 			if err := m.PerimeterRe.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field BigipCe", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.BigipCe == nil {
-				m.BigipCe = &DomainSites{}
-			}
-			if err := m.BigipCe.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
@@ -3221,38 +5076,6 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			iNdEx = postIndex
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field AccessUrl", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.AccessUrl = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
 		case 4:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Cert", wireType)
@@ -3289,38 +5112,6 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			iNdEx = postIndex
-		case 5:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ProfileName", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.ProfileName = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
 		case 6:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field CdnCeVhApiGw", wireType)
@@ -3354,6 +5145,178 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 			if err := m.CdnCeVhApiGw[len(m.CdnCeVhApiGw)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
+			iNdEx = postIndex
+		case 7:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AppVipPool", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.AppVipPool == nil {
+				m.AppVipPool = &AppVIPPool{}
+			}
+			if err := m.AppVipPool.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 8:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Policy", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Policy == nil {
+				m.Policy = &Policy{}
+			}
+			if err := m.Policy.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 9:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field VipDnsProxy", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.VipDnsProxy == nil {
+				m.VipDnsProxy = &schema.IpAddressType{}
+			}
+			if err := m.VipDnsProxy.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 11:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AccessFqdn", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.AccessFqdn = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 12:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AppVipSubnet", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.AppVipSubnet = append(m.AppVipSubnet, string(dAtA[iNdEx:postIndex]))
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
@@ -3480,38 +5443,6 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			iNdEx = postIndex
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field AccessUrl", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.AccessUrl = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
 		case 4:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Cert", wireType)
@@ -3548,38 +5479,6 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			iNdEx = postIndex
-		case 5:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ProfileName", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.ProfileName = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
 		case 6:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field CdnCeVhApiGw", wireType)
@@ -3613,6 +5512,178 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 			if err := m.CdnCeVhApiGw[len(m.CdnCeVhApiGw)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
+			iNdEx = postIndex
+		case 7:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AppVipPool", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.AppVipPool == nil {
+				m.AppVipPool = &AppVIPPool{}
+			}
+			if err := m.AppVipPool.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 8:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Policy", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Policy == nil {
+				m.Policy = &Policy{}
+			}
+			if err := m.Policy.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 9:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field VipDnsProxy", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.VipDnsProxy == nil {
+				m.VipDnsProxy = &schema.IpAddressType{}
+			}
+			if err := m.VipDnsProxy.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 11:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AccessFqdn", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.AccessFqdn = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 12:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AppVipSubnet", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.AppVipSubnet = append(m.AppVipSubnet, string(dAtA[iNdEx:postIndex]))
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
@@ -3739,38 +5810,6 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			iNdEx = postIndex
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field AccessUrl", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.AccessUrl = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
 		case 4:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Cert", wireType)
@@ -3807,38 +5846,6 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			iNdEx = postIndex
-		case 5:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ProfileName", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.ProfileName = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
 		case 6:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field CdnCeVhApiGw", wireType)
@@ -3872,6 +5879,178 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 			if err := m.CdnCeVhApiGw[len(m.CdnCeVhApiGw)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
+			iNdEx = postIndex
+		case 7:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AppVipPool", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.AppVipPool == nil {
+				m.AppVipPool = &AppVIPPool{}
+			}
+			if err := m.AppVipPool.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 8:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Policy", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Policy == nil {
+				m.Policy = &Policy{}
+			}
+			if err := m.Policy.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 9:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field VipDnsProxy", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.VipDnsProxy == nil {
+				m.VipDnsProxy = &schema.IpAddressType{}
+			}
+			if err := m.VipDnsProxy.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 11:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AccessFqdn", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.AccessFqdn = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 12:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AppVipSubnet", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.AppVipSubnet = append(m.AppVipSubnet, string(dAtA[iNdEx:postIndex]))
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
@@ -3998,38 +6177,6 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			iNdEx = postIndex
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field AccessUrl", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.AccessUrl = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
 		case 4:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Cert", wireType)
@@ -4066,38 +6213,6 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			iNdEx = postIndex
-		case 5:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ProfileName", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.ProfileName = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
 		case 6:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field CdnCeVhApiGw", wireType)
@@ -4131,6 +6246,178 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 			if err := m.CdnCeVhApiGw[len(m.CdnCeVhApiGw)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
+			iNdEx = postIndex
+		case 7:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AppVipPool", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.AppVipPool == nil {
+				m.AppVipPool = &AppVIPPool{}
+			}
+			if err := m.AppVipPool.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 8:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Policy", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Policy == nil {
+				m.Policy = &Policy{}
+			}
+			if err := m.Policy.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 9:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field VipDnsProxy", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.VipDnsProxy == nil {
+				m.VipDnsProxy = &schema.IpAddressType{}
+			}
+			if err := m.VipDnsProxy.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 11:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AccessFqdn", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.AccessFqdn = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 12:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AppVipSubnet", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.AppVipSubnet = append(m.AppVipSubnet, string(dAtA[iNdEx:postIndex]))
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex

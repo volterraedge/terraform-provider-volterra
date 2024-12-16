@@ -1225,7 +1225,7 @@ type ExportZoneFileResponse struct {
 	// HTML data
 	//
 	// x-displayName: "HTML Data"
-	// report data in HTML
+	// Base64-encoded zone file
 	HtmlData string `protobuf:"bytes,1,opt,name=html_data,json=htmlData,proto3" json:"html_data,omitempty"`
 }
 

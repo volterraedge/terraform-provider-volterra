@@ -1,9 +1,9 @@
 ---
 
 page_title: "Volterra: aws_tgw_site"
-description: "The aws_tgw_site allows CRUD of Aws Tgw Site resource on Volterra SaaS"
 
----
+description: "The aws_tgw_site allows CRUD of Aws Tgw Site resource on Volterra SaaS"
+-------------------------------------------------------------------------------------
 
 Resource volterra_aws_tgw_site
 ==============================
@@ -66,11 +66,7 @@ resource "volterra_aws_tgw_site" "example" {
       workload_subnet {
         // One of the arguments from this list "existing_subnet_id subnet_param" must be set
 
-        subnet_param {
-          ipv4 = "10.1.2.0/24"
-
-          ipv6 = "1234:568:abcd:9100::/64"
-        }
+        existing_subnet_id = "subnet-12345678901234567"
       }
     }
 
@@ -86,15 +82,11 @@ resource "volterra_aws_tgw_site" "example" {
 
     // One of the arguments from this list "disable_internet_vip enable_internet_vip" must be set
 
-    disable_internet_vip = true
+    enable_internet_vip = true
 
     // One of the arguments from this list "custom_security_group f5xc_security_group" must be set
 
-    custom_security_group {
-      inside_security_group_id = "sg-0db952838ba829943"
-
-      outside_security_group_id = "sg-0db952838ba829943"
-    }
+    f5xc_security_group = true
 
     // One of the arguments from this list "new_vpc vpc_id" must be set
 
@@ -118,11 +110,7 @@ resource "volterra_aws_tgw_site" "example" {
 
     // One of the arguments from this list "reserved_tgw_cidr tgw_cidr" must be set
 
-    tgw_cidr {
-      ipv4 = "10.1.2.0/24"
-
-      ipv6 = "1234:568:abcd:9100::/64"
-    }
+    reserved_tgw_cidr = true
 
     // One of the arguments from this list "no_worker_nodes nodes_per_az total_nodes" must be set
 
@@ -131,11 +119,35 @@ resource "volterra_aws_tgw_site" "example" {
 
   // One of the arguments from this list "block_all_services blocked_services default_blocked_services" must be set
 
-  block_all_services = true
+  default_blocked_services = true
 
   // One of the arguments from this list "direct_connect_disabled direct_connect_enabled private_connectivity" must be set
 
-  direct_connect_disabled = true
+  direct_connect_enabled {
+    // One of the arguments from this list "auto_asn custom_asn" must be set
+
+    auto_asn = true
+
+    // One of the arguments from this list "hosted_vifs manual_gw standard_vifs" must be set
+
+    hosted_vifs {
+      // One of the arguments from this list "site_registration_over_direct_connect site_registration_over_internet" can be set
+
+      site_registration_over_direct_connect {
+        cloudlink_network_name = "private-cloud-ntw"
+      }
+
+      vif_list {
+        vif_id = "dxvif-fgwtckim"
+
+        // One of the arguments from this list "other_region same_as_site_region" must be set
+
+        same_as_site_region = true
+      }
+
+      vifs = ["value"]
+    }
+  }
 
   // One of the arguments from this list "log_receiver logs_streaming_disabled" must be set
 
@@ -297,9 +309,9 @@ Enable Kubernetes Drain during OS or SW upgrade.
 
 ###### One of the arguments from this list "disable_upgrade_drain, enable_upgrade_drain" must be set
 
-`disable_upgrade_drain` - (Optional) x-displayName: "Disable Node by Node Upgrade" (`Bool`).
+`disable_upgrade_drain` - (Optional) x-displayName: "Disable" (`Bool`).
 
-`enable_upgrade_drain` - (Optional) x-displayName: "Enable Node by Node Upgrade". See [Kubernetes Upgrade Drain Enable Choice Enable Upgrade Drain ](#kubernetes-upgrade-drain-enable-choice-enable-upgrade-drain) below for details.
+`enable_upgrade_drain` - (Optional) x-displayName: "Enable". See [Kubernetes Upgrade Drain Enable Choice Enable Upgrade Drain ](#kubernetes-upgrade-drain-enable-choice-enable-upgrade-drain) below for details.
 
 ### Offline Survivability Mode
 
@@ -809,11 +821,11 @@ VIPs can be advertised to the internet directly on this Site.
 
 ### Kubernetes Upgrade Drain Enable Choice Disable Upgrade Drain
 
-x-displayName: "Disable Node by Node Upgrade".
+x-displayName: "Disable".
 
 ### Kubernetes Upgrade Drain Enable Choice Enable Upgrade Drain
 
-x-displayName: "Enable Node by Node Upgrade".
+x-displayName: "Enable".
 
 ###### One of the arguments from this list "drain_max_unavailable_node_count, drain_max_unavailable_node_percentage" must be set
 

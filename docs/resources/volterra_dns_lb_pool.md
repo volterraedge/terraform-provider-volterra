@@ -1,9 +1,9 @@
 ---
 
 page_title: "Volterra: dns_lb_pool"
-description: "The dns_lb_pool allows CRUD of Dns Lb Pool resource on Volterra SaaS"
 
----
+description: "The dns_lb_pool allows CRUD of Dns Lb Pool resource on Volterra SaaS"
+-----------------------------------------------------------------------------------
 
 Resource volterra_dns_lb_pool
 =============================

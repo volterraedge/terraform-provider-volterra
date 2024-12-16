@@ -43,6 +43,24 @@ func (c *PublicConfigCustomAPIGrpcClient) doRPCGetReferencingHttpLoadbalancers(c
 	return rsp, err
 }
 
+func (c *PublicConfigCustomAPIGrpcClient) doRPCGetReferencingLoadbalancers(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
+	req := &GetReferencingLoadbalancersReq{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.views.api_definition.GetReferencingLoadbalancersReq", yamlReq)
+	}
+	rsp, err := c.grpcClient.GetReferencingLoadbalancers(ctx, req, opts...)
+	return rsp, err
+}
+
+func (c *PublicConfigCustomAPIGrpcClient) doRPCListAvailableAPIDefinitions(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
+	req := &ListAvailableAPIDefinitionsReq{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.views.api_definition.ListAvailableAPIDefinitionsReq", yamlReq)
+	}
+	rsp, err := c.grpcClient.ListAvailableAPIDefinitions(ctx, req, opts...)
+	return rsp, err
+}
+
 func (c *PublicConfigCustomAPIGrpcClient) doRPCMarkAsNonAPI(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &APInventoryReq{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -110,6 +128,10 @@ func NewPublicConfigCustomAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient
 	}
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
 	rpcFns["GetReferencingHttpLoadbalancers"] = ccl.doRPCGetReferencingHttpLoadbalancers
+
+	rpcFns["GetReferencingLoadbalancers"] = ccl.doRPCGetReferencingLoadbalancers
+
+	rpcFns["ListAvailableAPIDefinitions"] = ccl.doRPCListAvailableAPIDefinitions
 
 	rpcFns["MarkAsNonAPI"] = ccl.doRPCMarkAsNonAPI
 
@@ -207,6 +229,173 @@ func (c *PublicConfigCustomAPIRestClient) doRPCGetReferencingHttpLoadbalancers(c
 	pbRsp := &GetReferencingLoadbalancersResp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.views.api_definition.GetReferencingLoadbalancersResp", body)
+
+	}
+	if callOpts.OutCallResponse != nil {
+		callOpts.OutCallResponse.ProtoMsg = pbRsp
+		callOpts.OutCallResponse.JSON = string(body)
+	}
+	return pbRsp, nil
+}
+
+func (c *PublicConfigCustomAPIRestClient) doRPCGetReferencingLoadbalancers(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
+	if callOpts.URI == "" {
+		return nil, fmt.Errorf("Error, URI should be specified, got empty")
+	}
+	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
+
+	yamlReq := callOpts.YAMLReq
+	req := &GetReferencingLoadbalancersReq{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.views.api_definition.GetReferencingLoadbalancersReq: %s", yamlReq, err)
+	}
+
+	var hReq *http.Request
+	hm := strings.ToLower(callOpts.HTTPMethod)
+	switch hm {
+	case "post", "put":
+		jsn, err := codec.ToJSON(req, codec.ToWithUseProtoFieldName())
+		if err != nil {
+			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
+		}
+		var op string
+		if hm == "post" {
+			op = http.MethodPost
+		} else {
+			op = http.MethodPut
+		}
+		newReq, err := http.NewRequest(op, url, bytes.NewBuffer([]byte(jsn)))
+		if err != nil {
+			return nil, errors.Wrapf(err, "Creating new HTTP %s request for custom API", op)
+		}
+		hReq = newReq
+	case "get":
+		newReq, err := http.NewRequest(http.MethodGet, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP GET request for custom API")
+		}
+		hReq = newReq
+		q := hReq.URL.Query()
+		_ = q
+		q.Add("name", fmt.Sprintf("%v", req.Name))
+		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
+
+		hReq.URL.RawQuery += q.Encode()
+	case "delete":
+		newReq, err := http.NewRequest(http.MethodDelete, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP DELETE request for custom API")
+		}
+		hReq = newReq
+	default:
+		return nil, fmt.Errorf("Error, invalid/empty HTTPMethod(%s) specified, should be POST|DELETE|GET", callOpts.HTTPMethod)
+	}
+	hReq = hReq.WithContext(ctx)
+	hReq.Header.Set("Content-Type", "application/json")
+	client.AddHdrsToReq(callOpts.Headers, hReq)
+
+	rsp, err := c.client.Do(hReq)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient")
+	}
+	defer rsp.Body.Close()
+
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
+		body, err := io.ReadAll(rsp.Body)
+		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
+	}
+
+	body, err := io.ReadAll(rsp.Body)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient read body")
+	}
+	pbRsp := &GetReferencingAllLoadbalancersResp{}
+	if err := codec.FromJSON(string(body), pbRsp); err != nil {
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.views.api_definition.GetReferencingAllLoadbalancersResp", body)
+
+	}
+	if callOpts.OutCallResponse != nil {
+		callOpts.OutCallResponse.ProtoMsg = pbRsp
+		callOpts.OutCallResponse.JSON = string(body)
+	}
+	return pbRsp, nil
+}
+
+func (c *PublicConfigCustomAPIRestClient) doRPCListAvailableAPIDefinitions(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
+	if callOpts.URI == "" {
+		return nil, fmt.Errorf("Error, URI should be specified, got empty")
+	}
+	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
+
+	yamlReq := callOpts.YAMLReq
+	req := &ListAvailableAPIDefinitionsReq{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.views.api_definition.ListAvailableAPIDefinitionsReq: %s", yamlReq, err)
+	}
+
+	var hReq *http.Request
+	hm := strings.ToLower(callOpts.HTTPMethod)
+	switch hm {
+	case "post", "put":
+		jsn, err := codec.ToJSON(req, codec.ToWithUseProtoFieldName())
+		if err != nil {
+			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
+		}
+		var op string
+		if hm == "post" {
+			op = http.MethodPost
+		} else {
+			op = http.MethodPut
+		}
+		newReq, err := http.NewRequest(op, url, bytes.NewBuffer([]byte(jsn)))
+		if err != nil {
+			return nil, errors.Wrapf(err, "Creating new HTTP %s request for custom API", op)
+		}
+		hReq = newReq
+	case "get":
+		newReq, err := http.NewRequest(http.MethodGet, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP GET request for custom API")
+		}
+		hReq = newReq
+		q := hReq.URL.Query()
+		_ = q
+		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
+
+		hReq.URL.RawQuery += q.Encode()
+	case "delete":
+		newReq, err := http.NewRequest(http.MethodDelete, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP DELETE request for custom API")
+		}
+		hReq = newReq
+	default:
+		return nil, fmt.Errorf("Error, invalid/empty HTTPMethod(%s) specified, should be POST|DELETE|GET", callOpts.HTTPMethod)
+	}
+	hReq = hReq.WithContext(ctx)
+	hReq.Header.Set("Content-Type", "application/json")
+	client.AddHdrsToReq(callOpts.Headers, hReq)
+
+	rsp, err := c.client.Do(hReq)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient")
+	}
+	defer rsp.Body.Close()
+
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
+		body, err := io.ReadAll(rsp.Body)
+		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
+	}
+
+	body, err := io.ReadAll(rsp.Body)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient read body")
+	}
+	pbRsp := &ListAvailableAPIDefinitionsResp{}
+	if err := codec.FromJSON(string(body), pbRsp); err != nil {
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.views.api_definition.ListAvailableAPIDefinitionsResp", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -590,6 +779,10 @@ func NewPublicConfigCustomAPIRestClient(baseURL string, hc http.Client) server.C
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
 	rpcFns["GetReferencingHttpLoadbalancers"] = ccl.doRPCGetReferencingHttpLoadbalancers
 
+	rpcFns["GetReferencingLoadbalancers"] = ccl.doRPCGetReferencingLoadbalancers
+
+	rpcFns["ListAvailableAPIDefinitions"] = ccl.doRPCListAvailableAPIDefinitions
+
 	rpcFns["MarkAsNonAPI"] = ccl.doRPCMarkAsNonAPI
 
 	rpcFns["MoveToAPInventory"] = ccl.doRPCMoveToAPInventory
@@ -613,6 +806,14 @@ type publicConfigCustomAPIInprocClient struct {
 func (c *publicConfigCustomAPIInprocClient) GetReferencingHttpLoadbalancers(ctx context.Context, in *GetReferencingLoadbalancersReq, opts ...grpc.CallOption) (*GetReferencingLoadbalancersResp, error) {
 	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.views.api_definition.PublicConfigCustomAPI.GetReferencingHttpLoadbalancers")
 	return c.PublicConfigCustomAPIServer.GetReferencingHttpLoadbalancers(ctx, in)
+}
+func (c *publicConfigCustomAPIInprocClient) GetReferencingLoadbalancers(ctx context.Context, in *GetReferencingLoadbalancersReq, opts ...grpc.CallOption) (*GetReferencingAllLoadbalancersResp, error) {
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.views.api_definition.PublicConfigCustomAPI.GetReferencingLoadbalancers")
+	return c.PublicConfigCustomAPIServer.GetReferencingLoadbalancers(ctx, in)
+}
+func (c *publicConfigCustomAPIInprocClient) ListAvailableAPIDefinitions(ctx context.Context, in *ListAvailableAPIDefinitionsReq, opts ...grpc.CallOption) (*ListAvailableAPIDefinitionsResp, error) {
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.views.api_definition.PublicConfigCustomAPI.ListAvailableAPIDefinitions")
+	return c.PublicConfigCustomAPIServer.ListAvailableAPIDefinitions(ctx, in)
 }
 func (c *publicConfigCustomAPIInprocClient) MarkAsNonAPI(ctx context.Context, in *APInventoryReq, opts ...grpc.CallOption) (*APInventoryResp, error) {
 	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.views.api_definition.PublicConfigCustomAPI.MarkAsNonAPI")
@@ -698,6 +899,104 @@ func (s *publicConfigCustomAPISrv) GetReferencingHttpLoadbalancers(ctx context.C
 	}
 
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.views.api_definition.GetReferencingLoadbalancersResp", rsp)...)
+
+	return rsp, nil
+}
+func (s *publicConfigCustomAPISrv) GetReferencingLoadbalancers(ctx context.Context, in *GetReferencingLoadbalancersReq) (*GetReferencingAllLoadbalancersResp, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.views.api_definition.PublicConfigCustomAPI")
+	cah, ok := ah.(PublicConfigCustomAPIServer)
+	if !ok {
+		return nil, fmt.Errorf("ah %v is not of type *PublicConfigCustomAPIServer", ah)
+	}
+
+	var (
+		rsp *GetReferencingAllLoadbalancersResp
+		err error
+	)
+
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.views.api_definition.GetReferencingLoadbalancersReq", in)
+	defer func() {
+		if len(bodyFields) > 0 {
+			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
+		}
+		userMsg := "The 'PublicConfigCustomAPI.GetReferencingLoadbalancers' operation on 'api_definition'"
+		if err == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
+	}()
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.views.api_definition.PublicConfigCustomAPI.GetReferencingLoadbalancers"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
+	rsp, err = cah.GetReferencingLoadbalancers(ctx, in)
+	if err != nil {
+		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
+	}
+
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.views.api_definition.GetReferencingAllLoadbalancersResp", rsp)...)
+
+	return rsp, nil
+}
+func (s *publicConfigCustomAPISrv) ListAvailableAPIDefinitions(ctx context.Context, in *ListAvailableAPIDefinitionsReq) (*ListAvailableAPIDefinitionsResp, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.views.api_definition.PublicConfigCustomAPI")
+	cah, ok := ah.(PublicConfigCustomAPIServer)
+	if !ok {
+		return nil, fmt.Errorf("ah %v is not of type *PublicConfigCustomAPIServer", ah)
+	}
+
+	var (
+		rsp *ListAvailableAPIDefinitionsResp
+		err error
+	)
+
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.views.api_definition.ListAvailableAPIDefinitionsReq", in)
+	defer func() {
+		if len(bodyFields) > 0 {
+			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
+		}
+		userMsg := "The 'PublicConfigCustomAPI.ListAvailableAPIDefinitions' operation on 'api_definition'"
+		if err == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
+	}()
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.views.api_definition.PublicConfigCustomAPI.ListAvailableAPIDefinitions"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
+	rsp, err = cah.ListAvailableAPIDefinitions(ctx, in)
+	if err != nil {
+		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
+	}
+
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.views.api_definition.ListAvailableAPIDefinitionsResp", rsp)...)
 
 	return rsp, nil
 }
@@ -924,7 +1223,7 @@ var PublicConfigCustomAPISwaggerJSON string = `{
         "/public/namespaces/{namespace}/api_definitions/{name}/http_loadbalancers": {
             "get": {
                 "summary": "Get Referencing HTTP Loadbalancers",
-                "description": "List Loadbalancer objects referenced by the API Definition (backrefrences).",
+                "description": "List Loadbalancer objects referenced by the API Definition (backrefrences).\nDEPRECATED. use GetReferencingLoadBalancers",
                 "operationId": "ves.io.schema.views.api_definition.PublicConfigCustomAPI.GetReferencingHttpLoadbalancers",
                 "responses": {
                     "200": {
@@ -1007,7 +1306,100 @@ var PublicConfigCustomAPISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-views-api_definition-publicconfigcustomapi-getreferencinghttploadbalancers"
                 },
+                "x-ves-deprecated": "Use GetReferencingLoadbalancers",
                 "x-ves-proto-rpc": "ves.io.schema.views.api_definition.PublicConfigCustomAPI.GetReferencingHttpLoadbalancers"
+            },
+            "x-displayname": "Public API Definition Custom API",
+            "x-ves-proto-service": "ves.io.schema.views.api_definition.PublicConfigCustomAPI",
+            "x-ves-proto-service-type": "CUSTOM_PUBLIC"
+        },
+        "/public/namespaces/{namespace}/api_definitions/{name}/loadbalancers": {
+            "get": {
+                "summary": "Get Referencing Loadbalancers",
+                "description": "List Loadbalancers referenced by the API Definition (backrefrences).",
+                "operationId": "ves.io.schema.views.api_definition.PublicConfigCustomAPI.GetReferencingLoadbalancers",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/api_definitionGetReferencingAllLoadbalancersResp"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "namespace",
+                        "description": "Namespace\n\nx-example: \"shared\"\nThe namespace of the API Definition for the current request",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "x-displayname": "Namespace"
+                    },
+                    {
+                        "name": "name",
+                        "description": "Name\n\nx-example: \"name\"\nThe name of the API Definition for the current request",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "x-displayname": "Name"
+                    }
+                ],
+                "tags": [
+                    "PublicConfigCustomAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-views-api_definition-publicconfigcustomapi-getreferencingloadbalancers"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.views.api_definition.PublicConfigCustomAPI.GetReferencingLoadbalancers"
             },
             "x-displayname": "Public API Definition Custom API",
             "x-ves-proto-service": "ves.io.schema.views.api_definition.PublicConfigCustomAPI",
@@ -1412,6 +1804,90 @@ var PublicConfigCustomAPISwaggerJSON string = `{
             "x-displayname": "Public API Definition Custom API",
             "x-ves-proto-service": "ves.io.schema.views.api_definition.PublicConfigCustomAPI",
             "x-ves-proto-service-type": "CUSTOM_PUBLIC"
+        },
+        "/public/namespaces/{namespace}/api_definitions_without_shared": {
+            "get": {
+                "summary": "List Available API Definitions",
+                "description": "List API definitions suitable for API Inventory management\nGet all API Definitions for specific namespace exclude shared namespace.",
+                "operationId": "ves.io.schema.views.api_definition.PublicConfigCustomAPI.ListAvailableAPIDefinitions",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/api_definitionListAvailableAPIDefinitionsResp"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "namespace",
+                        "description": "Namespace\n\nx-example: \"shared\"\nnamespace is used to get available API Definitions for the given namespace.",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "x-displayname": "Namespace"
+                    }
+                ],
+                "tags": [
+                    "PublicConfigCustomAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-views-api_definition-publicconfigcustomapi-listavailableapidefinitions"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.views.api_definition.PublicConfigCustomAPI.ListAvailableAPIDefinitions"
+            },
+            "x-displayname": "Public API Definition Custom API",
+            "x-ves-proto-service": "ves.io.schema.views.api_definition.PublicConfigCustomAPI",
+            "x-ves-proto-service-type": "CUSTOM_PUBLIC"
         }
     },
     "definitions": {
@@ -1473,6 +1949,24 @@ var PublicConfigCustomAPISwaggerJSON string = `{
                 }
             }
         },
+        "api_definitionGetReferencingAllLoadbalancersResp": {
+            "type": "object",
+            "description": "Response shape for Get API Endpoints With Newly Discovered Schema",
+            "title": "Get API Endpoints Schema Response",
+            "x-displayname": "Get API Endpoints Schema Response",
+            "x-ves-proto-message": "ves.io.schema.views.api_definition.GetReferencingAllLoadbalancersResp",
+            "properties": {
+                "loadbalancers": {
+                    "type": "array",
+                    "description": " Loadbalancers referencing the API Definition.",
+                    "title": "Loadbalancers",
+                    "items": {
+                        "$ref": "#/definitions/schemaviewsObjectRefType"
+                    },
+                    "x-displayname": "Loadbalancers"
+                }
+            }
+        },
         "api_definitionGetReferencingLoadbalancersResp": {
             "type": "object",
             "description": "Response shape for Get API Endpoints With Newly Discovered Schema",
@@ -1488,6 +1982,21 @@ var PublicConfigCustomAPISwaggerJSON string = `{
                         "$ref": "#/definitions/schemaviewsObjectRefType"
                     },
                     "x-displayname": "HTTP Loadbalancers"
+                }
+            }
+        },
+        "api_definitionListAvailableAPIDefinitionsResp": {
+            "type": "object",
+            "x-ves-proto-message": "ves.io.schema.views.api_definition.ListAvailableAPIDefinitionsResp",
+            "properties": {
+                "available_api_definitions": {
+                    "type": "array",
+                    "description": " The list of references to available API Definition objects.",
+                    "title": "Available API Definitions",
+                    "items": {
+                        "$ref": "#/definitions/schemaviewsObjectRefType"
+                    },
+                    "x-displayname": "Available API Definitions"
                 }
             }
         },

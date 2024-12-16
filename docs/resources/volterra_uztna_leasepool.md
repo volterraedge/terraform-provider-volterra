@@ -1,9 +1,9 @@
 ---
 
 page_title: "Volterra: uztna_leasepool"
-description: "The uztna_leasepool allows CRUD of Uztna Leasepool resource on Volterra SaaS"
 
----
+description: "The uztna_leasepool allows CRUD of Uztna Leasepool resource on Volterra SaaS"
+-------------------------------------------------------------------------------------------
 
 Resource volterra_uztna_leasepool
 =================================
@@ -60,25 +60,25 @@ Argument Reference
 
 ### Spec Argument Reference
 
-`ip_version` - (Required) IP address ranges for the Lease Pool Range . See [Ip Version ](#ip-version) below for details.
+`ip_version` - (Required) IP address ranges for the Lease Pools. See [Ip Version ](#ip-version) below for details.
 
 ### Ip Version
 
-IP address ranges for the Lease Pool Range .
+IP address ranges for the Lease Pools.
 
 ###### One of the arguments from this list "ipv4_vip, ipv6_vip" can be set
 
 `ipv4_vip` - (Optional) IPV4 Only Lease Pool. See [Ip Vip Ipv4 Vip ](#ip-vip-ipv4-vip) below for details.
 
-`ipv6_vip` - (Optional) IPV6 Only Lease Pool. See [Ip Vip Ipv6 Vip ](#ip-vip-ipv6-vip) below for details.
+`ipv6_vip` - (Optional) IPV6 Only Lease Pool. See [Ip Vip Ipv6 Vip ](#ip-vip-ipv6-vip) below for details.(Deprecated)
 
 ### Ip Vip Ipv4 Vip
 
 IPV4 Only Lease Pool.
 
-`prefix` - (Optional) IPV4 Lease Pool Network (`String`).
+`prefix` - (Required) IPV4 Lease Pool Network (`String`).
 
-`vip4_range` - (Required) IPV4 Lease Pool Range. See [Ipv4 Vip Vip4 Range ](#ipv4-vip-vip4-range) below for details.
+`vip4_range` - (Optional) IPV4 Lease Pool Range. See [Ipv4 Vip Vip4 Range ](#ipv4-vip-vip4-range) below for details.
 
 ### Ip Vip Ipv6 Vip
 

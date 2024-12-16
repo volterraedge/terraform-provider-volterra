@@ -5,7 +5,7 @@
 //
 // x-displayName: "F5XC DNS Management RRSet API"
 // x-required
-// APIs to manage a DNS RRSets
+// APIs to create, update or delete individual records of a DNS zone without having to send the whole DNS zone information.
 
 package rrset
 

@@ -8,7 +8,6 @@ import (
 	"context"
 	"fmt"
 	"log"
-	"math/rand"
 	"net/http"
 	"strings"
 	"time"
@@ -173,7 +172,7 @@ func resourceVolterraRegistrationApprovalCreate(d *schema.ResourceData, meta int
 		if approvalReq.Name != "" {
 			break
 		} else {
-			time.Sleep(time.Duration(rand.Int31n(waitTime)) * time.Second)
+			time.Sleep(time.Duration(GetTime(waitTime)) * time.Second)
 		}
 	}
 
@@ -288,4 +287,12 @@ func findRegistration(client *APIClient, approvalReq *ves_io_schema_registration
 		}
 	}
 	return nil
+}
+
+func GetTime(waitTime int32) int32 {
+	if waitTime < 30 || waitTime > 120 {
+		waitTime = 60
+	}
+	return waitTime
+
 }

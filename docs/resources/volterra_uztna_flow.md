@@ -1,9 +1,9 @@
 ---
 
 page_title: "Volterra: uztna_flow"
-description: "The uztna_flow allows CRUD of Uztna Flow resource on Volterra SaaS"
 
----
+description: "The uztna_flow allows CRUD of Uztna Flow resource on Volterra SaaS"
+---------------------------------------------------------------------------------
 
 Resource volterra_uztna_flow
 ============================
@@ -23,51 +23,11 @@ resource "volterra_uztna_flow" "example" {
   flow_type {
     // One of the arguments from this list "geo_match saml_message" must be set
 
-    saml_message {
-      application_tag {
-        saml_app_tag = "saml_app_tag"
-      }
-
-      provider_metadata {
-        idp_provider_metadata = "idp_provider_metadata"
-
-        service_provider_metadata = "service_provider_metadata"
-      }
-
-      service_provider_properties {
-        audience_uri {
-          // One of the arguments from this list "uniform_resource_locator uniform_resource_name" can be set
-
-          uniform_resource_locator {
-            url = "url"
-          }
+    geo_match {
+      match_cri {
+        custom_geo_location_selector {
+          expressions = ["region in (us-west1, us-west2),tier in (staging)"]
         }
-
-        force_authentication = true
-
-        relay_state = "relay_state"
-
-        sign_authentication_request {
-          // One of the arguments from this list "no_auth_req sign_auth" must be set
-
-          sign_auth {
-            certificate {
-              name      = "test1"
-              namespace = "staging"
-              tenant    = "acmecorp"
-            }
-          }
-        }
-
-        type = "type"
-
-        want_encrypted_assertion {
-          // One of the arguments from this list "encrypt_req no_encrypt_req" must be set
-
-          no_encrypt_req = true
-        }
-
-        want_signed_assertion = true
       }
     }
   }
@@ -120,6 +80,24 @@ x-required.
 
 `urn` - (Required) Name of Uniform resource (`String`).
 
+### Auth Request Signed No
+
+Auth Request is not signed .
+
+### Auth Request Signed Yes
+
+Auth Request is signed .
+
+###### One of the arguments from this list "rsa_sha1, rsa_sha256, rsa_sha384, rsa_sha512" must be set
+
+`rsa_sha1` - (Optional) RSA-SHA1 (`Bool`).
+
+`rsa_sha256` - (Optional) RSA-SHA256 (`Bool`).
+
+`rsa_sha384` - (Optional) RSA-SHA384 (`Bool`).
+
+`rsa_sha512` - (Optional) RSA-SHA512 (`Bool`).
+
 ### Flow Type Choice Geo Match
 
 Geolocation Match.
@@ -132,7 +110,7 @@ a single sign-on (SSO) experience for your applications..
 
 `application_tag` - (Required) Application Tagging. See [Saml Message Application Tag ](#saml-message-application-tag) below for details.
 
-`provider_metadata` - (Required) Provide metadata is xml kind of input for Service provider metadata and IDP .. See [Saml Message Provider Metadata ](#saml-message-provider-metadata) below for details.
+`idp` - (Required) including security certificates and endpoints used for single sign-on (SSO). . See [Saml Message Idp ](#saml-message-idp) below for details.
 
 `service_provider_properties` - (Required) Service Provider Properties. See [Saml Message Service Provider Properties ](#saml-message-service-provider-properties) below for details.
 
@@ -141,6 +119,22 @@ a single sign-on (SSO) experience for your applications..
 Rules to add Matching criteria.
 
 `custom_geo_location_selector` - (Optional) Select multiple geolocations. See [Match Cri Custom Geo Location Selector ](#match-cri-custom-geo-location-selector) below for details.
+
+### Idp Idp Assert Verification Cert
+
+Used for identity provider's assertion verification .
+
+`certificate` - (Optional) Select/Add one or more TLS Certificate objects to associate with this uztna flow. See [ref](#ref) below for details.
+
+### Idp Idp Security Property
+
+Identity Provider's Security Property.
+
+###### One of the arguments from this list "no, yes" must be set
+
+`no` - (Optional) Auth Request is not signed (`Bool`).
+
+`yes` - (Optional) Auth Request is signed . See [Auth Request Signed Yes ](#auth-request-signed-yes) below for details.
 
 ### Match Cri Custom Geo Location Selector
 
@@ -164,13 +158,25 @@ Application Tagging.
 
 `saml_app_tag` - (Required) x-required (`String`).
 
-### Saml Message Provider Metadata
+### Saml Message Idp
 
-Provide metadata is xml kind of input for Service provider metadata and IDP ..
+including security certificates and endpoints used for single sign-on (SSO). .
 
-`idp_provider_metadata` - (Optional) including security certificates and endpoints used for single sign-on (SSO). (`String`).
+`idp_assert_verification_cert` - (Optional) Used for identity provider's assertion verification . See [Idp Idp Assert Verification Cert ](#idp-idp-assert-verification-cert) below for details.
 
-`service_provider_metadata` - (Optional) Once downloaded, securely send this file to your identity provider so they can complete the federation. (`String`).
+`idp_security_property` - (Required) Identity Provider's Security Property. See [Idp Idp Security Property ](#idp-idp-security-property) below for details.
+
+`issuer` - (Required) and it is used to identify the entity in SAML messages (`String`).
+
+`name` - (Optional) Filled by the internal service which is used to refer the Identity provide (`String`).(Deprecated)
+
+###### One of the arguments from this list "post, redirect" must be set
+
+`post` - (Optional) SSO Service binding as POST request (`Bool`).
+
+`redirect` - (Optional) SSO Service binding as Redirect request (`Bool`).
+
+`sso_url` - (Required) URL required for SSO authentication (`String`).
 
 ### Saml Message Service Provider Properties
 
@@ -220,6 +226,22 @@ x-required.
 
 `no_encrypt_req` - (Optional) Do not encrypt assertions (`Bool`).
 
+### Sign Algo Rsa Sha1
+
+RSA-SHA1.
+
+### Sign Algo Rsa Sha256
+
+RSA-SHA256.
+
+### Sign Algo Rsa Sha384
+
+RSA-SHA384.
+
+### Sign Algo Rsa Sha512
+
+RSA-SHA512.
+
 ### Sign Auth Type Choice No Auth Req
 
 No Authentication is default authentication.
@@ -229,6 +251,14 @@ No Authentication is default authentication.
 Sign Authentication Request, upload certificate for key and certificate..
 
 `certificate` - (Optional) Select/Add one or more TLS Certificate objects to associate with this uztna flow. See [ref](#ref) below for details.
+
+### Sso Service Binding Post
+
+SSO Service binding as POST request.
+
+### Sso Service Binding Redirect
+
+SSO Service binding as Redirect request .
 
 ### Want Encrypted Request Encrypt Req
 

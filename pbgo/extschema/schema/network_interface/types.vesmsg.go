@@ -10307,6 +10307,12 @@ func (m *TunnelInterfaceType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetCloudConnectDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetCloudConnectDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
 	if fdrInfos, err := m.GetNetworkChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetNetworkChoiceDRefInfo() FAILED")
 	} else {
@@ -10327,6 +10333,51 @@ func (m *TunnelInterfaceType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return drInfos, nil
 
+}
+
+func (m *TunnelInterfaceType) GetCloudConnectDRefInfo() ([]db.DRefInfo, error) {
+	refs := m.GetCloudConnect()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("TunnelInterfaceType.cloud_connect[%d] has a nil value", i)
+		}
+		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "cloud_connect.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "cloud_connect",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+
+}
+
+// GetCloudConnectDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *TunnelInterfaceType) GetCloudConnectDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "cloud_connect.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: cloud_connect")
+	}
+	for _, ref := range m.GetCloudConnect() {
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
+	}
+
+	return entries, nil
 }
 
 func (m *TunnelInterfaceType) GetNetworkChoiceDRefInfo() ([]db.DRefInfo, error) {
@@ -10557,6 +10608,54 @@ func (v *ValidateTunnelInterfaceType) PriorityValidationRuleHandler(rules map[st
 	return validatorFn, nil
 }
 
+func (v *ValidateTunnelInterfaceType) CloudConnectValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for cloud_connect")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.ObjectRefType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ves_io_schema.ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for cloud_connect")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema.ObjectRefType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema.ObjectRefType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated cloud_connect")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items cloud_connect")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateTunnelInterfaceType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*TunnelInterfaceType)
 	if !ok {
@@ -10569,6 +10668,14 @@ func (v *ValidateTunnelInterfaceType) Validate(ctx context.Context, pm interface
 	}
 	if m == nil {
 		return nil
+	}
+
+	if fv, exists := v.FldValidators["cloud_connect"]; exists {
+		vOpts := append(opts, db.WithValidateField("cloud_connect"))
+		if err := fv(ctx, m.GetCloudConnect(), vOpts...); err != nil {
+			return err
+		}
+
 	}
 
 	if fv, exists := v.FldValidators["mtu"]; exists {
@@ -10784,6 +10891,17 @@ var DefaultTunnelInterfaceTypeValidator = func() *ValidateTunnelInterfaceType {
 		panic(errMsg)
 	}
 	v.FldValidators["priority"] = vFn
+
+	vrhCloudConnect := v.CloudConnectValidationRuleHandler
+	rulesCloudConnect := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "1",
+	}
+	vFn, err = vrhCloudConnect(rulesCloudConnect)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for TunnelInterfaceType.cloud_connect: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["cloud_connect"] = vFn
 
 	v.FldValidators["network_choice.inside_network"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 

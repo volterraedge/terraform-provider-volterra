@@ -1846,6 +1846,14 @@ type ValidateDetectionSetting struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateDetectionSetting) BotProtectionChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for bot_protection_choice")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidateDetectionSetting) FalsePositiveSuppressionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -1882,6 +1890,42 @@ func (v *ValidateDetectionSetting) Validate(ctx context.Context, pm interface{},
 	}
 	if m == nil {
 		return nil
+	}
+
+	if fv, exists := v.FldValidators["bot_protection_choice"]; exists {
+		val := m.GetBotProtectionChoice()
+		vOpts := append(opts,
+			db.WithValidateField("bot_protection_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetBotProtectionChoice().(type) {
+	case *DetectionSetting_DefaultBotSetting:
+		if fv, exists := v.FldValidators["bot_protection_choice.default_bot_setting"]; exists {
+			val := m.GetBotProtectionChoice().(*DetectionSetting_DefaultBotSetting).DefaultBotSetting
+			vOpts := append(opts,
+				db.WithValidateField("bot_protection_choice"),
+				db.WithValidateField("default_bot_setting"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *DetectionSetting_BotProtectionSetting:
+		if fv, exists := v.FldValidators["bot_protection_choice.bot_protection_setting"]; exists {
+			val := m.GetBotProtectionChoice().(*DetectionSetting_BotProtectionSetting).BotProtectionSetting
+			vOpts := append(opts,
+				db.WithValidateField("bot_protection_choice"),
+				db.WithValidateField("bot_protection_setting"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
 	}
 
 	if fv, exists := v.FldValidators["false_positive_suppression"]; exists {
@@ -2052,6 +2096,17 @@ var DefaultDetectionSettingValidator = func() *ValidateDetectionSetting {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
+
+	vrhBotProtectionChoice := v.BotProtectionChoiceValidationRuleHandler
+	rulesBotProtectionChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhBotProtectionChoice(rulesBotProtectionChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for DetectionSetting.bot_protection_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["bot_protection_choice"] = vFn
 
 	vrhFalsePositiveSuppression := v.FalsePositiveSuppressionValidationRuleHandler
 	rulesFalsePositiveSuppression := map[string]string{

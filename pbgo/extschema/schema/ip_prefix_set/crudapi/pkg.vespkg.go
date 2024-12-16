@@ -29,6 +29,41 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 
+	mdr.RPCDeprecatedRequestFieldsRegistry["ves.io.schema.ip_prefix_set.crudapi.API.Create"] = []string{
+		"spec.gc_spec.ipv6_prefix.#",
+		"spec.gc_spec.prefix.#",
+	}
+
+	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.ip_prefix_set.crudapi.API.Create"] = []string{
+		"spec.gc_spec.ipv6_prefix.#",
+		"spec.gc_spec.prefix.#",
+	}
+
+	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.ip_prefix_set.crudapi.API.Get"] = []string{
+		"spec.gc_spec.ipv6_prefix.#",
+		"spec.gc_spec.prefix.#",
+	}
+
+	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.ip_prefix_set.crudapi.API.List"] = []string{
+		"items.#.spec.gc_spec.ipv6_prefix.#",
+		"items.#.spec.gc_spec.prefix.#",
+	}
+
+	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.ip_prefix_set.crudapi.API.ListStream"] = []string{
+		"items.#.spec.gc_spec.ipv6_prefix.#",
+		"items.#.spec.gc_spec.prefix.#",
+	}
+
+	mdr.RPCDeprecatedRequestFieldsRegistry["ves.io.schema.ip_prefix_set.crudapi.API.Replace"] = []string{
+		"spec.gc_spec.ipv6_prefix.#",
+		"spec.gc_spec.prefix.#",
+	}
+
+	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.ip_prefix_set.crudapi.API.Replace"] = []string{
+		"spec.gc_spec.ipv6_prefix.#",
+		"spec.gc_spec.prefix.#",
+	}
+
 }
 
 func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {

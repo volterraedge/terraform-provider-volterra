@@ -4004,9 +4004,14 @@ var APISwaggerJSON string = `{
                 },
                 "tags": {
                     "type": "object",
-                    "description": " Attachment Tags",
+                    "description": " Attachment Tags\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.max_len: 127\n  ves.io.schema.rules.map.max_pairs: 20\n  ves.io.schema.rules.map.values.string.max_len: 255\n",
                     "title": "Attachment Tags",
-                    "x-displayname": "Attachment Tags"
+                    "x-displayname": "Attachment Tags",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.map.keys.string.max_len": "127",
+                        "ves.io.schema.rules.map.max_pairs": "20",
+                        "ves.io.schema.rules.map.values.string.max_len": "255"
+                    }
                 },
                 "vnet_attachment_id": {
                     "type": "string",
@@ -5346,6 +5351,12 @@ var APISwaggerJSON string = `{
                     "format": "date-time",
                     "x-displayname": "Deletion Timestamp"
                 },
+                "direct_ref_hash": {
+                    "type": "string",
+                    "description": " A hash of the UIDs of  direct references on this object. This can be used to determine if \n this object hash has had references become resolved/unresolved",
+                    "title": "direct_ref_hash",
+                    "x-displayname": "Direct Reference Hash"
+                },
                 "finalizers": {
                     "type": "array",
                     "description": " Must be empty before the object is deleted from the registry. Each entry\n is an identifier for the responsible component that will remove the entry\n from the list. If the deletionTimestamp of the object is non-nil, entries\n in this list can only be removed.\n\nExample: - \"value\"-",
@@ -6400,8 +6411,21 @@ var APISwaggerJSON string = `{
             "description": "Resource group and name of existing Azure Vnet",
             "title": "Azure Existing Vnet Type",
             "x-displayname": "Azure Existing Vnet Type",
+            "x-ves-oneof-field-routing_type": "[\"f5_orchestrated_routing\",\"manual_routing\"]",
             "x-ves-proto-message": "ves.io.schema.views.AzureVnetType",
             "properties": {
+                "f5_orchestrated_routing": {
+                    "description": "Exclusive with [manual_routing]\n F5 will orchestrate required routes for SLO Route Table towards Internet and SLI RT towards the CE.",
+                    "title": "F5 Orchestrated Routing",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "F5 Orchestrated Routing"
+                },
+                "manual_routing": {
+                    "description": "Exclusive with [f5_orchestrated_routing]\n  In this mode, F5 will not create nor alter any route tables or routes within the existing VPCs/Vnets providing better integration for existing environments. ",
+                    "title": "Manual Routing",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Manual Routing"
+                },
                 "resource_group": {
                     "type": "string",
                     "description": " Resource group of existing Vnet\n\nExample: - \"MyResourceGroup\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 64\n  ves.io.schema.rules.string.min_len: 1\n",
@@ -6632,13 +6656,13 @@ var APISwaggerJSON string = `{
                     "description": "Exclusive with [enable_upgrade_drain]\n",
                     "title": "Disable upgrade drain",
                     "$ref": "#/definitions/schemaEmpty",
-                    "x-displayname": "Disable Node by Node Upgrade"
+                    "x-displayname": "Disable"
                 },
                 "enable_upgrade_drain": {
                     "description": "Exclusive with [disable_upgrade_drain]\n",
                     "title": "Enable Node by Node Upgrade",
                     "$ref": "#/definitions/viewsKubernetesUpgradeDrainConfig",
-                    "x-displayname": "Enable Node by Node Upgrade"
+                    "x-displayname": "Enable"
                 }
             }
         },

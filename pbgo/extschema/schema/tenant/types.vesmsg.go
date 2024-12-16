@@ -229,325 +229,6 @@ func CredentialsExpiryValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
-func (m *DeactivateTenantRequest) ToJSON() (string, error) {
-	return codec.ToJSON(m)
-}
-
-func (m *DeactivateTenantRequest) ToYAML() (string, error) {
-	return codec.ToYAML(m)
-}
-
-func (m *DeactivateTenantRequest) DeepCopy() *DeactivateTenantRequest {
-	if m == nil {
-		return nil
-	}
-	ser, err := m.Marshal()
-	if err != nil {
-		return nil
-	}
-	c := &DeactivateTenantRequest{}
-	err = c.Unmarshal(ser)
-	if err != nil {
-		return nil
-	}
-	return c
-}
-
-func (m *DeactivateTenantRequest) DeepCopyProto() proto.Message {
-	if m == nil {
-		return nil
-	}
-	return m.DeepCopy()
-}
-
-func (m *DeactivateTenantRequest) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
-	return DeactivateTenantRequestValidator().Validate(ctx, m, opts...)
-}
-
-type ValidateDeactivateTenantRequest struct {
-	FldValidators map[string]db.ValidatorFunc
-}
-
-func (v *ValidateDeactivateTenantRequest) InitiatorValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for initiator")
-	}
-	return validatorFn, nil
-}
-
-func (v *ValidateDeactivateTenantRequest) InitiatorUserEmailValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	oValidatorFn_UserEmail, err := db.NewStringValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for user_email")
-	}
-	return oValidatorFn_UserEmail, nil
-}
-
-func (v *ValidateDeactivateTenantRequest) TenantIdValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	validatorFn, err := db.NewStringValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for tenant_id")
-	}
-
-	return validatorFn, nil
-}
-
-func (v *ValidateDeactivateTenantRequest) InitiatedViaValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	validatorFn, err := db.NewStringValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for initiated_via")
-	}
-
-	return validatorFn, nil
-}
-
-func (v *ValidateDeactivateTenantRequest) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
-	m, ok := pm.(*DeactivateTenantRequest)
-	if !ok {
-		switch t := pm.(type) {
-		case nil:
-			return nil
-		default:
-			return fmt.Errorf("Expected type *DeactivateTenantRequest got type %s", t)
-		}
-	}
-	if m == nil {
-		return nil
-	}
-
-	if fv, exists := v.FldValidators["feedback"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("feedback"))
-		if err := fv(ctx, m.GetFeedback(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
-	if fv, exists := v.FldValidators["initiated_via"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("initiated_via"))
-		if err := fv(ctx, m.GetInitiatedVia(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
-	if fv, exists := v.FldValidators["initiator"]; exists {
-		val := m.GetInitiator()
-		vOpts := append(opts,
-			db.WithValidateField("initiator"),
-		)
-		if err := fv(ctx, val, vOpts...); err != nil {
-			return err
-		}
-	}
-
-	switch m.GetInitiator().(type) {
-	case *DeactivateTenantRequest_UserEmail:
-		if fv, exists := v.FldValidators["initiator.user_email"]; exists {
-			val := m.GetInitiator().(*DeactivateTenantRequest_UserEmail).UserEmail
-			vOpts := append(opts,
-				db.WithValidateField("initiator"),
-				db.WithValidateField("user_email"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *DeactivateTenantRequest_ExternalId:
-		if fv, exists := v.FldValidators["initiator.external_id"]; exists {
-			val := m.GetInitiator().(*DeactivateTenantRequest_ExternalId).ExternalId
-			vOpts := append(opts,
-				db.WithValidateField("initiator"),
-				db.WithValidateField("external_id"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *DeactivateTenantRequest_Internal:
-		if fv, exists := v.FldValidators["initiator.internal"]; exists {
-			val := m.GetInitiator().(*DeactivateTenantRequest_Internal).Internal
-			vOpts := append(opts,
-				db.WithValidateField("initiator"),
-				db.WithValidateField("internal"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-
-	}
-
-	if fv, exists := v.FldValidators["reason"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("reason"))
-		if err := fv(ctx, m.GetReason(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
-	if fv, exists := v.FldValidators["tenant_id"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("tenant_id"))
-		if err := fv(ctx, m.GetTenantId(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
-	return nil
-}
-
-// Well-known symbol for default validator implementation
-var DefaultDeactivateTenantRequestValidator = func() *ValidateDeactivateTenantRequest {
-	v := &ValidateDeactivateTenantRequest{FldValidators: map[string]db.ValidatorFunc{}}
-
-	var (
-		err error
-		vFn db.ValidatorFunc
-	)
-	_, _ = err, vFn
-	vFnMap := map[string]db.ValidatorFunc{}
-	_ = vFnMap
-
-	vrhInitiator := v.InitiatorValidationRuleHandler
-	rulesInitiator := map[string]string{
-		"ves.io.schema.rules.message.required_oneof": "true",
-	}
-	vFn, err = vrhInitiator(rulesInitiator)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for DeactivateTenantRequest.initiator: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["initiator"] = vFn
-
-	vrhInitiatorUserEmail := v.InitiatorUserEmailValidationRuleHandler
-	rulesInitiatorUserEmail := map[string]string{
-		"ves.io.schema.rules.string.email": "true",
-	}
-	vFnMap["initiator.user_email"], err = vrhInitiatorUserEmail(rulesInitiatorUserEmail)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field DeactivateTenantRequest.initiator_user_email: %s", err)
-		panic(errMsg)
-	}
-
-	v.FldValidators["initiator.user_email"] = vFnMap["initiator.user_email"]
-
-	vrhTenantId := v.TenantIdValidationRuleHandler
-	rulesTenantId := map[string]string{
-		"ves.io.schema.rules.string.min_len": "1",
-	}
-	vFn, err = vrhTenantId(rulesTenantId)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for DeactivateTenantRequest.tenant_id: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["tenant_id"] = vFn
-
-	vrhInitiatedVia := v.InitiatedViaValidationRuleHandler
-	rulesInitiatedVia := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
-	}
-	vFn, err = vrhInitiatedVia(rulesInitiatedVia)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for DeactivateTenantRequest.initiated_via: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["initiated_via"] = vFn
-
-	return v
-}()
-
-func DeactivateTenantRequestValidator() db.Validator {
-	return DefaultDeactivateTenantRequestValidator
-}
-
-// augmented methods on protoc/std generated struct
-
-func (m *DeactivateTenantResponse) ToJSON() (string, error) {
-	return codec.ToJSON(m)
-}
-
-func (m *DeactivateTenantResponse) ToYAML() (string, error) {
-	return codec.ToYAML(m)
-}
-
-func (m *DeactivateTenantResponse) DeepCopy() *DeactivateTenantResponse {
-	if m == nil {
-		return nil
-	}
-	ser, err := m.Marshal()
-	if err != nil {
-		return nil
-	}
-	c := &DeactivateTenantResponse{}
-	err = c.Unmarshal(ser)
-	if err != nil {
-		return nil
-	}
-	return c
-}
-
-func (m *DeactivateTenantResponse) DeepCopyProto() proto.Message {
-	if m == nil {
-		return nil
-	}
-	return m.DeepCopy()
-}
-
-func (m *DeactivateTenantResponse) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
-	return DeactivateTenantResponseValidator().Validate(ctx, m, opts...)
-}
-
-type ValidateDeactivateTenantResponse struct {
-	FldValidators map[string]db.ValidatorFunc
-}
-
-func (v *ValidateDeactivateTenantResponse) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
-	m, ok := pm.(*DeactivateTenantResponse)
-	if !ok {
-		switch t := pm.(type) {
-		case nil:
-			return nil
-		default:
-			return fmt.Errorf("Expected type *DeactivateTenantResponse got type %s", t)
-		}
-	}
-	if m == nil {
-		return nil
-	}
-
-	if fv, exists := v.FldValidators["job_id"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("job_id"))
-		if err := fv(ctx, m.GetJobId(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
-	return nil
-}
-
-// Well-known symbol for default validator implementation
-var DefaultDeactivateTenantResponseValidator = func() *ValidateDeactivateTenantResponse {
-	v := &ValidateDeactivateTenantResponse{FldValidators: map[string]db.ValidatorFunc{}}
-
-	return v
-}()
-
-func DeactivateTenantResponseValidator() db.Validator {
-	return DefaultDeactivateTenantResponseValidator
-}
-
-// augmented methods on protoc/std generated struct
-
 func (m *Empty) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -1455,6 +1136,325 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 func GlobalSpecTypeValidator() db.Validator {
 	return DefaultGlobalSpecTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *PrivateDeactivateTenantRequest) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *PrivateDeactivateTenantRequest) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *PrivateDeactivateTenantRequest) DeepCopy() *PrivateDeactivateTenantRequest {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &PrivateDeactivateTenantRequest{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *PrivateDeactivateTenantRequest) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *PrivateDeactivateTenantRequest) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return PrivateDeactivateTenantRequestValidator().Validate(ctx, m, opts...)
+}
+
+type ValidatePrivateDeactivateTenantRequest struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidatePrivateDeactivateTenantRequest) InitiatorValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for initiator")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidatePrivateDeactivateTenantRequest) InitiatorUserEmailValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_UserEmail, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for user_email")
+	}
+	return oValidatorFn_UserEmail, nil
+}
+
+func (v *ValidatePrivateDeactivateTenantRequest) TenantIdValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for tenant_id")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidatePrivateDeactivateTenantRequest) InitiatedViaValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for initiated_via")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidatePrivateDeactivateTenantRequest) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*PrivateDeactivateTenantRequest)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *PrivateDeactivateTenantRequest got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["feedback"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("feedback"))
+		if err := fv(ctx, m.GetFeedback(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["initiated_via"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("initiated_via"))
+		if err := fv(ctx, m.GetInitiatedVia(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["initiator"]; exists {
+		val := m.GetInitiator()
+		vOpts := append(opts,
+			db.WithValidateField("initiator"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetInitiator().(type) {
+	case *PrivateDeactivateTenantRequest_UserEmail:
+		if fv, exists := v.FldValidators["initiator.user_email"]; exists {
+			val := m.GetInitiator().(*PrivateDeactivateTenantRequest_UserEmail).UserEmail
+			vOpts := append(opts,
+				db.WithValidateField("initiator"),
+				db.WithValidateField("user_email"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *PrivateDeactivateTenantRequest_ExternalId:
+		if fv, exists := v.FldValidators["initiator.external_id"]; exists {
+			val := m.GetInitiator().(*PrivateDeactivateTenantRequest_ExternalId).ExternalId
+			vOpts := append(opts,
+				db.WithValidateField("initiator"),
+				db.WithValidateField("external_id"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *PrivateDeactivateTenantRequest_Internal:
+		if fv, exists := v.FldValidators["initiator.internal"]; exists {
+			val := m.GetInitiator().(*PrivateDeactivateTenantRequest_Internal).Internal
+			vOpts := append(opts,
+				db.WithValidateField("initiator"),
+				db.WithValidateField("internal"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["reason"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("reason"))
+		if err := fv(ctx, m.GetReason(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["tenant_id"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("tenant_id"))
+		if err := fv(ctx, m.GetTenantId(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultPrivateDeactivateTenantRequestValidator = func() *ValidatePrivateDeactivateTenantRequest {
+	v := &ValidatePrivateDeactivateTenantRequest{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhInitiator := v.InitiatorValidationRuleHandler
+	rulesInitiator := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhInitiator(rulesInitiator)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for PrivateDeactivateTenantRequest.initiator: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["initiator"] = vFn
+
+	vrhInitiatorUserEmail := v.InitiatorUserEmailValidationRuleHandler
+	rulesInitiatorUserEmail := map[string]string{
+		"ves.io.schema.rules.string.email": "true",
+	}
+	vFnMap["initiator.user_email"], err = vrhInitiatorUserEmail(rulesInitiatorUserEmail)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field PrivateDeactivateTenantRequest.initiator_user_email: %s", err)
+		panic(errMsg)
+	}
+
+	v.FldValidators["initiator.user_email"] = vFnMap["initiator.user_email"]
+
+	vrhTenantId := v.TenantIdValidationRuleHandler
+	rulesTenantId := map[string]string{
+		"ves.io.schema.rules.string.min_len": "1",
+	}
+	vFn, err = vrhTenantId(rulesTenantId)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for PrivateDeactivateTenantRequest.tenant_id: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["tenant_id"] = vFn
+
+	vrhInitiatedVia := v.InitiatedViaValidationRuleHandler
+	rulesInitiatedVia := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhInitiatedVia(rulesInitiatedVia)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for PrivateDeactivateTenantRequest.initiated_via: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["initiated_via"] = vFn
+
+	return v
+}()
+
+func PrivateDeactivateTenantRequestValidator() db.Validator {
+	return DefaultPrivateDeactivateTenantRequestValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *PrivateDeactivateTenantResponse) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *PrivateDeactivateTenantResponse) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *PrivateDeactivateTenantResponse) DeepCopy() *PrivateDeactivateTenantResponse {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &PrivateDeactivateTenantResponse{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *PrivateDeactivateTenantResponse) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *PrivateDeactivateTenantResponse) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return PrivateDeactivateTenantResponseValidator().Validate(ctx, m, opts...)
+}
+
+type ValidatePrivateDeactivateTenantResponse struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidatePrivateDeactivateTenantResponse) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*PrivateDeactivateTenantResponse)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *PrivateDeactivateTenantResponse got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["job_id"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("job_id"))
+		if err := fv(ctx, m.GetJobId(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultPrivateDeactivateTenantResponseValidator = func() *ValidatePrivateDeactivateTenantResponse {
+	v := &ValidatePrivateDeactivateTenantResponse{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func PrivateDeactivateTenantResponseValidator() db.Validator {
+	return DefaultPrivateDeactivateTenantResponseValidator
 }
 
 // augmented methods on protoc/std generated struct

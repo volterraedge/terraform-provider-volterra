@@ -1874,7 +1874,7 @@ func resourceVolterraServicePolicy() *schema.Resource {
 														},
 													},
 												},
-												
+
 												"tls_fingerprint_matcher": {
 
 													Type:     schema.TypeList,
@@ -2602,188 +2602,187 @@ func resourceVolterraServicePolicyCreate(d *schema.ResourceData, meta interface{
 		createSpec.RuleChoice = ruleChoiceInt
 
 		sl := v.([]interface{})
-			for _, set := range sl {
-				if set != nil {
-					for _, set := range sl {
-						cs := set.(map[string]interface{})
+		for _, set := range sl {
+			if set != nil {
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
 
-						if v, ok := cs["asn_list"]; ok && !isIntfNil(v) {
+					if v, ok := cs["asn_list"]; ok && !isIntfNil(v) {
 
-							sl := v.([]interface{})
-							asnList := &ves_io_schema_policy.AsnMatchList{}
-							ruleChoiceInt.AllowList.AsnList = asnList
-							for _, set := range sl {
-								asnListMapStrToI := set.(map[string]interface{})
+						sl := v.([]interface{})
+						asnList := &ves_io_schema_policy.AsnMatchList{}
+						ruleChoiceInt.AllowList.AsnList = asnList
+						for _, set := range sl {
+							asnListMapStrToI := set.(map[string]interface{})
 
-								if w, ok := asnListMapStrToI["as_numbers"]; ok && !isIntfNil(w) {
-									ls := make([]uint32, len(w.([]interface{})))
-									for i, v := range w.([]interface{}) {
-										ls[i] = uint32(v.(int))
-									}
-									asnList.AsNumbers = ls
+							if w, ok := asnListMapStrToI["as_numbers"]; ok && !isIntfNil(w) {
+								ls := make([]uint32, len(w.([]interface{})))
+								for i, v := range w.([]interface{}) {
+									ls[i] = uint32(v.(int))
 								}
-
+								asnList.AsNumbers = ls
 							}
 
 						}
 
-						if v, ok := cs["asn_set"]; ok && !isIntfNil(v) {
-
-							sl := v.([]interface{})
-							asnSetInt := make([]*ves_io_schema_views.ObjectRefType, len(sl))
-							ruleChoiceInt.AllowList.AsnSet = asnSetInt
-							for i, ps := range sl {
-								if ps != nil {
-
-									asMapToStrVal := ps.(map[string]interface{})
-									asnSetInt[i] = &ves_io_schema_views.ObjectRefType{}
-
-									if v, ok := asMapToStrVal["name"]; ok && !isIntfNil(v) {
-										asnSetInt[i].Name = v.(string)
-									}
-
-									if v, ok := asMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-										asnSetInt[i].Namespace = v.(string)
-									}
-
-									if v, ok := asMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-										asnSetInt[i].Tenant = v.(string)
-									}
-								}
-
-							}
-
-						}
-
-						if v, ok := cs["country_list"]; ok && !isIntfNil(v) {
-
-							country_listList := []ves_io_schema_policy.CountryCode{}
-							for _, j := range v.([]interface{}) {
-								country_listList = append(country_listList, ves_io_schema_policy.CountryCode(ves_io_schema_policy.CountryCode_value[j.(string)]))
-							}
-							ruleChoiceInt.AllowList.CountryList = country_listList
-
-						}
-
-						defaultActionChoiceTypeFound := false
-
-						if v, ok := cs["default_action_allow"]; ok && !isIntfNil(v) && !defaultActionChoiceTypeFound {
-
-							defaultActionChoiceTypeFound = true
-
-							if v.(bool) {
-								defaultActionChoiceInt := &ves_io_schema_service_policy.SourceList_DefaultActionAllow{}
-								defaultActionChoiceInt.DefaultActionAllow = &ves_io_schema.Empty{}
-								ruleChoiceInt.AllowList.DefaultActionChoice = defaultActionChoiceInt
-							}
-
-						}
-
-						if v, ok := cs["default_action_deny"]; ok && !isIntfNil(v) && !defaultActionChoiceTypeFound {
-
-							defaultActionChoiceTypeFound = true
-
-							if v.(bool) {
-								defaultActionChoiceInt := &ves_io_schema_service_policy.SourceList_DefaultActionDeny{}
-								defaultActionChoiceInt.DefaultActionDeny = &ves_io_schema.Empty{}
-								ruleChoiceInt.AllowList.DefaultActionChoice = defaultActionChoiceInt
-							}
-
-						}
-
-						if v, ok := cs["default_action_next_policy"]; ok && !isIntfNil(v) && !defaultActionChoiceTypeFound {
-
-							defaultActionChoiceTypeFound = true
-
-							if v.(bool) {
-								defaultActionChoiceInt := &ves_io_schema_service_policy.SourceList_DefaultActionNextPolicy{}
-								defaultActionChoiceInt.DefaultActionNextPolicy = &ves_io_schema.Empty{}
-								ruleChoiceInt.AllowList.DefaultActionChoice = defaultActionChoiceInt
-							}
-
-						}
-
-						if v, ok := cs["ip_prefix_set"]; ok && !isIntfNil(v) {
-
-							sl := v.([]interface{})
-							ipPrefixSetInt := make([]*ves_io_schema_views.ObjectRefType, len(sl))
-							ruleChoiceInt.AllowList.IpPrefixSet = ipPrefixSetInt
-							for i, ps := range sl {
-								if ps != nil {
-
-									ipsMapToStrVal := ps.(map[string]interface{})
-									ipPrefixSetInt[i] = &ves_io_schema_views.ObjectRefType{}
-
-									if v, ok := ipsMapToStrVal["name"]; ok && !isIntfNil(v) {
-										ipPrefixSetInt[i].Name = v.(string)
-									}
-
-									if v, ok := ipsMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-										ipPrefixSetInt[i].Namespace = v.(string)
-									}
-
-									if v, ok := ipsMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-										ipPrefixSetInt[i].Tenant = v.(string)
-									}
-								}
-
-							}
-
-						}
-
-						if v, ok := cs["prefix_list"]; ok && !isIntfNil(v) {
-
-							sl := v.([]interface{})
-							prefixList := &ves_io_schema_views.PrefixStringListType{}
-							ruleChoiceInt.AllowList.PrefixList = prefixList
-							for _, set := range sl {
-								prefixListMapStrToI := set.(map[string]interface{})
-
-								if w, ok := prefixListMapStrToI["prefixes"]; ok && !isIntfNil(w) {
-									ls := make([]string, len(w.([]interface{})))
-									for i, v := range w.([]interface{}) {
-										ls[i] = v.(string)
-									}
-									prefixList.Prefixes = ls
-								}
-
-								if w, ok := prefixListMapStrToI["ipv6_prefixes"]; ok && !isIntfNil(w) {
-									ls := make([]string, len(w.([]interface{})))
-									for i, v := range w.([]interface{}) {
-										ls[i] = v.(string)
-									}
-									prefixList.Ipv6Prefixes = ls
-								}
-
-							}
-
-						}
-
-						if v, ok := cs["tls_fingerprint_classes"]; ok && !isIntfNil(v) {
-
-							tls_fingerprint_classesList := []ves_io_schema_policy.KnownTlsFingerprintClass{}
-							for _, j := range v.([]interface{}) {
-								tls_fingerprint_classesList = append(tls_fingerprint_classesList, ves_io_schema_policy.KnownTlsFingerprintClass(ves_io_schema_policy.KnownTlsFingerprintClass_value[j.(string)]))
-							}
-							ruleChoiceInt.AllowList.TlsFingerprintClasses = tls_fingerprint_classesList
-
-						}
-
-						if v, ok := cs["tls_fingerprint_values"]; ok && !isIntfNil(v) {
-
-							ls := make([]string, len(v.([]interface{})))
-							for i, v := range v.([]interface{}) {
-								ls[i] = v.(string)
-							}
-							ruleChoiceInt.AllowList.TlsFingerprintValues = ls
-
-						}
 					}
 
-		        }
+					if v, ok := cs["asn_set"]; ok && !isIntfNil(v) {
+
+						sl := v.([]interface{})
+						asnSetInt := make([]*ves_io_schema_views.ObjectRefType, len(sl))
+						ruleChoiceInt.AllowList.AsnSet = asnSetInt
+						for i, ps := range sl {
+							if ps != nil {
+
+								asMapToStrVal := ps.(map[string]interface{})
+								asnSetInt[i] = &ves_io_schema_views.ObjectRefType{}
+
+								if v, ok := asMapToStrVal["name"]; ok && !isIntfNil(v) {
+									asnSetInt[i].Name = v.(string)
+								}
+
+								if v, ok := asMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+									asnSetInt[i].Namespace = v.(string)
+								}
+
+								if v, ok := asMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+									asnSetInt[i].Tenant = v.(string)
+								}
+							}
+
+						}
+
+					}
+
+					if v, ok := cs["country_list"]; ok && !isIntfNil(v) {
+
+						country_listList := []ves_io_schema_policy.CountryCode{}
+						for _, j := range v.([]interface{}) {
+							country_listList = append(country_listList, ves_io_schema_policy.CountryCode(ves_io_schema_policy.CountryCode_value[j.(string)]))
+						}
+						ruleChoiceInt.AllowList.CountryList = country_listList
+
+					}
+
+					defaultActionChoiceTypeFound := false
+
+					if v, ok := cs["default_action_allow"]; ok && !isIntfNil(v) && !defaultActionChoiceTypeFound {
+
+						defaultActionChoiceTypeFound = true
+
+						if v.(bool) {
+							defaultActionChoiceInt := &ves_io_schema_service_policy.SourceList_DefaultActionAllow{}
+							defaultActionChoiceInt.DefaultActionAllow = &ves_io_schema.Empty{}
+							ruleChoiceInt.AllowList.DefaultActionChoice = defaultActionChoiceInt
+						}
+
+					}
+
+					if v, ok := cs["default_action_deny"]; ok && !isIntfNil(v) && !defaultActionChoiceTypeFound {
+
+						defaultActionChoiceTypeFound = true
+
+						if v.(bool) {
+							defaultActionChoiceInt := &ves_io_schema_service_policy.SourceList_DefaultActionDeny{}
+							defaultActionChoiceInt.DefaultActionDeny = &ves_io_schema.Empty{}
+							ruleChoiceInt.AllowList.DefaultActionChoice = defaultActionChoiceInt
+						}
+
+					}
+
+					if v, ok := cs["default_action_next_policy"]; ok && !isIntfNil(v) && !defaultActionChoiceTypeFound {
+
+						defaultActionChoiceTypeFound = true
+
+						if v.(bool) {
+							defaultActionChoiceInt := &ves_io_schema_service_policy.SourceList_DefaultActionNextPolicy{}
+							defaultActionChoiceInt.DefaultActionNextPolicy = &ves_io_schema.Empty{}
+							ruleChoiceInt.AllowList.DefaultActionChoice = defaultActionChoiceInt
+						}
+
+					}
+
+					if v, ok := cs["ip_prefix_set"]; ok && !isIntfNil(v) {
+
+						sl := v.([]interface{})
+						ipPrefixSetInt := make([]*ves_io_schema_views.ObjectRefType, len(sl))
+						ruleChoiceInt.AllowList.IpPrefixSet = ipPrefixSetInt
+						for i, ps := range sl {
+							if ps != nil {
+
+								ipsMapToStrVal := ps.(map[string]interface{})
+								ipPrefixSetInt[i] = &ves_io_schema_views.ObjectRefType{}
+
+								if v, ok := ipsMapToStrVal["name"]; ok && !isIntfNil(v) {
+									ipPrefixSetInt[i].Name = v.(string)
+								}
+
+								if v, ok := ipsMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+									ipPrefixSetInt[i].Namespace = v.(string)
+								}
+
+								if v, ok := ipsMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+									ipPrefixSetInt[i].Tenant = v.(string)
+								}
+							}
+
+						}
+
+					}
+
+					if v, ok := cs["prefix_list"]; ok && !isIntfNil(v) {
+
+						sl := v.([]interface{})
+						prefixList := &ves_io_schema_views.PrefixStringListType{}
+						ruleChoiceInt.AllowList.PrefixList = prefixList
+						for _, set := range sl {
+							prefixListMapStrToI := set.(map[string]interface{})
+
+							if w, ok := prefixListMapStrToI["prefixes"]; ok && !isIntfNil(w) {
+								ls := make([]string, len(w.([]interface{})))
+								for i, v := range w.([]interface{}) {
+									ls[i] = v.(string)
+								}
+								prefixList.Prefixes = ls
+							}
+
+							if w, ok := prefixListMapStrToI["ipv6_prefixes"]; ok && !isIntfNil(w) {
+								ls := make([]string, len(w.([]interface{})))
+								for i, v := range w.([]interface{}) {
+									ls[i] = v.(string)
+								}
+								prefixList.Ipv6Prefixes = ls
+							}
+
+						}
+
+					}
+
+					if v, ok := cs["tls_fingerprint_classes"]; ok && !isIntfNil(v) {
+
+						tls_fingerprint_classesList := []ves_io_schema_policy.KnownTlsFingerprintClass{}
+						for _, j := range v.([]interface{}) {
+							tls_fingerprint_classesList = append(tls_fingerprint_classesList, ves_io_schema_policy.KnownTlsFingerprintClass(ves_io_schema_policy.KnownTlsFingerprintClass_value[j.(string)]))
+						}
+						ruleChoiceInt.AllowList.TlsFingerprintClasses = tls_fingerprint_classesList
+
+					}
+
+					if v, ok := cs["tls_fingerprint_values"]; ok && !isIntfNil(v) {
+
+						ls := make([]string, len(v.([]interface{})))
+						for i, v := range v.([]interface{}) {
+							ls[i] = v.(string)
+						}
+						ruleChoiceInt.AllowList.TlsFingerprintValues = ls
+
+					}
+				}
+
 			}
+		}
 	}
-	
 
 	if v, ok := d.GetOk("deny_all_requests"); ok && !ruleChoiceTypeFound {
 
@@ -2982,7 +2981,6 @@ func resourceVolterraServicePolicyCreate(d *schema.ResourceData, meta interface{
 				}
 			}
 
-
 		}
 
 	}
@@ -3145,7 +3143,7 @@ func resourceVolterraServicePolicyCreate(d *schema.ResourceData, meta interface{
 									argMatchers := make([]*ves_io_schema_policy.ArgMatcherType, len(sl))
 									spec.ArgMatchers = argMatchers
 									for i, set := range sl {
-									
+
 										argMatchers[i] = &ves_io_schema_policy.ArgMatcherType{}
 										argMatchersMapStrToI := set.(map[string]interface{})
 
@@ -3190,7 +3188,7 @@ func resourceVolterraServicePolicyCreate(d *schema.ResourceData, meta interface{
 											for _, set := range sl {
 
 												if set != nil {
-													
+
 													cs := set.(map[string]interface{})
 
 													if v, ok := cs["exact_values"]; ok && !isIntfNil(v) {
@@ -3242,7 +3240,6 @@ func resourceVolterraServicePolicyCreate(d *schema.ResourceData, meta interface{
 										if w, ok := argMatchersMapStrToI["name"]; ok && !isIntfNil(w) {
 											argMatchers[i].Name = w.(string)
 										}
-									
 
 									}
 
@@ -3295,7 +3292,7 @@ func resourceVolterraServicePolicyCreate(d *schema.ResourceData, meta interface{
 									spec.AsnChoice = asnChoiceInt
 
 									sl := v.([]interface{})
-									for _, set := range sl {	
+									for _, set := range sl {
 										cs := set.(map[string]interface{})
 
 										if v, ok := cs["asn_sets"]; ok && !isIntfNil(v) {
@@ -3331,7 +3328,6 @@ func resourceVolterraServicePolicyCreate(d *schema.ResourceData, meta interface{
 											}
 
 										}
-									
 
 									}
 
@@ -3385,7 +3381,7 @@ func resourceVolterraServicePolicyCreate(d *schema.ResourceData, meta interface{
 									spec.BotAction = botAction
 									for _, set := range sl {
 										if set != nil {
-												
+
 											botActionMapStrToI := set.(map[string]interface{})
 
 											actionTypeTypeFound := false
@@ -3490,7 +3486,7 @@ func resourceVolterraServicePolicyCreate(d *schema.ResourceData, meta interface{
 									sl := v.([]interface{})
 									for _, set := range sl {
 										if set != nil {
-												
+
 											cs := set.(map[string]interface{})
 
 											if v, ok := cs["exact_values"]; ok && !isIntfNil(v) {
@@ -3585,7 +3581,7 @@ func resourceVolterraServicePolicyCreate(d *schema.ResourceData, meta interface{
 									spec.ClientRole = clientRole
 									for _, set := range sl {
 										if set != nil {
-											
+
 											clientRoleMapStrToI := set.(map[string]interface{})
 
 											if w, ok := clientRoleMapStrToI["match"]; ok && !isIntfNil(w) {
@@ -3644,102 +3640,101 @@ func resourceVolterraServicePolicyCreate(d *schema.ResourceData, meta interface{
 									spec.CookieMatchers = cookieMatchers
 									for i, set := range sl {
 
-									cookieMatchers[i] = &ves_io_schema_policy.CookieMatcherType{}
-									cookieMatchersMapStrToI := set.(map[string]interface{})
+										cookieMatchers[i] = &ves_io_schema_policy.CookieMatcherType{}
+										cookieMatchersMapStrToI := set.(map[string]interface{})
 
-									if w, ok := cookieMatchersMapStrToI["invert_matcher"]; ok && !isIntfNil(w) {
-										cookieMatchers[i].InvertMatcher = w.(bool)
-									}
-
-									matchTypeFound := false
-
-									if v, ok := cookieMatchersMapStrToI["check_not_present"]; ok && !isIntfNil(v) && !matchTypeFound {
-
-										matchTypeFound = true
-
-										if v.(bool) {
-											matchInt := &ves_io_schema_policy.CookieMatcherType_CheckNotPresent{}
-											matchInt.CheckNotPresent = &ves_io_schema.Empty{}
-											cookieMatchers[i].Match = matchInt
+										if w, ok := cookieMatchersMapStrToI["invert_matcher"]; ok && !isIntfNil(w) {
+											cookieMatchers[i].InvertMatcher = w.(bool)
 										}
 
-									}
+										matchTypeFound := false
 
-									if v, ok := cookieMatchersMapStrToI["check_present"]; ok && !isIntfNil(v) && !matchTypeFound {
+										if v, ok := cookieMatchersMapStrToI["check_not_present"]; ok && !isIntfNil(v) && !matchTypeFound {
 
-										matchTypeFound = true
+											matchTypeFound = true
 
-										if v.(bool) {
-											matchInt := &ves_io_schema_policy.CookieMatcherType_CheckPresent{}
-											matchInt.CheckPresent = &ves_io_schema.Empty{}
-											cookieMatchers[i].Match = matchInt
-										}
-
-									}
-
-									if v, ok := cookieMatchersMapStrToI["item"]; ok && !isIntfNil(v) && !matchTypeFound {
-
-										matchTypeFound = true
-										matchInt := &ves_io_schema_policy.CookieMatcherType_Item{}
-										matchInt.Item = &ves_io_schema_policy.MatcherType{}
-										cookieMatchers[i].Match = matchInt
-
-										sl := v.([]interface{})
-										for _, set := range sl {
-											if set != nil {
-													
-												cs := set.(map[string]interface{})
-
-												if v, ok := cs["exact_values"]; ok && !isIntfNil(v) {
-
-													ls := make([]string, len(v.([]interface{})))
-													for i, v := range v.([]interface{}) {
-														ls[i] = v.(string)
-													}
-													matchInt.Item.ExactValues = ls
-
-												}
-
-												if v, ok := cs["regex_values"]; ok && !isIntfNil(v) {
-
-													ls := make([]string, len(v.([]interface{})))
-													for i, v := range v.([]interface{}) {
-														ls[i] = v.(string)
-													}
-													matchInt.Item.RegexValues = ls
-
-												}
-
-												if v, ok := cs["transformers"]; ok && !isIntfNil(v) {
-
-													transformersList := []ves_io_schema_policy.Transformer{}
-													for _, j := range v.([]interface{}) {
-														transformersList = append(transformersList, ves_io_schema_policy.Transformer(ves_io_schema_policy.Transformer_value[j.(string)]))
-													}
-													matchInt.Item.Transformers = transformersList
-
-												}
+											if v.(bool) {
+												matchInt := &ves_io_schema_policy.CookieMatcherType_CheckNotPresent{}
+												matchInt.CheckNotPresent = &ves_io_schema.Empty{}
+												cookieMatchers[i].Match = matchInt
 											}
 
 										}
 
-									}
+										if v, ok := cookieMatchersMapStrToI["check_present"]; ok && !isIntfNil(v) && !matchTypeFound {
 
-									if v, ok := cookieMatchersMapStrToI["presence"]; ok && !isIntfNil(v) && !matchTypeFound {
+											matchTypeFound = true
 
-										matchTypeFound = true
-										matchInt := &ves_io_schema_policy.CookieMatcherType_Presence{}
+											if v.(bool) {
+												matchInt := &ves_io_schema_policy.CookieMatcherType_CheckPresent{}
+												matchInt.CheckPresent = &ves_io_schema.Empty{}
+												cookieMatchers[i].Match = matchInt
+											}
 
-										cookieMatchers[i].Match = matchInt
+										}
 
-										matchInt.Presence = v.(bool)
+										if v, ok := cookieMatchersMapStrToI["item"]; ok && !isIntfNil(v) && !matchTypeFound {
 
-									}
+											matchTypeFound = true
+											matchInt := &ves_io_schema_policy.CookieMatcherType_Item{}
+											matchInt.Item = &ves_io_schema_policy.MatcherType{}
+											cookieMatchers[i].Match = matchInt
 
-									if w, ok := cookieMatchersMapStrToI["name"]; ok && !isIntfNil(w) {
-										cookieMatchers[i].Name = w.(string)
-									}
-								
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["exact_values"]; ok && !isIntfNil(v) {
+
+														ls := make([]string, len(v.([]interface{})))
+														for i, v := range v.([]interface{}) {
+															ls[i] = v.(string)
+														}
+														matchInt.Item.ExactValues = ls
+
+													}
+
+													if v, ok := cs["regex_values"]; ok && !isIntfNil(v) {
+
+														ls := make([]string, len(v.([]interface{})))
+														for i, v := range v.([]interface{}) {
+															ls[i] = v.(string)
+														}
+														matchInt.Item.RegexValues = ls
+
+													}
+
+													if v, ok := cs["transformers"]; ok && !isIntfNil(v) {
+
+														transformersList := []ves_io_schema_policy.Transformer{}
+														for _, j := range v.([]interface{}) {
+															transformersList = append(transformersList, ves_io_schema_policy.Transformer(ves_io_schema_policy.Transformer_value[j.(string)]))
+														}
+														matchInt.Item.Transformers = transformersList
+
+													}
+												}
+
+											}
+
+										}
+
+										if v, ok := cookieMatchersMapStrToI["presence"]; ok && !isIntfNil(v) && !matchTypeFound {
+
+											matchTypeFound = true
+											matchInt := &ves_io_schema_policy.CookieMatcherType_Presence{}
+
+											cookieMatchers[i].Match = matchInt
+
+											matchInt.Presence = v.(bool)
+
+										}
+
+										if w, ok := cookieMatchersMapStrToI["name"]; ok && !isIntfNil(w) {
+											cookieMatchers[i].Name = w.(string)
+										}
 
 									}
 
@@ -3752,7 +3747,7 @@ func resourceVolterraServicePolicyCreate(d *schema.ResourceData, meta interface{
 									spec.DomainMatcher = domainMatcher
 									for _, set := range sl {
 										if set != nil {
-											
+
 											domainMatcherMapStrToI := set.(map[string]interface{})
 
 											if w, ok := domainMatcherMapStrToI["exact_values"]; ok && !isIntfNil(w) {
@@ -3834,7 +3829,7 @@ func resourceVolterraServicePolicyCreate(d *schema.ResourceData, meta interface{
 
 									sl := v.([]interface{})
 									for _, set := range sl {
-												
+
 										cs := set.(map[string]interface{})
 
 										if v, ok := cs["asn_sets"]; ok && !isIntfNil(v) {
@@ -3870,7 +3865,6 @@ func resourceVolterraServicePolicyCreate(d *schema.ResourceData, meta interface{
 											}
 
 										}
-										
 
 									}
 
@@ -3899,7 +3893,7 @@ func resourceVolterraServicePolicyCreate(d *schema.ResourceData, meta interface{
 
 									sl := v.([]interface{})
 									for _, set := range sl {
-											
+
 										cs := set.(map[string]interface{})
 
 										if v, ok := cs["invert_matcher"]; ok && !isIntfNil(v) {
@@ -3941,7 +3935,6 @@ func resourceVolterraServicePolicyCreate(d *schema.ResourceData, meta interface{
 											}
 
 										}
-									
 
 									}
 
@@ -4068,7 +4061,7 @@ func resourceVolterraServicePolicyCreate(d *schema.ResourceData, meta interface{
 									headers := make([]*ves_io_schema_policy.HeaderMatcherType, len(sl))
 									spec.Headers = headers
 									for i, set := range sl {
-									
+
 										headers[i] = &ves_io_schema_policy.HeaderMatcherType{}
 										headersMapStrToI := set.(map[string]interface{})
 
@@ -4164,7 +4157,6 @@ func resourceVolterraServicePolicyCreate(d *schema.ResourceData, meta interface{
 											headers[i].Name = w.(string)
 										}
 
-									
 									}
 
 								}
@@ -4263,7 +4255,6 @@ func resourceVolterraServicePolicyCreate(d *schema.ResourceData, meta interface{
 											}
 
 										}
-									
 
 									}
 
@@ -4279,7 +4270,7 @@ func resourceVolterraServicePolicyCreate(d *schema.ResourceData, meta interface{
 									sl := v.([]interface{})
 									for _, set := range sl {
 										if set != nil {
-												
+
 											cs := set.(map[string]interface{})
 
 											if v, ok := cs["invert_match"]; ok && !isIntfNil(v) {
@@ -4845,7 +4836,7 @@ func resourceVolterraServicePolicyCreate(d *schema.ResourceData, meta interface{
 
 								tlsFingerprintChoiceTypeFound := false
 
-								if v, ok :=  specMapStrToI["ja4_tls_fingerprint"]; ok && !isIntfNil(v) && !tlsFingerprintChoiceTypeFound {
+								if v, ok := specMapStrToI["ja4_tls_fingerprint"]; ok && !isIntfNil(v) && !tlsFingerprintChoiceTypeFound {
 
 									tlsFingerprintChoiceTypeFound = true
 									tlsFingerprintChoiceInt := &ves_io_schema_service_policy_rule.GlobalSpecType_Ja4TlsFingerprint{}
@@ -4928,7 +4919,7 @@ func resourceVolterraServicePolicyCreate(d *schema.ResourceData, meta interface{
 									spec.UrlMatcher = urlMatcher
 									for _, set := range sl {
 										if set != nil {
-												
+
 											urlMatcherMapStrToI := set.(map[string]interface{})
 
 											if w, ok := urlMatcherMapStrToI["invert_matcher"]; ok && !isIntfNil(w) {
@@ -5062,8 +5053,7 @@ func resourceVolterraServicePolicyCreate(d *schema.ResourceData, meta interface{
 									spec.WafAction = wafAction
 									for _, set := range sl {
 										if set != nil {
-											
-										
+
 											wafActionMapStrToI := set.(map[string]interface{})
 
 											actionTypeTypeFound := false
@@ -5078,8 +5068,7 @@ func resourceVolterraServicePolicyCreate(d *schema.ResourceData, meta interface{
 												sl := v.([]interface{})
 												for _, set := range sl {
 													if set != nil {
-															
-														
+
 														cs := set.(map[string]interface{})
 
 														if v, ok := cs["exclude_attack_type_contexts"]; ok && !isIntfNil(v) {
@@ -5233,7 +5222,6 @@ func resourceVolterraServicePolicyCreate(d *schema.ResourceData, meta interface{
 
 											}
 										}
-									
 
 									}
 
@@ -5770,13 +5758,12 @@ func resourceVolterraServicePolicyCreate(d *schema.ResourceData, meta interface{
 											}
 										}
 									}
-								
 
-							}
+								}
 							}
 
 						}
-					
+
 					}
 
 				}
@@ -6030,7 +6017,7 @@ func resourceVolterraServicePolicyUpdate(d *schema.ResourceData, meta interface{
 		sl := v.([]interface{})
 		for _, set := range sl {
 			if set != nil {
-				
+
 				cs := set.(map[string]interface{})
 
 				if v, ok := cs["asn_list"]; ok && !isIntfNil(v) {
@@ -6060,7 +6047,7 @@ func resourceVolterraServicePolicyUpdate(d *schema.ResourceData, meta interface{
 					ruleChoiceInt.AllowList.AsnSet = asnSetInt
 					for i, ps := range sl {
 						if ps != nil {
-								
+
 							asMapToStrVal := ps.(map[string]interface{})
 							asnSetInt[i] = &ves_io_schema_views.ObjectRefType{}
 
@@ -6206,7 +6193,7 @@ func resourceVolterraServicePolicyUpdate(d *schema.ResourceData, meta interface{
 				}
 
 			}
-	}
+		}
 
 	}
 
@@ -6484,7 +6471,7 @@ func resourceVolterraServicePolicyUpdate(d *schema.ResourceData, meta interface{
 		sl := v.([]interface{})
 		for _, set := range sl {
 			if set != nil {
-					
+
 				cs := set.(map[string]interface{})
 
 				if v, ok := cs["rules"]; ok && !isIntfNil(v) {
@@ -6529,7 +6516,7 @@ func resourceVolterraServicePolicyUpdate(d *schema.ResourceData, meta interface{
 							spec := &ves_io_schema_service_policy_rule.GlobalSpecType{}
 							rules[i].Spec = spec
 							for _, set := range sl {
-							
+
 								specMapStrToI := set.(map[string]interface{})
 
 								if v, ok := specMapStrToI["action"]; ok && !isIntfNil(v) {
@@ -6568,7 +6555,7 @@ func resourceVolterraServicePolicyUpdate(d *schema.ResourceData, meta interface{
 									argMatchers := make([]*ves_io_schema_policy.ArgMatcherType, len(sl))
 									spec.ArgMatchers = argMatchers
 									for i, set := range sl {
-									
+
 										argMatchers[i] = &ves_io_schema_policy.ArgMatcherType{}
 										argMatchersMapStrToI := set.(map[string]interface{})
 
@@ -6663,7 +6650,6 @@ func resourceVolterraServicePolicyUpdate(d *schema.ResourceData, meta interface{
 										if w, ok := argMatchersMapStrToI["name"]; ok && !isIntfNil(w) {
 											argMatchers[i].Name = w.(string)
 										}
-									
 
 									}
 
@@ -6717,7 +6703,7 @@ func resourceVolterraServicePolicyUpdate(d *schema.ResourceData, meta interface{
 
 									sl := v.([]interface{})
 									for _, set := range sl {
-									
+
 										cs := set.(map[string]interface{})
 
 										if v, ok := cs["asn_sets"]; ok && !isIntfNil(v) {
@@ -6753,7 +6739,6 @@ func resourceVolterraServicePolicyUpdate(d *schema.ResourceData, meta interface{
 											}
 
 										}
-									
 
 									}
 
@@ -7062,7 +7047,7 @@ func resourceVolterraServicePolicyUpdate(d *schema.ResourceData, meta interface{
 									cookieMatchers := make([]*ves_io_schema_policy.CookieMatcherType, len(sl))
 									spec.CookieMatchers = cookieMatchers
 									for i, set := range sl {
-									
+
 										cookieMatchers[i] = &ves_io_schema_policy.CookieMatcherType{}
 										cookieMatchersMapStrToI := set.(map[string]interface{})
 
@@ -7157,7 +7142,6 @@ func resourceVolterraServicePolicyUpdate(d *schema.ResourceData, meta interface{
 										if w, ok := cookieMatchersMapStrToI["name"]; ok && !isIntfNil(w) {
 											cookieMatchers[i].Name = w.(string)
 										}
-									
 
 									}
 
@@ -7286,7 +7270,7 @@ func resourceVolterraServicePolicyUpdate(d *schema.ResourceData, meta interface{
 											}
 
 										}
-								
+
 									}
 
 								}
@@ -7314,7 +7298,7 @@ func resourceVolterraServicePolicyUpdate(d *schema.ResourceData, meta interface{
 
 									sl := v.([]interface{})
 									for _, set := range sl {
-											
+
 										cs := set.(map[string]interface{})
 
 										if v, ok := cs["invert_matcher"]; ok && !isIntfNil(v) {
@@ -7356,7 +7340,6 @@ func resourceVolterraServicePolicyUpdate(d *schema.ResourceData, meta interface{
 											}
 
 										}
-									
 
 									}
 
@@ -7483,7 +7466,7 @@ func resourceVolterraServicePolicyUpdate(d *schema.ResourceData, meta interface{
 									headers := make([]*ves_io_schema_policy.HeaderMatcherType, len(sl))
 									spec.Headers = headers
 									for i, set := range sl {
-									
+
 										headers[i] = &ves_io_schema_policy.HeaderMatcherType{}
 										headersMapStrToI := set.(map[string]interface{})
 
@@ -7578,7 +7561,6 @@ func resourceVolterraServicePolicyUpdate(d *schema.ResourceData, meta interface{
 										if w, ok := headersMapStrToI["name"]; ok && !isIntfNil(w) {
 											headers[i].Name = w.(string)
 										}
-									
 
 									}
 
@@ -7591,7 +7573,7 @@ func resourceVolterraServicePolicyUpdate(d *schema.ResourceData, meta interface{
 									spec.HttpMethod = httpMethod
 									for _, set := range sl {
 										if set != nil {
-												
+
 											httpMethodMapStrToI := set.(map[string]interface{})
 
 											if w, ok := httpMethodMapStrToI["invert_matcher"]; ok && !isIntfNil(w) {
@@ -7636,7 +7618,7 @@ func resourceVolterraServicePolicyUpdate(d *schema.ResourceData, meta interface{
 
 									sl := v.([]interface{})
 									for _, set := range sl {
-									
+
 										cs := set.(map[string]interface{})
 
 										if v, ok := cs["invert_matcher"]; ok && !isIntfNil(v) {
@@ -7678,7 +7660,6 @@ func resourceVolterraServicePolicyUpdate(d *schema.ResourceData, meta interface{
 											}
 
 										}
-									
 
 									}
 
@@ -7805,7 +7786,7 @@ func resourceVolterraServicePolicyUpdate(d *schema.ResourceData, meta interface{
 											}
 
 										}
-								}
+									}
 
 								}
 
@@ -7946,27 +7927,27 @@ func resourceVolterraServicePolicyUpdate(d *schema.ResourceData, meta interface{
 									for i, ps := range sl {
 										if ps != nil {
 
-										rlMapToStrVal := ps.(map[string]interface{})
-										rateLimiterInt[i] = &ves_io_schema.ObjectRefType{}
+											rlMapToStrVal := ps.(map[string]interface{})
+											rateLimiterInt[i] = &ves_io_schema.ObjectRefType{}
 
-										rateLimiterInt[i].Kind = "rate_limiter"
+											rateLimiterInt[i].Kind = "rate_limiter"
 
-										if v, ok := rlMapToStrVal["name"]; ok && !isIntfNil(v) {
-											rateLimiterInt[i].Name = v.(string)
+											if v, ok := rlMapToStrVal["name"]; ok && !isIntfNil(v) {
+												rateLimiterInt[i].Name = v.(string)
+											}
+
+											if v, ok := rlMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+												rateLimiterInt[i].Namespace = v.(string)
+											}
+
+											if v, ok := rlMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+												rateLimiterInt[i].Tenant = v.(string)
+											}
+
+											if v, ok := rlMapToStrVal["uid"]; ok && !isIntfNil(v) {
+												rateLimiterInt[i].Uid = v.(string)
+											}
 										}
-
-										if v, ok := rlMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-											rateLimiterInt[i].Namespace = v.(string)
-										}
-
-										if v, ok := rlMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-											rateLimiterInt[i].Tenant = v.(string)
-										}
-
-										if v, ok := rlMapToStrVal["uid"]; ok && !isIntfNil(v) {
-											rateLimiterInt[i].Uid = v.(string)
-										}
-									}
 
 									}
 
@@ -8242,7 +8223,7 @@ func resourceVolterraServicePolicyUpdate(d *schema.ResourceData, meta interface{
 													}
 
 												}
-										}
+											}
 
 										}
 
@@ -8258,7 +8239,7 @@ func resourceVolterraServicePolicyUpdate(d *schema.ResourceData, meta interface{
 
 								tlsFingerprintChoiceTypeFound := false
 
-								if v, ok :=  specMapStrToI["ja4_tls_fingerprint"]; ok && !isIntfNil(v) && !tlsFingerprintChoiceTypeFound {
+								if v, ok := specMapStrToI["ja4_tls_fingerprint"]; ok && !isIntfNil(v) && !tlsFingerprintChoiceTypeFound {
 
 									tlsFingerprintChoiceTypeFound = true
 									tlsFingerprintChoiceInt := &ves_io_schema_service_policy_rule.GlobalSpecType_Ja4TlsFingerprint{}
@@ -8472,7 +8453,7 @@ func resourceVolterraServicePolicyUpdate(d *schema.ResourceData, meta interface{
 									spec.WafAction = wafAction
 									for _, set := range sl {
 										if set != nil {
-										
+
 											wafActionMapStrToI := set.(map[string]interface{})
 
 											actionTypeTypeFound := false
@@ -8640,7 +8621,6 @@ func resourceVolterraServicePolicyUpdate(d *schema.ResourceData, meta interface{
 
 											}
 										}
-									
 
 									}
 
@@ -8732,12 +8712,11 @@ func resourceVolterraServicePolicyUpdate(d *schema.ResourceData, meta interface{
 
 												}
 
-
 											}
 
 											if w, ok := jwtClaimsMapStrToI["name"]; ok && !isIntfNil(w) {
 												jwtClaims[i].Name = w.(string)
-												
+
 											}
 										}
 
@@ -9145,7 +9124,7 @@ func resourceVolterraServicePolicyUpdate(d *schema.ResourceData, meta interface{
 												srcSegments.SrcSegments = &ves_io_schema_views.SegmentRefList{}
 												segmentChoice.SrcSegmentChoice = srcSegments
 												for _, set := range sl {
-														if set != nil {
+													if set != nil {
 														srcSegmentMapStrToI := set.(map[string]interface{})
 														if w, ok := srcSegmentMapStrToI["segments"]; ok && !isIntfNil(w) {
 															sl := w.([]interface{})
@@ -9181,17 +9160,15 @@ func resourceVolterraServicePolicyUpdate(d *schema.ResourceData, meta interface{
 									}
 								}
 
-							
-						}
+							}
 
 						}
 					}
-				
 
 				}
 
 			}
-	}
+		}
 
 	}
 

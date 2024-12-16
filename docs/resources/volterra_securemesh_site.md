@@ -1,9 +1,9 @@
 ---
 
 page_title: "Volterra: securemesh_site"
-description: "The securemesh_site allows CRUD of Securemesh Site resource on Volterra SaaS"
 
----
+description: "The securemesh_site allows CRUD of Securemesh Site resource on Volterra SaaS"
+-------------------------------------------------------------------------------------------
 
 Resource volterra_securemesh_site
 =================================
@@ -30,11 +30,7 @@ resource "volterra_securemesh_site" "example" {
 
   // One of the arguments from this list "log_receiver logs_streaming_disabled" must be set
 
-  log_receiver {
-    name      = "test1"
-    namespace = "staging"
-    tenant    = "acmecorp"
-  }
+  logs_streaming_disabled = true
   master_node_configuration {
     name = "master-0"
 
@@ -126,9 +122,9 @@ Enable Kubernetes Drain during OS or SW upgrade.
 
 ###### One of the arguments from this list "disable_upgrade_drain, enable_upgrade_drain" must be set
 
-`disable_upgrade_drain` - (Optional) x-displayName: "Disable Node by Node Upgrade" (`Bool`).
+`disable_upgrade_drain` - (Optional) x-displayName: "Disable" (`Bool`).
 
-`enable_upgrade_drain` - (Optional) x-displayName: "Enable Node by Node Upgrade". See [Kubernetes Upgrade Drain Enable Choice Enable Upgrade Drain ](#kubernetes-upgrade-drain-enable-choice-enable-upgrade-drain) below for details.
+`enable_upgrade_drain` - (Optional) x-displayName: "Enable". See [Kubernetes Upgrade Drain Enable Choice Enable Upgrade Drain ](#kubernetes-upgrade-drain-enable-choice-enable-upgrade-drain) below for details.
 
 ### Master Node Configuration
 
@@ -748,11 +744,11 @@ Interface IP is configured statically.
 
 ### Kubernetes Upgrade Drain Enable Choice Disable Upgrade Drain
 
-x-displayName: "Disable Node by Node Upgrade".
+x-displayName: "Disable".
 
 ### Kubernetes Upgrade Drain Enable Choice Enable Upgrade Drain
 
-x-displayName: "Enable Node by Node Upgrade".
+x-displayName: "Enable".
 
 ###### One of the arguments from this list "drain_max_unavailable_node_count, drain_max_unavailable_node_percentage" must be set
 

@@ -1,9 +1,9 @@
 ---
 
 page_title: "Volterra: http_loadbalancer"
-description: "The http_loadbalancer allows CRUD of Http Loadbalancer resource on Volterra SaaS"
 
----
+description: "The http_loadbalancer allows CRUD of Http Loadbalancer resource on Volterra SaaS"
+-----------------------------------------------------------------------------------------------
 
 Resource volterra_http_loadbalancer
 ===================================
@@ -26,26 +26,28 @@ resource "volterra_http_loadbalancer" "example" {
 
   // One of the arguments from this list "api_definition api_definitions api_specification disable_api_definition" must be set
 
-  api_specification {
-    api_definition {
-      name      = "test1"
-      namespace = "staging"
-      tenant    = "acmecorp"
-    }
-
-    // One of the arguments from this list "validation_all_spec_endpoints validation_custom_list validation_disabled" must be set
-
-    validation_disabled = true
+  api_definition {
+    name      = "test1"
+    namespace = "staging"
+    tenant    = "acmecorp"
   }
 
   // One of the arguments from this list "disable_api_discovery enable_api_discovery" must be set
 
   enable_api_discovery {
+    api_crawler {
+      // One of the arguments from this list "api_crawler_config disable_api_crawler" must be set
+
+      disable_api_crawler = true
+    }
+
     api_discovery_from_code_scan {
       code_base_integrations {
         // One of the arguments from this list "all_repos selected_repos" must be set
 
-        all_repos = true
+        selected_repos {
+          api_code_repo = ["api_code_repo"]
+        }
 
         code_base_integration {
           name      = "test1"
@@ -55,6 +57,15 @@ resource "volterra_http_loadbalancer" "example" {
       }
     }
 
+    // One of the arguments from this list "custom_api_auth_discovery default_api_auth_discovery" must be set
+
+    custom_api_auth_discovery {
+      api_discovery_ref {
+        name      = "test1"
+        namespace = "staging"
+        tenant    = "acmecorp"
+      }
+    }
     discovered_api_settings {
       purge_duration_for_inactive_discovered_apis = "2"
     }
@@ -91,7 +102,7 @@ resource "volterra_http_loadbalancer" "example" {
 
           // One of the arguments from this list "any_target api_endpoint_target api_group base_path" must be set
 
-          api_group = "oas-all-operations"
+          any_target = true
         }
 
         sensitive_data_type {
@@ -107,7 +118,13 @@ resource "volterra_http_loadbalancer" "example" {
 
   // One of the arguments from this list "captcha_challenge enable_challenge js_challenge no_challenge policy_based_challenge" must be set
 
-  no_challenge = true
+  js_challenge {
+    cookie_expiry = "1000"
+
+    custom_page = "string:///PHA+IFBsZWFzZSBXYWl0IDwvcD4="
+
+    js_script_delay = "1000"
+  }
   domains = ["www.foo.com"]
 
   // One of the arguments from this list "cookie_stickiness least_active random ring_hash round_robin source_ip_stickiness" must be set
@@ -116,21 +133,123 @@ resource "volterra_http_loadbalancer" "example" {
 
   // One of the arguments from this list "l7_ddos_action_block l7_ddos_action_default l7_ddos_action_js_challenge l7_ddos_action_none" must be set
 
-  l7_ddos_action_none = true
+  l7_ddos_action_default = true
 
   // One of the arguments from this list "http https https_auto_cert" must be set
 
-  http {
-    dns_volterra_managed = true
+  https {
+    add_hsts = true
+
+    coalescing_options {
+      // One of the arguments from this list "default_coalescing strict_coalescing" must be set
+
+      default_coalescing = true
+    }
+
+    connection_idle_timeout = "60000"
+
+    // One of the arguments from this list "default_loadbalancer non_default_loadbalancer" can be set
+
+    default_loadbalancer = true
+    header_transformation_type {
+      // One of the arguments from this list "default_header_transformation legacy_header_transformation preserve_case_header_transformation proper_case_header_transformation" must be set
+
+      legacy_header_transformation = true
+    }
+    http_protocol_options {
+      // One of the arguments from this list "http_protocol_enable_v1_only http_protocol_enable_v1_v2 http_protocol_enable_v2_only" must be set
+
+      http_protocol_enable_v1_only {
+        header_transformation {
+          // One of the arguments from this list "default_header_transformation legacy_header_transformation preserve_case_header_transformation proper_case_header_transformation" must be set
+
+          legacy_header_transformation = true
+        }
+      }
+    }
+    http_redirect = true
+
+    // One of the arguments from this list "disable_path_normalize enable_path_normalize" must be set
+
+    disable_path_normalize = true
 
     // One of the arguments from this list "port port_ranges" must be set
 
-    port = "80"
+    port = "443"
+
+    // One of the arguments from this list "append_server_name default_header pass_through server_name" can be set
+
+    default_header = true
+
+    // One of the arguments from this list "tls_cert_params tls_parameters" must be set
+
+    tls_parameters {
+      // One of the arguments from this list "no_mtls use_mtls" must be set
+
+      use_mtls {
+        client_certificate_optional = true
+
+        // One of the arguments from this list "crl no_crl" can be set
+
+        crl {
+          name      = "test1"
+          namespace = "staging"
+          tenant    = "acmecorp"
+        }
+
+        // One of the arguments from this list "trusted_ca trusted_ca_url" must be set
+
+        trusted_ca_url = "trusted_ca_url"
+
+        // One of the arguments from this list "xfcc_disabled xfcc_options" can be set
+
+        xfcc_disabled = true
+      }
+
+      tls_certificates {
+        certificate_url = "value"
+
+        description = "Certificate used in production environment"
+
+        // One of the arguments from this list "custom_hash_algorithms disable_ocsp_stapling use_system_defaults" can be set
+
+        custom_hash_algorithms {
+          hash_algorithms = ["hash_algorithms"]
+        }
+        private_key {
+          blindfold_secret_info_internal {
+            decryption_provider = "value"
+
+            location = "string:///U2VjcmV0SW5mb3JtYXRpb24="
+
+            store_provider = "value"
+          }
+
+          secret_encoding_type = "secret_encoding_type"
+
+          // One of the arguments from this list "blindfold_secret_info clear_secret_info vault_secret_info wingman_secret_info" must be set
+
+          wingman_secret_info {
+            name = "ChargeBack-API-Key"
+          }
+        }
+      }
+
+      tls_config {
+        // One of the arguments from this list "custom_security default_security low_security medium_security" must be set
+
+        default_security = true
+      }
+    }
   }
 
   // One of the arguments from this list "disable_malicious_user_detection enable_malicious_user_detection" must be set
 
   enable_malicious_user_detection = true
+
+  // One of the arguments from this list "disable_malware_protection malware_protection_settings" must be set
+
+  disable_malware_protection = true
 
   // One of the arguments from this list "api_rate_limit disable_rate_limit rate_limit" must be set
 
@@ -142,7 +261,13 @@ resource "volterra_http_loadbalancer" "example" {
 
   // One of the arguments from this list "active_service_policies no_service_policies service_policies_from_namespace" must be set
 
-  no_service_policies = true
+  active_service_policies {
+    policies {
+      name      = "test1"
+      namespace = "staging"
+      tenant    = "acmecorp"
+    }
+  }
 
   // One of the arguments from this list "disable_threat_mesh enable_threat_mesh" must be set
 
@@ -154,15 +279,15 @@ resource "volterra_http_loadbalancer" "example" {
 
   // One of the arguments from this list "user_id_client_ip user_identification" must be set
 
-  user_identification {
+  user_id_client_ip = true
+
+  // One of the arguments from this list "app_firewall disable_waf" must be set
+
+  app_firewall {
     name      = "test1"
     namespace = "staging"
     tenant    = "acmecorp"
   }
-
-  // One of the arguments from this list "app_firewall disable_waf" must be set
-
-  disable_waf = true
 }
 
 ```
@@ -308,6 +433,12 @@ Argument Reference
 
 `malicious_user_mitigation` - (Optional) The settings defined in malicious user mitigation specify what mitigation actions to take for users determined to be at different threat levels.. See [ref](#ref) below for details.(Deprecated)
 
+###### One of the arguments from this list "disable_malware_protection, malware_protection_settings" must be set
+
+`disable_malware_protection` - (Optional) x-displayName: "Disable" (`Bool`).(Deprecated)
+
+`malware_protection_settings` - (Optional) x-displayName: "Enable". See [Malware Protection Malware Protection Settings ](#malware-protection-malware-protection-settings) below for details.(Deprecated)
+
 ###### One of the arguments from this list "multi_lb_app, single_lb_app" can be set
 
 `multi_lb_app` - (Optional) It should be configured externally using app type feature and label should be added to the HTTP load balancer. (`Bool`).(Deprecated)
@@ -336,7 +467,7 @@ Argument Reference
 
 `routes` - (Optional) to origin pool or redirect matching traffic to a different URL or respond directly to matching traffic. See [Routes ](#routes) below for details.
 
-`sensitive_data_disclosure_rules` - (Optional) Sensitive Data Exposure Rules allows specifying rules to mask sensitive data fields in API responses. See [Sensitive Data Disclosure Rules ](#sensitive-data-disclosure-rules) below for details.(Deprecated)
+`sensitive_data_disclosure_rules` - (Optional) Sensitive Data Exposure Rules allows specifying rules to mask sensitive data fields in API responses. See [Sensitive Data Disclosure Rules ](#sensitive-data-disclosure-rules) below for details.
 
 ###### One of the arguments from this list "default_sensitive_data_policy, sensitive_data_policy" must be set
 
@@ -426,13 +557,15 @@ Define rules to block IP Prefixes or AS numbers..
 
 `actions` - (Optional) Actions that should be taken when client identifier matches the rule (`List of Strings`).
 
-###### One of the arguments from this list "as_number, http_header, ip_prefix, user_identifier" must be set
+###### One of the arguments from this list "as_number, http_header, ip_prefix, ipv6_prefix, user_identifier" must be set
 
 `as_number` - (Optional) RFC 6793 defined 4-byte AS number (`Int`).
 
 `http_header` - (Optional) Request header name and value pairs. See [Client Source Choice Http Header ](#client-source-choice-http-header) below for details.
 
 `ip_prefix` - (Optional) IPv4 prefix string. (`String`).
+
+`ipv6_prefix` - (Optional) IPv6 prefix string. (`String`).
 
 `user_identifier` - (Optional) Identify user based on user identifier. User identifier value needs to be copied from security event. (`String`).
 
@@ -512,7 +645,7 @@ Define manual mitigation rules to block L7 DDoS attacks..
 
 `ddos_client_source` - (Optional) Combination of Region, ASN and TLS Fingerprints. See [Mitigation Choice Ddos Client Source ](#mitigation-choice-ddos-client-source) below for details.
 
-`ip_prefix_list` - (Optional) IPv4 prefix string.. See [Mitigation Choice Ip Prefix List ](#mitigation-choice-ip-prefix-list) below for details.
+`ip_prefix_list` - (Optional) IP prefix string.. See [Mitigation Choice Ip Prefix List ](#mitigation-choice-ip-prefix-list) below for details.
 
 ### Default Route Pools
 
@@ -698,13 +831,15 @@ Define rules to skip processing of one or more features such as WAF, Bot Defense
 
 `actions` - (Optional) Actions that should be taken when client identifier matches the rule (`List of Strings`).
 
-###### One of the arguments from this list "as_number, http_header, ip_prefix, user_identifier" must be set
+###### One of the arguments from this list "as_number, http_header, ip_prefix, ipv6_prefix, user_identifier" must be set
 
 `as_number` - (Optional) RFC 6793 defined 4-byte AS number (`Int`).
 
 `http_header` - (Optional) Request header name and value pairs. See [Client Source Choice Http Header ](#client-source-choice-http-header) below for details.
 
 `ip_prefix` - (Optional) IPv4 prefix string. (`String`).
+
+`ipv6_prefix` - (Optional) IPv6 prefix string. (`String`).
 
 `user_identifier` - (Optional) Identify user based on user identifier. User identifier value needs to be copied from security event. (`String`).
 
@@ -976,6 +1111,24 @@ Add one or more domains to source origin (allow) list..
 
 Allow all source origin domains..
 
+### Api Crawler Api Crawler Config
+
+Select to activate the API Crawling.
+
+`domains` - (Required) Enter domains and their credentials to allow authenticated API crawling. You can only include domains you own that are associated with this Load Balancer.. See [Api Crawler Config Domains ](#api-crawler-config-domains) below for details.
+
+### Api Crawler Disable Api Crawler
+
+Select to turn off the API Crawling. No API Crawling actions will be performed..
+
+### Api Crawler Config Domains
+
+Enter domains and their credentials to allow authenticated API crawling. You can only include domains you own that are associated with this Load Balancer..
+
+`domain` - (Required) Select the domain to execute API Crawling with given credentials. (`String`).
+
+`simple_login` - (Required) Enter the username and password to assign credentials for the selected domain to crawl. See [Domains Simple Login ](#domains-simple-login) below for details.
+
 ### Api Definition Choice Api Definitions
 
 DEPRECATED by 'api_definition'.
@@ -1004,7 +1157,15 @@ x-displayName: "Disable".
 
 x-displayName: "Enable".
 
+`api_crawler` - (Optional) Configure Discovered API Settings.. See [Enable Api Discovery Api Crawler ](#enable-api-discovery-api-crawler) below for details.
+
 `api_discovery_from_code_scan` - (Optional) Select API code repositories to the load balancer to use them as a source for API endpoint discovery.. See [Enable Api Discovery Api Discovery From Code Scan ](#enable-api-discovery-api-discovery-from-code-scan) below for details.
+
+###### One of the arguments from this list "custom_api_auth_discovery, default_api_auth_discovery" must be set
+
+`custom_api_auth_discovery` - (Optional) Apply custom API discovery settings. See [Api Discovery Settings Choice Custom Api Auth Discovery ](#api-discovery-settings-choice-custom-api-auth-discovery) below for details.(Deprecated)
+
+`default_api_auth_discovery` - (Optional) Apply system default API discovery settings (`Bool`).(Deprecated)
 
 `discovered_api_settings` - (Optional) Configure Discovered API Settings.. See [Enable Api Discovery Discovered Api Settings ](#enable-api-discovery-discovered-api-settings) below for details.
 
@@ -1020,7 +1181,15 @@ x-displayName: "Enable".
 
 x-displayName: "Enable".
 
+`api_crawler` - (Optional) Configure Discovered API Settings.. See [Enable Discovery Api Crawler ](#enable-discovery-api-crawler) below for details.
+
 `api_discovery_from_code_scan` - (Optional) Select API code repositories to the load balancer to use them as a source for API endpoint discovery.. See [Enable Discovery Api Discovery From Code Scan ](#enable-discovery-api-discovery-from-code-scan) below for details.
+
+###### One of the arguments from this list "custom_api_auth_discovery, default_api_auth_discovery" must be set
+
+`custom_api_auth_discovery` - (Optional) Apply custom API discovery settings. See [Api Discovery Settings Choice Custom Api Auth Discovery ](#api-discovery-settings-choice-custom-api-auth-discovery) below for details.(Deprecated)
+
+`default_api_auth_discovery` - (Optional) Apply system default API discovery settings (`Bool`).(Deprecated)
 
 `discovered_api_settings` - (Optional) Configure Discovered API Settings.. See [Enable Discovery Discovered Api Settings ](#enable-discovery-discovered-api-settings) below for details.
 
@@ -1043,6 +1212,16 @@ x-required.
 `selected_repos` - (Optional) x-displayName: "Selected API Repositories". See [Api Repos Choice Selected Repos ](#api-repos-choice-selected-repos) below for details.
 
 `code_base_integration` - (Required) Select the code base integration for use in code-based API discovery. See [ref](#ref) below for details.
+
+### Api Discovery Settings Choice Custom Api Auth Discovery
+
+Apply custom API discovery settings.
+
+`api_discovery_ref` - (Required) API Discovery Settings Object. See [ref](#ref) below for details.
+
+### Api Discovery Settings Choice Default Api Auth Discovery
+
+Apply system default API discovery settings.
 
 ### Api Endpoint Rules Action
 
@@ -1712,6 +1891,12 @@ Advertise this load balancer on public network.
 
 `public_ip` - (Required) Dedicated Public IP, which is allocated by F5 Distributed Cloud on request, is used as a VIP.. See [ref](#ref) below for details.
 
+### Choice Cbip Service
+
+Specify origin server with cBIP service name.
+
+`service_name` - (Required) Name of the discovered Classic BIG-IP virtual server to be used as origin. (`String`).
+
 ### Choice Consul Service
 
 Specify origin server with Hashi Corp Consul service name and site information.
@@ -1887,6 +2072,8 @@ A simple route matches on path and/or HTTP method and forwards the matching traf
 `origin_pools` - (Required) Origin Pools for this route. See [Simple Route Origin Pools ](#simple-route-origin-pools) below for details.
 
 `path` - (Required) URI path of route. See [Simple Route Path ](#simple-route-path) below for details.
+
+`query_params` - (Optional) Handling of incoming query parameters in simple route.. See [Simple Route Query Params ](#simple-route-query-params) below for details.
 
 ### Choice Site
 
@@ -2071,6 +2258,14 @@ configuration..
 ### Cluster Retract Choice Retract Cluster
 
 for route.
+
+### Coalescing Choice Default Coalescing
+
+or Cipher suite configuration.
+
+### Coalescing Choice Strict Coalescing
+
+and/or Cipher suite configuration.
 
 ### Condition Type Choice Api Endpoint
 
@@ -2286,7 +2481,9 @@ Advanced options configuration like timeouts, circuit breaker, subset load balan
 
 List of origin servers in this pool.
 
-###### One of the arguments from this list "consul_service, custom_endpoint_object, k8s_service, private_ip, private_name, public_ip, public_name, vn_private_ip, vn_private_name" must be set
+###### One of the arguments from this list "cbip_service, consul_service, custom_endpoint_object, k8s_service, private_ip, private_name, public_ip, public_name, vn_private_ip, vn_private_name" must be set
+
+`cbip_service` - (Optional) Specify origin server with cBIP service name. See [Choice Cbip Service ](#choice-cbip-service) below for details.
 
 `consul_service` - (Optional) Specify origin server with Hashi Corp Consul service name and site information. See [Choice Consul Service ](#choice-consul-service) below for details.
 
@@ -2394,6 +2591,22 @@ Send direct response.
 
 The rule will apply for all domains..
 
+### Domain Matcher Any Domain
+
+x-displayName: "Any Domain".
+
+### Domain Matcher Domain
+
+x-displayName: "Domain".
+
+###### One of the arguments from this list "exact_value, regex_value, suffix_value" must be set
+
+`exact_value` - (Optional) Exact domain name. (`String`).
+
+`regex_value` - (Optional) Regular Expression value for the domain name (`String`).
+
+`suffix_value` - (Optional) Suffix of domain name e.g "xyz.com" will match "*.xyz.com" and "xyz.com" (`String`).
+
 ### Domain Matcher Choice Any Domain
 
 Any Domain..
@@ -2409,6 +2622,24 @@ Domain matcher..
 `regex_value` - (Optional) Regular Expression value for the domain name (`String`).
 
 `suffix_value` - (Optional) Suffix of domain name e.g "xyz.com" will match "*.xyz.com" and "xyz.com" (`String`).
+
+### Domains Simple Login
+
+Enter the username and password to assign credentials for the selected domain to crawl.
+
+`password` - (Required) x-required. See [Simple Login Password ](#simple-login-password) below for details.
+
+`user` - (Required) x-required (`String`).
+
+### Enable Api Discovery Api Crawler
+
+Configure Discovered API Settings..
+
+###### One of the arguments from this list "api_crawler_config, disable_api_crawler" must be set
+
+`api_crawler_config` - (Optional) Select to activate the API Crawling. See [Api Crawler Api Crawler Config ](#api-crawler-api-crawler-config) below for details.
+
+`disable_api_crawler` - (Optional) Select to turn off the API Crawling. No API Crawling actions will be performed. (`Bool`).
 
 ### Enable Api Discovery Api Discovery From Code Scan
 
@@ -2429,6 +2660,16 @@ Manage rules to detect sensitive data in requests and/or response sections..
 `custom_sensitive_data_detection_rules` - (Optional) Rules to detect custom sensitive data in requests and/or responses sections.. See [Sensitive Data Detection Rules Custom Sensitive Data Detection Rules ](#sensitive-data-detection-rules-custom-sensitive-data-detection-rules) below for details.
 
 `disabled_built_in_rules` - (Optional) List of disabled built-in sensitive data detection rules.. See [Sensitive Data Detection Rules Disabled Built In Rules ](#sensitive-data-detection-rules-disabled-built-in-rules) below for details.
+
+### Enable Discovery Api Crawler
+
+Configure Discovered API Settings..
+
+###### One of the arguments from this list "api_crawler_config, disable_api_crawler" must be set
+
+`api_crawler_config` - (Optional) Select to activate the API Crawling. See [Api Crawler Api Crawler Config ](#api-crawler-api-crawler-config) below for details.
+
+`disable_api_crawler` - (Optional) Select to turn off the API Crawling. No API Crawling actions will be performed. (`Bool`).
 
 ### Enable Discovery Api Discovery From Code Scan
 
@@ -2852,6 +3093,16 @@ Add httponly attribute.
 
 Ignore httponly attribute.
 
+### Https Coalescing Options
+
+Options for coalescing TLS for multiple HTTPS Load Balancers.
+
+###### One of the arguments from this list "default_coalescing, strict_coalescing" must be set
+
+`default_coalescing` - (Optional) or Cipher suite configuration (`Bool`).
+
+`strict_coalescing` - (Optional) and/or Cipher suite configuration (`Bool`).
+
 ### Https Header Transformation Type
 
 Header transformation options for response headers to the client.
@@ -2877,6 +3128,16 @@ HTTP protocol configuration options for downstream connections..
 `http_protocol_enable_v1_v2` - (Optional) Enable both HTTP/1.1 and HTTP/2 for downstream connections (`Bool`).
 
 `http_protocol_enable_v2_only` - (Optional) Enable HTTP/2 for downstream connections (`Bool`).
+
+### Https Auto Cert Coalescing Options
+
+Options for coalescing TLS for multiple HTTPS Load Balancers.
+
+###### One of the arguments from this list "default_coalescing, strict_coalescing" must be set
+
+`default_coalescing` - (Optional) or Cipher suite configuration (`Bool`).
+
+`strict_coalescing` - (Optional) and/or Cipher suite configuration (`Bool`).
 
 ### Https Auto Cert Header Transformation Type
 
@@ -3388,6 +3649,8 @@ User is responsible for managing DNS to this load balancer..
 
 `add_hsts` - (Optional) Add HTTP Strict-Transport-Security response header (`Bool`).
 
+`coalescing_options` - (Optional) Options for coalescing TLS for multiple HTTPS Load Balancers. See [Https Coalescing Options ](#https-coalescing-options) below for details.
+
 `connection_idle_timeout` - (Optional) This is specified in milliseconds. The default value is 2 minutes. (`Int`).
 
 ###### One of the arguments from this list "default_loadbalancer, non_default_loadbalancer" can be set
@@ -3435,6 +3698,8 @@ User is responsible for managing DNS to this load balancer..
 or a DNS CNAME record should be created in your DNS provider's portal(only for Domains not managed by F5 Distributed Cloud)..
 
 `add_hsts` - (Optional) Add HTTP Strict-Transport-Security response header (`Bool`).
+
+`coalescing_options` - (Optional) Options for coalescing TLS for multiple HTTPS Load Balancers. See [Https Auto Cert Coalescing Options ](#https-auto-cert-coalescing-options) below for details.
 
 `connection_idle_timeout` - (Optional) This is specified in milliseconds. The default value is 2 minutes. (`Int`).
 
@@ -3491,6 +3756,70 @@ x-displayName: "Enable".
 ### Malicious User Mitigation Choice Default Mitigation Settings
 
 For high level, users will be temporarily blocked..
+
+### Malware Protection Malware Protection Settings
+
+x-displayName: "Enable".
+
+`malware_protection_rules` - (Required) Configure the match criteria to trigger Malware Protection Scan. See [Malware Protection Settings Malware Protection Rules ](#malware-protection-settings-malware-protection-rules) below for details.
+
+### Malware Protection Rules Action
+
+Report will identify and log threats, whereas Block will both log and block threats.
+
+###### One of the arguments from this list "block, report" must be set
+
+`block` - (Optional) Block the request and report the issue (`Bool`).
+
+`report` - (Optional) Allow the request and report the issue (`Bool`).
+
+### Malware Protection Rules Domain
+
+Domain to be matched.
+
+###### One of the arguments from this list "any_domain, domain" must be set
+
+`any_domain` - (Optional) x-displayName: "Any Domain". See [Domain Matcher Any Domain ](#domain-matcher-any-domain) below for details.
+
+`domain` - (Optional) x-displayName: "Domain". See [Domain Matcher Domain ](#domain-matcher-domain) below for details.
+
+### Malware Protection Rules Metadata
+
+Common attributes for the rule including name and description..
+
+`description` - (Optional) Human readable description. (`String`).
+
+`disable` - (Optional) A value of true will administratively disable the object that corresponds to the containing message. (`Bool`).(Deprecated)
+
+`name` - (Required) The value of name has to follow DNS-1035 format. (`String`).
+
+### Malware Protection Rules Path
+
+Path to be matched.
+
+###### One of the arguments from this list "path, prefix, regex" must be set
+
+`path` - (Optional) Exact path value to match (`String`).
+
+`prefix` - (Optional) Path prefix to match (e.g. the value / will match on all paths) (`String`).
+
+`regex` - (Optional) Regular expression of path match (e.g. the value .* will match on all paths) (`String`).
+
+### Malware Protection Settings Malware Protection Rules
+
+Configure the match criteria to trigger Malware Protection Scan.
+
+`action` - (Optional) Report will identify and log threats, whereas Block will both log and block threats. See [Malware Protection Rules Action ](#malware-protection-rules-action) below for details.
+
+`domain` - (Optional) Domain to be matched. See [Malware Protection Rules Domain ](#malware-protection-rules-domain) below for details.
+
+`http_methods` - (Optional) Methods to be matched (`List of Strings`).
+
+`metadata` - (Required) Common attributes for the rule including name and description.. See [Malware Protection Rules Metadata ](#malware-protection-rules-metadata) below for details.
+
+`path` - (Optional) Path to be matched. See [Malware Protection Rules Path ](#malware-protection-rules-path) below for details.
+
+`protocol` - (Optional) Protocol to be matched (`String`).
 
 ### Masking Mode Choice Mask
 
@@ -3574,7 +3903,7 @@ Combination of Region, ASN and TLS Fingerprints.
 
 ### Mitigation Choice Ip Prefix List
 
-IPv4 prefix string..
+IP prefix string..
 
 `invert_match` - (Optional) Invert the match result. (`Bool`).
 
@@ -3950,6 +4279,16 @@ Skip body validation when the body length is too long to verify (default 64Kb).
 
 Disable panic threshold. Only healthy endpoints are considered for load balancing..
 
+### Password Blindfold Secret Info Internal
+
+Blindfold Secret Internal is used for the putting re-encrypted blindfold secret.
+
+`decryption_provider` - (Optional) Name of the Secret Management Access object that contains information about the backend Secret Management service. (`String`).
+
+`location` - (Required) Or it could be a path if the store provider is an http/https location (`String`).
+
+`store_provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
+
 ### Path Choice Any Path
 
 Match all paths.
@@ -4020,6 +4359,8 @@ List of protected application endpoints (max 128 items)..
 
 `mitigate_good_bots` - (Optional) System flags Good Bot Traffic, but mitigation is handled in the same manner as malicious automated traffic defined above (`Bool`).
 
+`headers` - (Optional) Note that all specified header predicates must evaluate to true.. See [Protected App Endpoints Headers ](#protected-app-endpoints-headers) below for details.
+
 `http_methods` - (Required) List of HTTP methods. (`List of Strings`).
 
 `metadata` - (Required) Common attributes for the rule including name and description.. See [Protected App Endpoints Metadata ](#protected-app-endpoints-metadata) below for details.
@@ -4029,6 +4370,8 @@ List of protected application endpoints (max 128 items)..
 `path` - (Required) Matching URI path of the route.. See [Protected App Endpoints Path ](#protected-app-endpoints-path) below for details.
 
 `protocol` - (Optional) Protocol. (`String`).
+
+`query_params` - (Optional) Note that all specified query parameter predicates must evaluate to true.. See [Protected App Endpoints Query Params ](#protected-app-endpoints-query-params) below for details.
 
 ### Policy Protected App Endpoints
 
@@ -4190,6 +4533,24 @@ Custom settings for query parameters validation.
 
 `disallow_additional_parameters` - (Optional) Disallow extra query parameters (on top of what specified in the OAS documentation) (`Bool`).
 
+### Protected App Endpoints Headers
+
+Note that all specified header predicates must evaluate to true..
+
+`invert_matcher` - (Optional) Invert the match result. (`Bool`).
+
+###### One of the arguments from this list "check_not_present, check_present, item, presence" must be set
+
+`check_not_present` - (Optional) Check that the header is not present. (`Bool`).
+
+`check_present` - (Optional) Check that the header is present. (`Bool`).
+
+`item` - (Optional) Criteria for matching the values for the header. The match is successful if any of the values in the input satisfies the criteria in the matcher.. See [Match Item ](#match-item) below for details.
+
+`presence` - (Optional) Check if the header is present or absent. (`Bool`).(Deprecated)
+
+`name` - (Required) A case-insensitive HTTP header name. (`String`).
+
 ### Protected App Endpoints Metadata
 
 Common attributes for the rule including name and description..
@@ -4239,6 +4600,24 @@ Enter a regular expression or exact value to match your query parameters of inte
 `exact_value` - (Optional) Exact query value to match (`String`).
 
 `regex_value` - (Optional) Regular expression of query match (e.g. the value .* will match on all query) (`String`).
+
+### Protected App Endpoints Query Params
+
+Note that all specified query parameter predicates must evaluate to true..
+
+`invert_matcher` - (Optional) Invert the match result. (`Bool`).
+
+`key` - (Required) A case-sensitive HTTP query parameter name. (`String`).
+
+###### One of the arguments from this list "check_not_present, check_present, item, presence" must be set
+
+`check_not_present` - (Optional) Check that the query parameter is not present. (`Bool`).
+
+`check_present` - (Optional) Check that the query parameter is present. (`Bool`).
+
+`item` - (Optional) criteria in the matcher.. See [Match Item ](#match-item) below for details.
+
+`presence` - (Optional) Check if the query parameter is present or absent. (`Bool`).(Deprecated)
 
 ### Protected App Endpoints Request Body
 
@@ -4332,7 +4711,7 @@ Specify rate values for the rule..
 
 ###### One of the arguments from this list "ref_user_id, use_http_lb_user_id" must be set
 
-`ref_user_id` - (Optional) The rules in the user_identification object are evaluated to determine the user identifier to be rate limited.. See [ref](#ref) below for details.
+`ref_user_id` - (Optional) If traffic cannot be identified by the rules in the user_identification object, by default it will be identified by the HTTP-LB User Identifier.. See [ref](#ref) below for details.
 
 `use_http_lb_user_id` - (Optional) Defined in HTTP-LB Security Configuration -> User Identifier. (`Bool`).
 
@@ -4896,6 +5275,24 @@ Apply the specified list of service policies and bypass the namespace service po
 
 `policies` - (Required) If all policies are evaluated and none match, then the request will be denied by default.. See [ref](#ref) below for details.
 
+### Simple Login Password
+
+x-required.
+
+`blindfold_secret_info_internal` - (Optional) Blindfold Secret Internal is used for the putting re-encrypted blindfold secret. See [Password Blindfold Secret Info Internal ](#password-blindfold-secret-info-internal) below for details.(Deprecated)
+
+`secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).(Deprecated)
+
+###### One of the arguments from this list "blindfold_secret_info, clear_secret_info, vault_secret_info, wingman_secret_info" must be set
+
+`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
+
+`clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Secret Info Oneof Clear Secret Info ](#secret-info-oneof-clear-secret-info) below for details.
+
+`vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Secret Info Oneof Vault Secret Info ](#secret-info-oneof-vault-secret-info) below for details.(Deprecated)
+
+`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in F5XC Security Sidecar. See [Secret Info Oneof Wingman Secret Info ](#secret-info-oneof-wingman-secret-info) below for details.(Deprecated)
+
 ### Simple Route Advanced Options
 
 Configure Advanced per route options.
@@ -5041,6 +5438,18 @@ URI path of route.
 `prefix` - (Optional) Path prefix to match (e.g. the value / will match on all paths) (`String`).
 
 `regex` - (Optional) Regular expression of path match (e.g. the value .* will match on all paths) (`String`).
+
+### Simple Route Query Params
+
+Handling of incoming query parameters in simple route..
+
+###### One of the arguments from this list "remove_all_params, replace_params, retain_all_params" must be set
+
+`remove_all_params` - (Optional) x-displayName: "Remove All Parameters" (`Bool`).
+
+`replace_params` - (Optional) x-displayName: "Replace All Parameters" (`String`).
+
+`retain_all_params` - (Optional) x-displayName: "Retain All Parameters" (`Bool`).
 
 ### Slow Ddos Mitigation Choice Slow Ddos Mitigation
 

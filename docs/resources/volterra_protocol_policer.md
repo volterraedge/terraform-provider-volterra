@@ -1,9 +1,9 @@
 ---
 
 page_title: "Volterra: protocol_policer"
-description: "The protocol_policer allows CRUD of Protocol Policer resource on Volterra SaaS"
 
----
+description: "The protocol_policer allows CRUD of Protocol Policer resource on Volterra SaaS"
+---------------------------------------------------------------------------------------------
 
 Resource volterra_protocol_policer
 ==================================

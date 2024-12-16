@@ -5295,8 +5295,9 @@ var DefaultJA4TlsFingerprintMatcherTypeValidator = func() *ValidateJA4TlsFingerp
 
 	vrhExactValues := v.ExactValuesValidationRuleHandler
 	rulesExactValues := map[string]string{
-		"ves.io.schema.rules.repeated.max_items": "16",
-		"ves.io.schema.rules.repeated.unique":    "true",
+		"ves.io.schema.rules.repeated.items.string.len": "36",
+		"ves.io.schema.rules.repeated.max_items":        "16",
+		"ves.io.schema.rules.repeated.unique":           "true",
 	}
 	vFn, err = vrhExactValues(rulesExactValues)
 	if err != nil {
@@ -5850,6 +5851,124 @@ var DefaultL4DestMatcherTypeValidator = func() *ValidateL4DestMatcherType {
 
 func L4DestMatcherTypeValidator() db.Validator {
 	return DefaultL4DestMatcherTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *MalwareProtectionSettings) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *MalwareProtectionSettings) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *MalwareProtectionSettings) DeepCopy() *MalwareProtectionSettings {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &MalwareProtectionSettings{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *MalwareProtectionSettings) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *MalwareProtectionSettings) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return MalwareProtectionSettingsValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateMalwareProtectionSettings struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateMalwareProtectionSettings) ActionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for action")
+	}
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		if err := ves_io_schema.ActionValidator().Validate(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateMalwareProtectionSettings) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*MalwareProtectionSettings)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *MalwareProtectionSettings got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["action"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("action"))
+		if err := fv(ctx, m.GetAction(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultMalwareProtectionSettingsValidator = func() *ValidateMalwareProtectionSettings {
+	v := &ValidateMalwareProtectionSettings{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhAction := v.ActionValidationRuleHandler
+	rulesAction := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhAction(rulesAction)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for MalwareProtectionSettings.action: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["action"] = vFn
+
+	return v
+}()
+
+func MalwareProtectionSettingsValidator() db.Validator {
+	return DefaultMalwareProtectionSettingsValidator
 }
 
 // augmented methods on protoc/std generated struct

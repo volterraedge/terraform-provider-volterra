@@ -173,12 +173,34 @@ func (v *ValidateSubscribeRequest) Validate(ctx context.Context, pm interface{},
 				return err
 			}
 		}
-	case *SubscribeRequest_F5XcUniversalZtnaStandard:
-		if fv, exists := v.FldValidators["addon_choice.f5xc_universal_ztna_standard"]; exists {
-			val := m.GetAddonChoice().(*SubscribeRequest_F5XcUniversalZtnaStandard).F5XcUniversalZtnaStandard
+	case *SubscribeRequest_F5XcContentDeliveryNetworkStandard:
+		if fv, exists := v.FldValidators["addon_choice.f5xc_content_delivery_network_standard"]; exists {
+			val := m.GetAddonChoice().(*SubscribeRequest_F5XcContentDeliveryNetworkStandard).F5XcContentDeliveryNetworkStandard
 			vOpts := append(opts,
 				db.WithValidateField("addon_choice"),
-				db.WithValidateField("f5xc_universal_ztna_standard"),
+				db.WithValidateField("f5xc_content_delivery_network_standard"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *SubscribeRequest_F5XcSyntheticMonitoringStandard:
+		if fv, exists := v.FldValidators["addon_choice.f5xc_synthetic_monitoring_standard"]; exists {
+			val := m.GetAddonChoice().(*SubscribeRequest_F5XcSyntheticMonitoringStandard).F5XcSyntheticMonitoringStandard
+			vOpts := append(opts,
+				db.WithValidateField("addon_choice"),
+				db.WithValidateField("f5xc_synthetic_monitoring_standard"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *SubscribeRequest_F5XcBigipUtilitiesStandard:
+		if fv, exists := v.FldValidators["addon_choice.f5xc_bigip_utilities_standard"]; exists {
+			val := m.GetAddonChoice().(*SubscribeRequest_F5XcBigipUtilitiesStandard).F5XcBigipUtilitiesStandard
+			vOpts := append(opts,
+				db.WithValidateField("addon_choice"),
+				db.WithValidateField("f5xc_bigip_utilities_standard"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
@@ -440,12 +462,34 @@ func (v *ValidateUnsubscribeRequest) Validate(ctx context.Context, pm interface{
 				return err
 			}
 		}
-	case *UnsubscribeRequest_F5XcUniversalZtnaStandard:
-		if fv, exists := v.FldValidators["addon_choice.f5xc_universal_ztna_standard"]; exists {
-			val := m.GetAddonChoice().(*UnsubscribeRequest_F5XcUniversalZtnaStandard).F5XcUniversalZtnaStandard
+	case *UnsubscribeRequest_F5XcContentDeliveryNetworkStandard:
+		if fv, exists := v.FldValidators["addon_choice.f5xc_content_delivery_network_standard"]; exists {
+			val := m.GetAddonChoice().(*UnsubscribeRequest_F5XcContentDeliveryNetworkStandard).F5XcContentDeliveryNetworkStandard
 			vOpts := append(opts,
 				db.WithValidateField("addon_choice"),
-				db.WithValidateField("f5xc_universal_ztna_standard"),
+				db.WithValidateField("f5xc_content_delivery_network_standard"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *UnsubscribeRequest_F5XcSyntheticMonitoringStandard:
+		if fv, exists := v.FldValidators["addon_choice.f5xc_synthetic_monitoring_standard"]; exists {
+			val := m.GetAddonChoice().(*UnsubscribeRequest_F5XcSyntheticMonitoringStandard).F5XcSyntheticMonitoringStandard
+			vOpts := append(opts,
+				db.WithValidateField("addon_choice"),
+				db.WithValidateField("f5xc_synthetic_monitoring_standard"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *UnsubscribeRequest_F5XcBigipUtilitiesStandard:
+		if fv, exists := v.FldValidators["addon_choice.f5xc_bigip_utilities_standard"]; exists {
+			val := m.GetAddonChoice().(*UnsubscribeRequest_F5XcBigipUtilitiesStandard).F5XcBigipUtilitiesStandard
+			vOpts := append(opts,
+				db.WithValidateField("addon_choice"),
+				db.WithValidateField("f5xc_bigip_utilities_standard"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err

@@ -639,53 +639,65 @@ var CustomAPISwaggerJSON string = `{
             "description": "Request to subscribe to one of addon services",
             "title": "SubscribeRequest",
             "x-displayname": "Subscribe request",
-            "x-ves-oneof-field-addon_choice": "[\"f5xc_appstack_standard\",\"f5xc_securemesh_advanced\",\"f5xc_securemesh_standard\",\"f5xc_site_management_standard\",\"f5xc_universal_ztna_standard\",\"f5xc_waap_advanced\",\"f5xc_waap_standard\",\"f5xc_web_app_scanning_standard\"]",
+            "x-ves-oneof-field-addon_choice": "[\"f5xc_appstack_standard\",\"f5xc_bigip_utilities_standard\",\"f5xc_content_delivery_network_standard\",\"f5xc_securemesh_advanced\",\"f5xc_securemesh_standard\",\"f5xc_site_management_standard\",\"f5xc_synthetic_monitoring_standard\",\"f5xc_waap_advanced\",\"f5xc_waap_standard\",\"f5xc_web_app_scanning_standard\"]",
             "x-ves-proto-message": "ves.io.schema.subscription.SubscribeRequest",
             "properties": {
                 "f5xc_appstack_standard": {
-                    "description": "Exclusive with [f5xc_securemesh_advanced f5xc_securemesh_standard f5xc_site_management_standard f5xc_universal_ztna_standard f5xc_waap_advanced f5xc_waap_standard f5xc_web_app_scanning_standard]\n addon-Appstack tier-standard",
+                    "description": "Exclusive with [f5xc_bigip_utilities_standard f5xc_content_delivery_network_standard f5xc_securemesh_advanced f5xc_securemesh_standard f5xc_site_management_standard f5xc_synthetic_monitoring_standard f5xc_waap_advanced f5xc_waap_standard f5xc_web_app_scanning_standard]\n addon-Appstack tier-standard",
                     "title": "addon-Appstack tier-standard",
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "appstack standard"
                 },
+                "f5xc_bigip_utilities_standard": {
+                    "description": "Exclusive with [f5xc_appstack_standard f5xc_content_delivery_network_standard f5xc_securemesh_advanced f5xc_securemesh_standard f5xc_site_management_standard f5xc_synthetic_monitoring_standard f5xc_waap_advanced f5xc_waap_standard f5xc_web_app_scanning_standard]\n addon-bigip-utilities tier-standard",
+                    "title": "addon-bigip-utilities tier-standard",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "BIG-IP Utilities standard"
+                },
+                "f5xc_content_delivery_network_standard": {
+                    "description": "Exclusive with [f5xc_appstack_standard f5xc_bigip_utilities_standard f5xc_securemesh_advanced f5xc_securemesh_standard f5xc_site_management_standard f5xc_synthetic_monitoring_standard f5xc_waap_advanced f5xc_waap_standard f5xc_web_app_scanning_standard]\n addon-content-delivery-network tier-standard",
+                    "title": "addon-content-delivery-network tier-standard",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Content Delivery Network standard"
+                },
                 "f5xc_securemesh_advanced": {
-                    "description": "Exclusive with [f5xc_appstack_standard f5xc_securemesh_standard f5xc_site_management_standard f5xc_universal_ztna_standard f5xc_waap_advanced f5xc_waap_standard f5xc_web_app_scanning_standard]\n addon-Securemesh tier-advanced",
+                    "description": "Exclusive with [f5xc_appstack_standard f5xc_bigip_utilities_standard f5xc_content_delivery_network_standard f5xc_securemesh_standard f5xc_site_management_standard f5xc_synthetic_monitoring_standard f5xc_waap_advanced f5xc_waap_standard f5xc_web_app_scanning_standard]\n addon-Securemesh tier-advanced",
                     "title": "addon-Securemesh tier-advanced",
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "secure mesh advance"
                 },
                 "f5xc_securemesh_standard": {
-                    "description": "Exclusive with [f5xc_appstack_standard f5xc_securemesh_advanced f5xc_site_management_standard f5xc_universal_ztna_standard f5xc_waap_advanced f5xc_waap_standard f5xc_web_app_scanning_standard]\n addon-Securemesh tier-standard",
+                    "description": "Exclusive with [f5xc_appstack_standard f5xc_bigip_utilities_standard f5xc_content_delivery_network_standard f5xc_securemesh_advanced f5xc_site_management_standard f5xc_synthetic_monitoring_standard f5xc_waap_advanced f5xc_waap_standard f5xc_web_app_scanning_standard]\n addon-Securemesh tier-standard",
                     "title": "addon-Securemesh tier-standard",
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "secure mesh standard"
                 },
                 "f5xc_site_management_standard": {
-                    "description": "Exclusive with [f5xc_appstack_standard f5xc_securemesh_advanced f5xc_securemesh_standard f5xc_universal_ztna_standard f5xc_waap_advanced f5xc_waap_standard f5xc_web_app_scanning_standard]\n addon-Sitemanagement tier-standard ",
+                    "description": "Exclusive with [f5xc_appstack_standard f5xc_bigip_utilities_standard f5xc_content_delivery_network_standard f5xc_securemesh_advanced f5xc_securemesh_standard f5xc_synthetic_monitoring_standard f5xc_waap_advanced f5xc_waap_standard f5xc_web_app_scanning_standard]\n addon-Sitemanagement tier-standard ",
                     "title": "addon-Sitemanagement tier-standard",
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "Site management standard"
                 },
-                "f5xc_universal_ztna_standard": {
-                    "description": "Exclusive with [f5xc_appstack_standard f5xc_securemesh_advanced f5xc_securemesh_standard f5xc_site_management_standard f5xc_waap_advanced f5xc_waap_standard f5xc_web_app_scanning_standard]\n addon-universal-ztna tier-standard",
-                    "title": "addon-universal-ztna tier-standard",
+                "f5xc_synthetic_monitoring_standard": {
+                    "description": "Exclusive with [f5xc_appstack_standard f5xc_bigip_utilities_standard f5xc_content_delivery_network_standard f5xc_securemesh_advanced f5xc_securemesh_standard f5xc_site_management_standard f5xc_waap_advanced f5xc_waap_standard f5xc_web_app_scanning_standard]\n addon-synthetic-monitoring tier-standard",
+                    "title": "addon-synthetic-monitoring tier-standard",
                     "$ref": "#/definitions/schemaEmpty",
-                    "x-displayname": "Universal ZTNA standard"
+                    "x-displayname": "Synthetic Monitoring standard"
                 },
                 "f5xc_waap_advanced": {
-                    "description": "Exclusive with [f5xc_appstack_standard f5xc_securemesh_advanced f5xc_securemesh_standard f5xc_site_management_standard f5xc_universal_ztna_standard f5xc_waap_standard f5xc_web_app_scanning_standard]\n addon-WAAP tier-advanced",
+                    "description": "Exclusive with [f5xc_appstack_standard f5xc_bigip_utilities_standard f5xc_content_delivery_network_standard f5xc_securemesh_advanced f5xc_securemesh_standard f5xc_site_management_standard f5xc_synthetic_monitoring_standard f5xc_waap_standard f5xc_web_app_scanning_standard]\n addon-WAAP tier-advanced",
                     "title": "addon-WAAP tier-advanced",
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "WAAP advance"
                 },
                 "f5xc_waap_standard": {
-                    "description": "Exclusive with [f5xc_appstack_standard f5xc_securemesh_advanced f5xc_securemesh_standard f5xc_site_management_standard f5xc_universal_ztna_standard f5xc_waap_advanced f5xc_web_app_scanning_standard]\n addon-WAAP tier-standard",
+                    "description": "Exclusive with [f5xc_appstack_standard f5xc_bigip_utilities_standard f5xc_content_delivery_network_standard f5xc_securemesh_advanced f5xc_securemesh_standard f5xc_site_management_standard f5xc_synthetic_monitoring_standard f5xc_waap_advanced f5xc_web_app_scanning_standard]\n addon-WAAP tier-standard",
                     "title": "addon-WAAP tier-standard",
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "WAAP standard"
                 },
                 "f5xc_web_app_scanning_standard": {
-                    "description": "Exclusive with [f5xc_appstack_standard f5xc_securemesh_advanced f5xc_securemesh_standard f5xc_site_management_standard f5xc_universal_ztna_standard f5xc_waap_advanced f5xc_waap_standard]\n addon-web-app-scanning tier-standard",
+                    "description": "Exclusive with [f5xc_appstack_standard f5xc_bigip_utilities_standard f5xc_content_delivery_network_standard f5xc_securemesh_advanced f5xc_securemesh_standard f5xc_site_management_standard f5xc_synthetic_monitoring_standard f5xc_waap_advanced f5xc_waap_standard]\n addon-web-app-scanning tier-standard",
                     "title": "addon-web-app-scanning tier-standard",
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "Web App Scanning standard"
@@ -704,53 +716,65 @@ var CustomAPISwaggerJSON string = `{
             "description": "Request to unsubscribe to one of addon services",
             "title": "UnsubscribeRequest",
             "x-displayname": "Unsubscribe request",
-            "x-ves-oneof-field-addon_choice": "[\"f5xc_appstack_standard\",\"f5xc_securemesh_advanced\",\"f5xc_securemesh_standard\",\"f5xc_site_management_standard\",\"f5xc_universal_ztna_standard\",\"f5xc_waap_advanced\",\"f5xc_waap_standard\",\"f5xc_web_app_scanning_standard\"]",
+            "x-ves-oneof-field-addon_choice": "[\"f5xc_appstack_standard\",\"f5xc_bigip_utilities_standard\",\"f5xc_content_delivery_network_standard\",\"f5xc_securemesh_advanced\",\"f5xc_securemesh_standard\",\"f5xc_site_management_standard\",\"f5xc_synthetic_monitoring_standard\",\"f5xc_waap_advanced\",\"f5xc_waap_standard\",\"f5xc_web_app_scanning_standard\"]",
             "x-ves-proto-message": "ves.io.schema.subscription.UnsubscribeRequest",
             "properties": {
                 "f5xc_appstack_standard": {
-                    "description": "Exclusive with [f5xc_securemesh_advanced f5xc_securemesh_standard f5xc_site_management_standard f5xc_universal_ztna_standard f5xc_waap_advanced f5xc_waap_standard f5xc_web_app_scanning_standard]\n addon-Appstack tier-standard",
+                    "description": "Exclusive with [f5xc_bigip_utilities_standard f5xc_content_delivery_network_standard f5xc_securemesh_advanced f5xc_securemesh_standard f5xc_site_management_standard f5xc_synthetic_monitoring_standard f5xc_waap_advanced f5xc_waap_standard f5xc_web_app_scanning_standard]\n addon-Appstack tier-standard",
                     "title": "addon-Appstack tier-standard",
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "appstack standard"
                 },
+                "f5xc_bigip_utilities_standard": {
+                    "description": "Exclusive with [f5xc_appstack_standard f5xc_content_delivery_network_standard f5xc_securemesh_advanced f5xc_securemesh_standard f5xc_site_management_standard f5xc_synthetic_monitoring_standard f5xc_waap_advanced f5xc_waap_standard f5xc_web_app_scanning_standard]\n addon-bigip-utilities tier-standard",
+                    "title": "addon-bigip-utilities tier-standard",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "BIG-IP Utilities standard"
+                },
+                "f5xc_content_delivery_network_standard": {
+                    "description": "Exclusive with [f5xc_appstack_standard f5xc_bigip_utilities_standard f5xc_securemesh_advanced f5xc_securemesh_standard f5xc_site_management_standard f5xc_synthetic_monitoring_standard f5xc_waap_advanced f5xc_waap_standard f5xc_web_app_scanning_standard]\n addon-content-delivery-network tier-standard",
+                    "title": "addon-content-delivery-network tier-standard",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Content Delivery Network standard"
+                },
                 "f5xc_securemesh_advanced": {
-                    "description": "Exclusive with [f5xc_appstack_standard f5xc_securemesh_standard f5xc_site_management_standard f5xc_universal_ztna_standard f5xc_waap_advanced f5xc_waap_standard f5xc_web_app_scanning_standard]\n addon-Securemesh tier-advanced",
+                    "description": "Exclusive with [f5xc_appstack_standard f5xc_bigip_utilities_standard f5xc_content_delivery_network_standard f5xc_securemesh_standard f5xc_site_management_standard f5xc_synthetic_monitoring_standard f5xc_waap_advanced f5xc_waap_standard f5xc_web_app_scanning_standard]\n addon-Securemesh tier-advanced",
                     "title": "addon-Securemesh tier-advanced",
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "secure mesh advance"
                 },
                 "f5xc_securemesh_standard": {
-                    "description": "Exclusive with [f5xc_appstack_standard f5xc_securemesh_advanced f5xc_site_management_standard f5xc_universal_ztna_standard f5xc_waap_advanced f5xc_waap_standard f5xc_web_app_scanning_standard]\n addon-Securemesh tier-standard",
+                    "description": "Exclusive with [f5xc_appstack_standard f5xc_bigip_utilities_standard f5xc_content_delivery_network_standard f5xc_securemesh_advanced f5xc_site_management_standard f5xc_synthetic_monitoring_standard f5xc_waap_advanced f5xc_waap_standard f5xc_web_app_scanning_standard]\n addon-Securemesh tier-standard",
                     "title": "addon-Securemesh tier-standard",
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "secure mesh standard"
                 },
                 "f5xc_site_management_standard": {
-                    "description": "Exclusive with [f5xc_appstack_standard f5xc_securemesh_advanced f5xc_securemesh_standard f5xc_universal_ztna_standard f5xc_waap_advanced f5xc_waap_standard f5xc_web_app_scanning_standard]\n addon-Sitemanagement tier-standard ",
+                    "description": "Exclusive with [f5xc_appstack_standard f5xc_bigip_utilities_standard f5xc_content_delivery_network_standard f5xc_securemesh_advanced f5xc_securemesh_standard f5xc_synthetic_monitoring_standard f5xc_waap_advanced f5xc_waap_standard f5xc_web_app_scanning_standard]\n addon-Sitemanagement tier-standard ",
                     "title": "addon-Sitemanagement tier-standard",
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "Site management standard"
                 },
-                "f5xc_universal_ztna_standard": {
-                    "description": "Exclusive with [f5xc_appstack_standard f5xc_securemesh_advanced f5xc_securemesh_standard f5xc_site_management_standard f5xc_waap_advanced f5xc_waap_standard f5xc_web_app_scanning_standard]\n addon-universal-ztna tier-standard",
-                    "title": "addon-universal-ztna tier-standard",
+                "f5xc_synthetic_monitoring_standard": {
+                    "description": "Exclusive with [f5xc_appstack_standard f5xc_bigip_utilities_standard f5xc_content_delivery_network_standard f5xc_securemesh_advanced f5xc_securemesh_standard f5xc_site_management_standard f5xc_waap_advanced f5xc_waap_standard f5xc_web_app_scanning_standard]\n addon-synthetic-monitoring tier-standard",
+                    "title": "addon-synthetic-monitoring tier-standard",
                     "$ref": "#/definitions/schemaEmpty",
-                    "x-displayname": "Universal ZTNA standard"
+                    "x-displayname": "Synthetic Monitoring standard"
                 },
                 "f5xc_waap_advanced": {
-                    "description": "Exclusive with [f5xc_appstack_standard f5xc_securemesh_advanced f5xc_securemesh_standard f5xc_site_management_standard f5xc_universal_ztna_standard f5xc_waap_standard f5xc_web_app_scanning_standard]\n addon-WAAP tier-advanced",
+                    "description": "Exclusive with [f5xc_appstack_standard f5xc_bigip_utilities_standard f5xc_content_delivery_network_standard f5xc_securemesh_advanced f5xc_securemesh_standard f5xc_site_management_standard f5xc_synthetic_monitoring_standard f5xc_waap_standard f5xc_web_app_scanning_standard]\n addon-WAAP tier-advanced",
                     "title": "addon-WAAP tier-advanced",
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "WAAP advance"
                 },
                 "f5xc_waap_standard": {
-                    "description": "Exclusive with [f5xc_appstack_standard f5xc_securemesh_advanced f5xc_securemesh_standard f5xc_site_management_standard f5xc_universal_ztna_standard f5xc_waap_advanced f5xc_web_app_scanning_standard]\n addon-WAAP tier-standard",
+                    "description": "Exclusive with [f5xc_appstack_standard f5xc_bigip_utilities_standard f5xc_content_delivery_network_standard f5xc_securemesh_advanced f5xc_securemesh_standard f5xc_site_management_standard f5xc_synthetic_monitoring_standard f5xc_waap_advanced f5xc_web_app_scanning_standard]\n addon-WAAP tier-standard",
                     "title": "addon-WAAP tier-standard",
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "WAAP standard"
                 },
                 "f5xc_web_app_scanning_standard": {
-                    "description": "Exclusive with [f5xc_appstack_standard f5xc_securemesh_advanced f5xc_securemesh_standard f5xc_site_management_standard f5xc_universal_ztna_standard f5xc_waap_advanced f5xc_waap_standard]\n addon-web-app-scanning tier-standard",
+                    "description": "Exclusive with [f5xc_appstack_standard f5xc_bigip_utilities_standard f5xc_content_delivery_network_standard f5xc_securemesh_advanced f5xc_securemesh_standard f5xc_site_management_standard f5xc_synthetic_monitoring_standard f5xc_waap_advanced f5xc_waap_standard]\n addon-web-app-scanning tier-standard",
                     "title": "addon-web-app-scanning tier-standard",
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "Web App Scanning standard"

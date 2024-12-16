@@ -407,54 +407,6 @@ type ValidateIPV4LeasePoolConfig struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
-func (v *ValidateIPV4LeasePoolConfig) Vip4RangeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	itemRules := db.GetRepMessageItemRules(rules)
-	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
-	if err != nil {
-		return nil, errors.Wrap(err, "Message ValidationRuleHandler for vip4_range")
-	}
-	itemsValidatorFn := func(ctx context.Context, elems []*IPV4LeasePoolRange, opts ...db.ValidateOpt) error {
-		for i, el := range elems {
-			if err := itemValFn(ctx, el, opts...); err != nil {
-				return errors.Wrap(err, fmt.Sprintf("element %d", i))
-			}
-			if err := IPV4LeasePoolRangeValidator().Validate(ctx, el, opts...); err != nil {
-				return errors.Wrap(err, fmt.Sprintf("element %d", i))
-			}
-		}
-		return nil
-	}
-	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for vip4_range")
-	}
-
-	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
-		elems, ok := val.([]*IPV4LeasePoolRange)
-		if !ok {
-			return fmt.Errorf("Repeated validation expected []*IPV4LeasePoolRange, got %T", val)
-		}
-		l := []string{}
-		for _, elem := range elems {
-			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
-			if err != nil {
-				return errors.Wrapf(err, "Converting %v to JSON", elem)
-			}
-			l = append(l, strVal)
-		}
-		if err := repValFn(ctx, l, opts...); err != nil {
-			return errors.Wrap(err, "repeated vip4_range")
-		}
-		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
-			return errors.Wrap(err, "items vip4_range")
-		}
-		return nil
-	}
-
-	return validatorFn, nil
-}
-
 func (v *ValidateIPV4LeasePoolConfig) PrefixValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	itemRules := db.GetRepStringItemRules(rules)
@@ -520,9 +472,13 @@ func (v *ValidateIPV4LeasePoolConfig) Validate(ctx context.Context, pm interface
 	}
 
 	if fv, exists := v.FldValidators["vip4_range"]; exists {
+
 		vOpts := append(opts, db.WithValidateField("vip4_range"))
-		if err := fv(ctx, m.GetVip4Range(), vOpts...); err != nil {
-			return err
+		for idx, item := range m.GetVip4Range() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
 		}
 
 	}
@@ -542,22 +498,13 @@ var DefaultIPV4LeasePoolConfigValidator = func() *ValidateIPV4LeasePoolConfig {
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
 
-	vrhVip4Range := v.Vip4RangeValidationRuleHandler
-	rulesVip4Range := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
-	}
-	vFn, err = vrhVip4Range(rulesVip4Range)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for IPV4LeasePoolConfig.vip4_range: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["vip4_range"] = vFn
-
 	vrhPrefix := v.PrefixValidationRuleHandler
 	rulesPrefix := map[string]string{
+		"ves.io.schema.rules.message.required":                  "true",
 		"ves.io.schema.rules.repeated.items.string.ipv4_prefix": "true",
 		"ves.io.schema.rules.repeated.items.string.not_empty":   "true",
 		"ves.io.schema.rules.repeated.max_items":                "1024",
+		"ves.io.schema.rules.repeated.min_items":                "1",
 		"ves.io.schema.rules.repeated.unique":                   "true",
 	}
 	vFn, err = vrhPrefix(rulesPrefix)
@@ -566,6 +513,8 @@ var DefaultIPV4LeasePoolConfigValidator = func() *ValidateIPV4LeasePoolConfig {
 		panic(errMsg)
 	}
 	v.FldValidators["prefix"] = vFn
+
+	v.FldValidators["vip4_range"] = IPV4LeasePoolRangeValidator().Validate
 
 	return v
 }()

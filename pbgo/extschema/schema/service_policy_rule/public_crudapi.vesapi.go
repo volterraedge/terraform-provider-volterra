@@ -1149,16 +1149,25 @@ func (s *APISrv) Create(ctx context.Context, req *CreateRequest) (*CreateRespons
 	}
 	reqMsgFQN := "ves.io.schema.service_policy_rule.CreateRequest"
 	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.sf, reqMsgFQN, req)
+	var retErr error
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
 		}
+		userMsg := "The 'ves.io.schema.service_policy_rule.API.Create' operation on 'service_policy_rule'"
+		if retErr == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
 	obj := NewDBObject(nil)
 	req.ToObject(obj)
 	if conv, exists := s.sf.Config().MsgToObjConverters[reqMsgFQN]; exists {
 		if err := conv(req, obj); err != nil {
+			retErr = err
 			return nil, err
 		}
 	}
@@ -1167,16 +1176,19 @@ func (s *APISrv) Create(ctx context.Context, req *CreateRequest) (*CreateRespons
 	rsrcRsp, err := s.opts.RsrcHandler.CreateFn(ctx, rsrcReq, s.apiWrapper)
 	if err != nil {
 		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "CreateResource"))
+		retErr = err
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 	rsp, err := NewObjectCreateRsp(rsrcRsp.Entry)
 	if err != nil {
 		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "CreateResponse"))
+		retErr = err
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 	rspMsgFQN := "ves.io.schema.service_policy_rule.CreateResponse"
 	if conv, exists := s.sf.Config().ObjToMsgConverters[rspMsgFQN]; exists {
 		if err := conv(rsrcRsp.Entry, rsp); err != nil {
+			retErr = err
 			return nil, err
 		}
 	}
@@ -1208,21 +1220,31 @@ func (s *APISrv) Replace(ctx context.Context, req *ReplaceRequest) (*ReplaceResp
 		}
 	}
 	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.sf, "ves.io.schema.service_policy_rule.API.ReplaceRequest", req)
+	var retErr error
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
 		}
+		userMsg := "The 'ves.io.schema.service_policy_rule.API.Replace' operation on 'service_policy_rule'"
+		if retErr == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
 	rsrcReq := &server.ResourceReplaceRequest{RequestMsg: req}
 	rsrcRsp, err := s.opts.RsrcHandler.ReplaceFn(ctx, rsrcReq, s.apiWrapper)
 	if err != nil {
 		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "ReplaceResource"))
+		retErr = err
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 	rsp, err := NewObjectReplaceRsp(rsrcRsp.Entry)
 	if err != nil {
 		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "ReplaceResponse"))
+		retErr = err
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.sf, "ves.io.schema.service_policy_rule.API.ReplaceResponse", rsp)...)
@@ -1341,10 +1363,18 @@ func (s *APISrv) Delete(ctx context.Context, req *DeleteRequest) (*google_protob
 		}
 	}
 	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.sf, "ves.io.schema.service_policy_rule.API.DeleteRequest", req)
+	var retErr error
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
 		}
+		userMsg := "The 'ves.io.schema.service_policy_rule.API.Delete' operation on 'service_policy_rule'"
+		if retErr == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
 	tenant := server.TenantFromContext(ctx)
@@ -1354,6 +1384,7 @@ func (s *APISrv) Delete(ctx context.Context, req *DeleteRequest) (*google_protob
 	_, err := s.opts.RsrcHandler.DeleteFn(ctx, rsrcReq, s.apiWrapper)
 	if err != nil {
 		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "DeleteResource"))
+		retErr = err
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 	return &google_protobuf.Empty{}, nil
@@ -2874,14 +2905,14 @@ var APISwaggerJSON string = `{
         },
         "policyJA4TlsFingerprintMatcherType": {
             "type": "object",
-            "description": "JA4 TLS fingerprints to be matched",
+            "description": "An extended version of JA3 that includes additional fields for more comprehensive fingerprinting of\nSSL/TLS clients and potentially has a different structure and length.",
             "title": "JA4TlsFingerprintMatcherType",
             "x-displayname": "JA4 TLS Fingerprint Matcher",
             "x-ves-proto-message": "ves.io.schema.policy.JA4TlsFingerprintMatcherType",
             "properties": {
                 "exact_values": {
                     "type": "array",
-                    "description": " A list of exact JA4 TLS fingerprint to match the input JA4 TLS fingerprint against\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 16\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " A list of exact JA4 TLS fingerprint to match the input JA4 TLS fingerprint against\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.len: 36\n  ves.io.schema.rules.repeated.max_items: 16\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "exact values",
                     "maxItems": 16,
                     "items": {
@@ -2889,6 +2920,7 @@ var APISwaggerJSON string = `{
                     },
                     "x-displayname": "Exact Values",
                     "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.items.string.len": "36",
                         "ves.io.schema.rules.repeated.max_items": "16",
                         "ves.io.schema.rules.repeated.unique": "true"
                     }
@@ -4983,7 +5015,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "List of IP Threat Categories"
                 },
                 "ja4_tls_fingerprint": {
-                    "description": "Exclusive with [tls_fingerprint_matcher]\n JA4 TLS fingerprints to be matched",
+                    "description": "Exclusive with [tls_fingerprint_matcher]\n An extended version of JA3 that includes additional fields for more comprehensive fingerprinting of\n SSL/TLS clients and potentially has a different structure and length.",
                     "$ref": "#/definitions/policyJA4TlsFingerprintMatcherType",
                     "x-displayname": "JA4 TLS Fingerprint"
                 },
@@ -5043,7 +5075,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Configure Segments"
                 },
                 "tls_fingerprint_matcher": {
-                    "description": "Exclusive with [ja4_tls_fingerprint]\n JA3 TLS fingerprints to be matched",
+                    "description": "Exclusive with [ja4_tls_fingerprint]\n A method for uniquely identifying SSL/TLS clients by creating a 32-character MD5 hash based on the\n parameters of the Client Hello packet during the handshake.",
                     "$ref": "#/definitions/policyTlsFingerprintMatcherType",
                     "x-displayname": "JA3 TLS Fingerprint"
                 },
@@ -5209,7 +5241,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "List of IP Threat Categories"
                 },
                 "ja4_tls_fingerprint": {
-                    "description": "Exclusive with [tls_fingerprint_matcher]\n JA4 TLS fingerprints to be matched",
+                    "description": "Exclusive with [tls_fingerprint_matcher]\n An extended version of JA3 that includes additional fields for more comprehensive fingerprinting of\n SSL/TLS clients and potentially has a different structure and length.",
                     "$ref": "#/definitions/policyJA4TlsFingerprintMatcherType",
                     "x-displayname": "JA4 TLS Fingerprint"
                 },
@@ -5269,7 +5301,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Configure Segments"
                 },
                 "tls_fingerprint_matcher": {
-                    "description": "Exclusive with [ja4_tls_fingerprint]\n JA3 TLS fingerprints to be matched",
+                    "description": "Exclusive with [ja4_tls_fingerprint]\n A method for uniquely identifying SSL/TLS clients by creating a 32-character MD5 hash based on the\n parameters of the Client Hello packet during the handshake.",
                     "$ref": "#/definitions/policyTlsFingerprintMatcherType",
                     "x-displayname": "JA3 TLS Fingerprint"
                 },
@@ -5460,7 +5492,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "List of IP Threat Categories"
                 },
                 "ja4_tls_fingerprint": {
-                    "description": "Exclusive with [tls_fingerprint_matcher]\n JA4 TLS fingerprints to be matched",
+                    "description": "Exclusive with [tls_fingerprint_matcher]\n An extended version of JA3 that includes additional fields for more comprehensive fingerprinting of\n SSL/TLS clients and potentially has a different structure and length.",
                     "$ref": "#/definitions/policyJA4TlsFingerprintMatcherType",
                     "x-displayname": "JA4 TLS Fingerprint"
                 },
@@ -5520,7 +5552,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Configure Segments"
                 },
                 "tls_fingerprint_matcher": {
-                    "description": "Exclusive with [ja4_tls_fingerprint]\n JA3 TLS fingerprints to be matched",
+                    "description": "Exclusive with [ja4_tls_fingerprint]\n A method for uniquely identifying SSL/TLS clients by creating a 32-character MD5 hash based on the\n parameters of the Client Hello packet during the handshake.",
                     "$ref": "#/definitions/policyTlsFingerprintMatcherType",
                     "x-displayname": "JA3 TLS Fingerprint"
                 },

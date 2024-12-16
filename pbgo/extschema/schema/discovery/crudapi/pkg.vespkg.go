@@ -29,7 +29,38 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 
+	mdr.RPCDeprecatedRequestFieldsRegistry["ves.io.schema.discovery.crudapi.API.Create"] = []string{
+		"spec.gc_spec.discovery_cbip.cbip_clusters.#.cbip_devices.#.virtual_server_filter.protocols.#",
+	}
+
+	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.discovery.crudapi.API.Create"] = []string{
+		"spec.gc_spec.discovery_cbip.cbip_clusters.#.cbip_devices.#.virtual_server_filter.protocols.#",
+	}
+
 	mdr.RPCConfidentialRequestRegistry["ves.io.schema.discovery.crudapi.API.Create"] = "ves.io.schema.discovery.crudapi.ObjectCreateReq"
+
+	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.discovery.crudapi.API.Get"] = []string{
+		"spec.gc_spec.discovery_cbip.cbip_clusters.#.cbip_devices.#.virtual_server_filter.protocols.#",
+		"status.#.cbip_status.domain",
+	}
+
+	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.discovery.crudapi.API.List"] = []string{
+		"items.#.spec.gc_spec.discovery_cbip.cbip_clusters.#.cbip_devices.#.virtual_server_filter.protocols.#",
+		"items.#.status.#.cbip_status.domain",
+	}
+
+	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.discovery.crudapi.API.ListStream"] = []string{
+		"items.#.spec.gc_spec.discovery_cbip.cbip_clusters.#.cbip_devices.#.virtual_server_filter.protocols.#",
+		"items.#.status.#.cbip_status.domain",
+	}
+
+	mdr.RPCDeprecatedRequestFieldsRegistry["ves.io.schema.discovery.crudapi.API.Replace"] = []string{
+		"spec.gc_spec.discovery_cbip.cbip_clusters.#.cbip_devices.#.virtual_server_filter.protocols.#",
+	}
+
+	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.discovery.crudapi.API.Replace"] = []string{
+		"spec.gc_spec.discovery_cbip.cbip_clusters.#.cbip_devices.#.virtual_server_filter.protocols.#",
+	}
 
 	mdr.RPCConfidentialRequestRegistry["ves.io.schema.discovery.crudapi.API.Replace"] = "ves.io.schema.discovery.crudapi.ObjectReplaceReq"
 

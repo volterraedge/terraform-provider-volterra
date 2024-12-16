@@ -62,14 +62,16 @@ func resourceVolterraUztnaFlow() *schema.Resource {
 
 			"flow_type": {
 
-				Type:     schema.TypeSet,
+				Type:     schema.TypeList,
+				MaxItems: 1,
 				Required: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 
 						"geo_match": {
 
-							Type:     schema.TypeSet,
+							Type:     schema.TypeList,
+							MaxItems: 1,
 							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
@@ -83,7 +85,8 @@ func resourceVolterraUztnaFlow() *schema.Resource {
 
 												"custom_geo_location_selector": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Optional: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -109,14 +112,16 @@ func resourceVolterraUztnaFlow() *schema.Resource {
 
 						"saml_message": {
 
-							Type:     schema.TypeSet,
+							Type:     schema.TypeList,
+							MaxItems: 1,
 							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
 									"application_tag": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -129,21 +134,131 @@ func resourceVolterraUztnaFlow() *schema.Resource {
 										},
 									},
 
-									"provider_metadata": {
+									"idp": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
-												"idp_provider_metadata": {
+												"idp_assert_verification_cert": {
+
+													Type:     schema.TypeList,
+													MaxItems: 1,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"certificate": {
+
+																Type:     schema.TypeList,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"kind": {
+																			Type:     schema.TypeString,
+																			Computed: true,
+																		},
+
+																		"name": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+																		"namespace": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+																		"tenant": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+																	},
+																},
+															},
+														},
+													},
+												},
+
+												"idp_security_property": {
+
+													Type:     schema.TypeList,
+													MaxItems: 1,
+													Required: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"no": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"yes": {
+
+																Type:     schema.TypeList,
+																MaxItems: 1,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"rsa_sha1": {
+
+																			Type:     schema.TypeBool,
+																			Optional: true,
+																		},
+
+																		"rsa_sha256": {
+
+																			Type:     schema.TypeBool,
+																			Optional: true,
+																		},
+
+																		"rsa_sha384": {
+
+																			Type:     schema.TypeBool,
+																			Optional: true,
+																		},
+
+																		"rsa_sha512": {
+
+																			Type:     schema.TypeBool,
+																			Optional: true,
+																		},
+																	},
+																},
+															},
+														},
+													},
+												},
+
+												"issuer": {
 													Type:     schema.TypeString,
+													Required: true,
+												},
+
+												"name": {
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+
+												"post": {
+
+													Type:     schema.TypeBool,
 													Optional: true,
 												},
 
-												"service_provider_metadata": {
-													Type:     schema.TypeString,
+												"redirect": {
+
+													Type:     schema.TypeBool,
 													Optional: true,
+												},
+
+												"sso_url": {
+													Type:     schema.TypeString,
+													Required: true,
 												},
 											},
 										},
@@ -151,21 +266,24 @@ func resourceVolterraUztnaFlow() *schema.Resource {
 
 									"service_provider_properties": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
 												"audience_uri": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Required: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
 															"uniform_resource_locator": {
 
-																Type:     schema.TypeSet,
+																Type:     schema.TypeList,
+																MaxItems: 1,
 																Required: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
@@ -180,7 +298,8 @@ func resourceVolterraUztnaFlow() *schema.Resource {
 
 															"uniform_resource_name": {
 
-																Type:     schema.TypeSet,
+																Type:     schema.TypeList,
+																MaxItems: 1,
 																Required: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
@@ -213,7 +332,8 @@ func resourceVolterraUztnaFlow() *schema.Resource {
 
 												"sign_authentication_request": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Required: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -226,7 +346,8 @@ func resourceVolterraUztnaFlow() *schema.Resource {
 
 															"sign_auth": {
 
-																Type:     schema.TypeSet,
+																Type:     schema.TypeList,
+																MaxItems: 1,
 																Optional: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
@@ -272,14 +393,16 @@ func resourceVolterraUztnaFlow() *schema.Resource {
 
 												"want_encrypted_assertion": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Required: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
 															"encrypt_req": {
 
-																Type:     schema.TypeSet,
+																Type:     schema.TypeList,
+																MaxItems: 1,
 																Optional: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
@@ -397,351 +520,552 @@ func resourceVolterraUztnaFlowCreate(d *schema.ResourceData, meta interface{}) e
 	//flow_type
 	if v, ok := d.GetOk("flow_type"); ok && !isIntfNil(v) {
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		flowType := &ves_io_schema_uztna_uztna_flow.FlowType{}
 		createSpec.FlowType = flowType
 		for _, set := range sl {
-			flowTypeMapStrToI := set.(map[string]interface{})
+			if set != nil {
+				flowTypeMapStrToI := set.(map[string]interface{})
 
-			flowTypeChoiceTypeFound := false
+				flowTypeChoiceTypeFound := false
 
-			if v, ok := flowTypeMapStrToI["geo_match"]; ok && !isIntfNil(v) && !flowTypeChoiceTypeFound {
+				if v, ok := flowTypeMapStrToI["geo_match"]; ok && !isIntfNil(v) && !flowTypeChoiceTypeFound {
 
-				flowTypeChoiceTypeFound = true
-				flowTypeChoiceInt := &ves_io_schema_uztna_uztna_flow.FlowType_GeoMatch{}
-				flowTypeChoiceInt.GeoMatch = &ves_io_schema_uztna_uztna_flow.GeoMatch{}
-				flowType.FlowTypeChoice = flowTypeChoiceInt
+					flowTypeChoiceTypeFound = true
+					flowTypeChoiceInt := &ves_io_schema_uztna_uztna_flow.FlowType_GeoMatch{}
+					flowTypeChoiceInt.GeoMatch = &ves_io_schema_uztna_uztna_flow.GeoMatch{}
+					flowType.FlowTypeChoice = flowTypeChoiceInt
 
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
 
-					if v, ok := cs["match_cri"]; ok && !isIntfNil(v) {
+							if v, ok := cs["match_cri"]; ok && !isIntfNil(v) {
 
-						sl := v.([]interface{})
-						matchCri := make([]*ves_io_schema_uztna_uztna_flow.MatchingCriteria, len(sl))
-						flowTypeChoiceInt.GeoMatch.MatchCri = matchCri
-						for i, set := range sl {
-							matchCri[i] = &ves_io_schema_uztna_uztna_flow.MatchingCriteria{}
-							matchCriMapStrToI := set.(map[string]interface{})
+								sl := v.([]interface{})
+								matchCri := make([]*ves_io_schema_uztna_uztna_flow.MatchingCriteria, len(sl))
+								flowTypeChoiceInt.GeoMatch.MatchCri = matchCri
+								for i, set := range sl {
+									if set != nil {
+										matchCri[i] = &ves_io_schema_uztna_uztna_flow.MatchingCriteria{}
+										matchCriMapStrToI := set.(map[string]interface{})
 
-							if v, ok := matchCriMapStrToI["custom_geo_location_selector"]; ok && !isIntfNil(v) {
+										if v, ok := matchCriMapStrToI["custom_geo_location_selector"]; ok && !isIntfNil(v) {
 
-								sl := v.(*schema.Set).List()
-								customGeoLocationSelector := &ves_io_schema.LabelSelectorType{}
-								matchCri[i].CustomGeoLocationSelector = customGeoLocationSelector
-								for _, set := range sl {
-									customGeoLocationSelectorMapStrToI := set.(map[string]interface{})
+											sl := v.([]interface{})
+											customGeoLocationSelector := &ves_io_schema.LabelSelectorType{}
+											matchCri[i].CustomGeoLocationSelector = customGeoLocationSelector
+											for _, set := range sl {
+												if set != nil {
+													customGeoLocationSelectorMapStrToI := set.(map[string]interface{})
 
-									if w, ok := customGeoLocationSelectorMapStrToI["expressions"]; ok && !isIntfNil(w) {
-										ls := make([]string, len(w.([]interface{})))
-										for i, v := range w.([]interface{}) {
-											ls[i] = v.(string)
+													if w, ok := customGeoLocationSelectorMapStrToI["expressions"]; ok && !isIntfNil(w) {
+														ls := make([]string, len(w.([]interface{})))
+														for i, v := range w.([]interface{}) {
+															ls[i] = v.(string)
+														}
+														customGeoLocationSelector.Expressions = ls
+													}
+
+												}
+											}
+
 										}
-										customGeoLocationSelector.Expressions = ls
-									}
 
+									}
 								}
 
 							}
 
 						}
+					}
 
+				}
+
+				if v, ok := flowTypeMapStrToI["saml_message"]; ok && !isIntfNil(v) && !flowTypeChoiceTypeFound {
+
+					flowTypeChoiceTypeFound = true
+					flowTypeChoiceInt := &ves_io_schema_uztna_uztna_flow.FlowType_SamlMessage{}
+					flowTypeChoiceInt.SamlMessage = &ves_io_schema_uztna_uztna_flow.SAMLMessage{}
+					flowType.FlowTypeChoice = flowTypeChoiceInt
+
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["application_tag"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								applicationTag := &ves_io_schema_uztna_uztna_flow.ApplicationTagging{}
+								flowTypeChoiceInt.SamlMessage.ApplicationTag = applicationTag
+								for _, set := range sl {
+									if set != nil {
+										applicationTagMapStrToI := set.(map[string]interface{})
+
+										if w, ok := applicationTagMapStrToI["saml_app_tag"]; ok && !isIntfNil(w) {
+											applicationTag.SamlAppTag = w.(string)
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := cs["idp"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								idp := &ves_io_schema_uztna_uztna_flow.IdentityProvider{}
+								flowTypeChoiceInt.SamlMessage.Idp = idp
+								for _, set := range sl {
+									if set != nil {
+										idpMapStrToI := set.(map[string]interface{})
+
+										if v, ok := idpMapStrToI["idp_assert_verification_cert"]; ok && !isIntfNil(v) {
+
+											sl := v.([]interface{})
+											idpAssertVerificationCert := &ves_io_schema_uztna_uztna_flow.Certificate{}
+											idp.IdpAssertVerificationCert = idpAssertVerificationCert
+											for _, set := range sl {
+												if set != nil {
+													idpAssertVerificationCertMapStrToI := set.(map[string]interface{})
+
+													if v, ok := idpAssertVerificationCertMapStrToI["certificate"]; ok && !isIntfNil(v) {
+
+														sl := v.([]interface{})
+														certificateInt := make([]*ves_io_schema.ObjectRefType, len(sl))
+														idpAssertVerificationCert.Certificate = certificateInt
+														for i, ps := range sl {
+
+															cMapToStrVal := ps.(map[string]interface{})
+															certificateInt[i] = &ves_io_schema.ObjectRefType{}
+
+															certificateInt[i].Kind = "certificate"
+
+															if v, ok := cMapToStrVal["name"]; ok && !isIntfNil(v) {
+																certificateInt[i].Name = v.(string)
+															}
+
+															if v, ok := cMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+																certificateInt[i].Namespace = v.(string)
+															}
+
+															if v, ok := cMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+																certificateInt[i].Tenant = v.(string)
+															}
+
+															if v, ok := cMapToStrVal["uid"]; ok && !isIntfNil(v) {
+																certificateInt[i].Uid = v.(string)
+															}
+
+														}
+
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := idpMapStrToI["idp_security_property"]; ok && !isIntfNil(v) {
+
+											sl := v.([]interface{})
+											idpSecurityProperty := &ves_io_schema_uztna_uztna_flow.IdpSecurityProperty{}
+											idp.IdpSecurityProperty = idpSecurityProperty
+											for _, set := range sl {
+												if set != nil {
+													idpSecurityPropertyMapStrToI := set.(map[string]interface{})
+
+													authRequestSignedTypeFound := false
+
+													if v, ok := idpSecurityPropertyMapStrToI["no"]; ok && !isIntfNil(v) && !authRequestSignedTypeFound {
+
+														authRequestSignedTypeFound = true
+
+														if v.(bool) {
+															authRequestSignedInt := &ves_io_schema_uztna_uztna_flow.IdpSecurityProperty_No{}
+															authRequestSignedInt.No = &ves_io_schema.Empty{}
+															idpSecurityProperty.AuthRequestSigned = authRequestSignedInt
+														}
+
+													}
+
+													if v, ok := idpSecurityPropertyMapStrToI["yes"]; ok && !isIntfNil(v) && !authRequestSignedTypeFound {
+
+														authRequestSignedTypeFound = true
+														authRequestSignedInt := &ves_io_schema_uztna_uztna_flow.IdpSecurityProperty_Yes{}
+														authRequestSignedInt.Yes = &ves_io_schema_uztna_uztna_flow.SignAlgorithm{}
+														idpSecurityProperty.AuthRequestSigned = authRequestSignedInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																signAlgoTypeFound := false
+
+																if v, ok := cs["rsa_sha1"]; ok && !isIntfNil(v) && !signAlgoTypeFound {
+
+																	signAlgoTypeFound = true
+
+																	if v.(bool) {
+																		signAlgoInt := &ves_io_schema_uztna_uztna_flow.SignAlgorithm_RsaSha1{}
+																		signAlgoInt.RsaSha1 = &ves_io_schema.Empty{}
+																		authRequestSignedInt.Yes.SignAlgo = signAlgoInt
+																	}
+
+																}
+
+																if v, ok := cs["rsa_sha256"]; ok && !isIntfNil(v) && !signAlgoTypeFound {
+
+																	signAlgoTypeFound = true
+
+																	if v.(bool) {
+																		signAlgoInt := &ves_io_schema_uztna_uztna_flow.SignAlgorithm_RsaSha256{}
+																		signAlgoInt.RsaSha256 = &ves_io_schema.Empty{}
+																		authRequestSignedInt.Yes.SignAlgo = signAlgoInt
+																	}
+
+																}
+
+																if v, ok := cs["rsa_sha384"]; ok && !isIntfNil(v) && !signAlgoTypeFound {
+
+																	signAlgoTypeFound = true
+
+																	if v.(bool) {
+																		signAlgoInt := &ves_io_schema_uztna_uztna_flow.SignAlgorithm_RsaSha384{}
+																		signAlgoInt.RsaSha384 = &ves_io_schema.Empty{}
+																		authRequestSignedInt.Yes.SignAlgo = signAlgoInt
+																	}
+
+																}
+
+																if v, ok := cs["rsa_sha512"]; ok && !isIntfNil(v) && !signAlgoTypeFound {
+
+																	signAlgoTypeFound = true
+
+																	if v.(bool) {
+																		signAlgoInt := &ves_io_schema_uztna_uztna_flow.SignAlgorithm_RsaSha512{}
+																		signAlgoInt.RsaSha512 = &ves_io_schema.Empty{}
+																		authRequestSignedInt.Yes.SignAlgo = signAlgoInt
+																	}
+
+																}
+
+															}
+														}
+
+													}
+
+												}
+											}
+
+										}
+
+										if w, ok := idpMapStrToI["issuer"]; ok && !isIntfNil(w) {
+											idp.Issuer = w.(string)
+										}
+
+										if w, ok := idpMapStrToI["name"]; ok && !isIntfNil(w) {
+											idp.Name = w.(string)
+										}
+
+										ssoServiceBindingTypeFound := false
+
+										if v, ok := idpMapStrToI["post"]; ok && !isIntfNil(v) && !ssoServiceBindingTypeFound {
+
+											ssoServiceBindingTypeFound = true
+
+											if v.(bool) {
+												ssoServiceBindingInt := &ves_io_schema_uztna_uztna_flow.IdentityProvider_Post{}
+												ssoServiceBindingInt.Post = &ves_io_schema.Empty{}
+												idp.SsoServiceBinding = ssoServiceBindingInt
+											}
+
+										}
+
+										if v, ok := idpMapStrToI["redirect"]; ok && !isIntfNil(v) && !ssoServiceBindingTypeFound {
+
+											ssoServiceBindingTypeFound = true
+
+											if v.(bool) {
+												ssoServiceBindingInt := &ves_io_schema_uztna_uztna_flow.IdentityProvider_Redirect{}
+												ssoServiceBindingInt.Redirect = &ves_io_schema.Empty{}
+												idp.SsoServiceBinding = ssoServiceBindingInt
+											}
+
+										}
+
+										if w, ok := idpMapStrToI["sso_url"]; ok && !isIntfNil(w) {
+											idp.SsoUrl = w.(string)
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := cs["service_provider_properties"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								serviceProviderProperties := &ves_io_schema_uztna_uztna_flow.ServiceProviderProperties{}
+								flowTypeChoiceInt.SamlMessage.ServiceProviderProperties = serviceProviderProperties
+								for _, set := range sl {
+									if set != nil {
+										serviceProviderPropertiesMapStrToI := set.(map[string]interface{})
+
+										if v, ok := serviceProviderPropertiesMapStrToI["audience_uri"]; ok && !isIntfNil(v) {
+
+											sl := v.([]interface{})
+											audienceUri := &ves_io_schema_uztna_uztna_flow.AudienceUri{}
+											serviceProviderProperties.AudienceUri = audienceUri
+											for _, set := range sl {
+												if set != nil {
+													audienceUriMapStrToI := set.(map[string]interface{})
+
+													audienceUriChoiceTypeFound := false
+
+													if v, ok := audienceUriMapStrToI["uniform_resource_locator"]; ok && !isIntfNil(v) && !audienceUriChoiceTypeFound {
+
+														audienceUriChoiceTypeFound = true
+														audienceUriChoiceInt := &ves_io_schema_uztna_uztna_flow.AudienceUri_UniformResourceLocator{}
+														audienceUriChoiceInt.UniformResourceLocator = &ves_io_schema_uztna_uztna_flow.UniformResourceLocator{}
+														audienceUri.AudienceUriChoice = audienceUriChoiceInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["url"]; ok && !isIntfNil(v) {
+
+																	audienceUriChoiceInt.UniformResourceLocator.Url = v.(string)
+
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := audienceUriMapStrToI["uniform_resource_name"]; ok && !isIntfNil(v) && !audienceUriChoiceTypeFound {
+
+														audienceUriChoiceTypeFound = true
+														audienceUriChoiceInt := &ves_io_schema_uztna_uztna_flow.AudienceUri_UniformResourceName{}
+														audienceUriChoiceInt.UniformResourceName = &ves_io_schema_uztna_uztna_flow.UniformResourceName{}
+														audienceUri.AudienceUriChoice = audienceUriChoiceInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["host_name"]; ok && !isIntfNil(v) {
+
+																	audienceUriChoiceInt.UniformResourceName.HostName = v.(string)
+
+																}
+
+																if v, ok := cs["urn"]; ok && !isIntfNil(v) {
+
+																	audienceUriChoiceInt.UniformResourceName.Urn = v.(string)
+
+																}
+
+															}
+														}
+
+													}
+
+												}
+											}
+
+										}
+
+										if w, ok := serviceProviderPropertiesMapStrToI["force_authentication"]; ok && !isIntfNil(w) {
+											serviceProviderProperties.ForceAuthentication = w.(bool)
+										}
+
+										if w, ok := serviceProviderPropertiesMapStrToI["relay_state"]; ok && !isIntfNil(w) {
+											serviceProviderProperties.RelayState = w.(string)
+										}
+
+										if v, ok := serviceProviderPropertiesMapStrToI["sign_authentication_request"]; ok && !isIntfNil(v) {
+
+											sl := v.([]interface{})
+											signAuthenticationRequest := &ves_io_schema_uztna_uztna_flow.SignAuthenticationRequest{}
+											serviceProviderProperties.SignAuthenticationRequest = signAuthenticationRequest
+											for _, set := range sl {
+												if set != nil {
+													signAuthenticationRequestMapStrToI := set.(map[string]interface{})
+
+													signAuthTypeChoiceTypeFound := false
+
+													if v, ok := signAuthenticationRequestMapStrToI["no_auth_req"]; ok && !isIntfNil(v) && !signAuthTypeChoiceTypeFound {
+
+														signAuthTypeChoiceTypeFound = true
+
+														if v.(bool) {
+															signAuthTypeChoiceInt := &ves_io_schema_uztna_uztna_flow.SignAuthenticationRequest_NoAuthReq{}
+															signAuthTypeChoiceInt.NoAuthReq = &ves_io_schema.Empty{}
+															signAuthenticationRequest.SignAuthTypeChoice = signAuthTypeChoiceInt
+														}
+
+													}
+
+													if v, ok := signAuthenticationRequestMapStrToI["sign_auth"]; ok && !isIntfNil(v) && !signAuthTypeChoiceTypeFound {
+
+														signAuthTypeChoiceTypeFound = true
+														signAuthTypeChoiceInt := &ves_io_schema_uztna_uztna_flow.SignAuthenticationRequest_SignAuth{}
+														signAuthTypeChoiceInt.SignAuth = &ves_io_schema_uztna_uztna_flow.Certificate{}
+														signAuthenticationRequest.SignAuthTypeChoice = signAuthTypeChoiceInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["certificate"]; ok && !isIntfNil(v) {
+
+																	sl := v.([]interface{})
+																	certificateInt := make([]*ves_io_schema.ObjectRefType, len(sl))
+																	signAuthTypeChoiceInt.SignAuth.Certificate = certificateInt
+																	for i, ps := range sl {
+
+																		cMapToStrVal := ps.(map[string]interface{})
+																		certificateInt[i] = &ves_io_schema.ObjectRefType{}
+
+																		certificateInt[i].Kind = "certificate"
+
+																		if v, ok := cMapToStrVal["name"]; ok && !isIntfNil(v) {
+																			certificateInt[i].Name = v.(string)
+																		}
+
+																		if v, ok := cMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+																			certificateInt[i].Namespace = v.(string)
+																		}
+
+																		if v, ok := cMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+																			certificateInt[i].Tenant = v.(string)
+																		}
+
+																		if v, ok := cMapToStrVal["uid"]; ok && !isIntfNil(v) {
+																			certificateInt[i].Uid = v.(string)
+																		}
+
+																	}
+
+																}
+
+															}
+														}
+
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := serviceProviderPropertiesMapStrToI["type"]; ok && !isIntfNil(v) {
+
+											serviceProviderProperties.Type = ves_io_schema_uztna_uztna_flow.AssertionConsumerServiceBinding(ves_io_schema_uztna_uztna_flow.AssertionConsumerServiceBinding_value[v.(string)])
+
+										}
+
+										if v, ok := serviceProviderPropertiesMapStrToI["want_encrypted_assertion"]; ok && !isIntfNil(v) {
+
+											sl := v.([]interface{})
+											wantEncryptedAssertion := &ves_io_schema_uztna_uztna_flow.WantEncryptedRequest{}
+											serviceProviderProperties.WantEncryptedAssertion = wantEncryptedAssertion
+											for _, set := range sl {
+												if set != nil {
+													wantEncryptedAssertionMapStrToI := set.(map[string]interface{})
+
+													wantEncryptedRequestTypeFound := false
+
+													if v, ok := wantEncryptedAssertionMapStrToI["encrypt_req"]; ok && !isIntfNil(v) && !wantEncryptedRequestTypeFound {
+
+														wantEncryptedRequestTypeFound = true
+														wantEncryptedRequestInt := &ves_io_schema_uztna_uztna_flow.WantEncryptedRequest_EncryptReq{}
+														wantEncryptedRequestInt.EncryptReq = &ves_io_schema_uztna_uztna_flow.Certificate{}
+														wantEncryptedAssertion.WantEncryptedRequest = wantEncryptedRequestInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["certificate"]; ok && !isIntfNil(v) {
+
+																	sl := v.([]interface{})
+																	certificateInt := make([]*ves_io_schema.ObjectRefType, len(sl))
+																	wantEncryptedRequestInt.EncryptReq.Certificate = certificateInt
+																	for i, ps := range sl {
+
+																		cMapToStrVal := ps.(map[string]interface{})
+																		certificateInt[i] = &ves_io_schema.ObjectRefType{}
+
+																		certificateInt[i].Kind = "certificate"
+
+																		if v, ok := cMapToStrVal["name"]; ok && !isIntfNil(v) {
+																			certificateInt[i].Name = v.(string)
+																		}
+
+																		if v, ok := cMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+																			certificateInt[i].Namespace = v.(string)
+																		}
+
+																		if v, ok := cMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+																			certificateInt[i].Tenant = v.(string)
+																		}
+
+																		if v, ok := cMapToStrVal["uid"]; ok && !isIntfNil(v) {
+																			certificateInt[i].Uid = v.(string)
+																		}
+
+																	}
+
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := wantEncryptedAssertionMapStrToI["no_encrypt_req"]; ok && !isIntfNil(v) && !wantEncryptedRequestTypeFound {
+
+														wantEncryptedRequestTypeFound = true
+
+														if v.(bool) {
+															wantEncryptedRequestInt := &ves_io_schema_uztna_uztna_flow.WantEncryptedRequest_NoEncryptReq{}
+															wantEncryptedRequestInt.NoEncryptReq = &ves_io_schema.Empty{}
+															wantEncryptedAssertion.WantEncryptedRequest = wantEncryptedRequestInt
+														}
+
+													}
+
+												}
+											}
+
+										}
+
+										if w, ok := serviceProviderPropertiesMapStrToI["want_signed_assertion"]; ok && !isIntfNil(w) {
+											serviceProviderProperties.WantSignedAssertion = w.(bool)
+										}
+
+									}
+								}
+
+							}
+
+						}
 					}
 
 				}
 
 			}
-
-			if v, ok := flowTypeMapStrToI["saml_message"]; ok && !isIntfNil(v) && !flowTypeChoiceTypeFound {
-
-				flowTypeChoiceTypeFound = true
-				flowTypeChoiceInt := &ves_io_schema_uztna_uztna_flow.FlowType_SamlMessage{}
-				flowTypeChoiceInt.SamlMessage = &ves_io_schema_uztna_uztna_flow.SAMLMessage{}
-				flowType.FlowTypeChoice = flowTypeChoiceInt
-
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
-
-					if v, ok := cs["application_tag"]; ok && !isIntfNil(v) {
-
-						sl := v.(*schema.Set).List()
-						applicationTag := &ves_io_schema_uztna_uztna_flow.ApplicationTagging{}
-						flowTypeChoiceInt.SamlMessage.ApplicationTag = applicationTag
-						for _, set := range sl {
-							applicationTagMapStrToI := set.(map[string]interface{})
-
-							if w, ok := applicationTagMapStrToI["saml_app_tag"]; ok && !isIntfNil(w) {
-								applicationTag.SamlAppTag = w.(string)
-							}
-
-						}
-
-					}
-
-					if v, ok := cs["provider_metadata"]; ok && !isIntfNil(v) {
-
-						sl := v.(*schema.Set).List()
-						providerMetadata := &ves_io_schema_uztna_uztna_flow.ProviderMetadata{}
-						flowTypeChoiceInt.SamlMessage.ProviderMetadata = providerMetadata
-						for _, set := range sl {
-							providerMetadataMapStrToI := set.(map[string]interface{})
-
-							if w, ok := providerMetadataMapStrToI["idp_provider_metadata"]; ok && !isIntfNil(w) {
-								providerMetadata.IdpProviderMetadata = w.(string)
-							}
-
-							if w, ok := providerMetadataMapStrToI["service_provider_metadata"]; ok && !isIntfNil(w) {
-								providerMetadata.ServiceProviderMetadata = w.(string)
-							}
-
-						}
-
-					}
-
-					if v, ok := cs["service_provider_properties"]; ok && !isIntfNil(v) {
-
-						sl := v.(*schema.Set).List()
-						serviceProviderProperties := &ves_io_schema_uztna_uztna_flow.ServiceProviderProperties{}
-						flowTypeChoiceInt.SamlMessage.ServiceProviderProperties = serviceProviderProperties
-						for _, set := range sl {
-							serviceProviderPropertiesMapStrToI := set.(map[string]interface{})
-
-							if v, ok := serviceProviderPropertiesMapStrToI["audience_uri"]; ok && !isIntfNil(v) {
-
-								sl := v.(*schema.Set).List()
-								audienceUri := &ves_io_schema_uztna_uztna_flow.AudienceUri{}
-								serviceProviderProperties.AudienceUri = audienceUri
-								for _, set := range sl {
-									audienceUriMapStrToI := set.(map[string]interface{})
-
-									audienceUriChoiceTypeFound := false
-
-									if v, ok := audienceUriMapStrToI["uniform_resource_locator"]; ok && !isIntfNil(v) && !audienceUriChoiceTypeFound {
-
-										audienceUriChoiceTypeFound = true
-										audienceUriChoiceInt := &ves_io_schema_uztna_uztna_flow.AudienceUri_UniformResourceLocator{}
-										audienceUriChoiceInt.UniformResourceLocator = &ves_io_schema_uztna_uztna_flow.UniformResourceLocator{}
-										audienceUri.AudienceUriChoice = audienceUriChoiceInt
-
-										sl := v.(*schema.Set).List()
-										for _, set := range sl {
-											cs := set.(map[string]interface{})
-
-											if v, ok := cs["url"]; ok && !isIntfNil(v) {
-
-												audienceUriChoiceInt.UniformResourceLocator.Url = v.(string)
-
-											}
-
-										}
-
-									}
-
-									if v, ok := audienceUriMapStrToI["uniform_resource_name"]; ok && !isIntfNil(v) && !audienceUriChoiceTypeFound {
-
-										audienceUriChoiceTypeFound = true
-										audienceUriChoiceInt := &ves_io_schema_uztna_uztna_flow.AudienceUri_UniformResourceName{}
-										audienceUriChoiceInt.UniformResourceName = &ves_io_schema_uztna_uztna_flow.UniformResourceName{}
-										audienceUri.AudienceUriChoice = audienceUriChoiceInt
-
-										sl := v.(*schema.Set).List()
-										for _, set := range sl {
-											cs := set.(map[string]interface{})
-
-											if v, ok := cs["host_name"]; ok && !isIntfNil(v) {
-
-												audienceUriChoiceInt.UniformResourceName.HostName = v.(string)
-
-											}
-
-											if v, ok := cs["urn"]; ok && !isIntfNil(v) {
-
-												audienceUriChoiceInt.UniformResourceName.Urn = v.(string)
-
-											}
-
-										}
-
-									}
-
-								}
-
-							}
-
-							if w, ok := serviceProviderPropertiesMapStrToI["force_authentication"]; ok && !isIntfNil(w) {
-								serviceProviderProperties.ForceAuthentication = w.(bool)
-							}
-
-							if w, ok := serviceProviderPropertiesMapStrToI["relay_state"]; ok && !isIntfNil(w) {
-								serviceProviderProperties.RelayState = w.(string)
-							}
-
-							if v, ok := serviceProviderPropertiesMapStrToI["sign_authentication_request"]; ok && !isIntfNil(v) {
-
-								sl := v.(*schema.Set).List()
-								signAuthenticationRequest := &ves_io_schema_uztna_uztna_flow.SignAuthenticationRequest{}
-								serviceProviderProperties.SignAuthenticationRequest = signAuthenticationRequest
-								for _, set := range sl {
-									signAuthenticationRequestMapStrToI := set.(map[string]interface{})
-
-									signAuthTypeChoiceTypeFound := false
-
-									if v, ok := signAuthenticationRequestMapStrToI["no_auth_req"]; ok && !isIntfNil(v) && !signAuthTypeChoiceTypeFound {
-
-										signAuthTypeChoiceTypeFound = true
-
-										if v.(bool) {
-											signAuthTypeChoiceInt := &ves_io_schema_uztna_uztna_flow.SignAuthenticationRequest_NoAuthReq{}
-											signAuthTypeChoiceInt.NoAuthReq = &ves_io_schema.Empty{}
-											signAuthenticationRequest.SignAuthTypeChoice = signAuthTypeChoiceInt
-										}
-
-									}
-
-									if v, ok := signAuthenticationRequestMapStrToI["sign_auth"]; ok && !isIntfNil(v) && !signAuthTypeChoiceTypeFound {
-
-										signAuthTypeChoiceTypeFound = true
-										signAuthTypeChoiceInt := &ves_io_schema_uztna_uztna_flow.SignAuthenticationRequest_SignAuth{}
-										signAuthTypeChoiceInt.SignAuth = &ves_io_schema_uztna_uztna_flow.Certificate{}
-										signAuthenticationRequest.SignAuthTypeChoice = signAuthTypeChoiceInt
-
-										sl := v.(*schema.Set).List()
-										for _, set := range sl {
-											cs := set.(map[string]interface{})
-
-											if v, ok := cs["certificate"]; ok && !isIntfNil(v) {
-
-												sl := v.([]interface{})
-												certificateInt := make([]*ves_io_schema.ObjectRefType, len(sl))
-												signAuthTypeChoiceInt.SignAuth.Certificate = certificateInt
-												for i, ps := range sl {
-
-													cMapToStrVal := ps.(map[string]interface{})
-													certificateInt[i] = &ves_io_schema.ObjectRefType{}
-
-													certificateInt[i].Kind = "certificate"
-
-													if v, ok := cMapToStrVal["name"]; ok && !isIntfNil(v) {
-														certificateInt[i].Name = v.(string)
-													}
-
-													if v, ok := cMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-														certificateInt[i].Namespace = v.(string)
-													}
-
-													if v, ok := cMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-														certificateInt[i].Tenant = v.(string)
-													}
-
-													if v, ok := cMapToStrVal["uid"]; ok && !isIntfNil(v) {
-														certificateInt[i].Uid = v.(string)
-													}
-
-												}
-
-											}
-
-										}
-
-									}
-
-								}
-
-							}
-
-							if v, ok := serviceProviderPropertiesMapStrToI["type"]; ok && !isIntfNil(v) {
-
-								serviceProviderProperties.Type = ves_io_schema_uztna_uztna_flow.AssertionConsumerServiceBinding(ves_io_schema_uztna_uztna_flow.AssertionConsumerServiceBinding_value[v.(string)])
-
-							}
-
-							if v, ok := serviceProviderPropertiesMapStrToI["want_encrypted_assertion"]; ok && !isIntfNil(v) {
-
-								sl := v.(*schema.Set).List()
-								wantEncryptedAssertion := &ves_io_schema_uztna_uztna_flow.WantEncryptedRequest{}
-								serviceProviderProperties.WantEncryptedAssertion = wantEncryptedAssertion
-								for _, set := range sl {
-									wantEncryptedAssertionMapStrToI := set.(map[string]interface{})
-
-									wantEncryptedRequestTypeFound := false
-
-									if v, ok := wantEncryptedAssertionMapStrToI["encrypt_req"]; ok && !isIntfNil(v) && !wantEncryptedRequestTypeFound {
-
-										wantEncryptedRequestTypeFound = true
-										wantEncryptedRequestInt := &ves_io_schema_uztna_uztna_flow.WantEncryptedRequest_EncryptReq{}
-										wantEncryptedRequestInt.EncryptReq = &ves_io_schema_uztna_uztna_flow.Certificate{}
-										wantEncryptedAssertion.WantEncryptedRequest = wantEncryptedRequestInt
-
-										sl := v.(*schema.Set).List()
-										for _, set := range sl {
-											cs := set.(map[string]interface{})
-
-											if v, ok := cs["certificate"]; ok && !isIntfNil(v) {
-
-												sl := v.([]interface{})
-												certificateInt := make([]*ves_io_schema.ObjectRefType, len(sl))
-												wantEncryptedRequestInt.EncryptReq.Certificate = certificateInt
-												for i, ps := range sl {
-
-													cMapToStrVal := ps.(map[string]interface{})
-													certificateInt[i] = &ves_io_schema.ObjectRefType{}
-
-													certificateInt[i].Kind = "certificate"
-
-													if v, ok := cMapToStrVal["name"]; ok && !isIntfNil(v) {
-														certificateInt[i].Name = v.(string)
-													}
-
-													if v, ok := cMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-														certificateInt[i].Namespace = v.(string)
-													}
-
-													if v, ok := cMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-														certificateInt[i].Tenant = v.(string)
-													}
-
-													if v, ok := cMapToStrVal["uid"]; ok && !isIntfNil(v) {
-														certificateInt[i].Uid = v.(string)
-													}
-
-												}
-
-											}
-
-										}
-
-									}
-
-									if v, ok := wantEncryptedAssertionMapStrToI["no_encrypt_req"]; ok && !isIntfNil(v) && !wantEncryptedRequestTypeFound {
-
-										wantEncryptedRequestTypeFound = true
-
-										if v.(bool) {
-											wantEncryptedRequestInt := &ves_io_schema_uztna_uztna_flow.WantEncryptedRequest_NoEncryptReq{}
-											wantEncryptedRequestInt.NoEncryptReq = &ves_io_schema.Empty{}
-											wantEncryptedAssertion.WantEncryptedRequest = wantEncryptedRequestInt
-										}
-
-									}
-
-								}
-
-							}
-
-							if w, ok := serviceProviderPropertiesMapStrToI["want_signed_assertion"]; ok && !isIntfNil(w) {
-								serviceProviderProperties.WantSignedAssertion = w.(bool)
-							}
-
-						}
-
-					}
-
-				}
-
-			}
-
 		}
 
 	}
@@ -847,351 +1171,552 @@ func resourceVolterraUztnaFlowUpdate(d *schema.ResourceData, meta interface{}) e
 
 	if v, ok := d.GetOk("flow_type"); ok && !isIntfNil(v) {
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		flowType := &ves_io_schema_uztna_uztna_flow.FlowType{}
 		updateSpec.FlowType = flowType
 		for _, set := range sl {
-			flowTypeMapStrToI := set.(map[string]interface{})
+			if set != nil {
+				flowTypeMapStrToI := set.(map[string]interface{})
 
-			flowTypeChoiceTypeFound := false
+				flowTypeChoiceTypeFound := false
 
-			if v, ok := flowTypeMapStrToI["geo_match"]; ok && !isIntfNil(v) && !flowTypeChoiceTypeFound {
+				if v, ok := flowTypeMapStrToI["geo_match"]; ok && !isIntfNil(v) && !flowTypeChoiceTypeFound {
 
-				flowTypeChoiceTypeFound = true
-				flowTypeChoiceInt := &ves_io_schema_uztna_uztna_flow.FlowType_GeoMatch{}
-				flowTypeChoiceInt.GeoMatch = &ves_io_schema_uztna_uztna_flow.GeoMatch{}
-				flowType.FlowTypeChoice = flowTypeChoiceInt
+					flowTypeChoiceTypeFound = true
+					flowTypeChoiceInt := &ves_io_schema_uztna_uztna_flow.FlowType_GeoMatch{}
+					flowTypeChoiceInt.GeoMatch = &ves_io_schema_uztna_uztna_flow.GeoMatch{}
+					flowType.FlowTypeChoice = flowTypeChoiceInt
 
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
 
-					if v, ok := cs["match_cri"]; ok && !isIntfNil(v) {
+							if v, ok := cs["match_cri"]; ok && !isIntfNil(v) {
 
-						sl := v.([]interface{})
-						matchCri := make([]*ves_io_schema_uztna_uztna_flow.MatchingCriteria, len(sl))
-						flowTypeChoiceInt.GeoMatch.MatchCri = matchCri
-						for i, set := range sl {
-							matchCri[i] = &ves_io_schema_uztna_uztna_flow.MatchingCriteria{}
-							matchCriMapStrToI := set.(map[string]interface{})
+								sl := v.([]interface{})
+								matchCri := make([]*ves_io_schema_uztna_uztna_flow.MatchingCriteria, len(sl))
+								flowTypeChoiceInt.GeoMatch.MatchCri = matchCri
+								for i, set := range sl {
+									if set != nil {
+										matchCri[i] = &ves_io_schema_uztna_uztna_flow.MatchingCriteria{}
+										matchCriMapStrToI := set.(map[string]interface{})
 
-							if v, ok := matchCriMapStrToI["custom_geo_location_selector"]; ok && !isIntfNil(v) {
+										if v, ok := matchCriMapStrToI["custom_geo_location_selector"]; ok && !isIntfNil(v) {
 
-								sl := v.(*schema.Set).List()
-								customGeoLocationSelector := &ves_io_schema.LabelSelectorType{}
-								matchCri[i].CustomGeoLocationSelector = customGeoLocationSelector
-								for _, set := range sl {
-									customGeoLocationSelectorMapStrToI := set.(map[string]interface{})
+											sl := v.([]interface{})
+											customGeoLocationSelector := &ves_io_schema.LabelSelectorType{}
+											matchCri[i].CustomGeoLocationSelector = customGeoLocationSelector
+											for _, set := range sl {
+												if set != nil {
+													customGeoLocationSelectorMapStrToI := set.(map[string]interface{})
 
-									if w, ok := customGeoLocationSelectorMapStrToI["expressions"]; ok && !isIntfNil(w) {
-										ls := make([]string, len(w.([]interface{})))
-										for i, v := range w.([]interface{}) {
-											ls[i] = v.(string)
+													if w, ok := customGeoLocationSelectorMapStrToI["expressions"]; ok && !isIntfNil(w) {
+														ls := make([]string, len(w.([]interface{})))
+														for i, v := range w.([]interface{}) {
+															ls[i] = v.(string)
+														}
+														customGeoLocationSelector.Expressions = ls
+													}
+
+												}
+											}
+
 										}
-										customGeoLocationSelector.Expressions = ls
-									}
 
+									}
 								}
 
 							}
 
 						}
+					}
 
+				}
+
+				if v, ok := flowTypeMapStrToI["saml_message"]; ok && !isIntfNil(v) && !flowTypeChoiceTypeFound {
+
+					flowTypeChoiceTypeFound = true
+					flowTypeChoiceInt := &ves_io_schema_uztna_uztna_flow.FlowType_SamlMessage{}
+					flowTypeChoiceInt.SamlMessage = &ves_io_schema_uztna_uztna_flow.SAMLMessage{}
+					flowType.FlowTypeChoice = flowTypeChoiceInt
+
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["application_tag"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								applicationTag := &ves_io_schema_uztna_uztna_flow.ApplicationTagging{}
+								flowTypeChoiceInt.SamlMessage.ApplicationTag = applicationTag
+								for _, set := range sl {
+									if set != nil {
+										applicationTagMapStrToI := set.(map[string]interface{})
+
+										if w, ok := applicationTagMapStrToI["saml_app_tag"]; ok && !isIntfNil(w) {
+											applicationTag.SamlAppTag = w.(string)
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := cs["idp"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								idp := &ves_io_schema_uztna_uztna_flow.IdentityProvider{}
+								flowTypeChoiceInt.SamlMessage.Idp = idp
+								for _, set := range sl {
+									if set != nil {
+										idpMapStrToI := set.(map[string]interface{})
+
+										if v, ok := idpMapStrToI["idp_assert_verification_cert"]; ok && !isIntfNil(v) {
+
+											sl := v.([]interface{})
+											idpAssertVerificationCert := &ves_io_schema_uztna_uztna_flow.Certificate{}
+											idp.IdpAssertVerificationCert = idpAssertVerificationCert
+											for _, set := range sl {
+												if set != nil {
+													idpAssertVerificationCertMapStrToI := set.(map[string]interface{})
+
+													if v, ok := idpAssertVerificationCertMapStrToI["certificate"]; ok && !isIntfNil(v) {
+
+														sl := v.([]interface{})
+														certificateInt := make([]*ves_io_schema.ObjectRefType, len(sl))
+														idpAssertVerificationCert.Certificate = certificateInt
+														for i, ps := range sl {
+
+															cMapToStrVal := ps.(map[string]interface{})
+															certificateInt[i] = &ves_io_schema.ObjectRefType{}
+
+															certificateInt[i].Kind = "certificate"
+
+															if v, ok := cMapToStrVal["name"]; ok && !isIntfNil(v) {
+																certificateInt[i].Name = v.(string)
+															}
+
+															if v, ok := cMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+																certificateInt[i].Namespace = v.(string)
+															}
+
+															if v, ok := cMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+																certificateInt[i].Tenant = v.(string)
+															}
+
+															if v, ok := cMapToStrVal["uid"]; ok && !isIntfNil(v) {
+																certificateInt[i].Uid = v.(string)
+															}
+
+														}
+
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := idpMapStrToI["idp_security_property"]; ok && !isIntfNil(v) {
+
+											sl := v.([]interface{})
+											idpSecurityProperty := &ves_io_schema_uztna_uztna_flow.IdpSecurityProperty{}
+											idp.IdpSecurityProperty = idpSecurityProperty
+											for _, set := range sl {
+												if set != nil {
+													idpSecurityPropertyMapStrToI := set.(map[string]interface{})
+
+													authRequestSignedTypeFound := false
+
+													if v, ok := idpSecurityPropertyMapStrToI["no"]; ok && !isIntfNil(v) && !authRequestSignedTypeFound {
+
+														authRequestSignedTypeFound = true
+
+														if v.(bool) {
+															authRequestSignedInt := &ves_io_schema_uztna_uztna_flow.IdpSecurityProperty_No{}
+															authRequestSignedInt.No = &ves_io_schema.Empty{}
+															idpSecurityProperty.AuthRequestSigned = authRequestSignedInt
+														}
+
+													}
+
+													if v, ok := idpSecurityPropertyMapStrToI["yes"]; ok && !isIntfNil(v) && !authRequestSignedTypeFound {
+
+														authRequestSignedTypeFound = true
+														authRequestSignedInt := &ves_io_schema_uztna_uztna_flow.IdpSecurityProperty_Yes{}
+														authRequestSignedInt.Yes = &ves_io_schema_uztna_uztna_flow.SignAlgorithm{}
+														idpSecurityProperty.AuthRequestSigned = authRequestSignedInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																signAlgoTypeFound := false
+
+																if v, ok := cs["rsa_sha1"]; ok && !isIntfNil(v) && !signAlgoTypeFound {
+
+																	signAlgoTypeFound = true
+
+																	if v.(bool) {
+																		signAlgoInt := &ves_io_schema_uztna_uztna_flow.SignAlgorithm_RsaSha1{}
+																		signAlgoInt.RsaSha1 = &ves_io_schema.Empty{}
+																		authRequestSignedInt.Yes.SignAlgo = signAlgoInt
+																	}
+
+																}
+
+																if v, ok := cs["rsa_sha256"]; ok && !isIntfNil(v) && !signAlgoTypeFound {
+
+																	signAlgoTypeFound = true
+
+																	if v.(bool) {
+																		signAlgoInt := &ves_io_schema_uztna_uztna_flow.SignAlgorithm_RsaSha256{}
+																		signAlgoInt.RsaSha256 = &ves_io_schema.Empty{}
+																		authRequestSignedInt.Yes.SignAlgo = signAlgoInt
+																	}
+
+																}
+
+																if v, ok := cs["rsa_sha384"]; ok && !isIntfNil(v) && !signAlgoTypeFound {
+
+																	signAlgoTypeFound = true
+
+																	if v.(bool) {
+																		signAlgoInt := &ves_io_schema_uztna_uztna_flow.SignAlgorithm_RsaSha384{}
+																		signAlgoInt.RsaSha384 = &ves_io_schema.Empty{}
+																		authRequestSignedInt.Yes.SignAlgo = signAlgoInt
+																	}
+
+																}
+
+																if v, ok := cs["rsa_sha512"]; ok && !isIntfNil(v) && !signAlgoTypeFound {
+
+																	signAlgoTypeFound = true
+
+																	if v.(bool) {
+																		signAlgoInt := &ves_io_schema_uztna_uztna_flow.SignAlgorithm_RsaSha512{}
+																		signAlgoInt.RsaSha512 = &ves_io_schema.Empty{}
+																		authRequestSignedInt.Yes.SignAlgo = signAlgoInt
+																	}
+
+																}
+
+															}
+														}
+
+													}
+
+												}
+											}
+
+										}
+
+										if w, ok := idpMapStrToI["issuer"]; ok && !isIntfNil(w) {
+											idp.Issuer = w.(string)
+										}
+
+										if w, ok := idpMapStrToI["name"]; ok && !isIntfNil(w) {
+											idp.Name = w.(string)
+										}
+
+										ssoServiceBindingTypeFound := false
+
+										if v, ok := idpMapStrToI["post"]; ok && !isIntfNil(v) && !ssoServiceBindingTypeFound {
+
+											ssoServiceBindingTypeFound = true
+
+											if v.(bool) {
+												ssoServiceBindingInt := &ves_io_schema_uztna_uztna_flow.IdentityProvider_Post{}
+												ssoServiceBindingInt.Post = &ves_io_schema.Empty{}
+												idp.SsoServiceBinding = ssoServiceBindingInt
+											}
+
+										}
+
+										if v, ok := idpMapStrToI["redirect"]; ok && !isIntfNil(v) && !ssoServiceBindingTypeFound {
+
+											ssoServiceBindingTypeFound = true
+
+											if v.(bool) {
+												ssoServiceBindingInt := &ves_io_schema_uztna_uztna_flow.IdentityProvider_Redirect{}
+												ssoServiceBindingInt.Redirect = &ves_io_schema.Empty{}
+												idp.SsoServiceBinding = ssoServiceBindingInt
+											}
+
+										}
+
+										if w, ok := idpMapStrToI["sso_url"]; ok && !isIntfNil(w) {
+											idp.SsoUrl = w.(string)
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := cs["service_provider_properties"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								serviceProviderProperties := &ves_io_schema_uztna_uztna_flow.ServiceProviderProperties{}
+								flowTypeChoiceInt.SamlMessage.ServiceProviderProperties = serviceProviderProperties
+								for _, set := range sl {
+									if set != nil {
+										serviceProviderPropertiesMapStrToI := set.(map[string]interface{})
+
+										if v, ok := serviceProviderPropertiesMapStrToI["audience_uri"]; ok && !isIntfNil(v) {
+
+											sl := v.([]interface{})
+											audienceUri := &ves_io_schema_uztna_uztna_flow.AudienceUri{}
+											serviceProviderProperties.AudienceUri = audienceUri
+											for _, set := range sl {
+												if set != nil {
+													audienceUriMapStrToI := set.(map[string]interface{})
+
+													audienceUriChoiceTypeFound := false
+
+													if v, ok := audienceUriMapStrToI["uniform_resource_locator"]; ok && !isIntfNil(v) && !audienceUriChoiceTypeFound {
+
+														audienceUriChoiceTypeFound = true
+														audienceUriChoiceInt := &ves_io_schema_uztna_uztna_flow.AudienceUri_UniformResourceLocator{}
+														audienceUriChoiceInt.UniformResourceLocator = &ves_io_schema_uztna_uztna_flow.UniformResourceLocator{}
+														audienceUri.AudienceUriChoice = audienceUriChoiceInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["url"]; ok && !isIntfNil(v) {
+
+																	audienceUriChoiceInt.UniformResourceLocator.Url = v.(string)
+
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := audienceUriMapStrToI["uniform_resource_name"]; ok && !isIntfNil(v) && !audienceUriChoiceTypeFound {
+
+														audienceUriChoiceTypeFound = true
+														audienceUriChoiceInt := &ves_io_schema_uztna_uztna_flow.AudienceUri_UniformResourceName{}
+														audienceUriChoiceInt.UniformResourceName = &ves_io_schema_uztna_uztna_flow.UniformResourceName{}
+														audienceUri.AudienceUriChoice = audienceUriChoiceInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["host_name"]; ok && !isIntfNil(v) {
+
+																	audienceUriChoiceInt.UniformResourceName.HostName = v.(string)
+
+																}
+
+																if v, ok := cs["urn"]; ok && !isIntfNil(v) {
+
+																	audienceUriChoiceInt.UniformResourceName.Urn = v.(string)
+
+																}
+
+															}
+														}
+
+													}
+
+												}
+											}
+
+										}
+
+										if w, ok := serviceProviderPropertiesMapStrToI["force_authentication"]; ok && !isIntfNil(w) {
+											serviceProviderProperties.ForceAuthentication = w.(bool)
+										}
+
+										if w, ok := serviceProviderPropertiesMapStrToI["relay_state"]; ok && !isIntfNil(w) {
+											serviceProviderProperties.RelayState = w.(string)
+										}
+
+										if v, ok := serviceProviderPropertiesMapStrToI["sign_authentication_request"]; ok && !isIntfNil(v) {
+
+											sl := v.([]interface{})
+											signAuthenticationRequest := &ves_io_schema_uztna_uztna_flow.SignAuthenticationRequest{}
+											serviceProviderProperties.SignAuthenticationRequest = signAuthenticationRequest
+											for _, set := range sl {
+												if set != nil {
+													signAuthenticationRequestMapStrToI := set.(map[string]interface{})
+
+													signAuthTypeChoiceTypeFound := false
+
+													if v, ok := signAuthenticationRequestMapStrToI["no_auth_req"]; ok && !isIntfNil(v) && !signAuthTypeChoiceTypeFound {
+
+														signAuthTypeChoiceTypeFound = true
+
+														if v.(bool) {
+															signAuthTypeChoiceInt := &ves_io_schema_uztna_uztna_flow.SignAuthenticationRequest_NoAuthReq{}
+															signAuthTypeChoiceInt.NoAuthReq = &ves_io_schema.Empty{}
+															signAuthenticationRequest.SignAuthTypeChoice = signAuthTypeChoiceInt
+														}
+
+													}
+
+													if v, ok := signAuthenticationRequestMapStrToI["sign_auth"]; ok && !isIntfNil(v) && !signAuthTypeChoiceTypeFound {
+
+														signAuthTypeChoiceTypeFound = true
+														signAuthTypeChoiceInt := &ves_io_schema_uztna_uztna_flow.SignAuthenticationRequest_SignAuth{}
+														signAuthTypeChoiceInt.SignAuth = &ves_io_schema_uztna_uztna_flow.Certificate{}
+														signAuthenticationRequest.SignAuthTypeChoice = signAuthTypeChoiceInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["certificate"]; ok && !isIntfNil(v) {
+
+																	sl := v.([]interface{})
+																	certificateInt := make([]*ves_io_schema.ObjectRefType, len(sl))
+																	signAuthTypeChoiceInt.SignAuth.Certificate = certificateInt
+																	for i, ps := range sl {
+
+																		cMapToStrVal := ps.(map[string]interface{})
+																		certificateInt[i] = &ves_io_schema.ObjectRefType{}
+
+																		certificateInt[i].Kind = "certificate"
+
+																		if v, ok := cMapToStrVal["name"]; ok && !isIntfNil(v) {
+																			certificateInt[i].Name = v.(string)
+																		}
+
+																		if v, ok := cMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+																			certificateInt[i].Namespace = v.(string)
+																		}
+
+																		if v, ok := cMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+																			certificateInt[i].Tenant = v.(string)
+																		}
+
+																		if v, ok := cMapToStrVal["uid"]; ok && !isIntfNil(v) {
+																			certificateInt[i].Uid = v.(string)
+																		}
+
+																	}
+
+																}
+
+															}
+														}
+
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := serviceProviderPropertiesMapStrToI["type"]; ok && !isIntfNil(v) {
+
+											serviceProviderProperties.Type = ves_io_schema_uztna_uztna_flow.AssertionConsumerServiceBinding(ves_io_schema_uztna_uztna_flow.AssertionConsumerServiceBinding_value[v.(string)])
+
+										}
+
+										if v, ok := serviceProviderPropertiesMapStrToI["want_encrypted_assertion"]; ok && !isIntfNil(v) {
+
+											sl := v.([]interface{})
+											wantEncryptedAssertion := &ves_io_schema_uztna_uztna_flow.WantEncryptedRequest{}
+											serviceProviderProperties.WantEncryptedAssertion = wantEncryptedAssertion
+											for _, set := range sl {
+												if set != nil {
+													wantEncryptedAssertionMapStrToI := set.(map[string]interface{})
+
+													wantEncryptedRequestTypeFound := false
+
+													if v, ok := wantEncryptedAssertionMapStrToI["encrypt_req"]; ok && !isIntfNil(v) && !wantEncryptedRequestTypeFound {
+
+														wantEncryptedRequestTypeFound = true
+														wantEncryptedRequestInt := &ves_io_schema_uztna_uztna_flow.WantEncryptedRequest_EncryptReq{}
+														wantEncryptedRequestInt.EncryptReq = &ves_io_schema_uztna_uztna_flow.Certificate{}
+														wantEncryptedAssertion.WantEncryptedRequest = wantEncryptedRequestInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["certificate"]; ok && !isIntfNil(v) {
+
+																	sl := v.([]interface{})
+																	certificateInt := make([]*ves_io_schema.ObjectRefType, len(sl))
+																	wantEncryptedRequestInt.EncryptReq.Certificate = certificateInt
+																	for i, ps := range sl {
+
+																		cMapToStrVal := ps.(map[string]interface{})
+																		certificateInt[i] = &ves_io_schema.ObjectRefType{}
+
+																		certificateInt[i].Kind = "certificate"
+
+																		if v, ok := cMapToStrVal["name"]; ok && !isIntfNil(v) {
+																			certificateInt[i].Name = v.(string)
+																		}
+
+																		if v, ok := cMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+																			certificateInt[i].Namespace = v.(string)
+																		}
+
+																		if v, ok := cMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+																			certificateInt[i].Tenant = v.(string)
+																		}
+
+																		if v, ok := cMapToStrVal["uid"]; ok && !isIntfNil(v) {
+																			certificateInt[i].Uid = v.(string)
+																		}
+
+																	}
+
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := wantEncryptedAssertionMapStrToI["no_encrypt_req"]; ok && !isIntfNil(v) && !wantEncryptedRequestTypeFound {
+
+														wantEncryptedRequestTypeFound = true
+
+														if v.(bool) {
+															wantEncryptedRequestInt := &ves_io_schema_uztna_uztna_flow.WantEncryptedRequest_NoEncryptReq{}
+															wantEncryptedRequestInt.NoEncryptReq = &ves_io_schema.Empty{}
+															wantEncryptedAssertion.WantEncryptedRequest = wantEncryptedRequestInt
+														}
+
+													}
+
+												}
+											}
+
+										}
+
+										if w, ok := serviceProviderPropertiesMapStrToI["want_signed_assertion"]; ok && !isIntfNil(w) {
+											serviceProviderProperties.WantSignedAssertion = w.(bool)
+										}
+
+									}
+								}
+
+							}
+
+						}
 					}
 
 				}
 
 			}
-
-			if v, ok := flowTypeMapStrToI["saml_message"]; ok && !isIntfNil(v) && !flowTypeChoiceTypeFound {
-
-				flowTypeChoiceTypeFound = true
-				flowTypeChoiceInt := &ves_io_schema_uztna_uztna_flow.FlowType_SamlMessage{}
-				flowTypeChoiceInt.SamlMessage = &ves_io_schema_uztna_uztna_flow.SAMLMessage{}
-				flowType.FlowTypeChoice = flowTypeChoiceInt
-
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
-
-					if v, ok := cs["application_tag"]; ok && !isIntfNil(v) {
-
-						sl := v.(*schema.Set).List()
-						applicationTag := &ves_io_schema_uztna_uztna_flow.ApplicationTagging{}
-						flowTypeChoiceInt.SamlMessage.ApplicationTag = applicationTag
-						for _, set := range sl {
-							applicationTagMapStrToI := set.(map[string]interface{})
-
-							if w, ok := applicationTagMapStrToI["saml_app_tag"]; ok && !isIntfNil(w) {
-								applicationTag.SamlAppTag = w.(string)
-							}
-
-						}
-
-					}
-
-					if v, ok := cs["provider_metadata"]; ok && !isIntfNil(v) {
-
-						sl := v.(*schema.Set).List()
-						providerMetadata := &ves_io_schema_uztna_uztna_flow.ProviderMetadata{}
-						flowTypeChoiceInt.SamlMessage.ProviderMetadata = providerMetadata
-						for _, set := range sl {
-							providerMetadataMapStrToI := set.(map[string]interface{})
-
-							if w, ok := providerMetadataMapStrToI["idp_provider_metadata"]; ok && !isIntfNil(w) {
-								providerMetadata.IdpProviderMetadata = w.(string)
-							}
-
-							if w, ok := providerMetadataMapStrToI["service_provider_metadata"]; ok && !isIntfNil(w) {
-								providerMetadata.ServiceProviderMetadata = w.(string)
-							}
-
-						}
-
-					}
-
-					if v, ok := cs["service_provider_properties"]; ok && !isIntfNil(v) {
-
-						sl := v.(*schema.Set).List()
-						serviceProviderProperties := &ves_io_schema_uztna_uztna_flow.ServiceProviderProperties{}
-						flowTypeChoiceInt.SamlMessage.ServiceProviderProperties = serviceProviderProperties
-						for _, set := range sl {
-							serviceProviderPropertiesMapStrToI := set.(map[string]interface{})
-
-							if v, ok := serviceProviderPropertiesMapStrToI["audience_uri"]; ok && !isIntfNil(v) {
-
-								sl := v.(*schema.Set).List()
-								audienceUri := &ves_io_schema_uztna_uztna_flow.AudienceUri{}
-								serviceProviderProperties.AudienceUri = audienceUri
-								for _, set := range sl {
-									audienceUriMapStrToI := set.(map[string]interface{})
-
-									audienceUriChoiceTypeFound := false
-
-									if v, ok := audienceUriMapStrToI["uniform_resource_locator"]; ok && !isIntfNil(v) && !audienceUriChoiceTypeFound {
-
-										audienceUriChoiceTypeFound = true
-										audienceUriChoiceInt := &ves_io_schema_uztna_uztna_flow.AudienceUri_UniformResourceLocator{}
-										audienceUriChoiceInt.UniformResourceLocator = &ves_io_schema_uztna_uztna_flow.UniformResourceLocator{}
-										audienceUri.AudienceUriChoice = audienceUriChoiceInt
-
-										sl := v.(*schema.Set).List()
-										for _, set := range sl {
-											cs := set.(map[string]interface{})
-
-											if v, ok := cs["url"]; ok && !isIntfNil(v) {
-
-												audienceUriChoiceInt.UniformResourceLocator.Url = v.(string)
-
-											}
-
-										}
-
-									}
-
-									if v, ok := audienceUriMapStrToI["uniform_resource_name"]; ok && !isIntfNil(v) && !audienceUriChoiceTypeFound {
-
-										audienceUriChoiceTypeFound = true
-										audienceUriChoiceInt := &ves_io_schema_uztna_uztna_flow.AudienceUri_UniformResourceName{}
-										audienceUriChoiceInt.UniformResourceName = &ves_io_schema_uztna_uztna_flow.UniformResourceName{}
-										audienceUri.AudienceUriChoice = audienceUriChoiceInt
-
-										sl := v.(*schema.Set).List()
-										for _, set := range sl {
-											cs := set.(map[string]interface{})
-
-											if v, ok := cs["host_name"]; ok && !isIntfNil(v) {
-
-												audienceUriChoiceInt.UniformResourceName.HostName = v.(string)
-
-											}
-
-											if v, ok := cs["urn"]; ok && !isIntfNil(v) {
-
-												audienceUriChoiceInt.UniformResourceName.Urn = v.(string)
-
-											}
-
-										}
-
-									}
-
-								}
-
-							}
-
-							if w, ok := serviceProviderPropertiesMapStrToI["force_authentication"]; ok && !isIntfNil(w) {
-								serviceProviderProperties.ForceAuthentication = w.(bool)
-							}
-
-							if w, ok := serviceProviderPropertiesMapStrToI["relay_state"]; ok && !isIntfNil(w) {
-								serviceProviderProperties.RelayState = w.(string)
-							}
-
-							if v, ok := serviceProviderPropertiesMapStrToI["sign_authentication_request"]; ok && !isIntfNil(v) {
-
-								sl := v.(*schema.Set).List()
-								signAuthenticationRequest := &ves_io_schema_uztna_uztna_flow.SignAuthenticationRequest{}
-								serviceProviderProperties.SignAuthenticationRequest = signAuthenticationRequest
-								for _, set := range sl {
-									signAuthenticationRequestMapStrToI := set.(map[string]interface{})
-
-									signAuthTypeChoiceTypeFound := false
-
-									if v, ok := signAuthenticationRequestMapStrToI["no_auth_req"]; ok && !isIntfNil(v) && !signAuthTypeChoiceTypeFound {
-
-										signAuthTypeChoiceTypeFound = true
-
-										if v.(bool) {
-											signAuthTypeChoiceInt := &ves_io_schema_uztna_uztna_flow.SignAuthenticationRequest_NoAuthReq{}
-											signAuthTypeChoiceInt.NoAuthReq = &ves_io_schema.Empty{}
-											signAuthenticationRequest.SignAuthTypeChoice = signAuthTypeChoiceInt
-										}
-
-									}
-
-									if v, ok := signAuthenticationRequestMapStrToI["sign_auth"]; ok && !isIntfNil(v) && !signAuthTypeChoiceTypeFound {
-
-										signAuthTypeChoiceTypeFound = true
-										signAuthTypeChoiceInt := &ves_io_schema_uztna_uztna_flow.SignAuthenticationRequest_SignAuth{}
-										signAuthTypeChoiceInt.SignAuth = &ves_io_schema_uztna_uztna_flow.Certificate{}
-										signAuthenticationRequest.SignAuthTypeChoice = signAuthTypeChoiceInt
-
-										sl := v.(*schema.Set).List()
-										for _, set := range sl {
-											cs := set.(map[string]interface{})
-
-											if v, ok := cs["certificate"]; ok && !isIntfNil(v) {
-
-												sl := v.([]interface{})
-												certificateInt := make([]*ves_io_schema.ObjectRefType, len(sl))
-												signAuthTypeChoiceInt.SignAuth.Certificate = certificateInt
-												for i, ps := range sl {
-
-													cMapToStrVal := ps.(map[string]interface{})
-													certificateInt[i] = &ves_io_schema.ObjectRefType{}
-
-													certificateInt[i].Kind = "certificate"
-
-													if v, ok := cMapToStrVal["name"]; ok && !isIntfNil(v) {
-														certificateInt[i].Name = v.(string)
-													}
-
-													if v, ok := cMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-														certificateInt[i].Namespace = v.(string)
-													}
-
-													if v, ok := cMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-														certificateInt[i].Tenant = v.(string)
-													}
-
-													if v, ok := cMapToStrVal["uid"]; ok && !isIntfNil(v) {
-														certificateInt[i].Uid = v.(string)
-													}
-
-												}
-
-											}
-
-										}
-
-									}
-
-								}
-
-							}
-
-							if v, ok := serviceProviderPropertiesMapStrToI["type"]; ok && !isIntfNil(v) {
-
-								serviceProviderProperties.Type = ves_io_schema_uztna_uztna_flow.AssertionConsumerServiceBinding(ves_io_schema_uztna_uztna_flow.AssertionConsumerServiceBinding_value[v.(string)])
-
-							}
-
-							if v, ok := serviceProviderPropertiesMapStrToI["want_encrypted_assertion"]; ok && !isIntfNil(v) {
-
-								sl := v.(*schema.Set).List()
-								wantEncryptedAssertion := &ves_io_schema_uztna_uztna_flow.WantEncryptedRequest{}
-								serviceProviderProperties.WantEncryptedAssertion = wantEncryptedAssertion
-								for _, set := range sl {
-									wantEncryptedAssertionMapStrToI := set.(map[string]interface{})
-
-									wantEncryptedRequestTypeFound := false
-
-									if v, ok := wantEncryptedAssertionMapStrToI["encrypt_req"]; ok && !isIntfNil(v) && !wantEncryptedRequestTypeFound {
-
-										wantEncryptedRequestTypeFound = true
-										wantEncryptedRequestInt := &ves_io_schema_uztna_uztna_flow.WantEncryptedRequest_EncryptReq{}
-										wantEncryptedRequestInt.EncryptReq = &ves_io_schema_uztna_uztna_flow.Certificate{}
-										wantEncryptedAssertion.WantEncryptedRequest = wantEncryptedRequestInt
-
-										sl := v.(*schema.Set).List()
-										for _, set := range sl {
-											cs := set.(map[string]interface{})
-
-											if v, ok := cs["certificate"]; ok && !isIntfNil(v) {
-
-												sl := v.([]interface{})
-												certificateInt := make([]*ves_io_schema.ObjectRefType, len(sl))
-												wantEncryptedRequestInt.EncryptReq.Certificate = certificateInt
-												for i, ps := range sl {
-
-													cMapToStrVal := ps.(map[string]interface{})
-													certificateInt[i] = &ves_io_schema.ObjectRefType{}
-
-													certificateInt[i].Kind = "certificate"
-
-													if v, ok := cMapToStrVal["name"]; ok && !isIntfNil(v) {
-														certificateInt[i].Name = v.(string)
-													}
-
-													if v, ok := cMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-														certificateInt[i].Namespace = v.(string)
-													}
-
-													if v, ok := cMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-														certificateInt[i].Tenant = v.(string)
-													}
-
-													if v, ok := cMapToStrVal["uid"]; ok && !isIntfNil(v) {
-														certificateInt[i].Uid = v.(string)
-													}
-
-												}
-
-											}
-
-										}
-
-									}
-
-									if v, ok := wantEncryptedAssertionMapStrToI["no_encrypt_req"]; ok && !isIntfNil(v) && !wantEncryptedRequestTypeFound {
-
-										wantEncryptedRequestTypeFound = true
-
-										if v.(bool) {
-											wantEncryptedRequestInt := &ves_io_schema_uztna_uztna_flow.WantEncryptedRequest_NoEncryptReq{}
-											wantEncryptedRequestInt.NoEncryptReq = &ves_io_schema.Empty{}
-											wantEncryptedAssertion.WantEncryptedRequest = wantEncryptedRequestInt
-										}
-
-									}
-
-								}
-
-							}
-
-							if w, ok := serviceProviderPropertiesMapStrToI["want_signed_assertion"]; ok && !isIntfNil(w) {
-								serviceProviderProperties.WantSignedAssertion = w.(bool)
-							}
-
-						}
-
-					}
-
-				}
-
-			}
-
 		}
 
 	}

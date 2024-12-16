@@ -1732,6 +1732,12 @@ var CustomAPISwaggerJSON string = `{
                     "title": "str_value",
                     "x-displayname": "String"
                 },
+                "title": {
+                    "type": "string",
+                    "description": " Optional title to be displayed instead of the actual value.\n Used when pure value doesn't contain all the needed information to be displayed,\n or when display titles should be customized.",
+                    "title": "title",
+                    "x-displayname": "Title"
+                },
                 "value": {
                     "type": "string",
                     "description": " Suggested value for the field.\n Should use value_choice.str_value instead.",

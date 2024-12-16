@@ -3385,6 +3385,40 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "routeQueryParamsSimpleRoute": {
+            "type": "object",
+            "description": "Handling of incoming query parameters in simple route.",
+            "title": "query_params",
+            "x-displayname": "Query Parameters",
+            "x-ves-oneof-field-query_params": "[\"remove_all_params\",\"replace_params\",\"retain_all_params\"]",
+            "x-ves-proto-message": "ves.io.schema.route.QueryParamsSimpleRoute",
+            "properties": {
+                "remove_all_params": {
+                    "description": "Exclusive with [replace_params retain_all_params]\n",
+                    "title": "Remove All Params",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Remove All Parameters"
+                },
+                "replace_params": {
+                    "type": "string",
+                    "description": "Exclusive with [remove_all_params retain_all_params]\n\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n  ves.io.schema.rules.string.min_len: 1\n",
+                    "title": "Replace All Params",
+                    "minLength": 1,
+                    "maxLength": 256,
+                    "x-displayname": "Replace All Parameters",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "256",
+                        "ves.io.schema.rules.string.min_len": "1"
+                    }
+                },
+                "retain_all_params": {
+                    "description": "Exclusive with [remove_all_params replace_params]\n",
+                    "title": "Retain All Params",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Retain All Parameters"
+                }
+            }
+        },
         "routeRouteDestination": {
             "type": "object",
             "description": "Each destination is a reference to cluster, it's priority, weight and subset criteria.",
@@ -3446,7 +3480,7 @@ var APISwaggerJSON string = `{
             "description": "List of destination to choose if the route is match.",
             "title": "RouteDestinationList",
             "x-displayname": "Destination List",
-            "x-ves-displayorder": "1,8,9,25,20,10,11,13,14,15,16,18,19,23",
+            "x-ves-displayorder": "1,8,9,25,20,27,10,11,13,14,15,16,18,19,23",
             "x-ves-oneof-field-cluster_retract_choice": "[\"do_not_retract_cluster\",\"retract_cluster\"]",
             "x-ves-oneof-field-host_rewrite_params": "[\"auto_host_rewrite\",\"host_rewrite\"]",
             "x-ves-oneof-field-route_destination_rewrite": "[\"prefix_rewrite\",\"regex_rewrite\"]",
@@ -3557,6 +3591,12 @@ var APISwaggerJSON string = `{
                     "title": "priority",
                     "$ref": "#/definitions/schemaRoutingPriority",
                     "x-displayname": "Priority"
+                },
+                "query_params": {
+                    "description": " Handling of incoming query parameters in simple route.",
+                    "title": "query_params",
+                    "$ref": "#/definitions/routeQueryParamsSimpleRoute",
+                    "x-displayname": "Query Parameters"
                 },
                 "regex_rewrite": {
                     "description": "Exclusive with [prefix_rewrite]\n regex_rewrite indicates that during forwarding, the matched regex should be swapped\n with the substitution value. \n\n Example :\n   gcSpec:\n     routes:\n     - match:\n       - headers: []\n         path:\n           regex : \"^/service/([^/]+)(/.*)$\"\n         query_params: []\n       routeDestination:\n         regexRewrite: \n              pattern: \"^/service/([^/]+)(/.*)$\" \n              substitution: \"\\\\2/instance/\\\\1\"\n         destinations:\n         - cluster:\n           - kind: cluster.Object\n             uid: cluster-1\n\n The path pattern \"^/service/([^/]+)(/.*)$\" paired with a substitution string of \"\\\\2/instance/\\\\1\" \n would transform \"/service/foo/v1/api\" into \"/v1/api/instance/foo\".\n\nExample: - \"^/service/([^/]+)(/.*)$\"-",
@@ -5043,6 +5083,12 @@ var APISwaggerJSON string = `{
                     "title": "deletion_timestamp",
                     "format": "date-time",
                     "x-displayname": "Deletion Timestamp"
+                },
+                "direct_ref_hash": {
+                    "type": "string",
+                    "description": " A hash of the UIDs of  direct references on this object. This can be used to determine if \n this object hash has had references become resolved/unresolved",
+                    "title": "direct_ref_hash",
+                    "x-displayname": "Direct Reference Hash"
                 },
                 "finalizers": {
                     "type": "array",

@@ -62,14 +62,16 @@ func resourceVolterraAppType() *schema.Resource {
 
 			"business_logic_markup_setting": {
 
-				Type:     schema.TypeSet,
+				Type:     schema.TypeList,
+				MaxItems: 1,
 				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 
 						"discovered_api_settings": {
 
-							Type:     schema.TypeSet,
+							Type:     schema.TypeList,
+							MaxItems: 1,
 							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
@@ -96,7 +98,8 @@ func resourceVolterraAppType() *schema.Resource {
 
 						"sensitive_data_detection_rules": {
 
-							Type:       schema.TypeSet,
+							Type:       schema.TypeList,
+							MaxItems:   1,
 							Optional:   true,
 							Deprecated: "This field is deprecated and will be removed in future release.",
 							Elem: &schema.Resource{
@@ -112,7 +115,8 @@ func resourceVolterraAppType() *schema.Resource {
 
 												"metadata": {
 
-													Type:       schema.TypeSet,
+													Type:       schema.TypeList,
+													MaxItems:   1,
 													Required:   true,
 													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
@@ -141,7 +145,8 @@ func resourceVolterraAppType() *schema.Resource {
 
 												"sensitive_data_detection_config": {
 
-													Type:       schema.TypeSet,
+													Type:       schema.TypeList,
+													MaxItems:   1,
 													Required:   true,
 													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
@@ -163,7 +168,8 @@ func resourceVolterraAppType() *schema.Resource {
 
 															"key_pattern": {
 
-																Type:       schema.TypeSet,
+																Type:       schema.TypeList,
+																MaxItems:   1,
 																Optional:   true,
 																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
@@ -188,7 +194,8 @@ func resourceVolterraAppType() *schema.Resource {
 
 															"key_value_pattern": {
 
-																Type:       schema.TypeSet,
+																Type:       schema.TypeList,
+																MaxItems:   1,
 																Optional:   true,
 																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
@@ -196,7 +203,8 @@ func resourceVolterraAppType() *schema.Resource {
 
 																		"key_pattern": {
 
-																			Type:       schema.TypeSet,
+																			Type:       schema.TypeList,
+																			MaxItems:   1,
 																			Required:   true,
 																			Deprecated: "This field is deprecated and will be removed in future release.",
 																			Elem: &schema.Resource{
@@ -221,7 +229,8 @@ func resourceVolterraAppType() *schema.Resource {
 
 																		"value_pattern": {
 
-																			Type:       schema.TypeSet,
+																			Type:       schema.TypeList,
+																			MaxItems:   1,
 																			Required:   true,
 																			Deprecated: "This field is deprecated and will be removed in future release.",
 																			Elem: &schema.Resource{
@@ -249,7 +258,8 @@ func resourceVolterraAppType() *schema.Resource {
 
 															"value_pattern": {
 
-																Type:       schema.TypeSet,
+																Type:       schema.TypeList,
+																MaxItems:   1,
 																Optional:   true,
 																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
@@ -295,7 +305,8 @@ func resourceVolterraAppType() *schema.Resource {
 
 															"custom_sections": {
 
-																Type:       schema.TypeSet,
+																Type:       schema.TypeList,
+																MaxItems:   1,
 																Optional:   true,
 																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
@@ -324,7 +335,8 @@ func resourceVolterraAppType() *schema.Resource {
 
 															"api_endpoint_target": {
 
-																Type:       schema.TypeSet,
+																Type:       schema.TypeList,
+																MaxItems:   1,
 																Optional:   true,
 																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
@@ -369,7 +381,8 @@ func resourceVolterraAppType() *schema.Resource {
 
 												"sensitive_data_type": {
 
-													Type:       schema.TypeSet,
+													Type:       schema.TypeList,
+													MaxItems:   1,
 													Required:   true,
 													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
@@ -484,470 +497,500 @@ func resourceVolterraAppTypeCreate(d *schema.ResourceData, meta interface{}) err
 	//business_logic_markup_setting
 	if v, ok := d.GetOk("business_logic_markup_setting"); ok && !isIntfNil(v) {
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		businessLogicMarkupSetting := &ves_io_schema_app_type.BusinessLogicMarkupSetting{}
 		createSpec.BusinessLogicMarkupSetting = businessLogicMarkupSetting
 		for _, set := range sl {
-			businessLogicMarkupSettingMapStrToI := set.(map[string]interface{})
+			if set != nil {
+				businessLogicMarkupSettingMapStrToI := set.(map[string]interface{})
 
-			if v, ok := businessLogicMarkupSettingMapStrToI["discovered_api_settings"]; ok && !isIntfNil(v) {
+				if v, ok := businessLogicMarkupSettingMapStrToI["discovered_api_settings"]; ok && !isIntfNil(v) {
 
-				sl := v.(*schema.Set).List()
-				discoveredApiSettings := &ves_io_schema_app_type.DiscoveredAPISettings{}
-				businessLogicMarkupSetting.DiscoveredApiSettings = discoveredApiSettings
-				for _, set := range sl {
-					discoveredApiSettingsMapStrToI := set.(map[string]interface{})
+					sl := v.([]interface{})
+					discoveredApiSettings := &ves_io_schema_app_type.DiscoveredAPISettings{}
+					businessLogicMarkupSetting.DiscoveredApiSettings = discoveredApiSettings
+					for _, set := range sl {
+						if set != nil {
+							discoveredApiSettingsMapStrToI := set.(map[string]interface{})
 
-					if w, ok := discoveredApiSettingsMapStrToI["purge_duration_for_inactive_discovered_apis"]; ok && !isIntfNil(w) {
-						discoveredApiSettings.PurgeDurationForInactiveDiscoveredApis = uint32(w.(int))
+							if w, ok := discoveredApiSettingsMapStrToI["purge_duration_for_inactive_discovered_apis"]; ok && !isIntfNil(w) {
+								discoveredApiSettings.PurgeDurationForInactiveDiscoveredApis = uint32(w.(int))
+							}
+
+						}
 					}
 
 				}
 
-			}
+				learnFromRedirectTrafficTypeFound := false
 
-			learnFromRedirectTrafficTypeFound := false
+				if v, ok := businessLogicMarkupSettingMapStrToI["disable"]; ok && !isIntfNil(v) && !learnFromRedirectTrafficTypeFound {
 
-			if v, ok := businessLogicMarkupSettingMapStrToI["disable"]; ok && !isIntfNil(v) && !learnFromRedirectTrafficTypeFound {
+					learnFromRedirectTrafficTypeFound = true
 
-				learnFromRedirectTrafficTypeFound = true
+					if v.(bool) {
+						learnFromRedirectTrafficInt := &ves_io_schema_app_type.BusinessLogicMarkupSetting_Disable{}
+						learnFromRedirectTrafficInt.Disable = &ves_io_schema.Empty{}
+						businessLogicMarkupSetting.LearnFromRedirectTraffic = learnFromRedirectTrafficInt
+					}
 
-				if v.(bool) {
-					learnFromRedirectTrafficInt := &ves_io_schema_app_type.BusinessLogicMarkupSetting_Disable{}
-					learnFromRedirectTrafficInt.Disable = &ves_io_schema.Empty{}
-					businessLogicMarkupSetting.LearnFromRedirectTraffic = learnFromRedirectTrafficInt
 				}
 
-			}
+				if v, ok := businessLogicMarkupSettingMapStrToI["enable"]; ok && !isIntfNil(v) && !learnFromRedirectTrafficTypeFound {
 
-			if v, ok := businessLogicMarkupSettingMapStrToI["enable"]; ok && !isIntfNil(v) && !learnFromRedirectTrafficTypeFound {
+					learnFromRedirectTrafficTypeFound = true
 
-				learnFromRedirectTrafficTypeFound = true
+					if v.(bool) {
+						learnFromRedirectTrafficInt := &ves_io_schema_app_type.BusinessLogicMarkupSetting_Enable{}
+						learnFromRedirectTrafficInt.Enable = &ves_io_schema.Empty{}
+						businessLogicMarkupSetting.LearnFromRedirectTraffic = learnFromRedirectTrafficInt
+					}
 
-				if v.(bool) {
-					learnFromRedirectTrafficInt := &ves_io_schema_app_type.BusinessLogicMarkupSetting_Enable{}
-					learnFromRedirectTrafficInt.Enable = &ves_io_schema.Empty{}
-					businessLogicMarkupSetting.LearnFromRedirectTraffic = learnFromRedirectTrafficInt
 				}
 
-			}
+				if v, ok := businessLogicMarkupSettingMapStrToI["sensitive_data_detection_rules"]; ok && !isIntfNil(v) {
 
-			if v, ok := businessLogicMarkupSettingMapStrToI["sensitive_data_detection_rules"]; ok && !isIntfNil(v) {
+					sl := v.([]interface{})
+					sensitiveDataDetectionRules := &ves_io_schema_app_type.SensitiveDataDetectionRules{}
+					businessLogicMarkupSetting.SensitiveDataDetectionRules = sensitiveDataDetectionRules
+					for _, set := range sl {
+						if set != nil {
+							sensitiveDataDetectionRulesMapStrToI := set.(map[string]interface{})
 
-				sl := v.(*schema.Set).List()
-				sensitiveDataDetectionRules := &ves_io_schema_app_type.SensitiveDataDetectionRules{}
-				businessLogicMarkupSetting.SensitiveDataDetectionRules = sensitiveDataDetectionRules
-				for _, set := range sl {
-					sensitiveDataDetectionRulesMapStrToI := set.(map[string]interface{})
+							if v, ok := sensitiveDataDetectionRulesMapStrToI["custom_sensitive_data_detection_rules"]; ok && !isIntfNil(v) {
 
-					if v, ok := sensitiveDataDetectionRulesMapStrToI["custom_sensitive_data_detection_rules"]; ok && !isIntfNil(v) {
+								sl := v.([]interface{})
+								customSensitiveDataDetectionRules := make([]*ves_io_schema_app_type.CustomSensitiveDataDetectionRule, len(sl))
+								sensitiveDataDetectionRules.CustomSensitiveDataDetectionRules = customSensitiveDataDetectionRules
+								for i, set := range sl {
+									if set != nil {
+										customSensitiveDataDetectionRules[i] = &ves_io_schema_app_type.CustomSensitiveDataDetectionRule{}
+										customSensitiveDataDetectionRulesMapStrToI := set.(map[string]interface{})
 
-						sl := v.([]interface{})
-						customSensitiveDataDetectionRules := make([]*ves_io_schema_app_type.CustomSensitiveDataDetectionRule, len(sl))
-						sensitiveDataDetectionRules.CustomSensitiveDataDetectionRules = customSensitiveDataDetectionRules
-						for i, set := range sl {
-							customSensitiveDataDetectionRules[i] = &ves_io_schema_app_type.CustomSensitiveDataDetectionRule{}
-							customSensitiveDataDetectionRulesMapStrToI := set.(map[string]interface{})
+										if v, ok := customSensitiveDataDetectionRulesMapStrToI["metadata"]; ok && !isIntfNil(v) {
 
-							if v, ok := customSensitiveDataDetectionRulesMapStrToI["metadata"]; ok && !isIntfNil(v) {
+											sl := v.([]interface{})
+											metadata := &ves_io_schema.MessageMetaType{}
+											customSensitiveDataDetectionRules[i].Metadata = metadata
+											for _, set := range sl {
+												if set != nil {
+													metadataMapStrToI := set.(map[string]interface{})
 
-								sl := v.(*schema.Set).List()
-								metadata := &ves_io_schema.MessageMetaType{}
-								customSensitiveDataDetectionRules[i].Metadata = metadata
-								for _, set := range sl {
-									metadataMapStrToI := set.(map[string]interface{})
+													if w, ok := metadataMapStrToI["description"]; ok && !isIntfNil(w) {
+														metadata.Description = w.(string)
+													}
 
-									if w, ok := metadataMapStrToI["description"]; ok && !isIntfNil(w) {
-										metadata.Description = w.(string)
+													if w, ok := metadataMapStrToI["disable"]; ok && !isIntfNil(w) {
+														metadata.Disable = w.(bool)
+													}
+
+													if w, ok := metadataMapStrToI["name"]; ok && !isIntfNil(w) {
+														metadata.Name = w.(string)
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := customSensitiveDataDetectionRulesMapStrToI["sensitive_data_detection_config"]; ok && !isIntfNil(v) {
+
+											sl := v.([]interface{})
+											sensitiveDataDetectionConfig := &ves_io_schema_app_type.CustomDataDetectionConfig{}
+											customSensitiveDataDetectionRules[i].SensitiveDataDetectionConfig = sensitiveDataDetectionConfig
+											for _, set := range sl {
+												if set != nil {
+													sensitiveDataDetectionConfigMapStrToI := set.(map[string]interface{})
+
+													domainChoiceTypeFound := false
+
+													if v, ok := sensitiveDataDetectionConfigMapStrToI["any_domain"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
+
+														domainChoiceTypeFound = true
+
+														if v.(bool) {
+															domainChoiceInt := &ves_io_schema_app_type.CustomDataDetectionConfig_AnyDomain{}
+															domainChoiceInt.AnyDomain = &ves_io_schema.Empty{}
+															sensitiveDataDetectionConfig.DomainChoice = domainChoiceInt
+														}
+
+													}
+
+													if v, ok := sensitiveDataDetectionConfigMapStrToI["specific_domain"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
+
+														domainChoiceTypeFound = true
+														domainChoiceInt := &ves_io_schema_app_type.CustomDataDetectionConfig_SpecificDomain{}
+
+														sensitiveDataDetectionConfig.DomainChoice = domainChoiceInt
+
+														domainChoiceInt.SpecificDomain = v.(string)
+
+													}
+
+													patternChoiceTypeFound := false
+
+													if v, ok := sensitiveDataDetectionConfigMapStrToI["key_pattern"]; ok && !isIntfNil(v) && !patternChoiceTypeFound {
+
+														patternChoiceTypeFound = true
+														patternChoiceInt := &ves_io_schema_app_type.CustomDataDetectionConfig_KeyPattern{}
+														patternChoiceInt.KeyPattern = &ves_io_schema_app_type.KeyPattern{}
+														sensitiveDataDetectionConfig.PatternChoice = patternChoiceInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																keyPatternTypeFound := false
+
+																if v, ok := cs["exact_value"]; ok && !isIntfNil(v) && !keyPatternTypeFound {
+
+																	keyPatternTypeFound = true
+																	keyPatternInt := &ves_io_schema_app_type.KeyPattern_ExactValue{}
+
+																	patternChoiceInt.KeyPattern.KeyPattern = keyPatternInt
+
+																	keyPatternInt.ExactValue = v.(string)
+
+																}
+
+																if v, ok := cs["regex_value"]; ok && !isIntfNil(v) && !keyPatternTypeFound {
+
+																	keyPatternTypeFound = true
+																	keyPatternInt := &ves_io_schema_app_type.KeyPattern_RegexValue{}
+
+																	patternChoiceInt.KeyPattern.KeyPattern = keyPatternInt
+
+																	keyPatternInt.RegexValue = v.(string)
+
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := sensitiveDataDetectionConfigMapStrToI["key_value_pattern"]; ok && !isIntfNil(v) && !patternChoiceTypeFound {
+
+														patternChoiceTypeFound = true
+														patternChoiceInt := &ves_io_schema_app_type.CustomDataDetectionConfig_KeyValuePattern{}
+														patternChoiceInt.KeyValuePattern = &ves_io_schema_app_type.KeyValuePattern{}
+														sensitiveDataDetectionConfig.PatternChoice = patternChoiceInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["key_pattern"]; ok && !isIntfNil(v) {
+
+																	sl := v.([]interface{})
+																	keyPattern := &ves_io_schema_app_type.KeyPattern{}
+																	patternChoiceInt.KeyValuePattern.KeyPattern = keyPattern
+																	for _, set := range sl {
+																		if set != nil {
+																			keyPatternMapStrToI := set.(map[string]interface{})
+
+																			keyPatternTypeFound := false
+
+																			if v, ok := keyPatternMapStrToI["exact_value"]; ok && !isIntfNil(v) && !keyPatternTypeFound {
+
+																				keyPatternTypeFound = true
+																				keyPatternInt := &ves_io_schema_app_type.KeyPattern_ExactValue{}
+
+																				keyPattern.KeyPattern = keyPatternInt
+
+																				keyPatternInt.ExactValue = v.(string)
+
+																			}
+
+																			if v, ok := keyPatternMapStrToI["regex_value"]; ok && !isIntfNil(v) && !keyPatternTypeFound {
+
+																				keyPatternTypeFound = true
+																				keyPatternInt := &ves_io_schema_app_type.KeyPattern_RegexValue{}
+
+																				keyPattern.KeyPattern = keyPatternInt
+
+																				keyPatternInt.RegexValue = v.(string)
+
+																			}
+
+																		}
+																	}
+
+																}
+
+																if v, ok := cs["value_pattern"]; ok && !isIntfNil(v) {
+
+																	sl := v.([]interface{})
+																	valuePattern := &ves_io_schema_app_type.ValuePattern{}
+																	patternChoiceInt.KeyValuePattern.ValuePattern = valuePattern
+																	for _, set := range sl {
+																		if set != nil {
+																			valuePatternMapStrToI := set.(map[string]interface{})
+
+																			valuePatternTypeFound := false
+
+																			if v, ok := valuePatternMapStrToI["exact_value"]; ok && !isIntfNil(v) && !valuePatternTypeFound {
+
+																				valuePatternTypeFound = true
+																				valuePatternInt := &ves_io_schema_app_type.ValuePattern_ExactValue{}
+
+																				valuePattern.ValuePattern = valuePatternInt
+
+																				valuePatternInt.ExactValue = v.(string)
+
+																			}
+
+																			if v, ok := valuePatternMapStrToI["regex_value"]; ok && !isIntfNil(v) && !valuePatternTypeFound {
+
+																				valuePatternTypeFound = true
+																				valuePatternInt := &ves_io_schema_app_type.ValuePattern_RegexValue{}
+
+																				valuePattern.ValuePattern = valuePatternInt
+
+																				valuePatternInt.RegexValue = v.(string)
+
+																			}
+
+																		}
+																	}
+
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := sensitiveDataDetectionConfigMapStrToI["value_pattern"]; ok && !isIntfNil(v) && !patternChoiceTypeFound {
+
+														patternChoiceTypeFound = true
+														patternChoiceInt := &ves_io_schema_app_type.CustomDataDetectionConfig_ValuePattern{}
+														patternChoiceInt.ValuePattern = &ves_io_schema_app_type.ValuePattern{}
+														sensitiveDataDetectionConfig.PatternChoice = patternChoiceInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																valuePatternTypeFound := false
+
+																if v, ok := cs["exact_value"]; ok && !isIntfNil(v) && !valuePatternTypeFound {
+
+																	valuePatternTypeFound = true
+																	valuePatternInt := &ves_io_schema_app_type.ValuePattern_ExactValue{}
+
+																	patternChoiceInt.ValuePattern.ValuePattern = valuePatternInt
+
+																	valuePatternInt.ExactValue = v.(string)
+
+																}
+
+																if v, ok := cs["regex_value"]; ok && !isIntfNil(v) && !valuePatternTypeFound {
+
+																	valuePatternTypeFound = true
+																	valuePatternInt := &ves_io_schema_app_type.ValuePattern_RegexValue{}
+
+																	patternChoiceInt.ValuePattern.ValuePattern = valuePatternInt
+
+																	valuePatternInt.RegexValue = v.(string)
+
+																}
+
+															}
+														}
+
+													}
+
+													sectionChoiceTypeFound := false
+
+													if v, ok := sensitiveDataDetectionConfigMapStrToI["all_request_sections"]; ok && !isIntfNil(v) && !sectionChoiceTypeFound {
+
+														sectionChoiceTypeFound = true
+
+														if v.(bool) {
+															sectionChoiceInt := &ves_io_schema_app_type.CustomDataDetectionConfig_AllRequestSections{}
+															sectionChoiceInt.AllRequestSections = &ves_io_schema.Empty{}
+															sensitiveDataDetectionConfig.SectionChoice = sectionChoiceInt
+														}
+
+													}
+
+													if v, ok := sensitiveDataDetectionConfigMapStrToI["all_response_sections"]; ok && !isIntfNil(v) && !sectionChoiceTypeFound {
+
+														sectionChoiceTypeFound = true
+
+														if v.(bool) {
+															sectionChoiceInt := &ves_io_schema_app_type.CustomDataDetectionConfig_AllResponseSections{}
+															sectionChoiceInt.AllResponseSections = &ves_io_schema.Empty{}
+															sensitiveDataDetectionConfig.SectionChoice = sectionChoiceInt
+														}
+
+													}
+
+													if v, ok := sensitiveDataDetectionConfigMapStrToI["all_sections"]; ok && !isIntfNil(v) && !sectionChoiceTypeFound {
+
+														sectionChoiceTypeFound = true
+
+														if v.(bool) {
+															sectionChoiceInt := &ves_io_schema_app_type.CustomDataDetectionConfig_AllSections{}
+															sectionChoiceInt.AllSections = &ves_io_schema.Empty{}
+															sensitiveDataDetectionConfig.SectionChoice = sectionChoiceInt
+														}
+
+													}
+
+													if v, ok := sensitiveDataDetectionConfigMapStrToI["custom_sections"]; ok && !isIntfNil(v) && !sectionChoiceTypeFound {
+
+														sectionChoiceTypeFound = true
+														sectionChoiceInt := &ves_io_schema_app_type.CustomDataDetectionConfig_CustomSections{}
+														sectionChoiceInt.CustomSections = &ves_io_schema_app_type.CustomSections{}
+														sensitiveDataDetectionConfig.SectionChoice = sectionChoiceInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["custom_sections"]; ok && !isIntfNil(v) {
+
+																	custom_sectionsList := []ves_io_schema.HttpSections{}
+																	for _, j := range v.([]interface{}) {
+																		custom_sectionsList = append(custom_sectionsList, ves_io_schema.HttpSections(ves_io_schema.HttpSections_value[j.(string)]))
+																	}
+																	sectionChoiceInt.CustomSections.CustomSections = custom_sectionsList
+
+																}
+
+															}
+														}
+
+													}
+
+													targetChoiceTypeFound := false
+
+													if v, ok := sensitiveDataDetectionConfigMapStrToI["any_target"]; ok && !isIntfNil(v) && !targetChoiceTypeFound {
+
+														targetChoiceTypeFound = true
+
+														if v.(bool) {
+															targetChoiceInt := &ves_io_schema_app_type.CustomDataDetectionConfig_AnyTarget{}
+															targetChoiceInt.AnyTarget = &ves_io_schema.Empty{}
+															sensitiveDataDetectionConfig.TargetChoice = targetChoiceInt
+														}
+
+													}
+
+													if v, ok := sensitiveDataDetectionConfigMapStrToI["api_endpoint_target"]; ok && !isIntfNil(v) && !targetChoiceTypeFound {
+
+														targetChoiceTypeFound = true
+														targetChoiceInt := &ves_io_schema_app_type.CustomDataDetectionConfig_ApiEndpointTarget{}
+														targetChoiceInt.ApiEndpointTarget = &ves_io_schema_app_type.APIEndpoint{}
+														sensitiveDataDetectionConfig.TargetChoice = targetChoiceInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["api_endpoint_path"]; ok && !isIntfNil(v) {
+
+																	targetChoiceInt.ApiEndpointTarget.ApiEndpointPath = v.(string)
+
+																}
+
+																if v, ok := cs["methods"]; ok && !isIntfNil(v) {
+
+																	methodsList := []ves_io_schema.HttpMethod{}
+																	for _, j := range v.([]interface{}) {
+																		methodsList = append(methodsList, ves_io_schema.HttpMethod(ves_io_schema.HttpMethod_value[j.(string)]))
+																	}
+																	targetChoiceInt.ApiEndpointTarget.Methods = methodsList
+
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := sensitiveDataDetectionConfigMapStrToI["api_group"]; ok && !isIntfNil(v) && !targetChoiceTypeFound {
+
+														targetChoiceTypeFound = true
+														targetChoiceInt := &ves_io_schema_app_type.CustomDataDetectionConfig_ApiGroup{}
+
+														sensitiveDataDetectionConfig.TargetChoice = targetChoiceInt
+
+														targetChoiceInt.ApiGroup = v.(string)
+
+													}
+
+													if v, ok := sensitiveDataDetectionConfigMapStrToI["base_path"]; ok && !isIntfNil(v) && !targetChoiceTypeFound {
+
+														targetChoiceTypeFound = true
+														targetChoiceInt := &ves_io_schema_app_type.CustomDataDetectionConfig_BasePath{}
+
+														sensitiveDataDetectionConfig.TargetChoice = targetChoiceInt
+
+														targetChoiceInt.BasePath = v.(string)
+
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := customSensitiveDataDetectionRulesMapStrToI["sensitive_data_type"]; ok && !isIntfNil(v) {
+
+											sl := v.([]interface{})
+											sensitiveDataType := &ves_io_schema_app_type.CustomSensitiveDataType{}
+											customSensitiveDataDetectionRules[i].SensitiveDataType = sensitiveDataType
+											for _, set := range sl {
+												if set != nil {
+													sensitiveDataTypeMapStrToI := set.(map[string]interface{})
+
+													if w, ok := sensitiveDataTypeMapStrToI["type"]; ok && !isIntfNil(w) {
+														sensitiveDataType.Type = w.(string)
+													}
+
+												}
+											}
+
+										}
+
 									}
-
-									if w, ok := metadataMapStrToI["disable"]; ok && !isIntfNil(w) {
-										metadata.Disable = w.(bool)
-									}
-
-									if w, ok := metadataMapStrToI["name"]; ok && !isIntfNil(w) {
-										metadata.Name = w.(string)
-									}
-
 								}
 
 							}
 
-							if v, ok := customSensitiveDataDetectionRulesMapStrToI["sensitive_data_detection_config"]; ok && !isIntfNil(v) {
+							if v, ok := sensitiveDataDetectionRulesMapStrToI["disabled_built_in_rules"]; ok && !isIntfNil(v) {
 
-								sl := v.(*schema.Set).List()
-								sensitiveDataDetectionConfig := &ves_io_schema_app_type.CustomDataDetectionConfig{}
-								customSensitiveDataDetectionRules[i].SensitiveDataDetectionConfig = sensitiveDataDetectionConfig
-								for _, set := range sl {
-									sensitiveDataDetectionConfigMapStrToI := set.(map[string]interface{})
+								sl := v.([]interface{})
+								disabledBuiltInRules := make([]*ves_io_schema_app_type.BuiltInSensitiveDataType, len(sl))
+								sensitiveDataDetectionRules.DisabledBuiltInRules = disabledBuiltInRules
+								for i, set := range sl {
+									if set != nil {
+										disabledBuiltInRules[i] = &ves_io_schema_app_type.BuiltInSensitiveDataType{}
+										disabledBuiltInRulesMapStrToI := set.(map[string]interface{})
 
-									domainChoiceTypeFound := false
-
-									if v, ok := sensitiveDataDetectionConfigMapStrToI["any_domain"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
-
-										domainChoiceTypeFound = true
-
-										if v.(bool) {
-											domainChoiceInt := &ves_io_schema_app_type.CustomDataDetectionConfig_AnyDomain{}
-											domainChoiceInt.AnyDomain = &ves_io_schema.Empty{}
-											sensitiveDataDetectionConfig.DomainChoice = domainChoiceInt
+										if w, ok := disabledBuiltInRulesMapStrToI["name"]; ok && !isIntfNil(w) {
+											disabledBuiltInRules[i].Name = w.(string)
 										}
 
 									}
-
-									if v, ok := sensitiveDataDetectionConfigMapStrToI["specific_domain"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
-
-										domainChoiceTypeFound = true
-										domainChoiceInt := &ves_io_schema_app_type.CustomDataDetectionConfig_SpecificDomain{}
-
-										sensitiveDataDetectionConfig.DomainChoice = domainChoiceInt
-
-										domainChoiceInt.SpecificDomain = v.(string)
-
-									}
-
-									patternChoiceTypeFound := false
-
-									if v, ok := sensitiveDataDetectionConfigMapStrToI["key_pattern"]; ok && !isIntfNil(v) && !patternChoiceTypeFound {
-
-										patternChoiceTypeFound = true
-										patternChoiceInt := &ves_io_schema_app_type.CustomDataDetectionConfig_KeyPattern{}
-										patternChoiceInt.KeyPattern = &ves_io_schema_app_type.KeyPattern{}
-										sensitiveDataDetectionConfig.PatternChoice = patternChoiceInt
-
-										sl := v.(*schema.Set).List()
-										for _, set := range sl {
-											cs := set.(map[string]interface{})
-
-											keyPatternTypeFound := false
-
-											if v, ok := cs["exact_value"]; ok && !isIntfNil(v) && !keyPatternTypeFound {
-
-												keyPatternTypeFound = true
-												keyPatternInt := &ves_io_schema_app_type.KeyPattern_ExactValue{}
-
-												patternChoiceInt.KeyPattern.KeyPattern = keyPatternInt
-
-												keyPatternInt.ExactValue = v.(string)
-
-											}
-
-											if v, ok := cs["regex_value"]; ok && !isIntfNil(v) && !keyPatternTypeFound {
-
-												keyPatternTypeFound = true
-												keyPatternInt := &ves_io_schema_app_type.KeyPattern_RegexValue{}
-
-												patternChoiceInt.KeyPattern.KeyPattern = keyPatternInt
-
-												keyPatternInt.RegexValue = v.(string)
-
-											}
-
-										}
-
-									}
-
-									if v, ok := sensitiveDataDetectionConfigMapStrToI["key_value_pattern"]; ok && !isIntfNil(v) && !patternChoiceTypeFound {
-
-										patternChoiceTypeFound = true
-										patternChoiceInt := &ves_io_schema_app_type.CustomDataDetectionConfig_KeyValuePattern{}
-										patternChoiceInt.KeyValuePattern = &ves_io_schema_app_type.KeyValuePattern{}
-										sensitiveDataDetectionConfig.PatternChoice = patternChoiceInt
-
-										sl := v.(*schema.Set).List()
-										for _, set := range sl {
-											cs := set.(map[string]interface{})
-
-											if v, ok := cs["key_pattern"]; ok && !isIntfNil(v) {
-
-												sl := v.(*schema.Set).List()
-												keyPattern := &ves_io_schema_app_type.KeyPattern{}
-												patternChoiceInt.KeyValuePattern.KeyPattern = keyPattern
-												for _, set := range sl {
-													keyPatternMapStrToI := set.(map[string]interface{})
-
-													keyPatternTypeFound := false
-
-													if v, ok := keyPatternMapStrToI["exact_value"]; ok && !isIntfNil(v) && !keyPatternTypeFound {
-
-														keyPatternTypeFound = true
-														keyPatternInt := &ves_io_schema_app_type.KeyPattern_ExactValue{}
-
-														keyPattern.KeyPattern = keyPatternInt
-
-														keyPatternInt.ExactValue = v.(string)
-
-													}
-
-													if v, ok := keyPatternMapStrToI["regex_value"]; ok && !isIntfNil(v) && !keyPatternTypeFound {
-
-														keyPatternTypeFound = true
-														keyPatternInt := &ves_io_schema_app_type.KeyPattern_RegexValue{}
-
-														keyPattern.KeyPattern = keyPatternInt
-
-														keyPatternInt.RegexValue = v.(string)
-
-													}
-
-												}
-
-											}
-
-											if v, ok := cs["value_pattern"]; ok && !isIntfNil(v) {
-
-												sl := v.(*schema.Set).List()
-												valuePattern := &ves_io_schema_app_type.ValuePattern{}
-												patternChoiceInt.KeyValuePattern.ValuePattern = valuePattern
-												for _, set := range sl {
-													valuePatternMapStrToI := set.(map[string]interface{})
-
-													valuePatternTypeFound := false
-
-													if v, ok := valuePatternMapStrToI["exact_value"]; ok && !isIntfNil(v) && !valuePatternTypeFound {
-
-														valuePatternTypeFound = true
-														valuePatternInt := &ves_io_schema_app_type.ValuePattern_ExactValue{}
-
-														valuePattern.ValuePattern = valuePatternInt
-
-														valuePatternInt.ExactValue = v.(string)
-
-													}
-
-													if v, ok := valuePatternMapStrToI["regex_value"]; ok && !isIntfNil(v) && !valuePatternTypeFound {
-
-														valuePatternTypeFound = true
-														valuePatternInt := &ves_io_schema_app_type.ValuePattern_RegexValue{}
-
-														valuePattern.ValuePattern = valuePatternInt
-
-														valuePatternInt.RegexValue = v.(string)
-
-													}
-
-												}
-
-											}
-
-										}
-
-									}
-
-									if v, ok := sensitiveDataDetectionConfigMapStrToI["value_pattern"]; ok && !isIntfNil(v) && !patternChoiceTypeFound {
-
-										patternChoiceTypeFound = true
-										patternChoiceInt := &ves_io_schema_app_type.CustomDataDetectionConfig_ValuePattern{}
-										patternChoiceInt.ValuePattern = &ves_io_schema_app_type.ValuePattern{}
-										sensitiveDataDetectionConfig.PatternChoice = patternChoiceInt
-
-										sl := v.(*schema.Set).List()
-										for _, set := range sl {
-											cs := set.(map[string]interface{})
-
-											valuePatternTypeFound := false
-
-											if v, ok := cs["exact_value"]; ok && !isIntfNil(v) && !valuePatternTypeFound {
-
-												valuePatternTypeFound = true
-												valuePatternInt := &ves_io_schema_app_type.ValuePattern_ExactValue{}
-
-												patternChoiceInt.ValuePattern.ValuePattern = valuePatternInt
-
-												valuePatternInt.ExactValue = v.(string)
-
-											}
-
-											if v, ok := cs["regex_value"]; ok && !isIntfNil(v) && !valuePatternTypeFound {
-
-												valuePatternTypeFound = true
-												valuePatternInt := &ves_io_schema_app_type.ValuePattern_RegexValue{}
-
-												patternChoiceInt.ValuePattern.ValuePattern = valuePatternInt
-
-												valuePatternInt.RegexValue = v.(string)
-
-											}
-
-										}
-
-									}
-
-									sectionChoiceTypeFound := false
-
-									if v, ok := sensitiveDataDetectionConfigMapStrToI["all_request_sections"]; ok && !isIntfNil(v) && !sectionChoiceTypeFound {
-
-										sectionChoiceTypeFound = true
-
-										if v.(bool) {
-											sectionChoiceInt := &ves_io_schema_app_type.CustomDataDetectionConfig_AllRequestSections{}
-											sectionChoiceInt.AllRequestSections = &ves_io_schema.Empty{}
-											sensitiveDataDetectionConfig.SectionChoice = sectionChoiceInt
-										}
-
-									}
-
-									if v, ok := sensitiveDataDetectionConfigMapStrToI["all_response_sections"]; ok && !isIntfNil(v) && !sectionChoiceTypeFound {
-
-										sectionChoiceTypeFound = true
-
-										if v.(bool) {
-											sectionChoiceInt := &ves_io_schema_app_type.CustomDataDetectionConfig_AllResponseSections{}
-											sectionChoiceInt.AllResponseSections = &ves_io_schema.Empty{}
-											sensitiveDataDetectionConfig.SectionChoice = sectionChoiceInt
-										}
-
-									}
-
-									if v, ok := sensitiveDataDetectionConfigMapStrToI["all_sections"]; ok && !isIntfNil(v) && !sectionChoiceTypeFound {
-
-										sectionChoiceTypeFound = true
-
-										if v.(bool) {
-											sectionChoiceInt := &ves_io_schema_app_type.CustomDataDetectionConfig_AllSections{}
-											sectionChoiceInt.AllSections = &ves_io_schema.Empty{}
-											sensitiveDataDetectionConfig.SectionChoice = sectionChoiceInt
-										}
-
-									}
-
-									if v, ok := sensitiveDataDetectionConfigMapStrToI["custom_sections"]; ok && !isIntfNil(v) && !sectionChoiceTypeFound {
-
-										sectionChoiceTypeFound = true
-										sectionChoiceInt := &ves_io_schema_app_type.CustomDataDetectionConfig_CustomSections{}
-										sectionChoiceInt.CustomSections = &ves_io_schema_app_type.CustomSections{}
-										sensitiveDataDetectionConfig.SectionChoice = sectionChoiceInt
-
-										sl := v.(*schema.Set).List()
-										for _, set := range sl {
-											cs := set.(map[string]interface{})
-
-											if v, ok := cs["custom_sections"]; ok && !isIntfNil(v) {
-
-												custom_sectionsList := []ves_io_schema.HttpSections{}
-												for _, j := range v.([]interface{}) {
-													custom_sectionsList = append(custom_sectionsList, ves_io_schema.HttpSections(ves_io_schema.HttpSections_value[j.(string)]))
-												}
-												sectionChoiceInt.CustomSections.CustomSections = custom_sectionsList
-
-											}
-
-										}
-
-									}
-
-									targetChoiceTypeFound := false
-
-									if v, ok := sensitiveDataDetectionConfigMapStrToI["any_target"]; ok && !isIntfNil(v) && !targetChoiceTypeFound {
-
-										targetChoiceTypeFound = true
-
-										if v.(bool) {
-											targetChoiceInt := &ves_io_schema_app_type.CustomDataDetectionConfig_AnyTarget{}
-											targetChoiceInt.AnyTarget = &ves_io_schema.Empty{}
-											sensitiveDataDetectionConfig.TargetChoice = targetChoiceInt
-										}
-
-									}
-
-									if v, ok := sensitiveDataDetectionConfigMapStrToI["api_endpoint_target"]; ok && !isIntfNil(v) && !targetChoiceTypeFound {
-
-										targetChoiceTypeFound = true
-										targetChoiceInt := &ves_io_schema_app_type.CustomDataDetectionConfig_ApiEndpointTarget{}
-										targetChoiceInt.ApiEndpointTarget = &ves_io_schema_app_type.APIEndpoint{}
-										sensitiveDataDetectionConfig.TargetChoice = targetChoiceInt
-
-										sl := v.(*schema.Set).List()
-										for _, set := range sl {
-											cs := set.(map[string]interface{})
-
-											if v, ok := cs["api_endpoint_path"]; ok && !isIntfNil(v) {
-
-												targetChoiceInt.ApiEndpointTarget.ApiEndpointPath = v.(string)
-
-											}
-
-											if v, ok := cs["methods"]; ok && !isIntfNil(v) {
-
-												methodsList := []ves_io_schema.HttpMethod{}
-												for _, j := range v.([]interface{}) {
-													methodsList = append(methodsList, ves_io_schema.HttpMethod(ves_io_schema.HttpMethod_value[j.(string)]))
-												}
-												targetChoiceInt.ApiEndpointTarget.Methods = methodsList
-
-											}
-
-										}
-
-									}
-
-									if v, ok := sensitiveDataDetectionConfigMapStrToI["api_group"]; ok && !isIntfNil(v) && !targetChoiceTypeFound {
-
-										targetChoiceTypeFound = true
-										targetChoiceInt := &ves_io_schema_app_type.CustomDataDetectionConfig_ApiGroup{}
-
-										sensitiveDataDetectionConfig.TargetChoice = targetChoiceInt
-
-										targetChoiceInt.ApiGroup = v.(string)
-
-									}
-
-									if v, ok := sensitiveDataDetectionConfigMapStrToI["base_path"]; ok && !isIntfNil(v) && !targetChoiceTypeFound {
-
-										targetChoiceTypeFound = true
-										targetChoiceInt := &ves_io_schema_app_type.CustomDataDetectionConfig_BasePath{}
-
-										sensitiveDataDetectionConfig.TargetChoice = targetChoiceInt
-
-										targetChoiceInt.BasePath = v.(string)
-
-									}
-
-								}
-
-							}
-
-							if v, ok := customSensitiveDataDetectionRulesMapStrToI["sensitive_data_type"]; ok && !isIntfNil(v) {
-
-								sl := v.(*schema.Set).List()
-								sensitiveDataType := &ves_io_schema_app_type.CustomSensitiveDataType{}
-								customSensitiveDataDetectionRules[i].SensitiveDataType = sensitiveDataType
-								for _, set := range sl {
-									sensitiveDataTypeMapStrToI := set.(map[string]interface{})
-
-									if w, ok := sensitiveDataTypeMapStrToI["type"]; ok && !isIntfNil(w) {
-										sensitiveDataType.Type = w.(string)
-									}
-
 								}
 
 							}
 
 						}
-
-					}
-
-					if v, ok := sensitiveDataDetectionRulesMapStrToI["disabled_built_in_rules"]; ok && !isIntfNil(v) {
-
-						sl := v.([]interface{})
-						disabledBuiltInRules := make([]*ves_io_schema_app_type.BuiltInSensitiveDataType, len(sl))
-						sensitiveDataDetectionRules.DisabledBuiltInRules = disabledBuiltInRules
-						for i, set := range sl {
-							disabledBuiltInRules[i] = &ves_io_schema_app_type.BuiltInSensitiveDataType{}
-							disabledBuiltInRulesMapStrToI := set.(map[string]interface{})
-
-							if w, ok := disabledBuiltInRulesMapStrToI["name"]; ok && !isIntfNil(w) {
-								disabledBuiltInRules[i].Name = w.(string)
-							}
-
-						}
-
 					}
 
 				}
 
 			}
-
 		}
 
 	}
@@ -959,15 +1002,17 @@ func resourceVolterraAppTypeCreate(d *schema.ResourceData, meta interface{}) err
 		features := make([]*ves_io_schema_app_type.Feature, len(sl))
 		createSpec.Features = features
 		for i, set := range sl {
-			features[i] = &ves_io_schema_app_type.Feature{}
-			featuresMapStrToI := set.(map[string]interface{})
+			if set != nil {
+				features[i] = &ves_io_schema_app_type.Feature{}
+				featuresMapStrToI := set.(map[string]interface{})
 
-			if v, ok := featuresMapStrToI["type"]; ok && !isIntfNil(v) {
+				if v, ok := featuresMapStrToI["type"]; ok && !isIntfNil(v) {
 
-				features[i].Type = ves_io_schema_app_type.FeatureType(ves_io_schema_app_type.FeatureType_value[v.(string)])
+					features[i].Type = ves_io_schema_app_type.FeatureType(ves_io_schema_app_type.FeatureType_value[v.(string)])
+
+				}
 
 			}
-
 		}
 
 	}
@@ -1073,470 +1118,500 @@ func resourceVolterraAppTypeUpdate(d *schema.ResourceData, meta interface{}) err
 
 	if v, ok := d.GetOk("business_logic_markup_setting"); ok && !isIntfNil(v) {
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		businessLogicMarkupSetting := &ves_io_schema_app_type.BusinessLogicMarkupSetting{}
 		updateSpec.BusinessLogicMarkupSetting = businessLogicMarkupSetting
 		for _, set := range sl {
-			businessLogicMarkupSettingMapStrToI := set.(map[string]interface{})
+			if set != nil {
+				businessLogicMarkupSettingMapStrToI := set.(map[string]interface{})
 
-			if v, ok := businessLogicMarkupSettingMapStrToI["discovered_api_settings"]; ok && !isIntfNil(v) {
+				if v, ok := businessLogicMarkupSettingMapStrToI["discovered_api_settings"]; ok && !isIntfNil(v) {
 
-				sl := v.(*schema.Set).List()
-				discoveredApiSettings := &ves_io_schema_app_type.DiscoveredAPISettings{}
-				businessLogicMarkupSetting.DiscoveredApiSettings = discoveredApiSettings
-				for _, set := range sl {
-					discoveredApiSettingsMapStrToI := set.(map[string]interface{})
+					sl := v.([]interface{})
+					discoveredApiSettings := &ves_io_schema_app_type.DiscoveredAPISettings{}
+					businessLogicMarkupSetting.DiscoveredApiSettings = discoveredApiSettings
+					for _, set := range sl {
+						if set != nil {
+							discoveredApiSettingsMapStrToI := set.(map[string]interface{})
 
-					if w, ok := discoveredApiSettingsMapStrToI["purge_duration_for_inactive_discovered_apis"]; ok && !isIntfNil(w) {
-						discoveredApiSettings.PurgeDurationForInactiveDiscoveredApis = uint32(w.(int))
+							if w, ok := discoveredApiSettingsMapStrToI["purge_duration_for_inactive_discovered_apis"]; ok && !isIntfNil(w) {
+								discoveredApiSettings.PurgeDurationForInactiveDiscoveredApis = uint32(w.(int))
+							}
+
+						}
 					}
 
 				}
 
-			}
+				learnFromRedirectTrafficTypeFound := false
 
-			learnFromRedirectTrafficTypeFound := false
+				if v, ok := businessLogicMarkupSettingMapStrToI["disable"]; ok && !isIntfNil(v) && !learnFromRedirectTrafficTypeFound {
 
-			if v, ok := businessLogicMarkupSettingMapStrToI["disable"]; ok && !isIntfNil(v) && !learnFromRedirectTrafficTypeFound {
+					learnFromRedirectTrafficTypeFound = true
 
-				learnFromRedirectTrafficTypeFound = true
+					if v.(bool) {
+						learnFromRedirectTrafficInt := &ves_io_schema_app_type.BusinessLogicMarkupSetting_Disable{}
+						learnFromRedirectTrafficInt.Disable = &ves_io_schema.Empty{}
+						businessLogicMarkupSetting.LearnFromRedirectTraffic = learnFromRedirectTrafficInt
+					}
 
-				if v.(bool) {
-					learnFromRedirectTrafficInt := &ves_io_schema_app_type.BusinessLogicMarkupSetting_Disable{}
-					learnFromRedirectTrafficInt.Disable = &ves_io_schema.Empty{}
-					businessLogicMarkupSetting.LearnFromRedirectTraffic = learnFromRedirectTrafficInt
 				}
 
-			}
+				if v, ok := businessLogicMarkupSettingMapStrToI["enable"]; ok && !isIntfNil(v) && !learnFromRedirectTrafficTypeFound {
 
-			if v, ok := businessLogicMarkupSettingMapStrToI["enable"]; ok && !isIntfNil(v) && !learnFromRedirectTrafficTypeFound {
+					learnFromRedirectTrafficTypeFound = true
 
-				learnFromRedirectTrafficTypeFound = true
+					if v.(bool) {
+						learnFromRedirectTrafficInt := &ves_io_schema_app_type.BusinessLogicMarkupSetting_Enable{}
+						learnFromRedirectTrafficInt.Enable = &ves_io_schema.Empty{}
+						businessLogicMarkupSetting.LearnFromRedirectTraffic = learnFromRedirectTrafficInt
+					}
 
-				if v.(bool) {
-					learnFromRedirectTrafficInt := &ves_io_schema_app_type.BusinessLogicMarkupSetting_Enable{}
-					learnFromRedirectTrafficInt.Enable = &ves_io_schema.Empty{}
-					businessLogicMarkupSetting.LearnFromRedirectTraffic = learnFromRedirectTrafficInt
 				}
 
-			}
+				if v, ok := businessLogicMarkupSettingMapStrToI["sensitive_data_detection_rules"]; ok && !isIntfNil(v) {
 
-			if v, ok := businessLogicMarkupSettingMapStrToI["sensitive_data_detection_rules"]; ok && !isIntfNil(v) {
+					sl := v.([]interface{})
+					sensitiveDataDetectionRules := &ves_io_schema_app_type.SensitiveDataDetectionRules{}
+					businessLogicMarkupSetting.SensitiveDataDetectionRules = sensitiveDataDetectionRules
+					for _, set := range sl {
+						if set != nil {
+							sensitiveDataDetectionRulesMapStrToI := set.(map[string]interface{})
 
-				sl := v.(*schema.Set).List()
-				sensitiveDataDetectionRules := &ves_io_schema_app_type.SensitiveDataDetectionRules{}
-				businessLogicMarkupSetting.SensitiveDataDetectionRules = sensitiveDataDetectionRules
-				for _, set := range sl {
-					sensitiveDataDetectionRulesMapStrToI := set.(map[string]interface{})
+							if v, ok := sensitiveDataDetectionRulesMapStrToI["custom_sensitive_data_detection_rules"]; ok && !isIntfNil(v) {
 
-					if v, ok := sensitiveDataDetectionRulesMapStrToI["custom_sensitive_data_detection_rules"]; ok && !isIntfNil(v) {
+								sl := v.([]interface{})
+								customSensitiveDataDetectionRules := make([]*ves_io_schema_app_type.CustomSensitiveDataDetectionRule, len(sl))
+								sensitiveDataDetectionRules.CustomSensitiveDataDetectionRules = customSensitiveDataDetectionRules
+								for i, set := range sl {
+									if set != nil {
+										customSensitiveDataDetectionRules[i] = &ves_io_schema_app_type.CustomSensitiveDataDetectionRule{}
+										customSensitiveDataDetectionRulesMapStrToI := set.(map[string]interface{})
 
-						sl := v.([]interface{})
-						customSensitiveDataDetectionRules := make([]*ves_io_schema_app_type.CustomSensitiveDataDetectionRule, len(sl))
-						sensitiveDataDetectionRules.CustomSensitiveDataDetectionRules = customSensitiveDataDetectionRules
-						for i, set := range sl {
-							customSensitiveDataDetectionRules[i] = &ves_io_schema_app_type.CustomSensitiveDataDetectionRule{}
-							customSensitiveDataDetectionRulesMapStrToI := set.(map[string]interface{})
+										if v, ok := customSensitiveDataDetectionRulesMapStrToI["metadata"]; ok && !isIntfNil(v) {
 
-							if v, ok := customSensitiveDataDetectionRulesMapStrToI["metadata"]; ok && !isIntfNil(v) {
+											sl := v.([]interface{})
+											metadata := &ves_io_schema.MessageMetaType{}
+											customSensitiveDataDetectionRules[i].Metadata = metadata
+											for _, set := range sl {
+												if set != nil {
+													metadataMapStrToI := set.(map[string]interface{})
 
-								sl := v.(*schema.Set).List()
-								metadata := &ves_io_schema.MessageMetaType{}
-								customSensitiveDataDetectionRules[i].Metadata = metadata
-								for _, set := range sl {
-									metadataMapStrToI := set.(map[string]interface{})
+													if w, ok := metadataMapStrToI["description"]; ok && !isIntfNil(w) {
+														metadata.Description = w.(string)
+													}
 
-									if w, ok := metadataMapStrToI["description"]; ok && !isIntfNil(w) {
-										metadata.Description = w.(string)
+													if w, ok := metadataMapStrToI["disable"]; ok && !isIntfNil(w) {
+														metadata.Disable = w.(bool)
+													}
+
+													if w, ok := metadataMapStrToI["name"]; ok && !isIntfNil(w) {
+														metadata.Name = w.(string)
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := customSensitiveDataDetectionRulesMapStrToI["sensitive_data_detection_config"]; ok && !isIntfNil(v) {
+
+											sl := v.([]interface{})
+											sensitiveDataDetectionConfig := &ves_io_schema_app_type.CustomDataDetectionConfig{}
+											customSensitiveDataDetectionRules[i].SensitiveDataDetectionConfig = sensitiveDataDetectionConfig
+											for _, set := range sl {
+												if set != nil {
+													sensitiveDataDetectionConfigMapStrToI := set.(map[string]interface{})
+
+													domainChoiceTypeFound := false
+
+													if v, ok := sensitiveDataDetectionConfigMapStrToI["any_domain"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
+
+														domainChoiceTypeFound = true
+
+														if v.(bool) {
+															domainChoiceInt := &ves_io_schema_app_type.CustomDataDetectionConfig_AnyDomain{}
+															domainChoiceInt.AnyDomain = &ves_io_schema.Empty{}
+															sensitiveDataDetectionConfig.DomainChoice = domainChoiceInt
+														}
+
+													}
+
+													if v, ok := sensitiveDataDetectionConfigMapStrToI["specific_domain"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
+
+														domainChoiceTypeFound = true
+														domainChoiceInt := &ves_io_schema_app_type.CustomDataDetectionConfig_SpecificDomain{}
+
+														sensitiveDataDetectionConfig.DomainChoice = domainChoiceInt
+
+														domainChoiceInt.SpecificDomain = v.(string)
+
+													}
+
+													patternChoiceTypeFound := false
+
+													if v, ok := sensitiveDataDetectionConfigMapStrToI["key_pattern"]; ok && !isIntfNil(v) && !patternChoiceTypeFound {
+
+														patternChoiceTypeFound = true
+														patternChoiceInt := &ves_io_schema_app_type.CustomDataDetectionConfig_KeyPattern{}
+														patternChoiceInt.KeyPattern = &ves_io_schema_app_type.KeyPattern{}
+														sensitiveDataDetectionConfig.PatternChoice = patternChoiceInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																keyPatternTypeFound := false
+
+																if v, ok := cs["exact_value"]; ok && !isIntfNil(v) && !keyPatternTypeFound {
+
+																	keyPatternTypeFound = true
+																	keyPatternInt := &ves_io_schema_app_type.KeyPattern_ExactValue{}
+
+																	patternChoiceInt.KeyPattern.KeyPattern = keyPatternInt
+
+																	keyPatternInt.ExactValue = v.(string)
+
+																}
+
+																if v, ok := cs["regex_value"]; ok && !isIntfNil(v) && !keyPatternTypeFound {
+
+																	keyPatternTypeFound = true
+																	keyPatternInt := &ves_io_schema_app_type.KeyPattern_RegexValue{}
+
+																	patternChoiceInt.KeyPattern.KeyPattern = keyPatternInt
+
+																	keyPatternInt.RegexValue = v.(string)
+
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := sensitiveDataDetectionConfigMapStrToI["key_value_pattern"]; ok && !isIntfNil(v) && !patternChoiceTypeFound {
+
+														patternChoiceTypeFound = true
+														patternChoiceInt := &ves_io_schema_app_type.CustomDataDetectionConfig_KeyValuePattern{}
+														patternChoiceInt.KeyValuePattern = &ves_io_schema_app_type.KeyValuePattern{}
+														sensitiveDataDetectionConfig.PatternChoice = patternChoiceInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["key_pattern"]; ok && !isIntfNil(v) {
+
+																	sl := v.([]interface{})
+																	keyPattern := &ves_io_schema_app_type.KeyPattern{}
+																	patternChoiceInt.KeyValuePattern.KeyPattern = keyPattern
+																	for _, set := range sl {
+																		if set != nil {
+																			keyPatternMapStrToI := set.(map[string]interface{})
+
+																			keyPatternTypeFound := false
+
+																			if v, ok := keyPatternMapStrToI["exact_value"]; ok && !isIntfNil(v) && !keyPatternTypeFound {
+
+																				keyPatternTypeFound = true
+																				keyPatternInt := &ves_io_schema_app_type.KeyPattern_ExactValue{}
+
+																				keyPattern.KeyPattern = keyPatternInt
+
+																				keyPatternInt.ExactValue = v.(string)
+
+																			}
+
+																			if v, ok := keyPatternMapStrToI["regex_value"]; ok && !isIntfNil(v) && !keyPatternTypeFound {
+
+																				keyPatternTypeFound = true
+																				keyPatternInt := &ves_io_schema_app_type.KeyPattern_RegexValue{}
+
+																				keyPattern.KeyPattern = keyPatternInt
+
+																				keyPatternInt.RegexValue = v.(string)
+
+																			}
+
+																		}
+																	}
+
+																}
+
+																if v, ok := cs["value_pattern"]; ok && !isIntfNil(v) {
+
+																	sl := v.([]interface{})
+																	valuePattern := &ves_io_schema_app_type.ValuePattern{}
+																	patternChoiceInt.KeyValuePattern.ValuePattern = valuePattern
+																	for _, set := range sl {
+																		if set != nil {
+																			valuePatternMapStrToI := set.(map[string]interface{})
+
+																			valuePatternTypeFound := false
+
+																			if v, ok := valuePatternMapStrToI["exact_value"]; ok && !isIntfNil(v) && !valuePatternTypeFound {
+
+																				valuePatternTypeFound = true
+																				valuePatternInt := &ves_io_schema_app_type.ValuePattern_ExactValue{}
+
+																				valuePattern.ValuePattern = valuePatternInt
+
+																				valuePatternInt.ExactValue = v.(string)
+
+																			}
+
+																			if v, ok := valuePatternMapStrToI["regex_value"]; ok && !isIntfNil(v) && !valuePatternTypeFound {
+
+																				valuePatternTypeFound = true
+																				valuePatternInt := &ves_io_schema_app_type.ValuePattern_RegexValue{}
+
+																				valuePattern.ValuePattern = valuePatternInt
+
+																				valuePatternInt.RegexValue = v.(string)
+
+																			}
+
+																		}
+																	}
+
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := sensitiveDataDetectionConfigMapStrToI["value_pattern"]; ok && !isIntfNil(v) && !patternChoiceTypeFound {
+
+														patternChoiceTypeFound = true
+														patternChoiceInt := &ves_io_schema_app_type.CustomDataDetectionConfig_ValuePattern{}
+														patternChoiceInt.ValuePattern = &ves_io_schema_app_type.ValuePattern{}
+														sensitiveDataDetectionConfig.PatternChoice = patternChoiceInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																valuePatternTypeFound := false
+
+																if v, ok := cs["exact_value"]; ok && !isIntfNil(v) && !valuePatternTypeFound {
+
+																	valuePatternTypeFound = true
+																	valuePatternInt := &ves_io_schema_app_type.ValuePattern_ExactValue{}
+
+																	patternChoiceInt.ValuePattern.ValuePattern = valuePatternInt
+
+																	valuePatternInt.ExactValue = v.(string)
+
+																}
+
+																if v, ok := cs["regex_value"]; ok && !isIntfNil(v) && !valuePatternTypeFound {
+
+																	valuePatternTypeFound = true
+																	valuePatternInt := &ves_io_schema_app_type.ValuePattern_RegexValue{}
+
+																	patternChoiceInt.ValuePattern.ValuePattern = valuePatternInt
+
+																	valuePatternInt.RegexValue = v.(string)
+
+																}
+
+															}
+														}
+
+													}
+
+													sectionChoiceTypeFound := false
+
+													if v, ok := sensitiveDataDetectionConfigMapStrToI["all_request_sections"]; ok && !isIntfNil(v) && !sectionChoiceTypeFound {
+
+														sectionChoiceTypeFound = true
+
+														if v.(bool) {
+															sectionChoiceInt := &ves_io_schema_app_type.CustomDataDetectionConfig_AllRequestSections{}
+															sectionChoiceInt.AllRequestSections = &ves_io_schema.Empty{}
+															sensitiveDataDetectionConfig.SectionChoice = sectionChoiceInt
+														}
+
+													}
+
+													if v, ok := sensitiveDataDetectionConfigMapStrToI["all_response_sections"]; ok && !isIntfNil(v) && !sectionChoiceTypeFound {
+
+														sectionChoiceTypeFound = true
+
+														if v.(bool) {
+															sectionChoiceInt := &ves_io_schema_app_type.CustomDataDetectionConfig_AllResponseSections{}
+															sectionChoiceInt.AllResponseSections = &ves_io_schema.Empty{}
+															sensitiveDataDetectionConfig.SectionChoice = sectionChoiceInt
+														}
+
+													}
+
+													if v, ok := sensitiveDataDetectionConfigMapStrToI["all_sections"]; ok && !isIntfNil(v) && !sectionChoiceTypeFound {
+
+														sectionChoiceTypeFound = true
+
+														if v.(bool) {
+															sectionChoiceInt := &ves_io_schema_app_type.CustomDataDetectionConfig_AllSections{}
+															sectionChoiceInt.AllSections = &ves_io_schema.Empty{}
+															sensitiveDataDetectionConfig.SectionChoice = sectionChoiceInt
+														}
+
+													}
+
+													if v, ok := sensitiveDataDetectionConfigMapStrToI["custom_sections"]; ok && !isIntfNil(v) && !sectionChoiceTypeFound {
+
+														sectionChoiceTypeFound = true
+														sectionChoiceInt := &ves_io_schema_app_type.CustomDataDetectionConfig_CustomSections{}
+														sectionChoiceInt.CustomSections = &ves_io_schema_app_type.CustomSections{}
+														sensitiveDataDetectionConfig.SectionChoice = sectionChoiceInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["custom_sections"]; ok && !isIntfNil(v) {
+
+																	custom_sectionsList := []ves_io_schema.HttpSections{}
+																	for _, j := range v.([]interface{}) {
+																		custom_sectionsList = append(custom_sectionsList, ves_io_schema.HttpSections(ves_io_schema.HttpSections_value[j.(string)]))
+																	}
+																	sectionChoiceInt.CustomSections.CustomSections = custom_sectionsList
+
+																}
+
+															}
+														}
+
+													}
+
+													targetChoiceTypeFound := false
+
+													if v, ok := sensitiveDataDetectionConfigMapStrToI["any_target"]; ok && !isIntfNil(v) && !targetChoiceTypeFound {
+
+														targetChoiceTypeFound = true
+
+														if v.(bool) {
+															targetChoiceInt := &ves_io_schema_app_type.CustomDataDetectionConfig_AnyTarget{}
+															targetChoiceInt.AnyTarget = &ves_io_schema.Empty{}
+															sensitiveDataDetectionConfig.TargetChoice = targetChoiceInt
+														}
+
+													}
+
+													if v, ok := sensitiveDataDetectionConfigMapStrToI["api_endpoint_target"]; ok && !isIntfNil(v) && !targetChoiceTypeFound {
+
+														targetChoiceTypeFound = true
+														targetChoiceInt := &ves_io_schema_app_type.CustomDataDetectionConfig_ApiEndpointTarget{}
+														targetChoiceInt.ApiEndpointTarget = &ves_io_schema_app_type.APIEndpoint{}
+														sensitiveDataDetectionConfig.TargetChoice = targetChoiceInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["api_endpoint_path"]; ok && !isIntfNil(v) {
+
+																	targetChoiceInt.ApiEndpointTarget.ApiEndpointPath = v.(string)
+
+																}
+
+																if v, ok := cs["methods"]; ok && !isIntfNil(v) {
+
+																	methodsList := []ves_io_schema.HttpMethod{}
+																	for _, j := range v.([]interface{}) {
+																		methodsList = append(methodsList, ves_io_schema.HttpMethod(ves_io_schema.HttpMethod_value[j.(string)]))
+																	}
+																	targetChoiceInt.ApiEndpointTarget.Methods = methodsList
+
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := sensitiveDataDetectionConfigMapStrToI["api_group"]; ok && !isIntfNil(v) && !targetChoiceTypeFound {
+
+														targetChoiceTypeFound = true
+														targetChoiceInt := &ves_io_schema_app_type.CustomDataDetectionConfig_ApiGroup{}
+
+														sensitiveDataDetectionConfig.TargetChoice = targetChoiceInt
+
+														targetChoiceInt.ApiGroup = v.(string)
+
+													}
+
+													if v, ok := sensitiveDataDetectionConfigMapStrToI["base_path"]; ok && !isIntfNil(v) && !targetChoiceTypeFound {
+
+														targetChoiceTypeFound = true
+														targetChoiceInt := &ves_io_schema_app_type.CustomDataDetectionConfig_BasePath{}
+
+														sensitiveDataDetectionConfig.TargetChoice = targetChoiceInt
+
+														targetChoiceInt.BasePath = v.(string)
+
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := customSensitiveDataDetectionRulesMapStrToI["sensitive_data_type"]; ok && !isIntfNil(v) {
+
+											sl := v.([]interface{})
+											sensitiveDataType := &ves_io_schema_app_type.CustomSensitiveDataType{}
+											customSensitiveDataDetectionRules[i].SensitiveDataType = sensitiveDataType
+											for _, set := range sl {
+												if set != nil {
+													sensitiveDataTypeMapStrToI := set.(map[string]interface{})
+
+													if w, ok := sensitiveDataTypeMapStrToI["type"]; ok && !isIntfNil(w) {
+														sensitiveDataType.Type = w.(string)
+													}
+
+												}
+											}
+
+										}
+
 									}
-
-									if w, ok := metadataMapStrToI["disable"]; ok && !isIntfNil(w) {
-										metadata.Disable = w.(bool)
-									}
-
-									if w, ok := metadataMapStrToI["name"]; ok && !isIntfNil(w) {
-										metadata.Name = w.(string)
-									}
-
 								}
 
 							}
 
-							if v, ok := customSensitiveDataDetectionRulesMapStrToI["sensitive_data_detection_config"]; ok && !isIntfNil(v) {
+							if v, ok := sensitiveDataDetectionRulesMapStrToI["disabled_built_in_rules"]; ok && !isIntfNil(v) {
 
-								sl := v.(*schema.Set).List()
-								sensitiveDataDetectionConfig := &ves_io_schema_app_type.CustomDataDetectionConfig{}
-								customSensitiveDataDetectionRules[i].SensitiveDataDetectionConfig = sensitiveDataDetectionConfig
-								for _, set := range sl {
-									sensitiveDataDetectionConfigMapStrToI := set.(map[string]interface{})
+								sl := v.([]interface{})
+								disabledBuiltInRules := make([]*ves_io_schema_app_type.BuiltInSensitiveDataType, len(sl))
+								sensitiveDataDetectionRules.DisabledBuiltInRules = disabledBuiltInRules
+								for i, set := range sl {
+									if set != nil {
+										disabledBuiltInRules[i] = &ves_io_schema_app_type.BuiltInSensitiveDataType{}
+										disabledBuiltInRulesMapStrToI := set.(map[string]interface{})
 
-									domainChoiceTypeFound := false
-
-									if v, ok := sensitiveDataDetectionConfigMapStrToI["any_domain"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
-
-										domainChoiceTypeFound = true
-
-										if v.(bool) {
-											domainChoiceInt := &ves_io_schema_app_type.CustomDataDetectionConfig_AnyDomain{}
-											domainChoiceInt.AnyDomain = &ves_io_schema.Empty{}
-											sensitiveDataDetectionConfig.DomainChoice = domainChoiceInt
+										if w, ok := disabledBuiltInRulesMapStrToI["name"]; ok && !isIntfNil(w) {
+											disabledBuiltInRules[i].Name = w.(string)
 										}
 
 									}
-
-									if v, ok := sensitiveDataDetectionConfigMapStrToI["specific_domain"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
-
-										domainChoiceTypeFound = true
-										domainChoiceInt := &ves_io_schema_app_type.CustomDataDetectionConfig_SpecificDomain{}
-
-										sensitiveDataDetectionConfig.DomainChoice = domainChoiceInt
-
-										domainChoiceInt.SpecificDomain = v.(string)
-
-									}
-
-									patternChoiceTypeFound := false
-
-									if v, ok := sensitiveDataDetectionConfigMapStrToI["key_pattern"]; ok && !isIntfNil(v) && !patternChoiceTypeFound {
-
-										patternChoiceTypeFound = true
-										patternChoiceInt := &ves_io_schema_app_type.CustomDataDetectionConfig_KeyPattern{}
-										patternChoiceInt.KeyPattern = &ves_io_schema_app_type.KeyPattern{}
-										sensitiveDataDetectionConfig.PatternChoice = patternChoiceInt
-
-										sl := v.(*schema.Set).List()
-										for _, set := range sl {
-											cs := set.(map[string]interface{})
-
-											keyPatternTypeFound := false
-
-											if v, ok := cs["exact_value"]; ok && !isIntfNil(v) && !keyPatternTypeFound {
-
-												keyPatternTypeFound = true
-												keyPatternInt := &ves_io_schema_app_type.KeyPattern_ExactValue{}
-
-												patternChoiceInt.KeyPattern.KeyPattern = keyPatternInt
-
-												keyPatternInt.ExactValue = v.(string)
-
-											}
-
-											if v, ok := cs["regex_value"]; ok && !isIntfNil(v) && !keyPatternTypeFound {
-
-												keyPatternTypeFound = true
-												keyPatternInt := &ves_io_schema_app_type.KeyPattern_RegexValue{}
-
-												patternChoiceInt.KeyPattern.KeyPattern = keyPatternInt
-
-												keyPatternInt.RegexValue = v.(string)
-
-											}
-
-										}
-
-									}
-
-									if v, ok := sensitiveDataDetectionConfigMapStrToI["key_value_pattern"]; ok && !isIntfNil(v) && !patternChoiceTypeFound {
-
-										patternChoiceTypeFound = true
-										patternChoiceInt := &ves_io_schema_app_type.CustomDataDetectionConfig_KeyValuePattern{}
-										patternChoiceInt.KeyValuePattern = &ves_io_schema_app_type.KeyValuePattern{}
-										sensitiveDataDetectionConfig.PatternChoice = patternChoiceInt
-
-										sl := v.(*schema.Set).List()
-										for _, set := range sl {
-											cs := set.(map[string]interface{})
-
-											if v, ok := cs["key_pattern"]; ok && !isIntfNil(v) {
-
-												sl := v.(*schema.Set).List()
-												keyPattern := &ves_io_schema_app_type.KeyPattern{}
-												patternChoiceInt.KeyValuePattern.KeyPattern = keyPattern
-												for _, set := range sl {
-													keyPatternMapStrToI := set.(map[string]interface{})
-
-													keyPatternTypeFound := false
-
-													if v, ok := keyPatternMapStrToI["exact_value"]; ok && !isIntfNil(v) && !keyPatternTypeFound {
-
-														keyPatternTypeFound = true
-														keyPatternInt := &ves_io_schema_app_type.KeyPattern_ExactValue{}
-
-														keyPattern.KeyPattern = keyPatternInt
-
-														keyPatternInt.ExactValue = v.(string)
-
-													}
-
-													if v, ok := keyPatternMapStrToI["regex_value"]; ok && !isIntfNil(v) && !keyPatternTypeFound {
-
-														keyPatternTypeFound = true
-														keyPatternInt := &ves_io_schema_app_type.KeyPattern_RegexValue{}
-
-														keyPattern.KeyPattern = keyPatternInt
-
-														keyPatternInt.RegexValue = v.(string)
-
-													}
-
-												}
-
-											}
-
-											if v, ok := cs["value_pattern"]; ok && !isIntfNil(v) {
-
-												sl := v.(*schema.Set).List()
-												valuePattern := &ves_io_schema_app_type.ValuePattern{}
-												patternChoiceInt.KeyValuePattern.ValuePattern = valuePattern
-												for _, set := range sl {
-													valuePatternMapStrToI := set.(map[string]interface{})
-
-													valuePatternTypeFound := false
-
-													if v, ok := valuePatternMapStrToI["exact_value"]; ok && !isIntfNil(v) && !valuePatternTypeFound {
-
-														valuePatternTypeFound = true
-														valuePatternInt := &ves_io_schema_app_type.ValuePattern_ExactValue{}
-
-														valuePattern.ValuePattern = valuePatternInt
-
-														valuePatternInt.ExactValue = v.(string)
-
-													}
-
-													if v, ok := valuePatternMapStrToI["regex_value"]; ok && !isIntfNil(v) && !valuePatternTypeFound {
-
-														valuePatternTypeFound = true
-														valuePatternInt := &ves_io_schema_app_type.ValuePattern_RegexValue{}
-
-														valuePattern.ValuePattern = valuePatternInt
-
-														valuePatternInt.RegexValue = v.(string)
-
-													}
-
-												}
-
-											}
-
-										}
-
-									}
-
-									if v, ok := sensitiveDataDetectionConfigMapStrToI["value_pattern"]; ok && !isIntfNil(v) && !patternChoiceTypeFound {
-
-										patternChoiceTypeFound = true
-										patternChoiceInt := &ves_io_schema_app_type.CustomDataDetectionConfig_ValuePattern{}
-										patternChoiceInt.ValuePattern = &ves_io_schema_app_type.ValuePattern{}
-										sensitiveDataDetectionConfig.PatternChoice = patternChoiceInt
-
-										sl := v.(*schema.Set).List()
-										for _, set := range sl {
-											cs := set.(map[string]interface{})
-
-											valuePatternTypeFound := false
-
-											if v, ok := cs["exact_value"]; ok && !isIntfNil(v) && !valuePatternTypeFound {
-
-												valuePatternTypeFound = true
-												valuePatternInt := &ves_io_schema_app_type.ValuePattern_ExactValue{}
-
-												patternChoiceInt.ValuePattern.ValuePattern = valuePatternInt
-
-												valuePatternInt.ExactValue = v.(string)
-
-											}
-
-											if v, ok := cs["regex_value"]; ok && !isIntfNil(v) && !valuePatternTypeFound {
-
-												valuePatternTypeFound = true
-												valuePatternInt := &ves_io_schema_app_type.ValuePattern_RegexValue{}
-
-												patternChoiceInt.ValuePattern.ValuePattern = valuePatternInt
-
-												valuePatternInt.RegexValue = v.(string)
-
-											}
-
-										}
-
-									}
-
-									sectionChoiceTypeFound := false
-
-									if v, ok := sensitiveDataDetectionConfigMapStrToI["all_request_sections"]; ok && !isIntfNil(v) && !sectionChoiceTypeFound {
-
-										sectionChoiceTypeFound = true
-
-										if v.(bool) {
-											sectionChoiceInt := &ves_io_schema_app_type.CustomDataDetectionConfig_AllRequestSections{}
-											sectionChoiceInt.AllRequestSections = &ves_io_schema.Empty{}
-											sensitiveDataDetectionConfig.SectionChoice = sectionChoiceInt
-										}
-
-									}
-
-									if v, ok := sensitiveDataDetectionConfigMapStrToI["all_response_sections"]; ok && !isIntfNil(v) && !sectionChoiceTypeFound {
-
-										sectionChoiceTypeFound = true
-
-										if v.(bool) {
-											sectionChoiceInt := &ves_io_schema_app_type.CustomDataDetectionConfig_AllResponseSections{}
-											sectionChoiceInt.AllResponseSections = &ves_io_schema.Empty{}
-											sensitiveDataDetectionConfig.SectionChoice = sectionChoiceInt
-										}
-
-									}
-
-									if v, ok := sensitiveDataDetectionConfigMapStrToI["all_sections"]; ok && !isIntfNil(v) && !sectionChoiceTypeFound {
-
-										sectionChoiceTypeFound = true
-
-										if v.(bool) {
-											sectionChoiceInt := &ves_io_schema_app_type.CustomDataDetectionConfig_AllSections{}
-											sectionChoiceInt.AllSections = &ves_io_schema.Empty{}
-											sensitiveDataDetectionConfig.SectionChoice = sectionChoiceInt
-										}
-
-									}
-
-									if v, ok := sensitiveDataDetectionConfigMapStrToI["custom_sections"]; ok && !isIntfNil(v) && !sectionChoiceTypeFound {
-
-										sectionChoiceTypeFound = true
-										sectionChoiceInt := &ves_io_schema_app_type.CustomDataDetectionConfig_CustomSections{}
-										sectionChoiceInt.CustomSections = &ves_io_schema_app_type.CustomSections{}
-										sensitiveDataDetectionConfig.SectionChoice = sectionChoiceInt
-
-										sl := v.(*schema.Set).List()
-										for _, set := range sl {
-											cs := set.(map[string]interface{})
-
-											if v, ok := cs["custom_sections"]; ok && !isIntfNil(v) {
-
-												custom_sectionsList := []ves_io_schema.HttpSections{}
-												for _, j := range v.([]interface{}) {
-													custom_sectionsList = append(custom_sectionsList, ves_io_schema.HttpSections(ves_io_schema.HttpSections_value[j.(string)]))
-												}
-												sectionChoiceInt.CustomSections.CustomSections = custom_sectionsList
-
-											}
-
-										}
-
-									}
-
-									targetChoiceTypeFound := false
-
-									if v, ok := sensitiveDataDetectionConfigMapStrToI["any_target"]; ok && !isIntfNil(v) && !targetChoiceTypeFound {
-
-										targetChoiceTypeFound = true
-
-										if v.(bool) {
-											targetChoiceInt := &ves_io_schema_app_type.CustomDataDetectionConfig_AnyTarget{}
-											targetChoiceInt.AnyTarget = &ves_io_schema.Empty{}
-											sensitiveDataDetectionConfig.TargetChoice = targetChoiceInt
-										}
-
-									}
-
-									if v, ok := sensitiveDataDetectionConfigMapStrToI["api_endpoint_target"]; ok && !isIntfNil(v) && !targetChoiceTypeFound {
-
-										targetChoiceTypeFound = true
-										targetChoiceInt := &ves_io_schema_app_type.CustomDataDetectionConfig_ApiEndpointTarget{}
-										targetChoiceInt.ApiEndpointTarget = &ves_io_schema_app_type.APIEndpoint{}
-										sensitiveDataDetectionConfig.TargetChoice = targetChoiceInt
-
-										sl := v.(*schema.Set).List()
-										for _, set := range sl {
-											cs := set.(map[string]interface{})
-
-											if v, ok := cs["api_endpoint_path"]; ok && !isIntfNil(v) {
-
-												targetChoiceInt.ApiEndpointTarget.ApiEndpointPath = v.(string)
-
-											}
-
-											if v, ok := cs["methods"]; ok && !isIntfNil(v) {
-
-												methodsList := []ves_io_schema.HttpMethod{}
-												for _, j := range v.([]interface{}) {
-													methodsList = append(methodsList, ves_io_schema.HttpMethod(ves_io_schema.HttpMethod_value[j.(string)]))
-												}
-												targetChoiceInt.ApiEndpointTarget.Methods = methodsList
-
-											}
-
-										}
-
-									}
-
-									if v, ok := sensitiveDataDetectionConfigMapStrToI["api_group"]; ok && !isIntfNil(v) && !targetChoiceTypeFound {
-
-										targetChoiceTypeFound = true
-										targetChoiceInt := &ves_io_schema_app_type.CustomDataDetectionConfig_ApiGroup{}
-
-										sensitiveDataDetectionConfig.TargetChoice = targetChoiceInt
-
-										targetChoiceInt.ApiGroup = v.(string)
-
-									}
-
-									if v, ok := sensitiveDataDetectionConfigMapStrToI["base_path"]; ok && !isIntfNil(v) && !targetChoiceTypeFound {
-
-										targetChoiceTypeFound = true
-										targetChoiceInt := &ves_io_schema_app_type.CustomDataDetectionConfig_BasePath{}
-
-										sensitiveDataDetectionConfig.TargetChoice = targetChoiceInt
-
-										targetChoiceInt.BasePath = v.(string)
-
-									}
-
-								}
-
-							}
-
-							if v, ok := customSensitiveDataDetectionRulesMapStrToI["sensitive_data_type"]; ok && !isIntfNil(v) {
-
-								sl := v.(*schema.Set).List()
-								sensitiveDataType := &ves_io_schema_app_type.CustomSensitiveDataType{}
-								customSensitiveDataDetectionRules[i].SensitiveDataType = sensitiveDataType
-								for _, set := range sl {
-									sensitiveDataTypeMapStrToI := set.(map[string]interface{})
-
-									if w, ok := sensitiveDataTypeMapStrToI["type"]; ok && !isIntfNil(w) {
-										sensitiveDataType.Type = w.(string)
-									}
-
 								}
 
 							}
 
 						}
-
-					}
-
-					if v, ok := sensitiveDataDetectionRulesMapStrToI["disabled_built_in_rules"]; ok && !isIntfNil(v) {
-
-						sl := v.([]interface{})
-						disabledBuiltInRules := make([]*ves_io_schema_app_type.BuiltInSensitiveDataType, len(sl))
-						sensitiveDataDetectionRules.DisabledBuiltInRules = disabledBuiltInRules
-						for i, set := range sl {
-							disabledBuiltInRules[i] = &ves_io_schema_app_type.BuiltInSensitiveDataType{}
-							disabledBuiltInRulesMapStrToI := set.(map[string]interface{})
-
-							if w, ok := disabledBuiltInRulesMapStrToI["name"]; ok && !isIntfNil(w) {
-								disabledBuiltInRules[i].Name = w.(string)
-							}
-
-						}
-
 					}
 
 				}
 
 			}
-
 		}
 
 	}
@@ -1547,15 +1622,17 @@ func resourceVolterraAppTypeUpdate(d *schema.ResourceData, meta interface{}) err
 		features := make([]*ves_io_schema_app_type.Feature, len(sl))
 		updateSpec.Features = features
 		for i, set := range sl {
-			features[i] = &ves_io_schema_app_type.Feature{}
-			featuresMapStrToI := set.(map[string]interface{})
+			if set != nil {
+				features[i] = &ves_io_schema_app_type.Feature{}
+				featuresMapStrToI := set.(map[string]interface{})
 
-			if v, ok := featuresMapStrToI["type"]; ok && !isIntfNil(v) {
+				if v, ok := featuresMapStrToI["type"]; ok && !isIntfNil(v) {
 
-				features[i].Type = ves_io_schema_app_type.FeatureType(ves_io_schema_app_type.FeatureType_value[v.(string)])
+					features[i].Type = ves_io_schema_app_type.FeatureType(ves_io_schema_app_type.FeatureType_value[v.(string)])
+
+				}
 
 			}
-
 		}
 
 	}

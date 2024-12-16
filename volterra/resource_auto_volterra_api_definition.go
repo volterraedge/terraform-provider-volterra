@@ -206,19 +206,21 @@ func resourceVolterraApiDefinitionCreate(d *schema.ResourceData, meta interface{
 		apiInventoryExclusionList := make([]*ves_io_schema_views.ApiOperation, len(sl))
 		createSpec.ApiInventoryExclusionList = apiInventoryExclusionList
 		for i, set := range sl {
-			apiInventoryExclusionList[i] = &ves_io_schema_views.ApiOperation{}
-			apiInventoryExclusionListMapStrToI := set.(map[string]interface{})
+			if set != nil {
+				apiInventoryExclusionList[i] = &ves_io_schema_views.ApiOperation{}
+				apiInventoryExclusionListMapStrToI := set.(map[string]interface{})
 
-			if v, ok := apiInventoryExclusionListMapStrToI["method"]; ok && !isIntfNil(v) {
+				if v, ok := apiInventoryExclusionListMapStrToI["method"]; ok && !isIntfNil(v) {
 
-				apiInventoryExclusionList[i].Method = ves_io_schema.HttpMethod(ves_io_schema.HttpMethod_value[v.(string)])
+					apiInventoryExclusionList[i].Method = ves_io_schema.HttpMethod(ves_io_schema.HttpMethod_value[v.(string)])
+
+				}
+
+				if w, ok := apiInventoryExclusionListMapStrToI["path"]; ok && !isIntfNil(w) {
+					apiInventoryExclusionList[i].Path = w.(string)
+				}
 
 			}
-
-			if w, ok := apiInventoryExclusionListMapStrToI["path"]; ok && !isIntfNil(w) {
-				apiInventoryExclusionList[i].Path = w.(string)
-			}
-
 		}
 
 	}
@@ -230,19 +232,21 @@ func resourceVolterraApiDefinitionCreate(d *schema.ResourceData, meta interface{
 		apiInventoryInclusionList := make([]*ves_io_schema_views.ApiOperation, len(sl))
 		createSpec.ApiInventoryInclusionList = apiInventoryInclusionList
 		for i, set := range sl {
-			apiInventoryInclusionList[i] = &ves_io_schema_views.ApiOperation{}
-			apiInventoryInclusionListMapStrToI := set.(map[string]interface{})
+			if set != nil {
+				apiInventoryInclusionList[i] = &ves_io_schema_views.ApiOperation{}
+				apiInventoryInclusionListMapStrToI := set.(map[string]interface{})
 
-			if v, ok := apiInventoryInclusionListMapStrToI["method"]; ok && !isIntfNil(v) {
+				if v, ok := apiInventoryInclusionListMapStrToI["method"]; ok && !isIntfNil(v) {
 
-				apiInventoryInclusionList[i].Method = ves_io_schema.HttpMethod(ves_io_schema.HttpMethod_value[v.(string)])
+					apiInventoryInclusionList[i].Method = ves_io_schema.HttpMethod(ves_io_schema.HttpMethod_value[v.(string)])
+
+				}
+
+				if w, ok := apiInventoryInclusionListMapStrToI["path"]; ok && !isIntfNil(w) {
+					apiInventoryInclusionList[i].Path = w.(string)
+				}
 
 			}
-
-			if w, ok := apiInventoryInclusionListMapStrToI["path"]; ok && !isIntfNil(w) {
-				apiInventoryInclusionList[i].Path = w.(string)
-			}
-
 		}
 
 	}
@@ -254,19 +258,21 @@ func resourceVolterraApiDefinitionCreate(d *schema.ResourceData, meta interface{
 		nonApiEndpoints := make([]*ves_io_schema_views.ApiOperation, len(sl))
 		createSpec.NonApiEndpoints = nonApiEndpoints
 		for i, set := range sl {
-			nonApiEndpoints[i] = &ves_io_schema_views.ApiOperation{}
-			nonApiEndpointsMapStrToI := set.(map[string]interface{})
+			if set != nil {
+				nonApiEndpoints[i] = &ves_io_schema_views.ApiOperation{}
+				nonApiEndpointsMapStrToI := set.(map[string]interface{})
 
-			if v, ok := nonApiEndpointsMapStrToI["method"]; ok && !isIntfNil(v) {
+				if v, ok := nonApiEndpointsMapStrToI["method"]; ok && !isIntfNil(v) {
 
-				nonApiEndpoints[i].Method = ves_io_schema.HttpMethod(ves_io_schema.HttpMethod_value[v.(string)])
+					nonApiEndpoints[i].Method = ves_io_schema.HttpMethod(ves_io_schema.HttpMethod_value[v.(string)])
+
+				}
+
+				if w, ok := nonApiEndpointsMapStrToI["path"]; ok && !isIntfNil(w) {
+					nonApiEndpoints[i].Path = w.(string)
+				}
 
 			}
-
-			if w, ok := nonApiEndpointsMapStrToI["path"]; ok && !isIntfNil(w) {
-				nonApiEndpoints[i].Path = w.(string)
-			}
-
 		}
 
 	}
@@ -415,19 +421,21 @@ func resourceVolterraApiDefinitionUpdate(d *schema.ResourceData, meta interface{
 		apiInventoryExclusionList := make([]*ves_io_schema_views.ApiOperation, len(sl))
 		updateSpec.ApiInventoryExclusionList = apiInventoryExclusionList
 		for i, set := range sl {
-			apiInventoryExclusionList[i] = &ves_io_schema_views.ApiOperation{}
-			apiInventoryExclusionListMapStrToI := set.(map[string]interface{})
+			if set != nil {
+				apiInventoryExclusionList[i] = &ves_io_schema_views.ApiOperation{}
+				apiInventoryExclusionListMapStrToI := set.(map[string]interface{})
 
-			if v, ok := apiInventoryExclusionListMapStrToI["method"]; ok && !isIntfNil(v) {
+				if v, ok := apiInventoryExclusionListMapStrToI["method"]; ok && !isIntfNil(v) {
 
-				apiInventoryExclusionList[i].Method = ves_io_schema.HttpMethod(ves_io_schema.HttpMethod_value[v.(string)])
+					apiInventoryExclusionList[i].Method = ves_io_schema.HttpMethod(ves_io_schema.HttpMethod_value[v.(string)])
+
+				}
+
+				if w, ok := apiInventoryExclusionListMapStrToI["path"]; ok && !isIntfNil(w) {
+					apiInventoryExclusionList[i].Path = w.(string)
+				}
 
 			}
-
-			if w, ok := apiInventoryExclusionListMapStrToI["path"]; ok && !isIntfNil(w) {
-				apiInventoryExclusionList[i].Path = w.(string)
-			}
-
 		}
 
 	}
@@ -438,19 +446,21 @@ func resourceVolterraApiDefinitionUpdate(d *schema.ResourceData, meta interface{
 		apiInventoryInclusionList := make([]*ves_io_schema_views.ApiOperation, len(sl))
 		updateSpec.ApiInventoryInclusionList = apiInventoryInclusionList
 		for i, set := range sl {
-			apiInventoryInclusionList[i] = &ves_io_schema_views.ApiOperation{}
-			apiInventoryInclusionListMapStrToI := set.(map[string]interface{})
+			if set != nil {
+				apiInventoryInclusionList[i] = &ves_io_schema_views.ApiOperation{}
+				apiInventoryInclusionListMapStrToI := set.(map[string]interface{})
 
-			if v, ok := apiInventoryInclusionListMapStrToI["method"]; ok && !isIntfNil(v) {
+				if v, ok := apiInventoryInclusionListMapStrToI["method"]; ok && !isIntfNil(v) {
 
-				apiInventoryInclusionList[i].Method = ves_io_schema.HttpMethod(ves_io_schema.HttpMethod_value[v.(string)])
+					apiInventoryInclusionList[i].Method = ves_io_schema.HttpMethod(ves_io_schema.HttpMethod_value[v.(string)])
+
+				}
+
+				if w, ok := apiInventoryInclusionListMapStrToI["path"]; ok && !isIntfNil(w) {
+					apiInventoryInclusionList[i].Path = w.(string)
+				}
 
 			}
-
-			if w, ok := apiInventoryInclusionListMapStrToI["path"]; ok && !isIntfNil(w) {
-				apiInventoryInclusionList[i].Path = w.(string)
-			}
-
 		}
 
 	}
@@ -461,19 +471,21 @@ func resourceVolterraApiDefinitionUpdate(d *schema.ResourceData, meta interface{
 		nonApiEndpoints := make([]*ves_io_schema_views.ApiOperation, len(sl))
 		updateSpec.NonApiEndpoints = nonApiEndpoints
 		for i, set := range sl {
-			nonApiEndpoints[i] = &ves_io_schema_views.ApiOperation{}
-			nonApiEndpointsMapStrToI := set.(map[string]interface{})
+			if set != nil {
+				nonApiEndpoints[i] = &ves_io_schema_views.ApiOperation{}
+				nonApiEndpointsMapStrToI := set.(map[string]interface{})
 
-			if v, ok := nonApiEndpointsMapStrToI["method"]; ok && !isIntfNil(v) {
+				if v, ok := nonApiEndpointsMapStrToI["method"]; ok && !isIntfNil(v) {
 
-				nonApiEndpoints[i].Method = ves_io_schema.HttpMethod(ves_io_schema.HttpMethod_value[v.(string)])
+					nonApiEndpoints[i].Method = ves_io_schema.HttpMethod(ves_io_schema.HttpMethod_value[v.(string)])
+
+				}
+
+				if w, ok := nonApiEndpointsMapStrToI["path"]; ok && !isIntfNil(w) {
+					nonApiEndpoints[i].Path = w.(string)
+				}
 
 			}
-
-			if w, ok := nonApiEndpointsMapStrToI["path"]; ok && !isIntfNil(w) {
-				nonApiEndpoints[i].Path = w.(string)
-			}
-
 		}
 
 	}

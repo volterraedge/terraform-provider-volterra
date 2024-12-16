@@ -1149,16 +1149,25 @@ func (s *APISrv) Create(ctx context.Context, req *CreateRequest) (*CreateRespons
 	}
 	reqMsgFQN := "ves.io.schema.app_firewall.CreateRequest"
 	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.sf, reqMsgFQN, req)
+	var retErr error
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
 		}
+		userMsg := "The 'ves.io.schema.app_firewall.API.Create' operation on 'app_firewall'"
+		if retErr == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
 	obj := NewDBObject(nil)
 	req.ToObject(obj)
 	if conv, exists := s.sf.Config().MsgToObjConverters[reqMsgFQN]; exists {
 		if err := conv(req, obj); err != nil {
+			retErr = err
 			return nil, err
 		}
 	}
@@ -1167,16 +1176,19 @@ func (s *APISrv) Create(ctx context.Context, req *CreateRequest) (*CreateRespons
 	rsrcRsp, err := s.opts.RsrcHandler.CreateFn(ctx, rsrcReq, s.apiWrapper)
 	if err != nil {
 		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "CreateResource"))
+		retErr = err
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 	rsp, err := NewObjectCreateRsp(rsrcRsp.Entry)
 	if err != nil {
 		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "CreateResponse"))
+		retErr = err
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 	rspMsgFQN := "ves.io.schema.app_firewall.CreateResponse"
 	if conv, exists := s.sf.Config().ObjToMsgConverters[rspMsgFQN]; exists {
 		if err := conv(rsrcRsp.Entry, rsp); err != nil {
+			retErr = err
 			return nil, err
 		}
 	}
@@ -1208,21 +1220,31 @@ func (s *APISrv) Replace(ctx context.Context, req *ReplaceRequest) (*ReplaceResp
 		}
 	}
 	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.sf, "ves.io.schema.app_firewall.API.ReplaceRequest", req)
+	var retErr error
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
 		}
+		userMsg := "The 'ves.io.schema.app_firewall.API.Replace' operation on 'app_firewall'"
+		if retErr == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
 	rsrcReq := &server.ResourceReplaceRequest{RequestMsg: req}
 	rsrcRsp, err := s.opts.RsrcHandler.ReplaceFn(ctx, rsrcReq, s.apiWrapper)
 	if err != nil {
 		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "ReplaceResource"))
+		retErr = err
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 	rsp, err := NewObjectReplaceRsp(rsrcRsp.Entry)
 	if err != nil {
 		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "ReplaceResponse"))
+		retErr = err
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.sf, "ves.io.schema.app_firewall.API.ReplaceResponse", rsp)...)
@@ -1341,10 +1363,18 @@ func (s *APISrv) Delete(ctx context.Context, req *DeleteRequest) (*google_protob
 		}
 	}
 	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.sf, "ves.io.schema.app_firewall.API.DeleteRequest", req)
+	var retErr error
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
 		}
+		userMsg := "The 'ves.io.schema.app_firewall.API.Delete' operation on 'app_firewall'"
+		if retErr == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
 	tenant := server.TenantFromContext(ctx)
@@ -1354,6 +1384,7 @@ func (s *APISrv) Delete(ctx context.Context, req *DeleteRequest) (*google_protob
 	_, err := s.opts.RsrcHandler.DeleteFn(ctx, rsrcReq, s.apiWrapper)
 	if err != nil {
 		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "DeleteResource"))
+		retErr = err
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 	return &google_protobuf.Empty{}, nil
@@ -2195,23 +2226,40 @@ var APISwaggerJSON string = `{
     "definitions": {
         "app_firewallAiRiskBasedBlocking": {
             "type": "object",
-            "description": "x-displayName: \"Risk-based blocking (powered by AI)\"\nDefault policy settings will be applied. All attack types, including high, medium, and low accuracy signatures,\nautomatic attack signature tuning, threat campaigns, and all violations will be enabled. ML algorithms will\nassess transaction risk, and only high-risk transactions will be blocked.",
+            "description": "All Attack Types, including high, medium, and low accuracy signatures, automatic Attack Signature tuning,\nThreat Campaigns, and all Violations will be enabled. AI and ML algorithms will assess request risk, and\nonly high-risk requests will be blocked by default. This feature is in preview mode.",
             "title": "AI Risk Based Blocking",
+            "x-displayname": "Risk-Based Blocking (Powered by AI) - Preview",
+            "x-ves-proto-message": "ves.io.schema.app_firewall.AiRiskBasedBlocking",
             "properties": {
                 "high_risk_action": {
-                    "description": "x-displayName: \"High Risk\"\nx-required\nHigh-risk HTTP transactions are associated with attack attempts or requests that violate the application firewall policy.",
+                    "description": " High-risk HTTP transactions are associated with attack attempts or requests that violate the application firewall policy.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "high_risk_action",
-                    "$ref": "#/definitions/app_firewallRiskBasedBlockingAction"
+                    "$ref": "#/definitions/app_firewallRiskBasedBlockingAction",
+                    "x-displayname": "High Risk",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "low_risk_action": {
-                    "description": "x-displayName: \"Low Risk\"\nx-required\nLow-risk HTTP transactions are associated with findings that do not present an actual threat to the protected application.",
+                    "description": " Low-risk HTTP transactions are associated with findings that do not present an actual threat to the protected application.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "low_risk_action",
-                    "$ref": "#/definitions/app_firewallRiskBasedBlockingAction"
+                    "$ref": "#/definitions/app_firewallRiskBasedBlockingAction",
+                    "x-displayname": "Low Risk",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "medium_risk_action": {
-                    "description": "x-displayName: \"Medium Risk\"\nx-required\nMedium-risk HTTP transactions are associated with suspicious requests.",
+                    "description": " Medium-risk HTTP transactions are associated with suspicious requests.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "medium_risk_action",
-                    "$ref": "#/definitions/app_firewallRiskBasedBlockingAction"
+                    "$ref": "#/definitions/app_firewallRiskBasedBlockingAction",
+                    "x-displayname": "Medium Risk",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 }
             }
         },
@@ -2570,10 +2618,15 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-anonymization_setting": "[\"custom_anonymization\",\"default_anonymization\",\"disable_anonymization\"]",
             "x-ves-oneof-field-blocking_page_choice": "[\"blocking_page\",\"use_default_blocking_page\"]",
             "x-ves-oneof-field-bot_protection_choice": "[\"bot_protection_setting\",\"default_bot_setting\"]",
-            "x-ves-oneof-field-detection_setting_choice": "[\"default_detection_settings\",\"detection_settings\"]",
+            "x-ves-oneof-field-detection_setting_choice": "[\"ai_risk_based_blocking\",\"default_detection_settings\",\"detection_settings\"]",
             "x-ves-oneof-field-enforcement_mode_choice": "[\"blocking\",\"monitoring\"]",
             "x-ves-proto-message": "ves.io.schema.app_firewall.CreateSpecType",
             "properties": {
+                "ai_risk_based_blocking": {
+                    "description": "Exclusive with [default_detection_settings detection_settings]\n All Attack Types, including high, medium, and low accuracy signatures, automatic Attack Signature tuning,\n Threat Campaigns, and all Violations will be enabled. AI and ML algorithms will assess request risk, and\n only high-risk requests will be blocked by default. This feature is in preview mode.",
+                    "$ref": "#/definitions/app_firewallAiRiskBasedBlocking",
+                    "x-displayname": "Risk-Based Blocking (Powered by AI) - Preview"
+                },
                 "allow_all_response_codes": {
                     "description": "Exclusive with [allowed_response_codes]\n All HTTP response status codes are allowed",
                     "$ref": "#/definitions/ioschemaEmpty",
@@ -2615,12 +2668,12 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Default"
                 },
                 "default_detection_settings": {
-                    "description": "Exclusive with [detection_settings]\n Default policy settings will be applied.\n All Attack Types, high and medium accuracy signatures, automatic Attack Signatures tuning, Threat Campaigns and all Violations will be enabled.",
+                    "description": "Exclusive with [ai_risk_based_blocking detection_settings]\n Default policy settings will be applied.\n All Attack Types, high and medium accuracy signatures, automatic Attack Signatures tuning, Threat Campaigns and all Violations will be enabled.",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Default"
                 },
                 "detection_settings": {
-                    "description": "Exclusive with [default_detection_settings]\n Define Custom Security Policy settings",
+                    "description": "Exclusive with [ai_risk_based_blocking default_detection_settings]\n Define Custom Security Policy settings",
                     "$ref": "#/definitions/app_firewallDetectionSetting",
                     "x-displayname": "Custom"
                 },
@@ -2708,13 +2761,26 @@ var APISwaggerJSON string = `{
             "description": "Specifies detection settings to be used by WAF",
             "title": "Detection Settings",
             "x-displayname": "Detection Settings",
-            "x-ves-displayorder": "1,2,12,5,8",
+            "x-ves-displayorder": "1,2,12,5,8,16",
+            "x-ves-oneof-field-bot_protection_choice": "[\"bot_protection_setting\",\"default_bot_setting\"]",
             "x-ves-oneof-field-false_positive_suppression": "[\"disable_suppression\",\"enable_suppression\"]",
             "x-ves-oneof-field-signatures_staging_settings": "[\"disable_staging\",\"stage_new_and_updated_signatures\",\"stage_new_signatures\"]",
             "x-ves-oneof-field-threat_campaign_choice": "[\"disable_threat_campaigns\",\"enable_threat_campaigns\"]",
             "x-ves-oneof-field-violation_detection_setting": "[\"default_violation_settings\",\"violation_settings\"]",
             "x-ves-proto-message": "ves.io.schema.app_firewall.DetectionSetting",
             "properties": {
+                "bot_protection_setting": {
+                    "description": "Exclusive with [default_bot_setting]\n Define custom Bot Protection settings",
+                    "title": "Custom Settings",
+                    "$ref": "#/definitions/app_firewallBotProtectionSetting",
+                    "x-displayname": "Custom"
+                },
+                "default_bot_setting": {
+                    "description": "Exclusive with [bot_protection_setting]\n Default Bot Protection settings will be applied.\n Malicious bots will be blocked, Suspicious and Good bots will be reported.",
+                    "title": "Default Bot Settings",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Default"
+                },
                 "default_violation_settings": {
                     "description": "Exclusive with [violation_settings]\n All violations are enabled for detection",
                     "title": "Default Violation Settings",
@@ -2876,10 +2942,15 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-anonymization_setting": "[\"custom_anonymization\",\"default_anonymization\",\"disable_anonymization\"]",
             "x-ves-oneof-field-blocking_page_choice": "[\"blocking_page\",\"use_default_blocking_page\"]",
             "x-ves-oneof-field-bot_protection_choice": "[\"bot_protection_setting\",\"default_bot_setting\"]",
-            "x-ves-oneof-field-detection_setting_choice": "[\"default_detection_settings\",\"detection_settings\"]",
+            "x-ves-oneof-field-detection_setting_choice": "[\"ai_risk_based_blocking\",\"default_detection_settings\",\"detection_settings\"]",
             "x-ves-oneof-field-enforcement_mode_choice": "[\"blocking\",\"monitoring\"]",
             "x-ves-proto-message": "ves.io.schema.app_firewall.GetSpecType",
             "properties": {
+                "ai_risk_based_blocking": {
+                    "description": "Exclusive with [default_detection_settings detection_settings]\n All Attack Types, including high, medium, and low accuracy signatures, automatic Attack Signature tuning,\n Threat Campaigns, and all Violations will be enabled. AI and ML algorithms will assess request risk, and\n only high-risk requests will be blocked by default. This feature is in preview mode.",
+                    "$ref": "#/definitions/app_firewallAiRiskBasedBlocking",
+                    "x-displayname": "Risk-Based Blocking (Powered by AI) - Preview"
+                },
                 "allow_all_response_codes": {
                     "description": "Exclusive with [allowed_response_codes]\n All HTTP response status codes are allowed",
                     "$ref": "#/definitions/ioschemaEmpty",
@@ -2921,12 +2992,12 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Default"
                 },
                 "default_detection_settings": {
-                    "description": "Exclusive with [detection_settings]\n Default policy settings will be applied.\n All Attack Types, high and medium accuracy signatures, automatic Attack Signatures tuning, Threat Campaigns and all Violations will be enabled.",
+                    "description": "Exclusive with [ai_risk_based_blocking detection_settings]\n Default policy settings will be applied.\n All Attack Types, high and medium accuracy signatures, automatic Attack Signatures tuning, Threat Campaigns and all Violations will be enabled.",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Default"
                 },
                 "detection_settings": {
-                    "description": "Exclusive with [default_detection_settings]\n Define Custom Security Policy settings",
+                    "description": "Exclusive with [ai_risk_based_blocking default_detection_settings]\n Define Custom Security Policy settings",
                     "$ref": "#/definitions/app_firewallDetectionSetting",
                     "x-displayname": "Custom"
                 },
@@ -3103,10 +3174,15 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-anonymization_setting": "[\"custom_anonymization\",\"default_anonymization\",\"disable_anonymization\"]",
             "x-ves-oneof-field-blocking_page_choice": "[\"blocking_page\",\"use_default_blocking_page\"]",
             "x-ves-oneof-field-bot_protection_choice": "[\"bot_protection_setting\",\"default_bot_setting\"]",
-            "x-ves-oneof-field-detection_setting_choice": "[\"default_detection_settings\",\"detection_settings\"]",
+            "x-ves-oneof-field-detection_setting_choice": "[\"ai_risk_based_blocking\",\"default_detection_settings\",\"detection_settings\"]",
             "x-ves-oneof-field-enforcement_mode_choice": "[\"blocking\",\"monitoring\"]",
             "x-ves-proto-message": "ves.io.schema.app_firewall.ReplaceSpecType",
             "properties": {
+                "ai_risk_based_blocking": {
+                    "description": "Exclusive with [default_detection_settings detection_settings]\n All Attack Types, including high, medium, and low accuracy signatures, automatic Attack Signature tuning,\n Threat Campaigns, and all Violations will be enabled. AI and ML algorithms will assess request risk, and\n only high-risk requests will be blocked by default. This feature is in preview mode.",
+                    "$ref": "#/definitions/app_firewallAiRiskBasedBlocking",
+                    "x-displayname": "Risk-Based Blocking (Powered by AI) - Preview"
+                },
                 "allow_all_response_codes": {
                     "description": "Exclusive with [allowed_response_codes]\n All HTTP response status codes are allowed",
                     "$ref": "#/definitions/ioschemaEmpty",
@@ -3148,12 +3224,12 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Default"
                 },
                 "default_detection_settings": {
-                    "description": "Exclusive with [detection_settings]\n Default policy settings will be applied.\n All Attack Types, high and medium accuracy signatures, automatic Attack Signatures tuning, Threat Campaigns and all Violations will be enabled.",
+                    "description": "Exclusive with [ai_risk_based_blocking detection_settings]\n Default policy settings will be applied.\n All Attack Types, high and medium accuracy signatures, automatic Attack Signatures tuning, Threat Campaigns and all Violations will be enabled.",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Default"
                 },
                 "detection_settings": {
-                    "description": "Exclusive with [default_detection_settings]\n Define Custom Security Policy settings",
+                    "description": "Exclusive with [ai_risk_based_blocking default_detection_settings]\n Define Custom Security Policy settings",
                     "$ref": "#/definitions/app_firewallDetectionSetting",
                     "x-displayname": "Custom"
                 },
@@ -3176,13 +3252,15 @@ var APISwaggerJSON string = `{
         },
         "app_firewallRiskBasedBlockingAction": {
             "type": "string",
-            "description": "x-displayName: \"Risk Based Blocking Action\"\nAction to be performed on the request\n\n - AI_BLOCK: x-displayName: \"Block\"\nLog and block\n - AI_REPORT: x-displayName: \"Report\"\nLog only",
+            "description": "Action to be performed on the request\n\nLog and block\nLog only",
             "title": "Risk Based Blocking Action",
             "enum": [
                 "AI_BLOCK",
                 "AI_REPORT"
             ],
-            "default": "AI_BLOCK"
+            "default": "AI_BLOCK",
+            "x-displayname": "Risk Based Blocking Action",
+            "x-ves-proto-enum": "ves.io.schema.app_firewall.RiskBasedBlockingAction"
         },
         "app_firewallSignatureSelectionSetting": {
             "type": "object",

@@ -1138,16 +1138,25 @@ func (s *APISrv) Create(ctx context.Context, req *CreateRequest) (*CreateRespons
 	}
 	reqMsgFQN := "ves.io.schema.views.origin_pool.CreateRequest"
 	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.sf, reqMsgFQN, req)
+	var retErr error
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
 		}
+		userMsg := "The 'ves.io.schema.views.origin_pool.API.Create' operation on 'origin_pool'"
+		if retErr == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
 	obj := NewDBObject(nil)
 	req.ToObject(obj)
 	if conv, exists := s.sf.Config().MsgToObjConverters[reqMsgFQN]; exists {
 		if err := conv(req, obj); err != nil {
+			retErr = err
 			return nil, err
 		}
 	}
@@ -1156,16 +1165,19 @@ func (s *APISrv) Create(ctx context.Context, req *CreateRequest) (*CreateRespons
 	rsrcRsp, err := s.opts.RsrcHandler.CreateFn(ctx, rsrcReq, s.apiWrapper)
 	if err != nil {
 		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "CreateResource"))
+		retErr = err
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 	rsp, err := NewObjectCreateRsp(rsrcRsp.Entry)
 	if err != nil {
 		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "CreateResponse"))
+		retErr = err
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 	rspMsgFQN := "ves.io.schema.views.origin_pool.CreateResponse"
 	if conv, exists := s.sf.Config().ObjToMsgConverters[rspMsgFQN]; exists {
 		if err := conv(rsrcRsp.Entry, rsp); err != nil {
+			retErr = err
 			return nil, err
 		}
 	}
@@ -1197,21 +1209,31 @@ func (s *APISrv) Replace(ctx context.Context, req *ReplaceRequest) (*ReplaceResp
 		}
 	}
 	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.sf, "ves.io.schema.views.origin_pool.API.ReplaceRequest", req)
+	var retErr error
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
 		}
+		userMsg := "The 'ves.io.schema.views.origin_pool.API.Replace' operation on 'origin_pool'"
+		if retErr == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
 	rsrcReq := &server.ResourceReplaceRequest{RequestMsg: req}
 	rsrcRsp, err := s.opts.RsrcHandler.ReplaceFn(ctx, rsrcReq, s.apiWrapper)
 	if err != nil {
 		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "ReplaceResource"))
+		retErr = err
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 	rsp, err := NewObjectReplaceRsp(rsrcRsp.Entry)
 	if err != nil {
 		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "ReplaceResponse"))
+		retErr = err
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.sf, "ves.io.schema.views.origin_pool.API.ReplaceResponse", rsp)...)
@@ -1327,10 +1349,18 @@ func (s *APISrv) Delete(ctx context.Context, req *DeleteRequest) (*google_protob
 		}
 	}
 	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.sf, "ves.io.schema.views.origin_pool.API.DeleteRequest", req)
+	var retErr error
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
 		}
+		userMsg := "The 'ves.io.schema.views.origin_pool.API.Delete' operation on 'origin_pool'"
+		if retErr == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
 	tenant := server.TenantFromContext(ctx)
@@ -1340,6 +1370,7 @@ func (s *APISrv) Delete(ctx context.Context, req *DeleteRequest) (*google_protob
 	_, err := s.opts.RsrcHandler.DeleteFn(ctx, rsrcReq, s.apiWrapper)
 	if err != nil {
 		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "DeleteResource"))
+		retErr = err
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 	return &google_protobuf.Empty{}, nil
@@ -2887,6 +2918,27 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "origin_poolOriginServerCBIPService": {
+            "type": "object",
+            "description": "Specify origin server with Classic BIG-IP Service (Virtual Server)",
+            "title": "OriginServerCBIPService",
+            "x-displayname": "Discovered Classic BIG-IP Service Name",
+            "x-ves-displayorder": "1",
+            "x-ves-proto-message": "ves.io.schema.views.origin_pool.OriginServerCBIPService",
+            "properties": {
+                "service_name": {
+                    "type": "string",
+                    "description": " Name of the discovered Classic BIG-IP virtual server to be used as origin.\n\nExample: - \"cbip-vs1-dev\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Service Name",
+                    "x-displayname": "Service Name",
+                    "x-ves-example": "cbip-vs1-dev",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                }
+            }
+        },
         "origin_poolOriginServerConsulService": {
             "type": "object",
             "description": "Specify origin server with Hashi Corp Consul service name and site information",
@@ -3203,23 +3255,29 @@ var APISwaggerJSON string = `{
             "description": "Various options to specify origin server",
             "title": "OriginServerType",
             "x-displayname": "Origin Server",
-            "x-ves-oneof-field-choice": "[\"consul_service\",\"custom_endpoint_object\",\"k8s_service\",\"private_ip\",\"private_name\",\"public_ip\",\"public_name\",\"vn_private_ip\",\"vn_private_name\"]",
+            "x-ves-oneof-field-choice": "[\"cbip_service\",\"consul_service\",\"custom_endpoint_object\",\"k8s_service\",\"private_ip\",\"private_name\",\"public_ip\",\"public_name\",\"vn_private_ip\",\"vn_private_name\"]",
             "x-ves-proto-message": "ves.io.schema.views.origin_pool.OriginServerType",
             "properties": {
+                "cbip_service": {
+                    "description": "Exclusive with [consul_service custom_endpoint_object k8s_service private_ip private_name public_ip public_name vn_private_ip vn_private_name]\n Specify origin server with cBIP service name",
+                    "title": "OriginServerCBIPService",
+                    "$ref": "#/definitions/origin_poolOriginServerCBIPService",
+                    "x-displayname": "cBIP Service Name of Origin Server"
+                },
                 "consul_service": {
-                    "description": "Exclusive with [custom_endpoint_object k8s_service private_ip private_name public_ip public_name vn_private_ip vn_private_name]\n Specify origin server with Hashi Corp Consul service name and site information",
+                    "description": "Exclusive with [cbip_service custom_endpoint_object k8s_service private_ip private_name public_ip public_name vn_private_ip vn_private_name]\n Specify origin server with Hashi Corp Consul service name and site information",
                     "title": "OriginServerConsulService",
                     "$ref": "#/definitions/origin_poolOriginServerConsulService",
                     "x-displayname": "Consul Service Name of Origin Server on given Sites"
                 },
                 "custom_endpoint_object": {
-                    "description": "Exclusive with [consul_service k8s_service private_ip private_name public_ip public_name vn_private_ip vn_private_name]\n Specify origin server with a reference to endpoint object",
+                    "description": "Exclusive with [cbip_service consul_service k8s_service private_ip private_name public_ip public_name vn_private_ip vn_private_name]\n Specify origin server with a reference to endpoint object",
                     "title": "OriginServerCustomEndpoint",
                     "$ref": "#/definitions/origin_poolOriginServerCustomEndpoint",
                     "x-displayname": "Custom Endpoint Object for Origin Server"
                 },
                 "k8s_service": {
-                    "description": "Exclusive with [consul_service custom_endpoint_object private_ip private_name public_ip public_name vn_private_ip vn_private_name]\n Specify origin server with K8s service name and site information",
+                    "description": "Exclusive with [cbip_service consul_service custom_endpoint_object private_ip private_name public_ip public_name vn_private_ip vn_private_name]\n Specify origin server with K8s service name and site information",
                     "title": "OriginServerK8SService",
                     "$ref": "#/definitions/origin_poolOriginServerK8SService",
                     "x-displayname": "K8s Service Name of Origin Server on given Sites"
@@ -3232,37 +3290,37 @@ var APISwaggerJSON string = `{
                     "x-ves-example": "value"
                 },
                 "private_ip": {
-                    "description": "Exclusive with [consul_service custom_endpoint_object k8s_service private_name public_ip public_name vn_private_ip vn_private_name]\n Specify origin server with private or public IP address and site information",
+                    "description": "Exclusive with [cbip_service consul_service custom_endpoint_object k8s_service private_name public_ip public_name vn_private_ip vn_private_name]\n Specify origin server with private or public IP address and site information",
                     "title": "OriginServerPrivateIP",
                     "$ref": "#/definitions/origin_poolOriginServerPrivateIP",
                     "x-displayname": "IP address of Origin Server on given Sites"
                 },
                 "private_name": {
-                    "description": "Exclusive with [consul_service custom_endpoint_object k8s_service private_ip public_ip public_name vn_private_ip vn_private_name]\n Specify origin server with private or public DNS name and site information",
+                    "description": "Exclusive with [cbip_service consul_service custom_endpoint_object k8s_service private_ip public_ip public_name vn_private_ip vn_private_name]\n Specify origin server with private or public DNS name and site information",
                     "title": "OriginServerPrivateName",
                     "$ref": "#/definitions/origin_poolOriginServerPrivateName",
                     "x-displayname": "DNS Name of Origin Server on given Sites"
                 },
                 "public_ip": {
-                    "description": "Exclusive with [consul_service custom_endpoint_object k8s_service private_ip private_name public_name vn_private_ip vn_private_name]\n Specify origin server with public IP",
+                    "description": "Exclusive with [cbip_service consul_service custom_endpoint_object k8s_service private_ip private_name public_name vn_private_ip vn_private_name]\n Specify origin server with public IP",
                     "title": "OriginServerPublicIP",
                     "$ref": "#/definitions/origin_poolOriginServerPublicIP",
                     "x-displayname": "Public IP of Origin Server"
                 },
                 "public_name": {
-                    "description": "Exclusive with [consul_service custom_endpoint_object k8s_service private_ip private_name public_ip vn_private_ip vn_private_name]\n Specify origin server with public DNS name",
+                    "description": "Exclusive with [cbip_service consul_service custom_endpoint_object k8s_service private_ip private_name public_ip vn_private_ip vn_private_name]\n Specify origin server with public DNS name",
                     "title": "OriginServerPublicName",
                     "$ref": "#/definitions/origin_poolOriginServerPublicName",
                     "x-displayname": "Public DNS Name of Origin Server"
                 },
                 "vn_private_ip": {
-                    "description": "Exclusive with [consul_service custom_endpoint_object k8s_service private_ip private_name public_ip public_name vn_private_name]\n Specify origin server IP address on virtual network other than inside or outside network",
+                    "description": "Exclusive with [cbip_service consul_service custom_endpoint_object k8s_service private_ip private_name public_ip public_name vn_private_name]\n Specify origin server IP address on virtual network other than inside or outside network",
                     "title": "OriginServerVirtualNetworkIP",
                     "$ref": "#/definitions/origin_poolOriginServerVirtualNetworkIP",
                     "x-displayname": "IP address on Virtual Network"
                 },
                 "vn_private_name": {
-                    "description": "Exclusive with [consul_service custom_endpoint_object k8s_service private_ip private_name public_ip public_name vn_private_ip]\n Specify origin server name on virtual network other than inside or outside network",
+                    "description": "Exclusive with [cbip_service consul_service custom_endpoint_object k8s_service private_ip private_name public_ip public_name vn_private_ip]\n Specify origin server name on virtual network other than inside or outside network",
                     "title": "OriginServerVirtualNetworkName",
                     "$ref": "#/definitions/origin_poolOriginServerVirtualNetworkName",
                     "x-displayname": "Name on Virtual Network"
@@ -4464,7 +4522,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Other Settings"
                 },
                 "automatic_port": {
-                    "description": "Exclusive with [lb_port port]\n\n Automatic selection of port for endpoint\n\n For Consul service discovery, port will be discovered as part of service discovery.\n For other origin server types, port will be automatically set as 443 if TLS is enabled at Origin Pool and 80 if TLS is disabled",
+                    "description": "Exclusive with [lb_port port]\n\n Automatic selection of port for endpoint\n\n For Consul and Classic BIG-IP service discovery, port will be discovered as part of service discovery.\n For other origin server types, port will be automatically set as 443 if TLS is enabled at Origin Pool and 80 if TLS is disabled",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Automatic port"
                 },
@@ -4573,7 +4631,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Other Settings"
                 },
                 "automatic_port": {
-                    "description": "Exclusive with [lb_port port]\n\n Automatic selection of port for endpoint\n\n For Consul service discovery, port will be discovered as part of service discovery.\n For other origin server types, port will be automatically set as 443 if TLS is enabled at Origin Pool and 80 if TLS is disabled",
+                    "description": "Exclusive with [lb_port port]\n\n Automatic selection of port for endpoint\n\n For Consul and Classic BIG-IP service discovery, port will be discovered as part of service discovery.\n For other origin server types, port will be automatically set as 443 if TLS is enabled at Origin Pool and 80 if TLS is disabled",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Automatic port"
                 },
@@ -4682,7 +4740,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Other Settings"
                 },
                 "automatic_port": {
-                    "description": "Exclusive with [lb_port port]\n\n Automatic selection of port for endpoint\n\n For Consul service discovery, port will be discovered as part of service discovery.\n For other origin server types, port will be automatically set as 443 if TLS is enabled at Origin Pool and 80 if TLS is disabled",
+                    "description": "Exclusive with [lb_port port]\n\n Automatic selection of port for endpoint\n\n For Consul and Classic BIG-IP service discovery, port will be discovered as part of service discovery.\n For other origin server types, port will be automatically set as 443 if TLS is enabled at Origin Pool and 80 if TLS is disabled",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Automatic port"
                 },

@@ -24,6 +24,84 @@ var (
 
 // augmented methods on protoc/std generated struct
 
+func (m *AvgAggregationData) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *AvgAggregationData) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *AvgAggregationData) DeepCopy() *AvgAggregationData {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &AvgAggregationData{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *AvgAggregationData) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *AvgAggregationData) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return AvgAggregationDataValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateAvgAggregationData struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateAvgAggregationData) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*AvgAggregationData)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *AvgAggregationData got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["value"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("value"))
+		if err := fv(ctx, m.GetValue(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultAvgAggregationDataValidator = func() *ValidateAvgAggregationData {
+	v := &ValidateAvgAggregationData{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func AvgAggregationDataValidator() db.Validator {
+	return DefaultAvgAggregationDataValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *CardinalityAggregationData) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -772,6 +850,15 @@ func (v *ValidateFieldSubAggregationData) Validate(ctx context.Context, pm inter
 		return nil
 	}
 
+	if fv, exists := v.FldValidators["avg_aggregation"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("avg_aggregation"))
+		if err := fv(ctx, m.GetAvgAggregation(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["buckets"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("buckets"))
@@ -793,6 +880,42 @@ func (v *ValidateFieldSubAggregationData) Validate(ctx context.Context, pm inter
 
 	}
 
+	if fv, exists := v.FldValidators["filter_aggregation"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("filter_aggregation"))
+		if err := fv(ctx, m.GetFilterAggregation(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["max_aggregation"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("max_aggregation"))
+		if err := fv(ctx, m.GetMaxAggregation(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["min_aggregation"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("min_aggregation"))
+		if err := fv(ctx, m.GetMinAggregation(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["multi_filter_aggregation"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("multi_filter_aggregation"))
+		if err := fv(ctx, m.GetMultiFilterAggregation(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	return nil
 }
 
@@ -805,6 +928,444 @@ var DefaultFieldSubAggregationDataValidator = func() *ValidateFieldSubAggregatio
 
 func FieldSubAggregationDataValidator() db.Validator {
 	return DefaultFieldSubAggregationDataValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *FieldSubFieldAggregationBucket) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *FieldSubFieldAggregationBucket) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *FieldSubFieldAggregationBucket) DeepCopy() *FieldSubFieldAggregationBucket {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &FieldSubFieldAggregationBucket{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *FieldSubFieldAggregationBucket) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *FieldSubFieldAggregationBucket) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return FieldSubFieldAggregationBucketValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateFieldSubFieldAggregationBucket struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateFieldSubFieldAggregationBucket) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*FieldSubFieldAggregationBucket)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *FieldSubFieldAggregationBucket got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["count"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("count"))
+		if err := fv(ctx, m.GetCount(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["key"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("key"))
+		if err := fv(ctx, m.GetKey(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultFieldSubFieldAggregationBucketValidator = func() *ValidateFieldSubFieldAggregationBucket {
+	v := &ValidateFieldSubFieldAggregationBucket{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func FieldSubFieldAggregationBucketValidator() db.Validator {
+	return DefaultFieldSubFieldAggregationBucketValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *FieldSubFieldAggregationData) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *FieldSubFieldAggregationData) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *FieldSubFieldAggregationData) DeepCopy() *FieldSubFieldAggregationData {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &FieldSubFieldAggregationData{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *FieldSubFieldAggregationData) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *FieldSubFieldAggregationData) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return FieldSubFieldAggregationDataValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateFieldSubFieldAggregationData struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateFieldSubFieldAggregationData) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*FieldSubFieldAggregationData)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *FieldSubFieldAggregationData got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["buckets"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("buckets"))
+		for idx, item := range m.GetBuckets() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultFieldSubFieldAggregationDataValidator = func() *ValidateFieldSubFieldAggregationData {
+	v := &ValidateFieldSubFieldAggregationData{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func FieldSubFieldAggregationDataValidator() db.Validator {
+	return DefaultFieldSubFieldAggregationDataValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *FilterAggregationData) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *FilterAggregationData) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *FilterAggregationData) DeepCopy() *FilterAggregationData {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &FilterAggregationData{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *FilterAggregationData) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *FilterAggregationData) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return FilterAggregationDataValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateFilterAggregationData struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateFilterAggregationData) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*FilterAggregationData)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *FilterAggregationData got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["count"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("count"))
+		if err := fv(ctx, m.GetCount(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["sub_aggs"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("sub_aggs"))
+		for key, value := range m.GetSubAggs() {
+			vOpts := append(vOpts, db.WithValidateMapKey(key))
+			if err := fv(ctx, value, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultFilterAggregationDataValidator = func() *ValidateFilterAggregationData {
+	v := &ValidateFilterAggregationData{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func FilterAggregationDataValidator() db.Validator {
+	return DefaultFilterAggregationDataValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *FilterSubAggregationData) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *FilterSubAggregationData) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *FilterSubAggregationData) DeepCopy() *FilterSubAggregationData {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &FilterSubAggregationData{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *FilterSubAggregationData) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *FilterSubAggregationData) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return FilterSubAggregationDataValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateFilterSubAggregationData struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateFilterSubAggregationData) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*FilterSubAggregationData)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *FilterSubAggregationData got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["buckets"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("buckets"))
+		for idx, item := range m.GetBuckets() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultFilterSubAggregationDataValidator = func() *ValidateFilterSubAggregationData {
+	v := &ValidateFilterSubAggregationData{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func FilterSubAggregationDataValidator() db.Validator {
+	return DefaultFilterSubAggregationDataValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *FilterSubFieldAggregationBucket) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *FilterSubFieldAggregationBucket) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *FilterSubFieldAggregationBucket) DeepCopy() *FilterSubFieldAggregationBucket {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &FilterSubFieldAggregationBucket{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *FilterSubFieldAggregationBucket) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *FilterSubFieldAggregationBucket) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return FilterSubFieldAggregationBucketValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateFilterSubFieldAggregationBucket struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateFilterSubFieldAggregationBucket) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*FilterSubFieldAggregationBucket)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *FilterSubFieldAggregationBucket got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["count"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("count"))
+		if err := fv(ctx, m.GetCount(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["key"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("key"))
+		if err := fv(ctx, m.GetKey(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["sub_aggs"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("sub_aggs"))
+		for key, value := range m.GetSubAggs() {
+			vOpts := append(vOpts, db.WithValidateMapKey(key))
+			if err := fv(ctx, value, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultFilterSubFieldAggregationBucketValidator = func() *ValidateFilterSubFieldAggregationBucket {
+	v := &ValidateFilterSubFieldAggregationBucket{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func FilterSubFieldAggregationBucketValidator() db.Validator {
+	return DefaultFilterSubFieldAggregationBucketValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -862,6 +1423,15 @@ func (v *ValidateLogAggregationData) Validate(ctx context.Context, pm interface{
 		return nil
 	}
 
+	if fv, exists := v.FldValidators["avg_aggregation"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("avg_aggregation"))
+		if err := fv(ctx, m.GetAvgAggregation(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["cardinality_aggregation"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("cardinality_aggregation"))
@@ -889,6 +1459,24 @@ func (v *ValidateLogAggregationData) Validate(ctx context.Context, pm interface{
 
 	}
 
+	if fv, exists := v.FldValidators["filter_aggregation"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("filter_aggregation"))
+		if err := fv(ctx, m.GetFilterAggregation(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["max_aggregation"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("max_aggregation"))
+		if err := fv(ctx, m.GetMaxAggregation(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["metrics_aggregation"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("metrics_aggregation"))
@@ -898,10 +1486,28 @@ func (v *ValidateLogAggregationData) Validate(ctx context.Context, pm interface{
 
 	}
 
+	if fv, exists := v.FldValidators["min_aggregation"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("min_aggregation"))
+		if err := fv(ctx, m.GetMinAggregation(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["multi_field_aggregation"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("multi_field_aggregation"))
 		if err := fv(ctx, m.GetMultiFieldAggregation(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["multi_filter_aggregation"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("multi_filter_aggregation"))
+		if err := fv(ctx, m.GetMultiFilterAggregation(), vOpts...); err != nil {
 			return err
 		}
 
@@ -921,6 +1527,84 @@ var DefaultLogAggregationDataValidator = func() *ValidateLogAggregationData {
 
 func LogAggregationDataValidator() db.Validator {
 	return DefaultLogAggregationDataValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *MaxAggregationData) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *MaxAggregationData) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *MaxAggregationData) DeepCopy() *MaxAggregationData {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &MaxAggregationData{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *MaxAggregationData) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *MaxAggregationData) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return MaxAggregationDataValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateMaxAggregationData struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateMaxAggregationData) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*MaxAggregationData)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *MaxAggregationData got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["value"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("value"))
+		if err := fv(ctx, m.GetValue(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultMaxAggregationDataValidator = func() *ValidateMaxAggregationData {
+	v := &ValidateMaxAggregationData{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func MaxAggregationDataValidator() db.Validator {
+	return DefaultMaxAggregationDataValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -1005,6 +1689,84 @@ var DefaultMetricsAggregationDataValidator = func() *ValidateMetricsAggregationD
 
 func MetricsAggregationDataValidator() db.Validator {
 	return DefaultMetricsAggregationDataValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *MinAggregationData) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *MinAggregationData) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *MinAggregationData) DeepCopy() *MinAggregationData {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &MinAggregationData{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *MinAggregationData) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *MinAggregationData) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return MinAggregationDataValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateMinAggregationData struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateMinAggregationData) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*MinAggregationData)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *MinAggregationData got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["value"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("value"))
+		if err := fv(ctx, m.GetValue(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultMinAggregationDataValidator = func() *ValidateMinAggregationData {
+	v := &ValidateMinAggregationData{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func MinAggregationDataValidator() db.Validator {
+	return DefaultMinAggregationDataValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -1254,10 +2016,46 @@ func (v *ValidateMultiFieldSubAggregationData) Validate(ctx context.Context, pm 
 		return nil
 	}
 
+	if fv, exists := v.FldValidators["avg_aggregation"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("avg_aggregation"))
+		if err := fv(ctx, m.GetAvgAggregation(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["cardinality_aggregation"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("cardinality_aggregation"))
 		if err := fv(ctx, m.GetCardinalityAggregation(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["max_aggregation"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("max_aggregation"))
+		if err := fv(ctx, m.GetMaxAggregation(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["min_aggregation"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("min_aggregation"))
+		if err := fv(ctx, m.GetMinAggregation(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["top_hits_aggregation"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("top_hits_aggregation"))
+		if err := fv(ctx, m.GetTopHitsAggregation(), vOpts...); err != nil {
 			return err
 		}
 
@@ -1275,6 +2073,84 @@ var DefaultMultiFieldSubAggregationDataValidator = func() *ValidateMultiFieldSub
 
 func MultiFieldSubAggregationDataValidator() db.Validator {
 	return DefaultMultiFieldSubAggregationDataValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *MultiFilterAggregationData) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *MultiFilterAggregationData) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *MultiFilterAggregationData) DeepCopy() *MultiFilterAggregationData {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &MultiFilterAggregationData{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *MultiFilterAggregationData) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *MultiFilterAggregationData) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return MultiFilterAggregationDataValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateMultiFilterAggregationData struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateMultiFilterAggregationData) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*MultiFilterAggregationData)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *MultiFilterAggregationData got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["count"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("count"))
+		if err := fv(ctx, m.GetCount(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultMultiFilterAggregationDataValidator = func() *ValidateMultiFilterAggregationData {
+	v := &ValidateMultiFilterAggregationData{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func MultiFilterAggregationDataValidator() db.Validator {
+	return DefaultMultiFilterAggregationDataValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -1440,4 +2316,94 @@ var DefaultPercentileAggregationDataValidator = func() *ValidatePercentileAggreg
 
 func PercentileAggregationDataValidator() db.Validator {
 	return DefaultPercentileAggregationDataValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *TopHitsAggregationData) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *TopHitsAggregationData) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *TopHitsAggregationData) DeepCopy() *TopHitsAggregationData {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &TopHitsAggregationData{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *TopHitsAggregationData) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *TopHitsAggregationData) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return TopHitsAggregationDataValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateTopHitsAggregationData struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateTopHitsAggregationData) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*TopHitsAggregationData)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *TopHitsAggregationData got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["count"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("count"))
+		if err := fv(ctx, m.GetCount(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["documents"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("documents"))
+		for idx, item := range m.GetDocuments() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultTopHitsAggregationDataValidator = func() *ValidateTopHitsAggregationData {
+	v := &ValidateTopHitsAggregationData{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func TopHitsAggregationDataValidator() db.Validator {
+	return DefaultTopHitsAggregationDataValidator
 }

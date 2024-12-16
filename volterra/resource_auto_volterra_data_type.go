@@ -89,14 +89,16 @@ func resourceVolterraDataType() *schema.Resource {
 
 						"key_pattern": {
 
-							Type:     schema.TypeSet,
+							Type:     schema.TypeList,
+							MaxItems: 1,
 							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
 									"exact_values": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -131,21 +133,24 @@ func resourceVolterraDataType() *schema.Resource {
 
 						"key_value_pattern": {
 
-							Type:     schema.TypeSet,
+							Type:     schema.TypeList,
+							MaxItems: 1,
 							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
 									"key_pattern": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
 												"exact_values": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Optional: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -180,14 +185,16 @@ func resourceVolterraDataType() *schema.Resource {
 
 									"value_pattern": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
 												"exact_values": {
 
-													Type:     schema.TypeSet,
+													Type:     schema.TypeList,
+													MaxItems: 1,
 													Optional: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
@@ -225,14 +232,16 @@ func resourceVolterraDataType() *schema.Resource {
 
 						"value_pattern": {
 
-							Type:     schema.TypeSet,
+							Type:     schema.TypeList,
+							MaxItems: 1,
 							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
 									"exact_values": {
 
-										Type:     schema.TypeSet,
+										Type:     schema.TypeList,
+										MaxItems: 1,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
@@ -358,276 +367,296 @@ func resourceVolterraDataTypeCreate(d *schema.ResourceData, meta interface{}) er
 		rules := make([]*ves_io_schema_data_type.DetectionRule, len(sl))
 		createSpec.Rules = rules
 		for i, set := range sl {
-			rules[i] = &ves_io_schema_data_type.DetectionRule{}
-			rulesMapStrToI := set.(map[string]interface{})
+			if set != nil {
+				rules[i] = &ves_io_schema_data_type.DetectionRule{}
+				rulesMapStrToI := set.(map[string]interface{})
 
-			patternChoiceTypeFound := false
+				patternChoiceTypeFound := false
 
-			if v, ok := rulesMapStrToI["key_pattern"]; ok && !isIntfNil(v) && !patternChoiceTypeFound {
+				if v, ok := rulesMapStrToI["key_pattern"]; ok && !isIntfNil(v) && !patternChoiceTypeFound {
 
-				patternChoiceTypeFound = true
-				patternChoiceInt := &ves_io_schema_data_type.DetectionRule_KeyPattern{}
-				patternChoiceInt.KeyPattern = &ves_io_schema_data_type.RulePatternType{}
-				rules[i].PatternChoice = patternChoiceInt
+					patternChoiceTypeFound = true
+					patternChoiceInt := &ves_io_schema_data_type.DetectionRule_KeyPattern{}
+					patternChoiceInt.KeyPattern = &ves_io_schema_data_type.RulePatternType{}
+					rules[i].PatternChoice = patternChoiceInt
 
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
-
-					typeChoiceTypeFound := false
-
-					if v, ok := cs["exact_values"]; ok && !isIntfNil(v) && !typeChoiceTypeFound {
-
-						typeChoiceTypeFound = true
-						typeChoiceInt := &ves_io_schema_data_type.RulePatternType_ExactValues{}
-						typeChoiceInt.ExactValues = &ves_io_schema_data_type.ExactValues{}
-						patternChoiceInt.KeyPattern.TypeChoice = typeChoiceInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
 							cs := set.(map[string]interface{})
-
-							if v, ok := cs["exact_values"]; ok && !isIntfNil(v) {
-
-								ls := make([]string, len(v.([]interface{})))
-								for i, v := range v.([]interface{}) {
-									ls[i] = v.(string)
-								}
-								typeChoiceInt.ExactValues.ExactValues = ls
-
-							}
-
-						}
-
-					}
-
-					if v, ok := cs["regex_value"]; ok && !isIntfNil(v) && !typeChoiceTypeFound {
-
-						typeChoiceTypeFound = true
-						typeChoiceInt := &ves_io_schema_data_type.RulePatternType_RegexValue{}
-
-						patternChoiceInt.KeyPattern.TypeChoice = typeChoiceInt
-
-						typeChoiceInt.RegexValue = v.(string)
-
-					}
-
-					if v, ok := cs["substring_value"]; ok && !isIntfNil(v) && !typeChoiceTypeFound {
-
-						typeChoiceTypeFound = true
-						typeChoiceInt := &ves_io_schema_data_type.RulePatternType_SubstringValue{}
-
-						patternChoiceInt.KeyPattern.TypeChoice = typeChoiceInt
-
-						typeChoiceInt.SubstringValue = v.(string)
-
-					}
-
-				}
-
-			}
-
-			if v, ok := rulesMapStrToI["key_value_pattern"]; ok && !isIntfNil(v) && !patternChoiceTypeFound {
-
-				patternChoiceTypeFound = true
-				patternChoiceInt := &ves_io_schema_data_type.DetectionRule_KeyValuePattern{}
-				patternChoiceInt.KeyValuePattern = &ves_io_schema_data_type.KeyValuePattern{}
-				rules[i].PatternChoice = patternChoiceInt
-
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
-
-					if v, ok := cs["key_pattern"]; ok && !isIntfNil(v) {
-
-						sl := v.(*schema.Set).List()
-						keyPattern := &ves_io_schema_data_type.RulePatternType{}
-						patternChoiceInt.KeyValuePattern.KeyPattern = keyPattern
-						for _, set := range sl {
-							keyPatternMapStrToI := set.(map[string]interface{})
 
 							typeChoiceTypeFound := false
 
-							if v, ok := keyPatternMapStrToI["exact_values"]; ok && !isIntfNil(v) && !typeChoiceTypeFound {
+							if v, ok := cs["exact_values"]; ok && !isIntfNil(v) && !typeChoiceTypeFound {
 
 								typeChoiceTypeFound = true
 								typeChoiceInt := &ves_io_schema_data_type.RulePatternType_ExactValues{}
 								typeChoiceInt.ExactValues = &ves_io_schema_data_type.ExactValues{}
-								keyPattern.TypeChoice = typeChoiceInt
+								patternChoiceInt.KeyPattern.TypeChoice = typeChoiceInt
 
-								sl := v.(*schema.Set).List()
+								sl := v.([]interface{})
 								for _, set := range sl {
-									cs := set.(map[string]interface{})
+									if set != nil {
+										cs := set.(map[string]interface{})
 
-									if v, ok := cs["exact_values"]; ok && !isIntfNil(v) {
+										if v, ok := cs["exact_values"]; ok && !isIntfNil(v) {
 
-										ls := make([]string, len(v.([]interface{})))
-										for i, v := range v.([]interface{}) {
-											ls[i] = v.(string)
+											ls := make([]string, len(v.([]interface{})))
+											for i, v := range v.([]interface{}) {
+												ls[i] = v.(string)
+											}
+											typeChoiceInt.ExactValues.ExactValues = ls
+
 										}
-										typeChoiceInt.ExactValues.ExactValues = ls
 
 									}
-
 								}
 
 							}
 
-							if v, ok := keyPatternMapStrToI["regex_value"]; ok && !isIntfNil(v) && !typeChoiceTypeFound {
+							if v, ok := cs["regex_value"]; ok && !isIntfNil(v) && !typeChoiceTypeFound {
 
 								typeChoiceTypeFound = true
 								typeChoiceInt := &ves_io_schema_data_type.RulePatternType_RegexValue{}
 
-								keyPattern.TypeChoice = typeChoiceInt
+								patternChoiceInt.KeyPattern.TypeChoice = typeChoiceInt
 
 								typeChoiceInt.RegexValue = v.(string)
 
 							}
 
-							if v, ok := keyPatternMapStrToI["substring_value"]; ok && !isIntfNil(v) && !typeChoiceTypeFound {
+							if v, ok := cs["substring_value"]; ok && !isIntfNil(v) && !typeChoiceTypeFound {
 
 								typeChoiceTypeFound = true
 								typeChoiceInt := &ves_io_schema_data_type.RulePatternType_SubstringValue{}
 
-								keyPattern.TypeChoice = typeChoiceInt
+								patternChoiceInt.KeyPattern.TypeChoice = typeChoiceInt
 
 								typeChoiceInt.SubstringValue = v.(string)
 
 							}
 
 						}
-
 					}
 
-					if v, ok := cs["value_pattern"]; ok && !isIntfNil(v) {
+				}
 
-						sl := v.(*schema.Set).List()
-						valuePattern := &ves_io_schema_data_type.RulePatternType{}
-						patternChoiceInt.KeyValuePattern.ValuePattern = valuePattern
-						for _, set := range sl {
-							valuePatternMapStrToI := set.(map[string]interface{})
+				if v, ok := rulesMapStrToI["key_value_pattern"]; ok && !isIntfNil(v) && !patternChoiceTypeFound {
 
-							typeChoiceTypeFound := false
+					patternChoiceTypeFound = true
+					patternChoiceInt := &ves_io_schema_data_type.DetectionRule_KeyValuePattern{}
+					patternChoiceInt.KeyValuePattern = &ves_io_schema_data_type.KeyValuePattern{}
+					rules[i].PatternChoice = patternChoiceInt
 
-							if v, ok := valuePatternMapStrToI["exact_values"]; ok && !isIntfNil(v) && !typeChoiceTypeFound {
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
 
-								typeChoiceTypeFound = true
-								typeChoiceInt := &ves_io_schema_data_type.RulePatternType_ExactValues{}
-								typeChoiceInt.ExactValues = &ves_io_schema_data_type.ExactValues{}
-								valuePattern.TypeChoice = typeChoiceInt
+							if v, ok := cs["key_pattern"]; ok && !isIntfNil(v) {
 
-								sl := v.(*schema.Set).List()
+								sl := v.([]interface{})
+								keyPattern := &ves_io_schema_data_type.RulePatternType{}
+								patternChoiceInt.KeyValuePattern.KeyPattern = keyPattern
 								for _, set := range sl {
-									cs := set.(map[string]interface{})
+									if set != nil {
+										keyPatternMapStrToI := set.(map[string]interface{})
 
-									if v, ok := cs["exact_values"]; ok && !isIntfNil(v) {
+										typeChoiceTypeFound := false
 
-										ls := make([]string, len(v.([]interface{})))
-										for i, v := range v.([]interface{}) {
-											ls[i] = v.(string)
+										if v, ok := keyPatternMapStrToI["exact_values"]; ok && !isIntfNil(v) && !typeChoiceTypeFound {
+
+											typeChoiceTypeFound = true
+											typeChoiceInt := &ves_io_schema_data_type.RulePatternType_ExactValues{}
+											typeChoiceInt.ExactValues = &ves_io_schema_data_type.ExactValues{}
+											keyPattern.TypeChoice = typeChoiceInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["exact_values"]; ok && !isIntfNil(v) {
+
+														ls := make([]string, len(v.([]interface{})))
+														for i, v := range v.([]interface{}) {
+															ls[i] = v.(string)
+														}
+														typeChoiceInt.ExactValues.ExactValues = ls
+
+													}
+
+												}
+											}
+
 										}
-										typeChoiceInt.ExactValues.ExactValues = ls
+
+										if v, ok := keyPatternMapStrToI["regex_value"]; ok && !isIntfNil(v) && !typeChoiceTypeFound {
+
+											typeChoiceTypeFound = true
+											typeChoiceInt := &ves_io_schema_data_type.RulePatternType_RegexValue{}
+
+											keyPattern.TypeChoice = typeChoiceInt
+
+											typeChoiceInt.RegexValue = v.(string)
+
+										}
+
+										if v, ok := keyPatternMapStrToI["substring_value"]; ok && !isIntfNil(v) && !typeChoiceTypeFound {
+
+											typeChoiceTypeFound = true
+											typeChoiceInt := &ves_io_schema_data_type.RulePatternType_SubstringValue{}
+
+											keyPattern.TypeChoice = typeChoiceInt
+
+											typeChoiceInt.SubstringValue = v.(string)
+
+										}
 
 									}
-
 								}
 
 							}
 
-							if v, ok := valuePatternMapStrToI["regex_value"]; ok && !isIntfNil(v) && !typeChoiceTypeFound {
+							if v, ok := cs["value_pattern"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								valuePattern := &ves_io_schema_data_type.RulePatternType{}
+								patternChoiceInt.KeyValuePattern.ValuePattern = valuePattern
+								for _, set := range sl {
+									if set != nil {
+										valuePatternMapStrToI := set.(map[string]interface{})
+
+										typeChoiceTypeFound := false
+
+										if v, ok := valuePatternMapStrToI["exact_values"]; ok && !isIntfNil(v) && !typeChoiceTypeFound {
+
+											typeChoiceTypeFound = true
+											typeChoiceInt := &ves_io_schema_data_type.RulePatternType_ExactValues{}
+											typeChoiceInt.ExactValues = &ves_io_schema_data_type.ExactValues{}
+											valuePattern.TypeChoice = typeChoiceInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["exact_values"]; ok && !isIntfNil(v) {
+
+														ls := make([]string, len(v.([]interface{})))
+														for i, v := range v.([]interface{}) {
+															ls[i] = v.(string)
+														}
+														typeChoiceInt.ExactValues.ExactValues = ls
+
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := valuePatternMapStrToI["regex_value"]; ok && !isIntfNil(v) && !typeChoiceTypeFound {
+
+											typeChoiceTypeFound = true
+											typeChoiceInt := &ves_io_schema_data_type.RulePatternType_RegexValue{}
+
+											valuePattern.TypeChoice = typeChoiceInt
+
+											typeChoiceInt.RegexValue = v.(string)
+
+										}
+
+										if v, ok := valuePatternMapStrToI["substring_value"]; ok && !isIntfNil(v) && !typeChoiceTypeFound {
+
+											typeChoiceTypeFound = true
+											typeChoiceInt := &ves_io_schema_data_type.RulePatternType_SubstringValue{}
+
+											valuePattern.TypeChoice = typeChoiceInt
+
+											typeChoiceInt.SubstringValue = v.(string)
+
+										}
+
+									}
+								}
+
+							}
+
+						}
+					}
+
+				}
+
+				if v, ok := rulesMapStrToI["value_pattern"]; ok && !isIntfNil(v) && !patternChoiceTypeFound {
+
+					patternChoiceTypeFound = true
+					patternChoiceInt := &ves_io_schema_data_type.DetectionRule_ValuePattern{}
+					patternChoiceInt.ValuePattern = &ves_io_schema_data_type.RulePatternType{}
+					rules[i].PatternChoice = patternChoiceInt
+
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
+
+							typeChoiceTypeFound := false
+
+							if v, ok := cs["exact_values"]; ok && !isIntfNil(v) && !typeChoiceTypeFound {
+
+								typeChoiceTypeFound = true
+								typeChoiceInt := &ves_io_schema_data_type.RulePatternType_ExactValues{}
+								typeChoiceInt.ExactValues = &ves_io_schema_data_type.ExactValues{}
+								patternChoiceInt.ValuePattern.TypeChoice = typeChoiceInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["exact_values"]; ok && !isIntfNil(v) {
+
+											ls := make([]string, len(v.([]interface{})))
+											for i, v := range v.([]interface{}) {
+												ls[i] = v.(string)
+											}
+											typeChoiceInt.ExactValues.ExactValues = ls
+
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := cs["regex_value"]; ok && !isIntfNil(v) && !typeChoiceTypeFound {
 
 								typeChoiceTypeFound = true
 								typeChoiceInt := &ves_io_schema_data_type.RulePatternType_RegexValue{}
 
-								valuePattern.TypeChoice = typeChoiceInt
+								patternChoiceInt.ValuePattern.TypeChoice = typeChoiceInt
 
 								typeChoiceInt.RegexValue = v.(string)
 
 							}
 
-							if v, ok := valuePatternMapStrToI["substring_value"]; ok && !isIntfNil(v) && !typeChoiceTypeFound {
+							if v, ok := cs["substring_value"]; ok && !isIntfNil(v) && !typeChoiceTypeFound {
 
 								typeChoiceTypeFound = true
 								typeChoiceInt := &ves_io_schema_data_type.RulePatternType_SubstringValue{}
 
-								valuePattern.TypeChoice = typeChoiceInt
+								patternChoiceInt.ValuePattern.TypeChoice = typeChoiceInt
 
 								typeChoiceInt.SubstringValue = v.(string)
 
 							}
 
 						}
-
 					}
 
 				}
 
 			}
-
-			if v, ok := rulesMapStrToI["value_pattern"]; ok && !isIntfNil(v) && !patternChoiceTypeFound {
-
-				patternChoiceTypeFound = true
-				patternChoiceInt := &ves_io_schema_data_type.DetectionRule_ValuePattern{}
-				patternChoiceInt.ValuePattern = &ves_io_schema_data_type.RulePatternType{}
-				rules[i].PatternChoice = patternChoiceInt
-
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
-
-					typeChoiceTypeFound := false
-
-					if v, ok := cs["exact_values"]; ok && !isIntfNil(v) && !typeChoiceTypeFound {
-
-						typeChoiceTypeFound = true
-						typeChoiceInt := &ves_io_schema_data_type.RulePatternType_ExactValues{}
-						typeChoiceInt.ExactValues = &ves_io_schema_data_type.ExactValues{}
-						patternChoiceInt.ValuePattern.TypeChoice = typeChoiceInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["exact_values"]; ok && !isIntfNil(v) {
-
-								ls := make([]string, len(v.([]interface{})))
-								for i, v := range v.([]interface{}) {
-									ls[i] = v.(string)
-								}
-								typeChoiceInt.ExactValues.ExactValues = ls
-
-							}
-
-						}
-
-					}
-
-					if v, ok := cs["regex_value"]; ok && !isIntfNil(v) && !typeChoiceTypeFound {
-
-						typeChoiceTypeFound = true
-						typeChoiceInt := &ves_io_schema_data_type.RulePatternType_RegexValue{}
-
-						patternChoiceInt.ValuePattern.TypeChoice = typeChoiceInt
-
-						typeChoiceInt.RegexValue = v.(string)
-
-					}
-
-					if v, ok := cs["substring_value"]; ok && !isIntfNil(v) && !typeChoiceTypeFound {
-
-						typeChoiceTypeFound = true
-						typeChoiceInt := &ves_io_schema_data_type.RulePatternType_SubstringValue{}
-
-						patternChoiceInt.ValuePattern.TypeChoice = typeChoiceInt
-
-						typeChoiceInt.SubstringValue = v.(string)
-
-					}
-
-				}
-
-			}
-
 		}
 
 	}
@@ -761,276 +790,296 @@ func resourceVolterraDataTypeUpdate(d *schema.ResourceData, meta interface{}) er
 		rules := make([]*ves_io_schema_data_type.DetectionRule, len(sl))
 		updateSpec.Rules = rules
 		for i, set := range sl {
-			rules[i] = &ves_io_schema_data_type.DetectionRule{}
-			rulesMapStrToI := set.(map[string]interface{})
+			if set != nil {
+				rules[i] = &ves_io_schema_data_type.DetectionRule{}
+				rulesMapStrToI := set.(map[string]interface{})
 
-			patternChoiceTypeFound := false
+				patternChoiceTypeFound := false
 
-			if v, ok := rulesMapStrToI["key_pattern"]; ok && !isIntfNil(v) && !patternChoiceTypeFound {
+				if v, ok := rulesMapStrToI["key_pattern"]; ok && !isIntfNil(v) && !patternChoiceTypeFound {
 
-				patternChoiceTypeFound = true
-				patternChoiceInt := &ves_io_schema_data_type.DetectionRule_KeyPattern{}
-				patternChoiceInt.KeyPattern = &ves_io_schema_data_type.RulePatternType{}
-				rules[i].PatternChoice = patternChoiceInt
+					patternChoiceTypeFound = true
+					patternChoiceInt := &ves_io_schema_data_type.DetectionRule_KeyPattern{}
+					patternChoiceInt.KeyPattern = &ves_io_schema_data_type.RulePatternType{}
+					rules[i].PatternChoice = patternChoiceInt
 
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
-
-					typeChoiceTypeFound := false
-
-					if v, ok := cs["exact_values"]; ok && !isIntfNil(v) && !typeChoiceTypeFound {
-
-						typeChoiceTypeFound = true
-						typeChoiceInt := &ves_io_schema_data_type.RulePatternType_ExactValues{}
-						typeChoiceInt.ExactValues = &ves_io_schema_data_type.ExactValues{}
-						patternChoiceInt.KeyPattern.TypeChoice = typeChoiceInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
 							cs := set.(map[string]interface{})
-
-							if v, ok := cs["exact_values"]; ok && !isIntfNil(v) {
-
-								ls := make([]string, len(v.([]interface{})))
-								for i, v := range v.([]interface{}) {
-									ls[i] = v.(string)
-								}
-								typeChoiceInt.ExactValues.ExactValues = ls
-
-							}
-
-						}
-
-					}
-
-					if v, ok := cs["regex_value"]; ok && !isIntfNil(v) && !typeChoiceTypeFound {
-
-						typeChoiceTypeFound = true
-						typeChoiceInt := &ves_io_schema_data_type.RulePatternType_RegexValue{}
-
-						patternChoiceInt.KeyPattern.TypeChoice = typeChoiceInt
-
-						typeChoiceInt.RegexValue = v.(string)
-
-					}
-
-					if v, ok := cs["substring_value"]; ok && !isIntfNil(v) && !typeChoiceTypeFound {
-
-						typeChoiceTypeFound = true
-						typeChoiceInt := &ves_io_schema_data_type.RulePatternType_SubstringValue{}
-
-						patternChoiceInt.KeyPattern.TypeChoice = typeChoiceInt
-
-						typeChoiceInt.SubstringValue = v.(string)
-
-					}
-
-				}
-
-			}
-
-			if v, ok := rulesMapStrToI["key_value_pattern"]; ok && !isIntfNil(v) && !patternChoiceTypeFound {
-
-				patternChoiceTypeFound = true
-				patternChoiceInt := &ves_io_schema_data_type.DetectionRule_KeyValuePattern{}
-				patternChoiceInt.KeyValuePattern = &ves_io_schema_data_type.KeyValuePattern{}
-				rules[i].PatternChoice = patternChoiceInt
-
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
-
-					if v, ok := cs["key_pattern"]; ok && !isIntfNil(v) {
-
-						sl := v.(*schema.Set).List()
-						keyPattern := &ves_io_schema_data_type.RulePatternType{}
-						patternChoiceInt.KeyValuePattern.KeyPattern = keyPattern
-						for _, set := range sl {
-							keyPatternMapStrToI := set.(map[string]interface{})
 
 							typeChoiceTypeFound := false
 
-							if v, ok := keyPatternMapStrToI["exact_values"]; ok && !isIntfNil(v) && !typeChoiceTypeFound {
+							if v, ok := cs["exact_values"]; ok && !isIntfNil(v) && !typeChoiceTypeFound {
 
 								typeChoiceTypeFound = true
 								typeChoiceInt := &ves_io_schema_data_type.RulePatternType_ExactValues{}
 								typeChoiceInt.ExactValues = &ves_io_schema_data_type.ExactValues{}
-								keyPattern.TypeChoice = typeChoiceInt
+								patternChoiceInt.KeyPattern.TypeChoice = typeChoiceInt
 
-								sl := v.(*schema.Set).List()
+								sl := v.([]interface{})
 								for _, set := range sl {
-									cs := set.(map[string]interface{})
+									if set != nil {
+										cs := set.(map[string]interface{})
 
-									if v, ok := cs["exact_values"]; ok && !isIntfNil(v) {
+										if v, ok := cs["exact_values"]; ok && !isIntfNil(v) {
 
-										ls := make([]string, len(v.([]interface{})))
-										for i, v := range v.([]interface{}) {
-											ls[i] = v.(string)
+											ls := make([]string, len(v.([]interface{})))
+											for i, v := range v.([]interface{}) {
+												ls[i] = v.(string)
+											}
+											typeChoiceInt.ExactValues.ExactValues = ls
+
 										}
-										typeChoiceInt.ExactValues.ExactValues = ls
 
 									}
-
 								}
 
 							}
 
-							if v, ok := keyPatternMapStrToI["regex_value"]; ok && !isIntfNil(v) && !typeChoiceTypeFound {
+							if v, ok := cs["regex_value"]; ok && !isIntfNil(v) && !typeChoiceTypeFound {
 
 								typeChoiceTypeFound = true
 								typeChoiceInt := &ves_io_schema_data_type.RulePatternType_RegexValue{}
 
-								keyPattern.TypeChoice = typeChoiceInt
+								patternChoiceInt.KeyPattern.TypeChoice = typeChoiceInt
 
 								typeChoiceInt.RegexValue = v.(string)
 
 							}
 
-							if v, ok := keyPatternMapStrToI["substring_value"]; ok && !isIntfNil(v) && !typeChoiceTypeFound {
+							if v, ok := cs["substring_value"]; ok && !isIntfNil(v) && !typeChoiceTypeFound {
 
 								typeChoiceTypeFound = true
 								typeChoiceInt := &ves_io_schema_data_type.RulePatternType_SubstringValue{}
 
-								keyPattern.TypeChoice = typeChoiceInt
+								patternChoiceInt.KeyPattern.TypeChoice = typeChoiceInt
 
 								typeChoiceInt.SubstringValue = v.(string)
 
 							}
 
 						}
-
 					}
 
-					if v, ok := cs["value_pattern"]; ok && !isIntfNil(v) {
+				}
 
-						sl := v.(*schema.Set).List()
-						valuePattern := &ves_io_schema_data_type.RulePatternType{}
-						patternChoiceInt.KeyValuePattern.ValuePattern = valuePattern
-						for _, set := range sl {
-							valuePatternMapStrToI := set.(map[string]interface{})
+				if v, ok := rulesMapStrToI["key_value_pattern"]; ok && !isIntfNil(v) && !patternChoiceTypeFound {
 
-							typeChoiceTypeFound := false
+					patternChoiceTypeFound = true
+					patternChoiceInt := &ves_io_schema_data_type.DetectionRule_KeyValuePattern{}
+					patternChoiceInt.KeyValuePattern = &ves_io_schema_data_type.KeyValuePattern{}
+					rules[i].PatternChoice = patternChoiceInt
 
-							if v, ok := valuePatternMapStrToI["exact_values"]; ok && !isIntfNil(v) && !typeChoiceTypeFound {
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
 
-								typeChoiceTypeFound = true
-								typeChoiceInt := &ves_io_schema_data_type.RulePatternType_ExactValues{}
-								typeChoiceInt.ExactValues = &ves_io_schema_data_type.ExactValues{}
-								valuePattern.TypeChoice = typeChoiceInt
+							if v, ok := cs["key_pattern"]; ok && !isIntfNil(v) {
 
-								sl := v.(*schema.Set).List()
+								sl := v.([]interface{})
+								keyPattern := &ves_io_schema_data_type.RulePatternType{}
+								patternChoiceInt.KeyValuePattern.KeyPattern = keyPattern
 								for _, set := range sl {
-									cs := set.(map[string]interface{})
+									if set != nil {
+										keyPatternMapStrToI := set.(map[string]interface{})
 
-									if v, ok := cs["exact_values"]; ok && !isIntfNil(v) {
+										typeChoiceTypeFound := false
 
-										ls := make([]string, len(v.([]interface{})))
-										for i, v := range v.([]interface{}) {
-											ls[i] = v.(string)
+										if v, ok := keyPatternMapStrToI["exact_values"]; ok && !isIntfNil(v) && !typeChoiceTypeFound {
+
+											typeChoiceTypeFound = true
+											typeChoiceInt := &ves_io_schema_data_type.RulePatternType_ExactValues{}
+											typeChoiceInt.ExactValues = &ves_io_schema_data_type.ExactValues{}
+											keyPattern.TypeChoice = typeChoiceInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["exact_values"]; ok && !isIntfNil(v) {
+
+														ls := make([]string, len(v.([]interface{})))
+														for i, v := range v.([]interface{}) {
+															ls[i] = v.(string)
+														}
+														typeChoiceInt.ExactValues.ExactValues = ls
+
+													}
+
+												}
+											}
+
 										}
-										typeChoiceInt.ExactValues.ExactValues = ls
+
+										if v, ok := keyPatternMapStrToI["regex_value"]; ok && !isIntfNil(v) && !typeChoiceTypeFound {
+
+											typeChoiceTypeFound = true
+											typeChoiceInt := &ves_io_schema_data_type.RulePatternType_RegexValue{}
+
+											keyPattern.TypeChoice = typeChoiceInt
+
+											typeChoiceInt.RegexValue = v.(string)
+
+										}
+
+										if v, ok := keyPatternMapStrToI["substring_value"]; ok && !isIntfNil(v) && !typeChoiceTypeFound {
+
+											typeChoiceTypeFound = true
+											typeChoiceInt := &ves_io_schema_data_type.RulePatternType_SubstringValue{}
+
+											keyPattern.TypeChoice = typeChoiceInt
+
+											typeChoiceInt.SubstringValue = v.(string)
+
+										}
 
 									}
-
 								}
 
 							}
 
-							if v, ok := valuePatternMapStrToI["regex_value"]; ok && !isIntfNil(v) && !typeChoiceTypeFound {
+							if v, ok := cs["value_pattern"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								valuePattern := &ves_io_schema_data_type.RulePatternType{}
+								patternChoiceInt.KeyValuePattern.ValuePattern = valuePattern
+								for _, set := range sl {
+									if set != nil {
+										valuePatternMapStrToI := set.(map[string]interface{})
+
+										typeChoiceTypeFound := false
+
+										if v, ok := valuePatternMapStrToI["exact_values"]; ok && !isIntfNil(v) && !typeChoiceTypeFound {
+
+											typeChoiceTypeFound = true
+											typeChoiceInt := &ves_io_schema_data_type.RulePatternType_ExactValues{}
+											typeChoiceInt.ExactValues = &ves_io_schema_data_type.ExactValues{}
+											valuePattern.TypeChoice = typeChoiceInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["exact_values"]; ok && !isIntfNil(v) {
+
+														ls := make([]string, len(v.([]interface{})))
+														for i, v := range v.([]interface{}) {
+															ls[i] = v.(string)
+														}
+														typeChoiceInt.ExactValues.ExactValues = ls
+
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := valuePatternMapStrToI["regex_value"]; ok && !isIntfNil(v) && !typeChoiceTypeFound {
+
+											typeChoiceTypeFound = true
+											typeChoiceInt := &ves_io_schema_data_type.RulePatternType_RegexValue{}
+
+											valuePattern.TypeChoice = typeChoiceInt
+
+											typeChoiceInt.RegexValue = v.(string)
+
+										}
+
+										if v, ok := valuePatternMapStrToI["substring_value"]; ok && !isIntfNil(v) && !typeChoiceTypeFound {
+
+											typeChoiceTypeFound = true
+											typeChoiceInt := &ves_io_schema_data_type.RulePatternType_SubstringValue{}
+
+											valuePattern.TypeChoice = typeChoiceInt
+
+											typeChoiceInt.SubstringValue = v.(string)
+
+										}
+
+									}
+								}
+
+							}
+
+						}
+					}
+
+				}
+
+				if v, ok := rulesMapStrToI["value_pattern"]; ok && !isIntfNil(v) && !patternChoiceTypeFound {
+
+					patternChoiceTypeFound = true
+					patternChoiceInt := &ves_io_schema_data_type.DetectionRule_ValuePattern{}
+					patternChoiceInt.ValuePattern = &ves_io_schema_data_type.RulePatternType{}
+					rules[i].PatternChoice = patternChoiceInt
+
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
+
+							typeChoiceTypeFound := false
+
+							if v, ok := cs["exact_values"]; ok && !isIntfNil(v) && !typeChoiceTypeFound {
+
+								typeChoiceTypeFound = true
+								typeChoiceInt := &ves_io_schema_data_type.RulePatternType_ExactValues{}
+								typeChoiceInt.ExactValues = &ves_io_schema_data_type.ExactValues{}
+								patternChoiceInt.ValuePattern.TypeChoice = typeChoiceInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["exact_values"]; ok && !isIntfNil(v) {
+
+											ls := make([]string, len(v.([]interface{})))
+											for i, v := range v.([]interface{}) {
+												ls[i] = v.(string)
+											}
+											typeChoiceInt.ExactValues.ExactValues = ls
+
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := cs["regex_value"]; ok && !isIntfNil(v) && !typeChoiceTypeFound {
 
 								typeChoiceTypeFound = true
 								typeChoiceInt := &ves_io_schema_data_type.RulePatternType_RegexValue{}
 
-								valuePattern.TypeChoice = typeChoiceInt
+								patternChoiceInt.ValuePattern.TypeChoice = typeChoiceInt
 
 								typeChoiceInt.RegexValue = v.(string)
 
 							}
 
-							if v, ok := valuePatternMapStrToI["substring_value"]; ok && !isIntfNil(v) && !typeChoiceTypeFound {
+							if v, ok := cs["substring_value"]; ok && !isIntfNil(v) && !typeChoiceTypeFound {
 
 								typeChoiceTypeFound = true
 								typeChoiceInt := &ves_io_schema_data_type.RulePatternType_SubstringValue{}
 
-								valuePattern.TypeChoice = typeChoiceInt
+								patternChoiceInt.ValuePattern.TypeChoice = typeChoiceInt
 
 								typeChoiceInt.SubstringValue = v.(string)
 
 							}
 
 						}
-
 					}
 
 				}
 
 			}
-
-			if v, ok := rulesMapStrToI["value_pattern"]; ok && !isIntfNil(v) && !patternChoiceTypeFound {
-
-				patternChoiceTypeFound = true
-				patternChoiceInt := &ves_io_schema_data_type.DetectionRule_ValuePattern{}
-				patternChoiceInt.ValuePattern = &ves_io_schema_data_type.RulePatternType{}
-				rules[i].PatternChoice = patternChoiceInt
-
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
-
-					typeChoiceTypeFound := false
-
-					if v, ok := cs["exact_values"]; ok && !isIntfNil(v) && !typeChoiceTypeFound {
-
-						typeChoiceTypeFound = true
-						typeChoiceInt := &ves_io_schema_data_type.RulePatternType_ExactValues{}
-						typeChoiceInt.ExactValues = &ves_io_schema_data_type.ExactValues{}
-						patternChoiceInt.ValuePattern.TypeChoice = typeChoiceInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["exact_values"]; ok && !isIntfNil(v) {
-
-								ls := make([]string, len(v.([]interface{})))
-								for i, v := range v.([]interface{}) {
-									ls[i] = v.(string)
-								}
-								typeChoiceInt.ExactValues.ExactValues = ls
-
-							}
-
-						}
-
-					}
-
-					if v, ok := cs["regex_value"]; ok && !isIntfNil(v) && !typeChoiceTypeFound {
-
-						typeChoiceTypeFound = true
-						typeChoiceInt := &ves_io_schema_data_type.RulePatternType_RegexValue{}
-
-						patternChoiceInt.ValuePattern.TypeChoice = typeChoiceInt
-
-						typeChoiceInt.RegexValue = v.(string)
-
-					}
-
-					if v, ok := cs["substring_value"]; ok && !isIntfNil(v) && !typeChoiceTypeFound {
-
-						typeChoiceTypeFound = true
-						typeChoiceInt := &ves_io_schema_data_type.RulePatternType_SubstringValue{}
-
-						patternChoiceInt.ValuePattern.TypeChoice = typeChoiceInt
-
-						typeChoiceInt.SubstringValue = v.(string)
-
-					}
-
-				}
-
-			}
-
 		}
 
 	}

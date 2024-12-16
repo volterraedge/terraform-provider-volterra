@@ -30,6 +30,7 @@ const (
 	approvalResource          = "volterra_registration_approval"
 	modifySite                = "volterra_modify_site"
 	apiCredential             = "volterra_api_credential"
+	serviceCredential         = "volterra_service_credential"
 	publicIP                  = "volterra_public_ip"
 	siteState                 = "volterra_site_state"
 	setVPCK8SHostnames        = "volterra_vpc_k8s_hostnames"
@@ -211,6 +212,7 @@ func getResourceMap() map[string]*schema.Resource {
 	resourceMap[activeNetworkPolicies] = resourceVolterraActiveNetworkPolicies()
 	resourceMap[activeServicePolicies] = resourceVolterraActiveServicePolicies()
 	resourceMap[apiCredential] = resourceVolterraAPICredential()
+	resourceMap[serviceCredential] = resourceVolterraServiceCredential()
 	resourceMap[approvalResource] = resourceVolterraRegistrationApproval()
 	resourceMap[modifySite] = resourceVolterraModifySite()
 	resourceMap[publicIP] = resourceVolterraPublicIp()

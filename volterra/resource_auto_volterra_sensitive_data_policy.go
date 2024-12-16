@@ -81,7 +81,8 @@ func resourceVolterraSensitiveDataPolicy() *schema.Resource {
 
 						"custom_data_type_ref": {
 
-							Type:     schema.TypeSet,
+							Type:     schema.TypeList,
+							MaxItems: 1,
 							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
@@ -189,31 +190,35 @@ func resourceVolterraSensitiveDataPolicyCreate(d *schema.ResourceData, meta inte
 		customDataTypes := make([]*ves_io_schema_sensitive_data_policy.CustomDataTypeRef, len(sl))
 		createSpec.CustomDataTypes = customDataTypes
 		for i, set := range sl {
-			customDataTypes[i] = &ves_io_schema_sensitive_data_policy.CustomDataTypeRef{}
-			customDataTypesMapStrToI := set.(map[string]interface{})
+			if set != nil {
+				customDataTypes[i] = &ves_io_schema_sensitive_data_policy.CustomDataTypeRef{}
+				customDataTypesMapStrToI := set.(map[string]interface{})
 
-			if v, ok := customDataTypesMapStrToI["custom_data_type_ref"]; ok && !isIntfNil(v) {
+				if v, ok := customDataTypesMapStrToI["custom_data_type_ref"]; ok && !isIntfNil(v) {
 
-				sl := v.(*schema.Set).List()
-				customDataTypeRefInt := &ves_io_schema_views.ObjectRefType{}
-				customDataTypes[i].CustomDataTypeRef = customDataTypeRefInt
+					sl := v.([]interface{})
+					customDataTypeRefInt := &ves_io_schema_views.ObjectRefType{}
+					customDataTypes[i].CustomDataTypeRef = customDataTypeRefInt
 
-				for _, set := range sl {
-					cdtrMapToStrVal := set.(map[string]interface{})
-					if val, ok := cdtrMapToStrVal["name"]; ok && !isIntfNil(v) {
-						customDataTypeRefInt.Name = val.(string)
+					for _, set := range sl {
+						if set != nil {
+							cdtrMapToStrVal := set.(map[string]interface{})
+							if val, ok := cdtrMapToStrVal["name"]; ok && !isIntfNil(v) {
+								customDataTypeRefInt.Name = val.(string)
+							}
+							if val, ok := cdtrMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+								customDataTypeRefInt.Namespace = val.(string)
+							}
+
+							if val, ok := cdtrMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+								customDataTypeRefInt.Tenant = val.(string)
+							}
+						}
 					}
-					if val, ok := cdtrMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-						customDataTypeRefInt.Namespace = val.(string)
-					}
 
-					if val, ok := cdtrMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-						customDataTypeRefInt.Tenant = val.(string)
-					}
 				}
 
 			}
-
 		}
 
 	}
@@ -344,31 +349,35 @@ func resourceVolterraSensitiveDataPolicyUpdate(d *schema.ResourceData, meta inte
 		customDataTypes := make([]*ves_io_schema_sensitive_data_policy.CustomDataTypeRef, len(sl))
 		updateSpec.CustomDataTypes = customDataTypes
 		for i, set := range sl {
-			customDataTypes[i] = &ves_io_schema_sensitive_data_policy.CustomDataTypeRef{}
-			customDataTypesMapStrToI := set.(map[string]interface{})
+			if set != nil {
+				customDataTypes[i] = &ves_io_schema_sensitive_data_policy.CustomDataTypeRef{}
+				customDataTypesMapStrToI := set.(map[string]interface{})
 
-			if v, ok := customDataTypesMapStrToI["custom_data_type_ref"]; ok && !isIntfNil(v) {
+				if v, ok := customDataTypesMapStrToI["custom_data_type_ref"]; ok && !isIntfNil(v) {
 
-				sl := v.(*schema.Set).List()
-				customDataTypeRefInt := &ves_io_schema_views.ObjectRefType{}
-				customDataTypes[i].CustomDataTypeRef = customDataTypeRefInt
+					sl := v.([]interface{})
+					customDataTypeRefInt := &ves_io_schema_views.ObjectRefType{}
+					customDataTypes[i].CustomDataTypeRef = customDataTypeRefInt
 
-				for _, set := range sl {
-					cdtrMapToStrVal := set.(map[string]interface{})
-					if val, ok := cdtrMapToStrVal["name"]; ok && !isIntfNil(v) {
-						customDataTypeRefInt.Name = val.(string)
+					for _, set := range sl {
+						if set != nil {
+							cdtrMapToStrVal := set.(map[string]interface{})
+							if val, ok := cdtrMapToStrVal["name"]; ok && !isIntfNil(v) {
+								customDataTypeRefInt.Name = val.(string)
+							}
+							if val, ok := cdtrMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+								customDataTypeRefInt.Namespace = val.(string)
+							}
+
+							if val, ok := cdtrMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+								customDataTypeRefInt.Tenant = val.(string)
+							}
+						}
 					}
-					if val, ok := cdtrMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-						customDataTypeRefInt.Namespace = val.(string)
-					}
 
-					if val, ok := cdtrMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-						customDataTypeRefInt.Tenant = val.(string)
-					}
 				}
 
 			}
-
 		}
 
 	}

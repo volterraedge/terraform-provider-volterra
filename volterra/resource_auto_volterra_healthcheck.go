@@ -62,7 +62,8 @@ func resourceVolterraHealthcheck() *schema.Resource {
 
 			"dns_health_check": {
 
-				Type:       schema.TypeSet,
+				Type:       schema.TypeList,
+				MaxItems:   1,
 				Optional:   true,
 				Deprecated: "This field is deprecated and will be removed in future release.",
 				Elem: &schema.Resource{
@@ -116,7 +117,8 @@ func resourceVolterraHealthcheck() *schema.Resource {
 
 			"dns_proxy_tcp_health_check": {
 
-				Type:       schema.TypeSet,
+				Type:       schema.TypeList,
+				MaxItems:   1,
 				Optional:   true,
 				Deprecated: "This field is deprecated and will be removed in future release.",
 				Elem: &schema.Resource{
@@ -139,7 +141,8 @@ func resourceVolterraHealthcheck() *schema.Resource {
 
 			"dns_proxy_udp_health_check": {
 
-				Type:       schema.TypeSet,
+				Type:       schema.TypeList,
+				MaxItems:   1,
 				Optional:   true,
 				Deprecated: "This field is deprecated and will be removed in future release.",
 				Elem: &schema.Resource{
@@ -162,7 +165,8 @@ func resourceVolterraHealthcheck() *schema.Resource {
 
 			"http_health_check": {
 
-				Type:     schema.TypeSet,
+				Type:     schema.TypeList,
+				MaxItems: 1,
 				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
@@ -219,7 +223,8 @@ func resourceVolterraHealthcheck() *schema.Resource {
 
 			"tcp_health_check": {
 
-				Type:     schema.TypeSet,
+				Type:     schema.TypeList,
+				MaxItems: 1,
 				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
@@ -329,46 +334,48 @@ func resourceVolterraHealthcheckCreate(d *schema.ResourceData, meta interface{})
 		healthCheckInt.DnsHealthCheck = &ves_io_schema_healthcheck.DnsHealthCheck{}
 		createSpec.HealthCheck = healthCheckInt
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
+			if set != nil {
+				cs := set.(map[string]interface{})
 
-			if v, ok := cs["expected_rcode"]; ok && !isIntfNil(v) {
+				if v, ok := cs["expected_rcode"]; ok && !isIntfNil(v) {
 
-				healthCheckInt.DnsHealthCheck.ExpectedRcode = ves_io_schema_healthcheck.DNSResponseRcodeType(ves_io_schema_healthcheck.DNSResponseRcodeType_value[v.(string)])
+					healthCheckInt.DnsHealthCheck.ExpectedRcode = ves_io_schema_healthcheck.DNSResponseRcodeType(ves_io_schema_healthcheck.DNSResponseRcodeType_value[v.(string)])
+
+				}
+
+				if v, ok := cs["expected_record_type"]; ok && !isIntfNil(v) {
+
+					healthCheckInt.DnsHealthCheck.ExpectedRecordType = ves_io_schema_healthcheck.DNSResponseRecordType(ves_io_schema_healthcheck.DNSResponseRecordType_value[v.(string)])
+
+				}
+
+				if v, ok := cs["expected_response"]; ok && !isIntfNil(v) {
+
+					healthCheckInt.DnsHealthCheck.ExpectedResponse = v.(string)
+
+				}
+
+				if v, ok := cs["query_name"]; ok && !isIntfNil(v) {
+
+					healthCheckInt.DnsHealthCheck.QueryName = v.(string)
+
+				}
+
+				if v, ok := cs["query_type"]; ok && !isIntfNil(v) {
+
+					healthCheckInt.DnsHealthCheck.QueryType = ves_io_schema_healthcheck.DNSQueryType(ves_io_schema_healthcheck.DNSQueryType_value[v.(string)])
+
+				}
+
+				if v, ok := cs["reverse"]; ok && !isIntfNil(v) {
+
+					healthCheckInt.DnsHealthCheck.Reverse = v.(bool)
+
+				}
 
 			}
-
-			if v, ok := cs["expected_record_type"]; ok && !isIntfNil(v) {
-
-				healthCheckInt.DnsHealthCheck.ExpectedRecordType = ves_io_schema_healthcheck.DNSResponseRecordType(ves_io_schema_healthcheck.DNSResponseRecordType_value[v.(string)])
-
-			}
-
-			if v, ok := cs["expected_response"]; ok && !isIntfNil(v) {
-
-				healthCheckInt.DnsHealthCheck.ExpectedResponse = v.(string)
-
-			}
-
-			if v, ok := cs["query_name"]; ok && !isIntfNil(v) {
-
-				healthCheckInt.DnsHealthCheck.QueryName = v.(string)
-
-			}
-
-			if v, ok := cs["query_type"]; ok && !isIntfNil(v) {
-
-				healthCheckInt.DnsHealthCheck.QueryType = ves_io_schema_healthcheck.DNSQueryType(ves_io_schema_healthcheck.DNSQueryType_value[v.(string)])
-
-			}
-
-			if v, ok := cs["reverse"]; ok && !isIntfNil(v) {
-
-				healthCheckInt.DnsHealthCheck.Reverse = v.(bool)
-
-			}
-
 		}
 
 	}
@@ -392,22 +399,24 @@ func resourceVolterraHealthcheckCreate(d *schema.ResourceData, meta interface{})
 		healthCheckInt.DnsProxyTcpHealthCheck = &ves_io_schema_healthcheck.DnsProxyTcpHealthCheck{}
 		createSpec.HealthCheck = healthCheckInt
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
+			if set != nil {
+				cs := set.(map[string]interface{})
 
-			if v, ok := cs["expected_response"]; ok && !isIntfNil(v) {
+				if v, ok := cs["expected_response"]; ok && !isIntfNil(v) {
 
-				healthCheckInt.DnsProxyTcpHealthCheck.ExpectedResponse = v.(string)
+					healthCheckInt.DnsProxyTcpHealthCheck.ExpectedResponse = v.(string)
+
+				}
+
+				if v, ok := cs["send_payload"]; ok && !isIntfNil(v) {
+
+					healthCheckInt.DnsProxyTcpHealthCheck.SendPayload = v.(string)
+
+				}
 
 			}
-
-			if v, ok := cs["send_payload"]; ok && !isIntfNil(v) {
-
-				healthCheckInt.DnsProxyTcpHealthCheck.SendPayload = v.(string)
-
-			}
-
 		}
 
 	}
@@ -419,22 +428,24 @@ func resourceVolterraHealthcheckCreate(d *schema.ResourceData, meta interface{})
 		healthCheckInt.DnsProxyUdpHealthCheck = &ves_io_schema_healthcheck.DnsProxyUdpHealthCheck{}
 		createSpec.HealthCheck = healthCheckInt
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
+			if set != nil {
+				cs := set.(map[string]interface{})
 
-			if v, ok := cs["expected_response"]; ok && !isIntfNil(v) {
+				if v, ok := cs["expected_response"]; ok && !isIntfNil(v) {
 
-				healthCheckInt.DnsProxyUdpHealthCheck.ExpectedResponse = v.(string)
+					healthCheckInt.DnsProxyUdpHealthCheck.ExpectedResponse = v.(string)
+
+				}
+
+				if v, ok := cs["send_payload"]; ok && !isIntfNil(v) {
+
+					healthCheckInt.DnsProxyUdpHealthCheck.SendPayload = v.(string)
+
+				}
 
 			}
-
-			if v, ok := cs["send_payload"]; ok && !isIntfNil(v) {
-
-				healthCheckInt.DnsProxyUdpHealthCheck.SendPayload = v.(string)
-
-			}
-
 		}
 
 	}
@@ -446,76 +457,78 @@ func resourceVolterraHealthcheckCreate(d *schema.ResourceData, meta interface{})
 		healthCheckInt.HttpHealthCheck = &ves_io_schema_healthcheck.HttpHealthCheck{}
 		createSpec.HealthCheck = healthCheckInt
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
+			if set != nil {
+				cs := set.(map[string]interface{})
 
-			if v, ok := cs["expected_status_codes"]; ok && !isIntfNil(v) {
+				if v, ok := cs["expected_status_codes"]; ok && !isIntfNil(v) {
 
-				ls := make([]string, len(v.([]interface{})))
-				for i, v := range v.([]interface{}) {
-					ls[i] = v.(string)
+					ls := make([]string, len(v.([]interface{})))
+					for i, v := range v.([]interface{}) {
+						ls[i] = v.(string)
+					}
+					healthCheckInt.HttpHealthCheck.ExpectedStatusCodes = ls
+
 				}
-				healthCheckInt.HttpHealthCheck.ExpectedStatusCodes = ls
 
-			}
+				if v, ok := cs["headers"]; ok && !isIntfNil(v) {
 
-			if v, ok := cs["headers"]; ok && !isIntfNil(v) {
-
-				ms := map[string]string{}
-				for k, v := range v.(map[string]interface{}) {
-					ms[k] = v.(string)
+					ms := map[string]string{}
+					for k, v := range v.(map[string]interface{}) {
+						ms[k] = v.(string)
+					}
+					healthCheckInt.HttpHealthCheck.Headers = ms
 				}
-				healthCheckInt.HttpHealthCheck.Headers = ms
-			}
 
-			hostHeaderChoiceTypeFound := false
+				hostHeaderChoiceTypeFound := false
 
-			if v, ok := cs["host_header"]; ok && !isIntfNil(v) && !hostHeaderChoiceTypeFound {
+				if v, ok := cs["host_header"]; ok && !isIntfNil(v) && !hostHeaderChoiceTypeFound {
 
-				hostHeaderChoiceTypeFound = true
-				hostHeaderChoiceInt := &ves_io_schema_healthcheck.HttpHealthCheck_HostHeader{}
+					hostHeaderChoiceTypeFound = true
+					hostHeaderChoiceInt := &ves_io_schema_healthcheck.HttpHealthCheck_HostHeader{}
 
-				healthCheckInt.HttpHealthCheck.HostHeaderChoice = hostHeaderChoiceInt
-
-				hostHeaderChoiceInt.HostHeader = v.(string)
-
-			}
-
-			if v, ok := cs["use_origin_server_name"]; ok && !isIntfNil(v) && !hostHeaderChoiceTypeFound {
-
-				hostHeaderChoiceTypeFound = true
-
-				if v.(bool) {
-					hostHeaderChoiceInt := &ves_io_schema_healthcheck.HttpHealthCheck_UseOriginServerName{}
-					hostHeaderChoiceInt.UseOriginServerName = &ves_io_schema.Empty{}
 					healthCheckInt.HttpHealthCheck.HostHeaderChoice = hostHeaderChoiceInt
+
+					hostHeaderChoiceInt.HostHeader = v.(string)
+
+				}
+
+				if v, ok := cs["use_origin_server_name"]; ok && !isIntfNil(v) && !hostHeaderChoiceTypeFound {
+
+					hostHeaderChoiceTypeFound = true
+
+					if v.(bool) {
+						hostHeaderChoiceInt := &ves_io_schema_healthcheck.HttpHealthCheck_UseOriginServerName{}
+						hostHeaderChoiceInt.UseOriginServerName = &ves_io_schema.Empty{}
+						healthCheckInt.HttpHealthCheck.HostHeaderChoice = hostHeaderChoiceInt
+					}
+
+				}
+
+				if v, ok := cs["path"]; ok && !isIntfNil(v) {
+
+					healthCheckInt.HttpHealthCheck.Path = v.(string)
+
+				}
+
+				if v, ok := cs["request_headers_to_remove"]; ok && !isIntfNil(v) {
+
+					ls := make([]string, len(v.([]interface{})))
+					for i, v := range v.([]interface{}) {
+						ls[i] = v.(string)
+					}
+					healthCheckInt.HttpHealthCheck.RequestHeadersToRemove = ls
+
+				}
+
+				if v, ok := cs["use_http2"]; ok && !isIntfNil(v) {
+
+					healthCheckInt.HttpHealthCheck.UseHttp2 = v.(bool)
+
 				}
 
 			}
-
-			if v, ok := cs["path"]; ok && !isIntfNil(v) {
-
-				healthCheckInt.HttpHealthCheck.Path = v.(string)
-
-			}
-
-			if v, ok := cs["request_headers_to_remove"]; ok && !isIntfNil(v) {
-
-				ls := make([]string, len(v.([]interface{})))
-				for i, v := range v.([]interface{}) {
-					ls[i] = v.(string)
-				}
-				healthCheckInt.HttpHealthCheck.RequestHeadersToRemove = ls
-
-			}
-
-			if v, ok := cs["use_http2"]; ok && !isIntfNil(v) {
-
-				healthCheckInt.HttpHealthCheck.UseHttp2 = v.(bool)
-
-			}
-
 		}
 
 	}
@@ -527,22 +540,24 @@ func resourceVolterraHealthcheckCreate(d *schema.ResourceData, meta interface{})
 		healthCheckInt.TcpHealthCheck = &ves_io_schema_healthcheck.TcpHealthCheck{}
 		createSpec.HealthCheck = healthCheckInt
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
+			if set != nil {
+				cs := set.(map[string]interface{})
 
-			if v, ok := cs["expected_response"]; ok && !isIntfNil(v) {
+				if v, ok := cs["expected_response"]; ok && !isIntfNil(v) {
 
-				healthCheckInt.TcpHealthCheck.ExpectedResponse = v.(string)
+					healthCheckInt.TcpHealthCheck.ExpectedResponse = v.(string)
+
+				}
+
+				if v, ok := cs["send_payload"]; ok && !isIntfNil(v) {
+
+					healthCheckInt.TcpHealthCheck.SendPayload = v.(string)
+
+				}
 
 			}
-
-			if v, ok := cs["send_payload"]; ok && !isIntfNil(v) {
-
-				healthCheckInt.TcpHealthCheck.SendPayload = v.(string)
-
-			}
-
 		}
 
 	}
@@ -695,46 +710,48 @@ func resourceVolterraHealthcheckUpdate(d *schema.ResourceData, meta interface{})
 		healthCheckInt.DnsHealthCheck = &ves_io_schema_healthcheck.DnsHealthCheck{}
 		updateSpec.HealthCheck = healthCheckInt
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
+			if set != nil {
+				cs := set.(map[string]interface{})
 
-			if v, ok := cs["expected_rcode"]; ok && !isIntfNil(v) {
+				if v, ok := cs["expected_rcode"]; ok && !isIntfNil(v) {
 
-				healthCheckInt.DnsHealthCheck.ExpectedRcode = ves_io_schema_healthcheck.DNSResponseRcodeType(ves_io_schema_healthcheck.DNSResponseRcodeType_value[v.(string)])
+					healthCheckInt.DnsHealthCheck.ExpectedRcode = ves_io_schema_healthcheck.DNSResponseRcodeType(ves_io_schema_healthcheck.DNSResponseRcodeType_value[v.(string)])
+
+				}
+
+				if v, ok := cs["expected_record_type"]; ok && !isIntfNil(v) {
+
+					healthCheckInt.DnsHealthCheck.ExpectedRecordType = ves_io_schema_healthcheck.DNSResponseRecordType(ves_io_schema_healthcheck.DNSResponseRecordType_value[v.(string)])
+
+				}
+
+				if v, ok := cs["expected_response"]; ok && !isIntfNil(v) {
+
+					healthCheckInt.DnsHealthCheck.ExpectedResponse = v.(string)
+
+				}
+
+				if v, ok := cs["query_name"]; ok && !isIntfNil(v) {
+
+					healthCheckInt.DnsHealthCheck.QueryName = v.(string)
+
+				}
+
+				if v, ok := cs["query_type"]; ok && !isIntfNil(v) {
+
+					healthCheckInt.DnsHealthCheck.QueryType = ves_io_schema_healthcheck.DNSQueryType(ves_io_schema_healthcheck.DNSQueryType_value[v.(string)])
+
+				}
+
+				if v, ok := cs["reverse"]; ok && !isIntfNil(v) {
+
+					healthCheckInt.DnsHealthCheck.Reverse = v.(bool)
+
+				}
 
 			}
-
-			if v, ok := cs["expected_record_type"]; ok && !isIntfNil(v) {
-
-				healthCheckInt.DnsHealthCheck.ExpectedRecordType = ves_io_schema_healthcheck.DNSResponseRecordType(ves_io_schema_healthcheck.DNSResponseRecordType_value[v.(string)])
-
-			}
-
-			if v, ok := cs["expected_response"]; ok && !isIntfNil(v) {
-
-				healthCheckInt.DnsHealthCheck.ExpectedResponse = v.(string)
-
-			}
-
-			if v, ok := cs["query_name"]; ok && !isIntfNil(v) {
-
-				healthCheckInt.DnsHealthCheck.QueryName = v.(string)
-
-			}
-
-			if v, ok := cs["query_type"]; ok && !isIntfNil(v) {
-
-				healthCheckInt.DnsHealthCheck.QueryType = ves_io_schema_healthcheck.DNSQueryType(ves_io_schema_healthcheck.DNSQueryType_value[v.(string)])
-
-			}
-
-			if v, ok := cs["reverse"]; ok && !isIntfNil(v) {
-
-				healthCheckInt.DnsHealthCheck.Reverse = v.(bool)
-
-			}
-
 		}
 
 	}
@@ -758,22 +775,24 @@ func resourceVolterraHealthcheckUpdate(d *schema.ResourceData, meta interface{})
 		healthCheckInt.DnsProxyTcpHealthCheck = &ves_io_schema_healthcheck.DnsProxyTcpHealthCheck{}
 		updateSpec.HealthCheck = healthCheckInt
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
+			if set != nil {
+				cs := set.(map[string]interface{})
 
-			if v, ok := cs["expected_response"]; ok && !isIntfNil(v) {
+				if v, ok := cs["expected_response"]; ok && !isIntfNil(v) {
 
-				healthCheckInt.DnsProxyTcpHealthCheck.ExpectedResponse = v.(string)
+					healthCheckInt.DnsProxyTcpHealthCheck.ExpectedResponse = v.(string)
+
+				}
+
+				if v, ok := cs["send_payload"]; ok && !isIntfNil(v) {
+
+					healthCheckInt.DnsProxyTcpHealthCheck.SendPayload = v.(string)
+
+				}
 
 			}
-
-			if v, ok := cs["send_payload"]; ok && !isIntfNil(v) {
-
-				healthCheckInt.DnsProxyTcpHealthCheck.SendPayload = v.(string)
-
-			}
-
 		}
 
 	}
@@ -785,22 +804,24 @@ func resourceVolterraHealthcheckUpdate(d *schema.ResourceData, meta interface{})
 		healthCheckInt.DnsProxyUdpHealthCheck = &ves_io_schema_healthcheck.DnsProxyUdpHealthCheck{}
 		updateSpec.HealthCheck = healthCheckInt
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
+			if set != nil {
+				cs := set.(map[string]interface{})
 
-			if v, ok := cs["expected_response"]; ok && !isIntfNil(v) {
+				if v, ok := cs["expected_response"]; ok && !isIntfNil(v) {
 
-				healthCheckInt.DnsProxyUdpHealthCheck.ExpectedResponse = v.(string)
+					healthCheckInt.DnsProxyUdpHealthCheck.ExpectedResponse = v.(string)
+
+				}
+
+				if v, ok := cs["send_payload"]; ok && !isIntfNil(v) {
+
+					healthCheckInt.DnsProxyUdpHealthCheck.SendPayload = v.(string)
+
+				}
 
 			}
-
-			if v, ok := cs["send_payload"]; ok && !isIntfNil(v) {
-
-				healthCheckInt.DnsProxyUdpHealthCheck.SendPayload = v.(string)
-
-			}
-
 		}
 
 	}
@@ -812,76 +833,78 @@ func resourceVolterraHealthcheckUpdate(d *schema.ResourceData, meta interface{})
 		healthCheckInt.HttpHealthCheck = &ves_io_schema_healthcheck.HttpHealthCheck{}
 		updateSpec.HealthCheck = healthCheckInt
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
+			if set != nil {
+				cs := set.(map[string]interface{})
 
-			if v, ok := cs["expected_status_codes"]; ok && !isIntfNil(v) {
+				if v, ok := cs["expected_status_codes"]; ok && !isIntfNil(v) {
 
-				ls := make([]string, len(v.([]interface{})))
-				for i, v := range v.([]interface{}) {
-					ls[i] = v.(string)
+					ls := make([]string, len(v.([]interface{})))
+					for i, v := range v.([]interface{}) {
+						ls[i] = v.(string)
+					}
+					healthCheckInt.HttpHealthCheck.ExpectedStatusCodes = ls
+
 				}
-				healthCheckInt.HttpHealthCheck.ExpectedStatusCodes = ls
 
-			}
+				if v, ok := cs["headers"]; ok && !isIntfNil(v) {
 
-			if v, ok := cs["headers"]; ok && !isIntfNil(v) {
-
-				ms := map[string]string{}
-				for k, v := range v.(map[string]interface{}) {
-					ms[k] = v.(string)
+					ms := map[string]string{}
+					for k, v := range v.(map[string]interface{}) {
+						ms[k] = v.(string)
+					}
+					healthCheckInt.HttpHealthCheck.Headers = ms
 				}
-				healthCheckInt.HttpHealthCheck.Headers = ms
-			}
 
-			hostHeaderChoiceTypeFound := false
+				hostHeaderChoiceTypeFound := false
 
-			if v, ok := cs["host_header"]; ok && !isIntfNil(v) && !hostHeaderChoiceTypeFound {
+				if v, ok := cs["host_header"]; ok && !isIntfNil(v) && !hostHeaderChoiceTypeFound {
 
-				hostHeaderChoiceTypeFound = true
-				hostHeaderChoiceInt := &ves_io_schema_healthcheck.HttpHealthCheck_HostHeader{}
+					hostHeaderChoiceTypeFound = true
+					hostHeaderChoiceInt := &ves_io_schema_healthcheck.HttpHealthCheck_HostHeader{}
 
-				healthCheckInt.HttpHealthCheck.HostHeaderChoice = hostHeaderChoiceInt
-
-				hostHeaderChoiceInt.HostHeader = v.(string)
-
-			}
-
-			if v, ok := cs["use_origin_server_name"]; ok && !isIntfNil(v) && !hostHeaderChoiceTypeFound {
-
-				hostHeaderChoiceTypeFound = true
-
-				if v.(bool) {
-					hostHeaderChoiceInt := &ves_io_schema_healthcheck.HttpHealthCheck_UseOriginServerName{}
-					hostHeaderChoiceInt.UseOriginServerName = &ves_io_schema.Empty{}
 					healthCheckInt.HttpHealthCheck.HostHeaderChoice = hostHeaderChoiceInt
+
+					hostHeaderChoiceInt.HostHeader = v.(string)
+
+				}
+
+				if v, ok := cs["use_origin_server_name"]; ok && !isIntfNil(v) && !hostHeaderChoiceTypeFound {
+
+					hostHeaderChoiceTypeFound = true
+
+					if v.(bool) {
+						hostHeaderChoiceInt := &ves_io_schema_healthcheck.HttpHealthCheck_UseOriginServerName{}
+						hostHeaderChoiceInt.UseOriginServerName = &ves_io_schema.Empty{}
+						healthCheckInt.HttpHealthCheck.HostHeaderChoice = hostHeaderChoiceInt
+					}
+
+				}
+
+				if v, ok := cs["path"]; ok && !isIntfNil(v) {
+
+					healthCheckInt.HttpHealthCheck.Path = v.(string)
+
+				}
+
+				if v, ok := cs["request_headers_to_remove"]; ok && !isIntfNil(v) {
+
+					ls := make([]string, len(v.([]interface{})))
+					for i, v := range v.([]interface{}) {
+						ls[i] = v.(string)
+					}
+					healthCheckInt.HttpHealthCheck.RequestHeadersToRemove = ls
+
+				}
+
+				if v, ok := cs["use_http2"]; ok && !isIntfNil(v) {
+
+					healthCheckInt.HttpHealthCheck.UseHttp2 = v.(bool)
+
 				}
 
 			}
-
-			if v, ok := cs["path"]; ok && !isIntfNil(v) {
-
-				healthCheckInt.HttpHealthCheck.Path = v.(string)
-
-			}
-
-			if v, ok := cs["request_headers_to_remove"]; ok && !isIntfNil(v) {
-
-				ls := make([]string, len(v.([]interface{})))
-				for i, v := range v.([]interface{}) {
-					ls[i] = v.(string)
-				}
-				healthCheckInt.HttpHealthCheck.RequestHeadersToRemove = ls
-
-			}
-
-			if v, ok := cs["use_http2"]; ok && !isIntfNil(v) {
-
-				healthCheckInt.HttpHealthCheck.UseHttp2 = v.(bool)
-
-			}
-
 		}
 
 	}
@@ -893,22 +916,24 @@ func resourceVolterraHealthcheckUpdate(d *schema.ResourceData, meta interface{})
 		healthCheckInt.TcpHealthCheck = &ves_io_schema_healthcheck.TcpHealthCheck{}
 		updateSpec.HealthCheck = healthCheckInt
 
-		sl := v.(*schema.Set).List()
+		sl := v.([]interface{})
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
+			if set != nil {
+				cs := set.(map[string]interface{})
 
-			if v, ok := cs["expected_response"]; ok && !isIntfNil(v) {
+				if v, ok := cs["expected_response"]; ok && !isIntfNil(v) {
 
-				healthCheckInt.TcpHealthCheck.ExpectedResponse = v.(string)
+					healthCheckInt.TcpHealthCheck.ExpectedResponse = v.(string)
+
+				}
+
+				if v, ok := cs["send_payload"]; ok && !isIntfNil(v) {
+
+					healthCheckInt.TcpHealthCheck.SendPayload = v.(string)
+
+				}
 
 			}
-
-			if v, ok := cs["send_payload"]; ok && !isIntfNil(v) {
-
-				healthCheckInt.TcpHealthCheck.SendPayload = v.(string)
-
-			}
-
 		}
 
 	}

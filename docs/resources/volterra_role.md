@@ -1,9 +1,9 @@
 ---
 
 page_title: "Volterra: role"
-description: "The role allows CRUD of Role resource on Volterra SaaS"
 
----
+description: "The role allows CRUD of Role resource on Volterra SaaS"
+---------------------------------------------------------------------
 
 Resource volterra_role
 ======================

@@ -274,6 +274,89 @@ func APInventoryRespValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *GetReferencingAllLoadbalancersResp) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *GetReferencingAllLoadbalancersResp) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *GetReferencingAllLoadbalancersResp) DeepCopy() *GetReferencingAllLoadbalancersResp {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &GetReferencingAllLoadbalancersResp{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *GetReferencingAllLoadbalancersResp) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *GetReferencingAllLoadbalancersResp) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return GetReferencingAllLoadbalancersRespValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateGetReferencingAllLoadbalancersResp struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateGetReferencingAllLoadbalancersResp) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*GetReferencingAllLoadbalancersResp)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *GetReferencingAllLoadbalancersResp got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["loadbalancers"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("loadbalancers"))
+		for idx, item := range m.GetLoadbalancers() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultGetReferencingAllLoadbalancersRespValidator = func() *ValidateGetReferencingAllLoadbalancersResp {
+	v := &ValidateGetReferencingAllLoadbalancersResp{FldValidators: map[string]db.ValidatorFunc{}}
+
+	v.FldValidators["loadbalancers"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
+
+	return v
+}()
+
+func GetReferencingAllLoadbalancersRespValidator() db.Validator {
+	return DefaultGetReferencingAllLoadbalancersRespValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *GetReferencingLoadbalancersReq) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -504,4 +587,165 @@ var DefaultGetReferencingLoadbalancersRespValidator = func() *ValidateGetReferen
 
 func GetReferencingLoadbalancersRespValidator() db.Validator {
 	return DefaultGetReferencingLoadbalancersRespValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *ListAvailableAPIDefinitionsReq) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *ListAvailableAPIDefinitionsReq) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *ListAvailableAPIDefinitionsReq) DeepCopy() *ListAvailableAPIDefinitionsReq {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &ListAvailableAPIDefinitionsReq{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *ListAvailableAPIDefinitionsReq) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *ListAvailableAPIDefinitionsReq) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return ListAvailableAPIDefinitionsReqValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateListAvailableAPIDefinitionsReq struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateListAvailableAPIDefinitionsReq) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*ListAvailableAPIDefinitionsReq)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *ListAvailableAPIDefinitionsReq got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["namespace"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("namespace"))
+		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultListAvailableAPIDefinitionsReqValidator = func() *ValidateListAvailableAPIDefinitionsReq {
+	v := &ValidateListAvailableAPIDefinitionsReq{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func ListAvailableAPIDefinitionsReqValidator() db.Validator {
+	return DefaultListAvailableAPIDefinitionsReqValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *ListAvailableAPIDefinitionsResp) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *ListAvailableAPIDefinitionsResp) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *ListAvailableAPIDefinitionsResp) DeepCopy() *ListAvailableAPIDefinitionsResp {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &ListAvailableAPIDefinitionsResp{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *ListAvailableAPIDefinitionsResp) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *ListAvailableAPIDefinitionsResp) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return ListAvailableAPIDefinitionsRespValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateListAvailableAPIDefinitionsResp struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateListAvailableAPIDefinitionsResp) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*ListAvailableAPIDefinitionsResp)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *ListAvailableAPIDefinitionsResp got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["available_api_definitions"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("available_api_definitions"))
+		for idx, item := range m.GetAvailableApiDefinitions() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultListAvailableAPIDefinitionsRespValidator = func() *ValidateListAvailableAPIDefinitionsResp {
+	v := &ValidateListAvailableAPIDefinitionsResp{FldValidators: map[string]db.ValidatorFunc{}}
+
+	v.FldValidators["available_api_definitions"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
+
+	return v
+}()
+
+func ListAvailableAPIDefinitionsRespValidator() db.Validator {
+	return DefaultListAvailableAPIDefinitionsRespValidator
 }

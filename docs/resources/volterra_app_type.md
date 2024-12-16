@@ -1,9 +1,9 @@
 ---
 
 page_title: "Volterra: app_type"
-description: "The app_type allows CRUD of App Type resource on Volterra SaaS"
 
----
+description: "The app_type allows CRUD of App Type resource on Volterra SaaS"
+-----------------------------------------------------------------------------
 
 Resource volterra_app_type
 ==========================

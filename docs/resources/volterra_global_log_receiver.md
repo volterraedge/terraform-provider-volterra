@@ -1,9 +1,9 @@
 ---
 
 page_title: "Volterra: global_log_receiver"
-description: "The global_log_receiver allows CRUD of Global Log Receiver resource on Volterra SaaS"
 
----
+description: "The global_log_receiver allows CRUD of Global Log Receiver resource on Volterra SaaS"
+---------------------------------------------------------------------------------------------------
 
 Resource volterra_global_log_receiver
 =====================================
@@ -22,21 +22,23 @@ resource "volterra_global_log_receiver" "example" {
 
   // One of the arguments from this list "ns_all ns_current ns_list ns_system" must be set
 
-  ns_list {
-    namespaces = ["default"]
-  }
+  ns_system = true
 
   // One of the arguments from this list "audit_logs dns_logs request_logs security_events" must be set
 
-  dns_logs = true
+  audit_logs = true
 
   // One of the arguments from this list "aws_cloud_watch_receiver azure_event_hubs_receiver azure_receiver datadog_receiver elastic_receiver gcp_bucket_receiver http_receiver kafka_receiver new_relic_receiver qradar_receiver s3_receiver splunk_receiver sumo_logic_receiver" must be set
 
-  datadog_receiver {
+  elastic_receiver {
+    // One of the arguments from this list "auth_aws auth_basic auth_none" must be set
+
+    auth_none = true
+
     batch {
       // One of the arguments from this list "max_bytes max_bytes_disabled" can be set
 
-      max_bytes_disabled = true
+      max_bytes = "16384"
 
       // One of the arguments from this list "max_events max_events_disabled" can be set
 
@@ -48,25 +50,12 @@ resource "volterra_global_log_receiver" "example" {
     }
 
     compression {
-      // One of the arguments from this list "compression_gzip compression_none" can be set
+      // One of the arguments from this list "compression_default compression_gzip compression_none" must be set
 
       compression_none = true
     }
 
-    datadog_api_key {
-
-      secret_encoding_type = "secret_encoding_type"
-
-      // One of the arguments from this list "blindfold_secret_info clear_secret_info vault_secret_info wingman_secret_info" must be set
-
-      wingman_secret_info {
-        name = "ChargeBack-API-Key"
-      }
-    }
-
-    // One of the arguments from this list "endpoint site" must be set
-
-    site = "datadoghq.com"
+    endpoint = "http://10.9.8.7:9000"
 
     // One of the arguments from this list "no_tls use_tls" must be set
 
@@ -233,7 +222,9 @@ Batch Options allow tuning of the conditions for how batches of logs are sent to
 
 Compression Options allows selection of how data should be compressed when sent to the endpoint.
 
-###### One of the arguments from this list "compression_gzip, compression_none" can be set
+###### One of the arguments from this list "compression_default, compression_gzip, compression_none" must be set
+
+`compression_default` - (Optional) Default Compression defaults to gzip for all endpoint types, except: HTTP, QRadar (`Bool`).
 
 `compression_gzip` - (Optional) Gzip Compression (`Bool`).
 
@@ -283,7 +274,9 @@ Batch Options allow tuning of the conditions for how batches of logs are sent to
 
 Compression Options allows selection of how data should be compressed when sent to the endpoint.
 
-###### One of the arguments from this list "compression_gzip, compression_none" can be set
+###### One of the arguments from this list "compression_default, compression_gzip, compression_none" must be set
+
+`compression_default` - (Optional) Default Compression defaults to gzip for all endpoint types, except: HTTP, QRadar (`Bool`).
 
 `compression_gzip` - (Optional) Gzip Compression (`Bool`).
 
@@ -307,6 +300,18 @@ Azure Blob Storate Connection String. Note that this field must contain: `Accoun
 
 `wingman_secret_info` - (Optional) Secret is given as bootstrap secret in F5XC Security Sidecar. See [Secret Info Oneof Wingman Secret Info ](#secret-info-oneof-wingman-secret-info) below for details.(Deprecated)
 
+### Azure Receiver Filename Options
+
+Filename Options allow customization of filename and folder paths for the blob.
+
+###### One of the arguments from this list "custom_folder, log_type_folder, no_folder" can be set
+
+`custom_folder` - (Optional) The folder name must match `/^[a-z_][a-z0-9\\-\\._]*$/i` (`String`).
+
+`log_type_folder` - (Optional) depending on LogType selection, this will be one of: access, security, audit or dns (`Bool`).
+
+`no_folder` - (Optional) Do not use a folder path (`Bool`).
+
 ### Batch Bytes Max Bytes Disabled
 
 Batch Bytes Disabled.
@@ -322,6 +327,10 @@ Use Default Timeout (300 seconds).
 ### Ca Choice No Ca
 
 Do not use a CA Certificate.
+
+### Compression Choice Compression Default
+
+Default Compression defaults to gzip for all endpoint types, except: HTTP, QRadar.
 
 ### Compression Choice Compression Gzip
 
@@ -377,7 +386,9 @@ Batch Options allow tuning of the conditions for how batches of logs are sent to
 
 Compression Options allows selection of how data should be compressed when sent to the endpoint.
 
-###### One of the arguments from this list "compression_gzip, compression_none" can be set
+###### One of the arguments from this list "compression_default, compression_gzip, compression_none" must be set
+
+`compression_default` - (Optional) Default Compression defaults to gzip for all endpoint types, except: HTTP, QRadar (`Bool`).
 
 `compression_gzip` - (Optional) Gzip Compression (`Bool`).
 
@@ -427,7 +438,9 @@ Batch Options allow tuning of the conditions for how batches of logs are sent to
 
 Compression Options allows selection of how data should be compressed when sent to the endpoint.
 
-###### One of the arguments from this list "compression_gzip, compression_none" can be set
+###### One of the arguments from this list "compression_default, compression_gzip, compression_none" must be set
+
+`compression_default` - (Optional) Default Compression defaults to gzip for all endpoint types, except: HTTP, QRadar (`Bool`).
 
 `compression_gzip` - (Optional) Gzip Compression (`Bool`).
 
@@ -446,6 +459,14 @@ US Endpoint.
 x-displayName: "Select logs in specific namespaces".
 
 `namespaces` - (Required) List of namespaces to stream logs for (`String`).
+
+### Folder Log Type Folder
+
+depending on LogType selection, this will be one of: access, security, audit or dns.
+
+### Folder No Folder
+
+Do not use a folder path.
 
 ### Gcp Bucket Receiver Batch
 
@@ -473,11 +494,25 @@ Batch Options allow tuning of the conditions for how batches of logs are sent to
 
 Compression Options allows selection of how data should be compressed when sent to the endpoint.
 
-###### One of the arguments from this list "compression_gzip, compression_none" can be set
+###### One of the arguments from this list "compression_default, compression_gzip, compression_none" must be set
+
+`compression_default` - (Optional) Default Compression defaults to gzip for all endpoint types, except: HTTP, QRadar (`Bool`).
 
 `compression_gzip` - (Optional) Gzip Compression (`Bool`).
 
 `compression_none` - (Optional) No Compression (`Bool`).
+
+### Gcp Bucket Receiver Filename Options
+
+Filename Options allow customization of filename and folder paths for the bucket.
+
+###### One of the arguments from this list "custom_folder, log_type_folder, no_folder" can be set
+
+`custom_folder` - (Optional) The folder name must match `/^[a-z_][a-z0-9\\-\\._]*$/i` (`String`).
+
+`log_type_folder` - (Optional) depending on LogType selection, this will be one of: access, security, audit or dns (`Bool`).
+
+`no_folder` - (Optional) Do not use a folder path (`Bool`).
 
 ### Http Receiver Batch
 
@@ -505,7 +540,9 @@ Batch Options allow tuning of the conditions for how batches of logs are sent to
 
 Compression Options allows selection of how data should be compressed when sent to the endpoint.
 
-###### One of the arguments from this list "compression_gzip, compression_none" can be set
+###### One of the arguments from this list "compression_default, compression_gzip, compression_none" must be set
+
+`compression_default` - (Optional) Default Compression defaults to gzip for all endpoint types, except: HTTP, QRadar (`Bool`).
 
 `compression_gzip` - (Optional) Gzip Compression (`Bool`).
 
@@ -537,7 +574,9 @@ Batch Options allow tuning of the conditions for how batches of logs are sent to
 
 Compression Options allows selection of how data should be compressed when sent to the endpoint.
 
-###### One of the arguments from this list "compression_gzip, compression_none" can be set
+###### One of the arguments from this list "compression_default, compression_gzip, compression_none" must be set
+
+`compression_default` - (Optional) Default Compression defaults to gzip for all endpoint types, except: HTTP, QRadar (`Bool`).
 
 `compression_gzip` - (Optional) Gzip Compression (`Bool`).
 
@@ -637,7 +676,9 @@ Batch Options allow tuning of the conditions for how batches of logs are sent to
 
 Compression Options allows selection of how data should be compressed when sent to the endpoint.
 
-###### One of the arguments from this list "compression_gzip, compression_none" can be set
+###### One of the arguments from this list "compression_default, compression_gzip, compression_none" must be set
+
+`compression_default` - (Optional) Default Compression defaults to gzip for all endpoint types, except: HTTP, QRadar (`Bool`).
 
 `compression_gzip` - (Optional) Gzip Compression (`Bool`).
 
@@ -680,6 +721,8 @@ Send logs to Azure Blob Storage.
 `connection_string` - (Required) Azure Blob Storate Connection String. Note that this field must contain: `AccountKey`, `AccountName` and should contain `DefaultEndpointsProtocol`. See [Azure Receiver Connection String ](#azure-receiver-connection-string) below for details.
 
 `container_name` - (Required) Container Name is the name of the container into which logs should be stored (`String`).
+
+`filename_options` - (Optional) Filename Options allow customization of filename and folder paths for the blob. See [Azure Receiver Filename Options ](#azure-receiver-filename-options) below for details.
 
 ### Receiver Datadog Receiver
 
@@ -736,6 +779,8 @@ Send logs to a GCP Bucket.
 `bucket` - (Required) GCP Bucket Name (`String`).
 
 `compression` - (Optional) Compression Options allows selection of how data should be compressed when sent to the endpoint. See [Gcp Bucket Receiver Compression ](#gcp-bucket-receiver-compression) below for details.
+
+`filename_options` - (Optional) Filename Options allow customization of filename and folder paths for the bucket. See [Gcp Bucket Receiver Filename Options ](#gcp-bucket-receiver-filename-options) below for details.
 
 `gcp_cred` - (Required) Reference to GCP Cloud Credentials for access to the GCP bucket. See [ref](#ref) below for details.
 
@@ -823,6 +868,8 @@ Send logs to an AWS S3 bucket.
 
 `compression` - (Optional) Compression Options allows selection of how data should be compressed when sent to the endpoint. See [S3 Receiver Compression ](#s3-receiver-compression) below for details.
 
+`filename_options` - (Optional) Filename Options allow customization of filename and folder paths for the bucket. See [S3 Receiver Filename Options ](#s3-receiver-filename-options) below for details.
+
 ### Receiver Splunk Receiver
 
 Send logs to a Splunk HEC Logs service.
@@ -831,7 +878,7 @@ Send logs to a Splunk HEC Logs service.
 
 `compression` - (Optional) Compression Options allows selection of how data should be compressed when sent to the endpoint. See [Splunk Receiver Compression ](#splunk-receiver-compression) below for details.
 
-`endpoint` - (Required) Splunk HEC Logs Endpoint, example: `https://http-input-hec.splunkcloud.com` (`String`).
+`endpoint` - (Required) Splunk HEC Logs Endpoint, example: `https://http-input-hec.splunkcloud.com` (Note: must not contain `/services/collector`) (`String`).
 
 `splunk_hec_token` - (Required) Splunk HEC Logs secret Token. See [Splunk Receiver Splunk Hec Token ](#splunk-receiver-splunk-hec-token) below for details.
 
@@ -883,11 +930,25 @@ Batch Options allow tuning of the conditions for how batches of logs are sent to
 
 Compression Options allows selection of how data should be compressed when sent to the endpoint.
 
-###### One of the arguments from this list "compression_gzip, compression_none" can be set
+###### One of the arguments from this list "compression_default, compression_gzip, compression_none" must be set
+
+`compression_default` - (Optional) Default Compression defaults to gzip for all endpoint types, except: HTTP, QRadar (`Bool`).
 
 `compression_gzip` - (Optional) Gzip Compression (`Bool`).
 
 `compression_none` - (Optional) No Compression (`Bool`).
+
+### S3 Receiver Filename Options
+
+Filename Options allow customization of filename and folder paths for the bucket.
+
+###### One of the arguments from this list "custom_folder, log_type_folder, no_folder" can be set
+
+`custom_folder` - (Optional) The folder name must match `/^[a-z_][a-z0-9\\-\\._]*$/i` (`String`).
+
+`log_type_folder` - (Optional) depending on LogType selection, this will be one of: access, security, audit or dns (`Bool`).
+
+`no_folder` - (Optional) Do not use a folder path (`Bool`).
 
 ### Secret Info Oneof Blindfold Secret Info
 
@@ -963,7 +1024,9 @@ Batch Options allow tuning of the conditions for how batches of logs are sent to
 
 Compression Options allows selection of how data should be compressed when sent to the endpoint.
 
-###### One of the arguments from this list "compression_gzip, compression_none" can be set
+###### One of the arguments from this list "compression_default, compression_gzip, compression_none" must be set
+
+`compression_default` - (Optional) Default Compression defaults to gzip for all endpoint types, except: HTTP, QRadar (`Bool`).
 
 `compression_gzip` - (Optional) Gzip Compression (`Bool`).
 

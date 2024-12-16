@@ -16,6 +16,7 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.ai_assistant.common.Link"] = LinkValidator()
 	vr["ves.io.schema.ai_assistant.common.LogFilter"] = LogFilterValidator()
 
+	vr["ves.io.schema.ai_assistant.common.CellProperties"] = CellPropertiesValidator()
 	vr["ves.io.schema.ai_assistant.common.Display"] = DisplayValidator()
 	vr["ves.io.schema.ai_assistant.common.FieldProperties"] = FieldPropertiesValidator()
 

@@ -42,13 +42,16 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.tenant.Object"] = ObjectValidator()
 	vr["ves.io.schema.tenant.StatusObject"] = StatusObjectValidator()
 
-	vr["ves.io.schema.tenant.CA"] = CAValidator()
-	vr["ves.io.schema.tenant.CredentialsExpiry"] = CredentialsExpiryValidator()
 	vr["ves.io.schema.tenant.DeactivateTenantRequest"] = DeactivateTenantRequestValidator()
 	vr["ves.io.schema.tenant.DeactivateTenantResponse"] = DeactivateTenantResponseValidator()
+
+	vr["ves.io.schema.tenant.CA"] = CAValidator()
+	vr["ves.io.schema.tenant.CredentialsExpiry"] = CredentialsExpiryValidator()
 	vr["ves.io.schema.tenant.Empty"] = EmptyValidator()
 	vr["ves.io.schema.tenant.EncryptedPassword"] = EncryptedPasswordValidator()
 	vr["ves.io.schema.tenant.GlobalSpecType"] = GlobalSpecTypeValidator()
+	vr["ves.io.schema.tenant.PrivateDeactivateTenantRequest"] = PrivateDeactivateTenantRequestValidator()
+	vr["ves.io.schema.tenant.PrivateDeactivateTenantResponse"] = PrivateDeactivateTenantResponseValidator()
 	vr["ves.io.schema.tenant.SubCA"] = SubCAValidator()
 	vr["ves.io.schema.tenant.TenantControlConfig"] = TenantControlConfigValidator()
 
@@ -75,6 +78,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 
 func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {
 	sm["ves.io.schema.tenant.CustomAPI"] = "web"
+	sm["ves.io.schema.tenant.CustomAPIEywaprime"] = "saas"
 
 }
 
@@ -123,6 +127,25 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		mdr.SvcGwRegisterHandlers["ves.io.schema.tenant.CustomPrivateAPIEywaprime"] = RegisterGwCustomPrivateAPIEywaprimeHandler
 		customCSR.ServerRegistry["ves.io.schema.tenant.CustomPrivateAPIEywaprime"] = func(svc svcfw.Service) server.APIHandler {
 			return NewCustomPrivateAPIEywaprimeServer(svc)
+		}
+
+	}()
+
+	customCSR = mdr.PubCustomServiceRegistry
+
+	func() {
+		// set swagger jsons for our and external schemas
+		customCSR.SwaggerRegistry["ves.io.schema.tenant.CustomAPIEywaprime"] = CustomAPIEywaprimeSwaggerJSON
+
+		customCSR.GrpcClientRegistry["ves.io.schema.tenant.CustomAPIEywaprime"] = NewCustomAPIEywaprimeGrpcClient
+		customCSR.RestClientRegistry["ves.io.schema.tenant.CustomAPIEywaprime"] = NewCustomAPIEywaprimeRestClient
+		if isExternal {
+			return
+		}
+		mdr.SvcRegisterHandlers["ves.io.schema.tenant.CustomAPIEywaprime"] = RegisterCustomAPIEywaprimeServer
+		mdr.SvcGwRegisterHandlers["ves.io.schema.tenant.CustomAPIEywaprime"] = RegisterGwCustomAPIEywaprimeHandler
+		customCSR.ServerRegistry["ves.io.schema.tenant.CustomAPIEywaprime"] = func(svc svcfw.Service) server.APIHandler {
+			return NewCustomAPIEywaprimeServer(svc)
 		}
 
 	}()
