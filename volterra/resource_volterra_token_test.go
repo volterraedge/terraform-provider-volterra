@@ -34,7 +34,7 @@ func TestAccToken(t *testing.T) {
 			{
 				Config: testConfigToken(name, siteName, systemNS),
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr(resourceName, "type", "1"),
+					resource.TestCheckResourceAttr(resourceName, "name", siteName),
 				),
 			},
 		},
@@ -50,7 +50,6 @@ func testConfigToken(resourceName, name, namespace string) string {
 		resource "volterra_token" "%[1]s" {
 		  name = "%[2]s"
 		  namespace = "%[3]s"
-		  type = 1
 		}
 		`, resourceName, name, namespace)
 }
