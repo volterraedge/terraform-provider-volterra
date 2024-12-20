@@ -139,7 +139,11 @@ func resourceVolterraTokenCreate(d *schema.ResourceData, meta interface{}) error
 	if err != nil {
 		return fmt.Errorf("error creating Token: %s", err)
 	}
-	d.SetId(createTokenResp.GetObjSystemMetadata().GetUid())
+	if createSpec.Type == ves_io_schema_token.JWT {
+		d.SetId(createTokenResp.GetObjSpec().(*ves_io_schema_token.SpecType).GetGcSpec().GetContent())
+	} else {
+		d.SetId(createTokenResp.GetObjSystemMetadata().GetUid())
+	}
 	d.Set("tenant_name", createTokenResp.GetObjSystemMetadata().GetTenant())
 	return resourceVolterraTokenRead(d, meta)
 }
