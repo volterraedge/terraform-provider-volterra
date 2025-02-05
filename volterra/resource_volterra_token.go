@@ -9,6 +9,7 @@ import (
 	"fmt"
 	"log"
 	"strings"
+	"time"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"gopkg.volterra.us/stdlib/client/vesapi"
@@ -133,18 +134,28 @@ func resourceVolterraTokenCreate(d *schema.ResourceData, meta interface{}) error
 		createMeta.Labels = ms
 	}
 
-	log.Printf("[DEBUG] Creating Volterra Token object with struct: %+v", createReq)
-
-	createTokenResp, err := client.CreateObject(context.Background(), ves_io_schema_token.ObjectType, createReq)
-	if err != nil {
-		return fmt.Errorf("error creating Token: %s", err)
-	}
-	if createSpec.Type == ves_io_schema_token.JWT {
-		d.SetId(createTokenResp.GetObjSpec().(*ves_io_schema_token.SpecType).GetGcSpec().GetContent())
+	getResp, _ := client.GetObject(context.Background(), ves_io_schema_token.ObjectType, namespace, name)
+	if getResp != nil {
+		if createSpec.Type == ves_io_schema_token.JWT {
+			d.SetId(getResp.GetObjSpec().(*ves_io_schema_token.SpecType).GetGcSpec().GetContent())
+		} else {
+			d.SetId(getResp.GetObjSystemMetadata().GetUid())
+		}
+		d.Set("tenant_name", getResp.GetObjSystemMetadata().GetTenant())
 	} else {
-		d.SetId(createTokenResp.GetObjSystemMetadata().GetUid())
+		log.Printf("[DEBUG] Creating Volterra Token object with struct: %+v", createReq)
+
+		createTokenResp, err := client.CreateObject(context.Background(), ves_io_schema_token.ObjectType, createReq)
+		if err != nil {
+			return fmt.Errorf("error creating Token: %s", err)
+		}
+		if createSpec.Type == ves_io_schema_token.JWT {
+			d.SetId(createTokenResp.GetObjSpec().(*ves_io_schema_token.SpecType).GetGcSpec().GetContent())
+		} else {
+			d.SetId(createTokenResp.GetObjSystemMetadata().GetUid())
+		}
+		d.Set("tenant_name", createTokenResp.GetObjSystemMetadata().GetTenant())
 	}
-	d.Set("tenant_name", createTokenResp.GetObjSystemMetadata().GetTenant())
 	return resourceVolterraTokenRead(d, meta)
 }
 
@@ -244,7 +255,7 @@ func resourceVolterraTokenDelete(d *schema.ResourceData, meta interface{}) error
 	name := d.Get("name").(string)
 	namespace := d.Get("namespace").(string)
 
-	_, err := client.GetObject(context.Background(), ves_io_schema_token.ObjectType, namespace, name)
+	getResp, err := client.GetObject(context.Background(), ves_io_schema_token.ObjectType, namespace, name)
 	if err != nil {
 		if strings.Contains(err.Error(), "status code 404") {
 			log.Printf("[INFO] Token %s no longer exists", d.Id())
@@ -254,6 +265,24 @@ func resourceVolterraTokenDelete(d *schema.ResourceData, meta interface{}) error
 		return fmt.Errorf("Error finding Volterra Token before deleting %q: %s", d.Id(), err)
 	}
 
-	log.Printf("[DEBUG] Deleting Volterra Token obj with name %+v in namespace %+v", name, namespace)
-	return client.DeleteObject(context.Background(), ves_io_schema_token.ObjectType, namespace, name)
+	creationTimeString, err := convertTimestampToString(getResp.GetObjSystemMetadata().GetCreationTimestamp())
+	if err != nil {
+		return fmt.Errorf("error converting expiration_timestamp : %s", err)
+	}
+
+	creationTime, err := time.Parse(time.RFC3339, creationTimeString)
+	if err != nil {
+		return fmt.Errorf("error parsing creation timestamp: : %s", err)
+	}
+
+	cutoffTime, err := time.Parse(time.RFC3339, "2025-01-01T00:00:00Z")
+	if err != nil {
+		return fmt.Errorf("error parsing cutoff date: : %s", err)
+	}
+
+	if creationTime.After(cutoffTime) {
+		log.Printf("[DEBUG] Deleting Volterra Token obj with name %+v in namespace %+v", name, namespace)
+		return client.DeleteObject(context.Background(), ves_io_schema_token.ObjectType, namespace, name)
+	}
+	return nil
 }
