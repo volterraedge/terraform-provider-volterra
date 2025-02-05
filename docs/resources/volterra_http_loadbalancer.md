@@ -719,7 +719,7 @@ More options like header manipulation, compression etc..
 
 `cookies_to_modify` - (Optional) List of cookies to be modified from the HTTP response being sent towards downstream.. See [More Option Cookies To Modify ](#more-option-cookies-to-modify) below for details.(Deprecated)
 
-`custom_errors` - (Optional) matches for a request. (`String`).
+`custom_errors` - (Optional) Map of integer error codes as keys and string values that can be used to provide custom http pages for each error code. Key of the map can be either response code class or HTTP Error code. Response code classes for key is configured as follows 3 -- for 3xx response code class, 4 -- for 4xx response code class, 5 -- for 5xx response code class. Value of the map is string which represents custom HTTP responses. Specific response code takes preference when both response code and response code class matches for a request. (`map(string)`)
 
 `disable_default_error_pages` - (Optional) Disable the use of default F5XC error pages. (`Bool`).
 
