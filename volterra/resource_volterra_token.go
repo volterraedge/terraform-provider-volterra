@@ -136,26 +136,36 @@ func resourceVolterraTokenCreate(d *schema.ResourceData, meta interface{}) error
 
 	getResp, _ := client.GetObject(context.Background(), ves_io_schema_token.ObjectType, namespace, name)
 	if getResp != nil {
-		if createSpec.Type == ves_io_schema_token.JWT {
-			d.SetId(getResp.GetObjSpec().(*ves_io_schema_token.SpecType).GetGcSpec().GetContent())
+		gcSpec := getResp.GetObjSpec().(*ves_io_schema_token.SpecType).GetGcSpec()
+		specType := gcSpec.GetType()
+		if specType == createSpec.Type {
+			if specType == ves_io_schema_token.JWT {
+				d.SetId(gcSpec.GetContent())
+			} else {
+				d.SetId(getResp.GetObjSystemMetadata().GetUid())
+			}
 		} else {
-			d.SetId(getResp.GetObjSystemMetadata().GetUid())
+			if createSpec.Type == ves_io_schema_token.JWT {
+				return fmt.Errorf("A NORMAL token with the same name already exists. Please delete the existing token if it is no longer in use, or create a new JWT token with a different name.")
+			} else {
+				return fmt.Errorf("A JWT token with the same name already exists. Please delete the existing token if it is no longer in use, or create a new NORMAL token with a different name.")
+			}
 		}
 		d.Set("tenant_name", getResp.GetObjSystemMetadata().GetTenant())
-	} else {
-		log.Printf("[DEBUG] Creating Volterra Token object with struct: %+v", createReq)
-
-		createTokenResp, err := client.CreateObject(context.Background(), ves_io_schema_token.ObjectType, createReq)
-		if err != nil {
-			return fmt.Errorf("error creating Token: %s", err)
-		}
-		if createSpec.Type == ves_io_schema_token.JWT {
-			d.SetId(createTokenResp.GetObjSpec().(*ves_io_schema_token.SpecType).GetGcSpec().GetContent())
-		} else {
-			d.SetId(createTokenResp.GetObjSystemMetadata().GetUid())
-		}
-		d.Set("tenant_name", createTokenResp.GetObjSystemMetadata().GetTenant())
+		return resourceVolterraTokenRead(d, meta)
 	}
+	log.Printf("[DEBUG] Creating Volterra Token object with struct: %+v", createReq)
+
+	createTokenResp, err := client.CreateObject(context.Background(), ves_io_schema_token.ObjectType, createReq)
+	if err != nil {
+		return fmt.Errorf("error creating Token: %s", err)
+	}
+	if createSpec.Type == ves_io_schema_token.JWT {
+		d.SetId(createTokenResp.GetObjSpec().(*ves_io_schema_token.SpecType).GetGcSpec().GetContent())
+	} else {
+		d.SetId(createTokenResp.GetObjSystemMetadata().GetUid())
+	}
+	d.Set("tenant_name", createTokenResp.GetObjSystemMetadata().GetTenant())
 	return resourceVolterraTokenRead(d, meta)
 }
 
